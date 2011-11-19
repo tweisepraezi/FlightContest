@@ -2,14 +2,19 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-22.04.2010
+15.05.2010
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
 
-Neu in dieser Version (0.5):
-----------------------------
+Fehlerbehebung in dieser Version (0.5.1):
+-----------------------------------------
+- "Planung -> Zeitplan berechnen" zeigte für einzelne Mannschaften 
+  "Nicht berechnet" an. 
+  
+Neu in Version 0.5:
+-------------------
 - Übernahme von Überflug-Daten aus AFLOS
 - Neue Hauptmenüsortierung
 

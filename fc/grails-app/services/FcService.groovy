@@ -751,6 +751,8 @@ class FcService
     //--------------------------------------------------------------------------
     Map calculatetimetableTask(params)
     {
+        println "calculatetimetableTask"
+        
         def task = getTask(params) 
         if (!task.instance) {
             return task
@@ -4368,6 +4370,8 @@ class FcService
     //--------------------------------------------------------------------------
     void calulateTimetable(Task taskInstance)
     {
+        println "calulateTimetable: ${taskInstance.name()}"
+        
         Date first_date = Date.parse("HH:mm",taskInstance.firstTime)
         GregorianCalendar first_time = new GregorianCalendar() 
         first_time.setTime(first_date)
@@ -4381,7 +4385,8 @@ class FcService
         Date lastArrivalTime = first_date
         
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance ->
-            
+        	print "  ${testInstance.crew.name}..."
+        	
             if (testInstance.crew.tas > lastTAS) { // faster aircraft
             	start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalFasterAircraft - taskInstance.takeoffIntervalNormal)
             }
@@ -4428,6 +4433,8 @@ class FcService
             lastTAS = testInstance.crew.tas
             
             testInstance.timeCalculated = true
+            testInstance.save()
+            println "  Done."
         }
 
     }
