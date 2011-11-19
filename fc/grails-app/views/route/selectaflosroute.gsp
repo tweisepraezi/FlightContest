@@ -16,8 +16,12 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.routedefs.routename')}:</label></td>
-                                    <td><g:select optionKey="id" optionValue="${{it.name}}" from="${AflosRouteNames.findAllByIdNotEqual(0)}" name="aflosroutenames.id" value="${id}" ></g:select></td>
+                                    <td><g:select from="${AflosRouteNames.findAllByIdNotEqual(0)}" name="aflosroutenames.id" value="${id}" optionKey="id" optionValue="${{it.name}}" ></g:select></td>
                                 </tr> 
+                                <tr>
+                                    <td class="detailtitle"><label>${message(code:'fc.aflos.routedefs.secretpoint.identification')}:</label></td>
+                                    <td><g:select from="${SecretCoordRouteIdentification.values()}" optionValue="${{message(code:it.titleCode,args:[it.gateWidth])}}" name="aflosroutenames.secretcoordrouteidentification" /></td> <!-- name="type" value="${xx}" -->
+                                </tr>
                             </tbody>
                         </table>
                         <g:actionSubmit action="importaflosroute" value="${message(code:'fc.import')}" />

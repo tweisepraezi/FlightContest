@@ -180,18 +180,11 @@ class FcService
         def contestInstance = new Contest(params)
         
         if(!contestInstance.hasErrors() && contestInstance.save()) {
-            def contestDayInstance = new ContestDay()
-            contestDayInstance.title = params.contestDayTitle
-            contestDayInstance.idTitle = 1
-            contestDayInstance.contest = contestInstance
-            contestDayInstance.save()
-            
-            def contestDayTaskInstance = new ContestDayTask()
-            contestDayTaskInstance.title = params.contestDayTaskTitle
-            contestDayTaskInstance.idTitle = 1
-            contestDayTaskInstance.contestday = contestDayInstance
-            contestDayTaskInstance.save()
-            
+            def taskInstance = new Task()
+            taskInstance.title = params.taskTitle
+            taskInstance.idTitle = 1
+            taskInstance.contest = contestInstance
+            taskInstance.save()
             return ['instance':contestInstance,'saved':true,'message':getMsg('fc.created',["${contestInstance.title}"])]
         } else {
             return ['instance':contestInstance]
@@ -205,8 +198,8 @@ class FcService
         
         if (contestInstance) {
             try {
-            	ContestDay.findAllByContest(contestInstance).each { contestDayInstance ->
-            		contestDayInstance.delete()
+            	Task.findAllByContest(contestInstance).each { taskInstance ->
+            		taskInstance.delete()
             	}
                 contestInstance.delete()
                 
@@ -221,399 +214,351 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map getContestDay(params)
+    Map getTask(params)
     {
-        def contestDayInstance = ContestDay.get(params.id)
+        def taskInstance = Task.get(params.id)
 
-        if (!contestDayInstance) {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.contestday'),params.id])]
+        if (!taskInstance) {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
         }
         
-        return ['instance':contestDayInstance]
-    }
-
-    //--------------------------------------------------------------------------
-    Map updateContestDay(params)
-    {
-        def contestDayInstance = ContestDay.get(params.id)
-        
-        if (contestDayInstance) {
-
-            if(params.version) {
-                def version = params.version.toLong()
-                if(contestDayInstance.version > version) {
-                    contestDayInstance.errors.rejectValue("version", "contestDay.optimistic.locking.failure", getMsg('fc.notupdated'))
-                    return ['instance':contestDayInstance]
-                }
-            }
-            
-            contestDayInstance.properties = params
-            if(!contestDayInstance.hasErrors() && contestDayInstance.save()) {
-                return ['instance':contestDayInstance,'saved':true,'message':getMsg('fc.updated',["${contestDayInstance.name()}"])]
-            } else {
-                return ['instance':contestDayInstance]
-            }
-        } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.contestday'),params.id])]
-        }
-    }
-    
-    //--------------------------------------------------------------------------
-    Map createContestDay(params)
-    {
-        def contestDayInstance = new ContestDay()
-        contestDayInstance.properties = params
-        return ['instance':contestDayInstance]
-    }
-    
-    //--------------------------------------------------------------------------
-    Map saveContestDay(params)
-    {
-        def contestDayInstance = new ContestDay(params)
-        
-        contestDayInstance.contest = Contest.get(params.contestid)
-        contestDayInstance.idTitle = ContestDay.countByContest(contestDayInstance.contest) + 1
-        
-        if(!contestDayInstance.hasErrors() && contestDayInstance.save()) {
-            return ['instance':contestDayInstance,'saved':true,'fromcontest':params.fromcontest,'message':getMsg('fc.created',["${contestDayInstance.name()}"])]
-        } else {
-            return ['instance':contestDayInstance]
-        }
-    }
-    
-    //--------------------------------------------------------------------------
-    Map deleteContestDay(params)
-    {
-        def contestDayInstance = ContestDay.get(params.id)
-        def contestInstance = contestDayInstance.contest
-        
-        if (contestDayInstance) {
-            try {
-                contestDayInstance.delete()
-                
-                ContestDay.findAllByContest(contestInstance).eachWithIndex { contestDayInstance2, index  -> 
-                    contestDayInstance2.idTitle = index + 1
-                }
-                
-                return ['deleted':true,'message':getMsg('fc.deleted',["${contestDayInstance.name()}"])]
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.contestday'),params.id])]
-            }
-        } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.contestday'),params.id])]
-        }
-    }
-    
-    //--------------------------------------------------------------------------
-    Map getContestDayTask(params)
-    {
-        def contestDayTaskInstance = ContestDayTask.get(params.id)
-
-        if (!contestDayTaskInstance) {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.contestdaytask'),params.id])]
-        }
-        
-        return ['instance':contestDayTaskInstance]
+        return ['instance':taskInstance]
     }
 
     //--------------------------------------------------------------------------
-    Map updateContestDayTask(params)
+    Map updateTask(params)
     {
-        def contestDayTaskInstance = ContestDayTask.get(params.id)
+        def taskInstance = Task.get(params.id)
         
-        if (contestDayTaskInstance) {
+        if (taskInstance) {
             
             if(params.version) {
                 def version = params.version.toLong()
-                if(contestDayTaskInstance.version > version) {
-                    contestDayTaskInstance.errors.rejectValue("version", "contestDayTask.optimistic.locking.failure", getMsg('fc.notupdated'))
-                    return ['instance':contestDayTaskInstance]
+                if(taskInstance.version > version) {
+                    taskInstance.errors.rejectValue("version", "task.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':taskInstance]
                 }
             }
             
-            contestDayTaskInstance.properties = params
-            if(!contestDayTaskInstance.hasErrors() && contestDayTaskInstance.save()) {
-                return ['instance':contestDayTaskInstance,'saved':true,'message':getMsg('fc.updated',["${contestDayTaskInstance.name()}"])]
+            taskInstance.properties = params
+            if(!taskInstance.hasErrors() && taskInstance.save()) {
+                return ['instance':taskInstance,'saved':true,'message':getMsg('fc.updated',["${taskInstance.name()}"])]
             } else {
-                return ['instance':contestDayTaskInstance]
+                return ['instance':taskInstance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.contestdaytask'),params.id])]
+            return ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
         }
     }
     
     //--------------------------------------------------------------------------
-    Map createContestDayTask(params)
+    Map createTask(params)
     {
-        def contestDayTaskInstance = new ContestDayTask()
-        contestDayTaskInstance.properties = params
-        return ['instance':contestDayTaskInstance]
+        def taskInstance = new Task()
+        taskInstance.properties = params
+        return ['instance':taskInstance]
     }
     
     //--------------------------------------------------------------------------
-    Map saveContestDayTask(params)
+    Map saveTask(params,contestInstance)
     {
-        def contestDayTaskInstance = new ContestDayTask(params)
+    	def taskInstance = new Task(params)
         
-        contestDayTaskInstance.contestday = ContestDay.get(params.contestdayid)
-        contestDayTaskInstance.idTitle = ContestDayTask.countByContestday(contestDayTaskInstance.contestday) + 1
+        taskInstance.contest = contestInstance
+        taskInstance.idTitle = Task.countByContest(contestInstance) + 1
         
-        if(!contestDayTaskInstance.hasErrors() && contestDayTaskInstance.save()) {
-            Crew.findAllByContest(contestDayTaskInstance.contestday.contest).eachWithIndex { crewInstance, i ->
+        if(!taskInstance.hasErrors() && taskInstance.save()) {
+            Crew.findAllByContest(taskInstance.contest).eachWithIndex { crewInstance, i ->
                 def testInstance = new Test()
                 testInstance.crew = crewInstance
                 testInstance.viewpos = i
-                testInstance.contestdaytask = contestDayTaskInstance
+                testInstance.task = taskInstance
                 testInstance.timeCalculated = false
                 testInstance.save()
             }
             
-            return ['instance':contestDayTaskInstance,'saved':true,'fromcontestday':params.fromcontestday,'message':getMsg('fc.created',["${contestDayTaskInstance.name()}"])]
+            return ['instance':taskInstance,'saved':true,'fromcontestday':params.fromcontestday,'message':getMsg('fc.created',["${taskInstance.name()}"])]
         } else {
-            return ['instance':contestDayTaskInstance]
+            return ['instance':taskInstance]
         }
     }
     
     //--------------------------------------------------------------------------
-    Map deleteContestDayTask(params)
+    Map deleteTask(params)
     {
-        def contestDayTaskInstance = ContestDayTask.get(params.id)
+        def taskInstance = Task.get(params.id)
         
-        if (contestDayTaskInstance) {
+        if (taskInstance) {
             try {
             	// remove Tests
-            	Test.findAllByContestdaytask(contestDayTaskInstance).each { testInstance ->
+            	Test.findAllByTask(taskInstance).each { testInstance ->
             		testInstance.delete()
             	}
 
-                contestDayTaskInstance.delete()
+                taskInstance.delete()
                 
-                // correct idTitle of other contestdaytasks
-                ContestDayTask.findAllByContestday(contestDayTaskInstance.contestday).eachWithIndex { contestDayTaskInstance2, index  -> 
-                    contestDayTaskInstance2.idTitle = index + 1
+                // correct idTitle of other tasks
+                Task.findAllByContest(taskInstance.contest).eachWithIndex { taskInstance2, index  -> 
+                    taskInstance2.idTitle = index + 1
                 }
                 
-                return ['deleted':true,'message':getMsg('fc.deleted',["${contestDayTaskInstance.name()}"])]
+                return ['deleted':true,'message':getMsg('fc.deleted',["${taskInstance.name()}"])]
             }
             catch(org.springframework.dao.DataIntegrityViolationException e) {
-                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.contestdaytask'),params.id])]
+                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.task'),params.id])]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.contestdaytask'),params.id])]
+            return ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
         }
     }
     
     //--------------------------------------------------------------------------
-    Map startplanningContestDayTask(params,contestInstance,lastContestDayTaskPlanning)
+    Map startplanningTask(params,contestInstance,lastTaskPlanning)
     {
-    	def contestDayTaskInstance
-        if (lastContestDayTaskPlanning) {
-            contestDayTaskInstance = ContestDayTask.findById(lastContestDayTaskPlanning)
+    	def taskInstance
+        if (lastTaskPlanning) {
+            taskInstance = Task.findById(lastTaskPlanning)
         }
-        if (!contestDayTaskInstance) {
-            ContestDay.findAllByContest(contestInstance).each { contestDayInstance ->
-            	ContestDayTask.findAllByContestday(contestDayInstance).each {
-            		if (!contestDayTaskInstance) {
-            			contestDayTaskInstance = it
-            		}
-            	}
-            }
+        if (!taskInstance) {
+        	Task.findAllByContest(contestInstance).each {
+        		if (!taskInstance) {
+        			taskInstance = it
+        		}
+        	}
         }
-        if (contestDayTaskInstance) {
-            return ['contestdaytaskid':contestDayTaskInstance.id]
+        if (taskInstance) {
+            return ['taskid':taskInstance.id]
         }
     }
     
     //--------------------------------------------------------------------------
-    Map startresultsContestDayTask(params,contestInstance,lastContestDayTaskResults)
+    Map startresultsTask(params,contestInstance,lastTaskResults)
     {
-        def contestDayTaskInstance
-        if (lastContestDayTaskResults) {
-            contestDayTaskInstance = ContestDayTask.findById(lastContestDayTaskResults)
+        def taskInstance
+        if (lastTaskResults) {
+            taskInstance = Task.findById(lastTaskResults)
         }
-        if (!contestDayTaskInstance) {
-            ContestDay.findAllByContest(contestInstance).each { contestDayInstance ->
-                ContestDayTask.findAllByContestday(contestDayInstance).each {
-                    if (!contestDayTaskInstance) {
-                        contestDayTaskInstance = it
-                    }
+        if (!taskInstance) {
+            Task.findAllByContest(contestInstance).each {
+                if (!taskInstance) {
+                    taskInstance = it
                 }
             }
         }
-        if (contestDayTaskInstance) {
-            return ['contestdaytaskid':contestDayTaskInstance.id]
+        if (taskInstance) {
+            return ['taskid':taskInstance.id]
         }
     }
     
     //--------------------------------------------------------------------------
-    Map selectallContestDayTask(params)
+    Map selectallTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (contestdaytask.instance) {
+        def task = getTask(params) 
+        if (task.instance) {
             def selectedTestIDs = [selectedTestID:""]
-            Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+            Test.findAllByTask(task.instance).each { testInstance ->
                    selectedTestIDs["selectedTestID${testInstance.id}"] = "on"
             }
-            contestdaytask.selectedtestids = selectedTestIDs
+            task.selectedtestids = selectedTestIDs
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map assignplanningtesttaskContestDayTask(params)
+    Map assignplanningtesttaskTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // PlanningTest exists?
-        if (!contestdaytask.instance.planningtest) {
-            contestdaytask.message = getMsg('fc.planningtest.notfound')
-            contestdaytask.error = true
-            return contestdaytask
+        if (!task.instance.planningtest) {
+            task.message = getMsg('fc.planningtest.notfound')
+            task.error = true
+            return task
         }
 
         // PlanningTestTask exists?
-        if (!PlanningTestTask.countByPlanningtest(contestdaytask.instance.planningtest)) {
-            contestdaytask.message = getMsg('fc.planningtesttask.notfound')
-            contestdaytask.error = true
-            return contestdaytask
+        if (!PlanningTestTask.countByPlanningtest(task.instance.planningtest)) {
+            task.message = getMsg('fc.planningtesttask.notfound')
+            task.error = true
+            return task
         }
 
         // Multiple PlanningTestTasks?  
-        if (PlanningTestTask.countByPlanningtest(contestdaytask.instance.planningtest) > 1) {
+        if (PlanningTestTask.countByPlanningtest(task.instance.planningtest) > 1) {
             def testInstanceIDs = ['']
-            Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+            Test.findAllByTask(task.instance).each { testInstance ->
                 if (params["selectedTestID${testInstance.id}"] == "on") {
                     testInstanceIDs += testInstance.id
                 }
             }
-            contestdaytask.testinstanceids = testInstanceIDs
-            return contestdaytask
+            task.testinstanceids = testInstanceIDs
+            return task
         }
 
         // set single PlanningTestTask to all selected Tests
-        PlanningTestTask planningTestTaskInstance = PlanningTestTask.findByPlanningtest(contestdaytask.instance.planningtest) 
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        PlanningTestTask planningTestTaskInstance = PlanningTestTask.findByPlanningtest(task.instance.planningtest) 
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
                 testInstance.planningtesttask = planningTestTaskInstance
-                calulateTestLegPlannings(testInstance)
+                calulateTestLegPlannings(testInstance, testInstance.planningtesttask.route)
                 testInstance.save()
             }
         }
         
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    void putplanningtesttaskContestDayTask(contestdaytask,planningtesttask)
+    void putplanningtesttaskTask(task,planningtesttask)
     {
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             testInstance.planningtesttask = planningtesttask.instance
-            calulateTestLegPlannings(testInstance)
+            calulateTestLegPlannings(testInstance, testInstance.planningtesttask.route)
             testInstance.save()
         }
     }
     
     //--------------------------------------------------------------------------
-    void putplanningresultsContestDayTask(contestdaytask,results)
+    void putplanningresultsTask(task,results)
     {
-    	Test.findAllByContestdaytask(contestdaytask.instance,[sort:"viewpos"]).eachWithIndex { testInstance, i ->
+    	Test.findAllByTask(task.instance,[sort:"viewpos"]).eachWithIndex { testInstance, i ->
     		TestLegPlanning.findAllByTest(testInstance).eachWithIndex { testLegPlanningInstance, j  ->
-        		testLegPlanningInstance.resultTrueHeading = results[i].givenValues[j].trueHeading
-        		testLegPlanningInstance.resultLegTimeInput = results[i].givenValues[j].legTime
-        		calculateLegPlanningInstance(testLegPlanningInstance)
-        		testLegPlanningInstance.save()
+        		if (results[i].givenValues[j]?.trueHeading && results[i].givenValues[j]?.legTime) {
+	    			testLegPlanningInstance.resultTrueHeading = results[i].givenValues[j].trueHeading
+	        		testLegPlanningInstance.resultLegTimeInput = results[i].givenValues[j].legTime
+	        		calculateLegPlanningInstance(testLegPlanningInstance)
+	        		testLegPlanningInstance.save()
+        		}
         	}
-            testInstance.planningTestTooLate = results[i].givenTooLate
+            testInstance.planningTestGivenTooLate = results[i].givenTooLate
             testInstance.planningTestExitRoomTooLate = results[i].exitRoomTooLate
-    		calculateTestPenalties(testInstance)
+            calculateTestPenalties(testInstance)
            	testInstance.planningTestComplete = testInstance.planningTestLegComplete && results[i].testComplete
+            calculateTestPenalties(testInstance)
     		testInstance.save()
         }
     }
 
     //--------------------------------------------------------------------------
-    Map setplanningtesttaskContestDayTask(params)
+    Map setplanningtesttaskTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (contestdaytask.instance) {
+        def task = getTask(params) 
+        if (task.instance) {
             def planningTestTaskInstance = PlanningTestTask.get(params.planningtesttask.id)
             params.testInstanceIDs.each { testID ->
                 if (testID) {
                     def testInstance = Test.get(testID)
                     testInstance.planningtesttask = planningTestTaskInstance 
-                    calulateTestLegPlannings(testInstance)
+                    calulateTestLegPlannings(testInstance, testInstance.planningtesttask.route)
                     testInstance.save()
                 }
             }
-            contestdaytask.message = getMsg('fc.contestdaytask.selectplanningtesttask.assigned',[planningTestTaskInstance.name()])
+            task.message = getMsg('fc.task.selectplanningtesttask.assigned',[planningTestTaskInstance.name()])
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map assignflighttestwindContestDayTask(params)
+    Map assignflighttestwindTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // FlightTest exists?
-        if (!contestdaytask.instance.flighttest) {
-            contestdaytask.message = getMsg('fc.flighttest.notfound')
-            contestdaytask.error = true
-            return contestdaytask
+        if (!task.instance.flighttest) {
+            task.message = getMsg('fc.flighttest.notfound')
+            task.error = true
+            return task
         }
 
         // FlightTestWind exists?
-        if (!FlightTestWind.countByFlighttest(contestdaytask.instance.flighttest)) {
-            contestdaytask.message = getMsg('fc.flighttestwind.notfound')
-            contestdaytask.error = true
-            return contestdaytask
+        if (!FlightTestWind.countByFlighttest(task.instance.flighttest)) {
+            task.message = getMsg('fc.flighttestwind.notfound')
+            task.error = true
+            return task
         }
 
         // Multiple FlightTestWinds?  
-        if (FlightTestWind.countByFlighttest(contestdaytask.instance.flighttest) > 1) {
+        if (FlightTestWind.countByFlighttest(task.instance.flighttest) > 1) {
             def testInstanceIDs = ['']
-            Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+            Test.findAllByTask(task.instance).each { testInstance ->
                 if (params["selectedTestID${testInstance.id}"] == "on") {
                     testInstanceIDs += testInstance.id
                 }
             }
-            contestdaytask.testinstanceids = testInstanceIDs
-            return contestdaytask
+            task.testinstanceids = testInstanceIDs
+            return task
         }
 
         // set single FlightTestWind to all selected Tests
-        def flightTestWindInstance = FlightTestWind.findByFlighttest(contestdaytask.instance.flighttest)
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        def flightTestWindInstance = FlightTestWind.findByFlighttest(task.instance.flighttest)
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
                 testInstance.flighttestwind = flightTestWindInstance
                 testInstance.save()
             }
         }
 
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    void putflighttestwindContestDayTask(contestdaytask,flighttestwind)
+    void putflighttestwindTask(task,flighttestwind)
     {
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             testInstance.flighttestwind = flighttestwind.instance
             testInstance.save()
         }
     }
     
     //--------------------------------------------------------------------------
-    Map setflighttestwindContestDayTask(params)
+    void putflightresultsTask(task,results)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (contestdaytask.instance) {
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).eachWithIndex { testInstance, i ->
+        	CoordResult.findAllByTest(testInstance).eachWithIndex { coordResultInstance, j  ->
+        		boolean calculate = false
+        		if (results[i].givenValues[j]?.cpNotFound) {
+        			coordResultInstance.resultCpNotFound = true
+        			calculate = true
+        		} else if (results[i].givenValues[j]?.cpTime) {
+        			coordResultInstance.resultCpTimeInput =  results[i].givenValues[j].cpTime
+                    calculate = true
+        		}
+                if (results[i].givenValues[j]?.procedureTurnNotFlown) {
+                    calculate = true
+                    coordResultInstance.resultProcedureTurnNotFlown = true
+                }
+                if (results[i].givenValues[j]?.altitude) {
+                    calculate = true
+                    coordResultInstance.resultAltitude = results[i].givenValues[j].altitude
+                }
+                if (calculate) {
+                    calculateCoordResultInstance(coordResultInstance,false)
+                    coordResultInstance.resultProcedureTurnEntered = true
+                    coordResultInstance.save()
+                }
+            }
+            testInstance.flightTestTakeoffMissed = results[i].takeoffMissed
+            testInstance.flightTestBadCourseStartLanding = results[i].badCourseStartLanding
+            testInstance.flightTestLandingTooLate = results[i].landingTooLate
+            testInstance.flightTestGivenTooLate = results[i].givenTooLate
+            calculateTestPenalties(testInstance)
+            testInstance.flightTestComplete = testInstance.flightTestCheckPointsComplete && results[i].testComplete
+            calculateTestPenalties(testInstance)
+            testInstance.save()
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    Map setflighttestwindTask(params)
+    {
+        def task = getTask(params) 
+        if (task.instance) {
             def flightTestWindInstance = FlightTestWind.get(params.flighttestwind.id)
             params.testInstanceIDs.each { testID ->
                 if (testID) {
@@ -623,53 +568,53 @@ class FcService
                     testInstance.save()
                 }
             }
-            contestdaytask.message = getMsg('fc.contestdaytask.selectflighttestwind.assigned',[flightTestWindInstance.wind.name()])
+            task.message = getMsg('fc.task.selectflighttestwind.assigned',[flightTestWindInstance.wind.name()])
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map calculatesequenceContestDayTask(params)
+    Map calculatesequenceTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         /*
         // Have all crews an aircraft?
         def call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.crew.aircraft) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.aircraft.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.aircraft.notassigned')
+            task.error = true
+            return task
         }
         */
 
-        calulateSequence(contestdaytask.instance)
+        calulateSequence(task.instance)
         
-        contestdaytask.message = getMsg('fc.test.sequence.calculated')        
-        return contestdaytask
+        task.message = getMsg('fc.test.sequence.calculated')        
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map moveupContestDayTask(params)
+    Map moveupTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         def borderreached = false
         def notmovable = false
         def off2on = false
         def on2off = false
-        Test.findAllByContestdaytask(contestdaytask.instance,[sort:"viewpos"]).each { testInstance ->
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
                 if (testInstance.viewpos == 0) {
                     borderreached = true
@@ -685,21 +630,21 @@ class FcService
             }
         }
         if (borderreached) {
-               //contestdaytask.message = getMsg('fc.test.moveborderreached')
-               contestdaytask.borderreached = true
-            return contestdaytask
+               //task.message = getMsg('fc.test.moveborderreached')
+               task.borderreached = true
+            return task
         }
         if (notmovable) {
-            contestdaytask.message = getMsg('fc.test.notmovable')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.test.notmovable')
+            task.error = true
+            return task
         }
         
         def movenum = 0
         def movefirstpos = -1
         def selectedTestIDs = [selectedTestID:""]
         borderreached = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
                 testInstance.viewpos--
                 testInstance.timeCalculated = false
@@ -714,7 +659,7 @@ class FcService
                 }
             }
         }
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] != "on") {
                 if (testInstance.viewpos >= movefirstpos && testInstance.viewpos < movefirstpos + movenum) {
                     testInstance.viewpos += movenum
@@ -725,26 +670,26 @@ class FcService
         }
 
         if (!borderreached) {
-            contestdaytask.selectedtestids = selectedTestIDs
+            task.selectedtestids = selectedTestIDs
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map movedownContestDayTask(params)
+    Map movedownTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         def borderreached = false
         def notmovable = false
         def off2on = false
         def on2off = false
-        Test.findAllByContestdaytask(contestdaytask.instance,[sort:"viewpos"]).each { testInstance ->
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
-                if (testInstance.viewpos + 1 == Crew.countByContest(contestdaytask.instance.contest)) {
+                if (testInstance.viewpos + 1 == Crew.countByContest(task.instance.contest)) {
                     borderreached = true
                 }
                 if (off2on && on2off) {
@@ -758,27 +703,27 @@ class FcService
             }
         }
         if (borderreached) {
-               //contestdaytask.message = getMsg('fc.test.moveborderreached')
-            contestdaytask.borderreached = true
-            return contestdaytask
+               //task.message = getMsg('fc.test.moveborderreached')
+            task.borderreached = true
+            return task
         }
         if (notmovable) {
-            contestdaytask.message = getMsg('fc.test.notmovable')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.test.notmovable')
+            task.error = true
+            return task
         }
         
         def movenum = 0
         def movefirstpos = -1
         def selectedTestIDs = [selectedTestID:""]
         borderreached = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
                 testInstance.viewpos++
                 testInstance.timeCalculated = false
                 testInstance.save()
                 selectedTestIDs["selectedTestID${testInstance.id}"] = "on"
-                   if (testInstance.viewpos + 1 == Crew.countByContest(contestdaytask.instance.contest)) {
+                   if (testInstance.viewpos + 1 == Crew.countByContest(task.instance.contest)) {
                        borderreached = true
                    }
                 movenum++
@@ -787,7 +732,7 @@ class FcService
                 }
             }
         }
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] != "on") {
                 if (testInstance.viewpos >= movefirstpos && testInstance.viewpos < movefirstpos + movenum) {
                     testInstance.viewpos -= movenum
@@ -798,178 +743,179 @@ class FcService
         }
 
         if (!borderreached) {
-            contestdaytask.selectedtestids = selectedTestIDs
+            task.selectedtestids = selectedTestIDs
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map calculatetimetableContestDayTask(params)
+    Map calculatetimetableTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // FlightTest exists?
-        if (!contestdaytask.instance.flighttest) {
-            contestdaytask.message = getMsg('fc.flighttest.notfound')
-               contestdaytask.error = true
-            return contestdaytask
+        if (!task.instance.flighttest) {
+            task.message = getMsg('fc.flighttest.notfound')
+               task.error = true
+            return task
         }
 
         // FlightTestWind exists?
-        if (!FlightTestWind.countByFlighttest(contestdaytask.instance.flighttest)) {
-            contestdaytask.message = getMsg('fc.flighttestwind.notfound')
-               contestdaytask.error = true
-            return contestdaytask
+        if (!FlightTestWind.countByFlighttest(task.instance.flighttest)) {
+            task.message = getMsg('fc.flighttestwind.notfound')
+               task.error = true
+            return task
         }
         
         // FlightTestWind assigned to all crews?
         def call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.flighttestwind) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.flighttestwind.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.flighttestwind.notassigned')
+            task.error = true
+            return task
         }
 
         /*
         // Have all crews an aircraft?
         call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.crew.aircraft) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.aircraft.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.aircraft.notassigned')
+            task.error = true
+            return task
         }
         */
 
-        calulateTestLegFlights(contestdaytask.instance)
-        calulateTimetable(contestdaytask.instance)
+        calulateTestLegFlights(task.instance)
+        calulateTimetable(task.instance)
+        calulateCoordResults(task.instance)
         
-        contestdaytask.message = getMsg('fc.test.timetable.calculated')        
-        return contestdaytask
+        task.message = getMsg('fc.test.timetable.calculated')        
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map timeaddContestDayTask(params)
+    Map timeaddTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         def selectedTestIDs = [selectedTestID:""]
-        Test.findAllByContestdaytask(contestdaytask.instance,[sort:"viewpos"]).each { testInstance ->
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
-                addTestingTime(contestdaytask.instance,testInstance)
+                addTestingTime(task.instance,testInstance)
                 selectedTestIDs["selectedTestID${testInstance.id}"] = "on"
             }
         }
-        contestdaytask.selectedtestids = selectedTestIDs
-        return contestdaytask
+        task.selectedtestids = selectedTestIDs
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map timesubtractContestDayTask(params)
+    Map timesubtractTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         def selectedTestIDs = [selectedTestID:""]
-        Test.findAllByContestdaytask(contestdaytask.instance,[sort:"viewpos"]).each { testInstance ->
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { testInstance ->
             if (params["selectedTestID${testInstance.id}"] == "on") {
-                subtractTestingTime(contestdaytask.instance,testInstance)
+                subtractTestingTime(task.instance,testInstance)
                 selectedTestIDs["selectedTestID${testInstance.id}"] = "on"
             }
         }
-        contestdaytask.selectedtestids = selectedTestIDs
-           return contestdaytask
+        task.selectedtestids = selectedTestIDs
+           return task
     }
     
     //--------------------------------------------------------------------------
-    Map printtimetableContestDayTask(params,printparams)
+    Map printtimetableTask(params,printparams)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // FlightTest exists?
-        if (!contestdaytask.instance.flighttest) {
-            contestdaytask.message = getMsg('fc.flighttest.notfound')
-               contestdaytask.error = true
-            return contestdaytask
+        if (!task.instance.flighttest) {
+            task.message = getMsg('fc.flighttest.notfound')
+               task.error = true
+            return task
         }
 
         // FlightTestWind exists?
-        if (!FlightTestWind.countByFlighttest(contestdaytask.instance.flighttest)) {
-            contestdaytask.message = getMsg('fc.flighttestwind.notfound')
-               contestdaytask.error = true
-            return contestdaytask
+        if (!FlightTestWind.countByFlighttest(task.instance.flighttest)) {
+            task.message = getMsg('fc.flighttestwind.notfound')
+               task.error = true
+            return task
         }
         
         // FlightTestWind assigned to all crews?
         def call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.flighttestwind) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.flighttestwind.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.flighttestwind.notassigned')
+            task.error = true
+            return task
         }
 
         // Have all crews an aircraft?
         call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.crew.aircraft) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.aircraft.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.aircraft.notassigned')
+            task.error = true
+            return task
         }
 
         // Timetable calculated?  
         call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.timeCalculated) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.test.timetable.newcalculate')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.test.timetable.newcalculate')
+            task.error = true
+            return task
         }        
         
         // Warnings?  
         call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (testInstance.arrivalTimeWarning || testInstance.takeoffTimeWarning) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.test.flightplan.resolvewarnings')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.test.flightplan.resolvewarnings')
+            task.error = true
+            return task
         }        
         
         // Print timetable
@@ -977,93 +923,93 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            def url = "${printparams.baseuri}/contestDayTask/timetableprintable/${contestdaytask.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            def url = "${printparams.baseuri}/task/timetableprintable/${task.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
             renderer.createPDF(content,false)
             renderer.finishPDF()
-            contestdaytask.content = content 
+            task.content = content 
         }
         catch (Throwable e) {
-            contestdaytask.message = getMsg('fc.test.timetable.printerror',["$e"])
-            contestdaytask.error = true
+            task.message = getMsg('fc.test.timetable.printerror',["$e"])
+            task.error = true
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map printflightplansContestDayTask(params,printparams)
+    Map printflightplansTask(params,printparams)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // FlightTest exists?
-        if (!contestdaytask.instance.flighttest) {
-            contestdaytask.message = getMsg('fc.flighttest.notfound')
-            contestdaytask.error = true
-            return contestdaytask
+        if (!task.instance.flighttest) {
+            task.message = getMsg('fc.flighttest.notfound')
+            task.error = true
+            return task
         }
 
         // FlightTestWind exists?
-        if (!FlightTestWind.countByFlighttest(contestdaytask.instance.flighttest)) {
-            contestdaytask.message = getMsg('fc.flighttestwind.notfound')
-            contestdaytask.error = true
-            return contestdaytask
+        if (!FlightTestWind.countByFlighttest(task.instance.flighttest)) {
+            task.message = getMsg('fc.flighttestwind.notfound')
+            task.error = true
+            return task
         }
         
         // FlightTestWind assigned to all crews?
         def call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.flighttestwind) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.flighttestwind.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.flighttestwind.notassigned')
+            task.error = true
+            return task
         }
 
         // Have all crews an aircraft?
         call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.crew.aircraft) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.aircraft.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.aircraft.notassigned')
+            task.error = true
+            return task
         }
 
         // Timetable calculated?  
         call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.timeCalculated) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.test.timetable.newcalculate')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.test.timetable.newcalculate')
+            task.error = true
+            return task
         }        
         
         // Warnings?  
         call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (testInstance.arrivalTimeWarning || testInstance.takeoffTimeWarning) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.test.flightplan.resolvewarnings')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.test.flightplan.resolvewarnings')
+            task.error = true
+            return task
         }        
         
         // Print flightplans
@@ -1071,7 +1017,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            Test.findAllByContestdaytask(contestdaytask.instance,[sort:"viewpos"]).each { testInstance ->
+            Test.findAllByTask(task.instance,[sort:"viewpos"]).each { testInstance ->
                 def url = "${printparams.baseuri}/test/flightplanprintable/${testInstance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
                 println "Print: $url"
                 renderer.setDocument(url)
@@ -1085,48 +1031,48 @@ class FcService
             }
             renderer.finishPDF()
 
-            contestdaytask.content = content 
+            task.content = content 
         }
         catch (Throwable e) {
-            contestdaytask.message = getMsg('fc.test.flightplan.printerror',["$e"])
-            contestdaytask.error = true
+            task.message = getMsg('fc.test.flightplan.printerror',["$e"])
+            task.error = true
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map printplanningtasksContestDayTask(params,printparams)
+    Map printplanningtasksTask(params,printparams)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // PlanningTest exists?
-        if (!contestdaytask.instance.planningtest) {
-            contestdaytask.message = getMsg('fc.planningtest.notfound')
-            contestdaytask.error = true
-            return contestdaytask
+        if (!task.instance.planningtest) {
+            task.message = getMsg('fc.planningtest.notfound')
+            task.error = true
+            return task
         }
 
         // PlanningTestTask exists?
-        if (!PlanningTestTask.countByPlanningtest(contestdaytask.instance.planningtest)) {
-            contestdaytask.message = getMsg('fc.planningtesttask.notfound')
-               contestdaytask.error = true
-            return contestdaytask
+        if (!PlanningTestTask.countByPlanningtest(task.instance.planningtest)) {
+            task.message = getMsg('fc.planningtesttask.notfound')
+               task.error = true
+            return task
         }
 
         // PlanningTestTask assigned to all crews?
         def call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.planningtesttask) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.planningtesttask.notassigned')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.planningtesttask.notassigned')
+            task.error = true
+            return task
         }
 
         // Print PlanningTasks
@@ -1134,7 +1080,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            Test.findAllByContestdaytask(contestdaytask.instance,[sort:"viewpos"]).each { testInstance ->
+            Test.findAllByTask(task.instance,[sort:"viewpos"]).each { testInstance ->
                 def url = "${printparams.baseuri}/test/planningtaskprintable/${testInstance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}&results=no"
                 println "Print: $url"
                 renderer.setDocument(url)
@@ -1147,31 +1093,31 @@ class FcService
                 }
             }
             renderer.finishPDF()
-            contestdaytask.content = content
+            task.content = content
         }
         catch (Throwable e) {
-            contestdaytask.message = getMsg('fc.planningtesttask.printerror',["$e"])
-            contestdaytask.error = true
+            task.message = getMsg('fc.planningtesttask.printerror',["$e"])
+            task.error = true
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map calculatepositionsContestDayTask(params)
+    Map calculatepositionsTask(params)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // calulate position
         int actPenalty = -1
-        int maxPosition = Test.countByContestdaytask(contestdaytask.instance)
+        int maxPosition = Test.countByTask(task.instance)
         for (int actPosition = 1; actPosition <= maxPosition; actPosition++) {
             
             // search lowest penalty
             int minPenalty = 100000
-            Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+            Test.findAllByTask(task.instance).each { testInstance ->
                 if (testInstance.testPenalties > actPenalty) {
                     if (testInstance.testPenalties < minPenalty) {
                         minPenalty = testInstance.testPenalties 
@@ -1182,7 +1128,7 @@ class FcService
             
             // set position
             int setPositionNum = -1
-            Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+            Test.findAllByTask(task.instance).each { testInstance ->
                 if (testInstance.testPenalties == actPenalty) {
                     testInstance.positionContestDay = actPosition
                     testInstance.save()
@@ -1195,29 +1141,29 @@ class FcService
             }
         }
         
-        contestdaytask.message = getMsg('fc.test.results.positions.calculated')        
-        return contestdaytask
+        task.message = getMsg('fc.test.results.positions.calculated')        
+        return task
     }
     
     //--------------------------------------------------------------------------
-    Map printresultsContestDayTask(params,printparams)
+    Map printresultsTask(params,printparams)
     {
-        def contestdaytask = getContestDayTask(params) 
-        if (!contestdaytask.instance) {
-            return contestdaytask
+        def task = getTask(params) 
+        if (!task.instance) {
+            return task
         }
 
         // Positions calculated?  
         boolean call_return = false
-        Test.findAllByContestdaytask(contestdaytask.instance).each { testInstance ->
+        Test.findAllByTask(task.instance).each { testInstance ->
             if (!testInstance.positionContestDay) {
                 call_return = true
             }
         }
         if (call_return) {
-            contestdaytask.message = getMsg('fc.test.results.positions.newcalculate')
-            contestdaytask.error = true
-            return contestdaytask
+            task.message = getMsg('fc.test.results.positions.newcalculate')
+            task.error = true
+            return task
         }        
         
         // Print positions
@@ -1225,19 +1171,19 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            def url = "${printparams.baseuri}/contestDayTask/positionsprintable/${contestdaytask.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            def url = "${printparams.baseuri}/task/positionsprintable/${task.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
             renderer.createPDF(content,false)
             renderer.finishPDF()
-            contestdaytask.content = content 
+            task.content = content 
         }
         catch (Throwable e) {
-            contestdaytask.message = getMsg('fc.test.timetable.printerror',["$e"])
-            contestdaytask.error = true
+            task.message = getMsg('fc.test.timetable.printerror',["$e"])
+            task.error = true
         }
-        return contestdaytask
+        return task
     }
     
     //--------------------------------------------------------------------------
@@ -1415,32 +1361,33 @@ class FcService
         def aflosRouteNamesInstance = AflosRouteNames.get(params.aflosroutenames.id)
     	if (aflosRouteNamesInstance) {
     	
-	        def routeInstance = new Route()
+    		def routeInstance = new Route()
 	        
 	        routeInstance.contest = contestInstance
 	        routeInstance.idTitle = Route.countByContest(contestInstance) + 1
 	        routeInstance.title = aflosRouteNamesInstance.name
+	        routeInstance.mark = aflosRouteNamesInstance.name
 	        
 	        if(!routeInstance.hasErrors() && routeInstance.save()) {
                 def aflosRouteDefsInstances = AflosRouteDefs.findAllByRoutename(aflosRouteNamesInstance)
-                def lastRouteCoordInstance
-                def lastRouteCoordTestInstance
+                def lastCoordRouteInstance
+                def lastCoordRouteTestInstance
                 def tpNum = 0
                 def tcNum = 0
                 aflosRouteDefsInstances.each { aflosRouteDefsInstance ->
-                	def routeCoordInstance = new RouteCoord()
+                	def coordRouteInstance = new CoordRoute()
                     
                     // set latitude
                     aflosRouteDefsInstance.latitude.split().eachWithIndex{ latValue, i ->
                 		switch(i) {
                 			case 0: 
-                				routeCoordInstance.latDirection = latValue
+                				coordRouteInstance.latDirection = latValue
                 				break
                 			case 1:
-                				routeCoordInstance.latGrad = latValue.toInteger()
+                				coordRouteInstance.latGrad = latValue.toInteger()
                 				break
                 			case 2:
-                				routeCoordInstance.latMinute = latValue.replace(',','.').toBigDecimal()
+                				coordRouteInstance.latMinute = latValue.replace(',','.').toBigDecimal()
                 				break
                 		}
                 	}
@@ -1449,32 +1396,47 @@ class FcService
                     aflosRouteDefsInstance.longitude.split().eachWithIndex{ lonValue, i ->
                         switch(i) {
                             case 0: 
-                                routeCoordInstance.lonDirection = lonValue
+                                coordRouteInstance.lonDirection = lonValue
                                 break
                             case 1:
-                                routeCoordInstance.lonGrad = lonValue.toInteger()
+                                coordRouteInstance.lonGrad = lonValue.toInteger()
                                 break
                             case 2:
-                                routeCoordInstance.lonMinute = lonValue.replace(',','.').toBigDecimal()
+                                coordRouteInstance.lonMinute = lonValue.replace(',','.').toBigDecimal()
                                 break
                         }
                     }
     
                     // set type and title
-                    routeCoordInstance.type = RouteCoordType.UNKNOWN
-                    RouteCoordType.each { type ->
-                    	if (routeCoordInstance.type == RouteCoordType.UNKNOWN) {
-	                    	if (aflosRouteDefsInstance.mark.startsWith(type.aflosMark)) {
-	                    		if (type.aflosGateWidth == 0 || type.aflosGateWidth == aflosRouteDefsInstance.gatewidth) {
-		                    		routeCoordInstance.type = type
-		                    		switch (type) {
-		                    			case RouteCoordType.TP:
+                    coordRouteInstance.type = CoordType.UNKNOWN
+                    CoordType.each { type ->
+                    	if (coordRouteInstance.type == CoordType.UNKNOWN) { // Typ der Koordinate noch nicht ermittelt
+	                    	if (type != CoordType.UNKNOWN && aflosRouteDefsInstance.mark && aflosRouteDefsInstance.mark.startsWith(type.aflosMark)) {  
+	                    		if (type.aflosGateWidth == 0 || (type.aflosGateWidth == aflosRouteDefsInstance.gatewidth)) { // Übereinstimmung AFLOS-Kooordinate mit Typ
+	                    			switch (type) {
+	                    				case CoordType.SECRET:
+	                    					if (params.aflosroutenames.secretcoordrouteidentification == SecretCoordRouteIdentification.NONE.toString()) {
+	                    						coordRouteInstance.type = CoordType.TP 
+	                    					} else {
+	                    						coordRouteInstance.type = CoordType.SECRET 
+	                    					}
+                                            break
+	                    				case CoordType.TP:
+                                            coordRouteInstance.type = CoordType.TP 
+                                            break
+                                        default:
+                                        	coordRouteInstance.type = type
+                                        	break
+	                    			}
+
+	                    			switch (coordRouteInstance.type) {
+		                    			case CoordType.TP:
 		                    				tpNum++
-		                    				routeCoordInstance.titleNumber = tpNum
+		                    				coordRouteInstance.titleNumber = tpNum
 		                    				break
-		                    			case RouteCoordType.SECRET:
+		                    			case CoordType.SECRET:
 		                    				tcNum++
-	                                        routeCoordInstance.titleNumber = tcNum
+	                                        coordRouteInstance.titleNumber = tcNum
 		                    				break
 		                    		}
 	                    		}
@@ -1483,23 +1445,24 @@ class FcService
                     }
                     
                     // set other
-                    routeCoordInstance.altitude = aflosRouteDefsInstance.altitude.toInteger()
-                    routeCoordInstance.mark = aflosRouteDefsInstance.mark
-                    routeCoordInstance.gatewidth = aflosRouteDefsInstance.gatewidth
-                    routeCoordInstance.route = routeInstance
+                    coordRouteInstance.altitude = aflosRouteDefsInstance.altitude.toInteger()
+                    coordRouteInstance.mark = aflosRouteDefsInstance.mark
+                    coordRouteInstance.gatewidth = aflosRouteDefsInstance.gatewidth
+                    coordRouteInstance.route = routeInstance
                     
-                    routeCoordInstance.save()
+                    coordRouteInstance.save()
                     
-                    newLeg(routeCoordInstance.route, routeCoordInstance, lastRouteCoordInstance, lastRouteCoordTestInstance, 0)
-                    lastRouteCoordInstance = routeCoordInstance
-                    switch (routeCoordInstance.type) {
-	                    case RouteCoordType.SP:
-	                    case RouteCoordType.TP:
-	                    case RouteCoordType.FP:
-	                        lastRouteCoordTestInstance = routeCoordInstance
+                    newLeg(coordRouteInstance.route, coordRouteInstance, lastCoordRouteInstance, lastCoordRouteTestInstance, null, null)
+                    lastCoordRouteInstance = coordRouteInstance
+                    switch (coordRouteInstance.type) {
+	                    case CoordType.SP:
+	                    case CoordType.TP:
+	                    case CoordType.FP:
+	                        lastCoordRouteTestInstance = coordRouteInstance
 	                        break
 	                }
                 }
+                calculateSecretLegRatio(routeInstance)
                 return ['instance':routeInstance,'saved':true,'message':getMsg('fc.imported',["${routeInstance.name()}"])]
 	        } else {
 	            return ['error':true,'message':getMsg('fc.notimported',["${aflosRouteNamesInstance.name}"])]
@@ -1510,112 +1473,386 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map getRouteCoord(params)
+    Map existAnyAflosCrew()
     {
-        def routeCoordInstance = RouteCoord.get(params.id)
-
-        if (!routeCoordInstance) {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.routecoord'),params.id])]
+    	if (AflosCrewNames.count() > 0) {
+            return [:]
         }
+        return ['error':true,'message':getMsg('fc.aflos.points.notfound')]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map importAflosResults(params,contestInstance) // TODO
+    {
+    	AflosCrewNames aflosCrewNamesInstance = AflosCrewNames.findByName(params.afloscrewnames.name)
+        Test testInstance = Test.get(params.id)
+        AflosRouteNames aflosRouteNamesInstance = AflosRouteNames.findByName(testInstance.flighttestwind.flighttest.route.mark)
         
-        return ['instance':routeCoordInstance]
+        println "importAflosResults $testInstance.crew.name"
+
+        AflosErrors aflosError= AflosErrors.findByStartnumAndRoutename(aflosCrewNamesInstance.startnum,aflosRouteNamesInstance)
+        if (aflosError.mark == "Check Error") {
+        	return ['error':true,'message':getMsg('fc.aflos.points.notcalculated',[aflosCrewNamesInstance.name])]
+        }
+
+        try {
+	        // Import AflosCheckPoints
+            int checkPointErrors = 0
+            int heightErrors = 0
+	        CoordResult.findAllByTest(testInstance).each { coordResultInstance ->
+	        	boolean found = false
+	        	AflosCheckPoints.findAllByStartnumAndRoutename(aflosCrewNamesInstance.startnum,aflosRouteNamesInstance).each { aflosCheckPointsInstance ->
+	        		if (aflosCheckPointsInstance.mark == "P${coordResultInstance.mark}") {
+	        			// reset results
+	        			coordResultInstance.ResetResults()
+	        			
+	        			// read utc '09h 36min 05,000sec'
+	        			coordResultInstance.resultCpTimeInput = FcMath.ConvertAFLOSTime(aflosCheckPointsInstance.utc) 
+	
+	        			// read latitude '51° 26,9035' N'
+	        			coordResultInstance.resultLatitude = FcMath.ConvertAFLOSCoordValue(aflosCheckPointsInstance.latitude)
+ 
+	        			// read longitude '013° 51,7278' E'
+	                    coordResultInstance.resultLongitude = FcMath.ConvertAFLOSCoordValue(aflosCheckPointsInstance.longitude)
+ 
+	        			// read altitude '01992 ft'
+	        			coordResultInstance.resultAltitude = aflosCheckPointsInstance.altitude.split()[0].toInteger()
+	        			
+	        			// calculate results
+                        if (coordResultInstance.planProcedureTurn) {
+                            coordResultInstance.resultProcedureTurnEntered = true
+                        }
+	        			calculateCoordResultInstance(coordResultInstance,true)
+	        			
+                        // calculate verify values 
+                        if (coordResultInstance.resultMinAltitudeMissed) {
+                            heightErrors++
+                        }
+
+	        			// save results
+	                    coordResultInstance.save()
+	                    found = true
+	                    
+	                    // log
+	                    if (coordResultInstance.planProcedureTurn) {
+	                        println "Procedure turn"
+	                    }
+	                    println "Found AflosCheckPoint $aflosCheckPointsInstance.mark UTC: $coordResultInstance.resultCpTimeInput Local: ${coordResultInstance.resultCpTime.format('HH:mm:ss')}"
+	        		}
+	        	}
+	        	if (!found) {
+	        		// reset results
+                    coordResultInstance.ResetResults()
+                    
+	        		// calculate results
+                    coordResultInstance.resultCpNotFound = true
+                    if (coordResultInstance.planProcedureTurn) {
+                        coordResultInstance.resultProcedureTurnEntered = true
+                    }
+                    calculateCoordResultInstance(coordResultInstance,true)
+                    
+                    // calculate verify values
+                    checkPointErrors++
+                    
+                    // save results
+	                coordResultInstance.save()
+                    
+	                // log
+	                if (coordResultInstance.planProcedureTurn) {
+                        println "Procedure turn"
+                    }
+                    println "Not found AflosCheckPoint $coordResultInstance.mark"
+	        	}
+	    	}
+	    	
+	    	// Import AflosErrorPoints
+	    	int badCourseNum = 0
+	    	int courseErrors = 0
+	    	String badCourseStartTimeUTC
+	    	AflosErrorPoints.findAllByStartnumAndRoutename(aflosCrewNamesInstance.startnum,aflosRouteNamesInstance).each { aflosErrorPointsInstance ->
+	    		if (badCourseNum == 0) {
+	    			if (aflosErrorPointsInstance.mark.contains("-Bad Course")) {
+		    			badCourseNum = 1
+		    			badCourseStartTimeUTC = aflosErrorPointsInstance.utc
+		    		}
+	    		} else {
+	    			if (!aflosErrorPointsInstance.mark.trim()) {
+	    				badCourseNum++
+	    			} else {
+	    				// process error point
+	    				if (processAflosErrorPointBadCourse(testInstance,badCourseNum,badCourseStartTimeUTC)) {
+	    					courseErrors++
+	    				}
+	    				
+	    				// search for next error point 
+	    				if (aflosErrorPointsInstance.mark.contains("-Bad Course")) {
+	    					badCourseNum = 1
+	                        badCourseStartTimeUTC = aflosErrorPointsInstance.utc
+	    				} else {
+	    					badCourseNum = 0
+	    					badCourseStartTimeUTC = ""
+	    				}
+	    			}
+	    		}
+	    		if (aflosErrorPointsInstance.mark.contains("-Bad Turn")) {
+	    			processAflosErrorPointBadTurn(testInstance,aflosErrorPointsInstance.utc)
+	    		}
+	    	}
+	        if (badCourseNum > 0) {
+	            // process error point
+	        	if (processAflosErrorPointBadCourse(testInstance,badCourseNum,badCourseStartTimeUTC)) {
+	        		courseErrors++
+	        	}
+	        }
+	        
+	    	// Penalties berechnen
+	        calculateTestPenalties(testInstance)
+	        testInstance.save()
+	        
+	        // save imported crew
+	        testInstance.crew.mark = aflosCrewNamesInstance.name
+	        testInstance.crew.save()
+	        
+	        if (aflosError.mark == "Flight O.K.") {
+	        	return ['saved':true,'message':getMsg('fc.aflos.points.imported',[aflosCrewNamesInstance.name])]
+	        } else {
+	        	if (aflosError.dropOutErrors == 0 && 
+	        		checkPointErrors == aflosError.checkPointErrors && 
+	        		heightErrors == aflosError.heightErrors && 
+	        		courseErrors == aflosError.courseErrors)
+	        	{
+	        		return ['saved':true,'message':getMsg('fc.aflos.points.imported.naverrors',[aflosCrewNamesInstance.name])]
+	        	} else {
+	        		if (checkPointErrors != aflosError.checkPointErrors) {
+	        			println "Evaluation error: $checkPointErrors bad checkpoints <> $aflosError.checkPointErrors bad AFLOS checkpoints"
+	        		}
+                    if (heightErrors != aflosError.heightErrors) {
+                        println "Evaluation error: $heightErrors bad heights <> $aflosError.heightErrors bad AFLOS heights"
+                    }
+                    if (courseErrors != aflosError.courseErrors) {
+                        println "Evaluation error: $courseErrors bad courses <> $aflosError.courseErrors bad AFLOS courses"
+                    }
+	        		return ['error':true,'saved':true,'message':getMsg('fc.aflos.points.imported.naverrors.differences',[aflosCrewNamesInstance.name])]
+	        	}
+	        }
+    	}
+        catch (Exception e) {
+        	return ['error':true,'message':getMsg('fc.notimported.msg',[aflosCrewNamesInstance.name,e.getMessage()])]
+        }
     }
 
     //--------------------------------------------------------------------------
-    Map updateRouteCoord(params)
+    boolean processAflosErrorPointBadCourse(Test testInstance, int badCourseNum, String badCourseStartTimeUTC) // TODO
     {
-        def routeCoordInstance = RouteCoord.get(params.id)
+    	boolean courseError = false
+    	Contest contestInstance = testInstance.task.contest
+    	
+        Date badCourseStartTime = Date.parse("HH:mm:ss",FcMath.ConvertAFLOSTime(badCourseStartTimeUTC))
+        GregorianCalendar badCourseStartCalendar = new GregorianCalendar()
+        badCourseStartCalendar.setTime(badCourseStartTime)
         
-        if (routeCoordInstance) {
+        Date timeZoneDate = Date.parse("HH:mm",contestInstance.timeZone)
+        GregorianCalendar timeZoneCalendar = new GregorianCalendar()
+        timeZoneCalendar.setTime(timeZoneDate)
+        
+        badCourseStartCalendar.add(Calendar.HOUR, timeZoneCalendar.get(Calendar.HOUR))
+        badCourseStartCalendar.add(Calendar.MINUTE, timeZoneCalendar.get(Calendar.MINUTE))
+        
+        GregorianCalendar badCourseEndCalendar = badCourseStartCalendar.clone()
+        badCourseEndCalendar.add(Calendar.SECOND, badCourseNum)
+            
+        println "Found AflosErrorPointBadCourse ($badCourseNum, ${badCourseStartCalendar.getTime().format('HH:mm:ss')}...${badCourseEndCalendar.getTime().format('HH:mm:ss')}): "
+
+        if (badCourseNum > contestInstance.flightTestBadCourseCorrectSecond) {
+        	courseError = true
+    		int lastIndex = 0
+    		Date lastTime
+    		boolean calculatePenalties = false
+            CoordResult.findAllByTest(testInstance,[sort:"id"]).eachWithIndex { coordResultInstance, i ->
+            	if (lastIndex != 0 && badCourseEndCalendar.getTime() < coordResultInstance.resultCpTime) {
+        			// process
+        			lastIndex = i
+        			
+        			if (badCourseEndCalendar.getTime() > lastTime) {
+        				coordResultInstance.resultBadCourseNum++
+        				coordResultInstance.save()
+        				calculatePenalties = true
+        				println "  $coordResultInstance.mark relevant."
+        			} else {
+        				println "  $coordResultInstance.mark not relevant."
+        			}
+            	}
+
+            	if (badCourseStartCalendar.getTime() > coordResultInstance.resultCpTime) {
+                    lastIndex = i
+                    lastTime = coordResultInstance.resultCpTime
+                } else {
+                    lastIndex = 0
+                }
+            }
+    		
+    	} else {
+    		println "  Not relevant (number)."
+    	}
+        return courseError
+    }
+    
+    //--------------------------------------------------------------------------
+    void processAflosErrorPointBadTurn(Test testInstance, String badTurnTimeUTC) // TODO
+    {
+        Contest contestInstance = testInstance.task.contest
+        
+        Date badTurnTime = Date.parse("HH:mm:ss",FcMath.ConvertAFLOSTime(badTurnTimeUTC))
+        GregorianCalendar badTurnCalendar = new GregorianCalendar()
+        badTurnCalendar.setTime(badTurnTime)
+        
+        Date timeZoneDate = Date.parse("HH:mm",contestInstance.timeZone)
+        GregorianCalendar timeZoneCalendar = new GregorianCalendar()
+        timeZoneCalendar.setTime(timeZoneDate)
+        
+        badTurnCalendar.add(Calendar.HOUR, timeZoneCalendar.get(Calendar.HOUR))
+        badTurnCalendar.add(Calendar.MINUTE, timeZoneCalendar.get(Calendar.MINUTE))
+        
+        print "Found AflosErrorPointBadTurn (${badTurnCalendar.getTime().format('HH:mm:ss')}): "
+
+        int lastIndex = 0
+        Date lastTime
+        boolean calculatePenalties = false
+        CoordResult.findAllByTest(testInstance,[sort:"id"]).eachWithIndex { coordResultInstance, i ->
+            if (lastIndex != 0 && coordResultInstance.planProcedureTurn && badTurnCalendar.getTime() < coordResultInstance.resultCpTime) {
+                // process
+                lastIndex = i
+                
+                if (badTurnCalendar.getTime() > lastTime) {
+                    coordResultInstance.resultProcedureTurnNotFlown = true
+                    coordResultInstance.resultProcedureTurnEntered = true
+                    coordResultInstance.save()
+                    calculatePenalties = true
+                    println "  $coordResultInstance.mark relevant."
+                } else {
+                    println "  $coordResultInstance.mark not relevant."
+                }
+            }
+
+            if (badTurnCalendar.getTime() > coordResultInstance.resultCpTime) {
+                lastIndex = i
+                lastTime = coordResultInstance.resultCpTime
+            } else {
+                lastIndex = 0
+            }
+            
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map getCoordRoute(params)
+    {
+        def coordRouteInstance = CoordRoute.get(params.id)
+
+        if (!coordRouteInstance) {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+        
+        return ['instance':coordRouteInstance]
+    }
+
+    //--------------------------------------------------------------------------
+    Map updateCoordRoute(params)
+    {
+        def coordRouteInstance = CoordRoute.get(params.id)
+        
+        if (coordRouteInstance) {
 
             if(params.version) {
                 def version = params.version.toLong()
-                if(routeCoordInstance.version > version) {
-                    routeCoordInstance.errors.rejectValue("version", "routeCoord.optimistic.locking.failure", getMsg('fc.notupdated'))
-                    return ['instance':routeCoordInstance]
+                if(coordRouteInstance.version > version) {
+                    coordRouteInstance.errors.rejectValue("version", "coordRoute.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordRouteInstance]
                 }
             }
             
-            routeCoordInstance.properties = params
+            coordRouteInstance.properties = params
             
-            if(!routeCoordInstance.hasErrors() && routeCoordInstance.save()) {
-                calculateRouteLegs(routeCoordInstance.route)
-                return ['instance':routeCoordInstance,'saved':true,'message':getMsg('fc.updated',["${routeCoordInstance.name()}"])]
+            if(!coordRouteInstance.hasErrors() && coordRouteInstance.save()) {
+                calculateSecretLegRatio(coordRouteInstance.route)
+                calculateRouteLegs(coordRouteInstance.route)
+                return ['instance':coordRouteInstance,'saved':true,'message':getMsg('fc.updated',["${coordRouteInstance.name()}"])]
             } else {
-                return ['instance':routeCoordInstance]
+                return ['instance':coordRouteInstance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.routecoord'),params.id])]
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
         }
     }
     
     //--------------------------------------------------------------------------
-    Map createRouteCoord(params)
+    Map createCoordRoute(params)
     {
-        def lastRouteCoordInstance = RouteCoord.findByRoute(Route.get(params.routeid),[sort:"id", order:"desc"])
-        def routeCoordInstance = new RouteCoord()
+    	CoordRoute lastCoordRouteInstance = CoordRoute.findByRoute(Route.get(params.routeid),[sort:"id", order:"desc"])
+        CoordRoute coordRouteInstance = new CoordRoute()
     
-        routeCoordInstance.properties = params
+        coordRouteInstance.properties = params
+        coordRouteInstance.altitude = 1
     
         if (params.secret) {
-            routeCoordInstance.type = RouteCoordType.SECRET
-            if (lastRouteCoordInstance) {
-                switch (lastRouteCoordInstance.type) {
-                	case RouteCoordType.SP:
-                    case RouteCoordType.TP:
-                    case RouteCoordType.SECRET:
-                    	routeCoordInstance.titleNumber = findNextTitleNumber(lastRouteCoordInstance.route,RouteCoordType.SECRET)
+            coordRouteInstance.type = CoordType.SECRET
+            if (lastCoordRouteInstance) {
+                switch (lastCoordRouteInstance.type) {
+                	case CoordType.SP:
+                    case CoordType.TP:
+                    case CoordType.SECRET:
+                    	coordRouteInstance.titleNumber = findNextTitleNumber(lastCoordRouteInstance.route,CoordType.SECRET)
                     	break
                     default:
-                        return ['error':true,'message':getMsg('fc.routecoord.addsecret.notallowed')]
+                        return ['error':true,'message':getMsg('fc.coordroute.addsecret.notallowed')]
                 }
             } else {
-                return ['error':true,'message':getMsg('fc.routecoord.addsecret.notallowed')]
+                return ['error':true,'message':getMsg('fc.coordroute.addsecret.notallowed')]
             }
         } else {
-	        if (lastRouteCoordInstance) {
-	        	switch (lastRouteCoordInstance.type) {
-	        		case RouteCoordType.TO:
-	        			routeCoordInstance.type = RouteCoordType.SP
+	        if (lastCoordRouteInstance) {
+	        	switch (lastCoordRouteInstance.type) {
+	        		case CoordType.TO:
+	        			coordRouteInstance.type = CoordType.SP
 	        			break
-	        		case RouteCoordType.SP:
-	                    routeCoordInstance.type = RouteCoordType.TP
+	        		case CoordType.SP:
+	                    coordRouteInstance.type = CoordType.TP
 	                    break
-	        		case RouteCoordType.TP:
-                    case RouteCoordType.SECRET:
-	                    routeCoordInstance.type = RouteCoordType.TP
-	                    routeCoordInstance.titleNumber = findNextTitleNumber(lastRouteCoordInstance.route,RouteCoordType.TP) 
+	        		case CoordType.TP:
+                    case CoordType.SECRET:
+	                    coordRouteInstance.type = CoordType.TP
+	                    coordRouteInstance.titleNumber = findNextTitleNumber(lastCoordRouteInstance.route,CoordType.TP) 
 	                    break
-	                case RouteCoordType.FP:
-	                    routeCoordInstance.type = RouteCoordType.LDG
+	                case CoordType.FP:
+	                    coordRouteInstance.type = CoordType.LDG
 	                    break
-	                case RouteCoordType.LDG:
-	                	return ['error':true,'message':getMsg('fc.routecoord.add.notallowed')]
+	                case CoordType.LDG:
+	                	return ['error':true,'message':getMsg('fc.coordroute.add.notallowed')]
 	        	}
 	        }
         }
         
-        if (lastRouteCoordInstance) {
-            routeCoordInstance.latGrad = lastRouteCoordInstance.latGrad
-            routeCoordInstance.latMinute = lastRouteCoordInstance.latMinute
-            routeCoordInstance.latDirection = lastRouteCoordInstance.latDirection
-            routeCoordInstance.lonGrad = lastRouteCoordInstance.lonGrad
-            routeCoordInstance.lonMinute = lastRouteCoordInstance.lonMinute
-            routeCoordInstance.lonDirection = lastRouteCoordInstance.lonDirection
+        if (lastCoordRouteInstance) {
+            coordRouteInstance.latGrad = lastCoordRouteInstance.latGrad
+            coordRouteInstance.latMinute = lastCoordRouteInstance.latMinute
+            coordRouteInstance.latDirection = lastCoordRouteInstance.latDirection
+            coordRouteInstance.lonGrad = lastCoordRouteInstance.lonGrad
+            coordRouteInstance.lonMinute = lastCoordRouteInstance.lonMinute
+            coordRouteInstance.lonDirection = lastCoordRouteInstance.lonDirection
         }
         
-        return ['instance':routeCoordInstance]
+        return ['instance':coordRouteInstance]
     }
 
     
     //--------------------------------------------------------------------------
-    int findNextTitleNumber(Route route, RouteCoordType type)
+    int findNextTitleNumber(Route route, CoordType type)
     {
     	int titleNumber = 0
-        RouteCoord.findAllByRoute(route,[sort:"id", order:"desc"]).each { routeCoordInstance ->
+    	CoordRoute.findAllByRoute(route,[sort:"id", order:"desc"]).each { coordRouteInstance ->
         	if (!titleNumber) {
-	        	if (routeCoordInstance.type == type) {
-	        		titleNumber = routeCoordInstance.titleNumber
+	        	if (coordRouteInstance.type == type) {
+	        		titleNumber = coordRouteInstance.titleNumber
 	        	}
         	}
         }
@@ -1623,58 +1860,61 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map saveRouteCoord(params)
+    Map saveCoordRoute(params)
     {
-    	def lastRouteCoordInstance = RouteCoord.findByRoute(Route.get(params.routeid),[sort:"id", order:"desc"])
-    	BigDecimal lastMapMeasureDistance = 0
+    	def lastCoordRouteInstance = CoordRoute.findByRoute(Route.get(params.routeid),[sort:"id", order:"desc"])
+    	BigDecimal lastMapMeasureDistance = null
+    	BigDecimal lastMapMeasureTrueTrack = null
         
-    	def lastRouteCoordTestInstance 
-        RouteCoord.findAllByRoute(Route.get(params.routeid),[sort:"id", order:"desc"]).each { routeCoordInstance ->
-			if (!lastRouteCoordTestInstance) {
-		        switch (routeCoordInstance.type) {
-			        case RouteCoordType.SP:
-			        case RouteCoordType.TP:
-			        case RouteCoordType.FP:
-			        	lastRouteCoordTestInstance = routeCoordInstance
+    	def lastCoordRouteTestInstance 
+    	CoordRoute.findAllByRoute(Route.get(params.routeid),[sort:"id", order:"desc"]).each { coordRouteInstance ->
+			if (!lastCoordRouteTestInstance) {
+		        switch (coordRouteInstance.type) {
+			        case CoordType.SP:
+			        case CoordType.TP:
+			        case CoordType.FP:
+			        	lastCoordRouteTestInstance = coordRouteInstance
 			            break
 			        default:
-		                lastMapMeasureDistance += routeCoordInstance.mapmeasuredistance
+		        		lastMapMeasureDistance = addMapDistance(lastMapMeasureDistance,coordRouteInstance.mapmeasuredistance)
 		                break
 			    }
         	}
         }
         
-    	def routeCoordInstance = new RouteCoord(params)
+    	def coordRouteInstance = new CoordRoute(params)
         
-        routeCoordInstance.route = Route.get(params.routeid)
+        coordRouteInstance.route = Route.get(params.routeid)
         
-        if(!routeCoordInstance.hasErrors() && routeCoordInstance.save()) {
-        	lastMapMeasureDistance += routeCoordInstance.mapmeasuredistance 
-        	newLeg(routeCoordInstance.route, routeCoordInstance, lastRouteCoordInstance, lastRouteCoordTestInstance, lastMapMeasureDistance)
-            return ['instance':routeCoordInstance,'saved':true,'message':getMsg('fc.created',["${routeCoordInstance.name()}"])]
+        if(!coordRouteInstance.hasErrors() && coordRouteInstance.save()) {
+            calculateSecretLegRatio(coordRouteInstance.route)
+       		lastMapMeasureDistance = addMapDistance(lastMapMeasureDistance,coordRouteInstance.mapmeasuredistance)
+        	lastMapMeasureTrueTrack = coordRouteInstance.mapmeasuretruetrack
+        	newLeg(coordRouteInstance.route, coordRouteInstance, lastCoordRouteInstance, lastCoordRouteTestInstance, lastMapMeasureDistance, lastMapMeasureTrueTrack)
+            return ['instance':coordRouteInstance,'saved':true,'message':getMsg('fc.created',["${coordRouteInstance.name()}"])]
         } else {
-            return ['instance':routeCoordInstance]
+            return ['instance':coordRouteInstance]
         }
     }
     
     //--------------------------------------------------------------------------
-    Map deleteRouteCoord(params)
+    Map deleteCoordRoute(params)
     {
-        def routeCoordInstance = RouteCoord.get(params.id)
+        def coordRouteInstance = CoordRoute.get(params.id)
         
-        if (routeCoordInstance) {
+        if (coordRouteInstance) {
             try {
-                def routeInstance = routeCoordInstance.route
+                def routeInstance = coordRouteInstance.route
                 removeAllRouteLegs(routeInstance)
-                routeCoordInstance.delete()
+                coordRouteInstance.delete()
                 calculateRouteLegs(routeInstance)
-                return ['deleted':true,'message':getMsg('fc.deleted',["${routeCoordInstance.name()}"]),'routeid':routeInstance.id]
+                return ['deleted':true,'message':getMsg('fc.deleted',["${coordRouteInstance.name()}"]),'routeid':routeInstance.id]
             }
             catch(org.springframework.dao.DataIntegrityViolationException e) {
-                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.routecoord'),params.id])]
+                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.coordroute'),params.id])]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.routecoord'),params.id])]
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
         }
     }
     
@@ -1715,7 +1955,7 @@ class FcService
                 return ['instance':routeLegCoordInstance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.routecoord'),params.id])]
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
         }
     }
     
@@ -1727,59 +1967,61 @@ class FcService
     	Contest contestInstance = routeLegCoordInstance.route.contest
     		
     	// calculate mapdistance
-    	if (!routeLegCoordInstance.mapmeasuredistance) {
-            routeLegCoordInstance.mapmeasuredistance = 0
-    	}
     	routeLegCoordInstance.mapdistance = calculateMapDistance(contestInstance,routeLegCoordInstance.mapmeasuredistance)
     	
-    	// search routeCoord for routeLegCoordInstance
-    	def foundRouteCoord
+    	// search coord for routeLegCoordInstance
+    	def foundCoordRoute
     	RouteLegCoord.findAllByRoute(routeLegCoordInstance.route).eachWithIndex { routeLeg, i -> 
     		if (routeLeg == routeLegCoordInstance) {
-    			RouteCoord.findAllByRoute(routeLegCoordInstance.route).eachWithIndex { routeCoord, j ->  
+    			CoordRoute.findAllByRoute(routeLegCoordInstance.route).eachWithIndex { coordRouteInstance, j ->  
     				if (i + 1 == j) {
-    					foundRouteCoord = routeCoord
+    					foundCoordRoute = coordRouteInstance
     				}
     			}
     		}
     	}
 
-        // save mapdistance to routeCoord
-    	if (foundRouteCoord) {
-    		foundRouteCoord.mapmeasuredistance = routeLegCoordInstance.mapmeasuredistance
-			foundRouteCoord.mapdistance = routeLegCoordInstance.mapdistance
-			foundRouteCoord.save()
+        // save mapdistance to coord
+    	if (foundCoordRoute) {
+    		foundCoordRoute.mapmeasuredistance = routeLegCoordInstance.mapmeasuredistance
+			foundCoordRoute.mapdistance = routeLegCoordInstance.mapdistance
+			foundCoordRoute.mapmeasuretruetrack = routeLegCoordInstance.mapmeasuretruetrack
+			foundCoordRoute.save()
     	}
         
         // calculate mapdistance in testlegs
-        RouteCoord lastRouteCoordInstance
-        RouteCoord lastRouteCoordTestInstance
-        BigDecimal lastMapMeasureDistance = 0
+        CoordRoute lastCoordRouteInstance
+        CoordRoute lastCoordRouteTestInstance
+        BigDecimal lastMapMeasureDistance = null
+        BigDecimal lastMapMeasureTrueTrack = null
         int testlegpos = 0
-        RouteCoord.findAllByRoute(routeLegCoordInstance.route).each { routeCoordInstance -> 
-            lastMapMeasureDistance += routeCoordInstance.mapmeasuredistance
-            if (lastRouteCoordInstance && lastRouteCoordTestInstance) {
-                if ( (lastRouteCoordTestInstance.type == RouteCoordType.SP && routeCoordInstance.type == RouteCoordType.TP) ||
-                     (lastRouteCoordTestInstance.type == RouteCoordType.TP && routeCoordInstance.type == RouteCoordType.TP) ||
-                     (lastRouteCoordTestInstance.type == RouteCoordType.TP && routeCoordInstance.type == RouteCoordType.FP) ) 
+        CoordRoute.findAllByRoute(routeLegCoordInstance.route).each { coordRouteInstance ->
+       		lastMapMeasureDistance = addMapDistance(lastMapMeasureDistance,coordRouteInstance.mapmeasuredistance)
+            lastMapMeasureTrueTrack = coordRouteInstance.mapmeasuretruetrack
+            if (lastCoordRouteInstance && lastCoordRouteTestInstance) {
+                if ( (lastCoordRouteTestInstance.type == CoordType.SP && coordRouteInstance.type == CoordType.TP) ||
+                     (lastCoordRouteTestInstance.type == CoordType.SP && coordRouteInstance.type == CoordType.FP) ||
+                     (lastCoordRouteTestInstance.type == CoordType.TP && coordRouteInstance.type == CoordType.TP) ||
+                     (lastCoordRouteTestInstance.type == CoordType.TP && coordRouteInstance.type == CoordType.FP) ) 
                 {
                 	RouteLegTest.findAllByRoute(routeLegCoordInstance.route).eachWithIndex { testLeg, i ->
                 		if (i == testlegpos) {
                 			testLeg.mapmeasuredistance = lastMapMeasureDistance 
                 			testLeg.mapdistance = calculateMapDistance(contestInstance,lastMapMeasureDistance)
+                			testLeg.mapmeasuretruetrack = lastMapMeasureTrueTrack
                 			testLeg.save()
                 		}
                 	}
                     testlegpos++
                 }
             }
-            lastRouteCoordInstance = routeCoordInstance
-            switch (routeCoordInstance.type) {
-                case RouteCoordType.SP:
-                case RouteCoordType.TP:
-                case RouteCoordType.FP:
-                    lastRouteCoordTestInstance = routeCoordInstance
-                    lastMapMeasureDistance = 0
+            lastCoordRouteInstance = coordRouteInstance
+            switch (coordRouteInstance.type) {
+                case CoordType.SP:
+                case CoordType.TP:
+                case CoordType.FP:
+                    lastCoordRouteTestInstance = coordRouteInstance
+                    lastMapMeasureDistance = null
                     break
             }
         }
@@ -1906,15 +2148,13 @@ class FcService
                 }
             }
 
-            ContestDay.findAllByContest(contestInstance).each { contestDayInstance ->
-	            ContestDayTask.findAllByContestday(contestDayInstance).each { contestDayTaskInstance ->
-	                def testInstance = new Test()
-	                testInstance.crew = crewInstance
-	                testInstance.viewpos = Crew.countByContest(contestInstance) - 1
-	                testInstance.contestdaytask = contestDayTaskInstance
-	                testInstance.timeCalculated = false
-	                testInstance.save()
-	            }
+            Task.findAllByContest(contestInstance).each { taskInstance ->
+                def testInstance = new Test()
+                testInstance.crew = crewInstance
+                testInstance.viewpos = Crew.countByContest(contestInstance) - 1
+                testInstance.task = taskInstance
+                testInstance.timeCalculated = false
+                testInstance.save()
             }
             String msg
             if (crewInstance.aircraft) {
@@ -2144,6 +2384,7 @@ class FcService
         }
 
         test.instance.planningTestComplete = true
+        calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
             return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
@@ -2169,6 +2410,7 @@ class FcService
         }
 
         test.instance.planningTestComplete = false
+        calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
             return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
@@ -2193,7 +2435,7 @@ class FcService
             }
         }
 
-        test.instance.planningTestTooLate = true
+        test.instance.planningTestGivenTooLate = true
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -2219,7 +2461,7 @@ class FcService
             }
         }
 
-        test.instance.planningTestTooLate = false
+        test.instance.planningTestGivenTooLate = false
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -2282,21 +2524,282 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map flightresultscompleteTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestComplete = true
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultsopenTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestComplete = false
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultstakeoffmissedonTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestTakeoffMissed = true
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultstakeoffmissedoffTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestTakeoffMissed = false
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultsbadcoursestartlandingonTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestBadCourseStartLanding = true
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultsbadcoursestartlandingoffTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestBadCourseStartLanding = false
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultslandingtolateonTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestLandingTooLate = true
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultslandingtolateoffTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestLandingTooLate = false
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultsgiventolateonTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestGivenTooLate = true
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map flightresultsgiventolateoffTest(params)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+
+        if(params.version) {
+            def version = params.version.toLong()
+            if(test.instance.version > version) {
+                test.instance.errors.rejectValue("version", "test.optimistic.locking.failure", getMsg('fc.notupdated'))
+                return ['instance':test.instance]
+            }
+        }
+
+        test.instance.flightTestGivenTooLate = false
+        calculateTestPenalties(test.instance)
+        
+        if(!test.instance.hasErrors() && test.instance.save()) {
+            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+        } else {
+            return ['instance':test.instance,'error':true]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     void calculateTestPenalties(Test testInstance)
     {
     	print "calculateTestPenalties $testInstance.crew.name..."
     	
-    	Contest contestInstance = testInstance.contestdaytask.contestday.contest 
+    	Contest contestInstance = testInstance.task.contest 
     	
+    	// planningTestPenalties
     	testInstance.planningTestLegPenalties = 0
         testInstance.planningTestLegComplete = false
         if (TestLegPlanning.findByTest(testInstance)) {
         	testInstance.planningTestLegComplete = true
         }
-    	TestLegPlanning.findAllByTest(testInstance).each { testLegPlanning ->
-    		if (testLegPlanning.resultEntered) {
-    			testInstance.planningTestLegPenalties += testLegPlanning.penaltyTrueHeading
-    			testInstance.planningTestLegPenalties += testLegPlanning.penaltyLegTime
+    	TestLegPlanning.findAllByTest(testInstance).each { testLegPlanningInstance ->
+    		if (testLegPlanningInstance.resultEntered) {
+    			testInstance.planningTestLegPenalties += testLegPlanningInstance.penaltyTrueHeading
+    			testInstance.planningTestLegPenalties += testLegPlanningInstance.penaltyLegTime
     		} else {
     			testInstance.planningTestLegComplete = false
     		}
@@ -2305,19 +2808,77 @@ class FcService
             testInstance.planningTestLegPenalties = contestInstance.planningTestMaxPoints
         }
     	testInstance.planningTestPenalties = testInstance.planningTestLegPenalties
-    	if (testInstance.planningTestTooLate) {
+    	if (testInstance.planningTestGivenTooLate) {
     		testInstance.planningTestPenalties += contestInstance.planningTestPlanTooLatePoints
     	}
     	if (testInstance.planningTestExitRoomTooLate) {
     		testInstance.planningTestPenalties += contestInstance.planningTestExitRoomTooLatePoints
     	}
     	
-    	testInstance.testPenalties = testInstance.planningTestPenalties +
-    	                             testInstance.flightTestPenalties +
-    	                             testInstance.landingTestPenalties +
-    	                             testInstance.specialTestPenalties
+    	// flightTestPenalties
+    	testInstance.flightTestCheckPointPenalties = 0
+    	testInstance.flightTestCheckPointsComplete = false
+    	if (CoordResult.findByTest(testInstance)) {
+    		testInstance.flightTestCheckPointsComplete = true
+    	}
+    	CoordResult.findAllByTest(testInstance).each { coordResultInstance ->
+    		if (coordResultInstance.resultEntered) {
+  				testInstance.flightTestCheckPointPenalties += coordResultInstance.penaltyCoord
+    		} else {
+    			testInstance.flightTestCheckPointsComplete = false
+    		}
+    		if (coordResultInstance.planProcedureTurn) {
+	    		if (coordResultInstance.resultProcedureTurnEntered) {
+		    		if (coordResultInstance.resultProcedureTurnNotFlown) {
+		    			testInstance.flightTestCheckPointPenalties += contestInstance.flightTestProcedureTurnNotFlownPoints
+		    		}
+	    		} else {
+	    			testInstance.flightTestCheckPointsComplete = false
+	    		}
+    		}
+    		if (coordResultInstance.resultAltitude && coordResultInstance.resultMinAltitudeMissed) {
+    			testInstance.flightTestCheckPointPenalties += contestInstance.flightTestMinAltitudeMissedPoints
+    		}
+    		if (coordResultInstance.resultBadCourseNum) {
+    			testInstance.flightTestCheckPointPenalties += coordResultInstance.resultBadCourseNum * contestInstance.flightTestBadCoursePoints  
+    		}
+    	}
+    	testInstance.flightTestPenalties = testInstance.flightTestCheckPointPenalties
+        if (testInstance.flightTestTakeoffMissed) {
+            testInstance.flightTestPenalties += contestInstance.flightTestTakeoffMissedPoints
+        }
+        if (testInstance.flightTestBadCourseStartLanding) {
+            testInstance.flightTestPenalties += contestInstance.flightTestBadCourseStartLandingPoints
+        }
+        if (testInstance.flightTestLandingTooLate) {
+            testInstance.flightTestPenalties += contestInstance.flightTestLandingToLatePoints
+        }
+        if (testInstance.flightTestGivenTooLate) {
+            testInstance.flightTestPenalties += contestInstance.flightTestGivenToLatePoints
+        }
+    	
+        // landingTestPenalties
+        // TODO
+        
+        // specialTestPenalties
+        // TODO
+        
+        // testPenalties
+    	testInstance.testPenalties = 0
+    	if (testInstance.planningTestComplete) {
+    		testInstance.testPenalties += testInstance.planningTestPenalties
+    	}
+    	if (testInstance.flightTestComplete) {
+    		testInstance.testPenalties += testInstance.flightTestPenalties
+    	}
+        if (testInstance.landingTestComplete) {
+        	testInstance.testPenalties += testInstance.landingTestPenalties
+        }
+        if (testInstance.specialTestComplete) {
+        	testInstance.testPenalties += testInstance.specialTestPenalties
+        }
 
-    	println "  $testInstance.testPenalties"
+    	println "  Planning:$testInstance.planningTestPenalties Flight:$testInstance.flightTestPenalties Landing:$testInstance.landingTestPenalties Special:$testInstance.specialTestPenalties Summary:$testInstance.testPenalties"
     }
 
     //--------------------------------------------------------------------------
@@ -2361,7 +2922,7 @@ class FcService
             
             flightTestInstance.properties = params
             
-	        Test.findAllByContestdaytask(flightTestInstance.contestdaytask).each { testInstance ->
+	        Test.findAllByTask(flightTestInstance.task).each { testInstance ->
 	        	testInstance.timeCalculated = false
 	            testInstance.save()
 	        }
@@ -2381,8 +2942,8 @@ class FcService
     {
         if (!Route.count()) {
             return ['message':getMsg('fc.route.notfound'),'error':true,
-                    'fromlistplanning':params.fromlistplanning,'fromcontestdaytask':params.fromcontestdaytask,
-                    'contestdaytaskid':params.contestdaytask.id]
+                    'fromlistplanning':params.fromlistplanning,'fromtask':params.fromtask,
+                    'taskid':params.task.id]
         }
          
         def flightTestInstance = new FlightTest()
@@ -2396,7 +2957,7 @@ class FcService
     {
         def flightTestInstance = new FlightTest(params)
         
-        flightTestInstance.contestdaytask = ContestDayTask.get( params.contestdaytaskid )
+        flightTestInstance.task = Task.get( params.taskid )
         
         if (!flightTestInstance.direction) {
         	flightTestInstance.direction = 0
@@ -2407,9 +2968,9 @@ class FcService
         
         if(!flightTestInstance.hasErrors() && flightTestInstance.save()) {
 
-            def contestDayTaskInstance = ContestDayTask.get( params.contestdaytaskid )
-            contestDayTaskInstance.flighttest = flightTestInstance
-            contestDayTaskInstance.save()
+            def taskInstance = Task.get( params.taskid )
+            taskInstance.flighttest = flightTestInstance
+            taskInstance.save()
 
             def windInstance = new Wind(direction:flightTestInstance.direction,speed:flightTestInstance.speed)
             windInstance.save()
@@ -2420,8 +2981,8 @@ class FcService
             flightTestWindInstance.save()
 
             return ['instance':flightTestInstance,'saved':true,'message':getMsg('fc.created',["${flightTestInstance.name()}"]),
-                    'fromlistplanning':params.fromlistplanning,'fromcontestdaytask':params.fromcontestdaytask,
-                    'contestdaytaskid':contestDayTaskInstance.id]
+                    'fromlistplanning':params.fromlistplanning,'fromtask':params.fromtask,
+                    'taskid':taskInstance.id]
         } else {
             return ['instance':flightTestInstance]
         }
@@ -2434,9 +2995,9 @@ class FcService
         
         if (flightTestInstance) {
             try {
-                def contestDayTaskInstance = ContestDayTask.get( flightTestInstance.contestdaytask.id )
-                contestDayTaskInstance.flighttest = null
-                contestDayTaskInstance.save()
+                def taskInstance = Task.get( flightTestInstance.task.id )
+                taskInstance.flighttest = null
+                taskInstance.save()
                 
                 flightTestInstance.delete()
                 
@@ -2519,7 +3080,7 @@ class FcService
         if(!flightTestWindInstance.hasErrors() && flightTestWindInstance.save()) {
             return ['instance':flightTestWindInstance,'saved':true,'message':getMsg('fc.created',["${flightTestWindInstance.name()}"]),
                     'fromlistplanning':params.fromlistplanning,
-                    'contestdaytaskid':flightTestWindInstance.flighttest.contestdaytask.id,
+                    'taskid':flightTestWindInstance.flighttest.task.id,
                     'flighttestid':flightTestWindInstance.flighttest.id]
         } else {
             return ['instance':flightTestWindInstance]
@@ -2597,16 +3158,16 @@ class FcService
     {
         def landingTestInstance = new LandingTest(params)
         
-        landingTestInstance.contestdaytask = ContestDayTask.get( params.contestdaytaskid )
+        landingTestInstance.task = Task.get( params.taskid )
         
         if(!landingTestInstance.hasErrors() && landingTestInstance.save()) {
 
-            def contestDayTaskInstance = ContestDayTask.get( params.contestdaytaskid )
-            contestDayTaskInstance.landingtest = landingTestInstance
-            contestDayTaskInstance.save()
+            def taskInstance = Task.get( params.taskid )
+            taskInstance.landingtest = landingTestInstance
+            taskInstance.save()
             
             return ['instance':landingTestInstance,'saved':true,'message':getMsg('fc.created',["${landingTestInstance.name()}"]),
-                    'fromcontestdaytask':params.fromcontestdaytask,'contestdaytaskid':contestDayTaskInstance.id]
+                    'fromtask':params.fromtask,'taskid':taskInstance.id]
         } else {
             return ['instance':landingTestInstance]
         }
@@ -2619,9 +3180,9 @@ class FcService
         
         if (landingTestInstance) {
             try {
-                def contestDayTaskInstance = ContestDayTask.get( landingTestInstance.contestdaytask.id )
-                contestDayTaskInstance.landingtest = null
-                contestDayTaskInstance.save()
+                def taskInstance = Task.get( landingTestInstance.task.id )
+                taskInstance.landingtest = null
+                taskInstance.save()
                 
                 landingTestInstance.delete()
                 
@@ -2767,8 +3328,8 @@ class FcService
     {
         if (!Route.count()) {
             return ['message':getMsg('fc.route.notfound'),'error':true,
-                    'fromlistplanning':params.fromlistplanning,'fromcontestdaytask':params.fromcontestdaytask,
-                    'contestdaytaskid':params.contestdaytask.id]
+                    'fromlistplanning':params.fromlistplanning,'fromtask':params.fromtask,
+                    'taskid':params.task.id]
         }
          
         def planningTestInstance = new PlanningTest()
@@ -2782,7 +3343,7 @@ class FcService
     {
         def planningTestInstance = new PlanningTest(params)
         
-        planningTestInstance.contestdaytask = ContestDayTask.get( params.contestdaytaskid )
+        planningTestInstance.task = Task.get( params.taskid )
         
         if (!planningTestInstance.direction) {
             planningTestInstance.direction = 0
@@ -2808,13 +3369,13 @@ class FcService
                 }
             }
             
-            def contestDayTaskInstance = ContestDayTask.get( params.contestdaytaskid )
-            contestDayTaskInstance.planningtest = planningTestInstance
-            contestDayTaskInstance.save()
+            def taskInstance = Task.get( params.taskid )
+            taskInstance.planningtest = planningTestInstance
+            taskInstance.save()
             
             return ['instance':planningTestInstance,'saved':true,'message':getMsg('fc.created',["${planningTestInstance.name()}"]),
-                    'fromlistplanning':params.fromlistplanning,'fromcontestdaytask':params.fromcontestdaytask,
-                    'contestdaytaskid':contestDayTaskInstance.id]
+                    'fromlistplanning':params.fromlistplanning,'fromtask':params.fromtask,
+                    'taskid':taskInstance.id]
         } else {
             return ['instance':planningTestInstance]
         }
@@ -2827,9 +3388,9 @@ class FcService
         
         if (planningTestInstance) {
             try {
-                def contestDayTaskInstance = ContestDayTask.get( planningTestInstance.contestdaytask.id )
-                contestDayTaskInstance.planningtest = null
-                contestDayTaskInstance.save()
+                def taskInstance = Task.get( planningTestInstance.task.id )
+                taskInstance.planningtest = null
+                taskInstance.save()
                 
                 planningTestInstance.delete()
                 
@@ -2861,7 +3422,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map updatePlanningTestTask(params)
     {
-        def planningTestTaskInstance = PlanningTestTask.get(params.id)
+    	def planningTestTaskInstance = PlanningTestTask.get(params.id)
         
         if (planningTestTaskInstance) {
 
@@ -2885,8 +3446,8 @@ class FcService
             planningTestTaskInstance.wind.direction = planningTestTaskInstance.direction
             planningTestTaskInstance.wind.speed = planningTestTaskInstance.speed
 
-            Test.findAllByContestdaytask(planningTestTaskInstance.planningtest.contestdaytask).each { testInstance ->
-                calulateTestLegPlannings(testInstance)
+            Test.findAllByTask(planningTestTaskInstance.planningtest.task).each { testInstance ->
+                calulateTestLegPlannings(testInstance, planningTestTaskInstance.route)
             }
 
             if(!planningTestTaskInstance.hasErrors() && planningTestTaskInstance.save()) {
@@ -2935,7 +3496,7 @@ class FcService
         if(!planningTestTaskInstance.hasErrors() && planningTestTaskInstance.save()) {
             return ['instance':planningTestTaskInstance,'saved':true,'message':getMsg('fc.created',["${planningTestTaskInstance.name()}"]),
                     'fromlistplanning':params.fromlistplanning,
-                    'contestdaytaskid':planningTestTaskInstance.planningtest.contestdaytask.id,
+                    'taskid':planningTestTaskInstance.planningtest.task.id,
                     'planningtestid':planningTestTaskInstance.planningtest.id]
         } else {
             return ['instance':planningTestTaskInstance]
@@ -3036,7 +3597,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map calculateLegPlanningInstance(testLegPlanningInstance)
     {
-        // calculate planLegTime
+        // calculate resultLegTime
         try {
             switch (testLegPlanningInstance.resultLegTimeInput.size()) {
                 case 1:
@@ -3070,7 +3631,7 @@ class FcService
             return ['instance':testLegPlanningInstance,'error':true,'message':getMsg('fc.testlegplanningresult.value.error')]
         }
         
-        Contest contestInstance = testLegPlanningInstance.test.contestdaytask.contestday.contest
+        Contest contestInstance = testLegPlanningInstance.test.task.contest
         
         // calculate penaltyTrueHeading
         int planTrueHeading = testLegPlanningInstance.planTrueHeading.toDouble().round().toInteger()
@@ -3100,6 +3661,156 @@ class FcService
         }
         
         testLegPlanningInstance.resultEntered = true
+        
+        return [:]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map getCoordResult(params)
+    {
+        def coordResultInstance = CoordResult.get(params.id)
+
+        if (!coordResultInstance) {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordresult'),params.id])]
+        }
+        
+        // calculate resultCpTimeInput
+        coordResultInstance.resultCpTimeInput = coordResultInstance.resultCpTime.format("HH:mm:ss")
+
+        return ['instance':coordResultInstance]
+    }
+
+    //--------------------------------------------------------------------------
+    Map updateCoordResult(params)
+    {
+        CoordResult coordResultInstance = CoordResult.get(params.id)
+        if(coordResultInstance) {
+            if(params.version) {
+                def version = params.version.toLong()
+                if(coordResultInstance.version > version) {
+                    coordResultInstance.errors.rejectValue("version", "coordResult.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordResultInstance]
+                }
+            }
+
+            coordResultInstance.properties = params
+            
+            Map ret = calculateCoordResultInstance(coordResultInstance,false)
+            if (ret)
+            {
+                return ret
+            }
+            
+            calculateTestPenalties(coordResultInstance.test)
+            
+            if(!coordResultInstance.hasErrors() && coordResultInstance.save()) {
+                return ['instance':coordResultInstance,'saved':true,'message':getMsg('fc.updated',["${coordResultInstance.name()}"])]
+            } else {
+                return ['instance':coordResultInstance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.testlegplanningresult'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map updateCoordResultProcedureTurn(params)
+    {
+        CoordResult coordResultInstance = CoordResult.get(params.id)
+        if(coordResultInstance) {
+            if(params.version) {
+                def version = params.version.toLong()
+                if(coordResultInstance.version > version) {
+                    coordResultInstance.errors.rejectValue("version", "coordResult.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordResultInstance]
+                }
+            }
+
+            coordResultInstance.properties = params
+            coordResultInstance.resultProcedureTurnEntered = true
+            
+            calculateTestPenalties(coordResultInstance.test)
+            
+            if(!coordResultInstance.hasErrors() && coordResultInstance.save()) {
+                return ['instance':coordResultInstance,'saved':true,'message':getMsg('fc.updated',["${coordResultInstance.name()}"])]
+            } else {
+                return ['instance':coordResultInstance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.testlegplanningresult'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map calculateCoordResultInstance(coordResultInstance,boolean calculateUTC)
+    {
+    	// calculate resultCpTime
+        try {
+            switch (coordResultInstance.resultCpTimeInput.size()) {
+                case 1:
+                    coordResultInstance.resultCpTime = Date.parse("H", coordResultInstance.resultCpTimeInput)
+                    break
+                case 2:
+                	coordResultInstance.resultCpTime = Date.parse("HH", coordResultInstance.resultCpTimeInput)
+                    break
+                case 4:
+                	coordResultInstance.resultCpTime = Date.parse("H:mm", coordResultInstance.resultCpTimeInput)
+                    break
+                case 5:
+                	coordResultInstance.resultCpTime = Date.parse("HH:mm", coordResultInstance.resultCpTimeInput)
+                    break
+                case 7:
+                	coordResultInstance.resultCpTime = Date.parse("H:mm:ss", coordResultInstance.resultCpTimeInput)
+                    break
+                case 8:
+                	coordResultInstance.resultCpTime = Date.parse("HH:mm:ss", coordResultInstance.resultCpTimeInput)
+                    break
+                default:
+                    return ['instance':coordResultInstance,'error':true,'message':getMsg('fc.coordresult.cptime.error')]
+            }
+        } catch (Exception e) {
+            return ['instance':coordResultInstance,'error':true,'message':getMsg('fc.testlegplanningresult.value.error')]
+        }
+        
+        Contest contestInstance = coordResultInstance.test.task.contest
+        
+        // calculate penaltyCoord
+        if (coordResultInstance.resultCpNotFound) {
+        	coordResultInstance.penaltyCoord = contestInstance.flightTestCpNotFoundPoints
+        } else {
+	        GregorianCalendar planCpTime = new GregorianCalendar() 
+	        planCpTime.setTime(coordResultInstance.planCpTime)
+	        int planCpTimeSeconds = planCpTime.get(Calendar.SECOND) + 60 * planCpTime.get(Calendar.MINUTE) + 3600 * planCpTime.get(Calendar.HOUR)
+	        	
+	        GregorianCalendar resultCpTime = new GregorianCalendar() 
+	        resultCpTime.setTime(coordResultInstance.resultCpTime)
+
+	        if (calculateUTC) {
+	        	Date timeZoneDate = Date.parse("HH:mm",contestInstance.timeZone)
+	        	GregorianCalendar timeZoneCalendar = new GregorianCalendar()
+	        	timeZoneCalendar.setTime(timeZoneDate)
+	        	resultCpTime.add(Calendar.HOUR, timeZoneCalendar.get(Calendar.HOUR))
+	        	resultCpTime.add(Calendar.MINUTE, timeZoneCalendar.get(Calendar.MINUTE))
+	        	coordResultInstance.resultCpTime = resultCpTime.getTime()
+	        }
+	        int resultCpTimeSeconds = resultCpTime.get(Calendar.SECOND) + 60 * resultCpTime.get(Calendar.MINUTE) + 3600 * resultCpTime.get(Calendar.HOUR)
+	        
+	        int diffCpTime =  Math.abs(planCpTimeSeconds - resultCpTimeSeconds)
+	        if (diffCpTime > contestInstance.flightTestCptimeCorrectSecond) {
+	            coordResultInstance.penaltyCoord = contestInstance.flightTestCptimePointsPerSecond * (diffCpTime - contestInstance.flightTestCptimeCorrectSecond)
+	        } else {
+	            coordResultInstance.penaltyCoord = 0
+	        }
+	        if (coordResultInstance.penaltyCoord > contestInstance.flightTestCptimeMaxPoints) {
+	        	coordResultInstance.penaltyCoord = contestInstance.flightTestCptimeMaxPoints
+	        }
+        }
+        coordResultInstance.resultEntered = true
+        
+        // calculate resultMinAltitudeMissed
+        if (coordResultInstance.resultAltitude && coordResultInstance.resultAltitude < coordResultInstance.altitude) {
+        	coordResultInstance.resultMinAltitudeMissed = true
+        }
         
         return [:]
     }
@@ -3156,16 +3867,16 @@ class FcService
     {
         def specialTestInstance = new SpecialTest(params)
         
-        specialTestInstance.contestdaytask = ContestDayTask.get( params.contestdaytaskid )
+        specialTestInstance.task = Task.get( params.taskid )
         
         if(!specialTestInstance.hasErrors() && specialTestInstance.save()) {
 
-            def contestDayTaskInstance = ContestDayTask.get( params.contestdaytaskid )
-            contestDayTaskInstance.specialtest = specialTestInstance
-            contestDayTaskInstance.save()
+            def taskInstance = Task.get( params.taskid )
+            taskInstance.specialtest = specialTestInstance
+            taskInstance.save()
             
             return ['instance':specialTestInstance,'saved':true,'message':getMsg('fc.created',["${specialTestInstance.name()}"]),
-                    'fromcontestdaytask':params.fromcontestdaytask,'contestdaytaskid':contestDayTaskInstance.id]
+                    'fromtask':params.fromtask,'taskid':taskInstance.id]
         } else {
             return ['instance':specialTestInstance]
         }
@@ -3178,9 +3889,9 @@ class FcService
         
         if (specialTestInstance) {
             try {
-                def contestDayTaskInstance = ContestDayTask.get( specialTestInstance.contestdaytask.id )
-                contestDayTaskInstance.specialtest = null
-                contestDayTaskInstance.save()
+                def taskInstance = Task.get( specialTestInstance.task.id )
+                taskInstance.specialtest = null
+                taskInstance.save()
                 
                 specialTestInstance.delete()
                 
@@ -3296,14 +4007,14 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map calculateLegData(RouteCoord newRouteCoordInstance, RouteCoord lastRouteCoordInstance)
+    private Map calculateLegData(CoordRoute newCoordRouteInstance, CoordRoute lastCoordRouteInstance)
     {
         // calculate leg distance
-        def newLatMath = newRouteCoordInstance.latMath()
-        def lastLatMath = lastRouteCoordInstance.latMath()
+        def newLatMath = newCoordRouteInstance.latMath()
+        def lastLatMath = lastCoordRouteInstance.latMath()
             
         def latDiff = newLatMath - lastLatMath 
-        def lonDiff = newRouteCoordInstance.lonMath() - lastRouteCoordInstance.lonMath()
+        def lonDiff = newCoordRouteInstance.lonMath() - lastCoordRouteInstance.lonMath()
         
         def latDis = 60 * latDiff
         def lonDis = 60 * lonDiff * Math.cos( Math.toRadians((newLatMath + lastLatMath)/2) )
@@ -3334,42 +4045,45 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private void newLeg(Route route, RouteCoord newRouteCoordInstance, RouteCoord lastRouteCoordInstance, RouteCoord lastRouteCoordTestInstance, BigDecimal lastMapMeasureDistance) 
+    private void newLeg(Route route, CoordRoute newCoordRouteInstance, CoordRoute lastCoordRouteInstance, CoordRoute lastCoordRouteTestInstance, BigDecimal lastMapMeasureDistance, BigDecimal lastMapMeasureTrueTrack) 
     {
-    	println "newLeg: ${route.name()} ${newRouteCoordInstance.title()}"
+    	println "newLeg: ${route.name()} ${newCoordRouteInstance.title()}"
     	
-        // create RouteLegCoord
-    	if (lastRouteCoordInstance) {
-    		Map legDataCoord = calculateLegData(newRouteCoordInstance, lastRouteCoordInstance)
+        // create routeLegCoordInstance
+    	if (lastCoordRouteInstance) {
+    		Map legDataCoord = calculateLegData(newCoordRouteInstance, lastCoordRouteInstance)
 	
-	        def titleCoord = "${lastRouteCoordInstance.title()} -> ${newRouteCoordInstance.title()}"
+	        def titleCoord = "${lastCoordRouteInstance.title()} -> ${newCoordRouteInstance.title()}"
 	        
 	        def routeLegCoordInstance = new RouteLegCoord([trueTrack:legDataCoord.dir,
 	                                                       coordDistance:legDataCoord.dis,
 	                                                       route:route,
 	                                                       title:titleCoord,
-	                                                       mapmeasuredistance:newRouteCoordInstance.mapmeasuredistance,
-	                                                       mapdistance:newRouteCoordInstance.mapdistance
+	                                                       mapmeasuredistance:newCoordRouteInstance.mapmeasuredistance,
+	                                                       mapdistance:newCoordRouteInstance.mapdistance,
+	                                                       mapmeasuretruetrack:newCoordRouteInstance.mapmeasuretruetrack
 	                                                      ]) 
 	        routeLegCoordInstance.save()
         }
 
-        // create RouteCoordType
-        if (lastRouteCoordInstance && lastRouteCoordTestInstance) {
-            Map legDataTest = calculateLegData(newRouteCoordInstance, lastRouteCoordTestInstance)
+        // create routeLegTestInstance
+        if (lastCoordRouteInstance && lastCoordRouteTestInstance) {
+            Map legDataTest = calculateLegData(newCoordRouteInstance, lastCoordRouteTestInstance)
             
-	        def titleTest = "${lastRouteCoordTestInstance.title()} -> ${newRouteCoordInstance.title()}"
+	        def titleTest = "${lastCoordRouteTestInstance.title()} -> ${newCoordRouteInstance.title()}"
             
-	        if ( (lastRouteCoordTestInstance.type == RouteCoordType.SP && newRouteCoordInstance.type == RouteCoordType.TP) ||
-	        	 (lastRouteCoordTestInstance.type == RouteCoordType.TP && newRouteCoordInstance.type == RouteCoordType.TP) ||
-	        	 (lastRouteCoordTestInstance.type == RouteCoordType.TP && newRouteCoordInstance.type == RouteCoordType.FP) )
+	        if ( (lastCoordRouteTestInstance.type == CoordType.SP && newCoordRouteInstance.type == CoordType.TP) ||
+	        	 (lastCoordRouteTestInstance.type == CoordType.SP && newCoordRouteInstance.type == CoordType.FP) ||
+	        	 (lastCoordRouteTestInstance.type == CoordType.TP && newCoordRouteInstance.type == CoordType.TP) ||
+	        	 (lastCoordRouteTestInstance.type == CoordType.TP && newCoordRouteInstance.type == CoordType.FP) )
 	        {
 	        	def routeLegTestInstance = new RouteLegTest([trueTrack:legDataTest.dir,
 	        	                                             coordDistance:legDataTest.dis,
 	        	                                             route:route,
 	        	                                             title:titleTest,
 	                                                         mapmeasuredistance:lastMapMeasureDistance,
-	                                                         mapdistance:calculateMapDistance(route.contest,lastMapMeasureDistance)
+	                                                         mapdistance:calculateMapDistance(route.contest,lastMapMeasureDistance),
+	                                                         mapmeasuretruetrack:lastMapMeasureTrueTrack
 	                                                        ])
 	        	routeLegTestInstance.save()
 	        }
@@ -3379,6 +4093,9 @@ class FcService
     //--------------------------------------------------------------------------
     BigDecimal calculateMapDistance(Contest contestInstance, BigDecimal mapMeasureDistance)
     {
+    	if (mapMeasureDistance == null) {
+    		return null
+    	}
   		return contestInstance.mapScale * mapMeasureDistance / mmPerNM
     }
 
@@ -3398,28 +4115,125 @@ class FcService
     //--------------------------------------------------------------------------
     private void calculateRouteLegs(Route routeInstance) 
     {
+        println "calculateRouteLegs: ${routeInstance.name()}"
+        
         // remove all legs
     	removeAllRouteLegs(routeInstance)
         
         // calculate new legs
-        RouteCoord lastRouteCoordInstance
-        RouteCoord lastRouteCoordTestInstance
-        BigDecimal lastMapMeasureDistance = 0
-        RouteCoord.findAllByRoute(routeInstance).each { routeCoordInstance -> 
-        	lastMapMeasureDistance += routeCoordInstance.mapmeasuredistance
-            newLeg(routeInstance, routeCoordInstance, lastRouteCoordInstance, lastRouteCoordTestInstance, lastMapMeasureDistance)
-            lastRouteCoordInstance = routeCoordInstance
-            switch (routeCoordInstance.type) {
-	            case RouteCoordType.SP:
-	            case RouteCoordType.TP:
-	            case RouteCoordType.FP:
-	            	lastRouteCoordTestInstance = routeCoordInstance
-	            	lastMapMeasureDistance = 0
+        CoordRoute lastCoordRouteInstance
+        CoordRoute lastCoordRouteTestInstance
+        BigDecimal lastMapMeasureDistance = null
+        BigDecimal lastMapMeasureTrueTrack = null
+        CoordRoute.findAllByRoute(routeInstance).each { coordRouteInstance ->
+      		lastMapMeasureDistance = addMapDistance(lastMapMeasureDistance,coordRouteInstance.mapmeasuredistance)
+        	lastMapMeasureTrueTrack = coordRouteInstance.mapmeasuretruetrack
+            newLeg(routeInstance, coordRouteInstance, lastCoordRouteInstance, lastCoordRouteTestInstance, lastMapMeasureDistance, lastMapMeasureTrueTrack)
+            lastCoordRouteInstance = coordRouteInstance
+            switch (coordRouteInstance.type) {
+	            case CoordType.SP:
+	            case CoordType.TP:
+	            case CoordType.FP:
+	            	lastCoordRouteTestInstance = coordRouteInstance
+	            	lastMapMeasureDistance = null
 	            	break
             }
         }
     }
 
+    //--------------------------------------------------------------------------
+    private void calculateSecretLegRatio(Route routeInstance)
+    {
+        println "calculateSecretLegRatio: ${routeInstance.name()}"
+        
+        def startCoordRouteInstance
+        def startCoordRouteInstance2
+        def lastType
+        def lastLegDirection = null
+        
+        CoordRoute.findAllByRoute(routeInstance).each { coordRouteInstance ->
+        	switch (coordRouteInstance.type) {
+        		case CoordType.SP:
+        		case CoordType.TP:
+        			startCoordRouteInstance = coordRouteInstance
+        			break
+        		case CoordType.SECRET:
+	        		
+        			// search endCoordRouteInstance
+	        		def endCoordRouteInstance
+	        		boolean found = false
+	        		CoordRoute.findAllByRoute(routeInstance).each { coordRouteInstance2 ->
+	                    if (found) {
+	                        switch (coordRouteInstance2.type) {
+	                        	case CoordType.TP:
+                                case CoordType.FP:
+                                	endCoordRouteInstance = coordRouteInstance2
+                                	found = false
+                                	break
+	                        }
+	                    }
+	        			if (coordRouteInstance2 == startCoordRouteInstance) {
+	        				found = true
+	        			}
+	        		}
+
+	        		if (endCoordRouteInstance && !coordRouteInstance.secretLegRatio) {
+		        		// get leg data
+		                Map legData = calculateLegData(endCoordRouteInstance, startCoordRouteInstance)
+		                
+		        		// get secret leg data
+		        		Map legDataSecret = calculateLegData(coordRouteInstance, startCoordRouteInstance)
+		        		
+		        		// calculate secretLegRatio
+		        		if (legData.dis > 0) {
+		        			coordRouteInstance.secretLegRatio = legDataSecret.dis / legData.dis
+		        			coordRouteInstance.save()
+		        		}
+
+	        		}
+	        		break
+        	}
+
+        	// calculate planProcedureTurn
+        	if (lastType == CoordType.TP) {
+                Map legData = calculateLegData(coordRouteInstance, startCoordRouteInstance2)
+                if (lastLegDirection != null) {
+                    def diffTrack = legData.dir - lastLegDirection
+                    if (diffTrack < 0) {
+                        diffTrack += 360
+                    }
+                    if (diffTrack >= 90 && diffTrack < 270) {
+                        coordRouteInstance.planProcedureTurn = true
+                        coordRouteInstance.save()
+                    }
+                }
+                lastLegDirection = legData.dir
+        	}
+            switch (coordRouteInstance.type) {
+            	case CoordType.SP:
+            		startCoordRouteInstance2 = coordRouteInstance 
+            		break
+                case CoordType.TP:
+                case CoordType.FP:
+                    startCoordRouteInstance2 = coordRouteInstance 
+		            break
+            }
+        	lastType = coordRouteInstance.type
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    BigDecimal addMapDistance(lastMapMeasureDistance, addmeasuredistance)
+    {
+	    if (addmeasuredistance != null) {
+	    	if (lastMapMeasureDistance != null) {
+	    		lastMapMeasureDistance += addmeasuredistance
+	    	} else {
+	    		lastMapMeasureDistance = addmeasuredistance
+	    	}
+	    }
+    }
+    
     //--------------------------------------------------------------------------
     private String getMsg(String code, List args)
     {
@@ -3437,10 +4251,10 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    void calulateSequence(ContestDayTask contestDayTaskInstance)
+    void calulateSequence(Task taskInstance)
     {
     	// set viewpos for aircraft of user1 
-        Test.findAllByContestdaytask(contestDayTaskInstance).each { testInstance ->
+        Test.findAllByTask(taskInstance).each { testInstance ->
         	if (testInstance.crew.aircraft) {
         		if (testInstance.crew.aircraft.user1 == testInstance.crew) {
         			testInstance.viewpos = 2000+testInstance.crew.tas
@@ -3449,7 +4263,7 @@ class FcService
         }
 
         // set viewpos for aircraft of user2 
-        Test.findAllByContestdaytask(contestDayTaskInstance).each { testInstance ->
+        Test.findAllByTask(taskInstance).each { testInstance ->
             if (testInstance.crew.aircraft) {
                 if (testInstance.crew.aircraft.user2 == testInstance.crew) {
                     testInstance.viewpos = 1000+testInstance.crew.tas
@@ -3458,14 +4272,14 @@ class FcService
         }
 
         // set viewpos for user without aircraft 
-        Test.findAllByContestdaytask(contestDayTaskInstance).each { testInstance ->
+        Test.findAllByTask(taskInstance).each { testInstance ->
             if (!testInstance.crew.aircraft) {
                 testInstance.viewpos = 0
             }
         }
 
         // set viewpos
-        Test.findAllByContestdaytask(contestDayTaskInstance,[sort:"viewpos",order:"desc"]).eachWithIndex { testInstance, i ->
+        Test.findAllByTask(taskInstance,[sort:"viewpos",order:"desc"]).eachWithIndex { testInstance, i ->
             testInstance.viewpos = i
             testInstance.timeCalculated = false
             testInstance.save()
@@ -3473,7 +4287,7 @@ class FcService
     }
  
     //--------------------------------------------------------------------------
-    void addTestingTime(ContestDayTask contestDayTaskInstance, Test testInstance)
+    void addTestingTime(Task taskInstance, Test testInstance)
     {
         if (testInstance.timeCalculated) {
             
@@ -3481,18 +4295,18 @@ class FcService
             time.setTime(testInstance.testingTime)
             
             // add testingTime
-            time.add(Calendar.MINUTE, contestDayTaskInstance.addTimeValue)
+            time.add(Calendar.MINUTE, taskInstance.addTimeValue)
             testInstance.testingTime = time.getTime()
             
             // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
-            calculateTimes(time, contestDayTaskInstance, testInstance)
+            calculateTimes(time, taskInstance, testInstance)
             
-            calulateTimetableWarnings(contestDayTaskInstance)
+            calulateTimetableWarnings(taskInstance)
         }
     }
   
     //--------------------------------------------------------------------------
-    void subtractTestingTime(ContestDayTask contestDayTaskInstance, Test testInstance)
+    void subtractTestingTime(Task taskInstance, Test testInstance)
     {
         if (testInstance.timeCalculated) {
             
@@ -3500,23 +4314,23 @@ class FcService
             time.setTime(testInstance.testingTime)
             
             // subtract testingTime
-            time.add(Calendar.MINUTE, -contestDayTaskInstance.addTimeValue)
+            time.add(Calendar.MINUTE, -taskInstance.addTimeValue)
             testInstance.testingTime = time.getTime()
             
             // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
-            calculateTimes(time, contestDayTaskInstance, testInstance)
+            calculateTimes(time, taskInstance, testInstance)
             
-            calulateTimetableWarnings(contestDayTaskInstance)
+            calulateTimetableWarnings(taskInstance)
         }
     }
 
     //--------------------------------------------------------------------------
-    private void calulateTimetableWarnings(ContestDayTask contestDayTaskInstance)
+    private void calulateTimetableWarnings(Task taskInstance)
     {
-        Date first_date = Date.parse("HH:mm",contestDayTaskInstance.firstTime)
+        Date first_date = Date.parse("HH:mm",taskInstance.firstTime)
         Date lastArrivalTime = first_date
         
-        Test.findAllByContestdaytask(contestDayTaskInstance,[sort:"viewpos"]).each { testInstance ->
+        Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance ->
             
             // calculate arrivalTimeWarning by arrivalTime
             testInstance.arrivalTimeWarning = false
@@ -3529,7 +4343,7 @@ class FcService
             testInstance.takeoffTimeWarning = false
             boolean foundAircraft = false
             GregorianCalendar lastTakeoffTime = null
-            Test.findAllByContestdaytask(contestDayTaskInstance,[sort:"viewpos"]).each { testInstance2 ->
+            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance2 ->
                 if (testInstance.crew.aircraft == testInstance2.crew.aircraft) {
                 	if (testInstance == testInstance2) {
                 		foundAircraft = true
@@ -3537,8 +4351,8 @@ class FcService
 					if (!foundAircraft) {
 	                	lastTakeoffTime = new GregorianCalendar()
 	                    lastTakeoffTime.setTime(testInstance2.arrivalTime)
-	                    lastTakeoffTime.add(Calendar.MINUTE, contestDayTaskInstance.minNextFlightDuration)
-	                    lastTakeoffTime.add(Calendar.MINUTE, contestDayTaskInstance.preparationDuration)
+	                    lastTakeoffTime.add(Calendar.MINUTE, taskInstance.minNextFlightDuration)
+	                    lastTakeoffTime.add(Calendar.MINUTE, taskInstance.preparationDuration)
 	                }
                 }
             }
@@ -3552,9 +4366,9 @@ class FcService
     }
  
     //--------------------------------------------------------------------------
-    void calulateTimetable(ContestDayTask contestDayTaskInstance)
+    void calulateTimetable(Task taskInstance)
     {
-        Date first_date = Date.parse("HH:mm",contestDayTaskInstance.firstTime)
+        Date first_date = Date.parse("HH:mm",taskInstance.firstTime)
         GregorianCalendar first_time = new GregorianCalendar() 
         first_time.setTime(first_date)
 
@@ -3566,10 +4380,10 @@ class FcService
         BigDecimal lastTAS = 9000.0
         Date lastArrivalTime = first_date
         
-        Test.findAllByContestdaytask(contestDayTaskInstance,[sort:"viewpos"]).each { testInstance ->
+        Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance ->
             
             if (testInstance.crew.tas > lastTAS) { // faster aircraft
-            	start_time.add(Calendar.MINUTE, contestDayTaskInstance.takeoffIntervalFasterAircraft - contestDayTaskInstance.takeoffIntervalNormal)
+            	start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalFasterAircraft - taskInstance.takeoffIntervalNormal)
             }
             
             // calculate testingTime
@@ -3577,7 +4391,7 @@ class FcService
             testInstance.testingTime = time.getTime()
             
             // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
-            calculateTimes(time, contestDayTaskInstance, testInstance)
+            calculateTimes(time, taskInstance, testInstance)
             
             // calculate arrivalTimeWarning by arrivalTime
             testInstance.arrivalTimeWarning = false
@@ -3590,7 +4404,7 @@ class FcService
             testInstance.takeoffTimeWarning = false
             boolean foundAircraft = false
             GregorianCalendar lastTakeoffTime = null
-            Test.findAllByContestdaytask(contestDayTaskInstance,[sort:"viewpos"]).each { testInstance2 ->
+            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance2 ->
 	            if (testInstance.crew.aircraft == testInstance2.crew.aircraft) {
 	                if (testInstance == testInstance2) {
 	                    foundAircraft = true
@@ -3598,8 +4412,8 @@ class FcService
 	                if (!foundAircraft) {
 	                    lastTakeoffTime = new GregorianCalendar()
 	                    lastTakeoffTime.setTime(testInstance2.arrivalTime)
-	                    lastTakeoffTime.add(Calendar.MINUTE, contestDayTaskInstance.minNextFlightDuration)
-	                    lastTakeoffTime.add(Calendar.MINUTE, contestDayTaskInstance.preparationDuration)
+	                    lastTakeoffTime.add(Calendar.MINUTE, taskInstance.minNextFlightDuration)
+	                    lastTakeoffTime.add(Calendar.MINUTE, taskInstance.preparationDuration)
 	                }
 	            }
             }
@@ -3610,7 +4424,7 @@ class FcService
             }
 
             // next 
-            start_time.add(Calendar.MINUTE, contestDayTaskInstance.takeoffIntervalNormal)
+            start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
             lastTAS = testInstance.crew.tas
             
             testInstance.timeCalculated = true
@@ -3619,27 +4433,33 @@ class FcService
     }
  
     //--------------------------------------------------------------------------
-    private void calculateTimes(GregorianCalendar time, ContestDayTask contestDayTaskInstance, Test testInstance) 
+    private void calculateTimes(GregorianCalendar time, Task taskInstance, Test testInstance) 
     {
         // calulate endTestingTime
-        time.add(Calendar.MINUTE, contestDayTaskInstance.planningTestDuration)
+        time.add(Calendar.MINUTE, taskInstance.planningTestDuration)
         testInstance.endTestingTime = time.getTime()
             
         // calulate takeoffTime
-        time.add(Calendar.MINUTE, contestDayTaskInstance.preparationDuration)
+        time.add(Calendar.MINUTE, taskInstance.preparationDuration)
         testInstance.takeoffTime = time.getTime()
         
         // calulate startTime
-        time.add(Calendar.MINUTE, contestDayTaskInstance.risingDuration)
+        time.add(Calendar.MINUTE, taskInstance.risingDuration)
         testInstance.startTime = time.getTime()
         
         // calculate finishTime
         time.add(Calendar.SECOND, (3600 * getLegsPlanTime(testInstance)).toInteger() )
         testInstance.finishTime = time.getTime()
+        GregorianCalendar finish_time = time.clone()
         
+        // calculate maxLandingTime
+        finish_time.add(Calendar.MINUTE, taskInstance.maxLandingDuration)
+        testInstance.maxLandingTime = finish_time.getTime() 
+
         // calculate arrivalTime
-        time.add(Calendar.MINUTE, contestDayTaskInstance.landingDuration)
+        time.add(Calendar.MINUTE, taskInstance.parkingDuration)
         testInstance.arrivalTime = time.getTime()
+        
     }
     
     //--------------------------------------------------------------------------
@@ -3656,11 +4476,11 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    void calulateTestLegFlights(ContestDayTask contestDayTaskInstance)
+    void calulateTestLegFlights(Task taskInstance)
     {
-        println "calulateTestLegFlights: ${contestDayTaskInstance.name()}"
+        println "calulateTestLegFlights: ${taskInstance.name()}"
         
-        Test.findAllByContestdaytask(contestDayTaskInstance,[sort:"viewpos"]).each { testInstance ->
+        Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance ->
             // remove all TestLegFlights
             TestLegFlight.findAllByTest(testInstance).each { testLegFlightInstance ->
                 testLegFlightInstance.delete(flush:true)
@@ -3671,7 +4491,7 @@ class FcService
             RouteLegTest.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route).each { routeLegTestInstance ->
                 
                 def testLegFlightInstance = new TestLegFlight()
-                calculateLeg(testLegFlightInstance, routeLegTestInstance, testInstance.flighttestwind.wind, testInstance.crew.tas, testInstance.contestdaytask.procedureTurnDuration, lastTrueTrack)
+                calculateLeg(testLegFlightInstance, routeLegTestInstance, testInstance.flighttestwind.wind, testInstance.crew.tas, testInstance.task.procedureTurnDuration, lastTrueTrack)
                 testLegFlightInstance.test = testInstance
                 testLegFlightInstance.save()
 
@@ -3681,7 +4501,81 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    private void calulateTestLegPlannings(Test testInstance)
+    void calulateCoordResults(Task taskInstance)
+    {
+        println "calulateCoordResults: ${taskInstance.name()}"
+        
+        Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance ->
+        	// remove all coordResultInstances
+            CoordResult.findAllByTest(testInstance).each { coordResultInstance ->
+            	coordResultInstance.delete(flush:true)
+            }
+ 
+            // create coordResultInstances
+            int coordIndex = 0
+            CoordRoute.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route).each { coordRouteInstance ->
+                def coordResultInstance = new CoordResult()
+                coordResultInstance.type = coordRouteInstance.type
+                coordResultInstance.titleNumber = coordRouteInstance.titleNumber
+                coordResultInstance.mark = coordRouteInstance.mark
+                coordResultInstance.latGrad = coordRouteInstance.latGrad
+                coordResultInstance.latMinute = coordRouteInstance.latMinute
+                coordResultInstance.latDirection = coordRouteInstance.latDirection
+                coordResultInstance.lonGrad = coordRouteInstance.lonGrad
+                coordResultInstance.lonMinute = coordRouteInstance.lonMinute
+                coordResultInstance.lonDirection = coordRouteInstance.lonDirection
+                coordResultInstance.altitude = coordRouteInstance.altitude
+                coordResultInstance.gatewidth = coordRouteInstance.gatewidth
+                coordResultInstance.planProcedureTurn = coordRouteInstance.planProcedureTurn
+                switch (coordRouteInstance.type) {
+                	case CoordType.TO:
+                        coordResultInstance.planCpTime = testInstance.takeoffTime
+                        break
+                	case CoordType.SP:
+                		coordResultInstance.planCpTime = testInstance.startTime
+                		break
+                	case CoordType.LDG:
+                        coordResultInstance.planCpTime = testInstance.maxLandingTime
+                        break
+                    case CoordType.TP:
+                    case CoordType.FP:
+                    	coordIndex++
+                        Date cpTime = testInstance.startTime
+                        TestLegFlight.findAllByTest(testInstance).eachWithIndex { testLegFlightInstance, legIndex ->
+                            cpTime = testLegFlightInstance.AddPlanLegTime(cpTime)
+                            if (coordIndex == legIndex + 1) {
+                                coordResultInstance.planCpTime = cpTime
+                            }
+                        }
+                    	break
+                    case CoordType.SECRET:
+                        Date cpTime = testInstance.startTime
+                        TestLegFlight.findAllByTest(testInstance).eachWithIndex { testLegFlightInstance, legIndex ->
+                            if (coordIndex == legIndex) {
+                            	cpTime = testLegFlightInstance.AddPlanLegTime(cpTime,coordRouteInstance.secretLegRatio)
+                                coordResultInstance.planCpTime = cpTime
+                            } else {
+                            	cpTime = testLegFlightInstance.AddPlanLegTime(cpTime)
+                            }
+                        }
+                    	break
+                }
+                coordResultInstance.test = testInstance
+                switch (coordRouteInstance.type) {
+                	case CoordType.TO:
+                    case CoordType.LDG:
+                    	// ignore Takeoff and Landing
+                    	break
+                    default:
+                        coordResultInstance.save()
+                        break
+                }
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    private void calulateTestLegPlannings(Test testInstance, Route route)
     {
         println "calulateTestLegPlannings: ${testInstance.crew.name}"
         
@@ -3692,14 +4586,14 @@ class FcService
         
         // calculate TestLegPlannings with results 
         Integer lastTrueTrack = null
-        RouteLegTest.findAllByRoute(testInstance.planningtesttask.route).each { routeLegTestInstance ->
+        RouteLegTest.findAllByRoute(route).each { routeLegTestInstance ->
             def testLegPlanningInstance = new TestLegPlanning()
-            calculateLeg(testLegPlanningInstance, routeLegTestInstance, testInstance.planningtesttask.wind, testInstance.crew.tas, testInstance.planningtesttask.planningtest.contestdaytask.procedureTurnDuration, lastTrueTrack)
+            calculateLeg(testLegPlanningInstance, routeLegTestInstance, testInstance.planningtesttask.wind, testInstance.crew.tas, testInstance.planningtesttask.planningtest.task.procedureTurnDuration, lastTrueTrack)
             testLegPlanningInstance.test = testInstance
-            if (!testInstance.contestdaytask.planningTestDistanceMeasure) {
+            if (!testInstance.task.planningTestDistanceMeasure) {
                 testLegPlanningInstance.resultTestDistance = testLegPlanningInstance.planTestDistance
             }
-            if (!testInstance.contestdaytask.planningTestDirectionMeasure) {
+            if (!testInstance.task.planningTestDirectionMeasure) {
                 testLegPlanningInstance.resultTrueTrack = testLegPlanningInstance.planTrueTrack
             }
             testLegPlanningInstance.save()
@@ -3708,22 +4602,22 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    private void calculateLeg(TestLeg testLeg, RouteLegTest routeLegTestInstance, Wind windInstance, BigDecimal valueTAS, int procedureTurnDuration, Integer lastTrueTrack) 
+    private void calculateLeg(TestLeg testLeg, RouteLeg routeLegInstance, Wind windInstance, BigDecimal valueTAS, int procedureTurnDuration, Integer lastTrueTrack) 
     {
        // save route data
-       testLeg.planTestDistance = routeLegTestInstance.testDistance()
-       testLeg.planTrueTrack = routeLegTestInstance.trueTrack
+       testLeg.planTestDistance = routeLegInstance.testDistance()
+       testLeg.planTrueTrack = routeLegInstance.testTrueTrack()
        
        // calculate wind
        if (windInstance.speed) {
            def windDirection = windInstance.direction - 180
-           def beta = windDirection - routeLegTestInstance.trueTrack
+           def beta = windDirection - routeLegInstance.trueTrack
            def sinBeta = Math.sin(Math.toRadians(beta)) 
            def driftAngle = 0
            if (beta != 0 && beta != 180 && beta != -180) {
                driftAngle = Math.toDegrees(Math.asin(sinBeta*windInstance.speed/valueTAS))  
            }
-           testLeg.planTrueHeading = routeLegTestInstance.trueTrack - driftAngle 
+           testLeg.planTrueHeading = routeLegInstance.trueTrack - driftAngle 
            def gamma = 180 + testLeg.planTrueHeading - windDirection
            def sinGamma = Math.sin(Math.toRadians(gamma))
            //println "Beta: $beta, sinBeta: $sinBeta, Gamma: $gamma, sinGamma: $sinGamma"
@@ -3738,7 +4632,7 @@ class FcService
         	   testLeg.planTrueHeading += 360
            }
        } else {
-    	   testLeg.planTrueHeading = routeLegTestInstance.trueTrack
+    	   testLeg.planTrueHeading = routeLegInstance.trueTrack
     	   testLeg.planGroundSpeed = valueTAS
        }
        testLeg.planLegTime = testLeg.planTestDistance / testLeg.planGroundSpeed 
@@ -3787,43 +4681,24 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putContest(title,contestDayTitle,contestDayTaskTitle)
+    Map putTask(contest,title)
     {
         def p = [:]
         p.title = title
-        p.contestDayTitle = contestDayTitle
-        p.contestDayTaskTitle = contestDayTaskTitle
-        return saveContest(p)
+        return saveTask(p,contest.instance)
     }
     
     //--------------------------------------------------------------------------
-    Map putContestDay(contest,title)
-    {
-        def p = [:]
-        p.contestid = contest.instance.id
-        p.title = title
-        return saveContestDay(p)
-    }
-    
-    //--------------------------------------------------------------------------
-    Map putContestDayTask(contestday,title)
-    {
-        def p = [:]
-        p.contestdayid = contestday.instance.id 
-        p.title = title
-        return saveContestDayTask(p)
-    }
-    
-    //--------------------------------------------------------------------------
-    Map putRoute(contest,title)
+    Map putRoute(contest,title,mark)
     {
         def p = [:]
         p.title = title
+        p.mark = mark
         return saveRoute(p,contest.instance)
     }
 
     //--------------------------------------------------------------------------
-    Map putRouteCoord(route,type,titleNumber,latDirection,latGrad,latMinute,lonDirection,lonGrad,lonMinute,altitude,gatewidth,mapmeasuredistance)
+    Map putCoordRoute(route,type,titleNumber,mark,latDirection,latGrad,latMinute,lonDirection,lonGrad,lonMinute,altitude,gatewidth,mapmeasuredistance,mapmeasuretruetrack)
     {
         def p = [:]
         p.routeid = route.instance.id
@@ -3831,6 +4706,7 @@ class FcService
         if (titleNumber > 0) {
         	p.titleNumber = titleNumber
         }
+        p.mark = mark
         p.latGrad = latGrad
         p.latMinute = latMinute
         p.latDirection = latDirection
@@ -3841,7 +4717,8 @@ class FcService
         p.gatewidth = gatewidth
         p.mapmeasuredistance = mapmeasuredistance
         p.mapdistance = calculateMapDistance(route.instance.contest,mapmeasuredistance)
-        return saveRouteCoord(p)
+        p.mapmeasuretruetrack = mapmeasuretruetrack 
+        return saveCoordRoute(p)
     }
     
     //--------------------------------------------------------------------------
@@ -3858,10 +4735,10 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putFlightTest(contestdaytask,title,route)
+    Map putFlightTest(task,title,route)
     {
         def p = [:]
-        p.contestdaytaskid = contestdaytask.instance.id
+        p.taskid = task.instance.id
         p.title = title
         p.route = route.instance
         p.direction = 0
@@ -3870,10 +4747,10 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putFlightTest(contestdaytask,title,route,direction,speed)
+    Map putFlightTest(task,title,route,direction,speed)
     {
         def p = [:]
-        p.contestdaytaskid = contestdaytask.instance.id
+        p.taskid = task.instance.id
         p.title = title
         p.route = route.instance
         p.direction = direction
@@ -3892,10 +4769,10 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map putLandingTest(contestdaytask,title)
+    Map putLandingTest(task,title)
     {
         def p = [:]
-        p.contestdaytaskid = contestdaytask.instance.id
+        p.taskid = task.instance.id
         p.title = title
         return saveLandingTest(p)
     }
@@ -3910,10 +4787,10 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putPlanningTest(contestdaytask,title)
+    Map putPlanningTest(task,title)
     {
         def p = [:]
-        p.contestdaytaskid = contestdaytask.instance.id
+        p.taskid = task.instance.id
         p.title = title
         p.direction = 0
         p.speed = 0
@@ -3921,10 +4798,10 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map putPlanningTest(contestdaytask,title,taskTitle,route,direction,speed)
+    Map putPlanningTest(task,title,taskTitle,route,direction,speed)
     {
         def p = [:]
-        p.contestdaytaskid = contestdaytask.instance.id
+        p.taskid = task.instance.id
         p.title = title
         p.taskTitle = taskTitle
         p.route = route.instance
@@ -3946,10 +4823,10 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putSpecialTest(contestdaytask,title)
+    Map putSpecialTest(task,title)
     {
         def p = [:]
-        p.contestdaytaskid = contestdaytask.instance.id
+        p.taskid = task.instance.id
         p.title = title
         return saveSpecialTest(p)
     }
@@ -3964,9 +4841,9 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putResults(contestdaytask,crew,flightTestPenalties,landingTestPenalties,specialTestPenalties)
+    Map putResults(task,crew,flightTestPenalties,landingTestPenalties,specialTestPenalties)
     {
-        Test testInstance = Test.findByContestdaytaskAndCrew(contestdaytask.instance,crew.instance)
+        Test testInstance = Test.findByTaskAndCrew(task.instance,crew.instance)
         def p = [:]
         p.id = testInstance.id
         p.flightTestPenalties = flightTestPenalties
@@ -3976,26 +4853,26 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map runcalculatesequenceContestDayTask(contestdaytask)
+    Map runcalculatesequenceTask(task)
     {
         def p = [:]
-        p.id = contestdaytask.instance.id 
-        return calculatesequenceContestDayTask(p)
+        p.id = task.instance.id 
+        return calculatesequenceTask(p)
     }
     
     //--------------------------------------------------------------------------
-    Map runcalculatetimetableContestDayTask(contestdaytask)
+    Map runcalculatetimetableTask(task)
     {
         def p = [:]
-        p.id = contestdaytask.instance.id 
-        return calculatetimetableContestDayTask(p)
+        p.id = task.instance.id 
+        return calculatetimetableTask(p)
     }
     
     //--------------------------------------------------------------------------
-    Map runcalculatepositionsContestDayTask(contestdaytask)
+    Map runcalculatepositionsTask(task)
     {
         def p = [:]
-        p.id = contestdaytask.instance.id 
-        return calculatepositionsContestDayTask(p)
+        p.id = task.instance.id 
+        return calculatepositionsTask(p)
     }
 }

@@ -2,25 +2,21 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1}</title>
+        <title>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1}</h2>
+                <h2>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</h2>
                 <div class="block" id="forms" >
                     <g:form>
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.from')}:</td>
-                                    <td><g:contestday var="${testInstance?.contestdaytask?.contestday}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
-                                </tr>
-                                <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:contestdaytask var="${testInstance?.contestdaytask}" link="${createLink(controller:'contestDayTask',action:'listplanning')}"/></td>
+                                    <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listplanning')}"/></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -121,7 +117,7 @@
                                             <td/>
                                             <td/>
                                             <td/>
-                                            <td>${RouteCoordType.TO.title}</td>
+                                            <td>${CoordType.TO.title}</td>
                                             <g:if test="${testInstance.timeCalculated}">
                                                 <g:if test="${testInstance.takeoffTimeWarning}">
                                                     <td class="errors">${testInstance.takeoffTime?.format('HH:mm:ss')} !</td>
@@ -139,7 +135,7 @@
                                             <td/>
                                             <td/>
                                             <td/>
-                                            <td>${RouteCoordType.SP.title}</td>
+                                            <td>${CoordType.SP.title}</td>
                                             <g:if test="${testInstance.timeCalculated}">
                                                 <td>${testInstance.startTime?.format('HH:mm:ss')}</td>
                                             </g:if> <g:else>
@@ -157,7 +153,7 @@
                                             <g:set var="totalDistance" value="${FcMath.AddDistance(totalDistance,testLegFlightInstance.planTestDistance)}" />
                                             <g:if test="${testLegFlightInstance.planProcedureTurn}">
                                                 <tr>
-                                                    <td class="center" colspan="8">${message(code:'fc.procedureturn')} (${testLegFlightInstance.test.contestdaytask.procedureTurnDuration}${message(code:'fc.time.min')})</td>
+                                                    <td class="center" colspan="8">${message(code:'fc.procedureturn')} (${testLegFlightInstance.test.task.procedureTurnDuration}${message(code:'fc.time.min')})</td>
                                                 </tr>
                                             </g:if>
                                             <tr>
@@ -168,23 +164,23 @@
                                                 <td>${FcMath.SpeedStr(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                                 <td>${testLegFlightInstance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
                                                 <g:if test="${legNo==legNum}">
-                                                    <td>${RouteCoordType.FP.title}</td>
+                                                    <td>${CoordType.FP.title}</td>
                                                 </g:if>
                                                 <g:else>
-                                                    <td>${RouteCoordType.TP.title}${legNo}</td>
+                                                    <td>${CoordType.TP.title}${legNo}</td>
                                                 </g:else>
                                                 <td>${tptime.format('HH:mm:ss')}</td>
                                             </tr>
                                         </g:each>
                                     </tbody>
-                                </table>
-                                <table>
-                                    <tbody>
+                                    <tfoot>
                                         <tr>
-                                            <td class="detailtitle">${message(code:'fc.distance.total')}:</td>
-                                            <td>${FcMath.DistanceStr(totalDistance)}${message(code:'fc.mile')}</td>
+                                            <td/>
+                                            <td colspan="4">${FcMath.DistanceStr(totalDistance)}${message(code:'fc.mile')} ${message(code:'fc.distance.total')}</td>
+                                            <td colspan="2" align="right">${message(code:'fc.maxlandingtime')}:</td>
+                                            <td>${testInstance.maxLandingTime.format('HH:mm:ss')}</td>
                                         </tr>
-                                    </tbody>
+                                    </tfoot>
                                 </table>
                             </div>
                         </g:if>

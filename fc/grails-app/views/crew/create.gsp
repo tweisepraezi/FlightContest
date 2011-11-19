@@ -19,7 +19,7 @@
                     <g:form method="post" >
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.crew.name')}:</label>
+                                <label>${message(code:'fc.crew.name')}*:</label>
                                 <br/>
                                 <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}"/>
                             </p>
@@ -47,7 +47,7 @@
                                 <input type="text" id="colour" name="colour" value="${fieldValue(bean:crewInstance,field:'colour')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.tas')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.tas')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" />
                             </p>

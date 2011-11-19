@@ -23,4 +23,9 @@ class AflosCrewNames implements Serializable
 // def p = AflosCrewNames.get(new AflosCrewNames(startnum:1, logstart:20, points:3681))
 
 	}
+	
+	String viewName()
+	{
+		return "$name ($startnum)"
+	}
 }

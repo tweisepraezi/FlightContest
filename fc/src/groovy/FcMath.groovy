@@ -70,4 +70,34 @@ class FcMath
         }
         return ""
     }
+
+    static String RatioStr(BigDecimal ratioValue)
+    {
+        if (ratioValue >= 0) {
+            DecimalFormat df = new DecimalFormat("#0.0")
+            return df.format(ratioValue)
+        }
+        return ""
+    }
+
+    static String ConvertAFLOSCoordValue(String aflosCoordValue)
+    // "51° 26,9035' N" -> "N 051° 27,00000'" 
+    {
+    	String[] a = aflosCoordValue.split()
+    	
+    	String gradStr = a[0]
+    	while (gradStr.size() < 4) {
+    		gradStr = "0$gradStr"
+    	}
+    	
+    	String secondStr = "${a[1].substring(0,a[1].size()-1)}0'"
+    	
+    	return "${a[2]} $gradStr $secondStr"
+    }
+
+    static String ConvertAFLOSTime(String aflosTime)
+    {
+        String[] at = aflosTime.split()
+	    return "${at[0].replaceFirst('h','')}:${at[1].replaceFirst('min','')}:${at[2].replaceFirst(',000sec','')}"
+    }
 }

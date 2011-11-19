@@ -13,7 +13,7 @@ class SpecialTestController {
         	return [specialTestInstance:specialtest.instance]
         } else {
             flash.message = specialtest.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -23,7 +23,7 @@ class SpecialTestController {
         	return [specialTestInstance:specialtest.instance]
         } else {
             flash.message = specialtest.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -49,10 +49,10 @@ class SpecialTestController {
         def specialtest = fcService.saveSpecialTest(params) 
         if (specialtest.saved) {
         	flash.message = specialtest.message
-            if (specialtest.fromcontestdaytask) {
-            	redirect(controller:"contestDayTask",action:show,id:specialtest.contestdaytaskid)
+            if (specialtest.fromtask) {
+            	redirect(controller:"task",action:show,id:specialtest.taskid)
             } else {
-            	redirect(controller:"contest",action:"start")
+            	redirect(controller:"contest",action:"tasks")
             }
         } else {
             render(view:'create',model:[specialTestInstance:specialtest.instance])
@@ -63,21 +63,21 @@ class SpecialTestController {
         def specialtest = fcService.deleteSpecialTest(params)
         if (specialtest.deleted) {
         	flash.message = specialtest.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         } else if (specialtest.notdeleted) {
         	flash.message = specialtest.message
             redirect(action:show,id:params.id)
         } else {
         	flash.message = specialtest.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         }
     }
 	
 	def cancel = {
-        if (params.fromcontestdaytask) {
-            redirect(controller:"contestDayTask",action:show,id:params.contestdaytaskid)
+        if (params.fromtask) {
+            redirect(controller:"task",action:show,id:params.taskid)
         } else {
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
 	}
 	

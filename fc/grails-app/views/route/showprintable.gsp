@@ -12,16 +12,16 @@
                     <g:form>
                         <table width="100%" border="1" cellspacing="0" cellpadding="2">
                             <tbody>
-                                <g:each var="routeCoordInstance" in="${RouteCoord.findAllByRoute(routeInstance)}" status="j" >
+                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}" status="j" >
                                     <tr>
                                         <g:if test="${j==0}">
-                                            <td>${message(code:'fc.routecoord.list')}</td>
+                                            <td>${message(code:'fc.coordroute.list')}</td>
                                         </g:if>
                                         <g:else>
                                             <td/>
                                         </g:else>
-                                        <td>${routeCoordInstance.title()}<br/></td>
-                                        <td>${routeCoordInstance.name()}<br/></td>
+                                        <td>${coordRouteInstance.titleWithRatio()}<br/></td>
+                                        <td>${coordRouteInstance.name()}<br/></td>
                                     </tr>
                                 </g:each>
                                 <tr>

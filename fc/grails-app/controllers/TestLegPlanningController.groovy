@@ -9,7 +9,7 @@ class TestLegPlanningController
         	return [testLegPlanningInstance:testlegplanning.instance]
         } else {
             flash.message = testlegplanning.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         }
     }
 
@@ -19,7 +19,7 @@ class TestLegPlanningController
             return [testLegPlanningInstance:testlegplanning.instance]
         } else {
             flash.message = testlegplanning.message
-            redirect(controller:"contestDayTask",action:"startresults")
+            redirect(controller:"task",action:"startresults")
         }
     }
 

@@ -51,10 +51,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.routecoord.list')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.coordroute.list')}:</td>
                                     <td>
-                                        <g:each var="routeCoordInstance" in="${RouteCoord.list()}">
-                                            <g:routecoord var="${routeCoordInstance}" link="${createLink(controller:'routeCoord',action:'show')}"/>
+                                        <g:each var="coordRouteInstance" in="${CoordRoute.list()}">
+                                            <g:coordroute var="${coordRouteInstance}" link="${createLink(controller:'coordRoute',action:'show')}"/>
                                             <br/>
                                         </g:each>
                                     </td>
@@ -78,19 +78,10 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.contestday.list')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.task.list')}:</td>
                                     <td>
-                                        <g:each var="contestDayInstance" in="${ContestDay.list()}">
-                                            <g:contestday var="${contestDayInstance}" link="${createLink(controller:'contestDay',action:'show')}"/>
-                                            <br/>
-                                        </g:each>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.contestdaytask.list')}:</td>
-                                    <td>
-                                        <g:each var="contestDayTaskInstance" in="${ContestDayTask.list()}">
-                                            <g:contestdaytask var="${contestDayTaskInstance}" link="${createLink(controller:'contestDayTask',action:'show')}"/>
+                                        <g:each var="taskInstance" in="${Task.list()}">
+                                            <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'show')}"/>
                                             <br/>
                                         </g:each>
                                     </td>

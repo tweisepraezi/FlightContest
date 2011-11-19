@@ -13,7 +13,7 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>${testInstance?.contestdaytask?.contestday.name()} - ${testInstance?.contestdaytask.name()}</td>
+                                    <td>${testInstance?.task.name()}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -69,10 +69,10 @@
                                     <g:set var="legNum" value="${TestLegPlanning.countByTest(testInstance)}" />
                                     <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance)}">
                                         <g:set var="legNo" value="${legNo+1}" />
-                                        <g:if test="${!testLegPlanningInstance.test.contestdaytask.planningTestDistanceMeasure}">
+                                        <g:if test="${!testLegPlanningInstance.test.task.planningTestDistanceMeasure}">
                                             <g:set var="testDistance" value="${FcMath.DistanceStr(testLegPlanningInstance.planTestDistance)}" />
                                         </g:if>
-                                        <g:if test="${!testLegPlanningInstance.test.contestdaytask.planningTestDirectionMeasure}">
+                                        <g:if test="${!testLegPlanningInstance.test.task.planningTestDirectionMeasure}">
                                             <g:set var="testDirection" value="${FcMath.GradStr(testLegPlanningInstance.planTrueTrack)+message(code:'fc.grad')}" />
                                         </g:if>
                                         <tr>
@@ -84,10 +84,10 @@
                                                 <td>${FcMath.SpeedStr(testLegPlanningInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                                 <td>${testLegPlanningInstance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
                                                 <g:if test="${legNo==legNum}">
-                                                    <td>${RouteCoordType.FP.title}</td>
+                                                    <td>${CoordType.FP.title}</td>
                                                 </g:if>
                                                 <g:else>
-                                                    <td>${RouteCoordType.TP.title}${legNo}</td>
+                                                    <td>${CoordType.TP.title}${legNo}</td>
                                                 </g:else>
                                             </g:if>
                                             <g:else>
@@ -98,10 +98,10 @@
                                                 <td/>
                                                 <td/>
                                                 <g:if test="${legNo==legNum}">
-                                                    <td>${RouteCoordType.FP.title}</td>
+                                                    <td>${CoordType.FP.title}</td>
                                                 </g:if>
                                                 <g:else>
-                                                    <td>${RouteCoordType.TP.title}${legNo}</td>
+                                                    <td>${CoordType.TP.title}${legNo}</td>
                                                 </g:else>
                                             </g:else>
                                         </tr>

@@ -28,12 +28,12 @@
                         <fieldset>
                             <g:if test="${!testLegPlanningInstance.test.planningTestComplete}">
                                 <p>
-                                    <label>${message(code:'fc.trueheading')} [${message(code:'fc.grad')}]:</label>
+                                    <label>${message(code:'fc.trueheading')}* [${message(code:'fc.grad')}]:</label>
                                     <br/>
                                     <input type="text" id="resultTrueHeading" name="resultTrueHeading" value="${fieldValue(bean:testLegPlanningInstance,field:'resultTrueHeading')}"/>
                                 </p>
                                 <p>
-                                    <label>${message(code:'fc.legtime')} [${message(code:'fc.time.hminsec')}]:</label>
+                                    <label>${message(code:'fc.legtime')}* [${message(code:'fc.time.hminsec')}]:</label>
                                     <br/>
                                     <input type="text" id="resultLegTimeInput" name="resultLegTimeInput" value="${fieldValue(bean:testLegPlanningInstance,field:'resultLegTimeInput')}"/>
                                 </p>

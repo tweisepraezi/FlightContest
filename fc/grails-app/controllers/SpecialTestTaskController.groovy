@@ -13,7 +13,7 @@ class SpecialTestTaskController {
         	return [specialTestTaskInstance:specialtesttask.instance]
         } else {
             flash.message = specialtesttask.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -23,7 +23,7 @@ class SpecialTestTaskController {
         	return [specialTestTaskInstance:specialtesttask.instance]
         } else {
             flash.message = specialtesttask.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -65,7 +65,7 @@ class SpecialTestTaskController {
         	redirect(action:show,id:params.id)
         } else {
         	flash.message = specialtesttask.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         }
     }
 	

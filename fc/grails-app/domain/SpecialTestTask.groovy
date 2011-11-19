@@ -9,7 +9,7 @@ class SpecialTestTask
 	
     String idName()
     {
-		return "${messageSource.getMessage('fc.specialtesttask', null, null)}-${specialtest.contestdaytask.contestday.idTitle}.${specialtest.contestdaytask.idTitle}.${idTitle}"
+		return "${messageSource.getMessage('fc.specialtesttask', null, null)}-${specialtest.task.idTitle}.${idTitle}"
     }
     
 	String name()

@@ -9,7 +9,7 @@ class TestLegFlightController
         	return [testLegFlightInstance:testlegflight.instance]
         } else {
             flash.message = testlegflight.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         }
     }
 

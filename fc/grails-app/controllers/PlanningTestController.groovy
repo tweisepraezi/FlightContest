@@ -11,7 +11,7 @@ class PlanningTestController {
         	return [planningTestInstance:planningtest.instance]
         } else {
             flash.message = planningtest.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -21,7 +21,7 @@ class PlanningTestController {
         	return [planningTestInstance:planningtest.instance]
         } else {
             flash.message = planningtest.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -44,11 +44,11 @@ class PlanningTestController {
         	flash.message = planningtest.message
         	flash.error = planningtest.error
             if (planningtest.fromlistplanning) {
-            	redirect(controller:"contestDayTask",action:"listplanning",id:planningtest.contestdaytaskid)
-            } else if (planningtest.fromcontestdaytask) {
-            	redirect(controller:"contestDayTask",action:show,id:planningtest.contestdaytaskid)
+            	redirect(controller:"task",action:"listplanning",id:planningtest.taskid)
+            } else if (planningtest.fromtask) {
+            	redirect(controller:"task",action:show,id:planningtest.taskid)
             } else {
-            	redirect(controller:"contest",action:"start")
+            	redirect(controller:"contest",action:"tasks")
             }
         } else {
         	return [planningTestInstance:planningtest.instance]
@@ -60,11 +60,11 @@ class PlanningTestController {
         if (planningtest.saved) {
         	flash.message = planningtest.message
             if (planningtest.fromlistplanning) {
-            	redirect(controller:"contestDayTask",action:"listplanning",id:planningtest.contestdaytaskid)
-            } else if (planningtest.fromcontestdaytask) {
-            	redirect(controller:"contestDayTask",action:show,id:planningtest.contestdaytaskid)
+            	redirect(controller:"task",action:"listplanning",id:planningtest.taskid)
+            } else if (planningtest.fromtask) {
+            	redirect(controller:"task",action:show,id:planningtest.taskid)
             } else {
-            	redirect(controller:"contest",action:"start")
+            	redirect(controller:"contest",action:"tasks")
             }
         } else {
             render(view:'create',model:[planningTestInstance:planningtest.instance])
@@ -75,23 +75,23 @@ class PlanningTestController {
         def planningtest = fcService.deletePlanningTest(params)
         if (planningtest.deleted) {
         	flash.message = planningtest.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         } else if (planningtest.notdeleted) {
         	flash.message = planningtest.message
             redirect(action:show,id:params.id)
         } else {
         	flash.message = planningtest.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         }
     }
 	
     def cancel = {
         if (params.fromlistplanning) {
-            redirect(controller:"contestDayTask",action:"listplanning",id:params.contestdaytaskid)
-        } else if (params.fromcontestdaytask) {
-            redirect(controller:"contestDayTask",action:show,id:params.contestdaytaskid)
+            redirect(controller:"task",action:"listplanning",id:params.taskid)
+        } else if (params.fromtask) {
+            redirect(controller:"task",action:show,id:params.taskid)
         } else {
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
     

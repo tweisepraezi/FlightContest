@@ -19,9 +19,14 @@
                     <g:form method="post" >
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.crew.name')}:</label>
+                                <label>${message(code:'fc.crew.name')}*:</label>
                                 <br/>
                                 <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.crew.import.name')}:</label>
+                                <br/>
+                                <input type="text" id="mark" name="mark" value="${fieldValue(bean:crewInstance,field:'mark')}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.crew.country')}:</label>
@@ -37,7 +42,7 @@
                                 <g:select optionKey="id" optionValue="registration" from="${Aircraft.list(sort:'registration')}" name="aircraft.id" value="${crewInstance?.aircraft?.id}" noSelection="['null':'']"></g:select>
                             </p>
                             <p>
-                                <label>${message(code:'fc.tas')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.tas')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" />
                             </p>

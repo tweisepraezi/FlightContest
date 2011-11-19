@@ -15,12 +15,8 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.from')}:</td>
-                                    <td><g:contestday var="${testInstance?.contestdaytask?.contestday}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
-                                </tr>
-                                <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:contestdaytask var="${testInstance?.contestdaytask}" link="${createLink(controller:'contestDayTask',action:'listresults')}"/></td>
+                                    <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -21,7 +21,7 @@
                 <tbody>
                     <g:each var="aflosCrewNamesInstance" in="${aflosCrewNamesInstanceList}" status="i" >
                         <g:if test="${aflosCrewNamesInstance.points}">
-                            <tr class="${(i % 2) == 0 ? 'odd' : ''}">
+                            <tr class="${(aflosCrewNamesInstance.startnum % 2) == 0 ? 'odd' : ''}">
                                 <td>${aflosCrewNamesInstance.startnum}</td>
                                 <td>${aflosCrewNamesInstance.name}</td>
                             </tr>

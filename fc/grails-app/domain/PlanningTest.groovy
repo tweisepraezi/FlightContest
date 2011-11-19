@@ -9,7 +9,7 @@ class PlanningTest
 	BigDecimal direction = 0.0
 	BigDecimal speed = 0.0
 	
-	static belongsTo = [contestdaytask:ContestDayTask]
+	static belongsTo = [task:Task]
 
 	static hasMany = [planningtesttasks:PlanningTestTask]
 	
@@ -18,7 +18,7 @@ class PlanningTest
 		route(nullable:true) // TODO
         direction(range:0.0f..<360.0f)
         speed(range:0.0f..<1000.0f)
-		contestdaytask(nullable:false)
+		task(nullable:false)
 	}
 
 	static mapping = {
@@ -29,7 +29,7 @@ class PlanningTest
 	
     String idName()
     {
-		return "${messageSource.getMessage('fc.planningtest', null, null)}-${contestdaytask.contestday.idTitle}.${contestdaytask.idTitle}"
+		return "${messageSource.getMessage('fc.planningtest', null, null)}-${task.idTitle}"
     }
     
 	String name()

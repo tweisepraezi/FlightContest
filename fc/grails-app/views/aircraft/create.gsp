@@ -19,7 +19,7 @@
                     <g:form method="post">
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.aircraft.registration')}:</label>
+                                <label>${message(code:'fc.aircraft.registration')}*:</label>
                                 <br/>
                                 <input type="text" id="registration" name="registration" value="${fieldValue(bean:aircraftInstance,field:'registration')}"/>
                             </p>

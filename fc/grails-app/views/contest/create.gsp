@@ -19,25 +19,17 @@
                     <g:form method="post" >
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.title')}:</label>
+                                <label>${message(code:'fc.title')}*:</label>
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}"/>
                             </p>
                         </fieldset>
                         <fieldset>
-                            <legend>${message(code:'fc.contestday')}</legend>
+                            <legend>${message(code:'fc.task')}</legend>
                             <p>
                                 <label>${message(code:'fc.title')}:</label>
                                 <br/>
-                                <input type="text" id="contestDayTitle" name="contestDayTitle" value="${fieldValue(bean:contestInstance,field:'contestDayTitle')}"/>
-                            </p>
-                        </fieldset>
-                        <fieldset>
-                            <legend>${message(code:'fc.contestdaytask')}</legend>
-                            <p>
-                                <label>${message(code:'fc.title')}:</label>
-                                <br/>
-                                <input type="text" id="contestDayTaskTitle" name="contestDayTaskTitle" value="${fieldValue(bean:contestInstance,field:'contestDayTaskTitle')}"/>
+                                <input type="text" id="taskTitle" name="taskTitle" value="${fieldValue(bean:contestInstance,field:'taskTitle')}"/>
                             </p>
                         </fieldset>
                         <g:actionSubmit action="save" value="${message(code:'fc.create')}" />

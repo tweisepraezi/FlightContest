@@ -7,7 +7,7 @@ class AflosCrewNamesController
     def list = {
         session.lastAflosController = controllerName
     	
-        // params.sort = "registration"
+        params.sort = "startnum"
         [ aflosCrewNamesInstanceList: AflosCrewNames.list( params ), aflosCrewNamesInstanceTotal: AflosCrewNames.count() ]
     }
 }

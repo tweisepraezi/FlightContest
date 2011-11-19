@@ -8,7 +8,7 @@ class TestController
             return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -18,7 +18,7 @@ class TestController
         	return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         }
     }
 
@@ -31,7 +31,7 @@ class TestController
         	return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         }
     }
 
@@ -39,7 +39,7 @@ class TestController
         def test = fcService.printflightplanTest(params,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         } else if (test.error) {
         	flash.message = test.message
         	flash.error = true
@@ -57,7 +57,7 @@ class TestController
             return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         }
     }
 
@@ -70,7 +70,7 @@ class TestController
             return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         }
     }
 
@@ -78,7 +78,7 @@ class TestController
         def test = fcService.printplanningtaskTest(params,GetPrintParams(),false) // false - without result 
         if (!test.instance) {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         } else if (test.error) {
             flash.message = test.message
             flash.error = true
@@ -94,7 +94,7 @@ class TestController
         def test = fcService.printplanningtaskTest(params,GetPrintParams(),true) // true - with result
         if (!test.instance) {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startplanning")
+            redirect(controller:"task",action:"startplanning")
         } else if (test.error) {
             flash.message = test.message
             flash.error = true
@@ -112,7 +112,7 @@ class TestController
             return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startresults")
+            redirect(controller:"task",action:"startresults")
         }
     }
 
@@ -122,7 +122,7 @@ class TestController
         	return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startresults")
+            redirect(controller:"task",action:"startresults")
         }
     }
 
@@ -135,7 +135,7 @@ class TestController
         	return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startresults")
+            redirect(controller:"task",action:"startresults")
         }
     }
 
@@ -143,7 +143,7 @@ class TestController
         def test = fcService.printresultsTest(params,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startresults")
+            redirect(controller:"task",action:"startresults")
         } else if (test.error) {
         	flash.message = test.message
         	flash.error = true
@@ -161,7 +161,7 @@ class TestController
         	return [testInstance:test.instance]
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"startresults")
+            redirect(controller:"task",action:"startresults")
         }
     }
 
@@ -186,7 +186,7 @@ class TestController
             redirect(action:planningtaskresults,id:params.id)
         } else {
             flash.message = test.message
-            redirect(controller:"contestDayTask",action:"listresults",id:test.instance.contestdaytask.id)
+            redirect(controller:"task",action:"listresults",id:test.instance.task.id)
         }
 	}
 	
@@ -249,6 +249,171 @@ class TestController
             redirect(action:planningtaskresults,id:params.id)
         }
 	}
+	    
+    def flightresults = {
+        def test = fcService.getTest(params) 
+        if (test.instance) {
+            return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+
+    def flightresultscomplete = {
+        def test = fcService.flightresultscompleteTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"listresults",id:test.instance.task.id)
+        }
+    }
+    
+    def flightresultsreopen = {
+        def test = fcService.flightresultsopenTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def flightresultstakeoffmissedon = {
+        def test = fcService.flightresultstakeoffmissedonTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def flightresultstakeoffmissedoff = {
+        def test = fcService.flightresultstakeoffmissedoffTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+            
+    def flightresultsbadcoursestartlandingon = {
+        def test = fcService.flightresultsbadcoursestartlandingonTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def flightresultsbadcoursestartlandingoff = {
+        def test = fcService.flightresultsbadcoursestartlandingoffTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+	        
+    def flightresultslandingtolateon = {
+        def test = fcService.flightresultslandingtolateonTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def flightresultslandingtolateoff = {
+        def test = fcService.flightresultslandingtolateoffTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+	    
+    def flightresultsgiventolateon = {
+        def test = fcService.flightresultsgiventolateonTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def flightresultsgiventolateoff = {
+        def test = fcService.flightresultsgiventolateoffTest(params) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            flash.message = test.message
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def importresults = {
+        def route = fcService.existAnyAflosCrew()
+        if (route.error) {
+            flash.error = route.error
+            flash.message = route.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            redirect(action:selectafloscrew,id:params.id)
+        }
+    }
+	    
+    def selectafloscrew = {
+        def test = fcService.getTest(params) 
+        if (test.instance) {
+            return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+	    
+    def importaflosresults = {
+        def route = fcService.importAflosResults(params,session.lastContest) 
+        if (route.saved) {
+            flash.message = route.message
+            if (route.error) {
+            	flash.error = route.error
+            }
+        } else if (route.error) {
+            flash.error = route.error
+            flash.message = route.message
+        }
+        redirect(action:flightresults,id:params.id)
+    }
 	    
     Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),

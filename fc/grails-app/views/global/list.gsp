@@ -45,8 +45,8 @@
                                             <g:each var="routeInstance" in="${Route.findAllByContest(contestInstance)}">
                                                 <g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/>
                                                 <br/>
-                                                <g:each var="routeCoordInstance" in="${RouteCoord.findAllByRoute(routeInstance)}">
-                                                    - <g:routecoord var="${routeCoordInstance}" link="${createLink(controller:'routeCoord',action:'show')}"/>
+                                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}">
+                                                    - <g:coordroute var="${coordRouteInstance}" link="${createLink(controller:'coordRoute',action:'show')}"/>
                                                     <br/>
                                                 </g:each>
                                                 <g:each var="routeLegInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}">
@@ -62,64 +62,59 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.contestday.list')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.task.list')}:</td>
                                         <td>
-                                            <g:each var="contestDayInstance" in="${ContestDay.findAllByContest(contestInstance)}">
-                                                <g:contestday var="${contestDayInstance}" link="${createLink(controller:'contestDay',action:'show')}"/>
+                                            <g:each var="taskInstance" in="${Task.findAllByContest(contestInstance)}">
+                                                - <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'show')}"/>
                                                 <br/>
-                                                <g:each var="contestDayTaskInstance" in="${ContestDayTask.findAllByContestday(contestDayInstance)}">
-                                                    - <g:contestdaytask var="${contestDayTaskInstance}" link="${createLink(controller:'contestDayTask',action:'show')}"/>
+                                                <g:if test="${taskInstance.planningtest}">
+                                                    -- <g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/>
                                                     <br/>
-                                                    <g:if test="${contestDayTaskInstance.planningtest}">
-                                                        -- <g:planningtest var="${contestDayTaskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/>
+                                                    <g:each var="planningTestTaskInstance" in="${PlanningTestTask.findAllByPlanningtest(taskInstance.planningtest)}">
+                                                        +++ <g:planningtesttask var="${planningTestTaskInstance}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
                                                         <br/>
-                                                        <g:each var="planningTestTaskInstance" in="${PlanningTestTask.findAllByPlanningtest(contestDayTaskInstance.planningtest)}">
-                                                            +++ <g:planningtesttask var="${planningTestTaskInstance}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
-                                                            <br/>
-                                                            ++++ <g:wind var="${planningTestTaskInstance.wind}" link="${createLink(controller:'wind',action:'show')}"/>
-                                                            <br/>
-                                                        </g:each>
-                                                    </g:if>
-                                                    <g:if test="${contestDayTaskInstance.flighttest}">
-                                                        -- <g:flighttest var="${contestDayTaskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/>
+                                                        ++++ <g:wind var="${planningTestTaskInstance.wind}" link="${createLink(controller:'wind',action:'show')}"/>
                                                         <br/>
-                                                        <g:each var="flightTestWindInstance" in="${FlightTestWind.findAllByFlighttest(contestDayTaskInstance.flighttest)}">
-                                                            +++ <g:flighttestwind var="${flightTestWindInstance}" link="${createLink(controller:'flightTestWind',action:'show')}"/>
-                                                            <br/>
-                                                            ++++ <g:wind var="${flightTestWindInstance.wind}" link="${createLink(controller:'wind',action:'show')}"/>
-                                                            <br/>
-                                                        </g:each>
-                                                    </g:if>
-                                                    <g:if test="${contestDayTaskInstance.landingtest}">
-                                                        -- <g:landingtest var="${contestDayTaskInstance.landingtest}" link="${createLink(controller:'landingTest',action:'show')}"/>
+                                                    </g:each>
+                                                </g:if>
+                                                <g:if test="${taskInstance.flighttest}">
+                                                    -- <g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/>
+                                                    <br/>
+                                                    <g:each var="flightTestWindInstance" in="${FlightTestWind.findAllByFlighttest(taskInstance.flighttest)}">
+                                                        +++ <g:flighttestwind var="${flightTestWindInstance}" link="${createLink(controller:'flightTestWind',action:'show')}"/>
                                                         <br/>
-                                                        <g:each var="landingTestTaskInstance" in="${LandingTestTask.findAllByLandingtest(contestDayTaskInstance.landingtest)}">
-                                                            +++ <g:landingtesttask var="${landingTestTaskInstance}" link="${createLink(controller:'landingTestTask',action:'show')}"/>
-                                                            <br/>
-                                                        </g:each>
-                                                    </g:if>
-                                                     <g:if test="${contestDayTaskInstance.specialtest}">
-                                                        -- <g:specialtest var="${contestDayTaskInstance.specialtest}" link="${createLink(controller:'specialTest',action:'show')}"/>
+                                                        ++++ <g:wind var="${flightTestWindInstance.wind}" link="${createLink(controller:'wind',action:'show')}"/>
                                                         <br/>
-                                                        <g:each var="specialTestTaskInstance" in="${SpecialTestTask.findAllBySpecialtest(contestDayTaskInstance.specialtest)}">
-                                                            +++ <g:specialtesttask var="${specialTestTaskInstance}" link="${createLink(controller:'specialTestTask',action:'show')}"/>
-                                                            <br/>
-                                                        </g:each>
-                                                    </g:if>
-                                                    <g:each var="testInstance" in="${Test.findAllByContestdaytask(contestDayTaskInstance)}">
-                                                        -- <g:test var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/>
+                                                    </g:each>
+                                                </g:if>
+                                                <g:if test="${taskInstance.landingtest}">
+                                                    -- <g:landingtest var="${taskInstance.landingtest}" link="${createLink(controller:'landingTest',action:'show')}"/>
+                                                    <br/>
+                                                    <g:each var="landingTestTaskInstance" in="${LandingTestTask.findAllByLandingtest(taskInstance.landingtest)}">
+                                                        +++ <g:landingtesttask var="${landingTestTaskInstance}" link="${createLink(controller:'landingTestTask',action:'show')}"/>
                                                         <br/>
-                                                        <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance)}">
-                                                            +++ <g:testlegplanning var="${testLegPlanningInstance}" link="${createLink(controller:'testLegPlanning',action:'show')}"/>
-                                                            <br/>
-                                                        </g:each>
-                                                        <g:each var="testLegFlightInstance" in="${TestLegFlight.findAllByTest(testInstance)}">
-                                                            --- <g:testlegflight var="${testLegFlightInstance}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
-                                                            <br/>
-                                                        </g:each>
+                                                    </g:each>
+                                                </g:if>
+                                                 <g:if test="${taskInstance.specialtest}">
+                                                    -- <g:specialtest var="${taskInstance.specialtest}" link="${createLink(controller:'specialTest',action:'show')}"/>
+                                                    <br/>
+                                                    <g:each var="specialTestTaskInstance" in="${SpecialTestTask.findAllBySpecialtest(taskInstance.specialtest)}">
+                                                        +++ <g:specialtesttask var="${specialTestTaskInstance}" link="${createLink(controller:'specialTestTask',action:'show')}"/>
+                                                        <br/>
+                                                    </g:each>
+                                                </g:if>
+                                                <g:each var="testInstance" in="${Test.findAllByTask(taskInstance)}">
+                                                    -- <g:test var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/>
+                                                    <br/>
+                                                    <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance)}">
+                                                        +++ <g:testlegplanning var="${testLegPlanningInstance}" link="${createLink(controller:'testLegPlanning',action:'show')}"/>
+                                                        <br/>
+                                                    </g:each>
+                                                    <g:each var="testLegFlightInstance" in="${TestLegFlight.findAllByTest(testInstance)}">
+                                                        --- <g:testlegflight var="${testLegFlightInstance}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
+                                                        <br/>
                                                     </g:each>
                                                 </g:each>
-                                                <br/>
                                             </g:each>
                                         </td>
                                     </tr>

@@ -15,12 +15,8 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.from')}:</td>
-                                    <td><g:contestday var="${testInstance?.contestdaytask?.contestday}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
-                                </tr>
-                                <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:contestdaytask var="${testInstance?.contestdaytask}" link="${createLink(controller:'contestDayTask',action:'listplanning')}"/></td>
+                                    <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listplanning')}"/></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -83,10 +79,10 @@
                                         <g:set var="legNum" value="${TestLegPlanning.countByTest(testInstance)}" />
                                         <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance)}">
                                             <g:set var="legNo" value="${legNo+1}" />
-                                            <g:if test="${!testLegPlanningInstance.test.contestdaytask.planningTestDistanceMeasure}">
+                                            <g:if test="${!testLegPlanningInstance.test.task.planningTestDistanceMeasure}">
                                                 <g:set var="testDistance" value="${FcMath.DistanceStr(testLegPlanningInstance.planTestDistance)}" />
                                             </g:if>
-                                            <g:if test="${!testLegPlanningInstance.test.contestdaytask.planningTestDirectionMeasure}">
+                                            <g:if test="${!testLegPlanningInstance.test.task.planningTestDirectionMeasure}">
                                                 <g:set var="testDirection" value="${FcMath.GradStr(testLegPlanningInstance.planTrueTrack)+message(code:'fc.grad')}" />
                                             </g:if>
                                             <tr>
@@ -97,10 +93,10 @@
                                                 <td/>
                                                 <td/>
                                                 <g:if test="${legNo==legNum}">
-                                                    <td>${RouteCoordType.FP.title}</td>
+                                                    <td>${CoordType.FP.title}</td>
                                                 </g:if>
                                                 <g:else>
-                                                    <td>${RouteCoordType.TP.title}${legNo}</td>
+                                                    <td>${CoordType.TP.title}${legNo}</td>
                                                 </g:else>
                                             </tr>
                                         </g:each>

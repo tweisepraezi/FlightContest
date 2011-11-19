@@ -17,12 +17,12 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:if test="${params.fromlistplanning}">
-                        <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid,'fromlistplanning':true]"/>
+                        <g:set var="newparams" value="['taskid':params.taskid,'fromlistplanning':true]"/>
                     </g:if> <g:else> 
-                        <g:if test="${params.fromcontestdaytask}">
-                          <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid,'fromcontestdaytask':true]"/>
+                        <g:if test="${params.fromtask}">
+                          <g:set var="newparams" value="['taskid':params.taskid,'fromtask':true]"/>
                         </g:if> <g:else>
-                            <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid]"/>
+                            <g:set var="newparams" value="['taskid':params.taskid]"/>
                         </g:else>
                     </g:else>
                     <g:form method="post" params="${newparams}" >
@@ -41,20 +41,20 @@
                                 <input type="text" id="taskTitle" name="taskTitle" value="${fieldValue(bean:planningTestInstance,field:'taskTitle')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.route')}:</label>
+                                <label>${message(code:'fc.route')}*:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(planningTestInstance.contestdaytask.contestday.contest)}" name="route.id" value="${planningTestInstance?.route?.id}" ></g:select>
+                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(planningTestInstance.task.contest)}" name="route.id" value="${planningTestInstance?.route?.id}" ></g:select>
                             </p>
                         </fieldset>
                         <fieldset>
                             <legend>${message(code:'fc.wind')}</legend>
                             <p>
-                                <label>${message(code:'fc.wind.direction')} [${message(code:'fc.grad')}]:</label>
+                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="direction" name="direction" value="${fieldValue(bean:planningTestInstance,field:'direction')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.wind.speed')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="speed" name="speed" value="${fieldValue(bean:planningTestInstance,field:'speed')}"/>
                             </p>

@@ -19,6 +19,10 @@
                                     <td>${fieldValue(bean:crewInstance, field:'name')}</td>
                                 </tr>
                                 <tr>
+                                    <td class="detailtitle">${message(code:'fc.crew.import.name')}:</td>
+                                    <td>${fieldValue(bean:crewInstance, field:'mark')}</td>
+                                </tr>
+                                <tr>
                                     <td class="detailtitle">${message(code:'fc.crew.country')}:</td>
                                     <td>${fieldValue(bean:crewInstance, field:'country')}</td>
                                 </tr>

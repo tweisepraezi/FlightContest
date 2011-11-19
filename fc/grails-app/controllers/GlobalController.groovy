@@ -12,10 +12,6 @@ class GlobalController {
             [globalInstance:BootStrap.global,contestInstance:session.lastContest]
         }
 
-    def changecontest = {
-    	[globalInstance:BootStrap.global]
-    }
-
     def changelanguage = {
         [globalInstance:BootStrap.global]
     }
@@ -24,13 +20,6 @@ class GlobalController {
     	redirect(controller:'contest',action:'start',params:[lang:params.language])
     }
     
-    def updatecontest = {
-    	session.lastContest = Contest.get(params.contestid)
-    	session.lastContestDayTaskPlanning = null
-    	session.lastContestDayTaskResults = null
-        redirect(controller:'contest',action:'start')
-    }
-        
     def cancel = {
         redirect(action:list)
     }

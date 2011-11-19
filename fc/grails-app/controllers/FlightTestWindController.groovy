@@ -13,7 +13,7 @@ class FlightTestWindController {
         	return [flightTestWindInstance:flighttestwind.instance]
         } else {
             flash.message = flighttestwind.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -23,7 +23,7 @@ class FlightTestWindController {
         	return [flightTestWindInstance:flighttestwind.instance]
         } else {
             flash.message = flighttestwind.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -50,7 +50,7 @@ class FlightTestWindController {
         if (flighttestwind.saved) {
         	flash.message = flighttestwind.message
             if (flighttestwind.fromlistplanning) {
-            	redirect(controller:"contestDayTask",action:"listplanning",id:flighttestwind.contestdaytaskid)
+            	redirect(controller:"task",action:"listplanning",id:flighttestwind.taskid)
             } else {
             	redirect(controller:"flightTest",action:show,id:flighttestwind.flighttestid)
             }
@@ -69,13 +69,13 @@ class FlightTestWindController {
             redirect(action:show,id:params.id)
         } else {
         	flash.message = flighttestwind.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         }
     }
 
     def cancel = {
         if (params.fromlistplanning) {
-            redirect(controller:"contestDayTask",action:"listplanning",id:params.contestdaytaskid)
+            redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else {
             redirect(controller:"flightTest",action:show,id:params.flighttestid)
         }

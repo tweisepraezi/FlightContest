@@ -20,12 +20,8 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.flighttestwind.from')}:</td>
-                                    <td><g:contestday var="${flightTestWindInstance?.flighttest?.contestdaytask?.contestday}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
-                                </tr>
-                                <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:contestdaytask var="${flightTestWindInstance?.flighttest?.contestdaytask}" link="${createLink(controller:'contestDayTask',action:'show')}"/></td>
+                                    <td><g:task var="${flightTestWindInstance?.flighttest?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle"/>
@@ -36,12 +32,12 @@
                         <fieldset>
                             <legend>${message(code:'fc.wind')}</legend>
                             <p>
-                                <label>${message(code:'fc.wind.direction')} [${message(code:'fc.grad')}]:</label>
+                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestWindInstance,field:'direction')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.wind.speed')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestWindInstance,field:'speed')}"/>
                             </p>

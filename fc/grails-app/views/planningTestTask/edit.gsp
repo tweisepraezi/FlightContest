@@ -20,12 +20,8 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.planningtesttask.from')}:</td>
-                                    <td><g:contestday var="${planningTestTaskInstance?.planningtest?.contestdaytask?.contestday}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
-                                </tr>
-                                <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:contestdaytask var="${planningTestTaskInstance?.planningtest?.contestdaytask}" link="${createLink(controller:'contestDayTask',action:'show')}"/></td>
+                                    <td><g:task var="${planningTestTaskInstance?.planningtest?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle"/>
@@ -40,7 +36,7 @@
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:planningTestTaskInstance,field:'title')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.route')}:</label>
+                                <label>${message(code:'fc.route')}*:</label>
                                 <br/>
                                 <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance)}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
                             </p>
@@ -48,12 +44,12 @@
                         <fieldset>
                             <legend>${message(code:'fc.wind')}</legend>
                             <p>
-                                <label>${message(code:'fc.wind.direction')} [${message(code:'fc.grad')}]:</label>
+                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="direction" name="direction" value="${fieldValue(bean:planningTestTaskInstance,field:'direction')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.wind.speed')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="speed" name="speed" value="${fieldValue(bean:planningTestTaskInstance,field:'speed')}"/>
                             </p>

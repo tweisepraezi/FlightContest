@@ -15,7 +15,7 @@
                     </tr>
                     <tr>
                        <th>${message(code:'fc.title')}</th>
-                       <th colspan="2">${message(code:'fc.routecoord.list')}</th>
+                       <th colspan="2">${message(code:'fc.coordroute.list')}</th>
                        <th colspan="2">${message(code:'fc.routelegcoord.list')}</th>
                        <th colspan="2">${message(code:'fc.routelegtest.list')}</th>
                        <th>${message(code:'fc.planningtesttask.list')}</th>
@@ -28,14 +28,14 @@
                             <td><g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/></td>
 
                             <td>
-                                <g:each var="routeCoordInstance" in="${RouteCoord.findAllByRoute(routeInstance)}">
-                                    ${routeCoordInstance.title()}
+                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}">
+                                    ${coordRouteInstance.title()}
                                     <br/>                                     
                                 </g:each>
                             </td>
                             <td>
-                                <g:each var="routeCoordInstance" in="${RouteCoord.findAllByRoute(routeInstance)}">
-                                    ${routeCoordInstance.name()}
+                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}">
+                                    ${coordRouteInstance.name()}
                                     <br/>                                     
                                 </g:each>
                             </td>

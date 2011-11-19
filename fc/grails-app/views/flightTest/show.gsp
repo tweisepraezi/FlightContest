@@ -15,12 +15,8 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.flighttest.from')}:</td>
-                                    <td><g:contestday var="${flightTestInstance?.contestdaytask?.contestday}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
-                                </tr>
-                                <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:contestdaytask var="${flightTestInstance?.contestdaytask}" link="${createLink(controller:'contestDayTask',action:'show')}"/></td>
+                                    <td><g:task var="${flightTestInstance?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
                                 </tr>
                             </tbody>
                         </table>

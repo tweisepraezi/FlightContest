@@ -43,18 +43,17 @@
                                     <td>${fieldValue(bean:contestInstance, field:'planningTestMaxPoints')} ${message(code:'fc.points')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.planningtaskresults.giventolate')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.planningtest.giventolate')}:</td>
                                     <td>${fieldValue(bean:contestInstance, field:'planningTestPlanTooLatePoints')} ${message(code:'fc.points')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.planningtaskresults.exitroomtolate')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.planningtest.exitroomtolate')}:</td>
                                     <td>${fieldValue(bean:contestInstance, field:'planningTestExitRoomTooLatePoints')} ${message(code:'fc.points')}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <input type="hidden" name="id" value="${contestInstance?.id}" />
                         <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
-                        <g:actionSubmit action="createday" value="${message(code:'fc.contestday.add1')}" />
                     </g:form>
                 </div>
             </div>

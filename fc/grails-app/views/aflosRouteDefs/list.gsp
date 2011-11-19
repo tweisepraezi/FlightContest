@@ -5,7 +5,7 @@
         <title>${message(code:'fc.aflos.routedefs.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="aflosRouteDefs" />
+        <g:mainnav link="${createLink(controller:'aflos')}" controller="aflosRouteDefs" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>
@@ -15,18 +15,18 @@
                     </tr>
                     <tr>
                        <th>${message(code:'fc.aflos.routedefs.routename')}</th>
-                       <th>${message(code:'fc.mark')}</th>
+                       <th>${message(code:'fc.aflos.checkpoint')}</th>
                        <th>${message(code:'fc.latitude')}</th>
                        <th>${message(code:'fc.longitude')}</th>
                        <th>${message(code:'fc.altitude')}</th>
                        <th>${message(code:'fc.truetrack')}</th>
-                       <th>${message(code:'fc.distance.coord')}</th>
+                       <th>${message(code:'fc.distance')}</th>
                        <th>${message(code:'fc.gatewidth')}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <g:each var="aflosRouteDefsInstance" in="${aflosRouteDefsInstanceList}" status="i" >
-                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
+                        <tr class="${(aflosRouteDefsInstance.routename.id % 2) == 0 ? 'odd' : ''}">
                             <td>${aflosRouteDefsInstance.routename.name}</td>
                             <td>${aflosRouteDefsInstance.mark}</td>
                             <td>${aflosRouteDefsInstance.latitude}</td>

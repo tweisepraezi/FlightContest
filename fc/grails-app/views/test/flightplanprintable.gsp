@@ -13,7 +13,7 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>${testInstance?.contestdaytask?.contestday.name()} - ${testInstance?.contestdaytask.name()}</td>
+                                    <td>${testInstance?.task.name()}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -106,7 +106,7 @@
                                         <td/>
                                         <td/>
                                         <td/>
-                                        <td>${RouteCoordType.TO.title}</td>
+                                        <td>${CoordType.TO.title}</td>
                                         <g:if test="${testInstance.timeCalculated}">
                                             <g:if test="${testInstance.takeoffTimeWarning}">
                                                 <td class="errors">${testInstance.takeoffTime?.format('HH:mm:ss')} !</td>
@@ -124,7 +124,7 @@
                                         <td/>
                                         <td/>
                                         <td/>
-                                        <td>${RouteCoordType.SP.title}</td>
+                                        <td>${CoordType.SP.title}</td>
                                         <g:if test="${testInstance.timeCalculated}">
                                             <td>${testInstance.startTime?.format('HH:mm:ss')}</td>
                                         </g:if> <g:else>
@@ -142,7 +142,7 @@
                                         <g:set var="totalDistance" value="${FcMath.AddDistance(totalDistance,testLegFlightInstance.planTestDistance)}" />
                                         <g:if test="${testLegFlightInstance.planProcedureTurn}">
                                             <tr>
-                                                <td class="center" align="center" colspan="8">${message(code:'fc.procedureturn')} (${testLegFlightInstance.test.contestdaytask.procedureTurnDuration}${message(code:'fc.time.min')})</td>
+                                                <td class="center" align="center" colspan="8">${message(code:'fc.procedureturn')} (${testLegFlightInstance.test.task.procedureTurnDuration}${message(code:'fc.time.min')})</td>
                                             </tr>
                                         </g:if>
                                         <tr>
@@ -153,25 +153,25 @@
                                             <td>${FcMath.SpeedStr(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                             <td>${testLegFlightInstance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
                                             <g:if test="${legNo==legNum}">
-                                                <td>${RouteCoordType.FP.title}</td>
+                                                <td>${CoordType.FP.title}</td>
                                             </g:if>
                                             <g:else>
-                                                <td>${RouteCoordType.TP.title}${legNo}</td>
+                                                <td>${CoordType.TP.title}${legNo}</td>
                                             </g:else>
                                             <td>${tptime.format('HH:mm:ss')}</td>
                                         </tr>
                                     </g:each>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td/>
+                                        <td colspan="3">${FcMath.DistanceStr(totalDistance)}${message(code:'fc.mile')} ${message(code:'fc.distance.total')}</td>
+                                        <td colspan="3" align="right">${message(code:'fc.maxlandingtime')}:</td>
+                                        <td>${testInstance.maxLandingTime.format('HH:mm:ss')}</td>
+                                    </tr>
+                                </tfoot>
                             </table>
                             <br/>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.distance.total')}:</td>
-                                        <td>${FcMath.DistanceStr(totalDistance)}${message(code:'fc.mile')}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </g:if>
                     </g:form>
                 </div>

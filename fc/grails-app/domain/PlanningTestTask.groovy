@@ -14,7 +14,7 @@ class PlanningTestTask
 	static belongsTo = [planningtest:PlanningTest]
 
 	static constraints = {
-		route(blank:false,nullable:true) // TODO
+		route(blank:false)
 		direction(range:0.0f..<360.0f)
 		speed(range:0.0f..<1000.0f)
 	}
@@ -23,7 +23,7 @@ class PlanningTestTask
 	
     String idName()
     {
-		return "${messageSource.getMessage('fc.planningtesttask', null, null)}-${planningtest.contestdaytask.contestday.idTitle}.${planningtest.contestdaytask.idTitle}.${idTitle}"
+		return "${messageSource.getMessage('fc.planningtesttask', null, null)}-${planningtest.task.idTitle}.${idTitle}"
     }
     
 	String name()

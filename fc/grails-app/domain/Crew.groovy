@@ -1,6 +1,7 @@
 class Crew 
 {
 	String name
+    String mark = ""
 	String country
 	Aircraft aircraft
     BigDecimal tas = 90

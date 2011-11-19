@@ -2,17 +2,18 @@ class Route
 {
 	String title
     int idTitle
+    String mark = ""
 	
 	static belongsTo = [contest:Contest]
 
-	static hasMany = [routecoords:RouteCoord,routelegs:RouteLegCoord,testlegs:RouteLegTest]
+	static hasMany = [coords:CoordRoute,routelegs:RouteLegCoord,testlegs:RouteLegTest]
 
 	static constraints = {
 		contest(nullable:false)
 	}
 
 	static mapping = {
-		routecoords sort:"id"
+		coords sort:"id"
 		routelegs sort:"id"
 		testlegs sort:"id"
 	}

@@ -20,12 +20,8 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.from')}:</td>
-                                    <td><g:contestday var="${testInstance?.contestdaytask?.contestday}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
-                                </tr>
-                                <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:contestdaytask var="${testInstance?.contestdaytask}" link="${createLink(controller:'contestDayTask',action:'listresults')}"/></td>
+                                    <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -47,17 +43,12 @@
                         </table>
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.flighttest')} [${message(code:'fc.points')}]:</label>
-                                <br/>
-                                <input type="text" id="flightTestPenalties" name="flightTestPenalties" value="${fieldValue(bean:testInstance,field:'flightTestPenalties')}"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.landingtest')} [${message(code:'fc.points')}]:</label>
+                                <label>${message(code:'fc.landingtest')}* [${message(code:'fc.points')}]:</label>
                                 <br/>
                                 <input type="text" id="landingTestPenalties" name="landingTestPenalties" value="${fieldValue(bean:testInstance,field:'landingTestPenalties')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.specialtest')} [${message(code:'fc.points')}]:</label>
+                                <label>${message(code:'fc.specialtest')}* [${message(code:'fc.points')}]:</label>
                                 <br/>
                                 <input type="text" id="specialTestPenalties" name="specialTestPenalties" value="${fieldValue(bean:testInstance,field:'specialTestPenalties')}"/>
                             </p>

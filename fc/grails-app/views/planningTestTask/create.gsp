@@ -29,7 +29,7 @@
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:planningTestTaskInstance,field:'title')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.route')}:</label>
+                                <label>${message(code:'fc.route')}*:</label>
                                 <br/>
                                 <g:if test="${contestInstance}">
                                     <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance)}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
@@ -39,12 +39,12 @@
                         <fieldset>
                             <legend>${message(code:'fc.wind')}</legend>
                             <p>
-                                <label>${message(code:'fc.wind.direction')} [${message(code:'fc.grad')}]:</label>
+                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="direction" name="direction" value="${fieldValue(bean:planningTestTaskInstance,field:'direction')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.wind.speed')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="speed" name="speed" value="${fieldValue(bean:planningTestTaskInstance,field:'speed')}"/>
                             </p>

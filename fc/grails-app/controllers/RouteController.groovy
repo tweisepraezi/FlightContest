@@ -86,18 +86,18 @@ class RouteController {
         }
 	}
 	
-	def createroutecoords = {
+	def createcoordroutes = {
         def route = fcService.getRoute(params) 
-        redirect(controller:'routeCoord',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
+        redirect(controller:'coordRoute',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
 	}
 
-    def createsecretroutecoords = {
+    def createsecretcoordroutes = {
         def route = fcService.getRoute(params) 
-        redirect(controller:'routeCoord',action:'create',params:['secret':true,'route.id':route.instance.id,'routeid':route.instance.id])
+        redirect(controller:'coordRoute',action:'create',params:['secret':true,'route.id':route.instance.id,'routeid':route.instance.id])
     }
 
 	def selectaflosroute = {
-		[ routeInstanceList: Route.list( params ) ]
+		[:]
     }
 	
 	def importroute = {

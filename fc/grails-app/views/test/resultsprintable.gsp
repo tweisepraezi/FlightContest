@@ -13,7 +13,7 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>${testInstance?.contestdaytask?.contestday.name()} - ${testInstance?.contestdaytask.name()}</td>
+                                    <td>${testInstance?.task.name()}</td>
                                 </tr>
                             </tbody>
                         </table>

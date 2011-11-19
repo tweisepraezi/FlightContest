@@ -2,13 +2,13 @@ class LandingTest
 {
 	String title
 
-	static belongsTo = [contestdaytask:ContestDayTask]
+	static belongsTo = [task:Task]
 
 	static hasMany = [landingtesttasks:LandingTestTask]
 	
 	static constraints = {
 		title()
-		contestdaytask(nullable:false)
+		task(nullable:false)
 	}
 
 	static mapping = {
@@ -19,7 +19,7 @@ class LandingTest
 	
     String idName()
     {
-		return "${messageSource.getMessage('fc.landingtest', null, null)}-${contestdaytask.contestday.idTitle}.${contestdaytask.idTitle}"
+		return "${messageSource.getMessage('fc.landingtest', null, null)}-${task.idTitle}"
     }
     
 	String name()

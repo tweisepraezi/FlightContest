@@ -11,35 +11,42 @@ class Test
 	Date takeoffTime    = Date.parse("HH:mm","00:00")
 	Date startTime      = Date.parse("HH:mm","00:00")
 	Date finishTime     = Date.parse("HH:mm","00:00")
+    Date maxLandingTime = Date.parse("HH:mm","00:00")
 	Date arrivalTime    = Date.parse("HH:mm","00:00")
 
 	boolean arrivalTimeWarning = false
 	boolean takeoffTimeWarning = false
 	
 	// Penalties
-	int planningTestLegPenalties = 0
+	int     planningTestLegPenalties = 0
 	boolean planningTestLegComplete = false
-	boolean planningTestTooLate = false
+	boolean planningTestGivenTooLate = false
 	boolean planningTestExitRoomTooLate = false
-	int planningTestPenalties = 0
+	int     planningTestPenalties = 0
 	boolean planningTestComplete = false
 	
-	int flightTestPenalties = 0
+    int     flightTestCheckPointPenalties = 0
+	boolean flightTestCheckPointsComplete = false
+	boolean flightTestTakeoffMissed = false
+	boolean flightTestBadCourseStartLanding = false
+	boolean flightTestLandingTooLate = false
+    boolean flightTestGivenTooLate = false
+    int     flightTestPenalties = 0
     boolean flightTestComplete = false
     
-	int landingTestPenalties = 0
+	int     landingTestPenalties = 0
     boolean landingTestComplete = false
     
-	int specialTestPenalties = 0
+	int     specialTestPenalties = 0
     boolean specialTestComplete = false
     
 	int testPenalties = 0
 
     int positionContestDay = 0
     
-	static belongsTo = [contestdaytask:ContestDayTask]
+	static belongsTo = [task:Task]
 	
-	static hasMany = [testlegplannings:TestLegPlanning,testlegflights:TestLegFlight]
+	static hasMany = [testlegplannings:TestLegPlanning,testlegflights:TestLegFlight,coordresults:CoordResult]
 	
     static constraints = {
 		crew(nullable:true) // XXX

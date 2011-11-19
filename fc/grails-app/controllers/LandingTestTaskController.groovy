@@ -13,7 +13,7 @@ class LandingTestTaskController {
         	return [landingTestTaskInstance:landingtesttask.instance]
         } else {
             flash.message = landingtesttask.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -23,7 +23,7 @@ class LandingTestTaskController {
         	return [landingTestTaskInstance:landingtesttask.instance]
         } else {
             flash.message = landingtesttask.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -65,7 +65,7 @@ class LandingTestTaskController {
         	redirect(action:show,id:params.id)
         } else {
         	flash.message = landingtesttask.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         }
     }
 

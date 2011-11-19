@@ -1,7 +1,7 @@
 datasources = {
 
 	datasource(name: 'aflos') {
-		domainClasses([AflosRouteNames,AflosRouteDefs,AflosCrewNames])
+		domainClasses([AflosRouteNames,AflosRouteDefs,AflosCrewNames,AflosErrors,AflosCheckPoints,AflosErrorPoints])
 		readOnly(true)
 		
 		driverClassName('sun.jdbc.odbc.JdbcOdbcDriver')

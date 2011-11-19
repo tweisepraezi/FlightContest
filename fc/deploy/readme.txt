@@ -2,21 +2,19 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-13.02.2010
+22.04.2010
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
-Installationshinweise
----------------------
-- Wird AFLOS nicht in dem Verzeichnis C:\AFLOS installiert,
-  führen Sie nach der ersten Benutzung von AFLOS den Punkt
-  'Programme -> Flight Contest -> Install AFLOS connection' aus
-  (in Windows Vista oder Windows 7 als Administrator).
 
-
-Neu in dieser Version (0.4):
+Neu in dieser Version (0.5):
 ----------------------------
+- Übernahme von Überflug-Daten aus AFLOS
+- Neue Hauptmenüsortierung
+
+Neu in Version 0.4:
+-------------------
 - Übernahme von Strecken aus AFLOS
 - Unterstützung mehrerer Wettbewerbe
 - Deutsche und englische Bediensprache
@@ -53,7 +51,34 @@ Auf einem Rechner ist die gleichzeite Anzeige
 des Wettbewerbes in der anderen Bediensprache oder eines 2. Wettbewerbes   
 mit einem 2. Internet-Explorer-Fenster möglich, 
 nicht jedoch mit einem 2. Firefox-Fenster.
-  
+
+
+Interaktion mit AFLOS:
+---------------------
+Minimale empfohlene AFLOS Version: 2.10
+
+Installationshinweise:
+AFLOS und 'Flight Contest' müssen auf dem selben PC installiert sein.
+Wird AFLOS nicht in dem Verzeichnis C:\AFLOS installiert,
+führen Sie nach der ersten Benutzung von AFLOS den Punkt
+'Programme -> Flight Contest -> Install AFLOS connection' aus
+(in Windows Vista oder Windows 7 als Administrator).
+
+'Flight Contest' importiert Strecken und Logger-Messwerte direkt
+aus der zuletzt oder gerade geöffneten AFLOS-Datenbank.
+
+Import von Strecken (Strecken -> Import AFLOS-Strecke):
+Stellen Sie zum Import sicher, dass Check-Punkte unbekannter Zeitkontrollen 
+in AFLOS eine Torbreite von 2NM, alle anderen Check-Punkte eine andere Torbreite haben.
+
+Import von Logger-Messwerten (Auswertung -> Navigationsflug -> Import AFLOS-Logger-Daten):
+Stellen Sie zum Import sicher, dass die aus dem Logger eingelesenen Messwerte
+für eine konkrete Mannschaft (= Comp.-Nr.) und Strecke (= Ref.-Nr.) und der 
+aktivierten Option 'Procedure Turn" in AFLOS mit 'Check-Data -> Calculate' 
+berechnet wurden.
+Fehlerhaft errechnete Kursabweichungen können nach dem Import manuell korrigiert werden
+(Klick auf Zahl in Nr.-Spalte für den gewünschten Check-Punkt).
+
 
 Mögliche Betriebssysteme der Server-Installation:
 ------------------------------------------------
@@ -116,3 +141,8 @@ Vorgehen zur Datenwiederherstellung:
   	(C:\Programme\Flight Contest\fc)
   	
   Server starten
+
+Logs:
+-----
+  Sind hier zu finden:
+    <Installationsverzeichnis>\tomcat\logs\stdout_<Datum>.log"

@@ -11,7 +11,7 @@ class PlanningTestTaskController {
         	return [planningTestTaskInstance:planningtesttask.instance]
         } else {
             flash.message = planningtesttask.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -21,7 +21,7 @@ class PlanningTestTaskController {
         	return [planningTestTaskInstance:planningtesttask.instance]
         } else {
             flash.message = planningtesttask.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -31,7 +31,7 @@ class PlanningTestTaskController {
         	return [planningTestTaskInstance:planningtesttask.instance,contestInstance:session.lastContest]
         } else {
             flash.message = planningtesttask.message
-            redirect(controller:"contest",action:"start")
+            redirect(controller:"contest",action:"tasks")
         }
     }
 
@@ -64,7 +64,7 @@ class PlanningTestTaskController {
         if (planningtesttask.saved) {
         	flash.message = planningtesttask.message
             if (planningtesttask.fromlistplanning) {
-            	redirect(controller:"contestDayTask",action:"listplanning",id:planningtesttask.contestdaytaskid)
+            	redirect(controller:"task",action:"listplanning",id:planningtesttask.taskid)
             } else {
             	redirect(controller:"planningTest",action:show,id:planningtesttask.planningtestid)
             }
@@ -83,13 +83,13 @@ class PlanningTestTaskController {
         	redirect(action:show,id:params.id)
         } else {
         	flash.message = planningtesttask.message
-        	redirect(controller:"contest",action:"start")
+        	redirect(controller:"contest",action:"tasks")
         }
     }
 	
 	def cancel = {
         if (params.fromlistplanning) {
-            redirect(controller:"contestDayTask",action:"listplanning",id:params.contestdaytaskid)
+            redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else {
             redirect(controller:"planningTest",action:show,id:params.planningtestid)
         }

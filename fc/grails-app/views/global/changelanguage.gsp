@@ -14,7 +14,7 @@
                     <g:form method="post" >
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.language')}:</label>
+                                <label>${message(code:'fc.language')}*:</label>
                                 <br/>
                                 <g:select from="${Languages.values()}" name="language" value="${globalInstance.language}" optionValue="title" />
                             </p>

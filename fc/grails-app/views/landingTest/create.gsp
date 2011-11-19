@@ -16,10 +16,10 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:if test="${params.fromcontestdaytask}">
-                        <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid,'fromcontestdaytask':true]"/>
+                    <g:if test="${params.fromtask}">
+                        <g:set var="newparams" value="['taskid':params.taskid,'fromtask':true]"/>
                     </g:if> <g:else>
-                        <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid]"/>
+                        <g:set var="newparams" value="['taskid':params.taskid]"/>
                     </g:else>
                     <g:form method="post" params="${newparams}">
                         <fieldset>

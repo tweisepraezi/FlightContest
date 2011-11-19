@@ -25,12 +25,12 @@
                         <fieldset>
                             <legend>${message(code:'fc.wind')}</legend>
                             <p>
-                                <label>${message(code:'fc.wind.direction')} [${message(code:'fc.grad')}]:</label>
+                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
                                 <br/>
                                 <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestWindInstance,field:'direction')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.wind.speed')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestWindInstance,field:'speed')}"/>
                             </p>

@@ -139,4 +139,18 @@ class TestLeg
 		return time.getTime()
 	}
 	
+    Date AddPlanLegTime(Date initTime, BigDecimal partRatio)
+    {
+        GregorianCalendar time = new GregorianCalendar() 
+        time.setTime(initTime)
+        
+        if (planLegTime >= 0) {
+            time.add(Calendar.SECOND, (3600 * planLegTime * partRatio).toDouble().round().toInteger() )
+        }
+        if (planProcedureTurn && planProcedureTurnDuration) {
+            time.add(Calendar.SECOND, 60 * planProcedureTurnDuration )
+        }
+
+        return time.getTime()
+    }
 }

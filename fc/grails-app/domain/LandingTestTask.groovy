@@ -9,7 +9,7 @@ class LandingTestTask
 	
     String idName()
     {
-		return "${messageSource.getMessage('fc.landingtesttask', null, null)}-${landingtest.contestdaytask.contestday.idTitle}.${landingtest.contestdaytask.idTitle}.${idTitle}"
+		return "${messageSource.getMessage('fc.landingtesttask', null, null)}-${landingtest.task.idTitle}.${idTitle}"
     }
     
 	String name()

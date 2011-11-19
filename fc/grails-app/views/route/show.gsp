@@ -19,6 +19,10 @@
                                     <td colspan="2">${routeInstance.name()}</td>
                                 </tr>
                                 <tr>
+                                    <td class="detailtitle">${message(code:'fc.route.import.name')}:</td>
+                                    <td colspan="2">${routeInstance.mark}</td>
+                                </tr>
+                                <tr>
                                     <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
                                     <td colspan="2">
                                         <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance)}">
@@ -41,12 +45,12 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan="7">${message(code:'fc.routecoord.list')}</th>
+                                    <th class="table-head" colspan="7">${message(code:'fc.coordroute.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
                                     <th>${message(code:'fc.title')}</th>
-                                    <th>${message(code:'fc.mark')}</th>
+                                    <th>${message(code:'fc.aflos.checkpoint')}</th>
                                     <th>${message(code:'fc.latitude')}</th>
                                     <th>${message(code:'fc.longitude')}</th>
                                     <th>${message(code:'fc.altitude')}</th>
@@ -54,15 +58,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="routeCoordInstance" in="${routeInstance.routecoords}" status="i" >
+                                <g:each var="coordRouteInstance" in="${routeInstance.coords}" status="i" >
                                     <tr>
-                                        <td><g:routecoordnum var="${routeCoordInstance}" num="${i+1}" link="${createLink(controller:'routeCoord',action:'edit')}"/></td>
-                                        <td>${routeCoordInstance.title()}</td>
-                                        <td>${routeCoordInstance.mark}</td>
-                                        <td>${routeCoordInstance.latName()}</td>
-                                        <td>${routeCoordInstance.lonName()}</td>
-                                        <td>${routeCoordInstance.altitude}${message(code:'fc.foot')}</td>
-                                        <td>${routeCoordInstance.gatewidth}${message(code:'fc.mile')}</td>
+                                        <td><g:coordroutenum var="${coordRouteInstance}" num="${i+1}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
+                                        <td>${coordRouteInstance.titleWithRatio()}</td>
+                                        <td>${coordRouteInstance.mark}</td>
+                                        <td>${coordRouteInstance.latName()}</td>
+                                        <td>${coordRouteInstance.lonName()}</td>
+                                        <td>${coordRouteInstance.altitude}${message(code:'fc.foot')}</td>
+                                        <td>${coordRouteInstance.gatewidth}${message(code:'fc.mile')}</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -70,15 +74,16 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan="6">${message(code:'fc.routelegcoord.list')}</th>
+                                    <th class="table-head" colspan="7">${message(code:'fc.routelegcoord.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
                                     <th>${message(code:'fc.title')}</th>
-                                    <th>${message(code:'fc.truetrack')}</th>
+                                    <th>${message(code:'fc.truetrack.coord')}</th>
                                     <th>${message(code:'fc.distance.coord')}</th>
                                     <th>${message(code:'fc.distance.map.measure')}</th>
                                     <th>${message(code:'fc.distance.map')}</th>
+                                    <th>${message(code:'fc.truetrack.map.measure')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,6 +95,7 @@
                                         <td>${routeLegInstance.coordDistanceName()}</td>
                                         <td>${routeLegInstance.mapMeasureDistanceName()}</td>
                                         <td>${routeLegInstance.mapDistanceName()}</td>
+                                        <td>${routeLegInstance.mapMeasureTrueTrackName()}</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -97,15 +103,16 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan="6">${message(code:'fc.routelegtest.list')}</th>
+                                    <th class="table-head" colspan="7">${message(code:'fc.routelegtest.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
                                     <th>${message(code:'fc.title')}</th>
-                                    <th>${message(code:'fc.truetrack')}</th>
+                                    <th>${message(code:'fc.truetrack.coord')}</th>
                                     <th>${message(code:'fc.distance.coord')}</th>
                                     <th>${message(code:'fc.distance.map.measure')}</th>
                                     <th>${message(code:'fc.distance.map')}</th>
+                                    <th>${message(code:'fc.truetrack.map.measure')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,6 +124,7 @@
                                         <td>${routeLegInstance.coordDistanceName()}</td>
                                         <td>${routeLegInstance.mapMeasureDistanceName()}</td>
                                         <td>${routeLegInstance.mapDistanceName()}</td>
+                                        <td>${routeLegInstance.mapMeasureTrueTrackName()}</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -126,8 +134,8 @@
                         <g:if test="${!PlanningTestTask.findByRoute(routeInstance) && !FlightTest.findByRoute(routeInstance)}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         </g:if>
-                        <g:actionSubmit action="createroutecoords" value="${message(code:'fc.routecoord.add1')}" />
-                        <g:actionSubmit action="createsecretroutecoords" value="${message(code:'fc.routecoord.addsecret')}" />
+                        <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}" />
+                        <g:actionSubmit action="createsecretcoordroutes" value="${message(code:'fc.coordroute.addsecret')}" />
                         <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}" />
                         <g:actionSubmit action="printroute" value="${message(code:'fc.print')}" />
                     </g:form>

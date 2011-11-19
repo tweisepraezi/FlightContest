@@ -47,6 +47,11 @@
                                 <br/>
                                 <input type="text" id="mapmeasuredistance" name="mapmeasuredistance" value="${fieldValue(bean:routeLegInstance,field:'mapmeasuredistance')}"/>
                             </p>
+                            <p>
+                                <label>${message(code:'fc.truetrack.map.measure')} [${message(code:'fc.grad')}]:</label>
+                                <br/>
+                                <input type="text" id="mapmeasuretruetrack" name="mapmeasuretruetrack" value="${fieldValue(bean:routeLegInstance,field:'mapmeasuretruetrack')}"/>
+                            </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${routeLegInstance?.id}" />
                         <input type="hidden" name="version" value="${routeLegInstance?.version}" />

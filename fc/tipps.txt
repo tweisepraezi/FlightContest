@@ -34,7 +34,7 @@ redirect(controller:"contest",action:"start")
 -----------------------------------------------------------------------------------------------
 View.form
 =========
-<g:form controller="contestDay" params="['contest.id':contestInstance.id,'contestid':contestInstance.id,'fromcontest':true]" >
+<g:form controller="task" params="['contest.id':contestInstance.id,'contestid':contestInstance.id,'fromcontest':true]" >
 
 View.create
 ===========
@@ -51,7 +51,7 @@ Controller.save
 if (params.fromcontest) {
 	redirect(controller:"contest",action:show,id:params.contestid)
 } else {
-	redirect(controller:"contest",action:"start")
+	redirect(controller:"contest",action:"tasks")
 }
 
 -----------------------------------------------------------------------------------------------
