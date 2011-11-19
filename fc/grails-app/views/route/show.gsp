@@ -63,7 +63,7 @@
                                 <g:each var="coordRouteInstance" in="${routeInstance.coords}" status="i" >
                                     <tr>
                                         <td><g:coordroutenum var="${coordRouteInstance}" num="${i+1}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
-                                        <td>${coordRouteInstance.titleCode()}</td>
+                                        <td>${coordRouteInstance.titleWithRatio()}</td>
                                         <td>${coordRouteInstance.mark}</td>
                                         <td>${coordRouteInstance.latName()}</td>
                                         <td>${coordRouteInstance.lonName()}</td>

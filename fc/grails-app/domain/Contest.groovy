@@ -27,6 +27,8 @@ class Contest
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
 
+	// boolean contestClasses = false      // enable contest with classes, DB-1.2
+	
 	// transient values
 	static transients = ['taskTitle','copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
 	String taskTitle

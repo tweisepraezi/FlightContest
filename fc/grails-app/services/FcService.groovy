@@ -1817,6 +1817,8 @@ class FcService
         Route route_instance = Route.get(params.id)
         
         if (route_instance) {
+			calculateAllCoordMapDistances(route_instance) // TODO: new
+            calculateSecretLegRatio(route_instance)
         	calculateRouteLegs(route_instance)
             return ['instance':route_instance,'calculated':true,'message':getMsg('fc.routeleg.calculated')]
         } else {
@@ -2029,7 +2031,7 @@ class FcService
 	        			
 	        			// read utc '09h 36min 05,000sec'
 	        			coordresult_instance.resultCpTimeInput = FcMath.ConvertAFLOSTime(afloscheckpoints_instance.utc) 
-	
+						
 	        			// read latitude '51° 26,9035' N'
 	        			coordresult_instance.resultLatitude = FcMath.ConvertAFLOSCoordValue(afloscheckpoints_instance.latitude)
  
@@ -2511,6 +2513,47 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
+	private void calculateAllCoordMapDistances(Route routeInstance) // TODO: new
+	{
+    	printstart "calculateAllCoordMapDistances '${routeInstance.name()}'"
+		
+		CoordRoute.findAllByRoute(routeInstance,[sort:"id", order:"asc"]).each { CoordRoute coordroute_instance ->
+			if (coordroute_instance.type == CoordType.SECRET && coordroute_instance.measureDistance) {
+				BigDecimal leg_measure_distance = coordroute_instance.measureDistance
+				boolean exit = false
+				boolean check = false  
+				CoordRoute.findAllByRoute(routeInstance,[sort:"id", order:"desc"]).each { CoordRoute coordroute_instance2 ->
+					if (!exit) {
+						if (check) {
+							if (coordroute_instance2.type == CoordType.SECRET) {
+								if (coordroute_instance2.legMeasureDistance) {
+									leg_measure_distance -= coordroute_instance2.legMeasureDistance
+								}
+							} else {
+								exit = true
+							}
+						} else {
+							if (coordroute_instance == coordroute_instance2) {
+								check = true
+							}
+						}
+					}
+				}
+				if (coordroute_instance.legMeasureDistance != leg_measure_distance) {
+					BigDecimal old_leg_measure_distance = coordroute_instance.legMeasureDistance
+					BigDecimal old_leg_distance = coordroute_instance.legDistance  
+					coordroute_instance.legMeasureDistance = leg_measure_distance
+					coordroute_instance.legDistance = calculateMapDistance(routeInstance.contest, leg_measure_distance)
+					coordroute_instance.save()
+					println "$coordroute_instance.mark ${coordroute_instance.titleWithRatio()} modified: $old_leg_measure_distance -> $coordroute_instance.legMeasureDistance, $old_leg_distance -> $coordroute_instance.legDistance"
+				}
+			}
+		}
+		
+		printdone ""
+	}
+
+	//--------------------------------------------------------------------------
     Map deleteCoordRoute(Map params)
     {
         CoordRoute coordroute_instance = CoordRoute.get(params.id)
@@ -2520,6 +2563,8 @@ class FcService
                 Route route_instance = coordroute_instance.route
                 removeAllRouteLegs(route_instance)
                 coordroute_instance.delete()
+				calculateAllCoordMapDistances(route_instance) // TODO: new
+				calculateSecretLegRatio(route_instance)
                 calculateRouteLegs(route_instance)
                 return ['deleted':true,'message':getMsg('fc.deleted',["${coordroute_instance.name()}"]),'routeid':route_instance.id]
             }
@@ -3310,7 +3355,7 @@ class FcService
             test.content = content
         }
         catch (Throwable e) {
-            test.message = getMsg('fc.test.debriefing.printerror',["$e"])
+            test.message = getMsg('fc.test.protestprotocol.printerror',["$e"])
             test.error = true
         }
         return test
@@ -3348,7 +3393,7 @@ class FcService
             task.content = content 
         }
         catch (Throwable e) {
-            task.message = getMsg('fc.test.debriefing.printerror',["$e"])
+            task.message = getMsg('fc.test.protestprotocol.printerror',["$e"])
             task.error = true
         }
         return task
@@ -4690,7 +4735,9 @@ class FcService
     //--------------------------------------------------------------------------
     private Map calculateCoordResultInstance(CoordResult coordResultInstance, boolean calculateUTC)
     {
-		println "calculateCoordResultInstance '${coordResultInstance.title()}' (${coordResultInstance.mark}) $coordResultInstance.resultCpTimeInput"
+		println "calculateCoordResultInstance: '${coordResultInstance.title()}' (${coordResultInstance.mark}) '$coordResultInstance.resultCpTimeInput'"
+		
+		coordResultInstance.penaltyCoord = 0
 		
     	// calculate resultCpTime
         try {
@@ -4715,10 +4762,14 @@ class FcService
                 	coordResultInstance.resultCpTime = Date.parse("HH:mm:ss", input_time)
                     break
                 default:
-                    return ['instance':coordResultInstance,'error':true,'message':getMsg('fc.coordresult.cptime.error')]
+					Map ret = ['instance':coordResultInstance,'error':true,'message':getMsg('fc.coordresult.cptime.error')]
+					println "  Error: $ret"
+                    return ret
             }
         } catch (Exception e) {
-            return ['instance':coordResultInstance,'error':true,'message':getMsg('fc.testlegplanningresult.value.error')]
+            Map ret = ['instance':coordResultInstance,'error':true,'message':getMsg('fc.testlegplanningresult.value.error')]
+			println "  Error: $ret"
+			return ret
         }
         Contest contest_instance = coordResultInstance.test.task.contest
         if (calculateUTC) {
@@ -4759,6 +4810,7 @@ class FcService
         	coordResultInstance.resultMinAltitudeMissed = coordResultInstance.resultAltitude < coordResultInstance.altitude
         }
         
+		println "  Ok: '$coordResultInstance.resultCpTime'"
         return [:]
     }
     
@@ -4879,7 +4931,7 @@ class FcService
     //--------------------------------------------------------------------------
     private void removeAllRouteLegs(Route routeInstance) 
     {
-    	printstart "removeAllRouteLegs: ${routeInstance.name()}"
+    	printstart "removeAllRouteLegs: '${routeInstance.name()}'"
     	
         RouteLegCoord.findAllByRoute(routeInstance).each { RouteLegCoord routelegcoord_instance ->
         	routelegcoord_instance.delete()
@@ -4894,7 +4946,7 @@ class FcService
     //--------------------------------------------------------------------------
     private void calculateRouteLegs(Route routeInstance) 
     {
-        printstart "calculateRouteLegs: ${routeInstance.name()}"
+        printstart "calculateRouteLegs: '${routeInstance.name()}'"
         
         // remove all legs
     	removeAllRouteLegs(routeInstance)
@@ -4930,7 +4982,7 @@ class FcService
     //--------------------------------------------------------------------------
     private void calculateSecretLegRatio(Route routeInstance)
     {
-        printstart "calculateSecretLegRatio: ${routeInstance.name()}"
+        printstart "calculateSecretLegRatio: '${routeInstance.name()}'"
         
         CoordRoute start_coordroute_instance
         CoordRoute start_coordroute_instance2
@@ -4945,39 +4997,81 @@ class FcService
         			break
         		case CoordType.SECRET:
 	        		
-        			// search end_coordroute_instance
+        			// search end_coordroute_instance, end_distance and secret_distance
 	        		CoordRoute end_coordroute_instance
-	        		boolean found = false
+					BigDecimal end_distance = 0
+					BigDecimal secret_distance = 0
+	        		boolean leg_found = false
+					boolean secret_found = false
+					boolean no_end_distance = false
 	        		CoordRoute.findAllByRoute(routeInstance).each { CoordRoute coordroute_instance2 ->
-	                    if (found) {
+	                    if (leg_found) {
 	                        switch (coordroute_instance2.type) {
 	                        	case CoordType.TP:
                                 case CoordType.FP:
                                 	end_coordroute_instance = coordroute_instance2
-                                	found = false
+                                	leg_found = false
                                 	break
 	                        }
+							if (!no_end_distance) {
+								if (coordroute_instance2.measureDistance) {
+									end_distance += coordroute_instance2.legDistance
+								} else {
+									end_distance = 0
+									no_end_distance = true
+								}
+							}
+							if (secret_found) {
+		                        switch (coordroute_instance2.type) {
+									case CoordType.SECRET:
+										if (coordroute_instance2.measureDistance) {
+											secret_distance += coordroute_instance2.legDistance
+										} else {
+											secret_distance = 0
+										}
+										if (coordroute_instance2 == coordroute_instance) {
+											secret_found = false
+										}
+										break;
+									default:
+										secret_found = false
+	                                	break
+		                        }
+							}
 	                    }
 	        			if (coordroute_instance2 == start_coordroute_instance) {
-	        				found = true
+	        				leg_found = true
+							secret_found = true
 	        			}
 	        		}
 
-	        		if (end_coordroute_instance) { // && !coordroute_instance.secretLegRatio) {
-						if (coordroute_instance.legDistance && end_coordroute_instance.legDistance) { // calculate from measure
-							coordroute_instance.secretLegRatio = FcMath.RoundDistance(coordroute_instance.legDistance) / (FcMath.RoundDistance(coordroute_instance.legDistance) + FcMath.RoundDistance(end_coordroute_instance.legDistance))
-							coordroute_instance.save()
+					// calculate secretLegRatio
+	        		if (end_coordroute_instance) {
+						if (secret_distance && end_distance) { // calculate from measure
+							BigDecimal new_secret_leg_ratio = FcMath.RoundDistance(secret_distance) / FcMath.RoundDistance(end_distance)
+							if (new_secret_leg_ratio != coordroute_instance.secretLegRatio) { 
+								BigDecimal old_secret_leg_ratio = coordroute_instance.secretLegRatio 
+								coordroute_instance.secretLegRatio = new_secret_leg_ratio
+								coordroute_instance.save()
+								println "$coordroute_instance.mark ${coordroute_instance.titleWithRatio()} (Measure) (modified from $old_secret_leg_ratio)"
+							} else {
+								println "$coordroute_instance.mark ${coordroute_instance.titleWithRatio()} (Measure)"
+							}
 						} else { // calulate from coordinates
-			        		// get leg data
-			                Map legData = calculateLegData(end_coordroute_instance, start_coordroute_instance)
-			                
-			        		// get secret leg data
-			        		Map legDataSecret = calculateLegData(coordroute_instance, start_coordroute_instance)
+			                Map end_legdata = calculateLegData(end_coordroute_instance, start_coordroute_instance)
+			        		Map secret_legdata = calculateLegData(coordroute_instance, start_coordroute_instance)
 			        		
 			        		// calculate secretLegRatio
-			        		if (legData.dis > 0) {
-			        			coordroute_instance.secretLegRatio = FcMath.RoundDistance(legDataSecret.dis) / FcMath.RoundDistance(legData.dis)
-			        			coordroute_instance.save()
+			        		if (end_legdata.dis > 0) {
+								BigDecimal new_secret_leg_ratio = FcMath.RoundDistance(secret_legdata.dis) / FcMath.RoundDistance(end_legdata.dis)
+								if (new_secret_leg_ratio != coordroute_instance.secretLegRatio) {
+									BigDecimal old_secret_leg_ratio = coordroute_instance.secretLegRatio 
+									coordroute_instance.secretLegRatio = new_secret_leg_ratio
+									coordroute_instance.save()
+									println "$coordroute_instance.mark ${coordroute_instance.titleWithRatio()} (Coordinate) (modified from $old_secret_leg_ratio)"
+								} else {
+									println "$coordroute_instance.mark ${coordroute_instance.titleWithRatio()} (Coordinate)"
+								}
 			        		}
 						}
 	        		}
@@ -4986,9 +5080,9 @@ class FcService
 
         	// calculate planProcedureTurn
         	if (last_coordtype == CoordType.TP) {
-                Map legData = calculateLegData(coordroute_instance, start_coordroute_instance2)
+                Map leg_data = calculateLegData(coordroute_instance, start_coordroute_instance2)
                 if (last_legdirection != null) {
-                    BigDecimal diffTrack = legData.dir - last_legdirection
+                    BigDecimal diffTrack = leg_data.dir - last_legdirection
                     if (diffTrack < 0) {
                         diffTrack += 360
                     }
@@ -4997,7 +5091,7 @@ class FcService
                         coordroute_instance.save()
                     }
                 }
-                last_legdirection = legData.dir
+                last_legdirection = leg_data.dir
         	}
             switch (coordroute_instance.type) {
             	case CoordType.SP:
@@ -5358,7 +5452,7 @@ class FcService
                     Date cp_time = testInstance.startTime
                     TestLegFlight.findAllByTest(testInstance).eachWithIndex { TestLegFlight testlegflight_instance, int leg_index ->
                         if (coord_index == leg_index) {
-                            cp_time = testlegflight_instance.AddPlanLegTime(cp_time,coordroute_instance.secretLegRatio)
+							cp_time = testlegflight_instance.AddPlanLegTime(cp_time,coordroute_instance.secretLegRatio)
                             coordresult_instance.planCpTime = cp_time
                         } else {
                             cp_time = testlegflight_instance.AddPlanLegTime(cp_time)

@@ -12,9 +12,9 @@ const compatibelDigits = 1; // Anzahl der Stellen für Datenbankkompatibilität
 const DBVersion = '1.1.0';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 0.6.3
-AppVersion=0.6.3
-VersionInfoVersion=0.6.3
+AppVerName=Flight Contest 0.6.4
+AppVersion=0.6.4
+VersionInfoVersion=0.6.4
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=file:\\
@@ -24,6 +24,7 @@ AppPublisherURL=http://www.praeziflug.de
 DefaultDirName={pf}\Flight Contest
 DefaultGroupName=Flight Contest
 
+OutputDir=K:\Projects\EPJ\PJ18\_Projekt\output
 OutputBaseFilename=FCSetup
 
 LicenseFile=K:\Projects\EPJ\PJ18\workspace\fc\web-app\licenses\GPL_License.txt
@@ -49,7 +50,7 @@ Source: "K:\Projects\Java\jdk1.5.0_16\*";                                       
 Source: "K:\Projects\Server\apache-tomcat-6.0.20\*";                            DestDir: "{app}\tomcat";         Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\tomcat-users.xml";            DestDir: "{app}\tomcat\conf";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\install-service.bat";         DestDir: "{app}";
-Source: "K:\Projects\EPJ\PJ18\workspace\fc\target\fc-0.1.war";                  DestDir: "{app}\tomcat\webapps"; DestName: "fc.war";
+Source: "K:\Projects\EPJ\PJ18\_Projekt\output\fc.war";                          DestDir: "{app}\tomcat\webapps"; DestName: "fc.war";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\readme.txt";                  DestDir: "{app}";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\odbc.vbs";                    DestDir: "{app}";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\AFLOS.mdb";                   DestDir: "C:\AFLOS\AFLOS_System";

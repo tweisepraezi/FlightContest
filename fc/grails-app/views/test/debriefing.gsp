@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.test.debriefing')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</title>
+        <title>${message(code:'fc.test.protestprotocol')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.test.debriefing')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</h2>
+                <h2>${message(code:'fc.test.protestprotocol')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
                         <table>

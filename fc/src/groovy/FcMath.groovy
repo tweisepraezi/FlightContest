@@ -147,6 +147,16 @@ class FcMath
     static String ConvertAFLOSTime(String aflosTime)
     {
         String[] at = aflosTime.split()
-	    return "${at[0].replaceFirst('h','')}:${at[1].replaceFirst('min','')}:${at[2].replaceFirst(',000sec','')}"
+		
+		String aflos_hour = at[0].replaceFirst('h','')
+		String aflos_minute = at[1].replaceFirst('min','')
+		String aflos_seconds = at[2].replaceFirst('sec','') // old at[2].replaceFirst(',000sec','')
+		aflos_seconds = aflos_seconds.replaceFirst(',','.')
+		BigDecimal seconds_decimal = aflos_seconds.toBigDecimal() 
+		BigDecimal seconds_decimal_rounded = seconds_decimal.setScale(0, RoundingMode.HALF_EVEN)
+		DecimalFormat df = new DecimalFormat("00")
+		String seconds = df.format(seconds_decimal_rounded)
+
+		return "$aflos_hour:$aflos_minute:$seconds"
     }
 }

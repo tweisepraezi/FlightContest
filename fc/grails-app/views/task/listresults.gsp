@@ -72,7 +72,7 @@
                                 <g:if test="${taskInstance.specialTestRun}">
 	                                <th>${message(code:'fc.specialresults.other')}</th>
                                 </g:if>
-                                <th>${message(code:'fc.test.debriefing')}</th>
+                                <th>${message(code:'fc.test.protestprotocol')}</th>
                                 <th>${message(code:'fc.test.results.summary')}</th>
                                 <th>${message(code:'fc.test.results.position')}</th>
                             </tr>
@@ -160,7 +160,7 @@
                         <tfoot>
                             <tr class="">
                                 <td colspan="4"></td>
-                                <td colspan="${results_columns}"><g:actionSubmit action="printdebriefings" value="${message(code:'fc.test.debriefing.print')}" /> <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" /> <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" /></td>
+                                <td colspan="${results_columns}"><g:actionSubmit action="printdebriefings" value="${message(code:'fc.test.protestprotocol.print')}" /> <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" /> <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" /></td>
                             </tr>
                         </tfoot>
                     </table>

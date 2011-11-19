@@ -2,7 +2,7 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-08.06.2011
+14.09.2011
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -10,8 +10,36 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Erweiterungen in dieser Version (0.6.3):
-----------------------------------------
+Fehlerbehebungen in dieser Version (0.6.4):
+-------------------------------------------
+- Probleme mit dem Start von 'Flight Contest'
+  nach Nutzung von AFLOS 2.11 behoben (Windows XP).
+  
+- Auswertung Navigationsflug: Berechnungsfehler der Planzeiten 
+  bei Strecken, die in einer Etappe mehr als eine 
+  unbekannte Zeitkontrolle haben, behoben.
+  
+  Anpassung bestehender Wettbewerbe zur Behebung des Problems:
+    1. Streckendetails -> "Etappen neu berechnen" ausführen
+       (korrigiert Werte unbekannter Zeitkontrollen in Strecke)
+    2. Planung -> "Alle auswählen", "Zeit +" und "Zeit -" ausführen
+       (löscht Navigationsflug-Auswertungen)
+    3. Auswertung Navigationsflug -> AFLOS-Loggerdaten
+       aller Teilnehmer neu einlesen
+   
+- Nicht möglicher Import von AFLOS-Logger-Daten, die mittels 
+  GAC-Datei erzeugt wurden, behoben.
+  
+  GAC-Dateien fremder Logger liefern Zeiten, deren Genauigkeit
+  Sekunden-Bruchteile umfasst (im Gegensatz zum AFLOS-Logger). 
+  Diese werden zur nächsten ganzen Sekunde gerundet.
+  Eine halbe Sekunde wird zur nächsten geraden Sekunde gerundet.  
+
+- Der Begriff "Debriefing" wurde in "Protestprotokoll" umbenannt.
+   
+
+Erweiterungen in Version 0.6.3:
+-------------------------------
 - Bei der Navigationsflug-Auswertung können nun Checkpunkte deaktiviert
   werden (Auswertung -> Deaktivierte Checkpunkte).
   Nach einer Änderung werden die Strafpunkte neu berechnet und die
@@ -101,7 +129,7 @@ Erweiterungen in Version 0.6:
 
 - Ergebnisse werden bei Planungsänderung automatisch zurückgesetzt.
 - Punkte-Eingabe für Beobachtungen, Landungen und Anderes ergänzt.
-- Debriefing-Ausdruck für alle Mannschaften.
+- Protestprotokoll-Ausdruck für alle Mannschaften.
 - Wettbewerbs-Gesamtauswertung (Summe mehrerer Aufgaben/Wettbewerbstage)
   möglich.
 
@@ -120,9 +148,9 @@ Erweiterungen und Fehlerbehebung in Version 0.5.5:
 --------------------------------------------------
 - Navigationsflug-Auswertung:
   "Start verpasst" wurde in "Takeoff verpasst" umbenannt
-- Einführung eines Debriefing-Formulars für Proteste,
+- Einführung eines Protestprotokolls,
   erreichbar für jede Mannschaft in der Auswertung über 
-  die Spalte "Debriefing"
+  die Spalte "Protestprotokoll"
 
 
 Fehlerbehebung in Version 0.5.4:
@@ -306,7 +334,7 @@ B. Durchführung
    - Navigationsflug-Ergebnisse aus AFLOS importieren.
    - Beobachtungsergebnisse eintragen.
    - Landungsergebnisse eintragen.
-   - Debriefing-Protokolle drucken und Mannschaften übergeben.
+   - Protestprotokolle drucken und Mannschaften übergeben.
    - Ergebnisse auf Grund stattgegebener Proteste korrigieren. 
    - Plätze berechnen.
    - Ergebnisse drucken.

@@ -1,5 +1,5 @@
 
-Flight Contest 0.6.3
+Flight Contest 0.6.4
 Copyright 2011 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de/
@@ -28,7 +28,7 @@ http://grails.org/
 
 ============================================================================
 
-Groovy, release 1.7.8
+Groovy, release 1.7.10
 
 http://groovy.codehaus.org/
 
