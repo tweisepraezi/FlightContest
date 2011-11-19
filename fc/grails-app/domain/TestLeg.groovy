@@ -39,45 +39,46 @@ class TestLeg
 		planLegTime(blank:false, min:0.toBigDecimal())
 		
 		resultLegTimeInput(blank:false, validator:{ val, obj ->
-        	switch(val.size()) {
+			String v = val.replace('.',':')
+        	switch(v.size()) {
                 case 1:
                     try {
-                        Date t = Date.parse("s",val)
+                        Date t = Date.parse("s",v)
                     } catch(Exception e) {
                         return false
                     }
                     return true
                 case 2:
                     try {
-                        Date t = Date.parse("ss",val)
+                        Date t = Date.parse("ss",v)
                     } catch(Exception e) {
                         return false
                     }
                     return true
                 case 4:
                     try {
-                        Date t = Date.parse("m:ss",val)
+                        Date t = Date.parse("m:ss",v)
                     } catch(Exception e) {
                         return false
                     }
                     return true
                 case 5:
                     try {
-                        Date t = Date.parse("mm:ss",val)
+                        Date t = Date.parse("mm:ss",v)
                     } catch(Exception e) {
                         return false
                     }
                     return true
                 case 7:
                     try {
-                        Date t = Date.parse("H:mm:ss",val)
+                        Date t = Date.parse("H:mm:ss",v)
                     } catch(Exception e) {
                         return false
                     }
                     return true
         		case 8:
 		            try {
-		           		Date t = Date.parse("HH:mm:ss",val)
+		           		Date t = Date.parse("HH:mm:ss",v)
 		            } catch(Exception e) {
 		                return false
 		            }
@@ -87,6 +88,19 @@ class TestLeg
 		})
 	}
 	
+    void ResetResults()
+    {
+        resultTrueTrack = 0
+        resultTestDistance = 0 
+        resultTrueHeading = 0
+        resultGroundSpeed = 0
+        resultLegTime = 0
+        resultLegTimeInput = "00:00:00"
+        resultEntered = false
+        penaltyTrueHeading = 0
+        penaltyLegTime = 0
+    }
+
 	def messageSource
 	
 	String name()

@@ -26,6 +26,22 @@
                             </tbody>
                         </table>
                         <fieldset>
+                            <legend>${message(code:'fc.test.results.plan')}</legend>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.cptime')}:</td>
+                                        <td>${coordResultInstance.planCpTime.format('HH:mm:ss')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.altitude')}:</td>
+                                        <td>${coordResultInstance.altitude}${message(code:'fc.foot')}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>${message(code:'fc.test.results.given')}</legend>
                             <g:if test="${!coordResultInstance.test.flightTestComplete}">
                                  <p>
                                    <div>
@@ -84,6 +100,7 @@
                         <input type="hidden" name="name" value="${params.name}" />
                         <g:if test="${!coordResultInstance.test.flightTestComplete}">
                             <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>

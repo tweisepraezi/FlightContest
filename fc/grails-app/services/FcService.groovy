@@ -1486,15 +1486,25 @@ class FcService
     //--------------------------------------------------------------------------
     Map importAflosResults(params,contestInstance) // TODO
     {
-    	AflosCrewNames aflosCrewNamesInstance = AflosCrewNames.findByName(params.afloscrewnames.name)
         Test testInstance = Test.get(params.id)
+
+        AflosCrewNames aflosCrewNamesInstance = AflosCrewNames.findByStartnumAndPointsNotEqual(params.afloscrewnames.startnum,0)
+        if (!aflosCrewNamesInstance) {
+        	return ['error':true,'message':getMsg('fc.aflos.points.crewnotfound',[params.afloscrewnames.startnum])]
+        }
         AflosRouteNames aflosRouteNamesInstance = AflosRouteNames.findByName(testInstance.flighttestwind.flighttest.route.mark)
+        if (!aflosRouteNamesInstance) {
+        	return ['error':true,'message':getMsg('fc.aflos.points.routenotfound',[testInstance.flighttestwind.flighttest.route.mark])]
+        }
         
-        println "importAflosResults $testInstance.crew.name"
+        println "importAflosResults $testInstance.crew.name (AFLOS crew: ${aflosCrewNamesInstance.viewName()}, AFLOS route: $aflosRouteNamesInstance.name)"
 
         AflosErrors aflosError= AflosErrors.findByStartnumAndRoutename(aflosCrewNamesInstance.startnum,aflosRouteNamesInstance)
-        if (aflosError.mark == "Check Error") {
-        	return ['error':true,'message':getMsg('fc.aflos.points.notcalculated',[aflosCrewNamesInstance.name])]
+        if (!aflosError) {
+        	return ['error':true,'message':getMsg('fc.aflos.points.notcomplete',[aflosCrewNamesInstance.viewName()])]
+        }
+        if (aflosError.mark.contains("Check Error")) {
+        	return ['error':true,'message':getMsg('fc.aflos.points.errors',[aflosCrewNamesInstance.viewName()])]
         }
 
         try {
@@ -1612,18 +1622,18 @@ class FcService
 	        testInstance.save()
 	        
 	        // save imported crew
-	        testInstance.crew.mark = aflosCrewNamesInstance.name
+	        testInstance.crew.mark = aflosCrewNamesInstance.viewName()
 	        testInstance.crew.save()
 	        
 	        if (aflosError.mark == "Flight O.K.") {
-	        	return ['saved':true,'message':getMsg('fc.aflos.points.imported',[aflosCrewNamesInstance.name])]
+	        	return ['saved':true,'message':getMsg('fc.aflos.points.imported',[aflosCrewNamesInstance.viewName()])]
 	        } else {
 	        	if (aflosError.dropOutErrors == 0 && 
 	        		checkPointErrors == aflosError.checkPointErrors && 
 	        		heightErrors == aflosError.heightErrors && 
 	        		courseErrors == aflosError.courseErrors)
 	        	{
-	        		return ['saved':true,'message':getMsg('fc.aflos.points.imported.naverrors',[aflosCrewNamesInstance.name])]
+	        		return ['saved':true,'message':getMsg('fc.aflos.points.imported.naverrors',[aflosCrewNamesInstance.viewName()])]
 	        	} else {
 	        		if (checkPointErrors != aflosError.checkPointErrors) {
 	        			println "Evaluation error: $checkPointErrors bad checkpoints <> $aflosError.checkPointErrors bad AFLOS checkpoints"
@@ -1634,12 +1644,12 @@ class FcService
                     if (courseErrors != aflosError.courseErrors) {
                         println "Evaluation error: $courseErrors bad courses <> $aflosError.courseErrors bad AFLOS courses"
                     }
-	        		return ['error':true,'saved':true,'message':getMsg('fc.aflos.points.imported.naverrors.differences',[aflosCrewNamesInstance.name])]
+	        		return ['error':true,'saved':true,'message':getMsg('fc.aflos.points.imported.naverrors.differences',[aflosCrewNamesInstance.viewName()])]
 	        	}
 	        }
     	}
         catch (Exception e) {
-        	return ['error':true,'message':getMsg('fc.notimported.msg',[aflosCrewNamesInstance.name,e.getMessage()])]
+        	return ['error':true,'message':getMsg('fc.notimported.msg',[aflosCrewNamesInstance.viewName(),e.getMessage()])]
         }
     }
 
@@ -3597,33 +3607,62 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map resetTestLegPlanningResult(params)
+    {
+        TestLegPlanning testLegPlanningInstance = TestLegPlanning.get(params.id)
+        if(testLegPlanningInstance) {
+            if(params.version) {
+                def version = params.version.toLong()
+                if(testLegPlanningInstance.version > version) {
+                    testLegPlanningInstance.errors.rejectValue("version", "testLegPlanning.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':testLegPlanningInstance]
+                }
+            }
+
+            // reset results
+		    testLegPlanningInstance.ResetResults()
+            
+            calculateTestPenalties(testLegPlanningInstance.test)
+            
+            if(!testLegPlanningInstance.hasErrors() && testLegPlanningInstance.save()) {
+                return ['instance':testLegPlanningInstance,'saved':true,'message':getMsg('fc.updated',["${testLegPlanningInstance.name()}"])]
+            } else {
+                return ['instance':testLegPlanningInstance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.testlegplanningresult'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     Map calculateLegPlanningInstance(testLegPlanningInstance)
     {
         // calculate resultLegTime
         try {
-            switch (testLegPlanningInstance.resultLegTimeInput.size()) {
+            String input_time = testLegPlanningInstance.resultLegTimeInput.replace('.',':')
+            switch (input_time.size()) {
                 case 1:
-                    Date date = Date.parse("s", testLegPlanningInstance.resultLegTimeInput)
+                    Date date = Date.parse("s", input_time)
                     testLegPlanningInstance.resultLegTime = (date.seconds + 60 * date.minutes + 3600 * date.hours).toBigDecimal() / 3600
                     break
                 case 2:
-                    Date date = Date.parse("ss", testLegPlanningInstance.resultLegTimeInput)
+                    Date date = Date.parse("ss", input_time)
                     testLegPlanningInstance.resultLegTime = (date.seconds + 60 * date.minutes + 3600 * date.hours).toBigDecimal() / 3600
                     break
                 case 4:
-                    Date date = Date.parse("m:ss", testLegPlanningInstance.resultLegTimeInput)
+                    Date date = Date.parse("m:ss", input_time)
                     testLegPlanningInstance.resultLegTime = (date.seconds + 60 * date.minutes + 3600 * date.hours).toBigDecimal() / 3600
                     break
                 case 5:
-                    Date date = Date.parse("mm:ss", testLegPlanningInstance.resultLegTimeInput)
+                    Date date = Date.parse("mm:ss", input_time)
                     testLegPlanningInstance.resultLegTime = (date.seconds + 60 * date.minutes + 3600 * date.hours).toBigDecimal() / 3600
                     break
                 case 7:
-                    Date date = Date.parse("H:mm:ss", testLegPlanningInstance.resultLegTimeInput)
+                    Date date = Date.parse("H:mm:ss", input_time)
                     testLegPlanningInstance.resultLegTime = (date.seconds + 60 * date.minutes + 3600 * date.hours).toBigDecimal() / 3600
                     break
                 case 8:
-                    Date date = Date.parse("HH:mm:ss", testLegPlanningInstance.resultLegTimeInput)
+                    Date date = Date.parse("HH:mm:ss", input_time)
                     testLegPlanningInstance.resultLegTime = (date.seconds + 60 * date.minutes + 3600 * date.hours).toBigDecimal() / 3600
                     break
                 default:
@@ -3744,28 +3783,57 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map resetCoordResult(params)
+    {
+        CoordResult coordResultInstance = CoordResult.get(params.id)
+        if(coordResultInstance) {
+            if(params.version) {
+                def version = params.version.toLong()
+                if(coordResultInstance.version > version) {
+                    coordResultInstance.errors.rejectValue("version", "coordResult.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordResultInstance]
+                }
+            }
+
+            // reset results
+            coordResultInstance.ResetResults()
+
+            calculateTestPenalties(coordResultInstance.test)
+            
+            if(!coordResultInstance.hasErrors() && coordResultInstance.save()) {
+                return ['instance':coordResultInstance,'saved':true,'message':getMsg('fc.updated',["${coordResultInstance.name()}"])]
+            } else {
+                return ['instance':coordResultInstance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.testlegplanningresult'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     Map calculateCoordResultInstance(coordResultInstance,boolean calculateUTC)
     {
     	// calculate resultCpTime
         try {
-            switch (coordResultInstance.resultCpTimeInput.size()) {
+            String input_time = coordResultInstance.resultCpTimeInput.replace('.',':')
+            switch (input_time.size()) {
                 case 1:
-                    coordResultInstance.resultCpTime = Date.parse("H", coordResultInstance.resultCpTimeInput)
+                    coordResultInstance.resultCpTime = Date.parse("H", input_time)
                     break
                 case 2:
-                	coordResultInstance.resultCpTime = Date.parse("HH", coordResultInstance.resultCpTimeInput)
+                	coordResultInstance.resultCpTime = Date.parse("HH", input_time)
                     break
                 case 4:
-                	coordResultInstance.resultCpTime = Date.parse("H:mm", coordResultInstance.resultCpTimeInput)
+                	coordResultInstance.resultCpTime = Date.parse("H:mm", input_time)
                     break
                 case 5:
-                	coordResultInstance.resultCpTime = Date.parse("HH:mm", coordResultInstance.resultCpTimeInput)
+                	coordResultInstance.resultCpTime = Date.parse("HH:mm", input_time)
                     break
                 case 7:
-                	coordResultInstance.resultCpTime = Date.parse("H:mm:ss", coordResultInstance.resultCpTimeInput)
+                	coordResultInstance.resultCpTime = Date.parse("H:mm:ss", input_time)
                     break
                 case 8:
-                	coordResultInstance.resultCpTime = Date.parse("HH:mm:ss", coordResultInstance.resultCpTimeInput)
+                	coordResultInstance.resultCpTime = Date.parse("HH:mm:ss", input_time)
                     break
                 default:
                     return ['instance':coordResultInstance,'error':true,'message':getMsg('fc.coordresult.cptime.error')]

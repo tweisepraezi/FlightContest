@@ -199,7 +199,13 @@ class FcTagLib
     // ====================================================================================================================
     // <g:coordresult var="${coordResultInstance}" name="${legNo}" link="${createLink(controller:'coordResult',action:'edit')}"/></td>
     def coordresult = { p ->
-        out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${p.name}</a>""" // .encodeAsHTML()
+	    String t = p.name
+	    if (p.var.resultEntered) {
+	      t += """ <img src="/fc/images/skin/ok.png"/>"""
+	    } else {
+	        t += " ..."
+	    }
+        out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
     }
     
     // ====================================================================================================================
@@ -361,7 +367,13 @@ class FcTagLib
     // ====================================================================================================================
     // <g:testlegplanning2 var="${testLegFlightInstance}" name="${testLeg}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
     def testlegplanning2 = { p ->
-        out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${p.name}</a>""" // .encodeAsHTML()
+    	String t = p.name
+        if (p.var.resultEntered) {
+          t += """ <img src="/fc/images/skin/ok.png"/>"""
+        } else {
+        	t += " ..."
+        }
+        out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
     }
     
     // ====================================================================================================================

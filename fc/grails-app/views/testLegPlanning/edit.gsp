@@ -26,6 +26,22 @@
                             </tbody>
                         </table>
                         <fieldset>
+                            <legend>${message(code:'fc.test.results.plan')}</legend>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.trueheading')}:</td>
+                                        <td>${FcMath.GradStr(testLegPlanningInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.legtime')}:</td>
+                                        <td>${testLegPlanningInstance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </fieldset>
+                        <fieldset>
+                            <legend>${message(code:'fc.test.results.given')}</legend>
                             <g:if test="${!testLegPlanningInstance.test.planningTestComplete}">
                                 <p>
                                     <label>${message(code:'fc.trueheading')}* [${message(code:'fc.grad')}]:</label>
@@ -57,6 +73,7 @@
                         <input type="hidden" name="testid" value="${testLegPlanningInstance.test.id}" />
                         <g:if test="${!testLegPlanningInstance.test.planningTestComplete}">
                             <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>

@@ -2,10 +2,28 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-04.06.2010
+05.06.2010
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
+
+
+Erweiterungen und Fehlerbehebung in dieser Version (0.5.3):
+-----------------------------------------------------------
+- Ergebniseingabe bei Flugplanungs- und Navigationstest wurde verbessert:
+    * Ein Haken wird angezeigt, wenn ein Wert eingegeben wurde.
+    * Die Werteeingabe kann zurückgesetzt werden.
+    * Es werden Sollwerte bei der Istwerteingabe mit angezeigt.
+    * Bei Zeiten ist auch die Eingabe hh.mm.ss erlaubt.
+- Abstürze beim Import nicht auswertbarer AFLOS-Logger-Messwerte beseitigt.
+    "Flight Contest -> AFLOS -> Erfasste Fehlerstati"
+    oder "AFLOS -> Check -Overview" zeigen Status von AFLOS-Messungen an:
+        Flight O.K.      Auswertbarer Flug ohne Flugfehler
+        Flight not O.K.  Auswertbarer Flug mit Flugfehlern
+        Check Error !    Nicht auswertbarer Flug
+          (-> Import-Fehler "AFLOS-Logger-Daten von ... enthalten Fehler.")
+        Für eine AFLOS-Mannschaft nicht vorhandener Eintrag:
+          (-> Import-Fehler "AFLOS-Logger-Daten von ... nicht komplett.")
 
 
 Fehlerbehebung in dieser Version (0.5.2):
@@ -94,6 +112,15 @@ aktivierten Option 'Procedure Turn" in AFLOS mit 'Check-Data -> Calculate'
 berechnet wurden.
 Fehlerhaft errechnete Kursabweichungen können nach dem Import manuell korrigiert werden
 (Klick auf Zahl in Nr.-Spalte für den gewünschten Check-Punkt).
+Nicht auswertbare Logger-Messwerte können nicht importiert werden. 
+"Flight Contest -> AFLOS -> Erfasste Fehlerstati"
+oder "AFLOS -> Check -Overview" zeigen Status von AFLOS-Messungen an:
+  Flight O.K.      Auswertbarer Flug ohne Flugfehler
+  Flight not O.K.  Auswertbarer Flug mit Flugfehlern
+  Check Error !    Nicht auswertbarer Flug
+    (-> Import-Fehler "AFLOS-Logger-Daten von ... enthalten Fehler.")
+  Für eine AFLOS-Mannschaft nicht vorhandener Eintrag
+    (-> Import-Fehler "AFLOS-Logger-Daten von ... nicht komplett.")
 
 
 Mögliche Betriebssysteme der Server-Installation:

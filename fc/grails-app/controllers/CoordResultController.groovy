@@ -40,6 +40,23 @@ class CoordResultController
         }
     }
 
+    def reset = {
+        def coordresult = fcService.resetCoordResult(params) 
+        if (coordresult.saved) {
+            flash.message = coordresult.message
+            redirect(controller:"test",action:'flightresults',id:params.testid)
+        } else if (coordresult.instance) {
+            if (coordresult.error) {
+                flash.message = coordresult.message
+                flash.error = true
+            }
+            render(view:'edit',model:[coordResultInstance:coordresult.instance])
+        } else {
+            flash.message = coordresult.message
+            redirect(controller:"test",action:'flightresults',id:params.testid)
+        }
+    }
+
     def updateprocedureturn = {
         def coordresult = fcService.updateCoordResultProcedureTurn(params) 
         if (coordresult.saved) {

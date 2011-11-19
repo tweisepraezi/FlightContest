@@ -32,8 +32,14 @@
                             <tbody>
                                 <tr>
                                     <g:set var="lastName" value="${testInstance.crew.mark}" />
+                                    <g:if test="${lastName}">
+                                        <g:set var="lastStartnum" value="${lastName.substring(lastName.size()-2,lastName.size()-1)}" />
+                                    </g:if>
+                                    <g:else>
+                                        <g:set var="lastStartnum" value="" />
+                                    </g:else>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.crewnames.name')}:</label></td>
-                                    <td><g:select from="${AflosCrewNames.findAllByNameIsNotNullAndPointsNotEqual(0)}" name="afloscrewnames.name" value="${lastName}" optionKey="name" optionValue="${{it.viewName()}}" ></g:select></td>
+                                    <td><g:select from="${AflosCrewNames.findAllByNameIsNotNullAndPointsNotEqual(0)}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
                                 </tr> 
                             </tbody>
                         </table>
