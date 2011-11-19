@@ -1,0 +1,57 @@
+-----------------------------------------------------------------------------------------------
+                <fieldset>
+                    <legend>${message(code:'')}</legend>
+                    <p>
+                        <label>${message(code:'')}:</label>
+                        <br/>
+                    </p>
+                </fieldset>
+-----------------------------------------------------------------------------------------------
+fc.edit=Edit
+<g:message code="fc.edit"/>
+${message(code:'fc.edit')}
+
+fc.created="{0} created."
+<g:message code="fc.created" args=['Aircarft']/>
+"${message(code:'fc.created',args:["${aircraftInstance.registration}"])}"
+
+-----------------------------------------------------------------------------------------------
+redirect(action:list)
+->
+redirect(controller:"contest",action:"start")
+
+-----------------------------------------------------------------------------------------------
+<g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
+<g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+<g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+
+-----------------------------------------------------------------------------------------------
+<g:mainnav link="${link()}"/>
+<div class="nav">
+    <span class="menuButton"><g:link class="create" action="create"><g:message code="fc.aircraft.new"/></g:link></span>
+</div>
+
+-----------------------------------------------------------------------------------------------
+View.form
+=========
+<g:form controller="contestDay" params="['contest.id':contestInstance.id,'contestid':contestInstance.id,'fromcontest':true]" >
+
+View.create
+===========
+<g:if test="${params.fromcontest}">
+	<g:set var="newparams" value="['contestid':params.contestid,'fromcontest':true]"/>
+</g:if>
+<g:else>
+	<g:set var="newparams" value="['contestid':params.contestid]"/>
+</g:else>
+<g:form method="post" params="${newparams}" >
+
+Controller.save
+===============
+if (params.fromcontest) {
+	redirect(controller:"contest",action:show,id:params.contestid)
+} else {
+	redirect(controller:"contest",action:"start")
+}
+
+-----------------------------------------------------------------------------------------------

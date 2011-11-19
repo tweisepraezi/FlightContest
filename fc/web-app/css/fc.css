@@ -1,0 +1,64 @@
+/* modifications of layout.css
+----------------------------------------------- */
+
+h1#branding {
+    color:#000;
+}
+
+tfoot th,
+tfoot td {
+    border-top:2px solid #888;
+    background:#ccc; 
+}
+
+/* modifications of nav.css
+----------------------------------------------- */
+
+ul.main li a.active {
+    height:2.5em;
+    line-height:2.5em;
+    border:0;
+    color:#fff;
+    background:#888;
+}
+
+
+/* zusätzliche Styles
+----------------------------------------------- */
+div.errors {
+    background: #fff3f3;
+    border: 1px solid red;
+    color: #cc0000;
+    margin: 10px 0 5px 0;
+    padding: 5px 0 5px 0;
+}
+
+.boxborder {
+    border:1px solid #bbb; 
+    margin-bottom:10px;
+}
+
+#forms.block {
+    margin-bottom:6px; 
+}
+
+td.detailtitle {
+    width:5px;
+    white-space:nowrap;
+}
+
+td.errors {
+    color: red;
+}
+
+.grad {
+    width:40px;
+}
+
+.minute {
+    width:60px;
+}
+
+.direction {
+    width:40px;
+}
