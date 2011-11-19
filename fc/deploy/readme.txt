@@ -2,14 +2,24 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-05.06.2010
+01.08.2010
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
 
-Erweiterungen und Fehlerbehebung in dieser Version (0.5.3):
------------------------------------------------------------
+Fehlerbehebung in dieser Version (0.5.4):
+-----------------------------------------
+- Bei manueller Korrektur der Flughöhe wurden Strafpunkte 
+  nicht neu berechnet.
+- Das nachträgliche Eintragen des Flugzeugtyps funktioniert nun.
+- Beim Flugplan wurden einzelne Streckenabschnitte nicht berechnet.
+- Beim Löschen von Teilnehmern wurde laufende Nummerierung 
+  in Planung und Auswertung nicht aktualisiert.
+
+
+Erweiterungen und Fehlerbehebung in Version 0.5.3:
+--------------------------------------------------
 - Ergebniseingabe bei Flugplanungs- und Navigationstest wurde verbessert:
     * Ein Haken wird angezeigt, wenn ein Wert eingegeben wurde.
     * Die Werteeingabe kann zurückgesetzt werden.
@@ -26,8 +36,8 @@ Erweiterungen und Fehlerbehebung in dieser Version (0.5.3):
           (-> Import-Fehler "AFLOS-Logger-Daten von ... nicht komplett.")
 
 
-Fehlerbehebung in dieser Version (0.5.2):
------------------------------------------
+Fehlerbehebung in Version 0.5.2:
+--------------------------------
 - Punkte des Lande- und des Sondertests wurden nicht in der Summe
   einberechnet.
 - Bei Änderung des Zeitplanes mit "Zeit +" oder "Zeit -" wurden
@@ -37,8 +47,8 @@ Fehlerbehebung in dieser Version (0.5.2):
   um Verwechselungen mit der spätestens Lndezeit zu vermeiden.
  
   
-Fehlerbehebung in dieser Version (0.5.1):
------------------------------------------
+Fehlerbehebung in Version 0.5.1:
+--------------------------------
 - "Planung -> Zeitplan berechnen" zeigte für einzelne Mannschaften 
   "Nicht berechnet" an. 
   

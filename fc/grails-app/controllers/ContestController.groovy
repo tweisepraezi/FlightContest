@@ -152,7 +152,7 @@ class ContestController {
         def crew3 = fcService.putCrew(contest,"Schulze","Deutschland","","","",140.0f)
         def crew4 = fcService.putCrew(contest,"Schmidt","Deutschland","","","",140.0f)
         def crew5 = fcService.putCrew(contest,"Richter","Deutschland","","","",140.0f)
-        def crew6 = fcService.putCrew(contest,"R\u00f6thke/Weise","Deutschland","D-MWCB","","",60.0f)
+        def crew6 = fcService.putCrew(contest,"M\u00fcller","Deutschland","D-MUEL","","",60.0f)
         
         def aircraft3 = fcService.putAircraft(contest,"D-ESCH","C172","gelb")
         

@@ -1,18 +1,20 @@
 ; Inno Setup 5
 
 ; Deployment:
-; 1. grails war
-; 2. Versionsnummer setzen
-; 3. compile setup
+; 1. licenses\readme.txt: Versionsnummer setzen
+; 2. deploy\readme.txt aktualisieren
+; 3. grails war
+; 4. Versionsnummer hier setzen
+; 5. compile setup
 
 [Code]
 const compatibelDigits = 2; // Anzahl der Stellen für Datenbankkompatibilität
-const Version = '0.5.3';
+const Version = '0.5.4';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 0.5.3
-AppVersion=0.5.3
-VersionInfoVersion=0.5.3
+AppVerName=Flight Contest 0.5.4
+AppVersion=0.5.4
+VersionInfoVersion=0.5.4
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=file:\\

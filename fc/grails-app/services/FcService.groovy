@@ -40,7 +40,7 @@ class FcService
                 }
             }
 
-            if (params.registration) {
+            if (params.registration != aircraftInstance.registration) {
                 def aircraft2Instance = Aircraft.findByRegistrationAndContest(params.registration,aircraftInstance.contest)
                 if (aircraft2Instance) {
                     return ['instance':aircraft2Instance,'error':true,'message':getMsg('fc.aircraft.registration.error',["${params.registration}"])]
@@ -2207,6 +2207,14 @@ class FcService
                     testInstance.delete()
                 }
                 
+                // correct all viewpos
+                Task.findAllByContest(crewInstance.contest).each { taskInstance ->
+                	Test.findAllByTask(taskInstance,[sort:"viewpos"]).eachWithIndex { testInstance, i ->
+                		testInstance.viewpos = i
+                		testInstance.save()
+                	}
+                }
+
                 crewInstance.delete()
                 
                 return ['deleted':true,'message':getMsg('fc.deleted',["${crewInstance.name}"])]
@@ -3878,8 +3886,8 @@ class FcService
         coordResultInstance.resultEntered = true
         
         // calculate resultMinAltitudeMissed
-        if (coordResultInstance.resultAltitude && coordResultInstance.resultAltitude < coordResultInstance.altitude) {
-        	coordResultInstance.resultMinAltitudeMissed = true
+        if (coordResultInstance.resultAltitude) {
+        	coordResultInstance.resultMinAltitudeMissed = coordResultInstance.resultAltitude < coordResultInstance.altitude
         }
         
         return [:]
@@ -4715,7 +4723,9 @@ class FcService
            } else {
         	   testLeg.planGroundSpeed = valueTAS * sinGamma / sinBeta
            }
-           if (testLeg.planTrueHeading < 0) {
+           if (testLeg.planTrueHeading > 360) {
+        	   testLeg.planTrueHeading -= 360
+           } else if (testLeg.planTrueHeading < 0) {
         	   testLeg.planTrueHeading += 360
            }
        } else {
