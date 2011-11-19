@@ -2,14 +2,23 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-01.08.2010
+14.08.2010
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
 
-Fehlerbehebung in dieser Version (0.5.4):
------------------------------------------
+Erweiterungen und Fehlerbehebung in dieser Version (0.5.5):
+-----------------------------------------------------------
+- Navigationsflug-Auswertung:
+  "Start verpasst" wurde in "Takeoff verpasst" umbenannt
+- Einführung eines Debriefing-Formulars für Proteste,
+  erreichbar für jede Mannschaft in der Auswertung über 
+  die Spalte "Befragung"
+
+
+Fehlerbehebung in Version 0.5.4:
+--------------------------------
 - Bei manueller Korrektur der Flughöhe wurden Strafpunkte 
   nicht neu berechnet.
 - Das nachträgliche Eintragen des Flugzeugtyps funktioniert nun.

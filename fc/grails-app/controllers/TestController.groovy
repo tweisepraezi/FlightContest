@@ -415,7 +415,46 @@ class TestController
         redirect(action:flightresults,id:params.id)
     }
 	    
-    Map GetPrintParams() {
+    def debriefing = {
+        def test = fcService.getTest(params) 
+        if (test.instance) {
+            return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+
+    def printdebriefing = {
+        def test = fcService.printdebriefingTest(params,GetPrintParams()) 
+        if (!test.instance) {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        } else if (test.error) {
+            flash.message = test.message
+            flash.error = true
+            redirect(action:show,id:test.instance.id)
+        } else if (test.content) {
+            fcService.WritePDF(response,test.content)
+        } else {
+            redirect(action:show,id:test.instance.id)
+        }
+    }
+
+    def debriefingprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+        }
+        def test = fcService.getTest(params) 
+        if (test.instance) {
+            return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,
                 lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'

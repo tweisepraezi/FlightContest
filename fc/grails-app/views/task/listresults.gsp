@@ -28,7 +28,7 @@
                         <thead>
                             <tr>
                                 <th class="table-head" colspan="4">${message(code:'fc.crew.list')}</th>
-                                <th class="table-head" colspan="5">${message(code:'fc.test.results')}</th>
+                                <th class="table-head" colspan="6">${message(code:'fc.test.results')}</th>
                             </tr>
                             <tr>
                                 <th/>
@@ -39,6 +39,7 @@
                                 <th>${message(code:'fc.test.results.planning')}</th>
                                 <th>${message(code:'fc.test.results.flight')}</th>
                                 <th>${message(code:'fc.points')}</th>
+                                <th>${message(code:'fc.test.debriefing')}</th>
                                 <th>${message(code:'fc.test.results.summary')}</th>
                                 <th>${message(code:'fc.test.results.position')}</th>
                             </tr>
@@ -70,6 +71,8 @@
                                     
                                     <td><a href="${createLink(controller:'test',action:'results')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
                                     
+                                    <td><a href="${createLink(controller:'test',action:'debriefing')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
+                                    
                                     <td>${testInstance.testPenalties}</td>
                                     
                                     <g:if test="${testInstance.positionContestDay}">
@@ -84,7 +87,7 @@
                         <tfoot>
                             <tr class="">
                                 <td colspan="4"></td>
-                                <td colspan="5"><g:actionSubmit action="calculatepositions" value="${message(code:'fc.test.results.positions.calculate')}" /> <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" /></td>
+                                <td colspan="6"><g:actionSubmit action="calculatepositions" value="${message(code:'fc.test.results.positions.calculate')}" /> <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" /></td>
                             </tr>
                         </tfoot>
                     </table>

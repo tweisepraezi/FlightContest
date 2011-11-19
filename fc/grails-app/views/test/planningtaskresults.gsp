@@ -143,7 +143,7 @@
                                     <g:viewbool value="${testInstance.planningTestExitRoomTooLate}" tag="td" trueclass="points" />
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.planningtaskresults.penalties')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.penalties.total')}:</td>
                                     <td class="points">${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                             </tbody>

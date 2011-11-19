@@ -247,7 +247,7 @@
                                     <g:viewbool value="${testInstance.flightTestGivenTooLate}" tag="td" trueclass="points" />
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.flightresults.penalties')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.penalties.total')}:</td>
                                     <td class="points">${testInstance.flightTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                             </tbody>

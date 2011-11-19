@@ -9,12 +9,12 @@
 
 [Code]
 const compatibelDigits = 2; // Anzahl der Stellen für Datenbankkompatibilität
-const Version = '0.5.4';
+const Version = '0.5.5';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 0.5.4
-AppVersion=0.5.4
-VersionInfoVersion=0.5.4
+AppVerName=Flight Contest 0.5.5
+AppVersion=0.5.5
+VersionInfoVersion=0.5.5
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=file:\\
@@ -45,7 +45,7 @@ en.AdminNecessary=You need administrator privileges to install Flight Contest!
 ;de.AdminNecessary=Sie müssen Adminstrator-Rechte zur Installation von Flight Contest haben!
 
 [Files]
-Source: "K:\Projects\Java\jdk1.5.0_16\*";                                       DestDir: "{app}\java";           Flags: ignoreversion recursesubdirs;  Excludes: "demo,include,sample,src.zip";
+Source: "K:\Projects\Java\jdk1.5.0_16\*";                                       DestDir: "{app}\java";           Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
 Source: "K:\Projects\Server\apache-tomcat-6.0.20\*";                            DestDir: "{app}\tomcat";         Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
 Source: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\tomcat-users.xml";            DestDir: "{app}\tomcat\conf";
 Source: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\install-service.bat";         DestDir: "{app}";

@@ -1,8 +1,8 @@
 
-Flight Contest 0.5.4
+Flight Contest 0.5.5
 Copyright 2010 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
-http://www.praeziflug.de
+http://www.praeziflug.de/
 
 ============================================================================
 
@@ -19,6 +19,12 @@ http://www.apache.org/
 Grails, release 1.2.1
 
 http://grails.org/
+
+============================================================================
+
+Groovy, release 1.6.7
+
+http://groovy.codehaus.org/
 
 ============================================================================
 

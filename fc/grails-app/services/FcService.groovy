@@ -537,6 +537,10 @@ class FcService
                     calculate = true
                     coordResultInstance.resultAltitude = results[i].givenValues[j].altitude
                 }
+                if (results[i].givenValues[j]?.badCourseNum) {
+                    calculate = true
+                    coordResultInstance.resultBadCourseNum = results[i].givenValues[j].badCourseNum
+                }
                 if (calculate) {
                     calculateCoordResultInstance(coordResultInstance,false)
                     coordResultInstance.resultProcedureTurnEntered = true
@@ -2264,6 +2268,7 @@ class FcService
     //--------------------------------------------------------------------------
     Map getTest(params)
     {
+println "$params"    	
         Test testInstance = Test.get(params.id)
 
         if (!testInstance) {
@@ -2354,6 +2359,33 @@ class FcService
         }
         catch (Throwable e) {
             test.message = getMsg('fc.test.timetable.printerror',["$e"])
+            test.error = true
+        }
+        return test
+    }
+    
+    //--------------------------------------------------------------------------
+    Map printdebriefingTest(params,printparams)
+    {
+        def test = getTest(params)
+        if (!test.instance) {
+            return test
+        }
+        
+        // Print debriefing
+        try {
+            ITextRenderer renderer = new ITextRenderer();
+            ByteArrayOutputStream content = new ByteArrayOutputStream()
+            def url = "${printparams.baseuri}/test/debriefingprintable/${test.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            println "Print: $url"
+            renderer.setDocument(url)
+            renderer.layout()
+            renderer.createPDF(content,false)
+            renderer.finishPDF()
+            test.content = content
+        }
+        catch (Throwable e) {
+            test.message = getMsg('fc.test.debriefing.printerror',["$e"])
             test.error = true
         }
         return test
