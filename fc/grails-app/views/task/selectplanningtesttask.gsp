@@ -38,10 +38,15 @@
                                         <g:each var="testInstanceID" in="${testInstanceIDs}">
                                             <g:if test="${testInstanceID}">
                                                 <g:set var="testInstance" value="${Test.get(testInstanceID)}"/>
-                                                ${testInstance.crew.name}
-                                                <g:if test="${testInstance.planningtesttask}">
-                                                     (${testInstance.planningtesttask.name()})
-                                                </g:if>
+	                                            <g:if test="${testInstance}">
+	                                                ${testInstance.crew.name} [${testInstanceID}]
+	                                                <g:if test="${testInstance.planningtesttask}">
+	                                                     (${testInstance.planningtesttask.name()})
+	                                                </g:if>
+	                                            </g:if>
+	                                            <g:else>
+	                                            	[${testInstanceID}]
+	                                            </g:else>
                                                 <br/>                                                
                                             </g:if>
                                         </g:each>

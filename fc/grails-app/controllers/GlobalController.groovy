@@ -7,6 +7,7 @@ class GlobalController {
     }
 
     def list = {
+		fcService.println "List extras"
     	[globalInstance:BootStrap.global,contestInstance:session.lastContest]
     }
 

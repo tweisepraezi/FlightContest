@@ -52,6 +52,9 @@
                         <input type="hidden" name="id" value="${planningTestTaskInstance?.id}" />
                         <input type="hidden" name="version" value="${planningTestTaskInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:if test="${!Test.findByPlanningtesttask(planningTestTaskInstance)}">
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>

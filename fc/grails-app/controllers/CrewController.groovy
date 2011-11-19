@@ -8,7 +8,8 @@ class CrewController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def list = {
-        if (session.lastContest) {
+		fcService.printstart "List crews"
+        if (session?.lastContest) {
 			// save return action
 			session.crewReturnAction = actionName 
 			session.crewReturnController = controllerName
@@ -17,9 +18,11 @@ class CrewController {
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
             def crewList = Crew.findAllByContest(session.lastContest, [sort:'viewpos'])
+			fcService.printdone "last contest"
             return [crewInstanceList:crewList]
         }
-        return [:]
+		fcService.printdone ""
+        redirect(controller:'contest',action:'start')
     }
 
     def edit = {
@@ -118,7 +121,7 @@ class CrewController {
 		if (params.contestid) {
 			session.lastContest = Contest.get(params.contestid)
 		}
-		if (session.lastContest) {
+		if (session?.lastContest) {
             def crewList = Crew.findAllByContestAndDisabled(session.lastContest,false)
             params.sort = "viewpos"
             return [crewInstanceList:crewList]

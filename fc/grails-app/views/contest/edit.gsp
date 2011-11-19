@@ -16,7 +16,7 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post" params="${['contestReturnAction':contestReturnAction,'contestReturnController':contestReturnController,'contestReturnID':contestReturnID]}" >
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.title')}*:</label>

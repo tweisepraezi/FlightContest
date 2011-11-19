@@ -5,6 +5,8 @@ class AflosCrewNamesController
     def index = { redirect(action:list,params:params) }
 
     def list = {
+		fcService.println "List AFLOS crewnames"
+		
         session.lastAflosController = controllerName
     	
         params.sort = "startnum"

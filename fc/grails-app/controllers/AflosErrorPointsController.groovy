@@ -5,6 +5,8 @@ class AflosErrorPointsController {
     def index = { redirect(action:list,params:params) }
 
     def list = {
+		fcService.println "List AFLOS errorpoints"
+		
         session.lastAflosController = controllerName
         
         params.sort = "id"

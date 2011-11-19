@@ -2,7 +2,7 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-20.02.2011
+23.04.2011
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -10,8 +10,16 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Erweiterungen in dieser Version (0.6):
---------------------------------------
+Änderungen in dieser Version (0.6.1):
+-------------------------------------
+- Beseitigung kleinerer Fehler
+- AFLOS-Test-Datenbank für Test-Wettbewerb der Installation hinzugefügt:
+    C:\Program Files\Flight Contest\samples\AFLOS-FCTest1.mdb
+  Hinweise zum Anlegen des Test-Wettbewerbs siehe unten.
+
+
+Erweiterungen in Version 0.6:
+-----------------------------
 
 1. Wettbewerbsverwaltung
 
@@ -249,6 +257,7 @@ B. Durchführung
    - Allen Mannschaften einen Flugwind zuweisen.
    - Zeitplan berechnen.
    - GGf. einzelne Zeiten verschieben.
+   - Aufgaben drucken.
    - Zeitplan drucken.
    - Flugpläne drucken.
 8. Tagesablauf
@@ -303,6 +312,21 @@ auf einem beliebigen Rechner im Netzwerk aufrufen:
   http://SERVER-COMPUTERNAME:8080/fc/contest/start
   
 
+Test-Wettbewerb:
+----------------
+Ist kein Wettbewerb vorhanden, steht der Menüpunkt 'Test-Wettbewerb' zur Verfügung. 
+Sonst kann der Test-Wettbewerb durch Aufruf von
+  http://localhost:8080/fc/contest/createtest
+auch später angelegt werden.
+
+Vor Anlegen des Test-Wettbewerbs muss die Test-AFLOS-Datenbank aktiviert werden.
+Die Installation von 'Flight Contest' installiert eine Test-AFLOS-Datenbank mit.
+Haben Sie nach der 'Flight Contest'-Installation mit einer anderen AFLOS-Datenbank
+gearbeitet und wollen Sie den Test-Wettbewerb anlegen, müssen Sie die 
+Test-AFLOS-Datenbank wieder laden. Diese ist dazu hier zu finden:
+  C:\Program Files\Flight Contest\samples\AFLOS-FCTest1.mdb
+ 
+    
 Datensicherung:
 ---------------
 Die Datenbank wird an folgendem Ort gespeichert:

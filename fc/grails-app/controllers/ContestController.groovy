@@ -11,7 +11,7 @@ class ContestController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def start = {
-		fcService.printstart "Start"
+		fcService.printstart "Start contest"
 		
 		String showLanguage = fcService.GetCookie("ShowLanguage",Languages.de.toString())
 		if (showLanguage) {
@@ -32,7 +32,11 @@ class ContestController {
 				session.lastContest = last_contest
 			}
 		}
-        if (session.lastContest) {
+        if (session?.lastContest) {
+			// save return action
+			session.contestReturnAction = actionName 
+			session.contestReturnController = controllerName
+			session.contestReturnID = params.id
 			fcService.printdone "last contest"
             return [contestInstance:session.lastContest]
         }
@@ -41,7 +45,7 @@ class ContestController {
     }
 
     def show = {
-        if (session.lastContest) {
+        if (session?.lastContest) {
         	return [contestInstance:session.lastContest]
         } else {
             flash.message = contest.message
@@ -50,7 +54,11 @@ class ContestController {
     }
 
     def edit = {
-        if (session.lastContest) {
+        if (session?.lastContest) {
+			// assign return action
+			if (session.contestReturnAction) {
+				return [contestInstance:session.lastContest,contestReturnAction:session.contestReturnAction,contestReturnController:session.contestReturnController,contestReturnID:session.contestReturnID]
+			}
         	return [contestInstance:session.lastContest]
         } else {
             flash.message = contest.message
@@ -64,7 +72,12 @@ class ContestController {
         	flash.message = contest.message
         	session.lastContest = contest.instance
 			fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
-        	redirect(action:start,id:contest.instance.id)
+			// process return action
+			if (params.contestReturnAction) {
+				redirect(action:params.contestReturnAction,controller:params.contestReturnController,id:params.contestReturnID)
+			} else {
+        		redirect(action:start,id:contest.instance.id)
+			}
         } else if (contest.instance) {
         	render(view:'edit',model:[contestInstance:contest.instance])
         } else {
@@ -100,7 +113,8 @@ class ContestController {
     }
 
     def tasks = {
-        if (session.lastContest) {
+		fcService.printstart "List tasks"
+        if (session?.lastContest) {
             def contestTasksList = Task.findAllByContest(session.lastContest)
 			// save return action
 			session.taskReturnAction = actionName 
@@ -112,9 +126,11 @@ class ContestController {
 			session.flighttestReturnAction = actionName
 			session.flighttestReturnController = controllerName
 			session.flighttestReturnID = params.id
+			fcService.printdone "last contest"
             return [contestInstance:session.lastContest,contestTasks:contestTasksList]
         }
-        return [:]
+		fcService.printdone ""
+        redirect(controller:'contest',action:'start')
     }
 
 	def activate = {
@@ -128,7 +144,7 @@ class ContestController {
 	}
 
 	def deletequestion = {
-        if (session.lastContest) {
+        if (session?.lastContest) {
             return [contestInstance:session.lastContest]
         } else {
             flash.message = contest.message
@@ -184,8 +200,14 @@ class ContestController {
     }
         
 	def cancel = {
-		//redirect(action:start)
-		redirect(controller:'task',action:'startresults')
+		// process return action
+		if (params.positionsReturnAction) {
+			redirect(action:params.positionsReturnAction,controller:params.positionsReturnController,id:params.positionsReturnID)
+		} else if (params.contestReturnAction) {
+			redirect(action:params.contestReturnAction,controller:params.contestReturnController,id:params.contestReturnID)
+		} else {
+			redirect(action:start)
+		}
 	}
 	
 	def createtask = {
@@ -193,14 +215,15 @@ class ContestController {
 	}
 
 	def positions = {
-        if (session.lastContest) {
+        if (session?.lastContest) {
 			// save return action
 			session.crewReturnAction = actionName
 			session.crewReturnController = controllerName
 			session.crewReturnID = params.id
-			session.positionsReturnAction = actionName 
-			session.positionsReturnController = controllerName
-			session.positionsReturnID = params.id
+			// assign return action
+			if (session.positionsReturnAction) {
+				return [contestInstance:session.lastContest,,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID]
+			}
         	return [contestInstance:session.lastContest]
         } else {
             redirect(action:start)
@@ -217,7 +240,7 @@ class ContestController {
 	}
 
 	def printpositions = {
-        if (session.lastContest) {
+        if (session?.lastContest) {
 	        def contest = fcService.printresultsContest(session.lastContest,GetPrintParams()) 
 	        if (contest.error) {
 	        	flash.message = contest.message
@@ -698,7 +721,7 @@ class ContestController {
 	
 	void run_test4(String contestName)
 	{
-		if (session.lastContest && session.lastContest.title == contestName) {
+		if (session?.lastContest && session.lastContest.title == contestName) {
 			fcService.printstart "runtest '$session.lastContest.title'"
 			Map ret = fcService.testData(
 			   [[name:"Route",count:1,table:Route.findAllByContest(session.lastContest),

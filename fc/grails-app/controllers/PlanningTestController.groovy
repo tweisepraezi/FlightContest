@@ -85,6 +85,7 @@ class PlanningTestController {
         	flash.message = planningtest.message
         	redirect(controller:"contest",action:"tasks")
         } else if (planningtest.notdeleted) {
+			flash.error = true
         	flash.message = planningtest.message
             redirect(action:show,id:params.id)
         } else {

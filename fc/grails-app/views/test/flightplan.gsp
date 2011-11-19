@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable')} ${message(code:'fc.test.timetable.version')} ${testInstance.timetableVersion})</h2>
                 <div class="block" id="forms" >
-                    <g:form method="post" params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
+                    <g:form method="post" >
                         <table>
                             <tbody>
                                 <tr>

@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.test.debriefing')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</h2>
                 <div class="block" id="forms" >
-                    <g:form id="${testInstance.id}" method="post" params="${[id:testInstance.id,'positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
+                    <g:form id="${testInstance.id}" method="post" >
                         <table>
                             <tbody>
                                 <tr>

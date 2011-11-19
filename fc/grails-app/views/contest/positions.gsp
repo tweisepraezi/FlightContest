@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.contest.positions')}</h2>
                 <div class="block" id="forms" >
-                    <g:form>
+                    <g:form params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
                         <table>
                             <thead>
                                 <tr>

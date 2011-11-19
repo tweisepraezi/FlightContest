@@ -30,69 +30,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>class-diagram-0.5.2-grails-app-conf</name>
+			<name>.link_to_grails_plugins</name>
 			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/class-diagram-0.5.2/grails-app/conf</locationURI>
-		</link>
-		<link>
-			<name>class-diagram-0.5.2-grails-app-controllers</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/class-diagram-0.5.2/grails-app/controllers</locationURI>
-		</link>
-		<link>
-			<name>class-diagram-0.5.2-grails-app-i18n</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/class-diagram-0.5.2/grails-app/i18n</locationURI>
-		</link>
-		<link>
-			<name>class-diagram-0.5.2-grails-app-services</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/class-diagram-0.5.2/grails-app/services</locationURI>
-		</link>
-		<link>
-			<name>class-diagram-0.5.2-grails-app-views</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/class-diagram-0.5.2/grails-app/views</locationURI>
-		</link>
-		<link>
-			<name>class-diagram-0.5.2-src-groovy</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/class-diagram-0.5.2/src/groovy</locationURI>
-		</link>
-		<link>
-			<name>datasources-0.5-src-groovy</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/datasources-0.5/src/groovy</locationURI>
-		</link>
-		<link>
-			<name>datasources-0.5-src-java</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/datasources-0.5/src/java</locationURI>
-		</link>
-		<link>
-			<name>db-util-0.4-grails-app-controllers</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/db-util-0.4/grails-app/controllers</locationURI>
-		</link>
-		<link>
-			<name>db-util-0.4-grails-app-views</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/db-util-0.4/grails-app/views</locationURI>
-		</link>
-		<link>
-			<name>excel-import-0.3-grails-app-i18n</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/excel-import-0.3/grails-app/i18n</locationURI>
-		</link>
-		<link>
-			<name>excel-import-0.3-src-groovy</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/excel-import-0.3/src/groovy</locationURI>
-		</link>
-		<link>
-			<name>tomcat-1.3.6-src-groovy</name>
-			<type>2</type>
-			<locationURI>GRAILS_ROOT/1.3.6/projects/fc/plugins/tomcat-1.3.6/src/groovy</locationURI>
+			<locationURI>GRAILS_ROOT/1.3.7/projects/fc/plugins</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

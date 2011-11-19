@@ -90,81 +90,110 @@ class TaskController {
 	}
 	
     def startplanning = {
-		def task = fcService.startplanningTask(params,session.lastContest,session.lastTaskPlanning)
-		if (task.taskid) {
-   			params.id = task.taskid
-   			redirect(action:listplanning,params:params)
-   		}
+		fcService.printstart "Start planning"
+		if (session?.lastContest) {
+			def task = fcService.startplanningTask(params, session.lastContest, session.lastTaskPlanning)
+			if (task.taskid) {
+	   			params.id = task.taskid
+				fcService.println "last planning task $task.taskid"
+	   			redirect(action:listplanning,params:params)
+	   		}
+			fcService.printdone "last contest"
+		} else {
+			fcService.printdone ""
+			redirect(controller:'contest',action:'start')
+		}
     }
 
     def listplanning = {
-		def task = fcService.getTask(params) 
-        if (!task.instance) {
-            flash.message = task.message
-            redirect(controller:"contest",action:"tasks")
-        } else {
-			SetLimit()
-            session.lastTaskPlanning = task.instance.id
-			// save return action
-			session.taskReturnAction = actionName
-			session.taskReturnController = controllerName
-			session.taskReturnID = params.id
-			session.crewReturnAction = actionName
-			session.crewReturnController = controllerName
-			session.crewReturnID = params.id
-			session.aircraftReturnAction = actionName
-			session.aircraftReturnController = controllerName
-			session.aircraftReturnID = params.id
-			session.positionsReturnAction = actionName 
-			session.positionsReturnController = controllerName
-			session.positionsReturnID = params.id
-			session.planningtestReturnAction = actionName
-			session.planningtestReturnController = controllerName
-			session.planningtestReturnID = params.id
-			session.planningtesttaskReturnAction = actionName
-			session.planningtesttaskReturnController = controllerName
-			session.planningtesttaskReturnID = params.id
-			session.flighttestReturnAction = actionName
-			session.flighttestReturnController = controllerName
-			session.flighttestReturnID = params.id
-			session.flighttestwindReturnAction = actionName
-			session.flighttestwindReturnController = controllerName
-			session.flighttestwindReturnID = params.id
-        	return [taskInstance:task.instance]
-        }
+		fcService.printstart "List planning"
+		if (session?.lastContest) {
+			def task = fcService.getTask(params) 
+	        if (!task.instance) {
+	            flash.message = task.message
+				fcService.printdone task.message
+	            redirect(controller:"contest",action:"tasks")
+	        } else {
+				SetLimit()
+	            session.lastTaskPlanning = task.instance.id
+				// save return action
+				session.taskReturnAction = actionName
+				session.taskReturnController = controllerName
+				session.taskReturnID = params.id
+				session.crewReturnAction = actionName
+				session.crewReturnController = controllerName
+				session.crewReturnID = params.id
+				session.aircraftReturnAction = actionName
+				session.aircraftReturnController = controllerName
+				session.aircraftReturnID = params.id
+				session.planningtestReturnAction = actionName
+				session.planningtestReturnController = controllerName
+				session.planningtestReturnID = params.id
+				session.planningtesttaskReturnAction = actionName
+				session.planningtesttaskReturnController = controllerName
+				session.planningtesttaskReturnID = params.id
+				session.flighttestReturnAction = actionName
+				session.flighttestReturnController = controllerName
+				session.flighttestReturnID = params.id
+				session.flighttestwindReturnAction = actionName
+				session.flighttestwindReturnController = controllerName
+				session.flighttestwindReturnID = params.id
+				fcService.printdone ""
+	        	return [taskInstance:task.instance]
+	        }
+		} else {
+			fcService.printdone ""
+			redirect(controller:'contest',action:'start')
+		}
     }
 
     def startresults = {
-        def task = fcService.startresultsTask(params,session.lastContest,session.lastTaskResults)
-        if (task.taskid) {
-            params.id = task.taskid
-            redirect(action:listresults,params:params)
-        }
+		fcService.printstart "Start results"
+		if (session?.lastContest) {
+	        def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
+	        if (task.taskid) {
+	            params.id = task.taskid
+				fcService.println "last results task $task.taskid"
+	            redirect(action:listresults,params:params)
+	        }
+			fcService.printdone "last contest"
+		} else {
+			fcService.printdone ""
+			redirect(controller:'contest',action:'start')
+		}
     }
 
     def listresults = {
-        def task = fcService.getTask(params) 
-        if (!task.instance) {
-            flash.message = task.message
-            redirect(controller:"contest",action:"tasks")
-        } else {
-			SetLimit()
-            session.lastTaskResults = task.instance.id
-			// save return action
-			session.taskReturnAction = actionName 
-			session.taskReturnController = controllerName
-			session.taskReturnID = params.id
-			session.crewReturnAction = actionName
-			session.crewReturnController = controllerName
-			session.crewReturnID = params.id
-			session.aircraftReturnAction = actionName
-			session.aircraftReturnController = controllerName
-			session.aircraftReturnID = params.id
-			session.positionsReturnAction = actionName 
-			session.positionsReturnController = controllerName
-			session.positionsReturnID = params.id
-            return [taskInstance:task.instance]
-        }
+		fcService.printstart "List results"
+		if (session?.lastContest) {
+	        def task = fcService.getTask(params) 
+	        if (!task.instance) {
+	            flash.message = task.message
+				fcService.printdone task.message
+	            redirect(controller:"contest",action:"tasks")
+	        } else {
+				SetLimit()
+	            session.lastTaskResults = task.instance.id
+				// save return action
+				session.taskReturnAction = actionName 
+				session.taskReturnController = controllerName
+				session.taskReturnID = params.id
+				session.crewReturnAction = actionName
+				session.crewReturnController = controllerName
+				session.crewReturnID = params.id
+				session.aircraftReturnAction = actionName
+				session.aircraftReturnController = controllerName
+				session.aircraftReturnID = params.id
+				session.positionsReturnAction = actionName 
+				session.positionsReturnController = controllerName
+				session.positionsReturnID = params.id
+				fcService.printdone ""
+	            return [taskInstance:task.instance]
+	        }
+		} else {
+			fcService.printdone ""
+			redirect(controller:'contest',action:'start')
+		}
     }
 
 	def selectall = {
@@ -198,12 +227,8 @@ class TaskController {
         	flash.message = task.message
         	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
-        } else if (task.testinstanceids?.size > 0) {
-			long i = 0
-			task.testinstanceids.each {
-				i += it
-			}
-        	redirect(action:selectplanningtesttask,id:task.instance.id,params:[testInstanceIDs:task.testinstanceids,x:i]) // BUG: Map testInstanceIDs in Map params wird nicht ohne x ausgetauscht
+        } else if (task.testinstanceids?.size > 1) {
+        	redirect(action:selectplanningtesttask,id:task.instance.id,params:[testInstanceIDs:task.testinstanceids])
         } else {
         	redirect(action:listplanning,id:task.instance.id)
         }
@@ -239,12 +264,8 @@ class TaskController {
         	flash.message = task.message
            	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
-        } else if (task.testinstanceids?.size > 0) {
-			long i = 0
-			task.testinstanceids.each {
-				i += it
-			}
-        	redirect(action:selectflighttestwind,id:task.instance.id,params:[testInstanceIDs:task.testinstanceids,x:i]) // BUG: Map testInstanceIDs in Map params wird nicht ohne x ausgetauscht
+        } else if (task.testinstanceids?.size > 1) {
+        	redirect(action:selectflighttestwind,id:task.instance.id,params:[testInstanceIDs:task.testinstanceids])
         } else {
         	redirect(action:listplanning,id:task.instance.id)
         }

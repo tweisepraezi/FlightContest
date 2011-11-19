@@ -12,9 +12,9 @@ const compatibelDigits = 1; // Anzahl der Stellen für Datenbankkompatibilität
 const DBVersion = '1.0.0';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 0.6.0
-AppVersion=0.6.0
-VersionInfoVersion=0.6.0
+AppVerName=Flight Contest 0.6.1
+AppVersion=0.6.1
+VersionInfoVersion=0.6.1
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=file:\\
@@ -53,6 +53,7 @@ Source: "K:\Projects\EPJ\PJ18\workspace\fc\target\fc-0.1.war";                  
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\readme.txt";                  DestDir: "{app}";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\odbc.vbs";                    DestDir: "{app}";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\AFLOS.mdb";                   DestDir: "C:\AFLOS\AFLOS_System";
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\AFLOS.mdb";                   DestDir: "{app}\samples";        DestName: "AFLOS-FCTest1.mdb";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\FC-CrewList-Sample.xls";      DestDir: "{app}\samples";
 Source: "K:\Projects\EPJ\PJ18\workspace\fc\web-app\licenses\GPL_License.txt";   DestDir: "{app}";                AfterInstall: MyAfterInstall;
 

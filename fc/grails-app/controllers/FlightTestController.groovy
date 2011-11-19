@@ -87,6 +87,7 @@ class FlightTestController {
         	flash.message = flighttest.message
         	redirect(controller:"contest",action:"tasks")
         } else if (flighttest.notdeleted) {
+			flash.error = true
         	flash.message = flighttest.message
             redirect(action:show,id:params.id)
         } else {

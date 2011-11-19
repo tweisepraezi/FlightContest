@@ -8,11 +8,14 @@ class RouteController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def list = {
-        if (session.lastContest) {
+		fcService.printstart "List routes"
+        if (session?.lastContest) {
             def routeList = Route.findAllByContest(session.lastContest)
+			fcService.printdone "last contest"
             return [routeInstanceList:routeList]
         }
-        return [:]
+		fcService.printdone ""
+        redirect(controller:'contest',action:'start')
     }
 
     def show = {

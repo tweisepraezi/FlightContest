@@ -40,6 +40,9 @@
                         <input type="hidden" name="id" value="${flightTestWindInstance?.id}" />
                         <input type="hidden" name="version" value="${flightTestWindInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:if test="${!Test.findByFlighttestwind(flightTestWindInstance)}">
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>

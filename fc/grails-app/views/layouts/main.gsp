@@ -23,7 +23,7 @@
         <div class="container_12">
             <div class="grid">
                 <h1 id="branding">
-                    <g:if test="${session.lastContest}">
+                    <g:if test="${session?.lastContest}">
                         ${session.lastContest.name()}
                     </g:if>
                     <g:else>

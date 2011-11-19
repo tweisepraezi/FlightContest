@@ -15,12 +15,6 @@ class TestController
 			session.aircraftReturnAction = actionName
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
-			// assign return action
-			if (session.positionsReturnAction) {
-				return [testInstance:test.instance,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID]
-			} else {
-            	return [testInstance:test.instance]
-			}
             return [testInstance:test.instance]
         } else {
             flash.message = test.message
@@ -38,12 +32,6 @@ class TestController
 			session.aircraftReturnAction = actionName
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
-			// assign return action
-			if (session.positionsReturnAction) {
-				return [testInstance:test.instance,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID]
-			} else {
-            	return [testInstance:test.instance]
-			}
         	return [testInstance:test.instance]
         } else {
             flash.message = test.message
@@ -87,12 +75,7 @@ class TestController
 			session.crewReturnAction = actionName 
 			session.crewReturnController = controllerName
 			session.crewReturnID = params.id
-			// assign return action
-			if (session.positionsReturnAction) {
-				return [testInstance:test.instance,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID]
-			} else {
-            	return [testInstance:test.instance]
-			}
+           	return [testInstance:test.instance]
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startplanning")
@@ -449,12 +432,7 @@ class TestController
 			session.aircraftReturnAction = actionName
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
-			// assign return action
-			if (session.positionsReturnAction) {
-				return [testInstance:test.instance,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID]
-			} else {
-            	return [testInstance:test.instance]
-			}
+           	return [testInstance:test.instance]
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -491,12 +469,7 @@ class TestController
 	}
 	
     def cancel = {
-		// process return action
-		if (params.positionsReturnAction) {
-			redirect(action:params.positionsReturnAction,controller:params.positionsReturnController,id:params.positionsReturnID)
-		} else {
-        	redirect(controller:"task",action:'startresults')
-		}
+       	redirect(controller:"task",action:'startresults')
     }
 	
 	Map GetPrintParams() {

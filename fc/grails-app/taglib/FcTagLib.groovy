@@ -20,7 +20,7 @@ class FcTagLib
         outln """<div class="clear"></div>"""
         outln """<div class="grid">"""
         outln """  <ul class="nav main">"""
-        if (session.lastContest) {
+        if (session?.lastContest) {
 	        outln """    <li> <a class="${if (p.conteststart) active(p.controller,'contest')}" href="${p.link}/../../contest/start">${message(code:'fc.contest')}</a> </li>"""
             outln """    <li> <a class="${active(p.controller,'route')}" href="${p.link}/../../route/list">${message(code:'fc.route.list')}</a> </li>"""
 	        outln """    <li> <a class="${active(p.controller,'crew')}" href="${p.link}/../../crew/list">${message(code:'fc.crew.list')}</a> </li>"""
@@ -72,10 +72,10 @@ class FcTagLib
 					}
 		        }
 		        if (p.show) {
-		            outln """    <li> <a href="${p.link}/../../${p.controller}/show/${p.id}">${p.show}</a> </li"""
+		            outln """    <li> <a href="${p.link}/../../${p.controller}/show/${p.id}">${p.show}</a> </li>"""
 		        }
 		        if (p.edit) {
-		        	outln """    <li> <a href="${p.link}/../../${p.controller}/edit/${p.id}">${p.edit}</a> </li"""
+		        	outln """    <li> <a href="${p.link}/../../${p.controller}/edit/${p.id}">${p.edit}</a> </li>"""
 		        }
 		        if (p.printaction) {
 		            outln """    <li> <a href="${p.link}/../../${p.controller}/print">${p.printaction}</a> </li>"""

@@ -43,7 +43,7 @@ class PlanningTestTaskController {
         def planningtesttask = fcService.updatePlanningTestTask(params) 
         if (planningtesttask.saved) {
         	flash.message = planningtesttask.message
-        	redirect(action:show,id:planningtesttask.instance.id)
+        	redirect(controller:"planningTest",action:show,id:planningtesttask.planningtestid)
         } else if (planningtesttask.instance) {
         	render(view:'edit',model:[planningTestTaskInstance:planningtesttask.instance,contestInstance:session.lastContest])
         } else {
@@ -83,8 +83,9 @@ class PlanningTestTaskController {
         	flash.message = planningtesttask.message
         	redirect(controller:"planningTest",action:show,id:planningtesttask.planningtestid)
         } else if (planningtesttask.notdeleted) {
+			flash.error = true
         	flash.message = planningtesttask.message
-        	redirect(action:show,id:params.id)
+        	redirect(action:edit,id:params.id)
         } else {
         	flash.message = planningtesttask.message
         	redirect(controller:"contest",action:"tasks")

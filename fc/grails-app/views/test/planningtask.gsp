@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.test.planningtask')} ${testInstance.viewpos+1}</h2>
                 <div class="block" id="forms" >
-                    <g:form method="post" params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
+                    <g:form method="post" >
                         <table>
                             <tbody>
                                 <tr>

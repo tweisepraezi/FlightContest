@@ -521,10 +521,10 @@ class FcService
 
         // Multiple PlanningTestTasks?  
         if (PlanningTestTask.countByPlanningtest(task.instance.planningtest) > 1) {
-            List test_instance_ids = []
+            List test_instance_ids = [""]
             Test.findAllByTask(task.instance).each { Test test_instance ->
                 if (params["selectedTestID${test_instance.id}"] == "on") {
-                    test_instance_ids += test_instance.id
+                    test_instance_ids += test_instance.id.toString()
                 }
             }
             task.testinstanceids = test_instance_ids
@@ -602,10 +602,10 @@ class FcService
 
         // Multiple FlightTestWinds?  
         if (FlightTestWind.countByFlighttest(task.instance.flighttest) > 1) {
-            List test_instance_ids = []
+            List test_instance_ids = [""]
             Test.findAllByTask(task.instance).each { Test test_instance ->
                 if (params["selectedTestID${test_instance.id}"] == "on") {
-                    test_instance_ids += test_instance.id
+                    test_instance_ids += test_instance.id.toString()
                 }
             }
             task.testinstanceids = test_instance_ids
@@ -614,11 +614,11 @@ class FcService
         }
 
         // set single FlightTestWind to all selected Tests
-        FlightTestWind flight_test_wind = FlightTestWind.findByFlighttest(task.instance.flighttest)
+        FlightTestWind flighttestwind_instance = FlightTestWind.findByFlighttest(task.instance.flighttest)
         Test.findAllByTask(task.instance).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
 				if (!test_instance.crew.disabled) {
-					setflighttestwindTest(test_instance, task.instance, flight_test_wind)
+					setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
 				}
             }
         }
@@ -633,16 +633,16 @@ class FcService
 		printstart "setflighttestwindTask"
         Map task = getTask(params) 
         if (task.instance) {
-            FlightTestWind flight_test_wind = FlightTestWind.get(params.flighttestwind.id)
+            FlightTestWind flighttestwind_instance = FlightTestWind.get(params.flighttestwind.id)
             params.testInstanceIDs.each { String test_id ->
                 if (test_id) {
                     Test test_instance = Test.get(test_id)
 					if (!test_instance.crew.disabled) {
-						setflighttestwindTest(test_instance, task.instance, flight_test_wind)
+						setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
 					}
                 }
             }
-            task.message = getMsg('fc.task.selectflighttestwind.assigned',[flight_test_wind.wind.name()])
+            task.message = getMsg('fc.task.selectflighttestwind.assigned',[flighttestwind_instance.wind.name()])
         }
 		printdone ""
         return task
@@ -3642,44 +3642,57 @@ class FcService
     //--------------------------------------------------------------------------
     Map getFlightTest(Map params)
     {
-        FlightTest flightTestInstance = FlightTest.get(params.id)
+        FlightTest flighttest_instance = FlightTest.get(params.id)
 
-        if (!flightTestInstance) {
+        if (!flighttest_instance) {
             return ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]
         }
         
-        return ['instance':flightTestInstance]
+        return ['instance':flighttest_instance]
     }
 
     //--------------------------------------------------------------------------
     Map updateFlightTest(Map params)
     {
-        FlightTest flightTestInstance = FlightTest.get(params.id)
+		printstart "updateFlightTest"
+		
+        FlightTest flighttest_instance = FlightTest.get(params.id)
         
-        if (flightTestInstance) {
+        if (flighttest_instance) {
 
             if(params.version) {
                 long version = params.version.toLong()
-                if(flightTestInstance.version > version) {
-                    flightTestInstance.errors.rejectValue("version", "flightTest.optimistic.locking.failure", getMsg('fc.notupdated'))
-                    return ['instance':flightTestInstance]
+                if(flighttest_instance.version > version) {
+                    flighttest_instance.errors.rejectValue("version", "flightTest.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':flighttest_instance]
                 }
             }
+
+			Route old_route = flighttest_instance.route             
+            flighttest_instance.properties = params
+
+			if (old_route != flighttest_instance.route) {
+		        Test.findAllByTask(flighttest_instance.task).each { Test test_instance ->
+		        	test_instance.timeCalculated = false
+					test_instance.ResetFlightTestResults()
+					test_instance.CalculateTestPenalties()
+		            test_instance.save()
+		        }
+				println "Calculated times have been reset." 
+			}
             
-            flightTestInstance.properties = params
-            
-	        Test.findAllByTask(flightTestInstance.task).each { Test test_instance ->
-	        	test_instance.timeCalculated = false
-	            test_instance.save()
-	        }
-            
-            if(!flightTestInstance.hasErrors() && flightTestInstance.save()) {
-                return ['instance':flightTestInstance,'saved':true,'message':getMsg('fc.updated',["${flightTestInstance.name()}"])]
+            if(!flighttest_instance.hasErrors() && flighttest_instance.save()) {
+                Map ret = ['instance':flighttest_instance,'saved':true,'message':getMsg('fc.updated',["${flighttest_instance.name()}"])]
+				printdone ret.message
+				return ret
             } else {
-                return ['instance':flightTestInstance]
+				printerror ""
+                return ['instance':flighttest_instance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]
+			printerror ret.message
+			return ret
         }
     }
     
@@ -3692,66 +3705,77 @@ class FcService
                     'taskid':params.task.id]
         }
          
-        FlightTest flightTestInstance = new FlightTest()
-        flightTestInstance.properties = params
-        return ['instance':flightTestInstance]
+        FlightTest flighttest_instance = new FlightTest()
+        flighttest_instance.properties = params
+        return ['instance':flighttest_instance]
     }
 
     
     //--------------------------------------------------------------------------
     Map saveFlightTest(Map params)
     {
-        FlightTest flightTestInstance = new FlightTest(params)
+        FlightTest flighttest_instance = new FlightTest(params)
         
-        flightTestInstance.task = Task.get( params.taskid )
+        flighttest_instance.task = Task.get( params.taskid )
         
-        if (!flightTestInstance.direction) {
-        	flightTestInstance.direction = 0
+        if (!flighttest_instance.direction) {
+        	flighttest_instance.direction = 0
         }
-        if (!flightTestInstance.speed) {
-        	flightTestInstance.speed = 0
+        if (!flighttest_instance.speed) {
+        	flighttest_instance.speed = 0
         }
         
-        if(!flightTestInstance.hasErrors() && flightTestInstance.save()) {
+        if(!flighttest_instance.hasErrors() && flighttest_instance.save()) {
 
             Task task_instance = Task.get( params.taskid )
-            task_instance.flighttest = flightTestInstance
+            task_instance.flighttest = flighttest_instance
             task_instance.save()
 
-            Wind windInstance = new Wind(direction:flightTestInstance.direction,speed:flightTestInstance.speed)
+            Wind windInstance = new Wind(direction:flighttest_instance.direction,speed:flighttest_instance.speed)
             windInstance.save()
             
-            FlightTestWind flight_test_wind = new FlightTestWind(params)
-            flight_test_wind.wind = windInstance
-            flight_test_wind.flighttest = flightTestInstance
-            flight_test_wind.save()
+            FlightTestWind flighttestwind_instance = new FlightTestWind(params)
+            flighttestwind_instance.wind = windInstance
+            flighttestwind_instance.flighttest = flighttest_instance
+            flighttestwind_instance.save()
 
-            return ['instance':flightTestInstance,'saved':true,'message':getMsg('fc.created',["${flightTestInstance.name()}"]),
+            return ['instance':flighttest_instance,'saved':true,'message':getMsg('fc.created',["${flighttest_instance.name()}"]),
                     'fromlistplanning':params.fromlistplanning,'fromtask':params.fromtask,
                     'taskid':task_instance.id]
         } else {
-            return ['instance':flightTestInstance]
+            return ['instance':flighttest_instance]
         }
     }
     
     //--------------------------------------------------------------------------
     Map deleteFlightTest(Map params)
     {
-        FlightTest flightTestInstance = FlightTest.get(params.id)
+        FlightTest flighttest_instance = FlightTest.get(params.id)
         
-        if (flightTestInstance) {
-            try {
-                Task task_instance = Task.get( flightTestInstance.task.id )
-                task_instance.flighttest = null
-                task_instance.save()
-                
-                flightTestInstance.delete()
-                
-                return ['deleted':true,'message':getMsg('fc.deleted',["${flightTestInstance.name()}"])]
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.flighttest'),params.id])]
-            }
+        if (flighttest_instance) {
+			boolean flighttest_used = false
+			for (FlightTestWind fighttestwind_instance in flighttest_instance.flighttestwinds) {
+				if (Test.findByFlighttestwind(fighttestwind_instance)) {
+					flighttest_used = true
+					break
+				}
+			}
+			if (!flighttest_used) {
+	            try {
+	                Task task_instance = Task.get( flighttest_instance.task.id )
+	                task_instance.flighttest = null
+	                task_instance.save()
+	                
+	                flighttest_instance.delete()
+	                
+	                return ['deleted':true,'message':getMsg('fc.deleted',["${flighttest_instance.name()}"])]
+	            }
+	            catch(org.springframework.dao.DataIntegrityViolationException e) {
+	                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.flighttest'),params.id])]
+	            }
+			} else {
+				return ['notdeleted':true,'message':getMsg('fc.flighttest.notdeleted')]
+			}
         } else {
             return ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]
         }
@@ -3760,93 +3784,117 @@ class FcService
     //--------------------------------------------------------------------------
     Map getFlightTestWind(Map params)
     {
-        FlightTestWind flight_test_wind = FlightTestWind.get(params.id)
+        FlightTestWind flighttestwind_instance = FlightTestWind.get(params.id)
 
-        if (!flight_test_wind) {
+        if (!flighttestwind_instance) {
             return ['message':getMsg('fc.notfound',[getMsg('fc.flighttestwind'),params.id])]
         }
         
-        flight_test_wind.direction = flight_test_wind.wind.direction
-        flight_test_wind.speed = flight_test_wind.wind.speed
+        flighttestwind_instance.direction = flighttestwind_instance.wind.direction
+        flighttestwind_instance.speed = flighttestwind_instance.wind.speed
         
-        return ['instance':flight_test_wind]
+        return ['instance':flighttestwind_instance]
     }
 
     //--------------------------------------------------------------------------
     Map updateFlightTestWind(Map params)
     {
-        FlightTestWind flight_test_wind = FlightTestWind.get(params.id)
+		printstart "updateFlightTestWind"
+		
+        FlightTestWind flighttestwind_instance = FlightTestWind.get(params.id)
         
-        if (flight_test_wind) {
+        if (flighttestwind_instance) {
 
             if(params.version) {
                 long version = params.version.toLong()
-                if(flight_test_wind.version > version) {
-                    flight_test_wind.errors.rejectValue("version", "flightTestWind.optimistic.locking.failure", getMsg('fc.notupdated'))
-                    return ['instance':flight_test_wind]
+                if(flighttestwind_instance.version > version) {
+                    flighttestwind_instance.errors.rejectValue("version", "flightTestWind.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':flighttestwind_instance]
                 }
             }
             
-            flight_test_wind.properties = params
+			BigDecimal old_direction = flighttestwind_instance.wind.direction
+			BigDecimal old_speed = flighttestwind_instance.wind.speed  
+            flighttestwind_instance.properties = params
 
-            flight_test_wind.wind.direction = flight_test_wind.direction
-            flight_test_wind.wind.speed = flight_test_wind.speed
+            flighttestwind_instance.wind.direction = flighttestwind_instance.direction
+            flighttestwind_instance.wind.speed = flighttestwind_instance.speed
             
-            if(!flight_test_wind.hasErrors() && flight_test_wind.save()) {
-                return ['instance':flight_test_wind,'saved':true,'message':getMsg('fc.updated',["${flight_test_wind.name()}"])]
+			if (old_direction != flighttestwind_instance.wind.direction || old_speed != flighttestwind_instance.wind.speed) {
+		        Test.findAllByTask(flighttestwind_instance.flighttest.task).each { Test test_instance ->
+		        	test_instance.timeCalculated = false
+					test_instance.ResetFlightTestResults()
+					test_instance.CalculateTestPenalties()
+		            test_instance.save()
+		        }
+				println "Calculated times have been reset." 
+			}
+			
+            if(!flighttestwind_instance.hasErrors() && flighttestwind_instance.save()) {
+                Map ret = ['instance':flighttestwind_instance,'saved':true,'message':getMsg('fc.updated',["${flighttestwind_instance.name()}"]),
+						   'flighttestid':flighttestwind_instance.flighttest.id]
+				printdone ret.message
+				return ret
             } else {
-                return ['instance':flight_test_wind]
+				printerror ""
+                return ['instance':flighttestwind_instance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.flighttestwind'),params.id])]
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.flighttestwind'),params.id])]
+			printerror ret.message
+			return ret
         }
     }
     
     //--------------------------------------------------------------------------
     Map createFlightTestWind(Map params)
     {
-        FlightTestWind flight_test_wind = new FlightTestWind()
-        flight_test_wind.properties = params
-        return ['instance':flight_test_wind]
+        FlightTestWind flighttestwind_instance = new FlightTestWind()
+        flighttestwind_instance.properties = params
+        return ['instance':flighttestwind_instance]
     }
 
     
     //--------------------------------------------------------------------------
     Map saveFlightTestWind(Map params)
     {
-        FlightTestWind flight_test_wind = new FlightTestWind(params)
+        FlightTestWind flighttestwind_instance = new FlightTestWind(params)
         
-        flight_test_wind.flighttest = FlightTest.get(params.flighttestid)
+        flighttestwind_instance.flighttest = FlightTest.get(params.flighttestid)
         
         Wind windInstance = new Wind(params)
         if(!windInstance.hasErrors() && windInstance.save()) {
-            flight_test_wind.wind = windInstance
+            flighttestwind_instance.wind = windInstance
         }
         
-        if(!flight_test_wind.hasErrors() && flight_test_wind.save()) {
-            return ['instance':flight_test_wind,'saved':true,'message':getMsg('fc.created',["${flight_test_wind.name()}"]),
+        if(!flighttestwind_instance.hasErrors() && flighttestwind_instance.save()) {
+            return ['instance':flighttestwind_instance,'saved':true,'message':getMsg('fc.created',["${flighttestwind_instance.name()}"]),
                     'fromlistplanning':params.fromlistplanning,
-                    'taskid':flight_test_wind.flighttest.task.id,
-                    'flighttestid':flight_test_wind.flighttest.id]
+                    'taskid':flighttestwind_instance.flighttest.task.id,
+                    'flighttestid':flighttestwind_instance.flighttest.id]
         } else {
-            return ['instance':flight_test_wind]
+            return ['instance':flighttestwind_instance]
         }
     }
     
     //--------------------------------------------------------------------------
     Map deleteFlightTestWind(Map params)
     {
-        FlightTestWind flight_test_wind = FlightTestWind.get(params.id)
+        FlightTestWind flighttestwind_instance = FlightTestWind.get(params.id)
         
-        if (flight_test_wind) {
-            try {
-                flight_test_wind.delete()
-                return ['deleted':true,'message':getMsg('fc.deleted',["${flight_test_wind.name()}"]),
-                        'flighttestid':flight_test_wind.flighttest.id]
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.flighttestwind'),params.id])]
-            }
+        if (flighttestwind_instance) {
+			if (!Test.findByFlighttestwind(flighttestwind_instance)) {
+	            try {
+	                flighttestwind_instance.delete()
+	                return ['deleted':true,'message':getMsg('fc.deleted',["${flighttestwind_instance.name()}"]),
+	                        'flighttestid':flighttestwind_instance.flighttest.id]
+	            }
+	            catch(org.springframework.dao.DataIntegrityViolationException e) {
+	                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.flighttestwind'),params.id])]
+	            }
+			} else {
+				return ['notdeleted':true,'message':getMsg('fc.flighttestwind.notdeleted')]
+			}
         } else {
             return ['message':getMsg('fc.notfound',[getMsg('fc.flighttestwind'),params.id])]
         }
@@ -3855,38 +3903,45 @@ class FcService
     //--------------------------------------------------------------------------
     Map getPlanningTest(Map params)
     {
-        PlanningTest planningTestInstance = PlanningTest.get(params.id)
+        PlanningTest planningtest_instance = PlanningTest.get(params.id)
 
-        if (!planningTestInstance) {
+        if (!planningtest_instance) {
             return ['message':getMsg('fc.notfound',[getMsg('fc.planningtest'),params.id])]
         }
         
-        return ['instance':planningTestInstance]
+        return ['instance':planningtest_instance]
     }
 
     //--------------------------------------------------------------------------
     Map updatePlanningTest(Map params)
     {
-        PlanningTest planningTestInstance = PlanningTest.get(params.id)
+		printstart "updatePlanningTest"
+		
+        PlanningTest planningtest_instance = PlanningTest.get(params.id)
         
-        if (planningTestInstance) {
+        if (planningtest_instance) {
 
             if(params.version) {
                 long version = params.version.toLong()
-                if(planningTestInstance.version > version) {
-                    planningTestInstance.errors.rejectValue("version", "planningTest.optimistic.locking.failure", getMsg('fc.notupdated'))
-                    return ['instance':planningTestInstance]
+                if(planningtest_instance.version > version) {
+                    planningtest_instance.errors.rejectValue("version", "planningTest.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':planningtest_instance]
                 }
             }
             
-            planningTestInstance.properties = params
-            if(!planningTestInstance.hasErrors() && planningTestInstance.save()) {
-                return ['instance':planningTestInstance,'saved':true,'message':getMsg('fc.updated',["${planningTestInstance.name()}"])]
+            planningtest_instance.properties = params
+            if(!planningtest_instance.hasErrors() && planningtest_instance.save()) {
+                Map ret = ['instance':planningtest_instance,'saved':true,'message':getMsg('fc.updated',["${planningtest_instance.name()}"])]
+				printdone ret.message
+				return ret
             } else {
-                return ['instance':planningTestInstance]
+				printerror ""
+                return ['instance':planningtest_instance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.planningtest'),params.id])]
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.planningtest'),params.id])]
+			printerror ret.message
+			return ret
         }
     }
     
@@ -3899,73 +3954,84 @@ class FcService
                     'taskid':params.task.id]
         }
          
-        PlanningTest planningTestInstance = new PlanningTest()
-        planningTestInstance.properties = params
-        return ['instance':planningTestInstance]
+        PlanningTest planningtest_instance = new PlanningTest()
+        planningtest_instance.properties = params
+        return ['instance':planningtest_instance]
     }
 
     
     //--------------------------------------------------------------------------
     Map savePlanningTest(Map params)
     {
-        PlanningTest planningTestInstance = new PlanningTest(params)
+        PlanningTest planningtest_instance = new PlanningTest(params)
         
-        planningTestInstance.task = Task.get( params.taskid )
+        planningtest_instance.task = Task.get( params.taskid )
         
-        if (!planningTestInstance.direction) {
-            planningTestInstance.direction = 0
+        if (!planningtest_instance.direction) {
+            planningtest_instance.direction = 0
         }
-        if (!planningTestInstance.speed) {
-            planningTestInstance.speed = 0
+        if (!planningtest_instance.speed) {
+            planningtest_instance.speed = 0
         }
         
-        if(!planningTestInstance.hasErrors() && planningTestInstance.save()) {
+        if(!planningtest_instance.hasErrors() && planningtest_instance.save()) {
 
             if (params.route) {
-                Wind windInstance = new Wind(direction:planningTestInstance.direction,speed:planningTestInstance.speed)
+                Wind windInstance = new Wind(direction:planningtest_instance.direction,speed:planningtest_instance.speed)
                 windInstance.save()
                 
                 PlanningTestTask planningtesttask_instance = new PlanningTestTask(params)
-                planningtesttask_instance.planningtest = planningTestInstance
+                planningtesttask_instance.planningtest = planningtest_instance
                 planningtesttask_instance.title = params.taskTitle
                 planningtesttask_instance.idTitle = 1
                 planningtesttask_instance.wind = windInstance
                 if (planningtesttask_instance.hasErrors() || !planningtesttask_instance.save()) {
-                    planningTestInstance.delete()
-                    return ['instance':planningTestInstance]
+                    planningtest_instance.delete()
+                    return ['instance':planningtest_instance]
                 }
             }
             
             Task task_instance = Task.get( params.taskid )
-            task_instance.planningtest = planningTestInstance
+            task_instance.planningtest = planningtest_instance
             task_instance.save()
             
-            return ['instance':planningTestInstance,'saved':true,'message':getMsg('fc.created',["${planningTestInstance.name()}"]),
+            return ['instance':planningtest_instance,'saved':true,'message':getMsg('fc.created',["${planningtest_instance.name()}"]),
                     'fromlistplanning':params.fromlistplanning,'fromtask':params.fromtask,
                     'taskid':task_instance.id]
         } else {
-            return ['instance':planningTestInstance]
+            return ['instance':planningtest_instance]
         }
     }
     
     //--------------------------------------------------------------------------
     Map deletePlanningTest(Map params)
     {
-        PlanningTest planningTestInstance = PlanningTest.get(params.id)
+        PlanningTest planningtest_instance = PlanningTest.get(params.id)
         
-        if (planningTestInstance) {
-            try {
-                Task task_instance = Task.get( planningTestInstance.task.id )
-                task_instance.planningtest = null
-                task_instance.save()
-                
-                planningTestInstance.delete()
-                
-                return ['deleted':true,'message':getMsg('fc.deleted',["${planningTestInstance.name()}"])]
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.planningtest'),params.id])]
-            }
+        if (planningtest_instance) {
+			boolean planningtest_used = false
+			for (PlanningTestTask planningtesttask_instance in planningtest_instance.planningtesttasks) {
+				if (Test.findByPlanningtesttask(planningtesttask_instance)) {
+					planningtest_used = true
+					break
+				}
+			}
+			if (!planningtest_used) {			
+	            try {
+	                Task task_instance = Task.get( planningtest_instance.task.id )
+	                task_instance.planningtest = null
+	                task_instance.save()
+	                
+	                planningtest_instance.delete()
+	                
+	                return ['deleted':true,'message':getMsg('fc.deleted',["${planningtest_instance.name()}"])]
+	            }
+	            catch(org.springframework.dao.DataIntegrityViolationException e) {
+	                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.planningtest'),params.id])]
+	            }
+			} else {
+				return ['notdeleted':true,'message':getMsg('fc.planningtest.notdeleted')]
+			}
         } else {
             return ['message':getMsg('fc.notfound',[getMsg('fc.planningtest'),params.id])]
         }
@@ -3989,6 +4055,8 @@ class FcService
     //--------------------------------------------------------------------------
     Map updatePlanningTestTask(Map params)
     {
+		printstart "updatePlanningTestTask"
+		
     	PlanningTestTask planningtesttask_instance = PlanningTestTask.get(params.id)
         
         if (planningtesttask_instance) {
@@ -4001,6 +4069,9 @@ class FcService
                 }
             }
             
+			Route old_route = planningtesttask_instance.route
+			BigDecimal old_direction = planningtesttask_instance.wind.direction 
+			BigDecimal old_speed = planningtesttask_instance.wind.speed
             planningtesttask_instance.properties = params
             
             if (!planningtesttask_instance.direction) {
@@ -4013,17 +4084,29 @@ class FcService
             planningtesttask_instance.wind.direction = planningtesttask_instance.direction
             planningtesttask_instance.wind.speed = planningtesttask_instance.speed
 
-            Test.findAllByTask(planningtesttask_instance.planningtest.task).each { Test test_instance ->
-                calulateTestLegPlannings(test_instance)
-            }
+			if (old_route != planningtesttask_instance.route || old_direction != planningtesttask_instance.wind.direction || old_speed != planningtesttask_instance.wind.speed) {
+	            Test.findAllByTask(planningtesttask_instance.planningtest.task).each { Test test_instance ->
+	                calulateTestLegPlannings(test_instance)
+					test_instance.ResetPlanningTestResults()
+					test_instance.CalculateTestPenalties()
+	                test_instance.save()
+	            }
+				println "TestLegPlannings have been recalculated." 
+			}
 
             if(!planningtesttask_instance.hasErrors() && planningtesttask_instance.save()) {
-                return ['instance':planningtesttask_instance,'saved':true,'message':getMsg('fc.updated',["${planningtesttask_instance.name()}"])]
+                Map ret = ['instance':planningtesttask_instance,'saved':true,'message':getMsg('fc.updated',["${planningtesttask_instance.name()}"]),
+					       'planningtestid':planningtesttask_instance.planningtest.id]
+				printdone ret.message
+				return ret
             } else {
+				printerror ""
                 return ['instance':planningtesttask_instance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.planningtesttask'),params.id])]
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.planningtesttask'),params.id])]
+			printerror ret.message
+			return ret
         }
     }
     
@@ -4076,21 +4159,25 @@ class FcService
         PlanningTestTask planningtesttask_instance = PlanningTestTask.get(params.id)
         
         if (planningtesttask_instance) {
-            try {
-                PlanningTest planningTestInstance = planningtesttask_instance.planningtest 
-                    
-                planningtesttask_instance.delete()
-
-                PlanningTestTask.findAllByPlanningtest(planningTestInstance).eachWithIndex { PlanningTestTask planningtesttask_instance2, int index  -> 
-                    planningtesttask_instance2.idTitle = index + 1
-                }
-                
-                return ['deleted':true,'message':getMsg('fc.deleted',["${planningtesttask_instance.name()}"]),
-                        'planningtestid':planningtesttask_instance.planningtest.id]
-            }
-            catch(org.springframework.dao.DataIntegrityViolationException e) {
-                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.planningtesttask'),params.id])]
-            }
+			if (!Test.findByPlanningtesttask(planningtesttask_instance)) {
+				try {
+	                PlanningTest planningtest_instance = planningtesttask_instance.planningtest 
+	                    
+	                planningtesttask_instance.delete()
+	
+	                PlanningTestTask.findAllByPlanningtest(planningtest_instance).eachWithIndex { PlanningTestTask planningtesttask_instance2, int index  -> 
+	                    planningtesttask_instance2.idTitle = index + 1
+	                }
+	                
+	                return ['deleted':true,'message':getMsg('fc.deleted',["${planningtesttask_instance.name()}"]),
+	                        'planningtestid':planningtesttask_instance.planningtest.id]
+	            }
+	            catch(org.springframework.dao.DataIntegrityViolationException e) {
+	                return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.planningtesttask'),params.id])]
+	            }
+			} else {
+				return ['notdeleted':true,'message':getMsg('fc.planningtesttask.notdeleted')]
+			}
         } else {
             return ['message':getMsg('fc.notfound',[getMsg('fc.planningtesttask'),params.id])]
         }
