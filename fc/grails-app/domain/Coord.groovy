@@ -185,8 +185,6 @@ class Coord
 		this.save()
 	}
 	
-	def messageSource
-    
     String title()
 	{
 		switch (type) {
@@ -196,7 +194,17 @@ class Coord
 			default:
 				return type.title
 		}
-		
+	}
+	
+    String titleCode()
+	{
+		switch (type) {
+			case CoordType.TP:
+            case CoordType.SECRET:
+				return "${getMsg(type.code)}${titleNumber}"
+			default:
+				return getMsg(type.code)
+		}
 	}
 	
     String titleWithRatio()
@@ -206,13 +214,12 @@ class Coord
                 return "${type.title}${titleNumber}"
             case CoordType.SECRET:
                 if (secretLegRatio > 0) {
-                    return " ${type.title}${titleNumber} (${FcMath.RatioStr(100*secretLegRatio)}${messageSource.getMessage('fc.percent', null, null)})"
+                    return " ${type.title}${titleNumber} (${FcMath.RatioStr(100*secretLegRatio)}${getMsg('fc.percent')})"
                 }
                 return "${type.title}${titleNumber}"
             default:
                 return type.title
         }
-        
     }
     
 	BigDecimal latMath()
@@ -227,8 +234,8 @@ class Coord
 	
     String latName()
     {
-        //return "${latGrad}${messageSource.getMessage('fc.grad', null, null)}${latMinute}${messageSource.getMessage('fc.min', null, null)}${latDirection}"
-    	return "${latDirection} ${FcMath.GradStr(latGrad)}${messageSource.getMessage('fc.grad', null, null)} ${FcMath.MinuteStr(latMinute)}${messageSource.getMessage('fc.min', null, null)}"
+        //return "${latGrad}${getMsg('fc.grad')}${latMinute}${getMsg('fc.min')}${latDirection}"
+    	return "${latDirection} ${FcMath.GradStr(latGrad)}${getMsg('fc.grad')} ${FcMath.MinuteStr(latMinute)}${getMsg('fc.min')}"
     }
 
 	BigDecimal lonMath()
@@ -243,8 +250,8 @@ class Coord
 	
     String lonName()
     {
-        //return "${lonGrad}${messageSource.getMessage('fc.grad', null, null)}${lonMinute}${messageSource.getMessage('fc.min', null, null)}${lonDirection}"
-        return "${lonDirection} ${FcMath.GradStr(lonGrad)}${messageSource.getMessage('fc.grad', null, null)} ${FcMath.MinuteStr(lonMinute)}${messageSource.getMessage('fc.min', null, null)}"
+        //return "${lonGrad}${getMsg('fc.grad')}${lonMinute}${getMsg('fc.min')}${lonDirection}"
+        return "${lonDirection} ${FcMath.GradStr(lonGrad)}${getMsg('fc.grad')} ${FcMath.MinuteStr(lonMinute)}${getMsg('fc.min')}"
     }
 
 	String name()
@@ -259,18 +266,18 @@ class Coord
 
 	String coordTrueTrackName()
 	{
-		return "${FcMath.RouteGradStr(coordTrueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
+		return "${FcMath.RouteGradStr(coordTrueTrack)}${getMsg('fc.grad')}"
 	}
 	
 	String coordMeasureDistanceName()
 	{
-		return  "${FcMath.DistanceMeasureStr(coordMeasureDistance)}${messageSource.getMessage('fc.mm', null, null)}"
+		return  "${FcMath.DistanceMeasureStr(coordMeasureDistance)}${getMsg('fc.mm')}"
 	}
 	
 	String measureDistanceName()
     {
     	if (measureDistance != null) {
-    		return  "${FcMath.DistanceMeasureStr(measureDistance)}${messageSource.getMessage('fc.mm', null, null)}"
+    		return  "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
     	}
     	return "-"
     }
@@ -278,7 +285,7 @@ class Coord
     String measureTrueTrackName()
     {
     	if (measureTrueTrack != null) {
-    		return  "${FcMath.RouteGradStr(measureTrueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
+    		return  "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
     	}
     	return "-"
     }

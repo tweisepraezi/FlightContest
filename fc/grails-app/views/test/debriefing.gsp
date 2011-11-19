@@ -115,7 +115,7 @@
 	                                            <g:if test="${lastCoordResultInstance}">
 	                                                <g:set var="penaltyCoordSummary" value="${penaltyCoordSummary + lastCoordResultInstance.penaltyCoord}" />
 	                                                <tr>
-	                                                    <td>${lastCoordResultInstance.title()}</td>
+	                                                    <td>${lastCoordResultInstance.titleCode()}</td>
 	                                                    <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
 	                                                    <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
 	                                                    <td>${lastCoordResultInstance.penaltyCoord}</td>
@@ -167,7 +167,7 @@
 	                                        <g:if test="${lastCoordResultInstance}">
 	                                            <g:set var="penaltyCoordSummary" value="${penaltyCoordSummary + lastCoordResultInstance.penaltyCoord}" />
 	                                            <tr>
-	                                                <td>${lastCoordResultInstance.title()}</td>
+	                                                <td>${lastCoordResultInstance.titleCode()}</td>
 	                                                <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
 	                                                <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
 	                                                <td>${lastCoordResultInstance.penaltyCoord}</td>
@@ -271,12 +271,12 @@
 	                            </thead>
 	                            <tbody>
 	                                <tr>
-	                                    <td class="detailtitle">${message(code:'fc.observationresults.routephotopenalties')}:</td>
-	                                    <td>${testInstance.observationTestRoutePhotoPenalties} ${message(code:'fc.points')}</td>
-	                                </tr>
-	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.observationresults.turnpointphotopenalties')}:</td>
 	                                    <td>${testInstance.observationTestTurnPointPhotoPenalties} ${message(code:'fc.points')}</td>
+	                                </tr>
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.observationresults.routephotopenalties')}:</td>
+	                                    <td>${testInstance.observationTestRoutePhotoPenalties} ${message(code:'fc.points')}</td>
 	                                </tr>
 	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.observationresults.groundtargetpenalties')}:</td>

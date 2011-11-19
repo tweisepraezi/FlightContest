@@ -32,6 +32,8 @@ class Task
 	boolean timetableModified            = true
 	int timetableVersion                 = 0
 	
+	String disabledCheckPoints           = ""      // list of disabled check point titles, separated with ',', DB-1.1
+	
     static belongsTo = [contest:Contest]
     
 	static hasMany = [tests:Test]
@@ -116,11 +118,9 @@ class Task
 		}
 	}
 	
-	def messageSource
-	
     String idName()
     {
-		return "${messageSource.getMessage('fc.task', null, null)}-${idTitle}"
+		return "${getMsg('fc.task')}-${idTitle}"
     }
     
 	String name()

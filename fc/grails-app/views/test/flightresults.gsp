@@ -67,6 +67,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    	<g:set var="cp" value="${testInstance.task.disabledCheckPoints},"/>
                                         <g:set var="legNo" value="${new Integer(0)}" />
                                         <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance)}">
                                             <g:if test="${coordResultInstance.planProcedureTurn}">
@@ -117,7 +118,7 @@
                                             <g:set var="legNo" value="${legNo+1}" />
                                             <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
                                                 <td><g:coordresult var="${coordResultInstance}" name="${legNo}" link="${createLink(controller:'coordResult',action:'edit')}"/></td>
-                                                <td>${coordResultInstance.title()}</td>
+                                                <td>${coordResultInstance.titleCode()}</td>
                                                 <td>${coordResultInstance.mark}</td>
                                                 <td>${message(code:'fc.test.results.plan')}</td>
                                                 <td>${coordResultInstance.latName()}</td>
@@ -186,7 +187,7 @@
                                                 <td/>
                                                 <td/>
                                                 <td>${message(code:'fc.test.results.penalty')}</td>
-                                                <td/>
+                                               	<td/>
                                                 <td/>
                                                 <g:if test="${!coordResultInstance.resultAltitude}">
                                                     <td/>
@@ -200,7 +201,17 @@
                                                     </g:else>
                                                 </g:else>
                                                 <g:if test="${coordResultInstance.resultEntered}">
-                                                    <td class="points">${coordResultInstance.penaltyCoord} ${message(code:'fc.points')}</td>
+	                                                <g:if test="${cp.contains(coordResultInstance.title()+',')}">
+	                                                	<g:if test="${coordResultInstance.penaltyCoord}">
+	                                                		<td class="points">${message(code:'fc.disabled')} (${coordResultInstance.penaltyCoord})</td>
+	                                                	</g:if>
+	                                                	<g:else>
+	                                                		<td class="points">${message(code:'fc.disabled')}</td>
+	                                                	</g:else>
+	                                                </g:if>
+	                                                <g:else>
+	                                                    <td class="points">${coordResultInstance.penaltyCoord} ${message(code:'fc.points')}</td>
+	                                                </g:else>
                                                     <g:if test="${coordResultInstance.type != CoordType.SP}">
                                                         <td class="points">${coordResultInstance.resultBadCourseNum*coordResultInstance.test.task.contest.flightTestBadCoursePoints} ${message(code:'fc.points')}</td>
                                                     </g:if>

@@ -29,7 +29,7 @@
 
                             <td>
                                 <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}">
-                                    ${coordRouteInstance.title()}
+                                    ${coordRouteInstance.titleCode()}
                                     <br/>                                     
                                 </g:each>
                             </td>

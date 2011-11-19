@@ -51,11 +51,9 @@ class Route
 		}
 	}
 	
-	def messageSource
-	
     String idName()
     {
-		return "${messageSource.getMessage('fc.route', null, null)}-${idTitle}"
+		return "${getMsg('fc.route')}-${idTitle}"
     }
     
 	String name()

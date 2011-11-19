@@ -25,11 +25,9 @@ class PlanningTest
 		planningtesttasks sort:"id"
 	}
 
-	def messageSource
-	
     String idName()
     {
-		return "${messageSource.getMessage('fc.planningtest', null, null)}-${task.idTitle}"
+		return "${getMsg('fc.planningtest')}-${task.idTitle}"
     }
     
 	String name()

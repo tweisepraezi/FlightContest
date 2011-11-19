@@ -2,7 +2,7 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-17.05.2011
+08.06.2011
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -10,8 +10,27 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Fehlerbehebungen und Erweiterungen in dieser Version (0.6.2):
--------------------------------------------------------------
+Erweiterungen in dieser Version (0.6.3):
+----------------------------------------
+- Bei der Navigationsflug-Auswertung können nun Checkpunkte deaktiviert
+  werden (Auswertung -> Deaktivierte Checkpunkte).
+  Nach einer Änderung werden die Strafpunkte neu berechnet und die
+  Platzierung auf 'n/a' (= nicht berechnet) gesetzt.
+- Checkpunkt-Abkürzungen berücksichtigen nun die aktive Anzeige-Sprache. 
+  Entsprechend der Wettbewerbsordnung Navigationsflug 2008 werden 
+  Wendepunkte nun im Deutschen mit 'WP' abgekürzt (vorher 'TP').
+  Unbekannte Zeitkontrollen werden mit 'UZK' abgekürzt (vorher 'Secret').
+- Bei der Planung können nun Mannschaften ans Ende verschoben werden.
+  Beim Verschieben nach unten oder ans Ende werden nur die Planzeiten
+  der Mannschaften zurückgesetzt, die angehakt sind.
+  Beim Verschieben nach oben werden die Planzeiten der angehakten
+  Mannschaften und die nach unten rückende Mannschaft zurückgesetzt.
+- Bei der Planung kann nun auch ein Schiedsrichter-Zeitplan gedruckt 
+  werden, der zusätzlich Lande- und Parkzeit ausdruckt.  
+
+
+Fehlerbehebungen und Erweiterungen in Version 0.6.2:
+----------------------------------------------------
 - Nach dem Deaktivieren einer Mannschaft konnte der Zeitplan wegen
   Warnungen nicht gedruckt werden.
 - Beim Import von AFLOS-Logger-Daten wurden Punkte nicht korrekt berechnet,
@@ -275,6 +294,7 @@ B. Durchführung
    - GGf. einzelne Zeiten verschieben.
    - Aufgaben drucken.
    - Zeitplan drucken.
+   - Schiedsrichter-Zeitplan drucken.
    - Flugpläne drucken.
 8. Tagesablauf
    - Flugplanungstest durchführen.

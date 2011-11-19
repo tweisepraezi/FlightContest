@@ -16,9 +16,16 @@
                         <tbody>
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
+	                            <g:if test="${taskInstance.flighttest && taskInstance.flightTestRun}">
+	                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'disabledcheckpoints')}"/></td>
+	                            </g:if>
+	                            <g:else>
+	                            	<td/>
+	                            </g:else>
                             </tr>
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listplanning')}"/></td>
+                                <td/>
                             </tr>
                         </tbody>
                     </table>

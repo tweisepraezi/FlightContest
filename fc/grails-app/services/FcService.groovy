@@ -479,6 +479,97 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map savedisabledcheckpointsTask(Map params)
+    {
+        Task task_instance = Task.get(params.id)
+        
+        if (task_instance) {
+            
+            if(params.version) {
+                long version = params.version.toLong()
+                if(task_instance.version > version) {
+                    task_instance.errors.rejectValue("version", "task.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':task_instance]
+                }
+            }
+            
+			String last_disabledcheckpoints = task_instance.disabledCheckPoints
+            task_instance.properties = params
+			
+			task_instance.disabledCheckPoints = ""
+			CoordRoute.findAllByRoute(task_instance.flighttest.route).each { CoordRoute coordroute_instance ->
+				if (params.(coordroute_instance.title()) == "on") {
+					if (task_instance.disabledCheckPoints) {
+						task_instance.disabledCheckPoints += ",${coordroute_instance.title()}"
+					} else {
+						task_instance.disabledCheckPoints = coordroute_instance.title() 
+					}
+				}
+			}
+			
+			boolean modify_flighttest_results = last_disabledcheckpoints != task_instance.disabledCheckPoints
+			if (modify_flighttest_results) {
+		        Test.findAllByTask(task_instance).each { Test test_instance ->
+					CoordResult.findAllByTest(test_instance).each { CoordResult coordresult_instance ->
+						calculateCoordResultInstancePenaltyCoord(coordresult_instance)
+						coordresult_instance.save()
+					}
+					calculateTestPenalties(test_instance)
+		            test_instance.save()
+		        }
+			}	
+			
+            if(!task_instance.hasErrors() && task_instance.save()) {
+                return ['instance':task_instance,'saved':true,'message':getMsg('fc.updated',["${task_instance.name()}"])]
+            } else {
+                return ['instance':task_instance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map resetdisabledcheckpointsTask(Map params)
+    {
+        Task task_instance = Task.get(params.id)
+        
+        if (task_instance) {
+            
+            if(params.version) {
+                long version = params.version.toLong()
+                if(task_instance.version > version) {
+                    task_instance.errors.rejectValue("version", "task.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':task_instance]
+                }
+            }
+            
+			String last_disabledcheckpoints = task_instance.disabledCheckPoints
+            task_instance.disabledCheckPoints = ""
+			
+			boolean modify_flighttest_results = last_disabledcheckpoints != task_instance.disabledCheckPoints
+			if (modify_flighttest_results) {
+		        Test.findAllByTask(task_instance).each { Test test_instance ->
+					CoordResult.findAllByTest(test_instance).each { CoordResult coordresult_instance ->
+						calculateCoordResultInstancePenaltyCoord(coordresult_instance)
+						coordresult_instance.save()
+					}
+					calculateTestPenalties(test_instance)
+		            test_instance.save()
+		        }
+			}	
+			
+            if(!task_instance.hasErrors() && task_instance.save()) {
+                return ['instance':task_instance,'saved':true,'message':getMsg('fc.updated',["${task_instance.name()}"])]
+            } else {
+                return ['instance':task_instance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     Map startplanningTask(Map params,contestInstance,lastTaskPlanning)
     {
     	Task task_instance = null
@@ -850,7 +941,7 @@ class FcService
             return task
         }
         
-		// move tasks
+		// move tasks up
 		int movenum = 0
         int movefirstpos = -1
         Map selected_testids = [selectedTestID:""]
@@ -941,7 +1032,7 @@ class FcService
             return task
         }
         
-		// move tasks
+		// move tasks down
         int movenum = 0
         int movefirstpos = -1
         Map selected_testids = [selectedTestID:""]
@@ -965,7 +1056,6 @@ class FcService
             if (params["selectedTestID${test_instance.id}"] != "on") {
                 if (test_instance.viewpos >= movefirstpos && test_instance.viewpos < movefirstpos + movenum) {
                     test_instance.viewpos -= movenum
-                    test_instance.timeCalculated = false
                     test_instance.save()
                 }
             }
@@ -989,6 +1079,85 @@ class FcService
         if (!borderreached) {
             task.selectedtestids = selected_testids
         }
+        return task
+    }
+    
+    //--------------------------------------------------------------------------
+    Map moveendTask(Map params,session)
+    {
+        Map task = getTask(params) 
+        if (!task.instance) {
+            return task
+        }
+
+		// moveable? (not bottom & connected selection)
+        boolean borderreached = false
+        boolean notmovable = false
+        boolean off2on = false
+        boolean on2off = false
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+            if (params["selectedTestID${test_instance.id}"] == "on") {
+                if (test_instance.viewpos + 1 == Crew.countByContest(task.instance.contest)) {
+                    borderreached = true
+                }
+                if (off2on && on2off) {
+                    notmovable = true
+                }
+                off2on = true
+            } else {
+                if (off2on) {
+                    on2off = true
+                }
+            }
+        }
+        if (borderreached) {
+            //task.message = getMsg('fc.test.moveborderreached')
+            task.borderreached = true
+            return task
+        }
+        if (notmovable) {
+            task.message = getMsg('fc.test.notmovable')
+            task.error = true
+            return task
+        }
+        
+		// move tasks to end
+        int movenum = 0
+        int movefirstpos = -1
+        Map selected_testids = [selectedTestID:""]
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+            if (params["selectedTestID${test_instance.id}"] == "on") {
+                if (movefirstpos == -1) {
+                    movefirstpos = test_instance.viewpos
+                }
+                test_instance.viewpos = Crew.countByContest(task.instance.contest) + movenum
+                test_instance.timeCalculated = false
+                test_instance.save()
+                selected_testids["selectedTestID${test_instance.id}"] = "on"
+                movenum++
+            }
+        }
+        Test.findAllByTask(task.instance).each { Test test_instance ->
+            if (test_instance.viewpos >= movefirstpos) {
+                test_instance.viewpos -= movenum
+                test_instance.save()
+            }
+        }
+
+		// modify showLimitStartPos
+		if (session.showLimit) {
+			if (movefirstpos + movenum > session.showLimitStartPos + session.showLimitCrewNum) {
+				if (movenum == 1) {
+					int crew_num = Crew.countByContest(session.lastContest)
+					if (session.showLimitStartPos + session.showLimitCrewNum < crew_num) {
+						session.showLimitStartPos += session.showLimitCrewNum
+					}
+				} else {
+					session.showLimitStartPos++
+				}
+			}
+		}
+		
         return task
     }
     
@@ -1098,7 +1267,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printtimetableTask(Map params,printparams)
+    Map printtimetableTask(Map params,printparams, boolean isJury)
     {
         Map task = getTask(params) 
         if (!task.instance) {
@@ -1189,7 +1358,12 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/task/timetableprintable/${task.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
+			String url = ""
+			if (isJury) {
+				url = "${printparams.baseuri}/task/timetablejuryprintable/${task.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
+			} else {
+				url = "${printparams.baseuri}/task/timetableprintable/${task.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
+			}
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -1834,11 +2008,13 @@ class FcService
 			printerror ret.message
 			return ret
         }
+		/*
         if (aflos_error.mark.contains("Check Error")) {
         	Map ret = ['error':true,'message':getMsg('fc.aflos.points.errors',[afloscrewnames_instance.viewName()])]
 			printerror ret.message
 			return ret
         }
+        */
 
         try {
 	        // Import AflosCheckPoints
@@ -4514,7 +4690,7 @@ class FcService
     //--------------------------------------------------------------------------
     private Map calculateCoordResultInstance(CoordResult coordResultInstance, boolean calculateUTC)
     {
-		println "calculateCoordResultInstance '$coordResultInstance.mark' $coordResultInstance.resultCpTimeInput"
+		println "calculateCoordResultInstance '${coordResultInstance.title()}' (${coordResultInstance.mark}) $coordResultInstance.resultCpTimeInput"
 		
     	// calculate resultCpTime
         try {
@@ -4544,24 +4720,26 @@ class FcService
         } catch (Exception e) {
             return ['instance':coordResultInstance,'error':true,'message':getMsg('fc.testlegplanningresult.value.error')]
         }
-        
         Contest contest_instance = coordResultInstance.test.task.contest
+        if (calculateUTC) {
+			GregorianCalendar result_cptime = new GregorianCalendar() 
+			result_cptime.setTime(coordResultInstance.resultCpTime)
+        	Date timezone_date = Date.parse("HH:mm",contest_instance.timeZone)
+        	GregorianCalendar timezone_calendar = new GregorianCalendar()
+        	timezone_calendar.setTime(timezone_date)
+        	result_cptime.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
+        	result_cptime.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
+        	coordResultInstance.resultCpTime = result_cptime.getTime()
+        }
         
         // calculate penaltyCoord
-        if (coordResultInstance.resultCpNotFound) {
+		String cp = "${coordResultInstance.test.task.disabledCheckPoints},"
+        if (cp.contains("${coordResultInstance.title()},")) {
+			coordResultInstance.penaltyCoord = 0
+        } else if (coordResultInstance.resultCpNotFound) {
         	coordResultInstance.penaltyCoord = contest_instance.flightTestCpNotFoundPoints
         } else {
 	        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)
-	        if (calculateUTC) {
-				GregorianCalendar result_cptime = new GregorianCalendar() 
-				result_cptime.setTime(coordResultInstance.resultCpTime)
-	        	Date timezone_date = Date.parse("HH:mm",contest_instance.timeZone)
-	        	GregorianCalendar timezone_calendar = new GregorianCalendar()
-	        	timezone_calendar.setTime(timezone_date)
-	        	result_cptime.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
-	        	result_cptime.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
-	        	coordResultInstance.resultCpTime = result_cptime.getTime()
-	        }
 	        int resultcptime_seconds = FcMath.Seconds(coordResultInstance.resultCpTime)
 	        
 	        int diffCpTime =  Math.abs(plancptime_seconds - resultcptime_seconds)
@@ -4582,6 +4760,32 @@ class FcService
         }
         
         return [:]
+    }
+    
+    //--------------------------------------------------------------------------
+    private void calculateCoordResultInstancePenaltyCoord(CoordResult coordResultInstance)
+    {
+        Contest contest_instance = coordResultInstance.test.task.contest
+		String cp = "${coordResultInstance.test.task.disabledCheckPoints},"
+		
+        if (cp.contains("${coordResultInstance.title()},")) {
+			coordResultInstance.penaltyCoord = 0
+        } else if (coordResultInstance.resultCpNotFound) {
+        	coordResultInstance.penaltyCoord = contest_instance.flightTestCpNotFoundPoints
+        } else {
+	        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)
+	        int resultcptime_seconds = FcMath.Seconds(coordResultInstance.resultCpTime)
+	        
+	        int diffCpTime =  Math.abs(plancptime_seconds - resultcptime_seconds)
+	        if (diffCpTime > contest_instance.flightTestCptimeCorrectSecond) {
+	            coordResultInstance.penaltyCoord = contest_instance.flightTestCptimePointsPerSecond * (diffCpTime - contest_instance.flightTestCptimeCorrectSecond)
+	        } else {
+	            coordResultInstance.penaltyCoord = 0
+	        }
+	        if (coordResultInstance.penaltyCoord > contest_instance.flightTestCptimeMaxPoints) {
+	        	coordResultInstance.penaltyCoord = contest_instance.flightTestCptimeMaxPoints
+	        }
+        }
     }
     
     //--------------------------------------------------------------------------
@@ -4614,7 +4818,7 @@ class FcService
     	if (lastCoordRouteInstance) {
     		Map legDataCoord = calculateLegData(newCoordRouteInstance, lastCoordRouteInstance)
 	
-	        String title_coord = "${lastCoordRouteInstance.title()} -> ${newCoordRouteInstance.title()}"
+	        String title_coord = "${lastCoordRouteInstance.titleCode()} -> ${newCoordRouteInstance.titleCode()}"
 	        
 	        RouteLegCoord routelegcoord_instance = new RouteLegCoord([coordTrueTrack:legDataCoord.dir,
 	                                                                  coordDistance:legDataCoord.dis,
@@ -4632,7 +4836,7 @@ class FcService
         if (lastCoordRouteInstance && lastCoordRouteTestInstance) {
             Map legDataTest = calculateLegData(newCoordRouteInstance, lastCoordRouteTestInstance)
             
-	        String title_test = "${lastCoordRouteTestInstance.title()} -> ${newCoordRouteInstance.title()}"
+	        String title_test = "${lastCoordRouteTestInstance.titleCode()} -> ${newCoordRouteInstance.titleCode()}"
             
 	        if ( (lastCoordRouteTestInstance.type == CoordType.SP && newCoordRouteInstance.type == CoordType.TP) ||
 	        	 (lastCoordRouteTestInstance.type == CoordType.SP && newCoordRouteInstance.type == CoordType.FP) ||

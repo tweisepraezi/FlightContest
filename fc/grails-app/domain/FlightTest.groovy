@@ -24,11 +24,9 @@ class FlightTest
 		flighttestwinds sort:"id"
 	}
 
-	def messageSource
-	
     String idName()
     {
-		return "${messageSource.getMessage('fc.flighttest', null, null)}-${task.idTitle}"
+		return "${getMsg('fc.flighttest')}-${task.idTitle}"
     }
     
 	String name()

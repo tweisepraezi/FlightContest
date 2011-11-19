@@ -1,10 +1,11 @@
 class Global 
 {
-	static int VERSION_MAJOR = 1 
-	static int VERSION_MINOR = 0
+	static int DB_MAJOR = 1 
+	static int DB_MINOR = 1
 	
-	int versionMajor = VERSION_MAJOR
-	int versionMinor = VERSION_MINOR
+	int versionMajor = DB_MAJOR
+	int versionMinor = DB_MINOR
+	String showLanguage = "de"
 	
     static constraints = {
     }

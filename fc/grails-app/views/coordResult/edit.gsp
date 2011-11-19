@@ -21,7 +21,15 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.coordresult.from')}:</td>
-                                    <td><g:test var="${coordResultInstance?.test}" link="${createLink(controller:'test',action:'planningtaskresults')}"/></td>
+                                    <td><g:test var="${coordResultInstance?.test}" link="${createLink(controller:'test',action:'flightresults')}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.title')}:</td>
+                                    <td>${coordResultInstance.titleCode()}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.aflos.checkpoint')}:</td>
+                                    <td>${coordResultInstance.mark}</td>
                                 </tr>
                             </tbody>
                         </table>

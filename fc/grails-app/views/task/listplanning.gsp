@@ -133,10 +133,10 @@
                         <tfoot>
                             <tr class="">
                                 <td colspan="2"><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" /></td>
-                                <td colspan="2"><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}" /> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}" /></td>
+                                <td colspan="2"><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}" /> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}" /> <g:actionSubmit action="moveend" value="${message(code:'fc.test.moveend')}" /></td>
                                 <td colspan="2"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}" /></td>
                                 <td><g:actionSubmit action="assignflighttestwind" value="${message(code:'fc.flighttestwind.assign')}" /></td>
-                                <td colspan="5"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}" /> <g:actionSubmit action="printtimetable" value="${message(code:'fc.test.timetable.print')}" /></td>
+                                <td colspan="5"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}" /> <g:actionSubmit action="printtimetable" value="${message(code:'fc.test.timetable.print')}" /> <g:actionSubmit action="printtimetablejury" value="${message(code:'fc.test.timetablejury.print')}" /></td>
                             </tr>
                             <tr class="join">
                                 <td colspan="2"><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" /></td>

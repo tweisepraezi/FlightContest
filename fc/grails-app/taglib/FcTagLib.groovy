@@ -291,7 +291,10 @@ class FcTagLib
         if (p.link == "/fc/task/listplanning") {
         	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.planning')})</a>"""
         } else if (p.link == "/fc/task/listresults") {
-                out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.results')})</a>"""
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.results')})</a>"""
+        } else if (p.link == "/fc/task/disabledcheckpoints") {
+            //out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.disabledcheckpoints')})</a>"""
+            out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
         } else {
         	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.settings')})</a>"""
         }

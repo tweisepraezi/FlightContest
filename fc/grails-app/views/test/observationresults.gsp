@@ -50,14 +50,14 @@
                         <g:if test="${!testInstance.observationTestComplete}">
 	                        <fieldset>
 	                            <p>
-	                                <label>${message(code:'fc.observationresults.routephotopenalties')}* [${message(code:'fc.points')}]:</label>
-	                                <br/>
-	                                <input type="text" id="observationTestRoutePhotoPenalties" name="observationTestRoutePhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestRoutePhotoPenalties')}"/>
-	                            </p>
-	                            <p>
 	                                <label>${message(code:'fc.observationresults.turnpointphotopenalties')}* [${message(code:'fc.points')}]:</label>
 	                                <br/>
 	                                <input type="text" id="observationTestTurnPointPhotoPenalties" name="observationTestTurnPointPhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestTurnPointPhotoPenalties')}"/>
+	                            </p>
+	                            <p>
+	                                <label>${message(code:'fc.observationresults.routephotopenalties')}* [${message(code:'fc.points')}]:</label>
+	                                <br/>
+	                                <input type="text" id="observationTestRoutePhotoPenalties" name="observationTestRoutePhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestRoutePhotoPenalties')}"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.observationresults.groundtargetpenalties')}* [${message(code:'fc.points')}]:</label>
@@ -78,12 +78,12 @@
                                <table>
                                    <tbody>
                                        <tr>
-                                           <td class="detailtitle">${message(code:'fc.observationresults.routephotopenalties')}:</td>
-                                           <td>${testInstance.observationTestRoutePhotoPenalties} ${message(code:'fc.points')}</td>
-                                       </tr>
-                                       <tr>
                                            <td class="detailtitle">${message(code:'fc.observationresults.turnpointphotopenalties')}:</td>
                                            <td>${testInstance.observationTestTurnPointPhotoPenalties} ${message(code:'fc.points')}</td>
+                                       </tr>
+                                       <tr>
+                                           <td class="detailtitle">${message(code:'fc.observationresults.routephotopenalties')}:</td>
+                                           <td>${testInstance.observationTestRoutePhotoPenalties} ${message(code:'fc.points')}</td>
                                        </tr>
                                        <tr>
                                            <td class="detailtitle">${message(code:'fc.observationresults.groundtargetpenalties')}:</td>

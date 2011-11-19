@@ -101,11 +101,9 @@ class TestLeg
         penaltyLegTime = 0
     }
 
-	def messageSource
-	
 	String name()
 	{
-		return "${FcMath.GradStr(planTrueHeading)}${messageSource.getMessage('fc.grad', null, null)} ${FcMath.SpeedStr(planGroundSpeed)}${messageSource.getMessage('fc.mile', null, null)} ${FcMath.TimeStr(planLegTime)}"
+		return "${FcMath.GradStr(planTrueHeading)}${getMsg('fc.grad')} ${FcMath.SpeedStr(planGroundSpeed)}${getMsg('fc.mile')} ${FcMath.TimeStr(planLegTime)}"
 	}
 	
 	String planLegTimeStr()

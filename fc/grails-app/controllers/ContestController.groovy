@@ -13,13 +13,14 @@ class ContestController {
     def start = {
 		fcService.printstart "Start contest"
 		
-		String showLanguage = fcService.GetCookie("ShowLanguage",Languages.de.toString())
-		if (showLanguage) {
-			if (session?.showLanguage != showLanguage) {
-				fcService.println "Redirect contest/start $showLanguage"
-				redirect(controller:'contest',action:'start',params:[lang:showLanguage])
+		String show_language = fcService.GetCookie("ShowLanguage",Languages.de.toString())
+		if (show_language) {
+			if (session?.showLanguage != show_language) {
+				fcService.println "Redirect contest/start $show_language"
+				redirect(controller:'contest',action:'start',params:[lang:show_language])
 			}
-			session.showLanguage = showLanguage
+			session.showLanguage = show_language
+			BootStrap.global.showLanguage = show_language
 		}
 		String showLimitCrewNum = fcService.GetCookie("ShowLimitCrewNum","10")
 		if (showLimitCrewNum) {

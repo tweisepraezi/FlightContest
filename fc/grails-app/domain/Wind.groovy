@@ -12,10 +12,8 @@ class Wind
 		speed(range:0..<1000)
 	}
 
-	def messageSource
-	
 	String name()
 	{
-		return "${FcMath.GradStr(direction)}${messageSource.getMessage('fc.grad', null, null)} ${FcMath.SpeedStr(speed)}${messageSource.getMessage('fc.knot', null, null)}"
+		return "${FcMath.GradStr(direction)}${getMsg('fc.grad')} ${FcMath.SpeedStr(speed)}${getMsg('fc.knot')}"
 	}
 }

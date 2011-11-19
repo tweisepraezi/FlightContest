@@ -19,11 +19,9 @@ class PlanningTestTask
 		speed(range:0.0f..<1000.0f)
 	}
 	
-	def messageSource
-	
     String idName()
     {
-		return "${messageSource.getMessage('fc.planningtesttask', null, null)}-${planningtest.task.idTitle}.${idTitle}"
+		return "${getMsg('fc.planningtesttask')}-${planningtest.task.idTitle}.${idTitle}"
     }
     
 	String name()

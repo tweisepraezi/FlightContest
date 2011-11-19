@@ -70,6 +70,46 @@ class TaskController {
         }
     }
 	
+	def disabledcheckpoints = {
+        def task = fcService.getTask(params) 
+        if (task.instance) {
+			// assign return action
+			if (session.taskReturnAction) {
+				return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+			}
+			return [taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+	}
+	
+    def savedisabledcheckpoints = {
+        def task = fcService.savedisabledcheckpointsTask(params) 
+        if (task.saved) {
+        	flash.message = task.message
+			// process return action
+			if (params.taskReturnAction) {
+				redirect(action:params.taskReturnAction,controller:params.taskReturnController,id:params.taskReturnID)
+			} else {
+        		redirect(controller:"contest",action:"tasks")
+			}
+        } else if (task.instance) {
+			render(view:'edit',model:[taskInstance:task.instance])
+        } else {
+			flash.message = task.message
+			redirect(action:edit,id:params.id)
+        }
+    }
+
+	def resetdisabledcheckpoints = {
+        def task = fcService.resetdisabledcheckpointsTask(params) 
+        if (task.saved) {
+        	flash.message = task.message
+        }
+        redirect(action:disabledcheckpoints,id:params.id)
+	}
+	
 	def cancel = {
 		// process return action
 		if (params.taskReturnAction) {
@@ -352,6 +392,25 @@ class TaskController {
         }
 	}
 	
+	def moveend = {
+        def task = fcService.moveendTask(params,session) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.borderreached) {
+            redirect(action:listplanning,id:task.instance.id)
+        } else if (task.error) {
+       		flash.message = task.message
+            flash.error = true
+            redirect(action:listplanning,id:task.instance.id)
+        } else {
+	    	if (task.selectedtestids) {
+	    		flash.selectedTestIDs = task.selectedtestids
+	    	}
+	        redirect(action:listplanning,id:task.instance.id)
+        }
+	}
+	
 	def calculatetimetable = {
         def task = fcService.calculatetimetableTask(params) 
         flash.message = task.message
@@ -400,8 +459,37 @@ class TaskController {
         }
     }
 
+	def timetablejuryprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+        }
+        def task = fcService.getTask(params) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else {
+        	return [taskInstance:task.instance ]
+        }
+    }
+
 	def printtimetable = {
-        def task = fcService.printtimetableTask(params,GetPrintParams()) 
+        def task = fcService.printtimetableTask(params,GetPrintParams(),false) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+        	flash.message = task.message
+           	flash.error = true
+        	redirect(action:listplanning,id:task.instance.id)
+        } else if (task.content) {
+        	fcService.WritePDF(response,task.content)
+	    } else {
+        	redirect(action:listplanning,id:task.instance.id)
+	    }
+	}
+	
+	def printtimetablejury = {
+        def task = fcService.printtimetableTask(params,GetPrintParams(),true) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")

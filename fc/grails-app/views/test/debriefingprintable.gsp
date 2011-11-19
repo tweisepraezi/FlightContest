@@ -97,7 +97,7 @@
 	                                        <g:if test="${lastCoordResultInstance}">
 	                                            <g:set var="penaltyCoordSummary" value="${penaltyCoordSummary + lastCoordResultInstance.penaltyCoord}" />
 	                                            <tr>
-	                                                <td>${lastCoordResultInstance.title()}</td>
+	                                                <td>${lastCoordResultInstance.titleCode()}</td>
 	                                                <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
 	                                                <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
 	                                                <td>${lastCoordResultInstance.penaltyCoord}</td>
@@ -149,7 +149,7 @@
 	                                    <g:if test="${lastCoordResultInstance}">
 	                                        <g:set var="penaltyCoordSummary" value="${penaltyCoordSummary + lastCoordResultInstance.penaltyCoord}" />
 	                                        <tr>
-	                                            <td>${lastCoordResultInstance.title()}</td>
+	                                            <td>${lastCoordResultInstance.titleCode()}</td>
 	                                            <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
 	                                            <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
 	                                            <td>${lastCoordResultInstance.penaltyCoord}</td>
@@ -250,8 +250,8 @@
 	                            </thead>
 	                            <tbody>
 	                                <tr>
-	                                    <td>${message(code:'fc.observationresults.routephotopenalties')}: ${testInstance.observationTestRoutePhotoPenalties},
-	                                        ${message(code:'fc.observationresults.turnpointphotopenalties')}: ${testInstance.observationTestTurnPointPhotoPenalties},
+	                                    <td>${message(code:'fc.observationresults.turnpointphotopenalties')}: ${testInstance.observationTestTurnPointPhotoPenalties},
+	                                        ${message(code:'fc.observationresults.routephotopenalties')}: ${testInstance.observationTestRoutePhotoPenalties},
 	                                        ${message(code:'fc.observationresults.groundtargetpenalties')}: ${testInstance.observationTestGroundTargetPenalties}
 	                                    </td>
 	                                </tr>

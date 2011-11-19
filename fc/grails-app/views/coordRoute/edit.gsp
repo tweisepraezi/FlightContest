@@ -21,7 +21,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
-                                    <td>${coordRouteInstance.title()}</td>
+                                    <td>${coordRouteInstance.titleCode()}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aflos.checkpoint')}:</td>

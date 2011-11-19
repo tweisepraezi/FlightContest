@@ -97,7 +97,7 @@
                                         <td/>
                                         <td/>
                                         <td/>
-                                        <td>${CoordType.TO.title}</td>
+                                        <td>${message(code:CoordType.TO.code)}</td>
                                         <g:if test="${testInstance.timeCalculated}">
                                             <g:if test="${testInstance.takeoffTimeWarning}">
                                                 <td class="errors">${FcMath.TimeStr(testInstance.takeoffTime)} !</td>
@@ -115,7 +115,7 @@
                                         <td/>
                                         <td/>
                                         <td/>
-                                        <td>${CoordType.SP.title}</td>
+                                        <td>${message(code:CoordType.SP.code)}</td>
                                         <g:if test="${testInstance.timeCalculated}">
                                             <td>${FcMath.TimeStr(testInstance.startTime)}</td>
                                         </g:if> <g:else>
@@ -144,10 +144,10 @@
                                             <td>${FcMath.SpeedStr(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                             <td>${testLegFlightInstance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
                                             <g:if test="${legNo==legNum}">
-                                                <td>${CoordType.FP.title}</td>
+                                                <td>${message(code:CoordType.FP.code)}</td>
                                             </g:if>
                                             <g:else>
-                                                <td>${CoordType.TP.title}${legNo}</td>
+                                                <td>${message(code:CoordType.TP.code)}${legNo}</td>
                                             </g:else>
                                             <td>${FcMath.TimeStr(tptime)}</td>
                                         </tr>

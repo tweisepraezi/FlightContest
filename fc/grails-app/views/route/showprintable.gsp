@@ -20,7 +20,7 @@
                                         <g:else>
                                             <td/>
                                         </g:else>
-                                        <td>${coordRouteInstance.title()}<br/></td>
+                                        <td>${coordRouteInstance.titleCode()}<br/></td>
                                         <td>${coordRouteInstance.namePrintable()}<br/></td>
                                     </tr>
                                 </g:each>

@@ -9,12 +9,12 @@
 
 [Code]
 const compatibelDigits = 1; // Anzahl der Stellen für Datenbankkompatibilität
-const DBVersion = '1.0.0';
+const DBVersion = '1.1.0';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 0.6.2
-AppVersion=0.6.2
-VersionInfoVersion=0.6.2
+AppVerName=Flight Contest 0.6.3
+AppVersion=0.6.3
+VersionInfoVersion=0.6.3
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=file:\\

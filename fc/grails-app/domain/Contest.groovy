@@ -146,11 +146,9 @@ class Contest
 		}
 	}
 	
-	def messageSource
-	
 	String idName()
 	{
-		return "${messageSource.getMessage('fc.contest', null, null)}-${id}"
+		return "${getMsg('fc.contest')}-${id}"
 	}
 	
 	String name()
