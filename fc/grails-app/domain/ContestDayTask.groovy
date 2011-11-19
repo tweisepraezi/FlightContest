@@ -3,16 +3,16 @@ class ContestDayTask
 	String title
     int idTitle
 	
-	NavTest navtest
+	PlanningTest planningtest
 	FlightTest flighttest
 	LandingTest landingtest
 	SpecialTest specialtest
 	
-	String firstTime                  = "11:00" // Local time of first navigation test [hh:mm]
+	String firstTime                  = "11:00" // Local time of first planning test [hh:mm]
 	int takeoffIntervalNormal         = 10      // space between takeoff to slower aircraft [min]
 	int takeoffIntervalFasterAircraft = 120     // space between takeoff to faster aircraft [min]
 	
-	int navTestDuration               = 60      // duration of navigation test [min]
+	int planningTestDuration          = 60      // duration of planning test [min]
 	int preparationDuration           = 15      // duration of aircraft preparation [min]
 	int risingDuration                = 10      // duration from takeoff to start point [min]
 	int landingDuration               = 15      // duration from finish point to aircraft parking [min]
@@ -20,11 +20,13 @@ class ContestDayTask
 	int procedureTurnDuration         =  1      // duration of Procedure Turn [min]
 
 	int addTimeValue                  =  5      // add/subtract time value [min]  
+
+    boolean planningTestDistanceMeasure = false
+    boolean planningTestDirectionMeasure = true
 	
-	static hasMany = [crewtests:CrewTest]
-	
-	ContestDay contestday
-	static belongsTo = ContestDay
+    static belongsTo = [contestday:ContestDay]
+    
+	static hasMany = [tests:Test]
 	
 	static constraints = {
 		firstTime(blank:false, validator:{ val, obj ->
@@ -41,15 +43,17 @@ class ContestDayTask
 		
 		takeoffIntervalNormal(range:0..240)
 		takeoffIntervalFasterAircraft(range:0..240)
-		navTestDuration(range:0..240)
+		planningTestDuration(range:0..240)
 		preparationDuration(range:0..240)
 		risingDuration(range:0..240)
 		landingDuration(range:0..240)
 		minNextFlightDuration(range:0..240)
 		procedureTurnDuration(range:0..60)
 		addTimeValue(range:1..60)
+		planningTestDistanceMeasure()
+		planningTestDirectionMeasure()
 		
-		navtest(nullable:true)
+		planningtest(nullable:true)
 		flighttest(nullable:true)
 		landingtest(nullable:true)
 		specialtest(nullable:true)
@@ -57,7 +61,7 @@ class ContestDayTask
 	}
 
     static mapping = {
-		crewtests sort:"id"
+		tests sort:"id"
 	}
 	
 	def messageSource

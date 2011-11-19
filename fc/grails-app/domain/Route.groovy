@@ -3,10 +3,9 @@ class Route
 	String title
     int idTitle
 	
-	Contest contest
-	static belongsTo = Contest
+	static belongsTo = [contest:Contest]
 
-	static hasMany = [routecoords:RouteCoord,routelegs:RouteLeg]
+	static hasMany = [routecoords:RouteCoord,routelegs:RouteLegCoord,testlegs:RouteLegTest]
 
 	static constraints = {
 		contest(nullable:false)
@@ -15,6 +14,7 @@ class Route
 	static mapping = {
 		routecoords sort:"id"
 		routelegs sort:"id"
+		testlegs sort:"id"
 	}
 	
 	def messageSource

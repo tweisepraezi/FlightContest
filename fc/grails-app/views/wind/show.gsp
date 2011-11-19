@@ -23,10 +23,10 @@
                                     <td>${fieldValue(bean:windInstance, field:'speed')}${message(code:'fc.knot')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.navtesttask.list')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
                                     <td>
-                                        <g:each var="c" in="${NavTestTask.findAllByWind(windInstance)}">
-                                            <g:navtesttask var="${c}" link="${createLink(controller:'navTestTask',action:'show')}"/>
+                                        <g:each var="c" in="${PlanningTestTask.findAllByWind(windInstance)}">
+                                            <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
                                             <br/>
                                         </g:each>
                                     </td>

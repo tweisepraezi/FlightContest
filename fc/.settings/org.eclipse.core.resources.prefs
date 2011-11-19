@@ -1,3 +1,4 @@
-#Fri Dec 04 08:46:47 CET 2009
+#Tue Jan 26 18:09:51 CET 2010
 eclipse.preferences.version=1
-encoding//grails-app/i18n/messages_de.properties=UTF-8
+encoding//grails-app/i18n/messages.properties=UTF-8
+encoding//grails-app/i18n/messages_en.properties=UTF-8

@@ -83,9 +83,9 @@ class ContestDayTaskController {
         }
 	}
 
-	def createnavtest = {
+	def createplanningtest = {
         def contestdaytask = fcService.getContestDayTask(params)
-        redirect(controller:'navTest',action:'create',params:['contestdaytask.id':contestdaytask.instance.id,'contestdaytaskid':contestdaytask.instance.id,'fromcontestdaytask':true])
+        redirect(controller:'planningTest',action:'create',params:['contestdaytask.id':contestdaytask.instance.id,'contestdaytaskid':contestdaytask.instance.id,'fromcontestdaytask':true])
 	}
 	
 	def createflighttest = {
@@ -103,21 +103,41 @@ class ContestDayTaskController {
         redirect(controller:'specialTest',action:'create',params:['contestdaytask.id':contestdaytask.instance.id,'contestdaytaskid':contestdaytask.instance.id,'fromcontestdaytask':true])
 	}
 	
-    def start = {
-		def contestdaytask = fcService.startContestDayTask(params)
+    def startplanning = {
+		def contestdaytask = fcService.startplanningContestDayTask(params,session.lastContest,session.lastContestDayTaskPlanning)
 		if (contestdaytask.contestdaytaskid) {
    			params.id = contestdaytask.contestdaytaskid
-   			redirect(action:listcrewtests,params:params)
+   			redirect(action:listplanning,params:params)
    		}
     }
 
-    def listcrewtests = {
-        def contestdaytask = fcService.listcrewtestsContestDayTask(params) 
+    def listplanning = {
+        def contestdaytask = fcService.getContestDayTask(params) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else {
+            session.lastContestDayTaskPlanning = contestdaytask.instance.id
         	return [contestDayTaskInstance:contestdaytask.instance]
+        }
+    }
+
+    def startresults = {
+        def contestdaytask = fcService.startresultsContestDayTask(params,session.lastContest,session.lastContestDayTaskResults)
+        if (contestdaytask.contestdaytaskid) {
+            params.id = contestdaytask.contestdaytaskid
+            redirect(action:listresults,params:params)
+        }
+    }
+
+    def listresults = {
+        def contestdaytask = fcService.getContestDayTask(params) 
+        if (!contestdaytask.instance) {
+            flash.message = contestdaytask.message
+            redirect(controller:"contest",action:"start")
+        } else {
+            session.lastContestDayTaskResults = contestdaytask.instance.id
+            return [contestDayTaskInstance:contestdaytask.instance]
         }
     }
 
@@ -128,8 +148,8 @@ class ContestDayTaskController {
             redirect(controller:"contest",action:"start")
             return
         } else {
-        	flash.selectedCrewTestIDs = contestdaytask.selectedcrewtestids
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	flash.selectedTestIDs = contestdaytask.selectedtestids
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
     }
 
@@ -139,45 +159,45 @@ class ContestDayTaskController {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
     }
     
-    def assignnavtesttask = {
-        def contestdaytask = fcService.assignnavtesttaskContestDayTask(params) 
+    def assignplanningtesttask = {
+        def contestdaytask = fcService.assignplanningtesttaskContestDayTask(params) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else if (contestdaytask.error) {
         	flash.message = contestdaytask.message
         	flash.error = true
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
-        } else if (contestdaytask.crewtestinstanceids?.size > 1) {
-        	flash.crewTestInstanceIds = contestdaytask.crewtestinstanceids
-        	redirect(action:selectnavtesttask,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
+        } else if (contestdaytask.testinstanceids?.size > 1) {
+        	flash.testInstanceIDs = contestdaytask.testinstanceids
+        	redirect(action:selectplanningtesttask,id:contestdaytask.instance.id)
         } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
     }
     
-    def selectnavtesttask = {
+    def selectplanningtesttask = {
         def contestdaytask = fcService.getContestDayTask(params) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else {
         	contestdaytask.instance.properties = params
-        	return ['contestDayTaskInstance':contestdaytask.instance,'crewTestInstanceIds':flash.crewTestInstanceIds]
+        	return ['contestDayTaskInstance':contestdaytask.instance,'testInstanceIDs':flash.testInstanceIDs]
         }
     }
     
-    def setnavtesttask = {
-        def contestdaytask = fcService.setnavtesttaskContestDayTask(params) 
+    def setplanningtesttask = {
+        def contestdaytask = fcService.setplanningtesttaskContestDayTask(params) 
         flash.message = contestdaytask.message
         if (!contestdaytask.instance) {
             redirect(controller:"contest",action:"start")
         } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
     }
     
@@ -189,12 +209,12 @@ class ContestDayTaskController {
         } else if (contestdaytask.error) {
         	flash.message = contestdaytask.message
            	flash.error = true
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
-        } else if (contestdaytask.crewtestinstanceids?.size > 1) {
-        	flash.crewTestInstanceIds = contestdaytask.crewtestinstanceids
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
+        } else if (contestdaytask.testinstanceids?.size > 1) {
+        	flash.testInstanceIDs = contestdaytask.testinstanceids
         	redirect(action:selectflighttestwind,id:contestdaytask.instance.id)
         } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
     }
 
@@ -205,7 +225,7 @@ class ContestDayTaskController {
             redirect(controller:"contest",action:"start")
         } else {
         	contestdaytask.instance.properties = params
-        	return ['contestDayTaskInstance':contestdaytask.instance,'crewTestInstanceIds':flash.crewTestInstanceIds]
+        	return ['contestDayTaskInstance':contestdaytask.instance,'testInstanceIDs':flash.testInstanceIDs]
         }
     }
     
@@ -215,7 +235,7 @@ class ContestDayTaskController {
         if (!contestdaytask.instance) {
             redirect(controller:"contest",action:"start")
         } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
     }
 
@@ -226,7 +246,7 @@ class ContestDayTaskController {
             redirect(controller:"contest",action:"start")
         } else {
             flash.error = contestdaytask.error
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
 	}
 
@@ -236,16 +256,16 @@ class ContestDayTaskController {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else if (contestdaytask.borderreached) {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         } else if (contestdaytask.error) {
        		flash.message = contestdaytask.message
             flash.error = true
-            redirect(action:listcrewtests,id:contestdaytask.instance.id)
+            redirect(action:listplanning,id:contestdaytask.instance.id)
         } else { 
-	        if (contestdaytask.selectedcrewtestids) {
-	    		flash.selectedCrewTestIDs = contestdaytask.selectedcrewtestids
+	        if (contestdaytask.selectedtestids) {
+	    		flash.selectedTestIDs = contestdaytask.selectedtestids
 	    	}
-	        redirect(action:listcrewtests,id:contestdaytask.instance.id)
+	        redirect(action:listplanning,id:contestdaytask.instance.id)
         }
 	}
 	
@@ -255,16 +275,16 @@ class ContestDayTaskController {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else if (contestdaytask.borderreached) {
-            redirect(action:listcrewtests,id:contestdaytask.instance.id)
+            redirect(action:listplanning,id:contestdaytask.instance.id)
         } else if (contestdaytask.error) {
        		flash.message = contestdaytask.message
             flash.error = true
-            redirect(action:listcrewtests,id:contestdaytask.instance.id)
+            redirect(action:listplanning,id:contestdaytask.instance.id)
         } else {
-	    	if (contestdaytask.selectedcrewtestids) {
-	    		flash.selectedCrewTestIDs = contestdaytask.selectedcrewtestids
+	    	if (contestdaytask.selectedtestids) {
+	    		flash.selectedTestIDs = contestdaytask.selectedtestids
 	    	}
-	        redirect(action:listcrewtests,id:contestdaytask.instance.id)
+	        redirect(action:listplanning,id:contestdaytask.instance.id)
         }
 	}
 	
@@ -277,7 +297,7 @@ class ContestDayTaskController {
 			if (contestdaytask.error) {
 				flash.error = true
 			}
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
 		}
 	}
 
@@ -287,8 +307,8 @@ class ContestDayTaskController {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else {
-	   		flash.selectedCrewTestIDs = contestdaytask.selectedcrewtestids
-	    	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+	   		flash.selectedTestIDs = contestdaytask.selectedtestids
+	    	redirect(action:listplanning,id:contestdaytask.instance.id)
         }
 	}
 
@@ -298,12 +318,15 @@ class ContestDayTaskController {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else {
-	   		flash.selectedCrewTestIDs = contestdaytask.selectedcrewtestids
-	        redirect(action:listcrewtests,id:contestdaytask.instance.id)
+	   		flash.selectedTestIDs = contestdaytask.selectedtestids
+	        redirect(action:listplanning,id:contestdaytask.instance.id)
         }
 	}
 
 	def timetableprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+        }
         def contestdaytask = fcService.getContestDayTask(params) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
@@ -314,50 +337,50 @@ class ContestDayTaskController {
     }
 
 	def printtimetable = {
-        def contestdaytask = fcService.printtimetableContestDayTask(params,GetBaseURI()) 
+        def contestdaytask = fcService.printtimetableContestDayTask(params,GetPrintParams()) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else if (contestdaytask.error) {
         	flash.message = contestdaytask.message
            	flash.error = true
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         } else if (contestdaytask.content) {
         	fcService.WritePDF(response,contestdaytask.content)
 	    } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
 	    }
 	}
 	
 	def printflightplans = {
-        def contestdaytask = fcService.printflightplansContestDayTask(params,GetBaseURI()) 
+        def contestdaytask = fcService.printflightplansContestDayTask(params,GetPrintParams()) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else if (contestdaytask.error) {
         	flash.message = contestdaytask.message
            	flash.error = true
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         } else if (contestdaytask.content) {
         	fcService.WritePDF(response,contestdaytask.content)
 	    } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
 	    }
 	}
 
-    def printnavtesttask = {
-        def contestdaytask = fcService.printnavtesttaskContestDayTask(params,GetBaseURI()) 
+    def printplanningtesttask = {
+        def contestdaytask = fcService.printplanningtasksContestDayTask(params,GetPrintParams()) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else if (contestdaytask.error) {
             flash.message = contestdaytask.message
         	flash.error = true
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listplanning,id:contestdaytask.instance.id)
         } else if (contestdaytask.content) {
         	fcService.WritePDF(response,contestdaytask.content)
 	    } else {
-	        redirect(action:listcrewtests,id:contestdaytask.instance.id)
+	        redirect(action:listplanning,id:contestdaytask.instance.id)
 		}
 	}
 
@@ -370,27 +393,30 @@ class ContestDayTaskController {
 			if (contestdaytask.error) {
 				flash.error = true
 			}
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listresults,id:contestdaytask.instance.id)
 		}
 	}
 
 	def printresults = {
-        def contestdaytask = fcService.printresultsContestDayTask(params,GetBaseURI()) 
+        def contestdaytask = fcService.printresultsContestDayTask(params,GetPrintParams()) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
             redirect(controller:"contest",action:"start")
         } else if (contestdaytask.error) {
         	flash.message = contestdaytask.message
            	flash.error = true
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listresults,id:contestdaytask.instance.id)
         } else if (contestdaytask.content) {
         	fcService.WritePDF(response,contestdaytask.content)
 	    } else {
-        	redirect(action:listcrewtests,id:contestdaytask.instance.id)
+        	redirect(action:listresults,id:contestdaytask.instance.id)
 	    }
 	}
 
 	def positionsprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+        }
         def contestdaytask = fcService.getContestDayTask(params) 
         if (!contestdaytask.instance) {
             flash.message = contestdaytask.message
@@ -400,9 +426,11 @@ class ContestDayTaskController {
         }
     }
 
-	String GetBaseURI() {
-		return request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request)
-	}
-
+	Map GetPrintParams() {
+        return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
+                contest:session.lastContest,
+                lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'
+               ]
+    }
 }
 

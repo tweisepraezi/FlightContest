@@ -2,33 +2,20 @@ import java.text.*
 
 class Wind 
 {
-	float direction
-	float speed 
+	BigDecimal direction
+	BigDecimal speed 
 
-	static belongsTo = [NavTestTask, FlightTestWind]
+	static belongsTo = [PlanningTestTask, FlightTestWind]
 
 	static constraints = {
-		direction(range:0.0f..<360.0f)
-		speed(range:0.0f..<1000.0f)
+		direction(range:0..<360)
+		speed(range:0..<1000)
 	}
 
 	def messageSource
 	
 	String name()
 	{
-		return "${directionFormat()}${messageSource.getMessage('fc.grad', null, null)} ${speedFormat()}${messageSource.getMessage('fc.knot', null, null)}"
+		return "${FcMath.GradStr(direction)}${messageSource.getMessage('fc.grad', null, null)} ${FcMath.SpeedStr(speed)}${messageSource.getMessage('fc.knot', null, null)}"
 	}
-
-	String directionFormat()
-	{
-		DecimalFormat df = new DecimalFormat("000")
-		return df.format(direction)
-	}
-
-	String speedFormat()
-	{
-		DecimalFormat df = new DecimalFormat("#0.0")
-		return df.format(speed)
-	}
-	
 }

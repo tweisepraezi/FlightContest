@@ -3,18 +3,17 @@ class Aircraft
 	String registration
 	String type
 	String colour
-	float defaultTAS = 80.0f
-	Crew owner
+	Crew user1
+	Crew user2
 
-	Contest contest
-	static belongsTo = Contest
+	static belongsTo = [contest:Contest]
 
 	static constraints = {
-		registration(blank:false, unique:true)
+		registration(blank:false)
 		type()
 		colour()
-		defaultTAS(range:10.0f..<1000.0f)
-		owner(nullable:true, unique:true)
+		user1(nullable:true)
+        user2(nullable:true)
 		contest(nullable:false)
 	}
 

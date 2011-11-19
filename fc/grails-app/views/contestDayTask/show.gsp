@@ -27,6 +27,14 @@
                                     <td>${contestDayTaskInstance.name()}</td>
                                 </tr>
                                 <tr>
+                                    <td class="detailtitle">${message(code:'fc.contestdaytask.listplanning')}:</td>
+                                    <td><g:contestdaytask var="${contestDayTaskInstance}" link="${createLink(controller:'contestDayTask',action:'listplanning')}"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.contestdaytask.listresults')}:</td>
+                                    <td><g:contestdaytask var="${contestDayTaskInstance}" link="${createLink(controller:'contestDayTask',action:'listresults')}"/></td>
+                                </tr>
+                                <tr>
                                     <td class="detailtitle">${message(code:'fc.contestdaytask.firsttime')}:</td>
                                     <td>${fieldValue(bean:contestDayTaskInstance, field:'firstTime')}</td>
                                 </tr>
@@ -39,8 +47,8 @@
                                     <td>${fieldValue(bean:contestDayTaskInstance, field:'takeoffIntervalFasterAircraft')}${message(code:'fc.time.min')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.contestdaytask.navtestduration')}:</td>
-                                    <td>${fieldValue(bean:contestDayTaskInstance, field:'navTestDuration')}${message(code:'fc.time.min')}</td>
+                                    <td class="detailtitle">${message(code:'fc.contestdaytask.planningtestduration')}:</td>
+                                    <td>${fieldValue(bean:contestDayTaskInstance, field:'planningTestDuration')}${message(code:'fc.time.min')}</td>
                                 </tr>
                                 <tr>
                                     <td>${message(code:'fc.contestdaytask.preparationduration')}:</td>
@@ -67,9 +75,17 @@
                                     <td>${fieldValue(bean:contestDayTaskInstance, field:'addTimeValue')}${message(code:'fc.time.min')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.navtest')}:</td>
-                                    <g:if test="${contestDayTaskInstance.navtest}">
-                                        <td><g:navtest var="${contestDayTaskInstance.navtest}" link="${createLink(controller:'navTest',action:'show')}"/></td>
+                                    <td class="detailtitle">${message(code:'fc.contestdaytask.planningtestdistancemeasure')}:</td>
+                                    <g:viewbool value="${contestDayTaskInstance.planningTestDistanceMeasure}" tag="td" />
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.contestdaytask.planningtestdirectionmeasure')}:</td>
+                                    <g:viewbool value="${contestDayTaskInstance.planningTestDirectionMeasure}" tag="td" />
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtest')}:</td>
+                                    <g:if test="${contestDayTaskInstance.planningtest}">
+                                        <td><g:planningtest var="${contestDayTaskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                     </g:if> <g:else>
                                         <td/>
                                     </g:else>
@@ -98,17 +114,13 @@
                                         <td/>
                                     </g:else>
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.contestdaytask.listcrewtests')}:</td>
-                                    <td><g:contestdaytask var="${contestDayTaskInstance}" link="${createLink(controller:'contestDayTask',action:'listcrewtests')}"/></td>
-                                </tr>
                             </tbody>
                         </table>
                         <input type="hidden" name="id" value="${contestDayTaskInstance?.id}" />
                         <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
                         <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
-                        <g:if test="${!contestDayTaskInstance.navtest}">
-                            <g:actionSubmit action="createnavtest" value="${message(code:'fc.navtest.add1')}" />
+                        <g:if test="${!contestDayTaskInstance.planningtest}">
+                            <g:actionSubmit action="createplanningtest" value="${message(code:'fc.planningtest.add1')}" />
                         </g:if>
                         <g:if test="${!contestDayTaskInstance.flighttest}">
                             <g:actionSubmit action="createflighttest" value="${message(code:'fc.flighttest.add1')}" />

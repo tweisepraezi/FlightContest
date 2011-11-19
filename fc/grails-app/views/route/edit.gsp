@@ -5,7 +5,7 @@
         <title>${message(code:'fc.route.edit')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="route" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
@@ -27,6 +27,7 @@
                         <input type="hidden" name="id" value="${routeInstance?.id}" />
                         <input type="hidden" name="version" value="${routeInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

@@ -1,20 +1,73 @@
+import java.text.*
+
 class RouteLeg 
 {
-	float trueTrack
-	float distance 
+	String title
+	BigDecimal trueTrack               // Grad
+	BigDecimal coordDistance           // NM
+	BigDecimal mapmeasuredistance = 0  // mm
+	BigDecimal mapdistance = 0         // NM
 	
-	Route route
-	static belongsTo = Route
-
     static constraints = {
+		title(nullable:true)
 		trueTrack()
-		distance()
+		coordDistance()
+		mapmeasuredistance(range:0..<10000)
+		mapdistance()
     }
 
 	def messageSource
-	
-	String name()
+
+	String trueTrackName()
 	{
-		return "${trueTrack}${messageSource.getMessage('fc.grad', null, null)} ${distance}${messageSource.getMessage('fc.mile', null, null)}"
+		return "${FcMath.RouteGradStr(trueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
+	}
+	
+	String coordDistanceName()
+	{
+		return  "${FcMath.DistanceStr(coordDistance)}${messageSource.getMessage('fc.mile', null, null)}"
+	}
+	
+    String mapMeasureDistanceName()
+    {
+        return  "${FcMath.DistanceMeasureStr(mapmeasuredistance)}${messageSource.getMessage('fc.mm', null, null)}"
+    }
+    
+    String mapDistanceName()
+    {
+        return  "${FcMath.DistanceStr(mapdistance)}${messageSource.getMessage('fc.mile', null, null)}"
+    }
+    
+    BigDecimal testDistance()
+    {
+        if (mapdistance > 0) {
+            return mapdistance
+        } else {
+            return coordDistance
+        }
+    }
+    
+    String testDistanceName()
+    {
+        if (mapdistance > 0) {
+        	return  "${FcMath.DistanceStr(testDistance())}${messageSource.getMessage('fc.mile', null, null)} ${messageSource.getMessage('fc.distance.map.short', null, null)}"
+        } else {
+        	return  "${FcMath.DistanceStr(testDistance())}${messageSource.getMessage('fc.mile', null, null)} ${messageSource.getMessage('fc.distance.coord.short', null, null)}"
+        }
+    }
+    
+    String coordName()
+    {
+        return "${trueTrackName()} ${coordDistanceName()}"
+    }
+
+    String mapName()
+    {
+        return "${trueTrackName()} ${mapDistanceName()}"
+    }
+
+	String testName()
+	{
+		return "${trueTrackName()} ${testDistanceName()}"
 	}
 }

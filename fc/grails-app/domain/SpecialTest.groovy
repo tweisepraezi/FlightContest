@@ -2,8 +2,7 @@ class SpecialTest
 {
 	String title
 
-	ContestDayTask contestdaytask
-	static belongsTo = ContestDayTask
+	static belongsTo = [contestdaytask:ContestDayTask]
 
 	static hasMany = [specialtesttasks:SpecialTestTask]
 	

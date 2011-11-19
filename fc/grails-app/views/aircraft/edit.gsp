@@ -33,16 +33,6 @@
                                 <br/>
                                 <input type="text" id="colour" name="colour" value="${fieldValue(bean:aircraftInstance,field:'colour')}"/>
                             </p>
-                            <p>
-                                <label>${message(code:'fc.aircraft.defaulttas')} [${message(code:'fc.knot')}]:</label>
-                                <br/>
-                                <input type="text" id="defaultTAS" name="defaultTAS" value="${fieldValue(bean:aircraftInstance,field:'defaultTAS')}" />
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.aircraft.owner')}:</label>
-                                <br/>
-                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Crew.list(sort:'name1')}" name="owner.id" value="${aircraftInstance?.owner?.id}" noSelection="['null':'']" />
-                            </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${aircraftInstance?.id}" />
                         <input type="hidden" name="version" value="${aircraftInstance?.version}" />

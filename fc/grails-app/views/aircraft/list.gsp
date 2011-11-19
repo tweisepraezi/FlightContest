@@ -5,7 +5,7 @@
         <title>${message(code:'fc.aircraft.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" printaction="${message(code:'fc.aircraft.print')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>
@@ -17,8 +17,8 @@
                        <th>${message(code:'fc.aircraft.registration')}</th>
                        <th>${message(code:'fc.aircraft.type')}</th>
                        <th>${message(code:'fc.aircraft.colour')}</th>
-                       <th>${message(code:'fc.aircraft.defaulttas')}</th>
-                       <th>${message(code:'fc.aircraft.owner')}</th>
+                       <th>${message(code:'fc.aircraft.user1')}</th>
+                       <th>${message(code:'fc.aircraft.user2')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,8 +27,8 @@
                             <td><g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
                             <td>${fieldValue(bean:aircraftInstance, field:'type')}</td>
                             <td>${fieldValue(bean:aircraftInstance, field:'colour')}</td>
-                            <td>${fieldValue(bean:aircraftInstance, field:'defaultTAS')}${message(code:'fc.knot')}</td>
-                            <td><g:crew var="${aircraftInstance.owner}" link="${createLink(controller:'crew',action:'show')}"/></td>
+                            <td><g:crew var="${aircraftInstance.user1}" link="${createLink(controller:'crew',action:'show')}"/></td>
+                            <td><g:crew var="${aircraftInstance.user2}" link="${createLink(controller:'crew',action:'show')}"/></td>
                         </tr>
                     </g:each>
                 </tbody>

@@ -31,7 +31,7 @@ class RouteCoordController {
         def routecoord = fcService.updateRouteCoord(params) 
         if (routecoord.saved) {
         	flash.message = routecoord.message
-        	redirect(action:show,id:routecoord.instance.id)
+            redirect(controller:"route",action:show,id:routecoord.instance.route.id)
         } else if (routecoord.instance) {
         	render(view:'edit',model:[routeCoordInstance:routecoord.instance])
         } else {
@@ -42,14 +42,20 @@ class RouteCoordController {
 
     def create = {
 		def routecoord = fcService.createRouteCoord(params)
-        return [routeCoordInstance:routecoord.instance]
+		if (routecoord.error) {
+			flash.error = routecoord.error
+            flash.message = routecoord.message
+            redirect(controller:"route",action:show,id:params.routeid)
+		} else {
+			return [routeCoordInstance:routecoord.instance]
+		}
     }
 
     def save = {
         def routecoord = fcService.saveRouteCoord(params) 
         if (routecoord.saved) {
         	flash.message = routecoord.message
-        	redirect(controller:"route",action:show,id:params.routeid)
+        	redirect(controller:"route",action:show,id:routecoord.instance.route.id)
         } else {
             render(view:'create',model:[routeCoordInstance:routecoord.instance])
         }
@@ -70,6 +76,11 @@ class RouteCoordController {
     }
 	
 	def cancel = {
-        redirect(controller:"route",action:show,id:params.routeid)
+        def routecoord = fcService.getRouteCoord(params) 
+        if (routecoord.instance) {
+        	redirect(controller:"route",action:show,id:routecoord.instance.route.id)
+        } else {
+            redirect(controller:"route",action:show,id:params.routeid)
+        }
 	}
 }

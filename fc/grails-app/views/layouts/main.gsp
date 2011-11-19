@@ -2,7 +2,6 @@
     <head>
         <title><g:layoutTitle default="${message(code:'fc.programtitle')}" /> - ${message(code:'fc.programtitle')}</title>
 
-        <!--<link rel="stylesheet" href="${createLinkTo(dir:'css',file:'main.css')}" />-->
         <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
 
         <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'reset.css')}" media="screen" />
@@ -24,8 +23,8 @@
         <div class="container_12">
             <div class="grid">
                 <h1 id="branding">
-                    <g:if test="${Contest.findByIdIsNotNull()}">
-                        ${Contest.findByIdIsNotNull().name()}
+                    <g:if test="${session.lastContest}">
+                        ${session.lastContest.name()}
                     </g:if>
                     <g:else>
                         ${message(code:'fc.programtitle')}

@@ -49,8 +49,8 @@ class FlightTestWindController {
         def flighttestwind = fcService.saveFlightTestWind(params) 
         if (flighttestwind.saved) {
         	flash.message = flighttestwind.message
-            if (flighttestwind.fromlistcrewtests) {
-            	redirect(controller:"contestDayTask",action:"listcrewtests",id:flighttestwind.contestdaytaskid)
+            if (flighttestwind.fromlistplanning) {
+            	redirect(controller:"contestDayTask",action:"listplanning",id:flighttestwind.contestdaytaskid)
             } else {
             	redirect(controller:"flightTest",action:show,id:flighttestwind.flighttestid)
             }
@@ -74,8 +74,8 @@ class FlightTestWindController {
     }
 
     def cancel = {
-        if (params.fromlistcrewtests) {
-            redirect(controller:"contestDayTask",action:"listcrewtests",id:params.contestdaytaskid)
+        if (params.fromlistplanning) {
+            redirect(controller:"contestDayTask",action:"listplanning",id:params.contestdaytaskid)
         } else {
             redirect(controller:"flightTest",action:show,id:params.flighttestid)
         }

@@ -15,35 +15,21 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.crew.name1')}:</td>
-                                    <td>${fieldValue(bean:crewInstance, field:'name1')}</td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.crew.name2')}:</td>
-                                    <td>${fieldValue(bean:crewInstance, field:'name2')}</td>
+                                    <td class="detailtitle">${message(code:'fc.crew.name')}:</td>
+                                    <td>${fieldValue(bean:crewInstance, field:'name')}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew.country')}:</td>
                                     <td>${fieldValue(bean:crewInstance, field:'country')}</td>
                                 </tr>
-                                <g:if test="${crewInstance.ownAircraft}">
+                                <g:if test="${crewInstance.aircraft}">
                                     <tr>
-                                        <td class="detailtitle"">${message(code:'fc.crew.ownaircraft')}:</td>
-                                        <td><g:aircraft var="${crewInstance.ownAircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
+                                        <td class="detailtitle"">${message(code:'fc.crew.aircraft')}:</td>
+                                        <td><g:aircraft var="${crewInstance.aircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
                                     </tr>
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.aircraft.defaulttas')}:</td>
-                                        <td>${fieldValue(bean:crewInstance.ownAircraft, field:'defaultTAS')}${message(code:'fc.knot')}</td>
-                                    </tr>
-                                </g:if>
-                                <g:if test="${crewInstance.usedAircraft}">
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.usedaircraft')}:</td>
-                                        <td><g:aircraft var="${crewInstance.usedAircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.usedtas')}:</td>
-                                        <td>${fieldValue(bean:crewInstance, field:'usedTAS')}${message(code:'fc.knot')}</td>
+                                        <td class="detailtitle">${message(code:'fc.tas')}:</td>
+                                        <td>${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>
                                     </tr>
                                 </g:if>
                             </tbody>

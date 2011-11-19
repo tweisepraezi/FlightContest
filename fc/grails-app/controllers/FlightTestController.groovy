@@ -45,8 +45,8 @@ class FlightTestController {
         if (flighttest.error) {
         	flash.message = flighttest.message
         	flash.error = flighttest.error
-            if (flighttest.fromlistcrewtests) {
-            	redirect(controller:"contestDayTask",action:"listcrewtests",id:flighttest.contestdaytaskid)
+            if (flighttest.fromlistplanning) {
+            	redirect(controller:"contestDayTask",action:"listplanning",id:flighttest.contestdaytaskid)
             } else if (flighttest.fromcontestdaytask) {
             	redirect(controller:"contestDayTask",action:show,id:flighttest.contestdaytaskid)
             } else {
@@ -61,8 +61,8 @@ class FlightTestController {
         def flighttest = fcService.saveFlightTest(params) 
         if (flighttest.saved) {
         	flash.message = flighttest.message
-            if (flighttest.fromlistcrewtests) {
-            	redirect(controller:"contestDayTask",action:"listcrewtests",id:flighttest.contestdaytaskid)
+            if (flighttest.fromlistplanning) {
+            	redirect(controller:"contestDayTask",action:"listplanning",id:flighttest.contestdaytaskid)
             } else if (flighttest.fromcontestdaytask) {
             	redirect(controller:"contestDayTask",action:show,id:flighttest.contestdaytaskid)
             } else {
@@ -88,8 +88,8 @@ class FlightTestController {
     }
 
 	def cancel = {
-        if (params.fromlistcrewtests) {
-            redirect(controller:"contestDayTask",action:"listcrewtests",id:params.contestdaytaskid)
+        if (params.fromlistplanning) {
+            redirect(controller:"contestDayTask",action:"listplanning",id:params.contestdaytaskid)
         } else if (params.fromcontestdaytask) {
             redirect(controller:"contestDayTask",action:show,id:params.contestdaytaskid)
         } else {

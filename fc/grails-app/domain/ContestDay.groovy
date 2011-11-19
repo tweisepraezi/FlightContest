@@ -3,8 +3,7 @@ class ContestDay
 	String title
 	int idTitle
 
-	Contest contest
-	static belongsTo = Contest
+	static belongsTo = [contest:Contest]
 	
 	static hasMany = [contestdaytasks:ContestDayTask]
 	

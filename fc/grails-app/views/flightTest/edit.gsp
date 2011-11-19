@@ -38,7 +38,7 @@
                             <p>
                                 <label>${message(code:'fc.route')}:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.list()}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
+                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(flightTestInstance.contestdaytask.contestday.contest)}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${flightTestInstance?.id}" />

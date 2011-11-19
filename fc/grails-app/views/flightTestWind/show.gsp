@@ -38,7 +38,7 @@
                         </table>
                         <input type="hidden" name="id" value="${flightTestWindInstance?.id}" />
                         <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
-                        <g:if test="${!CrewTest.findByFlighttestwind(flightTestWindInstance)}">
+                        <g:if test="${!Test.findByFlighttestwind(flightTestWindInstance)}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         </g:if>
                     </g:form>

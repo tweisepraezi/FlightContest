@@ -27,12 +27,12 @@
                                     <td>${fieldValue(bean:aircraftInstance, field:'colour')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.aircraft.defaulttas')}:</td>
-                                    <td>${fieldValue(bean:aircraftInstance, field:'defaultTAS')}${message(code:'fc.knot')}</td>
+                                    <td class="detailtitle">${message(code:'fc.aircraft.user1')}:</td>
+                                    <td><g:crew var="${aircraftInstance.user1}" link="${createLink(controller:'crew',action:'show')}"/></td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.aircraft.owner')}:</td>
-                                    <td><g:crew var="${aircraftInstance.owner}" link="${createLink(controller:'crew',action:'show')}"/></td>
+                                    <td class="detailtitle">${message(code:'fc.aircraft.user2')}:</td>
+                                    <td><g:crew var="${aircraftInstance.user2}" link="${createLink(controller:'crew',action:'show')}"/></td>
                                 </tr>
                             </tbody>
                         </table>

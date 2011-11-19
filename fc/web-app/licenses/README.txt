@@ -1,6 +1,6 @@
 
-Flight Contest 0.3
-Copyright by Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 0.4
+Copyright 2010 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de
 
@@ -10,11 +10,13 @@ Apache Tomcat
 Copyright 1999-2009 The Apache Software Foundation
 
 This product includes software developed by
-The Apache Software Foundation (http://www.apache.org/).
+The Apache Software Foundation.
+
+http://www.apache.org/
 
 ============================================================================
 
-Grails, release 1.1.1 (May, 2009)
+Grails, release 1.2.1
 
 http://grails.org/
 
@@ -69,13 +71,14 @@ http://www.jasonsantamaria.com/archive/2004/05/24/grey_box_method.php
 
 ============================================================================
 
-
-
 960 Grid System
 Version 1.0
 2008-03-24
 
-Created by Nathan Smith. See the official site for more info: http://960.gs/
+Created by Nathan Smith. 
+
+See the official site for more info: 
+http://960.gs/
 
 ----------------------------------------------------------------------------
 

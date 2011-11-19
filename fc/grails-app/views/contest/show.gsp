@@ -19,13 +19,36 @@
                                     <td>${fieldValue(bean:contestInstance, field:'title')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.contestday.list')}:</td>
-                                    <td>
-                                        <g:each var="contestDayInstance" in="${ContestDay.findAllByContest(contestInstance)}">
-                                            <g:contestday var="${contestDayInstance}" link="${createLink(controller:'contestDay',action:'show')}"/>
-                                            <br/>
-                                        </g:each>
-                                    </td>
+                                    <td class="detailtitle">${message(code:'fc.scale')}:</td>
+                                    <td>1:${fieldValue(bean:contestInstance, field:'mapScale')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtest.directioncorrectgrad')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'planningTestDirectionCorrectGrad')}${message(code:'fc.grad')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtest.directionpointspergrad')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'planningTestDirectionPointsPerGrad')} ${message(code:'fc.points')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtest.timecorrectsecond')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'planningTestTimeCorrectSecond')}${message(code:'fc.time.s')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtest.timepointspersecond')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'planningTestTimePointsPerSecond')} ${message(code:'fc.points')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtest.maxpoints')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'planningTestMaxPoints')} ${message(code:'fc.points')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtaskresults.giventolate')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'planningTestPlanTooLatePoints')} ${message(code:'fc.points')}</td>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.planningtaskresults.exitroomtolate')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'planningTestExitRoomTooLatePoints')} ${message(code:'fc.points')}</td>
                                 </tr>
                             </tbody>
                         </table>

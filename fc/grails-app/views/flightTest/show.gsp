@@ -48,11 +48,11 @@
                         <input type="hidden" name="id" value="${flightTestInstance?.id}" />
                         <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
                         <g:each var="flightTestWindInstance" in="${flightTestInstance.flighttestwinds}">
-                            <g:if test="${CrewTest.findByFlighttestwind(flightTestWindInstance)}">
-                                <g:set var="foundCrewTest" value="${true}" />
+                            <g:if test="${Test.findByFlighttestwind(flightTestWindInstance)}">
+                                <g:set var="foundTest" value="${true}" />
                             </g:if>
                         </g:each>
-                        <g:if test="${!foundCrewTest}">
+                        <g:if test="${!foundTest}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         </g:if>
                         <g:actionSubmit action="createflighttestwind" value="${message(code:'fc.flighttestwind.add1')}" />

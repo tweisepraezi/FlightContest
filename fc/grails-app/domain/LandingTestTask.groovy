@@ -3,8 +3,7 @@ class LandingTestTask
 	String title
     int idTitle
 
-	LandingTest landingtest
-	static belongsTo = LandingTest
+	static belongsTo = [landingtest:LandingTest]
 	
 	def messageSource
 	

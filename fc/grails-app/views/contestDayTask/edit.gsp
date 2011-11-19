@@ -47,9 +47,9 @@
                                 <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:contestDayTaskInstance,field:'takeoffIntervalFasterAircraft')}"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.contestdaytask.navtestduration')} [${message(code:'fc.time.min')}]:</label>
+                                <label>${message(code:'fc.contestdaytask.planningtestduration')} [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="navTestDuration" name="navTestDuration" value="${fieldValue(bean:contestDayTaskInstance,field:'navTestDuration')}"/>
+                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:contestDayTaskInstance,field:'planningTestDuration')}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.contestdaytask.preparationduration')} [${message(code:'fc.time.min')}]:</label>
@@ -80,6 +80,16 @@
                                 <label>${message(code:'fc.contestdaytask.addtimevalue')} [${message(code:'fc.time.min')}]:</label>
                                 <br/>
                                 <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:contestDayTaskInstance,field:'addTimeValue')}"/>
+                            </p>
+                            <p>
+                                <div>
+                                    <g:checkBox name="planningTestDistanceMeasure" value="${contestDayTaskInstance.planningTestDistanceMeasure}" />
+                                    <label>${message(code:'fc.contestdaytask.planningtestdistancemeasure')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="planningTestDirectionMeasure" value="${contestDayTaskInstance.planningTestDirectionMeasure}" />
+                                    <label>${message(code:'fc.contestdaytask.planningtestdirectionmeasure')}</label>
+                                </div>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${contestDayTaskInstance?.id}" />

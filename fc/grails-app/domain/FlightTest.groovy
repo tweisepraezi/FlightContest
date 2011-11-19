@@ -5,17 +5,18 @@ class FlightTest
 
 	// transient Wind values
 	static transients = ['direction','speed']
-	float direction
-	float speed 
+	BigDecimal direction = 0.0
+	BigDecimal speed = 0.0
 	
-	ContestDayTask contestdaytask
-	static belongsTo = ContestDayTask
+	static belongsTo = [contestdaytask:ContestDayTask]
 
 	static hasMany = [flighttestwinds:FlightTestWind]
 	
 	static constraints = {
 		title()
-		route()
+		route(nullable:true) // TODO
+        direction(range:0.0f..<360.0f)
+        speed(range:0.0f..<1000.0f)
 		contestdaytask(nullable:false)
 	}
 

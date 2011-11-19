@@ -1,18 +1,34 @@
 class Contest 
 {
 	String title
-
+	int mapScale = 200000
+	
+	// PlanningTest
+	int planningTestDirectionCorrectGrad = 2
+	int planningTestDirectionPointsPerGrad = 2
+	int planningTestTimeCorrectSecond = 5
+	int planningTestTimePointsPerSecond = 1
+	int planningTestMaxPoints = 350
+	int planningTestPlanTooLatePoints = 50
+	int planningTestExitRoomTooLatePoints = 100
+	
 	// transient values
 	static transients = ['contestDayTitle','contestDayTaskTitle']
 	String contestDayTitle
 	String contestDayTaskTitle
 	
-	int lastContestDayTask = 0
-	
-	static hasMany = [contestdays:ContestDay, crews:Crew, aircrafts:Aircraft, routes:Route]
+	static hasMany = [crews:Crew, aircrafts:Aircraft, routes:Route, contestdays:ContestDay]
 	
 	static constraints = {
 		title(blank:false)
+		mapScale(blank:false, range:1..1000000000)
+		planningTestDirectionCorrectGrad(blank:false, min:0)
+		planningTestDirectionPointsPerGrad(blank:false, min:0)
+		planningTestTimeCorrectSecond(blank:false, min:0)
+		planningTestTimePointsPerSecond(blank:false, min:0)
+		planningTestMaxPoints(blank:false, min:0)
+		planningTestPlanTooLatePoints(blank:false, min:0)
+		planningTestExitRoomTooLatePoints(blank:false, min:0)
 	}
 
     static mapping = {

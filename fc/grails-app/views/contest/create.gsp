@@ -5,11 +5,7 @@
         <title>${message(code:'fc.contest.create')}</title>         
     </head>
     <body>
-        <div class="grid">
-            <ul class="nav main">
-                <li class="secondary"> <a class="list" href="${createLinkTo(dir:'')}">${message(code:'fc.internal')}</a> </li>
-            </ul>
-        </div>
+        <g:mainnav link="${createLink(controller:'contest')}" controller="contest" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >

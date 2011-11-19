@@ -16,8 +16,8 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:if test="${params.fromlistcrewtests}">
-                        <g:set var="newparams" value="['flighttestid':params.flighttestid,'fromlistcrewtests':true]"/>
+                    <g:if test="${params.fromlistplanning}">
+                        <g:set var="newparams" value="['flighttestid':params.flighttestid,'fromlistplanning':true]"/>
                     </g:if> <g:else> 
                         <g:set var="newparams" value="['flighttestid':params.flighttestid]"/>
                     </g:else>

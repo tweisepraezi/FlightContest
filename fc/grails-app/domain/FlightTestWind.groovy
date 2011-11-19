@@ -4,11 +4,10 @@ class FlightTestWind
 	
 	// transient Wind values
 	static transients = ['direction','speed']
-	float direction
-	float speed 
+	BigDecimal direction = 0.0
+	BigDecimal speed = 0.0
 	
-	FlightTest flighttest
-	static belongsTo = FlightTest
+	static belongsTo = [flighttest:FlightTest]
 
 	static constraints = {
 		direction(range:0.0f..<360.0f)

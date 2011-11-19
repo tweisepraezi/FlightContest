@@ -5,21 +5,14 @@
         <title>${message(code:'fc.contest')}</title>
     </head>
     <body>
-        <g:if test="${contestInstanceList}">
-            <g:set var="contestInstance" value="${contestInstanceList.get(0)}" />
-            <g:mainnav link="${createLink(controller:'contest')}" controller="contest" show="${message(code:'fc.contest.show')}" id="${contestInstance.id}" />
+        <g:if test="${contestInstance}">
+            <g:mainnav link="${createLink(controller:'contest')}" controller="contest" edit="${message(code:'fc.contest.settings')}" id="${contestInstance.id}" />
         </g:if> <g:else>
-            <div class="grid">
-                <ul class="nav main">
-                    <li> <g:link action="create">${message(code:'fc.contest.new')}</g:link> </li>
-                    <li> <g:link action="createtest">${message(code:'fc.contest.new.test')}</g:link> </li>
-                    <li class="secondary"> <a class="list" href="${createLinkTo(dir:'')}">${message(code:'fc.internal')}</a> </li>
-                </ul>
-            </div>
+            <g:mainnav link="${createLink(controller:'contest')}" controller="global" />
         </g:else>
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
-            <g:if test="${contestInstanceList}">
+            <g:if test="${contestInstance}">
                 <table>
                     <thead>
                         <tr>
@@ -27,7 +20,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <g:each in="${contestInstance.contestdays}" status="j" var="contestDayInstance">
+                        <g:each in="${contestDayInstanceList}" status="j" var="contestDayInstance">
                             <tr class="">
                                 <td colspan=7><g:contestday var="${contestDayInstance}" link="${createLink(controller:'contestDay',action:'show')}"/></td>
                             </tr>
@@ -37,10 +30,10 @@
                                     
                                     <td colspan=1><g:contestdaytask var="${contestDayTaskInstance}" link="${createLink(controller:'contestDayTask',action:'show')}"/></td>
     
-                                    <g:if test="${contestDayTaskInstance.navtest}">
-                                        <td colspan=1><g:navtest var="${contestDayTaskInstance.navtest}" link="${createLink(controller:'navTest',action:'show')}"/></td>
+                                    <g:if test="${contestDayTaskInstance.planningtest}">
+                                        <td colspan=1><g:planningtest var="${contestDayTaskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                     </g:if> <g:else>
-                                        <td class="add" colspan=1><g:link controller="navTest" params="['contestdaytask.id':contestDayTaskInstance?.id,'contestdaytaskid':contestDayTaskInstance?.id]" action="create">${message(code:'fc.navtest.add')}</g:link></td>
+                                        <td class="add" colspan=1><g:link controller="planningTest" params="['contestdaytask.id':contestDayTaskInstance?.id,'contestdaytaskid':contestDayTaskInstance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
                                     </g:else>
     
                                     <g:if test="${contestDayTaskInstance.flighttest}">

@@ -5,19 +5,20 @@
         <title>${message(code:'fc.route.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" importaction="${message(code:'fc.route.import')}" printaction="${message(code:'fc.route.print')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>
                 <thead>
                     <tr>
-                        <th colspan="5" class="table-head">${message(code:'fc.route.list')}</th>
+                        <th colspan="9" class="table-head">${message(code:'fc.route.list')}</th>
                     </tr>
                     <tr>
                        <th>${message(code:'fc.title')}</th>
-                       <th>${message(code:'fc.routecoord.list')}</th>
-                       <th>${message(code:'fc.routeleg.list')}</th>
-                       <th>${message(code:'fc.navtesttask.list')}</th>
+                       <th colspan="2">${message(code:'fc.routecoord.list')}</th>
+                       <th colspan="2">${message(code:'fc.routelegcoord.list')}</th>
+                       <th colspan="2">${message(code:'fc.routelegtest.list')}</th>
+                       <th>${message(code:'fc.planningtesttask.list')}</th>
                        <th>${message(code:'fc.flighttest.list')}</th>
                     </tr>
                 </thead>
@@ -25,24 +26,53 @@
                     <g:each in="${routeInstanceList}" status="i" var="routeInstance">
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                             <td><g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/></td>
+
                             <td>
-                                <g:each var="c" in="${RouteCoord.findAllByRoute(routeInstance)}">
-                                    <g:routecoord var="${c}" link="${createLink(controller:'routeCoord',action:'show')}"/>
+                                <g:each var="routeCoordInstance" in="${RouteCoord.findAllByRoute(routeInstance)}">
+                                    ${routeCoordInstance.title()}
                                     <br/>                                     
                                 </g:each>
                             </td>
                             <td>
-                                <g:each var="c" in="${RouteLeg.findAllByRoute(routeInstance)}">
-                                    <g:routeleg var="${c}" link="${createLink(controller:'routeLeg',action:'show')}"/>
+                                <g:each var="routeCoordInstance" in="${RouteCoord.findAllByRoute(routeInstance)}">
+                                    ${routeCoordInstance.name()}
+                                    <br/>                                     
+                                </g:each>
+                            </td>
+
+                            <td>
+                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}">
+                                    ${routeLegCoordInstance.title}
                                     <br/>                                     
                                 </g:each>
                             </td>
                             <td>
-                                <g:each var="c" in="${NavTestTask.findAllByRoute(routeInstance)}">
-                                    <g:navtesttask var="${c}" link="${createLink(controller:'navTestTask',action:'show')}"/>
+                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}">
+                                    ${routeLegCoordInstance.coordName()}
                                     <br/>                                     
                                 </g:each>
                             </td>
+
+                            <td>
+                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance)}">
+                                    ${routeLetTestInstance.title}
+                                    <br/>                                     
+                                </g:each>
+                            </td>
+                            <td>
+                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance)}">
+                                    ${routeLetTestInstance.testName()}
+                                    <br/>                                     
+                                </g:each>
+                            </td>
+
+                            <td>
+                                <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance)}">
+                                    <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
+                                    <br/>                                     
+                                </g:each>
+                            </td>
+
                             <td>
                                 <g:each var="c" in="${FlightTest.findAllByRoute(routeInstance)}">
                                     <g:flighttest var="${c}" link="${createLink(controller:'flightTest',action:'show')}"/>

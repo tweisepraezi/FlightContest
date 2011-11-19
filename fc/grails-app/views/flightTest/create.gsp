@@ -16,8 +16,8 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:if test="${params.fromlistcrewtests}">
-                        <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid,'fromlistcrewtests':true]"/>
+                    <g:if test="${params.fromlistplanning}">
+                        <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid,'fromlistplanning':true]"/>
                     </g:if> <g:else> 
                         <g:if test="${params.fromcontestdaytask}">
                             <g:set var="newparams" value="['contestdaytaskid':params.contestdaytaskid,'fromcontestdaytask':true]"/>
@@ -35,7 +35,7 @@
                             <p>
                                 <label>${message(code:'fc.route')}:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.list()}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
+                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(flightTestInstance.contestdaytask.contestday.contest)}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
                             </p>
                         </fieldset>
                         <fieldset>

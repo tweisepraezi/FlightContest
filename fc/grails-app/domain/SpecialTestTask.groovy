@@ -3,8 +3,7 @@ class SpecialTestTask
 	String title
     int idTitle
 	
-	SpecialTest specialtest
-	static belongsTo = SpecialTest
+	static belongsTo = [specialtest:SpecialTest]
 	
 	def messageSource
 	

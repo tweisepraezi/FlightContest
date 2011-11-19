@@ -5,21 +5,19 @@
         <title>${message(code:'fc.crew.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" printaction="${message(code:'fc.crew.print')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>
                 <thead>
                     <tr>
-                        <th colspan="6" class="table-head">${message(code:'fc.crew.list')}</th>
+                        <th colspan="4" class="table-head">${message(code:'fc.crew.list')}</th>
                     </tr>
                     <tr>
                         <th>${message(code:'fc.crew.name')}</th>
                         <th>${message(code:'fc.crew.country')}</th>
-                        <th>${message(code:'fc.crew.ownaircraft')}</th>
-                        <th>${message(code:'fc.aircraft.defaulttas')}</th>
-                        <th>${message(code:'fc.crew.usedaircraft')}</th>
-                        <th>${message(code:'fc.crew.usedtas')}</th>
+                        <th>${message(code:'fc.crew.aircraft')}</th>
+                        <th>${message(code:'fc.tas')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,14 +25,8 @@
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                             <td><g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'show')}"/></td>
                             <td>${fieldValue(bean:crewInstance, field:'country')}</td>
-                            <td><g:aircraft var="${crewInstance.ownAircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
-                               <td>${fieldValue(bean:crewInstance.ownAircraft, field:'defaultTAS')}${message(code:'fc.knot')}</td>
-                            <td><g:aircraft var="${crewInstance.usedAircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
-                            <g:if test="${crewInstance.usedAircraft}">
-                                <td>${fieldValue(bean:crewInstance, field:'usedTAS')}${message(code:'fc.knot')}</td>
-                            </g:if> <g:else>
-                                <td/>
-                            </g:else>
+                            <td><g:aircraft var="${crewInstance.aircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
+                            <td>${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>
                         </tr>
                     </g:each>
                 </tbody>

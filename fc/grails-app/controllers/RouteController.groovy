@@ -1,5 +1,3 @@
-
-
 class RouteController {
     
 	def fcService
@@ -10,8 +8,11 @@ class RouteController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def list = {
-        params.max = Math.min( params.max ? params.max.toInteger() : 10,  100)
-        [ routeInstanceList: Route.list( params ), routeInstanceTotal: Route.count() ]
+        if (session.lastContest) {
+            def routeList = Route.findAllByContest(session.lastContest)
+            return [routeInstanceList:routeList]
+        }
+        return [:]
     }
 
     def show = {
@@ -53,7 +54,7 @@ class RouteController {
     }
 
     def save = {
-        def route = fcService.saveRoute(params) 
+        def route = fcService.saveRoute(params,session.lastContest) 
         if (route.saved) {
         	flash.message = route.message
         	redirect(action:show,id:route.instance.id)
@@ -77,11 +78,104 @@ class RouteController {
     }
 	
 	def cancel = {
-        redirect(action:list)
+        def route = fcService.getRoute(params) 
+        if (route.instance) {
+            redirect(action:show,id:route.instance.id)
+        } else {
+        	redirect(action:list)
+        }
 	}
 	
 	def createroutecoords = {
         def route = fcService.getRoute(params) 
         redirect(controller:'routeCoord',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
 	}
+
+    def createsecretroutecoords = {
+        def route = fcService.getRoute(params) 
+        redirect(controller:'routeCoord',action:'create',params:['secret':true,'route.id':route.instance.id,'routeid':route.instance.id])
+    }
+
+	def selectaflosroute = {
+		[ routeInstanceList: Route.list( params ) ]
+    }
+	
+	def importroute = {
+		def route = fcService.existAnyAflosRoute()
+		if (route.error) {
+			flash.error = route.error
+            flash.message = route.message
+	        redirect(action:list)
+		} else {
+	        redirect(action:selectaflosroute)
+		}
+	}
+    
+	def importaflosroute = {
+        def route = fcService.importAflosRoute(params,session.lastContest) 
+        if (route.saved) {
+            flash.message = route.message
+        } else if (route.error) {
+        	flash.error = route.error
+            flash.message = route.message
+        }
+        redirect(action:list)
+	}
+	
+	def calculateroutelegs = {
+        def route = fcService.caculateroutelegsRoute(params) 
+        if (route.instance) {
+            flash.message = route.message
+            redirect(action:show,id:route.instance.id)
+        } else {
+            flash.message = route.message
+            redirect(action:list)
+        }
+	}
+    
+    def print = {
+        def routes = fcService.printRoutes(params,GetPrintParams()) 
+        if (routes.error) {
+            flash.message = routes.message
+            flash.error = true
+            redirect(action:list)
+        } else if (routes.found && routes.content) {
+            fcService.WritePDF(response,routes.content)
+        } else {
+            redirect(action:list)
+        }
+    }
+    
+    def printroute = {
+        def routes = fcService.printRoute(params,GetPrintParams()) 
+        if (routes.error) {
+            flash.message = routes.message
+            flash.error = true
+            redirect(action:list)
+        } else if (routes.content) {
+            fcService.WritePDF(response,routes.content)
+        } else {
+            redirect(action:list)
+        }
+	}
+	
+    def showprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+        }
+        def route = fcService.getRoute(params) 
+        if (route.instance) {
+            return [routeInstance:route.instance]
+        } else {
+            flash.message = route.message
+            redirect(action:list)
+        }
+    }
+
+	Map GetPrintParams() {
+        return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
+                contest:session.lastContest,
+                lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'
+               ]
+    }
 }

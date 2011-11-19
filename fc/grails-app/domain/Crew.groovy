@@ -1,39 +1,24 @@
 class Crew 
 {
-	String name1
-	String name2
+	String name
 	String country
-	Aircraft ownAircraft
-	Aircraft usedAircraft
-	float usedTAS = 90.0f
+	Aircraft aircraft
+    BigDecimal tas = 90
 
-	// transient own aircraft values 
-	static transients = ['registration','type','colour','defaultTAS']
+	// transient aircraft values 
+	static transients = ['registration','type','colour']
 	String registration
 	String type
 	String colour
-	float defaultTAS = 80.0f
 	
-	Contest contest
-	static belongsTo = Contest
+	static belongsTo = [contest:Contest]
 
 	static constraints = {
-		name1(blank:false)
-		name2()
+		name(blank:false)
 		country()
-		ownAircraft(nullable:true, unique:true)
-		usedAircraft(nullable:true)
-		usedTAS(range:10.0f..<1000.0f)
+		aircraft(nullable:true)
+        tas(range:10.0f..<1000.0f)
 		contest(nullable:false)
-		defaultTAS(range:10.0f..<1000.0f)
 	}
 	
-	String name() {
-		if(name2) {
-			return "$name1 + $name2"
-		} else {
-			return name1
-		}
-	}
-
 }

@@ -19,14 +19,9 @@
                     <g:form method="post" >
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.crew.name1')}:</label>
+                                <label>${message(code:'fc.crew.name')}:</label>
                                 <br/>
-                                <input type="text" id="name1" name="name1" value="${fieldValue(bean:crewInstance,field:'name1')}"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.crew.name2')}:</label>
-                                <br/>
-                                <input type="text" id="name2" name="name2" value="${fieldValue(bean:crewInstance,field:'name2')}"/>
+                                <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.crew.country')}:</label>
@@ -35,24 +30,16 @@
                             </p>
                         </fieldset>
                         <fieldset>
-                            <legend>${message(code:'fc.crew.ownaircraft')}</legend>
+                            <legend>${message(code:'fc.crew.aircraft')}</legend>
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="registration" from="${Aircraft.list(sort:'registration')}" name="ownAircraft.id" value="${crewInstance?.ownAircraft?.id}" noSelection="['null':'']"></g:select>
-                            </p>
-                        </fieldset>
-                        <fieldset>
-                            <legend>${message(code:'fc.crew.usedaircraft')}</legend>
-                            <p>
-                                <label>${message(code:'fc.crew.usedaircraft')}:</label>
-                                <br/>
-                                <g:select optionKey="id" optionValue="registration" from="${Aircraft.list(sort:'registration')}" name="usedAircraft.id" value="${crewInstance?.usedAircraft?.id}" noSelection="['null':'']"></g:select>
+                                <g:select optionKey="id" optionValue="registration" from="${Aircraft.list(sort:'registration')}" name="aircraft.id" value="${crewInstance?.aircraft?.id}" noSelection="['null':'']"></g:select>
                             </p>
                             <p>
-                                <label>${message(code:'fc.crew.usedtas')} [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.tas')} [${message(code:'fc.knot')}]:</label>
                                 <br/>
-                                <input type="text" id="usedTAS" name="usedTAS" value="${fieldValue(bean:crewInstance,field:'usedTAS')}" />
+                                <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" />
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${crewInstance?.id}" />

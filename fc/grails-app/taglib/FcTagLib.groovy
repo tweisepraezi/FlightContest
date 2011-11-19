@@ -3,120 +3,133 @@ class FcTagLib
     // ====================================================================================================================
     // <g:mainnav link="${createLink(controller:'contest')}" />
     // <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" />
-    // <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" />
+    // <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" printaction="${message(code:'fc.aircraft.print')}" importaction="${message(code:'fc.route.import')}" />
     // <g:mainnav link="${createLink(controller:'contest')}" controller="contest" show="${message(code:'fc.contest.show')}" id="${contestInstance.id}" />
-    // <g:mainnav link="${createLink(controller:'contest')}" controller="contestDayTask" contestdaytasknav="true" />
+    // <g:mainnav link="${createLink(controller:'contest')}" controller="contest" edit="${message(code:'fc.contest.edit')}" id="${contestInstance.id}" />
+    // <g:mainnav link="${createLink(controller:'contest')}" controller="contestDayTask" contestdaytaskplanning="true" />
+    // <g:mainnav link="${createLink(controller:'contest')}" controller="contestDayTask" contestdaytaskresults="true" />
     def mainnav = { p -> 
-        def c = ""
+    	def c = ""
         boolean second_nav = false
     
-        out << """<div class="clear"></div>
-"""
-        out << """<div class="grid">
-"""
-        out << """  <ul class="nav main">
-"""
-        c = ""
-        if (p.controller == "contest") { c = "active" }
-        out << """    <li> <a class="${c}" href="${p.link}/../../contest/start">${message(code:'fc.contest')}</a> </li>
-"""
-        c = ""
-        if (p.controller == "crew") { c = "active" }
-        out << """    <li> <a class="${c}" href="${p.link}/../../crew/list">${message(code:'fc.crew.list')}</a> </li>
-"""
-        c = ""
-        if (p.controller == "aircraft") { c = "active" }
-        out << """    <li> <a class="${c}" href="${p.link}/../../aircraft/list">${message(code:'fc.aircraft.list')}</a> </li>
-"""
-        c = ""
-        if (p.controller == "route") { c = "active" }
-        out << """    <li> <a class="${c}" href="${p.link}/../../route/list">${message(code:'fc.route.list')}</a> </li>
-"""
-        if (ContestDayTask.findByIdIsNotNull()) {
-            c = ""
-            if (p.controller == "contestDayTask") { c = "active" }
-            out << """    <li> <a class="${c}" href="${p.link}/../../contestDayTask/start">${message(code:'fc.contestdaytask.list')}</a> </li>
-"""
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        outln """<div class="clear"></div>"""
+        outln """<div class="grid">"""
+        outln """  <ul class="nav main">"""
+        if (session.lastContest) {
+	        outln """    <li> <a class="${active(p.controller,'contest')}" href="${p.link}/../../contest/start">${message(code:'fc.contest')}</a> </li>"""
+	        outln """    <li> <a class="${active(p.controller,'crew')}" href="${p.link}/../../crew/list">${message(code:'fc.crew.list')}</a> </li>"""
+	        outln """    <li> <a class="${active(p.controller,'aircraft')}" href="${p.link}/../../aircraft/list">${message(code:'fc.aircraft.list')}</a> </li>"""
+	        outln """    <li> <a class="${active(p.controller,'route')}" href="${p.link}/../../route/list">${message(code:'fc.route.list')}</a> </li>"""
+            boolean foundAnyContestDaytask = false
+	        ContestDay.findAllByContest(session.lastContest).each { contestDayInstance ->
+            	ContestDayTask.findAllByContestday(contestDayInstance).each { contestDayTaskInstance ->
+            		foundAnyContestDaytask = true
+            	}
+	        }
+			if (foundAnyContestDaytask) {
+				outln """    <li> <a class="${if (p.contestdaytaskplanning) active(p.controller,'contestDayTask')}" href="${p.link}/../../contestDayTask/startplanning">${message(code:'fc.contestdaytask.listplanning')}</a> </li>"""
+           		outln """    <li> <a class="${if (p.contestdaytaskresults) active(p.controller,'contestDayTask')}" href="${p.link}/../../contestDayTask/startresults">${message(code:'fc.contestdaytask.listresults')}</a> </li>"""
+			}
+        } else {
+        	if (Contest.findByIdIsNotNull()) {
+        		Contest.list().each { contestInstance ->
+        			outln """    <li> <a href="${p.link}/../../contest/activate/${contestInstance.id}">${contestInstance.name()}</a> </li>"""
+        		}
+        	} else {
+        		outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
+        	}
         }
+        outln """    <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list">${message(code:'fc.settings')}</a> </li>"""
         if (true) {
-            c = ""
-            if (p.controller == "root") { c = "active" }
-            out << """    <li class="secondary"> <a class="${c}" href="${p.link}/../..">${message(code:'fc.internal')}</a> </li>
-"""
+            outln """    <li class="secondary"> <a class="${if (isAflos(p.controller)) "active"}" href="${p.link}/../../aflos/start">${message(code:'fc.aflos')}</a> </li>"""
         }
-        out << """  </ul>
-"""
-        out << """</div>
-"""
+        outln """  </ul>"""
+        outln """</div>"""
 
-        if (p.newaction) {
-            out << """<div class="clear"></div>
-"""
-            out << """<div class="grid">
-"""
-            out << """  <ul class="nav main">
-"""
-            out << """    <li> <a href="${p.link}/../../${p.controller}/create">${p.newaction}</a> </li>
-"""
-            out << """  </ul>
-"""
-            out << """</div>
-"""
-            second_nav = true
-        } else if (p.show) {
-            out << """<div class="clear"></div>
-"""
-            out << """<div class="grid">
-"""
-            out << """  <ul class="nav main">
-"""
-            out << """    <li> <a href="${p.link}/../../${p.controller}/show/${p.id}">${p.show}</a> </li>
-"""
-            out << """  </ul>
-"""
-            out << """</div>
-"""
-            second_nav = true
-        }
-
-
-        out << """<div class="clear"></div>
-"""
-
-        if (p.contestdaytasknav) {
-            out << """<div class="grid">
-"""
-            out << """  <ul class="nav main">
-"""
-            def contestInstance = Contest.findByIdIsNotNull()
-            ContestDay.list().each { contestDayInstance ->
-                contestDayInstance.contestdaytasks.each { contestDayTaskInstance ->
-                    c = ""
-                    if (contestInstance.lastContestDayTask == contestDayTaskInstance.id ) { c = "active" }
-                    out << """    <li> <a class="${c}" href="${p.link}/../../contestDayTask/listcrewtests/${contestDayTaskInstance.id}" >${contestDayTaskInstance.name()}</a> </li>
-"""
+        // ---------------------------------------------------------------
+        // ---------------------------------------------------------------
+        if (p.newaction || p.show || p.edit || p.printaction || p.importaction) {
+            if (p.controller != "contest" || session.lastContest) {
+	        	outln """<div class="clear"></div>"""
+	            outln """<div class="grid">"""
+	            outln """  <ul class="nav main">"""
+		        if (p.newaction) {
+		            outln """    <li> <a href="${p.link}/../../${p.controller}/create">${p.newaction}</a> </li>"""
+		        } 
+		        if (p.show) {
+		            outln """    <li> <a href="${p.link}/../../${p.controller}/show/${p.id}">${p.show}</a> </li"""
+		        }
+		        if (p.edit) {
+		        	outln """    <li> <a href="${p.link}/../../${p.controller}/edit/${p.id}">${p.edit}</a> </li"""
+		        }
+		        if (p.printaction) {
+		            outln """    <li> <a href="${p.link}/../../${p.controller}/print">${p.printaction}</a> </li>"""
+		        }
+		        if (p.importaction) {
+	                outln """    <li> <a href="${p.link}/../../${p.controller}/importroute">${p.importaction}</a> </li>"""
+		        }
+	            outln """  </ul>"""
+	            outln """</div>"""
+	            second_nav = true
+            }
+        } else if (p.contestdaytaskplanning || p.contestdaytaskresults) {
+            outln """<div class="clear"></div>"""
+            outln """<div class="grid">"""
+            outln """  <ul class="nav main">"""
+            ContestDay.findAllByContest(session.lastContest).each { contestDayInstance ->
+                ContestDayTask.findAllByContestday(contestDayInstance).each { contestDayTaskInstance ->
+                   	if (p.contestdaytaskplanning) {
+                   		outln """    <li> <a class="${if (session.lastContestDayTaskPlanning == contestDayTaskInstance.id) "active"}" href="${p.link}/../../contestDayTask/listplanning/${contestDayTaskInstance.id}" >${contestDayTaskInstance.name()}</a> </li>"""
+                   	} else if (p.contestdaytaskresults) {
+                   		outln """    <li> <a class="${if (session.lastContestDayTaskResults == contestDayTaskInstance.id) "active"}" href="${p.link}/../../contestDayTask/listresults/${contestDayTaskInstance.id}" >${contestDayTaskInstance.name()}</a> </li>"""
+                   	}
                 }        
             }
-            out << """  </ul>
-"""
-            out << """</div>
-"""            
-            out << """<div class="clear"></div>
-"""
+            outln """  </ul>"""
+            outln """</div>"""            
+            outln """<div class="clear"></div>"""
+            second_nav = true
+        } else if (isAflos(p.controller)) {
+            outln """<div class="clear"></div>"""
+            outln """<div class="grid">"""
+            outln """  <ul class="nav main">"""
+            outln """    <li> <a class="${active(p.controller,'aflosRouteDefs')}" href="${p.link}/../../aflosRouteDefs/list" >${message(code:'fc.aflos.routedefs.list')}</a> </li>"""
+            outln """    <li> <a class="${active(p.controller,'aflosCrewNames')}" href="${p.link}/../../aflosCrewNames/list" >${message(code:'fc.aflos.crewnames.list')}</a> </li>"""
+            outln """  </ul>"""
+			outln """</div>"""            
+			outln """<div class="clear"></div>"""
+            second_nav = true
+        } else if (p.controller == "global") {
+            outln """<div class="clear"></div>"""
+            outln """<div class="grid">"""
+            outln """  <ul class="nav main">"""
+            outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../global/changelanguage">${message(code:'fc.changelanguage')}</a> </li>"""
+            if (Contest.count() > 1) {
+            	outln """    <li> <a href="${p.link}/../../global/changecontest">${message(code:'fc.changecontest')}</a> </li>"""
+            }
+            if (session.lastContest) {
+                outln """    <li> <a href="${p.link}/../../contest/deletequestion">${message(code:'fc.contest.delete')}</a> </li>"""
+            }
+            if (!Contest.findByIdIsNotNull()) {
+                outln """    <li> <a href="${p.link}/../../contest/createtest">${message(code:'fc.contest.new.test')}</a> </li>"""
+            } else {
+            	outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
+            }
+            outln """  </ul>"""
+            outln """</div>"""            
+            outln """<div class="clear"></div>"""
             second_nav = true
         }
-
+	
         if (!second_nav) {
-            out << """<div class="grid">
-"""
-            out << """  <ul class="nav main">
-"""
-            out << """  </ul>
-"""
-            out << """</div>
-"""            
-            out << """<div class="clear"></div>
-"""
+        	outln """<div class="grid">"""
+            outln """  <ul class="nav main">"""
+            outln """  </ul>"""
+            outln """</div>"""            
+            outln """<div class="clear"></div>"""
         }
     }
     
@@ -133,6 +146,42 @@ class FcTagLib
             out << """<h3 style="color: rgb(255,255,255); background: rgb(255,255,255) none repeat scroll 0% 0%; -moz-background-clip: border; -moz-background-origin: padding; -moz-background-inline-policy: continuous;" class="toggler atStart">.</h3>"""
         }
         out << """<h3></h3>"""
+    }
+    
+    // ====================================================================================================================
+    // <g:viewbool value="${value}" tag="td" trueclass="c1" falseclass="c0" />
+    def viewbool = { p ->
+    	def attrib = ""
+    	if (p.value) {
+	        if (p.trueclass) {
+	        	attrib = " class=${p.trueclass}"
+	        }
+    	} else {
+            if (p.falseclass) {
+                attrib = " class=${p.falseclass}"
+            }
+    	}
+    	def starttag = ""
+    	if (p.tag) {
+    		starttag = "<${p.tag}${attrib}>"
+    	}
+    	def endtag = ""
+        if (p.tag) {
+            endtag = "</${p.tag}>"
+        }
+    	if (p.value) {
+    		out << "${starttag}${message(code:'fc.yes')}${endtag}" 
+    	} else {
+    		out << "${starttag}${message(code:'fc.no')}${endtag}"
+    	}
+    }
+    
+    // ====================================================================================================================
+    // <g:aflosroutename var="${aflosRouteDefsInstance.routename}" link="${createLink(controller:'aflosRouteNames',action:'show')}"/>
+    def aflosroutename = { p ->
+        if (p.var) {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+        }
     }
     
     // ====================================================================================================================
@@ -158,10 +207,12 @@ class FcTagLib
     // ====================================================================================================================
     // <g:contestdaytask var="${contestDayTaskInstance}" link="${createLink(controller:'contestDayTask',action:'show')}"/>
     def contestdaytask = { p ->
-        if (p.link == "/fc/contestDayTask/listcrewtests") {
-        	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (M)</a>"""
+        if (p.link == "/fc/contestDayTask/listplanning") {
+        	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.contestdaytask.planning')})</a>"""
+        } else if (p.link == "/fc/contestDayTask/listresults") {
+                out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.contestdaytask.results')})</a>"""
         } else {
-        	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+        	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.contestdaytask.settings')})</a>"""
         }
     }
 
@@ -169,36 +220,8 @@ class FcTagLib
     // <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'show')}"/>
     def crew = { p ->
         if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
         }
-    }
-    
-    // ====================================================================================================================
-    // <g:crewtest var="${crewTestInstance}" link="${createLink(controller:'crewTest',action:'show')}"/>
-    def crewtest = { p ->
-        if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.crew.name().encodeAsHTML()} (${p.var.contestdaytask.name().encodeAsHTML()})</a>"""
-        }
-    }
-    
-    // ====================================================================================================================
-    // <g:crewtestnum var="${crewTestInstance}" link="${createLink(controller:'crewTest',action:'show')}"/>
-    def crewtestnum = { p ->
-        if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.viewpos+1}</a>"""
-        }
-    }
-    
-    // ====================================================================================================================
-    // <g:crewtestleg var="${crewTestLegInstance}" link="${createLink(controller:'crewTestLeg',action:'show')}"/>
-    def crewtestleg = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
-    }
-    
-    // ====================================================================================================================
-    // <g:crewtestleg2 var="${crewTestLegInstance}" name="${leg}" link="${createLink(controller:'crewTestLeg',action:'show')}"/>
-    def crewtestleg2 = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.name}</a>""" // .encodeAsHTML()
     }
     
     // ====================================================================================================================
@@ -226,49 +249,17 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:navtest var="${navTestInstance}" link="${createLink(controller:'navTest',action:'show')}"/>
-    def navtest = { p ->
+    // <g:planningtest var="${planningTestInstance}" link="${createLink(controller:'planningTest',action:'show')}"/>
+    def planningtest = { p ->
         out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
     }
 
     // ====================================================================================================================
-    // <g:navtesttext var="${navTestInstance}"/>
-    def navtesttext = { p ->
-        out << """${p.var.name().encodeAsHTML()}"""
-    }
-
-
-    // ====================================================================================================================
-    // <g:navtesttask var="${navTestTaskInstance}" link="${createLink(controller:'navTestTask',action:'show')}"/>
-    def navtesttask = { p ->
+    // <g:planningtesttask var="${planningTestTaskInstance}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
+    def planningtesttask = { p ->
         out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
     }
 
-    // ====================================================================================================================
-    // <g:navtesttasktitle var="${navTestTaskInstance}"/>
-    def navtesttasktitle = { p ->
-         out << """<td valign="top" class="name">${message(code:'fc.title')}:</td>"""
-        out << """<td valign="top" class="value">${p.var.name().encodeAsHTML()}</td>"""
-    }
-
-    // ====================================================================================================================
-    // <g:navtesttasktext var="${navTestTaskInstance}"/>
-    def navtesttasktext = { p ->
-        out << """${p.var.name().encodeAsHTML()}"""
-    }
-
-    // ====================================================================================================================
-    // <g:navtesttaskleg var="${navTestTaskLegInstance}" link="${createLink(controller:'navTestTaskLeg',action:'show')}"/>
-    def navtesttaskleg = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
-    }
-    
-    // ====================================================================================================================
-    // <g:navtesttaskleg2 var="${navTestTaskLegInstance}" name="${leg}" link="${createLink(controller:'navTestTaskLeg',action:'show')}"/>
-    def navtesttaskleg2 = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.name}</a>""" // .encodeAsHTML()
-    }
-    
     // ====================================================================================================================
     // <g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/>
     def route = { p ->
@@ -288,9 +279,39 @@ class FcTagLib
     }
     
     // ====================================================================================================================
+    // <g:routecoordnum var="${routeCoordInstance}" num="${i}" link="${createLink(controller:'routeCoord',action:'show')}"/>
+    def routecoordnum = { p ->
+        out << """<a href="${p.link}/${p.var.id}">${p.num}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
     // <g:routeleg var="${routeLegInstance}" link="${createLink(controller:'routeLeg',action:'show')}"/>
     def routeleg = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
+        out << """<a href="${p.link}/${p.var.id}">${p.var.testName()}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
+    // <g:routelegcoord var="${routeLegCoordInstance}" link="${createLink(controller:'routeLegCoord',action:'show')}"/>
+    def routelegcoord = { p ->
+        out << """<a href="${p.link}/${p.var.id}">${p.var.coordName()}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
+    // <g:routelegcoordnum var="${routeLegCoordInstance}" num="${i}" link="${createLink(controller:'routeLegCoord',action:'show')}"/>
+    def routelegcoordnum = { p ->
+        out << """<a href="${p.link}/${p.var.id}">${p.num}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
+    // <g:routelegtest var="${routeLegTestInstance}" link="${createLink(controller:'routeLegTest',action:'show')}"/>
+    def routelegtest = { p ->
+        out << """<a href="${p.link}/${p.var.id}">${p.var.testName()}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
+    // <g:routelegtestnum var="${routeLegTestInstance}" num="${i}" link="${createLink(controller:'routeLegTest',action:'show')}"/>
+    def routelegtestnum = { p ->
+        out << """<a href="${p.link}/${p.var.id}">${p.num}</a>""" // .encodeAsHTML()
     }
     
     // ====================================================================================================================
@@ -306,6 +327,40 @@ class FcTagLib
     }
     
     // ====================================================================================================================
+    // <g:test var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/>
+    def test = { p ->
+        if (p.var) {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.crew.name.encodeAsHTML()} (${p.var.contestdaytask.name().encodeAsHTML()})</a>"""
+        }
+    }
+    
+    // ====================================================================================================================
+    // <g:testnum var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/>
+    def testnum = { p ->
+        if (p.var) {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.viewpos+1}</a>"""
+        }
+    }
+    
+    // ====================================================================================================================
+    // <g:testlegflight var="${testLegFlightInstance}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
+    def testlegflight = { p ->
+        out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
+    // <g:testlegplanning var="${testLegPlanningInstance}" link="${createLink(controller:'testLegPlanning',action:'show')}"/>
+    def testlegplanning = { p ->
+        out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
+    // <g:testlegplanning2 var="${testLegFlightInstance}" name="${testLeg}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
+    def testlegplanning2 = { p ->
+        out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${p.name}</a>""" // .encodeAsHTML()
+    }
+    
+    // ====================================================================================================================
     // <g:wind var="${windInstance}" link="${createLink(controller:'wind',action:'show')}"/>
     def wind = { p ->
         out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
@@ -315,5 +370,28 @@ class FcTagLib
     // <g:windtext var="${windInstance}" />
     def windtext = { p ->
         out << "${p.var.name()}" // .encodeAsHTML()
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------
+    void outln(str)
+    {
+        out << """$str
+"""
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------
+    String active(controller, name)
+    {
+    	if (controller == name) { 
+    		return "active" 
+    	}
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean isAflos(controller)
+    {
+        if (controller == "aflosRouteDefs" || controller == "aflosRouteNames" || controller == "aflosCrewNames") {
+            return true
+        }
     }
 }

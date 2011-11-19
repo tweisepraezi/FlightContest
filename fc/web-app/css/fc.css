@@ -51,6 +51,10 @@ td.errors {
     color: red;
 }
 
+td.center {
+    text-align:center;
+}
+
 .grad {
     width:40px;
 }
@@ -61,4 +65,8 @@ td.errors {
 
 .direction {
     width:40px;
+}
+
+td.points {
+    font-weight:bold;
 }

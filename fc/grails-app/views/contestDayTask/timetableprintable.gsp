@@ -18,30 +18,26 @@
                             </tbody>
                         </table>
                         <br/>
-                        <table>
+                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
                             <thead>
                                 <tr>
-                                    <th>${message(code:'fc.crewtest.number')}</th>
+                                    <th>${message(code:'fc.number')}</th>
                                     <th>${message(code:'fc.crew')}</th>
                                     <th>${message(code:'fc.aircraft')}</th>
-                                    <th>${message(code:'fc.crewtest.tas')}</th>
-                                    <th>${message(code:'fc.flighttestwind')}</th>
-                                    <th>${message(code:'fc.crewtest.testing')}</th>
-                                    <th>${message(code:'fc.crewtest.takeoff')}</th>
-                                    <th>${message(code:'fc.crewtest.arrival')}</th>
+                                    <th>${message(code:'fc.tas')}</th>
+                                    <th>${message(code:'fc.test.planning')}</th>
+                                    <th>${message(code:'fc.test.takeoff')}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="crewTestInstance" in="${CrewTest.findAllByContestdaytask(contestDayTaskInstance,[sort:'viewpos'])}">
+                                <g:each var="testInstance" in="${Test.findAllByContestdaytask(contestDayTaskInstance,[sort:'viewpos'])}">
                                     <tr>
-                                        <td>${crewTestInstance.viewpos+1}</td>
-                                        <td>${crewTestInstance.crew.name()}</td>
-                                        <td>${crewTestInstance.aircraft.registration}</td>
-                                        <td>${crewTestInstance.TAS}${message(code:'fc.knot')}</td>
-                                        <td><g:windtext var="${crewTestInstance.flighttestwind.wind}"/></td>
-                                        <td>${crewTestInstance.testingTime?.format('HH:mm')}</td>
-                                        <td>${crewTestInstance.takeoffTime?.format('HH:mm')}</td>
-                                        <td>${crewTestInstance.arrivalTime?.format('HH:mm')}</td>
+                                        <td>${testInstance.viewpos+1}</td>
+                                        <td>${testInstance.crew.name}</td>
+                                        <td>${testInstance.crew.aircraft.registration}</td>
+                                        <td>${testInstance.crew.tas}${message(code:'fc.knot')}</td>
+                                        <td>${testInstance.testingTime?.format('HH:mm')}</td>
+                                        <td>${testInstance.takeoffTime?.format('HH:mm')}</td>
                                     </tr>
                                 </g:each>
                             </tbody>

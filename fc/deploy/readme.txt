@@ -2,54 +2,71 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-04.12.2009
+13.02.2010
+
+Diese Hinweise finden Sie nach der Installation im Startmenü unter
+'Programme -> Flight Contest -> Readme'.
 
 Installationshinweise
 ---------------------
-1. Deinstallieren Sie FlightContest, 
-   bevor Sie dieses Setup ausführen.
-2. Hatten Sie zuvor FlightContest 0.2 installiert,
-   löschen Sie zusätzlich das Datenbank-Verzeichnis 
-   C:\Programme\FlightContest\fc, da dieses mit dieser
-   Version nicht kompatibel ist.
+- Wird AFLOS nicht in dem Verzeichnis C:\AFLOS installiert,
+  führen Sie nach der ersten Benutzung von AFLOS den Punkt
+  'Programme -> Flight Contest -> Install AFLOS connection' aus
+  (in Windows Vista oder Windows 7 als Administrator).
 
 
-Neu in dieser Version (0.3.0):
-------------------------------
+Neu in dieser Version (0.4):
+----------------------------
+- Übernahme von Strecken aus AFLOS
+- Unterstützung mehrerer Wettbewerbe
+- Deutsche und englische Bediensprache
+- Erweiterungen der Wettbewerbsverwaltung
+
+Neu in Version 0.3:
+-------------------
 - Neues Layout, basierend auf Fluid 960 Grid System
 
-Neu in dieser Version (0.2.0):
-------------------------------
+Neu in Version 0.2:
+-------------------
 - 'Flight Contest' als Apache Tomcat Anwendung
+
+Neu in Version 0.1.1:
+---------------------
+- Unterstützung von 'Windows Vista'
+
+Version 0.1:
+------------
+- Erster Prototyp
 
 
 Allgemeines:
 ------------
 'Flight Contest' ist eine Netzwerk-Anwendung.
 Ein Server stellt eine Datenbank im Netzwerk zur Verfügung.
-Auf einem oder mehreren Clients läuft 'Flight Context' 
-im Web-Browser Firefox.
-
+Auf einem oder mehreren Clients läuft 'Flight Context' im Web-Browser.
 Server und Client können auf einem Windows-Rechner liegen.
 
+Beste Darstellung im Client mit dem Web-Browser 'Firefox'.
+'Internet Explorer' ebenfalls möglich.
 
-Server-Installations-Anforderungen:
------------------------------------
-  'Windows XP ServicePack 2' oder 'Windows Vista ServicePack 1' 
+Auf einem Rechner ist die gleichzeite Anzeige
+des Wettbewerbes in der anderen Bediensprache oder eines 2. Wettbewerbes   
+mit einem 2. Internet-Explorer-Fenster möglich, 
+nicht jedoch mit einem 2. Firefox-Fenster.
   
-  
-Client-Anforderungen:
----------------------
-  Firefox 3.0 als Standard-Web-Browser 
 
-
+Mögliche Betriebssysteme der Server-Installation:
+------------------------------------------------
+Windows XP ServicePack 2
+Windows Vista ServicePack 1
+Windows 7 
 
 
 Server starten:
 ---------------
 Starten des Dienstemanagers 'Apache Tomcat FlightContest':
-  'Start -> Programme -> Flight Contest -> Flight Contest Service Manager'
-    (unter Windows Vista als Adminstrator starten)
+  'Programme -> Flight Contest -> Flight Contest Service Manager'
+(in Windows Vista oder Windows 7 als Administrator)
 
 Auf Icon des Dienstemanagers 'Apache Tomcat FlightContest' ausführen:
   Kontextmenüpunkt 'Start Service' aufrufen
@@ -63,10 +80,11 @@ Auf Icon des Dienstemanagers 'Apache Tomcat FlightContest' ausführen:
   
 Arbeit mit 'Flight Contest':
 ----------------------------
-Mit Firefox auf dem Server:
-  'Start -> Programme -> Flight Contest -> Flight Contest'
+Mit Firefox oder Internet Explorer auf dem Server:
+  'Programme -> Flight Contest -> Flight Contest'
 
-Mit Firefox auf einem beliebigen Rechner im Netzwerk aufrufen:
+Mit Firefox oder Internet Explorer 
+auf einem beliebigen Rechner im Netzwerk aufrufen:
   http://SERVER-COMPUTERNAME:8080/fc/contest/start
   
 
@@ -74,14 +92,15 @@ Datensicherung:
 ---------------
 Die Datenbank wird an folgendem Ort gespeichert:
   <Installationsverzeichnis>\fc
+  (C:\Programme\Flight Contest\fc)
 
 Vorgehen zur Datensicherung:
 
   Server stoppen
 
   Folgende Dateien an einen sicheren Ort kopieren:
-    data.properties
-    data.script
+    fcdb.properties
+    fcdb.script
     
 Vorgehen zur Datenwiederherstellung:
 
@@ -89,9 +108,11 @@ Vorgehen zur Datenwiederherstellung:
 
   Inhalt des folgenden Verzeichnisses löschen:
     <Installationsverzeichnis>\fc
+    (C:\Programme\Flight Contest\fc)
 
   Folgende Dateien aus der Datensicherung wiederherstellen:
-  	<Installationsverzeichnis>\fc\data.properties
-  	<Installationsverzeichnis>\fc\data.script
+  	<Installationsverzeichnis>\fc\fcdb.properties
+  	<Installationsverzeichnis>\fc\fcdb.script
+  	(C:\Programme\Flight Contest\fc)
   	
   Server starten
