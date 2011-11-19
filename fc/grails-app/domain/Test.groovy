@@ -35,10 +35,10 @@ class Test
     boolean flightTestComplete = false
     
 	int     landingTestPenalties = 0
-    boolean landingTestComplete = false
+    boolean landingTestComplete = true // TODO
     
 	int     specialTestPenalties = 0
-    boolean specialTestComplete = false
+    boolean specialTestComplete = true // TODO
     
 	int testPenalties = 0
 

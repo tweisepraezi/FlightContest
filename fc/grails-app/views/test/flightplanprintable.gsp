@@ -56,24 +56,11 @@
                         </table>
                         <br/>
                         <table>
-                            <thead>
-                                <tr>
-                                    <th colspan="2">${message(code:'fc.test.timetable')}</th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.test.planning')}:</td>
                                     <g:if test="${testInstance.timeCalculated}">
                                         <td>${testInstance.testingTime?.format('HH:mm')} - ${testInstance.endTestingTime?.format('HH:mm')}</td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.nocalculated')}</td>
-                                    </g:else>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.arrival')}:</td>
-                                    <g:if test="${testInstance.timeCalculated}">
-                                        <td>${testInstance.arrivalTime?.format('HH:mm')}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.nocalculated')}</td>
                                     </g:else>

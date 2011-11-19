@@ -4302,7 +4302,9 @@ class FcService
             
             // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
             calculateTimes(time, taskInstance, testInstance)
+            testInstance.save()
             
+            calulateCoordResult(testInstance)
             calulateTimetableWarnings(taskInstance)
         }
     }
@@ -4321,7 +4323,9 @@ class FcService
             
             // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
             calculateTimes(time, taskInstance, testInstance)
+            testInstance.save()
             
+            calulateCoordResult(testInstance)
             calulateTimetableWarnings(taskInstance)
         }
     }
@@ -4363,6 +4367,8 @@ class FcService
                     testInstance.takeoffTimeWarning = true
                 }
             }
+            
+            testInstance.save()
         }
 
     }
@@ -4512,75 +4518,81 @@ class FcService
     {
         println "calulateCoordResults: ${taskInstance.name()}"
         
-        Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { testInstance ->
-        	// remove all coordResultInstances
-            CoordResult.findAllByTest(testInstance).each { coordResultInstance ->
-            	coordResultInstance.delete(flush:true)
-            }
- 
-            // create coordResultInstances
-            int coordIndex = 0
-            CoordRoute.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route).each { coordRouteInstance ->
-                def coordResultInstance = new CoordResult()
-                coordResultInstance.type = coordRouteInstance.type
-                coordResultInstance.titleNumber = coordRouteInstance.titleNumber
-                coordResultInstance.mark = coordRouteInstance.mark
-                coordResultInstance.latGrad = coordRouteInstance.latGrad
-                coordResultInstance.latMinute = coordRouteInstance.latMinute
-                coordResultInstance.latDirection = coordRouteInstance.latDirection
-                coordResultInstance.lonGrad = coordRouteInstance.lonGrad
-                coordResultInstance.lonMinute = coordRouteInstance.lonMinute
-                coordResultInstance.lonDirection = coordRouteInstance.lonDirection
-                coordResultInstance.altitude = coordRouteInstance.altitude
-                coordResultInstance.gatewidth = coordRouteInstance.gatewidth
-                coordResultInstance.planProcedureTurn = coordRouteInstance.planProcedureTurn
-                switch (coordRouteInstance.type) {
-                	case CoordType.TO:
-                        coordResultInstance.planCpTime = testInstance.takeoffTime
-                        break
-                	case CoordType.SP:
-                		coordResultInstance.planCpTime = testInstance.startTime
-                		break
-                	case CoordType.LDG:
-                        coordResultInstance.planCpTime = testInstance.maxLandingTime
-                        break
-                    case CoordType.TP:
-                    case CoordType.FP:
-                    	coordIndex++
-                        Date cpTime = testInstance.startTime
-                        TestLegFlight.findAllByTest(testInstance).eachWithIndex { testLegFlightInstance, legIndex ->
-                            cpTime = testLegFlightInstance.AddPlanLegTime(cpTime)
-                            if (coordIndex == legIndex + 1) {
-                                coordResultInstance.planCpTime = cpTime
-                            }
-                        }
-                    	break
-                    case CoordType.SECRET:
-                        Date cpTime = testInstance.startTime
-                        TestLegFlight.findAllByTest(testInstance).eachWithIndex { testLegFlightInstance, legIndex ->
-                            if (coordIndex == legIndex) {
-                            	cpTime = testLegFlightInstance.AddPlanLegTime(cpTime,coordRouteInstance.secretLegRatio)
-                                coordResultInstance.planCpTime = cpTime
-                            } else {
-                            	cpTime = testLegFlightInstance.AddPlanLegTime(cpTime)
-                            }
-                        }
-                    	break
-                }
-                coordResultInstance.test = testInstance
-                switch (coordRouteInstance.type) {
-                	case CoordType.TO:
-                    case CoordType.LDG:
-                    	// ignore Takeoff and Landing
-                    	break
-                    default:
-                        coordResultInstance.save()
-                        break
-                }
-            }
+        Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test testInstance ->
+        	calulateCoordResult(testInstance)
         }
     }
 
+    //--------------------------------------------------------------------------
+    private void calulateCoordResult(Test testInstance)
+    {
+        // remove all coordResultInstances
+        CoordResult.findAllByTest(testInstance).each { coordResultInstance ->
+            coordResultInstance.delete(flush:true)
+        }
+
+        // create coordResultInstances
+        int coordIndex = 0
+        CoordRoute.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route).each { coordRouteInstance ->
+            def coordResultInstance = new CoordResult()
+            coordResultInstance.type = coordRouteInstance.type
+            coordResultInstance.titleNumber = coordRouteInstance.titleNumber
+            coordResultInstance.mark = coordRouteInstance.mark
+            coordResultInstance.latGrad = coordRouteInstance.latGrad
+            coordResultInstance.latMinute = coordRouteInstance.latMinute
+            coordResultInstance.latDirection = coordRouteInstance.latDirection
+            coordResultInstance.lonGrad = coordRouteInstance.lonGrad
+            coordResultInstance.lonMinute = coordRouteInstance.lonMinute
+            coordResultInstance.lonDirection = coordRouteInstance.lonDirection
+            coordResultInstance.altitude = coordRouteInstance.altitude
+            coordResultInstance.gatewidth = coordRouteInstance.gatewidth
+            coordResultInstance.planProcedureTurn = coordRouteInstance.planProcedureTurn
+            switch (coordRouteInstance.type) {
+                case CoordType.TO:
+                    coordResultInstance.planCpTime = testInstance.takeoffTime
+                    break
+                case CoordType.SP:
+                    coordResultInstance.planCpTime = testInstance.startTime
+                    break
+                case CoordType.LDG:
+                    coordResultInstance.planCpTime = testInstance.maxLandingTime
+                    break
+                case CoordType.TP:
+                case CoordType.FP:
+                    coordIndex++
+                    Date cpTime = testInstance.startTime
+                    TestLegFlight.findAllByTest(testInstance).eachWithIndex { testLegFlightInstance, legIndex ->
+                        cpTime = testLegFlightInstance.AddPlanLegTime(cpTime)
+                        if (coordIndex == legIndex + 1) {
+                            coordResultInstance.planCpTime = cpTime
+                        }
+                    }
+                    break
+                case CoordType.SECRET:
+                    Date cpTime = testInstance.startTime
+                    TestLegFlight.findAllByTest(testInstance).eachWithIndex { testLegFlightInstance, legIndex ->
+                        if (coordIndex == legIndex) {
+                            cpTime = testLegFlightInstance.AddPlanLegTime(cpTime,coordRouteInstance.secretLegRatio)
+                            coordResultInstance.planCpTime = cpTime
+                        } else {
+                            cpTime = testLegFlightInstance.AddPlanLegTime(cpTime)
+                        }
+                    }
+                    break
+            }
+            coordResultInstance.test = testInstance
+            switch (coordRouteInstance.type) {
+                case CoordType.TO:
+                case CoordType.LDG:
+                    // ignore Takeoff and Landing
+                    break
+                default:
+                    coordResultInstance.save()
+                    break
+            }
+        }
+    }
+    
     //--------------------------------------------------------------------------
     private void calulateTestLegPlannings(Test testInstance, Route route)
     {

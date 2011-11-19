@@ -1,5 +1,5 @@
 
-Flight Contest 0.5.1
+Flight Contest 0.5.2
 Copyright 2010 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de

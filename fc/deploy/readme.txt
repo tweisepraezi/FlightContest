@@ -2,12 +2,23 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-15.05.2010
+04.06.2010
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
 
+Fehlerbehebung in dieser Version (0.5.2):
+-----------------------------------------
+- Punkte des Lande- und des Sondertests wurden nicht in der Summe
+  einberechnet.
+- Bei Änderung des Zeitplanes mit "Zeit +" oder "Zeit -" wurden
+  die geänderten Zeiten nicht in die Navigationsflug-Auswertung
+  übernommen.
+- Die Ausgabe der Ankunfts-Zeit wurde im Flugplan entfernt,
+  um Verwechselungen mit der spätestens Lndezeit zu vermeiden.
+ 
+  
 Fehlerbehebung in dieser Version (0.5.1):
 -----------------------------------------
 - "Planung -> Zeitplan berechnen" zeigte für einzelne Mannschaften 
