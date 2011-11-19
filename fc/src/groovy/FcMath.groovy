@@ -73,7 +73,7 @@ class FcMath
 	{
 		GregorianCalendar time = new GregorianCalendar()
 		time.setTime(dateValue)
-		int seconds = time.get(Calendar.SECOND) + 60 * time.get(Calendar.MINUTE) + 3600 * time.get(Calendar.HOUR)
+		int seconds = time.get(Calendar.SECOND) + 60 * time.get(Calendar.MINUTE) + 3600 * time.get(Calendar.HOUR_OF_DAY)
 		return seconds
 	}
 	

@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.contest.show')}</title>
+        <title>${message(code:'fc.contest.delete')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="contest" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.contest.show')}</h2>
+                <h2>${message(code:'fc.contest.delete')}</h2>
                 <div class="block" id="forms" >
                     <g:form>
                         <table>

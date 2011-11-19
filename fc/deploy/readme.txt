@@ -2,7 +2,7 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-23.04.2011
+17.05.2011
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -10,8 +10,24 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Änderungen in dieser Version (0.6.1):
--------------------------------------
+Fehlerbehebungen und Erweiterungen in dieser Version (0.6.2):
+-------------------------------------------------------------
+- Nach dem Deaktivieren einer Mannschaft konnte der Zeitplan wegen
+  Warnungen nicht gedruckt werden.
+- Beim Import von AFLOS-Logger-Daten wurden Punkte nicht korrekt berechnet,
+  wenn Soll- und Istzeit 12:00:00 überschritten.
+- Neue Funktion "Wettbewerb kopieren"
+  Erlaubt es, von einem bestehenden Wettbewerb 
+  Wettbewerbs-Einstellungen, Strecken, Mannschaften und/oder 
+  Aufgaben-Einstellungen in einen neuen Wettbewerb zu kopieren.
+  Damit kann eine Planung und Auswertung erneut begonnen werden
+  (z.B. für unterschiedliche Wettbewerbsklassen).
+- Beim Import von AFLOS-Logger-Daten können nun auch zutreffende 
+  AFLOS-Fehlerpunkte angezeigt werden (Knopf "AFLOS-Logger-Fehler").
+  
+
+Änderungen in Version 0.6.1:
+----------------------------
 - Beseitigung kleinerer Fehler
 - AFLOS-Test-Datenbank für Test-Wettbewerb der Installation hinzugefügt:
     C:\Program Files\Flight Contest\samples\AFLOS-FCTest1.mdb

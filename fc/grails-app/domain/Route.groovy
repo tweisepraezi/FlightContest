@@ -18,6 +18,39 @@ class Route
 		testlegs sort:"id"
 	}
 	
+	void CopyValues(Route routeInstance)
+	{
+		title = routeInstance.title
+		idTitle = routeInstance.idTitle
+		mark = routeInstance.mark
+		
+		this.save()
+		
+		// coords:CoordRoute
+		CoordRoute.findAllByRoute(routeInstance).each { CoordRoute coordroute_instance ->
+			CoordRoute new_coordroute_instance = new CoordRoute()
+			new_coordroute_instance.route = this
+			new_coordroute_instance.CopyValues(coordroute_instance)
+			new_coordroute_instance.save()
+		}
+		
+		// routelegs:RouteLegCoord
+		RouteLegCoord.findAllByRoute(routeInstance).each { RouteLegCoord routelegcoord_instance ->
+			RouteLegCoord new_routelegcoord_instance = new RouteLegCoord()
+			new_routelegcoord_instance.route = this
+			new_routelegcoord_instance.CopyValues(routelegcoord_instance)
+			new_routelegcoord_instance.save()
+		}
+
+		// testlegs:RouteLegTest
+		RouteLegTest.findAllByRoute(routeInstance).each { RouteLegTest routelegtest_instance ->
+			RouteLegTest new_routelegtest_instance = new RouteLegTest()
+			new_routelegtest_instance.route = this
+			new_routelegtest_instance.CopyValues(routelegtest_instance)
+			new_routelegtest_instance.save()
+		}
+	}
+	
 	def messageSource
 	
     String idName()

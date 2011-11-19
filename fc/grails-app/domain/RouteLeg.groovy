@@ -23,6 +23,19 @@ class RouteLeg
 		measureDistance(nullable:true,range:0..<10000)
     }
 
+	void CopyValues(RouteLeg routeLegInstance)
+	{
+		title = routeLegInstance.title
+		coordTrueTrack = routeLegInstance.coordTrueTrack
+		coordDistance = routeLegInstance.coordDistance
+		measureTrueTrack = routeLegInstance.measureTrueTrack
+		measureDistance = routeLegInstance.measureDistance
+		legMeasureDistance = routeLegInstance.legMeasureDistance
+		legDistance = routeLegInstance.legDistance
+		
+		this.save()
+	}
+	
 	def messageSource
 
 	String coordTrueTrackName()

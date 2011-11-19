@@ -182,16 +182,58 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+	String getContestCopyTitle(Contest sourceContestInstance)
+	{
+		String new_title = sourceContestInstance.title
+		if ( new_title.lastIndexOf(')') + 1 == new_title.length())
+		{
+			int i1 = new_title.lastIndexOf('(')
+			if (i1 > 0) {
+				new_title = new_title.substring(0,i1 - 1)
+			}
+		}
+		new_title = getMsg('fc.contest.copytitle',["$new_title"])
+		
+		String new_title2 = new_title 
+		int found_num = 1
+		while (ContestTitleFound(new_title2)) {
+			found_num++
+			new_title2 = "$new_title ($found_num)"
+		}
+		return new_title2
+	}
+	
+    //--------------------------------------------------------------------------
+	private boolean ContestTitleFound(String newTitle)
+	{
+      	if (Contest.findByIdIsNotNull()) {
+			for(Contest contest_instance in Contest.list()) {
+			   if (contest_instance.title == newTitle) {
+				   return true
+			   }
+			}
+      	}
+		return false
+	}
+	
+    //--------------------------------------------------------------------------
     Map saveContest(Map params)
     {
         Contest contest_instance = new Contest(params)
         
         if(!contest_instance.hasErrors() && contest_instance.save()) {
-            Task task_instance = new Task()
-            task_instance.title = params.taskTitle
-            task_instance.idTitle = 1
-            task_instance.contest = contest_instance
-            task_instance.save()
+            return ['instance':contest_instance,'saved':true,'message':getMsg('fc.created',["${contest_instance.title}"])]
+        } else {
+            return ['instance':contest_instance]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map copyContest(Map params, Contest lastContestInstance)
+    {
+        Contest contest_instance = new Contest(params)
+		contest_instance.CopyValues(lastContestInstance)
+        if(!contest_instance.hasErrors() && contest_instance.save()) {
             return ['instance':contest_instance,'saved':true,'message':getMsg('fc.created',["${contest_instance.title}"])]
         } else {
             return ['instance':contest_instance]
@@ -1073,7 +1115,7 @@ class FcService
         // FlightTestWind exists?
         if (!FlightTestWind.countByFlighttest(task.instance.flighttest)) {
             task.message = getMsg('fc.flighttestwind.notfound')
-               task.error = true
+            task.error = true
             return task
         }
         
@@ -1123,9 +1165,11 @@ class FcService
         // Warnings?  
         call_return = false
         Test.findAllByTask(task.instance).each { Test test_instance ->
-            if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
-                call_return = true
-            }
+			if (!test_instance.crew.disabled) {
+	            if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
+	                call_return = true
+	            }
+			}
         }
         if (call_return) {
             task.message = getMsg('fc.test.flightplan.resolvewarnings')
@@ -1964,7 +2008,7 @@ class FcService
         GregorianCalendar timezone_calendar = new GregorianCalendar()
         timezone_calendar.setTime(timezone_date)
         
-        badCourseStartCalendar.add(Calendar.HOUR, timezone_calendar.get(Calendar.HOUR))
+        badCourseStartCalendar.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
         badCourseStartCalendar.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
         
         GregorianCalendar badCourseEndCalendar = badCourseStartCalendar.clone()
@@ -2019,7 +2063,7 @@ class FcService
         GregorianCalendar timezone_calendar = new GregorianCalendar()
         timezone_calendar.setTime(timezone_date)
         
-        badturn_calendar.add(Calendar.HOUR, timezone_calendar.get(Calendar.HOUR))
+        badturn_calendar.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
         badturn_calendar.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
         
         print "Found AflosErrorPointBadTurn (${FcMath.TimeStr(badturn_calendar.getTime())}): "
@@ -3156,7 +3200,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.planningresults.points',["${test.instance.planningTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3183,7 +3228,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.planningresults.points',["${test.instance.planningTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3237,7 +3283,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.flightresults.points',["${test.instance.flightTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3264,7 +3311,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.flightresults.points',["${test.instance.flightTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3318,7 +3366,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.observationresults.points',["${test.instance.observationTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3371,7 +3420,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.observationresults.points',["${test.instance.observationTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3399,7 +3449,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.landingresults.points',["${test.instance.landingTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3452,7 +3503,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.landingresults.points',["${test.instance.landingTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3480,7 +3532,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.specialresults.points',["${test.instance.specialTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -3533,7 +3586,8 @@ class FcService
         calculateTestPenalties(test.instance)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
-            return ['instance':test.instance,'saved':true,'message':getMsg('fc.updated',["${test.instance.crew.name}"])]
+			String msg = "${getMsg('fc.updated',["${test.instance.crew.name}"])} ${getMsg('fc.specialresults.points',["${test.instance.specialTestPenalties}"])}"
+            return ['instance':test.instance,'saved':true,'message':msg]
         } else {
             return ['instance':test.instance,'error':true]
         }
@@ -4238,7 +4292,8 @@ class FcService
             calculateTestPenalties(testlegplanning_instance.test)
             
             if(!testlegplanning_instance.hasErrors() && testlegplanning_instance.save()) {
-                return ['instance':testlegplanning_instance,'saved':true,'message':getMsg('fc.updated',["${testlegplanning_instance.name()}"])]
+				String msg = "${getMsg('fc.updated',["${testlegplanning_instance.name()}"])} ${getMsg('fc.testlegplanning.points',["${testlegplanning_instance.penaltyTrueHeading}","${testlegplanning_instance.penaltyLegTime}"])}"
+                return ['instance':testlegplanning_instance,'saved':true,'message':msg]
             } else {
             	return ['instance':testlegplanning_instance]
             }
@@ -4386,7 +4441,12 @@ class FcService
             calculateTestPenalties(coordresult_instance.test)
             
             if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
-                return ['instance':coordresult_instance,'saved':true,'message':getMsg('fc.updated',["${coordresult_instance.name()}"])]
+				String altitude_points = "0"
+				if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
+					altitude_points = coordresult_instance.test.crew.contest.flightTestMinAltitudeMissedPoints.toString()
+				}
+				String msg = "${getMsg('fc.updated',["${coordresult_instance.name()}"])} ${getMsg('fc.coordresult.points',[altitude_points,"${coordresult_instance.penaltyCoord}","${coordresult_instance.resultBadCourseNum * coordresult_instance.test.crew.contest.flightTestBadCoursePoints}"])}"
+                return ['instance':coordresult_instance,'saved':true,'message':msg]
             } else {
                 return ['instance':coordresult_instance]
             }
@@ -4498,7 +4558,7 @@ class FcService
 	        	Date timezone_date = Date.parse("HH:mm",contest_instance.timeZone)
 	        	GregorianCalendar timezone_calendar = new GregorianCalendar()
 	        	timezone_calendar.setTime(timezone_date)
-	        	result_cptime.add(Calendar.HOUR, timezone_calendar.get(Calendar.HOUR))
+	        	result_cptime.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
 	        	result_cptime.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
 	        	coordResultInstance.resultCpTime = result_cptime.getTime()
 	        }

@@ -18,8 +18,9 @@ class CrewController {
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
             def crewList = Crew.findAllByContest(session.lastContest, [sort:'viewpos'])
+			def activeCrewList = Crew.findAllByContestAndDisabled(session.lastContest, false, [sort:'viewpos'])
 			fcService.printdone "last contest"
-            return [crewInstanceList:crewList]
+            return [crewInstanceList:crewList,activeCrewInstanceList:activeCrewList]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')

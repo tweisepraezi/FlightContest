@@ -17,4 +17,12 @@ class Aircraft
 		contest(nullable:false)
 	}
 
+	void CopyValues(Aircraft aircraftInstance)
+	{
+		registration = aircraftInstance.registration
+		type = aircraftInstance.type
+		colour = aircraftInstance.colour
+	
+		this.save()
+	}
 }

@@ -147,6 +147,44 @@ class Coord
 	    penaltyCoord                = 0
 	}
 
+	void CopyValues(Coord coordInstance)
+	{
+		type = coordInstance.type
+		titleNumber = coordInstance.titleNumber
+		mark = coordInstance.mark
+		latGrad = coordInstance.latGrad
+		latMinute = coordInstance.latMinute
+		latDirection = coordInstance.latDirection
+	    lonGrad = coordInstance.lonGrad
+	    lonMinute = coordInstance.lonMinute
+	    lonDirection = coordInstance.lonDirection
+	    altitude = coordInstance.altitude 
+	    gatewidth = coordInstance.gatewidth
+		measureEntered = coordInstance.measureEntered
+		coordTrueTrack = coordInstance.coordTrueTrack
+		coordMeasureDistance = coordInstance.coordMeasureDistance
+	    measureTrueTrack = coordInstance.measureTrueTrack
+		measureDistance = coordInstance.measureDistance
+	    legMeasureDistance = coordInstance.legMeasureDistance
+	    legDistance = coordInstance.legDistance
+	    secretLegRatio = coordInstance.secretLegRatio
+	    // planCpTime = coordInstance.planCpTime
+	    // planProcedureTurn = coordInstance.planProcedureTurn
+	    // resultLatitude = coordInstance.resultLatitude
+	    // resultLongitude = coordInstance.resultLongitude
+	    // resultAltitude = coordInstance.resultAltitude
+	    // resultCpTime = coordInstance.resultCpTime
+	    // resultCpNotFound = coordInstance.resultCpNotFound
+	    // resultEntered = coordInstance.resultEntered
+	    // resultProcedureTurnNotFlown = coordInstance.resultProcedureTurnNotFlown
+	    // resultProcedureTurnEntered = coordInstance.resultProcedureTurnEntered
+	    // resultMinAltitudeMissed = coordInstance.resultMinAltitudeMissed
+	    // resultBadCourseNum = coordInstance.resultBadCourseNum
+	    // penaltyCoord = coordInstance.penaltyCoord
+		
+		this.save()
+	}
+	
 	def messageSource
     
     String title()

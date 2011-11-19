@@ -75,6 +75,47 @@ class Task
 		tests sort:"id"
 	}
 	
+	void CopyValues(Task taskInstance)
+	{
+		title = taskInstance.title
+	    idTitle = taskInstance.idTitle
+		planningTestRun = taskInstance.planningTestRun
+		flightTestRun = taskInstance.flightTestRun
+		observationTestRun = taskInstance.observationTestRun
+		landingTestRun = taskInstance.landingTestRun
+		specialTestRun = taskInstance.specialTestRun
+		firstTime = taskInstance.firstTime
+		takeoffIntervalNormal = taskInstance.takeoffIntervalNormal
+		takeoffIntervalFasterAircraft = taskInstance.takeoffIntervalFasterAircraft
+		planningTestDuration = taskInstance.planningTestDuration
+		preparationDuration = taskInstance.preparationDuration
+		risingDuration = taskInstance.risingDuration
+	    maxLandingDuration = taskInstance.maxLandingDuration
+	    parkingDuration = taskInstance.parkingDuration
+		minNextFlightDuration = taskInstance.minNextFlightDuration
+		procedureTurnDuration = taskInstance.procedureTurnDuration
+		addTimeValue = taskInstance.addTimeValue  
+	    planningTestDistanceMeasure = taskInstance.planningTestDistanceMeasure
+	    planningTestDirectionMeasure = taskInstance.planningTestDirectionMeasure
+		// timetableModified = taskInstance.timetableModified
+		// timetableVersion = taskInstance.timetableVersion
+
+		//PlanningTest planningtest
+		//FlightTest flighttest
+
+		this.save()
+		
+		Crew.findAllByContest(contest,[sort:"viewpos"]).eachWithIndex { Crew crew_instance, int i ->
+			Test test_instance = new Test()
+			test_instance.crew = crew_instance
+			test_instance.taskTAS = crew_instance.tas
+			test_instance.viewpos = i
+			test_instance.task = this
+			test_instance.timeCalculated = false
+			test_instance.save()
+		}
+	}
+	
 	def messageSource
 	
     String idName()

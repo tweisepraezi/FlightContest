@@ -297,6 +297,7 @@
 					                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" />
                                             </g:if>
                                             <g:actionSubmit action="importresults" value="${message(code:'fc.flightresults.aflosimport')}" />
+                                            <g:actionSubmit action="viewimporterrors" value="${message(code:'fc.flightresults.viewimporterrors')}" />
                                         </g:if>
                                         <g:else>
                                             <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.flightresults.reopen')}" />

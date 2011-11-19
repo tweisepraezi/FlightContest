@@ -11,7 +11,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="5" class="table-head">${message(code:'fc.aircraft.list')}</th>
+                        <th colspan="5" class="table-head">${message(code:'fc.aircraft.list')} (${aircraftInstanceList.size()})</th>
                     </tr>
                     <tr>
                        <th>${message(code:'fc.aircraft.registration')}</th>

@@ -12,7 +12,7 @@
 	            <table>
 	                <thead>
 	                    <tr>
-	                        <th colspan="6" class="table-head">${message(code:'fc.crew.list')}</th>
+	                        <th colspan="6" class="table-head">${message(code:'fc.crew.list')} (${activeCrewInstanceList.size()})</th>
 	                    </tr>
 	                    <tr>
 	                        <th>${message(code:'fc.crew.name')}</th>

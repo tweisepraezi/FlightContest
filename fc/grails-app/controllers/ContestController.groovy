@@ -112,6 +112,38 @@ class ContestController {
         }
     }
 
+	def copyquestion = {
+        if (session?.lastContest) {
+			Map new_params = params + [title:fcService.getContestCopyTitle(session.lastContest)]
+			def contest = fcService.createContest(new_params)
+			if (contest.created) {
+				return [contestInstance:contest.instance]
+			} else {
+				flash.message = contest.message
+				redirect(action:start)
+			}
+        } else {
+            flash.message = contest.message
+            redirect(action:start)
+        }
+	}
+	
+    def copy = {
+        def contest = fcService.copyContest(params,session.lastContest) 
+        if (contest.saved) {
+        	session.lastContest = contest.instance
+			fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
+			session.showLimit = false
+			session.showLimitStartPos = 0
+            session.lastTaskPlanning = null
+            session.lastTaskResults = null
+        	flash.message = contest.message
+        	redirect(action:start,id:contest.instance.id)
+        } else {
+            render(view:'create',model:[contestInstance:contest.instance])
+        }
+    }
+
     def tasks = {
 		fcService.printstart "List tasks"
         if (session?.lastContest) {
@@ -155,9 +187,11 @@ class ContestController {
     def delete = {
         def contest = fcService.deleteContest(params)
         if (contest.deleted) {
-        	if (Contest.count() > 0) {
-        		session.lastContest = Contest.findByIdIsNotNull()
+        	if (Contest.count() == 1) {
+        		session.lastContest = Contest.findByIdIsNotNull([sort:"id",order:"desc"])
 				fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
+				// session.lastContest = null
+				// fcService.SetCookie(response, "LastContestID",  "")
 				session.showLimit = false
 				session.showLimitStartPos = 0
         		session.lastTaskPlanning = null

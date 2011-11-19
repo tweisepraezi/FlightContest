@@ -28,8 +28,12 @@ class Contest
 	int flightTestGivenToLatePoints = 100
 
 	// transient values
-	static transients = ['taskTitle']
+	static transients = ['taskTitle','copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
 	String taskTitle
+	boolean copyContestSettings = true
+	boolean copyRoutes = true
+	boolean copyCrews = true
+	boolean copyTaskSettings = true
 	
 	static hasMany = [routes:Route, tasks:Task, crews:Crew, aircrafts:Aircraft]
 	
@@ -75,6 +79,73 @@ class Contest
 		aircrafts sort:"id"
 	}
 
+	void CopyValues(Contest contestInstance)
+	{
+		if (contestInstance) {
+			if (copyContestSettings) {
+				mapScale = contestInstance.mapScale
+				timeZone = contestInstance.timeZone
+				planningTestDirectionCorrectGrad = contestInstance.planningTestDirectionCorrectGrad 
+				planningTestDirectionPointsPerGrad = contestInstance.planningTestDirectionPointsPerGrad
+				planningTestTimeCorrectSecond = contestInstance.planningTestTimeCorrectSecond
+				planningTestTimePointsPerSecond = contestInstance.planningTestTimePointsPerSecond
+				planningTestMaxPoints = contestInstance.planningTestMaxPoints
+				planningTestPlanTooLatePoints = contestInstance.planningTestPlanTooLatePoints
+				planningTestExitRoomTooLatePoints = contestInstance.planningTestExitRoomTooLatePoints
+				flightTestTakeoffMissedPoints = contestInstance.flightTestTakeoffMissedPoints
+				flightTestCptimeCorrectSecond = contestInstance.flightTestCptimeCorrectSecond
+				flightTestCptimePointsPerSecond = contestInstance.flightTestCptimePointsPerSecond
+				flightTestCptimeMaxPoints = contestInstance.flightTestCptimeMaxPoints
+				flightTestCpNotFoundPoints = contestInstance.flightTestCpNotFoundPoints
+				flightTestProcedureTurnNotFlownPoints = contestInstance.flightTestProcedureTurnNotFlownPoints
+				flightTestMinAltitudeMissedPoints = contestInstance.flightTestMinAltitudeMissedPoints
+				flightTestBadCourseCorrectSecond = contestInstance.flightTestBadCourseCorrectSecond
+				flightTestBadCoursePoints = contestInstance.flightTestBadCoursePoints
+				flightTestBadCourseStartLandingPoints = contestInstance.flightTestBadCourseStartLandingPoints
+				flightTestLandingToLatePoints = contestInstance.flightTestLandingToLatePoints
+				flightTestGivenToLatePoints = contestInstance.flightTestGivenToLatePoints
+			} 
+			
+			this.save()
+			
+			if (copyRoutes) { // routes:Route
+				Route.findAllByContest(contestInstance).each { Route route_instance ->
+					Route new_route_instance = new Route()
+					new_route_instance.contest = this
+					new_route_instance.CopyValues(route_instance)
+					new_route_instance.save()
+				}
+			}
+			
+			if (copyCrews) {
+				// aircrafts:Aircraft
+				Aircraft.findAllByContest(contestInstance).each { Aircraft aircraft_instance ->
+					Aircraft new_aircraft_instance = new Aircraft()
+					new_aircraft_instance.contest = this
+					new_aircraft_instance.CopyValues(aircraft_instance)
+					new_aircraft_instance.save()
+				}
+				
+				// crews:Crew
+				Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+					Crew new_crew_instance = new Crew()
+					new_crew_instance.contest = this
+					new_crew_instance.CopyValues(crew_instance)
+					new_crew_instance.save()
+				}
+			}
+			
+			if (copyTaskSettings) { // tasks:Task
+				Task.findAllByContest(contestInstance).each { Task task_instance ->
+					Task new_task_instance = new Task()
+					new_task_instance.contest = this
+					new_task_instance.CopyValues(task_instance)
+					new_task_instance.save()
+				}
+			}
+		}
+	}
+	
 	def messageSource
 	
 	String idName()
@@ -89,5 +160,5 @@ class Contest
 		} else {
             return idName()
 		}
-	}
+	}	
 }

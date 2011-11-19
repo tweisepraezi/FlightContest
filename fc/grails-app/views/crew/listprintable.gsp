@@ -7,7 +7,7 @@
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.crew.list')}</h2>
+                <h2>${message(code:'fc.crew.list')} (${crewInstanceList.size()})</h2>
                 <div class="block" id="forms" >
                     <g:form>
                          <table width="100%" border="1" cellspacing="0" cellpadding="2">
