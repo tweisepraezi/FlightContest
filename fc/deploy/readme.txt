@@ -2,17 +2,70 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-28.11.2010
+20.02.2011
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
+Standard-Wettbewerbsablauf siehe unten.
 
-Erweiterungen in dieser Version (0.5.6):
-----------------------------------------
-- Blättern-Modus für Planung und Auswertung 
-  mit frei einstellbarer Teilnehmer-Anzahl
-  (Extras -> Einstellungen)
+
+Erweiterungen in dieser Version (0.6):
+--------------------------------------
+
+1. Wettbewerbsverwaltung
+
+- Initialwerte der Punkte an Wettbewerbsordnung Navigationsflug 2008
+  angepasst.
+
+2. Streckenverwaltung
+
+- Streckenmesswerte sind jetzt vom letzten TP aus einzugeben.
+- Strecken-Druck erfolgt jetzt mit Karten-Messwerten. 
+
+3. Mannschaftsverwaltung
+
+- Import von Excel-Mannschaftslisten möglich.
+  Verwenden Sie dabei immer folgende Vorlage:
+  'Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls'
+- Deaktivieren von Mannschaften möglich.
+  Deaktivierte Mannschaften entfallen in Auswertungen und Ausdrucken.
+
+4. Aufgabeneinstellungen
+
+- Einstellbare Werte wurden nach Wichtigkeit sortiert.
+- Initialwert des Flugabstandes auf 3 Minuten geändert.
+- Auswertungsdetails einstellbar:
+    * Flugplanungsergebnisse (Standard: ein) 
+    * Navigationsflugergebnisse (Standard: ein) 
+    * Beobachtungsergebnisse (Standard: ein)
+    * Landungsergebnisse (Standard: ein)
+    * Andere Ergebnisse (Standard: aus)
+
+5. Wettbewerbsplanung
+
+- Automatische Flugplan-Neuberechnung bei Flugwindänderung.
+- Zeitplan-Berechnung erfolgt nur noch für Mannschaften, 
+  deren Zeitplan als "Nicht berechnet" angezeigt wird.
+  Zeitpläne werden beim Ändern der Reihenfolge als "Nicht berechnet"
+  markiert. 
+- Streckenberechnungen werden jetzt exakt wie bei PrecisWin gerundet.  
+- Zeit- und Flugpläne werden mit Ausgabe-Nummer gedruckt.
+  Alle Zeitplan- oder Flugplan-Neuberechnungen erhöhen die Ausgabenummer
+  beim nächsten Druck des Zeitplanes oder aller Fluppläne um 1.
+
+6. Wettbewerbsauswertung
+
+- Ergebnisse werden bei Planungsänderung automatisch zurückgesetzt.
+- Punkte-Eingabe für Beobachtungen, Landungen und Anderes ergänzt.
+- Debriefing-Ausdruck für alle Mannschaften.
+- Wettbewerbs-Gesamtauswertung (Summe mehrerer Aufgaben/Wettbewerbstage)
+  möglich.
+
+7. Bedienoberfläche
+
+- Blättern-Modus für Planung und Auswertung mit frei einstellbarer 
+  Teilnehmer-Anzahl (Extras -> Einstellungen).
 - Stellt folgende Informationen beim Start wieder her:
     * Letzter Wettbewerb
     * Bediensprache
@@ -26,7 +79,7 @@ Erweiterungen und Fehlerbehebung in Version 0.5.5:
   "Start verpasst" wurde in "Takeoff verpasst" umbenannt
 - Einführung eines Debriefing-Formulars für Proteste,
   erreichbar für jede Mannschaft in der Auswertung über 
-  die Spalte "Befragung"
+  die Spalte "Debriefing"
 
 
 Fehlerbehebung in Version 0.5.4:
@@ -152,6 +205,69 @@ oder "AFLOS -> Check -Overview" zeigen Status von AFLOS-Messungen an:
     (-> Import-Fehler "AFLOS-Logger-Daten von ... enthalten Fehler.")
   Für eine AFLOS-Mannschaft nicht vorhandener Eintrag
     (-> Import-Fehler "AFLOS-Logger-Daten von ... nicht komplett.")
+
+
+Excel-Mannschaftslisten
+-----------------------
+Sie können Mannschaftslisten mit Excel erstellen und in 'Flight Contest'
+importieren.
+
+Verwenden Sie dazu folgende Vorlage, deren Aufbau einen erfolgreichen
+Import sicherstellt: 
+'Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls'
+
+Importiert werden nur Mannschaftsnamen, die noch nicht vorhanden sind.
+
+
+Standard-Wettbewerbsablauf
+--------------------------
+
+A. Vorbereitung
+
+1. Strecken festlegen und in AFLOS eingeben.
+2. Mannschaftlisten in Excel-Tabelle (FC-CrewList-Sample.xls) eingeben. 
+3. Neuer Wettbewerb
+   - Wettbewerbsname, Kartenmaßstab und Zeitzone festlegen.
+4. Strecken -> Import AFLOS-Strecke
+   - Vorbereitete Strecke aus AFLOS importieren.
+   - Karten-Messwerte für Check-Punkte eintragen.
+
+B. Durchführung
+
+5. Mannschaften -> Import Excel-Mannschaftsliste
+   - Vorbereitete Excel-Tabelle (FC-CrewList-Sample.xls) importieren.
+   - Reihenfolge berechnen und ggf. nachsortieren.
+6. Neue Aufgabe
+   - Datum, Anfangszeit, Takeoff-Abstand, Flugzeit bis SP,
+     Planungstest- und Auswertungsdetails festlegen
+   - Flugplannungstest hinzufügen: Dabei eine erste Flugplannungsaufgabe
+     mit Strecke und Wind angeben. 
+   - Navigationstest hinzufügen: Dabei Strecke und Wind angeben. 
+7. Planung
+   - Allen Mannschaften eine Flugplannungsaufgabe zuweisen.
+   - GGf. Reihenfolge nachsortieren.
+   - Allen Mannschaften einen Flugwind zuweisen.
+   - Zeitplan berechnen.
+   - GGf. einzelne Zeiten verschieben.
+   - Zeitplan drucken.
+   - Flugpläne drucken.
+8. Tagesablauf
+   - Flugplanungstest durchführen.
+   - Logger-Daten in AFLOS einlesen.
+   - Beobachtungsergebnisse abfragen.
+   - Landungen durchführen und vermessen.
+9. Auswertung
+   - Flugplanungsergebnisse eintragen.
+   - Navigationsflug-Ergebnisse aus AFLOS importieren.
+   - Beobachtungsergebnisse eintragen.
+   - Landungsergebnisse eintragen.
+   - Debriefing-Protokolle drucken und Mannschaften übergeben.
+   - Ergebnisse auf Grund stattgegebener Proteste korrigieren. 
+   - Plätze berechnen.
+   - Ergebnisse drucken.
+10. Auswertung -> Gesamtergebnis
+   - Plätze berechnen.
+   - Gesamtergebnis drucken. 
 
 
 Mögliche Betriebssysteme der Server-Installation:

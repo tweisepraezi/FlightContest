@@ -1,29 +1,33 @@
+import java.math.RoundingMode;
 import java.text.*
 
 class RouteLeg 
 {
 	String title
-	BigDecimal trueTrack               // Grad
+
+	BigDecimal coordTrueTrack          // Grad
 	BigDecimal coordDistance           // NM
 	
-	BigDecimal mapmeasuredistance      // mm
-	BigDecimal mapdistance             // NM
-    BigDecimal mapmeasuretruetrack     // Grad
-	
+    BigDecimal measureTrueTrack        // Grad
+	BigDecimal measureDistance         // mm, Entfernung bis zum letzten TP/SP
+	BigDecimal legMeasureDistance      // mm
+	BigDecimal legDistance             // NM
+
     static constraints = {
 		title(nullable:true)
-		trueTrack()
+		coordTrueTrack()
 		coordDistance()
-		mapmeasuredistance(nullable:true,range:0..<10000)
-		mapdistance(nullable:true)
-		mapmeasuretruetrack(nullable:true,range:0..<360)
+		legMeasureDistance(nullable:true,range:0..<10000)
+		legDistance(nullable:true)
+		measureTrueTrack(nullable:true,range:0..<360)
+		measureDistance(nullable:true,range:0..<10000)
     }
 
 	def messageSource
 
-	String trueTrackName()
+	String coordTrueTrackName()
 	{
-		return "${FcMath.RouteGradStr(trueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
+		return "${FcMath.RouteGradStr(coordTrueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
 	}
 	
 	String coordDistanceName()
@@ -31,69 +35,78 @@ class RouteLeg
 		return  "${FcMath.DistanceStr(coordDistance)}${messageSource.getMessage('fc.mile', null, null)}"
 	}
 	
+    String measureDistanceName()
+    {
+    	if (measureDistance != null) {
+    		return  "${FcMath.DistanceMeasureStr(measureDistance)}${messageSource.getMessage('fc.mm', null, null)}"
+    	}
+    	return "-"
+    }
+    
     String mapMeasureDistanceName()
     {
-    	if (mapmeasuredistance != null) {
-    		return  "${FcMath.DistanceMeasureStr(mapmeasuredistance)}${messageSource.getMessage('fc.mm', null, null)}"
+    	if (legMeasureDistance != null) {
+    		return  "${FcMath.DistanceMeasureStr(legMeasureDistance)}${messageSource.getMessage('fc.mm', null, null)}"
     	}
     	return "-"
     }
     
     String mapDistanceName()
     {
-    	if (mapdistance != null) {
-    		return  "${FcMath.DistanceStr(mapdistance)}${messageSource.getMessage('fc.mile', null, null)}"
+    	if (legDistance != null) {
+    		return  "${FcMath.DistanceStr(legDistance)}${messageSource.getMessage('fc.mile', null, null)}"
     	}
     	return "-"
     }
     
     String mapMeasureTrueTrackName()
     {
-    	if (mapmeasuretruetrack != null) {
-    		return  "${FcMath.RouteGradStr(mapmeasuretruetrack)}${messageSource.getMessage('fc.grad', null, null)}"
+    	if (measureTrueTrack != null) {
+    		return  "${FcMath.RouteGradStr(measureTrueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
     	}
     	return "-"
     }
     
     BigDecimal testDistance()
     {
-        if (mapdistance != null) {
-            return mapdistance
+        if (legDistance != null) {
+            return FcMath.RoundDistance(legDistance)
         } else {
-            return coordDistance
+            return FcMath.RoundDistance(coordDistance)
         }
     }
     
     BigDecimal testTrueTrack()
     {
-        if (mapmeasuretruetrack != null) {
-            return mapmeasuretruetrack
+        if (measureTrueTrack != null) {
+            return measureTrueTrack
         } else {
-            return trueTrack
+            return coordTrueTrack
         }
     }
     
     String coordName()
     {
-        return "${trueTrackName()} ${coordDistanceName()}"
+        return "${coordTrueTrackName()} ${coordDistanceName()}"
     }
 
     String mapName()
     {
-        return "${trueTrackName()} ${mapDistanceName()}"
+        return "${coordTrueTrackName()} ${mapDistanceName()}"
     }
 
 	String testName()
 	{
 		String trueTrackStr = "${FcMath.RouteGradStr(testTrueTrack())}${messageSource.getMessage('fc.grad', null, null)}"
-		if (mapmeasuretruetrack != null) {
+		if (measureTrueTrack != null) {
 			trueTrackStr += " ${messageSource.getMessage('fc.distance.map.short', null, null)}"
 		} else {
 			trueTrackStr += " ${messageSource.getMessage('fc.distance.coord.short', null, null)}"
 		}
 		
 		String distanceStr = "${FcMath.DistanceStr(testDistance())}${messageSource.getMessage('fc.mile', null, null)}"
-		if (mapdistance != null) {
+		if (legDistance != null) {
+			distanceStr += " (${mapMeasureDistanceName()})"
 			distanceStr += " ${messageSource.getMessage('fc.distance.map.short', null, null)}"
 		} else {
             distanceStr += " ${messageSource.getMessage('fc.distance.coord.short', null, null)}"

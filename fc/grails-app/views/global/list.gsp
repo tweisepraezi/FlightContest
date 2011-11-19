@@ -25,7 +25,7 @@
                                         <td class="detailtitle">${message(code:'fc.crew.list')}:</td>
                                         <td>
                                             <g:each var="crewInstance" in="${Crew.findAllByContest(contestInstance)}">
-                                                <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'show')}"/>
+                                                <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'edit')}"/>
                                                 <br/>
                                             </g:each>
                                         </td>
@@ -34,7 +34,7 @@
                                         <td class="detailtitle">${message(code:'fc.aircraft.list')}:</td>
                                         <td>
                                             <g:each var="aircraftInstance" in="${Aircraft.findAllByContest(contestInstance)}">
-                                                <g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'show')}"/>
+                                                <g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'edit')}"/>
                                                 <br/>
                                             </g:each>
                                         </td>
@@ -65,7 +65,7 @@
                                         <td class="detailtitle">${message(code:'fc.task.list')}:</td>
                                         <td>
                                             <g:each var="taskInstance" in="${Task.findAllByContest(contestInstance)}">
-                                                - <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'show')}"/>
+                                                - <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>
                                                 <br/>
                                                 <g:if test="${taskInstance.planningtest}">
                                                     -- <g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/>
@@ -84,22 +84,6 @@
                                                         +++ <g:flighttestwind var="${flightTestWindInstance}" link="${createLink(controller:'flightTestWind',action:'show')}"/>
                                                         <br/>
                                                         ++++ <g:wind var="${flightTestWindInstance.wind}" link="${createLink(controller:'wind',action:'show')}"/>
-                                                        <br/>
-                                                    </g:each>
-                                                </g:if>
-                                                <g:if test="${taskInstance.landingtest}">
-                                                    -- <g:landingtest var="${taskInstance.landingtest}" link="${createLink(controller:'landingTest',action:'show')}"/>
-                                                    <br/>
-                                                    <g:each var="landingTestTaskInstance" in="${LandingTestTask.findAllByLandingtest(taskInstance.landingtest)}">
-                                                        +++ <g:landingtesttask var="${landingTestTaskInstance}" link="${createLink(controller:'landingTestTask',action:'show')}"/>
-                                                        <br/>
-                                                    </g:each>
-                                                </g:if>
-                                                 <g:if test="${taskInstance.specialtest}">
-                                                    -- <g:specialtest var="${taskInstance.specialtest}" link="${createLink(controller:'specialTest',action:'show')}"/>
-                                                    <br/>
-                                                    <g:each var="specialTestTaskInstance" in="${SpecialTestTask.findAllBySpecialtest(taskInstance.specialtest)}">
-                                                        +++ <g:specialtesttask var="${specialTestTaskInstance}" link="${createLink(controller:'specialTestTask',action:'show')}"/>
                                                         <br/>
                                                     </g:each>
                                                 </g:if>

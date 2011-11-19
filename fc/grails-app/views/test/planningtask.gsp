@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.test.planningtask')} ${testInstance.viewpos+1}</h2>
                 <div class="block" id="forms" >
-                    <g:form>
+                    <g:form method="post" params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
                         <table>
                             <tbody>
                                 <tr>
@@ -24,11 +24,11 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'show')}"/></td>
+                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.tas')}:</td>
-                                    <td>${testInstance.crew.tas}${message(code:'fc.knot')}</td>
+                                    <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.route')}:</td>
@@ -106,6 +106,7 @@
                         </g:if>
                         <input type="hidden" name="id" value="${testInstance?.id}" />
                         <g:actionSubmit action="printplanningtask" value="${message(code:'fc.print')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

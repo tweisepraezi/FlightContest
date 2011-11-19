@@ -5,7 +5,7 @@
         <title>${message(code:'fc.crew.edit')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" importaction="${message(code:'fc.crew.import')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
@@ -16,7 +16,7 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post" params="${['crewReturnAction':crewReturnAction,'crewReturnController':crewReturnController,'crewReturnID':crewReturnID]}" >
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.crew.name')}*:</label>
@@ -47,9 +47,19 @@
                                 <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" />
                             </p>
                         </fieldset>
+                        <fieldset>
+                            <p>
+                                <div>
+                                    <g:checkBox name="disabled" value="${crewInstance.disabled}" />
+                                    <label>${message(code:'fc.disabled')}</label>
+                                </div>
+                            </p>
+                        </fieldset>
                         <input type="hidden" name="id" value="${crewInstance?.id}" />
                         <input type="hidden" name="version" value="${crewInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

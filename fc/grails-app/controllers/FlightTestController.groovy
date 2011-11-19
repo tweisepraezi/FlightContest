@@ -10,6 +10,14 @@ class FlightTestController {
     def show = {
         def flighttest = fcService.getFlightTest(params) 
         if (flighttest.instance) {
+			// save return action
+			session.flighttestwindReturnAction = actionName
+			session.flighttestwindReturnController = controllerName
+			session.flighttestwindReturnID = params.id
+			// assign return action
+			if (session.flighttestReturnAction) {
+				return [flightTestInstance:flighttest.instance,flighttestReturnAction:session.flighttestReturnAction,flighttestReturnController:session.flighttestReturnController,flighttestReturnID:session.flighttestReturnID]
+			}
         	return [flightTestInstance:flighttest.instance]
         } else {
             flash.message = flighttest.message
@@ -41,7 +49,7 @@ class FlightTestController {
     }
 
     def create = {
-        def flighttest = fcService.createFlightTest(params)
+        def flighttest = fcService.createFlightTest(params,session.lastContest)
         if (flighttest.error) {
         	flash.message = flighttest.message
         	flash.error = flighttest.error
@@ -88,7 +96,10 @@ class FlightTestController {
     }
 
 	def cancel = {
-        if (params.fromlistplanning) {
+		// process return action
+		if (params.flighttestReturnAction) {
+			redirect(action:params.flighttestReturnAction,controller:params.flighttestReturnController,id:params.flighttestReturnID)
+		} else if (params.fromlistplanning) {
             redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else if (params.fromtask) {
             redirect(controller:"task",action:show,id:params.taskid)

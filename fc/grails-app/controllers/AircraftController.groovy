@@ -9,26 +9,26 @@ class AircraftController {
 
     def list = {
         if (session.lastContest) {
-            def aircraftList = Aircraft.findAllByContest(session.lastContest)
-            params.sort = "registration"
+			// save return action
+			session.crewReturnAction = actionName 
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+			session.aircraftReturnAction = actionName
+			session.aircraftReturnController = controllerName
+			session.aircraftReturnID = params.id
+            def aircraftList = Aircraft.findAllByContest(session.lastContest, [sort:'registration'])
             return [aircraftInstanceList:aircraftList]
         }
         return [:]
     }
 
-    def show = {
-        def aircraft = fcService.getAircraft(params) 
-        if (aircraft.instance) {
-        	return [aircraftInstance:aircraft.instance]
-        } else {
-            flash.message = aircraft.message
-            redirect(action:list)
-        }
-    }
-
     def edit = {
         def aircraft = fcService.getAircraft(params) 
         if (aircraft.instance) {
+			// assign return action
+			if (session.aircraftReturnAction) {
+				return [aircraftInstance:aircraft.instance,aircraftReturnAction:session.aircraftReturnAction,aircraftReturnController:session.aircraftReturnController,aircraftReturnID:session.aircraftReturnID]
+			}
         	return [aircraftInstance:aircraft.instance]
         } else {
             flash.message = aircraft.message
@@ -40,7 +40,12 @@ class AircraftController {
         def aircraft = fcService.updateAircraft(params) 
         if (aircraft.saved) {
         	flash.message = aircraft.message
-        	redirect(action:show,id:aircraft.instance.id)
+			// process return action
+			if (params.aircraftReturnAction) {
+				redirect(action:params.aircraftReturnAction,controller:params.aircraftReturnController,id:params.aircraftReturnID)
+			} else {
+				redirect(action:list)
+			}
         } else if (aircraft.error) {
             flash.message = aircraft.message
             flash.error = true
@@ -62,7 +67,7 @@ class AircraftController {
 		def aircraft = fcService.saveAircraft(params,session.lastContest) 
         if (aircraft.saved) {
         	flash.message = aircraft.message
-        	redirect(action:show,id:aircraft.instance.id)
+        	redirect(action:list)
         } else if (aircraft.error) {
             flash.message = aircraft.message
             flash.error = true
@@ -79,7 +84,7 @@ class AircraftController {
         	redirect(action:list)
         } else if (aircraft.notdeleted) {
         	flash.message = aircraft.message
-            redirect(action:show,id:params.id)
+            redirect(action:edit,id:params.id)
         } else {
         	flash.message = aircraft.message
         	redirect(action:list)
@@ -87,7 +92,11 @@ class AircraftController {
     }
 
 	def cancel = {
-        redirect(action:list)
+		if (params.aircraftReturnAction) {
+			redirect(action:params.aircraftReturnAction,controller:params.aircraftReturnController,id:params.aircraftReturnID)
+		} else {
+        	redirect(action:list)
+		}
 	}
 
 	def listprintable = {

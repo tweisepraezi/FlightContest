@@ -8,6 +8,11 @@ class FcMath
 		return distanceValue1.round(new MathContext(4)) + distanceValue2.round(new MathContext(4))
 	}
 	
+	static BigDecimal RoundDistance(BigDecimal distanceValue)
+	{
+		return distanceValue.setScale(2, RoundingMode.HALF_EVEN)
+	}
+	
 	static String DistanceStr(BigDecimal distanceValue)
 	{
 		if (distanceValue >= 0) {
@@ -17,6 +22,11 @@ class FcMath
 		return ""
 	}
 
+	static int Grads(BigDecimal gradValue)
+	{
+		return gradValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
+	}
+	
     static String GradStr(BigDecimal gradValue)
     {
         if (gradValue >= 0) {
@@ -53,10 +63,49 @@ class FcMath
     	return ""
     }
 
+	static int Seconds(BigDecimal timeValue)
+	{
+		BigDecimal seconds = (timeValue * 3600).setScale(0, RoundingMode.HALF_EVEN)
+		return seconds.toInteger()
+	}
+	
+	static int Seconds(Date dateValue)
+	{
+		GregorianCalendar time = new GregorianCalendar()
+		time.setTime(dateValue)
+		int seconds = time.get(Calendar.SECOND) + 60 * time.get(Calendar.MINUTE) + 3600 * time.get(Calendar.HOUR)
+		return seconds
+	}
+	
+	static int RatioSeconds(BigDecimal timeValue, BigDecimal ratioValue)
+	{
+		int ret = Seconds(timeValue * ratioValue)
+		return ret
+	}
+	
+	static String TimeStr(BigDecimal timeValue)
+	{
+		GregorianCalendar time = new GregorianCalendar()
+		time.set(Calendar.HOUR_OF_DAY, 0)
+		time.set(Calendar.MINUTE, 0)
+		if (timeValue >= 0) {
+			time.set(Calendar.SECOND, Seconds(timeValue))
+		}
+		return time.getTime().format("HH:mm:ss")
+	}
+	
+	static String TimeStr(Date dateValue)
+	{
+		if (dateValue) {
+			return dateValue.format('HH:mm:ss')
+		}
+		return ""
+	}
+	
     static String SpeedStr(BigDecimal speedValue)
     {
         if (speedValue >= 0) {
-            DecimalFormat df = new DecimalFormat("#0.0")
+            DecimalFormat df = new DecimalFormat("#0.00")
             return df.format(speedValue)
         }
         return ""
@@ -65,7 +114,7 @@ class FcMath
     static String DistanceMeasureStr(BigDecimal distanceValue)
     {
         if (distanceValue >= 0) {
-            DecimalFormat df = new DecimalFormat("0.0")
+            DecimalFormat df = new DecimalFormat("0.0#")
             return df.format(distanceValue)
         }
         return ""

@@ -27,7 +27,7 @@
                                     <td class="detailtitle">${message(code:'fc.crew.list')}:</td>
                                     <td>
                                         <g:each var="crewInstance" in="${Crew.list()}">
-                                            <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'show')}"/>
+                                            <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'edit')}"/>
                                             <br/>
                                         </g:each>
                                     </td>
@@ -36,7 +36,7 @@
                                     <td class="detailtitle">${message(code:'fc.aircraft.list')}:</td>
                                     <td>
                                         <g:each var="aircraftInstance" in="${Aircraft.list()}">
-                                            <g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'show')}"/>
+                                            <g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'edit')}"/>
                                             <br/>
                                         </g:each>
                                     </td>
@@ -81,7 +81,7 @@
                                     <td class="detailtitle">${message(code:'fc.task.list')}:</td>
                                     <td>
                                         <g:each var="taskInstance" in="${Task.list()}">
-                                            <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'show')}"/>
+                                            <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>
                                             <br/>
                                         </g:each>
                                     </td>
@@ -118,42 +118,6 @@
                                     <td>
                                         <g:each var="flightTestWindInstance" in="${FlightTestWind.list()}">
                                             <g:flighttestwind var="${flightTestWindInstance}" link="${createLink(controller:'flightTestWind',action:'show')}"/>
-                                            <br/>
-                                        </g:each>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.landingtest.list')}:</td>
-                                    <td>
-                                        <g:each var="landingTestInstance" in="${LandingTest.list()}">
-                                            <g:landingtest var="${landingTestInstance}" link="${createLink(controller:'landingTest',action:'show')}"/>
-                                            <br/>
-                                        </g:each>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.landingtesttask.list')}:</td>
-                                    <td>
-                                        <g:each var="landingTestTaskInstance" in="${LandingTestTask.list()}">
-                                            <g:landingtesttask var="${landingTestTaskInstance}" link="${createLink(controller:'landingTestTask',action:'show')}"/>
-                                            <br/>
-                                        </g:each>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.specialtest.list')}:</td>
-                                    <td>
-                                        <g:each var="specialTestInstance" in="${SpecialTest.list()}">
-                                            <g:specialtest var="${specialTestInstance}" link="${createLink(controller:'specialTest',action:'show')}"/>
-                                            <br/>
-                                        </g:each>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.specialtesttask.list')}:</td>
-                                    <td>
-                                        <g:each var="specialTestTaskInstance" in="${SpecialTestTask.list()}">
-                                            <g:specialtesttask var="${specialTestTaskInstance}" link="${createLink(controller:'specialTestTask',action:'show')}"/>
                                             <br/>
                                         </g:each>
                                     </td>

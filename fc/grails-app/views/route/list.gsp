@@ -48,7 +48,7 @@
                             </td>
                             <td>
                                 <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}">
-                                    ${routeLegCoordInstance.coordName()}
+                                    ${routeLegCoordInstance.testName()}
                                     <br/>                                     
                                 </g:each>
                             </td>

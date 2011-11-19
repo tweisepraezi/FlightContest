@@ -24,11 +24,11 @@
                 <tbody>
                     <g:each var="aircraftInstance" in="${aircraftInstanceList}" status="i" >
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                            <td><g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
+                            <td><g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                             <td>${fieldValue(bean:aircraftInstance, field:'type')}</td>
                             <td>${fieldValue(bean:aircraftInstance, field:'colour')}</td>
-                            <td><g:crew var="${aircraftInstance.user1}" link="${createLink(controller:'crew',action:'show')}"/></td>
-                            <td><g:crew var="${aircraftInstance.user2}" link="${createLink(controller:'crew',action:'show')}"/></td>
+                            <td><g:crew var="${aircraftInstance.user1}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+                            <td><g:crew var="${aircraftInstance.user2}" link="${createLink(controller:'crew',action:'edit')}"/></td>
                         </tr>
                     </g:each>
                 </tbody>

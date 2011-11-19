@@ -31,7 +31,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.cptime')}:</td>
-                                        <td>${coordResultInstance.planCpTime.format('HH:mm:ss')}</td>
+                                        <td>${FcMath.TimeStr(coordResultInstance.planCpTime)}</td>
                                     </tr>
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.altitude')}:</td>
@@ -72,7 +72,7 @@
                                     <tbody>
                                         <g:if test="${coordResultInstance.resultCpNotFound}">
                                             <tr>
-                                                <td>${message(code:'fc.flighttest.cpnotfound')}</td>
+                                                <td colspan="2">${message(code:'fc.flighttest.cpnotfound')}</td>
                                             </tr>
                                         </g:if>
                                         <g:else>

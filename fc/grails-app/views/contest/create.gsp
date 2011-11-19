@@ -23,13 +23,15 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}"/>
                             </p>
-                        </fieldset>
-                        <fieldset>
-                            <legend>${message(code:'fc.task')}</legend>
                             <p>
-                                <label>${message(code:'fc.title')}:</label>
+                                <label>${message(code:'fc.scale')}*:</label>
                                 <br/>
-                                <input type="text" id="taskTitle" name="taskTitle" value="${fieldValue(bean:contestInstance,field:'taskTitle')}"/>
+                                <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:contestInstance,field:'mapScale')}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.timezone')}* [${message(code:'fc.time.hmin')}]:</label>
+                                <br/>
+                                <input type="text" id="timeZone" name="timeZone" value="${fieldValue(bean:contestInstance,field:'timeZone')}"/>
                             </p>
                         </fieldset>
                         <g:actionSubmit action="save" value="${message(code:'fc.create')}" />

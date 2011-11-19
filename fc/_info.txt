@@ -1,0 +1,20 @@
+Code
+====
+
+<domain class>.list()
+<domain class>.count()
+----------------------
+Nicht verwenden. Immer einen Bezug zu einem Contest benutzen (außer Contest.list() zur Contest-Wahl).
+
+
+Plugins
+=======
+
+excel-import-0.3
+----------------
+benötigt zur Übersetzbarkeit joda-time-1.6.2.jar
+ 
+class-diagram-0.5.2
+-------------------
+benötigt zur Laufzeit Graphviz (K:\Projects\Install\Windows\Graphviz)
+http://localhost:8080/fc/classDiagram

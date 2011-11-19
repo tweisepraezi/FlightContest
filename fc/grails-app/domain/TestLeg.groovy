@@ -105,37 +105,17 @@ class TestLeg
 	
 	String name()
 	{
-		GregorianCalendar time = new GregorianCalendar()
-		time.set(Calendar.HOUR_OF_DAY, 0)
-		time.set(Calendar.MINUTE, 0)
-		if (planLegTime >= 0) {
-			time.set(Calendar.SECOND, (3600 * planLegTime).toDouble().round().toInteger())
-		}
-		String time_str = time.getTime().format("HH:mm:ss")
-		
-		return "${FcMath.GradStr(planTrueHeading)}${messageSource.getMessage('fc.grad', null, null)} ${FcMath.SpeedStr(planGroundSpeed)}${messageSource.getMessage('fc.mile', null, null)} ${time_str}"
+		return "${FcMath.GradStr(planTrueHeading)}${messageSource.getMessage('fc.grad', null, null)} ${FcMath.SpeedStr(planGroundSpeed)}${messageSource.getMessage('fc.mile', null, null)} ${FcMath.TimeStr(planLegTime)}"
 	}
 	
 	String planLegTimeStr()
 	{
-		GregorianCalendar time = new GregorianCalendar()
-		time.set(Calendar.HOUR_OF_DAY, 0)
-		time.set(Calendar.MINUTE, 0)
-        if (planLegTime >= 0) {
-			time.set(Calendar.SECOND, (3600 * planLegTime).toDouble().round().toInteger())
-        }
-		return time.getTime().format("HH:mm:ss")
+		return FcMath.TimeStr(planLegTime)
 	}
 	
     String resultLegTimeStr()
     {
-        GregorianCalendar time = new GregorianCalendar()
-        time.set(Calendar.HOUR_OF_DAY, 0)
-        time.set(Calendar.MINUTE, 0)
-        if (resultLegTime >= 0) {
-            time.set(Calendar.SECOND, (3600 * resultLegTime).toDouble().round().toInteger())
-        }
-        return time.getTime().format("HH:mm:ss")
+		return FcMath.TimeStr(resultLegTime)
     }
     
 	Date AddPlanLegTime(Date initTime)
@@ -144,7 +124,7 @@ class TestLeg
 		time.setTime(initTime)
 		
 		if (planLegTime >= 0) {
-			time.add(Calendar.SECOND, (3600 * planLegTime).toDouble().round().toInteger() )
+			time.add(Calendar.SECOND, FcMath.Seconds(planLegTime))
 		}
 	    if (planProcedureTurn && planProcedureTurnDuration) {
             time.add(Calendar.SECOND, 60 * planProcedureTurnDuration )
@@ -159,7 +139,7 @@ class TestLeg
         time.setTime(initTime)
         
         if (planLegTime >= 0) {
-            time.add(Calendar.SECOND, (3600 * planLegTime * partRatio).toDouble().round().toInteger() )
+			time.add(Calendar.SECOND, FcMath.RatioSeconds(planLegTime, partRatio))
         }
         if (planProcedureTurn && planProcedureTurnDuration) {
             time.add(Calendar.SECOND, 60 * planProcedureTurnDuration )

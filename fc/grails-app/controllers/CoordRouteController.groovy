@@ -73,6 +73,19 @@ class CoordRouteController {
         }
     }
 	
+    def reset = {
+		def coordroute = fcService.resetmeasureCoordRoute(params)
+		if (coordroute.saved) {
+			flash.message = coordroute.message
+			redirect(action:edit,id:params.id)
+		} else if (coordroute.instance) {
+			render(view:'edit',model:[coordRouteInstance:coordroute.instance])
+		} else {
+			flash.message = coordroute.message
+			redirect(action:edit,id:params.id)
+		}
+	}
+	
 	def cancel = {
         def coordroute = fcService.getCoordRoute(params) 
         if (coordroute.instance) {

@@ -20,6 +20,10 @@ class FlightTestWindController {
     def edit = {
         def flighttestwind = fcService.getFlightTestWind(params) 
         if (flighttestwind.instance) {
+			// assign return action
+			if (session.flighttestwindReturnAction) {
+				return [flightTestWindInstance:flighttestwind.instance,flighttestwindReturnAction:session.flighttestwindReturnAction,flighttestwindReturnController:session.flighttestwindReturnController,flighttestwindReturnID:session.flighttestwindReturnID]
+			}
         	return [flightTestWindInstance:flighttestwind.instance]
         } else {
             flash.message = flighttestwind.message
@@ -74,7 +78,10 @@ class FlightTestWindController {
     }
 
     def cancel = {
-        if (params.fromlistplanning) {
+		// process return action
+		if (params.flighttestwindReturnAction) {
+			redirect(action:params.flighttestwindReturnAction,controller:params.flighttestwindReturnController,id:params.flighttestwindReturnID)
+		} else if (params.fromlistplanning) {
             redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else {
             redirect(controller:"flightTest",action:show,id:params.flighttestid)

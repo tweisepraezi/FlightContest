@@ -26,7 +26,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.tas')}:</td>
-                                    <td>${testInstance.crew.tas}${message(code:'fc.knot')}</td>
+                                    <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.wind')}:</td>

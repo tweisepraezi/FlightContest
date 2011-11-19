@@ -16,7 +16,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'show')}"/><g:if test="${testInstance.crew.mark}"> (${message(code:'fc.aflos')}: ${testInstance.crew.mark})</g:if></td>
+                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.crew.mark}"> (${message(code:'fc.aflos')}: ${testInstance.crew.mark})</g:if></td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.route')}:</td>
@@ -33,7 +33,7 @@
                                 <tr>
                                     <g:set var="lastName" value="${testInstance.crew.mark}" />
                                     <g:if test="${lastName}">
-                                        <g:set var="lastStartnum" value="${lastName.substring(lastName.size()-2,lastName.size()-1)}" />
+                                        <g:set var="lastStartnum" value="${lastName.substring(lastName.lastIndexOf('(')+1,lastName.lastIndexOf(')'))}" />
                                     </g:if>
                                     <g:else>
                                         <g:set var="lastStartnum" value="" />

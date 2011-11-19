@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.task.selectplanningtesttask')}</h2>
                 <div class="block" id="forms" >
-                    <g:form method="post" params="['testInstanceIDs':testInstanceIDs]" >
+                    <g:form method="post" params="${['testInstanceIDs':testInstanceIDs]}" >
                         <table>
                             <table>
                                 <tbody>
@@ -35,12 +35,12 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.task.selectplanningtesttask.tocrews')}:</td>
                                     <td>
-                                        <g:each var="testInstanceID" in="${flash.testInstanceIDs}">
+                                        <g:each var="testInstanceID" in="${testInstanceIDs}">
                                             <g:if test="${testInstanceID}">
                                                 <g:set var="testInstance" value="${Test.get(testInstanceID)}"/>
-                                                <g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'show')}"/>
+                                                ${testInstance.crew.name}
                                                 <g:if test="${testInstance.planningtesttask}">
-                                                     (<g:planningtesttask var="${testInstance.planningtesttask}" link="${createLink(controller:'planningTestTask',action:'show')}"/>)
+                                                     (${testInstance.planningtesttask.name()})
                                                 </g:if>
                                                 <br/>                                                
                                             </g:if>

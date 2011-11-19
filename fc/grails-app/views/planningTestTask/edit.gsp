@@ -16,15 +16,10 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post" params="${['planningtesttaskReturnAction':planningtesttaskReturnAction,'planningtesttaskReturnController':planningtesttaskReturnController,'planningtesttaskReturnID':planningtesttaskReturnID]}" >
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle"/>
-                                    <td><g:task var="${planningTestTaskInstance?.planningtest?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle"/>
                                     <td><g:planningtest var="${planningTestTaskInstance?.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                 </tr>
                             </tbody>
@@ -57,6 +52,7 @@
                         <input type="hidden" name="id" value="${planningTestTaskInstance?.id}" />
                         <input type="hidden" name="version" value="${planningTestTaskInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

@@ -45,7 +45,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan="7">${message(code:'fc.coordroute.list')}</th>
+                                    <th class="table-head" colspan="9">${message(code:'fc.coordroute.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
@@ -55,18 +55,22 @@
                                     <th>${message(code:'fc.longitude')}</th>
                                     <th>${message(code:'fc.altitude')}</th>
                                     <th>${message(code:'fc.gatewidth')}</th>
+                                    <th>${message(code:'fc.truetrack.map.measure')}</th>
+                                    <th>${message(code:'fc.distance.map')}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <g:each var="coordRouteInstance" in="${routeInstance.coords}" status="i" >
                                     <tr>
                                         <td><g:coordroutenum var="${coordRouteInstance}" num="${i+1}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
-                                        <td>${coordRouteInstance.titleWithRatio()}</td>
+                                        <td>${coordRouteInstance.title()}</td>
                                         <td>${coordRouteInstance.mark}</td>
                                         <td>${coordRouteInstance.latName()}</td>
                                         <td>${coordRouteInstance.lonName()}</td>
                                         <td>${coordRouteInstance.altitude}${message(code:'fc.foot')}</td>
                                         <td>${coordRouteInstance.gatewidth}${message(code:'fc.mile')}</td>
+                                        <td>${coordRouteInstance.measureTrueTrackName()}</td>
+                                        <td>${coordRouteInstance.measureDistanceName()}</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -74,28 +78,26 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan="7">${message(code:'fc.routelegcoord.list')}</th>
+                                    <th class="table-head" colspan="6">${message(code:'fc.routelegcoord.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
                                     <th>${message(code:'fc.title')}</th>
                                     <th>${message(code:'fc.truetrack.coord')}</th>
-                                    <th>${message(code:'fc.distance.coord')}</th>
-                                    <th>${message(code:'fc.distance.map.measure')}</th>
-                                    <th>${message(code:'fc.distance.map')}</th>
                                     <th>${message(code:'fc.truetrack.map.measure')}</th>
+                                    <th>${message(code:'fc.distance.coord')}</th>
+                                    <th>${message(code:'fc.distance.map')}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <g:each var="routeLegInstance" in="${routeInstance.routelegs}" status="i" >
                                     <tr>
-                                        <td><g:routelegcoordnum var="${routeLegInstance}" num="${i+1}" link="${createLink(controller:'routeLegCoord',action:'edit')}"/></td>
+                                        <td>${i+1}</td>
                                         <td>${routeLegInstance.title}</td>
-                                        <td>${routeLegInstance.trueTrackName()}</td>
-                                        <td>${routeLegInstance.coordDistanceName()}</td>
-                                        <td>${routeLegInstance.mapMeasureDistanceName()}</td>
-                                        <td>${routeLegInstance.mapDistanceName()}</td>
+                                        <td>${routeLegInstance.coordTrueTrackName()}</td>
                                         <td>${routeLegInstance.mapMeasureTrueTrackName()}</td>
+                                        <td>${routeLegInstance.coordDistanceName()}</td>
+                                        <td>${routeLegInstance.mapDistanceName()} (${routeLegInstance.mapMeasureDistanceName()})</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -103,16 +105,15 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan="7">${message(code:'fc.routelegtest.list')}</th>
+                                    <th class="table-head" colspan="6">${message(code:'fc.routelegtest.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
                                     <th>${message(code:'fc.title')}</th>
                                     <th>${message(code:'fc.truetrack.coord')}</th>
-                                    <th>${message(code:'fc.distance.coord')}</th>
-                                    <th>${message(code:'fc.distance.map.measure')}</th>
-                                    <th>${message(code:'fc.distance.map')}</th>
                                     <th>${message(code:'fc.truetrack.map.measure')}</th>
+                                    <th>${message(code:'fc.distance.coord')}</th>
+                                    <th>${message(code:'fc.distance.map')}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -120,11 +121,10 @@
                                     <tr>
                                         <td>${i+1}</td>
                                         <td>${routeLegInstance.title}</td>
-                                        <td>${routeLegInstance.trueTrackName()}</td>
-                                        <td>${routeLegInstance.coordDistanceName()}</td>
-                                        <td>${routeLegInstance.mapMeasureDistanceName()}</td>
-                                        <td>${routeLegInstance.mapDistanceName()}</td>
+                                        <td>${routeLegInstance.coordTrueTrackName()}</td>
                                         <td>${routeLegInstance.mapMeasureTrueTrackName()}</td>
+                                        <td>${routeLegInstance.coordDistanceName()}</td>
+                                        <td>${routeLegInstance.mapDistanceName()} (${routeLegInstance.mapMeasureDistanceName()})</td>
                                     </tr>
                                 </g:each>
                             </tbody>

@@ -1,6 +1,6 @@
 class Contest 
 {
-	String title
+	String title = "Wettbewerbsname"
 	int mapScale = 200000
     String timeZone = "02:00" // Difference between UTC and local time [hh:mm]
 	
@@ -16,14 +16,14 @@ class Contest
 	// FlightTest
 	int flightTestTakeoffMissedPoints = 200
 	int flightTestCptimeCorrectSecond = 2
-	int flightTestCptimePointsPerSecond = 3
+	int flightTestCptimePointsPerSecond = 1
 	int flightTestCptimeMaxPoints = 200
 	int flightTestCpNotFoundPoints = 200
 	int flightTestProcedureTurnNotFlownPoints = 200
 	int flightTestMinAltitudeMissedPoints = 500
 	int flightTestBadCourseCorrectSecond = 5
 	int flightTestBadCoursePoints = 200
-	int flightTestBadCourseStartLandingPoints = 200
+	int flightTestBadCourseStartLandingPoints = 500
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
 

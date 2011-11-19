@@ -65,9 +65,35 @@
                                 <input type="text" id="gatewidth" name="gatewidth" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth')}"/>
                             </p>
                         </fieldset>
+                        <fieldset>
+                        	<legend>${message(code:'fc.measure.fromlasttp')}</legend>
+	                        <table>
+	                            <tbody>
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.truetrack.coord')}:</td>
+	                                    <td>${coordRouteInstance.coordTrueTrackName()}</td>
+	                                </tr>
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.distance.coord')}:</td>
+	                                    <td>${coordRouteInstance.coordMeasureDistanceName()}</td>
+	                                </tr>
+                            </tbody>
+                        </table>
+                            <p>
+                                <label>${message(code:'fc.truetrack.map.measure')} [${message(code:'fc.grad')}]:</label>
+                                <br/>
+                                <input type="text" id="measureTrueTrack" name="measureTrueTrack" value="${fieldValue(bean:coordRouteInstance,field:'measureTrueTrack')}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.distance.map.measure')} [${message(code:'fc.mm')}]:</label>
+                                <br/>
+                                <input type="text" id="measureDistance" name="measureDistance" value="${fieldValue(bean:coordRouteInstance,field:'measureDistance')}"/>
+                            </p>
+                        </fieldset>
                         <input type="hidden" name="id" value="${coordRouteInstance?.id}" />
                         <input type="hidden" name="version" value="${coordRouteInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>

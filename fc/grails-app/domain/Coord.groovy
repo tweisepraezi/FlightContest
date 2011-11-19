@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.text.*
 
 class Coord
@@ -19,17 +20,19 @@ class Coord
     int altitude = 500 // Altitude (Höhe) in ft 
     int gatewidth = 2 // Gate-Breite (in NM)
 
-    // Speicher für Landkarten-Entfernungsmessung
-    BigDecimal mapmeasuredistance // mm
-    BigDecimal mapdistance        // NM
-    
-    // Speicher für Landkarten-Kursmessung
-    BigDecimal mapmeasuretruetrack     // Grad
+    // Speicher für Eingabe der Landkarten-Messung
+	boolean measureEntered = false
+	BigDecimal coordTrueTrack = 0        // Grad
+	BigDecimal coordMeasureDistance = 0  // mm, Entfernung bis zum letzten TP/SP
+    BigDecimal measureTrueTrack          // Grad
+	BigDecimal measureDistance           // mm, Entfernung bis zum letzten TP/SP
+    BigDecimal legMeasureDistance        // mm
+    BigDecimal legDistance               // NM
     
     // Relative Position eines Secret-Points im Leg 
     BigDecimal secretLegRatio = 0
     
-    // plan, results, penalties // TODO
+    // plan, results, penalties
     Date planCpTime                     = Date.parse("HH:mm","00:00")
     boolean planProcedureTurn           = false
     String resultLatitude               = ""
@@ -72,9 +75,10 @@ class Coord
         lonDirection(inList:['E','W'])
         altitude(range:0..100000)
         gatewidth()
-        mapmeasuredistance(nullable:true)
-        mapdistance(nullable:true)
-        mapmeasuretruetrack(nullable:true,range:0..<360)
+		measureDistance(nullable:true)
+        legMeasureDistance(nullable:true)
+        legDistance(nullable:true)
+        measureTrueTrack(nullable:true,range:0..<360)
         resultCpTimeInput(blank:false, validator:{ val, obj ->
         	String v = val.replace('.',':')
 	        switch(v.size()) {
@@ -209,4 +213,35 @@ class Coord
 	{
 		return "${latName()} ${lonName()}"
 	}
+
+	String namePrintable() // BUG: ' wird nicht korrekt gedruckt
+	{
+		return "${latName()}' ${lonName()}'"
+	}
+
+	String coordTrueTrackName()
+	{
+		return "${FcMath.RouteGradStr(coordTrueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
+	}
+	
+	String coordMeasureDistanceName()
+	{
+		return  "${FcMath.DistanceMeasureStr(coordMeasureDistance)}${messageSource.getMessage('fc.mm', null, null)}"
+	}
+	
+	String measureDistanceName()
+    {
+    	if (measureDistance != null) {
+    		return  "${FcMath.DistanceMeasureStr(measureDistance)}${messageSource.getMessage('fc.mm', null, null)}"
+    	}
+    	return "-"
+    }
+    
+    String measureTrueTrackName()
+    {
+    	if (measureTrueTrack != null) {
+    		return  "${FcMath.RouteGradStr(measureTrueTrack)}${messageSource.getMessage('fc.grad', null, null)}"
+    	}
+    	return "-"
+    }
 }

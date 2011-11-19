@@ -20,8 +20,8 @@
                                         <g:else>
                                             <td/>
                                         </g:else>
-                                        <td>${coordRouteInstance.titleWithRatio()}<br/></td>
-                                        <td>${coordRouteInstance.name()}<br/></td>
+                                        <td>${coordRouteInstance.title()}<br/></td>
+                                        <td>${coordRouteInstance.namePrintable()}<br/></td>
                                     </tr>
                                 </g:each>
                                 <tr>
@@ -36,7 +36,7 @@
                                             <td/>
                                         </g:else>
                                         <td>${routeLegCoordInstance.title}<br/></td>
-                                        <td>${routeLegCoordInstance.coordName()}<br/></td>
+                                        <td>${routeLegCoordInstance.testName()}<br/></td>
                                     </tr>
                                 </g:each>
                                 <tr>

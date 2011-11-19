@@ -16,7 +16,7 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post" params="${['aircraftReturnAction':aircraftReturnAction,'aircraftReturnController':aircraftReturnController,'aircraftReturnID':aircraftReturnID]}" >
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}*:</label>
@@ -37,6 +37,8 @@
                         <input type="hidden" name="id" value="${aircraftInstance?.id}" />
                         <input type="hidden" name="version" value="${aircraftInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

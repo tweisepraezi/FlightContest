@@ -5,7 +5,7 @@
         <title>${message(code:'fc.aflos.routedefs.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'aflos')}" controller="aflosRouteDefs" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="aflosRouteDefs" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>

@@ -14,7 +14,7 @@ class FlightTest
 	
 	static constraints = {
 		title()
-		route(nullable:true) // TODO
+		route(nullable:true)
         direction(range:0.0f..<360.0f)
         speed(range:0.0f..<1000.0f)
 		task(nullable:false)

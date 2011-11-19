@@ -16,10 +16,6 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:task var="${flightTestWindInstance?.flighttest?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle"/>
                                     <td><g:flighttest var="${flightTestWindInstance?.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
                                 </tr>
                             </tbody>

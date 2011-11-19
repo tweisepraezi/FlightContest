@@ -1,3 +1,5 @@
+import grails.util.Environment
+
 class FcTagLib
 {
     // ====================================================================================================================
@@ -21,9 +23,9 @@ class FcTagLib
         if (session.lastContest) {
 	        outln """    <li> <a class="${if (p.conteststart) active(p.controller,'contest')}" href="${p.link}/../../contest/start">${message(code:'fc.contest')}</a> </li>"""
             outln """    <li> <a class="${active(p.controller,'route')}" href="${p.link}/../../route/list">${message(code:'fc.route.list')}</a> </li>"""
-            outln """    <li> <a class="${if (p.contesttasks) active(p.controller,'contest')}" href="${p.link}/../../contest/tasks">${message(code:'fc.contest.tasks')}</a> </li>"""
 	        outln """    <li> <a class="${active(p.controller,'crew')}" href="${p.link}/../../crew/list">${message(code:'fc.crew.list')}</a> </li>"""
 	        outln """    <li> <a class="${active(p.controller,'aircraft')}" href="${p.link}/../../aircraft/list">${message(code:'fc.aircraft.list')}</a> </li>"""
+            outln """    <li> <a class="${if (p.contesttasks) active(p.controller,'contest')}" href="${p.link}/../../contest/tasks">${message(code:'fc.contest.tasks')}</a> </li>"""
             boolean foundAnyTask = false
         	Task.findAllByContest(session.lastContest).each { taskInstance ->
         		foundAnyTask = true
@@ -62,6 +64,13 @@ class FcTagLib
 		        		outln """    <li> <a href="${p.link}/../../${p.controller}/create">${p.newaction}</a> </li>"""
 		        	}
 		        } 
+		        if (p.importaction) {
+					if (p.controller == "route") {
+						outln """    <li> <a href="${p.link}/../../${p.controller}/importroute">${p.importaction}</a> </li>"""
+					} else if (p.controller == "crew") {
+						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
+					}
+		        }
 		        if (p.show) {
 		            outln """    <li> <a href="${p.link}/../../${p.controller}/show/${p.id}">${p.show}</a> </li"""
 		        }
@@ -71,15 +80,15 @@ class FcTagLib
 		        if (p.printaction) {
 		            outln """    <li> <a href="${p.link}/../../${p.controller}/print">${p.printaction}</a> </li>"""
 		        }
-		        if (p.importaction) {
-	                outln """    <li> <a href="${p.link}/../../${p.controller}/importroute">${p.importaction}</a> </li>"""
-		        }
 	            if (p.controller == "contest" && session.lastContest && !p.contesttasks) {
 	                if (Contest.count() > 1) {
 	                    outln """    <li> <a href="${p.link}/../../contest/change">${message(code:'fc.contest.change')}</a> </li>"""
 	                }
                     outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
 	                outln """    <li> <a href="${p.link}/../../contest/deletequestion">${message(code:'fc.contest.delete')}</a> </li>"""
+					if (Environment.currentEnvironment != Environment.PRODUCTION ) {
+						outln """    <li> <a href="${p.link}/../../contest/runtest">${message(code:'fc.contest.runtest')}</a> </li>"""
+					}
 	            }
 	            outln """  </ul>"""
 	            outln """</div>"""
@@ -95,7 +104,10 @@ class FcTagLib
                	} else if (p.taskresults) {
                		outln """    <li> <a class="${if (session.lastTaskResults == taskInstance.id) "active"}" href="${p.link}/../../task/listresults/${taskInstance.id}" >${taskInstance.name()}</a> </li>"""
                	}
-            }        
+            }
+			if (p.taskresults) {
+				outln """    <li> <a href="${p.link}/../../contest/positions">${message(code:'fc.contest.positions')}</a> </li>"""
+			}
 			
 			if (session.showLimit) {
 				int crew_num = Crew.countByContest(session.lastContest)
@@ -153,8 +165,12 @@ class FcTagLib
             outln """<div class="clear"></div>"""
             outln """<div class="grid">"""
             outln """  <ul class="nav main">"""
-            outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../global/changeglobalsettings">${message(code:'fc.changeglobalsettings')}</a> </li>"""
+			if (Environment.currentEnvironment == Environment.DEVELOPMENT ) {
+				outln """    <li> <a href="${p.link}/../../classDiagram" target="_blank">${message(code:'fc.classdiagram')}</a> </li>"""
+				outln """    <li> <a href="${p.link}/../../dbUtil" target="_blank">${message(code:'fc.dbutil')}</a> </li>"""
+			}
+            outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
             if (!Contest.findByIdIsNotNull()) {
                 outln """    <li> <a href="${p.link}/../../contest/createtest">${message(code:'fc.contest.new.test')}</a> </li>"""
             }
@@ -225,7 +241,7 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'show')}"/>
+    // <g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'edit')}"/>
     def aircraft = { p ->
         if (p.var) {
             out << """<a href="${p.link}/${p.var.id}">${p.var.registration.encodeAsHTML()}</a>"""
@@ -252,8 +268,14 @@ class FcTagLib
     
     // ====================================================================================================================
     // <g:coordroutenum var="${coordRouteInstance}" num="${i}" link="${createLink(controller:'coordRoute',action:'show')}"/>
-    def coordroutenum = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.num}</a>""" // .encodeAsHTML()
+   def coordroutenum = { p ->
+    	String t = p.num.toString()
+        if (p.var.measureEntered) {
+			t += """ <img src="/fc/images/skin/ok.png"/>"""
+		} else {
+			t += " ..."
+		}
+		out << """<a href="${p.link}/${p.var.id}">${t}</a>""" // .encodeAsHTML()
     }
     
     // ====================================================================================================================
@@ -263,7 +285,7 @@ class FcTagLib
     }
 
     // ====================================================================================================================
-    // <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'show')}"/>
+    // <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>
     def task = { p ->
         if (p.link == "/fc/task/listplanning") {
         	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.planning')})</a>"""
@@ -275,7 +297,7 @@ class FcTagLib
     }
 
     // ====================================================================================================================
-    // <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'show')}"/>
+    // <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'edit')}"/>
     def crew = { p ->
         if (p.var) {
             out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
@@ -294,18 +316,6 @@ class FcTagLib
         out << """<a href="${p.link}/${p.var.id}">${p.var.wind.name()}</a>""" // .encodeAsHTML()
     }
 
-    // ====================================================================================================================
-    // <g:landingtest var="${landingTestInstance}" link="${createLink(controller:'landingTest',action:'show')}"/>
-    def landingtest = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
-    }
-    
-    // ====================================================================================================================
-    // <g:landingtesttask var="${landingTestTaskInstance}" link="${createLink(controller:'landingTestTask',action:'show')}"/>
-    def landingtesttask = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
-    }
-    
     // ====================================================================================================================
     // <g:planningtest var="${planningTestInstance}" link="${createLink(controller:'planningTest',action:'show')}"/>
     def planningtest = { p ->
@@ -361,18 +371,6 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:specialtest var="${specialTestInstance}" link="${createLink(controller:'specialTest',action:'show')}"/>
-    def specialtest = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
-    }
-    
-    // ====================================================================================================================
-    // <g:specialtesttask var="${specialTestTaskInstance}" link="${createLink(controller:'specialTestTask',action:'show')}"/>
-    def specialtesttask = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
-    }
-    
-    // ====================================================================================================================
     // <g:test var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/>
     def test = { p ->
         if (p.var) {
@@ -405,7 +403,7 @@ class FcTagLib
     def testlegplanning2 = { p ->
     	String t = p.name
         if (p.var.resultEntered) {
-          t += """ <img src="/fc/images/skin/ok.png"/>"""
+			t += """ <img src="/fc/images/skin/ok.png"/>"""
         } else {
         	t += " ..."
         }

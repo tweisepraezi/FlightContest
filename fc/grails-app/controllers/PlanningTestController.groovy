@@ -8,6 +8,14 @@ class PlanningTestController {
     def show = {
         def planningtest = fcService.getPlanningTest(params) 
         if (planningtest.instance) {
+			// save return action
+			session.planningtesttaskReturnAction = actionName
+			session.planningtesttaskReturnController = controllerName
+			session.planningtesttaskReturnID = params.id
+			// assign return action
+			if (session.planningtestReturnAction) {
+				return [planningTestInstance:planningtest.instance,planningtestReturnAction:session.planningtestReturnAction,planningtestReturnController:session.planningtestReturnController,planningtestReturnID:session.planningtestReturnID]
+			}
         	return [planningTestInstance:planningtest.instance]
         } else {
             flash.message = planningtest.message
@@ -39,7 +47,7 @@ class PlanningTestController {
     }
 
     def create = {
-        def planningtest = fcService.createPlanningTest(params)
+        def planningtest = fcService.createPlanningTest(params,session.lastContest)
         if (planningtest.error) {
         	flash.message = planningtest.message
         	flash.error = planningtest.error
@@ -86,7 +94,9 @@ class PlanningTestController {
     }
 	
     def cancel = {
-        if (params.fromlistplanning) {
+		if (params.planningtestReturnAction) {
+			redirect(action:params.planningtestReturnAction,controller:params.planningtestReturnController,id:params.planningtestReturnID)
+		} else if (params.fromlistplanning) {
             redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else if (params.fromtask) {
             redirect(controller:"task",action:show,id:params.taskid)

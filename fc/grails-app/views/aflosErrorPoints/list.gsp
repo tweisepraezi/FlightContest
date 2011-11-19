@@ -5,7 +5,7 @@
         <title>${message(code:'fc.aflos.errorpoints.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'aflos')}" controller="aflosErrorPoints" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="aflosErrorPoints" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>

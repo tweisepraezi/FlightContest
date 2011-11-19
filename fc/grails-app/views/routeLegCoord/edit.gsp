@@ -32,8 +32,8 @@
                                     <td>${routeLegInstance.title}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.truetrack')}:</td>
-                                    <td>${routeLegInstance.trueTrackName()}</td>
+                                    <td class="detailtitle">${message(code:'fc.truetrack.coord')}:</td>
+                                    <td>${routeLegInstance.coordTrueTrackName()}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.distance.coord')}:</td>
@@ -45,12 +45,12 @@
                             <p>
                                 <label>${message(code:'fc.distance.map.measure')} [${message(code:'fc.mm')}]:</label>
                                 <br/>
-                                <input type="text" id="mapmeasuredistance" name="mapmeasuredistance" value="${fieldValue(bean:routeLegInstance,field:'mapmeasuredistance')}"/>
+                                <input type="text" id="measureDistance" name="measureDistance" value="${fieldValue(bean:routeLegInstance,field:'measureDistance')}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.truetrack.map.measure')} [${message(code:'fc.grad')}]:</label>
                                 <br/>
-                                <input type="text" id="mapmeasuretruetrack" name="mapmeasuretruetrack" value="${fieldValue(bean:routeLegInstance,field:'mapmeasuretruetrack')}"/>
+                                <input type="text" id="measureTrueTrack" name="measureTrueTrack" value="${fieldValue(bean:routeLegInstance,field:'measureTrueTrack')}"/>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${routeLegInstance?.id}" />

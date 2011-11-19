@@ -17,14 +17,6 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post" >
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="detailtitle"/>
-                                    <td><g:task var="${planningTestInstance?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.title')} (${planningTestInstance.idName()}):</label>

@@ -1,8 +1,14 @@
 
-Flight Contest 0.5.6
-Copyright 2010 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 0.6.0
+Copyright 2011 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de/
+
+============================================================================
+
+Developed with SpringSource Tool Suite
+
+http://springsource.com/products/sts 
 
 ============================================================================
 
@@ -16,13 +22,13 @@ http://www.apache.org/
 
 ============================================================================
 
-Grails, release 1.2.1
+Grails, release 1.3.6
 
 http://grails.org/
 
 ============================================================================
 
-Groovy, release 1.6.7
+Groovy, release 1.7.5
 
 http://groovy.codehaus.org/
 

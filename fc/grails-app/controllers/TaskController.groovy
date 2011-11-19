@@ -9,20 +9,14 @@ class TaskController {
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
-    def show = {
-        def task = fcService.getTask(params) 
-        if (task.instance) {
-        	return [taskInstance:task.instance]
-        } else {
-            flash.message = task.message
-            redirect(controller:"contest",action:"tasks")
-        }
-    }
-
     def edit = {
         def task = fcService.getTask(params) 
         if (task.instance) {
-        	return [taskInstance:task.instance]
+			// assign return action
+			if (session.taskReturnAction) {
+				return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+			}
+			return [taskInstance:task.instance]
         } else {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -33,12 +27,17 @@ class TaskController {
         def task = fcService.updateTask(params) 
         if (task.saved) {
         	flash.message = task.message
-        	redirect(action:show,id:task.instance.id)
+			// process return action
+			if (params.taskReturnAction) {
+				redirect(action:params.taskReturnAction,controller:params.taskReturnController,id:params.taskReturnID)
+			} else {
+        		redirect(controller:"contest",action:"tasks")
+			}
         } else if (task.instance) {
-        	render(view:'edit',model:[taskInstance:task.instance])
+			render(view:'edit',model:[taskInstance:task.instance])
         } else {
-        	flash.message = task.message
-            redirect(action:edit,id:params.id)
+			flash.message = task.message
+			redirect(action:edit,id:params.id)
         }
     }
 
@@ -72,7 +71,12 @@ class TaskController {
     }
 	
 	def cancel = {
-        redirect(controller:"contest",action:"tasks")
+		// process return action
+		if (params.taskReturnAction) {
+			redirect(action:params.taskReturnAction,controller:params.taskReturnController,id:params.taskReturnID)
+		} else {
+			redirect(controller:"contest",action:"tasks")
+		}
 	}
 
 	def createplanningtest = {
@@ -85,16 +89,6 @@ class TaskController {
         redirect(controller:'flightTest',action:'create',params:['task.id':task.instance.id,'taskid':task.instance.id,'fromtask':true])
 	}
 	
-	def createlandingtest = {
-        def task = fcService.getTask(params) 
-        redirect(controller:'landingTest',action:'create',params:['task.id':task.instance.id,'taskid':task.instance.id,'fromtask':true])
-	}
-	
-	def createspecialtest = {
-        def task = fcService.getTask(params) 
-        redirect(controller:'specialTest',action:'create',params:['task.id':task.instance.id,'taskid':task.instance.id,'fromtask':true])
-	}
-	
     def startplanning = {
 		def task = fcService.startplanningTask(params,session.lastContest,session.lastTaskPlanning)
 		if (task.taskid) {
@@ -104,13 +98,38 @@ class TaskController {
     }
 
     def listplanning = {
-        def task = fcService.getTask(params) 
+		def task = fcService.getTask(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
 			SetLimit()
             session.lastTaskPlanning = task.instance.id
+			// save return action
+			session.taskReturnAction = actionName
+			session.taskReturnController = controllerName
+			session.taskReturnID = params.id
+			session.crewReturnAction = actionName
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+			session.aircraftReturnAction = actionName
+			session.aircraftReturnController = controllerName
+			session.aircraftReturnID = params.id
+			session.positionsReturnAction = actionName 
+			session.positionsReturnController = controllerName
+			session.positionsReturnID = params.id
+			session.planningtestReturnAction = actionName
+			session.planningtestReturnController = controllerName
+			session.planningtestReturnID = params.id
+			session.planningtesttaskReturnAction = actionName
+			session.planningtesttaskReturnController = controllerName
+			session.planningtesttaskReturnID = params.id
+			session.flighttestReturnAction = actionName
+			session.flighttestReturnController = controllerName
+			session.flighttestReturnID = params.id
+			session.flighttestwindReturnAction = actionName
+			session.flighttestwindReturnController = controllerName
+			session.flighttestwindReturnID = params.id
         	return [taskInstance:task.instance]
         }
     }
@@ -131,6 +150,19 @@ class TaskController {
         } else {
 			SetLimit()
             session.lastTaskResults = task.instance.id
+			// save return action
+			session.taskReturnAction = actionName 
+			session.taskReturnController = controllerName
+			session.taskReturnID = params.id
+			session.crewReturnAction = actionName
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+			session.aircraftReturnAction = actionName
+			session.aircraftReturnController = controllerName
+			session.aircraftReturnID = params.id
+			session.positionsReturnAction = actionName 
+			session.positionsReturnController = controllerName
+			session.positionsReturnID = params.id
             return [taskInstance:task.instance]
         }
     }
@@ -166,9 +198,12 @@ class TaskController {
         	flash.message = task.message
         	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
-        } else if (task.testinstanceids?.size > 1) {
-        	flash.testInstanceIDs = task.testinstanceids
-        	redirect(action:selectplanningtesttask,id:task.instance.id)
+        } else if (task.testinstanceids?.size > 0) {
+			long i = 0
+			task.testinstanceids.each {
+				i += it
+			}
+        	redirect(action:selectplanningtesttask,id:task.instance.id,params:[testInstanceIDs:task.testinstanceids,x:i]) // BUG: Map testInstanceIDs in Map params wird nicht ohne x ausgetauscht
         } else {
         	redirect(action:listplanning,id:task.instance.id)
         }
@@ -181,7 +216,7 @@ class TaskController {
             redirect(controller:"contest",action:"tasks")
         } else {
         	task.instance.properties = params
-        	return ['taskInstance':task.instance,'testInstanceIDs':flash.testInstanceIDs]
+        	return ['taskInstance':task.instance,'testInstanceIDs':params.testInstanceIDs]
         }
     }
     
@@ -204,9 +239,12 @@ class TaskController {
         	flash.message = task.message
            	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
-        } else if (task.testinstanceids?.size > 1) {
-        	flash.testInstanceIDs = task.testinstanceids
-        	redirect(action:selectflighttestwind,id:task.instance.id)
+        } else if (task.testinstanceids?.size > 0) {
+			long i = 0
+			task.testinstanceids.each {
+				i += it
+			}
+        	redirect(action:selectflighttestwind,id:task.instance.id,params:[testInstanceIDs:task.testinstanceids,x:i]) // BUG: Map testInstanceIDs in Map params wird nicht ohne x ausgetauscht
         } else {
         	redirect(action:listplanning,id:task.instance.id)
         }
@@ -219,7 +257,7 @@ class TaskController {
             redirect(controller:"contest",action:"tasks")
         } else {
         	task.instance.properties = params
-        	return ['taskInstance':task.instance,'testInstanceIDs':flash.testInstanceIDs]
+        	return ['taskInstance':task.instance,'testInstanceIDs':params.testInstanceIDs]
         }
     }
     
@@ -235,6 +273,17 @@ class TaskController {
 
 	def calculatesequence = {
         def task = fcService.calculatesequenceTask(params) 
+        flash.message = task.message
+        if (!task.instance) {
+            redirect(controller:"contest",action:"tasks")
+        } else {
+            flash.error = task.error
+        	redirect(action:listplanning,id:task.instance.id)
+        }
+	}
+
+	def resetsequence = {
+        def task = fcService.resetsequenceTask(params) 
         flash.message = task.message
         if (!task.instance) {
             redirect(controller:"contest",action:"tasks")
@@ -419,6 +468,22 @@ class TaskController {
         	return [taskInstance:task.instance ]
         }
     }
+
+	def printdebriefings = {
+        def task = fcService.printdebriefingsTask(params,GetPrintParams()) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+        	flash.message = task.message
+           	flash.error = true
+        	redirect(action:listplanning,id:task.instance.id)
+        } else if (task.content) {
+        	fcService.WritePDF(response,task.content)
+	    } else {
+        	redirect(action:listplanning,id:task.instance.id)
+	    }
+	}
 
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),

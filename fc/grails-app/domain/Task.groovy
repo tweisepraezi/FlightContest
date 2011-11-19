@@ -5,25 +5,32 @@ class Task
 	
 	PlanningTest planningtest
 	FlightTest flighttest
-	LandingTest landingtest
-	SpecialTest specialtest
 	
-	String firstTime                  = "11:00" // Local time of first planning test [hh:mm]
-	int takeoffIntervalNormal         = 5       // space between takeoff [min]
-	int takeoffIntervalFasterAircraft = 120     // space between takeoff to faster aircraft [min]
+	boolean planningTestRun              = true
+	boolean flightTestRun                = true
+	boolean observationTestRun           = true
+	boolean landingTestRun               = true
+	boolean specialTestRun               = false
 	
-	int planningTestDuration          = 60      // duration of planning test [min]
-	int preparationDuration           = 15      // duration of aircraft preparation [min]
-	int risingDuration                = 10      // duration from takeoff to start point [min]
-    int maxLandingDuration            = 10      // duration from finish point to landing [min]
-    int parkingDuration               = 15      // duration from finish point to aircraft parking [min] (> maxLandingDuration)
-	int minNextFlightDuration         = 30      // duration of aircraft maintenance between two flights [min]
-	int procedureTurnDuration         =  1      // duration of Procedure Turn [min]
+	String firstTime                     = "11:00" // Local time of first planning test [hh:mm]
+	int takeoffIntervalNormal            = 3       // space between takeoff [min]
+	int takeoffIntervalFasterAircraft    = 120     // space between takeoff to faster aircraft [min]
+	
+	int planningTestDuration             = 60      // duration of planning test [min]
+	int preparationDuration              = 15      // duration of aircraft preparation [min]
+	int risingDuration                   = 10      // duration from takeoff to start point [min]
+    int maxLandingDuration               = 10      // duration from finish point to landing [min]
+    int parkingDuration                  = 15      // duration from finish point to aircraft parking [min] (> maxLandingDuration)
+	int minNextFlightDuration            = 30      // duration of aircraft maintenance between two flights [min]
+	int procedureTurnDuration            = 1       // duration of Procedure Turn [min]
 
-	int addTimeValue                  =  5      // add/subtract time value [min]  
+	int addTimeValue                     = 3       // add/subtract time value [min]  
 
-    boolean planningTestDistanceMeasure = false
+    boolean planningTestDistanceMeasure  = false
     boolean planningTestDirectionMeasure = true
+	
+	boolean timetableModified            = true
+	int timetableVersion                 = 0
 	
     static belongsTo = [contest:Contest]
     
@@ -61,8 +68,6 @@ class Task
 		
 		planningtest(nullable:true)
 		flighttest(nullable:true)
-		landingtest(nullable:true)
-		specialtest(nullable:true)
 		contest(nullable:false)
 	}
 

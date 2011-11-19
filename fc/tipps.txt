@@ -54,6 +54,4 @@ if (params.fromcontest) {
 	redirect(controller:"contest",action:"tasks")
 }
 
------------------------------------------------------------------------------------------------
-Nichtzul‰ssig
-1. Class.list() - immer einen Bezug zu einem Contest benutzen, auﬂer Contest.list() zur Contest-Wahl
+

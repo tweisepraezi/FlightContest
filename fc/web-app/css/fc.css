@@ -3,6 +3,8 @@
 
 h1#branding {
     color:#000;
+	font-size:2.5em;
+    padding:.4em .4em;
 }
 
 tfoot th,

@@ -16,11 +16,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle"/>
-                                    <td><g:task var="${planningTestTaskInstance?.planningtest?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle"/>
-                                    <td><g:planningtest var="${planningTestTaskInstance?.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
+                                    <td><g:planningtest var="${planningTestTaskInstance?.planningtest}" link="${createLink(controller:'planningTest',action:'edit')}"/></td>
                                 </tr>
                             </tbody>
                         </table>

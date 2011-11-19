@@ -28,7 +28,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.truetrack')}:</td>
-                                    <td>${routeLegInstance.trueTrackName()}</td>
+                                    <td>${routeLegInstance.coordTrueTrackName()}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.distance.coord')}:</td>

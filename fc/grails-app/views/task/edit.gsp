@@ -16,7 +16,7 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post" params="${['taskReturnAction':taskReturnAction,'taskReturnController':taskReturnController,'taskReturnID':taskReturnID]}" >
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.title')} (${taskInstance.idName()}):</label>
@@ -34,6 +34,52 @@
                                 <input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.task.risingduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="risingDuration" name="risingDuration" value="${fieldValue(bean:taskInstance,field:'risingDuration')}"/>
+                            </p>
+                            <p>
+                                <div>
+	                               	<g:checkBox name="planningTestRun" value="${taskInstance.planningTestRun}" />
+    	                            <label>${message(code:'fc.planningresults')}</label>
+                                </div>
+                                <div>
+	                               	<g:checkBox name="flightTestRun" value="${taskInstance.flightTestRun}" />
+    	                            <label>${message(code:'fc.flightresults')}</label>
+                                </div>
+                                <div>
+	                               	<g:checkBox name="observationTestRun" value="${taskInstance.observationTestRun}" />
+    	                            <label>${message(code:'fc.observationresults')}</label>
+                                </div>
+                                <div>
+	                               	<g:checkBox name="landingTestRun" value="${taskInstance.landingTestRun}" />
+    	                            <label>${message(code:'fc.landingresults')}</label>
+                                </div>
+                                <div>
+	                               	<g:checkBox name="specialTestRun" value="${taskInstance.specialTestRun}" />
+    	                            <label>${message(code:'fc.specialresults')}</label>
+                                </div>
+                            </p>
+                            <p>
+                                <div>
+                                    <g:checkBox name="planningTestDistanceMeasure" value="${taskInstance.planningTestDistanceMeasure}" />
+                                    <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="planningTestDirectionMeasure" value="${taskInstance.planningTestDirectionMeasure}" />
+                                    <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
+                                </div>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p>
+                                <label>${message(code:'fc.task.addtimevalue')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}"/>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p>
                                 <label>${message(code:'fc.task.takeoffinterval.fasteraircraft')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
                                 <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}"/>
@@ -47,11 +93,6 @@
                                 <label>${message(code:'fc.task.preparationduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
                                 <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.risingduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="risingDuration" name="risingDuration" value="${fieldValue(bean:taskInstance,field:'risingDuration')}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.maxlandingduration')}* [${message(code:'fc.time.min')}]:</label>
@@ -73,25 +114,12 @@
                                 <br/>
                                 <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}"/>
                             </p>
-                            <p>
-                                <label>${message(code:'fc.task.addtimevalue')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}"/>
-                            </p>
-                            <p>
-                                <div>
-                                    <g:checkBox name="planningTestDistanceMeasure" value="${taskInstance.planningTestDistanceMeasure}" />
-                                    <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="planningTestDirectionMeasure" value="${taskInstance.planningTestDirectionMeasure}" />
-                                    <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
-                                </div>
-                            </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <input type="hidden" name="version" value="${taskInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

@@ -2,18 +2,18 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.task.timetable')}</title>
+        <title>${message(code:'fc.test.timetable')}</title>
     </head>
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.task.timetable')}</h2>
+                <h2>${message(code:'fc.test.timetable')}</h2>
                 <div class="block" id="forms" >
                     <g:form>
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>${taskInstance.name()}</td>
+                                    <td>${taskInstance.name()} (${message(code:'fc.test.timetable.version')} ${taskInstance.timetableVersion})</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -30,15 +30,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="testInstance" in="${Test.findAllByTask(taskInstance,[sort:'viewpos'])}">
-                                    <tr>
-                                        <td>${testInstance.viewpos+1}</td>
-                                        <td>${testInstance.crew.name}</td>
-                                        <td>${testInstance.crew.aircraft.registration}</td>
-                                        <td>${testInstance.crew.tas}${message(code:'fc.knot')}</td>
-                                        <td>${testInstance.testingTime?.format('HH:mm')}</td>
-                                        <td>${testInstance.takeoffTime?.format('HH:mm')}</td>
-                                    </tr>
+                                <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'viewpos'])}">
+                                   	<g:if test="${!test_instance.crew.disabled}">
+	                                    <tr>
+	                                        <td>${test_instance.viewpos+1}</td>
+	                                        <td>${test_instance.crew.name}</td>
+	                                        <td>${test_instance.crew.aircraft.registration}</td>
+	                                        <td>${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+	                                        <td>${test_instance.testingTime?.format('HH:mm')}</td>
+	                                        <td>${test_instance.takeoffTime?.format('HH:mm')}</td>
+	                                    </tr>
+	                                </g:if>
                                 </g:each>
                             </tbody>
                         </table>

@@ -11,15 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.planningtest.show')}</h2>
                 <div class="block" id="forms" >
-                    <g:form>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="detailtitle"/>
-                                    <td><g:task var="${planningTestInstance?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <g:form params="${['planningtestReturnAction':planningtestReturnAction,'planningtestReturnController':planningtestReturnController,'planningtestReturnID':planningtestReturnID]}" >
                         <table>
                             <tbody>
                                 <tr>
@@ -30,7 +22,7 @@
                                     <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
                                     <td>
                                         <g:each var="n" in="${planningTestInstance.planningtesttasks}">
-                                            <g:planningtesttask var="${n}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
+                                            <g:planningtesttask var="${n}" link="${createLink(controller:'planningTestTask',action:'edit')}"/>
                                             <br/>
                                         </g:each>
                                     </td>
@@ -48,6 +40,7 @@
                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
                         </g:if>
                         <g:actionSubmit action="createplanningtesttask" value="${message(code:'fc.planningtesttask.add1')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

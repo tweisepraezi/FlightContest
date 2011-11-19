@@ -16,15 +16,10 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post" params="${['flighttestwindReturnAction':flighttestwindReturnAction,'flighttestwindReturnController':flighttestwindReturnController,'flighttestwindReturnID':flighttestwindReturnID]}" >
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle"/>
-                                    <td><g:task var="${flightTestWindInstance?.flighttest?.task}" link="${createLink(controller:'task',action:'show')}"/></td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle"/>
                                     <td><g:flighttest var="${flightTestWindInstance?.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
                                 </tr>
                             </tbody>
@@ -45,6 +40,7 @@
                         <input type="hidden" name="id" value="${flightTestWindInstance?.id}" />
                         <input type="hidden" name="version" value="${flightTestWindInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>
