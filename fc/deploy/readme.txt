@@ -2,14 +2,26 @@ Flight Contest
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-14.08.2010
+28.11.2010
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
 
-Erweiterungen und Fehlerbehebung in dieser Version (0.5.5):
------------------------------------------------------------
+Erweiterungen in dieser Version (0.5.6):
+----------------------------------------
+- Blättern-Modus für Planung und Auswertung 
+  mit frei einstellbarer Teilnehmer-Anzahl
+  (Extras -> Einstellungen)
+- Stellt folgende Informationen beim Start wieder her:
+    * Letzter Wettbewerb
+    * Bediensprache
+    * Zeilenzahl beim Blättern
+  Dazu werden werden auf dem Bedien-Computer Cookies abgespeichert.
+
+
+Erweiterungen und Fehlerbehebung in Version 0.5.5:
+--------------------------------------------------
 - Navigationsflug-Auswertung:
   "Start verpasst" wurde in "Takeoff verpasst" umbenannt
 - Einführung eines Debriefing-Formulars für Proteste,
@@ -208,3 +220,12 @@ Logs:
 -----
   Sind hier zu finden:
     <Installationsverzeichnis>\tomcat\logs\stdout_<Datum>.log"
+
+Cookies:
+--------
+  Speichert folgende Cookies für 1 Jahr:
+    LastContestID    - Letzter Wettbewerb 
+    ShowLanguage     - Bediensprache
+    ShowLimitCrewNum - Zeilenzahl beim Blättern
+
+   

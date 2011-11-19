@@ -9,12 +9,12 @@
 
 [Code]
 const compatibelDigits = 2; // Anzahl der Stellen für Datenbankkompatibilität
-const Version = '0.5.5';
+const Version = '0.5.6';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 0.5.5
-AppVersion=0.5.5
-VersionInfoVersion=0.5.5
+AppVerName=Flight Contest 0.5.6
+AppVersion=0.5.6
+VersionInfoVersion=0.5.6
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=file:\\
@@ -26,15 +26,15 @@ DefaultGroupName=Flight Contest
 
 OutputBaseFilename=FCSetup
 
-LicenseFile=K:\Projects\EPJ\PJ11\workspace\fc\web-app\licenses\GPL_License.txt
-InfoBeforeFile=K:\Projects\EPJ\PJ11\workspace\fc\deploy\readme.txt
+LicenseFile=K:\Projects\EPJ\PJ18\workspace\fc\web-app\licenses\GPL_License.txt
+InfoBeforeFile=K:\Projects\EPJ\PJ18\workspace\fc\deploy\readme.txt
 
 DisableProgramGroupPage=yes
 MinVersion=0,5
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl";
-; Name: "de"; MessagesFile: "German.isl";             InfoAfterFile: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\readme.txt";
+; Name: "de"; MessagesFile: "German.isl";             InfoAfterFile: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\readme.txt";
 
 [Messages]
 en.BeveledLabel=Flight Contest
@@ -47,13 +47,13 @@ en.AdminNecessary=You need administrator privileges to install Flight Contest!
 [Files]
 Source: "K:\Projects\Java\jdk1.5.0_16\*";                                       DestDir: "{app}\java";           Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
 Source: "K:\Projects\Server\apache-tomcat-6.0.20\*";                            DestDir: "{app}\tomcat";         Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
-Source: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\tomcat-users.xml";            DestDir: "{app}\tomcat\conf";
-Source: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\install-service.bat";         DestDir: "{app}";
-Source: "K:\Projects\EPJ\PJ11\workspace\fc\target\fc-0.1.war";                  DestDir: "{app}\tomcat\webapps"; DestName: "fc.war";
-Source: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\readme.txt";                  DestDir: "{app}";
-Source: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\odbc.vbs";                    DestDir: "{app}";
-Source: "K:\Projects\EPJ\PJ11\workspace\fc\deploy\AFLOS.mdb";                   DestDir: "C:\AFLOS\AFLOS_System";
-Source: "K:\Projects\EPJ\PJ11\workspace\fc\web-app\licenses\GPL_License.txt";   DestDir: "{app}";                AfterInstall: MyAfterInstall;
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\tomcat-users.xml";            DestDir: "{app}\tomcat\conf";
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\install-service.bat";         DestDir: "{app}";
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\target\fc-0.1.war";                  DestDir: "{app}\tomcat\webapps"; DestName: "fc.war";
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\readme.txt";                  DestDir: "{app}";
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\odbc.vbs";                    DestDir: "{app}";
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\deploy\AFLOS.mdb";                   DestDir: "C:\AFLOS\AFLOS_System";
+Source: "K:\Projects\EPJ\PJ18\workspace\fc\web-app\licenses\GPL_License.txt";   DestDir: "{app}";                AfterInstall: MyAfterInstall;
 
 [Run]
 Filename: "wscript.exe";                    Parameters: """{app}\odbc.vbs""";      WorkingDir: "{app}";  Flags: runhidden;

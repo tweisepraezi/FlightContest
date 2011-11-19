@@ -1,4 +1,7 @@
 import org.xhtmlrenderer.pdf.ITextRenderer
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.web.context.request.RequestContextHolder
+import javax.servlet.http.Cookie
 
 class FcService
 {
@@ -6,6 +9,7 @@ class FcService
     def messageSource
     
     static int mmPerNM = 1852000
+	static int maxCookieAge = 31536000 // seconds (1 Jahr)
     
     
     //--------------------------------------------------------------------------
@@ -607,13 +611,14 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map moveupTask(params)
+    Map moveupTask(params,session)
     {
         def task = getTask(params) 
         if (!task.instance) {
             return task
         }
 
+		// moveable? (not top & connected selection)
         def borderreached = false
         def notmovable = false
         def off2on = false
@@ -634,8 +639,8 @@ class FcService
             }
         }
         if (borderreached) {
-               //task.message = getMsg('fc.test.moveborderreached')
-               task.borderreached = true
+            //task.message = getMsg('fc.test.moveborderreached')
+            task.borderreached = true
             return task
         }
         if (notmovable) {
@@ -644,7 +649,8 @@ class FcService
             return task
         }
         
-        def movenum = 0
+		// move tasks
+		def movenum = 0
         def movefirstpos = -1
         def selectedTestIDs = [selectedTestID:""]
         borderreached = false
@@ -673,6 +679,22 @@ class FcService
             }
         }
 
+		// modify showLimitStartPos
+		if (session.showLimit) {
+			if (movefirstpos < session.showLimitStartPos) {
+				if (movenum == 1) {
+					if (session.showLimitStartPos > session.showLimitCrewNum) {
+						session.showLimitStartPos -= session.showLimitCrewNum
+					} else {
+						session.showLimitStartPos = 0
+					}
+				} else {
+					session.showLimitStartPos--
+				}
+			}
+		}
+		
+		// restore selection if not top
         if (!borderreached) {
             task.selectedtestids = selectedTestIDs
         }
@@ -680,13 +702,14 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map movedownTask(params)
+    Map movedownTask(params,session)
     {
         def task = getTask(params) 
         if (!task.instance) {
             return task
         }
 
+		// moveable? (not bottom & connected selection)
         def borderreached = false
         def notmovable = false
         def off2on = false
@@ -717,6 +740,7 @@ class FcService
             return task
         }
         
+		// move tasks
         def movenum = 0
         def movefirstpos = -1
         def selectedTestIDs = [selectedTestID:""]
@@ -746,6 +770,21 @@ class FcService
             }
         }
 
+		// modify showLimitStartPos
+		if (session.showLimit) {
+			if (movefirstpos + movenum > session.showLimitStartPos + session.showLimitCrewNum) {
+				if (movenum == 1) {
+					int crew_num = Crew.countByContest(session.lastContest)
+					if (session.showLimitStartPos + session.showLimitCrewNum < crew_num) {
+						session.showLimitStartPos += session.showLimitCrewNum
+					}
+				} else {
+					session.showLimitStartPos++
+				}
+			}
+		}
+		
+		// restore selection if not bottom
         if (!borderreached) {
             task.selectedtestids = selectedTestIDs
         }
@@ -1488,7 +1527,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importAflosResults(params,contestInstance) // TODO
+    Map importAflosResults(params,contestInstance)
     {
         Test testInstance = Test.get(params.id)
 
@@ -1658,7 +1697,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    boolean processAflosErrorPointBadCourse(Test testInstance, int badCourseNum, String badCourseStartTimeUTC) // TODO
+    boolean processAflosErrorPointBadCourse(Test testInstance, int badCourseNum, String badCourseStartTimeUTC)
     {
     	boolean courseError = false
     	Contest contestInstance = testInstance.task.contest
@@ -1714,7 +1753,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    void processAflosErrorPointBadTurn(Test testInstance, String badTurnTimeUTC) // TODO
+    void processAflosErrorPointBadTurn(Test testInstance, String badTurnTimeUTC)
     {
         Contest contestInstance = testInstance.task.contest
         
@@ -5003,5 +5042,46 @@ println "$params"
         def p = [:]
         p.id = task.instance.id 
         return calculatepositionsTask(p)
+    }
+
+	//--------------------------------------------------------------------------
+	void SetCookie(response,name,value) {
+		Cookie cookie = new Cookie(name, value)
+        cookie.setMaxAge(maxCookieAge)
+		cookie.setPath("/fc")
+        response.addCookie(cookie)
+		println "Set cookie '$name' with '$value'."
+    }
+	
+    //--------------------------------------------------------------------------
+	private Cookie getCookie(name) {
+        def cookies = RequestContextHolder.currentRequestAttributes().request.getCookies()
+        if (cookies == null || name == null || name.length() == 0) {
+            return null
+        }
+        // Otherwise, we have to do a linear scan for the cookie.
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals(name)) {
+                return cookies[i]
+            }
+        }
+        return null;
+    }
+
+    //--------------------------------------------------------------------------
+	String GetCookie(String name, String initValue) {
+		Cookie cookie = getCookie(name)
+		if ( cookie ) {
+			def value = cookie.getValue()
+			println "Found cookie '$name' with '$value'."
+            return value
+		}
+		else {
+			println "Cookie '$name' not found."
+			if (initValue) {
+				return initValue
+			}
+			return ""
+		}
     }
 }

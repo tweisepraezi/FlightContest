@@ -1,5 +1,3 @@
-
-
 class ContestController {
     
 	def fcService
@@ -10,6 +8,24 @@ class ContestController {
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
     def start = {
+		String showLanguage = fcService.GetCookie("ShowLanguage",Languages.de.toString())
+		if (showLanguage) {
+			if (session?.showLanguage != showLanguage) {
+				redirect(controller:'contest',action:'start',params:[lang:showLanguage])
+			}
+			session.showLanguage = showLanguage
+		}
+		String showLimitCrewNum = fcService.GetCookie("ShowLimitCrewNum","10")
+		if (showLimitCrewNum) {
+			session.showLimitCrewNum = showLimitCrewNum.toInteger() 
+		}
+		String lastContestID = fcService.GetCookie("LastContestID","")
+		if (lastContestID) {
+			Contest last_contest = Contest.findById(lastContestID.toInteger())
+			if (last_contest) {
+				session.lastContest = last_contest
+			}
+		}
         if (session.lastContest) {
             return [contestInstance:session.lastContest]
         }
@@ -35,10 +51,11 @@ class ContestController {
     }
 
     def update = {
-        def contest = fcService.updateContest(params) 
+        def contest = fcService.updateContest(params)
         if (contest.saved) {
         	flash.message = contest.message
         	session.lastContest = contest.instance
+			fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
         	redirect(action:start,id:contest.instance.id)
         } else if (contest.instance) {
         	render(view:'edit',model:[contestInstance:contest.instance])
@@ -62,6 +79,9 @@ class ContestController {
         def contest = fcService.saveContest(params) 
         if (contest.saved) {
         	session.lastContest = contest.instance
+			fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
+			session.showLimit = false
+			session.showLimitStartPos = 0
             session.lastTaskPlanning = null
             session.lastTaskResults = null
         	flash.message = contest.message
@@ -81,6 +101,9 @@ class ContestController {
 
 	def activate = {
 		session.lastContest = Contest.get(params.id)
+		fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
+		session.showLimit = false
+		session.showLimitStartPos = 0
 		session.lastTaskPlanning = null
         session.lastTaskResults = null
         redirect(action:start)
@@ -100,12 +123,18 @@ class ContestController {
         if (contest.deleted) {
         	if (Contest.count() > 0) {
         		session.lastContest = Contest.findByIdIsNotNull()
+				fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
+				session.showLimit = false
+				session.showLimitStartPos = 0
         		session.lastTaskPlanning = null
         		session.lastTaskResults = null
         		flash.message = contest.message
                 redirect(action:start)
         	} else {
         		session.lastContest = null
+				fcService.SetCookie(response, "LastContestID",  "")
+				session.showLimit = false
+				session.showLimitStartPos = 0
                 session.lastTaskPlanning = null
                 session.lastTaskResults = null
                 flash.message = contest.message
@@ -122,11 +151,15 @@ class ContestController {
 
     def change = {
 		session.lastContest = null
+		fcService.SetCookie(response, "LastContestID",  "")
         redirect(action:start)
     }
 
     def updatecontest = {
         session.lastContest = Contest.get(params.contestid)
+		fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
+		session.showLimit = false
+		session.showLimitStartPos = 0
         session.lastTaskPlanning = null
         session.lastTaskResults = null
         redirect(action:start)
@@ -350,6 +383,8 @@ class ContestController {
     	fcService.runcalculatepositionsTask(task1)
         
         //session.lastContest = contest.instance
+		//session.showLimit = false
+		//session.showLimitStartPos = 0
         //session.lastTaskPlanning = null
         //session.lastTaskResults = null
         

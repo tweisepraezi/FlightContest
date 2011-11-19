@@ -109,6 +109,7 @@ class TaskController {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
+			SetLimit()
             session.lastTaskPlanning = task.instance.id
         	return [taskInstance:task.instance]
         }
@@ -128,6 +129,7 @@ class TaskController {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
+			SetLimit()
             session.lastTaskResults = task.instance.id
             return [taskInstance:task.instance]
         }
@@ -243,7 +245,7 @@ class TaskController {
 	}
 
 	def moveup = {
-        def task = fcService.moveupTask(params) 
+        def task = fcService.moveupTask(params,session) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -262,7 +264,7 @@ class TaskController {
 	}
 	
 	def movedown = {
-        def task = fcService.movedownTask(params) 
+        def task = fcService.movedownTask(params,session) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -424,5 +426,18 @@ class TaskController {
                 lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'
                ]
     }
+	
+	void SetLimit() {
+		if (params.showlimit == "on") {
+			session.showLimit = true
+			if (!session?.showLimitStartPos) {
+				session.showLimitStartPos = 0
+			}
+		} else if (params.showlimit == "off") {
+			session.showLimit = false
+		} else if (params.startpos) {
+			session.showLimitStartPos = params.startpos.toInteger()
+		}
+	}
 }
 

@@ -96,6 +96,42 @@ class FcTagLib
                		outln """    <li> <a class="${if (session.lastTaskResults == taskInstance.id) "active"}" href="${p.link}/../../task/listresults/${taskInstance.id}" >${taskInstance.name()}</a> </li>"""
                	}
             }        
+			
+			if (session.showLimit) {
+				int crew_num = Crew.countByContest(session.lastContest)
+				int next_start = 0
+				if (session.showLimitStartPos) {
+					next_start = session.showLimitStartPos
+				} 
+				if (next_start + session.showLimitCrewNum < crew_num) {
+					next_start += session.showLimitCrewNum
+				}
+				int before_start = 0
+				if (session.showLimitStartPos) {
+					before_start = session.showLimitStartPos
+				} 
+				if (before_start > session.showLimitCrewNum) {
+					before_start -= session.showLimitCrewNum
+				} else {
+					before_start = 0
+				}
+				int last_start = 0
+				if (crew_num > session.showLimitStartPos + session.showLimitCrewNum) {
+					last_start = crew_num - session.showLimitCrewNum
+				}
+				outln """    <li class="secondary"> <a href="?showlimit=off">${message(code:'fc.showlimitall')}</a> </li>"""
+				//if (last_start) {
+					outln """    <li class="secondary"> <a href="?startpos=${last_start}">&gt;&#124;</a> </li>"""
+					outln """    <li class="secondary"> <a href="?startpos=${next_start}">&gt;&gt;</a> </li>"""
+				//}
+				//if (session.showLimitStartPos > 0) {
+					outln """    <li class="secondary"> <a href="?startpos=${before_start}">&lt;&lt;</a> </li>"""
+					outln """    <li class="secondary"> <a href="?startpos=0">&#124;&lt;</a> </li>"""
+				//}
+			} else {
+				outln """    <li class="secondary"> <a href="?showlimit=on">${message(code:'fc.showlimit',args:[session.showLimitCrewNum])}</a> </li>"""
+			}
+			
             outln """  </ul>"""
             outln """</div>"""            
             outln """<div class="clear"></div>"""
@@ -118,7 +154,7 @@ class FcTagLib
             outln """<div class="grid">"""
             outln """  <ul class="nav main">"""
             outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
-            outln """    <li> <a href="${p.link}/../../global/changelanguage">${message(code:'fc.changelanguage')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../global/changeglobalsettings">${message(code:'fc.changeglobalsettings')}</a> </li>"""
             if (!Contest.findByIdIsNotNull()) {
                 outln """    <li> <a href="${p.link}/../../contest/createtest">${message(code:'fc.contest.new.test')}</a> </li>"""
             }

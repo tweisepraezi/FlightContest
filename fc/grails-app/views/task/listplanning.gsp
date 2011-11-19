@@ -68,56 +68,72 @@
                             </tr>
                         </thead>
                         <tbody>
+                       		<g:set var="showline" value="${false}"></g:set>
                             <g:each var="testInstance" status="i" in="${Test.findAllByTask(taskInstance,[sort:'viewpos'])}">
-                                <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-    
-                                    <g:set var="testInstanceID" value="selectedTestID${testInstance.id.toString()}"/>
-                                    <g:if test="${flash.selectedTestIDs && (flash.selectedTestIDs[testInstanceID] == 'on')}">
-                                        <td><g:checkBox name="${testInstanceID}" value="${true}" /> <g:testnum var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/></td>
-                                    </g:if> <g:else>
-                                        <td><g:checkBox name="${testInstanceID}" value="${false}" /> <g:testnum var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/></td>
-                                    </g:else>
-                            
-                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'show')}"/></td>
-                                    
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>
-                                    
-                                    <td>${testInstance.crew.tas}${message(code:'fc.knot')}</td>
-                                    
-                                    <g:if test="${testInstance.planningtesttask}">
-                                        <td colspan="2"><g:planningtesttask var="${testInstance.planningtesttask}" link="${createLink(controller:'planningTestTask',action:'show')}"/> <a href="${createLink(controller:'test',action:'planningtask')}/${testInstance.id}">${message(code:'fc.test.planningtask.here')}</a></td>
-                                    </g:if> <g:else>
-                                        <td colspan="2">${message(code:'fc.noassigned')}</td>
-                                    </g:else>
-                                    
-                                    <g:if test="${testInstance.flighttestwind}">
-                                        <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'show')}"/></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>                                    
-                                    </g:else>
-                                    
-                                    <g:if test="${testInstance.timeCalculated}">
-                                        <td>${testInstance.testingTime?.format('HH:mm')}</td>
-                                        <g:if test="${testInstance.takeoffTimeWarning}">
-                                            <td class="errors">${testInstance.takeoffTime?.format('HH:mm')} !</td>
-                                        </g:if> <g:else>
-                                            <td>${testInstance.takeoffTime?.format('HH:mm')}</td>
-                                        </g:else>
-                                        <g:if test="${testInstance.arrivalTimeWarning}">
-                                            <td class="errors">${testInstance.arrivalTime?.format('HH:mm')} !</td>
-                                        </g:if> <g:else>
-                                            <td>${testInstance.arrivalTime?.format('HH:mm')}</td>
-                                        </g:else>
-                                        <td><a href="${createLink(controller:'test',action:'flightplan')}/${testInstance.id}">${message(code:'fc.test.flightplan.here')}</a></td>
-                                    </g:if> <g:else>
-                                        <td colspan="4">${message(code:'fc.nocalculated')}</td>
-                                    </g:else>
-                                    
-                                </tr>
+                            	<g:if test="${session.showLimit}">
+                            		<g:if test="${(i + 1 > session.showLimitStartPos) && (i < session.showLimitStartPos + session.showLimitCrewNum)}">
+	                            		<g:set var="showline" value="${true}"></g:set>
+	                            		<g:set var="j" value="${i}"></g:set>
+                            		</g:if>
+                            		<g:else>
+	                            		<g:set var="showline" value="${false}"></g:set>
+									</g:else>
+                            	</g:if>
+                            	<g:else>
+                            		<g:set var="showline" value="${true}"></g:set>
+                            		<g:set var="j" value="${i}"></g:set>
+                            	</g:else>
+                            	<g:if test="${showline}">
+	                                <tr class="${(j % 2) == 0 ? 'odd' : ''}">
+	    
+	                                    <g:set var="testInstanceID" value="selectedTestID${testInstance.id.toString()}"/>
+	                                    <g:if test="${flash.selectedTestIDs && (flash.selectedTestIDs[testInstanceID] == 'on')}">
+	                                        <td><g:checkBox name="${testInstanceID}" value="${true}" /> <g:testnum var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/></td>
+	                                    </g:if> <g:else>
+	                                        <td><g:checkBox name="${testInstanceID}" value="${false}" /> <g:testnum var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/></td>
+	                                    </g:else>
+	                            
+	                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'show')}"/></td>
+	                                    
+	                                    <g:if test="${testInstance.crew.aircraft}">
+	                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'show')}"/></td>
+	                                    </g:if> <g:else>
+	                                        <td>${message(code:'fc.noassigned')}</td>
+	                                    </g:else>
+	                                    
+	                                    <td>${testInstance.crew.tas}${message(code:'fc.knot')}</td>
+	                                    
+	                                    <g:if test="${testInstance.planningtesttask}">
+	                                        <td colspan="2"><g:planningtesttask var="${testInstance.planningtesttask}" link="${createLink(controller:'planningTestTask',action:'show')}"/> <a href="${createLink(controller:'test',action:'planningtask')}/${testInstance.id}">${message(code:'fc.test.planningtask.here')}</a></td>
+	                                    </g:if> <g:else>
+	                                        <td colspan="2">${message(code:'fc.noassigned')}</td>
+	                                    </g:else>
+	                                    
+	                                    <g:if test="${testInstance.flighttestwind}">
+	                                        <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'show')}"/></td>
+	                                    </g:if> <g:else>
+	                                        <td>${message(code:'fc.noassigned')}</td>                                    
+	                                    </g:else>
+	                                    
+	                                    <g:if test="${testInstance.timeCalculated}">
+	                                        <td>${testInstance.testingTime?.format('HH:mm')}</td>
+	                                        <g:if test="${testInstance.takeoffTimeWarning}">
+	                                            <td class="errors">${testInstance.takeoffTime?.format('HH:mm')} !</td>
+	                                        </g:if> <g:else>
+	                                            <td>${testInstance.takeoffTime?.format('HH:mm')}</td>
+	                                        </g:else>
+	                                        <g:if test="${testInstance.arrivalTimeWarning}">
+	                                            <td class="errors">${testInstance.arrivalTime?.format('HH:mm')} !</td>
+	                                        </g:if> <g:else>
+	                                            <td>${testInstance.arrivalTime?.format('HH:mm')}</td>
+	                                        </g:else>
+	                                        <td><a href="${createLink(controller:'test',action:'flightplan')}/${testInstance.id}">${message(code:'fc.test.flightplan.here')}</a></td>
+	                                    </g:if> <g:else>
+	                                        <td colspan="4">${message(code:'fc.nocalculated')}</td>
+	                                    </g:else>
+	                                    
+	                                </tr>
+                                </g:if>
                             </g:each>
                         </tbody>
                         <tfoot>
