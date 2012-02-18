@@ -9,6 +9,21 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>
+                <tbody>
+                    <tr>
+                        <g:if test="${contestInstance?.aflosTest}">
+                            <td>${message(code:'fc.aflos.show.test')}</td>
+                        </g:if>
+                        <g:elseif test="${contestInstance?.aflosUpload}">
+                            <td>${message(code:'fc.aflos.show.upload')}</td>
+                        </g:elseif>
+                        <g:else>
+                            <td>${message(code:'fc.aflos.show.local')}</td>
+                        </g:else>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
                 <thead>
                     <tr>
                         <th colspan="11" class="table-head">${message(code:'fc.aflos.checkpoints.list')}</th>
@@ -31,7 +46,15 @@
                     <g:each var="aflosCheckPointsInstance" in="${aflosCheckPointsInstanceList}" status="i" >
                         <tr class="${(aflosCheckPointsInstance.startnum % 2) == 0 ? 'odd' : ''}">
                             <td>${aflosCheckPointsInstance.startnum}</td>
-                            <td>${AflosCrewNames.findByStartnumAndNameIsNotNull(aflosCheckPointsInstance.startnum).name}</td>
+							<g:if test="${contestInstance?.aflosTest}">
+                                <td>${AflosCrewNames.aflostest.findByStartnumAndNameIsNotNull(aflosCheckPointsInstance.startnum).name}</td>
+							</g:if>
+							<g:elseif test="${contestInstance?.aflosUpload}">
+                                <td>${AflosCrewNames.aflosupload.findByStartnumAndNameIsNotNull(aflosCheckPointsInstance.startnum).name}</td>
+							</g:elseif>
+							<g:else>
+                                <td>${AflosCrewNames.aflos.findByStartnumAndNameIsNotNull(aflosCheckPointsInstance.startnum).name}</td>
+							</g:else>
                             <td>${aflosCheckPointsInstance.routename.name}</td>
                             <td>${aflosCheckPointsInstance.mark}</td>
                             <td>${aflosCheckPointsInstance.utc}</td>
@@ -45,7 +68,7 @@
                     </g:each>
                 </tbody>
             </table>
-            <p>${message(code:'fc.programfoot')}</p>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

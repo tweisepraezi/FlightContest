@@ -1,5 +1,12 @@
 <html>
     <head>
+        <style type="text/css">
+            @page {
+                @bottom-center {
+                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                }
+            }
+        </style>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="layout" content="main" />
         <title>${routeInstance.name()}</title>
@@ -15,47 +22,55 @@
                                 <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}" status="j" >
                                     <tr>
                                         <g:if test="${j==0}">
-                                            <td>${message(code:'fc.coordroute.list')}</td>
+                                            <td width="25%">${message(code:'fc.coordroute.list')}</td>
                                         </g:if>
                                         <g:else>
-                                            <td/>
+                                            <td width="25%"></td>
                                         </g:else>
-                                        <td>${coordRouteInstance.titleCode()}<br/></td>
+                                        <td width="25%">${coordRouteInstance.titleCode()}<br/></td>
                                         <td>${coordRouteInstance.namePrintable()}<br/></td>
-                                    </tr>
-                                </g:each>
-                                <tr>
-                                    <td colspan="3"><br/></td>
-                                </tr>
-                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}" status="j" >
-                                    <tr>
-                                        <g:if test="${j==0}">
-                                            <td>${message(code:'fc.routelegcoord.list')}</td>
-                                        </g:if>
-                                        <g:else>
-                                            <td/>
-                                        </g:else>
-                                        <td>${routeLegCoordInstance.title}<br/></td>
-                                        <td>${routeLegCoordInstance.testName()}<br/></td>
-                                    </tr>
-                                </g:each>
-                                <tr>
-                                    <td colspan="3"><br/></td>
-                                </tr>
-                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance)}" status="j" >
-                                    <tr>
-                                        <g:if test="${j==0}">
-                                            <td>${message(code:'fc.routelegtest.list')}</td>
-                                        </g:if>
-                                        <g:else>
-                                            <td/>
-                                        </g:else>
-                                        <td>${routeLetTestInstance.title}<br/></td>
-                                        <td>${routeLetTestInstance.testName()}<br/></td>
                                     </tr>
                                 </g:each>
                             </tbody>
                         </table>
+                        <br/>
+                       	<div style="page-break-inside:avoid">
+	                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
+	                            <tbody>
+	                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}" status="j" >
+	                                    <tr>
+	                                        <g:if test="${j==0}">
+	                                            <td width="25%">${message(code:'fc.routelegcoord.list')}</td>
+	                                        </g:if>
+	                                        <g:else>
+	                                            <td width="25%"></td>
+	                                        </g:else>
+	                                        <td width="25%">${routeLegCoordInstance.title}<br/></td>
+	                                        <td>${routeLegCoordInstance.testName()}<br/></td>
+	                                    </tr>
+	                                </g:each>
+	                            </tbody>
+	                        </table>
+	                    </div>
+	                    <br/>
+                       	<div style="page-break-inside:avoid">
+	                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
+	                            <tbody>
+	                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance)}" status="j" >
+	                                    <tr>
+	                                        <g:if test="${j==0}">
+	                                            <td width="25%">${message(code:'fc.routelegtest.list')}</td>
+	                                        </g:if>
+	                                        <g:else>
+	                                            <td width="25%"></td>
+	                                        </g:else>
+	                                        <td width="25%">${routeLetTestInstance.title}<br/></td>
+	                                        <td>${routeLetTestInstance.testName()}<br/></td>
+	                                    </tr>
+	                                </g:each>
+	                            </tbody>
+	                        </table>
+	                	</div>
                     </g:form>
                 </div>
             </div>

@@ -1,11 +1,12 @@
-#Tue Feb 01 12:21:33 CET 2011
+#Sat Oct 08 19:07:43 CEST 2011
 DELEGATES_PREFERENCE=delegateValidatorList
 USER_BUILD_PREFERENCE=enabledBuildValidatorList
 USER_MANUAL_PREFERENCE=enabledManualValidatorList
-USER_PREFERENCE=overrideGlobalPreferencestruedisableAllValidationfalseversion1.2.200.v201005271900
+USER_PREFERENCE=overrideGlobalPreferencestruedisableAllValidationfalseversion1.2.300.v201104190230
 eclipse.preferences.version=1
 override=true
 suspend=false
 vals/com.springsource.sts.grails.editor.gsp.GSPBatchValidator/global=FF01
 vals/com.springsource.sts.grails.editor.gsp.GSPContentValidator/global=FF01
+vals/org.eclipse.wst.xml.core.xml/groups=0107include05111contentType128org.eclipse.core.runtime.xmlT111contentType134org.eclipse.wst.xml.core.xmlsourceT111contentType134org.eclipse.wst.xml.core.xslsourceT111contentType134org.eclipse.jst.jsp.core.tldsourceT07fileext03xmlF0107exclude07113projectNature134org.eclipse.jst.j2ee.ejb.EJBNature113projectNature130org.eclipse.jst.j2ee.EARNature04file08.projectT0104file110.classpathT0104file110.settings/T0204file112sitemesh.xmlF0104file06deployF02
 vf.version=3

@@ -13,11 +13,11 @@
                 <div class="block" id="forms" >
                 	<g:uploadForm action="importcrews">
                     	<div>
-    						<input type="file" size="80" accept="application/msexcel/*.xls" name="loadfile" />
+    						<input type="file" size="80" accept="application/msexcel/*.xls" name="loadfile" tabIndex="1"/>
                     	</div>
                     	<div>
-	    					<input type="submit" value="${message(code:'fc.import')}" />
-		                    <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" />
+	    					<input type="submit" value="${message(code:'fc.import')}" tabIndex="2"/>
+		                    <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                     	</div>
 					</g:uploadForm>
                 </div>

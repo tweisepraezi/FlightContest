@@ -5,11 +5,19 @@ class AflosErrorsController {
     def index = { redirect(action:list,params:params) }
 
     def list = {
-		fcService.println "List AFLOS errors"
-		
         session.lastAflosController = controllerName
         
         params.sort = "id"
-        [ aflosErrorsInstanceList: AflosErrors.list( params ) ]
+		if (session?.lastContest) {
+			if (session.lastContest.aflosTest) {
+				fcService.println "List AFLOS errors (aflostest)"
+		        return [contestInstance:session.lastContest, aflosErrorsInstanceList: AflosErrors.aflostest.list(params)]
+			} else if (session.lastContest.aflosUpload) {
+				fcService.println "List AFLOS errors (aflosupload)"
+		        return [contestInstance:session.lastContest, aflosErrorsInstanceList: AflosErrors.aflosupload.list(params)]
+			}
+		}
+		fcService.println "List AFLOS errors (aflos)"
+        return [aflosErrorsInstanceList: AflosErrors.aflos.list(params)]
     }
 }

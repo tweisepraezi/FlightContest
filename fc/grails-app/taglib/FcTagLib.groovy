@@ -24,12 +24,13 @@ class FcTagLib
 	        outln """    <li> <a class="${if (p.conteststart) active(p.controller,'contest')}" href="${p.link}/../../contest/start">${message(code:'fc.contest')}</a> </li>"""
             outln """    <li> <a class="${active(p.controller,'route')}" href="${p.link}/../../route/list">${message(code:'fc.route.list')}</a> </li>"""
 	        outln """    <li> <a class="${active(p.controller,'crew')}" href="${p.link}/../../crew/list">${message(code:'fc.crew.list')}</a> </li>"""
+	        outln """    <li> <a class="${active(p.controller,'team')}" href="${p.link}/../../team/list">${message(code:'fc.team.list')}</a> </li>"""
+			if (session?.lastContest.resultClasses) {
+				outln """    <li> <a class="${active(p.controller,'resultClass')}" href="${p.link}/../../resultClass/list">${message(code:'fc.resultclass.list')}</a> </li>"""
+			}
 	        outln """    <li> <a class="${active(p.controller,'aircraft')}" href="${p.link}/../../aircraft/list">${message(code:'fc.aircraft.list')}</a> </li>"""
             outln """    <li> <a class="${if (p.contesttasks) active(p.controller,'contest')}" href="${p.link}/../../contest/tasks">${message(code:'fc.contest.tasks')}</a> </li>"""
-            boolean foundAnyTask = false
-        	Task.findAllByContest(session.lastContest).each { taskInstance ->
-        		foundAnyTask = true
-        	}
+            boolean foundAnyTask = Task.findByContest(session.lastContest)
 			if (foundAnyTask) {
 				outln """    <li> <a class="${if (p.taskplanning) active(p.controller,'task')}" href="${p.link}/../../task/startplanning">${message(code:'fc.task.listplanning')}</a> </li>"""
            		outln """    <li> <a class="${if (p.taskresults) active(p.controller,'task')}" href="${p.link}/../../task/startresults">${message(code:'fc.task.listresults')}</a> </li>"""
@@ -41,6 +42,7 @@ class FcTagLib
         		}
         	} else {
         		outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
+				outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
         	}
         }
         outln """    <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list">${message(code:'fc.settings')}</a> </li>"""
@@ -81,13 +83,17 @@ class FcTagLib
 		            outln """    <li> <a href="${p.link}/../../${p.controller}/print">${p.printaction}</a> </li>"""
 		        }
 	            if (p.controller == "contest" && session.lastContest && !p.contesttasks) {
+					if (!session.lastContest.resultClasses) {
+	                    outln """    <li> <a href="${p.link}/../../contest/editpoints">${message(code:'fc.contestrule.points')}</a> </li>"""
+					}
 	                if (Contest.count() > 1) {
 	                    outln """    <li> <a href="${p.link}/../../contest/change">${message(code:'fc.contest.change')}</a> </li>"""
 	                }
                     outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
 	                outln """    <li> <a href="${p.link}/../../contest/deletequestion">${message(code:'fc.contest.delete')}</a> </li>"""
 	                outln """    <li> <a href="${p.link}/../../contest/copyquestion">${message(code:'fc.contest.copy')}</a> </li>"""
-					if (Environment.currentEnvironment != Environment.PRODUCTION ) {
+					outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
+					if (session.lastContest.testExists) {
 						outln """    <li> <a href="${p.link}/../../contest/runtest">${message(code:'fc.contest.runtest')}</a> </li>"""
 					}
 	            }
@@ -99,50 +105,61 @@ class FcTagLib
             outln """<div class="clear"></div>"""
             outln """<div class="grid">"""
             outln """  <ul class="nav main">"""
-            Task.findAllByContest(session.lastContest).each { taskInstance ->
+            for (Task task_instance in Task.findAllByContest(session.lastContest)) {
                	if (p.taskplanning) {
-               		outln """    <li> <a class="${if (session.lastTaskPlanning == taskInstance.id) "active"}" href="${p.link}/../../task/listplanning/${taskInstance.id}" >${taskInstance.name()}</a> </li>"""
+               		outln """    <li> <a class="${if (session.lastTaskPlanning == task_instance.id) "active"}" href="${p.link}/../../task/listplanning/${task_instance.id}" >${task_instance.name()}</a> </li>"""
                	} else if (p.taskresults) {
-               		outln """    <li> <a class="${if (session.lastTaskResults == taskInstance.id) "active"}" href="${p.link}/../../task/listresults/${taskInstance.id}" >${taskInstance.name()}</a> </li>"""
+               		outln """    <li> <a class="${if (session.lastTaskResults == task_instance.id) "active"}" href="${p.link}/../../task/listresults/${task_instance.id}" >${task_instance.name()}</a> </li>"""
                	}
             }
 			if (p.taskresults) {
-				outln """    <li> <a href="${p.link}/../../contest/positions">${message(code:'fc.contest.positions')}</a> </li>"""
+				if (session.lastContest.resultClasses) {
+					for (ResultClass resultclass_instance in ResultClass.findAllByContest(session.lastContest)) {
+						outln """    <li> <a class="${if (session.lastResultClassResults == resultclass_instance.id) "active"}" href="${p.link}/../../resultClass/listresults/${resultclass_instance.id}">${resultclass_instance.name}</a> </li>"""
+					}
+				} else {
+					outln """    <li> <a class="${if (session.lastContestResults) "active"}" href="${p.link}/../../contest/listresults">${message(code:'fc.contest.listresults')}</a> </li>"""
+				}
+				if (session.lastContest.teamCrewNum > 0) {
+					outln """    <li> <a class="${if (session.lastTeamResults) "active"}" href="${p.link}/../../contest/listteamresults">${message(code:'fc.contest.listteamresults')}</a> </li>"""
+				}
 			}
 			
-			if (session.showLimit) {
-				int crew_num = Crew.countByContest(session.lastContest)
-				int next_start = 0
-				if (session.showLimitStartPos) {
-					next_start = session.showLimitStartPos
-				} 
-				if (next_start + session.showLimitCrewNum < crew_num) {
-					next_start += session.showLimitCrewNum
-				}
-				int before_start = 0
-				if (session.showLimitStartPos) {
-					before_start = session.showLimitStartPos
-				} 
-				if (before_start > session.showLimitCrewNum) {
-					before_start -= session.showLimitCrewNum
+			if (!session.lastResultClassResults && !session.lastTeamResults && !session.lastContestResults) {
+				if (session.showLimit) {
+					int crew_num = Crew.countByContest(session.lastContest)
+					int next_start = 0
+					if (session.showLimitStartPos) {
+						next_start = session.showLimitStartPos
+					} 
+					if (next_start + session.showLimitCrewNum < crew_num) {
+						next_start += session.showLimitCrewNum
+					}
+					int before_start = 0
+					if (session.showLimitStartPos) {
+						before_start = session.showLimitStartPos
+					} 
+					if (before_start > session.showLimitCrewNum) {
+						before_start -= session.showLimitCrewNum
+					} else {
+						before_start = 0
+					}
+					int last_start = 0
+					if (crew_num > session.showLimitStartPos + session.showLimitCrewNum) {
+						last_start = crew_num - session.showLimitCrewNum
+					}
+					outln """    <li class="secondary"> <a href="?showlimit=off">${message(code:'fc.showlimitall')}</a> </li>"""
+					//if (last_start) {
+						outln """    <li class="secondary"> <a href="?startpos=${last_start}">&gt;&#124;</a> </li>"""
+						outln """    <li class="secondary"> <a href="?startpos=${next_start}">&gt;&gt;</a> </li>"""
+					//}
+					//if (session.showLimitStartPos > 0) {
+						outln """    <li class="secondary"> <a href="?startpos=${before_start}">&lt;&lt;</a> </li>"""
+						outln """    <li class="secondary"> <a href="?startpos=0">&#124;&lt;</a> </li>"""
+					//}
 				} else {
-					before_start = 0
+					outln """    <li class="secondary"> <a href="?showlimit=on">${message(code:'fc.showlimit',args:[session.showLimitCrewNum])}</a> </li>"""
 				}
-				int last_start = 0
-				if (crew_num > session.showLimitStartPos + session.showLimitCrewNum) {
-					last_start = crew_num - session.showLimitCrewNum
-				}
-				outln """    <li class="secondary"> <a href="?showlimit=off">${message(code:'fc.showlimitall')}</a> </li>"""
-				//if (last_start) {
-					outln """    <li class="secondary"> <a href="?startpos=${last_start}">&gt;&#124;</a> </li>"""
-					outln """    <li class="secondary"> <a href="?startpos=${next_start}">&gt;&gt;</a> </li>"""
-				//}
-				//if (session.showLimitStartPos > 0) {
-					outln """    <li class="secondary"> <a href="?startpos=${before_start}">&lt;&lt;</a> </li>"""
-					outln """    <li class="secondary"> <a href="?startpos=0">&#124;&lt;</a> </li>"""
-				//}
-			} else {
-				outln """    <li class="secondary"> <a href="?showlimit=on">${message(code:'fc.showlimit',args:[session.showLimitCrewNum])}</a> </li>"""
 			}
 			
             outln """  </ul>"""
@@ -158,6 +175,11 @@ class FcTagLib
             outln """    <li> <a class="${active(p.controller,'aflosErrors')}" href="${p.link}/../../aflosErrors/list" >${message(code:'fc.aflos.errors.list')}</a> </li>"""
             outln """    <li> <a class="${active(p.controller,'aflosCheckPoints')}" href="${p.link}/../../aflosCheckPoints/list" >${message(code:'fc.aflos.checkpoints.list')}</a> </li>"""
             outln """    <li> <a class="${active(p.controller,'aflosErrorPoints')}" href="${p.link}/../../aflosErrorPoints/list" >${message(code:'fc.aflos.errorpoints.list')}</a> </li>"""
+			if (session?.lastContest) {
+				if (!session.lastContest.aflosTest) {
+					outln """    <li> <a href="${p.link}/../../aflos/selectfilename" >${message(code:'fc.aflos.upload')}</a> </li>"""
+				}
+			}
             outln """  </ul>"""
 			outln """</div>"""            
 			outln """<div class="clear"></div>"""
@@ -172,9 +194,6 @@ class FcTagLib
 				outln """    <li> <a href="${p.link}/../../dbUtil" target="_blank">${message(code:'fc.dbutil')}</a> </li>"""
 			}
             outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
-            if (!Contest.findByIdIsNotNull()) {
-                outln """    <li> <a href="${p.link}/../../contest/createtest">${message(code:'fc.contest.new.test')}</a> </li>"""
-            }
             outln """  </ul>"""
             outln """</div>"""            
             outln """<div class="clear"></div>"""
@@ -250,15 +269,43 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:coordresult var="${coordResultInstance}" name="${legNo}" link="${createLink(controller:'coordResult',action:'edit')}"/></td>
+    // <g:team var="${teamInstance}" link="${createLink(controller:'team',action:'edit')}"/>
+    def team = { p ->
+        if (p.var) {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+        }
+    }
+    
+    // ====================================================================================================================
+    // <g:resultclass var="${resultclassInstance}" link="${createLink(controller:'resultClass',action:'edit')}"/>
+    def resultclass = { p ->
+        if (p.var) {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+        }
+    }
+    
+    // ====================================================================================================================
+    // <g:coordresult var="${coordResultInstance}" name="${legNo}" procedureTurn="false" next="${next}" link="${createLink(controller:'coordResult',action:'edit')}"/></td>
     def coordresult = { p ->
 	    String t = p.name
-	    if (p.var.resultEntered) {
-	      t += """ <img src="/fc/images/skin/ok.png"/>"""
-	    } else {
-	        t += " ..."
-	    }
-        out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
+		if (p.procedureTurn) {
+		    if (p.var.resultProcedureTurnEntered) {
+		      t += """ <img src="/fc/images/skin/ok.png"/>"""
+		    } else {
+		        t += " ..."
+		    }
+		} else {
+		    if (p.var.resultEntered) {
+		      t += """ <img src="/fc/images/skin/ok.png"/>"""
+		    } else {
+		        t += " ..."
+		    }
+		}
+		if (p.next) {
+			out << """<a href="${p.link}/${p.var.id}?name=${p.name}&next=${p.next}">${t}</a>""" // .encodeAsHTML()
+		} else {
+			out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
+		}
     }
     
     // ====================================================================================================================
@@ -268,7 +315,7 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:coordroutenum var="${coordRouteInstance}" num="${i}" link="${createLink(controller:'coordRoute',action:'show')}"/>
+    // <g:coordroutenum var="${coordRouteInstance}" num="${i}" next="${next}" link="${createLink(controller:'coordRoute',action:'show')}"/>
    def coordroutenum = { p ->
     	String t = p.num.toString()
         if (p.var.measureEntered) {
@@ -276,7 +323,11 @@ class FcTagLib
 		} else {
 			t += " ..."
 		}
-		out << """<a href="${p.link}/${p.var.id}">${t}</a>""" // .encodeAsHTML()
+		if (p.next) {
+			out << """<a href="${p.link}/${p.var.id}?next=${p.next}">${t}</a>""" // .encodeAsHTML()
+		} else {
+			out << """<a href="${p.link}/${p.var.id}">${t}</a>""" // .encodeAsHTML()
+		}
     }
     
     // ====================================================================================================================
@@ -403,7 +454,7 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:testlegplanning2 var="${testLegFlightInstance}" name="${testLeg}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
+    // <g:testlegplanning2 var="${testLegFlightInstance}" name="${testLeg}" next="${next}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
     def testlegplanning2 = { p ->
     	String t = p.name
         if (p.var.resultEntered) {
@@ -411,7 +462,11 @@ class FcTagLib
         } else {
         	t += " ..."
         }
-        out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
+		if (p.next) {
+			out << """<a href="${p.link}/${p.var.id}?name=${p.name}&next=${p.next}">${t}</a>""" // .encodeAsHTML()
+		} else {
+			out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
+		}
     }
     
     // ====================================================================================================================

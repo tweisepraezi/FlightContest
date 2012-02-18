@@ -43,6 +43,9 @@ class LogService
 	private int writtenChars = 0
 	private int writtenLines = 0
 	
+	private boolean cachePrintWriteOn = true  // BUG: Print.write fügt ungewollt Zeilenwechsel ein
+	private String cachePrintWrite = ""
+	
 	
 	//--------------------------------------------------------------------------
 	void printstart(out)
@@ -131,7 +134,11 @@ class LogService
 	{
 		if (printSystem) {
 			//print(out)
-			Print.write(out)
+			if (cachePrintWriteOn) {
+				cachePrintWrite += out
+			} else {
+				Print.write(out)
+			}
 		}
 		logWriter << out
 		if (logFileWriter) {
@@ -146,7 +153,13 @@ class LogService
 	{
 		if (printSystem) {
 			//println(out)
-			Print.writeln(out)
+			if (cachePrintWriteOn) {
+				cachePrintWrite += out
+				Print.writeln(cachePrintWrite)
+				cachePrintWrite = ""
+			} else {
+				Print.writeln(out)
+			}
 		}
 		logWriter << out
 		logWriter << LineSeparator

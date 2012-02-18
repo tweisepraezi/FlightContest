@@ -21,21 +21,21 @@
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}*:</label>
                                 <br/>
-                                <input type="text" id="registration" name="registration" value="${fieldValue(bean:aircraftInstance,field:'registration')}"/>
+                                <input type="text" id="registration" name="registration" value="${fieldValue(bean:aircraftInstance,field:'registration')}" tabIndex="1"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.aircraft.type')}:</label>
                                 <br/>
-                                <input type="text" id="type" name="type" value="${fieldValue(bean:aircraftInstance,field:'type')}"/>
+                                <input type="text" id="type" name="type" value="${fieldValue(bean:aircraftInstance,field:'type')}" tabIndex="2"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.aircraft.colour')}:</label>
                                 <br/>
-                                <input type="text" id="colour" name="colour" value="${fieldValue(bean:aircraftInstance,field:'colour')}"/>
+                                <input type="text" id="colour" name="colour" value="${fieldValue(bean:aircraftInstance,field:'colour')}" tabIndex="3"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="4"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="5"/>
                     </g:form>
                 </div>
             </div>

@@ -5,11 +5,19 @@ class AflosCheckPointsController {
     def index = { redirect(action:list,params:params) }
 
     def list = {
-		fcService.println "List AFLOS checkpoints"
-		
         session.lastAflosController = controllerName
         
         params.sort = "id"
-        [ aflosCheckPointsInstanceList: AflosCheckPoints.list( params ) ]
+		if (session?.lastContest) {
+			if (session.lastContest.aflosTest) {
+				fcService.println "List AFLOS checkpoints (aflostest)"
+				return [contestInstance:session.lastContest, aflosCheckPointsInstanceList: AflosCheckPoints.aflostest.list(params)]
+			} else if (session.lastContest.aflosUpload) {
+				fcService.println "List AFLOS checkpoints (aflosupload)"
+				return [contestInstance:session.lastContest, aflosCheckPointsInstanceList: AflosCheckPoints.aflosupload.list(params)]
+			}
+		}
+		fcService.println "List AFLOS checkpoints (aflos)"
+        return [aflosCheckPointsInstanceList: AflosCheckPoints.aflos.list(params)]
     }
 }

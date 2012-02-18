@@ -23,6 +23,15 @@
                                     <td class="detailtitle">${message(code:'fc.testlegplanningresult.from')}:</td>
                                     <td><g:test var="${testLegPlanningInstance?.test}" link="${createLink(controller:'test',action:'planningtaskresults')}"/></td>
                                 </tr>
+                                <tr>
+                                	<td class="detailtitle">${message(code:'fc.title')}:</td>
+	                                <g:if test="${params.next}">
+	                                    <td>${message(code:CoordType.TP.code)}${params.name}</td>
+	                                </g:if>
+	                                <g:else>
+	                                    <td>${message(code:CoordType.FP.code)}</td>
+	                                </g:else>
+                                </tr>
                             </tbody>
                         </table>
                         <fieldset>
@@ -46,12 +55,12 @@
                                 <p>
                                     <label>${message(code:'fc.trueheading')}* [${message(code:'fc.grad')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultTrueHeading" name="resultTrueHeading" value="${fieldValue(bean:testLegPlanningInstance,field:'resultTrueHeading')}"/>
+                                    <input type="text" id="resultTrueHeading" name="resultTrueHeading" value="${fieldValue(bean:testLegPlanningInstance,field:'resultTrueHeading')}" tabIndex="1"/>
                                 </p>
                                 <p>
                                     <label>${message(code:'fc.legtime')}* [${message(code:'fc.time.hminsec')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultLegTimeInput" name="resultLegTimeInput" value="${fieldValue(bean:testLegPlanningInstance,field:'resultLegTimeInput')}"/>
+                                    <input type="text" id="resultLegTimeInput" name="resultLegTimeInput" value="${fieldValue(bean:testLegPlanningInstance,field:'resultLegTimeInput')}" tabIndex="2"/>
                                 </p>
                              </g:if>
                              <g:else>
@@ -69,13 +78,16 @@
                                 </table>
                              </g:else>
                         </fieldset>
-                        <input type="hidden" name="id" value="${testLegPlanningInstance.id}" />
-                        <input type="hidden" name="testid" value="${testLegPlanningInstance.test.id}" />
+                        <input type="hidden" name="id" value="${testLegPlanningInstance.id}"/>
+                        <input type="hidden" name="testid" value="${testLegPlanningInstance.test.id}"/>
                         <g:if test="${!testLegPlanningInstance.test.planningTestComplete}">
-                            <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
-                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        	<g:if test="${params.next}">
+                            	<g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="3"/>
+                            </g:if>
+                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="4"/>
+                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="5"/>
                         </g:if>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="6"/>
                     </g:form>
                 </div>
             </div>

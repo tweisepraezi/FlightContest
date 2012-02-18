@@ -16,7 +16,7 @@
                             <p>
                                 <label>${message(code:'fc.title')}*:</label>
                                 <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}"/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}" tabIndex="1"/>
                             </p>
                             <p>
                                 <div>
@@ -37,9 +37,9 @@
                                 </div>
                             </p>
                         </fieldset>
-                        <input type="hidden" name="id" value="${contestInstance?.id}" />
-                        <g:actionSubmit action="copy" value="${message(code:'fc.copy')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <input type="hidden" name="id" value="${contestInstance?.id}"/>
+                        <g:actionSubmit action="copy" value="${message(code:'fc.copy')}" tabIndex="2"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                     </g:form>
                 </div>
             </div>

@@ -83,7 +83,7 @@
                     </g:each>
                 </tbody>
             </table>
-            <p>${message(code:'fc.programfoot')}</p>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

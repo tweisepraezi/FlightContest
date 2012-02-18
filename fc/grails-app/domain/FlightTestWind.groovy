@@ -10,8 +10,8 @@ class FlightTestWind
 	static belongsTo = [flighttest:FlightTest]
 
 	static constraints = {
-		direction(range:0.0f..<360.0f)
-		speed(range:0.0f..<1000.0f)
+		direction(range:0.0f..<360.0f,scale:10)
+		speed(range:0.0f..<1000.0f,scale:10)
 	}
 	
 	String name()

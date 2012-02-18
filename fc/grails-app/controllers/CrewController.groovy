@@ -17,10 +17,16 @@ class CrewController {
 			session.aircraftReturnAction = actionName
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
+			session.teamReturnAction = actionName
+			session.teamReturnController = controllerName
+			session.teamReturnID = params.id
+			session.resultclassReturnAction = actionName
+			session.resultclassReturnController = controllerName
+			session.resultclassReturnID = params.id
             def crewList = Crew.findAllByContest(session.lastContest, [sort:'viewpos'])
 			def activeCrewList = Crew.findAllByContestAndDisabled(session.lastContest, false, [sort:'viewpos'])
 			fcService.printdone "last contest"
-            return [crewInstanceList:crewList,activeCrewInstanceList:activeCrewList]
+            return [crewInstanceList:crewList,activeCrewInstanceList:activeCrewList,resultClasses:session.lastContest.resultClasses]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -60,7 +66,7 @@ class CrewController {
 
     def create = {
         def crew = fcService.createCrew(params) 
-        return [crewInstance:crew.instance]
+        return [crewInstance:crew.instance,resultClasses:session.lastContest.resultClasses]
     }
 
     def save = {
@@ -103,17 +109,26 @@ class CrewController {
 	def importcrews = {
 		def file = request.getFile('loadfile')
 		if (file && !file.empty) {
-			println file.getContentType()
-			String load_file_name = "fcdb-crewlist-upload.xls"
 			String file_name = file.getOriginalFilename()
-			file.transferTo(new File(load_file_name))
-	        def crews = fcService.importCrews(file_name, load_file_name, session.lastContest) 
-	        if (crews.saved) {
-	            flash.message = crews.message
-	        } else if (crews.error) {
-	        	flash.error = crews.error
-	            flash.message = crews.message
-	        }
+			fcService.printstart "Upload '$file_name'"
+			fcService.println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream" 
+			if (file_name.toLowerCase().endsWith('.xls')) {
+				String load_file_name = "CREWLIST-UPLOAD.xls"
+				file.transferTo(new File(load_file_name))
+		        def crews = fcService.importCrews(file_name, load_file_name, session.lastContest) 
+		        if (crews.saved) {
+		            flash.message = crews.message
+					fcService.printdone flash.message
+		        } else if (crews.error) {
+		        	flash.error = crews.error
+		            flash.message = crews.message
+					fcService.printerror flash.message
+		        }
+			} else {
+				flash.error = true
+				flash.message = message(code:'fc.notimported.excel',args:[file_name])
+				fcService.printerror flash.message
+			}
 		}
         redirect(action:list)
 	}
@@ -125,7 +140,7 @@ class CrewController {
 		if (session?.lastContest) {
             def crewList = Crew.findAllByContestAndDisabled(session.lastContest,false)
             params.sort = "viewpos"
-            return [crewInstanceList:crewList]
+            return [crewInstanceList:crewList,resultClasses:session.lastContest.resultClasses]
         }
         return [:]
     }
@@ -192,10 +207,18 @@ class CrewController {
         }
 	}
 	
+	def deletecrews = {
+        def ret = fcService.deleteCrews(session.lastContest,params,session)
+		if (ret.deleted) { 
+			flash.message = ret.message
+		}
+       	redirect(action:list)
+	}
+	
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,
-                lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'
+                lang:session.printLanguage
                ]
     }
 }

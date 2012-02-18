@@ -1,5 +1,15 @@
 <html>
     <head>
+        <style type="text/css">
+            @page {
+                @top-center {
+                    content: "${message(code:'fc.program.printpage')} " counter(page)
+                }
+                @bottom-center {
+                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                }
+            }
+        </style>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="layout" content="main" />
         <title>${message(code:'fc.aircraft.list')}</title>
@@ -16,8 +26,8 @@
                                    <th>${message(code:'fc.aircraft.registration')}</th>
                                    <th>${message(code:'fc.aircraft.type')}</th>
                                    <th>${message(code:'fc.aircraft.colour')}</th>
-                                   <th>${message(code:'fc.aircraft.user1')}</th>
-                                   <th>${message(code:'fc.aircraft.user2')}</th>
+                                   <th>${message(code:'fc.aircraft.crew1')}</th>
+                                   <th>${message(code:'fc.aircraft.crew2')}</th>
                                 </tr>
                             </thead>
                             <tbody>

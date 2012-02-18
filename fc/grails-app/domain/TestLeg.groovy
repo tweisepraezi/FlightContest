@@ -28,15 +28,20 @@ class TestLeg
 	int penaltyTrueHeading = 0          // Points
 	int penaltyLegTime = 0              // Points
 	
-	
     static transients = ['resultLegTimeInput']
     
     static constraints = {
-		planTrueTrack(blank:false, range:0..<360)
-		planTestDistance(blank:false, min:0.toBigDecimal())
-		planTrueHeading(blank:false, range:0..<360)
-		planGroundSpeed(blank:false, min:0.toBigDecimal())
-		planLegTime(blank:false, min:0.toBigDecimal())
+		planTrueTrack(blank:false, range:0..<360, scale:10)
+		planTestDistance(blank:false, min:0.toBigDecimal(), scale:10)
+		planTrueHeading(blank:false, range:0..<360, scale:10)
+		planGroundSpeed(blank:false, min:0.toBigDecimal(), scale:10)
+		planLegTime(blank:false, min:0.toBigDecimal(), scale:10)
+		
+		resultTrueTrack(scale:10)
+		resultTestDistance(scale:10)
+		resultTrueHeading(scale:10)
+		resultGroundSpeed(scale:10)
+		resultLegTime(scale:10)
 		
 		resultLegTimeInput(blank:false, validator:{ val, obj ->
 			String v = val.replace('.',':')

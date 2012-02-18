@@ -60,18 +60,53 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="coordRouteInstance" in="${routeInstance.coords}" status="i" >
-                                    <tr>
-                                        <td><g:coordroutenum var="${coordRouteInstance}" num="${i+1}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
-                                        <td>${coordRouteInstance.titleWithRatio()}</td>
-                                        <td>${coordRouteInstance.mark}</td>
-                                        <td>${coordRouteInstance.latName()}</td>
-                                        <td>${coordRouteInstance.lonName()}</td>
-                                        <td>${coordRouteInstance.altitude}${message(code:'fc.foot')}</td>
-                                        <td>${coordRouteInstance.gatewidth}${message(code:'fc.mile')}</td>
-                                        <td>${coordRouteInstance.measureTrueTrackName()}</td>
-                                        <td>${coordRouteInstance.measureDistanceName()}</td>
+                                <g:set var="last_measuretruetrack" value="${new Integer(0)}"/>
+                                <g:set var="last_measuredistance" value="${new Integer(0)}"/>
+                                <g:each var="coordroute_instance" in="${routeInstance.coords}" status="i" >
+                                    <tr class="${coordroute_instance.type in [CoordType.SP,CoordType.TP,CoordType.FP] ? '' : 'odd'}">
+                                    	<!-- search next id -->
+                                        <g:set var="next" value="${new Integer(0)}" />
+                                        <g:set var="setnext" value="${false}" />
+     		                            <g:each var="coordroute_instance2" in="${routeInstance.coords}">
+                                        	<g:if test="${setnext}">
+     				                        	<g:set var="next" value="${coordroute_instance2.id}" />
+			                                	<g:set var="setnext" value="${false}" />
+                                            </g:if>
+                                            <g:if test="${coordroute_instance2 == coordroute_instance}">
+	                                        	<g:set var="setnext" value="${true}" />
+                                            </g:if>
+     		                            </g:each>
+        		                                
+                                        <td><g:coordroutenum var="${coordroute_instance}" num="${i+1}" next="${next}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
+                                        <td>${coordroute_instance.titleWithRatio()}</td>
+                                        <td>${coordroute_instance.mark}</td>
+                                        <td>${coordroute_instance.latName()}</td>
+                                        <td>${coordroute_instance.lonName()}</td>
+                                        <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
+                                        <td>${coordroute_instance.gatewidth}${message(code:'fc.mile')}</td>
+                                        <g:if test="${last_measuretruetrack && last_measuretruetrack != coordroute_instance.measureTrueTrack}">
+	                                        <td class="errors">${coordroute_instance.measureTrueTrackName()} !</td>
+	                                    </g:if><g:else>
+	                                        <td>${coordroute_instance.measureTrueTrackName()}</td>
+	                                    </g:else>
+                                        <g:if test="${last_measuredistance && last_measuredistance >= coordroute_instance.measureDistance}">
+	                                        <td class="errors">${coordroute_instance.measureDistanceName()} !</td>
+	                                    </g:if><g:else>
+	                                        <td>${coordroute_instance.measureDistanceName()}</td>
+	                                    </g:else>
                                     </tr>
+                                    <g:if test="${coordroute_instance.type == CoordType.SECRET}">
+	                                	<g:set var="last_measuretruetrack" value="${coordroute_instance.measureTrueTrack}" />
+	                               	</g:if>
+	                               	<g:else>
+		                                <g:set var="last_measuretruetrack" value="${new Integer(0)}"/>
+	                               	</g:else>
+                                    <g:if test="${coordroute_instance.type == CoordType.SECRET}">
+	    	                            <g:set var="last_measuredistance" value="${coordroute_instance.measureDistance}" />
+	                               	</g:if>
+	                               	<g:else>
+	                               		<g:set var="last_measuredistance" value="${new Integer(0)}"/>
+	                               	</g:else>
                                 </g:each>
                             </tbody>
                         </table>
@@ -91,7 +126,7 @@
                             </thead>
                             <tbody>
                                 <g:each var="routeLegInstance" in="${routeInstance.routelegs}" status="i" >
-                                    <tr>
+                                    <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${i+1}</td>
                                         <td>${routeLegInstance.title}</td>
                                         <td>${routeLegInstance.coordTrueTrackName()}</td>
@@ -118,7 +153,7 @@
                             </thead>
                             <tbody>
                                 <g:each var="routeLegInstance" in="${routeInstance.testlegs}" status="i" >
-                                    <tr>
+                                    <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${i+1}</td>
                                         <td>${routeLegInstance.title}</td>
                                         <td>${routeLegInstance.coordTrueTrackName()}</td>
@@ -129,15 +164,16 @@
                                 </g:each>
                             </tbody>
                         </table>
-                        <input type="hidden" name="id" value="${routeInstance?.id}" />
-                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
+                        <input type="hidden" name="id" value="${routeInstance?.id}"/>
+                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" tabIndex="1"/>
+                        <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}"  tabIndex="2"/>
+                        <g:actionSubmit action="createsecretcoordroutes" value="${message(code:'fc.coordroute.addsecret')}"  tabIndex="3"/>
+                        <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}"  tabIndex="4"/>
+                        <g:actionSubmit action="printroute" value="${message(code:'fc.print')}"  tabIndex="5"/>
                         <g:if test="${!PlanningTestTask.findByRoute(routeInstance) && !FlightTest.findByRoute(routeInstance)}">
-                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="6"/>
                         </g:if>
-                        <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}" />
-                        <g:actionSubmit action="createsecretcoordroutes" value="${message(code:'fc.coordroute.addsecret')}" />
-                        <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}" />
-                        <g:actionSubmit action="printroute" value="${message(code:'fc.print')}" />
+                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}"  tabIndex="7"/>
                     </g:form>
                 </div>
             </div>

@@ -17,8 +17,8 @@
                        <th>${message(code:'fc.aircraft.registration')}</th>
                        <th>${message(code:'fc.aircraft.type')}</th>
                        <th>${message(code:'fc.aircraft.colour')}</th>
-                       <th>${message(code:'fc.aircraft.user1')}</th>
-                       <th>${message(code:'fc.aircraft.user2')}</th>
+                       <th>${message(code:'fc.aircraft.crew1')}</th>
+                       <th>${message(code:'fc.aircraft.crew2')}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                     </g:each>
                 </tbody>
             </table>
-            <p>${message(code:'fc.programfoot')}</p>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

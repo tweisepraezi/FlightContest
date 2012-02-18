@@ -43,7 +43,7 @@ class TaskController {
 
     def create = {
         def task = fcService.createTask(params) 
-        return [taskInstance:task.instance]
+        return [taskInstance:task.instance,contestInstance:session.lastContest]
     }
 
     def save = {
@@ -114,6 +114,10 @@ class TaskController {
 		// process return action
 		if (params.taskReturnAction) {
 			redirect(action:params.taskReturnAction,controller:params.taskReturnController,id:params.taskReturnID)
+		} else if (params.crewresultsprintquestionReturnAction) {
+			redirect(action:params.crewresultsprintquestionReturnAction,controller:params.crewresultsprintquestionReturnController,id:params.crewresultsprintquestionReturnID)
+		} else if (params.listresultsprintquestionReturnAction) {
+			redirect(action:params.listresultsprintquestionReturnAction,controller:params.listresultsprintquestionReturnController,id:params.listresultsprintquestionReturnID)
 		} else {
 			redirect(controller:"contest",action:"tasks")
 		}
@@ -163,9 +167,15 @@ class TaskController {
 				session.crewReturnAction = actionName
 				session.crewReturnController = controllerName
 				session.crewReturnID = params.id
+				session.teamReturnAction = actionName
+				session.teamReturnController = controllerName
+				session.teamReturnID = params.id
 				session.aircraftReturnAction = actionName
 				session.aircraftReturnController = controllerName
 				session.aircraftReturnID = params.id
+				session.resultclassReturnAction = actionName
+				session.resultclassReturnController = controllerName
+				session.resultclassReturnID = params.id
 				session.planningtestReturnAction = actionName
 				session.planningtestReturnController = controllerName
 				session.planningtestReturnID = params.id
@@ -190,12 +200,27 @@ class TaskController {
     def startresults = {
 		fcService.printstart "Start results"
 		if (session?.lastContest) {
-	        def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
-	        if (task.taskid) {
-	            params.id = task.taskid
-				fcService.println "last results task $task.taskid"
-	            redirect(action:listresults,params:params)
-	        }
+			if (session?.lastResultClassResults) {
+		        def resultclass = fcService.startresultsResultClass(params, session.lastContest, session.lastResultClassResults)
+		        if (resultclass.resultclassid) {
+		            params.id = resultclass.resultclassid
+					fcService.println "last results resultclass $resultclass.resultclassid"
+		            redirect(controller:'resultClass',action:'listresults',params:params)
+		        }
+			} else if (session?.lastContestResults) {
+				fcService.println "last results contest"
+	            redirect(controller:'contest',action:'listresults',params:params)
+			} else if (session?.lastTeamResults) {
+				fcService.println "last results contest"
+	            redirect(controller:'contest',action:'listteamresults',params:params)
+			} else {
+		        def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
+		        if (task.taskid) {
+		            params.id = task.taskid
+					fcService.println "last results task $task.taskid"
+		            redirect(action:listresults,params:params)
+		        }
+			}
 			fcService.printdone "last contest"
 		} else {
 			fcService.printdone ""
@@ -213,6 +238,9 @@ class TaskController {
 	            redirect(controller:"contest",action:"tasks")
 	        } else {
 				SetLimit()
+				session.lastResultClassResults = null
+				session.lastContestResults = null
+				session.lastTeamResults = null
 	            session.lastTaskResults = task.instance.id
 				// save return action
 				session.taskReturnAction = actionName 
@@ -221,9 +249,15 @@ class TaskController {
 				session.crewReturnAction = actionName
 				session.crewReturnController = controllerName
 				session.crewReturnID = params.id
+				session.teamReturnAction = actionName
+				session.teamReturnController = controllerName
+				session.teamReturnID = params.id
 				session.aircraftReturnAction = actionName
 				session.aircraftReturnController = controllerName
 				session.aircraftReturnID = params.id
+				session.resultclassReturnAction = actionName
+				session.resultclassReturnController = controllerName
+				session.resultclassReturnID = params.id
 				session.positionsReturnAction = actionName 
 				session.positionsReturnController = controllerName
 				session.positionsReturnID = params.id
@@ -238,6 +272,18 @@ class TaskController {
 
 	def selectall = {
         def task = fcService.selectallTask(params) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+            return
+        } else {
+        	flash.selectedTestIDs = task.selectedtestids
+        	redirect(action:listplanning,id:task.instance.id)
+        }
+    }
+
+	def selectend = {
+        def task = fcService.selectendTask(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -450,7 +496,7 @@ class TaskController {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
         }
-        def task = fcService.getTask(params) 
+        def task = fcService.gettimetableprintableTask(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -463,7 +509,7 @@ class TaskController {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
         }
-        def task = fcService.getTask(params) 
+        def task = fcService.gettimetableprintableTask(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -550,7 +596,46 @@ class TaskController {
 	}
 
 	def printresults = {
-        def task = fcService.printresultsTask(params,GetPrintParams()) 
+        def task = fcService.positionscalculatedTask(params) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+        	flash.message = task.message
+           	flash.error = true
+        	redirect(action:listresults,id:task.instance.id)
+        } else if (task.instance.contest.resultClasses) {
+			redirect(action:listresultsprintquestion,id:task.instance.id)
+		} else {
+			task = fcService.printresultsTask(params,GetPrintParams()) 
+	        if (!task.instance) {
+	            flash.message = task.message
+	            redirect(controller:"contest",action:"tasks")
+	        } else if (task.error) {
+	        	flash.message = task.message
+	           	flash.error = true
+	        	redirect(action:listresults,id:task.instance.id)
+	        } else if (task.content) {
+	        	fcService.WritePDF(response,task.content)
+		    } else {
+	        	redirect(action:listresults,id:task.instance.id)
+		    }
+		}
+	}
+
+    def listresultsprintquestion = {
+        def task = fcService.getTask(params) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else {
+        	task.instance.properties = params
+        	return ['taskInstance':task.instance,listresultsprintquestionReturnAction:"startresults",listresultsprintquestionReturnController:controllerName,listresultsprintquestionReturnID:params.id]
+        }
+    }
+	
+	def printresultclassresults = {
+		def task = fcService.printresultclassresultsTask(params,GetPrintParams()) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -564,40 +649,56 @@ class TaskController {
         	redirect(action:listresults,id:task.instance.id)
 	    }
 	}
-
-	def positionsprintable = {
-        if (params.contestid) {
-            session.lastContest = Contest.get(params.contestid)
-        }
+    
+	def listresultsprintable = {
         def task = fcService.getTask(params) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
-        	return [taskInstance:task.instance ]
+	        if (params.contestid) {
+	            session.lastContest = Contest.get(params.contestid)
+	        }
+	        if (params.resultclassid) {
+				ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
+				session.contestTitle = resultclass_instance.GetPrintContestTitle()
+				return [taskInstance:task.instance,resultclassInstance:resultclass_instance]
+			}
+        	return [taskInstance:task.instance]
         }
     }
 
-	def printdebriefings = {
-        def task = fcService.printdebriefingsTask(params,GetPrintParams()) 
+	def crewresultsprintquestion = {
+        def task = fcService.getTask(params) 
+        if (task.instance) {
+			// set return action
+           	return [taskInstance:task.instance,crewresultsprintquestionReturnAction:"startresults",crewresultsprintquestionReturnController:controllerName,crewresultsprintquestionReturnID:params.id]
+        } else {
+            flash.message = task.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def printcrewresults = {
+        def task = fcService.printcrewresultsTask(params,GetPrintParams()) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else if (task.error) {
         	flash.message = task.message
            	flash.error = true
-        	redirect(action:listplanning,id:task.instance.id)
+        	redirect(action:listresults,id:task.instance.id)
         } else if (task.content) {
         	fcService.WritePDF(response,task.content)
 	    } else {
-        	redirect(action:listplanning,id:task.instance.id)
+        	redirect(action:listresults,id:task.instance.id)
 	    }
 	}
 
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,
-                lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'
+                lang:session.printLanguage
                ]
     }
 	

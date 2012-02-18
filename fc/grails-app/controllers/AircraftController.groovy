@@ -130,7 +130,7 @@ class AircraftController {
     Map GetPrintParams() {
 		return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
 		        contest:session.lastContest,
-		        lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'
+		        lang:session.printLanguage
 		       ]
     }
 }

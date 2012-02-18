@@ -100,11 +100,11 @@ class RouteController {
     }
 
 	def selectaflosroute = {
-		[:]
+		[contestInstance:session.lastContest]
     }
 	
 	def importroute = {
-		def route = fcService.existAnyAflosRoute()
+		def route = fcService.existAnyAflosRoute(session.lastContest)
 		if (route.error) {
 			flash.error = route.error
             flash.message = route.message
@@ -162,6 +162,19 @@ class RouteController {
         }
 	}
 	
+    def copyroute = {
+        def routes = fcService.copyRoute(params) 
+        if (routes.error) {
+            flash.message = routes.message
+            flash.error = true
+            redirect(action:list)
+        } else if (routes.content) {
+            fcService.WritePDF(response,routes.content)
+        } else {
+            redirect(action:list)
+        }
+	}
+	
     def showprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
@@ -178,7 +191,7 @@ class RouteController {
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,
-                lang:session.'org.springframework.web.servlet.i18n.SessionLocaleResolver.LOCALE'
+                lang:session.printLanguage
                ]
     }
 }

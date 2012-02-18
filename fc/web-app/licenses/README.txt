@@ -1,6 +1,6 @@
 
-Flight Contest 0.6.4
-Copyright 2011 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 1.0.0
+Copyright 2012 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de/
 
@@ -12,7 +12,7 @@ http://springsource.com/products/sts
 
 ============================================================================
 
-Apache Tomcat
+Apache Tomcat 7.0
 Copyright 1999-2009 The Apache Software Foundation
 
 This product includes software developed by
@@ -22,33 +22,21 @@ http://www.apache.org/
 
 ============================================================================
 
-Grails, release 1.3.7
+Grails, release 2.0.1
 
 http://grails.org/
 
 ============================================================================
 
-Groovy, release 1.7.10
+Groovy, release 1.8.6
 
 http://groovy.codehaus.org/
 
 ============================================================================
 
-Java(TM) 2 Platform Standard Edition 
-Runtime Environment
-Version 5.0
+Java(TM) Runtime Environment Version 6.0
 
-The J2SE(TM) Runtime Environment (JRE) is intended for software developers 
-and vendors to redistribute with their applications.
-
-The J2SE Runtime Environment contains the Java virtual machine, 
-runtime class libraries, and Java application launcher that are 
-necessary to run programs written in the Java programming language. 
-It is not a development environment and does not contain development 
-tools such as compilers or debuggers.  For development tools, see the 
-J2SE Development Kit.
-
-http://java.sun.com/j2se/1.5.0/runtime.html
+http://java.com/license
 
 ============================================================================
 

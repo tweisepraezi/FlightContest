@@ -45,7 +45,7 @@
                     </tbody>
                 </table>
             </g:if>
-            <p>${message(code:'fc.programfoot')}</p>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

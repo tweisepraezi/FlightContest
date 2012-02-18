@@ -54,7 +54,7 @@ class Coord
         titleNumber(range:1..<100)
 		mark(nullable:true)
         latGrad(range:0..90)
-        latMinute(range:0..<60, validator:{val,obj->
+        latMinute(range:0..<60, scale:10, validator:{val,obj->
             if (val > 0 && obj.latGrad == 90 ) {
                 return false
             }
@@ -66,7 +66,7 @@ class Coord
                 return false
             }
         })
-        lonMinute(range:0..<60, validator:{val,obj->
+        lonMinute(range:0..<60, scale:10, validator:{val,obj->
             if (val > 0 && obj.lonGrad == 180 ) {
                 return false
             }
@@ -74,10 +74,12 @@ class Coord
         lonDirection(inList:['E','W'])
         altitude(range:0..100000)
         gatewidth()
-		measureDistance(nullable:true)
-        legMeasureDistance(nullable:true)
-        legDistance(nullable:true)
-        measureTrueTrack(nullable:true,range:0..<360)
+		coordTrueTrack(scale:10)
+		coordMeasureDistance(scale:10)
+        measureTrueTrack(nullable:true,range:0..<360,scale:10)
+		measureDistance(nullable:true,scale:10)
+        legMeasureDistance(nullable:true,scale:10)
+        legDistance(nullable:true,scale:10)
         resultCpTimeInput(blank:false, validator:{ val, obj ->
         	String v = val.replace('.',':')
 	        switch(v.size()) {
@@ -128,6 +130,7 @@ class Coord
 	    })
 	    resultAltitude(min:0)
 	    resultBadCourseNum(min:0)
+		secretLegRatio(scale:10)
     }
 
 	void ResetResults()
@@ -210,14 +213,14 @@ class Coord
     {
         switch (type) {
             case CoordType.TP:
-                return "${type.title}${titleNumber}"
+                return "${getMsg(type.code)}${titleNumber}"
             case CoordType.SECRET:
                 if (secretLegRatio > 0) {
-                    return " ${type.title}${titleNumber} (${FcMath.RatioStr(100*secretLegRatio)}${getMsg('fc.percent')})"
+                    return " ${getMsg(type.code)}${titleNumber} (${FcMath.RatioStr(100*secretLegRatio)}${getMsg('fc.percent')})"
                 }
-                return "${type.title}${titleNumber}"
+                return "${getMsg(type.code)}${titleNumber}"
             default:
-                return type.title
+                return getMsg(type.code)
         }
     }
     

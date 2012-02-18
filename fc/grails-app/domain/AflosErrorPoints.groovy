@@ -15,6 +15,7 @@ class AflosErrorPoints
     String speed
 	
 	static mapping = {
+		datasources(['aflos','aflostest','aflosupload'])
 		table 'PNT_Error'
 
         id column: 'POINTID'

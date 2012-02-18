@@ -38,11 +38,11 @@
 	                            </g:each>
                         	</tbody>
                         </table>
-                        <input type="hidden" name="id" value="${taskInstance?.id}" />
-                        <input type="hidden" name="version" value="${taskInstance?.version}" />
-                        <g:actionSubmit action="savedisabledcheckpoints" value="${message(code:'fc.update')}" />
-                        <g:actionSubmit action="resetdisabledcheckpoints" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <input type="hidden" name="id" value="${taskInstance?.id}"/>
+                        <input type="hidden" name="version" value="${taskInstance?.version}"/>
+                        <g:actionSubmit action="savedisabledcheckpoints" value="${message(code:'fc.update')}" tabIndex="1"/>
+                        <g:actionSubmit action="resetdisabledcheckpoints" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="2"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                     </g:form>
                 </div>
             </div>

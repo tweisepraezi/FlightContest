@@ -8,9 +8,12 @@ class BootStrap {
     static Global global = null 
     
     def init = { servletContext ->
-		
+		println "Init..."
+				
 		boolean db_loaded = false
 		boolean db_upgrade = false
+		boolean db_nodowngradedable = false
+		boolean db_nocompatible = false
 		
 		if (Global.count() == 0) {
 			global = new Global()
@@ -20,25 +23,41 @@ class BootStrap {
 			db_loaded = true
 		}
 		
-		if ((global.versionMajor != global.DB_MAJOR) || (global.versionMinor != global.DB_MINOR)) {
-			db_upgrade = true
-		}
-		
-		if (db_loaded) {
-			println "DB ${global.versionMajor}.${global.versionMinor} loaded."
+		if (global.versionMajor < global.DB_MAJOR) {
+			global.dbCompatibility = "olderMajor"
+		} else if (global.versionMajor > global.DB_MAJOR) {
+			global.dbCompatibility = "newerMajor"
 		} else {
-			println "DB ${global.versionMajor}.${global.versionMinor} created."
+			if (global.versionMinor < global.DB_MINOR) {
+				global.dbCompatibility = "upgrade"
+			} else if (global.versionMinor > global.DB_MINOR) {
+				global.dbCompatibility = "equalMajorNewerMinor" 
+			}
+		}
+
+		if (db_loaded) {
+			println "  DB ${global.versionMajor}.${global.versionMinor} loaded."
+		} else {
+			println "  DB ${global.versionMajor}.${global.versionMinor} created."
 		}
 		
-		// DB upgrade
-		if (db_upgrade) {
-			println "Upgrade"
-			
-			global.versionMajor = global.DB_MAJOR
-			global.versionMinor = global.DB_MINOR
-			global.showLanguage = "de"
-			global.save()
-			println "DB ${global.versionMajor}.${global.versionMinor} upgraded."
+		switch (global.dbCompatibility) {
+			case "upgrade":
+				println "  Upgrade database..."
+				global.versionMajor = global.DB_MAJOR
+				global.versionMinor = global.DB_MINOR
+				global.save()
+				println "  DB ${global.versionMajor}.${global.versionMinor} upgraded."
+				break
+			case "olderMajor":
+				global.save()
+				println "  You are using database of older Flight Contest. Flight Contest cannot be started."
+				break
+			case "newerMajor":
+			case "equalMajorNewerMinor":
+				global.save()
+				println "  You are using database of newer Flight Contest. Flight Contest cannot be started."
+				break
 		}
 		
 		// add method getMsg to all domain classes
@@ -46,7 +65,12 @@ class BootStrap {
 			domain_class.metaClass.getMsg = {
 	            return messageSource.getMessage(it, null, new Locale(global.showLanguage))
 			}
+			domain_class.metaClass.getPrintMsg = {
+	            return messageSource.getMessage(it, null, new Locale(global.printLanguage))
+			}
 		}
+		
+		println "Init done."
     }
     
     def destroy = {

@@ -16,11 +16,11 @@
                             <p>
                                 <label>${message(code:'fc.contest')}*:</label>
                                 <br/>
-                                <g:select from="${Contest.list()}" optionValue="${{it.name()}}" name="contestid" optionKey="id" />
+                                <g:select from="${Contest.list()}" optionValue="${{it.name()}}" name="contestid" optionKey="id" tabIndex="1"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="updatecontest" value="${message(code:'fc.update')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="updatecontest" value="${message(code:'fc.update')}" tabIndex="2"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                     </g:form>
                 </div>
             </div>

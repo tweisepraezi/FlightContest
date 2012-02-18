@@ -13,6 +13,7 @@ class AflosRouteDefs
     int gatewidth
 	
 	static mapping = {
+		datasources(['aflos','aflostest','aflosupload'])
 		table 'PNT_Ref'
 
 		id column: 'POINTID'

@@ -39,15 +39,23 @@
                     	</g:if>
                         <thead>
                             <tr>
-                                <th class="table-head" colspan="4">${message(code:'fc.crew.list')}</th>
+                                <g:if test="${taskInstance.contest.resultClasses}">
+	                                <th class="table-head" colspan="5">${message(code:'fc.crew.list')}</th>
+	                            </g:if>
+	                            <g:else>
+	                                <th class="table-head" colspan="4">${message(code:'fc.crew.list')}</th>
+	                            </g:else>
                                 <th class="table-head" colspan="3">${message(code:'fc.test.taskdata')}</th>
-                                <th class="table-head" colspan="5">${message(code:'fc.test.timetable')} (${message(code:'fc.test.timetable.version')} ${timetable_version})</th>
+                                <th class="table-head" colspan="5">${message(code:'fc.test.timetable')} (${message(code:'fc.version')} ${timetable_version})</th>
                             </tr>
                             <tr>
                                 <th/>
                                 <th>${message(code:'fc.crew')}</th>
                                 <th>${message(code:'fc.aircraft')}</th>
-                                <th>${message(code:'fc.tas')}</th>
+                                <th>${message(code:'fc.team')}</th>
+                                <g:if test="${taskInstance.contest.resultClasses}">
+                                	<th>${message(code:'fc.crew.resultclass')}</th>
+                                </g:if>
                                 <th colspan="2">${message(code:'fc.planningtesttask')}</th>
                                 <th>${message(code:'fc.flighttestwind')}</th>
                                
@@ -84,13 +92,17 @@
 	                            
 	                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
 	                                    
-	                                    <g:if test="${testInstance.crew.aircraft}">
-	                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
-	                                    </g:if> <g:else>
-	                                        <td>${message(code:'fc.noassigned')}</td>
-	                                    </g:else>
-	                                    
-	                                    <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+                                    	<td><g:if test="${testInstance.crew.aircraft}"><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')})</td>
+                                    	<td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+	                                    	
+	                                    <g:if test="${taskInstance.contest.resultClasses}">
+	                                    	<g:if test="${testInstance.crew.resultclass}">
+	                                    		<td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
+	                                    	</g:if>
+	                                    	<g:else>
+	                                    		<td>${message(code:'fc.noassigned')}</td>
+	                                    	</g:else>
+	                                    </g:if>
 	                                    
 										<g:if test="${testInstance.crew.disabled}">
 											<td colspan="8">${message(code:'fc.disabled')}</td>
@@ -131,25 +143,47 @@
                             </g:each>
                         </tbody>
                         <tfoot>
-                            <tr class="">
-                                <td colspan="2"><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" /></td>
-                                <td colspan="2"><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}" /> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}" /> <g:actionSubmit action="moveend" value="${message(code:'fc.test.moveend')}" /></td>
-                                <td colspan="2"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}" /></td>
-                                <td><g:actionSubmit action="assignflighttestwind" value="${message(code:'fc.flighttestwind.assign')}" /></td>
-                                <td colspan="5"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}" /> <g:actionSubmit action="printtimetable" value="${message(code:'fc.test.timetable.print')}" /> <g:actionSubmit action="printtimetablejury" value="${message(code:'fc.test.timetablejury.print')}" /></td>
+                            <tr>
+                                <td colspan="2"><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}"/></td>
+                                <g:if test="${taskInstance.contest.resultClasses}">
+                                	<td colspan="3"><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}"/></td>
+                                </g:if>
+                                <g:else>
+                                	<td colspan="2"><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}"/></td>
+                                </g:else>
+                                <td colspan="2"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}"/></td>
+                                <td><g:actionSubmit action="assignflighttestwind" value="${message(code:'fc.flighttestwind.assign')}"/></td>
+                                <td colspan="5"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}"/> <g:actionSubmit action="printtimetable" value="${message(code:'fc.test.timetable.print')}"/></td>
                             </tr>
                             <tr class="join">
-                                <td colspan="2"><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" /></td>
-                                <td colspan="2"><g:actionSubmit action="resetsequence" value="${message(code:'fc.test.sequence.toreset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
-                                <td><g:actionSubmit action="printplanningtesttask" value="${message(code:'fc.planningtesttask.print')}" /></td>
-                                <td colspan="2"/>
+                            	<td colspan="2"><g:actionSubmit action="selectend" value="${message(code:'fc.selectend')}"/></td>
+                                <g:if test="${taskInstance.contest.resultClasses}">
+	                            	<td colspan="3"><g:actionSubmit action="moveend" value="${message(code:'fc.test.moveend')}"/>
+                                </g:if>
+                                <g:else>
+	                            	<td colspan="2"><g:actionSubmit action="moveend" value="${message(code:'fc.test.moveend')}"/>
+                                </g:else>
+                            	<td colspan="2"><g:actionSubmit action="printplanningtesttask" value="${message(code:'fc.planningtesttask.print')}"/></td>
+                            	<td></td>
+                            	<td colspan="5"> <g:actionSubmit action="printtimetablejury" value="${message(code:'fc.test.timetablejury.print')}"/></td>
+                            </tr>
+                            <tr class="join">
+                                <td colspan="2"><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}"/></td>
+                                <g:if test="${taskInstance.contest.resultClasses}">
+	                                <td colspan="3"><g:actionSubmit action="resetsequence" value="${message(code:'fc.test.sequence.toreset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
+                                </g:if>
+                                <g:else>
+                                	<td colspan="2"><g:actionSubmit action="resetsequence" value="${message(code:'fc.test.sequence.toreset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
+								</g:else>						                            
+                                <td colspan="2"></td>
+                                <td></td>
                                 <td colspan="5"><g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" /> <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" /> <g:actionSubmit action="printflightplans" value="${message(code:'fc.test.flightplan.print')}" /></td>
                             </tr>
                         </tfoot>
                     </table>
                 </g:form>
             </div>
-            <p>${message(code:'fc.programfoot')}</p>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

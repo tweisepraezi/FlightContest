@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.observationresults')} ${testInstance.viewpos+1}</title>
+        <title>${message(code:'fc.observationresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.observationresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</h2>
+                <h2>${message(code:'fc.observationresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
                         <table>
@@ -52,17 +52,17 @@
 	                            <p>
 	                                <label>${message(code:'fc.observationresults.turnpointphotopenalties')}* [${message(code:'fc.points')}]:</label>
 	                                <br/>
-	                                <input type="text" id="observationTestTurnPointPhotoPenalties" name="observationTestTurnPointPhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestTurnPointPhotoPenalties')}"/>
+	                                <input type="text" id="observationTestTurnPointPhotoPenalties" name="observationTestTurnPointPhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestTurnPointPhotoPenalties')}" tabIndex="1"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.observationresults.routephotopenalties')}* [${message(code:'fc.points')}]:</label>
 	                                <br/>
-	                                <input type="text" id="observationTestRoutePhotoPenalties" name="observationTestRoutePhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestRoutePhotoPenalties')}"/>
+	                                <input type="text" id="observationTestRoutePhotoPenalties" name="observationTestRoutePhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestRoutePhotoPenalties')}" tabIndex="2"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.observationresults.groundtargetpenalties')}* [${message(code:'fc.points')}]:</label>
 	                                <br/>
-	                                <input type="text" id="observationTestGroundTargetPenalties" name="observationTestGroundTargetPenalties" value="${fieldValue(bean:testInstance,field:'observationTestGroundTargetPenalties')}"/>
+	                                <input type="text" id="observationTestGroundTargetPenalties" name="observationTestGroundTargetPenalties" value="${fieldValue(bean:testInstance,field:'observationTestGroundTargetPenalties')}" tabIndex="3"/>
 	                            </p>
 	                        </fieldset>
                                <table>
@@ -97,13 +97,14 @@
                                </table>
                         </g:else>
                         <g:if test="${!testInstance.observationTestComplete}">
-                        	<g:actionSubmit action="observationresultscomplete" value="${message(code:'fc.observationresults.complete')}" />
-                        	<g:actionSubmit action="observationresultssave" value="${message(code:'fc.save')}" />
+                        	<g:actionSubmit action="observationresultscomplete" value="${message(code:'fc.observationresults.complete')}" tabIndex="4"/>
+                        	<g:actionSubmit action="observationresultssave" value="${message(code:'fc.save')}" tabIndex="5"/>
                         </g:if>
                         <g:else>
-                        	<g:actionSubmit action="observationresultsreopen" value="${message(code:'fc.observationresults.reopen')}" />
+                        	<g:actionSubmit action="observationresultsreopen" value="${message(code:'fc.observationresults.reopen')}" tabIndex="1"/>
                         </g:else>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+				        <g:actionSubmit action="printobservationresults" value="${message(code:'fc.print')}" tabIndex="6"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="7"/>
                     </g:form>
                 </div>
             </div>

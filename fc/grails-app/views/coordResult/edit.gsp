@@ -52,26 +52,26 @@
                             <legend>${message(code:'fc.test.results.given')}</legend>
                             <g:if test="${!coordResultInstance.test.flightTestComplete}">
                                  <p>
-                                   <div>
-                                       <g:checkBox name="resultCpNotFound" value="${coordResultInstance.resultCpNotFound}" />
-                                       <label>${message(code:'fc.flighttest.cpnotfound')}</label>
-                                   </div>
+                                   	<div>
+                                   		<g:checkBox name="resultCpNotFound" value="${coordResultInstance.resultCpNotFound}" />
+                                       	<label>${message(code:'fc.flighttest.cpnotfound')}</label>
+                                   	</div>
                                  </p>
                                  <p>
                                     <label>${message(code:'fc.cptime')}* [${message(code:'fc.time.hminsec')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultCpTimeInput" name="resultCpTimeInput" value="${fieldValue(bean:coordResultInstance,field:'resultCpTimeInput')}"/>
+                                    <input type="text" id="resultCpTimeInput" name="resultCpTimeInput" value="${fieldValue(bean:coordResultInstance,field:'resultCpTimeInput')}" tabIndex="2"/>
                                  </p>
                                 <p>
                                     <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultAltitude" name="resultAltitude" value="${fieldValue(bean:coordResultInstance,field:'resultAltitude')}"/>
+                                    <input type="text" id="resultAltitude" name="resultAltitude" value="${fieldValue(bean:coordResultInstance,field:'resultAltitude')}" tabIndex="3"/>
                                 </p>
                                 <g:if test="${coordResultInstance.type != CoordType.SP}">
                                     <p>
                                         <label>${message(code:'fc.badcoursenum')}*:</label>
                                         <br/>
-                                        <input type="text" id="resultBadCourseNum" name="resultBadCourseNum" value="${fieldValue(bean:coordResultInstance,field:'resultBadCourseNum')}"/>
+                                        <input type="text" id="resultBadCourseNum" name="resultBadCourseNum" value="${fieldValue(bean:coordResultInstance,field:'resultBadCourseNum')}" tabIndex="4"/>
                                     </p>
                                 </g:if>
                             </g:if>
@@ -106,11 +106,15 @@
                         <input type="hidden" name="id" value="${coordResultInstance.id}" />
                         <input type="hidden" name="testid" value="${coordResultInstance.test.id}" />
                         <input type="hidden" name="name" value="${params.name}" />
+                        <input type="hidden" name="next" value="${params.next}" />
                         <g:if test="${!coordResultInstance.test.flightTestComplete}">
-                            <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
-                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                        	<g:if test="${params.next}">
+                            	<g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" tabIndex="5"/>
+                            </g:if>
+                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="6"/>
+                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="7"/>
                         </g:if>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="8"/>
                     </g:form>
                 </div>
             </div>

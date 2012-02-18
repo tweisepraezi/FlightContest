@@ -12,6 +12,7 @@ class AflosErrors
 	int dropOutErrors
 	
 	static mapping = {
+		datasources(['aflos','aflostest','aflosupload'])
 		table 'STAT_Error'
 
 		id column: 'ID'

@@ -21,39 +21,46 @@
                             <p>
                                 <label>${message(code:'fc.crew.name')}*:</label>
                                 <br/>
-                                <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}"/>
+                                <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}" tabIndex="1"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.crew.country')}:</label>
+                                <label>${message(code:'fc.crew.team')}:</label>
                                 <br/>
-                                <input type="text" id="country" name="country" value="${fieldValue(bean:crewInstance,field:'country')}"/>
+                                <input type="text" id="teamname" name="teamname" value="${fieldValue(bean:crewInstance,field:'teamname')}" tabIndex="2"/>
                             </p>
+                            <g:if test="${resultClasses}">
+	                            <p>
+	                                <label>${message(code:'fc.crew.resultclass')}:</label>
+	                                <br/>
+	                                <input type="text" id="resultclassname" name="resultclassname" value="${fieldValue(bean:crewInstance,field:'resultclassname')}" tabIndex="3"/>
+	                            </p>
+	                        </g:if>
                         </fieldset>
                         <fieldset>
                             <legend>${message(code:'fc.crew.aircraft')}</legend>
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}:</label>
                                 <br/>
-                                <input type="text" id="registration" name="registration" value="${fieldValue(bean:crewInstance,field:'registration')}"/>
+                                <input type="text" id="registration" name="registration" value="${fieldValue(bean:crewInstance,field:'registration')}" tabIndex="4"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.aircraft.type')}:</label>
                                 <br/>
-                                <input type="text" id="type" name="type" value="${fieldValue(bean:crewInstance,field:'type')}"/>
+                                <input type="text" id="type" name="type" value="${fieldValue(bean:crewInstance,field:'type')}" tabIndex="5"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.aircraft.colour')}:</label>
                                 <br/>
-                                <input type="text" id="colour" name="colour" value="${fieldValue(bean:crewInstance,field:'colour')}"/>
+                                <input type="text" id="colour" name="colour" value="${fieldValue(bean:crewInstance,field:'colour')}" tabIndex="6"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.tas')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
-                                <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" />
+                                <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" tabIndex="7"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="8"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="9"/>
                     </g:form>
                 </div>
             </div>

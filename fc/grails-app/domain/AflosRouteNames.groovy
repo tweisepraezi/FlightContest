@@ -7,6 +7,7 @@ class AflosRouteNames
 	int number
 	
 	static mapping = {
+		datasources(['aflos','aflostest','aflosupload'])
 		table 'PLN_Ref'
 		
 		id column: 'PLINEID'

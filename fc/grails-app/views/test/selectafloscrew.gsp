@@ -39,7 +39,15 @@
                                         <g:set var="lastStartnum" value="" />
                                     </g:else>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.crewnames.name')}:</label></td>
-                                    <td><g:select from="${AflosCrewNames.findAllByNameIsNotNullAndPointsNotEqual(0)}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+									<g:if test="${testInstance.crew.contest.aflosTest}">
+                                        <td><g:select from="${AflosCrewNames.aflostest.findAllByNameIsNotNullAndPointsNotEqual(0)}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+									</g:if>
+									<g:elseif test="${testInstance.crew.contest.aflosUpload}">
+                                        <td><g:select from="${AflosCrewNames.aflosupload.findAllByNameIsNotNullAndPointsNotEqual(0)}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+									</g:elseif>
+									<g:else>
+                                        <td><g:select from="${AflosCrewNames.aflos.findAllByNameIsNotNullAndPointsNotEqual(0)}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+									</g:else>
                                 </tr> 
                             </tbody>
                         </table>

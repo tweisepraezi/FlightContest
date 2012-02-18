@@ -8,6 +8,7 @@ class AflosCrewNames implements Serializable
 	String name
 	
 	static mapping = {
+		datasources(['aflos','aflostest','aflosupload'])
 		table 'PLN_Data'
 		
 		startnum column: 'Start_Nr'
@@ -16,12 +17,7 @@ class AflosCrewNames implements Serializable
 		name column: 'MARK'
 
         id composite:['startnum','logstart','points']
-		
 		version false
-
-// access to instance
-// def p = AflosCrewNames.get(new AflosCrewNames(startnum:1, logstart:20, points:3681))
-
 	}
 	
 	String viewName()

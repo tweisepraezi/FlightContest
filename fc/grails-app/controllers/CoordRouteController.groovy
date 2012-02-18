@@ -25,11 +25,53 @@ class CoordRouteController {
         }
     }
 
-    def update = {
+    def updatereturn = {
         def coordroute = fcService.updateCoordRoute(params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
             redirect(controller:"route",action:show,id:coordroute.instance.route.id)
+        } else if (coordroute.instance) {
+        	render(view:'edit',model:[coordRouteInstance:coordroute.instance])
+        } else {
+        	flash.message = coordroute.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+
+    def updatenext = {
+        def coordroute = fcService.updateCoordRoute(params) 
+        if (coordroute.saved) {
+        	flash.message = coordroute.message
+			
+			// search next id
+			boolean set_next = false
+			CoordRoute coordroute_nextinstance = null
+			CoordRoute coordroute_nextinstance2 = null
+			int leg_no = 0
+			for ( CoordRoute coordroute_instance in CoordRoute.findAllByRoute(coordroute.instance.route) ) {
+				if (!coordroute_nextinstance) {
+					leg_no++
+				}
+				if (set_next) {
+					if (!coordroute_nextinstance) {
+						coordroute_nextinstance = coordroute_instance
+					} else if (!coordroute_nextinstance2) {
+						coordroute_nextinstance2 = coordroute_instance
+						break
+					}
+				}
+				if (coordroute_instance == coordroute.instance) {
+					set_next = true
+				}
+			}
+
+			if (coordroute_nextinstance2) {
+				redirect(action:'edit',id:coordroute_nextinstance.id,params:[name:leg_no,next:coordroute_nextinstance2.id])
+			} else if (coordroute_nextinstance) {
+				redirect(action:'edit',id:coordroute_nextinstance.id,params:[name:leg_no])
+			} else {
+				redirect(controller:"route",action:show,id:coordroute.instance.route.id)
+			}
         } else if (coordroute.instance) {
         	render(view:'edit',model:[coordRouteInstance:coordroute.instance])
         } else {

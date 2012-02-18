@@ -20,9 +20,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="hidden" name="id" value="${contestInstance?.id}" />
-                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.contest.delete.areyousure')}');" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <input type="hidden" name="id" value="${contestInstance?.id}"/>
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.contest.delete.areyousure')}');" tabIndex="1"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="2"/>
                     </g:form>
                 </div>
             </div>

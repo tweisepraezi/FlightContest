@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.test.planningtask')} ${testInstance.viewpos+1}</h2>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post" params="${['planningtaskReturnAction':planningtaskReturnAction,'planningtaskReturnController':planningtaskReturnController,'planningtaskReturnID':planningtaskReturnID]}">
                         <table>
                             <tbody>
                                 <tr>
@@ -53,16 +53,15 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th colspan="7" class="table-head">${message(code:'fc.testlegplanning.list')}</th>
+                                            <th colspan="6" class="table-head">${message(code:'fc.testlegplanning.list')}</th>
                                         </tr>
                                         <tr>
-                                            <th>${message(code:'fc.number')}</th>
+                                            <th>${message(code:'fc.title')}</th>
                                             <th>${message(code:'fc.distance')}</th>
                                             <th>${message(code:'fc.truetrack')}</th>
                                             <th>${message(code:'fc.trueheading')}</th>
                                             <th>${message(code:'fc.groundspeed')}</th>
                                             <th>${message(code:'fc.legtime')}</th>
-                                            <th>${message(code:'fc.tpname')}</th>
                                         </tr>
                                         <tr>
                                             <th/>
@@ -71,42 +70,40 @@
                                             <th>[${message(code:'fc.grad')}]</th>
                                             <th>[${message(code:'fc.knot')}]</th>
                                             <th>[${message(code:'fc.time.minsec')}]</th>
-                                            <th/>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <g:set var="legNo" value="${new Integer(0)}" />
                                         <g:set var="legNum" value="${TestLegPlanning.countByTest(testInstance)}" />
-                                        <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance)}">
+                                        <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance)}">
                                             <g:set var="legNo" value="${legNo+1}" />
-                                            <g:if test="${!testLegPlanningInstance.test.task.planningTestDistanceMeasure}">
-                                                <g:set var="testDistance" value="${FcMath.DistanceStr(testLegPlanningInstance.planTestDistance)}" />
+                                            <g:if test="${!testlegplanning_instance.test.IsPlanningTestDistanceMeasure()}">
+                                                <g:set var="test_distance" value="${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}" />
                                             </g:if>
-                                            <g:if test="${!testLegPlanningInstance.test.task.planningTestDirectionMeasure}">
-                                                <g:set var="testDirection" value="${FcMath.GradStr(testLegPlanningInstance.planTrueTrack)+message(code:'fc.grad')}" />
+                                            <g:if test="${!testlegplanning_instance.test.IsPlanningTestDirectionMeasure()}">
+                                                <g:set var="test_direction" value="${FcMath.GradStr(testlegplanning_instance.planTrueTrack)+message(code:'fc.grad')}" />
                                             </g:if>
                                             <tr>
-                                                <td>${legNo}</td>
-                                                <td>${testDistance}</td>
-                                                <td>${testDirection}</td>
-                                                <td/>
-                                                <td/>
-                                                <td/>
                                                 <g:if test="${legNo==legNum}">
-                                                    <td>${CoordType.FP.title}</td>
+                                                    <td>${message(code:CoordType.FP.code)}</td>
                                                 </g:if>
                                                 <g:else>
-                                                    <td>${CoordType.TP.title}${legNo}</td>
+                                                    <td>${message(code:CoordType.TP.code)}${legNo}</td>
                                                 </g:else>
+                                                <td>${test_distance}</td>
+                                                <td>${test_direction}</td>
+                                                <td/>
+                                                <td/>
+                                                <td/>
                                             </tr>
                                         </g:each>
                                     </tbody>
                                 </table>
                             </div>
                         </g:if>
-                        <input type="hidden" name="id" value="${testInstance?.id}" />
-                        <g:actionSubmit action="printplanningtask" value="${message(code:'fc.print')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <input type="hidden" name="id" value="${testInstance?.id}"/>
+                        <g:actionSubmit action="printplanningtask" value="${message(code:'fc.print')}" tabIndex="1"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="2"/>
                     </g:form>
                 </div>
             </div>

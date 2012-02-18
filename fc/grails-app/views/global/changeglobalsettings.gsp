@@ -17,17 +17,22 @@
                             <p>
                                 <label>${message(code:'fc.language')}*:</label>
                                 <br/>
-                                <g:select from="${Languages.values()}" name="showLanguage" value="${session.showLanguage}" optionValue="title" />
+                                <g:select from="${Languages.values()}" name="showLanguage" value="${session.showLanguage}" optionValue="title" tabIndex="1"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.printlanguage')}*:</label>
+                                <br/>
+                                <g:select from="${Languages.values()}" name="printLanguage" value="${session.printLanguage}" optionValue="title" tabIndex="2"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.showlimitcrewnum')}*:</label>
                                 <br/>
-                                <input type="text" id="showLimitCrewNum" name="showLimitCrewNum" value="${fieldValue(bean:session,field:'showLimitCrewNum')}"/>
+                                <input type="text" id="showLimitCrewNum" name="showLimitCrewNum" value="${fieldValue(bean:session,field:'showLimitCrewNum')}" tabIndex="3"/>
                             </p>
                         </fieldset>
-                        <input type="hidden" name="lastShowLimitCrewNum" value="${lastShowLimitCrewNum}" />
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <input type="hidden" name="lastShowLimitCrewNum" value="${lastShowLimitCrewNum}"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="4"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="5"/>
                     </g:form>
                 </div>
             </div>

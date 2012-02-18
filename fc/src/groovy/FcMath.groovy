@@ -138,9 +138,10 @@ class FcMath
     	while (gradStr.size() < 4) {
     		gradStr = "0$gradStr"
     	}
+		gradStr = "${gradStr.substring(0,gradStr.size()-1)}\u00b0" // ° -> \u00b0 
     	
     	String secondStr = "${a[1].substring(0,a[1].size()-1)}0'"
-    	
+		
     	return "${a[2]} $gradStr $secondStr"
     }
 

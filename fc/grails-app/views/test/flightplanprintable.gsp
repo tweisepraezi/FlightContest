@@ -1,5 +1,12 @@
 <html>
     <head>
+        <style type="text/css">
+            @page {
+                @bottom-center {
+                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                }
+            }
+        </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <title>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1}</title>
@@ -8,66 +15,59 @@
         <div class="box">
             <div class="box boxborder" >
                 <h2>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1}</h2>
+                <h3>${testInstance.task.name()} (${message(code:'fc.test.timetable')} ${message(code:'fc.version')} ${testInstance.timetableVersion})</h3>
                 <div class="block" id="forms" >
                     <g:form>
-                        <table>
+                        <table width="100%">
                             <tbody>
                                 <tr>
-                                    <td>${testInstance.task.name()} (${message(code:'fc.test.timetable')} ${message(code:'fc.test.timetable.version')} ${testInstance.timetableVersion})</td>
+                                    <td>${message(code:'fc.crew')}: ${testInstance.crew.name}</td>
+			                    	<g:if test="${testInstance.crew.team}">
+		                            	<td>${message(code:'fc.crew.team')}: ${testInstance.crew.team.name}</td>
+	    		                    </g:if>
+			                    	<g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
+		                                <td>${message(code:'fc.crew.resultclass')}: ${testInstance.crew.resultclass.name}</td>
+	    		                    </g:if>
+                                </tr>
+                                <tr>
+                                    <td>${message(code:'fc.aircraft.registration')}:
+                                        <g:if test="${testInstance.crew.aircraft}">
+                                            ${testInstance.crew.aircraft.registration}
+                                        </g:if> <g:else>
+                                            ${message(code:'fc.noassigned')}
+                                        </g:else>
+                                    </td>
+                                    <td>${message(code:'fc.aircraft.type')}: 
+                                        <g:if test="${testInstance.crew.aircraft}">
+		                                    ${testInstance.crew.aircraft.type}
+                                        </g:if> <g:else>
+                                            ${message(code:'fc.noassigned')}
+                                        </g:else>
+                                    </td>
+                                    <td>${message(code:'fc.tas')}: ${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <br/>
-                        <table>
+                        <table width="100%">
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td>${testInstance.crew.name}</td>
+                                    <td>${message(code:'fc.flighttestwind')}:
+	                                    <g:if test="${testInstance.flighttestwind}">
+	                                        <g:windtext var="${testInstance.flighttestwind.wind}" />
+	                                    </g:if> <g:else>
+	                                        ${message(code:'fc.noassigned')}                                    
+	                                    </g:else>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.crew.country')}:</td>
-                                    <td>${testInstance.crew.country}</td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-	                                    <td>${testInstance.crew.aircraft.type}</td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>                    
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.registration}</td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>
-                                    </g:else>                    
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.tas')}:</td>
-                                    <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
-                                </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.flighttestwind')}:</td>
-                                    <g:if test="${testInstance.flighttestwind}">
-                                        <td><g:windtext var="${testInstance.flighttestwind.wind}" /></td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.noassigned')}</td>                                    
-                                    </g:else>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br/>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.planning')}:</td>
-                                    <g:if test="${testInstance.timeCalculated}">
-                                        <td>${testInstance.testingTime?.format('HH:mm')} - ${testInstance.endTestingTime?.format('HH:mm')}</td>
-                                    </g:if> <g:else>
-                                        <td>${message(code:'fc.nocalculated')}</td>
-                                    </g:else>
+                                    <td>${message(code:'fc.test.planning')}:
+	                                    <g:if test="${testInstance.timeCalculated}">
+	                                        ${testInstance.testingTime?.format('HH:mm')} - ${testInstance.endTestingTime?.format('HH:mm')}
+	                                    </g:if> <g:else>
+	                                        ${message(code:'fc.nocalculated')}
+	                                    </g:else>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -75,9 +75,6 @@
                             <br/>
                             <table width="100%" border="1" cellspacing="0" cellpadding="2">
                                 <thead>
-                                    <tr>
-                                        <th colspan="8">${message(code:'fc.testlegflight.list')}</th>
-                                    </tr>
                                     <tr>
                                         <th>${message(code:'fc.number')}</th>
                                         <th>${message(code:'fc.distance')}</th>

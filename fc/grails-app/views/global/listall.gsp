@@ -33,6 +33,15 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="detailtitle">${message(code:'fc.team.list')}:</td>
+                                    <td>
+                                        <g:each var="teamInstance" in="${Team.list()}">
+                                            <g:team var="${teamInstance}" link="${createLink(controller:'team',action:'edit')}"/>
+                                            <br/>
+                                        </g:each>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.list')}:</td>
                                     <td>
                                         <g:each var="aircraftInstance" in="${Aircraft.list()}">
@@ -163,7 +172,7 @@
                     </g:form>
                 </div>
             </div>
-            <p>${message(code:'fc.programfoot')}</p>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

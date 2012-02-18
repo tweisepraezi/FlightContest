@@ -9,6 +9,21 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>
+                <tbody>
+                    <tr>
+                        <g:if test="${contestInstance?.aflosTest}">
+                            <td>${message(code:'fc.aflos.show.test')}</td>
+                        </g:if>
+                        <g:elseif test="${contestInstance?.aflosUpload}">
+                            <td>${message(code:'fc.aflos.show.upload')}</td>
+                        </g:elseif>
+                        <g:else>
+                            <td>${message(code:'fc.aflos.show.local')}</td>
+                        </g:else>
+                    </tr>
+                </tbody>
+            </table>
+            <table>
                 <thead>
                     <tr>
                         <th colspan="8" class="table-head">${message(code:'fc.aflos.errors.list')}</th>
@@ -28,7 +43,15 @@
                     <g:each var="aflosErrorsInstance" in="${aflosErrorsInstanceList}" status="i" >
                         <tr class="${(aflosErrorsInstance.startnum % 2) == 0 ? 'odd' : ''}">
                             <td>${aflosErrorsInstance.startnum}</td>
-                            <td>${AflosCrewNames.findByStartnumAndNameIsNotNull(aflosErrorsInstance.startnum).name}</td>
+							<g:if test="${contestInstance?.aflosTest}">
+                                <td>${AflosCrewNames.aflostest.findByStartnumAndNameIsNotNull(aflosErrorsInstance.startnum).name}</td>
+							</g:if>
+							<g:elseif test="${contestInstance?.aflosUpload}">
+                                <td>${AflosCrewNames.aflosupload.findByStartnumAndNameIsNotNull(aflosErrorsInstance.startnum).name}</td>
+							</g:elseif>
+							<g:else>
+                                <td>${AflosCrewNames.aflos.findByStartnumAndNameIsNotNull(aflosErrorsInstance.startnum).name}</td>
+							</g:else>
                             <td>${aflosErrorsInstance.routename.name}</td>
                             <td>${aflosErrorsInstance.checkPointErrors}</td>
                             <td>${aflosErrorsInstance.courseErrors}</td>
@@ -39,7 +62,7 @@
                     </g:each>
                 </tbody>
             </table>
-            <p>${message(code:'fc.programfoot')}</p>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>
