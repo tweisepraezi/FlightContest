@@ -1,6 +1,6 @@
 enum ContestRules 
 {
-	R1 ('fc.contestrule.de.rally.2008',      false,
+	R1 ('fc.contestrule.de.rally.2012',      false,
 		[
 			// PlanningTest
 			planningTestDirectionCorrectGrad:2,

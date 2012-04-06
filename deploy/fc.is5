@@ -4,12 +4,12 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.0.0';
 const FCCompatibelDigits = 1; // Number of digits for application compatibility
-const FCVersion = '1.0.0';
+const FCVersion = '1.0.1';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 1.0.0
-AppVersion=1.0.0
-VersionInfoVersion=1.0.0
+AppVerName=Flight Contest 1.0.1
+AppVersion=1.0.1
+VersionInfoVersion=1.0.1
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -57,6 +57,10 @@ Source: ".\AFLOS.mdb";                                DestDir: "{app}\samples"; 
 Source: ".\AFLOS.mdb";                                DestDir: "C:\AFLOS\AFLOS_System";
 Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";                 AfterInstall: MyAfterInstall;
 
+[Registry]
+Root: HKLM32; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat7w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC32();
+Root: HKLM64; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat7w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC64();
+
 [Run]
 Filename: "wscript.exe";                    Parameters: """{app}\odbc.vbs"" ""{app}""";    WorkingDir: "{app}";  Flags: runhidden;
 Filename: "{app}\install-service.bat";      Parameters: "install FlightContest";           WorkingDir: "{app}";  Flags: runhidden;
@@ -78,13 +82,14 @@ Type: filesandordirs; Name: "{app}\samples";
 
 [Icons]
 Name: "{group}\Flight Contest Service Manager"; Filename: "{app}\tomcat\bin\tomcat7w.exe";          Parameters: "//MS//FlightContest";           WorkingDir: "{app}";
-Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080/fc/contest/start";                                              WorkingDir: "{userdesktop}";
-Name: "{group}\Präzisionsflug-Verein e.V.";     Filename: "http://www.praeziflug.de";                                                            WorkingDir: "{userdesktop}";
-Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{userdesktop}";
-Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{userdesktop}";
+Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";
+Name: "{commondesktop}\Flight Contest";         Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";
+Name: "{group}\Präzisionsflug-Verein e.V.";     Filename: "http://www.praeziflug.de";                                                            WorkingDir: "{commondesktop}";
+Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{commondesktop}";
+Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{commondesktop}";
 Name: "{group}\Install AFLOS connection";       Filename: "wscript.exe";                            Parameters: """{app}\odbc.vbs"" ""{app}""";  WorkingDir: "{app}";
 Name: "{group}\Uninstall Flight Contest";       Filename: "{uninstallexe}"
-Name: "{group}\Samples\FC-CrewList-Sample.xls"; Filename: "{app}\samples\FC-CrewList-Sample.xls";                                                WorkingDir: "{userdesktop}";
+Name: "{group}\Samples\FC-CrewList-Sample.xls"; Filename: "{app}\samples\FC-CrewList-Sample.xls";                                                WorkingDir: "{commondesktop}";
 
 [Code]
 //---------------------------------------------------------------------------------------------------------
@@ -117,6 +122,34 @@ begin
     exit;
   end;
   Result := true;
+end;
+
+//---------------------------------------------------------------------------------------------------------
+function IsUAC32(): boolean;
+var win_version: TWindowsVersion;
+begin
+  GetWindowsVersionEx(win_version);
+  if win_version.Major = 6 then begin
+    if not IsWin64() then begin
+      Result := true;
+      exit;
+    end;
+  end;
+  Result := false;
+end;
+
+//---------------------------------------------------------------------------------------------------------
+function IsUAC64(): boolean;
+var win_version: TWindowsVersion;
+begin
+  GetWindowsVersionEx(win_version);
+  if win_version.Major = 6 then begin
+    if IsWin64() then begin
+      Result := true;
+      exit;
+    end;
+  end;
+  Result := false;
 end;
 
 //---------------------------------------------------------------------------------------------------------

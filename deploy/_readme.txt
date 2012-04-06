@@ -14,7 +14,7 @@ Windows XP ServicePack 2
 Build installer for Windows:
 ----------------------------
 Windows installer tool:
-	Inno Setup 5.2.3 (http://www.innosetup.com)
+	Inno Setup 5.4.3 (http://www.innosetup.com)
 
 Additional sources for installer compilation:
 	Java SDK 1.6 (32 Bit) in folder '..\..\..\Java\jdk1.6.0_30'

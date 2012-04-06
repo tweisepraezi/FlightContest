@@ -6,7 +6,7 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-18.02.2012
+12.03.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -14,8 +14,17 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Erweiterungen in dieser Version (1.0):
---------------------------------------
+Fehlerbehebungen in dieser Version (1.0.1):
+-------------------------------------------
+- Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012
+  Gegenüber der Ausgabe 2008 gab es keine Veränderungen in den 
+  Punkten.
+- Beschreibung zur Behebung von Server-Ausführungsproblemen 
+  nach Update-Installation hinzugefügt (siehe unten).
+
+
+Erweiterungen in Version 1.0:
+-----------------------------
 - Klassenverwaltung:
   * Ein Wettbewerb kann auf Klassen-Auswertung umgestellt werden.
     Die Auswertungsdetails werden dann in der Aufgabe pro Klasse definiert.
@@ -48,7 +57,7 @@ Erweiterungen in dieser Version (1.0):
   * Die Wettbewerbsordnung wird beim Anlegen eines Wettbewerbs bzw.
     einer Klasse festgelegt. 
   * Es stehen folgende Wettbewerbsordnungen zur Auswahl:
-      Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2008
+      Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012
       Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005
       FAI Air Rally Flying - Edition 2011
       FAI Precision Flying - Edition 2011
@@ -339,7 +348,7 @@ B. Durchführung
    
 Formeln der Strafpunkt-Berechnung von Landungen
 -----------------------------------------------
-Berechungsformel für 'Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2008' für alle Landungen:
+Berechungsformel für 'Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012' für alle Landungen:
 {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}
 
 Berechungsformel für 'Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005' für alle Landungen:
@@ -369,7 +378,8 @@ Server starten:
 ---------------
 Starten des Dienstemanagers 'Apache Tomcat FlightContest':
   'Programme -> Flight Contest -> Flight Contest Service Manager'
-(in Windows Vista oder Windows 7 als Administrator)
+(in Windows Vista oder Windows 7 werden Administrator-Privilegien
+ automatisch angefordert)
 
 Auf Icon des Dienstemanagers 'Apache Tomcat FlightContest' ausführen:
   Kontextmenüpunkt 'Start Service' aufrufen
@@ -381,6 +391,16 @@ Auf Icon des Dienstemanagers 'Apache Tomcat FlightContest' ausführen:
   Kontextmenüpunkt 'Stop Service'
   
   
+Behebung von Server-Ausführungsproblemen:
+-----------------------------------------
+Gelegentlich kann der Dienst 'Apache Tomcat FlightContest' 
+nach Update-Installation nicht gestartet werden. Behebung:
+  1. 'Flight Contest' deinstallieren
+     (-> Programme -> Flight Contest -> Uninstall Flight Contest)
+  2. Booten
+  3. 'Flight Contest' erneut installieren
+
+
 Arbeit mit 'Flight Contest':
 ----------------------------
 Mit Firefox oder Internet Explorer auf dem Server:
@@ -410,32 +430,31 @@ Datensicherung:
 Die Datenbank wird an folgendem Ort gespeichert:
   <Installationsverzeichnis>\fc
   (C:\Program Files\Flight Contest\fc)
+  
+Datenbankdatei: 
+  fcdb.h2.db
 
 Vorgehen zur Datensicherung:
-
-  Server stoppen
-
-  Folgende Dateien an einen sicheren Ort kopieren:
-    fcdb.h2.db
+  1. Server stoppen
+  2. <Installationsverzeichnis>\fc\fcdb.h2.db
+     an einen sicheren Ort kopieren
     
 Vorgehen zur Datenwiederherstellung:
+  1. Server stoppen
+  2. Gesicherte fcdb.h2.db nach 
+     <Installationsverzeichnis>\fc kopieren
+  3. Server starten
 
-  Server stoppen
+Hinweis:
+  <Installationsverzeichnis>\fc\AFLOS-UPLOAD.mdb
+  darf nicht gelöscht werden.
 
-  Inhalt des folgenden Verzeichnisses löschen:
-    <Installationsverzeichnis>\fc
-    (C:\Program Files\Flight Contest\fc)
-
-  Folgende Dateien aus der Datensicherung wiederherstellen:
-      <Installationsverzeichnis>\fc\fcdb.h2.db
-      (C:\Program Files\Flight Contest\fc)
-      
-  Server starten
 
 Logs:
 -----
   Sind hier zu finden:
     <Installationsverzeichnis>\fc\logs
+
 
 Cookies:
 --------
@@ -445,4 +464,3 @@ Cookies:
     PrintLanguage    - Drucksprache
     ShowLimitCrewNum - Zeilenzahl beim Blättern
 
-   
