@@ -105,7 +105,7 @@ class FcTagLib
             outln """<div class="clear"></div>"""
             outln """<div class="grid">"""
             outln """  <ul class="nav main">"""
-            for (Task task_instance in Task.findAllByContest(session.lastContest)) {
+            for (Task task_instance in Task.findAllByContest(session.lastContest,[sort:"id"])) {
                	if (p.taskplanning) {
                		outln """    <li> <a class="${if (session.lastTaskPlanning == task_instance.id) "active"}" href="${p.link}/../../task/listplanning/${task_instance.id}" >${task_instance.name()}</a> </li>"""
                	} else if (p.taskresults) {
@@ -113,12 +113,11 @@ class FcTagLib
                	}
             }
 			if (p.taskresults) {
+				outln """    <li> <a class="${if (session.lastContestResults) "active"}" href="${p.link}/../../contest/listresults">${message(code:'fc.contest.listresults')}</a> </li>"""
 				if (session.lastContest.resultClasses) {
-					for (ResultClass resultclass_instance in ResultClass.findAllByContest(session.lastContest)) {
+					for (ResultClass resultclass_instance in ResultClass.findAllByContest(session.lastContest,[sort:"id"])) {
 						outln """    <li> <a class="${if (session.lastResultClassResults == resultclass_instance.id) "active"}" href="${p.link}/../../resultClass/listresults/${resultclass_instance.id}">${resultclass_instance.name}</a> </li>"""
 					}
-				} else {
-					outln """    <li> <a class="${if (session.lastContestResults) "active"}" href="${p.link}/../../contest/listresults">${message(code:'fc.contest.listresults')}</a> </li>"""
 				}
 				if (session.lastContest.teamCrewNum > 0) {
 					outln """    <li> <a class="${if (session.lastTeamResults) "active"}" href="${p.link}/../../contest/listteamresults">${message(code:'fc.contest.listteamresults')}</a> </li>"""

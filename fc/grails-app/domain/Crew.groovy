@@ -26,9 +26,13 @@ class Crew
 	int observationPenalties = 0              // DB-2.0
 	int landingPenalties = 0                  // DB-2.0
 	int specialPenalties = 0                  // DB-2.0
+	
 	int contestPenalties = 0
-    int contestPosition = 0
 	int teamPenalties = 0                     // DB-2.0
+	
+    int contestPosition = 0
+	Boolean noContestPosition = false         // DB-2.1
+	Integer classPosition = 0                 // DB-2.1
 	
 	static belongsTo = [contest:Contest]
 
@@ -39,6 +43,10 @@ class Crew
 		resultclass(nullable:true)
         tas(range:10.0f..<1000.0f,scale:10)
 		contest(nullable:false)
+		
+		// DB-2.1 compatibility
+		noContestPosition(nullable:true)
+		classPosition(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)
@@ -96,14 +104,25 @@ class Crew
 		}
 	}
 	
-	private boolean IsActiveCrew()
+	private boolean IsActiveCrew(ResultFilter resultFilter)
 	{
 		if (contest.resultClasses) {
 			if (resultclass) {
-				for(String team_class_result in contest.teamClassResults.split(',')) {
-					if (team_class_result == "resultclass_${resultclass.id}") {
-						return true
-					}
+				switch (resultFilter) {
+					case ResultFilter.Contest:
+						for(String contest_class_result in contest.contestClassResults.split(',')) {
+							if (contest_class_result == "resultclass_${resultclass.id}") {
+								return true
+							}
+						}
+						break
+					case ResultFilter.Team:
+						for(String team_class_result in contest.teamClassResults.split(',')) {
+							if (team_class_result == "resultclass_${resultclass.id}") {
+								return true
+							}
+						}
+						break
 				}
 			}
 			return false

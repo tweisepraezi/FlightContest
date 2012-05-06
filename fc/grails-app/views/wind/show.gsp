@@ -25,7 +25,7 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
                                     <td>
-                                        <g:each var="c" in="${PlanningTestTask.findAllByWind(windInstance)}">
+                                        <g:each var="c" in="${PlanningTestTask.findAllByWind(windInstance,[sort:"id"])}">
                                             <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
                                             <br/>
                                         </g:each>
@@ -34,7 +34,7 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.flighttestwind.list')}:</td>
                                     <td>
-                                        <g:each var="c" in="${FlightTestWind.findAllByWind(windInstance)}">
+                                        <g:each var="c" in="${FlightTestWind.findAllByWind(windInstance,[sort:"id"])}">
                                             <g:flighttestwind var="${c}" link="${createLink(controller:'flightTestWind',action:'show')}"/>
                                             <br/>
                                         </g:each>

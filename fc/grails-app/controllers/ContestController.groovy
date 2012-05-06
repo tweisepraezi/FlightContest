@@ -223,7 +223,7 @@ class ContestController {
     def tasks = {
         fcService.printstart "List tasks"
         if (session?.lastContest) {
-            def contestTasksList = Task.findAllByContest(session.lastContest)
+            def contestTasksList = Task.findAllByContest(session.lastContest,[sort:"id"])
             // save return action
             session.taskReturnAction = actionName 
             session.taskReturnController = controllerName
@@ -390,7 +390,7 @@ class ContestController {
     }
 
     def calculatepositions = {
-        def contest = fcService.calculatepositionsContest(session.lastContest) 
+        def contest = fcService.calculatecontestpositionsContest(session.lastContest,[],[]) 
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -399,7 +399,7 @@ class ContestController {
     }
 
     def calculateteampositions = {
-        def contest = fcService.calculateteampositionsContest(session.lastContest,[]) 
+        def contest = fcService.calculateteampositionsContest(session.lastContest,[],[]) 
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -427,6 +427,7 @@ class ContestController {
     def listresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
             return [contestInstance:session.lastContest]
         } else {
             redirect(action:start)
@@ -453,7 +454,7 @@ class ContestController {
     def listteamresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
-            session.contestTitle = session.lastContest.GetPrintContestTitle()
+            session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Team)
             return [contestInstance:session.lastContest]
         } else {
             redirect(action:start)
@@ -463,7 +464,7 @@ class ContestController {
     def editresultsettings = {
         if (session?.lastContest) {
             // set return action
-               return [contestInstance:session.lastContest,editresultsettingsReturnAction:"listresults",editresultsettingsReturnController:controllerName,editresultsettingsReturnID:params.id]
+               return [contestInstance:session.lastContest,resultfilter:ResultFilter.Contest,editresultsettingsReturnAction:"listresults",editresultsettingsReturnController:controllerName,editresultsettingsReturnID:params.id]
         } else {
             redirect(action:start)
         }
@@ -472,7 +473,7 @@ class ContestController {
     def editteamresultsettings = {
         if (session?.lastContest) {
             // set return action
-               return [contestInstance:session.lastContest,editteamresultsettingsReturnAction:"listteamresults",editteamresultsettingsReturnController:controllerName,editteamresultsettingsReturnID:params.id]
+               return [contestInstance:session.lastContest,resultfilter:ResultFilter.Team,editteamresultsettingsReturnAction:"listteamresults",editteamresultsettingsReturnController:controllerName,editteamresultsettingsReturnID:params.id]
         } else {
             redirect(action:start)
         }
@@ -511,43 +512,7 @@ class ContestController {
                ]
     }
     
-    int create_test2(String testName, boolean testExists) 
-    {
-        fcService.printstart "Create test contest '$testName'"
-        
-        // Contest
-        Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"","11:00",3,10,true,true,true,true,false, false,true, false,false,false,false)
-    
-        // Crews and Aircrafts
-        (1..100).each {
-            fcService.putCrew(contest,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
-        }
-        
-        fcService.printdone ""
-        
-		return contest.instance.id
-    }
-
-    int create_test3(String testName, boolean testExists) 
-    {
-        fcService.printstart "Create test contest '$testName'"
-        
-        // Contest
-        Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"","11:00",3,10,true,true,true,true,false, false,true, false,false,false,false)
-    
-        // Crews and Aircrafts
-        (1..20).each {
-            fcService.putCrew(contest,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
-        }
-        
-        fcService.printdone ""
-        
-		return contest.instance.id
-    }
-
-    int create_test4(String testName, boolean testExists) 
+    int create_test1(String testName, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
@@ -789,15 +754,15 @@ class ContestController {
                                                  testComplete:true],
                                                ])
         fcService.runcalculatepositionsTask(task1)
-        fcService.runcalculatepositionsContest(contest)
-        fcService.runcalculateteampositionsContest(contest,[])
+        fcService.runcalculatecontestpositionsContest(contest,[],[task1])
+        fcService.runcalculateteampositionsContest(contest,[],[task1])
 
         fcService.printdone ""
         
 		return contest.instance.id
     }
     
-    int create_test5(String testName, boolean testExists) 
+    int create_test2(String testName, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
@@ -1053,17 +1018,316 @@ class ContestController {
                                                  testComplete:true],
                                                ])
         fcService.runcalculatepositionsTask(task1)
-        fcService.runcalculatepositionsResultClass(resultclass1)
-        fcService.runcalculatepositionsResultClass(resultclass2)
-        fcService.runcalculatepositionsResultClass(resultclass3)
-        fcService.runcalculateteampositionsContest(contest,[resultclass1,resultclass2,resultclass3])
+        fcService.runcalculatepositionsResultClass(resultclass1,[task1])
+        fcService.runcalculatepositionsResultClass(resultclass2,[task1])
+        fcService.runcalculatepositionsResultClass(resultclass3,[task1])
+		fcService.runcalculatecontestpositionsContest(contest,[resultclass1],[task1])
+        fcService.runcalculateteampositionsContest(contest,[resultclass1,resultclass2,resultclass3],[task1])
         
         fcService.printdone ""
         
 		return contest.instance.id
     }
     
-    int create_test6(String testName, boolean testExists) 
+    int create_test3(String testName, boolean testExists) 
+    {
+        fcService.printstart "Create test contest '$testName'"
+        
+        // Contest
+        Map contest = fcService.putContest(testName,200000,true,0,ContestRules.R1,true,testExists) // 0 - keine Team-Auswertung
+		
+		// Route 1
+		fcService.printstart "Route 1"
+		Map route1 = fcService.putRoute(contest,"Strecke 1","Strecke 1")
+		fcService.putCoordRoute(route1,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
+		fcService.putCoordRoute(route1,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
+		fcService.putCoordRoute(route1,CoordType.SECRET,1,'CP1', 'N',52, 5.121,'E',14, 6.679,500,2,  99.0,  89.0)
+		fcService.putCoordRoute(route1,CoordType.TP,    1,'CP2', 'N',52, 5.223,'E',14,15.555,500,1, 150.0,  89.0)
+		fcService.putCoordRoute(route1,CoordType.SECRET,2,'CP3', 'N',52, 1.367,'E',14,10.417,500,2,  46.0, 219.0)
+		fcService.putCoordRoute(route1,CoordType.TP,    2,'CP4', 'N',51,51.719,'E',13,57.662,500,1, 161.5, 219.0)
+		fcService.putCoordRoute(route1,CoordType.SECRET,3,'CP5', 'N',51,44.633,'E',14, 1.635,500,2,  68.5, 161.0)
+		fcService.putCoordRoute(route1,CoordType.TP,    3,'CP6', 'N',51,38.847,'E',14, 4.857,500,1, 125.0, 161.0)
+		fcService.putCoordRoute(route1,CoordType.SECRET,4,'CP7', 'N',51,38.983,'E',14, 8.299,500,2,  19.5,  86.0)
+		fcService.putCoordRoute(route1,CoordType.TP,    4,'CP8', 'N',51,39.535,'E',14,23.4,  500,1, 106.45, 86.0)
+		fcService.putCoordRoute(route1,CoordType.SECRET,5,'CP9', 'N',51,38.02, 'E',14,19.606,500,2,  25.5, 237.0)
+		fcService.putCoordRoute(route1,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
+		fcService.putCoordRoute(route1,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
+		fcService.putCoordRoute(route1,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
+		fcService.printdone ""
+		
+		// Route 2
+		fcService.printstart "Route 2"
+		Map route2 = fcService.putRoute(contest,"Strecke 2","Strecke 2")
+		fcService.putCoordRoute(route2,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
+		fcService.putCoordRoute(route2,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
+		fcService.putCoordRoute(route2,CoordType.TP,    1,'CP2', 'N',52, 5.223,'E',14,15.555,500,1, 150.0,  89.0)
+		fcService.putCoordRoute(route2,CoordType.TP,    2,'CP4', 'N',51,51.719,'E',13,57.662,500,1, 161.5, 219.0)
+		fcService.putCoordRoute(route2,CoordType.TP,    3,'CP6', 'N',51,38.847,'E',14, 4.857,500,1, 125.0, 161.0)
+		fcService.putCoordRoute(route2,CoordType.TP,    4,'CP8', 'N',51,39.535,'E',14,23.4,  500,1, 106.45, 86.0)
+		fcService.putCoordRoute(route2,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
+		fcService.putCoordRoute(route2,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
+		fcService.putCoordRoute(route2,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
+		fcService.printdone ""
+		
+		// Crews with Teams, ResultClasses and Aircrafts
+		// DMM
+		Map crew3 = fcService.putCrew(contest,"Besatzung 3","Deutschland","DMM","D-EAAA","","",85)
+		Map crew18 = fcService.putCrew(contest,"Besatzung 18","Deutschland","DMM","D-EAAD","","",80)
+		Map crew19 = fcService.putCrew(contest,"Besatzung 19","Deutschland","DMM","D-EAAE","","",80)
+		Map crew11 = fcService.putCrew(contest,"Besatzung 11","Deutschland","DMM","D-EAAB","","",70)
+		Map crew13 = fcService.putCrew(contest,"Besatzung 13","Deutschland","DMM","D-EAAC","","",70)
+		// RuB-Wettbewerb
+		Map crew1 = fcService.putCrew(contest,"Besatzung 1","Deutschland","RuB-Wettbewerb","D-EABA","","",85)
+		Map crew2 = fcService.putCrew(contest,"Besatzung 2","Deutschland","RuB-Wettbewerb","D-EABB","","",70)
+		Map crew4 = fcService.putCrew(contest,"Besatzung 4","Deutschland","RuB-Wettbewerb","D-EABC","","",90)
+		Map crew5 = fcService.putCrew(contest,"Besatzung 5","Deutschland","RuB-Wettbewerb","D-EABD","","",90)
+		Map crew7 = fcService.putCrew(contest,"Besatzung 7","Deutschland","RuB-Wettbewerb","D-EABE","","",80)
+		// RuB-Tourist
+		Map crew8 = fcService.putCrew(contest,"Besatzung 8","Deutschland","RuB-Tourist","D-EACA","","",70)
+		Map crew9 = fcService.putCrew(contest,"Besatzung 9","Deutschland","RuB-Tourist","D-EACB","","",85)
+		Map crew10 = fcService.putCrew(contest,"Besatzung 10","Deutschland","RuB-Tourist","D-EACC","","",75)
+		Map crew12 = fcService.putCrew(contest,"Besatzung 12","Deutschland","RuB-Tourist","D-EACD","","",90)
+		Map crew14 = fcService.putCrew(contest,"Besatzung 14","Deutschland","RuB-Tourist","D-EACE","","",100)
+		
+        // Classes with properties
+        Map resultclass1 = fcService.putResultClass(contest,"DMM","Deutsche Motorflugmeisterschaft Navigationsflug",ContestRules.R1)
+        Map resultclass2 = fcService.putResultClass(contest,"RuB-Wettbewerb","Rund um Berlin",ContestRules.R1)
+		Map resultclass3 = fcService.putResultClass(contest,"RuB-Tourist","Rund um Berlin",ContestRules.R1)
+		
+		// Tasks - planningTestRun flightTestRun observationTestRun landingTestRun specialTestRun
+		//         planningTestDistanceMeasure planningTestDirectionMeasure 
+		//         landingTest1Run landingTest2Run landingTest3Run landingTest4Run
+		
+        // TaskClass properties
+		
+		// 1 - 23. August 2012
+        Map task1 = fcService.putTask(contest,"23. August 2012","10:00",3,8,true,true,true,true,false,  false,true, true,true,true,true)
+		
+        fcService.puttaskclassTask(task1,resultclass1,true,true,true,true,false,      false,true, true,true,true,true)
+        fcService.puttaskclassTask(task1,resultclass2,false,false,false,false,false,  false,true, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass3,false,false,false,false,false,  false,true, false,false,false,false)
+		
+		Map planningtest1 = fcService.putPlanningTest(task1,"")
+		Map planningtesttask1 = fcService.putPlanningTestTask(planningtest1,"",route1,130,20)
+		fcService.putplanningtesttaskcrewsTask(task1,planningtesttask1,[crew3,crew11,crew13,crew19,crew18])
+		
+		Map flighttest1 = fcService.putFlightTest(task1,"",route1)
+		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15)
+		fcService.putflighttestwindcrewsTask(task1,flighttestwind1,[crew3,crew11,crew13,crew19,crew18])
+		
+		fcService.putsequenceTask(task1,[crew3,crew11,crew13,crew19,crew18])
+		fcService.runcalculatetimetableTask(task1)
+		
+		// 2 - 24. August 2012
+		Map task2 = fcService.putTask(contest,"24. August 2012","10:00",3,8,true,true,true,false,false, false,true, false,false,false,false)
+		
+        fcService.puttaskclassTask(task2,resultclass1,true,true,true,false,false,     false,true, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass2,false,false,false,false,false,  false,true, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass3,false,false,false,false,false,  false,true, false,false,false,false)
+		
+		Map planningtest2 = fcService.putPlanningTest(task2,"")
+		Map planningtesttask2 = fcService.putPlanningTestTask(planningtest2,"",route2,130,20)
+		fcService.putplanningtesttaskcrewsTask(task2,planningtesttask2,[crew3,crew11,crew13,crew19,crew18])
+		
+		Map flighttest2 = fcService.putFlightTest(task2,"",route2)
+		Map flighttestwind2 = fcService.putFlightTestWind(flighttest2,300,15)
+		fcService.putflighttestwindcrewsTask(task2,flighttestwind2,[crew3,crew11,crew13,crew19,crew18])
+		
+		fcService.putsequenceTask(task2,[crew3,crew11,crew13,crew19,crew18])
+		fcService.runcalculatetimetableTask(task2)
+
+		// 3 - 25. August 2012
+		Map task3 = fcService.putTask(contest,"25. August 2012","10:00",3,8,true,true,true,true,false,  false,true, true,false,false,false)
+		
+		fcService.puttaskclassTask(task3,resultclass1,true,true,true,true,false,      false,true, true,false,false,false)
+		fcService.puttaskclassTask(task3,resultclass2,true,true,true,true,false,      false,true, true,false,false,false)
+		fcService.puttaskclassTask(task3,resultclass3,true,true,true,true,false,      false,true, true,false,false,false)
+		
+		Map planningtest3 = fcService.putPlanningTest(task3,"")
+		Map planningtesttask3 = fcService.putPlanningTestTask(planningtest3,"",route1,130,20)
+		fcService.putplanningtesttaskTask(task3,planningtesttask3)
+		
+		Map flighttest3 = fcService.putFlightTest(task3,"",route1)
+		Map flighttestwind3 = fcService.putFlightTestWind(flighttest3,300,15)
+		fcService.putflighttestwindTask(task3,flighttestwind3)
+		
+		fcService.putsequenceTask(task3,[crew14,crew4,crew5,crew12,crew3,crew1,crew9,crew18,crew19,crew7,crew10,crew11,crew13,crew2,crew8])
+		fcService.runcalculatetimetableTask(task3)
+
+        // Planning Test
+
+        // Results
+		/*
+        fcService.putplanningresultsTask(task1,[[crew:crew3,
+                                                 givenTooLate:false,
+                                                 exitRoomTooLate:false,
+                                                 givenValues:[[trueHeading: 98,legTime:"00:14:06"],
+                                                              [trueHeading:205,legTime:"00:12:41"],
+                                                              [trueHeading:154,legTime:"00:12:03"],
+                                                              [trueHeading: 95,legTime:"00:09:56"],
+                                                              [trueHeading:224,legTime:"00:07:43"],
+                                                              [trueHeading:232,legTime:"00:04:25"]],
+                                                 testComplete:true],
+                                                [crew:crew11,
+                                                 givenTooLate:false,
+                                                 exitRoomTooLate:false,
+                                                 givenValues:[[trueHeading: 99,legTime:"00:18:00"],
+                                                              [trueHeading:203,legTime:"00:15:44"],
+                                                              [trueHeading:153,legTime:"00:15:31"],
+                                                              [trueHeading: 97,legTime:"00:12:42"],
+                                                              [trueHeading:221,legTime:"00:09:21"],
+                                                              [trueHeading:229,legTime:"00:05:20"]],
+                                                 testComplete:true],
+                                                [crew:crew13,
+                                                 givenTooLate:false,
+                                                 exitRoomTooLate:false,
+                                                 givenValues:[[trueHeading:100,legTime:"00:18:03"],
+                                                              [trueHeading:203,legTime:"00:15:37"],
+                                                              [trueHeading:153,legTime:"00:15:35"],
+                                                              [trueHeading: 98,legTime:"00:12:45"],
+                                                              [trueHeading:221,legTime:"00:09:19"],
+                                                              [trueHeading:229,legTime:"00:05:21"]],
+                                                 testComplete:true],
+                                                [crew:crew19,
+                                                 givenTooLate:false,
+                                                 exitRoomTooLate:false,
+                                                 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
+                                                              [trueHeading:203,legTime:"00:13:35"],
+                                                              [trueHeading:154,legTime:"00:13:04"],
+                                                              [trueHeading:102,legTime:"00:10:57"],
+                                                              [trueHeading:222,legTime:"00:08:19"],
+                                                              [trueHeading:230,legTime:"00:04:42"]],
+                                                 testComplete:true],
+                                                [crew:crew18,
+                                                 givenTooLate:false,
+                                                 exitRoomTooLate:false,
+                                                 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
+                                                              [trueHeading:204,legTime:"00:13:38"],
+                                                              [trueHeading:153,legTime:"00:13:03"],
+                                                              [trueHeading: 96,legTime:"00:10:43"],
+                                                              [trueHeading:223,legTime:"00:08:10"],
+                                                              [trueHeading:230,legTime:"00:04:44"]],
+                                                 testComplete:true],
+                                               ])
+          
+        fcService.importflightresultsTask(task1,[[crew:crew3,
+                                                  startNum:3,
+                                                  takeoffMissed:false,
+                                                  badCourseStartLanding:false,
+                                                  landingTooLate:false,
+                                                  givenTooLate:false,
+                                                  testComplete:true],
+                                                 [crew:crew11,
+                                                  startNum:11,
+                                                  takeoffMissed:false,
+                                                  badCourseStartLanding:false,
+                                                  landingTooLate:false,
+                                                  givenTooLate:false,
+                                                  testComplete:true],
+                                                 [crew:crew13,
+                                                  startNum:13,
+                                                  takeoffMissed:false,
+                                                  badCourseStartLanding:false,
+                                                  landingTooLate:false,
+                                                  givenTooLate:false,
+                                                  testComplete:true],
+                                                 [crew:crew19,
+                                                  startNum:19,
+                                                  takeoffMissed:false,
+                                                  badCourseStartLanding:false,
+                                                  landingTooLate:false,
+                                                  givenTooLate:false,
+                                                  testComplete:true],
+                                                 [crew:crew18,
+                                                  startNum:18,
+                                                  takeoffMissed:false,
+                                                  badCourseStartLanding:false,
+                                                  landingTooLate:false,
+                                                  givenTooLate:false,
+                                                  testComplete:true],
+                                                ])
+        fcService.putobservationresultsTask(task1, [
+                                                    [crew:crew3,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
+                                                    [crew:crew18,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
+                                                    [crew:crew19,routePhotos:120,turnPointPhotos:0,groundTargets:10,testComplete:true],
+                                                    [crew:crew11,routePhotos:0,turnPointPhotos:0,groundTargets:0,testComplete:true],
+                                                    [crew:crew13,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
+                                                   ])
+        fcService.putlandingresultsTask(task1, [
+                                                [crew:crew3,
+                                                 landingTest1Measure:'B',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:true,
+                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
+                                                 landingTest2Measure:'0',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
+                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
+                                                 landingTest3Measure:'0',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
+                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
+                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
+                                                 landingTest4Measure:'0',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
+                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
+                                                 landingTest4TouchingObstacle:false,
+                                                 testComplete:true],
+                                                [crew:crew18,
+                                                 landingTest1Measure:'0',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
+                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
+                                                 landingTest2Measure:'0',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
+                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
+                                                 landingTest3Measure:'F',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
+                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
+                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
+                                                 landingTest4Measure:'A',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
+                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
+                                                 landingTest4TouchingObstacle:false,
+                                                 testComplete:true],
+                                                [crew:crew19,
+                                                 landingTest1Measure:'B',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
+                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
+                                                 landingTest2Measure:'A',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
+                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
+                                                 landingTest3Measure:'0',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
+                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
+                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
+                                                 landingTest4Measure:'A',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
+                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
+                                                 landingTest4TouchingObstacle:false,
+                                                 testComplete:true],
+                                                [crew:crew11,
+                                                 landingTest1Measure:'0',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
+                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
+                                                 landingTest2Measure:'F',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
+                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
+                                                 landingTest3Measure:'B',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
+                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
+                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
+                                                 landingTest4Measure:'0',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
+                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
+                                                 landingTest4TouchingObstacle:false,
+                                                 testComplete:true],
+                                                [crew:crew13,
+                                                 landingTest1Measure:'E',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
+                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
+                                                 landingTest2Measure:'0',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
+                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
+                                                 landingTest3Measure:'0',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
+                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
+                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
+                                                 landingTest4Measure:'A',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
+                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
+                                                 landingTest4TouchingObstacle:false,
+                                                 testComplete:true],
+                                               ])
+        fcService.runcalculatepositionsTask(task1)
+        fcService.runcalculatepositionsResultClass(resultclass1,[task1])
+        fcService.runcalculatepositionsResultClass(resultclass2,[task1])
+		fcService.runcalculatecontestpositionsContest(contest,[resultclass1],[task1])
+        fcService.runcalculateteampositionsContest(contest,[resultclass1,resultclass2],[task1])
+        */
+		
+        fcService.printdone ""
+        
+		return contest.instance.id
+    }
+    
+    int create_test11(String testName, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
@@ -1145,7 +1409,7 @@ class ContestController {
 		return contest.instance.id
     }
         
-    int create_test7(String testName, boolean testExists) 
+    int create_test12(String testName, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
@@ -1242,10 +1506,46 @@ class ContestController {
 		return contest.instance.id
     }
 
-    List test4Route() {
+    int create_test13(String testName, boolean testExists) 
+    {
+        fcService.printstart "Create test contest '$testName'"
+        
+        // Contest
+        Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
+        Map task1 = fcService.putTask(contest,"","11:00",3,10,true,true,true,true,false, false,true, false,false,false,false)
+    
+        // Crews and Aircrafts
+        (1..100).each {
+            fcService.putCrew(contest,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
+        }
+        
+        fcService.printdone ""
+        
+		return contest.instance.id
+    }
+
+    int create_test14(String testName, boolean testExists) 
+    {
+        fcService.printstart "Create test contest '$testName'"
+        
+        // Contest
+        Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
+        Map task1 = fcService.putTask(contest,"","11:00",3,10,true,true,true,true,false, false,true, false,false,false,false)
+    
+        // Crews and Aircrafts
+        (1..20).each {
+            fcService.putCrew(contest,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
+        }
+        
+        fcService.printdone ""
+        
+		return contest.instance.id
+    }
+
+    List test1Route() {
       [[title:"Strecke 1",mark:"Strecke 1"]]
     }
-    List test4CoordRoute() {
+    List test1CoordRoute() {
       [[type:CoordType.TO,    mark:"T/O",
         latGrad:52,latMinute:2.18,latDirection:'N',lonGrad:13,lonMinute:44.0,lonDirection:'E',altitude:0,gatewidth:1,
         coordTrueTrack:0,coordMeasureDistance:0,
@@ -1304,7 +1604,7 @@ class ContestController {
         measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0]
       ]
     }
-    List test4RouteLegCoord() {
+    List test1RouteLegCoord() {
       [[coordTrueTrack:49.6801228191,coordDistance:4.1990291847,measureDistance:null,legMeasureDistance:null,legDistance:null,measureTrueTrack:null],
        [coordTrueTrack:88.8048175589,coordDistance:10.7391013062,measureDistance:99.0,legMeasureDistance:99.0,legDistance:10.6911447084,measureTrueTrack:89.0],
        [coordTrueTrack:88.9286028152,coordDistance:5.4550359042,measureDistance:150.0,legMeasureDistance:51.0,legDistance:5.5075593952,measureTrueTrack:89.0],
@@ -1320,7 +1620,7 @@ class ContestController {
        [coordTrueTrack:255.9739613296,coordDistance:3.5195165446,measureDistance:null,legMeasureDistance:null,legDistance:null,measureTrueTrack:null],
       ]
     }
-    List test4RouteLegTest() {
+    List test1RouteLegTest() {
       [[coordTrueTrack:88.8465166117,coordDistance:16.1941524134,
         measureTrueTrack:89.0,measureDistance:150.0,legMeasureDistance:150.0,legDistance:16.1987041037],
        [coordTrueTrack:219.2221790621,coordDistance:17.4312688120,
@@ -1335,15 +1635,15 @@ class ContestController {
         measureTrueTrack:244.0,measureDistance:62.4,legMeasureDistance:62.4,legDistance:6.7386609071],
       ]
     }
-    List test4Crew() {
-       [[name:"Besatzung 3",mark:"Besatzung 3 (3)",   team:[name:"Deutschland"],tas:85,contestPenalties:215,contestPosition:3,aircraft:[registration:"D-EAAA",type:"",colour:""]],
-        [name:"Besatzung 18",mark:"Besatzung 18 (18)",team:[name:"Deutschland"],tas:80,contestPenalties:133,contestPosition:1,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-        [name:"Besatzung 19",mark:"Besatzung 19 (19)",team:[name:"Deutschland"],tas:80,contestPenalties:568,contestPosition:5,aircraft:[registration:"D-EAAE",type:"",colour:""]],
-        [name:"Besatzung 11",mark:"Besatzung 11 (11)",team:[name:"Schweiz"],    tas:70,contestPenalties:383,contestPosition:4,aircraft:[registration:"D-EAAB",type:"",colour:""]],
-        [name:"Besatzung 13",mark:"Besatzung 13 (13)",team:[name:"Schweiz"],    tas:70,contestPenalties:135,contestPosition:2,aircraft:[registration:"D-EAAC",type:"",colour:""]],
+    List test1Crew() {
+       [[name:"Besatzung 3",mark:"Besatzung 3 (3)",   team:[name:"Deutschland"],tas:85,contestPenalties:215,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
+        [name:"Besatzung 18",mark:"Besatzung 18 (18)",team:[name:"Deutschland"],tas:80,contestPenalties:133,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAD",type:"",colour:""]],
+        [name:"Besatzung 19",mark:"Besatzung 19 (19)",team:[name:"Deutschland"],tas:80,contestPenalties:568,contestPosition:5,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+        [name:"Besatzung 11",mark:"Besatzung 11 (11)",team:[name:"Schweiz"],    tas:70,contestPenalties:383,contestPosition:4,noContestPosition:false,aircraft:[registration:"D-EAAB",type:"",colour:""]],
+        [name:"Besatzung 13",mark:"Besatzung 13 (13)",team:[name:"Schweiz"],    tas:70,contestPenalties:135,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
        ]
     }
-    List test4Aircraft() {
+    List test1Aircraft() {
        [[registration:"D-EAAA",type:"",colour:"",user1:[name:"Besatzung 3"],user2:null],
         [registration:"D-EAAD",type:"",colour:"",user1:[name:"Besatzung 18"],user2:null],
         [registration:"D-EAAE",type:"",colour:"",user1:[name:"Besatzung 19"],user2:null],
@@ -1351,18 +1651,18 @@ class ContestController {
         [registration:"D-EAAC",type:"",colour:"",user1:[name:"Besatzung 13"],user2:null],
        ]
     }
-    List test4Team() {
+    List test1Team() {
       [[name:"Deutschland",contestPenalties:348,contestPosition:1],
        [name:"Schweiz",    contestPenalties:518,contestPosition:2],
       ]
     }
-    List test4Task() {
+    List test1Task() {
       [[title:"20. Februar 2012",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalFasterAircraft:120,planningTestDuration:60,
         preparationDuration:15,risingDuration:8,maxLandingDuration:10,parkingDuration:15,minNextFlightDuration:30,
         procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true]
       ]
     }
-    List test4TestLegPlanning3() {
+    List test1TestLegPlanning3() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:97.8800763462,planGroundSpeed:68.8869647355,planLegTime:0.2351678589,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:16.20,resultTrueHeading:98,resultGroundSpeed:0,resultLegTime:0.235,
@@ -1401,7 +1701,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegPlanning18() {
+    List test1TestLegPlanning18() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:98.4400045050,planGroundSpeed:63.8224392169,planLegTime:0.2538292205,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:16.20,resultTrueHeading:98,resultGroundSpeed:0,resultLegTime:0.2530555556,
@@ -1440,7 +1740,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegPlanning19() {
+    List test1TestLegPlanning19() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:98.4400045050,planGroundSpeed:63.8224392169,planLegTime:0.2538292205,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:16.20,resultTrueHeading:98,resultGroundSpeed:0,resultLegTime:0.2530555556,
@@ -1479,7 +1779,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegPlanning11() {
+    List test1TestLegPlanning11() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:99.8037402076,planGroundSpeed:53.6650595563,planLegTime:0.3018723940,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:16.20,resultTrueHeading:99,resultGroundSpeed:0,resultLegTime:0.3,
@@ -1518,7 +1818,7 @@ class ContestController {
        ],
       ]
     }     
-    List test4TestLegPlanning13() {
+    List test1TestLegPlanning13() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:99.8037402076,planGroundSpeed:53.6650595563,planLegTime:0.3018723940,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:16.20,resultTrueHeading:100,resultGroundSpeed:0,resultLegTime:0.3008333333,
@@ -1557,7 +1857,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegFlight3() {
+    List test1TestLegFlight3() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:83.7852431943,planGroundSpeed:97.5056964422,planLegTime:0.1661441392,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:0,resultTrueHeading:0,resultGroundSpeed:0,resultLegTime:0,
@@ -1596,7 +1896,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegFlight18() {
+    List test1TestLegFlight18() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:83.4583310658,planGroundSpeed:92.4836079382,planLegTime:0.1751661766,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:0,resultTrueHeading:0,resultGroundSpeed:0,resultLegTime:0,
@@ -1635,7 +1935,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegFlight19() {
+    List test1TestLegFlight19() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:83.4583310658,planGroundSpeed:92.4836079382,planLegTime:0.1751661766,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:0,resultTrueHeading:0,resultGroundSpeed:0,resultLegTime:0,
@@ -1674,7 +1974,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegFlight11() {
+    List test1TestLegFlight11() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:82.6636259635,planGroundSpeed:82.4298858593,planLegTime:0.1965306616,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:0,resultTrueHeading:0,resultGroundSpeed:0,resultLegTime:0,
@@ -1713,7 +2013,7 @@ class ContestController {
        ],
       ]
     }
-    List test4TestLegFlight13() {
+    List test1TestLegFlight13() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:82.6636259635,planGroundSpeed:82.4298858593,planLegTime:0.1965306616,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:0,resultTestDistance:0,resultTrueHeading:0,resultGroundSpeed:0,resultLegTime:0,
@@ -1752,7 +2052,7 @@ class ContestController {
        ],
       ]
     }
-    List test4CoordResult3() {
+    List test1CoordResult3() {
       [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:29:00"),planProcedureTurn:false,
@@ -1863,7 +2163,7 @@ class ContestController {
        ],
       ]
     }
-    List test4CoordResult18() {
+    List test1CoordResult18() {
       [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:11:00"),planProcedureTurn:false,
@@ -1974,7 +2274,7 @@ class ContestController {
        ],
       ]
     }
-    List test4CoordResult19() {
+    List test1CoordResult19() {
       [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:14:00"),planProcedureTurn:false,
@@ -2085,7 +2385,7 @@ class ContestController {
        ],
       ]
     }
-    List test4CoordResult11() {
+    List test1CoordResult11() {
       [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:53:00"),planProcedureTurn:false,
@@ -2196,7 +2496,7 @@ class ContestController {
        ],
       ]
     }
-    List test4CoordResult13() {
+    List test1CoordResult13() {
       [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:59:00"),planProcedureTurn:false,
@@ -2307,7 +2607,7 @@ class ContestController {
        ],
       ]
     }
-    List test4Test() {
+    List test1Test() {
       [[crew:[name:"Besatzung 3"],viewpos:0,taskTAS:85,
         flighttestwind:[wind:[direction:300,speed:15]],
         timeCalculated:true,
@@ -2421,35 +2721,35 @@ class ContestController {
       ]
     }
     
-    void run_test4(String contestName)
+    void run_test1(String contestName)
     {
         if (session?.lastContest && session.lastContest.title == contestName) {
             fcService.printstart "runtest '$session.lastContest.title'"
             Map ret = fcService.testData(
-               [[name:"Route",count:1,table:Route.findAllByContest(session.lastContest),data:test4Route()],
-                [name:"CoordRoute",count:14,table:CoordRoute.findAllByRoute(Route.findByContest(session.lastContest)),data:test4CoordRoute()],
-                [name:"RouteLegCoord",count:13,table:RouteLegCoord.findAllByRoute(Route.findByContest(session.lastContest)),data:test4RouteLegCoord()],
-                [name:"RouteLegTest",count:6,table:RouteLegTest.findAllByRoute(Route.findByContest(session.lastContest)),data:test4RouteLegTest()],
-                [name:"Crew",count:5,table:Crew.findAllByContest(session.lastContest),data:test4Crew()],
-                [name:"Aircraft",count:5,table:Aircraft.findAllByContest(session.lastContest),data:test4Aircraft()],
-                [name:"Team",count:2,table:Team.findAllByContest(session.lastContest),data:test4Team()],
-                [name:"Task",count:1,table:Task.findAllByContest(session.lastContest),data:test4Task()],
-                [name:"TestLegPlanning 'Besatzung 3'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3"))),data:test4TestLegPlanning3()],
-                [name:"TestLegPlanning 'Besatzung 18'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18"))),data:test4TestLegPlanning18()],
-                [name:"TestLegPlanning 'Besatzung 19'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19"))),data:test4TestLegPlanning19()],
-                [name:"TestLegPlanning 'Besatzung 11'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11"))),data:test4TestLegPlanning11()],
-                [name:"TestLegPlanning 'Besatzung 13'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13"))),data:test4TestLegPlanning13()],
-                [name:"TestLegFlight 'Besatzung 3'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3"))),data:test4TestLegFlight3()],
-                [name:"TestLegFlight 'Besatzung 18'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18"))),data:test4TestLegFlight18()],
-                [name:"TestLegFlight 'Besatzung 19'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19"))),data:test4TestLegFlight19()],
-                [name:"TestLegFlight 'Besatzung 11'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11"))),data:test4TestLegFlight11()],
-                [name:"TestLegFlight 'Besatzung 13'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13"))),data:test4TestLegFlight13()],
-                [name:"CoordResult 'Besatzung 3'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3"))),data:test4CoordResult3()],    
-                [name:"CoordResult 'Besatzung 18'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18"))),data:test4CoordResult18()],    
-                [name:"CoordResult 'Besatzung 19'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19"))),data:test4CoordResult19()],    
-                [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11"))),data:test4CoordResult11()],    
-                [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13"))),data:test4CoordResult13()],    
-                [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(session.lastContest)),data:test4Test()],
+               [[name:"Route",count:1,table:Route.findAllByContest(session.lastContest,[sort:"id"]),data:test1Route()],
+                [name:"CoordRoute",count:14,table:CoordRoute.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1CoordRoute()],
+                [name:"RouteLegCoord",count:13,table:RouteLegCoord.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1RouteLegCoord()],
+                [name:"RouteLegTest",count:6,table:RouteLegTest.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1RouteLegTest()],
+                [name:"Crew",count:5,table:Crew.findAllByContest(session.lastContest,[sort:"id"]),data:test1Crew()],
+                [name:"Aircraft",count:5,table:Aircraft.findAllByContest(session.lastContest,[sort:"id"]),data:test1Aircraft()],
+                [name:"Team",count:2,table:Team.findAllByContest(session.lastContest,[sort:"id"]),data:test1Team()],
+                [name:"Task",count:1,table:Task.findAllByContest(session.lastContest,[sort:"id"]),data:test1Task()],
+                [name:"TestLegPlanning 'Besatzung 3'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1TestLegPlanning3()],
+                [name:"TestLegPlanning 'Besatzung 18'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1TestLegPlanning18()],
+                [name:"TestLegPlanning 'Besatzung 19'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegPlanning19()],
+                [name:"TestLegPlanning 'Besatzung 11'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1TestLegPlanning11()],
+                [name:"TestLegPlanning 'Besatzung 13'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegPlanning13()],
+                [name:"TestLegFlight 'Besatzung 3'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1TestLegFlight3()],
+                [name:"TestLegFlight 'Besatzung 18'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1TestLegFlight18()],
+                [name:"TestLegFlight 'Besatzung 19'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegFlight19()],
+                [name:"TestLegFlight 'Besatzung 11'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1TestLegFlight11()],
+                [name:"TestLegFlight 'Besatzung 13'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegFlight13()],
+                [name:"CoordResult 'Besatzung 3'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1CoordResult3()],    
+                [name:"CoordResult 'Besatzung 18'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1CoordResult18()],    
+                [name:"CoordResult 'Besatzung 19'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1CoordResult19()],    
+                [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
+                [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
+                [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(session.lastContest),[sort:"id"]),data:test1Test()],
                 ]
             )
             fcService.printdone "Test '$session.lastContest.title'"
@@ -2461,32 +2761,33 @@ class ContestController {
         }
     }
 
-    List test5Crew() {
-      [[name:"Besatzung 3", mark:"Besatzung 3 (3)",  team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:55, contestPosition:2,aircraft:[registration:"D-EAAA",type:"",colour:""]],
-       [name:"Besatzung 18",mark:"Besatzung 18 (18)",team:[name:"Deutschland"],resultclass:[name:"Tourist",   contestTitle:""],                                tas:80,contestPenalties:120,contestPosition:1,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-       [name:"Besatzung 19",mark:"Besatzung 19 (19)",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,contestPosition:3,aircraft:[registration:"D-EAAE",type:"",colour:""]],
-       [name:"Besatzung 11",mark:"Besatzung 11 (11)",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   contestTitle:""],                                tas:70,contestPenalties:130,contestPosition:2,aircraft:[registration:"D-EAAB",type:"",colour:""]],
-       [name:"Besatzung 13",mark:"Besatzung 13 (13)",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, contestPosition:1,aircraft:[registration:"D-EAAC",type:"",colour:""]],
+    List test2Crew() {
+      [[name:"Besatzung 3", mark:"Besatzung 3 (3)",  team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:55, classPosition:2,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
+       [name:"Besatzung 18",mark:"Besatzung 18 (18)",team:[name:"Deutschland"],resultclass:[name:"Tourist",   contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
+       [name:"Besatzung 19",mark:"Besatzung 19 (19)",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+       [name:"Besatzung 11",mark:"Besatzung 11 (11)",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
+       [name:"Besatzung 13",mark:"Besatzung 13 (13)",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
       ]
     }
-    List test5ResultClass() {
+    List test2ResultClass() {
       [[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],
        [name:"Tourist",contestTitle:""],
        [name:"Observer",contestTitle:""],
       ]
     }
-    List test5Team() {
+    List test2Team() {
       [[name:"Deutschland",contestPenalties:175,contestPosition:1],
        [name:"Schweiz",    contestPenalties:175,contestPosition:1],
        [name:'Polen',      contestPenalties:0,  contestPosition:0],
-      ]    }
-    List test5TaskClass() {
+      ]    
+	}
+    List test2TaskClass() {
       [[resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],planningTestRun:true,flightTestRun:true,observationTestRun:false,landingTestRun:false,specialTestRun:false,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
        [resultclass:[name:"Tourist",contestTitle:""],planningTestRun:false,flightTestRun:false,observationTestRun:true,landingTestRun:true,specialTestRun:true,planningTestDistanceMeasure:true,planningTestDirectionMeasure:false],
        [resultclass:[name:"Observer",contestTitle:""],planningTestRun:true,flightTestRun:true,observationTestRun:true,landingTestRun:true,specialTestRun:false,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
       ]
     }
-    List test5TestLegPlanning18() {
+    List test2TestLegPlanning18() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:98.4400045050,planGroundSpeed:63.8224392169,planLegTime:0.2538292205,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:89.0,resultTestDistance:0,resultTrueHeading:98,resultGroundSpeed:0,resultLegTime:0.2530555556,
@@ -2525,7 +2826,7 @@ class ContestController {
        ],
       ]
     }
-    List test5TestLegPlanning11() {
+    List test2TestLegPlanning11() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:99.8037402076,planGroundSpeed:53.6650595563,planLegTime:0.3018723940,
         planProcedureTurn:false,planProcedureTurnDuration:0,
         resultTrueTrack:89.0,resultTestDistance:0,resultTrueHeading:99,resultGroundSpeed:0,resultLegTime:0.3,
@@ -2564,7 +2865,7 @@ class ContestController {
        ],
       ]
     }
-    List test5Test() {
+    List test2Test() {
       [[crew:[name:"Besatzung 3"],viewpos:0,taskTAS:85,
         flighttestwind:[wind:[direction:300,speed:15]],
         timeCalculated:true,
@@ -2678,37 +2979,37 @@ class ContestController {
       ]
     }
     
-    void run_test5(String contestName)
+    void run_test2(String contestName)
     {
         if (session?.lastContest && session.lastContest.title == contestName) {
             fcService.printstart "runtest '$session.lastContest.title'"
             Map ret = fcService.testData(
-               [[name:"Route",count:1,table:Route.findAllByContest(session.lastContest),data:test4Route()],
-                [name:"CoordRoute",count:14,table:CoordRoute.findAllByRoute(Route.findByContest(session.lastContest)),data:test4CoordRoute()],
-                [name:"RouteLegCoord",count:13,table:RouteLegCoord.findAllByRoute(Route.findByContest(session.lastContest)),data:test4RouteLegCoord()],
-                [name:"RouteLegTest",count:6,table:RouteLegTest.findAllByRoute(Route.findByContest(session.lastContest)),data:test4RouteLegTest()],
-                [name:"Crew",count:5,table:Crew.findAllByContest(session.lastContest),data:test5Crew()],
-                [name:"Aircraft",count:5,table:Aircraft.findAllByContest(session.lastContest),data:test4Aircraft()],
-                [name:"ResultClass",count:3,table:ResultClass.findAllByContest(session.lastContest),data:test5ResultClass()],
-                [name:"Team",count:3,table:Team.findAllByContest(session.lastContest),data:test5Team()],
-                [name:"Task",count:1,table:Task.findAllByContest(session.lastContest),data:test4Task()],
-                [name:"TaskClass",count:3,table:TaskClass.findAllByTask(Task.findByContest(session.lastContest)),data:test5TaskClass()],
-                [name:"TestLegPlanning 'Besatzung 3'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3"))),data:test4TestLegPlanning3()],
-                [name:"TestLegPlanning 'Besatzung 18'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18"))),data:test5TestLegPlanning18()],
-                [name:"TestLegPlanning 'Besatzung 19'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19"))),data:test4TestLegPlanning19()],
-                [name:"TestLegPlanning 'Besatzung 11'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11"))),data:test5TestLegPlanning11()],
-                [name:"TestLegPlanning 'Besatzung 13'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13"))),data:test4TestLegPlanning13()],
-                [name:"TestLegFlight 'Besatzung 3'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3"))),data:test4TestLegFlight3()],
-                [name:"TestLegFlight 'Besatzung 18'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18"))),data:test4TestLegFlight18()],
-                [name:"TestLegFlight 'Besatzung 19'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19"))),data:test4TestLegFlight19()],
-                [name:"TestLegFlight 'Besatzung 11'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11"))),data:test4TestLegFlight11()],
-                [name:"TestLegFlight 'Besatzung 13'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13"))),data:test4TestLegFlight13()],
-                [name:"CoordResult 'Besatzung 3'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3"))),data:test4CoordResult3()],    
-                [name:"CoordResult 'Besatzung 18'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18"))),data:test4CoordResult18()],    
-                [name:"CoordResult 'Besatzung 19'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19"))),data:test4CoordResult19()],    
-                [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11"))),data:test4CoordResult11()],    
-                [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13"))),data:test4CoordResult13()],    
-                [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(session.lastContest)),data:test5Test()],
+               [[name:"Route",count:1,table:Route.findAllByContest(session.lastContest,[sort:"id"]),data:test1Route()],
+                [name:"CoordRoute",count:14,table:CoordRoute.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1CoordRoute()],
+                [name:"RouteLegCoord",count:13,table:RouteLegCoord.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1RouteLegCoord()],
+                [name:"RouteLegTest",count:6,table:RouteLegTest.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1RouteLegTest()],
+                [name:"Crew",count:5,table:Crew.findAllByContest(session.lastContest,[sort:"id"]),data:test2Crew()],
+                [name:"Aircraft",count:5,table:Aircraft.findAllByContest(session.lastContest,[sort:"id"]),data:test1Aircraft()],
+                [name:"ResultClass",count:3,table:ResultClass.findAllByContest(session.lastContest,[sort:"id"]),data:test2ResultClass()],
+                [name:"Team",count:3,table:Team.findAllByContest(session.lastContest,[sort:"id"]),data:test2Team()],
+                [name:"Task",count:1,table:Task.findAllByContest(session.lastContest,[sort:"id"]),data:test1Task()],
+                [name:"TaskClass",count:3,table:TaskClass.findAllByTask(Task.findByContest(session.lastContest),[sort:"id"]),data:test2TaskClass()],
+                [name:"TestLegPlanning 'Besatzung 3'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1TestLegPlanning3()],
+                [name:"TestLegPlanning 'Besatzung 18'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test2TestLegPlanning18()],
+                [name:"TestLegPlanning 'Besatzung 19'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegPlanning19()],
+                [name:"TestLegPlanning 'Besatzung 11'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test2TestLegPlanning11()],
+                [name:"TestLegPlanning 'Besatzung 13'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegPlanning13()],
+                [name:"TestLegFlight 'Besatzung 3'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1TestLegFlight3()],
+                [name:"TestLegFlight 'Besatzung 18'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1TestLegFlight18()],
+                [name:"TestLegFlight 'Besatzung 19'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegFlight19()],
+                [name:"TestLegFlight 'Besatzung 11'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1TestLegFlight11()],
+                [name:"TestLegFlight 'Besatzung 13'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegFlight13()],
+                [name:"CoordResult 'Besatzung 3'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1CoordResult3()],    
+                [name:"CoordResult 'Besatzung 18'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1CoordResult18()],    
+                [name:"CoordResult 'Besatzung 19'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1CoordResult19()],    
+                [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
+                [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
+                [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(session.lastContest),[sort:"id"]),data:test2Test()],
                 ]
             )
             fcService.printdone "Test '$session.lastContest.title'"
@@ -2720,6 +3021,64 @@ class ContestController {
         }
     }
 
+    void run_test3(String contestName)
+    {
+        if (session?.lastContest && session.lastContest.title == contestName) {
+            fcService.printstart "runtest '$session.lastContest.title'"
+            Map ret = fcService.testData(
+               [[name:"Route",count:1,table:Route.findAllByContest(session.lastContest,[sort:"id"]),data:test1Route()],
+                [name:"CoordRoute",count:14,table:CoordRoute.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1CoordRoute()],
+                [name:"RouteLegCoord",count:13,table:RouteLegCoord.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1RouteLegCoord()],
+                [name:"RouteLegTest",count:6,table:RouteLegTest.findAllByRoute(Route.findByContest(session.lastContest),[sort:"id"]),data:test1RouteLegTest()],
+                [name:"Crew",count:5,table:Crew.findAllByContest(session.lastContest,[sort:"id"]),data:test2Crew()],
+                [name:"Aircraft",count:5,table:Aircraft.findAllByContest(session.lastContest,[sort:"id"]),data:test1Aircraft()],
+                [name:"ResultClass",count:2,table:ResultClass.findAllByContest(session.lastContest,[sort:"id"]),data:test3ResultClass()],
+                [name:"Team",count:2,table:Team.findAllByContest(session.lastContest,[sort:"id"]),data:test3Team()],
+                [name:"Task",count:1,table:Task.findAllByContest(session.lastContest,[sort:"id"]),data:test1Task()],
+                [name:"TaskClass",count:2,table:TaskClass.findAllByTask(Task.findByContest(session.lastContest),[sort:"id"]),data:test3TaskClass()],
+                [name:"TestLegPlanning 'Besatzung 3'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1TestLegPlanning3()],
+                [name:"TestLegPlanning 'Besatzung 18'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test2TestLegPlanning18()],
+                [name:"TestLegPlanning 'Besatzung 19'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegPlanning19()],
+                [name:"TestLegPlanning 'Besatzung 11'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test2TestLegPlanning11()],
+                [name:"TestLegPlanning 'Besatzung 13'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegPlanning13()],
+                [name:"TestLegFlight 'Besatzung 3'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1TestLegFlight3()],
+                [name:"TestLegFlight 'Besatzung 18'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1TestLegFlight18()],
+                [name:"TestLegFlight 'Besatzung 19'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegFlight19()],
+                [name:"TestLegFlight 'Besatzung 11'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1TestLegFlight11()],
+                [name:"TestLegFlight 'Besatzung 13'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegFlight13()],
+                [name:"CoordResult 'Besatzung 3'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1CoordResult3()],    
+                [name:"CoordResult 'Besatzung 18'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1CoordResult18()],    
+                [name:"CoordResult 'Besatzung 19'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1CoordResult19()],    
+                [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
+                [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
+                [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(session.lastContest),[sort:"id"]),data:test2Test()],
+                ]
+            )
+            fcService.printdone "Test '$session.lastContest.title'"
+            flash.error = ret.error
+            flash.message = ret.msgtext
+        } else {
+            flash.error = true
+            flash.message = "No test found."
+        }
+    }
+
+    List test3Team() {
+      [[name:"Deutschland",contestPenalties:175,contestPosition:1],
+       [name:"Schweiz",    contestPenalties:175,contestPosition:1],
+      ]    
+	}
+    List test3TaskClass() {
+      [[resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],planningTestRun:true,flightTestRun:true,observationTestRun:false,landingTestRun:false,specialTestRun:false,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true],
+       [resultclass:[name:"Tourist",contestTitle:""],planningTestRun:false,flightTestRun:false,observationTestRun:true,landingTestRun:true,specialTestRun:true,planningTestDistanceMeasure:true,planningTestDirectionMeasure:false],
+      ]
+    }
+	List test3ResultClass() {
+		[[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],
+		 [name:"Tourist",contestTitle:""],
+		]
+    }
+  
     def createtestquestion = {
             return []
     }
@@ -2727,23 +3086,26 @@ class ContestController {
     def createtest = {
 		int contest_id = 0
 		switch (params.demoContest) {
-			case '2': 
-		        contest_id = create_test2("Demo Wettbewerb (100 Besatzungen)", false)
+			case '1': 
+		        contest_id = create_test1("Demo Wettbewerb 2012", true)
 				break
-			case '3': 
-		        contest_id = create_test3("Demo Wettbewerb (20 Besatzungen)", false)
+			case '2':
+				contest_id = create_test2("Demo Wettbewerb 2012 (mit Klassen)", true)
 				break
-			case '4': 
-		        contest_id = create_test4("Demo Wettbewerb 2012", true)
+			case '3':
+				contest_id = create_test3("Demo Wettbewerb 2012 (kombinierter Wettbewerb)", false)
 				break
-			case '5': 
-		        contest_id = create_test5("Demo Wettbewerb 2012 (mit Klassen)", true)
+			case '11':
+				contest_id = create_test11("Demo Wettbewerb Auswertung ohne Klassen", false)
 				break
-			case '6': 
-		        contest_id = create_test6("Demo Wettbewerb Auswertung ohne Klassen", false)
+			case '12':
+				contest_id = create_test12("Demo Wettbewerb Auswertung mit Klassen", false)
 				break
-			case '7': 
-		        contest_id = create_test7("Demo Wettbewerb Auswertung mit Klassen", false)
+			case '13': 
+		        contest_id = create_test13("Demo Wettbewerb (100 Besatzungen)", false)
+				break
+			case '14': 
+		        contest_id = create_test14("Demo Wettbewerb (20 Besatzungen)", false)
 				break
 		}
         
@@ -2753,11 +3115,14 @@ class ContestController {
     def runtest = {
         switch (session.lastContest.title) {
             case "Demo Wettbewerb 2012":
-                run_test4 "Demo Wettbewerb 2012"
+                run_test1 "Demo Wettbewerb 2012"
                 break
             case "Demo Wettbewerb 2012 (mit Klassen)":
-                run_test5 "Demo Wettbewerb 2012 (mit Klassen)"
+                run_test2 "Demo Wettbewerb 2012 (mit Klassen)"
                 break
+			case "Demo Wettbewerb 2012 (kombinierter Wettbewerb)":
+				run_test3 "Demo Wettbewerb 2012 (kombinierter Wettbewerb)"
+				break
         }
         redirect(controller:'contest',action:start)
     }

@@ -141,6 +141,7 @@ class Test
 	static mapping = {
 		testlegplannings sort:"id"
 		testlegflights sort:"id"
+		coordresults sort:"id"
 	}
 	
 	void ResetPlanningTestResults()
@@ -264,6 +265,8 @@ class Test
 		crew.specialPenalties = 0
 		crew.contestPenalties = 0
 		crew.contestPosition = 0
+		crew.noContestPosition = false
+		crew.classPosition = 0
 		crew.teamPenalties = 0
 		if (crew.team) {
 			crew.team.contestPenalties = 0

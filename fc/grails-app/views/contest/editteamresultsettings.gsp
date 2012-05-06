@@ -11,12 +11,12 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.contest.teamresultsettings')}</h2>
                 <div class="block" id="forms">
-                    <g:form params="${['editteamresultsettingsReturnAction':editteamresultsettingsReturnAction,'editteamresultsettingsReturnController':editteamresultsettingsReturnController,'editteamresultsettingsReturnID':editteamresultsettingsReturnID]}">
+                    <g:form params="${['resultfilter':resultfilter,'editteamresultsettingsReturnAction':editteamresultsettingsReturnAction,'editteamresultsettingsReturnController':editteamresultsettingsReturnController,'editteamresultsettingsReturnID':editteamresultsettingsReturnID]}">
                        	<g:set var="resultclass_contesttitles" value="${false}"/>
                         <g:if test="${contestInstance.resultClasses}">
 	                        <fieldset>
 	                        	<p>
-		                        	<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance)}">
+		                        	<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance,[sort:"id"])}">
 		                        		<g:set var="resultclass_selected" value="${false}"/>
 		                        		<g:each var="team_class_result" in="${contestInstance.teamClassResults.split(',')}">
 			                        		<g:if test="${team_class_result == 'resultclass_' + resultclass_instance.id.toString()}">
@@ -34,6 +34,22 @@
 	    	                    </p>
                         	</fieldset>
                         </g:if>
+                        <fieldset>
+                            <p>
+                                <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"id"])}">
+                                    <g:set var="task_selected" value="${false}"/>
+                                    <g:each var="contest_task_result" in="${contestInstance.teamTaskResults.split(',')}">
+                                        <g:if test="${contest_task_result == 'task_' + task_instance.id.toString()}">
+                                            <g:set var="task_selected" value="${true}"/>
+                                        </g:if>
+                                    </g:each>
+                                    <div>
+                                        <g:checkBox name="task_${task_instance.id}" value="${task_selected}" />
+                                        <label>${task_instance.name()}</label>
+                                    </div>
+                                </g:each>
+                            </p>
+                        </fieldset>
                         <fieldset>
                             <p>
                             	<g:if test="${contestInstance.IsPlanningTestRun()}">
@@ -76,7 +92,7 @@
 		                        	<g:set var="print_title_labels" value="${[contestInstance.title]}"/>
 		                        	<g:set var="print_title_values" value="${[1]}"/>
 		                        	<g:set var="i" value="${new Integer(1)}"/>
-		                        	<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance)}">
+		                        	<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance,[sort:"id"])}">
 		                        		<g:if test="${resultclass_instance.contestTitle}">
 		                        			<g:set var="i" value="${i+1}"/>
 				                        	<g:set var="print_title_labels" value="${print_title_labels += resultclass_instance.name + ': ' + resultclass_instance.contestTitle}"/>
@@ -101,6 +117,10 @@
                                 <br/>
                                 <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="1"/>
                             </p>
+                            <div>
+                                <g:checkBox name="teamPrintLandscape" value="${contestInstance.teamPrintLandscape}" />
+                                <label>${message(code:'fc.printlandscape')}</label>
+                            </div>
                        	</fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>

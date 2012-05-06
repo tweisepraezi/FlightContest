@@ -19,7 +19,7 @@
                     <g:form>
                         <table width="100%" border="1" cellspacing="0" cellpadding="2">
                             <tbody>
-                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}" status="j" >
+                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}" status="j" >
                                     <tr>
                                         <g:if test="${j==0}">
                                             <td width="25%">${message(code:'fc.coordroute.list')}</td>
@@ -37,7 +37,7 @@
                        	<div style="page-break-inside:avoid">
 	                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
 	                            <tbody>
-	                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}" status="j" >
+	                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}" status="j" >
 	                                    <tr>
 	                                        <g:if test="${j==0}">
 	                                            <td width="25%">${message(code:'fc.routelegcoord.list')}</td>
@@ -56,7 +56,7 @@
                        	<div style="page-break-inside:avoid">
 	                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
 	                            <tbody>
-	                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance)}" status="j" >
+	                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}" status="j" >
 	                                    <tr>
 	                                        <g:if test="${j==0}">
 	                                            <td width="25%">${message(code:'fc.routelegtest.list')}</td>

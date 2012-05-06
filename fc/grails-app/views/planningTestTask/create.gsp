@@ -32,7 +32,7 @@
                                 <label>${message(code:'fc.route')}*:</label>
                                 <br/>
                                 <g:if test="${contestInstance}">
-                                    <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance)}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
+                                    <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance,[sort:"id"])}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
                                 </g:if>
                             </p>
                         </fieldset>

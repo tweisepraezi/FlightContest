@@ -24,7 +24,7 @@ class Team
 	boolean IsActiveTeam()
 	{
 		int crew_num = 0
-		for (Crew crew_instance in Crew.findAllByTeamAndDisabled(this,false)) {
+		for (Crew crew_instance in Crew.findAllByTeamAndDisabled(this,false,[sort:"id"])) {
 			if (contest.resultClasses) {
 				if (crew_instance.resultclass) {
 					for(String team_class_result in crew_instance.contest.teamClassResults.split(',')) {

@@ -50,7 +50,7 @@ class CoordResultController
 			CoordResult coordresult_nextinstance = null
 			CoordResult coordresult_nextinstance2 = null
 			int leg_no = 0
-			for ( CoordResult coordresult_instance in CoordResult.findAllByTest(coordresult.instance.test) ) {
+			for ( CoordResult coordresult_instance in CoordResult.findAllByTest(coordresult.instance.test,[sort:"id"]) ) {
 				if (!coordresult_nextinstance) {
 					if (coordresult_instance.planProcedureTurn) {
 						leg_no++

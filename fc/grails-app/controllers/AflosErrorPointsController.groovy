@@ -26,15 +26,15 @@ class AflosErrorPointsController {
 			if (session.lastContest.aflosTest) {
 				fcService.println "List AFLOS errorpoints of startnum $params.startnum and route '$params.routename' (aflostest)"
 		        AflosRouteNames aflosroutenames_instance = AflosRouteNames.aflostest.findByName(params.routename) 
-				return [contestInstance:session.lastContest, aflosErrorPointsInstanceList: AflosErrorPoints.aflostest.findAllByStartnumAndRoutename(params.startnum,aflosroutenames_instance)]
+				return [contestInstance:session.lastContest, aflosErrorPointsInstanceList: AflosErrorPoints.aflostest.findAllByStartnumAndRoutename(params.startnum,aflosroutenames_instance,[sort:"id"])]
 			} else if (session.lastContest.aflosUpload) {
 				fcService.println "List AFLOS errorpoints of startnum $params.startnum and route '$params.routename' (aflosupload)"
 		        AflosRouteNames aflosroutenames_instance = AflosRouteNames.aflosupload.findByName(params.routename) 
-				return [contestInstance:session.lastContest, aflosErrorPointsInstanceList: AflosErrorPoints.aflosupload.findAllByStartnumAndRoutename(params.startnum,aflosroutenames_instance)]
+				return [contestInstance:session.lastContest, aflosErrorPointsInstanceList: AflosErrorPoints.aflosupload.findAllByStartnumAndRoutename(params.startnum,aflosroutenames_instance,[sort:"id"])]
 			}
 		}
 		fcService.println "List AFLOS errorpoints of startnum $params.startnum and route '$params.routename' (aflos)"
         AflosRouteNames aflosroutenames_instance = AflosRouteNames.aflos.findByName(params.routename) 
-		return [aflosErrorPointsInstanceList: AflosErrorPoints.aflos.findAllByStartnumAndRoutename(params.startnum,aflosroutenames_instance)]
+		return [aflosErrorPointsInstanceList: AflosErrorPoints.aflos.findAllByStartnumAndRoutename(params.startnum,aflosroutenames_instance,[sort:"id"])]
 	}
 }

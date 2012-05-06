@@ -41,7 +41,7 @@
                             </p>
                         </fieldset>
                         <g:if test="${contestInstance.resultClasses}">
-                    		<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance)}" status="i">
+                    		<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance,[sort:"id"])}" status="i">
 		                        <fieldset>
 		                            <legend>${resultclass_instance.name}</legend>
 		                            <p>

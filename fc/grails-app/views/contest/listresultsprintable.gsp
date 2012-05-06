@@ -2,7 +2,12 @@
     <head>
 		<style type="text/css">
 			@page {
-			    size: A4 landscape; 
+			    <g:if test="${contestInstance.contestPrintLandscape}">
+			        size: A4 landscape;
+			    </g:if>
+			    <g:else>
+			        size: A4;
+			    </g:else> 
                 @top-center {
                     content: "${message(code:'fc.contest.listresults')} - ${message(code:'fc.program.printpage')} " counter(page)
                 }
@@ -18,7 +23,7 @@
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.contest.listresults')}<g:if test="${contestInstance.AreResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${message(code:'fc.contest.listresults')}<g:if test="${contestInstance.AreResultsProvisional(contestInstance.GetResultSettings(),contestInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <h3>${contestInstance.GetResultTitle(contestInstance.GetResultSettings(),true)}</h3>
                 <div class="block" id="forms" >
                     <g:form>
@@ -30,24 +35,34 @@
                                    	<th>${message(code:'fc.crew')}</th>
                                    	<th>${message(code:'fc.aircraft')}</th>
                                    	<th>${message(code:'fc.team')}</th>
-                                   	<g:each var="task_instance" in="${Task.findAllByContest(contestInstance)}">
-                                    	<th>${task_instance.name()}</th>
-	                                </g:each>
+                                   	<g:if test="${contestInstance.contestPrintTaskDetails}">
+	                                   	<g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
+	                                    	<th>${task_instance.name()}</th>
+		                                </g:each>
+	                                </g:if>
                                    	<th>${message(code:'fc.test.results.summary.short')}</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="crew_instance" in="${Crew.findAllByContestAndDisabled(contestInstance,false,[sort:'contestPosition'])}">
+                                <g:each var="crew_instance" in="${Crew.findAllByContestAndDisabledAndNoContestPosition(contestInstance,false,false,[sort:'contestPosition'])}">
                                     <tr class="even">
                                         <td>${crew_instance.contestPosition}</td>
                                         <td>${crew_instance.name}</td>
                                         <td>${crew_instance.aircraft.registration}</td>
                                         <td>${crew_instance.team.name}</td>
                                         <g:set var="test_provisional" value="${false}"/>
-                                        <g:each var="task_instance" in="${Task.findAllByContest(contestInstance)}">
-                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
-                                        	<td>${test_instance.GetResultPenalties(contestInstance.GetResultSettings())}<g:if test="${test_instance.AreResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
-		                                </g:each>
+	                                    <g:if test="${contestInstance.contestPrintTaskDetails}">
+	                                        <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
+	                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
+	                                        	<td>${test_instance.GetResultPenalties(contestInstance.GetResultSettings())}<g:if test="${test_instance.AreResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
+			                                </g:each>
+                                        </g:if>
+                                        <g:else>
+                                            <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
+                                                <g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
+                                                <g:if test="${test_instance.AreResultsProvisional(contestInstance.GetResultSettings())}"><g:set var="test_provisional" value="${true}"/></g:if>
+                                            </g:each>
+                                        </g:else>
                                         <td>${crew_instance.contestPenalties}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
                                     </tr>
                                 </g:each>

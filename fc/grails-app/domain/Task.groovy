@@ -125,7 +125,7 @@ class Task
 		this.save()
 		
 		// taskclasses:TaskClass
-		TaskClass.findAllByTask(taskInstance).each { TaskClass taskclass_instance ->
+		TaskClass.findAllByTask(taskInstance,[sort:"id"]).each { TaskClass taskclass_instance ->
 			TaskClass new_taskclass_instance = new TaskClass()
 			new_taskclass_instance.task = this
 			new_taskclass_instance.resultclass = ResultClass.findByNameAndContest(taskclass_instance.resultclass.name,contest)
@@ -161,9 +161,9 @@ class Task
 	boolean IsPlanningTestRun()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -182,9 +182,9 @@ class Task
 	boolean IsFlightTestRun()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -203,9 +203,9 @@ class Task
 	boolean IsObservationTestRun()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -224,9 +224,9 @@ class Task
 	boolean IsLandingTestRun()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -245,9 +245,9 @@ class Task
 	boolean IsLandingTestAnyRun()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -266,9 +266,9 @@ class Task
 	boolean IsLandingTest1Run()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -287,9 +287,9 @@ class Task
 	boolean IsLandingTest2Run()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -308,9 +308,9 @@ class Task
 	boolean IsLandingTest3Run()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -329,9 +329,9 @@ class Task
 	boolean IsLandingTest4Run()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -350,9 +350,9 @@ class Task
 	boolean IsSpecialTestRun()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -371,9 +371,9 @@ class Task
 	boolean IsPlanningTestDistanceMeasure()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -392,9 +392,9 @@ class Task
 	boolean IsPlanningTestDirectionMeasure()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this)) {
+			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 						
 						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
 						{
@@ -413,7 +413,7 @@ class Task
 	boolean AreResultsProvisional(Map resultSettings)
 	{
 		//println "XX Task.AreResultsProvisional $title $resultSettings"
-		for (Test test_instance in Test.findAllByTask(this)) {
+		for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 			if (test_instance.AreResultsProvisional(resultSettings)) {
 				//println "-> true (Task.AreResultsProvisional $title $test_instance.crew.name)"
 				return true
@@ -426,7 +426,7 @@ class Task
 	boolean AreClassResultsProvisional(Map resultSettings, ResultClass resultclassInstance)
 	{
 		//println "XX Task.AreClassResultsProvisional $title $resultclassInstance.name $resultSettings"
-		for (Test test_instance in Test.findAllByTask(this)) {
+		for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
 			if (test_instance.crew.resultclass == resultclassInstance) {
 				if (test_instance.AreClassResultsProvisional(resultSettings,resultclassInstance)) {
 					//println "-> true (Task.AreClassResultsProvisional $title $test_instance.crew.name)"
@@ -462,7 +462,7 @@ class Task
 	Map GetClassResultSettings(ResultClass resultclassInstance)
 	{
 		Map ret = [:]
-		for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+		for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 			if (taskclass_instance.resultclass == resultclassInstance) {
 				if (taskclass_instance.planningTestRun) {
 					ret += [Planning:true]
@@ -533,7 +533,7 @@ class Task
 	
 	TaskClass GetTaskClass(ResultClass resultClass)
 	{
-		for (TaskClass taskclass_instance in TaskClass.findAllByTask(this)) {
+		for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 			
 			if (resultClass == taskclass_instance.resultclass)
 			{

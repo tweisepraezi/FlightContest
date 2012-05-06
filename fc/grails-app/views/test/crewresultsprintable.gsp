@@ -130,7 +130,7 @@
 		                                    <g:set var="penaltyTrueHeadingSummary" value="${new Integer(0)}" />
 		                                    <g:set var="penaltyLegTimeSummary" value="${new Integer(0)}" />
 		                                    <g:set var="legNo" value="${new Integer(0)}" />
-		                                    <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance)}">
+		                                    <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
 		                                        <g:if test="${lastTestLegPlanningInstance}">
 		                                            <g:set var="penaltyTrueHeadingSummary" value="${penaltyTrueHeadingSummary + lastTestLegPlanningInstance.penaltyTrueHeading}" />
 		                                            <g:set var="penaltyLegTimeSummary" value="${penaltyLegTimeSummary + lastTestLegPlanningInstance.penaltyLegTime}" />
@@ -242,7 +242,7 @@
 		                                    <g:set var="penaltyProcedureTurnSummary" value="${new Integer(0)}" />
 		                                    <g:set var="penaltyBadCourseSummary" value="${new Integer(0)}" />
 		                                    <g:set var="penaltyAltitudeSummary" value="${new Integer(0)}" />
-		                                    <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance)}">
+		                                    <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance,[sort:"id"])}">
 		                                        <g:if test="${lastCoordResultInstance}">
 		                                            <g:set var="penaltyCoordSummary" value="${penaltyCoordSummary + lastCoordResultInstance.penaltyCoord}" />
 		                                            <tr>

@@ -124,7 +124,7 @@
                                     <g:set var="legNum" value="${TestLegFlight.countByTest(testInstance)}" />
                                     <g:set var="tptime" value="${testInstance.startTime}" />
                                     <g:set var="totalDistance" value="${new BigDecimal(0)}" />
-                                    <g:each var="testLegFlightInstance" in="${TestLegFlight.findAllByTest(testInstance)}">
+                                    <g:each var="testLegFlightInstance" in="${TestLegFlight.findAllByTest(testInstance,[sort:"id"])}">
                                         <g:set var="legNo" value="${legNo+1}" />
                                         <g:set var="tptime" value="${testLegFlightInstance.AddPlanLegTime(tptime)}" />
                                         <g:set var="totalDistance" value="${FcMath.AddDistance(totalDistance,testLegFlightInstance.planTestDistance)}" />

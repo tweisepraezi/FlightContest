@@ -79,7 +79,7 @@
                                     <g:set var="penaltyProcedureTurnSummary" value="${new Integer(0)}" />
                                     <g:set var="penaltyBadCourseSummary" value="${new Integer(0)}" />
                                     <g:set var="penaltyAltitudeSummary" value="${new Integer(0)}" />
-                                    <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance)}">
+                                    <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance,[sort:"id"])}">
                                         <g:if test="${lastCoordResultInstance}">
                                             <g:set var="penaltyCoordSummary" value="${penaltyCoordSummary + lastCoordResultInstance.penaltyCoord}" />
                                             <tr>

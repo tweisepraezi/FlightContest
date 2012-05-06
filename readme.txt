@@ -6,7 +6,7 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-12.03.2012
+06.05.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -14,14 +14,28 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Fehlerbehebungen in dieser Version (1.0.1):
--------------------------------------------
+Erweiterungen in dieser Version (1.1.0):
+----------------------------------------
+- Unterstützung kombinierter Wettbewerbe
+  * Wettbewerbs-Auswertung auch für klassenbasierte Wettbewerbe,
+    wo nach Klassen gefiltert werden kann, eingeführt.
+  * In der Wettbewerbs-Auswertung kann zusätzlich nach Aufgaben
+    gefiltert werden.
+  * Teilen Sie die Teilnehmer derart in Klassen auf,
+    dass je Wettbewerb entsprechende Aufgaben und Klassen als
+    Filter anwendbar sind. Sie benötigen jeweils eine Klasse für
+    - Teilnehmer, die nur an einem Wettbewerb teilnehmen
+    - Teilnehmer, die an mehreren Wettbewerben teilnehmen.
+- Zeitplan-Berechnung auch bei unvollständiger Planung
+  (kein Flugwind zugewiesen) möglich.
+
+Fehlerbehebungen in Version 1.0.1:
+----------------------------------
 - Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012
   Gegenüber der Ausgabe 2008 gab es keine Veränderungen in den 
   Punkten.
 - Beschreibung zur Behebung von Server-Ausführungsproblemen 
   nach Update-Installation hinzugefügt (siehe unten).
-
 
 Erweiterungen in Version 1.0:
 -----------------------------

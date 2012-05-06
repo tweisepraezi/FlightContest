@@ -40,7 +40,7 @@
                             </p>
                         </fieldset>
                     	<g:if test="${taskInstance.contest.resultClasses}">
-                    		<g:each var="taskclass_instance" in="${TaskClass.findAllByTask(taskInstance)}" status="i">
+                    		<g:each var="taskclass_instance" in="${TaskClass.findAllByTask(taskInstance,[sort:"id"])}" status="i">
 		                        <fieldset>
 		                            <legend>${taskclass_instance.resultclass.name}</legend>
 		                            <p>

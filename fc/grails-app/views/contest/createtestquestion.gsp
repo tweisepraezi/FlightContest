@@ -17,11 +17,12 @@
                                 <g:set var="print_title_labels" value="${[]}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb 2012']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb 2012 (mit Klassen)']}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb 2012 (kombinierter Wettbewerb)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb Auswertung ohne Klassen']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb Auswertung mit Klassen']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (100 Besatzungen)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (20 Besatzungen)']}"/>
-	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[4,5,6,7,2,3]" value="4">
+	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[1,2,3,11,12,13,14]" value="1">
 	                                <div>
 	                                    <label>${it.radio} ${it.label}</label>
 	                                </div>

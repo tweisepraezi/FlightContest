@@ -152,6 +152,8 @@ class FcService
     //--------------------------------------------------------------------------
     Map updateContest(Map params)
     {
+		printstart "updateContest $params.resultfilter"
+		
         Contest contest_instance = Contest.get(params.id)
         
         if (contest_instance) {
@@ -173,23 +175,59 @@ class FcService
 			boolean team_landing_results = contest_instance.teamLandingResults
 			boolean team_special_results = contest_instance.teamSpecialResults
 			String team_class_results = contest_instance.teamClassResults
+			String team_task_results = contest_instance.teamTaskResults
 			
 			boolean contest_planning_results = contest_instance.contestPlanningResults
 			boolean contest_flight_results = contest_instance.contestFlightResults
 			boolean contest_observation_results = contest_instance.contestObservationResults
 			boolean contest_landing_results = contest_instance.contestLandingResults
 			boolean contest_special_results = contest_instance.contestSpecialResults
-
+			String contest_class_results = contest_instance.contestClassResults
+			String contest_task_results = contest_instance.contestTaskResults
+			
             contest_instance.properties = params
 			
-			contest_instance.teamClassResults = ""
-			for (ResultClass resultclass_instance in contest_instance.resultclasses) {
-				if (params["resultclass_${resultclass_instance.id}"] == "on") {
-					if (contest_instance.teamClassResults) {
-						contest_instance.teamClassResults += ","
+			switch (params.resultfilter) {
+				case ResultFilter.Contest.toString():
+					contest_instance.contestClassResults = ""
+					for (ResultClass resultclass_instance in contest_instance.resultclasses) {
+						if (params["resultclass_${resultclass_instance.id}"] == "on") {
+							if (contest_instance.contestClassResults) {
+								contest_instance.contestClassResults += ","
+							}
+							contest_instance.contestClassResults += "resultclass_${resultclass_instance.id}"
+						}
 					}
-					contest_instance.teamClassResults += "resultclass_${resultclass_instance.id}"
-				}
+					contest_instance.contestTaskResults = ""
+					for (Task task_instance in contest_instance.tasks) {
+						if (params["task_${task_instance.id}"] == "on") {
+							if (contest_instance.contestTaskResults) {
+								contest_instance.contestTaskResults += ","
+							}
+							contest_instance.contestTaskResults += "task_${task_instance.id}"
+						}
+					}
+					break
+				case ResultFilter.Team.toString():
+					contest_instance.teamClassResults = ""
+					for (ResultClass resultclass_instance in contest_instance.resultclasses) {
+						if (params["resultclass_${resultclass_instance.id}"] == "on") {
+							if (contest_instance.teamClassResults) {
+								contest_instance.teamClassResults += ","
+							}
+							contest_instance.teamClassResults += "resultclass_${resultclass_instance.id}"
+						}
+					}
+					contest_instance.teamTaskResults = ""
+					for (Task task_instance in contest_instance.tasks) {
+						if (params["task_${task_instance.id}"] == "on") {
+							if (contest_instance.teamTaskResults) {
+								contest_instance.teamTaskResults += ","
+							}
+							contest_instance.teamTaskResults += "task_${task_instance.id}"
+						}
+					}
+					break
 			}
 			
 			boolean modify_contest_rule = contest_instance.contestRule != contest_rule
@@ -200,20 +238,25 @@ class FcService
 			 							  (contest_instance.teamObservationResults != team_observation_results) ||
 										  (contest_instance.teamLandingResults != team_landing_results) ||
 										  (contest_instance.teamSpecialResults != team_special_results) ||
-										  (contest_instance.teamClassResults != team_class_results)
+										  (contest_instance.teamClassResults != team_class_results) ||
+										  (contest_instance.teamTaskResults != team_task_results)
 										  
 			boolean modify_contest_results = (contest_instance.contestPlanningResults != contest_planning_results) ||
 			                                 (contest_instance.contestFlightResults != contest_flight_results) ||
 			 							     (contest_instance.contestObservationResults != contest_observation_results) ||
 										     (contest_instance.contestLandingResults != contest_landing_results) ||
-										     (contest_instance.contestSpecialResults != contest_special_results)
-										  
+										     (contest_instance.contestSpecialResults != contest_special_results) ||
+										     (contest_instance.contestClassResults != contest_class_results) ||
+											 (contest_instance.contestTaskResults != contest_task_results)
+											 
 			if (modify_contest_rule) {
+				println "Contest rule modfified."
 				setContestRule(contest_instance, contest_instance.contestRule)
 			}
 			
 			if (modify_team_results) {
-				for (Team team_instance in Team.findAllByContest(contest_instance)) {
+				println "Team results modfified."
+				for (Team team_instance in Team.findAllByContest(contest_instance,[sort:"id"])) {
 					team_instance.contestPenalties = 0
 					team_instance.contestPosition = 0
 					team_instance.save()
@@ -221,19 +264,24 @@ class FcService
 			}
 			
 			if (modify_contest_results) {
-				for (Crew crew_instance in Crew.findAllByContest(contest_instance)) {
+				println "Contest results modfified."
+				for (Crew crew_instance in Crew.findAllByContest(contest_instance,[sort:"id"])) {
 					crew_instance.contestPenalties = 0
 					crew_instance.contestPosition = 0
+					crew_instance.noContestPosition = false
 					crew_instance.save()
 				}
 			}
 
             if(!contest_instance.hasErrors() && contest_instance.save()) {
+				printdone ""
                 return ['instance':contest_instance,'saved':true,'message':getMsg('fc.updated',["${contest_instance.title}"])]
             } else {
+				printerror ""
                 return ['instance':contest_instance]
             }
         } else {
+			printerror ""
             return ['message':getMsg('fc.notfound',[getMsg('fc.contest'),params.id])]
         }
     }
@@ -245,8 +293,8 @@ class FcService
         if (contest_instance) {
             
 			// Alle Berechungen erneut ausführen
-			Task.findAllByContest(contest_instance).each { Task task_instance ->
-		        Test.findAllByTask(task_instance).each { Test test_instance ->
+			Task.findAllByContest(contest_instance,[sort:"id"]).each { Task task_instance ->
+		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 					calculateTestPenalties(test_instance,true)
 		            test_instance.save()
 		        }
@@ -406,7 +454,7 @@ class FcService
         
         if (contest_instance) {
             try {
-            	Task.findAllByContest(contest_instance).each { Task task_instance ->
+            	Task.findAllByContest(contest_instance,[sort:"id"]).each { Task task_instance ->
             		task_instance.delete()
             	}
                 contest_instance.delete()
@@ -429,22 +477,64 @@ class FcService
 	}
 
     //--------------------------------------------------------------------------
-    Map calculatepositionsContest(Contest contestInstance)
+    Map calculatecontestpositionsContest(Contest contestInstance, List contestClasses, List contestTasks)
     {
-		printstart "calculatepositionsContest"
+		printstart "calculatecontestpositionsContest"
 		
 		Map contest = [:]
 		
-		calculate_crew_penalties(contestInstance,null,contestInstance.GetResultSettings(),false)
+		if (contestClasses && contestInstance.resultClasses) {
+			println "Set contest result classes with $contestClasses"
+			contestInstance.contestClassResults = ""
+			for (ResultClass resultclass_instance in ResultClass.findAllByContest(contestInstance,[sort:"id"])) {
+				for (Map contest_class in contestClasses) {
+					if (contest_class.instance == resultclass_instance) {
+						if (contestInstance.contestClassResults) {
+							contestInstance.contestClassResults += ","
+						}
+						contestInstance.contestClassResults += "resultclass_${resultclass_instance.id}"
+					}
+				}
+			}
+			contestInstance.save()
+		}
+		
+		if (contestTasks) {
+			println "Set contest result tasks with $contestTasks"
+			contestInstance.contestTaskResults = ""
+			for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+				for (Map contest_task in contestTasks) {
+					if (contest_task.instance == task_instance) {
+						if (contestInstance.contestTaskResults) {
+							contestInstance.contestTaskResults += ","
+						}
+						contestInstance.contestTaskResults += "task_${task_instance.id}"
+					}
+				}
+			}
+			contestInstance.save()
+		}
+		
+		if (contestInstance.resultClasses && !contestInstance.contestClassResults) {
+			contest.message = getMsg('fc.contest.resultsettings.noclassselected')
+			contest.error = true
+			printerror contest.message
+			return contest
+		}
+		if (!contestInstance.contestTaskResults) {
+			contest.message = getMsg('fc.contest.resultsettings.notaskselected')
+			contest.error = true
+			printerror contest.message
+			return contest
+		}
+		
+		println "Calculate contest results with classes: '${GetResultClassNames(contestInstance, contestInstance.contestClassResults)}'"
+		println "Calculate contest results with tasks: '${GetResultTaskNames(contestInstance, contestInstance.contestTaskResults)}'"
+		
+		calculate_crew_penalties(contestInstance,null,contestInstance.GetResultTasks(contestInstance.contestTaskResults),contestInstance.GetResultSettings(),ResultFilter.Contest)
 		
 		// calculate positions
-		if (contestInstance.resultClasses) {
-			for (ResultClass resultclass_instance in ResultClass.findAllByContest(contestInstance)) {
-				calculatepositions_contest(contestInstance, resultclass_instance)
-			}
-		} else {
-        	calculatepositions_contest(contestInstance, null)
-		}
+       	calculatepositions_contest(contestInstance, null)
         
         contest.message = getMsg('fc.results.positionscalculated')
 		printdone contest.message      
@@ -452,62 +542,101 @@ class FcService
     }
     
 	//--------------------------------------------------------------------------
-	private void calculate_crew_penalties(Contest contestInstance, ResultClass resultclassInstance, Map resultSettings, boolean checkActiveCrew)
+	private void calculate_crew_penalties(Contest contestInstance, ResultClass resultclassInstance, List tastSettings, Map resultSettings, ResultFilter resultFilter)
 	{
-		printstart "calculate_crew_penalties"
-		for (Crew crew_instance in Crew.findAllByContest(contestInstance)) {
+		printstart "calculate_crew_penalties $resultFilter"
+		for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
 			if (!resultclassInstance || (crew_instance.resultclass == resultclassInstance)) {
 				crew_instance.planningPenalties = 0
 				crew_instance.flightPenalties = 0
 				crew_instance.observationPenalties = 0
 				crew_instance.landingPenalties = 0
 				crew_instance.specialPenalties = 0
-				crew_instance.contestPenalties = 0
-				crew_instance.teamPenalties = 0
-				if (!checkActiveCrew || crew_instance.IsActiveCrew()) {
-					for (Task task_instance in Task.findAllByContest(contestInstance)) {
-						Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
-						if (test_instance.IsPlanningTestRun()) {
-							crew_instance.planningPenalties += test_instance.planningTestPenalties
-							if (resultSettings["Planning"]) {
-								crew_instance.contestPenalties += test_instance.planningTestPenalties
-								crew_instance.teamPenalties += test_instance.planningTestPenalties
+				switch (resultFilter) {
+					case ResultFilter.Contest:
+						crew_instance.contestPenalties = 0
+						for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+							if (task_instance in tastSettings) {
+								Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+								if (test_instance.IsPlanningTestRun()) {
+									crew_instance.planningPenalties += test_instance.planningTestPenalties
+									if (resultSettings["Planning"]) {
+										crew_instance.contestPenalties += test_instance.planningTestPenalties
+									}
+								}
+								if (test_instance.IsFlightTestRun()) {
+									crew_instance.flightPenalties += test_instance.flightTestPenalties
+									if (resultSettings["Flight"]) {
+										crew_instance.contestPenalties += test_instance.flightTestPenalties
+									}
+								}
+								if (test_instance.IsObservationTestRun()) {
+									crew_instance.observationPenalties += test_instance.observationTestPenalties
+									if (resultSettings["Observation"]) {
+										crew_instance.contestPenalties += test_instance.observationTestPenalties
+									}
+								}
+								if (test_instance.IsLandingTestRun()) {
+									crew_instance.landingPenalties += test_instance.landingTestPenalties
+									if (resultSettings["Landing"]) {
+										crew_instance.contestPenalties += test_instance.landingTestPenalties
+									}
+								}
+								if (test_instance.IsSpecialTestRun()) {
+									crew_instance.specialPenalties += test_instance.specialTestPenalties
+									if (resultSettings["Special"]) {
+										crew_instance.contestPenalties += test_instance.specialTestPenalties
+									}
+								}
 							}
 						}
-						if (test_instance.IsFlightTestRun()) {
-							crew_instance.flightPenalties += test_instance.flightTestPenalties
-							if (resultSettings["Flight"]) {
-								crew_instance.contestPenalties += test_instance.flightTestPenalties
-								crew_instance.teamPenalties += test_instance.flightTestPenalties
+						println "$crew_instance.name (${crew_instance.resultclass?.name}): contestPenalties = $crew_instance.contestPenalties"
+						break
+					case ResultFilter.Team:
+						if (crew_instance.IsActiveCrew(ResultFilter.Team)) { 
+							crew_instance.teamPenalties = 0
+							for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+								if (task_instance in tastSettings) {
+									Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+									if (test_instance.IsPlanningTestRun()) {
+										crew_instance.planningPenalties += test_instance.planningTestPenalties
+										if (resultSettings["Planning"]) {
+											crew_instance.teamPenalties += test_instance.planningTestPenalties
+										}
+									}
+									if (test_instance.IsFlightTestRun()) {
+										crew_instance.flightPenalties += test_instance.flightTestPenalties
+										if (resultSettings["Flight"]) {
+											crew_instance.teamPenalties += test_instance.flightTestPenalties
+										}
+									}
+									if (test_instance.IsObservationTestRun()) {
+										crew_instance.observationPenalties += test_instance.observationTestPenalties
+										if (resultSettings["Observation"]) {
+											crew_instance.teamPenalties += test_instance.observationTestPenalties
+										}
+									}
+									if (test_instance.IsLandingTestRun()) {
+										crew_instance.landingPenalties += test_instance.landingTestPenalties
+										if (resultSettings["Landing"]) {
+											crew_instance.teamPenalties += test_instance.landingTestPenalties
+										}
+									}
+									if (test_instance.IsSpecialTestRun()) {
+										crew_instance.specialPenalties += test_instance.specialTestPenalties
+										if (resultSettings["Special"]) {
+											crew_instance.teamPenalties += test_instance.specialTestPenalties
+										}
+									}
+								}
 							}
+						} else {
+							crew_instance.teamPenalties = 100000
 						}
-						if (test_instance.IsObservationTestRun()) {
-							crew_instance.observationPenalties += test_instance.observationTestPenalties
-							if (resultSettings["Observation"]) {
-								crew_instance.contestPenalties += test_instance.observationTestPenalties
-								crew_instance.teamPenalties += test_instance.observationTestPenalties
-							}
-						}
-						if (test_instance.IsLandingTestRun()) {
-							crew_instance.landingPenalties += test_instance.landingTestPenalties
-							if (resultSettings["Landing"]) {
-								crew_instance.contestPenalties += test_instance.landingTestPenalties
-								crew_instance.teamPenalties += test_instance.landingTestPenalties
-							}
-						}
-						if (test_instance.IsSpecialTestRun()) {
-							crew_instance.specialPenalties += test_instance.specialTestPenalties
-							if (resultSettings["Special"]) {
-								crew_instance.contestPenalties += test_instance.specialTestPenalties
-								crew_instance.teamPenalties += test_instance.specialTestPenalties
-							}
-						}
-					}
-				} else {
-					crew_instance.teamPenalties = 100000
+						println "$crew_instance.name (${crew_instance.resultclass?.name}): teamPenalties = $crew_instance.teamPenalties"
+						break
 				}
 				crew_instance.save()
-				println "$crew_instance.name: contest - $crew_instance.contestPenalties, team - $crew_instance.teamPenalties"
 			}
 		}
 		printdone ""
@@ -516,13 +645,15 @@ class FcService
 	//--------------------------------------------------------------------------
 	private void calculatepositions_contest(Contest contestInstance, ResultClass resultclassInstance)
 	{
+		printstart "calculatepositions_contest ${resultclassInstance?.name}"
+		
         int act_penalty = -1
         int max_position = Crew.countByContest(contestInstance)
         for (int act_position = 1; act_position <= max_position; act_position++) {
             
             // search lowest penalty
             int min_penalty = 100000
-            for (Crew crew_instance in Crew.findAllByContest(contestInstance)) {
+            for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
 				if (!crew_instance.disabled) {
 					if (resultclassInstance) {
 						if (crew_instance.resultclass) {
@@ -533,6 +664,14 @@ class FcService
 				                    }
 				                }
 							}
+						}
+					} else if (contestInstance.resultClasses) {
+						if (crew_instance.IsActiveCrew(ResultFilter.Contest)) {
+			                if (crew_instance.contestPenalties > act_penalty) {
+			                    if (crew_instance.contestPenalties < min_penalty) {
+			                        min_penalty = crew_instance.contestPenalties 
+			                    }
+			                }
 						}
 					} else {
 		                if (crew_instance.contestPenalties > act_penalty) {
@@ -547,16 +686,48 @@ class FcService
 
             // set position
             int set_position = -1
-            for (Crew crew_instance in Crew.findAllByContest(contestInstance)) {
+            for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
 				if (crew_instance.disabled) {
-					crew_instance.contestPosition = 0
+					if (resultclassInstance) {
+						crew_instance.classPosition = 0
+						//println "$crew_instance.name: classPosition = 0 (disabled)"
+					} else {
+						crew_instance.contestPosition = 0
+						crew_instance.noContestPosition = false
+						//println "$crew_instance.name: contestPosition = 0 (disabled)"
+					}
 					crew_instance.save()
 				} else if (resultclassInstance && !crew_instance.resultclass) {
+					if (resultclassInstance) {
+						crew_instance.classPosition = 0
+						//println "$crew_instance.name: classPosition = 0 (no assigned class)"
+					} else {
+						crew_instance.contestPosition = 0
+						crew_instance.noContestPosition = false
+						//println "$crew_instance.name: contestPosition = 0 (no assigned class)"
+					}
+					crew_instance.save()
+				} else if (contestInstance.resultClasses && !resultclassInstance && !crew_instance.IsActiveCrew(ResultFilter.Contest)) {
 					crew_instance.contestPosition = 0
+					if (!crew_instance.noContestPosition) {
+						println "$crew_instance.name ($crew_instance.resultclass.name): no contest position"
+					}
+					crew_instance.noContestPosition = true
 					crew_instance.save()
 				} else if (!resultclassInstance || (resultclassInstance.id == crew_instance.resultclass.id)) { // BUG: direkter Klassen-Vergleich geht nicht
 	                if (crew_instance.contestPenalties == act_penalty) {
-	                    crew_instance.contestPosition = act_position
+						if (resultclassInstance) {
+	                    	crew_instance.classPosition = act_position
+							println "$crew_instance.name ($crew_instance.resultclass.name): classPosition = $act_position ($crew_instance.contestPenalties Punkte)"
+						} else if (contestInstance.resultClasses) {
+	                    	crew_instance.contestPosition = act_position
+							crew_instance.noContestPosition = false
+							println "$crew_instance.name ($crew_instance.resultclass.name): contestPosition = $act_position ($crew_instance.contestPenalties Punkte)"
+						} else {
+	                    	crew_instance.contestPosition = act_position
+							crew_instance.noContestPosition = false
+							println "$crew_instance.name: contestPosition = $act_position ($crew_instance.contestPenalties Punkte)"
+						}
 	                    crew_instance.save()
 	                    set_position++
 	                }
@@ -567,18 +738,21 @@ class FcService
                 act_position += set_position
             }
         }
+		
+		printdone ""
 	}
 	
     //--------------------------------------------------------------------------
-    Map calculateteampositionsContest(Contest contestInstance, List teamClasses)
+    Map calculateteampositionsContest(Contest contestInstance, List teamClasses, List teamTasks)
     {
 		printstart "calculateteampositionsContest"
 		
 		Map contest = [:]
 		
 		if (teamClasses && contestInstance.resultClasses) {
+			println "Set team result classes with $teamClasses"
 			contestInstance.teamClassResults = ""
-			for (ResultClass resultclass_instance in ResultClass.findAllByContest(contestInstance)) {
+			for (ResultClass resultclass_instance in ResultClass.findAllByContest(contestInstance,[sort:"id"])) {
 				for (Map team_class in teamClasses) {
 					if (team_class.instance == resultclass_instance) {
 						if (contestInstance.teamClassResults) {
@@ -588,20 +762,51 @@ class FcService
 					}
 				}
 			}
-			println "Set team classes: $contestInstance.teamClassResults"
 			contestInstance.save()
 		}
 		
+		if (teamTasks) {
+			println "Set team result tasks with $teamTasks"
+			contestInstance.teamTaskResults = ""
+			for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+				for (Map team_task in teamTasks) {
+					if (team_task.instance == task_instance) {
+						if (contestInstance.teamTaskResults) {
+							contestInstance.teamTaskResults += ","
+						}
+						contestInstance.teamTaskResults += "task_${task_instance.id}"
+					}
+				}
+			}
+			contestInstance.save()
+		}
+		
+		if (contestInstance.resultClasses && !contestInstance.teamClassResults) {
+			contest.message = getMsg('fc.contest.teamresultsettings.noclassselected')
+			contest.error = true
+			printerror contest.message
+			return contest
+		}
+		if (!contestInstance.teamTaskResults) {
+			contest.message = getMsg('fc.contest.teamresultsettings.notaskselected')
+			contest.error = true
+			printerror contest.message
+			return contest
+		}
+		
+		println "Calculate team results with classes: '${GetResultClassNames(contestInstance, contestInstance.teamClassResults)}'"
+		println "Calculate team results with tasks: '${GetResultTaskNames(contestInstance, contestInstance.teamTaskResults)}'"
+		
 		Map team_result_settings = contestInstance.GetTeamResultSettings()
-		calculate_crew_penalties(contestInstance,null,team_result_settings,true)
+		calculate_crew_penalties(contestInstance,null,contestInstance.GetResultTasks(contestInstance.teamTaskResults),team_result_settings,ResultFilter.Team)
 
 		// calculate team penalties
-		for (Team team_instance in Team.findAllByContest(contestInstance)) {
+		for (Team team_instance in Team.findAllByContest(contestInstance,[sort:"id"])) {
 			printstart team_instance.name
 			team_instance.contestPenalties = 0
 			int crew_num = 0
 			for (Crew crew_instance in Crew.findAllByTeamAndDisabled(team_instance,false,[sort:"teamPenalties"])) {
-				if (crew_instance.IsActiveCrew()) {
+				if (crew_instance.IsActiveCrew(ResultFilter.Team)) {
 					crew_num++
 					if (crew_num > contestInstance.teamCrewNum) {
 						break
@@ -637,15 +842,51 @@ class FcService
     }
     
 	//--------------------------------------------------------------------------
+	private String GetResultClassNames(Contest contestInstance, String resultClassIDs)
+	{
+		String s = ""
+		if (contestInstance.resultClasses) {
+			String resultclass_ids = "$resultClassIDs,"
+			for (ResultClass resultclass_instance in ResultClass.findAllByContest(contestInstance,[sort:"id"])) {
+				if (resultclass_ids.contains("resultclass_${resultclass_instance.id},")) {
+					if (s) {
+						s += ","
+					}
+					s += resultclass_instance.name
+				}
+			}
+		}
+		return s
+	}
+	
+	//--------------------------------------------------------------------------
+	private String GetResultTaskNames(Contest contestInstance, String resultTaskIDs)
+	{
+		String s = ""
+		String task_ids = "$resultTaskIDs,"
+		for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+			if (task_ids.contains("task_${task_instance.id},")) {
+				if (s) {
+					s += ","
+				}
+				s += task_instance.name()
+			}
+		}
+		return s
+	}
+	
+	//--------------------------------------------------------------------------
 	private void calculatepositions_team(Contest contestInstance)
 	{
+		printstart "calculatepositions_team"
+		
         int act_penalty = -1
         int max_position = Team.countByContest(contestInstance)
         for (int act_position = 1; act_position <= max_position; act_position++) {
             
             // search lowest penalty
             int min_penalty = 100000
-            for (Team team_instance in Team.findAllByContest(contestInstance)) {
+            for (Team team_instance in Team.findAllByContest(contestInstance,[sort:"id"])) {
 				if (team_instance.IsActiveTeam()) {
 	                if (team_instance.contestPenalties > act_penalty) {
 	                    if (team_instance.contestPenalties < min_penalty) {
@@ -658,10 +899,11 @@ class FcService
 
             // set position
             int set_position = -1
-            for (Team team_instance in Team.findAllByContest(contestInstance)) {
+            for (Team team_instance in Team.findAllByContest(contestInstance,[sort:"id"])) {
 				if (team_instance.IsActiveTeam()) {
 	                if (team_instance.contestPenalties == act_penalty) {
 	                    team_instance.contestPosition = act_position
+						println "$team_instance.name: contestPosition = $act_position ($team_instance.contestPenalties Punkte)"
 	                    team_instance.save()
 	                    set_position++
 	                }
@@ -671,6 +913,8 @@ class FcService
                 act_position += set_position
             }
         }
+		
+		printdone ""
 	}
 	
 	//--------------------------------------------------------------------------
@@ -680,8 +924,8 @@ class FcService
 		
         // Positions calculated?
         boolean call_return = false
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
-            if (crew_instance.disabled) {
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
+            if (crew_instance.disabled || crew_instance.noContestPosition) {
 				if (crew_instance.contestPosition) {
 					call_return = true
 				}
@@ -749,7 +993,7 @@ class FcService
 		
         // Positions calculated?
         boolean call_return = false
-        for (Team team_instance in Team.findAllByContest(contestInstance)) {
+        for (Team team_instance in Team.findAllByContest(contestInstance,[sort:"id"])) {
 			if (team_instance.IsActiveTeam()) {
 				if (!team_instance.contestPosition) {
 					call_return = true
@@ -865,7 +1109,7 @@ class FcService
 			
 			// save TaskClasses
 			if (task_instance.contest.resultClasses) {
-				for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+				for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 					if (params["taskclass_${taskclass_instance.resultclass.id}_planningTestRun"]) {
 						taskclass_instance.planningTestRun = true
 					} else {
@@ -928,7 +1172,7 @@ class FcService
 				}
 			}
 			if (calculate_penalties) {
-		        Test.findAllByTask(task_instance).each { Test test_instance ->
+		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 					calculateTestPenalties(test_instance,false)
 		            test_instance.save()
 		        }
@@ -979,7 +1223,7 @@ class FcService
         
         if(!task_instance.hasErrors() && task_instance.save()) {
 			if (contestInstance.resultClasses) {
-				for (ResultClass resultclass_instance in ResultClass.findAllByContest(contestInstance)) {
+				for (ResultClass resultclass_instance in ResultClass.findAllByContest(contestInstance,[sort:"id"])) {
 					TaskClass taskclass_instance = new TaskClass()
 					taskclass_instance.task = task_instance
 					taskclass_instance.resultclass = resultclass_instance
@@ -1065,14 +1309,14 @@ class FcService
         if (task_instance) {
             try {
             	// remove Tests
-            	Test.findAllByTask(task_instance).each { Test test_instance ->
+            	Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
             		test_instance.delete()
             	}
 
                 task_instance.delete()
                 
                 // correct idTitle of other tasks
-                Task.findAllByContest(task_instance.contest).eachWithIndex { Task task_instance2, int index -> 
+                Task.findAllByContest(task_instance.contest,[sort:"id"]).eachWithIndex { Task task_instance2, int index -> 
                     task_instance2.idTitle = index + 1
                 }
                 
@@ -1105,7 +1349,7 @@ class FcService
             task_instance.properties = params
 			
 			task_instance.disabledCheckPoints = ""
-			CoordRoute.findAllByRoute(task_instance.flighttest.route).each { CoordRoute coordroute_instance ->
+			CoordRoute.findAllByRoute(task_instance.flighttest.route,[sort:"id"]).each { CoordRoute coordroute_instance ->
 				if (params.(coordroute_instance.title()) == "on") {
 					if (task_instance.disabledCheckPoints) {
 						task_instance.disabledCheckPoints += ",${coordroute_instance.title()}"
@@ -1117,8 +1361,8 @@ class FcService
 			
 			boolean modify_flighttest_results = last_disabledcheckpoints != task_instance.disabledCheckPoints
 			if (modify_flighttest_results) {
-		        Test.findAllByTask(task_instance).each { Test test_instance ->
-					CoordResult.findAllByTest(test_instance).each { CoordResult coordresult_instance ->
+		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
+					CoordResult.findAllByTest(test_instance,[sort:"id"]).each { CoordResult coordresult_instance ->
 						calculateCoordResultInstancePenaltyCoord(coordresult_instance)
 						coordresult_instance.save()
 					}
@@ -1159,8 +1403,8 @@ class FcService
 			
 			boolean modify_flighttest_results = last_disabledcheckpoints != task_instance.disabledCheckPoints
 			if (modify_flighttest_results) {
-		        Test.findAllByTask(task_instance).each { Test test_instance ->
-					CoordResult.findAllByTest(test_instance).each { CoordResult coordresult_instance ->
+		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
+					CoordResult.findAllByTest(test_instance,[sort:"id"]).each { CoordResult coordresult_instance ->
 						calculateCoordResultInstancePenaltyCoord(coordresult_instance)
 						coordresult_instance.save()
 					}
@@ -1190,7 +1434,7 @@ class FcService
         }
         if (!task_instance) {
 			if (contestInstance) {
-	        	Task.findAllByContest(contestInstance).each {
+	        	Task.findAllByContest(contestInstance,[sort:"id"]).each {
 	        		if (!task_instance) {
 	        			task_instance = it
 	        		}
@@ -1211,7 +1455,7 @@ class FcService
         }
         if (!task_instance) {
 			if (contestInstance) {
-	            Task.findAllByContest(contestInstance).each {
+	            Task.findAllByContest(contestInstance,[sort:"id"]).each {
 	                if (!task_instance) {
 	                    task_instance = it
 	                }
@@ -1229,7 +1473,7 @@ class FcService
         Map task = getTask(params) 
         if (task.instance) {
             Map selected_testids = [selectedTestID:""]
-            Test.findAllByTask(task.instance).each { Test test_instance ->
+            Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 				selected_testids["selectedTestID${test_instance.id}"] = "on"
             }
             task.selectedtestids = selected_testids
@@ -1300,7 +1544,7 @@ class FcService
         // Multiple PlanningTestTasks?  
         if (PlanningTestTask.countByPlanningtest(task.instance.planningtest) > 1) {
             List test_instance_ids = [""]
-            Test.findAllByTask(task.instance).each { Test test_instance ->
+            Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
                 if (params["selectedTestID${test_instance.id}"] == "on") {
                     test_instance_ids += test_instance.id.toString()
                 }
@@ -1312,7 +1556,7 @@ class FcService
 
         // set single PlanningTestTask to all selected Tests
         PlanningTestTask planningtesttask_instance = PlanningTestTask.findByPlanningtest(task.instance.planningtest) 
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
 				if (!test_instance.crew.disabled) {
 	                test_instance.planningtesttask = planningtesttask_instance
@@ -1381,7 +1625,7 @@ class FcService
         // Multiple FlightTestWinds?  
         if (FlightTestWind.countByFlighttest(task.instance.flighttest) > 1) {
             List test_instance_ids = [""]
-            Test.findAllByTask(task.instance).each { Test test_instance ->
+            Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
                 if (params["selectedTestID${test_instance.id}"] == "on") {
                     test_instance_ids += test_instance.id.toString()
                 }
@@ -1393,7 +1637,7 @@ class FcService
 
         // set single FlightTestWind to all selected Tests
         FlightTestWind flighttestwind_instance = FlightTestWind.findByFlighttest(task.instance.flighttest)
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
 				if (!test_instance.crew.disabled) {
 					setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
@@ -1458,7 +1702,7 @@ class FcService
         /*
         // Have all crews an aircraft?
         boolean call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (!test_instance.crew.aircraft) {
                 call_return = true
             }
@@ -1471,7 +1715,7 @@ class FcService
         */
 
     	// set viewpos for aircraft of user1 
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	        	if (test_instance.crew.aircraft) {
 	        		if (test_instance.crew.aircraft.user1 == test_instance.crew) {
@@ -1482,7 +1726,7 @@ class FcService
         }
 
         // set viewpos for aircraft of user2 
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (test_instance.crew.aircraft) {
 	                if (test_instance.crew.aircraft.user2 == test_instance.crew) {
@@ -1493,7 +1737,7 @@ class FcService
         }
 
         // set viewpos for user without aircraft 
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (!test_instance.crew.aircraft) {
 	                test_instance.viewpos = 2000+test_instance.taskTAS
@@ -1502,7 +1746,7 @@ class FcService
         }
 
         // set viewpos for disabled user 
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (test_instance.crew.disabled) {
                 test_instance.viewpos = 1000+test_instance.taskTAS
 			}
@@ -1534,7 +1778,7 @@ class FcService
         }
 
     	// set viewpos with crew viewpos
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
    			test_instance.viewpos = test_instance.crew.viewpos
             test_instance.timeCalculated = false
 			test_instance.ResetFlightTestResults()
@@ -1591,7 +1835,7 @@ class FcService
         int movefirstpos = -1
         Map selected_testids = [selectedTestID:""]
         borderreached = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
                 test_instance.viewpos--
                 test_instance.timeCalculated = false
@@ -1606,7 +1850,7 @@ class FcService
                 }
             }
         }
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] != "on") {
                 if (test_instance.viewpos >= movefirstpos && test_instance.viewpos < movefirstpos + movenum) {
                     test_instance.viewpos += movenum
@@ -1682,7 +1926,7 @@ class FcService
         int movefirstpos = -1
         Map selected_testids = [selectedTestID:""]
         borderreached = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
                 test_instance.viewpos++
                 test_instance.timeCalculated = false
@@ -1697,7 +1941,7 @@ class FcService
                 }
             }
         }
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] != "on") {
                 if (test_instance.viewpos >= movefirstpos && test_instance.viewpos < movefirstpos + movenum) {
                     test_instance.viewpos -= movenum
@@ -1782,7 +2026,7 @@ class FcService
                 movenum++
             }
         }
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (test_instance.viewpos >= movefirstpos) {
                 test_instance.viewpos -= movenum
                 test_instance.save()
@@ -1833,9 +2077,10 @@ class FcService
             return task
         }
         
+		/*
         // FlightTestWind assigned to all crews?
         boolean call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (!test_instance.flighttestwind) {
 	                call_return = true
@@ -1848,11 +2093,12 @@ class FcService
 			printerror task.message
             return task
         }
+        */
 
         /*
         // Have all crews an aircraft?
         call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (!test_instance.crew.aircraft) {
                 call_return = true
             }
@@ -1935,7 +2181,7 @@ class FcService
         
         // FlightTestWind assigned to all crews?
         boolean call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (!test_instance.flighttestwind) {
 	                call_return = true
@@ -1950,7 +2196,7 @@ class FcService
 
         // Have all crews an aircraft?
         call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (!test_instance.crew.aircraft) {
                 call_return = true
             }
@@ -1963,7 +2209,7 @@ class FcService
 
         // Timetable calculated?  
         call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (!test_instance.timeCalculated) {
 	                call_return = true
@@ -1978,7 +2224,7 @@ class FcService
         
         // Warnings?  
         call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
 	                call_return = true
@@ -2045,7 +2291,7 @@ class FcService
         
         // FlightTestWind assigned to all crews?
         boolean call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (!test_instance.flighttestwind) {
 	                call_return = true
@@ -2061,7 +2307,7 @@ class FcService
 
         // Have all crews an aircraft?
         call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (!test_instance.crew.aircraft) {
                 call_return = true
             }
@@ -2075,7 +2321,7 @@ class FcService
 
         // Timetable calculated?  
         call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (!test_instance.timeCalculated) {
 	                call_return = true
@@ -2091,7 +2337,7 @@ class FcService
         
         // Warnings?  
         call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
 	                call_return = true
@@ -2179,7 +2425,7 @@ class FcService
 
         // PlanningTestTask assigned to all crews?
         boolean call_return = false
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
 	            if (!test_instance.planningtesttask) {
 	                call_return = true
@@ -2252,7 +2498,7 @@ class FcService
 
 		// calculate positions
 		if (task.instance.contest.resultClasses) {
-			for (ResultClass resultclass_instance in ResultClass.findAllByContest(task.instance.contest)) {
+			for (ResultClass resultclass_instance in ResultClass.findAllByContest(task.instance.contest,[sort:"id"])) {
 				calculatepositions_task(task.instance, resultclass_instance)
 			}
 		} else {
@@ -2273,7 +2519,7 @@ class FcService
             
             // search lowest penalty
             int min_penalty = 100000
-            for (Test test_instance in Test.findAllByTask(taskInstance)) {
+            for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
 				if (!test_instance.crew.disabled) {
 					if ((resultclassInstance == null) || (resultclassInstance == test_instance.crew.resultclass)) {
 		                if (test_instance.taskPenalties > act_penalty) {
@@ -2288,7 +2534,7 @@ class FcService
             
             // set position
             int set_position = -1
-            for (Test test_instance in Test.findAllByTask(taskInstance)) {
+            for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
 				if (test_instance.crew.disabled) {
                     test_instance.taskPosition = 0
                     test_instance.save()
@@ -2320,7 +2566,7 @@ class FcService
 
 		// Positions calculated?
 		boolean call_return = false
-		Test.findAllByTask(task.instance).each { Test test_instance ->
+		Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 			if (test_instance.crew.disabled) {
 				if (test_instance.taskPosition) {
 					call_return = true
@@ -2381,7 +2627,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-			for (ResultClass resultclass_instance in ResultClass.findAllByContest(task.instance.contest)) {
+			for (ResultClass resultclass_instance in ResultClass.findAllByContest(task.instance.contest,[sort:"id"])) {
 				if (params["resultclass_${resultclass_instance.id}"] == "on") {
 		            String url = "${printparams.baseuri}/task/listresultsprintable/${task.instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}&resultclassid=${resultclass_instance.id}"
 		            println "Print: $url"
@@ -2497,7 +2743,7 @@ class FcService
         Team team_instance = Team.get(params.id)
         if(team_instance) {
             try {
-                Crew.findAllByTeam(team_instance).each { Crew crew_instance ->
+                Crew.findAllByTeam(team_instance,[sort:"id"]).each { Crew crew_instance ->
                     crew_instance.team = null
                     crew_instance.save()
                 }
@@ -2574,26 +2820,40 @@ class FcService
 			boolean contest_observation_results = resultclass_instance.contestObservationResults
 			boolean contest_landing_results = resultclass_instance.contestLandingResults
 			boolean contest_special_results = resultclass_instance.contestSpecialResults
-
+			String contest_task_results = resultclass_instance.contestTaskResults
+			
             resultclass_instance.properties = params
 
+			resultclass_instance.contestTaskResults = ""
+			for (Task task_instance in resultclass_instance.contest.tasks) {
+				if (params["task_${task_instance.id}"] == "on") {
+					if (resultclass_instance.contestTaskResults) {
+						resultclass_instance.contestTaskResults += ","
+					}
+					resultclass_instance.contestTaskResults += "task_${task_instance.id}"
+				}
+			}
+					
 			boolean modify_contest_rule = resultclass_instance.contestRule != contest_rule
 
 			boolean modify_contest_results = (resultclass_instance.contestPlanningResults != contest_planning_results) ||
 			                                 (resultclass_instance.contestFlightResults != contest_flight_results) ||
 			 							     (resultclass_instance.contestObservationResults != contest_observation_results) ||
 										     (resultclass_instance.contestLandingResults != contest_landing_results) ||
-										     (resultclass_instance.contestSpecialResults != contest_special_results)
+										     (resultclass_instance.contestSpecialResults != contest_special_results) ||
+											 (resultclass_instance.contestTaskResults != contest_task_results)
 										  
 			if (modify_contest_rule) {
+				println "Contest rule modfified."
 				setContestRule(resultclass_instance, resultclass_instance.contestRule)
 			}
 			
 			if (modify_contest_results) {
-				for (Crew crew_instance in Crew.findAllByContest(resultclass_instance.contest)) {
+				println "Contest results modfified."
+				for (Crew crew_instance in Crew.findAllByContest(resultclass_instance.contest,[sort:"id"])) {
 					if (crew_instance.resultclass == resultclass_instance) {
 						crew_instance.contestPenalties = 0
-						crew_instance.contestPosition = 0
+						crew_instance.classPosition = 0
 						crew_instance.save()
 					}
 				}
@@ -2616,8 +2876,8 @@ class FcService
         if(resultclass_instance) {
 			
 			// Alle Berechungen in Klasse erneut ausführen
-			Task.findAllByContest(resultclass_instance.contest).each { Task task_instance ->
-		        Test.findAllByTask(task_instance).each { Test test_instance ->
+			Task.findAllByContest(resultclass_instance.contest,[sort:"id"]).each { Task task_instance ->
+		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 					if (test_instance.crew.resultclass == resultclass_instance) {
 						calculateTestPenalties(test_instance,true)
 						test_instance.save()
@@ -2643,10 +2903,6 @@ class FcService
     //--------------------------------------------------------------------------
     Map saveResultClass(Map params,Contest contestInstance)
     {
-        ResultClass resultclass_instance = new ResultClass(params)
-        resultclass_instance.contest = contestInstance
-		setContestRule(resultclass_instance, resultclass_instance.contestRule)
-		
         if (params.name) {
             ResultClass resultclass_instance2 = ResultClass.findByNameAndContest(params.name,contestInstance)
             if (resultclass_instance2) {
@@ -2654,10 +2910,14 @@ class FcService
             }
         }
         
+        ResultClass resultclass_instance = new ResultClass(params)
+        resultclass_instance.contest = contestInstance
+		setContestRule(resultclass_instance, resultclass_instance.contestRule)
+		
         if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
 			// create TaskClasses
 			if (contestInstance.resultClasses) {
-				for (Task task_instance in Task.findAllByContest(contestInstance)) {
+				for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
 					TaskClass taskclass_instance = new TaskClass()
 					taskclass_instance.task = task_instance
 					taskclass_instance.resultclass = resultclass_instance
@@ -2676,10 +2936,10 @@ class FcService
         ResultClass resultclass_instance = ResultClass.get(params.id)
         if(resultclass_instance) {
             try {
-				TaskClass.findAllByResultclass(resultclass_instance).each { TaskClass taskclass_instance ->
+				TaskClass.findAllByResultclass(resultclass_instance,[sort:"id"]).each { TaskClass taskclass_instance ->
 					taskclass_instance.delete()
 				}
-                Crew.findAllByResultclass(resultclass_instance).each { Crew crew_instance ->
+                Crew.findAllByResultclass(resultclass_instance,[sort:"id"]).each { Crew crew_instance ->
                     crew_instance.resultclass = null
                     crew_instance.save()
                 }
@@ -2703,7 +2963,7 @@ class FcService
         }
         if (!resultclass_instance) {
 			if (contestInstance) {
-	            ResultClass.findAllByContest(contestInstance).each {
+	            ResultClass.findAllByContest(contestInstance,[sort:"id"]).each {
 	                if (!resultclass_instance) {
 	                    resultclass_instance = it
 	                }
@@ -2716,21 +2976,43 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map calculatepositionsResultClass(ResultClass resultclassInstance)
+    Map calculatepositionsResultClass(ResultClass resultclassInstance, List contestTasks)
     {
 		printstart "calculatepositionsResultClass $resultclassInstance.name"
 		
 		Map resultclass = [:]
 		
-        if(resultclassInstance) {
-			
-			calculate_crew_penalties(resultclassInstance.contest,resultclassInstance,resultclassInstance.GetClassResultSettings(),false)
-			
-			// calculate positions
-			calculatepositions_contest(resultclassInstance.contest, resultclassInstance)
-	        
-	        resultclass.message = getMsg('fc.results.positionscalculated')
-        }
+		if (contestTasks) {
+			println "Set class result tasks with $contestTasks"
+			resultclassInstance.contestTaskResults = ""
+			for (Task task_instance in Task.findAllByContest(resultclassInstance.contest,[sort:"id"])) {
+				for (Map contest_task in contestTasks) {
+					if (contest_task.instance == task_instance) {
+						if (resultclassInstance.contestTaskResults) {
+							resultclassInstance.contestTaskResults += ","
+						}
+						resultclassInstance.contestTaskResults += "task_${task_instance.id}"
+					}
+				}
+			}
+			resultclassInstance.save()
+		}
+		
+		if (!resultclassInstance.contestTaskResults) {
+			resultclass.message = getMsg('fc.resultclass.resultsettings.notaskselected')
+			resultclass.error = true
+			printerror resultclass.message
+			return resultclass
+		}
+		
+		println "Calculate class results with tasks: '${GetResultTaskNames(resultclassInstance.contest, resultclassInstance.contestTaskResults)}'"
+		
+		calculate_crew_penalties(resultclassInstance.contest,resultclassInstance,resultclassInstance.contest.GetResultTasks(resultclassInstance.contestTaskResults),resultclassInstance.GetClassResultSettings(),ResultFilter.Contest)
+		
+		// calculate positions
+		calculatepositions_contest(resultclassInstance.contest, resultclassInstance)
+        
+        resultclass.message = getMsg('fc.results.positionscalculated')
 
 		printdone resultclass.message      
         return resultclass
@@ -2745,13 +3027,13 @@ class FcService
 		
         // Positions calculated? 
         boolean call_return = false
-        Crew.findAllByContest(resultclassInstance.contest).each { Crew crew_instance ->
+        Crew.findAllByContest(resultclassInstance.contest,[sort:"id"]).each { Crew crew_instance ->
             if (crew_instance.disabled) {
-				if (crew_instance.contestPosition) {
+				if (crew_instance.classPosition) {
 					call_return = true
 				}
             } else if (crew_instance.resultclass == resultclassInstance) {
-				if (!crew_instance.contestPosition) {
+				if (!crew_instance.classPosition) {
 					call_return = true
 				}
             }
@@ -2905,7 +3187,7 @@ class FcService
             try {
                 route_instance.delete()
                 
-                Route.findAllByContest(contest_instance).eachWithIndex { Route route_instance2, int index -> 
+                Route.findAllByContest(contest_instance,[sort:"id"]).eachWithIndex { Route route_instance2, int index -> 
                     route_instance2.idTitle = index + 1
                 }
                 
@@ -2968,7 +3250,7 @@ class FcService
     //--------------------------------------------------------------------------
 	private boolean RouteTitleFound(String newTitle, Contest contestInstance)
 	{
-		for(Route route_instance in Route.findAllByContest(contestInstance)) {
+		for(Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
 		   if (route_instance.title == newTitle) {
 			   return true
 		   }
@@ -3014,7 +3296,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            Route.findAllByContest(printparams.contest).each { Route route_instance ->
+            Route.findAllByContest(printparams.contest,[sort:"id"]).each { Route route_instance ->
 	            String url = "${printparams.baseuri}/route/showprintable/${route_instance.id}?lang=${printparams.lang}&contestid=${printparams.contest.id}"
 	            println "Print: $url"
 	            renderer.setDocument(url)
@@ -3098,11 +3380,11 @@ class FcService
 	        if(!route_instance.hasErrors() && route_instance.save()) {
 				List aflosroutedefs_instances = null
 				if (contestInstance.aflosTest) {
-					aflosroutedefs_instances = AflosRouteDefs.aflostest.findAllByRoutename(aflosroutenames_instance)
+					aflosroutedefs_instances = AflosRouteDefs.aflostest.findAllByRoutename(aflosroutenames_instance,[sort:"id"])
 				} else if (contestInstance.aflosUpload) {
-					aflosroutedefs_instances = AflosRouteDefs.aflosupload.findAllByRoutename(aflosroutenames_instance)
+					aflosroutedefs_instances = AflosRouteDefs.aflosupload.findAllByRoutename(aflosroutenames_instance,[sort:"id"])
 				} else {
-                	aflosroutedefs_instances = AflosRouteDefs.aflos.findAllByRoutename(aflosroutenames_instance)
+                	aflosroutedefs_instances = AflosRouteDefs.aflos.findAllByRoutename(aflosroutenames_instance,[sort:"id"])
 				}
                 CoordRoute last_coordroute_instance
                 CoordRoute last_coordroute_test_instance
@@ -3310,15 +3592,15 @@ class FcService
 	        // Import AflosCheckPoints
             int checkpoint_errors = 0
             int height_errors = 0
-	        CoordResult.findAllByTest(testInstance).each { CoordResult coordresult_instance ->
+	        CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
 	        	boolean found = false
 				List afloscheckpoints_instances = null
 				if (contest_instance.aflosTest) {
-					afloscheckpoints_instances = AflosCheckPoints.aflostest.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance)
+					afloscheckpoints_instances = AflosCheckPoints.aflostest.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
 				} else if (contest_instance.aflosUpload) {
-					afloscheckpoints_instances = AflosCheckPoints.aflosupload.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance)
+					afloscheckpoints_instances = AflosCheckPoints.aflosupload.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
 				} else {
-					afloscheckpoints_instances = AflosCheckPoints.aflos.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance)
+					afloscheckpoints_instances = AflosCheckPoints.aflos.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
 				}
 	        	afloscheckpoints_instances.each { AflosCheckPoints afloscheckpoints_instance ->
 	        		if (afloscheckpoints_instance.mark == "P${coordresult_instance.mark}") {
@@ -3390,11 +3672,11 @@ class FcService
 	    	String badcourse_starttimeutc
 			List afloserrorpoints_instances = null
 			if (contest_instance.aflosTest) {
-				afloserrorpoints_instances = AflosErrorPoints.aflostest.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance)
+				afloserrorpoints_instances = AflosErrorPoints.aflostest.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
 			} else if (contest_instance.aflosUpload) {
-				afloserrorpoints_instances = AflosErrorPoints.aflosupload.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance)
+				afloserrorpoints_instances = AflosErrorPoints.aflosupload.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
 			} else {
-				afloserrorpoints_instances = AflosErrorPoints.aflos.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance)
+				afloserrorpoints_instances = AflosErrorPoints.aflos.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
 			}
 	    	afloserrorpoints_instances.each { AflosErrorPoints afloserrorpoints_instance ->
 	    		if (badcourse_num == 0) {
@@ -3492,7 +3774,7 @@ class FcService
             }
         }
 
-		CoordResult.findAllByTest(test.instance).each { CoordResult coordresult_instance ->
+		CoordResult.findAllByTest(test.instance,[sort:"id"]).each { CoordResult coordresult_instance ->
 			// reset results
 	        coordresult_instance.ResetResults()
 			
@@ -3979,9 +4261,9 @@ class FcService
     		
     	// search coord for routeLegCoordInstance
     	CoordRoute found_coordroute_instance
-    	RouteLegCoord.findAllByRoute(routeLegCoordInstance.route).eachWithIndex { RouteLegCoord routelegcoord_instance, int i -> 
+    	RouteLegCoord.findAllByRoute(routeLegCoordInstance.route,[sort:"id"]).eachWithIndex { RouteLegCoord routelegcoord_instance, int i -> 
     		if (routelegcoord_instance == routeLegCoordInstance) {
-    			CoordRoute.findAllByRoute(routeLegCoordInstance.route).eachWithIndex { CoordRoute coordroute_instance, int j ->
+    			CoordRoute.findAllByRoute(routeLegCoordInstance.route,[sort:"id"]).eachWithIndex { CoordRoute coordroute_instance, int j ->
     				if (i + 1 == j) {
     					found_coordroute_instance = coordroute_instance
     				}
@@ -4017,7 +4299,7 @@ class FcService
         BigDecimal lastMapMeasureDistance = null
         BigDecimal lastMapMeasureTrueTrack = null
         int testlegpos = 0
-        CoordRoute.findAllByRoute(routeLegCoordInstance.route).each { CoordRoute coordroute_instance ->
+        CoordRoute.findAllByRoute(routeLegCoordInstance.route,[sort:"id"]).each { CoordRoute coordroute_instance ->
        		lastMapMeasureDistance = addMapDistance(lastMapMeasureDistance,coordroute_instance.legMeasureDistance)
             lastMapMeasureTrueTrack = coordroute_instance.measureTrueTrack
             if (last_coordroute_instance && last_coordroute_test_instance) {
@@ -4026,7 +4308,7 @@ class FcService
                      (last_coordroute_test_instance.type == CoordType.TP && coordroute_instance.type == CoordType.TP) ||
                      (last_coordroute_test_instance.type == CoordType.TP && coordroute_instance.type == CoordType.FP) ) 
                 {
-                	RouteLegTest.findAllByRoute(routeLegCoordInstance.route).eachWithIndex { RouteLegTest routelegtest_instance, int i ->
+                	RouteLegTest.findAllByRoute(routeLegCoordInstance.route,[sort:"id"]).eachWithIndex { RouteLegTest routelegtest_instance, int i ->
                 		if (i == testlegpos) {
                 			routelegtest_instance.legMeasureDistance = lastMapMeasureDistance 
                 			routelegtest_instance.legDistance = calculateMapDistance(contest_instance,lastMapMeasureDistance)
@@ -4106,12 +4388,14 @@ class FcService
 					crew_instance.specialPenalties = 0
 					crew_instance.contestPenalties = 0
 					crew_instance.contestPosition = 0
+					crew_instance.noContestPosition = false
+					crew_instance.classPosition = 0
 					crew_instance.teamPenalties = 0
 					if (crew_instance.team) {
 						crew_instance.team.contestPenalties = 0
 						crew_instance.team.contestPosition = 0
 					}
-					for (Crew crew_instance2 in Crew.findAllByContest(crew_instance.contest)) {
+					for (Crew crew_instance2 in Crew.findAllByContest(crew_instance.contest,[sort:"id"])) {
 						boolean run = false
 						if (crew_instance2 != crew_instance) {
 							if (crew_instance.contest.resultClasses) {
@@ -4131,6 +4415,8 @@ class FcService
 							crew_instance2.specialPenalties = 0
 							crew_instance2.contestPenalties = 0
 							crew_instance2.contestPosition = 0
+							crew_instance2.noContestPosition = false
+							crew_instance2.classPosition = 0
 							crew_instance2.teamPenalties = 0
 							if (crew_instance2.team) {
 								crew_instance2.team.contestPenalties = 0
@@ -4168,7 +4454,7 @@ class FcService
 					int no_modify_tas_num = 0
 					if (modify_tas) {
 						println "TAS modified."
-		                Test.findAllByCrew(crew_instance).each { Test test_instance ->
+		                Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
 							if (test_instance.planningtesttask || test_instance.timeCalculated) {
 								println "'${test_instance.task.name()}' '$test_instance.crew.name': do nothing."
 								no_modify_tas_num++
@@ -4238,7 +4524,7 @@ class FcService
                     if(!aircraft_instance.hasErrors() && aircraft_instance.save()) {
                         crew_instance.aircraft = aircraft_instance 
                         crew_instance.save(flush:true)
-						println "saveCrew: $crew_instance.name saved (flush:true)."
+						println "saveCrew (aircraft): $crew_instance.name saved (flush:true)."
                     }
                 }
             }
@@ -4253,7 +4539,7 @@ class FcService
                     if(!team_instance.hasErrors() && team_instance.save()) {
 						crew_instance.team = team_instance 
                         crew_instance.save(flush:true)
-						println "saveCrew: $crew_instance.name saved (flush:true)."
+						println "saveCrew (team): $crew_instance.name saved (flush:true)."
                     }
                 }
 			}
@@ -4264,14 +4550,16 @@ class FcService
                     resultclass_instance = new ResultClass(name:params.resultclassname)
                     resultclass_instance.contest = crew_instance.contest
 					resultclass_instance.save()
+					println "saveCrew (new class): $resultclass_instance.name saved."
 					
 					// create TaskClasses
 					if (contestInstance.resultClasses) {
-						for (Task task_instance in Task.findAllByContest(contestInstance)) {
+						for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
 							TaskClass taskclass_instance = new TaskClass()
 							taskclass_instance.task = task_instance
 							taskclass_instance.resultclass = resultclass_instance
 							taskclass_instance.save()
+							println "saveCrew (new taskclass): Taskclass for task '${task_instance.name()}' saved."
 						}
 					}
                 }
@@ -4279,12 +4567,12 @@ class FcService
                     if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
 						crew_instance.resultclass = resultclass_instance 
                         crew_instance.save(flush:true)
-						println "saveCrew: $crew_instance.name saved (flush:true)."
+						println "saveCrew (class): $crew_instance.name saved (flush:true)."
                     }
                 }
 			}
 			
-            Task.findAllByContest(contestInstance).each { Task task_instance ->
+            Task.findAllByContest(contestInstance,[sort:"id"]).each { Task task_instance ->
                 Test test_instance = new Test()
                 test_instance.crew = crew_instance
 				test_instance.taskTAS = crew_instance.tas
@@ -4371,12 +4659,12 @@ class FcService
         }
 		
         // remove crew tests
-        Test.findAllByCrew(crewInstance).each { Test test_instance ->
+        Test.findAllByCrew(crewInstance,[sort:"id"]).each { Test test_instance ->
             test_instance.delete()
         }
         
         // correct all test's viewpos
-        Task.findAllByContest(crewInstance.contest).each { Task task_instance ->
+        Task.findAllByContest(crewInstance.contest,[sort:"id"]).each { Task task_instance ->
         	Test.findAllByTask(task_instance,[sort:"viewpos"]).eachWithIndex { Test test_instance, int i ->
         		test_instance.viewpos = i
         		test_instance.save()
@@ -4386,7 +4674,7 @@ class FcService
         crewInstance.delete()
         
         // correct all crew's viewpos
-		Crew.findAllByContest(crewInstance.contest).eachWithIndex { Crew crew_instance2, int i ->
+		Crew.findAllByContest(crewInstance.contest,[sort:"id"]).eachWithIndex { Crew crew_instance2, int i ->
 			crew_instance2.viewpos = i
 			crew_instance2.save()
 		}
@@ -4411,7 +4699,7 @@ class FcService
     {
         Map crew = [:] 
         Map selected_crewids = [selectedCrewID:""]
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
 			selected_crewids["selectedCrewID${crew_instance.id}"] = "on"
         }
         crew.selectedcrewids = selected_crewids
@@ -4428,7 +4716,7 @@ class FcService
 		/*
         // Have all crews an aircraft?
         boolean call_return = false
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
             if (!crew_instance.aircraft) {
                 call_return = true
             }
@@ -4441,7 +4729,7 @@ class FcService
         */
 
     	// set viewpos for aircraft of user1 
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
 			if (!crew_instance.disabled) {
 	        	if (crew_instance.aircraft) {
 	        		if (crew_instance.aircraft.user1 == crew_instance) {
@@ -4452,7 +4740,7 @@ class FcService
         }
 
         // set viewpos for aircraft of user2 
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
 			if (!crew_instance.disabled) {
 	            if (crew_instance.aircraft) {
 	                if (crew_instance.aircraft.user2 == crew_instance) {
@@ -4463,7 +4751,7 @@ class FcService
         }
 
         // set viewpos for user without aircraft 
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
 			if (!crew_instance.disabled) {
 	            if (!crew_instance.aircraft) {
 	                crew_instance.viewpos = 2000+crew_instance.tas
@@ -4472,7 +4760,7 @@ class FcService
         }
 
         // set viewpos for disabled user 
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
 			if (crew_instance.disabled) {
                 crew_instance.viewpos = 1000+crew_instance.tas
 			}
@@ -4529,7 +4817,7 @@ class FcService
         int movefirstpos = -1
         Map selected_crewids = [selectedCrewID:""]
         borderreached = false
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
             if (params["selectedCrewID${crew_instance.id}"] == "on") {
                 crew_instance.viewpos--
                 crew_instance.save()
@@ -4543,7 +4831,7 @@ class FcService
                 }
             }
         }
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
             if (params["selectedCrewID${crew_instance.id}"] != "on") {
                 if (crew_instance.viewpos >= movefirstpos && crew_instance.viewpos < movefirstpos + movenum) {
                     crew_instance.viewpos += movenum
@@ -4614,7 +4902,7 @@ class FcService
         int movefirstpos = -1
         Map selected_crewids = [selectedCrewID:""]
         borderreached = false
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
             if (params["selectedCrewID${crew_instance.id}"] == "on") {
                 crew_instance.viewpos++
                 crew_instance.save()
@@ -4628,7 +4916,7 @@ class FcService
                 }
             }
         }
-        Crew.findAllByContest(contestInstance).each { Crew crew_instance ->
+        Crew.findAllByContest(contestInstance,[sort:"id"]).each { Crew crew_instance ->
             if (params["selectedCrewID${crew_instance.id}"] != "on") {
                 if (crew_instance.viewpos >= movefirstpos && crew_instance.viewpos < movefirstpos + movenum) {
                     crew_instance.viewpos -= movenum
@@ -5248,7 +5536,7 @@ class FcService
 	boolean isprintcrewresult(Map params, Test testInstance) 
 	{
 		if (testInstance.task.contest.resultClasses) {
-			for (ResultClass resultclass_instance in ResultClass.findAllByContest(testInstance.task.contest)) {
+			for (ResultClass resultclass_instance in ResultClass.findAllByContest(testInstance.task.contest,[sort:"id"])) {
 				if (params["resultclass_${resultclass_instance.id}"] == "on") {
 					if (testInstance.crew.resultclass) {
 						if (testInstance.crew.resultclass.id == resultclass_instance.id) {  // BUG: direkter Klassen-Vergleich geht nicht
@@ -5744,13 +6032,13 @@ class FcService
     	
 		if (recalculatePenalties) {
 			// recalculate TestLegPlanning
-			TestLegPlanning.findAllByTest(testInstance).each { TestLegPlanning testlegplanning_instance  ->
+			TestLegPlanning.findAllByTest(testInstance,[sort:"id"]).each { TestLegPlanning testlegplanning_instance  ->
 				calculateLegPlanningInstance(testlegplanning_instance,true)
 				testlegplanning_instance.save()
 			}
 			
 			// recalculate CoordResult
-			CoordResult.findAllByTest(testInstance).each { CoordResult coordresult_instance ->
+			CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
 				calculateCoordResultInstance(coordresult_instance,false,true)
 				coordresult_instance.save()
 			}
@@ -5762,7 +6050,7 @@ class FcService
         if (TestLegPlanning.findByTest(testInstance)) {
         	testInstance.planningTestLegComplete = true
         }
-    	TestLegPlanning.findAllByTest(testInstance).each { TestLegPlanning testlegplanning_instance ->
+    	TestLegPlanning.findAllByTest(testInstance,[sort:"id"]).each { TestLegPlanning testlegplanning_instance ->
     		if (testlegplanning_instance.resultEntered) {
     			testInstance.planningTestLegPenalties += testlegplanning_instance.penaltyTrueHeading
     			testInstance.planningTestLegPenalties += testlegplanning_instance.penaltyLegTime
@@ -5790,7 +6078,7 @@ class FcService
     	if (CoordResult.findByTest(testInstance)) {
     		testInstance.flightTestCheckPointsComplete = true
     	}
-    	CoordResult.findAllByTest(testInstance).each { CoordResult coordresult_instance ->
+    	CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
     		if (coordresult_instance.resultEntered) {
   				testInstance.flightTestCheckPointPenalties += coordresult_instance.penaltyCoord
     		} else {
@@ -6054,7 +6342,7 @@ class FcService
             flighttest_instance.properties = params
 
 			if (old_route != flighttest_instance.route) {
-		        Test.findAllByTask(flighttest_instance.task).each { Test test_instance ->
+		        Test.findAllByTask(flighttest_instance.task,[sort:"id"]).each { Test test_instance ->
 		        	test_instance.timeCalculated = false
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
@@ -6203,7 +6491,7 @@ class FcService
             flighttestwind_instance.wind.speed = flighttestwind_instance.speed
             
 			if (old_direction != flighttestwind_instance.wind.direction || old_speed != flighttestwind_instance.wind.speed) {
-		        Test.findAllByTask(flighttestwind_instance.flighttest.task).each { Test test_instance ->
+		        Test.findAllByTask(flighttestwind_instance.flighttest.task,[sort:"id"]).each { Test test_instance ->
 		        	test_instance.timeCalculated = false
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
@@ -6467,7 +6755,7 @@ class FcService
             planningtesttask_instance.wind.speed = planningtesttask_instance.speed
 
 			if (old_route != planningtesttask_instance.route || old_direction != planningtesttask_instance.wind.direction || old_speed != planningtesttask_instance.wind.speed) {
-	            Test.findAllByTask(planningtesttask_instance.planningtest.task).each { Test test_instance ->
+	            Test.findAllByTask(planningtesttask_instance.planningtest.task,[sort:"id"]).each { Test test_instance ->
 	                calulateTestLegPlannings(test_instance)
 					test_instance.ResetPlanningTestResults()
 					test_instance.CalculateTestPenalties()
@@ -6547,7 +6835,7 @@ class FcService
 	                    
 	                planningtesttask_instance.delete()
 	
-	                PlanningTestTask.findAllByPlanningtest(planningtest_instance).eachWithIndex { PlanningTestTask planningtesttask_instance2, int index  -> 
+	                PlanningTestTask.findAllByPlanningtest(planningtest_instance,[sort:"id"]).eachWithIndex { PlanningTestTask planningtesttask_instance2, int index  -> 
 	                    planningtesttask_instance2.idTitle = index + 1
 	                }
 	                
@@ -7065,10 +7353,10 @@ class FcService
     {
     	printstart "removeAllRouteLegs: '${routeInstance.name()}'"
     	
-        RouteLegCoord.findAllByRoute(routeInstance).each { RouteLegCoord routelegcoord_instance ->
+        RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"]).each { RouteLegCoord routelegcoord_instance ->
         	routelegcoord_instance.delete()
         }
-        RouteLegTest.findAllByRoute(routeInstance).each { RouteLegTest routelegtest_instance ->
+        RouteLegTest.findAllByRoute(routeInstance,[sort:"id"]).each { RouteLegTest routelegtest_instance ->
         	routelegtest_instance.delete()
         }
 		
@@ -7087,7 +7375,7 @@ class FcService
         CoordRoute last_coordroute_instance
         CoordRoute last_coordroute_test_instance
         BigDecimal last_mapmeasuredistance = null
-        CoordRoute.findAllByRoute(routeInstance).each { CoordRoute coordroute_instance ->
+        CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
       		last_mapmeasuredistance = addMapDistance(last_mapmeasuredistance,coordroute_instance.legMeasureDistance)
             newLeg(
 				routeInstance, 
@@ -7121,7 +7409,7 @@ class FcService
         CoordType last_coordtype
         BigDecimal last_legdirection = null
         
-        CoordRoute.findAllByRoute(routeInstance).each { CoordRoute coordroute_instance ->
+        CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
         	switch (coordroute_instance.type) {
         		case CoordType.SP:
         		case CoordType.TP:
@@ -7136,7 +7424,7 @@ class FcService
 	        		boolean leg_found = false
 					boolean secret_found = false
 					boolean no_end_distance = false
-	        		CoordRoute.findAllByRoute(routeInstance).each { CoordRoute coordroute_instance2 ->
+	        		CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance2 ->
 	                    if (leg_found) {
 	                        switch (coordroute_instance2.type) {
 	                        	case CoordType.TP:
@@ -7369,20 +7657,22 @@ class FcService
         
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
-		        if (test_instance.taskTAS > last_task_tas) { // faster aircraft
-		        	start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalFasterAircraft - taskInstance.takeoffIntervalNormal)
-		        }
-		        
-				if (!test_instance.timeCalculated) {
-					calculateTime(test_instance, taskInstance, start_time, last_arrival_time)
-					calulateCoordResult(test_instance)
-					calculated_crew_num++
+				if (test_instance.flighttestwind) {
+			        if (test_instance.taskTAS > last_task_tas) { // faster aircraft
+			        	start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalFasterAircraft - taskInstance.takeoffIntervalNormal)
+			        }
+			        
+					if (!test_instance.timeCalculated) {
+						calculateTime(test_instance, taskInstance, start_time, last_arrival_time)
+						calulateCoordResult(test_instance)
+						calculated_crew_num++
+					}
+			
+					// next 
+			        start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
+			        last_task_tas = test_instance.taskTAS
+		            last_arrival_time = test_instance.arrivalTime
 				}
-		
-				// next 
-		        start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
-		        last_task_tas = test_instance.taskTAS
-	            last_arrival_time = test_instance.arrivalTime
 			}
         }
 
@@ -7482,7 +7772,7 @@ class FcService
     private int getLegsPlanTimeSeconds(Test testInstance)
     {
 		Date legs_time = Date.parse("HH:mm","00:00")
-        TestLegFlight.findAllByTest(testInstance).each { TestLegFlight testlegflight_instance ->
+        TestLegFlight.findAllByTest(testInstance,[sort:"id"]).each { TestLegFlight testlegflight_instance ->
 			legs_time = testlegflight_instance.AddPlanLegTime(legs_time)
         }
         return FcMath.Seconds(legs_time)
@@ -7495,9 +7785,11 @@ class FcService
 		boolean something_calculated = false
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
 			if (!test_instance.crew.disabled) {
-				if (!test_instance.timeCalculated) {
-					calulateTestLegFlight(test_instance)
-					something_calculated = true
+				if (test_instance.flighttestwind) {
+					if (!test_instance.timeCalculated) {
+						calulateTestLegFlight(test_instance)
+						something_calculated = true
+					}
 				}
 			}
         }
@@ -7514,14 +7806,14 @@ class FcService
         printstart "calulateTestLegFlight: ${testInstance.crew.name}"
         
         // remove all TestLegFlights
-        TestLegFlight.findAllByTest(testInstance).each { TestLegFlight testlegflight_instance ->
+        TestLegFlight.findAllByTest(testInstance,[sort:"id"]).each { TestLegFlight testlegflight_instance ->
             testlegflight_instance.delete(flush:true)
 			println "calulateTestLegFlight: TestLegFlight instance deleted (flush:true)."
         }
 
         // calculate TestLegFlights
         BigDecimal last_truetrack = null
-        RouteLegTest.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route).each { RouteLegTest routelegtest_instance ->
+        RouteLegTest.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route,[sort:"id"]).each { RouteLegTest routelegtest_instance ->
             
             TestLegFlight testlegflight_instance = new TestLegFlight()
             calculateLeg(testlegflight_instance, routelegtest_instance, testInstance.flighttestwind.wind, testInstance.taskTAS, testInstance.task.procedureTurnDuration, last_truetrack)
@@ -7540,14 +7832,14 @@ class FcService
 		printstart "calulateCoordResult: ${testInstance.crew.name}"
 		
         // remove all coordResultInstances
-        CoordResult.findAllByTest(testInstance).each { CoordResult coordresult_instance ->
+        CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
             coordresult_instance.delete(flush:true)
 			println "calulateCoordResult: CoordResult instance deleted (flush:true)."
         }
 
         // create coordResultInstances
         int coord_index = 0
-        CoordRoute.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route).each { CoordRoute coordroute_instance ->
+        CoordRoute.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route,[sort:"id"]).each { CoordRoute coordroute_instance ->
             CoordResult coordresult_instance = new CoordResult()
             coordresult_instance.type = coordroute_instance.type
             coordresult_instance.titleNumber = coordroute_instance.titleNumber
@@ -7575,7 +7867,7 @@ class FcService
                 case CoordType.FP:
                     coord_index++
                     Date cp_time = testInstance.startTime
-                    TestLegFlight.findAllByTest(testInstance).eachWithIndex { TestLegFlight testlegflight_instance, int leg_index ->
+                    TestLegFlight.findAllByTest(testInstance,[sort:"id"]).eachWithIndex { TestLegFlight testlegflight_instance, int leg_index ->
                         cp_time = testlegflight_instance.AddPlanLegTime(cp_time)
                         if (coord_index == leg_index + 1) {
                             coordresult_instance.planCpTime = cp_time
@@ -7584,7 +7876,7 @@ class FcService
                     break
                 case CoordType.SECRET:
                     Date cp_time = testInstance.startTime
-                    TestLegFlight.findAllByTest(testInstance).eachWithIndex { TestLegFlight testlegflight_instance, int leg_index ->
+                    TestLegFlight.findAllByTest(testInstance,[sort:"id"]).eachWithIndex { TestLegFlight testlegflight_instance, int leg_index ->
                         if (coord_index == leg_index) {
 							cp_time = testlegflight_instance.AddPlanLegTime(cp_time,coordroute_instance.secretLegRatio)
                             coordresult_instance.planCpTime = cp_time
@@ -7621,13 +7913,13 @@ class FcService
 		Route route_instance = testInstance.planningtesttask.route
 		
         // remove all TestLegPlannings
-        TestLegPlanning.findAllByTest(testInstance).each { TestLegPlanning testlegplanning_instance ->
+        TestLegPlanning.findAllByTest(testInstance,[sort:"id"]).each { TestLegPlanning testlegplanning_instance ->
             testlegplanning_instance.delete()
         }
         
         // calculate TestLegPlannings with results 
         BigDecimal last_truetrack = null
-        RouteLegTest.findAllByRoute(route_instance).each { RouteLegTest routelegtest_instance ->
+        RouteLegTest.findAllByRoute(route_instance,[sort:"id"]).each { RouteLegTest routelegtest_instance ->
             TestLegPlanning testlegplanning_instance = new TestLegPlanning()
             calculateLeg(testlegplanning_instance, routelegtest_instance, testInstance.planningtesttask.wind, testInstance.taskTAS, testInstance.planningtesttask.planningtest.task.procedureTurnDuration, last_truetrack)
             testlegplanning_instance.test = testInstance
@@ -7737,13 +8029,31 @@ class FcService
     Map putResultClass(Map contest, String name, String contestTitle, ContestRules contestRule)
     {
 		printstart "putResultClass"
-        Map p = [:]
-        p.name = name
-		p.contestTitle = contestTitle
-		p.contestRule = contestRule
-        Map ret = saveResultClass(p,contest.instance)
-		printdone ret
-		return ret
+		
+        ResultClass resultclass_instance = ResultClass.findByNameAndContest(name,contest.instance)
+        if (resultclass_instance) {
+			resultclass_instance.name = name
+			resultclass_instance.contestTitle = contestTitle
+			resultclass_instance.contestRule = contestRule
+			setContestRule(resultclass_instance, resultclass_instance.contestRule)
+			if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
+				Map ret = ['instance':resultclass_instance,'saved':true,'message':getMsg('fc.created',["${resultclass_instance.name}"])]
+				printdone ret
+				return ret
+			} else {
+				Map ret = ['instance':resultclass_instance]
+				printdone ret
+				return ret
+			}
+		} else {
+	        Map p = [:]
+	        p.name = name
+			p.contestTitle = contestTitle
+			p.contestRule = contestRule
+	        Map ret = saveResultClass(p,contest.instance)
+			printdone ret
+			return ret
+		}
     }
     
     //--------------------------------------------------------------------------
@@ -7755,7 +8065,7 @@ class FcService
 		printstart "puttaskclassTask"
 		
 		Task task_instance = task.instance
-		for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+		for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 			if (taskclass_instance.resultclass == resultClass.instance) {
 				taskclass_instance.planningTestRun = planningTestRun
 				taskclass_instance.flightTestRun = flightTestRun
@@ -7933,11 +8243,29 @@ class FcService
     void putplanningtesttaskTask(Map task, Map planningtesttask)
     {
 		printstart "putplanningtesttaskTask"
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             test_instance.planningtesttask = planningtesttask.instance
             calulateTestLegPlannings(test_instance)
             test_instance.save()
+			println "$test_instance.crew.name"
         }
+		printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    void putplanningtesttaskcrewsTask(Map task, Map planningtesttask, List crewList)
+    {
+		printstart "putplanningtesttaskTask"
+	    Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
+			crewList.each { Map crew ->
+				if (crew.instance == test_instance.crew) {
+		            test_instance.planningtesttask = planningtesttask.instance
+		            calulateTestLegPlannings(test_instance)
+		            test_instance.save()
+					println "$test_instance.crew.name"
+				}
+	        }
+		}
 		printdone ""
     }
     
@@ -7950,7 +8278,7 @@ class FcService
 		crewResults.each { Map crew_result ->
 	    	Test.findAllByTask(task_instance,[sort:"viewpos"]).each { Test test_instance ->
 				if (test_instance.crew == crew_result.crew.instance) {
-		    		TestLegPlanning.findAllByTest(test_instance).eachWithIndex { TestLegPlanning testlegplanning_instance, int j  ->
+		    		TestLegPlanning.findAllByTest(test_instance,[sort:"id"]).eachWithIndex { TestLegPlanning testlegplanning_instance, int j  ->
 		        		if (crew_result.givenValues[j]?.trueHeading && crew_result.givenValues[j]?.legTime) {
 			    			testlegplanning_instance.resultTrueHeading = crew_result.givenValues[j].trueHeading
 			        		testlegplanning_instance.resultLegTimeInput = crew_result.givenValues[j].legTime
@@ -7975,9 +8303,26 @@ class FcService
     void putflighttestwindTask(Map task, Map flighttestwind)
     {
 		printstart "putflighttestwindTask"
-        Test.findAllByTask(task.instance).each { Test test_instance ->
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             test_instance.flighttestwind = flighttestwind.instance
             test_instance.save()
+			println "$test_instance.crew.name"
+        }
+		printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    void putflighttestwindcrewsTask(Map task, Map flighttestwind, List crewList)
+    {
+		printstart "putflighttestwindTask"
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
+			crewList.each { Map crew ->
+				if (crew.instance == test_instance.crew) {
+		            test_instance.flighttestwind = flighttestwind.instance
+		            test_instance.save()
+					println "$test_instance.crew.name"
+				}
+			}
         }
 		printdone ""
     }
@@ -8023,7 +8368,7 @@ class FcService
 	private void putflightresults(Test testInstance, Map crewResult)
 	{
 		if (crewResult.givenValues) {
-			CoordResult.findAllByTest(testInstance).eachWithIndex { CoordResult coordresult_instance, int j  ->
+			CoordResult.findAllByTest(testInstance,[sort:"id"]).eachWithIndex { CoordResult coordresult_instance, int j  ->
 				boolean calculate = false
 	    		if (crewResult.givenValues[j]?.cpNotFound) {
 	    			coordresult_instance.resultCpNotFound = true
@@ -8053,7 +8398,7 @@ class FcService
         }
 		if (crewResult.correctionValues) {
 			crewResult.correctionValues.each { Map correction_value ->
-				CoordResult.findAllByTest(testInstance).each { CoordResult coordresult_instance ->
+				CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
 					if (correction_value.mark == coordresult_instance.mark) {
 						boolean calculate = false
 			    		if (correction_value?.cpNotFound) {
@@ -8205,7 +8550,7 @@ class FcService
 		printstart "putsequenceTask"
 		int view_pos = 0
 		crewSequence.each { Map crew ->
-			Test.findAllByTask(task.instance).each { Test test_instance ->
+			Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
 				if (test_instance.crew == crew.instance) {
 					test_instance.viewpos = view_pos
 					test_instance.timeCalculated = false
@@ -8286,28 +8631,28 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map runcalculatepositionsContest(Map contest)
+    Map runcalculatecontestpositionsContest(Map contest, List contestClasses, List contestTasks)
     {
-		printstart "runcalculatepositionsContest"
-        Map ret = calculatepositionsContest(contest.instance)
+		printstart "runcalculatecontestpositionsContest [$contestClasses] [$contestTasks]"
+        Map ret = calculatecontestpositionsContest(contest.instance,contestClasses,contestTasks)
 		printdone ret
 		return ret
     }
 
     //--------------------------------------------------------------------------
-    Map runcalculatepositionsResultClass(Map resultclass)
+    Map runcalculatepositionsResultClass(Map resultclass, List contestTasks)
     {
 		printstart "runcalculatepositionsResultClass"
-        Map ret = calculatepositionsResultClass(resultclass.instance)
+        Map ret = calculatepositionsResultClass(resultclass.instance,contestTasks)
 		printdone ret
 		return ret
     }
 
     //--------------------------------------------------------------------------
-    Map runcalculateteampositionsContest(Map contest, List teamClasses)
+    Map runcalculateteampositionsContest(Map contest, List teamClasses, List teamTasks)
     {
-		printstart "runcalculateteampositionsContest $teamClasses"
-        Map ret = calculateteampositionsContest(contest.instance, teamClasses)
+		printstart "runcalculateteampositionsContest [$teamClasses] [$teamTasks]"
+        Map ret = calculateteampositionsContest(contest.instance,teamClasses,teamTasks)
 		printdone ret
 		return ret
     }

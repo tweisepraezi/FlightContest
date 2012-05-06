@@ -1,0 +1,5 @@
+enum ResultFilter 
+{
+	Contest,
+	Team
+}

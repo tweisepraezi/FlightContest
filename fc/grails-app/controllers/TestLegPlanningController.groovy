@@ -50,7 +50,7 @@ class TestLegPlanningController
 			TestLegPlanning testlegplanning_nextinstance = null
 			TestLegPlanning testlegplanning_nextinstance2 = null
 			int leg_no = 0
-			for ( TestLegPlanning testlegplanning_instance in TestLegPlanning.findAllByTest(testlegplanning.instance.test) ) {
+			for ( TestLegPlanning testlegplanning_instance in TestLegPlanning.findAllByTest(testlegplanning.instance.test,[sort:"id"]) ) {
 				if (!testlegplanning_nextinstance) {
 					leg_no++
 				}

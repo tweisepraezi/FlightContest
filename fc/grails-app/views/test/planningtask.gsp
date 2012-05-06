@@ -75,7 +75,7 @@
                                     <tbody>
                                         <g:set var="legNo" value="${new Integer(0)}" />
                                         <g:set var="legNum" value="${TestLegPlanning.countByTest(testInstance)}" />
-                                        <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance)}">
+                                        <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
                                             <g:set var="legNo" value="${legNo+1}" />
                                             <g:if test="${!testlegplanning_instance.test.IsPlanningTestDistanceMeasure()}">
                                                 <g:set var="test_distance" value="${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}" />

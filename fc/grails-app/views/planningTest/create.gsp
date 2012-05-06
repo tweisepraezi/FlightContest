@@ -43,7 +43,7 @@
                             <p>
                                 <label>${message(code:'fc.route')}*:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(planningTestInstance.task.contest)}" name="route.id" value="${planningTestInstance?.route?.id}" ></g:select>
+                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(planningTestInstance.task.contest,[sort:"id"])}" name="route.id" value="${planningTestInstance?.route?.id}" ></g:select>
                             </p>
                         </fieldset>
                         <fieldset>

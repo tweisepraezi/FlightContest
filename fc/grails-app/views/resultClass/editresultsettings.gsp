@@ -14,6 +14,22 @@
                     <g:form params="${['editresultsettingsReturnAction':editresultsettingsReturnAction,'editresultsettingsReturnController':editresultsettingsReturnController,'editresultsettingsReturnID':editresultsettingsReturnID]}">
                         <fieldset>
                             <p>
+                                <g:each var="task_instance" in="${Task.findAllByContest(resultclassInstance.contest,[sort:"id"])}">
+                                    <g:set var="task_selected" value="${false}"/>
+                                    <g:each var="contest_task_result" in="${resultclassInstance.contestTaskResults.split(',')}">
+                                        <g:if test="${contest_task_result == 'task_' + task_instance.id.toString()}">
+                                            <g:set var="task_selected" value="${true}"/>
+                                        </g:if>
+                                    </g:each>
+                                    <div>
+                                        <g:checkBox name="task_${task_instance.id}" value="${task_selected}" />
+                                        <label>${task_instance.name()}</label>
+                                    </div>
+                                </g:each>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p>
                             	<g:if test="${resultclassInstance.IsPlanningTestRun()}">
 	                                <div>
 	                                    <g:checkBox name="contestPlanningResults" value="${resultclassInstance.contestPlanningResults}" />
@@ -44,6 +60,22 @@
 	                                    <label>${message(code:'fc.specialresults')}</label>
 	                                </div>
                                 </g:if>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p>
+                                <div>
+                                    <g:checkBox name="contestPrintLandscape" value="${resultclassInstance.contestPrintLandscape}" />
+                                    <label>${message(code:'fc.printlandscape')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="contestPrintTaskDetails" value="${resultclassInstance.contestPrintTaskDetails}" />
+                                    <label>${message(code:'fc.printtaskdetails')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="contestPrintTaskNamesInTitle" value="${resultclassInstance.contestPrintTaskNamesInTitle}" />
+                                    <label>${message(code:'fc.printtasknamesinttitle')}</label>
+                                </div>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${resultclassInstance?.id}"/>

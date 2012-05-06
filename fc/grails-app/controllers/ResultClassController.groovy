@@ -175,8 +175,7 @@ class ResultClassController {
 				session.lastContest = Contest.get(params.contestid)
 			}
 			if (session?.lastContest) {
-				def resultclassList = ResultClass.findAllByContest(session.lastContest)
-				params.sort = "name"
+				def resultclassList = ResultClass.findAllByContest(session.lastContest,[sort:"name"])
 				return [resultclassInstanceList:resultclassList]
 			}
 			return [:]
@@ -224,7 +223,7 @@ class ResultClassController {
 	
 		def calculatepositions = {
 			ResultClass resultclass_instance = ResultClass.get(params.id)
-	        def resultclass = fcService.calculatepositionsResultClass(resultclass_instance) 
+	        def resultclass = fcService.calculatepositionsResultClass(resultclass_instance,[]) 
 	        flash.message = resultclass.message
 			if (resultclass.error) {
 				flash.error = true

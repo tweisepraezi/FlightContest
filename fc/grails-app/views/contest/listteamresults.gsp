@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${contestInstance.GetListTitle('fc.contest.listteamresults')}</title>
+        <title>${contestInstance.GetListTitle(ResultFilter.Team,'fc.contest.listteamresults')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="task" taskresults="true" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${contestInstance.GetListTitle('fc.contest.listteamresults')}<g:if test="${contestInstance.IsTeamResultsProvisional(contestInstance.GetTeamResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${contestInstance.GetListTitle(ResultFilter.Team,'fc.contest.listteamresults')}<g:if test="${contestInstance.IsTeamResultsProvisional(contestInstance.GetTeamResultSettings(),contestInstance.teamTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
                     <g:form params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
                         <table>
@@ -45,10 +45,10 @@
                                         <td>
                                         	<g:set var="crew_num" value="${new Integer(0)}"/>
                                         	<g:each var="crew_instance" in="${Crew.findAllByTeamAndDisabled(team_instance,false,[sort:'teamPenalties'])}">
-                                        		<g:if test="${crew_instance.IsActiveCrew() && (crew_num < contestInstance.teamCrewNum)}">
+                                        		<g:if test="${crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_num < contestInstance.teamCrewNum)}">
                                         			<g:set var="crew_num" value="${crew_num+1}"/>
 			                                        <g:set var="test_provisional" value="${false}"/>
-			                                        <g:each var="task_instance" in="${Task.findAllByContest(contestInstance)}">
+			                                        <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.teamTaskResults)}">
 			                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
 			                                        	<g:if test="${test_instance.AreResultsProvisional(contestInstance.GetTeamResultSettings())}">
 			                                        		<g:set var="test_provisional" value="${true}"/>

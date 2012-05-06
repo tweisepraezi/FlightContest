@@ -28,53 +28,53 @@
                             <td><g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/></td>
 
                             <td>
-                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}">
+                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
                                     ${coordRouteInstance.titleCode()}
                                     <br/>                                     
                                 </g:each>
                             </td>
                             <td>
-                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance)}">
+                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
                                     ${coordRouteInstance.name()}
                                     <br/>                                     
                                 </g:each>
                             </td>
 
                             <td>
-                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}">
+                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}">
                                     ${routeLegCoordInstance.title}
                                     <br/>                                     
                                 </g:each>
                             </td>
                             <td>
-                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance)}">
+                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}">
                                     ${routeLegCoordInstance.testName()}
                                     <br/>                                     
                                 </g:each>
                             </td>
 
                             <td>
-                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance)}">
+                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
                                     ${routeLetTestInstance.title}
                                     <br/>                                     
                                 </g:each>
                             </td>
                             <td>
-                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance)}">
+                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
                                     ${routeLetTestInstance.testName()}
                                     <br/>                                     
                                 </g:each>
                             </td>
 
                             <td>
-                                <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance)}">
+                                <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance,[sort:"id"])}">
                                     <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
                                     <br/>                                     
                                 </g:each>
                             </td>
 
                             <td>
-                                <g:each var="c" in="${FlightTest.findAllByRoute(routeInstance)}">
+                                <g:each var="c" in="${FlightTest.findAllByRoute(routeInstance,[sort:"id"])}">
                                     <g:flighttest var="${c}" link="${createLink(controller:'flightTest',action:'show')}"/>
                                     <br/>                                     
                                 </g:each>

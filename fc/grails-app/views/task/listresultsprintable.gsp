@@ -5,7 +5,7 @@
 			    size: A4 landscape;
                 @top-center {
                     <g:if test="${resultclassInstance}">
-                        content: "${resultclassInstance.GetListTitle('fc.test.results')} - ${message(code:'fc.program.printpage')} " counter(page)
+                        content: "${resultclassInstance.GetPrintTitle2('fc.test.results')} - ${message(code:'fc.program.printpage')} " counter(page)
                     </g:if>
                     <g:else>
                         content: "${message(code:'fc.test.results')} - ${taskInstance.name()} - ${message(code:'fc.program.printpage')} " counter(page)

@@ -110,8 +110,7 @@ class TeamController {
             session.lastContest = Contest.get(params.contestid)
         }
         if (session?.lastContest) {
-            def teamList = Team.findAllByContest(session.lastContest)
-            params.sort = "name"
+            def teamList = Team.findAllByContest(session.lastContest,[sort:"name"])
             return [teamInstanceList:teamList]
         }
         return [:]

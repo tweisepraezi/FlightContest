@@ -57,7 +57,8 @@ environments {
 		dataSource {
 			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
 			//url = "jdbc:hsqldb:mem:devDB"
-			url = "jdbc:h2:mem:fcdb"
+			//url = "jdbc:h2:mem:fcdb"
+			url = "jdbc:h2:file:~/.grails/.fc/dev" // BUG: mem verursacht Fehler
 		}
 	}
 	test {
@@ -65,7 +66,7 @@ environments {
 			dbCreate = "update"
 			//url = "jdbc:hsqldb:file:fcdb;shutdown=true"
 			//url = "jdbc:h2:mem:testDb"
-			url = "jdbc:h2:file:fcdb"
+			url = "jdbc:h2:file:~/.grails/.fc/test"
 		}
 	}
 	production {

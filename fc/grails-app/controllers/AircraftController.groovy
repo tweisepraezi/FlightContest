@@ -107,8 +107,7 @@ class AircraftController {
             session.lastContest = Contest.get(params.contestid)
         }
         if (session?.lastContest) {
-            def aircraftList = Aircraft.findAllByContest(session.lastContest)
-            params.sort = "registration"
+            def aircraftList = Aircraft.findAllByContest(session.lastContest,[sort:"registration"])
             return [aircraftInstanceList:aircraftList]
         }
         return [:]

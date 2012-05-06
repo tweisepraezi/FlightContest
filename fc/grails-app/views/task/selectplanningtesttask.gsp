@@ -30,7 +30,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.planningtesttask')}:</label></td>
-                                    <td><g:select optionKey="id" optionValue="${{it.name()}}" from="${PlanningTestTask.findAllByPlanningtest(taskInstance.planningtest)}" name="planningtesttask.id" value="${taskInstance?.planningtest?.id}" ></g:select></td>
+                                    <td><g:select optionKey="id" optionValue="${{it.name()}}" from="${PlanningTestTask.findAllByPlanningtest(taskInstance.planningtest,[sort:"id"])}" name="planningtesttask.id" value="${taskInstance?.planningtest?.id}" ></g:select></td>
                                 </tr> 
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.task.selectplanningtesttask.tocrews')}:</td>

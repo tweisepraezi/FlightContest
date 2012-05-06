@@ -68,14 +68,14 @@
                                     <tbody>
                                         <g:set var="legNo" value="${new Integer(0)}" />
                                         <g:set var="legNum" value="${TestLegPlanning.countByTest(testInstance)}" />
-                                        <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance)}">
+                                        <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
                                             <g:set var="legNo" value="${legNo+1}" />
                                             <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
                                             
                                             	<!-- search next id -->
 		                                        <g:set var="next" value="${new Integer(0)}" />
 		                                        <g:set var="setnext" value="${false}" />
-        		                                <g:each var="testlegplanning_instance2" in="${TestLegPlanning.findAllByTest(testInstance)}">
+        		                                <g:each var="testlegplanning_instance2" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
                                                     <g:if test="${setnext}">
 	       				                                <g:set var="next" value="${testlegplanning_instance2.id}" />
 						                                <g:set var="setnext" value="${false}" />

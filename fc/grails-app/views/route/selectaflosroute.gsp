@@ -17,13 +17,13 @@
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.routedefs.routename')}:</label></td>
 									<g:if test="${contestInstance?.aflosTest}">
-                                        <td><g:select from="${AflosRouteNames.aflostest.findAllByIdNotEqual(0)}" name="aflosroutenames.id" value="${id}" optionKey="id" optionValue="${{it.name}}" tabIndex="1"></g:select></td>
+                                        <td><g:select from="${AflosRouteNames.aflostest.findAllByIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.id" value="${id}" optionKey="id" optionValue="${{it.name}}" tabIndex="1"></g:select></td>
 									</g:if>
 									<g:elseif test="${contestInstance?.aflosUpload}">
-                                        <td><g:select from="${AflosRouteNames.aflosupload.findAllByIdNotEqual(0)}" name="aflosroutenames.id" value="${id}" optionKey="id" optionValue="${{it.name}}" tabIndex="1"></g:select></td>
+                                        <td><g:select from="${AflosRouteNames.aflosupload.findAllByIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.id" value="${id}" optionKey="id" optionValue="${{it.name}}" tabIndex="1"></g:select></td>
 									</g:elseif>
 									<g:else>
-                                        <td><g:select from="${AflosRouteNames.aflos.findAllByIdNotEqual(0)}" name="aflosroutenames.id" value="${id}" optionKey="id" optionValue="${{it.name}}" tabIndex="1"></g:select></td>
+                                        <td><g:select from="${AflosRouteNames.aflos.findAllByIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.id" value="${id}" optionKey="id" optionValue="${{it.name}}" tabIndex="1"></g:select></td>
 									</g:else>
                                 </tr> 
                                 <tr>

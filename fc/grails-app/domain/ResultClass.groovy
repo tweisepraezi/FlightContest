@@ -5,15 +5,19 @@ class ResultClass
 {
 	String name
 	String contestTitle = ""
-	ContestRules contestRule                 // Wettbewerbsordnung
+	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung
 	
 	// Klassen-Auswertung
-	boolean contestPlanningResults = true    // Planungstest berüchsichtigen
-	boolean contestFlightResults = true      // Navigationstest berüchsichtigen
-	boolean contestObservationResults = true // Beobachtungstest berüchsichtigen
-	boolean contestLandingResults = true     // Landetest berüchsichtigen
-	boolean contestSpecialResults = false    // Sondertest berücksichtigen
-
+	String contestTaskResults = ""                      // Zu berücksichtigende Aufgaben, DB-2.1
+	boolean contestPlanningResults = true               // Planungstest berüchsichtigen
+	boolean contestFlightResults = true                 // Navigationstest berüchsichtigen
+	boolean contestObservationResults = true            // Beobachtungstest berüchsichtigen
+	boolean contestLandingResults = true                // Landetest berüchsichtigen
+	boolean contestSpecialResults = false               // Sondertest berücksichtigen
+	Boolean contestPrintLandscape = true                // Ausdruck quer, DB-2.1
+	Boolean contestPrintTaskDetails = true              // Ausdruck von Aufgabendetails, DB-2.1
+	Boolean contestPrintTaskNamesInTitle = true         // Ausdruck der Tasknamen im Title, wenn contestPrintTaskDetails = False, DB-2.1
+	
 	// PlanningTest
 	int planningTestDirectionCorrectGrad = 2
 	int planningTestDirectionPointsPerGrad = 2
@@ -153,6 +157,12 @@ class ResultClass
 		landingTest4AbnormalLandingPoints(blank:false, min:0)
 		landingTest4TouchingObstaclePoints(blank:false, min:0)
 		landingTest4PenaltyCalculator(blank:false, size:0..4096)
+		
+		// DB-2.1 compatibility
+		contestTaskResults(nullable:true)
+		contestPrintLandscape(nullable:true)
+		contestPrintTaskDetails(nullable:true)
+		contestPrintTaskNamesInTitle(nullable:true)
 	}
 
 	String GetPrintContestTitle()
@@ -166,9 +176,17 @@ class ResultClass
 	String GetPrintTitle(String msgID)
 	{
 		if (contestTitle) {
-			return "${getPrintMsg(msgID)}" 
+			return "${getPrintMsg(msgID)}"
 		}
 		return "${getPrintMsg(msgID)} ${name}"
+	}
+	
+	String GetPrintTitle2(String msgID)
+	{
+		if (contestTitle) {
+			return "${getPrintMsg(msgID)} - ${contestTitle}" 
+		}
+		return "${getPrintMsg(msgID)} - ${name}"
 	}
 	
 	String GetListTitle(String msgID)
@@ -181,8 +199,8 @@ class ResultClass
 	
 	boolean IsPlanningTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(contest)) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 				if (taskclass_instance.resultclass == this) {
 					if (taskclass_instance.planningTestRun) {
 						return true
@@ -195,8 +213,8 @@ class ResultClass
 	
 	boolean IsFlightTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(contest)) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 				if (taskclass_instance.resultclass == this) {
 					if (taskclass_instance.flightTestRun) {
 						return true
@@ -209,8 +227,8 @@ class ResultClass
 	
 	boolean IsObservationTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(contest)) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 				if (taskclass_instance.resultclass == this) {
 					if (taskclass_instance.observationTestRun) {
 						return true
@@ -223,8 +241,8 @@ class ResultClass
 	
 	boolean IsLandingTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(contest)) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 				if (taskclass_instance.resultclass == this) {
 					if (taskclass_instance.landingTestRun) {
 						return true
@@ -237,8 +255,8 @@ class ResultClass
 	
 	boolean IsSpecialTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(contest)) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 				if (taskclass_instance.resultclass == this) {
 					if (taskclass_instance.specialTestRun) {
 						return true
@@ -252,8 +270,8 @@ class ResultClass
 	Map GetTeamResultSettings()
 	{
 		Map ret = [:]
-		for (Task task_instance in Task.findAllByContest(contest)) {
-			for(TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance)) {
+		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+			for(TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 				if (taskclass_instance.resultclass == this) {
 					if (taskclass_instance.planningTestRun) {
 						ret += [Planning:true]
@@ -350,12 +368,12 @@ class ResultClass
 		this.save()
 	}
 	
-	boolean AreClassResultsProvisional(Map resultSettings)
+	boolean AreClassResultsProvisional(Map resultSettings, String resultTaskIDs)
 	{
 		//println "XX ResultClass.AreClassResultsProvisional $name $resultSettings"
-	    for (Crew crew_instance in Crew.findAllByContestAndDisabled(contest,false,[sort:'contestPosition'])) {
+	    for (Crew crew_instance in Crew.findAllByContestAndDisabled(contest,false,[sort:'classPosition'])) {
 	    	if (crew_instance.resultclass == this) {
-                for (Task task_instance in Task.findAllByContest(contest)) {
+                for (Task task_instance in contest.GetResultTasks(resultTaskIDs)) {
                 	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
                 	if (test_instance.AreClassResultsProvisional(resultSettings,this)) {
 						//println "-> true (ResultClass.AreClassResultsProvisional $task_instance.title $test_instance.crew.name)"
@@ -371,6 +389,18 @@ class ResultClass
 	Map GetClassResultSettings()
 	{
 		Map ret = [:]
+		if (!contestPrintTaskDetails && contestPrintTaskNamesInTitle) {
+			String task_names = ""
+			for (Task task_instance in contest.GetResultTasks(contestTaskResults)) {
+				if (task_names) {
+					task_names += ", "
+				}
+				task_names += task_instance.name()
+			}
+			if (task_names) {
+				ret += [Tasks:task_names]
+			}
+		}
 		if (contestPlanningResults && IsPlanningTestRun()) {
 			ret += [Planning:true]
 		}

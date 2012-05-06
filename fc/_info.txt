@@ -10,6 +10,10 @@ Neue DB-Felder
 --------------
 markieren mit // Grund, DB-2.1
 
+Primitve Typen nicht updatefähig, Object-Typen verwenden:
+  boolean -> Boolean
+  int -> Integer
+
 Plugins
 =======
 

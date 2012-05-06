@@ -138,8 +138,7 @@ class CrewController {
 			session.lastContest = Contest.get(params.contestid)
 		}
 		if (session?.lastContest) {
-            def crewList = Crew.findAllByContestAndDisabled(session.lastContest,false)
-            params.sort = "viewpos"
+            def crewList = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
             return [crewInstanceList:crewList,resultClasses:session.lastContest.resultClasses]
         }
         return [:]

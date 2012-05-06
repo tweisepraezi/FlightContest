@@ -2,14 +2,14 @@
 
 [Code]
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
-const DBVersion = '2.0.0';
+const DBVersion = '2.1.0';
 const FCCompatibelDigits = 1; // Number of digits for application compatibility
-const FCVersion = '1.0.1';
+const FCVersion = '1.1.0';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 1.0.1
-AppVersion=1.0.1
-VersionInfoVersion=1.0.1
+AppVerName=Flight Contest 1.1.0
+AppVersion=1.1.0
+VersionInfoVersion=1.1.0
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -227,11 +227,11 @@ begin
     FileCopy(samples_dir + '\AFLOS-DemoContest.mdb', db_dir + '\AFLOS-UPLOAD.mdb', true);
   end;
 
+  // Remove logs
+  DelTree( db_dir + '\logs', true, true, true );
+  DeleteFile( db_dir + '\fcdb.trace.db' );
+
   // write installed version
   RegWriteStringValue( HKCU, 'SOFTWARE\Flight Contest', 'lastVersion', DBVersion )
 
 end;
-
-
-
-

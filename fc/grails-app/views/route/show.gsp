@@ -25,7 +25,7 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
                                     <td colspan="2">
-                                        <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance)}">
+                                        <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance,[sort:"id"])}">
                                             <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
                                             <br/>
                                         </g:each>
@@ -34,7 +34,7 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.flighttest.list')}:</td>
                                     <td colspan="2">
-                                        <g:each var="c" in="${FlightTest.findAllByRoute(routeInstance)}">
+                                        <g:each var="c" in="${FlightTest.findAllByRoute(routeInstance,[sort:"id"])}">
                                             <g:flighttest var="${c}" link="${createLink(controller:'flightTest',action:'show')}"/>
                                             <br/>
                                         </g:each>

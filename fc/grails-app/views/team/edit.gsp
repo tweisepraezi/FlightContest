@@ -26,7 +26,7 @@
                         </fieldset>
                         <fieldset>
                         	<legend>${message(code:'fc.crew.list')}</legend>
-                        	<p><g:each var="${crew_instance}" in="${Crew.findAllByTeam(teamInstance)}"><br/>${crew_instance.name}<g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></g:each></p>
+                        	<p><g:each var="${crew_instance}" in="${Crew.findAllByTeam(teamInstance,[sort:"id"])}"><br/>${crew_instance.name}<g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></g:each></p>
                         </fieldset>
                         <input type="hidden" name="id" value="${teamInstance?.id}"/>
                         <input type="hidden" name="version" value="${teamInstance?.version}"/>

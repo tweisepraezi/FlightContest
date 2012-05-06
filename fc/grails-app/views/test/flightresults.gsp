@@ -69,7 +69,7 @@
                                     <tbody>
                                     	<g:set var="cp" value="${testInstance.task.disabledCheckPoints},"/>
                                         <g:set var="legNo" value="${new Integer(0)}" />
-                                        <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance)}">
+                                        <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance,[sort:"id"])}">
                                             <g:if test="${coordResultInstance.planProcedureTurn}">
                                                 <g:set var="legNo" value="${legNo+1}" />
                                                 <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
@@ -121,7 +121,7 @@
                                             	<!-- search next id -->
 		                                        <g:set var="next" value="${new Integer(0)}" />
 		                                        <g:set var="setnext" value="${false}" />
-        		                                <g:each var="coordResultInstance2" in="${CoordResult.findAllByTest(testInstance)}">
+        		                                <g:each var="coordResultInstance2" in="${CoordResult.findAllByTest(testInstance,[sort:"id"])}">
                                                     <g:if test="${setnext}">
 	       				                                <g:set var="next" value="${coordResultInstance2.id}" />
 						                                <g:set var="setnext" value="${false}" />

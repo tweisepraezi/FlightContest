@@ -10,7 +10,7 @@ class RouteController {
     def list = {
 		fcService.printstart "List routes"
         if (session?.lastContest) {
-            def routeList = Route.findAllByContest(session.lastContest)
+            def routeList = Route.findAllByContest(session.lastContest,[sort:"id"])
 			fcService.printdone "last contest"
             return [routeInstanceList:routeList]
         }

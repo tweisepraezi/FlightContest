@@ -48,7 +48,7 @@ class CoordRouteController {
 			CoordRoute coordroute_nextinstance = null
 			CoordRoute coordroute_nextinstance2 = null
 			int leg_no = 0
-			for ( CoordRoute coordroute_instance in CoordRoute.findAllByRoute(coordroute.instance.route) ) {
+			for ( CoordRoute coordroute_instance in CoordRoute.findAllByRoute(coordroute.instance.route,[sort:"id"]) ) {
 				if (!coordroute_nextinstance) {
 					leg_no++
 				}

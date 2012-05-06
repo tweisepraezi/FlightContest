@@ -27,7 +27,7 @@ class Route
 		this.save()
 		
 		// coords:CoordRoute
-		CoordRoute.findAllByRoute(routeInstance).each { CoordRoute coordroute_instance ->
+		CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
 			CoordRoute new_coordroute_instance = new CoordRoute()
 			new_coordroute_instance.route = this
 			new_coordroute_instance.CopyValues(coordroute_instance)
@@ -35,7 +35,7 @@ class Route
 		}
 		
 		// routelegs:RouteLegCoord
-		RouteLegCoord.findAllByRoute(routeInstance).each { RouteLegCoord routelegcoord_instance ->
+		RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"]).each { RouteLegCoord routelegcoord_instance ->
 			RouteLegCoord new_routelegcoord_instance = new RouteLegCoord()
 			new_routelegcoord_instance.route = this
 			new_routelegcoord_instance.CopyValues(routelegcoord_instance)
@@ -43,7 +43,7 @@ class Route
 		}
 
 		// testlegs:RouteLegTest
-		RouteLegTest.findAllByRoute(routeInstance).each { RouteLegTest routelegtest_instance ->
+		RouteLegTest.findAllByRoute(routeInstance,[sort:"id"]).each { RouteLegTest routelegtest_instance ->
 			RouteLegTest new_routelegtest_instance = new RouteLegTest()
 			new_routelegtest_instance.route = this
 			new_routelegtest_instance.CopyValues(routelegtest_instance)
