@@ -4549,6 +4549,7 @@ class FcService
                 if (!resultclass_instance) {
                     resultclass_instance = new ResultClass(name:params.resultclassname)
                     resultclass_instance.contest = crew_instance.contest
+					setContestRule(resultclass_instance, resultclass_instance.contestRule)
 					resultclass_instance.save()
 					println "saveCrew (new class): $resultclass_instance.name saved."
 					
@@ -5012,24 +5013,31 @@ class FcService
 	
 			crews.each { Map crew_entry ->
 				if (crew_entry.name) {
-					if (crew_entry.name2) {
-						crew_entry.name += " " + crew_entry.name2 
-					}
-					if (crew_entry.tas) {
-						crew_entry.tas = crew_entry.tas.replace('.',',')
-					}
-					printstart crew_entry.name
-					Crew crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
-					if (crew) {
-						printdone "Crew already exists."
-						exist_crew_num++
-					} else {
-						Map ret = saveCrew(crew_entry,contestInstance)
-						printdone "Created $ret"
-						if (ret.saved) {
-							new_crew_num++
+					String crew_name = crew_entry.name.trim()
+					if (crew_name) {
+						if (crew_entry.name2) {
+							String crew_name2 = crew_entry.name2.trim()
+							if (crew_name2) {
+								crew_name += ", " + crew_name2
+							}
+						}
+						crew_entry.name = crew_name
+						if (crew_entry.tas) {
+							crew_entry.tas = crew_entry.tas.replace('.',',')
+						}
+						printstart crew_name
+						Crew crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
+						if (crew) {
+							printdone "Crew already exists."
+							exist_crew_num++
 						} else {
-							new_crew_error_num++
+							Map ret = saveCrew(crew_entry,contestInstance)
+							printdone "Created $ret"
+							if (ret.saved) {
+								new_crew_num++
+							} else {
+								new_crew_error_num++
+							}
 						}
 					}
 				}

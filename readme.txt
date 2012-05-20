@@ -6,7 +6,7 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-06.05.2012
+20.05.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -14,8 +14,22 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Erweiterungen in dieser Version (1.1.0):
-----------------------------------------
+Fehlerbehebung in dieser Version (1.1.1):
+-----------------------------------------
+- Beim Anlegen von Klassen beim Import von Besatzungen aus Excel-Vorlage
+  wurden die Auswertungs-Punkte der Klassen nicht korrekt eingestellt.
+  Das Problem besteht nicht, wenn die Klassen vor dem Import manuell
+  angelegt wurden. 
+  Von der gewählten Wettbewerbsordnung abweichende Punkte werden in
+  der Punkte-Anzeige mit einem ! markiert.
+  Bei bestehenden Wettbewerben kann eine Punkteanweichung durch Wechsel
+  zu einer anderen Wettbewerbsordnung, Speichern, Wechsel zurück zur
+  gewünschten Wettbewerbsordnung und Speichern repariert werden.
+- Beim Import von Besatzungen aus Excel-Vorlage werden zwischen
+  Pilot und Copilot ein , eingefügt.
+
+Erweiterungen in Version 1.1.0:
+-------------------------------
 - Unterstützung kombinierter Wettbewerbe
   * Wettbewerbs-Auswertung auch für klassenbasierte Wettbewerbe,
     wo nach Klassen gefiltert werden kann, eingeführt.

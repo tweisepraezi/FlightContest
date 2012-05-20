@@ -7,9 +7,9 @@ const FCCompatibelDigits = 1; // Number of digits for application compatibility
 const FCVersion = '1.1.0';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 1.1.0
-AppVersion=1.1.0
-VersionInfoVersion=1.1.0
+AppVerName=Flight Contest 1.1.1
+AppVersion=1.1.1
+VersionInfoVersion=1.1.1
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
