@@ -2,6 +2,9 @@
     <head>
         <style type="text/css">
             @page {
+                @top-center {
+                    content: "${testInstance.GetViewPos()}"
+                }
                 @bottom-center {
                     content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
                 }
@@ -9,12 +12,12 @@
         </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.test.planningtask')} ${testInstance.viewpos+1}</title>
+        <title>${message(code:'fc.test.planningtask')} ${testInstance.GetStartNum()}</title>
     </head>
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.test.planningtask')} ${testInstance.viewpos+1}</h2>
+                <h2>${message(code:'fc.test.planningtask')} ${testInstance.GetStartNum()}</h2>
                 <h3>${testInstance?.task.name()}</h3>
                 <div class="block" id="forms" >
                     <g:form>

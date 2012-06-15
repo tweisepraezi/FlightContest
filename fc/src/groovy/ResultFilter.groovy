@@ -1,5 +1,6 @@
 enum ResultFilter 
 {
 	Contest,
-	Team
+	Team,
+	ResultClass
 }

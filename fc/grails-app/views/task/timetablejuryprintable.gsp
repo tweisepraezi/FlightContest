@@ -31,8 +31,13 @@
                                     <th>${message(code:'fc.aircraft')}</th>
                                     <th>${message(code:'fc.tas')}</th>
                                     <th>${message(code:'fc.team')}</th>
-                                    <th>${message(code:'fc.test.planning')}</th>
-                                    <th>${message(code:'fc.test.planning.end')}</th>
+                                    <g:if test="${taskInstance.planningTestDuration == 0}">
+                                        <th>${message(code:'fc.test.planning.publish')}</th>
+                                    </g:if>
+                                    <g:else>
+	                                    <th>${message(code:'fc.test.planning')}</th>
+                                        <th>${message(code:'fc.test.planning.end')}</th>
+                                    </g:else>
                                     <th>${message(code:'fc.test.takeoff')}</th>
                                     <th>${message(code:'fc.test.startpoint')}</th>
                                     <th>${message(code:'fc.test.finishpoint')}</th>
@@ -44,13 +49,15 @@
                                 <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'viewpos'])}">
                                    	<g:if test="${!test_instance.crew.disabled}">
 	                                    <tr>
-	                                        <td>${test_instance.viewpos+1}</td>
+	                                        <td>${test_instance.GetStartNum()}</td>
 	                                        <td>${test_instance.crew.name}</td>
 	                                        <td>${test_instance.crew.aircraft.registration}</td>
 	                                        <td>${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
 	                                        <td><g:if test="${test_instance.crew.team}">${test_instance.crew.team.name}</g:if></td>
 	                                        <td>${test_instance.testingTime?.format('HH:mm')}</td>
-	                                        <td>${test_instance.endTestingTime?.format('HH:mm')}</td>
+                                            <g:if test="${taskInstance.planningTestDuration > 0}">
+	                                           <td>${test_instance.endTestingTime?.format('HH:mm')}</td>
+	                                        </g:if>
 	                                        <td>${test_instance.takeoffTime?.format('HH:mm')}</td>
 	                                        <td>${test_instance.startTime?.format('HH:mm')}</td>
 	                                        <td>${test_instance.finishTime?.format('HH:mm')}</td>

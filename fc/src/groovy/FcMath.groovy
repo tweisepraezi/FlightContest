@@ -160,4 +160,14 @@ class FcMath
 
 		return "$aflos_hour:$aflos_minute:$seconds"
     }
+	
+    static String GateWidthStr(Float gateWidthValue)
+    {
+        if (gateWidthValue) {
+            DecimalFormat df = new DecimalFormat("0.#")
+            return df.format(gateWidthValue)
+        }
+        return "0"
+    }
+
 }

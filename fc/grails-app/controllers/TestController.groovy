@@ -354,12 +354,8 @@ class TestController
 	def viewimporterrors = {
         def test = fcService.getTest(params) 
         if (test.instance) {
-			if (test.instance.crew.mark) {
-				String startnum = test.instance.crew.mark.substring(test.instance.crew.mark.lastIndexOf('(')+1, test.instance.crew.mark.lastIndexOf(')') )
-				redirect(controller:"aflosErrorPoints",action:"crew",params:[startnum:startnum,routename:test.instance.flighttestwind.flighttest.route.mark])
-			} else {
-				redirect(action:flightresults,id:params.id)
-			}
+			String start_num = test.instance.crew.GetAFLOSStartNum()
+			redirect(controller:"aflosErrorPoints",action:"crew",params:[startnum:start_num,routename:test.instance.flighttestwind.flighttest.route.mark])
         } else {
 			redirect(action:flightresults,id:params.id)
 		}

@@ -1128,5 +1128,13 @@ class Test
 		return task.contest.landingTest4PenaltyCalculator
 	}
 
-
+	int GetViewPos()
+	{
+		return viewpos+1
+	}
+	
+	int GetStartNum()
+	{
+		return crew.startNum  
+	}
 }

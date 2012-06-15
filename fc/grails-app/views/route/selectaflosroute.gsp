@@ -28,7 +28,7 @@
                                 </tr> 
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.routedefs.secretpoint.identification')}:</label></td>
-                                    <td><g:select from="${SecretCoordRouteIdentification.values()}" optionValue="${{message(code:it.titleCode,args:[it.gateWidth])}}" name="aflosroutenames.secretcoordrouteidentification" tabIndex="2"/></td> <!-- name="type" value="${xx}" -->
+                                    <td><g:select from="${SecretCoordRouteIdentification.values()}" optionValue="${{message(code:it.titleCode)}}" value="${SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK}" name="aflosroutenames.secretcoordrouteidentification" tabIndex="2"/></td> <!-- name="type" value="${xx}" -->
                                 </tr>
                             </tbody>
                         </table>

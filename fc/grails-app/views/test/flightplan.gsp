@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</title>
+        <title>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.test.flightplan')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable')} ${message(code:'fc.version')} ${testInstance.timetableVersion})</h2>
+                <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable')} ${message(code:'fc.version')} ${testInstance.timetableVersion})</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['flightplanReturnAction':flightplanReturnAction,'flightplanReturnController':flightplanReturnController,'flightplanReturnID':flightplanReturnID]}">
                         <table>
@@ -78,9 +78,19 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.test.planning')}:</td>
+                                    <g:if test="${testInstance.task.planningTestDuration == 0}">
+                                        <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</th>
+                                    </g:if>
+                                    <g:else>
+                                        <td class="detailtitle">${message(code:'fc.test.planning')}:</td>
+                                    </g:else>
                                     <g:if test="${testInstance.timeCalculated}">
-                                        <td>${testInstance.testingTime?.format('HH:mm')} - ${testInstance.endTestingTime?.format('HH:mm')}</td>
+                                        <g:if test="${testInstance.task.planningTestDuration > 0}">
+                                            <td>${testInstance.testingTime?.format('HH:mm')} - ${testInstance.endTestingTime?.format('HH:mm')}</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>${testInstance.testingTime?.format('HH:mm')}</td>
+                                        </g:else>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.nocalculated')}</td>
                                     </g:else>

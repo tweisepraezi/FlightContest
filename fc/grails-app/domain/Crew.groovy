@@ -10,6 +10,7 @@ class Crew
 
 	int viewpos = 0
 	boolean disabled = false
+	Integer startNum = 0                      // DB-2.2
 	
 	// transient values 
 	static transients = ['name2','registration','type','colour','teamname','resultclassname'] 
@@ -47,6 +48,9 @@ class Crew
 		// DB-2.1 compatibility
 		noContestPosition(nullable:true)
 		classPosition(nullable:true)
+		
+		// DB-2.2 compatibility
+		startNum(nullable:true,min:1)
 	}
 	
 	int GetResultPenalties(Map resultSettings)
@@ -128,5 +132,13 @@ class Crew
 			return false
 		}
 		return true
+	}
+	
+	String GetAFLOSStartNum()
+	{
+		if (mark.contains(':')) {
+			return mark.substring(0, mark.indexOf(':') )
+		}
+		return startNum.toString()
 	}
 }

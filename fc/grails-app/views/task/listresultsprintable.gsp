@@ -117,7 +117,12 @@
 			                                        <td>${test_instance.taskPosition}</td>
 			                                        <td>${test_instance.crew.name}</td>
 			                                    	<td><g:if test="${test_instance.crew.aircraft}">${test_instance.crew.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
-			                                    	<td><g:if test="${test_instance.crew.team}">${test_instance.crew.team.name}</g:if></td>
+			                                    	<g:if test="${test_instance.crew.team}">
+			                                    	    <td>${test_instance.crew.team.name}</td>
+			                                    	</g:if>
+		                                            <g:else>
+		                                                <td>-</td>
+		                                            </g:else>
 					                               	<g:if test="${test_instance.IsPlanningTestRun()}">
 			                                        	<td>${test_instance.planningTestPenalties}<g:if test="${!test_instance.planningTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 					                                </g:if>
@@ -233,7 +238,12 @@
 		                                        <td>${test_instance.taskPosition}</td>
 		                                        <td>${test_instance.crew.name}</td>
 			                                    <td><g:if test="${test_instance.crew.aircraft}">${test_instance.crew.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
-			                                    <td><g:if test="${test_instance.crew.team}">${test_instance.crew.team.name}</g:if></td>
+			                                    <g:if test="${test_instance.crew.team}">
+			                                        <td>${test_instance.crew.team.name}</td>
+			                                    </g:if>
+	                                            <g:else>
+	                                                <td>-</td>
+	                                            </g:else>
 				                               	<g:if test="${test_instance.IsPlanningTestRun()}">
 		                                        	<td>${test_instance.planningTestPenalties}<g:if test="${!test_instance.planningTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                                </g:if>

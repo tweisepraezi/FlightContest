@@ -26,11 +26,11 @@
 								</tr>
                             </thead>
                         	<tbody>
-                        		<g:set var="cp" value="${taskInstance.disabledCheckPoints},"/> 
+                        		<g:set var="disabled_checkpoints" value="${taskInstance.disabledCheckPoints},"/> 
 	                            <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(taskInstance.flighttest.route,[sort:"id"])}" status="i" >
 	                            	<g:if test="${(coordroute_instance.type != CoordType.TO) && (coordroute_instance.type != CoordType.LDG)}">
 	                            		<tr class="${(i % 2) == 0 ? '' : 'odd'}">
-	                            			<td><g:checkBox name="${coordroute_instance.title()}" value="${cp.contains(coordroute_instance.title()+',')}" /> <label>${i}</label></td>
+	                            			<td><g:checkBox name="${coordroute_instance.title()}" value="${disabled_checkpoints.contains(coordroute_instance.title()+',')}" /> <label>${i}</label></td>
 	                            			<td>${coordroute_instance.titleCode()}</td>
 	                            			<td>${coordroute_instance.mark}</td>
 	                            		</tr>

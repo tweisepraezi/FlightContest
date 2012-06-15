@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.test.planningtask')} ${testInstance.viewpos+1}</title>
+        <title>${message(code:'fc.test.planningtask')} ${testInstance.GetStartNum()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.test.planningtask')} ${testInstance.viewpos+1}</h2>
+                <h2>${message(code:'fc.test.planningtask')} ${testInstance.GetStartNum()}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['planningtaskReturnAction':planningtaskReturnAction,'planningtaskReturnController':planningtaskReturnController,'planningtaskReturnID':planningtaskReturnID]}">
                         <table>
@@ -25,6 +25,34 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
                                     <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+                                </tr>
+                                <g:if test="${testInstance.crew.team}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+                                        <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+                                        <td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
+                                    </tr>
+                                </g:if>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
+                                    <g:if test="${testInstance.crew.aircraft}">
+                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    </g:if> <g:else>
+                                        <td>${message(code:'fc.noassigned')}</td>
+                                    </g:else>                    
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
+                                    <g:if test="${testInstance.crew.aircraft}">
+                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    </g:if> <g:else>
+                                        <td>${message(code:'fc.noassigned')}</td>
+                                    </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.tas')}:</td>

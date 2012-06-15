@@ -50,7 +50,12 @@
 	                                        <td>${crew_instance.classPosition}</td>
 	                                        <td>${crew_instance.name}</td>
 	                                        <td><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
-	                                        <td><g:if test="${crew_instance.team}">${crew_instance.team.name}</g:if></td>
+                                            <g:if test="${crew_instance.team}">                          
+	                                           <td><g:if test="${crew_instance.team}">${crew_instance.team.name}</g:if></td>
+	                                        </g:if>
+	                                        <g:else>
+	                                            <td>-</td>
+	                                        </g:else>
 	                                        <g:set var="test_provisional" value="${false}"/>
                                             <g:if test="${resultclassInstance.contestPrintTaskDetails}">
 		                                        <g:each var="task_instance" in="${resultclassInstance.contest.GetResultTasks(resultclassInstance.contestTaskResults)}">

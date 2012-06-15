@@ -39,10 +39,7 @@
                                             <g:if test="${testInstanceID}">
                                                 <g:set var="testInstance" value="${Test.get(testInstanceID)}"/>
 	                                            <g:if test="${testInstance}">
-	                                                ${testInstance.crew.name} [${testInstanceID}]
-	                                                <g:if test="${testInstance.planningtesttask}">
-	                                                     (${testInstance.planningtesttask.name()})
-	                                                </g:if>
+	                                                ${testInstance.crew.startNum}: ${testInstance.crew.name}<g:if test="${testInstance.planningtesttask}"> (${testInstance.planningtesttask.name()})</g:if>
 	                                            </g:if>
 	                                            <g:else>
 	                                            	[${testInstanceID}]

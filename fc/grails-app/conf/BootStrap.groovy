@@ -48,7 +48,7 @@ class BootStrap {
 				println "  Upgrade database..."
 				switch (global.versionMajor) {
 					case 2:
-						if (global.versionMinor < 1) { // DB-2.1 compatibility 
+						if (global.versionMinor < 1) { // DB-2.1 compatibility
 							print "    2.1 modifications"
 							Contest.findAll().each { Contest contest_instance ->
 								contest_instance.contestClassResults = ""
@@ -95,6 +95,15 @@ class BootStrap {
 								resultclass_instance.contestPrintTaskDetails = true
 								resultclass_instance.contestPrintTaskNamesInTitle = true
 								resultclass_instance.save()
+							}
+							println " done."
+						}
+						if (global.versionMinor < 2) { // DB-2.2 compatibility
+							print "    2.2 modifications"
+							Crew.findAll().each { Crew crew_instance ->
+								crew_instance.startNum = crew_instance.viewpos + 1
+								crew_instance.mark = ""
+								crew_instance.save()
 							}
 							println " done."
 						}

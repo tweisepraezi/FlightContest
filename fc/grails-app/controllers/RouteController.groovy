@@ -118,6 +118,9 @@ class RouteController {
         def route = fcService.importAflosRoute(params,session.lastContest) 
         if (route.saved) {
             flash.message = route.message
+			if (route.error) {
+				flash.error = route.error
+			}
         } else if (route.error) {
         	flash.error = route.error
             flash.message = route.message

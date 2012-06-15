@@ -17,7 +17,7 @@ class Coord
     String lonDirection = 'E'
 
     int altitude = 500 // Altitude (Höhe) in ft 
-    int gatewidth = 2 // Gate-Breite (in NM)
+    int gatewidth = 1 // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM)
 
     // Speicher für Eingabe der Landkarten-Messung
 	boolean measureEntered = false
@@ -263,7 +263,23 @@ class Coord
 
 	String namePrintable() // BUG: ' wird nicht korrekt gedruckt
 	{
-		return "${latName()}' ${lonName()}'"
+		String print_name = "${latName()}' ${lonName()}'"
+    	if (measureDistance != null || measureTrueTrack != null) {
+			print_name += " ("
+		}
+    	if (measureTrueTrack != null) {
+    		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
+			if (measureDistance != null) {
+				print_name += "; "
+			}
+    	}
+    	if (measureDistance != null) {
+    		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
+    	}
+    	if (measureDistance != null || measureTrueTrack != null) {
+			print_name += ")"
+		}
+		return print_name
 	}
 
 	String coordTrueTrackName()

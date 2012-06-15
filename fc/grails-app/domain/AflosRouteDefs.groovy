@@ -5,12 +5,13 @@ class AflosRouteDefs
 	int id
     AflosRouteNames routename
 	String mark
+	String info
 	String latitude
 	String longitude
     String altitude
 	BigDecimal truetrack
 	BigDecimal coordDistance
-    int gatewidth
+    Float gatewidth
 	
 	static mapping = {
 		datasources(['aflos','aflostest','aflosupload'])
@@ -19,6 +20,7 @@ class AflosRouteDefs
 		id column: 'POINTID'
 		routename column: 'Ref_Nr'
 		mark column: 'MARK'
+		info column: 'Mark_Add'
 		latitude column: 'Latitude'
 		longitude column: 'Longitude'
 	    altitude column: 'Altitude'

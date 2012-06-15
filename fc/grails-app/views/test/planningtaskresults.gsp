@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.planningresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</title>
+        <title>${message(code:'fc.planningresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.planningresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</h2>
+                <h2>${message(code:'fc.planningresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post">
                         <table>
@@ -24,6 +24,34 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
                                     <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+                                </tr>
+                                <g:if test="${testInstance.crew.team}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+                                        <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+                                        <td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
+                                    </tr>
+                                </g:if>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
+                                    <g:if test="${testInstance.crew.aircraft}">
+                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    </g:if> <g:else>
+                                        <td>${message(code:'fc.noassigned')}</td>
+                                    </g:else>                    
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
+                                    <g:if test="${testInstance.crew.aircraft}">
+                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    </g:if> <g:else>
+                                        <td>${message(code:'fc.noassigned')}</td>
+                                    </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.tas')}:</td>
@@ -128,9 +156,17 @@
                                                 <g:if test="${testlegplanning_instance.resultEntered}">
                                                     <td/>
                                                     <td/>
-                                                    <td class="points">${testlegplanning_instance.penaltyTrueHeading} ${message(code:'fc.points')}</td>
+                                                    <g:set var="points_class" value="points"/>
+                                                    <g:if test="${!testlegplanning_instance.penaltyTrueHeading}">
+                                                        <g:set var="points_class" value="zeropoints"/>
+                                                    </g:if>
+                                                    <td class="${points_class}">${testlegplanning_instance.penaltyTrueHeading} ${message(code:'fc.points')}</td>
                                                     <td/>
-                                                    <td class="points">${testlegplanning_instance.penaltyLegTime} ${message(code:'fc.points')}</td>
+                                                    <g:set var="points_class" value="points"/>
+                                                    <g:if test="${!testlegplanning_instance.penaltyLegTime}">
+                                                        <g:set var="points_class" value="zeropoints"/>
+                                                    </g:if>
+                                                    <td class="${points_class}">${testlegplanning_instance.penaltyLegTime} ${message(code:'fc.points')}</td>
                                                 </g:if>
                                                 <g:else>
                                                     <td/>
@@ -194,7 +230,11 @@
                                 </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.penalties.total')}:</td>
-                                    <td class="points">${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
+                                    <g:set var="points_class" value="points"/>
+                                    <g:if test="${!testInstance.planningTestPenalties}">
+                                        <g:set var="points_class" value="zeropoints"/>
+                                    </g:if>
+                                    <td class="${points_class}">${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                             </tbody>
                             <tfoot>

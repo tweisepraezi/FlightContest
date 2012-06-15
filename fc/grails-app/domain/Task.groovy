@@ -20,13 +20,14 @@ class Task
 	
 	String firstTime                     = "11:00" // Local time of first planning test [hh:mm]
 	int takeoffIntervalNormal            = 3       // space between takeoff [min]
-	int takeoffIntervalFasterAircraft    = 120     // space between takeoff to faster aircraft [min]
+	int takeoffIntervalFasterAircraft    = 30      // space between takeoff to faster aircraft [min]
 	
 	int planningTestDuration             = 60      // duration of planning test [min]
 	int preparationDuration              = 15      // duration of aircraft preparation [min]
-	int risingDuration                   = 10      // duration from takeoff to start point [min]
-    int maxLandingDuration               = 10      // duration from finish point to landing [min]
-    int parkingDuration                  = 15      // duration from finish point to aircraft parking [min] (> maxLandingDuration)
+	int risingDuration                   = 5       // duration from takeoff to start point [min]
+    int maxLandingDuration               = 5       // duration from finish point to landing [min]
+    int parkingDuration                  = 10      // duration from finish point to aircraft parking [min] (> maxLandingDuration)
+	
 	int minNextFlightDuration            = 30      // duration of aircraft maintenance between two flights [min]
 	int procedureTurnDuration            = 1       // duration of Procedure Turn [min]
 

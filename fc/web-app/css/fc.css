@@ -86,8 +86,26 @@ td.center {
 
 td.points {
     font-weight:bold;
+    color: blue;
+}
+
+td.zeropoints {
+    font-weight:bold;
 }
 
 td.subpoints {
 	text-decoration:underline
 }
+
+td.warning {
+    color: purple;
+}
+
+td.secretgatewidth {
+    color: gray;
+}
+
+p.warning {
+    background: yellow;
+}
+

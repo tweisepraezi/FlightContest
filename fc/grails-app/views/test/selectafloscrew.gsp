@@ -16,7 +16,37 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.crew.mark}"> (${message(code:'fc.aflos')}: ${testInstance.crew.mark})</g:if></td>
+                                    <td>${testInstance.crew.startNum}: <g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.crew.mark}"> (${message(code:'fc.aflos')}: ${testInstance.crew.mark})</g:if></td>
+                                </tr>
+                                <g:if test="${testInstance.crew.team}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+                                        <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+                                        <td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
+                                    </tr>
+                                </g:if>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.aircraft')}:</td>
+                                    <td>
+                                        <g:if test="${testInstance.crew.aircraft}">
+                                            <g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/>
+                                        </g:if> <g:else>
+                                            ${message(code:'fc.noassigned')}
+                                        </g:else>
+                                    </td>                    
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
+                                    <g:if test="${testInstance.crew.aircraft}">
+                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    </g:if> <g:else>
+                                        <td>${message(code:'fc.noassigned')}</td>
+                                    </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.route')}:</td>
@@ -31,22 +61,16 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <g:set var="lastName" value="${testInstance.crew.mark}" />
-                                    <g:if test="${lastName}">
-                                        <g:set var="lastStartnum" value="${lastName.substring(lastName.lastIndexOf('(')+1,lastName.lastIndexOf(')'))}" />
-                                    </g:if>
-                                    <g:else>
-                                        <g:set var="lastStartnum" value="" />
-                                    </g:else>
+                                    <g:set var="last_startnum" value="${testInstance.crew.GetAFLOSStartNum()}" />
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.crewnames.name')}:</label></td>
 									<g:if test="${testInstance.crew.contest.aflosTest}">
-                                        <td><g:select from="${AflosCrewNames.aflostest.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+                                        <td><g:select from="${AflosCrewNames.aflostest.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
 									</g:if>
 									<g:elseif test="${testInstance.crew.contest.aflosUpload}">
-                                        <td><g:select from="${AflosCrewNames.aflosupload.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+                                        <td><g:select from="${AflosCrewNames.aflosupload.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
 									</g:elseif>
 									<g:else>
-                                        <td><g:select from="${AflosCrewNames.aflos.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${lastStartnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+                                        <td><g:select from="${AflosCrewNames.aflos.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
 									</g:else>
                                 </tr> 
                             </tbody>

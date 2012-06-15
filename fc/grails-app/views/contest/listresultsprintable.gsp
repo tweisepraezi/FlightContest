@@ -49,7 +49,12 @@
                                         <td>${crew_instance.contestPosition}</td>
                                         <td>${crew_instance.name}</td>
                                         <td>${crew_instance.aircraft.registration}</td>
-                                        <td>${crew_instance.team.name}</td>
+                                        <g:if test="${crew_instance.team}">                          
+                                            <td>${crew_instance.team.name}</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>-</td>
+                                        </g:else>
                                         <g:set var="test_provisional" value="${false}"/>
 	                                    <g:if test="${contestInstance.contestPrintTaskDetails}">
 	                                        <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">

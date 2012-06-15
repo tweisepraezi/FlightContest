@@ -13,18 +13,14 @@
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['testInstanceIDs':testInstanceIDs]}" >
                         <table>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td/>
-                                        <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listplanning')}"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td/>
-                                        <td><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <tbody>
+                                <tr>
+                                    <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listplanning')}"/></td>
+                                </tr>
+                                <tr>
+                                    <td><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
+                                </tr>
+                            </tbody>
                         </table>
                         <table>
                             <tbody>
@@ -39,10 +35,7 @@
                                             <g:if test="${testInstanceID}">
                                                 <g:set var="testInstance" value="${Test.get(testInstanceID)}"/>
 	                                            <g:if test="${testInstance}">
-	                                                ${testInstance.crew.name} [${testInstanceID}]
-	                                                <g:if test="${testInstance.flighttestwind}">
-	                                                	(${testInstance.flighttestwind.name()})
-	                                                </g:if>
+	                                                ${testInstance.crew.startNum}: ${testInstance.crew.name}<g:if test="${testInstance.flighttestwind}"> (${testInstance.flighttestwind.name()})</g:if>
 	                                            </g:if>
 	                                            <g:else>
 	                                            	[${testInstanceID}]
@@ -51,6 +44,13 @@
                                             </g:if>
                                         </g:each>
                                     </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="warning">${message(code:'fc.task.selectflighttestwind.recalculatetimes')}</td>
                                 </tr>
                             </tbody>
                         </table>

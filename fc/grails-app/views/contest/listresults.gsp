@@ -46,7 +46,12 @@
 	                                    </g:else>
                                         <td class="positioncrew"><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/></td>
                                         <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
-                                        <td><g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                        <g:if test="${crew_instance.team}">                          
+                                            <td><g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+		                                </g:if>
+		                                <g:else>
+		                                    <td>-</td>
+		                                </g:else>
                                         <g:set var="test_provisional" value="${false}"/>
                                         <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
                                         	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>

@@ -1,15 +1,15 @@
 enum SecretCoordRouteIdentification 
 {
-	NONE       ('fc.aflos.routedefs.secretpoint.identification.none',      0),
-	GATEWIDTH2 ('fc.aflos.routedefs.secretpoint.identification.gatewidth', 2)
+	NONE                   ('fc.aflos.routedefs.secretpoint.identification.none'),
+	GATEWIDTH2             ('fc.aflos.routedefs.secretpoint.identification.gatewidth'),
+	SECRETMARK             ('fc.aflos.routedefs.secretpoint.identification.secretmark'),
+	GATEWIDTH2ORSECRETMARK ('fc.aflos.routedefs.secretpoint.identification.gatewidthorsecretmark')
 	
-	SecretCoordRouteIdentification(String titleCode, int gateWidth)
+	SecretCoordRouteIdentification(String titleCode)
 	{
 		this.titleCode = titleCode
-		this.gateWidth = gateWidth
 	}
 	
 	final String titleCode
-	final int gateWidth
 	
 }

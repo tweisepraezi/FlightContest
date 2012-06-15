@@ -79,7 +79,7 @@
         		                                
                                         <td><g:coordroutenum var="${coordroute_instance}" num="${i+1}" next="${next}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
                                         <td>${coordroute_instance.titleWithRatio()}</td>
-                                        <td>${coordroute_instance.mark}</td>
+                                        <td>${coordroute_instance.mark}<g:if test="${coordroute_instance.planProcedureTurn}"> (${message(code:'fc.procedureturn.symbol')})</g:if></td>
                                         <td>${coordroute_instance.latName()}</td>
                                         <td>${coordroute_instance.lonName()}</td>
                                         <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
@@ -125,14 +125,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="routeLegInstance" in="${routeInstance.routelegs}" status="i" >
+                                <g:each var="routeleg_instance" in="${routeInstance.routelegs}" status="i" >
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${i+1}</td>
-                                        <td>${routeLegInstance.title}</td>
-                                        <td>${routeLegInstance.coordTrueTrackName()}</td>
-                                        <td>${routeLegInstance.mapMeasureTrueTrackName()}</td>
-                                        <td>${routeLegInstance.coordDistanceName()}</td>
-                                        <td>${routeLegInstance.mapDistanceName()} (${routeLegInstance.mapMeasureDistanceName()})</td>
+                                        <td>${routeleg_instance.title}</td>
+                                        <td>${routeleg_instance.coordTrueTrackName()}</td>
+                                        <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
+                                        <td>${routeleg_instance.coordDistanceName()}</td>
+                                        <td>${routeleg_instance.mapDistanceName()} (${routeleg_instance.mapMeasureDistanceName()})</td>
                                     </tr>
                                 </g:each>
                             </tbody>
@@ -152,14 +152,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="routeLegInstance" in="${routeInstance.testlegs}" status="i" >
+                                <g:each var="routeleg_instance" in="${routeInstance.testlegs}" status="i" >
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${i+1}</td>
-                                        <td>${routeLegInstance.title}</td>
-                                        <td>${routeLegInstance.coordTrueTrackName()}</td>
-                                        <td>${routeLegInstance.mapMeasureTrueTrackName()}</td>
-                                        <td>${routeLegInstance.coordDistanceName()}</td>
-                                        <td>${routeLegInstance.mapDistanceName()} (${routeLegInstance.mapMeasureDistanceName()})</td>
+                                        <td>${routeleg_instance.title}</td>
+                                        <td>${routeleg_instance.coordTrueTrackName()}</td>
+                                        <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
+                                        <td>${routeleg_instance.coordDistanceName()}</td>
+                                        <td>${routeleg_instance.mapDistanceName()} (${routeleg_instance.mapMeasureDistanceName()})</td>
                                     </tr>
                                 </g:each>
                             </tbody>

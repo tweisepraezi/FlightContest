@@ -24,6 +24,7 @@
 	                        	</tr>
 	                        </tbody>
                         </table>
+                        <p class="warning">${message(code:'fc.resultclass.recalculatepoints')}</p>
                         <fieldset>
                             <legend>${message(code:'fc.planningtest')}</legend>
                             <p/>
@@ -424,9 +425,9 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${resultclassInstance?.id}"/>
                         <input type="hidden" name="version" value="${resultclassInstance?.version}"/>
+                        <input type="hidden" name="pointssaved" value="${true}"/>
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="60"/>
                         <g:actionSubmit action="savepoints" value="${message(code:'fc.save')}" tabIndex="61"/>
-                        <g:actionSubmit action="calculatepoints" value="${message(code:'fc.contestrule.calculate')}" tabIndex="62"/>
                         <g:actionSubmit action="printpoints" value="${message(code:'fc.print')}"  tabIndex="63"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="64"/>
                     </g:form>

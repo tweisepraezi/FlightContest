@@ -264,7 +264,7 @@ class ResultClassController {
 			def resultclass = fcService.getResultClass(params)
 			if (resultclass.instance) {
 				// set return action
-	           	return [resultclassInstance:resultclass.instance,editresultsettingsReturnAction:"listresults",editresultsettingsReturnController:controllerName,editresultsettingsReturnID:params.id]
+	           	return [resultclassInstance:resultclass.instance,resultfilter:ResultFilter.ResultClass,editresultsettingsReturnAction:"listresults",editresultsettingsReturnController:controllerName,editresultsettingsReturnID:params.id]
 	        } else {
 	            redirect(action:start)
 	        }

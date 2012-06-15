@@ -2,6 +2,9 @@
     <head>
         <style type="text/css">
             @page {
+                @top-center {
+                    content: "${testInstance.GetViewPos()}"
+                }
                 @bottom-center {
                     content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
                 }
@@ -9,12 +12,12 @@
         </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.specialresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()}</title>
+        <title>${message(code:'fc.specialresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
     </head>
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.specialresults')} ${testInstance.viewpos+1}</h2>
+                <h2>${message(code:'fc.specialresults')} ${testInstance.GetStartNum()}</h2>
                 <g:if test="${!testInstance.specialTestComplete}">
 	                <h3>${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()}) [${message(code:'fc.provisional')}]</h3>
                 </g:if>

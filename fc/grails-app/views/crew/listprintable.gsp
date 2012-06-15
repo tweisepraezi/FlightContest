@@ -23,25 +23,37 @@
                          <table width="100%" border="1" cellspacing="0" cellpadding="2">
                             <thead>
                                 <tr>
+                                    <th>${message(code:'fc.crew.startnum.short')}</th>
                                     <th>${message(code:'fc.crew.name')}</th>
                                     <th>${message(code:'fc.crew.team')}</th>
+                                    <g:if test="${resultClasses}">
+                                        <th>${message(code:'fc.crew.resultclass')}</th>
+                                    </g:if>
                                     <th>${message(code:'fc.crew.aircraft')}</th>
                                     <th>${message(code:'fc.tas')}</th>
-			                    	<g:if test="${resultClasses}">
-        	                            <th>${message(code:'fc.crew.resultclass')}</th>
-        	                        </g:if>
                                 </tr>
                             </thead>
                             <tbody>
                                 <g:each in="${crewInstanceList}" status="i" var="crewInstance">
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
+                                        <td>${crewInstance.startNum}</td>
                                         <td>${crewInstance.name}</td>
-                                        <td>${crewInstance.team?.name}</td>
+                                        <g:if test="${crewInstance.team}">                          
+                                            <td>${crewInstance.team?.name}</td>
+		                                </g:if>
+		                                <g:else>
+		                                    <td>-</td>
+		                                </g:else>
+                                        <g:if test="${resultClasses}">
+                                            <g:if test="${crewInstance.resultclass}">                          
+                                                <td>${crewInstance.resultclass?.name}</td>
+		                                    </g:if>
+		                                    <g:else>
+		                                        <td>-</td>
+		                                    </g:else>
+                                        </g:if>
                                         <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
                                         <td>${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>
-				                    	<g:if test="${resultClasses}">
-    	                                    <td>${crewInstance.resultclass?.name}</td>
-    	                                </g:if>
                                     </tr>
                                 </g:each>
                             </tbody>

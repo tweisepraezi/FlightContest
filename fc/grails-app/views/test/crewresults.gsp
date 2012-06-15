@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.crewresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})</title>
+        <title>${message(code:'fc.crewresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.crewresults')} ${testInstance.viewpos+1} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})<g:if test="${testInstance.AreResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${message(code:'fc.crewresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})<g:if test="${testInstance.AreResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
                         <table>
@@ -95,7 +95,11 @@
                             <tfoot>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.penalties.total')}:</td>
-        	                        <td class="points">${testInstance.taskPenalties} ${message(code:'fc.points')}</td>
+                                    <g:set var="points_class" value="points"/>
+                                    <g:if test="${!testInstance.taskPenalties}">
+                                        <g:set var="points_class" value="zeropoints"/>
+                                    </g:if>
+        	                        <td class="${points_class}">${testInstance.taskPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -199,7 +203,11 @@
 	                            <tfoot>
 	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.penalties')}:</td>
-	                                    <td class="points">${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
+	                                    <g:set var="points_class" value="points"/>
+	                                    <g:if test="${!testInstance.planningTestPenalties}">
+	                                        <g:set var="points_class" value="zeropoints"/>
+	                                    </g:if>
+	                                    <td class="${points_class}">${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
 	                                </tr>
 	                            </tfoot>
 	                        </table>
@@ -224,6 +232,7 @@
 	                                    </tr>
 	                                </thead>
 	                                <tbody>
+                                        <g:set var="disabled_checkpoints" value="${testInstance.task.disabledCheckPoints},"/>
 	                                    <g:set var="penaltyCoordSummary" value="${new Integer(0)}" />
 	                                    <g:set var="penaltyProcedureTurnSummary" value="${new Integer(0)}" />
 	                                    <g:set var="penaltyBadCourseSummary" value="${new Integer(0)}" />
@@ -234,15 +243,28 @@
 	                                            <tr>
 	                                                <td>${lastCoordResultInstance.titleCode()}</td>
 	                                                <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
-	                                                <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
-	                                                <td>${lastCoordResultInstance.penaltyCoord}</td>
+	                                                <g:if test="${lastCoordResultInstance.resultCpNotFound}">
+                                                        <td>-</td>
+	                                                </g:if>
+	                                                <g:else>
+	                                                    <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
+	                                                </g:else>
+		                                            <g:if test="${disabled_checkpoints.contains(lastCoordResultInstance.title()+',')}">
+		                                                <td>-</td>
+		                                            </g:if>
+		                                            <g:else>
+    	                                                <td>${lastCoordResultInstance.penaltyCoord}</td>
+    	                                            </g:else>
 	                                                <g:if test="${coordResultInstance.planProcedureTurn}">
-	                                                    <g:if test="${coordResultInstance.resultProcedureTurnEntered}">
+                                                        <g:if test="${testInstance.GetFlightTestProcedureTurnNotFlownPoints() > 0}">
 	                                                        <g:if test="${coordResultInstance.resultProcedureTurnEntered}">
-	                                                            <g:if test="${coordResultInstance.resultProcedureTurnNotFlown}">
-	                                                                <g:set var="penaltyProcedureTurnSummary" value="${penaltyProcedureTurnSummary + coordResultInstance.test.GetFlightTestProcedureTurnNotFlownPoints()}" />
-	                                                                <td>${coordResultInstance.test.GetFlightTestProcedureTurnNotFlownPoints()}</td>
-	                                                            </g:if>
+			                                                    <g:if test="${disabled_checkpoints.contains(lastCoordResultInstance.title()+',')}">
+			                                                        <td>-</td>
+			                                                    </g:if>
+	                                                            <g:elseif test="${coordResultInstance.resultProcedureTurnNotFlown}">
+	                                                                <g:set var="penaltyProcedureTurnSummary" value="${penaltyProcedureTurnSummary + testInstance.GetFlightTestProcedureTurnNotFlownPoints()}" />
+	                                                                <td>${testInstance.GetFlightTestProcedureTurnNotFlownPoints()}</td>
+	                                                            </g:elseif>
 	                                                            <g:else>
 	                                                                <td>0</td>
 	                                                            </g:else>
@@ -252,36 +274,46 @@
 	                                                        </g:else>
 	                                                    </g:if>
 	                                                    <g:else>
-	                                                        <td/>
+	                                                        <td>-</td>
 	                                                    </g:else>
 	                                                </g:if>
 	                                                <g:else>
 	                                                    <td/>
 	                                                </g:else>
-	                                                <g:if test="${lastCoordResultInstance.resultEntered}">
-	                                                    <g:set var="penaltyBadCourseSummary" value="${penaltyBadCourseSummary + lastCoordResultInstance.resultBadCourseNum*lastCoordResultInstance.test.GetFlightTestBadCoursePoints()}" />
-	                                                    <g:if test="${lastCoordResultInstance.resultBadCourseNum > 0}">
-	                                                    	<td>${lastCoordResultInstance.resultBadCourseNum*lastCoordResultInstance.test.GetFlightTestBadCoursePoints()} (${lastCoordResultInstance.resultBadCourseNum})</td>
-	                                                    </g:if>
-	                                                    <g:else>
-	                                                    	<td>${lastCoordResultInstance.resultBadCourseNum*lastCoordResultInstance.test.GetFlightTestBadCoursePoints()}</td>
-	                                                    </g:else>
-	                                                </g:if>
-	                                                <g:else>
-	                                                    <td/>
-	                                                </g:else>
-	                                                <g:if test="${lastCoordResultInstance.resultAltitude}">
-	                                                    <g:if test="${lastCoordResultInstance.resultMinAltitudeMissed}">
-	                                                        <g:set var="penaltyAltitudeSummary" value="${penaltyAltitudeSummary + lastCoordResultInstance.test.GetFlightTestMinAltitudeMissedPoints()}" />
-	                                                        <td>${lastCoordResultInstance.test.GetFlightTestMinAltitudeMissedPoints()} (${lastCoordResultInstance.resultAltitude}${message(code:'fc.foot')})</td>
-	                                                    </g:if>
-	                                                    <g:else>
-	                                                        <td>0</td>
-	                                                    </g:else>
-	                                                </g:if>
-	                                                <g:else>
-	                                                    <td>0</td>
-	                                                </g:else>
+	                                                <g:if test="${testInstance.GetFlightTestBadCoursePoints() > 0}">
+		                                                <g:if test="${lastCoordResultInstance.resultEntered}">
+		                                                    <g:set var="penaltyBadCourseSummary" value="${penaltyBadCourseSummary + lastCoordResultInstance.resultBadCourseNum*testInstance.GetFlightTestBadCoursePoints()}" />
+		                                                    <g:if test="${lastCoordResultInstance.resultBadCourseNum > 0}">
+		                                                    	<td>${lastCoordResultInstance.resultBadCourseNum*testInstance.GetFlightTestBadCoursePoints()} (${lastCoordResultInstance.resultBadCourseNum})</td>
+		                                                    </g:if>
+		                                                    <g:else>
+		                                                    	<td>${lastCoordResultInstance.resultBadCourseNum*testInstance.GetFlightTestBadCoursePoints()}</td>
+		                                                    </g:else>
+		                                                </g:if>
+		                                                <g:else>
+		                                                    <td/>
+		                                                </g:else>
+                                                    </g:if>
+                                                    <g:else>
+                                                        <td>-</td>
+                                                    </g:else>
+	                                                <g:if test="${testInstance.GetFlightTestMinAltitudeMissedPoints() > 0}">
+		                                                <g:if test="${lastCoordResultInstance.resultAltitude}">
+		                                                    <g:if test="${lastCoordResultInstance.resultMinAltitudeMissed}">
+		                                                        <g:set var="penaltyAltitudeSummary" value="${penaltyAltitudeSummary + testInstance.GetFlightTestMinAltitudeMissedPoints()}" />
+		                                                        <td>${testInstance.GetFlightTestMinAltitudeMissedPoints()} (${lastCoordResultInstance.resultAltitude}${message(code:'fc.foot')})</td>
+		                                                    </g:if>
+		                                                    <g:else>
+		                                                        <td>0</td>
+		                                                    </g:else>
+		                                                </g:if>
+		                                                <g:else>
+		                                                    <td>0</td>
+		                                                </g:else>
+		                                            </g:if>
+		                                            <g:else>
+		                                                <td>-</td>
+		                                            </g:else>
 	                                            </tr>
 	                                        </g:if>
 	                                        <g:set var="lastCoordResultInstance" value="${coordResultInstance}" />
@@ -291,28 +323,48 @@
 	                                        <tr>
 	                                            <td>${lastCoordResultInstance.titleCode()}</td>
 	                                            <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
-	                                            <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
-	                                            <td>${lastCoordResultInstance.penaltyCoord}</td>
+                                                <g:if test="${lastCoordResultInstance.resultCpNotFound}">
+                                                    <td>-</td>
+                                                </g:if>
+                                                <g:else>
+	                                                <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
+	                                            </g:else>
+                                                <g:if test="${disabled_checkpoints.contains(lastCoordResultInstance.title()+',')}">
+                                                    <td>-</td>
+                                                </g:if>
+                                                <g:else>
+    	                                            <td>${lastCoordResultInstance.penaltyCoord}</td>
+                                                </g:else>
 	                                            <td/>
-	                                            <g:if test="${lastCoordResultInstance.resultEntered}">
-	                                                <g:set var="penaltyBadCourseSummary" value="${penaltyBadCourseSummary + lastCoordResultInstance.resultBadCourseNum*lastCoordResultInstance.test.GetFlightTestBadCoursePoints()}" />
-	                                                <td>${lastCoordResultInstance.resultBadCourseNum*lastCoordResultInstance.test.GetFlightTestBadCoursePoints()}</td>
-	                                            </g:if>
-	                                            <g:else>
-	                                                <td/>
-	                                            </g:else>
-	                                            <g:if test="${lastCoordResultInstance.resultAltitude}">
-	                                                <g:if test="${lastCoordResultInstance.resultMinAltitudeMissed}">
-	                                                    <g:set var="penaltyAltitudeSummary" value="${penaltyAltitudeSummary + lastCoordResultInstance.test.GetFlightTestMinAltitudeMissedPoints()}" />
-	                                                    <td>${lastCoordResultInstance.test.GetFlightTestMinAltitudeMissedPoints()}</td>
-	                                                </g:if>
-	                                                <g:else>
-	                                                    <td>0</td>
-	                                                </g:else>
-	                                            </g:if>
-	                                            <g:else>
-	                                                <td>0</td>
-	                                            </g:else>
+                                                <g:if test="${testInstance.GetFlightTestBadCoursePoints() > 0}">
+		                                            <g:if test="${lastCoordResultInstance.resultEntered}">
+		                                                <g:set var="penaltyBadCourseSummary" value="${penaltyBadCourseSummary + lastCoordResultInstance.resultBadCourseNum*testInstance.GetFlightTestBadCoursePoints()}" />
+		                                                <td>${lastCoordResultInstance.resultBadCourseNum*testInstance.GetFlightTestBadCoursePoints()}</td>
+		                                            </g:if>
+		                                            <g:else>
+		                                                <td/>
+		                                            </g:else>
+                                                </g:if>
+                                                <g:else>
+                                                    <td>-</td>
+                                                </g:else>
+	                                            <g:if test="${testInstance.GetFlightTestMinAltitudeMissedPoints() > 0}">
+		                                            <g:if test="${lastCoordResultInstance.resultAltitude}">
+		                                                <g:if test="${lastCoordResultInstance.resultMinAltitudeMissed}">
+		                                                    <g:set var="penaltyAltitudeSummary" value="${penaltyAltitudeSummary + testInstance.GetFlightTestMinAltitudeMissedPoints()}" />
+		                                                    <td>${testInstance.GetFlightTestMinAltitudeMissedPoints()}</td>
+		                                                </g:if>
+		                                                <g:else>
+		                                                    <td>0</td>
+		                                                </g:else>
+		                                            </g:if>
+		                                            <g:else>
+		                                                <td>0</td>
+		                                            </g:else>
+                                                </g:if>
+                                                <g:else>
+                                                    <td>-</td>
+                                                </g:else>
 	                                        </tr>
 	                                    </g:if>
 	                                </tbody>
@@ -369,7 +421,11 @@
 	                            <tfoot>
 	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.penalties')}:</td>
-	                                    <td class="points">${testInstance.flightTestPenalties} ${message(code:'fc.points')}</td>
+                                        <g:set var="points_class" value="points"/>
+                                        <g:if test="${!testInstance.flightTestPenalties}">
+                                            <g:set var="points_class" value="zeropoints"/>
+                                        </g:if>
+	                                    <td class="${points_class}">${testInstance.flightTestPenalties} ${message(code:'fc.points')}</td>
 	                                </tr>
 	                            </tfoot>
 	                        </table>
@@ -398,7 +454,11 @@
 	                            <tfoot>
 	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.penalties')}:</td>
-	                                    <td class="points">${testInstance.observationTestPenalties} ${message(code:'fc.points')}</td>
+                                        <g:set var="points_class" value="points"/>
+                                        <g:if test="${!testInstance.observationTestPenalties}">
+                                            <g:set var="points_class" value="zeropoints"/>
+                                        </g:if>
+	                                    <td class="${points_class}">${testInstance.observationTestPenalties} ${message(code:'fc.points')}</td>
 	                                </tr>
 	                            </tfoot>
 	                        </table>
@@ -687,7 +747,11 @@
 	                            <tfoot>
 	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.penalties')}:</td>
-	                                    <td class="points">${testInstance.landingTestPenalties} ${message(code:'fc.points')}</td>
+                                        <g:set var="points_class" value="points"/>
+                                        <g:if test="${!testInstance.landingTestPenalties}">
+                                            <g:set var="points_class" value="zeropoints"/>
+                                        </g:if>
+	                                    <td class="${points_class}">${testInstance.landingTestPenalties} ${message(code:'fc.points')}</td>
 	                                </tr>
 	                            </tfoot>
 	                        </table>
@@ -702,7 +766,11 @@
 	                            <tfoot>
 	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.penalties')}:</td>
-	                                    <td class="points">${testInstance.specialTestPenalties} ${message(code:'fc.points')}</td>
+                                        <g:set var="points_class" value="points"/>
+                                        <g:if test="${!testInstance.specialTestPenalties}">
+                                            <g:set var="points_class" value="zeropoints"/>
+                                        </g:if>
+	                                    <td class="${points_class}">${testInstance.specialTestPenalties} ${message(code:'fc.points')}</td>
 	                                </tr>
 	                            </tfoot>
 	                        </table>

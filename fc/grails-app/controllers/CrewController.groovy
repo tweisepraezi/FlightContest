@@ -65,7 +65,8 @@ class CrewController {
     }
 
     def create = {
-        def crew = fcService.createCrew(params) 
+        def crew = fcService.createCrew(params)
+		crew.instance.startNum = Crew.countByContest(session.lastContest) + 1
         return [crewInstance:crew.instance,resultClasses:session.lastContest.resultClasses]
     }
 

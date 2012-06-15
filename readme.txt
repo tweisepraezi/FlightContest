@@ -6,16 +6,84 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-20.05.2012
+15.06.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
+Vorbereitungs- und Nutzungshinweise finden Sie im Startmenü unter
+'Programme -> Flight Contest -> Usage'.
+
 Standard-Wettbewerbsablauf siehe unten.
 
 
-Fehlerbehebung in dieser Version (1.1.1):
+Erweiterungen in dieser Version (1.2.0):
 -----------------------------------------
+- Einführung einer Start-Nummer für Besatzungen
+  Diese ändert sich nicht, wenn die Reihenfolge der Besatzungen
+  bei einer Aufgabe geändert wird.
+  Diese Nummer entspricht der AFLOS-Competitor-Nummer.
+  FC-CrewList-Sample.xls wurde entspr. erweitert.
+- Bei Neuanlage einer Aufgabe werden jetzt alle Einstellungen
+  im Eingabe-Formular angezeigt.
+- Automatische Neuberechnung des Zeitplanes bei Änderungen bestimmter 
+  Aufgaben-Einstellungen hinzugefügt.
+  Die Auswirkung einer Einstellungsänderung wird im Eingabe-Formular erklärt.
+- Soll eine Wendeschleife (Kursänderung am Wendepunkt >= 90 Grad) nicht
+  geflogen werden, ist bei der Flugzeit der Wendeschleife 0 min anzugeben.
+  Der Flugplan enthält dann keine Aufforderung zur Wendeschleife.
+  Kursänderungen >= 90 Grad werden in der Koordinaten-Liste einer Strecke
+  angezeigt (= Kursänderung nach Erreichen des vorangegangen Wendepunktes).
+- Ausdruck der Navigationsflugergebnisse verbessert:
+  * Nicht getroffene Wendepunkte drucken beim Messwert das Zeichen '-'.
+  * Deaktivierte Wendepunkte drucken bei den Punkten das Zeichen '-'.
+  * Wendeschleifen-Fehler werden bei deaktivierten Wendepunkten
+    nicht bestraft und drucken bei den Punkten das Zeichen '-'.
+  * Werden Auswerte-Punkte für Wendeschleifen-, Kursabweichungs- 
+    oder Höhen-Fehler mit 0 festgelegt, werden Spalten für die Punkte
+    dieser Werte beim Ausdruck weggelassen.
+- AFLOS-Strecken-Import erweitert
+  Check-Punkte in den AFLOS-Referenz-Daten können im Feld 'Mark' 
+  mit folgenden Markierungen versehen werden, die beim Import
+  der Strecke verarbeitet werden:
+  * $secret - Check-Punkt als unbekannte Zeitkontrolle importieren,
+    für unbekannte Zeitkontrollen mit von 2NM abweichender Torbreite
+  * $ignore - Check-Punkt nicht importieren,
+    zur Markierung von Hilfspunkten, die nicht ausgewertet werden sollen,
+    z.B. für krumme Strecken
+  * $dist:26,5mm - Entfernung vom vorangegangenen Wende-Punkt in mm
+    (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
+  * $dist:12,3NM - Entfernung vom vorangegangenen Wende-Punkt in NM
+  * $dist:22,4km - Entfernung vom vorangegangenen Wende-Punkt in km
+  * $track:142 - Richtung vom vorangegangenen Wende-Punkt in Grad
+  Der vorangegangene Wende-Punkt ist ein Check-Punkt, der importiert wird
+  und keine unbekannte Zeitkontrolle ist.
+  Beim Import können folgende Erkennungs-Verfahren für unbekannte
+  Zeitkontrollen gewählt werden:
+  * Keine Erkennung
+  * Check-Punkte mit Torbreite 2NM
+  * Check-Punkte mit Markierung $secret
+  * Check-Punkte mit Torbreite 2NM oder Markierung $secret (Default)
+- Standard-Wettbewerbsablauf überarbeitet
+  * Neue Einteilung in 3 Wettbewerbsphasen
+    A. Wettbewerbs-Vorbereitung
+    B. Wettbewerbs-Beginn
+    C. Wettbewerbs-Durchführung
+  * Anpassungen bei Strecken-Vorbereitung
+  * Anpassungen bei Aufgaben-Einstellungen
+- Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009
+  hinzugefügt
+- Programm-Menü erweitert
+  * Programme -> Flight Contest -> Usage:
+      Vorbereitungs- und Nutzungshinweise
+  * Programme -> Flight Contest -> Rules:
+      alle unterstützten Wettbewerbsregeln
+- Beschreibung
+  "Wiederherstellung eines fehlgeschlagenen 'Flight Contest'-Updates"
+  hinzugefügt, siehe unten
+
+Fehlerbehebung in Version 1.1.1:
+--------------------------------
 - Beim Anlegen von Klassen beim Import von Besatzungen aus Excel-Vorlage
   wurden die Auswertungs-Punkte der Klassen nicht korrekt eingestellt.
   Das Problem besteht nicht, wenn die Klassen vor dem Import manuell
@@ -89,6 +157,7 @@ Erweiterungen in Version 1.0:
       Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005
       FAI Air Rally Flying - Edition 2011
       FAI Precision Flying - Edition 2011
+      Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009
   * Einzelne Werte können in "Punkte" geändert werden.
   * Die Wettbewerbsordnung kann je Wettbewerb bzw. je Klasse geändert werden.
     Eine Neuberechnung vorhandener Ergebnisse findet aber erst mit Aufruf von
@@ -282,7 +351,7 @@ oder aus der zuletzt hochgeladenen AFLOS-Datenbank (Fall 2).
 
 Import von Strecken (Strecken -> Import AFLOS-Strecke):
 Stellen Sie zum Import sicher, dass Check-Punkte unbekannter Zeitkontrollen 
-in AFLOS eine Torbreite von 2NM, alle anderen Check-Punkte eine andere Torbreite haben.
+in AFLOS eine Torbreite von 2NM oder die Markierung $secret haben.
 
 Import von Logger-Messwerten (Auswertung -> Navigationsflug -> Import AFLOS-Logger-Daten):
 Stellen Sie zum Import sicher, dass die aus dem Logger eingelesenen Messwerte
@@ -317,39 +386,60 @@ Importiert werden nur Besatzungsnamen, die noch nicht vorhanden sind.
 Standard-Wettbewerbsablauf
 --------------------------
 
-A. Vorbereitung
+A. Wettbewerbs-Vorbereitung
 
-1. Strecken festlegen und in AFLOS eingeben.
-2. Besatzunglisten in Excel-Tabelle (FC-CrewList-Sample.xls) eingeben.
+1. Strecken festlegen und in AFLOS eingeben
+   - Bei Päzisionsflug-Wettbewerben Karten-Entfernungs-Messwerte 
+     mit $dist:...mm im Feld 'Mark' eintragen.
+2. Besatzunglisten in Excel-Tabelle eingeben
+   - Vorlage verwenden:
+     Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls
    - Bei Wettbewerb mit Klassen-Auswertung Klassen-Name zuordnen.
    - Bei Wettbewerb mit Team-Auswertung Team-Name zuordnen.
+   - Reihenfolge festlegen und Startnummern zuordnen.
+
+B. Wettbewerbs-Beginn
+   
 3. Neuer Wettbewerb
-   - Wettbewerbsname, Wettbewerbsordnung, Kartenmaßstab und Zeitzone
-     festlegen.
-   - GGf. Klassen-Verwaltung aktivieren.
-   - GGf. Klassen anlegen
-   - GGf. Drucksprache festlegen.
+   - Wettbewerbsname eintragen.
+   - Ggf. Klassen-Verwaltung aktivieren.
+   - Wettbewerbsordnung, Kartenmaßstab und Zeitzone einstellen.
+   - Anzahl der zu wertenden Teams bei Team-Auswertung einstellen.
+   - Ggf. Drucksprache umstellen (-> Extras -> Einstellungen).
+   - Auswertungs-Einstellungen des Wettbewerbs anpassen
+     (-> 'Wettbewerb -> Punkte' oder 'Klassen -> <Name> -> Punkte'):
+     * Ggf. Punkte für nicht geflogene Wendescheifen mit 0 einstellen
+     * Ggf. Punkte für Kursabweichungen > 90 Grad mit 0 einstellen
+     * Ggf. Punkte für Unterschreitung der Mindestflughöhe mit 0 einstellen
 4. Strecken -> Import AFLOS-Strecke
-   - Vorbereitete Strecke aus AFLOS importieren.
-   - Karten-Messwerte für Check-Punkte eintragen.
-
-B. Durchführung
-
+   - Vorbereitete Strecken aus AFLOS importieren.
 5. Besatzungen -> Import Excel-Besatzungsliste
    - Vorbereitete Excel-Tabelle (FC-CrewList-Sample.xls) importieren.
-   - Reihenfolge berechnen und ggf. nachsortieren.
+   - Nicht eingetroffene Teilnehmer deaktivieren.
+   
+C. Wettbewerbs-Durchführung
+
 6. Neue Aufgabe
-   - Datum, Anfangszeit, Takeoff-Abstand, Flugzeit bis SP,
-     Planungstest- und Auswertungsdetails festlegen
+   - Zeit-Einstellungen festlegen
+     * TakeOff-Abstand
+     * Zeit T/O -> SP
+     * Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
+     * Zeit FP -> Landung
+     * Zeit FP -> Abstellen des Flugzeuges
+   - Auswertungsdetails festlegen
+     * Flugplanungstest (ja/nein)
+     * Navigationstest (ja/nein)
+     * Beobachtungstest (ja/nein)
+     * Landetest (ja/nein, Anzahl der Landungen festlegen)
    - Flugplannungstest hinzufügen: Dabei eine erste Flugplannungsaufgabe
      mit Strecke und Wind angeben. 
    - Navigationstest hinzufügen: Dabei Strecke und Wind angeben. 
 7. Planung
    - Allen Besatzungen eine Flugplannungsaufgabe zuweisen.
-   - GGf. Reihenfolge nachsortieren.
+   - Ggf. Reihenfolge korrigieren.
    - Allen Besatzungen einen Flugwind zuweisen.
    - Zeitplan berechnen.
-   - GGf. einzelne Zeiten verschieben.
+   - Ggf. einzelne Zeiten verschieben.
    - Aufgaben drucken.
    - Zeitplan drucken.
    - Schiedsrichter-Zeitplan drucken.
@@ -362,6 +452,7 @@ B. Durchführung
 9. Auswertung des Tagesablaufes
    - Flugplanungsergebnisse eintragen.
    - Navigationsflug-Ergebnisse aus AFLOS importieren.
+     * Ggf. Wendepunkte für Zeitauswertung deaktivieren
    - Beobachtungsergebnisse eintragen.
    - Landungsergebnisse eintragen.
    - Besatzungsergebnisse drucken und Besatzungen übergeben.
@@ -393,6 +484,12 @@ für Landung 1 und 4:
 {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 6*i}else{return -(14*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 350;case 'D':return 150;case 'E':return 180;case 'F':return 210;case 'G':return 240;case 'H':return 270;default:return 300;}}}
 für Landung 2 und 3:
 {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 4*i}else{return -(8*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 200;case 'D':return 100;case 'E':return 120;case 'F':return 140;case 'G':return 160;case 'H':return 180;default:return 200;}}}
+
+Berechungsformel für 'Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009' für alle Landungen:
+für Landung 1 und 4:
+{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+für Landung 2 und 3:
+{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
 
 
 Mögliche Betriebssysteme der Server-Installation:
@@ -477,6 +574,22 @@ Hinweis:
   <Installationsverzeichnis>\fc\AFLOS-UPLOAD.mdb
   darf nicht gelöscht werden.
 
+
+Wiederherstellung eines fehlgeschlagenen 'Flight Contest'-Updates:
+------------------------------------------------------------------
+Das Verzeichnis <Installationsverzeichnis>\fc wird bei 
+Update-Installation mit dem Namen 
+<Installationsverzeichnis>\fc-backup-<Datum> automatisch gesichert. 
+
+Sollte das 'Flight Contest'-Update nicht starten, kann folgendermassen 
+zum letzten funktionstüchtigen 'Flight Contest' zurückgekehrt werden:
+  1. Server stoppen
+  2. 'Flight Contest' deinstallieren
+  3. <Installationsverzeichnis>\fc löschen
+  4. <Installationsverzeichnis>\fc-backup-<Datum> in
+     <Installationsverzeichnis>\fc umbenennen
+  5. Letztes funktionstüchtiges 'Flight Contest' installieren
+  
 
 Logs:
 -----

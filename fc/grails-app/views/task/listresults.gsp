@@ -111,7 +111,12 @@
 	                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
 	                                    
                                     	<td><g:if test="${testInstance.crew.aircraft}"><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')})</td>
-                                    	<td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                        <g:if test="${testInstance.crew.team}">
+                                        	<td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>-</td>
+                                        </g:else>
                                     	
 	                                    <g:if test="${taskInstance.contest.resultClasses}">
 	                                    	<g:if test="${testInstance.crew.resultclass}">

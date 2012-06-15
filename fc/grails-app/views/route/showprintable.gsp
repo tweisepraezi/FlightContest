@@ -22,12 +22,12 @@
                                 <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}" status="j" >
                                     <tr>
                                         <g:if test="${j==0}">
-                                            <td width="25%">${message(code:'fc.coordroute.list')}</td>
+                                            <td width="20%">${message(code:'fc.coordroute.list')}</td>
                                         </g:if>
                                         <g:else>
-                                            <td width="25%"></td>
+                                            <td width="20%"></td>
                                         </g:else>
-                                        <td width="25%">${coordRouteInstance.titleCode()}<br/></td>
+                                        <td width="20%">${coordRouteInstance.titleCode()}<br/></td>
                                         <td>${coordRouteInstance.namePrintable()}<br/></td>
                                     </tr>
                                 </g:each>
@@ -40,12 +40,12 @@
 	                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}" status="j" >
 	                                    <tr>
 	                                        <g:if test="${j==0}">
-	                                            <td width="25%">${message(code:'fc.routelegcoord.list')}</td>
+	                                            <td width="20%">${message(code:'fc.routelegcoord.list')}</td>
 	                                        </g:if>
 	                                        <g:else>
-	                                            <td width="25%"></td>
+	                                            <td width="20%"></td>
 	                                        </g:else>
-	                                        <td width="25%">${routeLegCoordInstance.title}<br/></td>
+	                                        <td width="20%">${routeLegCoordInstance.title}<br/></td>
 	                                        <td>${routeLegCoordInstance.testName()}<br/></td>
 	                                    </tr>
 	                                </g:each>
@@ -59,12 +59,12 @@
 	                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}" status="j" >
 	                                    <tr>
 	                                        <g:if test="${j==0}">
-	                                            <td width="25%">${message(code:'fc.routelegtest.list')}</td>
+	                                            <td width="20%">${message(code:'fc.routelegtest.list')}</td>
 	                                        </g:if>
 	                                        <g:else>
-	                                            <td width="25%"></td>
+	                                            <td width="20%"></td>
 	                                        </g:else>
-	                                        <td width="25%">${routeLetTestInstance.title}<br/></td>
+	                                        <td width="20%">${routeLetTestInstance.title}<br/></td>
 	                                        <td>${routeLetTestInstance.testName()}<br/></td>
 	                                    </tr>
 	                                </g:each>

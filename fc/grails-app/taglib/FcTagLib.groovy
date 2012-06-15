@@ -428,7 +428,7 @@ class FcTagLib
     // <g:test var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/>
     def test = { p ->
         if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.crew.name.encodeAsHTML()} (${p.var.task.name().encodeAsHTML()})</a>"""
+            out << """<a href="${p.link}/${p.var.id}">${p.var.crew.startNum}: ${p.var.crew.name.encodeAsHTML()} (${p.var.task.name().encodeAsHTML()})</a>"""
         }
     }
     
@@ -436,7 +436,7 @@ class FcTagLib
     // <g:testnum var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/>
     def testnum = { p ->
         if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.viewpos+1}</a>"""
+			out << """<a href="${p.link}/${p.var.id}">${p.var.GetStartNum()}</a>"""
         }
     }
     

@@ -23,6 +23,9 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:taskInstance,field:'title')}" tabIndex="1"/>
                             </p>
+                        </fieldset>
+                        <fieldset>
+                            <p class="warning">${message(code:'fc.task.info.resettimetable')}</p>
                             <p>
                                 <label>${message(code:'fc.task.firsttime')}* [${message(code:'fc.time.hmin')}]:</label>
                                 <br/>
@@ -34,9 +37,50 @@
                                 <input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}" tabIndex="3"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.task.takeoffinterval.fasteraircraft')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="4"/>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p class="warning">${message(code:'fc.task.info.recalculatetimes')}</p>
+                            <p>
                                 <label>${message(code:'fc.task.risingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="risingDuration" name="risingDuration" value="${fieldValue(bean:taskInstance,field:'risingDuration')}" tabIndex="4"/>
+                                <input type="text" id="risingDuration" name="risingDuration" value="${fieldValue(bean:taskInstance,field:'risingDuration')}" tabIndex="5"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.planningtestduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="6"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.preparationduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="7"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="8"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.maxlandingduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="maxLandingDuration" name="maxLandingDuration" value="${fieldValue(bean:taskInstance,field:'maxLandingDuration')}" tabIndex="9"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="10"/>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p class="warning">${message(code:'fc.task.info.recalculatewarnings')}</p>
+                            <p>
+                                <label>${message(code:'fc.task.minnextflightduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="11"/>
                             </p>
                         </fieldset>
                     	<g:if test="${taskInstance.contest.resultClasses}">
@@ -46,19 +90,29 @@
 		                            <p>
 		                                <div>
 			                               	<g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_planningTestRun" value="${taskclass_instance.planningTestRun}" />
-		    	                            <label>${message(code:'fc.planningresults')}</label>
+		    	                            <label>${message(code:'fc.planningtest')}</label>
 		                                </div>
+	                                    <div style="margin-left:20px">
+	                                        <div>
+	                                            <g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_planningTestDistanceMeasure" value="${taskclass_instance.planningTestDistanceMeasure}" />
+	                                            <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
+	                                        </div>
+	                                        <div>
+	                                            <g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_planningTestDirectionMeasure" value="${taskclass_instance.planningTestDirectionMeasure}" />
+	                                            <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
+	                                        </div>
+	                                    </div>
 		                                <div>
 			                               	<g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_flightTestRun" value="${taskclass_instance.flightTestRun}" />
-		    	                            <label>${message(code:'fc.flightresults')}</label>
+		    	                            <label>${message(code:'fc.flighttest')}</label>
 		                                </div>
 		                                <div>
 			                               	<g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_observationTestRun" value="${taskclass_instance.observationTestRun}" />
-		    	                            <label>${message(code:'fc.observationresults')}</label>
+		    	                            <label>${message(code:'fc.observationtest')}</label>
 		                                </div>
 		                                <div>
 			                               	<g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_landingTestRun" value="${taskclass_instance.landingTestRun}" />
-		    	                            <label>${message(code:'fc.landingresults')}</label>
+		    	                            <label>${message(code:'fc.landingtest')}</label>
 		                                </div>
 				                        <div style="margin-left:20px">
 			                                <div>
@@ -80,17 +134,7 @@
 	                                	</div>
 		                                <div>
 			                               	<g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_specialTestRun" value="${taskclass_instance.specialTestRun}" />
-		    	                            <label>${message(code:'fc.specialresults')}</label>
-		                                </div>
-		                            </p>
-		                            <p>
-		                                <div>
-		                                    <g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_planningTestDistanceMeasure" value="${taskclass_instance.planningTestDistanceMeasure}" />
-		                                    <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
-		                                </div>
-		                                <div>
-		                                    <g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_planningTestDirectionMeasure" value="${taskclass_instance.planningTestDirectionMeasure}" />
-		                                    <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
+		    	                            <label>${message(code:'fc.specialtest')}</label>
 		                                </div>
 		                            </p>
 		                    	</fieldset>
@@ -101,19 +145,29 @@
 	                            <p>
 	                                <div>
 		                               	<g:checkBox name="planningTestRun" value="${taskInstance.planningTestRun}" />
-	    	                            <label>${message(code:'fc.planningresults')}</label>
+	    	                            <label>${message(code:'fc.planningtest')}</label>
 	                                </div>
+                                    <div style="margin-left:20px">
+	                                    <div>
+	                                        <g:checkBox name="planningTestDistanceMeasure" value="${taskInstance.planningTestDistanceMeasure}" />
+	                                        <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
+	                                    </div>
+	                                    <div>
+	                                        <g:checkBox name="planningTestDirectionMeasure" value="${taskInstance.planningTestDirectionMeasure}" />
+	                                        <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
+	                                    </div>
+                                    </div>
 	                                <div>
 		                               	<g:checkBox name="flightTestRun" value="${taskInstance.flightTestRun}" />
-	    	                            <label>${message(code:'fc.flightresults')}</label>
+	    	                            <label>${message(code:'fc.flighttest')}</label>
 	                                </div>
 	                                <div>
 		                               	<g:checkBox name="observationTestRun" value="${taskInstance.observationTestRun}" />
-	    	                            <label>${message(code:'fc.observationresults')}</label>
+	    	                            <label>${message(code:'fc.observationtest')}</label>
 	                                </div>
 	                                <div>
 		                               	<g:checkBox name="landingTestRun" value="${taskInstance.landingTestRun}" />
-	    	                            <label>${message(code:'fc.landingresults')}</label>
+	    	                            <label>${message(code:'fc.landingtest')}</label>
 	                                </div>
 			                        <div style="margin-left:20px">
 		                                <div>
@@ -135,17 +189,7 @@
 	                                </div>
 	                                <div>
 		                               	<g:checkBox name="specialTestRun" value="${taskInstance.specialTestRun}" />
-	    	                            <label>${message(code:'fc.specialresults')}</label>
-	                                </div>
-	                            </p>
-	                            <p>
-	                                <div>
-	                                    <g:checkBox name="planningTestDistanceMeasure" value="${taskInstance.planningTestDistanceMeasure}" />
-	                                    <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
-	                                </div>
-	                                <div>
-	                                    <g:checkBox name="planningTestDirectionMeasure" value="${taskInstance.planningTestDirectionMeasure}" />
-	                                    <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
+	    	                            <label>${message(code:'fc.specialtest')}</label>
 	                                </div>
 	                            </p>
 	                        </fieldset>
@@ -154,44 +198,7 @@
                             <p>
                                 <label>${message(code:'fc.task.addtimevalue')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="5"/>
-                            </p>
-                        </fieldset>
-                        <fieldset>
-                            <p>
-                                <label>${message(code:'fc.task.takeoffinterval.fasteraircraft')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="6"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.planningtestduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="7"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.preparationduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="8"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.maxlandingduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="maxLandingDuration" name="maxLandingDuration" value="${fieldValue(bean:taskInstance,field:'maxLandingDuration')}" tabIndex="9"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="10"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.minnextflightduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="11"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="12"/>
+                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="12"/>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}"/>

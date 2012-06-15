@@ -518,17 +518,19 @@ class ContestController {
         
         // Contest
         Map contest = fcService.putContest(testName,200000,false,2,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"20. Februar 2012","09:00",3,8,true,true,true,true,false, false,true, true,true,true,true)
+        Map task1 = fcService.putTask(contest,"20. Februar 2012","09:00",3,8,10,15,true,true,true,true,false, false,true, true,true,true,true)
 
         // Crews and Aircrafts
-        Map crew1 = fcService.putCrew(contest,"Besatzung 3","Deutschland","","D-EAAA","","",85)
-        Map crew2 = fcService.putCrew(contest,"Besatzung 18","Deutschland","","D-EAAD","","",80)
-        Map crew3 = fcService.putCrew(contest,"Besatzung 19","Deutschland","","D-EAAE","","",80)
-        Map crew4 = fcService.putCrew(contest,"Besatzung 11","Schweiz","","D-EAAB","","",70)
-        Map crew5 = fcService.putCrew(contest,"Besatzung 13","Schweiz","","D-EAAC","","",70)
+        Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","","D-EAAA","","",85)
+        Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","","D-EAAD","","",80)
+        Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","","D-EAAE","","",80)
+        Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","Schweiz","","D-EAAB","","",70)
+        Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","Schweiz","","D-EAAC","","",70)
         
         // Route
         fcService.printstart "Route"
+		Map route1 = fcService.importRoute(contest,"Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
+		/*
         Map route1 = fcService.putRoute(contest,"Strecke 1","Strecke 1")
         fcService.putCoordRoute(route1,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
         fcService.putCoordRoute(route1,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
@@ -544,6 +546,7 @@ class ContestController {
         fcService.putCoordRoute(route1,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
         fcService.putCoordRoute(route1,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
         fcService.putCoordRoute(route1,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
+        */
         fcService.printdone ""
         
         // Planning Test
@@ -768,18 +771,18 @@ class ContestController {
         
         // Contest
         Map contest = fcService.putContest(testName,200000,true,2,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"20. Februar 2012","09:00",3,8,true,true,true,true,false, false,true, false,false,false,false)
+        Map task1 = fcService.putTask(contest,"20. Februar 2012","09:00",3,8,10,15,true,true,true,true,false, false,true, false,false,false,false)
 
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"Pr\u00E4zi","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
         Map resultclass2 = fcService.putResultClass(contest,"Tourist","",ContestRules.R1)
         
         // Crews with Teams, ResultClasses and Aircrafts
-        Map crew1 = fcService.putCrew(contest,"Besatzung 3","Deutschland","Pr\u00E4zi","D-EAAA","","",85)
-        Map crew2 = fcService.putCrew(contest,"Besatzung 18","Deutschland","Tourist","D-EAAD","","",80)
-        Map crew3 = fcService.putCrew(contest,"Besatzung 19","Deutschland","Pr\u00E4zi","D-EAAE","","",80)
-        Map crew4 = fcService.putCrew(contest,"Besatzung 11","Schweiz","Tourist","D-EAAB","","",70)
-        Map crew5 = fcService.putCrew(contest,"Besatzung 13","Schweiz","Pr\u00E4zi","D-EAAC","","",70)
+        Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","Pr\u00E4zi","D-EAAA","","",85)
+        Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","Tourist","D-EAAD","","",80)
+        Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","Pr\u00E4zi","D-EAAE","","",80)
+        Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","Schweiz","Tourist","D-EAAB","","",70)
+        Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","Schweiz","Pr\u00E4zi","D-EAAC","","",70)
         
         // additional team
         Map team3 = fcService.putTeam(contest,'Polen')
@@ -793,6 +796,8 @@ class ContestController {
         
         // Route
         fcService.printstart "Route"
+		Map route1 = fcService.importRoute(contest,"Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
+		/*
         Map route1 = fcService.putRoute(contest,"Strecke 1","Strecke 1")
         fcService.putCoordRoute(route1,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
         fcService.putCoordRoute(route1,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
@@ -808,6 +813,7 @@ class ContestController {
         fcService.putCoordRoute(route1,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
         fcService.putCoordRoute(route1,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
         fcService.putCoordRoute(route1,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
+        */
         fcService.printdone ""
         
         // Planning Test
@@ -1038,6 +1044,8 @@ class ContestController {
 		
 		// Route 1
 		fcService.printstart "Route 1"
+		Map route1 = fcService.importRoute(contest,"Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
+		/*
 		Map route1 = fcService.putRoute(contest,"Strecke 1","Strecke 1")
 		fcService.putCoordRoute(route1,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
 		fcService.putCoordRoute(route1,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
@@ -1053,10 +1061,13 @@ class ContestController {
 		fcService.putCoordRoute(route1,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
 		fcService.putCoordRoute(route1,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
 		fcService.putCoordRoute(route1,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
+		*/
 		fcService.printdone ""
 		
 		// Route 2
 		fcService.printstart "Route 2"
+		Map route2 = fcService.importRoute(contest,"Strecke 2",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
+		/*
 		Map route2 = fcService.putRoute(contest,"Strecke 2","Strecke 2")
 		fcService.putCoordRoute(route2,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
 		fcService.putCoordRoute(route2,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
@@ -1067,27 +1078,28 @@ class ContestController {
 		fcService.putCoordRoute(route2,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
 		fcService.putCoordRoute(route2,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
 		fcService.putCoordRoute(route2,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
+		*/
 		fcService.printdone ""
 		
 		// Crews with Teams, ResultClasses and Aircrafts
 		// DMM
-		Map crew3 = fcService.putCrew(contest,"Besatzung 3","Deutschland","DMM","D-EAAA","","",85)
-		Map crew18 = fcService.putCrew(contest,"Besatzung 18","Deutschland","DMM","D-EAAD","","",80)
-		Map crew19 = fcService.putCrew(contest,"Besatzung 19","Deutschland","DMM","D-EAAE","","",80)
-		Map crew11 = fcService.putCrew(contest,"Besatzung 11","Deutschland","DMM","D-EAAB","","",70)
-		Map crew13 = fcService.putCrew(contest,"Besatzung 13","Deutschland","DMM","D-EAAC","","",70)
+		Map crew3 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","DMM","D-EAAA","","",85)
+		Map crew18 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","DMM","D-EAAD","","",80)
+		Map crew19 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","DMM","D-EAAE","","",80)
+		Map crew11 = fcService.putCrew(contest,11,"Besatzung 11","Deutschland","DMM","D-EAAB","","",70)
+		Map crew13 = fcService.putCrew(contest,13,"Besatzung 13","Deutschland","DMM","D-EAAC","","",70)
 		// RuB-Wettbewerb
-		Map crew1 = fcService.putCrew(contest,"Besatzung 1","Deutschland","RuB-Wettbewerb","D-EABA","","",85)
-		Map crew2 = fcService.putCrew(contest,"Besatzung 2","Deutschland","RuB-Wettbewerb","D-EABB","","",70)
-		Map crew4 = fcService.putCrew(contest,"Besatzung 4","Deutschland","RuB-Wettbewerb","D-EABC","","",90)
-		Map crew5 = fcService.putCrew(contest,"Besatzung 5","Deutschland","RuB-Wettbewerb","D-EABD","","",90)
-		Map crew7 = fcService.putCrew(contest,"Besatzung 7","Deutschland","RuB-Wettbewerb","D-EABE","","",80)
+		Map crew1 = fcService.putCrew(contest,1,"Besatzung 1","Deutschland","RuB-Wettbewerb","D-EABA","","",85)
+		Map crew2 = fcService.putCrew(contest,2,"Besatzung 2","Deutschland","RuB-Wettbewerb","D-EABB","","",70)
+		Map crew4 = fcService.putCrew(contest,4,"Besatzung 4","Deutschland","RuB-Wettbewerb","D-EABC","","",90)
+		Map crew5 = fcService.putCrew(contest,5,"Besatzung 5","Deutschland","RuB-Wettbewerb","D-EABD","","",90)
+		Map crew7 = fcService.putCrew(contest,7,"Besatzung 7","Deutschland","RuB-Wettbewerb","D-EABE","","",80)
 		// RuB-Tourist
-		Map crew8 = fcService.putCrew(contest,"Besatzung 8","Deutschland","RuB-Tourist","D-EACA","","",70)
-		Map crew9 = fcService.putCrew(contest,"Besatzung 9","Deutschland","RuB-Tourist","D-EACB","","",85)
-		Map crew10 = fcService.putCrew(contest,"Besatzung 10","Deutschland","RuB-Tourist","D-EACC","","",75)
-		Map crew12 = fcService.putCrew(contest,"Besatzung 12","Deutschland","RuB-Tourist","D-EACD","","",90)
-		Map crew14 = fcService.putCrew(contest,"Besatzung 14","Deutschland","RuB-Tourist","D-EACE","","",100)
+		Map crew8 = fcService.putCrew(contest,8,"Besatzung 8","Deutschland","RuB-Tourist","D-EACA","","",70)
+		Map crew9 = fcService.putCrew(contest,9,"Besatzung 9","Deutschland","RuB-Tourist","D-EACB","","",85)
+		Map crew10 = fcService.putCrew(contest,10,"Besatzung 10","Deutschland","RuB-Tourist","D-EACC","","",75)
+		Map crew12 = fcService.putCrew(contest,12,"Besatzung 12","Deutschland","RuB-Tourist","D-EACD","","",90)
+		Map crew14 = fcService.putCrew(contest,14,"Besatzung 14","Deutschland","RuB-Tourist","D-EACE","","",100)
 		
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"DMM","Deutsche Motorflugmeisterschaft Navigationsflug",ContestRules.R1)
@@ -1101,7 +1113,7 @@ class ContestController {
         // TaskClass properties
 		
 		// 1 - 23. August 2012
-        Map task1 = fcService.putTask(contest,"23. August 2012","10:00",3,8,true,true,true,true,false,  false,true, true,true,true,true)
+        Map task1 = fcService.putTask(contest,"23. August 2012","10:00",3,8,10,15,true,true,true,true,false,  false,true, true,true,true,true)
 		
         fcService.puttaskclassTask(task1,resultclass1,true,true,true,true,false,      false,true, true,true,true,true)
         fcService.puttaskclassTask(task1,resultclass2,false,false,false,false,false,  false,true, false,false,false,false)
@@ -1119,7 +1131,7 @@ class ContestController {
 		fcService.runcalculatetimetableTask(task1)
 		
 		// 2 - 24. August 2012
-		Map task2 = fcService.putTask(contest,"24. August 2012","10:00",3,8,true,true,true,false,false, false,true, false,false,false,false)
+		Map task2 = fcService.putTask(contest,"24. August 2012","10:00",3,8,10,15,true,true,true,false,false, false,true, false,false,false,false)
 		
         fcService.puttaskclassTask(task2,resultclass1,true,true,true,false,false,     false,true, false,false,false,false)
         fcService.puttaskclassTask(task2,resultclass2,false,false,false,false,false,  false,true, false,false,false,false)
@@ -1137,7 +1149,7 @@ class ContestController {
 		fcService.runcalculatetimetableTask(task2)
 
 		// 3 - 25. August 2012
-		Map task3 = fcService.putTask(contest,"25. August 2012","10:00",3,8,true,true,true,true,false,  false,true, true,false,false,false)
+		Map task3 = fcService.putTask(contest,"25. August 2012","10:00",3,8,10,15,true,true,true,true,false,  false,true, true,false,false,false)
 		
 		fcService.puttaskclassTask(task3,resultclass1,true,true,true,true,false,      false,true, true,false,false,false)
 		fcService.puttaskclassTask(task3,resultclass2,true,true,true,true,false,      false,true, true,false,false,false)
@@ -1335,17 +1347,17 @@ class ContestController {
         Map contest = fcService.putContest(testName,200000,false,2,ContestRules.R1,true,testExists)
         
         // Tasks
-        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,false,false, true,false,false, false,true, false,false,false,false)
-        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,false,false, false,true,false, false,true, false,false,false,false)
+        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,10,15,false,false, true,false,false, false,true, false,false,false,false)
+        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,10,15,false,false, false,true,false, false,true, false,false,false,false)
 
         // Crews with Teams, ResultClasses and Aircrafts
-        Map crew11 = fcService.putCrew(contest,"Crew 1-1","Deutschland","","D-EAAA","","",85)
-        Map crew12 = fcService.putCrew(contest,"Crew 1-2","Deutschland","","D-EAAE","","",80)
-        Map crew13 = fcService.putCrew(contest,"Crew 1-3","Schweiz","","D-EAAC","","",70)
-        Map crew21 = fcService.putCrew(contest,"Crew 2-1","Deutschland","","D-EAAD","","",80)
-        Map crew22 = fcService.putCrew(contest,"Crew 2-2","Schweiz","","D-EAAB","","",70)
-        Map crew31 = fcService.putCrew(contest,"Crew 3-1","Deutschland","","D-EAAF","","",80)
-        Map crew32 = fcService.putCrew(contest,"Crew 3-2","Schweiz","","D-EAAG","","",70)
+        Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","Deutschland","","D-EAAA","","",85)
+        Map crew12 = fcService.putCrew(contest,12,"Crew 1-2","Deutschland","","D-EAAE","","",80)
+        Map crew13 = fcService.putCrew(contest,13,"Crew 1-3","Schweiz","","D-EAAC","","",70)
+        Map crew21 = fcService.putCrew(contest,21,"Crew 2-1","Deutschland","","D-EAAD","","",80)
+        Map crew22 = fcService.putCrew(contest,22,"Crew 2-2","Schweiz","","D-EAAB","","",70)
+        Map crew31 = fcService.putCrew(contest,31,"Crew 3-1","Deutschland","","D-EAAF","","",80)
+        Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","Schweiz","","D-EAAG","","",70)
 
         fcService.putsequenceTask(task1,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
         fcService.putsequenceTask(task2,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
@@ -1417,8 +1429,8 @@ class ContestController {
         Map contest = fcService.putContest(testName,200000,true,2,ContestRules.R1,true,testExists)
         
         // Tasks
-        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,true,true,true,true,false, false,true, false,false,false,false)
-        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,true,true,true,true,false, false,true, false,false,false,false)
+        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,10,15,true,true,true,true,false, false,true, false,false,false,false)
+        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,10,15,true,true,true,true,false, false,true, false,false,false,false)
 
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"Class-1","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -1426,13 +1438,13 @@ class ContestController {
         Map resultclass3 = fcService.putResultClass(contest,"Class-3","",ContestRules.R1)
         
         // Crews with Teams, ResultClasses and Aircrafts
-        Map crew11 = fcService.putCrew(contest,"Crew 1-1","Deutschland","Class-1","D-EAAA","","",85)
-        Map crew12 = fcService.putCrew(contest,"Crew 1-2","Deutschland","Class-1","D-EAAE","","",80)
-        Map crew13 = fcService.putCrew(contest,"Crew 1-3","Schweiz","Class-1","D-EAAC","","",70)
-        Map crew21 = fcService.putCrew(contest,"Crew 2-1","Deutschland","Class-2","D-EAAD","","",80)
-        Map crew22 = fcService.putCrew(contest,"Crew 2-2","Schweiz","Class-2","D-EAAB","","",70)
-        Map crew31 = fcService.putCrew(contest,"Crew 3-1","Deutschland","Class-3","D-EAAF","","",80)
-        Map crew32 = fcService.putCrew(contest,"Crew 3-2","Schweiz","Class-3","D-EAAG","","",70)
+        Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","Deutschland","Class-1","D-EAAA","","",85)
+        Map crew12 = fcService.putCrew(contest,12,"Crew 1-2","Deutschland","Class-1","D-EAAE","","",80)
+        Map crew13 = fcService.putCrew(contest,13,"Crew 1-3","Schweiz","Class-1","D-EAAC","","",70)
+        Map crew21 = fcService.putCrew(contest,21,"Crew 2-1","Deutschland","Class-2","D-EAAD","","",80)
+        Map crew22 = fcService.putCrew(contest,22,"Crew 2-2","Schweiz","Class-2","D-EAAB","","",70)
+        Map crew31 = fcService.putCrew(contest,31,"Crew 3-1","Deutschland","Class-3","D-EAAF","","",80)
+        Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","Schweiz","Class-3","D-EAAG","","",70)
 
         // TaskClass properties
         fcService.puttaskclassTask(task1,resultclass1,false,false, true,true,true, false,true, false,false,false,false)
@@ -1512,11 +1524,11 @@ class ContestController {
         
         // Contest
         Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"","11:00",3,10,true,true,true,true,false, false,true, false,false,false,false)
+        Map task1 = fcService.putTask(contest,"","11:00",3,10,10,15,true,true,true,true,false, false,true, false,false,false,false)
     
         // Crews and Aircrafts
         (1..100).each {
-            fcService.putCrew(contest,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
+            fcService.putCrew(contest,it,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
         }
         
         fcService.printdone ""
@@ -1530,11 +1542,11 @@ class ContestController {
         
         // Contest
         Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"","11:00",3,10,true,true,true,true,false, false,true, false,false,false,false)
+        Map task1 = fcService.putTask(contest,"","11:00",3,10,10,15,true,true,true,true,false, false,true, false,false,false,false)
     
         // Crews and Aircrafts
         (1..20).each {
-            fcService.putCrew(contest,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
+            fcService.putCrew(contest,it,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
         }
         
         fcService.printdone ""
@@ -1636,11 +1648,11 @@ class ContestController {
       ]
     }
     List test1Crew() {
-       [[name:"Besatzung 3",mark:"Besatzung 3 (3)",   team:[name:"Deutschland"],tas:85,contestPenalties:215,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
-        [name:"Besatzung 18",mark:"Besatzung 18 (18)",team:[name:"Deutschland"],tas:80,contestPenalties:133,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-        [name:"Besatzung 19",mark:"Besatzung 19 (19)",team:[name:"Deutschland"],tas:80,contestPenalties:568,contestPosition:5,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
-        [name:"Besatzung 11",mark:"Besatzung 11 (11)",team:[name:"Schweiz"],    tas:70,contestPenalties:383,contestPosition:4,noContestPosition:false,aircraft:[registration:"D-EAAB",type:"",colour:""]],
-        [name:"Besatzung 13",mark:"Besatzung 13 (13)",team:[name:"Schweiz"],    tas:70,contestPenalties:135,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
+       [[startNum:3, name:"Besatzung 3", mark:"3: Besatzung 3",  team:[name:"Deutschland"],tas:85,contestPenalties:215,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
+        [startNum:18,name:"Besatzung 18",mark:"18: Besatzung 18",team:[name:"Deutschland"],tas:80,contestPenalties:133,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAD",type:"",colour:""]],
+        [startNum:19,name:"Besatzung 19",mark:"19: Besatzung 19",team:[name:"Deutschland"],tas:80,contestPenalties:568,contestPosition:5,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+        [startNum:11,name:"Besatzung 11",mark:"11: Besatzung 11",team:[name:"Schweiz"],    tas:70,contestPenalties:383,contestPosition:4,noContestPosition:false,aircraft:[registration:"D-EAAB",type:"",colour:""]],
+        [startNum:13,name:"Besatzung 13",mark:"13: Besatzung 13",team:[name:"Schweiz"],    tas:70,contestPenalties:135,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
        ]
     }
     List test1Aircraft() {
@@ -1657,7 +1669,7 @@ class ContestController {
       ]
     }
     List test1Task() {
-      [[title:"20. Februar 2012",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalFasterAircraft:120,planningTestDuration:60,
+      [[title:"20. Februar 2012",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
         preparationDuration:15,risingDuration:8,maxLandingDuration:10,parkingDuration:15,minNextFlightDuration:30,
         procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true]
       ]
@@ -2082,11 +2094,11 @@ class ContestController {
        ],
        [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
-        planCpTime:Date.parse("HH:mm:ss","10:43:38"),planProcedureTurn:false,
+        planCpTime:Date.parse("HH:mm:ss","10:43:38"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,29270'",resultLongitude:"E 014\u00b0 10,54200'",resultAltitude:1399,
         resultCpTime:Date.parse("HH:mm:ss","10:43:39"),resultCpTimeInput:"00:00:00",
         resultCpNotFound:false,resultBadCourseNum:0,
-        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
        [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
@@ -2193,11 +2205,11 @@ class ContestController {
        ],
        [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
-        planCpTime:Date.parse("HH:mm:ss","13:26:26"),planProcedureTurn:false,
+        planCpTime:Date.parse("HH:mm:ss","13:26:26"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,27670'",resultLongitude:"E 014\u00b0 10,60120'",resultAltitude:1198,
         resultCpTime:Date.parse("HH:mm:ss","13:26:27"),resultCpTimeInput:"00:00:00",
         resultCpNotFound:false,resultBadCourseNum:0,
-        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
        [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
@@ -2304,11 +2316,11 @@ class ContestController {
        ],
        [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
-        planCpTime:Date.parse("HH:mm:ss","12:29:26"),planProcedureTurn:false,
+        planCpTime:Date.parse("HH:mm:ss","12:29:26"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,12430'",resultLongitude:"E 014\u00b0 10,91000'",resultAltitude:1412,
         resultCpTime:Date.parse("HH:mm:ss","12:29:45"),resultCpTimeInput:"00:00:00",
         resultCpNotFound:false,resultBadCourseNum:0,
-        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:17
        ],
        [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
@@ -2415,11 +2427,11 @@ class ContestController {
        ],
        [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
-        planCpTime:Date.parse("HH:mm:ss","11:10:19"),planProcedureTurn:false,
+        planCpTime:Date.parse("HH:mm:ss","11:10:19"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,22360'",resultLongitude:"E 014\u00b0 10,69030'",resultAltitude:1659,
         resultCpTime:Date.parse("HH:mm:ss","11:10:38"),resultCpTimeInput:"00:00:00",
         resultCpNotFound:false,resultBadCourseNum:0,
-        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:17
        ],
        [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
@@ -2526,11 +2538,11 @@ class ContestController {
        ],
        [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
-        planCpTime:Date.parse("HH:mm:ss","11:16:19"),planProcedureTurn:false,
+        planCpTime:Date.parse("HH:mm:ss","11:16:19"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,26100'",resultLongitude:"E 014\u00b0 10,64230'",resultAltitude:1281,
         resultCpTime:Date.parse("HH:mm:ss","11:16:09"),resultCpTimeInput:"00:00:00",
         resultCpNotFound:false,resultBadCourseNum:0,
-        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:8
        ],
        [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
@@ -2762,11 +2774,11 @@ class ContestController {
     }
 
     List test2Crew() {
-      [[name:"Besatzung 3", mark:"Besatzung 3 (3)",  team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:55, classPosition:2,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
-       [name:"Besatzung 18",mark:"Besatzung 18 (18)",team:[name:"Deutschland"],resultclass:[name:"Tourist",   contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-       [name:"Besatzung 19",mark:"Besatzung 19 (19)",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
-       [name:"Besatzung 11",mark:"Besatzung 11 (11)",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
-       [name:"Besatzung 13",mark:"Besatzung 13 (13)",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
+      [[startNum:3, name:"Besatzung 3", mark:"3: Besatzung 3",  team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:55, classPosition:2,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
+       [startNum:18,name:"Besatzung 18",mark:"18: Besatzung 18",team:[name:"Deutschland"],resultclass:[name:"Tourist",   contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
+       [startNum:19,name:"Besatzung 19",mark:"19: Besatzung 19",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+       [startNum:11,name:"Besatzung 11",mark:"11: Besatzung 11",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
+       [startNum:13,name:"Besatzung 13",mark:"13: Besatzung 13",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
       ]
     }
     List test2ResultClass() {
