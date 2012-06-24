@@ -60,9 +60,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:set var="last_measuretruetrack" value="${new Integer(0)}"/>
-                                <g:set var="last_measuredistance" value="${new Integer(0)}"/>
-                                <g:each var="coordroute_instance" in="${routeInstance.coords}" status="i" >
+                                <g:set var="last_measuretruetrack" value="${new BigDecimal(0)}"/>
+                                <g:set var="last_measuredistance" value="${new BigDecimal(0)}"/>
+                                <g:each var="coordroute_instance" in="${routeInstance.coords}" status="i">
                                     <tr class="${coordroute_instance.type in [CoordType.SP,CoordType.TP,CoordType.FP] ? '' : 'odd'}">
                                     	<!-- search next id -->
                                         <g:set var="next" value="${new Integer(0)}" />
@@ -99,18 +99,19 @@
 	                                	<g:set var="last_measuretruetrack" value="${coordroute_instance.measureTrueTrack}" />
 	                               	</g:if>
 	                               	<g:else>
-		                                <g:set var="last_measuretruetrack" value="${new Integer(0)}"/>
+		                                <g:set var="last_measuretruetrack" value="${new BigDecimal(0)}"/>
 	                               	</g:else>
                                     <g:if test="${coordroute_instance.type == CoordType.SECRET}">
 	    	                            <g:set var="last_measuredistance" value="${coordroute_instance.measureDistance}" />
 	                               	</g:if>
 	                               	<g:else>
-	                               		<g:set var="last_measuredistance" value="${new Integer(0)}"/>
+	                               		<g:set var="last_measuredistance" value="${new BigDecimal(0)}"/>
 	                               	</g:else>
                                 </g:each>
                             </tbody>
                         </table>
                         <table>
+                            <g:set var="total_distance" value="${new BigDecimal(0)}" />
                             <thead>
                                 <tr>
                                     <th class="table-head" colspan="6">${message(code:'fc.routelegcoord.list')}</th>
@@ -125,19 +126,37 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="routeleg_instance" in="${routeInstance.routelegs}" status="i" >
+                                <g:set var="last_testtruetrack" value="${null}"/>
+                                <g:set var="i" value="${new Integer(0)}"/>
+                                <g:each var="routeleg_instance" in="${routeInstance.routelegs}" status="num">
+                                    <g:set var="i" value="${i+1}"/>
+                                    <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routeleg_instance.testDistance())}" />
+                                    <g:set var="course_change" value="${AviationMath.courseChange(last_testtruetrack,routeleg_instance.testTrueTrack())}"/>
+                                    <g:if test="${course_change.abs() >= 90}">
+                                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
+                                            <td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
+                                        </tr>
+                                        <g:set var="i" value="${i+1}"/>
+                                    </g:if>
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                                        <td>${i+1}</td>
+                                        <td>${num+1}</td>
                                         <td>${routeleg_instance.title}</td>
                                         <td>${routeleg_instance.coordTrueTrackName()}</td>
                                         <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
                                         <td>${routeleg_instance.coordDistanceName()}</td>
                                         <td>${routeleg_instance.mapDistanceName()} (${routeleg_instance.mapMeasureDistanceName()})</td>
                                     </tr>
+                                    <g:set var="last_testtruetrack" value="${routeleg_instance.testTrueTrack()}"/>
                                 </g:each>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6">${message(code:'fc.distance.total')} ${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')}</td>
+                                </tr>
+                            </tfoot>
                         </table>
                         <table>
+                            <g:set var="total_distance" value="${new BigDecimal(0)}" />
                             <thead>
                                 <tr>
                                     <th class="table-head" colspan="6">${message(code:'fc.routelegtest.list')}</th>
@@ -152,17 +171,34 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="routeleg_instance" in="${routeInstance.testlegs}" status="i" >
+                                <g:set var="last_testtruetrack" value="${null}"/>
+                                <g:set var="i" value="${new Integer(0)}"/>
+                                <g:each var="routeleg_instance" in="${routeInstance.testlegs}" status="num">
+                                    <g:set var="i" value="${i+1}"/>
+                                    <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routeleg_instance.testDistance())}" />
+                                    <g:set var="course_change" value="${AviationMath.courseChange(last_testtruetrack,routeleg_instance.testTrueTrack())}"/>
+                                    <g:if test="${course_change.abs() >= 90}">
+                                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
+                                            <td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
+                                        </tr>
+                                        <g:set var="i" value="${i+1}"/>
+                                    </g:if>
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                                        <td>${i+1}</td>
+                                        <td>${num+1}</td>
                                         <td>${routeleg_instance.title}</td>
                                         <td>${routeleg_instance.coordTrueTrackName()}</td>
                                         <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
                                         <td>${routeleg_instance.coordDistanceName()}</td>
                                         <td>${routeleg_instance.mapDistanceName()} (${routeleg_instance.mapMeasureDistanceName()})</td>
                                     </tr>
+                                    <g:set var="last_testtruetrack" value="${routeleg_instance.testTrueTrack()}"/>
                                 </g:each>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6">${message(code:'fc.distance.total')} ${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')}</td>
+                                </tr>
+                            </tfoot>
                         </table>
                         <input type="hidden" name="id" value="${routeInstance?.id}"/>
                         <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" tabIndex="1"/>

@@ -45,6 +45,12 @@ class FcMath
         return ""
     }
     
+    static String GradStrMinus(BigDecimal gradValue)
+    {
+        DecimalFormat df = new DecimalFormat("0")
+        return df.format(gradValue)
+    }
+	
     static String RouteGradStr(BigDecimal gradValue)
     {
         if (gradValue >= 0) {

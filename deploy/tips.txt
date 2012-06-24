@@ -1,0 +1,91 @@
+Thomas Weise
+tweise.praeziflug@gmx.de
+
+Bedienung-Tipps
+---------------
+- Fett markierte Texte und Zahlen sowie das Zeichen '...' sind Links, 
+  hinter denen sich weitere Daten verbergen (in Planung und Auswertung).
+- Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
+  wodurch das Drücken der Shift-Taste nicht notwendig ist.
+
+Standard-Wettbewerbsablauf
+--------------------------
+
+A. Wettbewerbs-Vorbereitung
+
+1. Strecken festlegen und in AFLOS eingeben
+   - Bei Päzisionsflug-Wettbewerben Karten-Entfernungs-Messwerte 
+     mit $dist:...mm im Feld 'Mark' eintragen.
+2. Besatzunglisten in Excel-Tabelle eingeben
+   - Vorlage verwenden:
+     Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls
+   - Bei Wettbewerb mit Klassen-Auswertung Klassen-Name zuordnen.
+   - Bei Wettbewerb mit Team-Auswertung Team-Name zuordnen.
+   - Reihenfolge festlegen und Startnummern zuordnen.
+
+B. Wettbewerbs-Beginn
+   
+3. Neuer Wettbewerb
+   - Wettbewerbsname eintragen.
+   - Ggf. Klassen-Verwaltung aktivieren.
+   - Wettbewerbsordnung, Kartenmaßstab und Zeitzone einstellen.
+   - Anzahl der zu wertenden Teams bei Team-Auswertung einstellen.
+   - Ggf. Drucksprache umstellen (-> Extras -> Einstellungen).
+   - Auswertungs-Einstellungen des Wettbewerbs anpassen
+     (-> 'Wettbewerb -> Punkte' oder 'Klassen -> <Name> -> Punkte'):
+     * Ggf. Punkte für nicht geflogene Wendescheifen mit 0 einstellen
+     * Ggf. Punkte für Kursabweichungen > 90 Grad mit 0 einstellen
+     * Ggf. Punkte für Unterschreitung der Mindestflughöhe mit 0 einstellen
+4. Strecken -> Import AFLOS-Strecke
+   - Vorbereitete Strecken aus AFLOS importieren.
+5. Besatzungen -> Import Excel-Besatzungsliste
+   - Vorbereitete Excel-Tabelle (FC-CrewList-Sample.xls) importieren.
+   - Nicht eingetroffene Teilnehmer deaktivieren.
+   
+C. Wettbewerbs-Durchführung
+
+6. Neue Aufgabe
+   - Zeit-Einstellungen festlegen
+     * TakeOff-Abstand
+     * Zeit T/O -> SP
+     * Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
+     * Zeit FP -> Landung
+     * Zeit FP -> Abstellen des Flugzeuges
+   - Auswertungsdetails festlegen
+     * Flugplanungstest (ja/nein)
+     * Navigationstest (ja/nein)
+     * Beobachtungstest (ja/nein)
+     * Landetest (ja/nein, Anzahl der Landungen festlegen)
+   - Flugplannungstest hinzufügen: Dabei eine erste Flugplannungsaufgabe
+     mit Strecke und Wind angeben. 
+   - Navigationstest hinzufügen: Dabei Strecke und Wind angeben. 
+7. Planung
+   - Allen Besatzungen eine Flugplannungsaufgabe zuweisen.
+   - Ggf. Reihenfolge korrigieren.
+   - Allen Besatzungen einen Flugwind zuweisen.
+   - Zeitplan berechnen.
+   - Ggf. einzelne Zeiten verschieben.
+   - Aufgaben drucken.
+   - Zeitplan drucken.
+   - Schiedsrichter-Zeitplan drucken.
+   - Flugpläne drucken.
+8. Tagesablauf
+   - Flugplanungstest durchführen.
+   - Logger-Daten in AFLOS einlesen.
+   - Beobachtungsergebnisse abfragen.
+   - Landungen durchführen und vermessen.
+9. Auswertung des Tagesablaufes
+   - Flugplanungsergebnisse eintragen.
+   - Navigationsflug-Ergebnisse aus AFLOS importieren.
+     * Ggf. Wendepunkte für Zeitauswertung deaktivieren
+   - Beobachtungsergebnisse eintragen.
+   - Landungsergebnisse eintragen.
+   - Besatzungsergebnisse drucken und Besatzungen übergeben.
+   - Ergebnisse auf Grund stattgegebener Proteste korrigieren. 
+   - Plätze berechnen.
+   - Aufgaben-Ergebnis des Tages drucken.
+10. Wettbewerbs- oder Klassen-Ergebnisse
+   - Plätze berechnen.
+   - Wettbewerbs- oder Klassen-Ergebnis drucken.
+   - Team-Ergebnisse drucken
+

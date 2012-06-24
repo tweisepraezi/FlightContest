@@ -6,7 +6,7 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-15.06.2012
+22.06.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -14,11 +14,33 @@ Diese Hinweise finden Sie nach der Installation im Startmenü unter
 Vorbereitungs- und Nutzungshinweise finden Sie im Startmenü unter
 'Programme -> Flight Contest -> Usage'.
 
-Standard-Wettbewerbsablauf siehe unten.
+Bedientipps und Standard-Wettbewerbsablauf finden Sie im Startmenü unter
+'Programme -> Flight Contest -> Tips'
 
 
-Erweiterungen in dieser Version (1.2.0):
------------------------------------------
+Erweiterungen in dieser Version (1.2.1):
+----------------------------------------
+- Streckenaudruck verbessert
+  * Der Koordinaten-Tabelle wurden Spalten für AFLOS-CheckPunkte, Höhe und
+    Torbreite hinzugefügt.
+  * Den Auswerte- und Test-Etappen-Tabellen wurde die Gesamtentfernung
+    und die Anzeige von Kursänderungen >= 90 Grad hinzugefügt.
+- Hinweis zur Verwendung der AFLOS-Koordinaten-Markierung $ignore:
+  Ein dertiger Punkt wird von 'Flight Contest' beim Import vollständig
+  ignoriert, d.h., es werden keine Daten dieses Punktes verarbeitet.
+  Bei Verwendung als Hilfspunkt für krumme Strecken ist deshalb dem
+  ersten folgenden Wendepunkt die Entfernung und Richtung mitzuteilen, 
+  die für den krummen Streckenabschnitt verwendet werden soll.
+  Dafür sind zweckmässigerweise folgende Werte anzugeben:
+    $dist  - Summe der Entfernung der vorangegangen $ignore-Punkte
+    $track - Richtung des ersten $ignore-Punktes
+  Für diesen Einsatzfall wird in einer zukünftigen 'Flight Contest'-
+  Version eine eigene Markierungsmöglichkeit eingeführt.
+- Tipps 'Programme -> Flight Contest -> Tips' hinzugefügt.
+  Darin ist jetzt der Standard-Wettbewerbsablauf zu finden.
+
+Erweiterungen in Version 1.2.0:
+-------------------------------
 - Einführung einer Start-Nummer für Besatzungen
   Diese ändert sich nicht, wenn die Reihenfolge der Besatzungen
   bei einer Aufgabe geändert wird.
@@ -48,9 +70,7 @@ Erweiterungen in dieser Version (1.2.0):
   der Strecke verarbeitet werden:
   * $secret - Check-Punkt als unbekannte Zeitkontrolle importieren,
     für unbekannte Zeitkontrollen mit von 2NM abweichender Torbreite
-  * $ignore - Check-Punkt nicht importieren,
-    zur Markierung von Hilfspunkten, die nicht ausgewertet werden sollen,
-    z.B. für krumme Strecken
+  * $ignore - Check-Punkt nicht importieren
   * $dist:26,5mm - Entfernung vom vorangegangenen Wende-Punkt in mm
     (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
   * $dist:12,3NM - Entfernung vom vorangegangenen Wende-Punkt in NM
@@ -383,88 +403,6 @@ Import sicherstellt:
 Importiert werden nur Besatzungsnamen, die noch nicht vorhanden sind.
 
 
-Standard-Wettbewerbsablauf
---------------------------
-
-A. Wettbewerbs-Vorbereitung
-
-1. Strecken festlegen und in AFLOS eingeben
-   - Bei Päzisionsflug-Wettbewerben Karten-Entfernungs-Messwerte 
-     mit $dist:...mm im Feld 'Mark' eintragen.
-2. Besatzunglisten in Excel-Tabelle eingeben
-   - Vorlage verwenden:
-     Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls
-   - Bei Wettbewerb mit Klassen-Auswertung Klassen-Name zuordnen.
-   - Bei Wettbewerb mit Team-Auswertung Team-Name zuordnen.
-   - Reihenfolge festlegen und Startnummern zuordnen.
-
-B. Wettbewerbs-Beginn
-   
-3. Neuer Wettbewerb
-   - Wettbewerbsname eintragen.
-   - Ggf. Klassen-Verwaltung aktivieren.
-   - Wettbewerbsordnung, Kartenmaßstab und Zeitzone einstellen.
-   - Anzahl der zu wertenden Teams bei Team-Auswertung einstellen.
-   - Ggf. Drucksprache umstellen (-> Extras -> Einstellungen).
-   - Auswertungs-Einstellungen des Wettbewerbs anpassen
-     (-> 'Wettbewerb -> Punkte' oder 'Klassen -> <Name> -> Punkte'):
-     * Ggf. Punkte für nicht geflogene Wendescheifen mit 0 einstellen
-     * Ggf. Punkte für Kursabweichungen > 90 Grad mit 0 einstellen
-     * Ggf. Punkte für Unterschreitung der Mindestflughöhe mit 0 einstellen
-4. Strecken -> Import AFLOS-Strecke
-   - Vorbereitete Strecken aus AFLOS importieren.
-5. Besatzungen -> Import Excel-Besatzungsliste
-   - Vorbereitete Excel-Tabelle (FC-CrewList-Sample.xls) importieren.
-   - Nicht eingetroffene Teilnehmer deaktivieren.
-   
-C. Wettbewerbs-Durchführung
-
-6. Neue Aufgabe
-   - Zeit-Einstellungen festlegen
-     * TakeOff-Abstand
-     * Zeit T/O -> SP
-     * Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
-     * Zeit FP -> Landung
-     * Zeit FP -> Abstellen des Flugzeuges
-   - Auswertungsdetails festlegen
-     * Flugplanungstest (ja/nein)
-     * Navigationstest (ja/nein)
-     * Beobachtungstest (ja/nein)
-     * Landetest (ja/nein, Anzahl der Landungen festlegen)
-   - Flugplannungstest hinzufügen: Dabei eine erste Flugplannungsaufgabe
-     mit Strecke und Wind angeben. 
-   - Navigationstest hinzufügen: Dabei Strecke und Wind angeben. 
-7. Planung
-   - Allen Besatzungen eine Flugplannungsaufgabe zuweisen.
-   - Ggf. Reihenfolge korrigieren.
-   - Allen Besatzungen einen Flugwind zuweisen.
-   - Zeitplan berechnen.
-   - Ggf. einzelne Zeiten verschieben.
-   - Aufgaben drucken.
-   - Zeitplan drucken.
-   - Schiedsrichter-Zeitplan drucken.
-   - Flugpläne drucken.
-8. Tagesablauf
-   - Flugplanungstest durchführen.
-   - Logger-Daten in AFLOS einlesen.
-   - Beobachtungsergebnisse abfragen.
-   - Landungen durchführen und vermessen.
-9. Auswertung des Tagesablaufes
-   - Flugplanungsergebnisse eintragen.
-   - Navigationsflug-Ergebnisse aus AFLOS importieren.
-     * Ggf. Wendepunkte für Zeitauswertung deaktivieren
-   - Beobachtungsergebnisse eintragen.
-   - Landungsergebnisse eintragen.
-   - Besatzungsergebnisse drucken und Besatzungen übergeben.
-   - Ergebnisse auf Grund stattgegebener Proteste korrigieren. 
-   - Plätze berechnen.
-   - Aufgaben-Ergebnis des Tages drucken.
-10. Wettbewerbs- oder Klassen-Ergebnisse
-   - Plätze berechnen.
-   - Wettbewerbs- oder Klassen-Ergebnis drucken.
-   - Team-Ergebnisse drucken
-
-   
 Formeln der Strafpunkt-Berechnung von Landungen
 -----------------------------------------------
 Berechungsformel für 'Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012' für alle Landungen:

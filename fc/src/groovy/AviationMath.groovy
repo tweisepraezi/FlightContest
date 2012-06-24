@@ -95,4 +95,31 @@ class AviationMath
 	   // return Map
 	   return [trueheading:trueheading,groundspeed:groundspeed,legtime:legtime]
 	}
+	
+	//--------------------------------------------------------------------------
+	static BigDecimal courseChange(BigDecimal oldTrueTrack, BigDecimal newTrueTrack)
+	// Berechnet Kursänderung in Grad.
+	//   positiver Wert - Kursänderung im Uhrzeigersinn
+	//   negativer Wert - Kursänderung entgegen dem Uhrzeigersinn
+	// oldTrueTrack: alter Kurs
+	// newTrueTrack: neuer Kurs
+	{
+		if ((oldTrueTrack == null) || (newTrueTrack == null)) {
+			return 0
+		}
+		BigDecimal ret = 0
+		if (newTrueTrack >= oldTrueTrack) {
+			ret = newTrueTrack - oldTrueTrack
+			if (ret > 180) {
+				ret -= 360
+			}
+		} else {
+			ret = oldTrueTrack - newTrueTrack
+			if (ret > 180) {
+				ret -= 360
+			}
+			ret = -ret
+		}
+		return ret
+	}
 }
