@@ -61,10 +61,22 @@
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.tas')}:</td>
-                                    <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
-                                </tr>
+                                <g:if test="${testInstance.crew.tas != testInstance.taskTAS}">
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.crewtas')}:</td>
+	                                    <td>${fieldValue(bean:testInstance.crew, field:'tas')}${message(code:'fc.knot')}</td>
+	                                </tr>
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.tasktas')}:</td>
+	                                    <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+	                                </tr>
+	                            </g:if>
+	                            <g:else>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.tas')}:</td>
+                                        <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+                                    </tr>
+	                            </g:else>
 
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.planningtest')}:</td>

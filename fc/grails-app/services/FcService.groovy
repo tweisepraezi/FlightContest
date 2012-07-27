@@ -1912,6 +1912,11 @@ class FcService
     	// set viewpos with crew viewpos
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
    			test_instance.viewpos = test_instance.crew.viewpos
+			if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
+				test_instance.taskTAS = test_instance.crew.tas
+				calulateTestLegPlannings(test_instance)
+				test_instance.ResetPlanningTestResults()
+			}
             test_instance.timeCalculated = false
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
@@ -1970,6 +1975,11 @@ class FcService
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
                 test_instance.viewpos--
+				if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
+					test_instance.taskTAS = test_instance.crew.tas
+					calulateTestLegPlannings(test_instance)
+					test_instance.ResetPlanningTestResults()
+				}
                 test_instance.timeCalculated = false
                 test_instance.save()
                 selected_testids["selectedTestID${test_instance.id}"] = "on"
@@ -1986,7 +1996,6 @@ class FcService
             if (params["selectedTestID${test_instance.id}"] != "on") {
                 if (test_instance.viewpos >= movefirstpos && test_instance.viewpos < movefirstpos + movenum) {
                     test_instance.viewpos += movenum
-                    test_instance.timeCalculated = false
                     test_instance.save()
                 }
             }
@@ -2061,6 +2070,11 @@ class FcService
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
                 test_instance.viewpos++
+				if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
+					test_instance.taskTAS = test_instance.crew.tas
+					calulateTestLegPlannings(test_instance)
+					test_instance.ResetPlanningTestResults()
+				}
                 test_instance.timeCalculated = false
                 test_instance.save()
                 selected_testids["selectedTestID${test_instance.id}"] = "on"
@@ -2152,6 +2166,11 @@ class FcService
                     movefirstpos = test_instance.viewpos
                 }
                 test_instance.viewpos = Crew.countByContest(task.instance.contest) + movenum
+				if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
+					test_instance.taskTAS = test_instance.crew.tas
+					calulateTestLegPlannings(test_instance)
+					test_instance.ResetPlanningTestResults()
+				}
                 test_instance.timeCalculated = false
                 test_instance.save()
                 selected_testids["selectedTestID${test_instance.id}"] = "on"
@@ -2245,7 +2264,8 @@ class FcService
 
         calulateTestLegFlights(task.instance)
         int crew_num = calulateTimetable(task.instance)
-        
+		calulateTimetableWarnings(task.instance)
+		
         task.message = getMsg('fc.test.timetable.calculated',[crew_num])   
 		printdone task.message    
         return task
@@ -2269,6 +2289,7 @@ class FcService
             }
         }
         task.selectedtestids = selected_testids
+        calulateTimetableWarnings(task.instance)
 		printdone ""
         return task
     }
@@ -2291,6 +2312,7 @@ class FcService
             }
         }
         task.selectedtestids = selected_testids
+        calulateTimetableWarnings(task.instance)
 		printdone ""
         return task
     }
@@ -7958,7 +7980,6 @@ class FcService
             testInstance.save()
             
             calculate_coordresult(testInstance)
-            calulateTimetableWarnings(taskInstance)
 			
 			taskInstance.timetableModified = true
 			taskInstance.save()
@@ -7985,7 +8006,6 @@ class FcService
             testInstance.save()
             
             calculate_coordresult(testInstance)
-            calulateTimetableWarnings(taskInstance)
 
 			taskInstance.timetableModified = true
 			taskInstance.save()
@@ -7996,44 +8016,79 @@ class FcService
     //--------------------------------------------------------------------------
     private void calulateTimetableWarnings(Task taskInstance)
     {
+		printstart "calulateTimetableWarnings"
         Date first_date = Date.parse("HH:mm",taskInstance.firstTime)
         Date last_arrival_time = first_date
         
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
-            
-            // calculate arrivalTimeWarning by arrivalTime
-            test_instance.arrivalTimeWarning = false
-            if (last_arrival_time > test_instance.arrivalTime) {
-                test_instance.arrivalTimeWarning = true
-            }
-            last_arrival_time = test_instance.arrivalTime
-            
-            // calculate takeoffTimeWarning by aircraft
-            test_instance.takeoffTimeWarning = false
-            boolean found_aircraft = false
-            GregorianCalendar last_takeoff_time = null
-            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
-                if (test_instance.crew.aircraft == test_instance2.crew.aircraft) {
-                	if (test_instance == test_instance2) {
-                		found_aircraft = true
-                	}
-					if (!found_aircraft) {
-	                	last_takeoff_time = new GregorianCalendar()
-	                    last_takeoff_time.setTime(test_instance2.arrivalTime)
-	                    last_takeoff_time.add(Calendar.MINUTE, taskInstance.minNextFlightDuration)
-	                    last_takeoff_time.add(Calendar.MINUTE, taskInstance.preparationDuration)
-	                }
-                }
-            }
-            if (last_takeoff_time) {
-                if (test_instance.takeoffTime < last_takeoff_time.getTime()) {
-                    test_instance.takeoffTimeWarning = true
-                }
-            }
-            
-            test_instance.save()
-        }
+			if (!test_instance.crew.disabled) {
 
+	            // calculate arrivalTimeWarning by arrivalTime
+	            test_instance.arrivalTimeWarning = false
+	            if (last_arrival_time > test_instance.arrivalTime) {
+	                test_instance.arrivalTimeWarning = true
+					println "Arrival time warning ($test_instance.crew.name)."
+	            }
+	            last_arrival_time = test_instance.arrivalTime
+	            
+	            // calculate takeoffTimeWarning by aircraft
+	            test_instance.takeoffTimeWarning = false
+	            boolean found_aircraft = false
+	            GregorianCalendar last_takeoff_time = null
+	            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
+					if (!test_instance2.crew.disabled) {
+		                if (test_instance.crew.aircraft == test_instance2.crew.aircraft) {
+		                	if (test_instance == test_instance2) {
+		                		found_aircraft = true
+		                	}
+							if (!found_aircraft) {
+			                	last_takeoff_time = new GregorianCalendar()
+			                    last_takeoff_time.setTime(test_instance2.arrivalTime)
+			                    last_takeoff_time.add(Calendar.MINUTE, taskInstance.minNextFlightDuration)
+			                    last_takeoff_time.add(Calendar.MINUTE, taskInstance.preparationDuration)
+			                }
+		                }
+					}
+	            }
+	            if (last_takeoff_time) {
+	                if (test_instance.takeoffTime < last_takeoff_time.getTime()) {
+	                    test_instance.takeoffTimeWarning = true
+						println "Takeoff time warning by aircraft ($test_instance.crew.name)."
+	                }
+	            }
+				
+				// calculate takeoffTimeWarning by predecessor 
+				boolean found_predecessor = false
+				last_takeoff_time = null
+				BigDecimal last_tasktas = 0
+				Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
+					if (!test_instance2.crew.disabled) {
+						if (test_instance == test_instance2) {
+							found_predecessor = true
+						}
+						if (!found_predecessor) {
+							last_takeoff_time = new GregorianCalendar()
+							last_takeoff_time.setTime(test_instance2.takeoffTime)
+							last_tasktas =  test_instance2.taskTAS
+						}
+					}
+				}
+				if (last_takeoff_time) {
+					if (test_instance.taskTAS > last_tasktas) { // faster aircraft
+						last_takeoff_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalFasterAircraft)
+					} else {
+						last_takeoff_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
+					}
+					if (test_instance.takeoffTime < last_takeoff_time.getTime()) {
+						test_instance.takeoffTimeWarning = true
+						println "Takeoff time warning by predecessor ($test_instance.crew.name): '$test_instance.takeoffTime' < '${last_takeoff_time.getTime()}'"
+					}
+				}
+	
+	            test_instance.save()
+			}
+        }
+		printdone ""
     }
  
     //--------------------------------------------------------------------------
@@ -8069,10 +8124,12 @@ class FcService
 						calculate_test_time(test_instance, taskInstance, start_time, last_arrival_time, true)
 						calculate_coordresult(test_instance)
 						calculated_crew_num++
+					} else { // set start_time with last calculateted crew
+						start_time.setTime(test_instance.testingTime)
 					}
 			
 					// next 
-			        start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
+					start_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
 			        last_task_tas = test_instance.taskTAS
 		            last_arrival_time = test_instance.arrivalTime
 					

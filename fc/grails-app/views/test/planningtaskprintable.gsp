@@ -51,6 +51,20 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <br/>
+                        <table width="100%">
+                            <tbody>
+                                <tr>
+                                    <td>${message(code:'fc.wind')}:
+	                                    <g:if test="${testInstance.planningtesttask}">
+	                                        <g:windtext var="${testInstance.planningtesttask.wind}" />
+	                                    </g:if> <g:else>
+	                                        ${message(code:'fc.noassigned')}                                    
+	                                    </g:else>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <g:if test="${TestLegPlanning.countByTest(testInstance)}" >
                             <br/>
                             <table width="100%" border="1" cellspacing="0" cellpadding="2">

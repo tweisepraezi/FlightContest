@@ -55,7 +55,7 @@
                         <table width="100%">
                             <tbody>
                                 <tr>
-                                    <td>${message(code:'fc.flighttestwind')}:
+                                    <td>${message(code:'fc.wind')}:
 	                                    <g:if test="${testInstance.flighttestwind}">
 	                                        <g:windtext var="${testInstance.flighttestwind.wind}" />
 	                                    </g:if> <g:else>

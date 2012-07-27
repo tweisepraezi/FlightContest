@@ -97,7 +97,7 @@
 	                            
 	                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
 	                                    
-                                    	<td><g:if test="${testInstance.crew.aircraft}"><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')})</td>
+                                    	<td><g:if test="${testInstance.crew.aircraft}"><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}<g:if test="${testInstance.taskTAS != testInstance.crew.tas}"> !</g:if>)</td>
                                         <g:if test="${testInstance.crew.team}">
                                     	   <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
 		                                </g:if>
@@ -137,11 +137,11 @@
 		                                        </g:if> <g:else>
 		                                            <td>${testInstance.takeoffTime?.format('HH:mm')}</td>
 		                                        </g:else>
-												<td>${testInstance.maxLandingTime?.format('HH:mm')}</td>
+												<td>${testInstance.maxLandingTime?.format('HH:mm:ss')}</td>
 		                                        <g:if test="${testInstance.arrivalTimeWarning}">
-		                                            <td class="errors">${testInstance.arrivalTime?.format('HH:mm')} !</td>
+		                                            <td class="errors">${testInstance.arrivalTime?.format('HH:mm:ss')} !</td>
 		                                        </g:if> <g:else>
-		                                            <td>${testInstance.arrivalTime?.format('HH:mm')}</td>
+		                                            <td>${testInstance.arrivalTime?.format('HH:mm:ss')}</td>
 		                                        </g:else>
 		                                        <td><a href="${createLink(controller:'test',action:'flightplan')}/${testInstance.id}">${message(code:'fc.test.flightplan.here')}</a></td>
 		                                    </g:if> <g:else>

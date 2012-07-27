@@ -6,7 +6,7 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-22.06.2012
+28.07.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -18,8 +18,31 @@ Bedientipps und Standard-Wettbewerbsablauf finden Sie im Startmenü unter
 'Programme -> Flight Contest -> Tips'
 
 
-Erweiterungen in dieser Version (1.2.1):
-----------------------------------------
+Fehlerbehebungen und Erweiterungen in Version 1.2.2:
+----------------------------------------------------
+- Flugplanungsaufgabe: Fehlender Ausdruck des Windes wurde ergänzt.
+- Zeitplan berechnen: Die Berechnung nicht berechneter Mannschaften
+  orientiert sich jetzt an der Anfangszeit der vorherigen Besatzung.
+- Planung: Das Verschieben der Besatzungs-Reihenfolge nach oben 
+  löscht jetzt nur noch die Zeiten der verschobenen Besatzung(en) 
+  und damit nicht mehr die Zeit der darüberliegenden Besatzung.
+- TAS-Änderung: Das Ändern der TAS einer Besatzung ändert erst einmal 
+  nicht die TAS, die in einer Aufgabe für Flugplanung und Navigationsflug
+  benutzt wurde. Dadurch ist es möglich, dass eine Besatzung von Aufgabe 
+  zu Aufgabe jeweils eine andere TAS verwenden kann. 
+  Derartige Abweichungen werden in der Planung jetzt mit einem ! markiert.
+  Die TAS der Aufgabe wird allerdings an die der Besatzungs-Festlegung
+  angepasst, wenn die Reihenfolge innerhalb einer Aufgabe für diese
+  Besatzung geändert wird.
+- Planung: Warnungen bei Nichteinhaltung der Takeoff-Zeit-Reihenfolge
+  eingeführt. Diese berücksichtigt auch den anderen Takeoff-Abstand
+  bei einem schnelleren Folgeflugzeug.  
+- Planung: Beim Deaktivieren einer Besatzung werden Warnungen
+  folgender Besatzungen nicht automatisch gelöscht. Die Neuberechnung
+  von Warnungen erfolgt mit 'Zeitplan berechnen'.
+
+Erweiterungen in Version 1.2.1:
+-------------------------------
 - Streckenaudruck verbessert
   * Der Koordinaten-Tabelle wurden Spalten für AFLOS-CheckPunkte, Höhe und
     Torbreite hinzugefügt.

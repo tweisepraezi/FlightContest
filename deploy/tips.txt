@@ -7,6 +7,8 @@ Bedienung-Tipps
   hinter denen sich weitere Daten verbergen (in Planung und Auswertung).
 - Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
   wodurch das Drücken der Shift-Taste nicht notwendig ist.
+- Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben 
+  eingegeben werden, wodurch das Drücken der Shift-Taste nicht notwendig ist.
 
 Standard-Wettbewerbsablauf
 --------------------------

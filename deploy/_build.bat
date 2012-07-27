@@ -13,7 +13,8 @@ cd %startdir%
 
 set JAVA_HOME=%basedir%\Java\jdk1.6.0_30
 set GRAILS_HOME=%basedir%\Grails\grails-2.0.1
-set SETUPEXE=%ProgramFiles%\Inno Setup 5\iscc.exe
+set SETUPEXE=%ProgramFiles(x86)%\Inno Setup 5\iscc.exe
+if not exist "%SETUPEXE%" set SETUPEXE=%ProgramFiles%\Inno Setup 5\iscc.exe
 
 if not exist "%JAVA_HOME%" goto javaerror
 if not exist "%GRAILS_HOME%" goto grailserror

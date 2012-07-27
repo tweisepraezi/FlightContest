@@ -60,9 +60,9 @@
 	                                        </g:if>
 	                                        <td>${test_instance.takeoffTime?.format('HH:mm')}</td>
 	                                        <td>${test_instance.startTime?.format('HH:mm')}</td>
-	                                        <td>${test_instance.finishTime?.format('HH:mm')}</td>
-	                                        <td>${test_instance.maxLandingTime?.format('HH:mm')}</td>
-	                                        <td>${test_instance.arrivalTime?.format('HH:mm')}</td>
+	                                        <td>${test_instance.finishTime?.format('HH:mm:ss')}</td>
+	                                        <td>${test_instance.maxLandingTime?.format('HH:mm:ss')}</td>
+	                                        <td>${test_instance.arrivalTime?.format('HH:mm:ss')}</td>
 	                                    </tr>
 	                                </g:if>
                                 </g:each>

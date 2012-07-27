@@ -15,6 +15,7 @@ Build installer for Windows:
 ----------------------------
 Windows installer tool:
 	Inno Setup 5.4.3 (http://www.innosetup.com)
+	  Register extension is5 for open with 'C:\Program Files\Inno Setup 5\Compil32.exe'
 
 Additional sources for installer compilation:
 	Java SDK 1.6 (32 Bit) in folder '..\..\..\Java\jdk1.6.0_30'

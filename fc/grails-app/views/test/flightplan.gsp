@@ -66,7 +66,7 @@
                                     </g:else>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.flighttestwind')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.wind')}:</td>
                                     <g:if test="${testInstance.flighttestwind}">
                                         <td><g:windtext var="${testInstance.flighttestwind.wind}" /></td>
                                     </g:if> <g:else>
