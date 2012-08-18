@@ -51,7 +51,7 @@
 	                                    <tr>
 	                                        <td>${test_instance.GetStartNum()}</td>
 	                                        <td>${test_instance.crew.name}</td>
-	                                        <td>${test_instance.crew.aircraft.registration}</td>
+	                                        <td>${test_instance.crew.aircraft.registration}<g:if test="${test_instance.crew.aircraft?.user1 && test_instance.crew.aircraft?.user2}"> *</g:if></td>
 	                                        <td>${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
 	                                        <td><g:if test="${test_instance.crew.team}">${test_instance.crew.team.name}</g:if></td>
 	                                        <td>${test_instance.testingTime?.format('HH:mm')}</td>

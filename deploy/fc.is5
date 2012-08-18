@@ -4,12 +4,12 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.2.0';
 const FCCompatibelDigits = 1; // Number of digits for application compatibility
-const FCVersion = '1.2.2';
+const FCVersion = '1.2.3';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 1.2.2
-AppVersion=1.2.2
-VersionInfoVersion=1.2.2
+AppVerName=Flight Contest 1.2.3
+AppVersion=1.2.3
+VersionInfoVersion=1.2.3
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -59,8 +59,8 @@ Source: "..\fc\web-app\images\fc.ico";                DestDir: "{app}";
 Source: ".\FC-CrewList-Sample.xls";                   DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\AFLOS.mdb";                                DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly; DestName: "AFLOS-DemoContest.mdb"; 
 Source: ".\AFLOS.mdb";                                DestDir: "C:\AFLOS\AFLOS_System";
-Source: ".\rules\FAI_gac_precision_rules_2011.pdf";   DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
-Source: ".\rules\FAI_rally_flying_rules_2011.pdf";    DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\FAI_gac_precision_rules_2012.pdf";   DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\FAI_rally_flying_rules_2012.pdf";    DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Praezisionsflug_2005.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Navigationsflug_2012.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\CH_Praezisionsflug_2009.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
@@ -84,6 +84,7 @@ Type: filesandordirs; Name: "{app}\java";
 Type: filesandordirs; Name: "{app}\tomcat";
 Type: filesandordirs; Name: "{app}\samples";
 Type: filesandordirs; Name: "{app}\rules";
+Type: filesandordirs; Name: "{group}";
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\java";
@@ -103,8 +104,8 @@ Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt
 Name: "{group}\Install AFLOS connection";       Filename: "wscript.exe";                            Parameters: """{app}\odbc.vbs"" ""{app}""";  WorkingDir: "{app}";
 Name: "{group}\Uninstall Flight Contest";       Filename: "{uninstallexe}"
 Name: "{group}\Samples\FC-CrewList-Sample.xls"; Filename: "{app}\samples\FC-CrewList-Sample.xls";                                                WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2011";               Filename: "{app}\rules\FAI_gac_precision_rules_2011.pdf";   WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2011";               Filename: "{app}\rules\\FAI_rally_flying_rules_2011.pdf";   WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2012";               Filename: "{app}\rules\FAI_gac_precision_rules_2012.pdf";   WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2012";               Filename: "{app}\rules\\FAI_rally_flying_rules_2012.pdf";   WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsregeln Präzisionsflug Deutschland 2005";             Filename: "{app}\rules\\DE_Praezisionsflug_2005.pdf";       WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2012";           Filename: "{app}\rules\\DE_Navigationsflug_2012.pdf";       WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2009"; Filename: "{app}\rules\\CH_Praezisionsflug_2009.pdf";       WorkingDir: "{commondesktop}";

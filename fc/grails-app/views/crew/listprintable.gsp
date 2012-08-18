@@ -52,7 +52,7 @@
 		                                        <td>-</td>
 		                                    </g:else>
                                         </g:if>
-                                        <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+                                        <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.registration}<g:if test="${crewInstance.aircraft?.user1 && crewInstance.aircraft?.user2}"> *</g:if></g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
                                         <td>${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>
                                     </tr>
                                 </g:each>

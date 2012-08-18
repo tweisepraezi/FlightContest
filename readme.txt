@@ -6,7 +6,7 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-28.07.2012
+18.08.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -17,6 +17,13 @@ Vorbereitungs- und Nutzungshinweise finden Sie im Startmenü unter
 Bedientipps und Standard-Wettbewerbsablauf finden Sie im Startmenü unter
 'Programme -> Flight Contest -> Tips'
 
+
+Fehlerbehebungen und Erweiterungen in Version 1.2.3:
+----------------------------------------------------
+- Aktualisierung der FAI Regelwerke
+      FAI Air Rally Flying - Edition 2012
+      FAI Precision Flying - Edition 2012
+- Anzeige der Flugzeug-Doppelnutzung in Zeitplan und Besatzungsliste
 
 Fehlerbehebungen und Erweiterungen in Version 1.2.2:
 ----------------------------------------------------
@@ -198,8 +205,8 @@ Erweiterungen in Version 1.0:
   * Es stehen folgende Wettbewerbsordnungen zur Auswahl:
       Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012
       Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005
-      FAI Air Rally Flying - Edition 2011
-      FAI Precision Flying - Edition 2011
+      FAI Air Rally Flying - Edition 2012
+      FAI Precision Flying - Edition 201
       Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009
   * Einzelne Werte können in "Punkte" geändert werden.
   * Die Wettbewerbsordnung kann je Wettbewerb bzw. je Klasse geändert werden.
@@ -437,14 +444,14 @@ für Landung 1 und 4:
 für Landung 2 und 3:
 {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
 
-Berechungsformel für 'FAI Air Rally Flying - Edition 2011' für alle Landungen:
+Berechungsformel für 'FAI Air Rally Flying - Edition 2012' für alle Landungen:
 {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}
 
-Berechungsformel für 'FAI Precision Flying - Edition 2011':
+Berechungsformel für 'FAI Precision Flying - Edition 2012':
 für Landung 1 und 4:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 6*i}else{return -(14*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 350;case 'D':return 150;case 'E':return 180;case 'F':return 210;case 'G':return 240;case 'H':return 270;default:return 300;}}}
+{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}
 für Landung 2 und 3:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 4*i}else{return -(8*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 200;case 'D':return 100;case 'E':return 120;case 'F':return 140;case 'G':return 160;case 'H':return 180;default:return 200;}}}
+{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
 
 Berechungsformel für 'Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009' für alle Landungen:
 für Landung 1 und 4:

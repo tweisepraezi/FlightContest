@@ -55,7 +55,7 @@
 	                                    <td>-</td>
 	                                </g:else>
                                 </g:if>
-	                            <td><g:aircraft var="${crewInstance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+	                            <td><g:aircraft var="${crewInstance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/><g:if test="${crewInstance.aircraft?.user1 && crewInstance.aircraft?.user2}"> *</g:if></td>
 	                            <td>${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>
 	                            <g:if test="${crewInstance.disabled}">
 	                            	<td>${message(code:'fc.disabled')}</td>
