@@ -44,7 +44,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.groundspeed')}:</td>
-                                    <td>${FcMath.SpeedStr(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
+                                    <td>${FcMath.SpeedStr_Flight(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.legtime')}:</td>

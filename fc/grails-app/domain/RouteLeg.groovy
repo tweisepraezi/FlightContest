@@ -33,7 +33,9 @@ class RouteLeg
 		legMeasureDistance = routeLegInstance.legMeasureDistance
 		legDistance = routeLegInstance.legDistance
 		
-		this.save()
+		if (!this.save()) {
+			throw new Exception("RouteLeg.CopyValues could not save")
+		}
 	}
 	
 	String coordTrueTrackName()
@@ -90,9 +92,9 @@ class RouteLeg
     BigDecimal testTrueTrack()
     {
         if (measureTrueTrack != null) {
-            return measureTrueTrack
+            return FcMath.RoundGrad(measureTrueTrack)
         } else {
-            return coordTrueTrack
+            return FcMath.RoundGrad(coordTrueTrack)
         }
     }
     

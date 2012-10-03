@@ -18,7 +18,9 @@ class Team
 	{
 		name = teamInstance.name
 	
-		this.save()
+		if (!this.save()) {
+			throw new Exception("Team.CopyValues could not save")
+		}
 	}
 	
 	boolean IsActiveTeam()

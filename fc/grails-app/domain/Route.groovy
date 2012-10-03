@@ -24,7 +24,9 @@ class Route
 		idTitle = routeInstance.idTitle
 		mark = routeInstance.mark
 		
-		this.save()
+		if (!this.save()) {
+			throw new Exception("Route.CopyValues could not save")
+		}
 		
 		// coords:CoordRoute
 		CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->

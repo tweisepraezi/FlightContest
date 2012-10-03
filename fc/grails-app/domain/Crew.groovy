@@ -81,6 +81,7 @@ class Crew
 	    tas = crewInstance.tas
 		viewpos = crewInstance.viewpos
 		disabled = crewInstance.disabled
+		startNum = crewInstance.startNum
 
 		if (crewInstance.aircraft) {
 			Aircraft aircraft_instance = Aircraft.findByRegistrationAndContest(crewInstance.aircraft.registration, contest)
@@ -95,7 +96,9 @@ class Crew
 			resultclass = resultclass_instance
 		}
 
-		this.save()
+		if (!this.save()) {
+			throw new Exception("Crew.CopyValues could not save")
+		}
 
 		if (aircraft) {
 			if (!aircraft.user1) {

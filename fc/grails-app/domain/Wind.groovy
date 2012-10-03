@@ -14,6 +14,6 @@ class Wind
 
 	String name()
 	{
-		return "${FcMath.GradStr(direction)}${getMsg('fc.grad')} ${FcMath.SpeedStr(speed)}${getMsg('fc.knot')}"
+		return "${FcMath.GradStr(direction)}${getMsg('fc.grad')} ${FcMath.SpeedStr_Planning(speed)}${getMsg('fc.knot')}"
 	}
 }

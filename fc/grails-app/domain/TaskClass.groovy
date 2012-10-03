@@ -83,6 +83,8 @@ class TaskClass
 		planningTestDistanceMeasure = taskClassInstance.planningTestDistanceMeasure
 		planningTestDirectionMeasure = taskClassInstance.planningTestDirectionMeasure
 		
-		this.save()
+		if (!this.save()) {
+			throw new Exception("TaskClass.CopyValues could not save")
+		}
 	}
 }

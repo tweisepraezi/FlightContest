@@ -521,11 +521,11 @@ class ContestController {
         Map task1 = fcService.putTask(contest,"20. Februar 2012","09:00",3,8,10,15,true,true,true,true,false, false,true, true,true,true,true)
 
         // Crews and Aircrafts
-        Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","","D-EAAA","","",85)
-        Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","","D-EAAD","","",80)
-        Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","","D-EAAE","","",80)
-        Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","Schweiz","","D-EAAB","","",70)
-        Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","Schweiz","","D-EAAC","","",70)
+        Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","K1","D-EAAA","","",85)
+        Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","K1","D-EAAD","","",80)
+        Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","K2","D-EAAE","","",80)
+        Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","Schweiz","K2","D-EAAB","","",70)
+        Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","Schweiz","K2","D-EAAC","","",70)
         
         // Route
         fcService.printstart "Route"

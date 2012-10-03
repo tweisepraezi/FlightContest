@@ -123,7 +123,9 @@ class Task
 		//PlanningTest planningtest
 		//FlightTest flighttest
 
-		this.save()
+		if (!this.save()) {
+			throw new Exception("Task.CopyValues could not save")
+		}
 		
 		// taskclasses:TaskClass
 		TaskClass.findAllByTask(taskInstance,[sort:"id"]).each { TaskClass taskclass_instance ->

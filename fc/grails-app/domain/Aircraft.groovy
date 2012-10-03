@@ -23,6 +23,8 @@ class Aircraft
 		type = aircraftInstance.type
 		colour = aircraftInstance.colour
 	
-		this.save()
+		if (!this.save()) {
+			throw new Exception("Aircraft.CopyValues could not save")
+		}
 	}
 }

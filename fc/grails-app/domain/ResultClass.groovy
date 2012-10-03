@@ -365,7 +365,9 @@ class ResultClass
 		landingTest4TouchingObstaclePoints = resultClassInstance.landingTest4TouchingObstaclePoints
 		landingTest4PenaltyCalculator = resultClassInstance.landingTest4PenaltyCalculator
 		
-		this.save()
+		if (!this.save()) {
+			throw new Exception("ResultClass.CopyValues could not save")
+		}
 	}
 	
 	boolean AreClassResultsProvisional(Map resultSettings, String resultTaskIDs)

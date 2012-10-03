@@ -1,14 +1,14 @@
 
-Flight Contest 1.2.3
+Flight Contest 1.2.4
 Copyright 2012 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de/
 
 ============================================================================
 
-Developed with SpringSource Tool Suite
+Developed with Groovy/Grails Tool Suite
 
-http://springsource.com/products/sts 
+http://www.grails.org/products/ggts 
 
 ============================================================================
 

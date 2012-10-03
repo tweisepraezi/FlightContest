@@ -63,7 +63,7 @@ class AviationMathTest extends GrailsUnitTestCase
 		)
 		Map outputValues = [:]
 		outputValues.trueHeading = FcMath.GradStr(ret.trueheading)
-		outputValues.groundSpeed = FcMath.SpeedStr(ret.groundspeed)
+		outputValues.groundSpeed = FcMath.SpeedStr_Planning(ret.groundspeed)
 		outputValues.legTime = FcMath.TimeStr(ret.legtime)
 		if (outputValues == testValues) {
 			println "$outputValues OK"

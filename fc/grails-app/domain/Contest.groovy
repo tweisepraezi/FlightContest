@@ -301,9 +301,13 @@ class Contest
 				landingTest4AbnormalLandingPoints = contestInstance.landingTest4AbnormalLandingPoints
 				landingTest4TouchingObstaclePoints = contestInstance.landingTest4TouchingObstaclePoints
 				landingTest4PenaltyCalculator = contestInstance.landingTest4PenaltyCalculator
+			} else {
+				contestRule = ContestRules.R1
 			} 
 			
-			this.save()
+			if (!this.save()) {
+				throw new Exception("Contest.CopyValues could not save")
+			}
 			
 			if (copyRoutes) { // routes:Route
 				Route.findAllByContest(contestInstance,[sort:"id"]).each { Route route_instance ->

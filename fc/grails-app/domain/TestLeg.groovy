@@ -108,7 +108,7 @@ class TestLeg
 
 	String name()
 	{
-		return "${FcMath.GradStr(planTrueHeading)}${getMsg('fc.grad')} ${FcMath.SpeedStr(planGroundSpeed)}${getMsg('fc.mile')} ${FcMath.TimeStr(planLegTime)}"
+		return "${FcMath.GradStr(planTrueHeading)}${getMsg('fc.grad')} ${FcMath.SpeedStr_Planning(planGroundSpeed)}${getMsg('fc.mile')} ${FcMath.TimeStr(planLegTime)}"
 	}
 	
 	String planLegTimeStr()

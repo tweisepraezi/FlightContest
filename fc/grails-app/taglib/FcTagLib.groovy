@@ -36,7 +36,7 @@ class FcTagLib
            		outln """    <li> <a class="${if (p.taskresults) active(p.controller,'task')}" href="${p.link}/../../task/startresults">${message(code:'fc.task.listresults')}</a> </li>"""
 			}
         } else {
-        	if (Contest.findByIdIsNotNull()) {
+        	if (Contest.findByIdIsNotNull([sort:"id"])) {
         		Contest.list().each { contestInstance ->
         			outln """    <li> <a href="${p.link}/../../contest/activate/${contestInstance.id}">${contestInstance.name()}</a> </li>"""
         		}

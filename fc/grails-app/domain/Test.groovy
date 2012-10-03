@@ -280,7 +280,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.planningTestRun
+				if (taskclass_instance) {
+					return taskclass_instance.planningTestRun
+				}
 			}
 			return false
 		}
@@ -292,7 +294,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.flightTestRun
+				if (taskclass_instance) {
+					return taskclass_instance.flightTestRun
+				}
 			}
 			return false
 		}
@@ -304,7 +308,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.observationTestRun
+				if (taskclass_instance) {
+					return taskclass_instance.observationTestRun
+				}
 			}
 			return false
 		}
@@ -316,7 +322,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.landingTestRun
+				if (taskclass_instance) {
+					return taskclass_instance.landingTestRun
+				}
 			}
 			return false
 		}
@@ -328,7 +336,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.landingTest1Run
+				if (taskclass_instance) {
+					return taskclass_instance.landingTest1Run
+				}
 			}
 			return false
 		}
@@ -340,7 +350,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.landingTest2Run
+				if (taskclass_instance) {
+					return taskclass_instance.landingTest2Run
+				}
 			}
 			return false
 		}
@@ -352,7 +364,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.landingTest3Run
+				if (taskclass_instance) {
+					return taskclass_instance.landingTest3Run
+				}
 			}
 			return false
 		}
@@ -364,7 +378,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.landingTest4Run
+				if (taskclass_instance) {
+					return taskclass_instance.landingTest4Run
+				}
 			}
 			return false
 		}
@@ -376,7 +392,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.landingTest1Run || taskclass_instance.landingTest2Run || taskclass_instance.landingTest3Run || taskclass_instance.landingTest4Run
+				if (taskclass_instance) {
+					return taskclass_instance.landingTest1Run || taskclass_instance.landingTest2Run || taskclass_instance.landingTest3Run || taskclass_instance.landingTest4Run
+				}
 			}
 			return false
 		}
@@ -399,7 +417,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.specialTestRun
+				if (taskclass_instance) {
+					return taskclass_instance.specialTestRun
+				}
 			}
 			return false
 		}
@@ -411,7 +431,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.planningTestDistanceMeasure
+				if (taskclass_instance) {
+					return taskclass_instance.planningTestDistanceMeasure
+				}
 			}
 			return false
 		}
@@ -423,7 +445,9 @@ class Test
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
 				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
-				return taskclass_instance.planningTestDirectionMeasure
+				if (taskclass_instance) {
+					return taskclass_instance.planningTestDirectionMeasure
+				}
 			}
 			return false
 		}

@@ -3,7 +3,7 @@
         <style type="text/css">
             @page {
                 @top-center {
-                    content: "${testInstance.GetViewPos()} - " counter(page)
+                    content: "${testInstance.GetStartNum()}: ${testInstance.crew.name} (${testInstance.GetViewPos()}/" counter(page) ")"
                 }
                 @bottom-center {
                     content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
@@ -27,10 +27,14 @@
                                     <td>${message(code:'fc.crew')}: ${testInstance.crew.name}</td>
 			                    	<g:if test="${testInstance.crew.team}">
 		                            	<td>${message(code:'fc.crew.team')}: ${testInstance.crew.team.name}</td>
-	    		                    </g:if>
+	    		                    </g:if> <g:else>
+                                         <td/>
+                                    </g:else>
 			                    	<g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
 		                                <td>${message(code:'fc.crew.resultclass')}: ${testInstance.crew.resultclass.name}</td>
-	    		                    </g:if>
+	    		                    </g:if> <g:else>
+                                         <td/>
+                                    </g:else>
                                 </tr>
                                 <tr>
                                     <td>${message(code:'fc.aircraft.registration')}:

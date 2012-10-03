@@ -169,6 +169,7 @@ class FcService
 			
 			boolean calculate_points = params.pointssaved
 			
+			boolean result_classes = contest_instance.resultClasses
 			ContestRules contest_rule = contest_instance.contestRule
 			
 			int team_crew_num = contest_instance.teamCrewNum
@@ -233,6 +234,8 @@ class FcService
 					break
 			}
 			
+			boolean set_result_classes = (result_classes != contest_instance.resultClasses) && contest_instance.resultClasses
+			
 			boolean modify_contest_rule = contest_instance.contestRule != contest_rule
 
 			boolean modify_team_results = (contest_instance.teamCrewNum != team_crew_num) ||
@@ -273,6 +276,32 @@ class FcService
 					crew_instance.contestPosition = 0
 					crew_instance.noContestPosition = false
 					crew_instance.save()
+				}
+			}
+			
+			if (set_result_classes) {
+				println "Contest with classes has been set."
+				for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"id"])) {
+					if (!TaskClass.findByTask(task_instance)) {
+						for (ResultClass resultclass_instance in ResultClass.findAllByContest(contest_instance,[sort:"id"])) {
+							TaskClass taskclass_instance = new TaskClass()
+							taskclass_instance.task = task_instance
+							taskclass_instance.resultclass = resultclass_instance
+							taskclass_instance.planningTestRun = task_instance.planningTestRun
+							taskclass_instance.flightTestRun = task_instance.flightTestRun
+							taskclass_instance.observationTestRun = task_instance.observationTestRun
+							taskclass_instance.landingTestRun = task_instance.landingTestRun
+							taskclass_instance.landingTest1Run = task_instance.landingTest1Run
+							taskclass_instance.landingTest2Run = task_instance.landingTest2Run
+							taskclass_instance.landingTest3Run = task_instance.landingTest3Run
+							taskclass_instance.landingTest4Run = task_instance.landingTest4Run
+							taskclass_instance.specialTestRun = task_instance.specialTestRun
+							taskclass_instance.planningTestDistanceMeasure = task_instance.planningTestDistanceMeasure
+							taskclass_instance.planningTestDirectionMeasure = task_instance.planningTestDirectionMeasure
+							taskclass_instance.save()
+						}
+						println "TaskClasses for task '${task_instance.name()}' has been generated."
+					}
 				}
 			}
 			
@@ -5040,12 +5069,15 @@ class FcService
         	}
         }
 
+		int deleted_viewpos = crewInstance.viewpos 
         crewInstance.delete()
         
         // correct all crew's viewpos
-		Crew.findAllByContest(crewInstance.contest,[sort:"id"]).eachWithIndex { Crew crew_instance2, int i ->
-			crew_instance2.viewpos = i
-			crew_instance2.save()
+		Crew.findAllByContest(crewInstance.contest,[sort:"id"]).each { Crew crew_instance2 ->
+			if (crew_instance2.viewpos > deleted_viewpos) {
+				crew_instance2.viewpos--
+				crew_instance2.save()
+			}
 		}
 		
 	}
@@ -7394,15 +7426,12 @@ class FcService
         Test test_instance = testLegPlanningInstance.test
         
         // calculate penaltyTrueHeading
-        int plan_trueheading = FcMath.Grads(testLegPlanningInstance.planTrueHeading)
-        if (plan_trueheading > 180) {
-            plan_trueheading -= 360
-        }
+        int plan_trueheading = FcMath.RoundGrad(testLegPlanningInstance.planTrueHeading)
         int result_trueheading = testLegPlanningInstance.resultTrueHeading
-        if (result_trueheading > 180) {
-            result_trueheading -= 360
-        }
-        int diff_trueheading =  Math.abs(plan_trueheading - result_trueheading)
+		int diff_trueheading =  Math.abs(plan_trueheading - result_trueheading)
+		if (diff_trueheading > 180) {
+			diff_trueheading = 360 - diff_trueheading
+		}
         if (diff_trueheading > test_instance.GetPlanningTestDirectionCorrectGrad()) {
             testLegPlanningInstance.penaltyTrueHeading = test_instance.GetPlanningTestDirectionPointsPerGrad() * (diff_trueheading - test_instance.GetPlanningTestDirectionCorrectGrad())
         } else {
@@ -8074,11 +8103,7 @@ class FcService
 					}
 				}
 				if (last_takeoff_time) {
-					if (test_instance.taskTAS > last_tasktas) { // faster aircraft
-						last_takeoff_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalFasterAircraft)
-					} else {
-						last_takeoff_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
-					}
+					last_takeoff_time.add(Calendar.MINUTE, taskInstance.takeoffIntervalNormal)
 					if (test_instance.takeoffTime < last_takeoff_time.getTime()) {
 						test_instance.takeoffTimeWarning = true
 						println "Takeoff time warning by predecessor ($test_instance.crew.name): '$test_instance.takeoffTime' < '${last_takeoff_time.getTime()}'"

@@ -27,10 +27,14 @@
                                     <td>${message(code:'fc.crew')}: ${testInstance.crew.name}</td>
 			                    	<g:if test="${testInstance.crew.team}">
 		                            	<td>${message(code:'fc.crew.team')}: ${testInstance.crew.team.name}</td>
-	    		                    </g:if>
+	    		                    </g:if> <g:else>
+                                         <td/>
+                                    </g:else>
 			                    	<g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
 		                                <td>${message(code:'fc.crew.resultclass')}: ${testInstance.crew.resultclass.name}</td>
-	    		                    </g:if>
+	    		                    </g:if> <g:else>
+                                         <td/>
+                                    </g:else>
                                 </tr>
                                 <tr>
                                     <td>${message(code:'fc.aircraft.registration')}:
@@ -152,7 +156,7 @@
                                             <td>${FcMath.DistanceStr(testLegFlightInstance.planTestDistance)}${message(code:'fc.mile')}</td>
                                             <td>${FcMath.GradStr(testLegFlightInstance.planTrueTrack)}${message(code:'fc.grad')}</td>
                                             <td>${FcMath.GradStr(testLegFlightInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-                                            <td>${FcMath.SpeedStr(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
+                                            <td>${FcMath.SpeedStr_Flight(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                             <td>${testLegFlightInstance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
                                             <g:if test="${legNo==legNum}">
                                                 <td>${message(code:CoordType.FP.code)}</td>

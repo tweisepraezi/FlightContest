@@ -6,7 +6,7 @@ Program for planning and valuating of Air Rally and Precision Flying
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
 tweise.praeziflug@gmx.de
-18.08.2012
+03.10.2012
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -17,6 +17,48 @@ Vorbereitungs- und Nutzungshinweise finden Sie im Startmenü unter
 Bedientipps und Standard-Wettbewerbsablauf finden Sie im Startmenü unter
 'Programme -> Flight Contest -> Tips'
 
+
+Flight Contest ist eine moderne, auf Java-Techniken basierende, mehrsprachige
+und netzwerkfähige Open-Source-Datenbank-Anwendung:
+* Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Internet Explorer u.a.). 
+* Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden. 
+* Jeder Benutzer kann dabei seine bevorzugte Bediensprache verwenden
+  (Deutsch, Englisch, erweiterbar).
+ 
+Flight Contest hat gegenüber bisherigen Programmen ein flexibles
+Wettbewerbsmanagement. Dazu zählen die Unterstützung
+* unterschiedlicher Wettbewerbsordnungen 
+  (FAI, Deutschland, Schweiz, erweiterbar),
+* von Wettbewerbsklassen 
+  (unterschiedliche Auswertung von Teilnehmergruppen in einem Wettbewerb),
+* paralleler Wettbewerbe 
+  (gleichzeitig stattfindende Wettbewerbe mit unabhängigen Startfeldern),
+* kombinierter Wettbewerbe 
+  (gleichzeitig stattfindende Wettbewerbe mit einem gemeinsamen Startfeld).
+ 
+Weitere nützliche Funktionen von Flight Contest:
+* Sehr schnelle Logger-Daten-Nutzung des FAI-zertifizierten Loggers AFLOS 
+  (ohne Umweg über Datei-Export und -Import).
+* PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
+
+
+Fehlerbehebungen in dieser Version (1.2.4):
+-------------------------------------------
+- TrueTrack-Rundungs-Problem bei Leg-Berechnung beseitigt.
+- Ausgabe der GroundSpeed im Flugplan mit 1 Nachkommastelle.
+- 180-Grad-Eingabeproblem bei Planungstest-Auswertungs-Eingabe beseitigt.
+- Takeoff-Abstands-Warnung: Warnung wird nur bei Unterschreitung des
+  definierten Standard-Takoff-Abstandes ausgegeben, 
+  auch bei schnellerem Folgeflugzeug.
+- Probleme der nachträglichen Aktivierung der Klassenverwaltung 
+  eines Wettbewerbes, bei dem schon Aufgaben geplant wurden, behoben.
+- Sortierreihenfolge beim Löschen einer Besatzung bleibt nun erhalten.
+- Besatzungsergebnis-Druck: Kopfzeile um Startnummer und Besatzungsname ergänzt.
+- Installation der korrekten Fassung der 
+  'Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012'.
+- Fehlfunktion beim 'Wettbewerb kopieren' beseitigt.
+- Beispiel eines Beobachtungsprotokolls hinzugefügt:
+  'Programme -> Flight Contest -> Samples -> FC-ObservationLog-Sample.xls'
 
 Fehlerbehebungen und Erweiterungen in Version 1.2.3:
 ----------------------------------------------------

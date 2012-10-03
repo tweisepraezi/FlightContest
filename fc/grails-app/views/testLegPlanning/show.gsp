@@ -41,7 +41,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.groundspeed')}:</td>
-                                    <td>${FcMath.SpeedStr(testLegPlanningInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
+                                    <td>${FcMath.SpeedStr_Planning(testLegPlanningInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.legtime')}:</td>
@@ -74,7 +74,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.groundspeed')}:</td>
-                                    <td>${FcMath.SpeedStr(testLegPlanningInstance.resultGroundSpeed)}${message(code:'fc.knot')}</td>
+                                    <td>${FcMath.SpeedStr_Planning(testLegPlanningInstance.resultGroundSpeed)}${message(code:'fc.knot')}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.legtime')}:</td>

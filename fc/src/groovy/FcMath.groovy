@@ -22,7 +22,7 @@ class FcMath
 		return ""
 	}
 
-	static int Grads(BigDecimal gradValue)
+	static int RoundGrad(BigDecimal gradValue)
 	{
 		return gradValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
 	}
@@ -108,10 +108,19 @@ class FcMath
 		return ""
 	}
 	
-    static String SpeedStr(BigDecimal speedValue)
+    static String SpeedStr_Planning(BigDecimal speedValue)
     {
         if (speedValue >= 0) {
             DecimalFormat df = new DecimalFormat("#0.00")
+            return df.format(speedValue)
+        }
+        return ""
+    }
+    
+    static String SpeedStr_Flight(BigDecimal speedValue)
+    {
+        if (speedValue >= 0) {
+            DecimalFormat df = new DecimalFormat("#0.0")
             return df.format(speedValue)
         }
         return ""

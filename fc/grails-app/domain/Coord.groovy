@@ -184,7 +184,9 @@ class Coord
 	    // resultBadCourseNum = coordInstance.resultBadCourseNum
 	    // penaltyCoord = coordInstance.penaltyCoord
 		
-		this.save()
+		if (!this.save()) {
+			throw new Exception("Coord.CopyValues could not save")
+		}
 	}
 	
     String title()

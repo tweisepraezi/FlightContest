@@ -4,12 +4,12 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.2.0';
 const FCCompatibelDigits = 1; // Number of digits for application compatibility
-const FCVersion = '1.2.3';
+const FCVersion = '1.2.4';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 1.2.3
-AppVersion=1.2.3
-VersionInfoVersion=1.2.3
+AppVerName=Flight Contest 1.2.4
+AppVersion=1.2.4
+VersionInfoVersion=1.2.4
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -57,6 +57,7 @@ Source: ".\install-service.bat";                      DestDir: "{app}";
 Source: ".\odbc.vbs";                                 DestDir: "{app}";
 Source: "..\fc\web-app\images\fc.ico";                DestDir: "{app}";
 Source: ".\FC-CrewList-Sample.xls";                   DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\FC-ObservationLog-Sample.xls";             DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\AFLOS.mdb";                                DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly; DestName: "AFLOS-DemoContest.mdb"; 
 Source: ".\AFLOS.mdb";                                DestDir: "C:\AFLOS\AFLOS_System";
 Source: ".\rules\FAI_gac_precision_rules_2012.pdf";   DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
@@ -102,8 +103,9 @@ Name: "{group}\Tips";                           Filename: "{app}\tips.txt";     
 Name: "{group}\Usage";                          Filename: "{app}\usage.rtf";                                                                     WorkingDir: "{commondesktop}";
 Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{commondesktop}";
 Name: "{group}\Install AFLOS connection";       Filename: "wscript.exe";                            Parameters: """{app}\odbc.vbs"" ""{app}""";  WorkingDir: "{app}";
-Name: "{group}\Uninstall Flight Contest";       Filename: "{uninstallexe}"
-Name: "{group}\Samples\FC-CrewList-Sample.xls"; Filename: "{app}\samples\FC-CrewList-Sample.xls";                                                WorkingDir: "{commondesktop}";
+Name: "{group}\Uninstall Flight Contest";                                            Filename: "{uninstallexe}";
+Name: "{group}\Samples\FC-CrewList-Sample.xls";                                      Filename: "{app}\samples\FC-CrewList-Sample.xls";           WorkingDir: "{commondesktop}";
+Name: "{group}\Samples\FC-ObservationLog-Sample.xls";                                Filename: "{app}\samples\FC-ObservationLog-Sample.xls";     WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2012";               Filename: "{app}\rules\FAI_gac_precision_rules_2012.pdf";   WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2012";               Filename: "{app}\rules\\FAI_rally_flying_rules_2012.pdf";   WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsregeln Präzisionsflug Deutschland 2005";             Filename: "{app}\rules\\DE_Praezisionsflug_2005.pdf";       WorkingDir: "{commondesktop}";

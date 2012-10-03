@@ -27,10 +27,14 @@
                                     <td>${message(code:'fc.crew')}: ${testInstance.crew.name}</td>
 			                    	<g:if test="${testInstance.crew.team}">
 		                            	<td>${message(code:'fc.crew.team')}: ${testInstance.crew.team.name}</td>
-	    		                    </g:if>
+	    		                    </g:if> <g:else>
+	    		                         <td/>
+	    		                    </g:else>
 			                    	<g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
 		                                <td>${message(code:'fc.crew.resultclass')}: ${testInstance.crew.resultclass.name}</td>
-	    		                    </g:if>
+	    		                    </g:if> <g:else>
+                                         <td/>
+                                    </g:else>
                                 </tr>
                                 <tr>
                                     <td>${message(code:'fc.aircraft.registration')}:
@@ -103,14 +107,8 @@
                                                 <td>${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}${message(code:'fc.mile')}</td>
                                                 <td>${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}${message(code:'fc.grad')}</td>
                                                 <td>${FcMath.GradStr(testlegplanning_instance.planTrueHeading)}${message(code:'fc.grad')}</td>
-                                                <td>${FcMath.SpeedStr(testlegplanning_instance.planGroundSpeed)}${message(code:'fc.knot')}</td>
+                                                <td>${FcMath.SpeedStr_Planning(testlegplanning_instance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                                 <td>${testlegplanning_instance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
-                                                <g:if test="${legNo==legNum}">
-                                                    <td>${message(code:CoordType.FP.code)}</td>
-                                                </g:if>
-                                                <g:else>
-                                                    <td>${message(code:CoordType.TP.code)}${legNo}</td>
-                                                </g:else>
                                             </g:if>
                                             <g:else>
                                                 <g:if test="${legNo==legNum}">

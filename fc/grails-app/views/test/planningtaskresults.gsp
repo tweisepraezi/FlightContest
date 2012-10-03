@@ -124,7 +124,7 @@
                                                 <td>${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}${message(code:'fc.mile')}</td>
                                                 <td>${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}${message(code:'fc.grad')}</td>
                                                 <td>${FcMath.GradStr(testlegplanning_instance.planTrueHeading)}${message(code:'fc.grad')}</td>
-                                                <td>${FcMath.SpeedStr(testlegplanning_instance.planGroundSpeed)}${message(code:'fc.knot')}</td>
+                                                <td>${FcMath.SpeedStr_Planning(testlegplanning_instance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                                 <td>${testlegplanning_instance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
                                             </tr>
                                             <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
