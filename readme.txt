@@ -5,10 +5,13 @@ Program for planning and valuating of Air Rally and Precision Flying
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-10.03.2013
+17.03.2013
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
+
+Screenshots:
+https://www.dropbox.com/sh/4alum2m63589geb/Sia5EPuLrv
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
