@@ -29,10 +29,10 @@
         <div class="box">
             <div class="box boxborder" >
 		       	<g:if test="${resultclassInstance}">
-		       		<h2>${resultclassInstance.GetPrintTitle('fc.test.results')}<g:if test="${taskInstance.AreClassResultsProvisional(taskInstance.GetClassResultSettings(resultclassInstance),resultclassInstance)}"> [${message(code:'fc.provisional')}]</g:if></h2>
+		       		<h2>${resultclassInstance.GetPrintTitle('fc.test.results')}<g:if test="${taskInstance.IsTaskClassResultsProvisional(taskInstance.GetClassResultSettings(resultclassInstance),resultclassInstance)}"> [${message(code:'fc.provisional')}]</g:if></h2>
 		       	</g:if>
        			<g:else>
-                	<h2>${message(code:'fc.test.results')}<g:if test="${taskInstance.AreResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                	<h2>${message(code:'fc.test.results')}<g:if test="${taskInstance.IsTaskResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 </g:else>
                	<h3>${taskInstance.name()}</h3>
                 <div class="block" id="forms" >
@@ -116,7 +116,7 @@
 			                                    <tr class="even">
 			                                        <td>${test_instance.taskPosition}</td>
 			                                        <td>${test_instance.crew.name}</td>
-			                                    	<td><g:if test="${test_instance.crew.aircraft}">${test_instance.crew.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+			                                    	<td><g:if test="${test_instance.taskAircraft}">${test_instance.taskAircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
 			                                    	<g:if test="${test_instance.crew.team}">
 			                                    	    <td>${test_instance.crew.team.name}</td>
 			                                    	</g:if>
@@ -151,7 +151,7 @@
 					                                	<td>${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 					                                </g:if>
 					                                <g:if test="${results_columns > 1}">
-			    	                                    <td>${test_instance.taskPenalties}<g:if test="${test_instance.AreResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
+			    	                                    <td>${test_instance.taskPenalties}<g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
 			    	                                </g:if>
 			                                    </tr>
 			                                </g:if>
@@ -237,7 +237,7 @@
 		                                    <tr class="even">
 		                                        <td>${test_instance.taskPosition}</td>
 		                                        <td>${test_instance.crew.name}</td>
-			                                    <td><g:if test="${test_instance.crew.aircraft}">${test_instance.crew.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+			                                    <td><g:if test="${test_instance.taskAircraft}">${test_instance.taskAircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
 			                                    <g:if test="${test_instance.crew.team}">
 			                                        <td>${test_instance.crew.team.name}</td>
 			                                    </g:if>
@@ -272,7 +272,7 @@
 				                                	<td>${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                                </g:if>
 				                                <g:if test="${results_columns > 1}">
-		    	                                    <td>${test_instance.taskPenalties}<g:if test="${test_instance.AreResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
+		    	                                    <td>${test_instance.taskPenalties}<g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
 		    	                                </g:if>
 		                                    </tr>
 		                                </g:if> 

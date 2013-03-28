@@ -9,7 +9,7 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${contestInstance.GetListTitle(ResultFilter.Contest,'fc.contest.listresults')}<g:if test="${contestInstance.AreResultsProvisional(contestInstance.GetResultSettings(),contestInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${contestInstance.GetListTitle(ResultFilter.Contest,'fc.contest.listresults')}<g:if test="${contestInstance.IsContestResultsProvisional(contestInstance.GetResultSettings(),contestInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
                     <g:form params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
                         <table>
@@ -26,8 +26,8 @@
                                    	<th>${message(code:'fc.crew')}</th>
                                    	<th>${message(code:'fc.aircraft')}</th>
                                    	<th>${message(code:'fc.team')}</th>
-                                   	<g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
-                                    	<th><a href="${createLink(controller:'contest')}/../../task/listresults/${task_instance.id}" >${task_instance.name()}</a></th>
+                                   	<g:each var="task_instance1" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
+                                    	<th><a href="${createLink(controller:'contest')}/../../task/listresults/${task_instance1.id}" >${task_instance1.bestOfName()}</a></th>
 	                                </g:each>
                                    	<th>${message(code:'fc.test.results.summary')}</th>
                             	</tr>
@@ -53,9 +53,14 @@
 		                                    <td>-</td>
 		                                </g:else>
                                         <g:set var="test_provisional" value="${false}"/>
-                                        <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
-                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
-                                        	<td>${test_instance.GetResultPenalties(contestInstance.GetResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.AreResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
+                                        <g:each var="task_instance2" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
+                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance2)}"/>
+                                        	<g:if test="${test_instance}">
+                                        	   <td>${test_instance.GetResultPenalties(contestInstance.GetResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
+                                        	</g:if>
+                                        	<g:else>
+                                        	   <td>-</td>
+                                        	</g:else>
 		                                </g:each>
 	                                    <td class="positionpenalties">${crew_instance.contestPenalties} ${message(code:'fc.points')}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
                                     </tr>

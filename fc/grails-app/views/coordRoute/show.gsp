@@ -44,7 +44,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.gatewidth')}:</td>
-                                    <td>${coordRouteInstance.gatewidth}${message(code:'fc.mile')}</td>
+                                    <td>${coordRouteInstance.gatewidth2}${message(code:'fc.mile')}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -39,15 +39,15 @@
                                 </tr>
                                 <tr>
                                     <td>${message(code:'fc.aircraft.registration')}:
-                                        <g:if test="${testInstance.crew.aircraft}">
-                                            ${testInstance.crew.aircraft.registration}
+                                        <g:if test="${testInstance.taskAircraft}">
+                                            ${testInstance.taskAircraft.registration}
                                         </g:if> <g:else>
                                             ${message(code:'fc.noassigned')}
                                         </g:else>
                                     </td>
                                     <td>${message(code:'fc.aircraft.type')}: 
-                                        <g:if test="${testInstance.crew.aircraft}">
-		                                    ${testInstance.crew.aircraft.type}
+                                        <g:if test="${testInstance.taskAircraft}">
+		                                    ${testInstance.taskAircraft.type}
                                         </g:if> <g:else>
                                             ${message(code:'fc.noassigned')}
                                         </g:else>

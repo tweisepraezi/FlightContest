@@ -33,8 +33,8 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft')}:</td>
                                     <td>
-                                        <g:if test="${testInstance.crew.aircraft}">
-                                            <g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/>
+                                        <g:if test="${testInstance.taskAircraft}">
+                                            <g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/>
                                         </g:if> <g:else>
                                             ${message(code:'fc.noassigned')}
                                         </g:else>
@@ -42,8 +42,8 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
@@ -76,7 +76,7 @@
                             </tbody>
                         </table>
                         <g:actionSubmit action="importaflosresults" value="${message(code:'fc.import')}" />
-                        <g:actionSubmit action="flightresults" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="cancelaflosresults" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>
             </div>

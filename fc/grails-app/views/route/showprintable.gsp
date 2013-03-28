@@ -37,7 +37,7 @@
                                         <td width="10%">${coordroute_instance.mark}</td>
                                         <td>${coordroute_instance.namePrintable()}</td>
                                         <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
-                                        <td>${coordroute_instance.gatewidth}${message(code:'fc.mile')}</td>
+                                        <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
                                     </tr>
                                 </g:each>
                             </tbody>

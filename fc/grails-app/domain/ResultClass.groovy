@@ -6,17 +6,22 @@ class ResultClass
 	String name
 	String contestTitle = ""
 	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung
+	Boolean precisionFlying = false                     // DB-2.3
 	
 	// Klassen-Auswertung
 	String contestTaskResults = ""                      // Zu berücksichtigende Aufgaben, DB-2.1
+	String contestTeamResults = ""                      // Zu berücksichtigende Teams, DB-2.3
 	boolean contestPlanningResults = true               // Planungstest berüchsichtigen
 	boolean contestFlightResults = true                 // Navigationstest berüchsichtigen
 	boolean contestObservationResults = true            // Beobachtungstest berüchsichtigen
 	boolean contestLandingResults = true                // Landetest berüchsichtigen
 	boolean contestSpecialResults = false               // Sondertest berücksichtigen
+	String contestPrintSubtitle = ""                    // Ausdruck-Untertitel, DB-2.3
 	Boolean contestPrintLandscape = true                // Ausdruck quer, DB-2.1
 	Boolean contestPrintTaskDetails = true              // Ausdruck von Aufgabendetails, DB-2.1
 	Boolean contestPrintTaskNamesInTitle = true         // Ausdruck der Tasknamen im Title, wenn contestPrintTaskDetails = False, DB-2.1
+	Boolean contestPrintProvisional = false             // Ausdruck "vorläufig", DB-2.3
+	Boolean contestPrintA3 = false                      // Ausdruck A3, DB-2.3
 	
 	// PlanningTest
 	int planningTestDirectionCorrectGrad = 2
@@ -29,6 +34,9 @@ class ResultClass
 
 	// FlightTest
 	int flightTestTakeoffMissedPoints = 200
+	Integer flightTestTakeoffCorrectSecond = 60         // DB-2.3
+	Boolean flightTestTakeoffCheckSeconds = false       // DB-2.3
+	Integer flightTestTakeoffPointsPerSecond = 3        // DB-2.3
 	int flightTestCptimeCorrectSecond = 2
 	int flightTestCptimePointsPerSecond = 1
 	int flightTestCptimeMaxPoints = 200
@@ -40,7 +48,12 @@ class ResultClass
 	int flightTestBadCourseStartLandingPoints = 500
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
-	
+	Integer flightTestSafetyAndRulesInfringementPoints = 0  // DB-2.3
+	Integer flightTestInstructionsNotFollowedPoints = 0 // DB-2.3
+	Integer flightTestFalseEnvelopeOpenedPoints = 0     // DB-2.3
+	Integer flightTestSafetyEnvelopeOpenedPoints = 0    // DB-2.3
+	Integer flightTestFrequencyNotMonitoredPoints = 0   // DB-2.3
+
 	// LandingTest
 	int landingTest1MaxPoints = 300
 	int landingTest1NoLandingPoints = 300
@@ -86,6 +99,18 @@ class ResultClass
 	int landingTest4TouchingObstaclePoints = 400
 	String landingTest4PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}"
 	
+	// Points print settings
+	String printPointsPrintTitle = ""                   // DB-2.3
+	Boolean printPointsPlanningTest = true              // DB-2.3
+	Boolean printPointsFlightTest = true                // DB-2.3
+	Boolean printPointsLandingTest1 = true              // DB-2.3
+	Boolean printPointsLandingTest2 = true              // DB-2.3
+	Boolean printPointsLandingTest3 = true              // DB-2.3
+	Boolean printPointsLandingTest4 = true              // DB-2.3
+	Boolean printPointsZero = false                     // DB-2.3
+	Boolean printPointsLandscape = false                // DB-2.3
+	Boolean printPointsA3 = false                       // DB-2.3
+
 	static belongsTo = [contest:Contest]
 
 	static constraints = {
@@ -163,6 +188,31 @@ class ResultClass
 		contestPrintLandscape(nullable:true)
 		contestPrintTaskDetails(nullable:true)
 		contestPrintTaskNamesInTitle(nullable:true)
+		
+		// DB-2.3 compatibility
+		precisionFlying(nullable:true)
+		contestPrintSubtitle(nullable:true)
+		contestPrintProvisional(nullable:true)
+		contestPrintA3(nullable:true)
+		contestTeamResults(nullable:true)
+		flightTestTakeoffCorrectSecond(nullable:true, min:0)
+		flightTestTakeoffCheckSeconds(nullable:true)
+		flightTestTakeoffPointsPerSecond(nullable:true, min:0)
+		flightTestSafetyAndRulesInfringementPoints(nullable:true, min:0)
+		flightTestInstructionsNotFollowedPoints(nullable:true, min:0)
+		flightTestFalseEnvelopeOpenedPoints(nullable:true, min:0)
+		flightTestSafetyEnvelopeOpenedPoints(nullable:true, min:0)
+		flightTestFrequencyNotMonitoredPoints(nullable:true, min:0)
+		printPointsPrintTitle(nullable:true)
+		printPointsPlanningTest(nullable:true)
+		printPointsFlightTest(nullable:true)
+		printPointsLandingTest1(nullable:true)
+		printPointsLandingTest2(nullable:true)
+		printPointsLandingTest3(nullable:true)
+		printPointsLandingTest4(nullable:true)
+		printPointsZero(nullable:true)
+		printPointsLandscape(nullable:true)
+		printPointsA3(nullable:true)
 	}
 
 	String GetPrintContestTitle()
@@ -299,6 +349,7 @@ class ResultClass
 		name = resultClassInstance.name
 		contestTitle = resultClassInstance.contestTitle
 		contestRule = resultClassInstance.contestRule
+		precisionFlying = resultClassInstance.precisionFlying
 		
 		planningTestDirectionCorrectGrad = resultClassInstance.planningTestDirectionCorrectGrad 
 		planningTestDirectionPointsPerGrad = resultClassInstance.planningTestDirectionPointsPerGrad
@@ -309,6 +360,9 @@ class ResultClass
 		planningTestExitRoomTooLatePoints = resultClassInstance.planningTestExitRoomTooLatePoints
 		
 		flightTestTakeoffMissedPoints = resultClassInstance.flightTestTakeoffMissedPoints
+		flightTestTakeoffCorrectSecond = resultClassInstance.flightTestTakeoffCorrectSecond
+		flightTestTakeoffCheckSeconds = resultClassInstance.flightTestTakeoffCheckSeconds
+		flightTestTakeoffPointsPerSecond = resultClassInstance.flightTestTakeoffPointsPerSecond
 		flightTestCptimeCorrectSecond = resultClassInstance.flightTestCptimeCorrectSecond
 		flightTestCptimePointsPerSecond = resultClassInstance.flightTestCptimePointsPerSecond
 		flightTestCptimeMaxPoints = resultClassInstance.flightTestCptimeMaxPoints
@@ -320,7 +374,12 @@ class ResultClass
 		flightTestBadCourseStartLandingPoints = resultClassInstance.flightTestBadCourseStartLandingPoints
 		flightTestLandingToLatePoints = resultClassInstance.flightTestLandingToLatePoints
 		flightTestGivenToLatePoints = resultClassInstance.flightTestGivenToLatePoints
-		
+		flightTestSafetyAndRulesInfringementPoints = resultClassInstance.flightTestSafetyAndRulesInfringementPoints
+		flightTestInstructionsNotFollowedPoints = resultClassInstance.flightTestInstructionsNotFollowedPoints
+		flightTestFalseEnvelopeOpenedPoints = resultClassInstance.flightTestFalseEnvelopeOpenedPoints
+		flightTestSafetyEnvelopeOpenedPoints = resultClassInstance.flightTestSafetyEnvelopeOpenedPoints
+		flightTestFrequencyNotMonitoredPoints = resultClassInstance.flightTestFrequencyNotMonitoredPoints
+
 		landingTest1MaxPoints = resultClassInstance.landingTest1MaxPoints
 		landingTest1NoLandingPoints = resultClassInstance.landingTest1NoLandingPoints
 		landingTest1OutsideLandingPoints = resultClassInstance.landingTest1OutsideLandingPoints
@@ -370,21 +429,23 @@ class ResultClass
 		}
 	}
 	
-	boolean AreClassResultsProvisional(Map resultSettings, String resultTaskIDs)
+	boolean IsClassResultsProvisional(Map resultSettings, String resultTaskIDs)
 	{
-		//println "XX ResultClass.AreClassResultsProvisional $name $resultSettings"
+		if (contestPrintProvisional) {
+			return true
+		}
 	    for (Crew crew_instance in Crew.findAllByContestAndDisabled(contest,false,[sort:'classPosition'])) {
 	    	if (crew_instance.resultclass == this) {
                 for (Task task_instance in contest.GetResultTasks(resultTaskIDs)) {
                 	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
-                	if (test_instance.AreClassResultsProvisional(resultSettings,this)) {
-						//println "-> true (ResultClass.AreClassResultsProvisional $task_instance.title $test_instance.crew.name)"
-						return true
+					if (test_instance) {
+	                	if (test_instance.IsTestClassResultsProvisional(resultSettings,this)) {
+							return true
+						}
 					}
                 }
 	    	}
 	    }
-		//println "-> false (ResultClass.AreClassResultsProvisional)"
 		return false
 	}
 	

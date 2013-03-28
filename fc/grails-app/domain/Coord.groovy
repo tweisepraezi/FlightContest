@@ -16,8 +16,11 @@ class Coord
     BigDecimal lonMinute = 0.0
     String lonDirection = 'E'
 
-    int altitude = 500 // Altitude (Höhe) in ft 
-    int gatewidth = 1 // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM)
+    int altitude = 500                   // Altitude (Höhe) in ft 
+    int gatewidth = 1                    // Typumstellung auf Float gatewidth2, DB-2.3
+	Float gatewidth2 = 1.0f              // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM), DB-2.3
+	Integer legDuration                  // duration of leg [min], DB-2.3
+	Boolean noTimeCheck = false          // No timecheck, DB-2.3
 
     // Speicher für Eingabe der Landkarten-Messung
 	boolean measureEntered = false
@@ -131,6 +134,12 @@ class Coord
 	    resultAltitude(min:0)
 	    resultBadCourseNum(min:0)
 		secretLegRatio(scale:10)
+		
+		// DB-2.3 compatibility
+		gatewidth2(nullable:true,scale:10,min:0.0f)
+		legDuration(nullable:true,min:1)
+		noTimeCheck(nullable:true)
+		
     }
 
 	void ResetResults()
@@ -161,7 +170,7 @@ class Coord
 	    lonMinute = coordInstance.lonMinute
 	    lonDirection = coordInstance.lonDirection
 	    altitude = coordInstance.altitude 
-	    gatewidth = coordInstance.gatewidth
+	    gatewidth2 = coordInstance.gatewidth2
 		measureEntered = coordInstance.measureEntered
 		coordTrueTrack = coordInstance.coordTrueTrack
 		coordMeasureDistance = coordInstance.coordMeasureDistance
@@ -169,6 +178,8 @@ class Coord
 		measureDistance = coordInstance.measureDistance
 	    legMeasureDistance = coordInstance.legMeasureDistance
 	    legDistance = coordInstance.legDistance
+		legDuration = coordInstance.legDuration
+		noTimeCheck = coordInstance.noTimeCheck
 	    secretLegRatio = coordInstance.secretLegRatio
 	    // planCpTime = coordInstance.planCpTime
 	    // planProcedureTurn = coordInstance.planProcedureTurn
@@ -266,19 +277,31 @@ class Coord
 	String namePrintable() // BUG: ' wird nicht korrekt gedruckt
 	{
 		String print_name = "${latName()}' ${lonName()}'"
-    	if (measureDistance != null || measureTrueTrack != null) {
+    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
 			print_name += " ("
 		}
     	if (measureTrueTrack != null) {
     		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
-			if (measureDistance != null) {
+			if (measureDistance != null || legDuration != null || noTimeCheck) {
 				print_name += "; "
 			}
     	}
     	if (measureDistance != null) {
     		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
+			if (legDuration != null || noTimeCheck) {
+				print_name += "; "
+			}
     	}
-    	if (measureDistance != null || measureTrueTrack != null) {
+		if (legDuration != null) {
+			if (noTimeCheck) {
+				print_name += "; "
+			}
+			print_name += "${legDuration}${getMsg('fc.time.min')}"
+		}
+		if (noTimeCheck) {
+			print_name += "${getMsg('fc.notimecheck.print')}"
+		}
+    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
 			print_name += ")"
 		}
 		return print_name
@@ -309,4 +332,35 @@ class Coord
     	}
     	return "-"
     }
+	
+	String legDurationName()
+	{
+		if (legDuration != null) {
+			return  "${legDuration}${getMsg('fc.time.min')}"
+		}
+		return "-"
+
+	}
+	
+	String GetCpNotFoundName()
+	{
+		switch(type) {
+			case CoordType.TO:
+				return getMsg('fc.flighttest.takeoffnotfound')
+			case CoordType.LDG:
+				return getMsg('fc.flighttest.landingnotfound')
+		}
+		return getMsg('fc.flighttest.cpnotfound')
+	}
+
+	String GetCpNotFoundShortName()
+	{
+		switch(type) {
+			case CoordType.TO:
+				return getMsg('fc.flighttest.takeoffnotfound.short')
+			case CoordType.LDG:
+				return getMsg('fc.flighttest.landingnotfound.short')
+		}
+		return getMsg('fc.flighttest.cpnotfound.short')
+	}
 }

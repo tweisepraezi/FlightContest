@@ -1,11 +1,12 @@
 Flight Contest
 
 Programm zur Planung und Auswertung von Navigationsflug-Wettbewerben
-Program for planning and valuating of Air Rally and Precision Flying 
+Program for planning and valuating of General Aviation championships
+
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-17.03.2013
+28.03.2013
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -16,11 +17,11 @@ https://www.dropbox.com/sh/4alum2m63589geb/Sia5EPuLrv
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
 
+Hilfe finden Sie im Startmenü unter
+'Programme -> Flight Contest -> Help'
+
 Vorbereitungs- und Nutzungshinweise finden Sie im Startmenü unter
 'Programme -> Flight Contest -> Usage'.
-
-Bedientipps und Standard-Wettbewerbsablauf finden Sie im Startmenü unter
-'Programme -> Flight Contest -> Tips'
 
 
 Flight Contest ist eine moderne, auf Java-Techniken basierende, mehrsprachige
@@ -47,8 +48,116 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Fehlerbehebungen in dieser Version (1.2.4):
--------------------------------------------
+Erweiterungen in dieser Version (2.0.0):
+----------------------------------------
+- Tips wurde in Help ('Programme -> Flight Contest -> Help') umbenannt.
+    Enthält folgende Kapitel:
+      Bedien-Tipps
+      Standard-Wettbewerbsablauf
+      Änderungen bei Wettbewerbs-Durchführung (neu)
+	  Besatzungsliste erstellen (neu)
+      Streckenplanung (neu)
+	  Landungen (neu)
+	  Datensicherung eines laufenden Wettbewerbes (neu)
+- Vereinfachte Ergebnis-Listen-Eingabe:
+    Die Eingabe von Besatzungs-Ergebnissen kann nun mit 
+	"Fertig und nächstes Ergebnis" beendet werden, um sofort 
+    die Eingabe des nächsten Besatzungs-Ergebnisses vorzunehmen.
+- Möglichkeit, die Zeitauswertung von UZK-Koordinaten zu deaktivieren:
+	Durch Abwahl der Navigationstest-Aufgaben-Einstellung können
+	unbekannte Zeitkontrollen (UZK) für eine Klasse aus der Zeit-
+	auswertung genommen werden.
+- Automatische Auswertung der Einhaltung des Takeoff-Zeitfensters und
+  der spätesten Landezeit einer Aufgabe mit Hilfe der Logger-Daten
+    Dazu müssen Takeoff- und Landungs-Tor in AFLOS geeignet konfiguriert werden.
+    Details sind in 'Programme -> Flight Contest -> Help' im Abschnitt
+    'Streckenplanung' zu finden.
+    In den Navigationstest-Aufgaben-Einstellungen kann die automatische 
+    Auswertung abgeschaltet werden. In diesem Fall müssen Schiedsrichter,
+    die die Landebahn überwachen, tätig werden.
+- Möglichkeit, nur die besten x Aufgaben einer Besatzung zu werten:
+    Mit der Aufgaben-Einstellung "Als beste Aufgabe auswerten" können
+	die Aufgaben festgelegt werden, die dafür einzubeziehen sind.
+	Mit der Wettbewerbs-Einstellung "Anzahl der Aufgaben, von denen 
+	das beste Ergebnis auszuwerten ist" wird die Anzahl x der Aufgaben
+	festgelegt, deren geringste Punktezahl dafür zu summieren ist.
+- Verbergen von Aufgaben
+    Aufgaben können in der Anzeige von 'Planung' und 'Auswertung' verborgen 
+    werden, um das versehentliche Ändern erledigter Wettbewerbstage zu
+    vermeiden.
+    Neue Besatzungen werden einer Aufgabe nicht hinzugefügt, wenn sie in der
+    'Planung' nicht angezeigt werden (für kombinierte Wettbewerbe).
+- Aufgaben-Kopie:
+    Möglichkeit, eine neue Aufgabe mit den Einstellungen einer
+	bestehenden Aufgabe anzulegen (Schalter 'Kopieren' in 'Aufgabe bearbeiten').
+- Auswertung: "Deaktivierte Check-Punkte" wurde in 
+    "Zeitauswertung von Check-Punkten deaktivieren" umbenannt.
+	Unterschreitung der Mindestflughöhe und festgestelltes Kreisen
+	wird beim einem deaktivierten Check-Punkt weiter bestraft.
+- Neue Auswertungseinstellungen:
+    Angabe eines beliebigen Titels beim Ausdruck.
+    Die Ausgabe von '[vorläufig]' kann forciert werden.
+	Zusätzliche Filterung nach Teams bei Wettbewerbs- und Klassen-Auswertung.
+- Ausdruck:
+    PDF-Dateinamen beschreiben jetzt den enthaltenen Inhalt.
+	PDF-Dateinamen wird ein Präfix vorangestellt, der mit 'fc-'
+	beginnt, gefolgt von einer Abkürzung des Wettbewerbstitels
+	oder einer eigenen Festlegung.
+	Zeitplan-Dateinamen werden um Ausgabe-Nummer ergänzt.
+    Wahl von Hoch- und Querausdruck
+    Wahl von A3-Papier
+- Ausdruck von anpassbaren Grafiken in der Kopfzeile
+	Auswahl der Grafiken in 'Wettbewerbseinstellungen'.
+    Unterstützung von 3 Bildern: am linken Rand, in der Mitte und am rechten Rand.
+	Wird ein linkes und ein rechtes Bild zugeordnet, wird der Wettbewerbstitel 
+	zentriert angeordnet, sonst linksbündig.
+	Wird ein mittleres Bild zugeordnet, wird der Wettbewerbstitel weggelassen.
+	Grafik- und Titel-Größe können eingestellt und mit einem Test-Ausdruck 
+	in der Wirkung beurteilt werden.
+	Max. Größe einer Grafik: 1 MB.
+- Zeitplan/Flugplan:
+    Anzeige der letzten Änderung.
+- Ausdruck-Optionen bei Zeitplan
+    Wahl auszudruckender Spalten
+	Zusätzlicher Untertitel
+	Änderungen der verschiedenen Ausgaben
+- Ausdruck-Optionen bei Schiedsrichterzeitplan und Besatzungen
+    Wahl auszudruckender Spalten
+	Zusätzlicher Untertitel
+	Bis zu 3 Leerspalten
+- Anderer Test: 
+    Festlegung eines beliebigen Titels (anstelle von 'Andere Ergebnisse')
+- Flugzeug-Wechsel:
+    Das Ändern des Flugzeuges einer Besatzung ändert erst einmal 
+    nicht das Flugzeug, das in einer Aufgabe für Planung und Navigationsflug
+    benutzt wurde. Dadurch ist es möglich, dass eine Besatzung von Aufgabe 
+    zu Aufgabe jeweils ein anderes Flugzeug verwenden kann. 
+    Derartige Abweichungen werden in der Planung mit einem ! markiert.
+    Das Flugzeug der Aufgabe wird an die der Besatzungs-Festlegung
+    angepasst, wenn die Reihenfolge innerhalb einer Aufgabe für diese
+    Besatzung geändert wird.
+    Frühere Nutzungen eines Flugzeuges werden unter "Flugzeug bearbeiten"
+    angezeigt.
+- Navigationsflug-Messwert-Ausdruck (AFLOS-Druck):
+    Ausdruck der AFLOS-Messwerte Überflugzeit, Kursabweichungen (Kreisen)
+	und Flughöhe ohne Strafpunkte.
+- AFLOS-Strecken-Import erweitert:
+  Check-Punkte in den AFLOS-Referenz-Daten können im Feld 'Mark' mit folgenden 
+  weiteren Markierungen versehen werden, die beim Import der Strecke 
+  verarbeitet werden:
+    * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten
+      (für Touch&Go-Landungen)
+    * $notimecheck - Keine Zeitauswertung für diesen Check-Punkt
+  Details zur Anwendung dieser und aller anderen Markierungen sind in 
+  'Programme -> Flight Contest -> Help' im Abschnitt 'Streckenplanung' zu finden.
+- Aktualisierung der FAI Regelwerke
+    FAI Precision Flying - Edition 2013
+    FAI Air Rally Flying - Edition 2013
+- Vollständige Unterstützung der Punkte-Auswertung für 'FAI Air Rally Flying'
+    Punkte pro Sekunde Zeitüberschreitung des Takeoff-Zeitfensters wird ermittelt
+
+Fehlerbehebungen in Version 1.2.4:
+----------------------------------
 - TrueTrack-Rundungs-Problem bei Leg-Berechnung beseitigt.
 - Ausgabe der GroundSpeed im Flugplan mit 1 Nachkommastelle.
 - 180-Grad-Eingabeproblem bei Planungstest-Auswertungs-Eingabe beseitigt.
@@ -67,21 +176,18 @@ Fehlerbehebungen in dieser Version (1.2.4):
 
 Fehlerbehebungen und Erweiterungen in Version 1.2.3:
 ----------------------------------------------------
-- Aktualisierung der FAI Regelwerke
-      FAI Air Rally Flying - Edition 2012
-      FAI Precision Flying - Edition 2012
 - Anzeige der Flugzeug-Doppelnutzung in Zeitplan und Besatzungsliste
 
 Fehlerbehebungen und Erweiterungen in Version 1.2.2:
 ----------------------------------------------------
-- Flugplanungsaufgabe: Fehlender Ausdruck des Windes wurde ergänzt.
+- Planungsaufgabe: Fehlender Ausdruck des Windes wurde ergänzt.
 - Zeitplan berechnen: Die Berechnung nicht berechneter Mannschaften
   orientiert sich jetzt an der Anfangszeit der vorherigen Besatzung.
 - Planung: Das Verschieben der Besatzungs-Reihenfolge nach oben 
   löscht jetzt nur noch die Zeiten der verschobenen Besatzung(en) 
   und damit nicht mehr die Zeit der darüberliegenden Besatzung.
 - TAS-Änderung: Das Ändern der TAS einer Besatzung ändert erst einmal 
-  nicht die TAS, die in einer Aufgabe für Flugplanung und Navigationsflug
+  nicht die TAS, die in einer Aufgabe für Planung und Navigationsflug
   benutzt wurde. Dadurch ist es möglich, dass eine Besatzung von Aufgabe 
   zu Aufgabe jeweils eine andere TAS verwenden kann. 
   Derartige Abweichungen werden in der Planung jetzt mit einem ! markiert.
@@ -98,7 +204,7 @@ Fehlerbehebungen und Erweiterungen in Version 1.2.2:
 Erweiterungen in Version 1.2.1:
 -------------------------------
 - Streckenaudruck verbessert
-  * Der Koordinaten-Tabelle wurden Spalten für AFLOS-CheckPunkte, Höhe und
+  * Der Koordinaten-Tabelle wurden Spalten für AFLOS-Check-Punkte, Höhe und
     Torbreite hinzugefügt.
   * Den Auswerte- und Test-Etappen-Tabellen wurde die Gesamtentfernung
     und die Anzeige von Kursänderungen >= 90 Grad hinzugefügt.
@@ -113,8 +219,6 @@ Erweiterungen in Version 1.2.1:
     $track - Richtung des ersten $ignore-Punktes
   Für diesen Einsatzfall wird in einer zukünftigen 'Flight Contest'-
   Version eine eigene Markierungsmöglichkeit eingeführt.
-- Tipps 'Programme -> Flight Contest -> Tips' hinzugefügt.
-  Darin ist jetzt der Standard-Wettbewerbsablauf zu finden.
 
 Erweiterungen in Version 1.2.0:
 -------------------------------
@@ -148,12 +252,12 @@ Erweiterungen in Version 1.2.0:
   * $secret - Check-Punkt als unbekannte Zeitkontrolle importieren,
     für unbekannte Zeitkontrollen mit von 2NM abweichender Torbreite
   * $ignore - Check-Punkt nicht importieren
-  * $dist:26,5mm - Entfernung vom vorangegangenen Wende-Punkt in mm
+  * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
     (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
-  * $dist:12,3NM - Entfernung vom vorangegangenen Wende-Punkt in NM
-  * $dist:22,4km - Entfernung vom vorangegangenen Wende-Punkt in km
-  * $track:142 - Richtung vom vorangegangenen Wende-Punkt in Grad
-  Der vorangegangene Wende-Punkt ist ein Check-Punkt, der importiert wird
+  * $dist:12,3NM - Entfernung vom vorangegangenen Wendepunkt in NM
+  * $dist:22,4km - Entfernung vom vorangegangenen Wendepunkt in km
+  * $track:142 - Richtung vom vorangegangenen Wendepunkt in Grad
+  Der vorangegangene Wendepunkt ist ein Check-Punkt, der importiert wird
   und keine unbekannte Zeitkontrolle ist.
   Beim Import können folgende Erkennungs-Verfahren für unbekannte
   Zeitkontrollen gewählt werden:
@@ -210,9 +314,6 @@ Erweiterungen in Version 1.1.0:
 
 Fehlerbehebungen in Version 1.0.1:
 ----------------------------------
-- Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012
-  Gegenüber der Ausgabe 2008 gab es keine Veränderungen in den 
-  Punkten.
 - Beschreibung zur Behebung von Server-Ausführungsproblemen 
   nach Update-Installation hinzugefügt (siehe unten).
 
@@ -244,7 +345,7 @@ Erweiterungen in Version 1.0:
     aller Landungen durch eine Landemesswert-Eingabe und zusätzliche 
     Lande-Fehlerschalter je Landung ersetzt.
   * Die Strafpunkte einer Landung werden aus dem Landemesswert mit einer 
-    konfigurierbaren Formel (siehe Landefeld-Punkt-Berechnung)
+    konfigurierbaren Formel (siehe Help -> Landungen)
     und den Lande-Fehlerschaltern mit konfigurierbarer Strafpunktzahl berechnet.
 - Auswahl der Wettbewerbsordnung
   * Die Wettbewerbsordnung wird beim Anlegen eines Wettbewerbs bzw.
@@ -252,8 +353,8 @@ Erweiterungen in Version 1.0:
   * Es stehen folgende Wettbewerbsordnungen zur Auswahl:
       Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012
       Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005
-      FAI Air Rally Flying - Edition 2012
-      FAI Precision Flying - Edition 201
+      FAI Air Rally Flying - Edition 2013
+      FAI Precision Flying - Edition 2013
       Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009
   * Einzelne Werte können in "Punkte" geändert werden.
   * Die Wettbewerbsordnung kann je Wettbewerb bzw. je Klasse geändert werden.
@@ -267,17 +368,17 @@ Erweiterungen in Version 1.0:
 - Der Begriff "Mannschaft" wurde durch "Besatzung" ersetzt.
 - Der Begriff "Protestprotokoll" wurde durch "Besatzungsergebnis" ersetzt. 
 - Beim Druck eines oder aller Besatzungsergebnisse können zu druckende Details
-  (Flugplanung, Navigationsflug, Beobachtungen, Landung, andere Ergebnisse)
+  (Planung, Navigationsflug, Beobachtungen, Landung, andere Ergebnisse)
   festgelegt werden.
 - Vereinfachte Strecken-Eingabe:
     Die Eingabe von Strecken-Karten-Messwerten kann 
     nun mit "Speichern und nächster Punkt" beendet werden, um sofort 
     die Eingabe des nächsten Karten-Messwertes vorzunehmen.
 - Vereinfachte Auswertungs-Eingabe: 
-    Die manuelle Eingabe von Checkpunkt-Werten bei 
-    Flugplanungs- und Navigationsflugergebnissen kann nun mit
+    Die manuelle Eingabe von Check-Punkt-Werten bei 
+    Planungs- und Navigationsflugergebnissen kann nun mit
     "Speichern und nächster Punkt" beendet werden, um sofort 
-    die Eingabe des nächsten Checkpunkt-Wertes vorzunehmen.
+    die Eingabe des nächsten Check-Punkt-Wertes vorzunehmen.
 - Verbesserte Tastatur-Bedienung:
     Bei der Eingabe von Werten bewirkt das Drücken der Tab-Taste
     die Fokussierung auf das erste interessante Text-Eingabeelement. 
@@ -308,8 +409,6 @@ Erweiterungen in Version 1.0:
 Erweiterungen in Version 0.6:
 -----------------------------
 - Wettbewerbsverwaltung
-  * Initialwerte der Punkte an Wettbewerbsordnung Navigationsflug 2008
-    angepasst.
   * Neue Funktion "Wettbewerb kopieren"
     Erlaubt es, von einem bestehenden Wettbewerb 
     Wettbewerbs-Einstellungen, Strecken, Besatzungen und/oder 
@@ -329,7 +428,7 @@ Erweiterungen in Version 0.6:
   * Einstellbare Werte wurden nach Wichtigkeit sortiert.
   * Initialwert des Flugabstandes auf 3 Minuten geändert.
   * Auswertungsdetails einstellbar:
-      Flugplanungsergebnisse (Standard: ein) 
+      Planungsergebnisse (Standard: ein) 
       Navigationsflugergebnisse (Standard: ein) 
       Beobachtungsergebnisse (Standard: ein)
       Landungsergebnisse (Standard: ein)
@@ -350,8 +449,8 @@ Erweiterungen in Version 0.6:
     Beim Verschieben nach oben werden die Planzeiten der angehakten
     Besatzungen und die nach unten rückende Besatzung zurückgesetzt.
   * Druck eines Schiedsrichter-Zeitplanes mit mehr Details möglich.
-  * Checkpunkt-Abkürzungen berücksichtigen nun die aktive Anzeige-Sprache. 
-    Entsprechend der Wettbewerbsordnung Navigationsflug 2008 werden 
+  * Check-Punkt-Abkürzungen berücksichtigen nun die aktive Anzeige-Sprache. 
+    Entsprechend der Wettbewerbsordnung Navigationsflug werden 
     Wendepunkte nun im Deutschen mit 'WP' abgekürzt (vorher 'TP').
     Unbekannte Zeitkontrollen werden mit 'UZK' abgekürzt (vorher 'Secret').
 - Wettbewerbsauswertung
@@ -360,7 +459,7 @@ Erweiterungen in Version 0.6:
   * Ausdruck des Besatzungsergebnisses
   * Wettbewerbs-Gesamtauswertung
     (Summe mehrerer Aufgaben/Wettbewerbstage) möglich.
-  * Deaktivierung von Checkpunkten möglich (Deaktivierte Checkpunkte).
+  * Deaktivierung der Zeitauswertung von Check-Punkten
     Nach einer Änderung werden die Strafpunkte neu berechnet und die
     Platzierung auf 'n/a' (= nicht berechnet) gesetzt.
   * Beim Import von AFLOS-Logger-Daten können nun auch zutreffende 
@@ -379,7 +478,7 @@ Erweiterungen in Version 0.5:
 -----------------------------
 - Übernahme von Überflug-Daten aus AFLOS
 - Neue Hauptmenüsortierung
-- Ergebniseingabe bei Flugplanungs- und Navigationstest wurde verbessert:
+- Ergebniseingabe bei Planungs- und Navigationstest wurde verbessert:
   * Ein Haken wird angezeigt, wenn ein Wert eingegeben wurde.
   * Die Werteeingabe kann zurückgesetzt werden.
   * Es werden Sollwerte bei der Istwerteingabe mit angezeigt.
@@ -419,7 +518,7 @@ Beste Darstellung im Client mit dem Web-Browser 'Firefox'.
 
 Interaktion mit AFLOS:
 ---------------------
-Minimale empfohlene AFLOS Version: 2.10
+Minimale empfohlene AFLOS Version: 2.12
 
 'Flight Contest' kann AFLOS-Daten von 2 Quellen lesen:
 1. direkt von 'AFLOS', wenn 'AFLOS' und 'Flight Contest' 
@@ -466,45 +565,6 @@ oder "AFLOS -> Check -Overview" zeigen Status von AFLOS-Messungen an:
     (-> Import-Fehler "AFLOS-Logger-Daten von ... enthalten Fehler.")
   Für eine AFLOS-Besatzung nicht vorhandener Eintrag
     (-> Import-Fehler "AFLOS-Logger-Daten von ... nicht komplett.")
-
-
-Excel-Besatzungslisten
-----------------------
-Sie können Besatzungslisten mit Excel erstellen und in 'Flight Contest'
-importieren.
-
-Verwenden Sie dazu folgende Vorlage, deren Aufbau einen erfolgreichen
-Import sicherstellt: 
-'Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls'
-
-Importiert werden nur Besatzungsnamen, die noch nicht vorhanden sind.
-
-
-Formeln der Strafpunkt-Berechnung von Landungen
------------------------------------------------
-Berechungsformel für 'Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012' für alle Landungen:
-{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}
-
-Berechungsformel für 'Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005' für alle Landungen:
-für Landung 1 und 4:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
-für Landung 2 und 3:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
-
-Berechungsformel für 'FAI Air Rally Flying - Edition 2012' für alle Landungen:
-{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}
-
-Berechungsformel für 'FAI Precision Flying - Edition 2012':
-für Landung 1 und 4:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}
-für Landung 2 und 3:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
-
-Berechungsformel für 'Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009' für alle Landungen:
-für Landung 1 und 4:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
-für Landung 2 und 3:
-{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
 
 
 Mögliche Betriebssysteme der Server-Installation:
@@ -565,31 +625,6 @@ Das gleichzeitige Benutzen von Demo-Wettbewerb und echtem Wettbewerb
 im Netzwerk ist ebenfalls möglich.
  
     
-Datensicherung:
----------------
-Die Datenbank wird an folgendem Ort gespeichert:
-  <Installationsverzeichnis>\fc
-  (C:\Program Files\Flight Contest\fc)
-  
-Datenbankdatei: 
-  fcdb.h2.db
-
-Vorgehen zur Datensicherung:
-  1. Server stoppen
-  2. <Installationsverzeichnis>\fc\fcdb.h2.db
-     an einen sicheren Ort kopieren
-    
-Vorgehen zur Datenwiederherstellung:
-  1. Server stoppen
-  2. Gesicherte fcdb.h2.db nach 
-     <Installationsverzeichnis>\fc kopieren
-  3. Server starten
-
-Hinweis:
-  <Installationsverzeichnis>\fc\AFLOS-UPLOAD.mdb
-  darf nicht gelöscht werden.
-
-
 Wiederherstellung eines fehlgeschlagenen 'Flight Contest'-Updates:
 ------------------------------------------------------------------
 Das Verzeichnis <Installationsverzeichnis>\fc wird bei 

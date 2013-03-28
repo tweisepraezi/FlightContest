@@ -36,7 +36,7 @@
                         </fieldset>
                         <g:if test="${aircraftInstance.user1 || aircraftInstance.user2}">
 	                        <fieldset>
-	                        	<legend>${message(code:'fc.crew.list')}</legend>
+	                        	<legend>${message(code:'fc.aircraft.usedby.crew')}</legend>
 	                        	<p>
 	                        		<g:if test="${aircraftInstance.user1}">
 	                        			<br/>${aircraftInstance.user1.name}
@@ -49,10 +49,22 @@
 	                        	</p>
 	                        </fieldset>
                         </g:if>
+                        <g:if test="${Test.findByTaskAircraftAndCrewNotEqualAndCrewNotEqual(aircraftInstance,aircraftInstance.user1,aircraftInstance.user2)}">
+                            <fieldset>
+                                <legend>${message(code:'fc.aircraft.usedby.task')}</legend>
+                                <p>
+                                    <g:each var="test_instance" in="${Test.findAllByTaskAircraftAndCrewNotEqualAndCrewNotEqual(aircraftInstance,aircraftInstance.user1,aircraftInstance.user2)}">
+                                        <br/>${test_instance.crew.name} (${test_instance.task.name()})
+                                    </g:each>
+                                </p>
+                            </fieldset>
+                        </g:if>
                         <input type="hidden" name="id" value="${aircraftInstance?.id}"/>
                         <input type="hidden" name="version" value="${aircraftInstance?.version}"/>
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="4"/>
-                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="5"/>
+                        <g:if test="${!Test.findByTaskAircraft(aircraftInstance)}">
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="5"/>
+                        </g:if>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
                     </g:form>
                 </div>

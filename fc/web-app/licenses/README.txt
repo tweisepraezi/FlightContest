@@ -1,36 +1,47 @@
 
-Flight Contest 1.2.4
-Copyright 2012 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 2.0.0
+Copyright 2013 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
-http://www.praeziflug.de/
+http://www.praeziflug.de
 
 ============================================================================
 
 Developed with Groovy/Grails Tool Suite
 
-http://www.grails.org/products/ggts 
+http://www.grails.org/products/ggts
 
 ============================================================================
 
 Apache Tomcat 7.0
 Copyright 1999-2009 The Apache Software Foundation
 
+http://tomcat.apache.org
+
 This product includes software developed by
 The Apache Software Foundation.
 
-http://www.apache.org/
+http://www.apache.org
 
 ============================================================================
 
 Grails, release 2.0.1
 
-http://grails.org/
+http://grails.org
 
 ============================================================================
 
 Groovy, release 1.8.6
 
-http://groovy.codehaus.org/
+http://groovy.codehaus.org
+
+============================================================================
+
+iText, release 2.1.5
+
+http://www.itextpdf.com
+http://sourceforge.net/projects/itext
+
+GNU AFFERO GENERAL PUBLIC LICENSE, Version 3
 
 ============================================================================
 
@@ -78,7 +89,7 @@ Version 1.0
 Created by Nathan Smith. 
 
 See the official site for more info: 
-http://960.gs/
+http://960.gs
 
 ----------------------------------------------------------------------------
 
@@ -109,5 +120,5 @@ The files in the 960 Grid System are free of charge, licensed under GPL/MIT.
 
 Special thanks to Eric Meyer for his comprehensive browser reset stylesheet.
 
-http://meyerweb.com/eric/tools/css/reset/
+http://meyerweb.com/eric/tools/css/reset
 

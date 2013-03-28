@@ -12,12 +12,12 @@
         </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.specialresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
+        <title>${testInstance.GetSpecialTestTitle()} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
     </head>
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.specialresults')} ${testInstance.GetStartNum()}</h2>
+                <h2>${testInstance.GetSpecialTestTitle()} ${testInstance.GetStartNum()}</h2>
                 <g:if test="${!testInstance.specialTestComplete}">
 	                <h3>${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()}) [${message(code:'fc.provisional')}]</h3>
                 </g:if>
@@ -39,15 +39,15 @@
                                 </tr>
                                 <tr>
                                     <td>${message(code:'fc.aircraft.registration')}:
-                                        <g:if test="${testInstance.crew.aircraft}">
-                                            ${testInstance.crew.aircraft.registration}
+                                        <g:if test="${testInstance.taskAircraft}">
+                                            ${testInstance.taskAircraft.registration}
                                         </g:if> <g:else>
                                             ${message(code:'fc.noassigned')}
                                         </g:else>
                                     </td>
                                     <td>${message(code:'fc.aircraft.type')}: 
-                                        <g:if test="${testInstance.crew.aircraft}">
-		                                    ${testInstance.crew.aircraft.type}
+                                        <g:if test="${testInstance.taskAircraft}">
+		                                    ${testInstance.taskAircraft.type}
                                         </g:if> <g:else>
                                             ${message(code:'fc.noassigned')}
                                         </g:else>

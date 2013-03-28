@@ -1,7 +1,7 @@
 Deployment Notes
 ----------------
 Thomas Weise
-tweise.praeziflug@gmx.de
+Deutscher Präzisionsflug-Verein e.V.
 
 
 Supported platforms:

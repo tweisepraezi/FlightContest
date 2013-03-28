@@ -130,7 +130,11 @@ class RouteController {
 	
 	def calculateroutelegs = {
         def route = fcService.caculateroutelegsRoute(params) 
-        if (route.instance) {
+        if (route.error) {
+            flash.message = route.message
+            flash.error = true
+            redirect(action:show,id:route.instance.id)
+        } else if (route.instance) {
             flash.message = route.message
             redirect(action:show,id:route.instance.id)
         } else {
@@ -146,7 +150,7 @@ class RouteController {
             flash.error = true
             redirect(action:list)
         } else if (routes.found && routes.content) {
-            fcService.WritePDF(response,routes.content)
+            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"routes")
         } else {
             redirect(action:list)
         }
@@ -159,7 +163,7 @@ class RouteController {
             flash.error = true
             redirect(action:list)
         } else if (routes.content) {
-            fcService.WritePDF(response,routes.content)
+            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"route")
         } else {
             redirect(action:list)
         }
@@ -171,8 +175,6 @@ class RouteController {
             flash.message = routes.message
             flash.error = true
             redirect(action:list)
-        } else if (routes.content) {
-            fcService.WritePDF(response,routes.content)
         } else {
             redirect(action:list)
         }

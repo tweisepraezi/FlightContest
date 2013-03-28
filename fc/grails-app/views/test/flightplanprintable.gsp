@@ -18,7 +18,7 @@
         <div class="box">
             <div class="box boxborder" >
                 <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()}</h2>
-                <h3>${testInstance.task.name()} (${message(code:'fc.test.timetable')} ${message(code:'fc.version')} ${testInstance.timetableVersion})</h3>
+                <h3>${testInstance.task.name()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h3>
                 <div class="block" id="forms" >
                     <g:form>
                         <table width="100%">
@@ -38,15 +38,15 @@
                                 </tr>
                                 <tr>
                                     <td>${message(code:'fc.aircraft.registration')}:
-                                        <g:if test="${testInstance.crew.aircraft}">
-                                            ${testInstance.crew.aircraft.registration}
+                                        <g:if test="${testInstance.taskAircraft}">
+                                            ${testInstance.taskAircraft.registration}
                                         </g:if> <g:else>
                                             ${message(code:'fc.noassigned')}
                                         </g:else>
                                     </td>
                                     <td>${message(code:'fc.aircraft.type')}: 
-                                        <g:if test="${testInstance.crew.aircraft}">
-		                                    ${testInstance.crew.aircraft.type}
+                                        <g:if test="${testInstance.taskAircraft}">
+		                                    ${testInstance.taskAircraft.type}
                                         </g:if> <g:else>
                                             ${message(code:'fc.noassigned')}
                                         </g:else>
@@ -172,7 +172,7 @@
                                     <tr>
                                         <td/>
                                         <td colspan="3">${FcMath.DistanceStr(totalDistance)}${message(code:'fc.mile')} ${message(code:'fc.distance.total')}</td>
-                                        <td colspan="3" align="right">${message(code:'fc.maxlandingtime')}:</td>
+                                        <td colspan="3" align="right">${message(code:'fc.test.landing.latest')}:</td>
                                         <td>${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
                                     </tr>
                                 </tfoot>

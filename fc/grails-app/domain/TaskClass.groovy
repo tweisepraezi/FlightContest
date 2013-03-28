@@ -15,12 +15,22 @@ class TaskClass
 
 	boolean planningTestDistanceMeasure  = false
 	boolean planningTestDirectionMeasure = true
-
+	Boolean flightTestCheckSecretPoints  = true    // DB-2.3
+	Boolean flightTestCheckTakeOff       = true    // DB-2.3
+	Boolean flightTestCheckLanding       = true    // DB-2.3
+	String specialTestTitle              = ""      // DB-2.3
+	
 	static belongsTo = [task:Task]
 
 	static constraints = {
 		resultclass(nullable:false)
 		task(nullable:false)
+		
+		// DB-2.3 compatibility
+		flightTestCheckSecretPoints(nullable:true)
+		flightTestCheckTakeOff(nullable:true)
+		flightTestCheckLanding(nullable:true)
+		specialTestTitle(nullable:true)
 	}
 
 	int GetResultColumns()
@@ -82,6 +92,9 @@ class TaskClass
 		specialTestRun = taskClassInstance.specialTestRun
 		planningTestDistanceMeasure = taskClassInstance.planningTestDistanceMeasure
 		planningTestDirectionMeasure = taskClassInstance.planningTestDirectionMeasure
+		flightTestCheckSecretPoints = taskClassInstance.flightTestCheckSecretPoints
+		flightTestCheckTakeOff = taskClassInstance.flightTestCheckTakeOff
+		flightTestCheckLanding = taskClassInstance.flightTestCheckLanding
 		
 		if (!this.save()) {
 			throw new Exception("TaskClass.CopyValues could not save")

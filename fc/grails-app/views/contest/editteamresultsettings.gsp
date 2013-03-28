@@ -45,7 +45,7 @@
                                     </g:each>
                                     <div>
                                         <g:checkBox name="task_${task_instance.id}" value="${task_selected}" />
-                                        <label>${task_instance.name()}</label>
+                                        <label>${task_instance.bestOfName()}</label>
                                     </div>
                                 </g:each>
                             </p>
@@ -84,48 +84,65 @@
                                 </g:if>
                             </p>
                         </fieldset>
-                        <g:if test="${contestInstance.resultClasses}">
-                        	<g:if test="${resultclass_contesttitles}">
-		                        <fieldset>
-		                        	<legend>${message(code:'fc.resultclass.contesttitle')}</legend>
-		                        	<br/>
-		                        	<g:set var="print_title_labels" value="${[contestInstance.title]}"/>
-		                        	<g:set var="print_title_values" value="${[1]}"/>
-		                        	<g:set var="i" value="${new Integer(1)}"/>
-		                        	<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance,[sort:"id"])}">
-		                        		<g:if test="${resultclass_instance.contestTitle}">
-		                        			<g:set var="i" value="${i+1}"/>
-				                        	<g:set var="print_title_labels" value="${print_title_labels += resultclass_instance.name + ': ' + resultclass_instance.contestTitle}"/>
-				                        	<g:set var="print_title_values" value="${print_title_values += i}"/>
-		                        		</g:if>
-		                        	</g:each>
-		                        	<g:set var="print_title_value" value="${contestInstance.teamContestTitle}"/>
-		                        	<g:if test="${!contestInstance.teamContestTitle || (contestInstance.teamContestTitle > i)}">
-		                        		<g:set var="print_title_value" value="${new Integer(1)}"/>
-		                        	</g:if>
-	                        		<g:radioGroup name="teamContestTitle" labels="${print_title_labels}" values="${print_title_values}" value="${print_title_value}">
-	                        			<div>
-											<label>${it.radio} ${it.label}</label>
-										</div>
-									</g:radioGroup>
-	                        	</fieldset>
+                        <fieldset>
+                        	<label>${message(code:'fc.resultclass.contesttitle')}:</label>
+                        	<br/>
+                        	<g:set var="print_title_labels" value="${[contestInstance.title]}"/>
+                        	<g:set var="print_title_values" value="${[1]}"/>
+                        	<g:set var="i" value="${new Integer(1)}"/>
+                            <g:if test="${resultclass_contesttitles}">
+	                        	<g:each var="resultclass_instance" in="${ResultClass.findAllByContest(contestInstance,[sort:"id"])}">
+	                        		<g:if test="${resultclass_instance.contestTitle}">
+	                        			<g:set var="i" value="${i+1}"/>
+			                        	<g:set var="print_title_labels" value="${print_title_labels += resultclass_instance.name + ': ' + resultclass_instance.contestTitle}"/>
+			                        	<g:set var="print_title_values" value="${print_title_values += i}"/>
+	                        		</g:if>
+	                        	</g:each>
+	                        </g:if>
+                            <g:set var="i" value="${i+1}"/>
+                            <g:set var="print_title_labels" value="${print_title_labels += message(code:'fc.resultclass.contesttitle.othervalue') + ':'}"/>
+                            <g:set var="print_title_values" value="${print_title_values += i}"/>
+                        	<g:set var="print_title_value" value="${contestInstance.teamContestTitle}"/>
+                        	<g:if test="${!contestInstance.teamContestTitle || (contestInstance.teamContestTitle > i)}">
+                        		<g:set var="print_title_value" value="${new Integer(1)}"/>
                         	</g:if>
-                        </g:if>
+                       		<g:radioGroup name="teamContestTitle" labels="${print_title_labels}" values="${print_title_values}" value="${print_title_value}">
+                       			<div>
+									<label>${it.radio} ${it.label}</label>
+								</div>
+							</g:radioGroup>
+                            <p>
+                                <input type="text" id="teamPrintTitle" name="teamPrintTitle" value="${fieldValue(bean:contestInstance,field:'teamPrintTitle')}" tabIndex="1"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.printsubtitle')}:</label>
+                                <br/>
+                                <input type="text" id="teamPrintSubtitle" name="teamPrintSubtitle" value="${fieldValue(bean:contestInstance,field:'teamPrintSubtitle')}" tabIndex="2"/>
+                            </p>
+                       	</fieldset>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.teamcrewnum')}*:</label>
                                 <br/>
-                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="1"/>
+                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="3"/>
                             </p>
                             <div>
                                 <g:checkBox name="teamPrintLandscape" value="${contestInstance.teamPrintLandscape}" />
                                 <label>${message(code:'fc.printlandscape')}</label>
                             </div>
+                            <div>
+                                <g:checkBox name="teamPrintA3" value="${contestInstance.teamPrintA3}" />
+                                <label>${message(code:'fc.printa3')}</label>
+                            </div>
+                            <div>
+                                <g:checkBox name="teamPrintProvisional" value="${contestInstance.teamPrintProvisional}" />
+                                <label>${message(code:'fc.printprovisional')}</label>
+                            </div>
                        	</fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="2"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="4"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="5"/>
                     </g:form>
                 </div>
             </div>

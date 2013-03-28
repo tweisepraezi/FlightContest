@@ -1,0 +1,374 @@
+Thomas Weise
+Deutscher Präzisionsflug-Verein e.V.
+
+Inhalt
+======
+- Bedien-Tipps
+- Standard-Wettbewerbsablauf
+- Änderungen bei Wettbewerbs-Durchführung
+- Besatzungsliste erstellen
+- Streckenplanung
+- Landungen
+- Datensicherung eines laufenden Wettbewerbes
+
+
+Bedien-Tipps
+============
+- Fett markierte Texte und Zahlen sowie das Zeichen '...' sind Links, 
+  hinter denen sich weitere Daten verbergen (in Planung und Auswertung).
+- Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
+  wodurch das Drücken der Shift-Taste nicht notwendig ist.
+- Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben 
+  eingegeben werden, wodurch das Drücken der Shift-Taste nicht notwendig ist.
+
+
+Standard-Wettbewerbsablauf
+==========================
+
+A. Wettbewerbs-Vorbereitung
+
+1. Strecken festlegen und in AFLOS eingeben
+   - Bei Päzisionsflug-Wettbewerben Karten-Entfernungs-Messwerte 
+     mit $dist:...mm im Feld 'Mark' eintragen.
+2. Besatzunglisten in Excel-Tabelle eingeben
+   - Vorlage verwenden:
+     Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls
+   - Bei Wettbewerb mit Klassen-Auswertung Klassen-Name zuordnen.
+   - Bei Wettbewerb mit Team-Auswertung Team-Name zuordnen.
+   - Reihenfolge festlegen und Startnummern zuordnen.
+
+B. Wettbewerbs-Beginn
+   
+3. Neuer Wettbewerb
+   - Wettbewerbsname eintragen.
+   - Ggf. Klassen-Verwaltung aktivieren.
+   - Wettbewerbsordnung, Kartenmaßstab und Zeitzone einstellen.
+   - Anzahl der zu wertenden Teams bei Team-Auswertung einstellen.
+   - Ggf. Drucksprache umstellen (-> Extras -> Einstellungen).
+   - Auswertungs-Einstellungen des Wettbewerbs anpassen
+     (-> 'Wettbewerb -> Punkte' oder 'Klassen -> <Name> -> Punkte'):
+     * Ggf. Punkte für nicht geflogene Wendescheifen mit 0 einstellen
+     * Ggf. Punkte für Kursabweichungen > 90 Grad mit 0 einstellen
+     * Ggf. Punkte für Unterschreitung der Mindestflughöhe mit 0 einstellen
+4. Strecken -> Import AFLOS-Strecke
+   - Vorbereitete Strecken aus AFLOS importieren.
+5. Besatzungen -> Import Excel-Besatzungsliste
+   - Vorbereitete Excel-Tabelle (FC-CrewList-Sample.xls) importieren.
+   - Nicht eingetroffene Teilnehmer deaktivieren.
+   
+C. Wettbewerbs-Durchführung
+
+6. Neue Aufgabe
+   - Zeit-Einstellungen festlegen
+     * TakeOff-Abstand
+     * Zeit T/O -> SP
+     * Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
+     * Zeit FP -> Landung
+     * Zeit FP -> Abstellen des Flugzeuges
+   - Auswertungsdetails festlegen
+     * Planungstest (ja/nein)
+     * Navigationstest (ja/nein, Zeitauswertung für unbekannte Zeitkontrollen festlegen)
+     * Beobachtungstest (ja/nein)
+     * Landetest (ja/nein, Anzahl der Landungen festlegen)
+   - Planungstest hinzufügen: Dabei eine erste Planungsaufgabe
+     mit Strecke und Wind angeben. 
+   - Navigationstest hinzufügen: Dabei Strecke und Wind angeben. 
+7. Planung
+   - Allen Besatzungen eine Planungsaufgabe zuweisen.
+   - Ggf. Reihenfolge korrigieren.
+   - Allen Besatzungen einen Flugwind zuweisen.
+   - Zeitplan berechnen.
+   - Ggf. einzelne Zeiten verschieben.
+   - Aufgaben drucken.
+   - Zeitplan drucken.
+   - Schiedsrichter-Zeitplan drucken.
+   - Flugpläne drucken.
+8. Tagesablauf
+   - Planungstest durchführen.
+   - Logger-Daten in AFLOS einlesen.
+   - Beobachtungsergebnisse abfragen.
+   - Landungen durchführen und vermessen.
+9. Auswertung des Tagesablaufes
+   - Planungsergebnisse eintragen.
+   - Navigationsflug-Ergebnisse aus AFLOS importieren.
+     * Ggf. Wendepunkte für Zeitauswertung deaktivieren
+   - Beobachtungsergebnisse eintragen.
+   - Landungsergebnisse eintragen.
+   - Besatzungsergebnisse drucken und Besatzungen übergeben.
+   - Ergebnisse auf Grund stattgegebener Proteste korrigieren. 
+   - Plätze berechnen.
+   - Aufgaben-Ergebnis des Tages drucken.
+10. Wettbewerbs- oder Klassen-Ergebnisse
+   - Plätze berechnen.
+   - Wettbewerbs- oder Klassen-Ergebnis drucken.
+   - Team-Ergebnisse drucken
+
+
+Änderungen bei Wettbewerbs-Durchführung
+=======================================
+- Besatzung nimmt kurzfritig nicht teil
+  -> Besatzung deaktivieren
+  Zeitplan bleibt unverändert.
+  
+- Besatzung kann nicht wie geplant starten
+  -> Besatzung ans Ende der Aufgabe schieben
+  Für die betroffene Besatzung wird ein neuer Flugplan berechnet.
+  
+- Starts verschieben sich zeitlich
+  -> Anfangszeit betroffener Besatzungen korrigieren
+  Für die betroffenen Besatzungen wird ein neuer Flugplan berechnet.
+  
+- Flugwind ändert sich im Laufe der Starts
+  -> Verbliebenen Besatzungen anderen Flugwind zuweisen.
+  Für die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.
+
+- Besatzung muß wegen Defekt das Flugzeug wechseln
+  -> Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen
+  Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet.
+  Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unverändert.
+
+- Wendepunkt-Überflugzeit einer Aufgabe soll nicht gewertet werden
+  -> Zeitauswertung des Wendepunktes deaktivieren
+  Bewirkt Neuberechnung des Ergebnisses.
+
+
+Besatzungsliste erstellen
+=========================
+Besatzungslisten werden mit Excel erstellt. 
+Verwenden Sie die Vorlage
+'Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls',
+deren Aufbau einen erfolgreichen Import sicherstellt.
+
+Die Liste erfasst folgende Daten:
+  Nr. (Start-Nummer) (optional)
+  Pilot
+  Copilot (optional)
+  Mannschaft (optional)
+  Klasse (für Wettbewerbe mit unterscheidlichen Auswerte-Klassen)
+  TAS (kt)
+  Flugzeug-Kennzeichen
+  Flugzeug-Typ (optional)
+  Flugzeug-Farbe (optional)
+
+Diese Liste muss am Wettbewerbstag sortiert und mit zugeordneten Start-Nummern vorliegen.
+Da Spalten und Tabellenblätter eingefügt werden dürfen, kann diese Vorlage auch 
+zur Planung anderer Belange des Wettbewerbes verwendet werden (Hotel, Kontaktdaten).
+
+Besatzungslisten werden mit 'Besatzungen -> Import Excel-Besatzungsliste' in die
+'Flight Contest'-Datenbank aufgenommen.
+Besatzungen ohne Start-Nummer wird dabei automatisch eine Start-Nummer zugewiesen.
+Importiert werden nur Besatzungsnamen (Pilot + Copilot), die noch nicht in der 
+'Flight Contest'-Datenbank vorhanden sind. Korrekturen bereits importierter
+Besatzungsnamen (Pilot oder Copilot) bewirken den erneuten Import der Besatzung 
+bei Zuordnung einer weiteren Start-Nummer. Korrigieren Sie deshalb Besatzungen nach
+einem Import nur noch in 'Flight Contest'.
+
+
+Streckenplanung
+===============
+Startpunkt (SP), Check-Punkte (CP) und Endpunkt (FP = Finish point)
+sind Logger-Messpunkte einer Strecke, wo Überflugzeit und Flughöhe gemessen
+sowie vorangegangene Kursänderungen >= 90 Grad festgestellt werden.
+Wendepunkte (WP o. TP = Turn point) sind Check-Punkte,
+wo eine Kursänderung erfolgt und die im Flugplan einer Besatzung stehen.
+Unbekannte Zeitkontrollen (UZK o. Secret) sind Check-Punkte für 
+Zeitmessungen auf der Strecke, die nicht im Flugplan einer Besatzung stehen.
+Takeoff (T/O) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
+der Einhaltung des Takeoff-Zeitfensters gemessen wird.
+Landung (LDG) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
+der Einhaltung der spätesten Landezeit gemessen wird.
+
+In einer Wettbewerbskarte sind Startpunkt, Wendepunkte und Endpunkt 
+einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:
+Wettbewerbssprache "Deutsch":  SP, WP1, WP2, ..., FP
+Wettbewerbssprache "Englisch": SP, TP1, TP2, ..., FP
+
+Eine Wettbewerbsstrecke muss in AFLOS als Referenz-Strecke (Reference - Data)
+eingegeben werden. Dabei sind neben den Koordinaten (in Grad und Dezimal-Minuten),
+der Bodenhöhe über Normal-Null (Altitude, in ft) und der minimalen 
+Flug-Höhe über Boden (Minimum, in ft, i.d.R. 500) folgende Eingaben nötig:
+- Check-Punkte unbekannter Zeitkontrollen mussen mit der Torbreite (Gate_Width)
+  2 NM versehen werden, SP, FP und Wendepunkte mit der Torbreite 1 NM.
+- Für präzise Übereinstimmung der ausgegebenen Wettbewerbskarte 
+  mit den zu verarbeitenden Daten müssen bei Präzisionsflug-Wettbewerben 
+  Entfernungen und Winkel auf der Wettbewerbskarte gemessen und dem Check-Punkt
+  im Feld 'Mark' mit folgenden Einträgen zugeordnet werden:
+    * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
+      (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
+    * $track:142 - Richtung vom vorangegangenen Wendepunkt in Grad
+  Der vorangegangene Wendepunkt ist ein Check-Punkt, der keine 
+  unbekannte Zeitkontrolle ist.
+- Für Landungen zwischen zwei Check-Punkten (Touch&Go) ist eine feste
+  Flugzeit anzugeben. Dazu ist dem Check-Punkt nach dem Landefeld
+  im Feld 'Mark' folgender Eintrag zuzuordnen:
+    * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten
+- Für krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. Diese Check-Punkte 
+  sind als unbekannte Zeitkontrollen zu markieren, damit sie nicht im Flugplan 
+  einer Besatzung erscheinen. Wird die Torbreite nicht mit 2 NM festgelegt, 
+  ist der Check-Punkt mit "$secret" zu markieren. Darüberhinaus muss die 
+  Zeitauswertung mit "$notimecheck" deaktiviert werden.
+  Der Wendepunkt nach dem letzten Hilfspunkt sollte mit einer Richtungskorrektur
+  $track versehen werden, die die Richtung auf den ersten Hilfspunkt bekommt,
+  damit der Flugplan der Besatzung einen sinnvollen Einflug-Kurs auf die
+  krumme Strecke erhält.
+- Zur Auswertung der Einhaltung des Takeoff-Zeitfensters und der spätesten Landezeit
+  müssen Takeoff und Landung in der AFLOS-Referenzstrecke mit einer
+  Torbreite (Gate_Width) > 0 und einem Kurs (Heading) > 0 konfiguriert werden.
+  Torbreiten müssen sehr klein gewählt werden (0.01...0.09NM), damit das Rollen 
+  der Flugzeuge auf die Startbahn nicht als Takeoff-Zeit erfasst wird.
+  Geeignete Takeoff- und Landungs-Tore können folgendermassen in AFLOS 
+  aus einem gemessenen Flug ermittelt werden:
+    * 'Flight - Map' aktivieren.
+    * Competitor und Referenzstrecke wählen.
+    * Mit Plus-Zeichen auf die Startbahn zoomen.
+    * 'Show Points' aktivieren.
+    * 'Info' (roter Pfeil mit i) aktivieren.
+    * Zeiger auf einen Punkt setzen, der für das jeweilige Tor günstig liegt.
+    * Rechts unten werden die Punktdaten angezeigt.
+    * Latitude, Longitude und Track (=Heading) eines geeigneten Punktes
+      in die Referenzstrecke übernehmen.
+ 
+Übersicht über alle möglichen Markierungen eines Check-Punktes im Feld 'Mark'
+in den AFLOS-Referenz-Daten, die beim Import der Strecke verarbeitet werden:
+  * $secret - Check-Punkt als unbekannte Zeitkontrolle importieren,
+    für unbekannte Zeitkontrollen mit von 2NM abweichender Torbreite,
+	erscheint nicht im Flugplan der Besatzungen
+  * $ignore - Check-Punkt nicht importieren
+  * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
+    (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
+  * $dist:12,3NM - Entfernung vom vorangegangenen Wendepunkt in NM
+  * $dist:22,4km - Entfernung vom vorangegangenen Wendepunkt in km
+  * $track:142 - Richtung vom vorangegangenen Wendepunkt in Grad
+  * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten,
+    für Touch&Go-Landungen
+  * $notimecheck - Keine Zeitauswertung für diesen Check-Punkt
+  Der vorangegangene Wendepunkt ist ein Check-Punkt, der importiert wird
+  und keine unbekannte Zeitkontrolle ist.
+  Alle Markierungen beginnen und enden mit einem Leerzeichen 
+  (bzw. Feldanfang und -ende).
+
+Eine AFLOS-Referenz-Strecke ist zur Verwendung in 'Flight Contest' zu importieren.
+Damit vorgenommene Markierungen funktionieren, importieren Sie die AFLOS-Strecke
+mit der Option "Check-Punkte mit Torbreite 2NM oder Markierung $secret" (Default).
+
+
+Landungen
+=========
+Je nach ausgewählter Wettbewerbsordnung wird ein festgelegtes Landeschema verwendet.
+Deren Strafpunkt-Berechnung aus einem Landemesswert ist als Formel hinterlegt.
+Diese Formel kann angepasst werden, um ein von der gewählten Wettbewerbsordnung 
+abweichendes Landeschema zu benutzen. Die Formeln können unter 
+'Wettbewerb -> Punkte' oder 'Klasse -> Punkte' je Landung (max. 4) eingestellt werden.
+Besondere Landefehler wie 'Keine Landung', 'Abnormale Landung' usw. werden durch
+anklickbare Check-Boxen eingegeben.
+
+Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
+  Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2012:
+    Alle Landungen
+      {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}
+
+  Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005:
+    Landung 1 und 4
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+    Landung 2 und 3
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
+
+  FAI Air Rally Flying - Edition 2013:
+    Alle Landungen
+      {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}
+
+  FAI Precision Flying - Edition 2013:
+    Landung 1 und 4
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}
+    Landung 2 und 3
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+
+  Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009:
+    Landung 1 und 4
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+    Landung 2 und 3
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
+
+Zur Erfassung der Landungen drucken Sie den Schiedsrichter-Zeitplan einer Aufgabe
+mit folgenden Feldern aus:
+  Nr. (Start-Nummer)
+  Flugzeug (Kennzeichen)
+  Flugzeugtyp
+  Farbe (sofern erfasst)
+  Späteste Landezeit
+  Leerspalte 1 (zur Erfassung der Landezeit)
+  Leerspalte 2 (zur Erfassung des Landemesswertes (Landefeld))
+  Leerspalte 3 (zur Erfassung besonderer Umstände (Landefehler))
+Drucken Sie nicht die Besatzung aus, da dass dem Regelwerk widerspricht.
+Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig
+über die konkrete Besatzung eines Flugzeuges wissen.
+
+
+Datensicherung eines laufenden Wettbewerbes
+===========================================
+Während eines laufenden Wettbewerbes sollten Sie folgende Daten sichern:
+  AFLOS-Datenbank
+  'Flight Contest'-Datenbank
+  'Flight Contest'-Ausdrucke
+  
+Datensicherungen erfolgen ins Verzeichnis 'C:\FCSave',
+welches durch die 'Flight Contest'-Installation angelegt wird.
+
+Datensicherungen dienen vor allem als Schutz vor Ausfall oder Verlust 
+des Windows-Rechners, auf dem der Wettbewerb ausgewertet wird.
+Kopieren Sie deshalb das Sicherungsverzeichnis 'C:\FCSave'
+nach Abschluss eines Wettbewerbstages oder nach Erreichen eines besonders
+wichtigen Zeitpunktes Ihres Wettbewerbes auf ein externes Speichermedium, 
+nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.
+
+Sicherung der AFLOS-Datenbank:
+  1. Schließen Sie AFLOS mit 'Quit'.
+     Brechen Sie den Dialog 'Save AFLOS Database' ab, ohne eine Datenbank zu speichern.
+  2. Rufen Sie das Script 
+     'Programme -> Flight Contest -> Scripts -> Save AFLOS database' auf.
+     Die Datenbank wird mit Datum und Uhrzeit versehen
+	 ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-AFLOS.mdb).
+  3. Starten Sie AFLOS erneut.
+     Brechen Sie den Dialog 'Open AFLOS Database' ab, ohne eine andere Datenbank zu laden.
+
+Sicherung der 'Flight Contest'-Datenbank:
+  1. Stoppen Sie den Dienst 'Apache Tomcat FlightContest'.
+  2. Rufen Sie das Script 
+     'Programme -> Flight Contest -> Scripts -> Save contest database' auf.
+     Die Datenbank wird mit Datum und Uhrzeit versehen
+	 ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-fcdb.h2.db).
+  3. Starten Sie den Dienst 'Apache Tomcat FlightContest'.
+
+Sicherung der 'Flight Contest'-Ausdrucke (Firefox):
+  Empfohlene Firefox-Einstellungen:
+	Allgemein -> Den Download-Manager anzeigen, wenn ein Download startet: ein
+    Allgemein -> Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
+	Anwendungen -> Adobe Acrobat Document: Datei speichern
+  Diese Einstellungen stellen sicher, dass alle Ausdrucke im Sicherungsverzeichnis 
+  C:\FCSave gespeichert werden. Öffnen der PDF und Ausdruck erfolgt dann über
+  den Download-Manager.
+  
+  Ist diese Einstellung nicht möglich oder gewünscht, landen Ausdrucke im
+  Windows-Temp-Verzeichnis. Von dort können sie mit dem Script
+  'Programme -> Flight Contest -> Scripts -> Save contest prints'
+  ins Sicherungsverzeichnis C:\FCSave gespeichert werden.
+  Beachten Sie jedoch, dass Firefox beim Schließen alle Downloads aus dem
+  Windows-Temp-Verzeichnis löscht, so dass der Verlust erfolgter Ausdrucke
+  droht, wenn dieses Script nicht regelmässig aufgerufen wird.
+
+Datenwiederherstellung der AFLOS-Datenbank:
+  - Zur Datenwiederherstellung muss AFLOS geschlossen sein.
+  - Kopieren Sie 'C:\FCSave\<Datum>-<Uhrzeit>-AFLOS.mdb'
+    nach 'C:\AFLOS\AFLOS_System\AFLOS.mdb'.
+  - Sollte Ihnen AFLOS bei laufender Nutzung abgestürzt sein, starten Sie AFLOS
+    erneut und brechen Sie den Dialog 'Open AFLOS Database' ab, ohne eine andere 
+	Datenbank zu laden. Dadurch bleibt der Datenbank-Bestand erhalten,
+	der vor dem Absturz vorhanden war. Bevor Sie weiter machen, sollten Sie
+	die AFLOS-Datenbank wie oben beschrieben sichern.
+
+Datenwiederherstellung der 'Flight Contest'-Datenbank:
+  - Zur Datenwiederherstellung muss der Dienst 'Apache Tomcat FlightContest'
+    gestoppt sein.
+  - Kopieren Sie 'C:\FCSave\<Datum>-<Uhrzeit>-fcdb.h2.db'
+    nach 'C:\Program Files (x86)\Flight Contest\fc\fcdb.h2.db'.
+	Hierfür benötigen Sie Administrator-Privilegien.

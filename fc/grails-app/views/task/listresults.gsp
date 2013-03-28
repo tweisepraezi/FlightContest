@@ -9,7 +9,7 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.task.listresults')} - ${taskInstance.name()}<g:if test="${taskInstance.AreResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${message(code:'fc.task.listresults')} - ${taskInstance.name()}<g:if test="${taskInstance.IsTaskResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <g:form id="${taskInstance.id}" method="post" >
                     <br/>
                     <table>
@@ -24,7 +24,12 @@
 	                            </g:else>
                             </tr>
                             <tr>
-                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listplanning')}"/></td>
+                                <g:if test="${!taskInstance.hidePlanning}">
+                                    <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listplanning')}"/></td>
+                                </g:if>
+                                <g:else>
+                                    <td/>
+                                </g:else>
                                 <td/>
                             </tr>
                         </tbody>
@@ -101,6 +106,19 @@
                             	<g:if test="${showline}">
 	                                <tr class="${(i % 2) == 0 ? 'odd' : ''}">
 	    
+                                        <!-- search next id -->
+                                        <g:set var="next" value="" />
+                                        <g:set var="setnext" value="${false}" />
+                                        <g:each var="test_instance2" in="${Test.findAllByTask(taskInstance,[sort:'viewpos'])}">
+                                            <g:if test="${setnext}">
+                                                <g:set var="next" value="?next=${test_instance2.id}" />
+                                                <g:set var="setnext" value="${false}" />
+                                            </g:if>
+                                            <g:if test="${test_instance2 == testInstance}">
+                                                <g:set var="setnext" value="${true}" />
+                                            </g:if>
+                                        </g:each>
+                                                
 	                                    <g:set var="testInstanceID" value="selectedTestID${testInstance.id.toString()}"></g:set>
 	                                    <g:if test="${flash.selectedTestIDs && (flash.selectedTestIDs[testInstanceID] == 'on')}">
 	                                        <td><g:testnum var="${testInstance}" link="${createLink(controller:'test',action:'show')}"/></td>
@@ -110,7 +128,7 @@
 	                            
 	                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
 	                                    
-                                    	<td><g:if test="${testInstance.crew.aircraft}"><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')})</td>
+                                    	<td><g:if test="${testInstance.taskAircraft}"><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')})</td>
                                         <g:if test="${testInstance.crew.team}">
                                         	<td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
                                         </g:if>
@@ -134,7 +152,7 @@
 			                                <g:if test="${taskInstance.IsPlanningTestRun()}">
 			                                	<g:if test="${testInstance.IsPlanningTestRun()}">
 				                                    <g:if test="${testInstance.planningtesttask}">
-				                                    	<td>${testInstance.planningTestPenalties} <g:if test="${!testInstance.planningTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'planningtaskresults')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
+				                                    	<td>${testInstance.planningTestPenalties} <g:if test="${!testInstance.planningTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'planningtaskresults')}/${testInstance.id}${next}">${message(code:'fc.test.results.here')}</a></td>
 													</g:if> <g:else>
 														<td>${message(code:'fc.noassigned')}</td>
 													</g:else>
@@ -147,7 +165,7 @@
 											<g:if test="${taskInstance.IsFlightTestRun()}">
 												<g:if test="${testInstance.IsFlightTestRun()}">
 													<g:if test="${testInstance.timeCalculated}">
-				                                    	<td>${testInstance.flightTestPenalties} <g:if test="${!testInstance.flightTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'flightresults')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
+				                                    	<td>${testInstance.flightTestPenalties} <g:if test="${!testInstance.flightTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'flightresults')}/${testInstance.id}${next}">${message(code:'fc.test.results.here')}</a></td>
 													</g:if> <g:else>
 														<td>${message(code:'fc.nocalculated')}</td>
 													</g:else>
@@ -159,7 +177,7 @@
 											
 			                                <g:if test="${taskInstance.IsObservationTestRun()}">
 				                                <g:if test="${testInstance.IsObservationTestRun()}">
-		        	                            	<td>${testInstance.observationTestPenalties} <g:if test="${!testInstance.observationTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'observationresults')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
+		        	                            	<td>${testInstance.observationTestPenalties} <g:if test="${!testInstance.observationTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'observationresults')}/${testInstance.id}${next}">${message(code:'fc.test.results.here')}</a></td>
 												</g:if>
 												<g:else>
 													<td>${message(code:'fc.none')}</td>
@@ -168,7 +186,7 @@
 											
 			                                <g:if test="${taskInstance.IsLandingTestRun()}">
 				                                <g:if test="${testInstance.IsLandingTestRun()}">
-		                                    		<td>${testInstance.landingTestPenalties} <g:if test="${!testInstance.landingTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'landingresults')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
+		                                    		<td>${testInstance.landingTestPenalties} <g:if test="${!testInstance.landingTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'landingresults')}/${testInstance.id}${next}">${message(code:'fc.test.results.here')}</a></td>
 												</g:if>
 												<g:else>
 													<td>${message(code:'fc.none')}</td>
@@ -177,16 +195,16 @@
 	                                    	
 			                                <g:if test="${taskInstance.IsSpecialTestRun()}">
 				                                <g:if test="${testInstance.IsSpecialTestRun()}">
-			                                    	<td>${testInstance.specialTestPenalties} <g:if test="${!testInstance.specialTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'specialresults')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
+			                                    	<td>${testInstance.specialTestPenalties} <g:if test="${!testInstance.specialTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'specialresults')}/${testInstance.id}${next}">${message(code:'fc.test.results.here')}</a></td>
 												</g:if>
 												<g:else>
 													<td>${message(code:'fc.none')}</td>
 												</g:else>
 											</g:if>
 			                                
-		                                    <td><a href="${createLink(controller:'test',action:'crewresults')}/${testInstance.id}">${message(code:'fc.test.results.here')}</a></td>
+		                                    <td><a href="${createLink(controller:'test',action:'crewresults')}/${testInstance.id}${next}">${message(code:'fc.test.results.here')}</a></td>
 		                                    
-		                                    <td>${testInstance.taskPenalties} ${message(code:'fc.points')}<g:if test="${testInstance.AreResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                    <td>${testInstance.taskPenalties} ${message(code:'fc.points')}<g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                    
 		                                    <g:if test="${testInstance.taskPosition}">
 		                                        <td>${testInstance.taskPosition}</td>

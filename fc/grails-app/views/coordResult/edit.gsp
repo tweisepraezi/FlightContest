@@ -49,12 +49,28 @@
                             </table>
                         </fieldset>
                         <fieldset>
-                            <legend>${message(code:'fc.test.results.given')}</legend>
+                            <legend>${message(code:'fc.test.results.measured')}</legend>
+                            <g:set var="edit_checkpoint" value="${false}"/>
                             <g:if test="${!coordResultInstance.test.flightTestComplete}">
+                                <g:if test="${coordResultInstance.type == CoordType.TO}">
+                                    <g:if test="${coordResultInstance.test.IsFlightTestCheckTakeOff() || coordResultInstance.test.GetFlightTestTakeoffCheckSeconds()}">
+                                        <g:set var="edit_checkpoint" value="${true}"/>
+                                    </g:if>
+                                </g:if>
+                                <g:elseif test="${coordResultInstance.type == CoordType.LDG}">
+                                    <g:if test="${coordResultInstance.test.IsFlightTestCheckLanding()}">
+                                        <g:set var="edit_checkpoint" value="${true}"/>
+                                    </g:if>
+                                </g:elseif>
+                                <g:else>
+                                    <g:set var="edit_checkpoint" value="${true}"/>
+                                </g:else>
+                            </g:if>
+                            <g:if test="${edit_checkpoint}">
                                  <p>
                                    	<div>
                                    		<g:checkBox name="resultCpNotFound" value="${coordResultInstance.resultCpNotFound}" />
-                                       	<label>${message(code:'fc.flighttest.cpnotfound')}</label>
+                                       	<label>${coordResultInstance.GetCpNotFoundName()}</label>
                                    	</div>
                                  </p>
                                  <p>
@@ -67,7 +83,7 @@
                                     <br/>
                                     <input type="text" id="resultAltitude" name="resultAltitude" value="${fieldValue(bean:coordResultInstance,field:'resultAltitude')}" tabIndex="3"/>
                                 </p>
-                                <g:if test="${coordResultInstance.type != CoordType.SP}">
+                                <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                     <p>
                                         <label>${message(code:'fc.badcoursenum')}*:</label>
                                         <br/>
@@ -80,7 +96,7 @@
                                     <tbody>
                                         <g:if test="${coordResultInstance.resultCpNotFound}">
                                             <tr>
-                                                <td colspan="2">${message(code:'fc.flighttest.cpnotfound')}</td>
+                                                <td colspan="2">${coordResultInstance.GetCpNotFoundName()}</td>
                                             </tr>
                                         </g:if>
                                         <g:else>
@@ -89,11 +105,13 @@
                                                 <td>${coordResultInstance.resultCpTimeInput}</td>
                                             </tr>
                                         </g:else>
-                                        <tr>
-                                            <td class="detailtitle">${message(code:'fc.altitude')}:</td>
-                                            <td>${coordResultInstance.resultAltitude}${message(code:'fc.foot')}</td>
-                                        </tr>
-                                        <g:if test="${coordResultInstance.type != CoordType.SP}">
+                                        <g:if test="${coordResultInstance.resultAltitude}">
+	                                        <tr>
+	                                            <td class="detailtitle">${message(code:'fc.altitude')}:</td>
+	                                            <td>${coordResultInstance.resultAltitude}${message(code:'fc.foot')}</td>
+	                                        </tr>
+	                                    </g:if>
+                                        <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                             <tr>
                                                 <td class="detailtitle">${message(code:'fc.badcoursenum')}:</td>
                                                 <td>${coordResultInstance.resultBadCourseNum}</td>
@@ -107,14 +125,19 @@
                         <input type="hidden" name="testid" value="${coordResultInstance.test.id}" />
                         <input type="hidden" name="name" value="${params.name}" />
                         <input type="hidden" name="next" value="${params.next}" />
-                        <g:if test="${!coordResultInstance.test.flightTestComplete}">
+                        <g:if test="${edit_checkpoint}">
                         	<g:if test="${params.next}">
                             	<g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" tabIndex="5"/>
                             </g:if>
                             <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="6"/>
                             <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="7"/>
                         </g:if>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="8"/>
+                        <g:else>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" tabIndex="8"/>
+                            </g:if>
+                        </g:else>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="9"/>
                     </g:form>
                 </div>
             </div>

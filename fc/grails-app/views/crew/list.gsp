@@ -5,7 +5,7 @@
         <title>${message(code:'fc.crew.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" importaction="${message(code:'fc.crew.import')}" printaction="${message(code:'fc.crew.print')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" importaction="${message(code:'fc.crew.import')}" printaction="${message(code:'fc.crew.print')}" printsettings="${message(code:'fc.crew.editprintsettings')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <g:form method="post" >
@@ -13,10 +13,10 @@
 	                <thead>
 	                    <tr>
 	                    	<g:if test="${resultClasses}">
-	                        	<th colspan="9" class="table-head">${message(code:'fc.crew.list')} (${activeCrewInstanceList.size()})</th>
+	                        	<th colspan="9" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
 	                        </g:if>
 	                        <g:else>
-	                        	<th colspan="8" class="table-head">${message(code:'fc.crew.list')} (${activeCrewInstanceList.size()})</th>
+	                        	<th colspan="8" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
 	                        </g:else>
 	                    </tr>
 	                    <tr>
@@ -32,7 +32,7 @@
 	                    </tr>
 	                </thead>
 	                <tbody>
-	                    <g:each in="${crewInstanceList}" status="i" var="crewInstance">
+	                    <g:each in="${crewList}" status="i" var="crewInstance">
 	                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
 	                            <g:set var="crew_id" value="selectedCrewID${crewInstance.id.toString()}"></g:set>
 	                            <g:if test="${flash.selectedCrewIDs && (flash.selectedCrewIDs[crew_id] == 'on')}">

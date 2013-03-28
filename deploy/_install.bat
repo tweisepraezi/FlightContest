@@ -30,6 +30,7 @@ goto :eof
 
 ::-------------------------------------------------------------------
 :done
+if exist "%USERPROFILE%\.grails\install.bat" call "%USERPROFILE%\.grails\install.bat"
 echo.
 echo Done.
 pause

@@ -45,17 +45,19 @@
                                         <td>
                                         	<g:set var="crew_num" value="${new Integer(0)}"/>
                                         	<g:each var="crew_instance" in="${Crew.findAllByTeamAndDisabled(team_instance,false,[sort:'teamPenalties'])}">
-                                        		<g:if test="${crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_num < contestInstance.teamCrewNum)}">
+                                        		<g:if test="${crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_instance.teamPenalties != -1) && (crew_num < contestInstance.teamCrewNum)}">
                                         			<g:set var="crew_num" value="${crew_num+1}"/>
 			                                        <g:set var="test_provisional" value="${false}"/>
 			                                        <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.teamTaskResults)}">
 			                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
-			                                        	<g:if test="${test_instance.AreResultsProvisional(contestInstance.GetTeamResultSettings())}">
-			                                        		<g:set var="test_provisional" value="${true}"/>
-					                                        <g:set var="team_provisional" value="${true}"/>
-			                                        	</g:if>
+                                                        <g:if test="${test_instance}">
+				                                        	<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetTeamResultSettings())}">
+				                                        		<g:set var="test_provisional" value="${true}"/>
+						                                        <g:set var="team_provisional" value="${true}"/>
+				                                        	</g:if>
+				                                        </g:if>
 					                                </g:each>
-                                        			<g:if test="${crew_num > 1}">, </g:if><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/> (${crew_instance.GetResultPenalties(contestInstance.GetTeamResultSettings())}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if>)
+                                        			<g:if test="${crew_num > 1}">, </g:if><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/> (${crew_instance.teamPenalties}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if>)
                                         		</g:if>
                                         	</g:each>
                                         </td>

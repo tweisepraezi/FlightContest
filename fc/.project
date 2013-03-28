@@ -28,5 +28,20 @@
 			<type>2</type>
 			<locationURI>GRAILS_ROOT/2.0.1/projects/fc/plugins</locationURI>
 		</link>
+		<link>
+			<name>deploy</name>
+			<type>2</type>
+			<location>K:/Projects/GIT/FlightContest/deploy</location>
+		</link>
+		<link>
+			<name>readme.txt</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/readme.txt</location>
+		</link>
+		<link>
+			<name>screenshots</name>
+			<type>2</type>
+			<location>K:/Projects/GIT/FlightContest/screenshots</location>
+		</link>
 	</linkedResources>
 </projectDescription>

@@ -9,7 +9,7 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable')} ${message(code:'fc.version')} ${testInstance.timetableVersion})</h2>
+                <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.timetableModified}">*</g:if><g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['flightplanReturnAction':flightplanReturnAction,'flightplanReturnController':flightplanReturnController,'flightplanReturnID':flightplanReturnID]}">
                         <table>
@@ -39,16 +39,16 @@
     		                    </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-	                                    <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+	                                    <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
@@ -183,7 +183,7 @@
                                         <tr>
                                             <td/>
                                             <td colspan="4">${FcMath.DistanceStr(totalDistance)}${message(code:'fc.mile')} ${message(code:'fc.distance.total')}</td>
-                                            <td colspan="2" align="right">${message(code:'fc.maxlandingtime')}:</td>
+                                            <td colspan="2" align="right">${message(code:'fc.test.landing.latest')}:</td>
                                             <td>${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
                                         </tr>
                                     </tfoot>

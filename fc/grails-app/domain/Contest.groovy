@@ -2,27 +2,41 @@ import java.util.Map;
 
 class Contest 
 {
+	static final int IMAGEMAXSIZE = 1048576             // 1MB, DB-2.3
+	static final int IMAGEHEIGHT = 50                   // DB-2.3
+	static final String TITLESIZE = "2.5em"             // DB-2.3
+	
+	static final String DEMOCONTESTYEAR = "2013"        // Jahr der Demo-Wettbewerbe
+	
 	String title = "Wettbewerbsname"
 	int mapScale = 200000
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
 	boolean resultClasses = false          	            // Klassen, DB-2.0
 	ContestRules contestRule                            // Wettbewerbsordnung, DB-2.0
+	Boolean precisionFlying = false                     // DB-2.3
 	boolean testExists = false                          // Integrierter Test vorhanden, DB-2.0
 	boolean aflosTest = false                           // Nutzung der AFLOS-Test-Datenbank, DB-2.0
 	boolean aflosUpload = false                         // Nutzung einer geuploadeten AFLO-Datenbank,DB-2.0 
+	Integer bestOfAnalysisTaskNum = 0                   // Anzahl der Aufgaben, aus denen das beste Ergebnis zu nehmen ist, DB-2.3
+	String printPrefix = ""                             // Prefix for print, DB-2.3
 	
 	// Wettbewerbs-Auswertung
 	String contestClassResults = ""		                // Zu berücksichtigende Klassen, DB-2.1
 	String contestTaskResults = ""                      // Zu berücksichtigende Aufgaben, DB-2.1
+	String contestTeamResults = ""                      // Zu berücksichtigende Teams, DB-2.3
 	boolean contestPlanningResults = true               // Planungstest berüchsichtigen, DB-2.0
 	boolean contestFlightResults = true                 // Navigationstest berüchsichtigen, DB-2.0
 	boolean contestObservationResults = true            // Beobachtungstest berüchsichtigen, DB-2.0
 	boolean contestLandingResults = true                // Landetest berüchsichtigen, DB-2.0
 	boolean contestSpecialResults = false               // Sondertest berücksichtigen, DB-2.0
 	Integer contestContestTitle = 0            	        // Wettbewerbstitel beim Ausdruck, DB-2.1
+	String contestPrintTitle = ""                       // Ausdruck-Titel, DB-2.3
+	String contestPrintSubtitle = ""                    // Ausdruck-Untertitel, DB-2.3
 	Boolean contestPrintLandscape = true                // Ausdruck quer, DB-2.1
 	Boolean contestPrintTaskDetails = true              // Ausdruck von Aufgabendetails, DB-2.1
 	Boolean contestPrintTaskNamesInTitle = true         // Ausdruck der Tasknamen im Title, wenn contestPrintTaskDetails = False, DB-2.1
+	Boolean contestPrintProvisional = false             // Ausdruck "vorläufig", DB-2.3
+	Boolean contestPrintA3 = false                      // Ausdruck A3, DB-2.3
 	
 	// Team-Auswertung
 	int teamCrewNum = 0                    	            // Anzahl von Besatzungen, DB-2.0
@@ -34,8 +48,12 @@ class Contest
 	boolean teamLandingResults = true      	            // Landetest berüchsichtigen, DB-2.0
 	boolean teamSpecialResults = false     	            // Sondertest berücksichtigen, DB-2.0
 	int teamContestTitle = 0               	            // Wettbewerbstitel beim Ausdruck, DB-2.0
+	String teamPrintTitle = ""                          // Ausdruck-Titel, DB-2.3
+	String teamPrintSubtitle = ""                       // Ausdruck-Untertitel, DB-2.3
 	Boolean teamPrintLandscape = true                   // Ausdruck quer, DB-2.1
-
+	Boolean teamPrintProvisional = false                // Ausdruck "vorläufig", DB-2.3
+	Boolean teamPrintA3 = false                         // Ausdruck A3, DB-2.3
+	
 	// PlanningTest
 	int planningTestDirectionCorrectGrad = 2
 	int planningTestDirectionPointsPerGrad = 2
@@ -47,6 +65,9 @@ class Contest
 
 	// FlightTest
 	int flightTestTakeoffMissedPoints = 200
+	Integer flightTestTakeoffCorrectSecond = 60         // DB-2.3
+	Boolean flightTestTakeoffCheckSeconds = false       // DB-2.3
+	Integer flightTestTakeoffPointsPerSecond = 3        // DB-2.3
 	int flightTestCptimeCorrectSecond = 2
 	int flightTestCptimePointsPerSecond = 1
 	int flightTestCptimeMaxPoints = 200
@@ -58,6 +79,11 @@ class Contest
 	int flightTestBadCourseStartLandingPoints = 500
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
+	Integer flightTestSafetyAndRulesInfringementPoints = 0 // DB-2.3
+	Integer flightTestInstructionsNotFollowedPoints = 0 // DB-2.3
+	Integer flightTestFalseEnvelopeOpenedPoints = 0     // DB-2.3
+	Integer flightTestSafetyEnvelopeOpenedPoints = 0    // DB-2.3
+	Integer flightTestFrequencyNotMonitoredPoints = 0   // DB-2.3
 	
 	// LandingTest
 	int landingTest1MaxPoints = 300                     // DB-2.0
@@ -104,6 +130,44 @@ class Contest
 	int landingTest4TouchingObstaclePoints = 400        // DB-2.0
 	String landingTest4PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
 	
+	// Crew print settings
+	String printCrewPrintTitle = ""                     // DB-2.3
+	Boolean printCrewNumber = true                      // DB-2.3
+	Boolean printCrewName = true                        // DB-2.3
+	Boolean printCrewTeam = true                        // DB-2.3
+	Boolean printCrewClass = true                       // DB-2.3
+	Boolean printCrewAircraft = true                    // DB-2.3
+	Boolean printCrewTAS = true                         // DB-2.3
+	Boolean printCrewEmptyColumn1 = false               // DB-2.3
+	String printCrewEmptyTitle1 = ""                    // DB-2.3
+	Boolean printCrewEmptyColumn2 = false               // DB-2.3
+	String printCrewEmptyTitle2 = ""                    // DB-2.3
+	Boolean printCrewEmptyColumn3 = false               // DB-2.3
+	String printCrewEmptyTitle3 = ""                    // DB-2.3
+	Boolean printCrewLandscape = false                  // DB-2.3
+	Boolean printCrewA3 = false                         // DB-2.3
+	
+	// Points print settings
+	String printPointsPrintTitle = ""                   // DB-2.3
+	Boolean printPointsPlanningTest = true              // DB-2.3
+	Boolean printPointsFlightTest = true                // DB-2.3
+	Boolean printPointsLandingTest1 = true              // DB-2.3
+	Boolean printPointsLandingTest2 = true              // DB-2.3
+	Boolean printPointsLandingTest3 = true              // DB-2.3
+	Boolean printPointsLandingTest4 = true              // DB-2.3
+	Boolean printPointsZero = false                     // DB-2.3
+	Boolean printPointsLandscape = false                // DB-2.3
+	Boolean printPointsA3 = false                       // DB-2.3
+
+	// Images
+	byte[] imageLeft = null                             // DB-2.3
+	Integer imageLeftHeight = IMAGEHEIGHT               // DB-2.3
+	byte[] imageCenter = null                           // DB-2.3
+	Integer imageCenterHeight = IMAGEHEIGHT             // DB-2.3
+	byte[] imageRight = null                            // DB-2.3
+	Integer imageRightHeight = IMAGEHEIGHT              // DB-2.3
+	String titleSize = TITLESIZE                        // DB-2.3
+
 	// transient values
 	static transients = ['taskTitle','copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
 	String taskTitle
@@ -215,6 +279,60 @@ class Contest
 		contestPrintTaskNamesInTitle(nullable:true)
 		teamTaskResults(nullable:true)
 		teamPrintLandscape(nullable:true)
+		
+		// DB-2.3 compatibility
+		precisionFlying(nullable:true)
+		bestOfAnalysisTaskNum(nullable:true,blank:false, min:0)
+		contestPrintTitle(nullable:true)
+		contestPrintSubtitle(nullable:true)
+		contestPrintProvisional(nullable:true)
+		contestPrintA3(nullable:true)
+		teamPrintTitle(nullable:true)
+		teamPrintSubtitle(nullable:true)
+		teamPrintProvisional(nullable:true)
+		teamPrintA3(nullable:true)
+		printPrefix(nullable:true)
+		contestTeamResults(nullable:true)
+		printCrewPrintTitle(nullable:true)
+		printCrewNumber(nullable:true)
+		printCrewName(nullable:true)
+		printCrewTeam(nullable:true)
+		printCrewClass(nullable:true)
+		printCrewAircraft(nullable:true)
+		printCrewTAS(nullable:true)
+		printCrewEmptyColumn1(nullable:true)
+		printCrewEmptyTitle1(nullable:true)
+		printCrewEmptyColumn2(nullable:true)
+		printCrewEmptyTitle2(nullable:true)
+		printCrewEmptyColumn3(nullable:true)
+		printCrewEmptyTitle3(nullable:true)
+		printCrewLandscape(nullable:true)
+		printCrewA3(nullable:true)
+		printPointsPrintTitle(nullable:true)
+		printPointsPlanningTest(nullable:true)
+		printPointsFlightTest(nullable:true)
+		printPointsLandingTest1(nullable:true)
+		printPointsLandingTest2(nullable:true)
+		printPointsLandingTest3(nullable:true)
+		printPointsLandingTest4(nullable:true)
+		printPointsZero(nullable:true)
+		printPointsLandscape(nullable:true)
+		printPointsA3(nullable:true)
+		imageLeft(nullable:true,maxSize:IMAGEMAXSIZE)
+		imageLeftHeight(nullable:true)
+		imageCenter(nullable:true,maxSize:IMAGEMAXSIZE)
+		imageCenterHeight(nullable:true)
+		imageRight(nullable:true,maxSize:IMAGEMAXSIZE)
+		imageRightHeight(nullable:true)
+		titleSize(nullable:true)
+		flightTestTakeoffCorrectSecond(nullable:true, min:0)
+		flightTestTakeoffCheckSeconds(nullable:true)
+		flightTestTakeoffPointsPerSecond(nullable:true, min:0)
+		flightTestSafetyAndRulesInfringementPoints(nullable:true, min:0)
+		flightTestInstructionsNotFollowedPoints(nullable:true, min:0)
+		flightTestFalseEnvelopeOpenedPoints(nullable:true, min:0)
+		flightTestSafetyEnvelopeOpenedPoints(nullable:true, min:0)
+		flightTestFrequencyNotMonitoredPoints(nullable:true, min:0)
 	}
 
     static mapping = {
@@ -234,7 +352,9 @@ class Contest
 				timeZone = contestInstance.timeZone
 				resultClasses = contestInstance.resultClasses
 				contestRule = contestInstance.contestRule
+				precisionFlying = contestInstance.precisionFlying
 				teamCrewNum = contestInstance.teamCrewNum
+				bestOfAnalysisTaskNum = contestInstance.bestOfAnalysisTaskNum
 				
 				planningTestDirectionCorrectGrad = contestInstance.planningTestDirectionCorrectGrad 
 				planningTestDirectionPointsPerGrad = contestInstance.planningTestDirectionPointsPerGrad
@@ -245,6 +365,9 @@ class Contest
 				planningTestExitRoomTooLatePoints = contestInstance.planningTestExitRoomTooLatePoints
 				
 				flightTestTakeoffMissedPoints = contestInstance.flightTestTakeoffMissedPoints
+				flightTestTakeoffCorrectSecond = contestInstance.flightTestTakeoffCorrectSecond
+				flightTestTakeoffCheckSeconds = contestInstance.flightTestTakeoffCheckSeconds
+				flightTestTakeoffPointsPerSecond = contestInstance.flightTestTakeoffPointsPerSecond
 				flightTestCptimeCorrectSecond = contestInstance.flightTestCptimeCorrectSecond
 				flightTestCptimePointsPerSecond = contestInstance.flightTestCptimePointsPerSecond
 				flightTestCptimeMaxPoints = contestInstance.flightTestCptimeMaxPoints
@@ -256,6 +379,11 @@ class Contest
 				flightTestBadCourseStartLandingPoints = contestInstance.flightTestBadCourseStartLandingPoints
 				flightTestLandingToLatePoints = contestInstance.flightTestLandingToLatePoints
 				flightTestGivenToLatePoints = contestInstance.flightTestGivenToLatePoints
+				flightTestSafetyAndRulesInfringementPoints = contestInstance.flightTestSafetyAndRulesInfringementPoints
+				flightTestInstructionsNotFollowedPoints = contestInstance.flightTestInstructionsNotFollowedPoints
+				flightTestFalseEnvelopeOpenedPoints = contestInstance.flightTestFalseEnvelopeOpenedPoints
+				flightTestSafetyEnvelopeOpenedPoints = contestInstance.flightTestSafetyEnvelopeOpenedPoints
+				flightTestFrequencyNotMonitoredPoints = contestInstance.flightTestFrequencyNotMonitoredPoints
 				
 				landingTest1MaxPoints = contestInstance.landingTest1MaxPoints
 				landingTest1NoLandingPoints = contestInstance.landingTest1NoLandingPoints
@@ -303,6 +431,7 @@ class Contest
 				landingTest4PenaltyCalculator = contestInstance.landingTest4PenaltyCalculator
 			} else {
 				contestRule = ContestRules.R1
+				precisionFlying = ContestRules.R1.ruleValues.precisionFlying
 			} 
 			
 			if (!this.save()) {
@@ -441,6 +570,14 @@ class Contest
 							}
 						}
 					}
+					i++
+					if (i == contestContestTitle) {
+						if (contestPrintTitle) {
+							return contestPrintTitle
+						} else {
+							return "-"
+						}
+					}
 				}
 				return title
 			case ResultFilter.Team:
@@ -452,6 +589,14 @@ class Contest
 							if (i == teamContestTitle) {
 								return resultclass_instance.contestTitle
 							}
+						}
+					}
+					i++
+					if (i == teamContestTitle) {
+						if (teamPrintTitle) {
+							return teamPrintTitle
+						} else {
+							return "-"
 						}
 					}
 				}
@@ -473,6 +618,10 @@ class Contest
 							}
 						}
 					}
+					i++
+					if (i == contestContestTitle) {
+						return "${getMsg(msgID)} - ${contestPrintTitle}"
+					}
 				}
 				return "${getMsg(msgID)} - ${title}"
 			case ResultFilter.Team:
@@ -485,6 +634,10 @@ class Contest
 								return "${getMsg(msgID)} - ${resultclass_instance.contestTitle}"
 							}
 						}
+					}
+					i++
+					if (i == teamContestTitle) {
+						return "${getMsg(msgID)} - ${teamPrintTitle}"
 					}
 				}
 				return "${getMsg(msgID)} - ${title}"
@@ -556,6 +709,9 @@ class Contest
 	
 	boolean IsTeamResultsProvisional(Map resultSettings, String resultTaskIDs)
 	{
+		if (teamPrintProvisional) {
+			return true
+		}
         for (Team team_instance in Team.findAllByContest(this,[sort:'contestPosition'])) {
 			if (team_instance.IsActiveTeam()) {
                 int crew_num = 0
@@ -564,9 +720,11 @@ class Contest
             			crew_num++
                         for ( Task task_instance in GetResultTasks(resultTaskIDs)) {
                         	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
-                        	if (test_instance.AreResultsProvisional(resultSettings)) {
-								return true
-                        	}
+							if (test_instance) {
+	                        	if (test_instance.IsTestResultsProvisional(resultSettings)) {
+									return true
+	                        	}
+							}
                         }
             		}
             	}
@@ -596,19 +754,23 @@ class Contest
 		return ret
 	}
 	
-	boolean AreResultsProvisional(Map resultSettings, String resultTaskIDs)
+	boolean IsContestResultsProvisional(Map resultSettings, String resultTaskIDs)
 	{
-		//println "XX Contest.AreResultsProvisional $resultSettings"
+		if (contestPrintProvisional) {
+			return true
+		}
 	    for (Crew crew_instance in Crew.findAllByContestAndDisabled(this,false,[sort:'contestPosition'])) {
-            for (Task task_instance in GetResultTasks(resultTaskIDs)) {
-            	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
-            	if (test_instance.AreResultsProvisional(resultSettings)) {
-					//println "-> true (Contest.AreResultsProvisional $task_instance.title $test_instance.crew.name)"
-					return true
-				}
-            }
+			if (!crew_instance.disabled && !crew_instance.noContestPosition) {
+	            for (Task task_instance in GetResultTasks(resultTaskIDs)) {
+	            	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+					if (test_instance) {
+		            	if (test_instance.IsTestResultsProvisional(resultSettings)) {
+							return true
+						}
+					}
+	            }
+			}
 	    }
-		//println "-> false (Contest.AreResultsProvisional)"
 		return false
 	}
 	
@@ -655,6 +817,50 @@ class Contest
 			}
 		}
 		return ret
+	}
+	
+	List GetResultTeams(String resultTeamIDs)
+	{
+		List ret = []
+		String team_ids = "$resultTeamIDs,"
+		for (Team team_instance in Team.findAllByContest(this,[sort:"id"])) {
+			if (team_ids.contains("team_${team_instance.id},")) {
+				ret += team_instance
+			}
+		}
+		if (team_ids.contains("team_no_team_crew,")) {
+			ret += null
+		}
+		return ret
+	}
+	
+	String GetPrintPrefix()
+	{
+		String prefix = "" 
+		if (printPrefix) {
+			prefix = printPrefix.replaceAll(' ', '')
+		} else {
+			String title2 = title.replaceAll('[\\p{Punct}]','') // Punkt u.a. Satzzeichen entfernen
+			if (title2.isInteger()) {
+				prefix = title2
+			} else {
+				for (String s in title2.split()) {
+					if (s) {
+						if (s.isInteger()) {
+							if (!title2.startsWith(s)) {
+								prefix += s
+							}
+						} else {
+							prefix += s.substring(0,1)
+						}
+					}
+				}
+			}
+		}
+		if (prefix) {
+			prefix += '-'
+		}
+		return prefix.toLowerCase()
 	}
 	
 }

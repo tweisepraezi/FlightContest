@@ -40,16 +40,16 @@
                                 </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    

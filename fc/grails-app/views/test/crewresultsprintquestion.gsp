@@ -9,7 +9,7 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.crewresults.print')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})<g:if test="${testInstance.AreResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${message(code:'fc.crewresults.print')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})<g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms">
                     <g:form params="${['crewresultsprintquestionReturnAction':crewresultsprintquestionReturnAction,'crewresultsprintquestionReturnController':crewresultsprintquestionReturnController,'crewresultsprintquestionReturnID':crewresultsprintquestionReturnID]}">
                         <table>
@@ -32,16 +32,16 @@
     		                    </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.registration}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td>${testInstance.taskAircraft.registration}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-	                                    <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+	                                    <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
@@ -81,9 +81,17 @@
     	                       	<g:if test="${testInstance.IsSpecialTestRun()}">
 	                                <div>
 	                                    <g:checkBox name="printSpecialResults" value="${testInstance.printSpecialResults}" />
-	                                    <label>${message(code:'fc.specialresults')} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})<g:if test="${!testInstance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
+	                                    <label>${message(code:'fc.specialresults')}<g:if test="${testInstance.IsSpecialTestTitle()}"> [${testInstance.GetSpecialTestTitle()}]</g:if> (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})<g:if test="${!testInstance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
 	                                </div>
 	                            </g:if>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p>
+                                <div>
+                                    <g:checkBox name="printProvisionalResults" value="${testInstance.printProvisionalResults}" />
+                                    <label>${message(code:'fc.printprovisional')}</label>
+                                </div>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${testInstance?.id}" />

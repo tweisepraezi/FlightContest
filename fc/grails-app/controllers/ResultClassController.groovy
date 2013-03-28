@@ -188,7 +188,7 @@ class ResultClassController {
 				flash.error = true
 				redirect(action:list)
 			} else if (resultclasses.content) {
-				fcService.WritePDF(response,resultclasses.content)
+				fcService.WritePDF(response,resultclasses.content,session.lastContest.GetPrintPrefix(),"classes")
 			} else {
 				redirect(action:list)
 			}
@@ -223,7 +223,7 @@ class ResultClassController {
 	
 		def calculatepositions = {
 			ResultClass resultclass_instance = ResultClass.get(params.id)
-	        def resultclass = fcService.calculatepositionsResultClass(resultclass_instance,[]) 
+	        def resultclass = fcService.calculatepositionsResultClass(resultclass_instance,[],[]) 
 	        flash.message = resultclass.message
 			if (resultclass.error) {
 				flash.error = true
@@ -240,7 +240,7 @@ class ResultClassController {
 		           	flash.error = true
 					redirect(action:"listresults",id:params.id)
 		        } else if (resultclass_print.content) {
-		        	fcService.WritePDF(response,resultclass_print.content)
+		        	fcService.WritePDF(response,resultclass_print.content,session.lastContest.GetPrintPrefix(),"classresults")
 			    } else {
 					redirect(action:"listresults",id:params.id)
 			    }
@@ -279,7 +279,7 @@ class ResultClassController {
 		           	flash.error = true
 					redirect(action:"editpoints",id:params.id)
 		        } else if (resultclass_print.content) {
-		        	fcService.WritePDF(response,resultclass_print.content)
+		        	fcService.WritePDF(response,resultclass_print.content,session.lastContest.GetPrintPrefix(),"points")
 			    } else {
 					redirect(action:"editpoints",id:params.id)
 			    }

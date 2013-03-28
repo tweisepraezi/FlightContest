@@ -83,6 +83,11 @@ class FcMath
 		return seconds
 	}
 	
+	static BigDecimal Hours(int minutesValue)
+	{
+		return 	minutesValue / 60
+	}
+	
 	static int RatioSeconds(BigDecimal timeValue, BigDecimal ratioValue)
 	{
 		int ret = Seconds(timeValue * ratioValue)

@@ -39,16 +39,16 @@
                                 </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
@@ -610,14 +610,27 @@
                             </tbody>
                         </table>
                         <g:if test="${!testInstance.landingTestComplete}">
-                        	<g:actionSubmit action="landingresultscomplete" value="${message(code:'fc.landingresults.complete')}" tabIndex="7"/>
-                        	<g:actionSubmit action="landingresultssave" value="${message(code:'fc.save')}" tabIndex="8"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="landingresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="7"/>
+                            </g:if>
+                        	<g:actionSubmit action="landingresultsready" value="${message(code:'fc.results.ready')}" tabIndex="8"/>
+                        	<g:actionSubmit action="landingresultssave" value="${message(code:'fc.save')}" tabIndex="9"/>
+                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="10"/>
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="11"/>
                         </g:if>
                         <g:else>
-                        	<g:actionSubmit action="landingresultsreopen" value="${message(code:'fc.landingresults.reopen')}" tabIndex="9"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="7"/>
+                            </g:if>
+                            <g:else>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="8"/>
+                            </g:else>
+                        	<g:actionSubmit action="landingresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="9"/>
+                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="10"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="11"/>
+                            </g:if>
                         </g:else>
-				        <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="10"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="11"/>
                     </g:form>
                 </div>
             </div>

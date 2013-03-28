@@ -54,12 +54,6 @@ grails.exceptionresolver.params.exclude = ['password']
 // set per-environment serverURL stem for creating absolute links
 environments {
     production {
-    	// disable stacktrace.log
-    	log4j = {
-			appenders {
-				null name:'stacktrace'
-            }
-        }
         grails.serverURL = "" // must be empty, for use from external pc, old was: http://localhost:8080/${appName}
     }
     development {
@@ -68,7 +62,6 @@ environments {
     test {
         grails.serverURL = "" // must be empty, for use from external pc, old was: http://localhost:8080/${appName}
     }
-	
 }
 
 // log4j configuration
@@ -79,7 +72,12 @@ log4j = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
-
+	
+	// disable stacktrace.log
+	appenders {
+		'null' name:'stacktrace'
+    }
+	
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
 	       'org.codehaus.groovy.grails.web.pages', //  GSP
 	       'org.codehaus.groovy.grails.web.sitemesh', //  layouts

@@ -2,11 +2,21 @@
     <head>
 		<style type="text/css">
 			@page {
-                <g:if test="${contestInstance.teamPrintLandscape}">
-                    size: A4 landscape;
+                <g:if test="${contestInstance.teamPrintA3}">
+                    <g:if test="${contestInstance.teamPrintLandscape}">
+                        size: A3 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A3;
+                    </g:else> 
                 </g:if>
                 <g:else>
-                    size: A4;
+	                <g:if test="${contestInstance.teamPrintLandscape}">
+	                    size: A4 landscape;
+	                </g:if>
+	                <g:else>
+	                    size: A4;
+	                </g:else> 
                 </g:else> 
                 @top-center {
                     content: "${message(code:'fc.contest.listteamresults')} - ${message(code:'fc.program.printpage')} " counter(page)
@@ -23,7 +33,7 @@
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.contest.listteamresults')}<g:if test="${contestInstance.IsTeamResultsProvisional(contestInstance.GetTeamResultSettings(),contestInstance.teamTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${message(code:'fc.contest.listteamresults')}<g:if test="${contestInstance.teamPrintSubtitle}"> - ${contestInstance.teamPrintSubtitle}</g:if><g:if test="${contestInstance.IsTeamResultsProvisional(contestInstance.GetTeamResultSettings(),contestInstance.teamTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <h3>${contestInstance.GetResultTitle(contestInstance.GetTeamResultSettings(),true)}</h3>
                 <div class="block" id="forms" >
                     <g:form>
@@ -47,17 +57,19 @@
 	                                        <td>
 	                                        	<g:set var="crew_num" value="${new Integer(0)}"/>
 	                                        	<g:each var="crew_instance" in="${Crew.findAllByTeamAndDisabled(team_instance,false,[sort:'teamPenalties'])}">
-	                                        		<g:if test="${crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_num < contestInstance.teamCrewNum)}">
+	                                        		<g:if test="${crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_instance.teamPenalties != -1) && (crew_num < contestInstance.teamCrewNum)}">
 		                                        		<g:set var="crew_num" value="${crew_num+1}"/>
 				                                        <g:set var="test_provisional" value="${false}"/>
 				                                        <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.teamTaskResults)}">
 				                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
-				                                        	<g:if test="${test_instance.AreResultsProvisional(contestInstance.GetTeamResultSettings())}">
-				                                        		<g:set var="test_provisional" value="${true}"/>
-						                                        <g:set var="team_provisional" value="${true}"/>
-				                                        	</g:if>
+				                                        	<g:if test="${test_instance}">
+					                                        	<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetTeamResultSettings())}">
+					                                        		<g:set var="test_provisional" value="${true}"/>
+							                                        <g:set var="team_provisional" value="${true}"/>
+					                                        	</g:if>
+					                                        </g:if>
 						                                </g:each>
-	                                        			<g:if test="${crew_num > 1}">, </g:if>${crew_instance.name} (${crew_instance.GetResultPenalties(contestInstance.GetTeamResultSettings())}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if>)
+	                                        			<g:if test="${crew_num > 1}">, </g:if>${crew_instance.name} (${crew_instance.teamPenalties}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if>)
 	                                        		</g:if>
 	                                        	</g:each>
 	                                        </td>

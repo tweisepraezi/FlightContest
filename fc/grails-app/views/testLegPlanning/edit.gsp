@@ -87,7 +87,12 @@
                             <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="4"/>
                             <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="5"/>
                         </g:if>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="6"/>
+                        <g:else>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="6"/>
+                            </g:if>
+                        </g:else>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="7"/>
                     </g:form>
                 </div>
             </div>

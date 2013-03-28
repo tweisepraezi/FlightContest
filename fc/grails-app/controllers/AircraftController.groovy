@@ -120,7 +120,7 @@ class AircraftController {
             flash.error = true
             redirect(action:list)
         } else if (aircrafts.content) {
-            fcService.WritePDF(response,aircrafts.content)
+            fcService.WritePDF(response,aircrafts.content,session.lastContest.GetPrintPrefix(),"aircrafts")
         } else {
             redirect(action:list)
         }

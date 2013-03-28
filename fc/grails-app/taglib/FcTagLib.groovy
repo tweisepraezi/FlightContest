@@ -30,11 +30,10 @@ class FcTagLib
 			}
 	        outln """    <li> <a class="${active(p.controller,'aircraft')}" href="${p.link}/../../aircraft/list">${message(code:'fc.aircraft.list')}</a> </li>"""
             outln """    <li> <a class="${if (p.contesttasks) active(p.controller,'contest')}" href="${p.link}/../../contest/tasks">${message(code:'fc.contest.tasks')}</a> </li>"""
-            boolean foundAnyTask = Task.findByContest(session.lastContest)
-			if (foundAnyTask) {
+			if (Task.findByContestAndHidePlanning(session.lastContest,false)) {
 				outln """    <li> <a class="${if (p.taskplanning) active(p.controller,'task')}" href="${p.link}/../../task/startplanning">${message(code:'fc.task.listplanning')}</a> </li>"""
-           		outln """    <li> <a class="${if (p.taskresults) active(p.controller,'task')}" href="${p.link}/../../task/startresults">${message(code:'fc.task.listresults')}</a> </li>"""
 			}
+       		outln """    <li> <a class="${if (p.taskresults) active(p.controller,'task')}" href="${p.link}/../../task/startresults">${message(code:'fc.task.listresults')}</a> </li>"""
         } else {
         	if (Contest.findByIdIsNotNull([sort:"id"])) {
         		Contest.list().each { contestInstance ->
@@ -54,7 +53,7 @@ class FcTagLib
 
         // ---------------------------------------------------------------
         // ---------------------------------------------------------------
-        if (p.newaction || p.show || p.edit || p.printaction || p.importaction) {
+        if (p.newaction || p.show || p.edit || p.printaction || p.printsettings || p.importaction) {
             if (p.controller != "contest" || session.lastContest) {
 	        	outln """<div class="clear"></div>"""
 	            outln """<div class="grid">"""
@@ -82,6 +81,9 @@ class FcTagLib
 		        if (p.printaction) {
 		            outln """    <li> <a href="${p.link}/../../${p.controller}/print">${p.printaction}</a> </li>"""
 		        }
+				if (p.printsettings) {
+					outln """    <li> <a href="${p.link}/../../${p.controller}/editprintsettings">${p.printsettings}</a> </li>"""
+				}
 	            if (p.controller == "contest" && session.lastContest && !p.contesttasks) {
 					if (!session.lastContest.resultClasses) {
 	                    outln """    <li> <a href="${p.link}/../../contest/editpoints">${message(code:'fc.contestrule.points')}</a> </li>"""
@@ -107,9 +109,13 @@ class FcTagLib
             outln """  <ul class="nav main">"""
             for (Task task_instance in Task.findAllByContest(session.lastContest,[sort:"id"])) {
                	if (p.taskplanning) {
-               		outln """    <li> <a class="${if (session.lastTaskPlanning == task_instance.id) "active"}" href="${p.link}/../../task/listplanning/${task_instance.id}" >${task_instance.name()}</a> </li>"""
+					if (!task_instance.hidePlanning) {
+						outln """    <li> <a class="${if (session.lastTaskPlanning == task_instance.id) "active"}" href="${p.link}/../../task/listplanning/${task_instance.id}" >${task_instance.name()}</a> </li>"""
+					}
                	} else if (p.taskresults) {
-               		outln """    <li> <a class="${if (session.lastTaskResults == task_instance.id) "active"}" href="${p.link}/../../task/listresults/${task_instance.id}" >${task_instance.name()}</a> </li>"""
+					if (!task_instance.hideResults) {
+						outln """    <li> <a class="${if (session.lastTaskResults == task_instance.id) "active"}" href="${p.link}/../../task/listresults/${task_instance.id}" >${task_instance.name()}</a> </li>"""
+					}
                	}
             }
 			if (p.taskresults) {
@@ -339,14 +345,15 @@ class FcTagLib
     // <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>
     def task = { p ->
         if (p.link == "/fc/task/listplanning") {
-        	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.planning')})</a>"""
+       		out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.planning')})</a>"""
         } else if (p.link == "/fc/task/listresults") {
             out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.results')})</a>"""
         } else if (p.link == "/fc/task/disabledcheckpoints") {
-            //out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.disabledcheckpoints')})</a>"""
             out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
+        } else if (p.link == "/fc/task/editprintsettings") {
+			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.editprintsettings')}</a>"""
         } else {
-        	out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.settings')})</a>"""
+        	out << """<a href="${p.link}/${p.var.id}">${p.var.bestOfName().encodeAsHTML()} (${message(code:'fc.task.settings')})</a>"""
         }
     }
 
@@ -480,6 +487,17 @@ class FcTagLib
         out << "${p.var.name()}" // .encodeAsHTML()
     }
 
+    // ====================================================================================================================
+	// <g:wrpoints test="${testInstance.flightTestTakeoffMissed}" titlecode="fc.flighttest.takeoffmissed" points="${testInstance.GetFlightTestTakeoffMissedPoints()}" />
+	def wrpoints = { p ->
+		if (p.test) {
+			String title_msg = "${message(code:p.titlecode)}"
+			out << """<tr>"""
+		    out << """<td>${title_msg}: ${p.points.toString()} ${message(code:'fc.points')}</td>"""
+			out << """</tr>"""
+		}
+    }
+										
     // --------------------------------------------------------------------------------------------------------------------
     void outln(str)
     {

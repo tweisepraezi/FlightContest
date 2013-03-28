@@ -39,16 +39,16 @@
                                 </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
@@ -101,7 +101,7 @@
                                             <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
                                             
                                             	<!-- search next id -->
-		                                        <g:set var="next" value="${new Integer(0)}" />
+                                            	<g:set var="next" value="${new Integer(0)}" />
 		                                        <g:set var="setnext" value="${false}" />
         		                                <g:each var="testlegplanning_instance2" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
                                                     <g:if test="${setnext}">
@@ -242,15 +242,31 @@
                                     <td colspan="2">
                                         <g:if test="${!testInstance.planningTestComplete}">
                                             <g:if test="${testInstance.planningTestLegComplete}">
-                                                <g:actionSubmit action="planningtaskresultscomplete" value="${message(code:'fc.planningresults.complete')}" tabIndex="2"/>
-					                        	<g:actionSubmit action="planningtaskresultssave" value="${message(code:'fc.save')}" tabIndex="3"/>
+	                                            <g:if test="${params.next}">
+	                                                <g:actionSubmit action="planningtaskresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="2"/>
+	                                            </g:if>
+                                                <g:actionSubmit action="planningtaskresultsready" value="${message(code:'fc.results.ready')}" tabIndex="3"/>
+					                        	<g:actionSubmit action="planningtaskresultssave" value="${message(code:'fc.save')}" tabIndex="4"/>
                                             </g:if>
+                                            <g:elseif test="${params.next}">
+                                                <g:actionSubmit action="planningtaskresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
+                                            </g:elseif>
+                                            <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="5"/>
+                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
                                         </g:if>
                                         <g:else>
-                                            <g:actionSubmit action="planningtaskresultsreopen" value="${message(code:'fc.planningresults.reopen')}" tabIndex="4"/>
+                                            <g:if test="${params.next}">
+                                                <g:actionSubmit action="planningtaskresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
+                                            </g:if>
+                                            <g:else>
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+                                            </g:else>
+                                            <g:actionSubmit action="planningtaskresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="4"/>
+                                            <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="5"/>
+                                            <g:if test="${params.next}">
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
+                                            </g:if>
                                         </g:else>
-				                        <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="5"/>
-				                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
                                     </td>
                                 </tr>
                             </tfoot>

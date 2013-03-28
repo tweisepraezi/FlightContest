@@ -17,26 +17,30 @@
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
 	                            <g:if test="${taskInstance.planningtest}">
-	                                    <td><g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/> (${taskInstance.planningtest.planningtesttasks?.size()} ${message(code:'fc.planningtesttask.list')})</td>
+	                                <td><g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/> (${taskInstance.planningtest.planningtesttasks?.size()} ${message(code:'fc.planningtesttask.list')})</td>
 	                            </g:if> <g:else>
-	                                    <td><g:link controller="planningTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
+	                                <td><g:link controller="planningTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
 	                            </g:else>
+                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'editprintsettings')}"/></td>
                             </tr>
                             <tr>
-                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listresults')}"/></td>
+                                <g:if test="${!taskInstance.hideResults}">
+                                    <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listresults')}"/></td>
+                                </g:if>
+                                <g:else>
+                                    <td/>
+                                </g:else>
 	                            <g:if test="${taskInstance.flighttest}">
-	                                    <td><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/> (${taskInstance.flighttest.flighttestwinds?.size()} ${message(code:'fc.flighttestwind.list')})</td>
+	                                <td><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/> (${taskInstance.flighttest.flighttestwinds?.size()} ${message(code:'fc.flighttestwind.list')})</td>
 	                            </g:if> <g:else>
-	                                    <td><g:link controller="flightTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
+	                                <td><g:link controller="flightTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
 	                            </g:else>
+	                            <td/>
                             </tr>
                         </tbody>
                     </table>
                     <table>
-                    	<g:set var="timetable_version" value="${taskInstance.timetableVersion}"></g:set>
-                    	<g:if test="${taskInstance.timetableModified}">
-                    		<g:set var="timetable_version" value="${timetable_version+1}"></g:set>
-                    	</g:if>
+                    	<g:set var="timetable_version" value="${taskInstance.GetTimeTableVersion()}"></g:set>
                         <thead>
                             <tr>
                                 <g:if test="${taskInstance.contest.resultClasses}">
@@ -46,7 +50,7 @@
 	                                <th class="table-head" colspan="4">${message(code:'fc.crew.list')}</th>
 	                            </g:else>
                                 <th class="table-head" colspan="3">${message(code:'fc.test.taskdata')}</th>
-                                <th class="table-head" colspan="5">${message(code:'fc.test.timetable')} (${message(code:'fc.version')} ${timetable_version})</th>
+                                <th class="table-head" colspan="5">${message(code:'fc.test.timetable')} (${message(code:'fc.version')} ${timetable_version}<g:if test="${taskInstance.timetableModified}">*</g:if>)</th>
                             </tr>
                             <tr>
                                 <th/>
@@ -97,7 +101,7 @@
 	                            
 	                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
 	                                    
-                                    	<td><g:if test="${testInstance.crew.aircraft}"><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/><g:if test="${testInstance.crew.aircraft?.user1 && testInstance.crew.aircraft?.user2}"> *</g:if></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}<g:if test="${testInstance.taskTAS != testInstance.crew.tas}"> !</g:if>)</td>
+                                    	<td><g:if test="${testInstance.taskAircraft}"><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/><g:if test="${testInstance.taskAircraft?.user1 && testInstance.taskAircraft?.user2}"> *</g:if><g:if test="${testInstance.taskAircraft != testInstance.crew.aircraft}"> !</g:if></g:if><g:else>${message(code:'fc.noassigned')}</g:else> (${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}<g:if test="${testInstance.taskTAS != testInstance.crew.tas}"> !</g:if>)</td>
                                         <g:if test="${testInstance.crew.team}">
                                     	   <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
 		                                </g:if>

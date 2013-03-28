@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.specialresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})</title>
+        <title>${testInstance.GetSpecialTestTitle()} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.specialresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})</h2>
+                <h2>${testInstance.GetSpecialTestTitle()} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
                         <table>
@@ -39,16 +39,16 @@
                                 </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
@@ -62,7 +62,7 @@
                         <g:if test="${!testInstance.specialTestComplete}">
 	                        <fieldset>
 	                            <p>
-	                                <label>${message(code:'fc.specialresults')}* [${message(code:'fc.points')}]:</label>
+	                                <label>${message(code:'fc.specialresults.results')}* [${message(code:'fc.points')}]:</label>
 	                                <br/>
 	                                <input type="text" id="specialTestPenalties" name="specialTestPenalties" value="${fieldValue(bean:testInstance,field:'specialTestPenalties')}" tabIndex="1"/>
 	                            </p>
@@ -72,21 +72,34 @@
                                <table>
                                    <tbody>
                                        <tr>
-                                           <td class="detailtitle">${message(code:'fc.specialresults')}:</td>
+                                           <td class="detailtitle">${message(code:'fc.specialresults.results')}:</td>
                                            <td>${testInstance.specialTestPenalties} ${message(code:'fc.points')}</td>
                                        </tr>
                                    </tbody>
                                </table>
                         </g:else>
                         <g:if test="${!testInstance.specialTestComplete}">
-                        	<g:actionSubmit action="specialresultscomplete" value="${message(code:'fc.specialresults.complete')}" tabIndex="2"/>
-                        	<g:actionSubmit action="specialresultssave" value="${message(code:'fc.save')}" tabIndex="3"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="specialresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="2"/>
+                            </g:if>
+                        	<g:actionSubmit action="specialresultsready" value="${message(code:'fc.results.ready')}" tabIndex="3"/>
+                        	<g:actionSubmit action="specialresultssave" value="${message(code:'fc.save')}" tabIndex="4"/>
+                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="5"/>
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
                         </g:if>
                         <g:else>
-                        	<g:actionSubmit action="specialresultsreopen" value="${message(code:'fc.specialresults.reopen')}" tabIndex="1"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
+                            </g:if>
+                            <g:else>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+                            </g:else>
+                        	<g:actionSubmit action="specialresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="4"/>
+                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="5"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
+                            </g:if>
                         </g:else>
-				        <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="4"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="5"/>
                     </g:form>
                 </div>
             </div>

@@ -34,3 +34,23 @@ Caused by: java.lang.OutOfMemoryError: PermGen space
 ====================================================
 http://javarevisited.blogspot.com/2011/09/javalangoutofmemoryerror-permgen-space.html
 -XX:MaxPermSize=128m
+
+Design
+======
+
+Automatische TakeoffMissed-Berechnung
+-------------------------------------
+1. TakeoffMissed-Haken in test/flightresults.gsp sichtbar, wenn
+     - T/O-Punkt nicht vorhanden (bei alten Wettbewerben) oder
+     - !IsFlightTestCheckTakeOff() && !GetFlightTestTakeoffCheckSeconds()
+2. T/O-Zeiteingabe in coordResult/edit.gsp, wenn
+     - IsFlightTestCheckTakeOff() oder
+     - GetFlightTestTakeoffCheckSeconds()
+
+Automatische LandingToLate-Berechnung
+-------------------------------------
+1. LandingToLate-Haken in test/flightresults.gsp sichtbar, wenn
+     - LDG-Punkt nicht vorhanden (bei alten Wettbewerben) oder
+     - !IsFlightTestCheckLanding()
+2. LDG-Zeiteingabe in coordResult/edit.gsp, wenn
+     - IsFlightTestCheckLanding()

@@ -45,7 +45,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan="9">${message(code:'fc.coordroute.list')}</th>
+                                    <th class="table-head" colspan=11">${message(code:'fc.coordroute.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
@@ -55,6 +55,8 @@
                                     <th>${message(code:'fc.longitude')}</th>
                                     <th>${message(code:'fc.altitude')}</th>
                                     <th>${message(code:'fc.gatewidth')}</th>
+                                    <th>${message(code:'fc.legduration')}</th>
+                                    <th>${message(code:'fc.notimecheck')}</th>
                                     <th>${message(code:'fc.truetrack.map.measure')}</th>
                                     <th>${message(code:'fc.distance.map')}</th>
                                 </tr>
@@ -83,7 +85,14 @@
                                         <td>${coordroute_instance.latName()}</td>
                                         <td>${coordroute_instance.lonName()}</td>
                                         <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
-                                        <td>${coordroute_instance.gatewidth}${message(code:'fc.mile')}</td>
+                                        <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
+                                        <td>${coordroute_instance.legDurationName()}</td>
+                                        <g:if test="${coordroute_instance.noTimeCheck}">
+                                            <td>${message(code:'fc.yes')}</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>-</td>
+                                        </g:else>
                                         <g:if test="${last_measuretruetrack && last_measuretruetrack != coordroute_instance.measureTrueTrack}">
 	                                        <td class="errors">${coordroute_instance.measureTrueTrackName()} !</td>
 	                                    </g:if><g:else>
@@ -202,11 +211,13 @@
                         </table>
                         <input type="hidden" name="id" value="${routeInstance?.id}"/>
                         <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" tabIndex="1"/>
-                        <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}"  tabIndex="2"/>
-                        <g:actionSubmit action="createsecretcoordroutes" value="${message(code:'fc.coordroute.addsecret')}"  tabIndex="3"/>
-                        <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}"  tabIndex="4"/>
+                        <g:if test="${!routeInstance.Used()}">
+                            <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}"  tabIndex="2"/>
+                            <g:actionSubmit action="createsecretcoordroutes" value="${message(code:'fc.coordroute.addsecret')}"  tabIndex="3"/>
+                            <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}"  tabIndex="4"/>
+                        </g:if>
                         <g:actionSubmit action="printroute" value="${message(code:'fc.print')}"  tabIndex="5"/>
-                        <g:if test="${!PlanningTestTask.findByRoute(routeInstance) && !FlightTest.findByRoute(routeInstance)}">
+                        <g:if test="${!routeInstance.Used()}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="6"/>
                         </g:if>
                         <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}"  tabIndex="7"/>

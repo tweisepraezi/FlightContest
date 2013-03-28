@@ -123,7 +123,7 @@ class TeamController {
             flash.error = true
             redirect(action:list)
         } else if (teams.content) {
-            fcService.WritePDF(response,teams.content)
+            fcService.WritePDF(response,teams.content,session.lastContest.GetPrintPrefix(),"teams")
         } else {
             redirect(action:list)
         }

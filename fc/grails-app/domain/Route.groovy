@@ -66,4 +66,12 @@ class Route
             return idName()
 		}
 	}
+	
+	boolean Used()
+	{
+		if (PlanningTestTask.findByRoute(this) || FlightTest.findByRoute(this)) {
+			return true
+		}
+		return false
+	}
 }

@@ -58,6 +58,14 @@
 	                            </g:if>
                             </p>
                         </fieldset>
+                        <fieldset>
+                            <p>
+                                <div>
+                                    <g:checkBox name="printProvisionalResults" value="${taskInstance.printProvisionalResults}" />
+                                    <label>${message(code:'fc.printprovisional')}</label>
+                                </div>
+                            </p>
+                        </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <g:actionSubmit action="printcrewresults" value="${message(code:'fc.print')}" />
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />

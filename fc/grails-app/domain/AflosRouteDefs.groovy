@@ -11,7 +11,7 @@ class AflosRouteDefs
     String altitude
 	BigDecimal truetrack
 	BigDecimal coordDistance
-    Float gatewidth
+    Float gatewidth2
 	
 	static mapping = {
 		datasources(['aflos','aflostest','aflosupload'])
@@ -26,7 +26,7 @@ class AflosRouteDefs
 	    altitude column: 'Altitude'
 		truetrack column: 'True_Course'
 		coordDistance column: 'Distance'
-        gatewidth column: 'Gate_Width'
+        gatewidth2 column: 'Gate_Width'
 			
 		version false
 	}

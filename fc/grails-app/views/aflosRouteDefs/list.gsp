@@ -43,7 +43,7 @@
                 <tbody>
                     <g:each var="aflosRouteDefsInstance" in="${aflosRouteDefsInstanceList}" status="i" >
                         <g:set var="secretgatewidthclass" value=""/>
-                        <g:if test="${aflosRouteDefsInstance.gatewidth == 2}">
+                        <g:if test="${aflosRouteDefsInstance.gatewidth2 == 2.0f}">
                             <g:set var="secretgatewidthclass" value="secretgatewidth"/>
                         </g:if>
                         <g:else>
@@ -57,7 +57,7 @@
                             <td class="${secretgatewidthclass}">${aflosRouteDefsInstance.altitude}${message(code:'fc.foot')}</td>
                             <td class="${secretgatewidthclass}">${aflosRouteDefsInstance.truetrack}${message(code:'fc.grad')}</td>
                             <td class="${secretgatewidthclass}">${aflosRouteDefsInstance.coordDistance}${message(code:'fc.mile')}</td>
-                            <td class="${secretgatewidthclass}">${FcMath.GateWidthStr(aflosRouteDefsInstance.gatewidth)}${message(code:'fc.mile')}</td>
+                            <td class="${secretgatewidthclass}">${aflosRouteDefsInstance.gatewidth2}${message(code:'fc.mile')}</td>
                         </tr>
                     </g:each>
                 </tbody>

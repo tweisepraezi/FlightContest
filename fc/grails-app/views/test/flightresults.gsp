@@ -39,16 +39,16 @@
                                 </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.registration')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td><g:aircraft var="${testInstance.crew.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td><g:aircraft var="${testInstance.taskAircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.aircraft.type')}:</td>
-                                    <g:if test="${testInstance.crew.aircraft}">
-                                        <td>${testInstance.crew.aircraft.type}</td>
+                                    <g:if test="${testInstance.taskAircraft}">
+                                        <td>${testInstance.taskAircraft.type}</td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>                    
@@ -75,7 +75,10 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <g:set var="show_takeoffmissed" value="${true}"/>
+                        <g:set var="show_landingtolate" value="${true}"/>
                         <g:if test="${CoordResult.countByTest(testInstance)}" >
+                            <g:set var="check_secretpoints" value="${testInstance.IsFlightTestCheckSecretPoints()}"/>
                             <div>
                                 <table>
                                     <thead>
@@ -98,6 +101,16 @@
                                     	<g:set var="disabled_checkpoints" value="${testInstance.task.disabledCheckPoints},"/>
                                         <g:set var="legNo" value="${new Integer(0)}" />
                                         <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance,[sort:"id"])}">
+                                            <g:if test="${coordResultInstance.type == CoordType.TO}">
+                                                <g:if test="${testInstance.GetFlightTestTakeoffCheckSeconds() || testInstance.IsFlightTestCheckTakeOff()}">
+                                                    <g:set var="show_takeoffmissed" value="${false}"/>
+                                                </g:if>
+                                            </g:if>
+                                            <g:if test="${coordResultInstance.type == CoordType.LDG}">
+                                                <g:if test="${testInstance.IsFlightTestCheckLanding()}">
+                                                    <g:set var="show_landingtolate" value="${false}"/>
+                                                </g:if>
+                                            </g:if>
                                             <g:if test="${coordResultInstance.planProcedureTurn}">
                                                 <g:set var="legNo" value="${legNo+1}" />
                                                 <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
@@ -173,7 +186,7 @@
                                                 <td>${coordResultInstance.lonName()}</td>
                                                 <td>${coordResultInstance.altitude}${message(code:'fc.foot')}</td>
                                                 <td>${FcMath.TimeStr(coordResultInstance.planCpTime)}</td>
-                                                <g:if test="${coordResultInstance.type != CoordType.SP}">
+                                                <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                                     <td>0</td>
                                                 </g:if>
                                                 <g:else>
@@ -200,12 +213,20 @@
                                                         </g:else>
                                                     </g:else>
                                                     <g:if test="${coordResultInstance.resultCpNotFound}">
-                                                        <td class="errors">${message(code:'fc.flighttest.cpnotfound.short')}</td>
+	                                                    <g:if test="${(coordResultInstance.type == CoordType.TO) && (!(coordResultInstance.test.IsFlightTestCheckTakeOff() || coordResultInstance.test.GetFlightTestTakeoffCheckSeconds()))}">
+	                                                        <td/>
+	                                                    </g:if>
+	                                                    <g:elseif test="${(coordResultInstance.type == CoordType.LDG) && !coordResultInstance.test.IsFlightTestCheckLanding()}">
+                                                            <td/>
+	                                                    </g:elseif>
+                                                        <g:else>
+                                                            <td class="errors">${coordResultInstance.GetCpNotFoundShortName()}</td>
+                                                        </g:else>
                                                     </g:if>
                                                     <g:else>
                                                         <td>${FcMath.TimeStr(coordResultInstance.resultCpTime)}</td>
                                                     </g:else>
-                                                    <g:if test="${coordResultInstance.type != CoordType.SP}">
+                                                    <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                                         <g:if test="${coordResultInstance.resultBadCourseNum}">
                                                             <td class="errors">${coordResultInstance.resultBadCourseNum}</td>
                                                         </g:if>
@@ -222,7 +243,7 @@
                                                     <td/>
                                                     <td/>
                                                     <td>${message(code:'fc.unknown')}</td>
-                                                    <g:if test="${coordResultInstance.type != CoordType.SP}">
+                                                    <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                                         <td>${message(code:'fc.unknown')}</td>
                                                     </g:if>
                                                     <g:else>
@@ -237,44 +258,58 @@
                                                 <td>${message(code:'fc.test.results.penalty')}</td>
                                                	<td/>
                                                 <td/>
-                                                <g:if test="${testInstance.GetFlightTestMinAltitudeMissedPoints() > 0}">
-	                                                <g:if test="${!coordResultInstance.resultAltitude}">
-	                                                    <td/>
-	                                                </g:if>
-	                                                <g:else>
-	                                                    <g:if test="${coordResultInstance.resultMinAltitudeMissed}">
-	                                                        <td class="points">${testInstance.GetFlightTestMinAltitudeMissedPoints()} ${message(code:'fc.points')}</td>
-	                                                    </g:if>
-	                                                    <g:else>
-	                                                        <td class="zeropoints">0 ${message(code:'fc.points')}</td>
-	                                                    </g:else>
-	                                                </g:else>
-	                                            </g:if>
-	                                            <g:else>
-	                                               <td class="zeropoints">${message(code:'fc.disabled')}</td>
-	                                            </g:else>
+                                                <g:if test="${coordResultInstance.type.IsAltitudeCheckCoord()}">
+	                                                <g:if test="${testInstance.GetFlightTestMinAltitudeMissedPoints() > 0}">
+		                                                <g:if test="${!coordResultInstance.resultAltitude}">
+		                                                    <td/>
+		                                                </g:if>
+		                                                <g:else>
+		                                                    <g:if test="${coordResultInstance.resultMinAltitudeMissed}">
+		                                                        <td class="points">${testInstance.GetFlightTestMinAltitudeMissedPoints()} ${message(code:'fc.points')}</td>
+		                                                    </g:if>
+		                                                    <g:else>
+		                                                        <td class="zeropoints">0 ${message(code:'fc.points')}</td>
+		                                                    </g:else>
+		                                                </g:else>
+		                                            </g:if>
+		                                            <g:else>
+		                                               <td class="zeropoints">${message(code:'fc.disabled')}</td>
+		                                            </g:else>
+                                                </g:if>
+                                                <g:else>
+                                                    <td/>
+                                                </g:else>
                                                 <g:if test="${coordResultInstance.resultEntered}">
-	                                                <g:if test="${disabled_checkpoints.contains(coordResultInstance.title()+',')}">
+                                                    <g:if test="${(coordResultInstance.type == CoordType.TO) && (!(coordResultInstance.test.IsFlightTestCheckTakeOff() || coordResultInstance.test.GetFlightTestTakeoffCheckSeconds()))}">
+                                                        <td class="zeropoints">${message(code:'fc.disabled')}</td>
+                                                    </g:if>
+                                                    <g:elseif test="${(coordResultInstance.type == CoordType.LDG) && !coordResultInstance.test.IsFlightTestCheckLanding()}">
+                                                        <td class="zeropoints">${message(code:'fc.disabled')}</td>
+                                                    </g:elseif>
+	                                                <g:elseif test="${disabled_checkpoints.contains(coordResultInstance.title()+',')}">
 	                                                	<g:if test="${coordResultInstance.penaltyCoord}">
 	                                                		<td class="zeropoints">${message(code:'fc.disabled')} (${coordResultInstance.penaltyCoord})</td>
 	                                                	</g:if>
 	                                                	<g:else>
 	                                                		<td class="zeropoints">${message(code:'fc.disabled')}</td>
 	                                                	</g:else>
-	                                                </g:if>
-	                                                <g:else>
-	                                                    <g:set var="points_class" value="points"/>
-	                                                    <g:if test="${!coordResultInstance.penaltyCoord}">
-	                                                        <g:set var="points_class" value="zeropoints"/>
-	                                                    </g:if>
-	                                                    <td class="${points_class}">${coordResultInstance.penaltyCoord} ${message(code:'fc.points')}</td>
-	                                                </g:else>
+	                                                </g:elseif>
+                                                    <g:elseif test="${(coordResultInstance.type != CoordType.SECRET) || check_secretpoints}">
+                                                        <g:set var="points_class" value="points"/>
+                                                        <g:if test="${!coordResultInstance.penaltyCoord}">
+                                                            <g:set var="points_class" value="zeropoints"/>
+                                                        </g:if>
+                                                        <td class="${points_class}">${coordResultInstance.penaltyCoord} ${message(code:'fc.points')}</td>
+                                                    </g:elseif>
+                                                    <g:else>
+                                                        <td class="zeropoints">${message(code:'fc.disabled')}</td>
+                                                    </g:else>
                                                     <g:if test="${testInstance.GetFlightTestBadCoursePoints() > 0}">
                                                         <g:set var="points_class" value="points"/>
                                                         <g:if test="${!coordResultInstance.resultBadCourseNum}">
                                                             <g:set var="points_class" value="zeropoints"/>
                                                         </g:if>
-		                                                <g:if test="${coordResultInstance.type != CoordType.SP}">
+		                                                <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
 		                                                    <td class="${points_class}">${coordResultInstance.resultBadCourseNum*testInstance.GetFlightTestBadCoursePoints()} ${message(code:'fc.points')}</td>
 		                                                </g:if>
 		                                                <g:else>
@@ -287,7 +322,7 @@
                                                 </g:if>
                                                 <g:else>
                                                     <td>${message(code:'fc.unknown')}</td>
-                                                    <g:if test="${coordResultInstance.type != CoordType.SP}">
+                                                    <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                                         <td>${message(code:'fc.unknown')}</td>
                                                     </g:if>
                                                     <g:else>
@@ -305,10 +340,12 @@
                             <fieldset>
 		                        <p>
 		                        	<g:if test="${testInstance.GetFlightTestTakeoffMissedPoints() > 0}">
-				                        <div>
-			        	                	<g:checkBox name="flightTestTakeoffMissed" value="${testInstance.flightTestTakeoffMissed}"/>
-											<label>${message(code:'fc.flighttest.takeoffmissed')}</label>
-			    	                    </div>
+                                        <g:if test="${show_takeoffmissed}">
+					                        <div>
+				        	                	<g:checkBox name="flightTestTakeoffMissed" value="${testInstance.flightTestTakeoffMissed}"/>
+												<label>${message(code:'fc.flighttest.takeoffmissed')}</label>
+				    	                    </div>
+                                        </g:if>
 			    	                </g:if>
 		                        	<g:if test="${testInstance.GetFlightTestBadCourseStartLandingPoints() > 0}">
 				                        <div>
@@ -317,10 +354,12 @@
 			    	                    </div>
 			    	                </g:if>
 		                        	<g:if test="${testInstance.GetFlightTestLandingToLatePoints() > 0}">
-				                        <div>
-			        	                	<g:checkBox name="flightTestLandingTooLate" value="${testInstance.flightTestLandingTooLate}"/>
-											<label>${message(code:'fc.flighttest.landingtolate')}</label>
-			    	                    </div>
+                                        <g:if test="${show_landingtolate}">
+					                        <div>
+				        	                	<g:checkBox name="flightTestLandingTooLate" value="${testInstance.flightTestLandingTooLate}"/>
+												<label>${message(code:'fc.flighttest.landingtolate')}</label>
+				    	                    </div>
+                                        </g:if>
 			    	                </g:if>
 		                        	<g:if test="${testInstance.GetFlightTestGivenToLatePoints() > 0}">
 				                        <div>
@@ -328,6 +367,36 @@
 											<label>${message(code:'fc.flighttest.giventolate')}</label>
 			    	                    </div>
 			    	                </g:if>
+                                    <g:if test="${testInstance.GetFlightTestSafetyAndRulesInfringementPoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="flightTestSafetyAndRulesInfringement" value="${testInstance.flightTestSafetyAndRulesInfringement}"/>
+                                            <label>${message(code:'fc.flighttest.safetyandrulesinfringement')}</label>
+                                        </div>
+                                    </g:if>
+                                    <g:if test="${testInstance.GetFlightTestInstructionsNotFollowedPoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="flightTestInstructionsNotFollowed" value="${testInstance.flightTestInstructionsNotFollowed}"/>
+                                            <label>${message(code:'fc.flighttest.instructionsnotfollowed')}</label>
+                                        </div>
+                                    </g:if>
+                                    <g:if test="${testInstance.GetFlightTestFalseEnvelopeOpenedPoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="flightTestFalseEnvelopeOpened" value="${testInstance.flightTestFalseEnvelopeOpened}"/>
+                                            <label>${message(code:'fc.flighttest.falseenvelopeopened')}</label>
+                                        </div>
+                                    </g:if>
+                                    <g:if test="${testInstance.GetFlightTestSafetyEnvelopeOpenedPoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="flightTestSafetyEnvelopeOpened" value="${testInstance.flightTestSafetyEnvelopeOpened}"/>
+                                            <label>${message(code:'fc.flighttest.safetyenvelopeopened')}</label>
+                                        </div>
+                                    </g:if>
+                                    <g:if test="${testInstance.GetFlightTestFrequencyNotMonitoredPoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="flightTestFrequencyNotMonitored" value="${testInstance.flightTestFrequencyNotMonitored}"/>
+                                            <label>${message(code:'fc.flighttest.frequencynotmonitored')}</label>
+                                        </div>
+                                    </g:if>
 		                        </p>
                                 <p>
                                     <label>${message(code:'fc.flighttest.otherpenalties')}* [${message(code:'fc.points')}]:</label>
@@ -366,6 +435,36 @@
                                         <td>${testInstance.GetFlightTestGivenToLatePoints()} ${message(code:'fc.points')}</td>
                                 	</tr>
                                 </g:if>
+                                <g:if test="${testInstance.flightTestSafetyAndRulesInfringement}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.flighttest.safetyandrulesinfringement')}:</td>
+                                        <td>${testInstance.GetFlightTestSafetyAndRulesInfringementPoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.flightTestInstructionsNotFollowed}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.flighttest.instructionsnotfollowed')}:</td>
+                                        <td>${testInstance.GetFlightTestInstructionsNotFollowedPoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.flightTestFalseEnvelopeOpened}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.flighttest.falseenvelopeopened')}:</td>
+                                        <td>${testInstance.GetFlightTestFalseEnvelopeOpenedPoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.flightTestSafetyEnvelopeOpened}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.flighttest.safetyenvelopeopened')}:</td>
+                                        <td>${testInstance.GetFlightTestSafetyEnvelopeOpenedPoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.flightTestFrequencyNotMonitored}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.flighttest.frequencynotmonitored')}:</td>
+                                        <td>${testInstance.GetFlightTestFrequencyNotMonitoredPoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
                                 <g:if test="${testInstance.flightTestOtherPenalties > 0}">
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.flighttest.otherpenalties')}:</td>
@@ -386,18 +485,36 @@
                                     <td colspan="2">
                                         <g:if test="${!testInstance.flightTestComplete}">
                                             <g:if test="${testInstance.flightTestCheckPointsComplete}">
-                                                <g:actionSubmit action="flightresultscomplete" value="${message(code:'fc.flightresults.complete')}" tabIndex="2"/>
-					                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" tabIndex="3"/>
+                                                <g:if test="${params.next}">
+                                                    <g:actionSubmit action="flightresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="2"/>
+                                                </g:if>
+                                                <g:actionSubmit action="flightresultsready" value="${message(code:'fc.results.ready')}" tabIndex="3"/>
+					                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" tabIndex="4"/>
                                             </g:if>
-                                            <g:actionSubmit action="importresults" value="${message(code:'fc.flightresults.aflosimport')}" tabIndex="4"/>
-                                            <g:actionSubmit action="viewimporterrors" value="${message(code:'fc.flightresults.viewimporterrors')}" tabIndex="5"/>
-                                            <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" tabIndex="6"/>
+                                            <g:elseif test="${params.next}">
+                                                <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
+                                            </g:elseif>
+                                            <g:actionSubmit action="importresults" value="${message(code:'fc.flightresults.aflosimport')}" tabIndex="5"/>
+                                            <g:actionSubmit action="viewimporterrors" value="${message(code:'fc.flightresults.viewimporterrors')}" tabIndex="6"/>
+                                            <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" tabIndex="7"/>
+                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" tabIndex="8"/>
+                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="9"/>
+                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="10"/>
                                         </g:if>
                                         <g:else>
-                                            <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.flightresults.reopen')}" tabIndex="7"/>
+                                            <g:if test="${params.next}">
+                                                <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
+                                            </g:if>
+                                            <g:else>
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+                                            </g:else>
+                                            <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="4"/>
+                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" tabIndex="5"/>
+	                                        <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="6"/>
+	                                        <g:if test="${params.next}">
+	                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="7"/>
+	                                        </g:if>
                                         </g:else>
-				                        <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" tabIndex="8"/>
-			                        	<g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="9"/>
                                     </td>
                                 </tr>
                             </tfoot>

@@ -12,6 +12,9 @@ class RouteLeg
 	BigDecimal measureDistance         // mm, Entfernung bis zum letzten TP/SP
 	BigDecimal legMeasureDistance      // mm
 	BigDecimal legDistance             // NM
+	
+	Integer legDuration                // min, DB-2.3
+	Boolean noTimeCheck = false        // DB-2.3
 
     static constraints = {
 		title(nullable:true)
@@ -21,6 +24,10 @@ class RouteLeg
 		measureDistance(nullable:true,range:0..<10000,scale:10)
 		legMeasureDistance(nullable:true,range:0..<10000,scale:10)
 		legDistance(nullable:true,scale:10)
+		
+		// DB-2.3 compatibility
+		legDuration(nullable:true)
+		noTimeCheck(nullable:true)
     }
 
 	void CopyValues(RouteLeg routeLegInstance)

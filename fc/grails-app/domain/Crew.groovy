@@ -34,6 +34,7 @@ class Crew
     int contestPosition = 0
 	Boolean noContestPosition = false         // DB-2.1
 	Integer classPosition = 0                 // DB-2.1
+	Boolean noClassPosition = false           // DB-2.3
 	
 	static belongsTo = [contest:Contest]
 
@@ -51,6 +52,9 @@ class Crew
 		
 		// DB-2.2 compatibility
 		startNum(nullable:true,min:1)
+		
+		// DB-2.3 compatibility
+		noClassPosition(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)

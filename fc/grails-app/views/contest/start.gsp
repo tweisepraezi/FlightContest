@@ -24,6 +24,10 @@
                                         <td>${fieldValue(bean:contestInstance, field:'title')}</td>
                                     </tr>
                                     <tr>
+                                        <td class="detailtitle">${message(code:'fc.titleprintprefix')}:</td>
+                                        <td>${fieldValue(bean:contestInstance, field:'printPrefix')}</td>
+                                    </tr>
+                                    <tr>
                                     	<td class="detailtitle">${message(code:'fc.resultclasses')}:</td>
                                     	<td><g:if test="${contestInstance.resultClasses}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
                                     </tr>
@@ -42,6 +46,10 @@
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.teamcrewnum')}:</td>
                                         <td>${fieldValue(bean:contestInstance, field:'teamCrewNum')}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.bestofanalysistasknum')}:</td>
+                                        <td>${fieldValue(bean:contestInstance, field:'bestOfAnalysisTaskNum')}</td>
                                     </tr>
                                     <g:if test="${!contestInstance.aflosTest}">
 	                                    <tr>

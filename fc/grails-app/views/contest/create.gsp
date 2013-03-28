@@ -24,6 +24,11 @@
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}" tabIndex="1"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.titleprintprefix')}:</label>
+                                <br/>
+                                <input type="text" id="printPrefix" name="printPrefix" value="${fieldValue(bean:contestInstance,field:'printPrefix')}" tabIndex="2"/>
+                            </p>
+                            <p>
                                 <div>
 	                               	<g:checkBox name="resultClasses" value="${contestInstance.resultClasses}" />
     	                            <label>${message(code:'fc.resultclasses')}</label>
@@ -32,22 +37,27 @@
                             <p>
                                 <label>${message(code:'fc.contestrule')}*:</label>
                                 <br/>
-                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" tabIndex="2"/>
+                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" tabIndex="3"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.scale')}*:</label>
                                 <br/>
-                                <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:contestInstance,field:'mapScale')}" tabIndex="3"/>
+                                <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:contestInstance,field:'mapScale')}" tabIndex="4"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.timezone')}* [${message(code:'fc.time.hmin')}]:</label>
                                 <br/>
-                                <input type="text" id="timeZone" name="timeZone" value="${fieldValue(bean:contestInstance,field:'timeZone')}" tabIndex="4"/>
+                                <input type="text" id="timeZone" name="timeZone" value="${fieldValue(bean:contestInstance,field:'timeZone')}" tabIndex="5"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.teamcrewnum')}*:</label>
                                 <br/>
-                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="5"/>
+                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="6"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.bestofanalysistasknum')}*:</label>
+                                <br/>
+                                <input type="text" id="bestOfAnalysisTaskNum" name="bestOfAnalysisTaskNum" value="${fieldValue(bean:contestInstance,field:'bestOfAnalysisTaskNum')}" tabIndex="7"/>
                             </p>
                             <p>
                                 <div>
@@ -56,8 +66,8 @@
                                 </div>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="6"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="7"/>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="8"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="9"/>
                     </g:form>
                 </div>
             </div>

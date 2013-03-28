@@ -1,7 +1,16 @@
 enum ContestRules 
 {
-	R1 ('fc.contestrule.de.rally.2012',      false,
+	R1 ('fc.contestrule.de.rally.2012',
 		[
+			// General
+			precisionFlying:false,
+			printPointsPlanningTest:true,
+			printPointsFlightTest:true,
+			printPointsLandingTest1:true,
+			printPointsLandingTest2:false,
+			printPointsLandingTest3:false,
+			printPointsLandingTest4:false,
+		
 			// PlanningTest
 			planningTestDirectionCorrectGrad:2,
 			planningTestDirectionPointsPerGrad:2,
@@ -13,6 +22,9 @@ enum ContestRules
 		
 			// FlightTest
 			flightTestTakeoffMissedPoints:200,
+			flightTestTakeoffCorrectSecond:60,
+			flightTestTakeoffCheckSeconds:false,
+			flightTestTakeoffPointsPerSecond:0,
 			flightTestCptimeCorrectSecond:2,
 			flightTestCptimePointsPerSecond:1,
 			flightTestCptimeMaxPoints:200,
@@ -24,7 +36,12 @@ enum ContestRules
 			flightTestBadCourseStartLandingPoints:500,
 			flightTestLandingToLatePoints:200,
 			flightTestGivenToLatePoints:100,
-			
+			flightTestSafetyAndRulesInfringementPoints:0,
+			flightTestInstructionsNotFollowedPoints:0,
+			flightTestFalseEnvelopeOpenedPoints:0,
+			flightTestSafetyEnvelopeOpenedPoints:0,
+			flightTestFrequencyNotMonitoredPoints:0,
+		
 			// LandingTest
 			landingTest1MaxPoints:300,
 			landingTest1NoLandingPoints:300,
@@ -71,8 +88,17 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}"
 		]
 	),
-	R2 ('fc.contestrule.de.precision.2005',  true,
+	R2 ('fc.contestrule.de.precision.2005',
 		[
+			// General
+			precisionFlying:true,
+			printPointsPlanningTest:true,
+			printPointsFlightTest:true,
+			printPointsLandingTest1:true,
+			printPointsLandingTest2:true,
+			printPointsLandingTest3:true,
+			printPointsLandingTest4:true,
+
 			// PlanningTest
 			planningTestDirectionCorrectGrad:2,
 			planningTestDirectionPointsPerGrad:2,
@@ -84,6 +110,9 @@ enum ContestRules
 		
 			// FlightTest
 			flightTestTakeoffMissedPoints:200,
+			flightTestTakeoffCorrectSecond:60,
+			flightTestTakeoffCheckSeconds:false,
+			flightTestTakeoffPointsPerSecond:0,
 			flightTestCptimeCorrectSecond:2,
 			flightTestCptimePointsPerSecond:3,
 			flightTestCptimeMaxPoints:200,
@@ -95,7 +124,12 @@ enum ContestRules
 			flightTestBadCourseStartLandingPoints:200,
 			flightTestLandingToLatePoints:200,
 			flightTestGivenToLatePoints:100,
-			
+			flightTestSafetyAndRulesInfringementPoints:0,
+			flightTestInstructionsNotFollowedPoints:0,
+			flightTestFalseEnvelopeOpenedPoints:0,
+			flightTestSafetyEnvelopeOpenedPoints:0,
+			flightTestFrequencyNotMonitoredPoints:0,
+
 			// LandingTest
 			landingTest1MaxPoints:400,
 			landingTest1NoLandingPoints:200,
@@ -142,8 +176,17 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}"
 		]
 	),
-	R3 ('fc.contestrule.fai.rally.2012',     false,
+	R3 ('fc.contestrule.fai.rally.2013',
 		[
+			// General
+			precisionFlying:false,
+			printPointsPlanningTest:false,
+			printPointsFlightTest:true,
+			printPointsLandingTest1:true,
+			printPointsLandingTest2:false,
+			printPointsLandingTest3:false,
+			printPointsLandingTest4:false,
+
 			// PlanningTest
 			planningTestDirectionCorrectGrad:2,
 			planningTestDirectionPointsPerGrad:2,
@@ -155,6 +198,9 @@ enum ContestRules
 		
 			// FlightTest
 			flightTestTakeoffMissedPoints:100,
+			flightTestTakeoffCorrectSecond:60,
+			flightTestTakeoffCheckSeconds:true,
+			flightTestTakeoffPointsPerSecond:3,
 			flightTestCptimeCorrectSecond:2,
 			flightTestCptimePointsPerSecond:3,
 			flightTestCptimeMaxPoints:100,
@@ -163,10 +209,15 @@ enum ContestRules
 			flightTestMinAltitudeMissedPoints:200,
 			flightTestBadCourseCorrectSecond:5,
 			flightTestBadCoursePoints:200,
-			flightTestBadCourseStartLandingPoints:200,
+			flightTestBadCourseStartLandingPoints:0,
 			flightTestLandingToLatePoints:0,
 			flightTestGivenToLatePoints:300,
-			
+			flightTestSafetyAndRulesInfringementPoints:600,
+			flightTestInstructionsNotFollowedPoints:200,
+			flightTestFalseEnvelopeOpenedPoints:100,
+			flightTestSafetyEnvelopeOpenedPoints:300,
+			flightTestFrequencyNotMonitoredPoints:200,
+
 			// LandingTest
 			landingTest1MaxPoints:300,
 			landingTest1NoLandingPoints:300,
@@ -213,8 +264,17 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}"
 		]
 	),
-	R4 ('fc.contestrule.fai.precision.2012', true,
+	R4 ('fc.contestrule.fai.precision.2013',
 		[
+			// General
+			precisionFlying:true,
+			printPointsPlanningTest:true,
+			printPointsFlightTest:true,
+			printPointsLandingTest1:true,
+			printPointsLandingTest2:true,
+			printPointsLandingTest3:true,
+			printPointsLandingTest4:true,
+
 			// PlanningTest
 			planningTestDirectionCorrectGrad:2,
 			planningTestDirectionPointsPerGrad:2,
@@ -226,6 +286,9 @@ enum ContestRules
 		
 			// FlightTest
 			flightTestTakeoffMissedPoints:200,
+			flightTestTakeoffCorrectSecond:60,
+			flightTestTakeoffCheckSeconds:false,
+			flightTestTakeoffPointsPerSecond:0,
 			flightTestCptimeCorrectSecond:2,
 			flightTestCptimePointsPerSecond:3,
 			flightTestCptimeMaxPoints:100,
@@ -237,7 +300,12 @@ enum ContestRules
 			flightTestBadCourseStartLandingPoints:200,
 			flightTestLandingToLatePoints:200,
 			flightTestGivenToLatePoints:100,
-			
+			flightTestSafetyAndRulesInfringementPoints:0,
+			flightTestInstructionsNotFollowedPoints:0,
+			flightTestFalseEnvelopeOpenedPoints:0,
+			flightTestSafetyEnvelopeOpenedPoints:0,
+			flightTestFrequencyNotMonitoredPoints:0,
+
 			// LandingTest
 			landingTest1MaxPoints:400,
 			landingTest1NoLandingPoints:300,
@@ -284,8 +352,17 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}"
 		]
 	),
-	R5 ('fc.contestrule.ch.precision.2009',  true,
+	R5 ('fc.contestrule.ch.precision.2009',
 		[
+			// General
+			precisionFlying:true,
+			printPointsPlanningTest:true,
+			printPointsFlightTest:true,
+			printPointsLandingTest1:true,
+			printPointsLandingTest2:true,
+			printPointsLandingTest3:true,
+			printPointsLandingTest4:true,
+
 			// PlanningTest
 			planningTestDirectionCorrectGrad:2,
 			planningTestDirectionPointsPerGrad:2,
@@ -297,6 +374,9 @@ enum ContestRules
 		
 			// FlightTest
 			flightTestTakeoffMissedPoints:200,
+			flightTestTakeoffCorrectSecond:60,
+			flightTestTakeoffCheckSeconds:false,
+			flightTestTakeoffPointsPerSecond:0,
 			flightTestCptimeCorrectSecond:2,
 			flightTestCptimePointsPerSecond:3,
 			flightTestCptimeMaxPoints:200,
@@ -308,7 +388,12 @@ enum ContestRules
 			flightTestBadCourseStartLandingPoints:200,
 			flightTestLandingToLatePoints:200,
 			flightTestGivenToLatePoints:100,
-			
+			flightTestSafetyAndRulesInfringementPoints:0,
+			flightTestInstructionsNotFollowedPoints:0,
+			flightTestFalseEnvelopeOpenedPoints:0,
+			flightTestSafetyEnvelopeOpenedPoints:0,
+			flightTestFrequencyNotMonitoredPoints:0,
+
 			// LandingTest
 			landingTest1MaxPoints:400,
 			landingTest1NoLandingPoints:200,
@@ -356,14 +441,12 @@ enum ContestRules
 		]
 	)
 
-	ContestRules(String titleCode, boolean precisionFlying, Map ruleValues) 
+	ContestRules(String titleCode, Map ruleValues) 
 	{
 		this.titleCode = titleCode
-		this.precisionFlying = precisionFlying
 		this.ruleValues = ruleValues
 	}
 	
 	final String titleCode
-	final boolean precisionFlying
 	final Map ruleValues
 }

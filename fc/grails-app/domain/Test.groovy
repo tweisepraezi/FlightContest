@@ -8,6 +8,7 @@ class Test
 	
 	int viewpos = 0
 	BigDecimal taskTAS = 0
+	Aircraft taskAircraft                                  // DB-2.3
 	
 	// planning
 	boolean timeCalculated = false
@@ -40,6 +41,11 @@ class Test
 	boolean flightTestBadCourseStartLanding = false
 	boolean flightTestLandingTooLate = false
     boolean flightTestGivenTooLate = false
+	Boolean flightTestSafetyAndRulesInfringement = false   // DB-2.3
+	Boolean flightTestInstructionsNotFollowed = false      // DB-2.3
+	Boolean flightTestFalseEnvelopeOpened = false          // DB-2.3
+	Boolean flightTestSafetyEnvelopeOpened = false         // DB-2.3
+	Boolean flightTestFrequencyNotMonitored = false        // DB-2.3
     int     flightTestOtherPenalties = 0                   // DB-2.0
     int     flightTestPenalties = 0
     boolean flightTestComplete = false
@@ -116,12 +122,13 @@ class Test
     int taskPosition = 0
     
 	// transient values 
-	static transients = ['printPlanningResults','printFlightResults','printObservationResults','printLandingResults','printSpecialResults']
+	static transients = ['printPlanningResults','printFlightResults','printObservationResults','printLandingResults','printSpecialResults','printProvisionalResults',]
 	boolean printPlanningResults = true
 	boolean printFlightResults = true
 	boolean printObservationResults = true
 	boolean printLandingResults = true
 	boolean printSpecialResults = true
+	boolean printProvisionalResults = false
 	
 	static belongsTo = [task:Task]
 	
@@ -136,6 +143,14 @@ class Test
 		flightTestOtherPenalties(min:0)
 		landingTestOtherPenalties(min:0)
 		landingTestPenalties(min:0)
+		
+		// DB-2.3 compatibility
+		taskAircraft(nullable:true)
+		flightTestSafetyAndRulesInfringement(nullable:true)
+		flightTestInstructionsNotFollowed(nullable:true)
+		flightTestFalseEnvelopeOpened(nullable:true)
+		flightTestSafetyEnvelopeOpened(nullable:true)
+		flightTestFrequencyNotMonitored(nullable:true)
     }
 
 	static mapping = {
@@ -162,6 +177,11 @@ class Test
 		flightTestBadCourseStartLanding = false
 		flightTestLandingTooLate = false
 		flightTestGivenTooLate = false
+		flightTestSafetyAndRulesInfringement = false
+		flightTestInstructionsNotFollowed = false
+		flightTestFalseEnvelopeOpened = false
+		flightTestSafetyEnvelopeOpened = false
+		flightTestFrequencyNotMonitored = false
 		flightTestPenalties = 0
 		flightTestComplete = false
 	}
@@ -267,6 +287,7 @@ class Test
 		crew.contestPosition = 0
 		crew.noContestPosition = false
 		crew.classPosition = 0
+		crew.noClassPosition = false
 		crew.teamPenalties = 0
 		if (crew.team) {
 			crew.team.contestPenalties = 0
@@ -405,11 +426,11 @@ class Test
 	{
 		if (task.contest.resultClasses) {
 			if (crew.resultclass) {
-				return crew.resultclass?.contestRule.precisionFlying
+				return crew.resultclass.precisionFlying
 			}
 			return false
 		}
-		return task.contest?.contestRule.precisionFlying
+		return task.contest.precisionFlying
 	}
 	
 	boolean IsSpecialTestRun()
@@ -452,6 +473,48 @@ class Test
 			return false
 		}
 		return task.planningTestDirectionMeasure
+	}
+
+	boolean IsFlightTestCheckSecretPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+				if (taskclass_instance) {
+					return taskclass_instance.flightTestCheckSecretPoints
+				}
+			}
+			return false
+		}
+		return task.flightTestCheckSecretPoints
+	}
+
+	boolean IsFlightTestCheckTakeOff()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+				if (taskclass_instance) {
+					return taskclass_instance.flightTestCheckTakeOff
+				}
+			}
+			return false
+		}
+		return task.flightTestCheckTakeOff
+	}
+
+	boolean IsFlightTestCheckLanding()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+				if (taskclass_instance) {
+					return taskclass_instance.flightTestCheckLanding
+				}
+			}
+			return false
+		}
+		return task.flightTestCheckLanding
 	}
 
 	Map GetResultSettings()
@@ -506,9 +569,11 @@ class Test
 		return penalties
 	}
 	
-	boolean AreResultsProvisional(Map resultSettings)
+	boolean IsTestResultsProvisional(Map resultSettings)
 	{
-		//println "XX Test.AreResultsProvisional $crew.name $resultSettings"
+		if (printProvisionalResults) {
+			return true
+		}
 		boolean provisional = false
 		if (resultSettings["Planning"]) {
 			if (printPlanningResults && IsPlanningTestRun()) {
@@ -545,20 +610,16 @@ class Test
 				}
 			}
 		}
-		//println "-> $provisional (Test.AreResultsProvisional)"
 		return provisional
 	}
 
-	boolean AreClassResultsProvisional(Map resultSettings, ResultClass resultclassInstance)
+	boolean IsTestClassResultsProvisional(Map resultSettings, ResultClass resultclassInstance)
 	{
-		//println "XX Test.AreClassResultsProvisional $resultclassInstance.name $crew.name $resultSettings"
 		if (crew.resultclass == resultclassInstance) {
-			if (AreResultsProvisional(resultSettings)) {
-				//println "-> true (Test.AreClassResultsProvisional)"
+			if (IsTestResultsProvisional(resultSettings)) {
 				return true
 			}
 		}
-		//println "-> false (Test.AreClassResultsProvisional)"
 		return false
 	}
 	
@@ -640,6 +701,37 @@ class Test
 			}
 		}
 		return task.contest.flightTestTakeoffMissedPoints
+	}
+	
+	int GetFlightTestTakeoffCorrectSecond()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestTakeoffCorrectSecond
+			}
+		}
+		return task.contest.flightTestTakeoffCorrectSecond
+	}
+	
+	boolean GetFlightTestTakeoffCheckSeconds()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestTakeoffCheckSeconds && (crew.resultclass.flightTestTakeoffPointsPerSecond > 0)
+			}
+			return false
+		}
+		return task.contest.flightTestTakeoffCheckSeconds && (task.contest.flightTestTakeoffPointsPerSecond > 0)
+	}
+	
+	int GetFlightTestTakeoffPointsPerSecond()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestTakeoffPointsPerSecond
+			}
+		}
+		return task.contest.flightTestTakeoffPointsPerSecond
 	}
 	
 	int GetFlightTestCptimeCorrectSecond()
@@ -750,6 +842,56 @@ class Test
 			}
 		}
 		return task.contest.flightTestGivenToLatePoints
+	}
+	
+	int GetFlightTestSafetyAndRulesInfringementPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestSafetyAndRulesInfringementPoints
+			}
+		}
+		return task.contest.flightTestSafetyAndRulesInfringementPoints
+	}
+	
+	int GetFlightTestInstructionsNotFollowedPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestInstructionsNotFollowedPoints
+			}
+		}
+		return task.contest.flightTestInstructionsNotFollowedPoints
+	}
+	
+	int GetFlightTestFalseEnvelopeOpenedPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestFalseEnvelopeOpenedPoints
+			}
+		}
+		return task.contest.flightTestFalseEnvelopeOpenedPoints
+	}
+	
+	int GetFlightTestSafetyEnvelopeOpenedPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestSafetyEnvelopeOpenedPoints
+			}
+		}
+		return task.contest.flightTestSafetyEnvelopeOpenedPoints
+	}
+	
+	int GetFlightTestFrequencyNotMonitoredPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestFrequencyNotMonitoredPoints
+			}
+		}
+		return task.contest.flightTestFrequencyNotMonitoredPoints
 	}
 	
 	int GetLandingTest1MaxPoints()
@@ -1150,6 +1292,45 @@ class Test
 			}
 		}
 		return task.contest.landingTest4PenaltyCalculator
+	}
+
+	boolean IsSpecialTestTitle()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+				if (taskclass_instance) {
+					if (taskclass_instance.specialTestTitle) {
+						return true
+					}
+				}
+			}
+		} else {
+			if (task.specialTestTitle) { 
+				return true
+			}
+		}
+		return false
+	}
+
+	String GetSpecialTestTitle()
+	{
+		String print_title = getMsg('fc.specialresults')
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+				if (taskclass_instance) {
+					if (taskclass_instance.specialTestTitle) {
+						print_title = taskclass_instance.specialTestTitle
+					}
+				}
+			}
+		} else {
+			if (task.specialTestTitle) { 
+				print_title = task.specialTestTitle
+			}
+		}
+		return "${print_title}"
 	}
 
 	int GetViewPos()

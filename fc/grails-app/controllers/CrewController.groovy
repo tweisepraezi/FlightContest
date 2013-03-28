@@ -23,10 +23,10 @@ class CrewController {
 			session.resultclassReturnAction = actionName
 			session.resultclassReturnController = controllerName
 			session.resultclassReturnID = params.id
-            def crewList = Crew.findAllByContest(session.lastContest, [sort:'viewpos'])
-			def activeCrewList = Crew.findAllByContestAndDisabled(session.lastContest, false, [sort:'viewpos'])
+            def crew_list = Crew.findAllByContest(session.lastContest, [sort:'viewpos'])
+			def active_crew_list = Crew.findAllByContestAndDisabled(session.lastContest, false, [sort:'viewpos'])
 			fcService.printdone "last contest"
-            return [crewInstanceList:crewList,activeCrewInstanceList:activeCrewList,resultClasses:session.lastContest.resultClasses]
+            return [crewList:crew_list,activeCrewList:active_crew_list,resultClasses:session.lastContest.resultClasses]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -46,6 +46,14 @@ class CrewController {
         }
     }
 
+	def editprintsettings = {
+		if (session.lastContest) {
+			return [contestInstance:session.lastContest]
+        } else {
+            redirect(action:list)
+        }
+	}
+	
     def update = {
         def crew = fcService.updateCrew(params) 
         if (crew.saved) {
@@ -64,6 +72,54 @@ class CrewController {
         }
     }
 
+    def updateprintsettings = {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.Modified,session.printLanguage) 
+        if (contest.saved) {
+        	flash.message = contest.message
+			// process return action
+			if (params.crewReturnAction) {
+				redirect(action:params.crewReturnAction,controller:params.crewReturnController,id:params.crewReturnID)
+			} else {
+        		redirect(action:list)
+			}
+        } else if (contest.instance) {
+			render(view:'editprintsettings',model:[contestInstance:contest.instance])
+        } else {
+			flash.message = contest.message
+			redirect(action:edit,id:params.id)
+        }
+    }
+
+	def updateprintsettingsstandard = {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.Standard,session.printLanguage) 
+        if (contest.saved) {
+			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
+		} else {
+			flash.message = contest.message
+			redirect(controller:"contest",action:"crews")
+		}
+	}
+	
+	def updateprintsettingsnone = {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.None,session.printLanguage) 
+        if (contest.saved) {
+			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
+		} else {
+			flash.message = contest.message
+			redirect(controller:"contest",action:"crews")
+		}
+	}
+	
+	def updateprintsettingsall = {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.All,session.printLanguage) 
+        if (contest.saved) {
+			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
+		} else {
+			flash.message = contest.message
+			redirect(controller:"contest",action:"crews")
+		}
+	}
+	
     def create = {
         def crew = fcService.createCrew(params)
 		crew.instance.startNum = Crew.countByContest(session.lastContest) + 1
@@ -139,8 +195,8 @@ class CrewController {
 			session.lastContest = Contest.get(params.contestid)
 		}
 		if (session?.lastContest) {
-            def crewList = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
-            return [crewInstanceList:crewList,resultClasses:session.lastContest.resultClasses]
+            def crew_list = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
+            return [crewList:crew_list,contestInstance:session.lastContest,resultClasses:session.lastContest.resultClasses]
         }
         return [:]
     }
@@ -152,7 +208,7 @@ class CrewController {
             flash.error = true
             redirect(action:list)
         } else if (crews.content) {
-            fcService.WritePDF(response,crews.content)
+            fcService.WritePDF(response,crews.content,session.lastContest.GetPrintPrefix(),"crews")
         } else {
             redirect(action:list)
         }

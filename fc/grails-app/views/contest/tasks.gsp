@@ -16,12 +16,14 @@
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="3" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                            <th colspan="5" class="table-head">${message(code:'fc.contest.tasks')}</th>
                         </tr>
                         <tr>
                             <th>${message(code:'fc.task')}</th>
                             <th>${message(code:'fc.planningtest')}</th>
                             <th>${message(code:'fc.flighttest')}</th>
+                            <th>${message(code:'fc.task.listplanning')}</th>
+                            <th>${message(code:'fc.task.listresults')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +41,20 @@
                                     <td colspan=1><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
                                 </g:if> <g:else>
                                     <td class="add" colspan=1><g:link controller="flightTest" params="['task.id':taskInstance?.id,'taskid':taskInstance?.id]" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
+                                </g:else>
+                                
+                                <g:if test="${taskInstance.hidePlanning}">
+                                    <td>${message(code:'fc.hided')}</td>
+                                </g:if>
+                                <g:else>
+                                    <td/>
+                                </g:else>
+                                
+                                <g:if test="${taskInstance.hideResults}">
+                                    <td>${message(code:'fc.hided')}</td>
+                                </g:if>
+                                <g:else>
+                                    <td/>
                                 </g:else>
                             </tr>
                         </g:each>

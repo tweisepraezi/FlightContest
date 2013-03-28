@@ -320,7 +320,139 @@ class ContestController {
         session.lastTeamResults = null
         redirect(action:start)
     }
-        
+
+	def selectfilename_imageleft = {
+		redirect(action:selectimagefilename,params:['imageField':'imageLeft'])
+	}
+	
+	def selectfilename_imagecenter = {
+		redirect(action:selectimagefilename,params:['imageField':'imageCenter'])
+	}
+	
+	def selectfilename_imageright = {
+		redirect(action:selectimagefilename,params:['imageField':'imageRight'])
+	}
+	
+	def selectimagefilename = {
+		[:]
+    }
+	
+	def loadimage = {
+		load_image(params) 
+		redirect(action:edit)
+	}
+	
+	void load_image(Map params) 
+	{
+		def file = request.getFile('imagefile')
+		if (file && !file.empty) {
+			String file_name = file.getOriginalFilename()
+			fcService.printstart "Upload '$file_name' to '$params.imageField'"
+			if (file.size <= Contest.IMAGEMAXSIZE) {
+				fcService.println file.getContentType() // "image/jpeg"
+				if (file_name.toLowerCase().endsWith('.jpg')) {
+					session.lastContest.(params.imageField) = file.bytes
+					session.lastContest.save()
+					fcService.printdone ""
+				} else {
+					flash.error = true
+					flash.message = message(code:'fc.notimported.image',args:[file_name])
+					fcService.printerror flash.message
+				}
+			} else {
+				flash.error = true
+				flash.message = message(code:'fc.notimported.image.size',args:[file_name,file.size,Contest.IMAGEMAXSIZE])
+				fcService.printerror flash.message
+			}
+		}
+	}
+	
+	def deleteimage_imageleft = {
+		delete_image(['imageField':'imageLeft','imageFieldHeight':'imageLeftHeight'])
+		redirect(action:edit)
+	}
+	
+	def deleteimage_imagecenter = {
+		delete_image(['imageField':'imageCenter','imageFieldHeight':'imageCenterHeight'])
+		redirect(action:edit)
+	}
+	
+	def deleteimage_imageright = {
+		delete_image(['imageField':'imageRight','imageFieldHeight':'imageRightHeight'])
+		redirect(action:edit)
+	}
+	
+	void delete_image(Map params)
+	{
+		fcService.printstart "Delete '$params.imageField'"
+		session.lastContest.(params.imageField) = null
+		session.lastContest.(params.imageFieldHeight) = Contest.IMAGEHEIGHT
+		session.lastContest.save()
+		fcService.printdone ""
+	}   
+	
+	def actualimage_imageleft = {
+		actual_image(['imageFieldHeight':'imageLeftHeight','imageHeight':params.imageLeftHeight])
+		redirect(action:edit)
+	}
+	
+	def actualimage_imagecenter = {
+		actual_image(['imageFieldHeight':'imageCenterHeight','imageHeight':params.imageCenterHeight])
+		redirect(action:edit)
+	}
+	
+	def actualimage_imageright = {
+		actual_image(['imageFieldHeight':'imageRightHeight','imageHeight':params.imageRightHeight])
+		redirect(action:edit)
+	}
+	
+	void actual_image(Map params)
+	{
+		fcService.printstart "Actual '$params.imageFieldHeight'"
+		if (params.imageHeight.isInteger()) {
+			session.lastContest.(params.imageFieldHeight) = params.imageHeight.toInteger()
+		}
+		session.lastContest.save()
+		fcService.printdone ""
+	}   
+	
+	def actual_titelsize = {
+		fcService.printstart "Actual 'titleSize'"
+		session.lastContest.titleSize = params.titleSize
+		session.lastContest.save()
+		fcService.printdone ""
+		redirect(action:edit)
+	}
+	
+	def reset_titlesize = {
+		fcService.printstart "Reset 'titleSize'"
+		session.lastContest.titleSize = Contest.TITLESIZE
+		session.lastContest.save()
+		fcService.printdone ""
+		redirect(action:edit)
+	}
+	
+	def view_image_left = {
+		if (params.contestid) {
+	        Contest contest = Contest.get(params.contestid)
+			response.outputStream << contest.imageLeft
+		}
+	}
+	     
+	def view_image_center = {
+		if (params.contestid) {
+	        Contest contest = Contest.get(params.contestid)
+			response.outputStream << contest.imageCenter
+		}
+	}
+	     
+	def view_image_right = {
+		if (params.contestid) {
+	        Contest contest = Contest.get(params.contestid)
+			response.outputStream << contest.imageRight
+		}
+	}
+	     
     def cancel = {
         // process return action
         if (params.positionsReturnAction) {
@@ -390,7 +522,7 @@ class ContestController {
     }
 
     def calculatepositions = {
-        def contest = fcService.calculatecontestpositionsContest(session.lastContest,[],[]) 
+        def contest = fcService.calculatecontestpositionsContest(session.lastContest,[],[],[])
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -407,6 +539,50 @@ class ContestController {
         redirect(action:"listteamresults")
     }
 
+    def printtest = {
+        if (session?.lastContest) {
+            def contest = fcService.printtestContest(session.lastContest,false,GetPrintParams()) 
+            if (contest.error) {
+                flash.message = contest.message
+                   flash.error = true
+                redirect(controller:"contest",action:"listresults")
+            } else if (contest.content) {
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test-normal")
+            } else {
+                redirect(action:start)
+            }
+        } else {
+            redirect(action:start)
+        }
+    }
+    
+    def printtest_landscape = {
+        if (session?.lastContest) {
+            def contest = fcService.printtestContest(session.lastContest,true,GetPrintParams()) 
+            if (contest.error) {
+                flash.message = contest.message
+                   flash.error = true
+                redirect(controller:"contest",action:"listresults")
+            } else if (contest.content) {
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test-landscape")
+            } else {
+                redirect(action:start)
+            }
+        } else {
+            redirect(action:start)
+        }
+    }
+    
+    def listtestprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
+            return [contestInstance:session.lastContest]
+        } else {
+            redirect(action:start)
+        }
+    }
+
     def printresults = {
         if (session?.lastContest) {
             def contest = fcService.printresultsContest(session.lastContest,GetPrintParams()) 
@@ -415,7 +591,7 @@ class ContestController {
                    flash.error = true
                 redirect(controller:"contest",action:"listresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content)
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"contestresults")
             } else {
                 redirect(action:start)
             }
@@ -442,7 +618,7 @@ class ContestController {
                    flash.error = true
                 redirect(action:"listteamresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content)
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"teamresults")
             } else {
                 redirect(action:start)
             }
@@ -487,7 +663,7 @@ class ContestController {
                    flash.error = true
                 redirect(action:"editpoints")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content)
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points")
             } else {
                 redirect(action:"editpoints")
             }
@@ -512,14 +688,18 @@ class ContestController {
                ]
     }
     
-    int create_test1(String testName, boolean testExists) 
+    int create_test1(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,200000,false,2,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"20. Februar 2012","09:00",3,8,10,15,true,true,true,true,false, false,true, true,true,true,true)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,true,testExists)
+        Map task1 = fcService.putTask(contest,"20. Februar ${Contest.DEMOCONTESTYEAR}","09:00",3,8,10,15,true,true,true,true,false, false,true, true,true,true, true,true,true,true, false)
 
+		// Teams
+		Map team1 = fcService.putTeam(contest,"Deutschland")
+		Map team2 = fcService.putTeam(contest,"Schweiz")
+		
         // Crews and Aircrafts
         Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","K1","D-EAAA","","",85)
         Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","K1","D-EAAD","","",80)
@@ -530,23 +710,6 @@ class ContestController {
         // Route
         fcService.printstart "Route"
 		Map route1 = fcService.importRoute(contest,"Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
-		/*
-        Map route1 = fcService.putRoute(contest,"Strecke 1","Strecke 1")
-        fcService.putCoordRoute(route1,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
-        fcService.putCoordRoute(route1,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
-        fcService.putCoordRoute(route1,CoordType.SECRET,1,'CP1', 'N',52, 5.121,'E',14, 6.679,500,2,  99.0,  89.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    1,'CP2', 'N',52, 5.223,'E',14,15.555,500,1, 150.0,  89.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,2,'CP3', 'N',52, 1.367,'E',14,10.417,500,2,  46.0, 219.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    2,'CP4', 'N',51,51.719,'E',13,57.662,500,1, 161.5, 219.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,3,'CP5', 'N',51,44.633,'E',14, 1.635,500,2,  68.5, 161.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    3,'CP6', 'N',51,38.847,'E',14, 4.857,500,1, 125.0, 161.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,4,'CP7', 'N',51,38.983,'E',14, 8.299,500,2,  19.5,  86.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    4,'CP8', 'N',51,39.535,'E',14,23.4,  500,1, 106.45, 86.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,5,'CP9', 'N',51,38.02, 'E',14,19.606,500,2,  25.5, 237.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
-        fcService.putCoordRoute(route1,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
-        fcService.putCoordRoute(route1,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
-        */
         fcService.printdone ""
         
         // Planning Test
@@ -627,6 +790,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew4,
                                                   startNum:11,
@@ -634,6 +802,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew5,
                                                   startNum:13,
@@ -641,6 +814,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew3,
                                                   startNum:19,
@@ -648,6 +826,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew2,
                                                   startNum:18,
@@ -655,29 +838,13 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                 ])
-        /*                       
-        fcService.putflightresultsTask(task1,  [[crew:crew1,
-                                                 takeoffMissed:false,
-                                                 badCourseStartLanding:false,
-                                                 landingTooLate:false,
-                                                 givenTooLate:false,
-                                                 givenValues:[[cpTime:"12:25:00",altitude:1001],
-                                                              [cpTime:"12:28:03",altitude:1001],
-                                                              [cpTime:"12:28:55",altitude:1001],
-                                                              [cpTime:"12:31:09",altitude:1001],
-                                                              [cpTime:"12:34:29",altitude:1001],
-                                                              [cpTime:"12:36:13",altitude:1001],
-                                                              [cpNotFound:true],
-                                                              [cpTime:"12:42:52",altitude:401],
-                                                              [cpTime:"12:45:10",altitude:1001],
-                                                              [cpTime:"12:46:03",altitude:1001],
-                                                              [cpTime:"12:51:12",altitude:1001]],
-                                                 testComplete:true],
-                                               ]
-                                      )
-        */
         fcService.putobservationresultsTask(task1, [
                                                     [crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
                                                     [crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -685,15 +852,6 @@ class ContestController {
                                                     [crew:crew4,routePhotos:0,turnPointPhotos:0,groundTargets:0,testComplete:true],
                                                     [crew:crew5,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
                                                    ])
-        /*
-        fcService.putlandingresultsTask(task1, [
-                                                [crew:crew1,landingPenalties:140,testComplete:true],
-                                                [crew:crew2,landingPenalties:110,testComplete:true],
-                                                [crew:crew3,landingPenalties: 80,testComplete:true],
-                                                [crew:crew4,landingPenalties:130,testComplete:true],
-                                                [crew:crew5,landingPenalties: 70,testComplete:true],
-                                               ])
-        */
         fcService.putlandingresultsTask(task1, [
                                                 [crew:crew1,
                                                  landingTest1Measure:'B',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:true,
@@ -757,7 +915,7 @@ class ContestController {
                                                  testComplete:true],
                                                ])
         fcService.runcalculatepositionsTask(task1)
-        fcService.runcalculatecontestpositionsContest(contest,[],[task1])
+        fcService.runcalculatecontestpositionsContest(contest,[],[task1],[team1,team2])
         fcService.runcalculateteampositionsContest(contest,[],[task1])
 
         fcService.printdone ""
@@ -765,18 +923,22 @@ class ContestController {
 		return contest.instance.id
     }
     
-    int create_test2(String testName, boolean testExists) 
+    int create_test2(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,200000,true,2,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"20. Februar 2012","09:00",3,8,10,15,true,true,true,true,false, false,true, false,false,false,false)
+        Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,true,testExists)
+        Map task1 = fcService.putTask(contest,"20. Februar ${Contest.DEMOCONTESTYEAR}","09:00",3,8,10,15,true,true,true,true,false, false,true, true,true,true, false,false,false,false, false)
 
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"Pr\u00E4zi","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
         Map resultclass2 = fcService.putResultClass(contest,"Tourist","",ContestRules.R1)
         
+		// Teams
+		Map team1 = fcService.putTeam(contest,"Deutschland")
+		Map team2 = fcService.putTeam(contest,"Schweiz")
+		
         // Crews with Teams, ResultClasses and Aircrafts
         Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","Pr\u00E4zi","D-EAAA","","",85)
         Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","Tourist","D-EAAD","","",80)
@@ -788,32 +950,16 @@ class ContestController {
         Map team3 = fcService.putTeam(contest,'Polen')
         
         // TaskClass properties
-        fcService.puttaskclassTask(task1,resultclass1,true,true,false,false,false, false,true, true,true,true,true)
-        fcService.puttaskclassTask(task1,resultclass2,false,false,true,true,true, true,false, true,true,true,true)
+        fcService.puttaskclassTask(task1,resultclass1,true,true,false,false,false, false,true, true,true,true, true,true,true,true)
+        fcService.puttaskclassTask(task1,resultclass2,false,false,true,true,true, true,false, true,true,true, true,true,true,true)
 
         // additional class
         Map resultclass3 = fcService.putResultClass(contest,"Observer","",ContestRules.R1)
-        
+		fcService.puttaskclassTask(task1,resultclass3,true,true,true,true,false, false,true, true,true,true, false,false,false,false)
+		
         // Route
         fcService.printstart "Route"
 		Map route1 = fcService.importRoute(contest,"Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
-		/*
-        Map route1 = fcService.putRoute(contest,"Strecke 1","Strecke 1")
-        fcService.putCoordRoute(route1,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
-        fcService.putCoordRoute(route1,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
-        fcService.putCoordRoute(route1,CoordType.SECRET,1,'CP1', 'N',52, 5.121,'E',14, 6.679,500,2,  99.0,  89.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    1,'CP2', 'N',52, 5.223,'E',14,15.555,500,1, 150.0,  89.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,2,'CP3', 'N',52, 1.367,'E',14,10.417,500,2,  46.0, 219.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    2,'CP4', 'N',51,51.719,'E',13,57.662,500,1, 161.5, 219.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,3,'CP5', 'N',51,44.633,'E',14, 1.635,500,2,  68.5, 161.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    3,'CP6', 'N',51,38.847,'E',14, 4.857,500,1, 125.0, 161.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,4,'CP7', 'N',51,38.983,'E',14, 8.299,500,2,  19.5,  86.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    4,'CP8', 'N',51,39.535,'E',14,23.4,  500,1, 106.45, 86.0)
-        fcService.putCoordRoute(route1,CoordType.SECRET,5,'CP9', 'N',51,38.02, 'E',14,19.606,500,2,  25.5, 237.0)
-        fcService.putCoordRoute(route1,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
-        fcService.putCoordRoute(route1,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
-        fcService.putCoordRoute(route1,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
-        */
         fcService.printdone ""
         
         // Planning Test
@@ -894,6 +1040,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew4,
                                                   startNum:11,
@@ -901,6 +1052,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew5,
                                                   startNum:13,
@@ -908,6 +1064,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew3,
                                                   startNum:19,
@@ -915,6 +1076,11 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                  [crew:crew2,
                                                   startNum:18,
@@ -922,29 +1088,13 @@ class ContestController {
                                                   badCourseStartLanding:false,
                                                   landingTooLate:false,
                                                   givenTooLate:false,
+												  safetyAndRulesInfringement:false,
+												  instructionsNotFollowed:false,
+												  falseEnvelopeOpened:false,
+												  safetyEnvelopeOpened:false,
+												  frequencyNotMonitored:false,
                                                   testComplete:true],
                                                 ])
-        /*                       
-        fcService.putflightresultsTask(task1,  [[crew:crew1,
-                                                 takeoffMissed:false,
-                                                 badCourseStartLanding:false,
-                                                 landingTooLate:false,
-                                                 givenTooLate:false,
-                                                 givenValues:[[cpTime:"12:25:00",altitude:1001],
-                                                              [cpTime:"12:28:03",altitude:1001],
-                                                              [cpTime:"12:28:55",altitude:1001],
-                                                              [cpTime:"12:31:09",altitude:1001],
-                                                              [cpTime:"12:34:29",altitude:1001],
-                                                              [cpTime:"12:36:13",altitude:1001],
-                                                              [cpNotFound:true],
-                                                              [cpTime:"12:42:52",altitude:401],
-                                                              [cpTime:"12:45:10",altitude:1001],
-                                                              [cpTime:"12:46:03",altitude:1001],
-                                                              [cpTime:"12:51:12",altitude:1001]],
-                                                 testComplete:true],
-                                               ]
-                                      )
-        */
         fcService.putobservationresultsTask(task1, [
                                                     [crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
                                                     [crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -952,15 +1102,6 @@ class ContestController {
                                                     [crew:crew4,routePhotos:0,turnPointPhotos:0,groundTargets:0,testComplete:true],
                                                     [crew:crew5,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
                                                    ])
-        /*
-        fcService.putlandingresultsTask(task1, [
-                                                [crew:crew1,landingPenalties:140,testComplete:true],
-                                                [crew:crew2,landingPenalties:110,testComplete:true],
-                                                [crew:crew3,landingPenalties: 80,testComplete:true],
-                                                [crew:crew4,landingPenalties:130,testComplete:true],
-                                                [crew:crew5,landingPenalties: 70,testComplete:true],
-                                               ])
-        */
         fcService.putlandingresultsTask(task1, [
                                                 [crew:crew1,
                                                  landingTest1Measure:'B',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:true,
@@ -1024,10 +1165,10 @@ class ContestController {
                                                  testComplete:true],
                                                ])
         fcService.runcalculatepositionsTask(task1)
-        fcService.runcalculatepositionsResultClass(resultclass1,[task1])
-        fcService.runcalculatepositionsResultClass(resultclass2,[task1])
-        fcService.runcalculatepositionsResultClass(resultclass3,[task1])
-		fcService.runcalculatecontestpositionsContest(contest,[resultclass1],[task1])
+        fcService.runcalculatepositionsResultClass(resultclass1,[task1],[team1,team2,team3])
+        fcService.runcalculatepositionsResultClass(resultclass2,[task1],[team1,team2,team3])
+        fcService.runcalculatepositionsResultClass(resultclass3,[task1],[team1,team2,team3])
+		fcService.runcalculatecontestpositionsContest(contest,[resultclass1],[task1],[team1,team2,team3])
         fcService.runcalculateteampositionsContest(contest,[resultclass1,resultclass2,resultclass3],[task1])
         
         fcService.printdone ""
@@ -1035,51 +1176,25 @@ class ContestController {
 		return contest.instance.id
     }
     
-    int create_test3(String testName, boolean testExists) 
+    int create_test3(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,200000,true,0,ContestRules.R1,true,testExists) // 0 - keine Team-Auswertung
+        Map contest = fcService.putContest(testName,printPrefix,200000,true,0,ContestRules.R1,true,testExists) // 0 - keine Team-Auswertung
 		
 		// Route 1
 		fcService.printstart "Route 1"
 		Map route1 = fcService.importRoute(contest,"Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
-		/*
-		Map route1 = fcService.putRoute(contest,"Strecke 1","Strecke 1")
-		fcService.putCoordRoute(route1,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
-		fcService.putCoordRoute(route1,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
-		fcService.putCoordRoute(route1,CoordType.SECRET,1,'CP1', 'N',52, 5.121,'E',14, 6.679,500,2,  99.0,  89.0)
-		fcService.putCoordRoute(route1,CoordType.TP,    1,'CP2', 'N',52, 5.223,'E',14,15.555,500,1, 150.0,  89.0)
-		fcService.putCoordRoute(route1,CoordType.SECRET,2,'CP3', 'N',52, 1.367,'E',14,10.417,500,2,  46.0, 219.0)
-		fcService.putCoordRoute(route1,CoordType.TP,    2,'CP4', 'N',51,51.719,'E',13,57.662,500,1, 161.5, 219.0)
-		fcService.putCoordRoute(route1,CoordType.SECRET,3,'CP5', 'N',51,44.633,'E',14, 1.635,500,2,  68.5, 161.0)
-		fcService.putCoordRoute(route1,CoordType.TP,    3,'CP6', 'N',51,38.847,'E',14, 4.857,500,1, 125.0, 161.0)
-		fcService.putCoordRoute(route1,CoordType.SECRET,4,'CP7', 'N',51,38.983,'E',14, 8.299,500,2,  19.5,  86.0)
-		fcService.putCoordRoute(route1,CoordType.TP,    4,'CP8', 'N',51,39.535,'E',14,23.4,  500,1, 106.45, 86.0)
-		fcService.putCoordRoute(route1,CoordType.SECRET,5,'CP9', 'N',51,38.02, 'E',14,19.606,500,2,  25.5, 237.0)
-		fcService.putCoordRoute(route1,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
-		fcService.putCoordRoute(route1,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
-		fcService.putCoordRoute(route1,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
-		*/
 		fcService.printdone ""
 		
 		// Route 2
 		fcService.printstart "Route 2"
 		Map route2 = fcService.importRoute(contest,"Strecke 2",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK)
-		/*
-		Map route2 = fcService.putRoute(contest,"Strecke 2","Strecke 2")
-		fcService.putCoordRoute(route2,CoordType.TO,    0,'T/O', 'N',52, 2.18, 'E',13,44.0,    0,1,  null,  null)
-		fcService.putCoordRoute(route2,CoordType.SP,    0,'SP',  'N',52, 4.897,'E',13,49.207,500,1,  null,  null)
-		fcService.putCoordRoute(route2,CoordType.TP,    1,'CP2', 'N',52, 5.223,'E',14,15.555,500,1, 150.0,  89.0)
-		fcService.putCoordRoute(route2,CoordType.TP,    2,'CP4', 'N',51,51.719,'E',13,57.662,500,1, 161.5, 219.0)
-		fcService.putCoordRoute(route2,CoordType.TP,    3,'CP6', 'N',51,38.847,'E',14, 4.857,500,1, 125.0, 161.0)
-		fcService.putCoordRoute(route2,CoordType.TP,    4,'CP8', 'N',51,39.535,'E',14,23.4,  500,1, 106.45, 86.0)
-		fcService.putCoordRoute(route2,CoordType.TP,    5,'CP10','N',51,33.399,'E',14, 8.079,500,1, 105.2, 237.0)
-		fcService.putCoordRoute(route2,CoordType.FP,    0,'FP',  'N',51,30.353,'E',13,58.485,500,1,  62.4, 244.0)
-		fcService.putCoordRoute(route2,CoordType.LDG,   0,'LDG', 'N',51,29.5,  'E',13,53.0,    0,1,  null,  null)
-		*/
 		fcService.printdone ""
+		
+		// Teams
+		Map team1 = fcService.putTeam(contest,"Deutschland")
 		
 		// Crews with Teams, ResultClasses and Aircrafts
 		// DMM
@@ -1112,12 +1227,12 @@ class ContestController {
 		
         // TaskClass properties
 		
-		// 1 - 23. August 2012
-        Map task1 = fcService.putTask(contest,"23. August 2012","10:00",3,8,10,15,true,true,true,true,false,  false,true, true,true,true,true)
+		// 1 - 23. August
+        Map task1 = fcService.putTask(contest,"23. August ${Contest.DEMOCONTESTYEAR}","10:00",3,8,10,15,true,true,true,true,false,  false,true, true,false,false, true,true,true,true, false)
 		
-        fcService.puttaskclassTask(task1,resultclass1,true,true,true,true,false,      false,true, true,true,true,true)
-        fcService.puttaskclassTask(task1,resultclass2,false,false,false,false,false,  false,true, false,false,false,false)
-        fcService.puttaskclassTask(task1,resultclass3,false,false,false,false,false,  false,true, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,true,true,true)
+        fcService.puttaskclassTask(task1,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass3,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
 		
 		Map planningtest1 = fcService.putPlanningTest(task1,"")
 		Map planningtesttask1 = fcService.putPlanningTestTask(planningtest1,"",route1,130,20)
@@ -1130,12 +1245,12 @@ class ContestController {
 		fcService.putsequenceTask(task1,[crew3,crew11,crew13,crew19,crew18])
 		fcService.runcalculatetimetableTask(task1)
 		
-		// 2 - 24. August 2012
-		Map task2 = fcService.putTask(contest,"24. August 2012","10:00",3,8,10,15,true,true,true,false,false, false,true, false,false,false,false)
+		// 2 - 24. August
+		Map task2 = fcService.putTask(contest,"24. August ${Contest.DEMOCONTESTYEAR}","10:00",3,8,10,15,true,true,true,false,false, false,true, false,true,true, false,false,false,false, false)
 		
-        fcService.puttaskclassTask(task2,resultclass1,true,true,true,false,false,     false,true, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass2,false,false,false,false,false,  false,true, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass3,false,false,false,false,false,  false,true, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass1,true,true,true,false,false,     false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass3,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
 		
 		Map planningtest2 = fcService.putPlanningTest(task2,"")
 		Map planningtesttask2 = fcService.putPlanningTestTask(planningtest2,"",route2,130,20)
@@ -1148,12 +1263,12 @@ class ContestController {
 		fcService.putsequenceTask(task2,[crew3,crew11,crew13,crew19,crew18])
 		fcService.runcalculatetimetableTask(task2)
 
-		// 3 - 25. August 2012
-		Map task3 = fcService.putTask(contest,"25. August 2012","10:00",3,8,10,15,true,true,true,true,false,  false,true, true,false,false,false)
+		// 3 - 25. August
+		Map task3 = fcService.putTask(contest,"25. August ${Contest.DEMOCONTESTYEAR}","10:00",3,8,10,15,true,true,true,true,false,  false,true, true,false,false, true,false,false,false, false)
 		
-		fcService.puttaskclassTask(task3,resultclass1,true,true,true,true,false,      false,true, true,false,false,false)
-		fcService.puttaskclassTask(task3,resultclass2,true,true,true,true,false,      false,true, true,false,false,false)
-		fcService.puttaskclassTask(task3,resultclass3,true,true,true,true,false,      false,true, true,false,false,false)
+		fcService.puttaskclassTask(task3,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,false,false,false)
+		fcService.puttaskclassTask(task3,resultclass2,true,true,true,true,false,      false,true, true,false,false, true,false,false,false)
+		fcService.puttaskclassTask(task3,resultclass3,true,true,true,true,false,      false,true, true,false,false, true,false,false,false)
 		
 		Map planningtest3 = fcService.putPlanningTest(task3,"")
 		Map planningtesttask3 = fcService.putPlanningTestTask(planningtest3,"",route1,130,20)
@@ -1166,189 +1281,21 @@ class ContestController {
 		fcService.putsequenceTask(task3,[crew14,crew4,crew5,crew12,crew3,crew1,crew9,crew18,crew19,crew7,crew10,crew11,crew13,crew2,crew8])
 		fcService.runcalculatetimetableTask(task3)
 
-        // Planning Test
-
-        // Results
-		/*
-        fcService.putplanningresultsTask(task1,[[crew:crew3,
-                                                 givenTooLate:false,
-                                                 exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 98,legTime:"00:14:06"],
-                                                              [trueHeading:205,legTime:"00:12:41"],
-                                                              [trueHeading:154,legTime:"00:12:03"],
-                                                              [trueHeading: 95,legTime:"00:09:56"],
-                                                              [trueHeading:224,legTime:"00:07:43"],
-                                                              [trueHeading:232,legTime:"00:04:25"]],
-                                                 testComplete:true],
-                                                [crew:crew11,
-                                                 givenTooLate:false,
-                                                 exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 99,legTime:"00:18:00"],
-                                                              [trueHeading:203,legTime:"00:15:44"],
-                                                              [trueHeading:153,legTime:"00:15:31"],
-                                                              [trueHeading: 97,legTime:"00:12:42"],
-                                                              [trueHeading:221,legTime:"00:09:21"],
-                                                              [trueHeading:229,legTime:"00:05:20"]],
-                                                 testComplete:true],
-                                                [crew:crew13,
-                                                 givenTooLate:false,
-                                                 exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading:100,legTime:"00:18:03"],
-                                                              [trueHeading:203,legTime:"00:15:37"],
-                                                              [trueHeading:153,legTime:"00:15:35"],
-                                                              [trueHeading: 98,legTime:"00:12:45"],
-                                                              [trueHeading:221,legTime:"00:09:19"],
-                                                              [trueHeading:229,legTime:"00:05:21"]],
-                                                 testComplete:true],
-                                                [crew:crew19,
-                                                 givenTooLate:false,
-                                                 exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
-                                                              [trueHeading:203,legTime:"00:13:35"],
-                                                              [trueHeading:154,legTime:"00:13:04"],
-                                                              [trueHeading:102,legTime:"00:10:57"],
-                                                              [trueHeading:222,legTime:"00:08:19"],
-                                                              [trueHeading:230,legTime:"00:04:42"]],
-                                                 testComplete:true],
-                                                [crew:crew18,
-                                                 givenTooLate:false,
-                                                 exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
-                                                              [trueHeading:204,legTime:"00:13:38"],
-                                                              [trueHeading:153,legTime:"00:13:03"],
-                                                              [trueHeading: 96,legTime:"00:10:43"],
-                                                              [trueHeading:223,legTime:"00:08:10"],
-                                                              [trueHeading:230,legTime:"00:04:44"]],
-                                                 testComplete:true],
-                                               ])
-          
-        fcService.importflightresultsTask(task1,[[crew:crew3,
-                                                  startNum:3,
-                                                  takeoffMissed:false,
-                                                  badCourseStartLanding:false,
-                                                  landingTooLate:false,
-                                                  givenTooLate:false,
-                                                  testComplete:true],
-                                                 [crew:crew11,
-                                                  startNum:11,
-                                                  takeoffMissed:false,
-                                                  badCourseStartLanding:false,
-                                                  landingTooLate:false,
-                                                  givenTooLate:false,
-                                                  testComplete:true],
-                                                 [crew:crew13,
-                                                  startNum:13,
-                                                  takeoffMissed:false,
-                                                  badCourseStartLanding:false,
-                                                  landingTooLate:false,
-                                                  givenTooLate:false,
-                                                  testComplete:true],
-                                                 [crew:crew19,
-                                                  startNum:19,
-                                                  takeoffMissed:false,
-                                                  badCourseStartLanding:false,
-                                                  landingTooLate:false,
-                                                  givenTooLate:false,
-                                                  testComplete:true],
-                                                 [crew:crew18,
-                                                  startNum:18,
-                                                  takeoffMissed:false,
-                                                  badCourseStartLanding:false,
-                                                  landingTooLate:false,
-                                                  givenTooLate:false,
-                                                  testComplete:true],
-                                                ])
-        fcService.putobservationresultsTask(task1, [
-                                                    [crew:crew3,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
-                                                    [crew:crew18,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
-                                                    [crew:crew19,routePhotos:120,turnPointPhotos:0,groundTargets:10,testComplete:true],
-                                                    [crew:crew11,routePhotos:0,turnPointPhotos:0,groundTargets:0,testComplete:true],
-                                                    [crew:crew13,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
-                                                   ])
-        fcService.putlandingresultsTask(task1, [
-                                                [crew:crew3,
-                                                 landingTest1Measure:'B',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:true,
-                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
-                                                 landingTest2Measure:'0',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
-                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
-                                                 landingTest3Measure:'0',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
-                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
-                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
-                                                 landingTest4Measure:'0',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
-                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
-                                                 landingTest4TouchingObstacle:false,
-                                                 testComplete:true],
-                                                [crew:crew18,
-                                                 landingTest1Measure:'0',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
-                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
-                                                 landingTest2Measure:'0',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
-                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
-                                                 landingTest3Measure:'F',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
-                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
-                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
-                                                 landingTest4Measure:'A',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
-                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
-                                                 landingTest4TouchingObstacle:false,
-                                                 testComplete:true],
-                                                [crew:crew19,
-                                                 landingTest1Measure:'B',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
-                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
-                                                 landingTest2Measure:'A',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
-                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
-                                                 landingTest3Measure:'0',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
-                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
-                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
-                                                 landingTest4Measure:'A',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
-                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
-                                                 landingTest4TouchingObstacle:false,
-                                                 testComplete:true],
-                                                [crew:crew11,
-                                                 landingTest1Measure:'0',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
-                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
-                                                 landingTest2Measure:'F',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
-                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
-                                                 landingTest3Measure:'B',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
-                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
-                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
-                                                 landingTest4Measure:'0',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
-                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
-                                                 landingTest4TouchingObstacle:false,
-                                                 testComplete:true],
-                                                [crew:crew13,
-                                                 landingTest1Measure:'E',landingTest1Landing:1,landingTest1RollingOutside:false,landingTest1PowerInBox:false,
-                                                 landingTest1GoAroundWithoutTouching:false,landingTest1GoAroundInsteadStop:false,landingTest1AbnormalLanding:false,
-                                                 landingTest2Measure:'0',landingTest2Landing:1,landingTest2RollingOutside:false,landingTest2PowerInBox:false,
-                                                 landingTest2GoAroundWithoutTouching:false,landingTest2GoAroundInsteadStop:false,landingTest2AbnormalLanding:false,landingTest2PowerInAir:false,
-                                                 landingTest3Measure:'0',landingTest3Landing:1,landingTest3RollingOutside:false,landingTest3PowerInBox:false,
-                                                 landingTest3GoAroundWithoutTouching:false,landingTest3GoAroundInsteadStop:false,landingTest3AbnormalLanding:false,
-                                                 landingTest3PowerInAir:false,landingTest3FlapsInAir:false,
-                                                 landingTest4Measure:'A',landingTest4Landing:1,landingTest4RollingOutside:false,landingTest4PowerInBox:false,
-                                                 landingTest4GoAroundWithoutTouching:false,landingTest4GoAroundInsteadStop:false,landingTest4AbnormalLanding:false,
-                                                 landingTest4TouchingObstacle:false,
-                                                 testComplete:true],
-                                               ])
-        fcService.runcalculatepositionsTask(task1)
-        fcService.runcalculatepositionsResultClass(resultclass1,[task1])
-        fcService.runcalculatepositionsResultClass(resultclass2,[task1])
-		fcService.runcalculatecontestpositionsContest(contest,[resultclass1],[task1])
-        fcService.runcalculateteampositionsContest(contest,[resultclass1,resultclass2],[task1])
-        */
-		
         fcService.printdone ""
         
 		return contest.instance.id
     }
     
-    int create_test11(String testName, boolean testExists) 
+    int create_test11(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,200000,false,2,ContestRules.R1,true,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,true,testExists)
         
         // Tasks
-        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,10,15,false,false, true,false,false, false,true, false,false,false,false)
-        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,10,15,false,false, false,true,false, false,true, false,false,false,false)
+        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,10,15,false,false, true,false,false, false,true, true,false,false, false,false,false,false, false)
+        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,10,15,false,false, false,true,false, false,true, true,false,false, false,false,false,false, false)
 
         // Crews with Teams, ResultClasses and Aircrafts
         Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","Deutschland","","D-EAAA","","",85)
@@ -1421,16 +1368,16 @@ class ContestController {
 		return contest.instance.id
     }
         
-    int create_test12(String testName, boolean testExists) 
+    int create_test12(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,200000,true,2,ContestRules.R1,true,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,true,testExists)
         
         // Tasks
-        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,10,15,true,true,true,true,false, false,true, false,false,false,false)
-        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,10,15,true,true,true,true,false, false,true, false,false,false,false)
+        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,8,10,15,true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
+        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,8,10,15,true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
 
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"Class-1","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -1447,14 +1394,14 @@ class ContestController {
         Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","Schweiz","Class-3","D-EAAG","","",70)
 
         // TaskClass properties
-        fcService.puttaskclassTask(task1,resultclass1,false,false, true,true,true, false,true, false,false,false,false)
-        fcService.puttaskclassTask(task1,resultclass2,false,false, true,true,true, false,true, false,false,false,false)
-        fcService.puttaskclassTask(task1,resultclass3,false,false, true,true,true, false,true, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass1,false,false, true,true,true, false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass2,false,false, true,true,true, false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass3,false,false, true,true,true, false,true, true,false,false, false,false,false,false)
         
         // TaskClass properties
-        fcService.puttaskclassTask(task2,resultclass1,false,false, true,false,false, false,true, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass2,false,false, false,true,false, false,true, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass3,false,false, false,false,true, false,true, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass1,false,false, true,false,false, false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass2,false,false, false,true,false, false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass3,false,false, false,false,true, false,true, true,false,false, false,false,false,false)
         
         fcService.putsequenceTask(task1,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
         fcService.putsequenceTask(task2,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
@@ -1518,13 +1465,13 @@ class ContestController {
 		return contest.instance.id
     }
 
-    int create_test13(String testName, boolean testExists) 
+    int create_test13(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"","11:00",3,10,10,15,true,true,true,true,false, false,true, false,false,false,false)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+        Map task1 = fcService.putTask(contest,"","11:00",3,10,10,15,true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
     
         // Crews and Aircrafts
         (1..100).each {
@@ -1536,13 +1483,13 @@ class ContestController {
 		return contest.instance.id
     }
 
-    int create_test14(String testName, boolean testExists) 
+    int create_test14(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,200000,false,0,ContestRules.R1,true,testExists)
-        Map task1 = fcService.putTask(contest,"","11:00",3,10,10,15,true,true,true,true,false, false,true, false,false,false,false)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+        Map task1 = fcService.putTask(contest,"","11:00",3,10,10,15,true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
     
         // Crews and Aircrafts
         (1..20).each {
@@ -1559,65 +1506,65 @@ class ContestController {
     }
     List test1CoordRoute() {
       [[type:CoordType.TO,    mark:"T/O",
-        latGrad:52,latMinute:2.18,latDirection:'N',lonGrad:13,lonMinute:44.0,lonDirection:'E',altitude:0,gatewidth:1,
+        latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
         coordTrueTrack:0,coordMeasureDistance:0,
         measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0],
        [type:CoordType.SP,    mark:"SP",
-        latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
+        latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
         coordTrueTrack:0,coordMeasureDistance:0,
         measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0],
        [type:CoordType.SECRET,mark:"CP1",
-        latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth:2,
+        latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
         coordTrueTrack:88.8048175589,coordMeasureDistance:99.4440780950,
         measureTrueTrack:89.0,measureDistance:99.0,legMeasureDistance:99.0,legDistance:10.6911447084,secretLegRatio:0.6598765432],
        [type:CoordType.TP,    mark:"CP2",
-        latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth:1,
+        latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
         coordTrueTrack:88.8465166117,coordMeasureDistance:149.9578513483,
         measureTrueTrack:89.0,measureDistance:150.0,legMeasureDistance:51.0,legDistance:5.5075593952,secretLegRatio:0],
        [type:CoordType.SECRET,mark:"CP3",
-        latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
+        latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
         coordTrueTrack:219.3292360731,coordMeasureDistance:46.1613175609,
         measureTrueTrack:219.0,measureDistance:46.0,legMeasureDistance:46.0,legDistance:4.9676025918,secretLegRatio:0.2849770642],
        [type:CoordType.TP,    mark:"CP4",
-        latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
+        latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
         coordTrueTrack:219.2221790621,coordMeasureDistance:161.4135491992,
         measureTrueTrack:219.0,measureDistance:161.5,legMeasureDistance:115.5,legDistance:12.4730021598,secretLegRatio:0],
        [type:CoordType.SECRET,mark:"CP5",
-        latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth:2,
+        latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
         coordTrueTrack:160.8781319787,coordMeasureDistance:69.4482392126,
         measureTrueTrack:161.0,measureDistance:68.5,legMeasureDistance:68.5,legDistance:7.3974082073,secretLegRatio:0.5481481481],
        [type:CoordType.TP,    mark:"CP6",
-        latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth:1,
+        latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
         coordTrueTrack:160.9135697323,coordMeasureDistance:126.1284575235,
         measureTrueTrack:161.0,measureDistance:125.0,legMeasureDistance:56.5,legDistance:6.1015118790,secretLegRatio:0],
        [type:CoordType.SECRET,mark:"CP7",
-        latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth:2,
+        latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
         coordTrueTrack:86.3563657892,coordMeasureDistance:19.8166630762,
         measureTrueTrack:86.0,measureDistance:19.5,legMeasureDistance:19.5,legDistance:2.1058315335,secretLegRatio:0.1834782609],
        [type:CoordType.TP,    mark:"CP8",
-        latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth:1,
+        latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
         coordTrueTrack:86.5776194402,coordMeasureDistance:106.7215296566,
         measureTrueTrack:86.0,measureDistance:106.45,legMeasureDistance:86.95,legDistance:9.3898488121,secretLegRatio:0],
        [type:CoordType.SECRET,mark:"CP9",
-        latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth:2,
+        latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
         coordTrueTrack:237.2378249684,coordMeasureDistance:25.9240833138,
         measureTrueTrack:237.0,measureDistance:25.5,legMeasureDistance:25.5,legDistance:2.7537796976,secretLegRatio:0.2420774648],
        [type:CoordType.TP,    mark:"CP10",
-        latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth:1,
+        latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
         coordTrueTrack:237.1829094762,coordMeasureDistance:104.8407146901,
         measureTrueTrack:237.0,measureDistance:105.2,legMeasureDistance:79.7,legDistance:8.6069114471,secretLegRatio:0],
        [type:CoordType.FP,    mark:"FP",
-        latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth:1,
+        latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
         coordTrueTrack:242.9619395538,coordMeasureDistance:62.0480855033,
         measureTrueTrack:244.0,measureDistance:62.4,legMeasureDistance:62.4,legDistance:6.7386609071,secretLegRatio:0],
        [type:CoordType.LDG,   mark:"LDG",
-        latGrad:51,latMinute:29.5,latDirection:'N',lonGrad:13,lonMinute:53.0,lonDirection:'E',altitude:0,gatewidth:1,
-        coordTrueTrack:255.9739613296,coordMeasureDistance:32.5907232027,
+        latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+        coordTrueTrack:256.4547835436,coordMeasureDistance:33.4955075819,
         measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0]
       ]
     }
     List test1RouteLegCoord() {
-      [[coordTrueTrack:49.6801228191,coordDistance:4.1990291847,measureDistance:null,legMeasureDistance:null,legDistance:null,measureTrueTrack:null],
+      [[coordTrueTrack:48.2896815944,coordDistance:4.0974514721,measureDistance:null,legMeasureDistance:null,legDistance:null,measureTrueTrack:null],
        [coordTrueTrack:88.8048175589,coordDistance:10.7391013062,measureDistance:99.0,legMeasureDistance:99.0,legDistance:10.6911447084,measureTrueTrack:89.0],
        [coordTrueTrack:88.9286028152,coordDistance:5.4550359042,measureDistance:150.0,legMeasureDistance:51.0,legDistance:5.5075593952,measureTrueTrack:89.0],
        [coordTrueTrack:219.3292360731,coordDistance:4.9850234947,measureDistance:46.0,legMeasureDistance:46.0,legDistance:4.9676025918,measureTrueTrack:219.0],
@@ -1629,21 +1576,21 @@ class ContestController {
        [coordTrueTrack:237.2378249684,coordDistance:2.7995770317,measureDistance:25.5,legMeasureDistance:25.5,legDistance:2.7537796976,measureTrueTrack:237.0],
        [coordTrueTrack:237.1648386550,coordDistance:8.5223089414,measureDistance:105.2,legMeasureDistance:79.7,legDistance:8.6069114471,measureTrueTrack:237.0],
        [coordTrueTrack:242.9619395538,coordDistance:6.7006571818,measureDistance:62.4,legMeasureDistance:62.4,legDistance:6.7386609071,measureTrueTrack:244.0],
-       [coordTrueTrack:255.9739613296,coordDistance:3.5195165446,measureDistance:null,legMeasureDistance:null,legDistance:null,measureTrueTrack:null],
+       [coordTrueTrack:256.4547835436,coordDistance:3.6172254408,measureDistance:null,legMeasureDistance:null,legDistance:null,measureTrueTrack:null],
       ]
     }
     List test1RouteLegTest() {
-      [[coordTrueTrack:88.8465166117,coordDistance:16.1941524134,
+      [[coordTrueTrack:88.8465166117,coordDistance:16.2,
         measureTrueTrack:89.0,measureDistance:150.0,legMeasureDistance:150.0,legDistance:16.1987041037],
-       [coordTrueTrack:219.2221790621,coordDistance:17.4312688120,
+       [coordTrueTrack:219.2221790621,coordDistance:17.44,
         measureTrueTrack:219.0,measureDistance:161.5,legMeasureDistance:161.5,legDistance:17.4406047516],
-       [coordTrueTrack:160.9135697323,coordDistance:13.6207837498,
+       [coordTrueTrack:160.9135697323,coordDistance:13.62,
         measureTrueTrack:161.0,measureDistance:125.0,legMeasureDistance:125.0,legDistance:13.4989200864],
-       [coordTrueTrack:86.5776194402,coordDistance:11.5250032027,
+       [coordTrueTrack:86.5776194402,coordDistance:11.52,
         measureTrueTrack:86.0,measureDistance:106.45,legMeasureDistance:106.45,legDistance:11.4956803456],
-       [coordTrueTrack:237.1829094762,coordDistance:11.3218914352,
+       [coordTrueTrack:237.1829094762,coordDistance:11.32,
         measureTrueTrack:237.0,measureDistance:105.2,legMeasureDistance:105.2,legDistance:11.3606911447],
-       [coordTrueTrack:242.9619395538,coordDistance:6.7006571818,
+       [coordTrueTrack:242.9619395538,coordDistance:6.7,
         measureTrueTrack:244.0,measureDistance:62.4,legMeasureDistance:62.4,legDistance:6.7386609071],
       ]
     }
@@ -1669,7 +1616,7 @@ class ContestController {
       ]
     }
     List test1Task() {
-      [[title:"20. Februar 2012",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
+      [[title:"20. Februar ${Contest.DEMOCONTESTYEAR}",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
         preparationDuration:15,risingDuration:8,maxLandingDuration:10,parkingDuration:15,minNextFlightDuration:30,
         procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true]
       ]
@@ -2065,7 +2012,16 @@ class ContestController {
       ]
     }
     List test1CoordResult3() {
-      [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","10:21:00"),planProcedureTurn:false,
+        resultLatitude:"N 052\u00b0 02,04630'",resultLongitude:"E 013\u00b0 43,84060'",resultAltitude:214,
+        resultCpTime:Date.parse("HH:mm:ss","10:21:09"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:29:00"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,84870'",resultLongitude:"E 013\u00b0 49,21010'",resultAltitude:1375,
@@ -2074,7 +2030,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:35:35"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,29710'",resultLongitude:"E 014\u00b0 06,67800'",resultAltitude:1409,
@@ -2083,7 +2039,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:9
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:38:58"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,24970'",resultLongitude:"E 014\u00b0 15,53960'",resultAltitude:1609,
@@ -2092,7 +2048,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:43:38"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,29270'",resultLongitude:"E 014\u00b0 10,54200'",resultAltitude:1399,
@@ -2101,7 +2057,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:52:50"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,69550'",resultLongitude:"E 013\u00b0 57,68880'",resultAltitude:1629,
@@ -2110,7 +2066,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:57:28"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,68110'",resultLongitude:"E 014\u00b0 01,81410'",resultAltitude:1496,
@@ -2119,7 +2075,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:11
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:01:18"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,88340'",resultLongitude:"E 014\u00b0 04,96680'",resultAltitude:1569,
@@ -2128,7 +2084,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:4
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:02:36"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,11140'",resultLongitude:"E 014\u00b0 08,27210'",resultAltitude:1707,
@@ -2137,7 +2093,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:17
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:08:25"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,52840'",resultLongitude:"E 014\u00b0 23,41510'",resultAltitude:1523,
@@ -2146,7 +2102,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:11:33"),planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 37,97560'",resultLongitude:"E 014\u00b0 19,65030'",resultAltitude:1387,
@@ -2155,7 +2111,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:10
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:18:15"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,44220'",resultLongitude:"E 014\u00b0 08,05000'",resultAltitude:1615,
@@ -2164,7 +2120,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:23:36"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,34350'",resultLongitude:"E 013\u00b0 58,49930'",resultAltitude:1358,
@@ -2173,10 +2129,28 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","11:33:36"),planProcedureTurn:false,
+        resultLatitude:"N 051\u00b0 29,50800'",resultLongitude:"E 013\u00b0 52,83280'",resultAltitude:337,
+        resultCpTime:Date.parse("HH:mm:ss","11:27:25"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
       ]
     }
     List test1CoordResult18() {
-      [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","13:03:00"),planProcedureTurn:false,
+        resultLatitude:"N 052\u00b0 02,00640'",resultLongitude:"E 013\u00b0 44,01730'",resultAltitude:216,
+        resultCpTime:Date.parse("HH:mm:ss","13:03:08"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:11:00"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,83500'",resultLongitude:"E 013\u00b0 49,22100'",resultAltitude:1170,
@@ -2185,7 +2159,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:17:56"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,17800'",resultLongitude:"E 014\u00b0 06,68980'",resultAltitude:1236,
@@ -2194,7 +2168,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:21:31"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,13820'",resultLongitude:"E 014\u00b0 15,54840'",resultAltitude:1290,
@@ -2203,7 +2177,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:26:26"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,27670'",resultLongitude:"E 014\u00b0 10,60120'",resultAltitude:1198,
@@ -2212,7 +2186,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:36:14"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,74450'",resultLongitude:"E 013\u00b0 57,59730'",resultAltitude:965,
@@ -2221,7 +2195,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:41:08"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,66360'",resultLongitude:"E 014\u00b0 01,74150'",resultAltitude:1225,
@@ -2230,7 +2204,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:45:10"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,83570'",resultLongitude:"E 014\u00b0 04,76570'",resultAltitude:1395,
@@ -2239,7 +2213,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:46:33"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,90780'",resultLongitude:"E 014\u00b0 08,31320'",resultAltitude:1405,
@@ -2248,7 +2222,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:6
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:52:40"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,52900'",resultLongitude:"E 014\u00b0 23,38740'",resultAltitude:2166,
@@ -2257,7 +2231,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:55:57"),planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 38,01820'",resultLongitude:"E 014\u00b0 19,59790'",resultAltitude:1822,
@@ -2266,7 +2240,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","14:03:07"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,42810'",resultLongitude:"E 014\u00b0 08,03690'",resultAltitude:1384,
@@ -2275,7 +2249,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","14:08:50"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,43140'",resultLongitude:"E 013\u00b0 58,42820'",resultAltitude:1502,
@@ -2284,10 +2258,28 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","14:18:50"),planProcedureTurn:false,
+        resultLatitude:"N 051\u00b0 29,50580'",resultLongitude:"E 013\u00b0 52,83610'",resultAltitude:307,
+        resultCpTime:Date.parse("HH:mm:ss","14:12:10"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
       ]
     }
     List test1CoordResult19() {
-      [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","12:06:00"),planProcedureTurn:false,
+        resultLatitude:"N 052\u00b0 02,01150'",resultLongitude:"E 013\u00b0 43,90980'",resultAltitude:188,
+        resultCpTime:Date.parse("HH:mm:ss","12:06:06"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:14:00"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,00160'",resultLongitude:"E 013\u00b0 49,20850'",resultAltitude:1001,
@@ -2296,7 +2288,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:21
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:20:56"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,29600'",resultLongitude:"E 014\u00b0 06,67890'",resultAltitude:1490,
@@ -2305,7 +2297,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:14
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:24:31"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,37350'",resultLongitude:"E 014\u00b0 15,56770'",resultAltitude:1595,
@@ -2314,7 +2306,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:16
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:29:26"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,12430'",resultLongitude:"E 014\u00b0 10,91000'",resultAltitude:1412,
@@ -2323,7 +2315,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:17
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:39:14"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,53060'",resultLongitude:"E 013\u00b0 58,04620'",resultAltitude:1435,
@@ -2332,7 +2324,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:16
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:44:08"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,66070'",resultLongitude:"E 014\u00b0 01,74090'",resultAltitude:1923,
@@ -2341,7 +2333,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:11
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:48:10"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,90240'",resultLongitude:"E 014\u00b0 05,07120'",resultAltitude:2058,
@@ -2350,7 +2342,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:49:33"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,64160'",resultLongitude:"E 014\u00b0 08,33550'",resultAltitude:1687,
@@ -2359,7 +2351,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:11
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:55:40"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,61940'",resultLongitude:"E 014\u00b0 23,36750'",resultAltitude:1774,
@@ -2368,7 +2360,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:14
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:58:57"),planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 37,31980'",resultLongitude:"E 014\u00b0 20,31900'",resultAltitude:2359,
@@ -2377,7 +2369,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:06:07"),planProcedureTurn:false,
         resultLatitude:"",resultLongitude:"",resultAltitude:0,
@@ -2386,7 +2378,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:200
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","13:11:50"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,21180'",resultLongitude:"E 013\u00b0 58,60650'",resultAltitude:1291,
@@ -2395,10 +2387,28 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:14
        ],
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","13:21:50"),planProcedureTurn:false,
+        resultLatitude:"N 051\u00b0 29,50790'",resultLongitude:"E 013\u00b0 52,83230'",resultAltitude:305,
+        resultCpTime:Date.parse("HH:mm:ss","13:16:59"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
       ]
     }
     List test1CoordResult11() {
-      [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","10:45:00"),planProcedureTurn:false,
+        resultLatitude:"N 052\u00b0 02,01130'",resultLongitude:"E 013\u00b0 43,93320'",resultAltitude:200,
+        resultCpTime:Date.parse("HH:mm:ss","10:45:18"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:53:00"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,66460'",resultLongitude:"E 013\u00b0 49,22740'",resultAltitude:1678,
@@ -2407,7 +2417,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:00:47"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,93310'",resultLongitude:"E 014\u00b0 06,67050'",resultAltitude:1816,
@@ -2416,7 +2426,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:8
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:04:48"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,15430'",resultLongitude:"E 014\u00b0 15,57610'",resultAltitude:1622,
@@ -2425,7 +2435,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:4
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:10:19"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,22360'",resultLongitude:"E 014\u00b0 10,69030'",resultAltitude:1659,
@@ -2434,7 +2444,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:17
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:21:38"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,80050'",resultLongitude:"E 013\u00b0 57,51850'",resultAltitude:1571,
@@ -2443,7 +2453,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:6
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:27:08"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,63940'",resultLongitude:"E 014\u00b0 01,71880'",resultAltitude:1970,
@@ -2452,7 +2462,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:31:41"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,83070'",resultLongitude:"E 014\u00b0 04,75630'",resultAltitude:1827,
@@ -2461,7 +2471,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:33:14"),planProcedureTurn:false,
         resultLatitude:"",resultLongitude:"",resultAltitude:0,
@@ -2470,7 +2480,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:200
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:40:06"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,39500'",resultLongitude:"E 014\u00b0 23,40800'",resultAltitude:1839,
@@ -2479,7 +2489,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:43:46"),planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 38,01920'",resultLongitude:"E 014\u00b0 19,61850'",resultAltitude:2007,
@@ -2488,7 +2498,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:52:07"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,47440'",resultLongitude:"E 014\u00b0 07,98900'",resultAltitude:1574,
@@ -2497,7 +2507,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:5
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:58:48"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,43450'",resultLongitude:"E 013\u00b0 58,43000'",resultAltitude:1644,
@@ -2506,10 +2516,28 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:5
        ],
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","12:08:48"),planProcedureTurn:false,
+        resultLatitude:"N 051\u00b0 29,50910'",resultLongitude:"E 013\u00b0 52,83120'",resultAltitude:321,
+        resultCpTime:Date.parse("HH:mm:ss","12:02:55"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
       ]
     }
     List test1CoordResult13() {
-      [[type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth:1,
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","10:51:00"),planProcedureTurn:false,
+        resultLatitude:"N 052\u00b0 02,01860'",resultLongitude:"E 013\u00b0 43,87860'",resultAltitude:211,
+        resultCpTime:Date.parse("HH:mm:ss","10:51:07"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","10:59:00"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,81010'",resultLongitude:"E 013\u00b0 49,21410'",resultAltitude:985,
@@ -2518,7 +2546,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:06:47"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,00180'",resultLongitude:"E 014\u00b0 06,69910'",resultAltitude:1293,
@@ -2527,7 +2555,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:10:48"),planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,15960'",resultLongitude:"E 014\u00b0 15,55880'",resultAltitude:1240,
@@ -2536,7 +2564,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:16:19"),planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,26100'",resultLongitude:"E 014\u00b0 10,64230'",resultAltitude:1281,
@@ -2545,7 +2573,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:8
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:27:38"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,74850'",resultLongitude:"E 013\u00b0 57,59490'",resultAltitude:1424,
@@ -2554,7 +2582,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:33:08"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,63130'",resultLongitude:"E 014\u00b0 01,65960'",resultAltitude:1307,
@@ -2563,7 +2591,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:15
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:37:41"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,85720'",resultLongitude:"E 014\u00b0 04,88720'",resultAltitude:1149,
@@ -2572,7 +2600,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:39:14"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,76200'",resultLongitude:"E 014\u00b0 08,31770'",resultAltitude:995,
@@ -2581,7 +2609,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:9
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:46:06"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,46530'",resultLongitude:"E 014\u00b0 23,41820'",resultAltitude:895,
@@ -2590,7 +2618,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth:2,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:49:46"),planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 37,98390'",resultLongitude:"E 014\u00b0 19,65190'",resultAltitude:1212,
@@ -2599,7 +2627,7 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","11:58:07"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,27590'",resultLongitude:"E 014\u00b0 08,20140'",resultAltitude:1389,
@@ -2608,11 +2636,20 @@ class ContestController {
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:4
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth:1,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:Date.parse("HH:mm:ss","12:04:48"),planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,42410'",resultLongitude:"E 013\u00b0 58,43490'",resultAltitude:1299,
         resultCpTime:Date.parse("HH:mm:ss","12:04:50"),resultCpTimeInput:"00:00:00",
+        resultCpNotFound:false,resultBadCourseNum:0,
+        resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
+        resultEntered:true,penaltyCoord:0
+       ],
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+        legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
+        planCpTime:Date.parse("HH:mm:ss","12:14:48"),planProcedureTurn:false,
+        resultLatitude:"N 051\u00b0 29,50860'",resultLongitude:"E 013\u00b0 52,83220'",resultAltitude:320,
+        resultCpTime:Date.parse("HH:mm:ss","12:12:41"),resultCpTimeInput:"00:00:00",
         resultCpNotFound:false,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
@@ -2635,6 +2672,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:55,flightTestPenalties:55,
@@ -2657,6 +2696,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:13,flightTestPenalties:13,
@@ -2679,6 +2720,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:21,planningTestPenalties:21,
         flightTestCheckPointPenalties:337,flightTestPenalties:337,
@@ -2701,6 +2744,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:2,planningTestPenalties:2,
         flightTestCheckPointPenalties:251,flightTestPenalties:251,
@@ -2723,6 +2768,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:45,flightTestPenalties:45,
@@ -2756,11 +2803,11 @@ class ContestController {
                 [name:"TestLegFlight 'Besatzung 19'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegFlight19()],
                 [name:"TestLegFlight 'Besatzung 11'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1TestLegFlight11()],
                 [name:"TestLegFlight 'Besatzung 13'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegFlight13()],
-                [name:"CoordResult 'Besatzung 3'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1CoordResult3()],    
-                [name:"CoordResult 'Besatzung 18'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1CoordResult18()],    
-                [name:"CoordResult 'Besatzung 19'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1CoordResult19()],    
-                [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
-                [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
+                [name:"CoordResult 'Besatzung 3'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1CoordResult3()],    
+                [name:"CoordResult 'Besatzung 18'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1CoordResult18()],    
+                [name:"CoordResult 'Besatzung 19'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1CoordResult19()],    
+                [name:"CoordResult 'Besatzung 11'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
+                [name:"CoordResult 'Besatzung 13'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
                 [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(session.lastContest),[sort:"id"]),data:test1Test()],
                 ]
             )
@@ -2774,11 +2821,11 @@ class ContestController {
     }
 
     List test2Crew() {
-      [[startNum:3, name:"Besatzung 3", mark:"3: Besatzung 3",  team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:55, classPosition:2,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
-       [startNum:18,name:"Besatzung 18",mark:"18: Besatzung 18",team:[name:"Deutschland"],resultclass:[name:"Tourist",   contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-       [startNum:19,name:"Besatzung 19",mark:"19: Besatzung 19",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
-       [startNum:11,name:"Besatzung 11",mark:"11: Besatzung 11",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
-       [startNum:13,name:"Besatzung 13",mark:"13: Besatzung 13",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
+      [[startNum:3, name:"Besatzung 3", mark:"3: Besatzung 3",  team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:55, classPosition:2,noClassPosition:false,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
+       [startNum:18,name:"Besatzung 18",mark:"18: Besatzung 18",team:[name:"Deutschland"],resultclass:[name:"Tourist",   contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
+       [startNum:19,name:"Besatzung 19",mark:"19: Besatzung 19",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,noClassPosition:false,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+       [startNum:11,name:"Besatzung 11",mark:"11: Besatzung 11",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
+       [startNum:13,name:"Besatzung 13",mark:"13: Besatzung 13",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,noClassPosition:false,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
       ]
     }
     List test2ResultClass() {
@@ -2893,6 +2940,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:55,flightTestPenalties:55,
@@ -2915,6 +2964,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:13,flightTestPenalties:13,
@@ -2937,6 +2988,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:21,planningTestPenalties:21,
         flightTestCheckPointPenalties:337,flightTestPenalties:337,
@@ -2959,6 +3012,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:2,planningTestPenalties:2,
         flightTestCheckPointPenalties:251,flightTestPenalties:251,
@@ -2981,6 +3036,8 @@ class ContestController {
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
+		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:45,flightTestPenalties:45,
@@ -3016,11 +3073,11 @@ class ContestController {
                 [name:"TestLegFlight 'Besatzung 19'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegFlight19()],
                 [name:"TestLegFlight 'Besatzung 11'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1TestLegFlight11()],
                 [name:"TestLegFlight 'Besatzung 13'",count:6,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1TestLegFlight13()],
-                [name:"CoordResult 'Besatzung 3'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1CoordResult3()],    
-                [name:"CoordResult 'Besatzung 18'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1CoordResult18()],    
-                [name:"CoordResult 'Besatzung 19'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1CoordResult19()],    
-                [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
-                [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
+                [name:"CoordResult 'Besatzung 3'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 3")),[sort:"id"]),data:test1CoordResult3()],    
+                [name:"CoordResult 'Besatzung 18'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 18")),[sort:"id"]),data:test1CoordResult18()],    
+                [name:"CoordResult 'Besatzung 19'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 19")),[sort:"id"]),data:test1CoordResult19()],    
+                [name:"CoordResult 'Besatzung 11'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
+                [name:"CoordResult 'Besatzung 13'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(session.lastContest),Crew.findByContestAndName(session.lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
                 [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(session.lastContest),[sort:"id"]),data:test2Test()],
                 ]
             )
@@ -3099,25 +3156,25 @@ class ContestController {
 		int contest_id = 0
 		switch (params.demoContest) {
 			case '1': 
-		        contest_id = create_test1("Demo Wettbewerb 2012", true)
+		        contest_id = create_test1("Demo Wettbewerb ${Contest.DEMOCONTESTYEAR}", "demo1", true)
 				break
 			case '2':
-				contest_id = create_test2("Demo Wettbewerb 2012 (mit Klassen)", true)
+				contest_id = create_test2("Demo Wettbewerb ${Contest.DEMOCONTESTYEAR} (mit Klassen)", "demo2", true)
 				break
 			case '3':
-				contest_id = create_test3("Demo Wettbewerb 2012 (kombinierter Wettbewerb)", false)
+				contest_id = create_test3("Demo Wettbewerb ${Contest.DEMOCONTESTYEAR} (kombinierter Wettbewerb)", "demo3", false)
 				break
 			case '11':
-				contest_id = create_test11("Demo Wettbewerb Auswertung ohne Klassen", false)
+				contest_id = create_test11("Demo Wettbewerb Auswertung ohne Klassen", "demo11", false)
 				break
 			case '12':
-				contest_id = create_test12("Demo Wettbewerb Auswertung mit Klassen", false)
+				contest_id = create_test12("Demo Wettbewerb Auswertung mit Klassen", "demo12", false)
 				break
 			case '13': 
-		        contest_id = create_test13("Demo Wettbewerb (100 Besatzungen)", false)
+		        contest_id = create_test13("Demo Wettbewerb (100 Besatzungen)", "demo13", false)
 				break
 			case '14': 
-		        contest_id = create_test14("Demo Wettbewerb (20 Besatzungen)", false)
+		        contest_id = create_test14("Demo Wettbewerb (20 Besatzungen)", "demo14", false)
 				break
 		}
         
@@ -3126,14 +3183,14 @@ class ContestController {
             
     def runtest = {
         switch (session.lastContest.title) {
-            case "Demo Wettbewerb 2012":
-                run_test1 "Demo Wettbewerb 2012"
+            case "Demo Wettbewerb ${Contest.DEMOCONTESTYEAR}":
+                run_test1 "Demo Wettbewerb ${Contest.DEMOCONTESTYEAR}"
                 break
-            case "Demo Wettbewerb 2012 (mit Klassen)":
-                run_test2 "Demo Wettbewerb 2012 (mit Klassen)"
+            case "Demo Wettbewerb ${Contest.DEMOCONTESTYEAR} (mit Klassen)":
+                run_test2 "Demo Wettbewerb ${Contest.DEMOCONTESTYEAR} (mit Klassen)"
                 break
-			case "Demo Wettbewerb 2012 (kombinierter Wettbewerb)":
-				run_test3 "Demo Wettbewerb 2012 (kombinierter Wettbewerb)"
+			case "Demo Wettbewerb ${Contest.DEMOCONTESTYEAR} (kombinierter Wettbewerb)":
+				run_test3 "Demo Wettbewerb ${Contest.DEMOCONTESTYEAR} (kombinierter Wettbewerb)"
 				break
         }
         redirect(controller:'contest',action:start)

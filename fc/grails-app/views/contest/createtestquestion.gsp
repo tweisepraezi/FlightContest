@@ -15,9 +15,9 @@
                         <fieldset>
                             <p>
                                 <g:set var="print_title_labels" value="${[]}"/>
-                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb 2012']}"/>
-                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb 2012 (mit Klassen)']}"/>
-                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb 2012 (kombinierter Wettbewerb)']}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb '+Contest.DEMOCONTESTYEAR]}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb '+Contest.DEMOCONTESTYEAR+' (mit Klassen)']}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb '+Contest.DEMOCONTESTYEAR+' (kombinierter Wettbewerb)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb Auswertung ohne Klassen']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb Auswertung mit Klassen']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (100 Besatzungen)']}"/>
