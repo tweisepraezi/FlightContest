@@ -102,7 +102,7 @@
                                         <g:set var="legNo" value="${new Integer(0)}" />
                                         <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance,[sort:"id"])}">
                                             <g:if test="${coordResultInstance.type == CoordType.TO}">
-                                                <g:if test="${testInstance.GetFlightTestTakeoffCheckSeconds() || testInstance.IsFlightTestCheckTakeOff()}">
+                                                <g:if test="${testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()}">
                                                     <g:set var="show_takeoffmissed" value="${false}"/>
                                                 </g:if>
                                             </g:if>
@@ -347,19 +347,19 @@
 				    	                    </div>
                                         </g:if>
 			    	                </g:if>
+                                    <g:if test="${testInstance.GetFlightTestLandingToLatePoints() > 0}">
+                                        <g:if test="${show_landingtolate}">
+                                            <div>
+                                                <g:checkBox name="flightTestLandingTooLate" value="${testInstance.flightTestLandingTooLate}"/>
+                                                <label>${message(code:'fc.flighttest.landingtolate')}</label>
+                                            </div>
+                                        </g:if>
+                                    </g:if>
 		                        	<g:if test="${testInstance.GetFlightTestBadCourseStartLandingPoints() > 0}">
 				                        <div>
 			        	                	<g:checkBox name="flightTestBadCourseStartLanding" value="${testInstance.flightTestBadCourseStartLanding}"/>
 											<label>${message(code:'fc.flighttest.badcoursestartlanding')}</label>
 			    	                    </div>
-			    	                </g:if>
-		                        	<g:if test="${testInstance.GetFlightTestLandingToLatePoints() > 0}">
-                                        <g:if test="${show_landingtolate}">
-					                        <div>
-				        	                	<g:checkBox name="flightTestLandingTooLate" value="${testInstance.flightTestLandingTooLate}"/>
-												<label>${message(code:'fc.flighttest.landingtolate')}</label>
-				    	                    </div>
-                                        </g:if>
 			    	                </g:if>
 		                        	<g:if test="${testInstance.GetFlightTestGivenToLatePoints() > 0}">
 				                        <div>
@@ -417,16 +417,16 @@
                                         <td>${testInstance.GetFlightTestTakeoffMissedPoints()} ${message(code:'fc.points')}</td>
                                 	</tr>
                                 </g:if>
+                                <g:if test="${testInstance.flightTestLandingTooLate}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.flighttest.landingtolate')}:</td>
+                                        <td>${testInstance.GetFlightTestLandingToLatePoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
                                 <g:if test="${testInstance.flightTestBadCourseStartLanding}">
                                 	<tr>
                                     	<td class="detailtitle">${message(code:'fc.flighttest.badcoursestartlanding')}:</td>
                                         <td>${testInstance.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>
-                                	</tr>
-                                </g:if>
-                                <g:if test="${testInstance.flightTestLandingTooLate}">
-                                	<tr>
-                                    	<td class="detailtitle">${message(code:'fc.flighttest.landingtolate')}:</td>
-                                        <td>${testInstance.GetFlightTestLandingToLatePoints()} ${message(code:'fc.points')}</td>
                                 	</tr>
                                 </g:if>
                                 <g:if test="${testInstance.flightTestGivenTooLate}">

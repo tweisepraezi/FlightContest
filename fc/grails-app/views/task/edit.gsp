@@ -37,9 +37,14 @@
                                 <input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}" tabIndex="3"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.task.takeoffinterval.sloweraircraft')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="takeoffIntervalSlowerAircraft" name="takeoffIntervalSlowerAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalSlowerAircraft')}" tabIndex="4"/>
+                            </p>
+                            <p>
                                 <label>${message(code:'fc.task.takeoffinterval.fasteraircraft')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="4"/>
+                                <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="5"/>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -47,32 +52,32 @@
                             <p>
                                 <label>${message(code:'fc.task.risingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="risingDuration" name="risingDuration" value="${fieldValue(bean:taskInstance,field:'risingDuration')}" tabIndex="5"/>
+                                <input type="text" id="risingDuration" name="risingDuration" value="${fieldValue(bean:taskInstance,field:'risingDuration')}" tabIndex="6"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.planningtestduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="6"/>
+                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="7"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.preparationduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="7"/>
+                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="8"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="8"/>
+                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="9"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.maxlandingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="maxLandingDuration" name="maxLandingDuration" value="${fieldValue(bean:taskInstance,field:'maxLandingDuration')}" tabIndex="9"/>
+                                <input type="text" id="maxLandingDuration" name="maxLandingDuration" value="${fieldValue(bean:taskInstance,field:'maxLandingDuration')}" tabIndex="10"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="10"/>
+                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="11"/>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -80,7 +85,7 @@
                             <p>
                                 <label>${message(code:'fc.task.minnextflightduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="11"/>
+                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="12"/>
                             </p>
                         </fieldset>
                     	<g:if test="${taskInstance.contest.resultClasses}">
@@ -150,7 +155,7 @@
 			                               	<g:checkBox name="taskclass_${taskclass_instance.resultclass.id}_specialTestRun" value="${taskclass_instance.specialTestRun}" />
 		    	                            <label>${message(code:'fc.specialtest')}</label>
 		    	                            <p>
-                                                <input type="text" id="specialTestTitle${taskclass_instance.resultclass.id}" name="specialTestTitle${taskclass_instance.resultclass.id}" value="${fieldValue(bean:taskclass_instance,field:'specialTestTitle')}" tabIndex="${12+i}"/>
+                                                <input type="text" id="specialTestTitle${taskclass_instance.resultclass.id}" name="specialTestTitle${taskclass_instance.resultclass.id}" value="${fieldValue(bean:taskclass_instance,field:'specialTestTitle')}" tabIndex="${13+i}"/>
                                             </p>
 		                                </div>
 		                            </p>
@@ -222,7 +227,7 @@
 		                               	<g:checkBox name="specialTestRun" value="${taskInstance.specialTestRun}" />
 	    	                            <label>${message(code:'fc.specialtest')}</label>
 	                                    <p>
-	                                        <input type="text" id="specialTestTitle" name="specialTestTitle" value="${fieldValue(bean:taskInstance,field:'specialTestTitle')}" tabIndex="12"/>
+	                                        <input type="text" id="specialTestTitle" name="specialTestTitle" value="${fieldValue(bean:taskInstance,field:'specialTestTitle')}" tabIndex="13"/>
 	                                    </p>
 	                                </div>
 	                            </p>

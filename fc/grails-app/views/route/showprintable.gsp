@@ -35,7 +35,7 @@
                                     <tr>
                                         <td width="10%">${coordroute_instance.titleCode()}</td>
                                         <td width="10%">${coordroute_instance.mark}</td>
-                                        <td>${coordroute_instance.namePrintable()}</td>
+                                        <td>${coordroute_instance.namePrintable(true)}</td>
                                         <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
                                         <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
                                     </tr>
@@ -52,10 +52,9 @@
 	                                </tr>
 	                            </thead>
 	                            <tbody>
-                                    <g:set var="last_testtruetrack" value="${null}"/>
 	                                <g:each var="routelegcoord_instance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}">
                                         <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routelegcoord_instance.testDistance())}" />
-                                        <g:set var="course_change" value="${AviationMath.courseChange(last_testtruetrack,routelegcoord_instance.testTrueTrack())}"/>
+                                        <g:set var="course_change" value="${AviationMath.courseChange(routelegcoord_instance.turnTrueTrack,routelegcoord_instance.testTrueTrack())}"/>
 	                                    <g:if test="${course_change.abs() >= 90}">
 	                                        <tr>
 	                                            <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
@@ -65,7 +64,6 @@
 	                                        <td width="20%">${routelegcoord_instance.title}</td>
 	                                        <td>${routelegcoord_instance.testName()}</td>
 	                                    </tr>
-                                        <g:set var="last_testtruetrack" value="${routelegcoord_instance.testTrueTrack()}"/>
 	                                </g:each>
 	                            </tbody>
                                 <tfoot>
@@ -85,10 +83,9 @@
                                     </tr>
                                 </thead>
 	                            <tbody>
-                                    <g:set var="last_testtruetrack" value="${null}"/>
 	                                <g:each var="routelettest_instance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
                                         <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routelettest_instance.testDistance())}" />
-                                        <g:set var="course_change" value="${AviationMath.courseChange(last_testtruetrack,routelettest_instance.testTrueTrack())}"/>
+                                        <g:set var="course_change" value="${AviationMath.courseChange(routelettest_instance.turnTrueTrack,routelettest_instance.testTrueTrack())}"/>
                                         <g:if test="${course_change.abs() >= 90}">
                                             <tr>
                                                 <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
@@ -98,7 +95,6 @@
 	                                        <td width="20%">${routelettest_instance.title}</td>
 	                                        <td>${routelettest_instance.testName()}</td>
 	                                    </tr>
-                                        <g:set var="last_testtruetrack" value="${routelettest_instance.testTrueTrack()}"/>
 	                                </g:each>
 	                            </tbody>
                                 <tfoot>

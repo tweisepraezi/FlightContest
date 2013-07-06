@@ -195,22 +195,26 @@ Flug-Höhe über Boden (Minimum, in ft, i.d.R. 500) folgende Eingaben nötig:
   im Feld 'Mark' mit folgenden Einträgen zugeordnet werden:
     * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
       (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
-    * $track:142 - Richtung vom vorangegangenen Wendepunkt in Grad
+    * $track:142 - Richtung vom vorangegangenen Check-Punkt in Grad
   Der vorangegangene Wendepunkt ist ein Check-Punkt, der keine 
   unbekannte Zeitkontrolle ist.
-- Für Landungen zwischen zwei Check-Punkten (Touch&Go) ist eine feste
-  Flugzeit anzugeben. Dazu ist dem Check-Punkt nach dem Landefeld
+- Für Landungen zwischen zwei Check-Punkten (Touch&Go) ist eine abweichende
+  Entfernung der zwei Check-Punkte anzugeben. Diese Entfernung ist größer als
+  die reale Entfernung zu wählen und muss zusätzliche Platzrunden sowie eine
+  zusätzliche Entfernung für die Geschwindigkeitsverringerung auf Grund
+  von Start und Landung beinhalten. Dafür ist dem Check-Punkt nach dem Landefeld
   im Feld 'Mark' folgender Eintrag zuzuordnen:
-    * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten
+    * $dist:12,3NM - Größere Entfernung vom vorangegangenen Wendepunkt in NM
 - Für krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. Diese Check-Punkte 
   sind als unbekannte Zeitkontrollen zu markieren, damit sie nicht im Flugplan 
   einer Besatzung erscheinen. Wird die Torbreite nicht mit 2 NM festgelegt, 
   ist der Check-Punkt mit "$secret" zu markieren. Darüberhinaus muss die 
   Zeitauswertung mit "$notimecheck" deaktiviert werden.
-  Der Wendepunkt nach dem letzten Hilfspunkt sollte mit einer Richtungskorrektur
-  $track versehen werden, die die Richtung auf den ersten Hilfspunkt bekommt,
-  damit der Flugplan der Besatzung einen sinnvollen Einflug-Kurs auf die
-  krumme Strecke erhält.
+  Vor oder nach einem krummen Strecken-Abschnitt sind auch Wendeschleifen 
+  erlaubt. Diese können aber bei Bedarf durch eine abweichende 
+  Richtungsangabe ($track) außer Kraft gesetzt werden. 
+  Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
+  auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke. 
 - Zur Auswertung der Einhaltung des Takeoff-Zeitfensters und der spätesten Landezeit
   müssen Takeoff und Landung in der AFLOS-Referenzstrecke mit einer
   Torbreite (Gate_Width) > 0 und einem Kurs (Heading) > 0 konfiguriert werden.
@@ -237,10 +241,10 @@ in den AFLOS-Referenz-Daten, die beim Import der Strecke verarbeitet werden:
   * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
     (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
   * $dist:12,3NM - Entfernung vom vorangegangenen Wendepunkt in NM
+    (für Touch&Go-Landungen)
   * $dist:22,4km - Entfernung vom vorangegangenen Wendepunkt in km
-  * $track:142 - Richtung vom vorangegangenen Wendepunkt in Grad
-  * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten,
-    für Touch&Go-Landungen
+  * $track:142 - Richtung vom vorangegangenen Check-Punkt in Grad
+  * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten
   * $notimecheck - Keine Zeitauswertung für diesen Check-Punkt
   Der vorangegangene Wendepunkt ist ein Check-Punkt, der importiert wird
   und keine unbekannte Zeitkontrolle ist.

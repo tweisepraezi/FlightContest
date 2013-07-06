@@ -22,7 +22,8 @@
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb Auswertung mit Klassen']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (100 Besatzungen)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (20 Besatzungen)']}"/>
-	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[1,2,3,11,12,13,14]" value="1">
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (Strecken)']}"/>
+	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[1,2,3,11,12,13,14,21]" value="1">
 	                                <div>
 	                                    <label>${it.radio} ${it.label}</label>
 	                                </div>

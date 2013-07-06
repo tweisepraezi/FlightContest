@@ -15,6 +15,8 @@ class RouteLeg
 	
 	Integer legDuration                // min, DB-2.3
 	Boolean noTimeCheck = false        // DB-2.3
+	
+	BigDecimal turnTrueTrack           // DB-2.4
 
     static constraints = {
 		title(nullable:true)
@@ -28,6 +30,9 @@ class RouteLeg
 		// DB-2.3 compatibility
 		legDuration(nullable:true)
 		noTimeCheck(nullable:true)
+		
+		// DB-2.4 compatibility
+		turnTrueTrack(nullable:true)
     }
 
 	void CopyValues(RouteLeg routeLegInstance)
@@ -39,6 +44,7 @@ class RouteLeg
 		measureDistance = routeLegInstance.measureDistance
 		legMeasureDistance = routeLegInstance.legMeasureDistance
 		legDistance = routeLegInstance.legDistance
+		turnTrueTrack = routeLegInstance.turnTrueTrack
 		
 		if (!this.save()) {
 			throw new Exception("RouteLeg.CopyValues could not save")
@@ -117,7 +123,7 @@ class RouteLeg
 
 	String testName()
 	{
-		String trueTrackStr = "${FcMath.RouteGradStr(testTrueTrack())}${getMsg('fc.grad')}"
+		String trueTrackStr = "${FcMath.GradStr(testTrueTrack())}${getMsg('fc.grad')}"
 		if (measureTrueTrack != null) {
 			trueTrackStr += " ${getMsg('fc.distance.map.short')}"
 		} else {

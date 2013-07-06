@@ -135,12 +135,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:set var="last_testtruetrack" value="${null}"/>
                                 <g:set var="i" value="${new Integer(0)}"/>
                                 <g:each var="routeleg_instance" in="${routeInstance.routelegs}" status="num">
                                     <g:set var="i" value="${i+1}"/>
                                     <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routeleg_instance.testDistance())}" />
-                                    <g:set var="course_change" value="${AviationMath.courseChange(last_testtruetrack,routeleg_instance.testTrueTrack())}"/>
+                                    <g:set var="course_change" value="${AviationMath.courseChange(routeleg_instance.turnTrueTrack,routeleg_instance.testTrueTrack())}"/>
                                     <g:if test="${course_change.abs() >= 90}">
                                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                             <td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
@@ -155,7 +154,6 @@
                                         <td>${routeleg_instance.coordDistanceName()}</td>
                                         <td>${routeleg_instance.mapDistanceName()} (${routeleg_instance.mapMeasureDistanceName()})</td>
                                     </tr>
-                                    <g:set var="last_testtruetrack" value="${routeleg_instance.testTrueTrack()}"/>
                                 </g:each>
                             </tbody>
                             <tfoot>
@@ -180,12 +178,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:set var="last_testtruetrack" value="${null}"/>
                                 <g:set var="i" value="${new Integer(0)}"/>
                                 <g:each var="routeleg_instance" in="${routeInstance.testlegs}" status="num">
                                     <g:set var="i" value="${i+1}"/>
                                     <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routeleg_instance.testDistance())}" />
-                                    <g:set var="course_change" value="${AviationMath.courseChange(last_testtruetrack,routeleg_instance.testTrueTrack())}"/>
+                                    <g:set var="course_change" value="${AviationMath.courseChange(routeleg_instance.turnTrueTrack,routeleg_instance.testTrueTrack())}"/>
                                     <g:if test="${course_change.abs() >= 90}">
                                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                             <td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
@@ -200,7 +197,6 @@
                                         <td>${routeleg_instance.coordDistanceName()}</td>
                                         <td>${routeleg_instance.mapDistanceName()} (${routeleg_instance.mapMeasureDistanceName()})</td>
                                     </tr>
-                                    <g:set var="last_testtruetrack" value="${routeleg_instance.testTrueTrack()}"/>
                                 </g:each>
                             </tbody>
                             <tfoot>
@@ -217,10 +213,12 @@
                             <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}"  tabIndex="4"/>
                         </g:if>
                         <g:actionSubmit action="printroute" value="${message(code:'fc.print')}"  tabIndex="5"/>
+                        <g:actionSubmit action="printcoordall" value="${message(code:'fc.printcoord.all')}"  tabIndex="6"/>
+                        <g:actionSubmit action="printcoordtp" value="${message(code:'fc.printcoord.tp')}"  tabIndex="7"/>
                         <g:if test="${!routeInstance.Used()}">
-                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="6"/>
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="8"/>
                         </g:if>
-                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}"  tabIndex="7"/>
+                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}"  tabIndex="9"/>
                     </g:form>
                 </div>
             </div>

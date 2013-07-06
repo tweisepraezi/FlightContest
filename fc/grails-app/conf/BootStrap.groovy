@@ -282,6 +282,28 @@ class BootStrap {
 							}
 							println " done."
 						}
+						if (global.versionMinor < 4) { // DB-2.4 compatibility
+							print "    2.4 modifications"
+							Route.findAll().each { Route route_instance ->
+								BigDecimal next_turntruetrack = null
+								RouteLegCoord.findAllByRoute(route_instance,[sort:"id"]).each { RouteLegCoord routelegcoord_instance ->
+									routelegcoord_instance.turnTrueTrack = next_turntruetrack
+									routelegcoord_instance.save()
+									next_turntruetrack = routelegcoord_instance.testTrueTrack()
+								}
+								next_turntruetrack = null
+								RouteLegTest.findAllByRoute(route_instance,[sort:"id"]).each { RouteLegTest routelegtest_instance ->
+									routelegtest_instance.turnTrueTrack = next_turntruetrack
+									routelegtest_instance.save()
+									next_turntruetrack = routelegtest_instance.testTrueTrack()
+								}
+							}
+							Task.findAll().each { Task task_instance ->
+								task_instance.takeoffIntervalSlowerAircraft = task_instance.takeoffIntervalNormal
+								task_instance.save()
+							}
+							println " done."
+						}
 						break
 				}
 				global.versionMajor = global.DB_MAJOR

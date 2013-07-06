@@ -22,6 +22,9 @@ class AflosCrewNames implements Serializable
 	
 	String viewName()
 	{
-		return "$startnum: $name"
+		if (name) {
+			return "$startnum: $name"
+		}
+		return "$startnum"
 	}
 }

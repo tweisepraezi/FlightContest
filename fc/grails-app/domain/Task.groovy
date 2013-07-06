@@ -21,6 +21,7 @@ class Task
 
 	String firstTime                         = "11:00" // Local time of first planning test [hh:mm]
 	int takeoffIntervalNormal                = 3     // space between takeoff [min]
+	Integer takeoffIntervalSlowerAircraft    = 3     // DB-2.4, space between takeoff to slower aircraft [min]
 	int takeoffIntervalFasterAircraft        = 30    // space between takeoff to faster aircraft [min]
 	
 	int planningTestDuration                 = 60    // duration of planning test [min]
@@ -179,6 +180,9 @@ class Task
 		specialTestTitle(nullable:true)
 		hidePlanning(nullable:true)
 		hideResults(nullable:true)
+		
+		// DB-2.4 compatibility
+		takeoffIntervalSlowerAircraft(nullable:true,range:0..240)
 	}
 
     static mapping = {
@@ -201,6 +205,7 @@ class Task
 		specialTestRun = taskInstance.specialTestRun
 		firstTime = taskInstance.firstTime
 		takeoffIntervalNormal = taskInstance.takeoffIntervalNormal
+		takeoffIntervalSlowerAircraft = taskInstance.takeoffIntervalSlowerAircraft
 		takeoffIntervalFasterAircraft = taskInstance.takeoffIntervalFasterAircraft
 		planningTestDuration = taskInstance.planningTestDuration
 		preparationDuration = taskInstance.preparationDuration
@@ -259,6 +264,7 @@ class Task
 		specialTestRun = taskInstance.specialTestRun
 		firstTime = taskInstance.firstTime
 		takeoffIntervalNormal = taskInstance.takeoffIntervalNormal
+		takeoffIntervalSlowerAircraft = taskInstance.takeoffIntervalSlowerAircraft
 		takeoffIntervalFasterAircraft = taskInstance.takeoffIntervalFasterAircraft
 		planningTestDuration = taskInstance.planningTestDuration
 		preparationDuration = taskInstance.preparationDuration

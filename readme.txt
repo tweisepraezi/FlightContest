@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-28.03.2013
+06.07.2013
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -48,8 +48,31 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Erweiterungen in dieser Version (2.0.0):
+Erweiterungen in dieser Version (2.1.0):
 ----------------------------------------
+- Verbesserungen für krumme Strecken-Abschnitte
+    Vor oder nach einem krummen Strecken-Abschnitt sind auch Wendeschleifen 
+    erlaubt. Diese können aber bei Bedarf durch eine abweichende 
+    Richtungsangabe ($track) außer Kraft gesetzt werden. 
+    Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
+    auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.
+    ('Programme -> Flight Contest -> Help' -> Abschnitt 'Streckenplanung')
+- Strecken-Koordinaten-Ausdruck
+    Ermöglicht Ausdruck der Koordinaten einer Strecke 
+    mit und ohne unbekannte Zeitkontrollen.
+- Planung: Takeoff-Abstand bei langsamerem Folgeflugzeug
+    Ermöglicht es, vor jeder Geschwindigkeits-Gruppe einen zusätzlichen
+    Zeitabstand einzustellen, um gleichzeitiges Kreisen vor dem Start-Punkt
+    zu vermeiden. 
+- AFLOS 2.13 für automatische Auswertung des Takeoff-Zeitfensters erforderlich
+    Die AFLOS-Calculate-Funktion in älteren Versionen berechnet
+    die Überflugzeit des T/O-Punktes nicht.
+- Probleme bei der Umschaltung von manueller auf automatische Auswertung
+  der Einhaltung des Takeoff-Zeitfensters und der spätesten Landezeit
+  wurden beseitigt.
+
+Erweiterungen in Version 2.1.0:
+-------------------------------
 - Tips wurde in Help ('Programme -> Flight Contest -> Help') umbenannt.
     Enthält folgende Kapitel:
       Bedien-Tipps
@@ -146,8 +169,7 @@ Erweiterungen in dieser Version (2.0.0):
   weiteren Markierungen versehen werden, die beim Import der Strecke 
   verarbeitet werden:
     * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten
-      (für Touch&Go-Landungen)
-    * $notimecheck - Keine Zeitauswertung für diesen Check-Punkt
+    * $notimecheck    - Keine Zeitauswertung für diesen Check-Punkt
   Details zur Anwendung dieser und aller anderen Markierungen sind in 
   'Programme -> Flight Contest -> Help' im Abschnitt 'Streckenplanung' zu finden.
 - Aktualisierung der FAI Regelwerke
@@ -208,17 +230,6 @@ Erweiterungen in Version 1.2.1:
     Torbreite hinzugefügt.
   * Den Auswerte- und Test-Etappen-Tabellen wurde die Gesamtentfernung
     und die Anzeige von Kursänderungen >= 90 Grad hinzugefügt.
-- Hinweis zur Verwendung der AFLOS-Koordinaten-Markierung $ignore:
-  Ein dertiger Punkt wird von 'Flight Contest' beim Import vollständig
-  ignoriert, d.h., es werden keine Daten dieses Punktes verarbeitet.
-  Bei Verwendung als Hilfspunkt für krumme Strecken ist deshalb dem
-  ersten folgenden Wendepunkt die Entfernung und Richtung mitzuteilen, 
-  die für den krummen Streckenabschnitt verwendet werden soll.
-  Dafür sind zweckmässigerweise folgende Werte anzugeben:
-    $dist  - Summe der Entfernung der vorangegangen $ignore-Punkte
-    $track - Richtung des ersten $ignore-Punktes
-  Für diesen Einsatzfall wird in einer zukünftigen 'Flight Contest'-
-  Version eine eigene Markierungsmöglichkeit eingeführt.
 
 Erweiterungen in Version 1.2.0:
 -------------------------------
@@ -256,7 +267,7 @@ Erweiterungen in Version 1.2.0:
     (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
   * $dist:12,3NM - Entfernung vom vorangegangenen Wendepunkt in NM
   * $dist:22,4km - Entfernung vom vorangegangenen Wendepunkt in km
-  * $track:142 - Richtung vom vorangegangenen Wendepunkt in Grad
+  * $track:142 - Richtung vom vorangegangenen Check-Punkt in Grad
   Der vorangegangene Wendepunkt ist ein Check-Punkt, der importiert wird
   und keine unbekannte Zeitkontrolle ist.
   Beim Import können folgende Erkennungs-Verfahren für unbekannte
@@ -518,7 +529,7 @@ Beste Darstellung im Client mit dem Web-Browser 'Firefox'.
 
 Interaktion mit AFLOS:
 ---------------------
-Minimale empfohlene AFLOS Version: 2.12
+Minimale empfohlene AFLOS Version: 2.13
 
 'Flight Contest' kann AFLOS-Daten von 2 Quellen lesen:
 1. direkt von 'AFLOS', wenn 'AFLOS' und 'Flight Contest' 

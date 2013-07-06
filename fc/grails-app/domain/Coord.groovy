@@ -274,35 +274,37 @@ class Coord
 		return "${latName()} ${lonName()}"
 	}
 
-	String namePrintable() // BUG: ' wird nicht korrekt gedruckt
+	String namePrintable(boolean printSettings) // BUG: ' wird nicht korrekt gedruckt
 	{
 		String print_name = "${latName()}' ${lonName()}'"
-    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
-			print_name += " ("
-		}
-    	if (measureTrueTrack != null) {
-    		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
-			if (measureDistance != null || legDuration != null || noTimeCheck) {
-				print_name += "; "
+		if (printSettings) {
+	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
+				print_name += " ("
 			}
-    	}
-    	if (measureDistance != null) {
-    		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
-			if (legDuration != null || noTimeCheck) {
-				print_name += "; "
+	    	if (measureTrueTrack != null) {
+	    		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
+				if (measureDistance != null || legDuration != null || noTimeCheck) {
+					print_name += "; "
+				}
+	    	}
+	    	if (measureDistance != null) {
+	    		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
+				if (legDuration != null || noTimeCheck) {
+					print_name += "; "
+				}
+	    	}
+			if (legDuration != null) {
+				if (noTimeCheck) {
+					print_name += "; "
+				}
+				print_name += "${legDuration}${getMsg('fc.time.min')}"
 			}
-    	}
-		if (legDuration != null) {
 			if (noTimeCheck) {
-				print_name += "; "
+				print_name += "${getMsg('fc.notimecheck.print')}"
 			}
-			print_name += "${legDuration}${getMsg('fc.time.min')}"
-		}
-		if (noTimeCheck) {
-			print_name += "${getMsg('fc.notimecheck.print')}"
-		}
-    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
-			print_name += ")"
+	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
+				print_name += ")"
+			}
 		}
 		return print_name
 	}

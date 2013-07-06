@@ -404,16 +404,16 @@
 	                                        <td>${testInstance.GetFlightTestTakeoffMissedPoints()} ${message(code:'fc.points')}</td>
 	                                	</tr>
 	                                </g:if>
+                                    <g:if test="${testInstance.flightTestLandingTooLate}">
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.flighttest.landingtolate')}:</td>
+                                            <td>${testInstance.GetFlightTestLandingToLatePoints()} ${message(code:'fc.points')}</td>
+                                        </tr>
+                                    </g:if>
 	                                <g:if test="${testInstance.flightTestBadCourseStartLanding}">
 	                                	<tr>
 	                                    	<td class="detailtitle">${message(code:'fc.flighttest.badcoursestartlanding')}:</td>
 	                                        <td>${testInstance.GetFlightTestBadCourseStartLandingPoints()} ${message(code:'fc.points')}</td>
-	                                	</tr>
-	                                </g:if>
-                                   	<g:if test="${testInstance.flightTestLandingTooLate}">
-		                                <tr>
-		                                    <td class="detailtitle">${message(code:'fc.flighttest.landingtolate')}:</td>
-	                                        <td>${testInstance.GetFlightTestLandingToLatePoints()} ${message(code:'fc.points')}</td>
 	                                	</tr>
 	                                </g:if>
                                     <g:if test="${testInstance.flightTestGivenTooLate}">
