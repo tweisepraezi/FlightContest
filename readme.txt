@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-06.07.2013
+15.07.2013
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -48,8 +48,13 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Erweiterungen in dieser Version (2.1.0):
-----------------------------------------
+Fehlerbehebungen in dieser Version (2.1.1):
+-------------------------------------------
+- Bei nicht geflogenen Wendepunkten wurden davor beobachtete Kursabweichungen
+  mit einer zu hohen Anzahl aus AFLOS-Loggerdaten gelesen.  
+
+Erweiterungen in Version 2.1.0:
+-------------------------------
 - Verbesserungen für krumme Strecken-Abschnitte
     Vor oder nach einem krummen Strecken-Abschnitt sind auch Wendeschleifen 
     erlaubt. Diese können aber bei Bedarf durch eine abweichende 
@@ -71,7 +76,7 @@ Erweiterungen in dieser Version (2.1.0):
   der Einhaltung des Takeoff-Zeitfensters und der spätesten Landezeit
   wurden beseitigt.
 
-Erweiterungen in Version 2.1.0:
+Erweiterungen in Version 2.0.0:
 -------------------------------
 - Tips wurde in Help ('Programme -> Flight Contest -> Help') umbenannt.
     Enthält folgende Kapitel:

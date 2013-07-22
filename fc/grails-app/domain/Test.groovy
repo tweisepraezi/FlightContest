@@ -139,8 +139,8 @@ class Test
 		planningtesttask(nullable:true)
 		flighttestwind(nullable:true)
 		taskTAS(scale:10)
-		planningTestOtherPenalties(min:0)
-		flightTestOtherPenalties(min:0)
+		planningTestOtherPenalties()
+		flightTestOtherPenalties()
 		landingTestOtherPenalties(min:0)
 		landingTestPenalties(min:0)
 		

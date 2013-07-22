@@ -5118,9 +5118,8 @@ class FcService
 	    	}
 	    	
 	    	// Import AflosErrorPoints
-	    	int badcourse_num = 0
+	    	int badcourse_seconds = 0
 	    	int course_errors = 0
-	    	String badcourse_starttimeutc
 			List afloserrorpoints_instances = null
 			if (contest_instance.aflosTest) {
 				afloserrorpoints_instances = AflosErrorPoints.aflostest.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
@@ -5130,40 +5129,29 @@ class FcService
 				afloserrorpoints_instances = AflosErrorPoints.aflos.findAllByStartnumAndRoutename(afloscrewnames_instance.startnum,aflosroutenames_instance,[sort:"id"])
 			}
 	    	afloserrorpoints_instances.each { AflosErrorPoints afloserrorpoints_instance ->
-	    		if (badcourse_num == 0) {
-	    			if (afloserrorpoints_instance.mark.contains("-Bad Course")) {
-		    			badcourse_num = 1
-		    			badcourse_starttimeutc = afloserrorpoints_instance.utc
-		    		}
-	    		} else {
-	    			if (!afloserrorpoints_instance.mark.trim()) {
-	    				badcourse_num++
-	    			} else {
-	    				// process error point
-	    				if (processAflosErrorPointBadCourse(testInstance, badcourse_num, badcourse_starttimeutc)) {
-	    					course_errors++
-	    				}
-	    				
-	    				// search for next error point 
-	    				if (afloserrorpoints_instance.mark.contains("-Bad Course")) {
-	    					badcourse_num = 1
-	                        badcourse_starttimeutc = afloserrorpoints_instance.utc
-	    				} else {
-	    					badcourse_num = 0
-	    					badcourse_starttimeutc = ""
-	    				}
-	    			}
-	    		}
+				// check Bad Course
+				if (afloserrorpoints_instance.mark.contains("-Bad Course")) {
+					String badcourse_mark = afloserrorpoints_instance.mark.substring(11).trim()
+					if (badcourse_mark) {
+						if (badcourse_mark.startsWith("(") && badcourse_mark.endsWith(")")) {
+							badcourse_mark = badcourse_mark.substring(1,badcourse_mark.size()-1)
+							if (badcourse_mark.isInteger()) {
+								badcourse_seconds = badcourse_mark.toInteger()
+								if (badcourse_seconds) { 
+				    				if (processAflosErrorPointBadCourse(testInstance, badcourse_seconds, afloserrorpoints_instance.utc)) {
+				    					course_errors++
+				    				}
+								}
+							}
+						}
+					}
+				}
+				
+				// check Bad Turn
 	    		if (afloserrorpoints_instance.mark.contains("-Bad Turn")) {
 	    			processAflosErrorPointBadTurn(testInstance, afloserrorpoints_instance.utc)
 	    		}
 	    	}
-	        if (badcourse_num > 0) {
-	            // process error point
-	        	if (processAflosErrorPointBadCourse(testInstance, badcourse_num, badcourse_starttimeutc)) {
-	        		course_errors++
-	        	}
-	        }
 	        
 			if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
 				testInstance.flightTestTakeoffMissed = false
@@ -5260,61 +5248,65 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    private boolean processAflosErrorPointBadCourse(Test testInstance, int badCourseNum, String badCourseStartTimeUTC)
+    private boolean processAflosErrorPointBadCourse(Test testInstance, int badCourseSeconds, String badCourseStartTimeUTC)
     {
     	boolean course_error = false
     	Contest contest_instance = testInstance.task.contest
     	
-        Date badCourseStartTime = Date.parse("HH:mm:ss",FcMath.ConvertAFLOSTime(badCourseStartTimeUTC))
-        GregorianCalendar badCourseStartCalendar = new GregorianCalendar()
-        badCourseStartCalendar.setTime(badCourseStartTime)
+        Date badcourse_starttime = Date.parse("HH:mm:ss",FcMath.ConvertAFLOSTime(badCourseStartTimeUTC))
+        GregorianCalendar badcourse_startcalendar = new GregorianCalendar()
+        badcourse_startcalendar.setTime(badcourse_starttime)
         
         Date timezone_date = Date.parse("HH:mm",contest_instance.timeZone)
         GregorianCalendar timezone_calendar = new GregorianCalendar()
         timezone_calendar.setTime(timezone_date)
         
-        badCourseStartCalendar.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
+        badcourse_startcalendar.add(Calendar.HOUR_OF_DAY, timezone_calendar.get(Calendar.HOUR_OF_DAY))
 		if (contest_instance.timeZone.startsWith("-")) {
-			badCourseStartCalendar.add(Calendar.MINUTE, -timezone_calendar.get(Calendar.MINUTE))
+			badcourse_startcalendar.add(Calendar.MINUTE, -timezone_calendar.get(Calendar.MINUTE))
 		} else {
-        	badCourseStartCalendar.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
+        	badcourse_startcalendar.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
 		}
         
-        GregorianCalendar badCourseEndCalendar = badCourseStartCalendar.clone()
-        badCourseEndCalendar.add(Calendar.SECOND, badCourseNum)
+        GregorianCalendar badcourse_endcalendar = badcourse_startcalendar.clone()
+        badcourse_endcalendar.add(Calendar.SECOND, badCourseSeconds)
             
-        println "Found AflosErrorPointBadCourse ($badCourseNum, ${FcMath.TimeStr(badCourseStartCalendar.getTime())}...${FcMath.TimeStr(badCourseEndCalendar.getTime())}): "
+        println "Found AflosErrorPointBadCourse ($badCourseSeconds s, ${FcMath.TimeStr(badcourse_startcalendar.getTime())}...${FcMath.TimeStr(badcourse_endcalendar.getTime())}): "
 
-        if (badCourseNum > testInstance.GetFlightTestBadCourseCorrectSecond()) {
+        if (badCourseSeconds > testInstance.GetFlightTestBadCourseCorrectSecond()) {
         	course_error = true
     		int last_index = 0
-    		Date last_time
-    		boolean calculatePenalties = false
+    		Date last_time = null
             CoordResult.findAllByTest(testInstance,[sort:"id"]).eachWithIndex { CoordResult coordresult_instance, int i ->
-            	if (last_index != 0 && badCourseEndCalendar.getTime() < coordresult_instance.resultCpTime) {
-        			// process
-        			last_index = i
-        			
-        			if (badCourseEndCalendar.getTime() > last_time) {
-        				coordresult_instance.resultBadCourseNum++
-        				coordresult_instance.save()
-        				calculatePenalties = true
-        				println "  $coordresult_instance.mark relevant."
-        			} else {
-        				println "  $coordresult_instance.mark not relevant."
-        			}
-            	}
-
-            	if (badCourseStartCalendar.getTime() > coordresult_instance.resultCpTime) {
-                    last_index = i
-                    last_time = coordresult_instance.resultCpTime
-                } else {
-                    last_index = 0
-                }
+				switch (coordresult_instance.type) {
+					case CoordType.TP:
+					case CoordType.SECRET:
+					case CoordType.FP:
+						if (coordresult_instance.resultCpTime != Date.parse("HH:mm","02:00")) { // Messung
+			            	if (last_index != 0) {
+								if (badcourse_endcalendar.getTime() < coordresult_instance.resultCpTime) {
+			        				coordresult_instance.resultBadCourseNum++
+			        				coordresult_instance.save()
+			        				println "  $coordresult_instance.mark (${FcMath.TimeStr(last_time)}, ${FcMath.TimeStr(coordresult_instance.resultCpTime)}) relevant (Set BadCourseNum to $coordresult_instance.resultBadCourseNum)."
+			        			} else {
+			        				// println "  $coordresult_instance.mark (${FcMath.TimeStr(last_time)}, ${FcMath.TimeStr(coordresult_instance.resultCpTime)}) not relevant."
+			        			}
+			            	}
+			
+			            	if (badcourse_startcalendar.getTime() > coordresult_instance.resultCpTime) {
+			                    last_index = i
+			                    last_time = coordresult_instance.resultCpTime
+			                } else {
+			                    last_index = 0
+								last_time = null
+			                }
+						}
+						break
+				}
             }
     		
     	} else {
-    		println "  Not relevant (number)."
+    		println "  Not relevant (<= ${testInstance.GetFlightTestBadCourseCorrectSecond()})."
     	}
         return course_error
     }
@@ -5339,7 +5331,7 @@ class FcService
 			badturn_calendar.add(Calendar.MINUTE, timezone_calendar.get(Calendar.MINUTE))
 		}
         
-        print "Found AflosErrorPointBadTurn (${FcMath.TimeStr(badturn_calendar.getTime())}): "
+        println "Found AflosErrorPointBadTurn (${FcMath.TimeStr(badturn_calendar.getTime())}): "
 
         int last_index = 0
         Date last_time
@@ -5589,7 +5581,7 @@ class FcService
 						last_coordroute_instance2 = coordroute_instance
 		                break
 			    }
-				if (last_coordtype == CoordType.UNKNOWN) { // TODO new
+				if (last_coordtype == CoordType.UNKNOWN) {
 					last_coordtype = coordroute_instance.type
 				}
 				if (coordroute_instance.type == CoordType.SECRET) {
