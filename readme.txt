@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-15.07.2013
+16.08.2013
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -48,8 +48,12 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Fehlerbehebungen in dieser Version (2.1.1):
+Fehlerbehebungen in dieser Version (2.1.2):
 -------------------------------------------
+- Die Zeitauswertung enthielt unerwünschte 'Procedure Turn'-Einträge nach SP und FP.
+
+Fehlerbehebungen in Version 2.1.1:
+----------------------------------
 - Bei nicht geflogenen Wendepunkten wurden davor beobachtete Kursabweichungen
   mit einer zu hohen Anzahl aus AFLOS-Loggerdaten gelesen.  
 

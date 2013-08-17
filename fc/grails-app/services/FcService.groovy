@@ -5087,7 +5087,7 @@ class FcService
 	                    
 	                    // log
 	                    if (coordresult_instance.planProcedureTurn) {
-	                        println "Procedure turn"
+	                        println "PROCEDURE TURN"
 	                    }
 	                    println "Found AflosCheckPoint $afloscheckpoints_instance.mark UTC: $coordresult_instance.resultCpTimeInput Local: ${FcMath.TimeStr(coordresult_instance.resultCpTime)}"
 	        		}
@@ -5111,7 +5111,7 @@ class FcService
                     
 	                // log
 	                if (coordresult_instance.planProcedureTurn) {
-                        println "Procedure turn"
+                        println "PROCEDURE TURN"
                     }
                     println "Not found AflosCheckPoint $coordresult_instance.mark"
 	        	}
@@ -9755,9 +9755,13 @@ class FcService
             coordresult_instance.lonDirection = coordroute_instance.lonDirection
             coordresult_instance.altitude = coordroute_instance.altitude
             coordresult_instance.gatewidth2 = coordroute_instance.gatewidth2
-			if (last_coordtype != CoordType.SECRET) {
+			
+			// planProcedureTurn
+			if (last_coordtype.IsProcedureTurnCoord()) {
 				coordresult_instance.planProcedureTurn = coordroute_instance.planProcedureTurn
 			}
+			
+			// planCpTime
             switch (coordroute_instance.type) {
                 case CoordType.TO:
                     coordresult_instance.planCpTime = testInstance.takeoffTime
@@ -9791,9 +9795,15 @@ class FcService
                     }
                     break
             }
-            coordresult_instance.test = testInstance
-			println "'${coordresult_instance.name()}' saved."
+            
+			coordresult_instance.test = testInstance
             coordresult_instance.save()
+
+			if (coordresult_instance.planProcedureTurn) {
+				println "PROCEDURE TURN"
+			}
+			println "${coordresult_instance.title()} ${coordresult_instance.mark} ${FcMath.TimeStr(coordresult_instance.planCpTime)}"
+			
 			last_coordtype = coordroute_instance.type
         }
 		printdone ""

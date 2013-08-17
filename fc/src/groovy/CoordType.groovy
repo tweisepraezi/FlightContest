@@ -71,4 +71,13 @@ enum CoordType
 		}
 		return false
 	}
+	
+	boolean IsProcedureTurnCoord()
+	{
+		switch(this) {
+			case CoordType.TP:
+				return true
+		}
+		return false
+	}
 }
