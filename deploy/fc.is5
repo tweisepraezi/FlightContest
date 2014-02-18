@@ -4,12 +4,12 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.4.0';
 const FCCompatibelDigits = 0; // Number of digits for application compatibility
-const FCVersion = '2.1.2';
+const FCVersion = '2.1.3';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 2.1.2
-AppVersion=2.1.2
-VersionInfoVersion=2.1.2
+AppVerName=Flight Contest 2.1.3
+AppVersion=2.1.3
+VersionInfoVersion=2.1.3
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -45,7 +45,7 @@ en.BackupError=Backup error
 de.BackupError=Backup-Fehler
 
 [Files]
-Source: "..\..\..\Java\jdk1.6.0_30\*";                DestDir: "{app}\java";            Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
+Source: "..\..\..\Java\jdk1.6.0_30\jre\*";            DestDir: "{app}\java";            Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
 Source: "..\..\..\Server\apache-tomcat-7.0.25-x86\*"; DestDir: "{app}\tomcat";          Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
 Source: ".\fc-service.bat";                           DestDir: "{app}\tomcat\bin";
 Source: ".\tomcat-users.xml";                         DestDir: "{app}\tomcat\conf";
@@ -67,7 +67,7 @@ Source: ".\rules\FAI_gac_precision_rules_2013.pdf";   DestDir: "{app}\rules";   
 Source: ".\rules\FAI_rally_flying_rules_2013.pdf";    DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Praezisionsflug_2005.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Navigationsflug_2012.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
-Source: ".\rules\CH_Praezisionsflug_2009.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\CH_Praezisionsflug_2014.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly; AfterInstall: MyAfterInstall;
 
 [Dirs]
@@ -121,7 +121,7 @@ Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2013";          
 Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2013";               Filename: "{app}\rules\\FAI_rally_flying_rules_2013.pdf";   WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsregeln Präzisionsflug Deutschland 2005";             Filename: "{app}\rules\\DE_Praezisionsflug_2005.pdf";       WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2012";           Filename: "{app}\rules\\DE_Navigationsflug_2012.pdf";       WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2009"; Filename: "{app}\rules\\CH_Praezisionsflug_2009.pdf";       WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2014"; Filename: "{app}\rules\\CH_Praezisionsflug_2014.pdf";       WorkingDir: "{commondesktop}";
 
 [Code]
 //---------------------------------------------------------------------------------------------------------

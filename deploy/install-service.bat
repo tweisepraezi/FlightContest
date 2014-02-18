@@ -1,11 +1,11 @@
 @echo off
 
 :: Thomas Weise
-:: Version 1.0.1
+:: Version 1.0.2
 
 set PRGDIR=%~dp0
-set JAVA_HOME=%PRGDIR%java
-set JRE_HOME=%PRGDIR%java\jre
+set JAVA_HOME=
+set JRE_HOME=%PRGDIR%java
 set path=%JAVA_HOME%\bin;%path%
 set CATALINA_HOME=%PRGDIR%tomcat
 set WORKINGDIR=%PRGDIR%fc

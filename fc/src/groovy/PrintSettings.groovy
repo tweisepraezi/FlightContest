@@ -4,6 +4,7 @@ enum PrintSettings
 	Standard,
 	None,
 	All,
+	Tower,
 	Planning,
 	Takeoff,
 	Landing, 

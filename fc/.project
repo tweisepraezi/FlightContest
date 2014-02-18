@@ -26,7 +26,7 @@
 		<link>
 			<name>.link_to_grails_plugins</name>
 			<type>2</type>
-			<locationURI>GRAILS_ROOT/2.0.1/projects/fc/plugins</locationURI>
+			<location>K:/Projects/GIT/FlightContest/fc/target/work/plugins</location>
 		</link>
 		<link>
 			<name>deploy</name>

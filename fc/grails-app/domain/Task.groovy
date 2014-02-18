@@ -228,11 +228,14 @@ class Task
 		
 		// taskclasses:TaskClass
 		TaskClass.findAllByTask(taskInstance,[sort:"id"]).each { TaskClass taskclass_instance ->
-			TaskClass new_taskclass_instance = new TaskClass()
-			new_taskclass_instance.task = this
-			new_taskclass_instance.resultclass = ResultClass.findByNameAndContest(taskclass_instance.resultclass.name,contest)
-			new_taskclass_instance.CopyValues(taskclass_instance)
-			new_taskclass_instance.save()
+			ResultClass resultclass_instance = ResultClass.findByNameAndContest(taskclass_instance.resultclass.name,contest)
+			if (resultclass_instance) {
+				TaskClass new_taskclass_instance = new TaskClass()
+				new_taskclass_instance.task = this
+				new_taskclass_instance.resultclass = resultclass_instance
+				new_taskclass_instance.CopyValues(taskclass_instance)
+				new_taskclass_instance.save()
+			}
 		}
 		
 		Crew.findAllByContest(contest,[sort:"viewpos"]).eachWithIndex { Crew crew_instance, int i ->

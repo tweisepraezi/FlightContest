@@ -169,8 +169,7 @@ class Contest
 	String titleSize = TITLESIZE                        // DB-2.3
 
 	// transient values
-	static transients = ['taskTitle','copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
-	String taskTitle
+	static transients = ['copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
 	boolean copyContestSettings = true
 	boolean copyRoutes = true
 	boolean copyCrews = true

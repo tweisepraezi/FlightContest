@@ -20,6 +20,8 @@ Bedien-Tipps
   wodurch das Drücken der Shift-Taste nicht notwendig ist.
 - Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben 
   eingegeben werden, wodurch das Drücken der Shift-Taste nicht notwendig ist.
+- Wird ein Landemesswert leer gelassen, wird automatisch die Einstellung 
+  'Landung außerhalb der Landebox' gewählt.
 
 
 Standard-Wettbewerbsablauf
@@ -27,19 +29,41 @@ Standard-Wettbewerbsablauf
 
 A. Wettbewerbs-Vorbereitung
 
-1. Strecken festlegen und in AFLOS eingeben
-   - Bei Päzisionsflug-Wettbewerben Karten-Entfernungs-Messwerte 
-     mit $dist:...mm im Feld 'Mark' eintragen.
-2. Besatzunglisten in Excel-Tabelle eingeben
-   - Vorlage verwenden:
-     Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls
+1. Strecken-Planung 
+   AFLOS-Datenbank mit Referenzstrecke(n) vorbereiten
+   - Koordinaten mit Google Earth ermitteln
+   - Entfernungen und Höhen mit Top 200 ermitteln
+   - Unbekannte Zeitkontrollen mit $secret im Feld 'Mark' markieren.
+   - Bei Päzisionsflug-Wettbewerben Karten-Entfernungen in Top 200 
+     messen und mit $dist:...km im Feld 'Mark' eintragen.
+2. Teilnehmer-Liste
+   Excel-Tabelle mit Flight Contest-Vorlage vorbereiten
+   - Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls
    - Bei Wettbewerb mit Klassen-Auswertung Klassen-Name zuordnen.
    - Bei Wettbewerb mit Team-Auswertung Team-Name zuordnen.
    - Reihenfolge festlegen und Startnummern zuordnen.
+3. Ablauf-Planung
+   Aufgaben-Anzahl, -Inhalte, -Einstellungen und Auswertungen
+   - Festlegung der Aufgabenanzahl und der Aufgabeninhalte:
+       * Planungstest (Rechenaufgabe)
+       * Navigationstest (Navigationsflug)
+       * Beobachtungstest (Wendepunkt- und Strecken-Bilder, Bodenzeichen)
+       * Landetest (Anzahl der Landungen (bis 4))
+   - Einstellungen je Aufgabe festlegen:
+       * Anfangs-Zeit
+       * TakeOff-Abstand (bei vorhandenen Wendeschleifen min. 2 Minuten)
+       * Zeit T/O -> SP (feste Zeit, muss für langsamstes Flugzeug kalkuliert sein)
+       * Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
+       * Zeit FP -> Landung (-> späteste Landezeit)
+       * Zeit FP -> Abstellen des Flugzeuges
+   - Auswertungs-Einstellungen des Wettbewerbs festlegen:
+       * Wendepunkte für Zeitauswertung festlegen (alle/zu wertende Wendepunkte)
+       * Zeitauswertung für unbekannte Zeitkontrollen für jede Klasse festlegen
 
 B. Wettbewerbs-Beginn
    
-3. Neuer Wettbewerb
+4. Wettbewerb anlegen
+   -> Wettbewerb -> Neuer Wettbewerb 
    - Wettbewerbsname eintragen.
    - Ggf. Klassen-Verwaltung aktivieren.
    - Wettbewerbsordnung, Kartenmaßstab und Zeitzone einstellen.
@@ -50,58 +74,134 @@ B. Wettbewerbs-Beginn
      * Ggf. Punkte für nicht geflogene Wendescheifen mit 0 einstellen
      * Ggf. Punkte für Kursabweichungen > 90 Grad mit 0 einstellen
      * Ggf. Punkte für Unterschreitung der Mindestflughöhe mit 0 einstellen
-4. Strecken -> Import AFLOS-Strecke
-   - Vorbereitete Strecken aus AFLOS importieren.
-5. Besatzungen -> Import Excel-Besatzungsliste
+5. Strecken importieren 
+   -> Strecken -> Import AFLOS-Strecke
+   - Vorbereitete Strecke(n) aus AFLOS importieren.
+6. Besatzungen importieren
+   -> Besatzungen -> Import Excel-Besatzungsliste
    - Vorbereitete Excel-Tabelle (FC-CrewList-Sample.xls) importieren.
-   - Nicht eingetroffene Teilnehmer deaktivieren.
-   
+   - Nicht eingetroffene Besatzungen deaktivieren.
+7. Aufgabe anlegen (Zeit-Einstellungen, Auswertungs-Details)
+   -> Aufgaben -> Neue Aufgabe
+   - Zeit-Einstellungen festlegen
+       * Anfangs-Zeit
+       * TakeOff-Abstand
+       * Zeit T/O -> SP
+       * Flugzeit der Wendeschleife (1 min)
+       * Zeit FP -> Landung
+       * Zeit FP -> Abstellen des Flugzeuges
+   - Auswertungsdetails festlegen
+       * Planungstest (Rechenaufgabe)
+       * Navigationstest (Navigationsflug)
+       * Beobachtungstest (Wendepunkt- und Strecken-Bilder, Bodenzeichen)
+       * Landetest (Anzahl der Landungen (bis 4))
+   - Planungstest hinzufügen: Dabei Strecke und Wind angeben. 
+   - Navigationstest hinzufügen: Dabei Strecke und Wind angeben. 
+8. Aufgabe planen (Planungstest, Zeitplan)
+   -> Planung 
+   - Allen Besatzungen eine Planungsaufgabe zuweisen (-> Aufgabe zuweisen).
+   - Ggf. Reihenfolge korrigieren.
+   - Allen Besatzungen einen Flugwind zuweisen (-> Wind zuweisen).
+   - Zeitplan berechnen (-> Zeitplan berechnen).
+   - Ggf. einzelne Zeiten verschieben.
+9. Aufgabe ausdrucken (Zeitplan, Besatzungs-Aufgaben und -Flugpläne)
+   -> Planung
+   - Planungstest-Aufgaben für Besatzungen drucken (-> Aufgaben drucken).
+   - Zeitplan für Besatzung drucken (-> Zeitplan drucken).
+   - Zeitpläne für verschiedene Schiedsrichter drucken
+     (-> Druckeinstellungen, -> Schiedsrichter-Zeitplan drucken).
+   - Flugpläne für Besatzung drucken (-> Flugpläne drucken).
+
 C. Wettbewerbs-Durchführung
 
-6. Neue Aufgabe
-   - Zeit-Einstellungen festlegen
-     * TakeOff-Abstand
-     * Zeit T/O -> SP
-     * Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
-     * Zeit FP -> Landung
-     * Zeit FP -> Abstellen des Flugzeuges
-   - Auswertungsdetails festlegen
-     * Planungstest (ja/nein)
-     * Navigationstest (ja/nein, Zeitauswertung für unbekannte Zeitkontrollen festlegen)
-     * Beobachtungstest (ja/nein)
-     * Landetest (ja/nein, Anzahl der Landungen festlegen)
-   - Planungstest hinzufügen: Dabei eine erste Planungsaufgabe
-     mit Strecke und Wind angeben. 
-   - Navigationstest hinzufügen: Dabei Strecke und Wind angeben. 
-7. Planung
-   - Allen Besatzungen eine Planungsaufgabe zuweisen.
-   - Ggf. Reihenfolge korrigieren.
-   - Allen Besatzungen einen Flugwind zuweisen.
-   - Zeitplan berechnen.
-   - Ggf. einzelne Zeiten verschieben.
-   - Aufgaben drucken.
-   - Zeitplan drucken.
-   - Schiedsrichter-Zeitplan drucken.
-   - Flugpläne drucken.
-8. Tagesablauf
-   - Planungstest durchführen.
-   - Logger-Daten in AFLOS einlesen.
-   - Beobachtungsergebnisse abfragen.
-   - Landungen durchführen und vermessen.
-9. Auswertung des Tagesablaufes
-   - Planungsergebnisse eintragen.
-   - Navigationsflug-Ergebnisse aus AFLOS importieren.
-     * Ggf. Wendepunkte für Zeitauswertung deaktivieren
-   - Beobachtungsergebnisse eintragen.
-   - Landungsergebnisse eintragen.
-   - Besatzungsergebnisse drucken und Besatzungen übergeben.
-   - Ergebnisse auf Grund stattgegebener Proteste korrigieren. 
-   - Plätze berechnen.
-   - Aufgaben-Ergebnis des Tages drucken.
-10. Wettbewerbs- oder Klassen-Ergebnisse
-   - Plätze berechnen.
-   - Wettbewerbs- oder Klassen-Ergebnis drucken.
-   - Team-Ergebnisse drucken
+10. Logger-Auswertung
+   -> Auswertung -> Aufgaben-Titel
+   - AFLOS: Logger einlesen
+   - AFLOS: Calculate mit Referenzstrecke
+   - AFLOS: Karte mit Referenzstrecke und Loggerdaten für Besatzung drucken
+   - Logger-Daten importieren (-> Navigationsflug -> ... -> Import AFLOS-Logger-Daten).
+   - Rot markierte Positionen in Ergebnisliste prüfen und ggf. korrigieren.
+   - Ergebnisliste für Besatzung drucken (-> Druck)
+     
+11. Ergebniseingabe Planungstest
+   -> Auswertung -> Aufgaben-Titel
+   - Werte für Steuerkurs und Flugzeit eintragen (-> Planung -> ... -> 1,2,3 ...).
+   - Punkte > 0 (blau markiert) prüfen  
+
+12. Ergebniseingabe Beobachtungstest
+   -> Auswertung -> Aufgaben-Titel
+   - Werte für Wendepunkt-Fotos, Strecken-Fotos und Bodenzeichen eintragen
+     (-> Beobachtungen -> ...).
+
+13. Ergebniseingabe Landetest
+   -> Auswertung -> Aufgaben-Titel
+   - Landemesswert und Landefehler eintragen (-> Landung -> ...).
+
+14. Erfasste Ergebnisse an Besatzungen übergeben
+   -> Auswertung -> Aufgaben-Titel
+   - Ggf. Wendepunkte der Zeitauswertung deaktivieren
+     (-> Zeitauswertung von Check-Punkten deaktivieren)
+   - Ergebnisse für Besatzungen drucken (-> Alle Besatzungsergebnisse drucken)
+
+D. Wettbewerbs-Auswertung
+
+15. Proteste von Besatzungen verarbeiten
+   -> Auswertung -> Aufgaben-Titel -> ...
+   - Aufgaben-Ergebnisse auf Grund stattgegebener Proteste korrigieren.
+   
+16. Klassen-Auswertung (je Klasse)
+   -> Auswertung -> Klassen-Titel
+   - Auswertungs-Filter und Druck-Formatierung einstellen (-> Klassen-Ergebnis-Einstellungen)
+       Filter:
+         * einzubeziehende Aufgaben
+         * einzubeziehende Teams
+         * einzubeziehende Aufgabendetails
+       Formatierung:
+         * Titel
+         * Untertitel
+         * A3
+         * Querdruck (Landscape)
+         * Spalte für Aufgabenergebnisse
+         * Aufgabentitel im Detailtitel
+         * Vorläufig
+   - Plätze berechnen (-> Plätze berechnen).
+   - Ergebnis drucken (-> Druck)
+
+17. Wettbewerbs-Auswertung (bei klassenlosen Wettbewerben oder wenn Klassen zu mischen sind)
+   -> Auswertung -> Wettbewerbs-Ergebnis
+   - Auswertungs-Filter und Druck-Formatierung einstellen (-> Wettbewerbs-Ergebnis-Einstellungen)
+       Filter:
+         * einzubeziehende Klassen
+         * einzubeziehende Aufgaben
+         * einzubeziehende Teams
+         * einzubeziehende Aufgabendetails
+       Formatierung:
+         * Titel
+         * Untertitel
+         * A3
+         * Querdruck (Landscape)
+         * Spalte für Aufgabenergebnisse
+         * Aufgabentitel im Detailtitel
+         * Vorläufig
+   - Plätze berechnen (-> Plätze berechnen).
+   - Ergebnis drucken (-> Druck)
+
+18. Team-Auswertung
+   -> Auswertung -> Team-Ergebnis
+   - Auswertungs-Filter und Druck-Formatierung einstellen (-> Team-Ergebnis-Einstellungen)
+       Filter:
+         * einzubeziehende Klassen
+         * einzubeziehende Aufgaben
+         * einzubeziehende Aufgabendetails
+         * Besatzungsanzahl eines Teams
+       Formatierung:
+         * Titel
+         * Untertitel
+         * A3
+         * Querdruck (Landscape)
+         * Vorläufig
+   - Plätze berechnen (-> Plätze berechnen).
+   - Ergebnis drucken (-> Druck)
 
 
 Änderungen bei Wettbewerbs-Durchführung
@@ -287,11 +387,11 @@ Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
     Landung 2 und 3
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
 
-  Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2009:
+  Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2014:
     Landung 1 und 4
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}
     Landung 2 und 3
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
 
 Zur Erfassung der Landungen drucken Sie den Schiedsrichter-Zeitplan einer Aufgabe
 mit folgenden Feldern aus:

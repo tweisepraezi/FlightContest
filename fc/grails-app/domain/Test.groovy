@@ -1342,4 +1342,51 @@ class Test
 	{
 		return crew.startNum  
 	}
+	
+	String GetTitle(ResultType resultType)
+	{
+		int result_version = 0
+		switch (resultType) {
+			case ResultType.Planningtask:
+				result_version = GetPlanningTestVersion()
+				break
+			case ResultType.Flight:
+				result_version = GetFlightTestVersion()
+				break
+			case ResultType.Observation:
+				result_version = GetObservationTestVersion()
+				break
+			case ResultType.Landing:
+				result_version = GetLandingTestVersion()
+				break
+			case ResultType.Special:	
+				result_version = GetSpecialTestVersion()
+				break
+			case ResultType.Crew:
+				result_version = GetCrewResultsVersion()
+				break
+		}
+		String result_type = ""
+		switch (resultType) {
+			case ResultType.Planningtask:
+				result_type = "${getMsg('fc.planningresults')}"
+				break
+			case ResultType.Flight:
+				result_type = "${getMsg('fc.flightresults')}"
+				break
+			case ResultType.Observation:
+				result_type = "${getMsg('fc.observationresults')}"
+				break
+			case ResultType.Landing:
+				result_type = "${getMsg('fc.landingresults')}"
+				break
+			case ResultType.Special:	
+				result_type = "${GetSpecialTestTitle()}"
+				break
+			case ResultType.Crew:
+				result_type = "${getMsg('fc.crewresults')}"
+				break
+		}
+		return "${GetStartNum()} - ${taskAircraft.registration} - ${task.name()} - ${result_type} (${getMsg('fc.version')} ${result_version})"
+	}
 }

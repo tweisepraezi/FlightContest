@@ -2,6 +2,22 @@
     <head>
         <style type="text/css">
             @page {
+                <g:if test="${params.a3=='true'}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: A3 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A3;
+                    </g:else> 
+                </g:if>
+                <g:else>
+                    <g:if test="${params.landscape=='true'}">
+                        size: A4 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A4;
+                    </g:else> 
+                </g:else>
                 @top-center {
                     content: "${routeInstance.name()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale} - ${message(code:'fc.program.printpage')} " counter(page)
                 }
@@ -32,7 +48,7 @@
                                 <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
                                     <g:if test="${coordroute_instance.type != CoordType.SECRET}">
 	                                    <tr>
-	                                        <td width="10%">${coordroute_instance.titleCode()}</td>
+	                                        <td width="10%">${coordroute_instance.titlePrintCode()}</td>
 	                                        <td>${coordroute_instance.namePrintable(false)}</td>
 	                                        <td width="10%" align="center">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
 	                                    </tr>

@@ -27,6 +27,11 @@ class FcMath
 		return gradValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
 	}
 	
+	static int RoundDiffGrad(BigDecimal gradDiffValue)
+	{
+		return gradDiffValue.setScale(0, RoundingMode.HALF_DOWN).toInteger()
+	}
+	
     static String GradStr(BigDecimal gradValue)
     {
         if (gradValue >= 0) {
@@ -45,6 +50,15 @@ class FcMath
         return ""
     }
     
+    static String GradStrComma(BigDecimal gradValue)
+    {
+        if (gradValue >= 0) {
+            DecimalFormat df = new DecimalFormat("000.#####")
+            return df.format(gradValue)
+        }
+        return ""
+    }
+	
     static String GradStrMinus(BigDecimal gradValue)
     {
         DecimalFormat df = new DecimalFormat("0")

@@ -2,8 +2,8 @@
     <head>
 		<style type="text/css">
 		    @page {
-                <g:if test="${taskInstance.printTimetableJuryA3}">
-                    <g:if test="${taskInstance.printTimetableJuryLandscape}">
+                <g:if test="${params.a3=='true'}">
+                    <g:if test="${params.landscape=='true'}">
                         size: A3 landscape;
                     </g:if>
                     <g:else>
@@ -11,13 +11,13 @@
                     </g:else> 
                 </g:if>
                 <g:else>
-	                <g:if test="${taskInstance.printTimetableJuryLandscape}">
-	                    size: A4 landscape;
-	                </g:if>
-	                <g:else>
-	                    size: A4;
-	                </g:else> 
-                </g:else> 
+                    <g:if test="${params.landscape=='true'}">
+                        size: A4 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A4;
+                    </g:else> 
+                </g:else>
                 @top-center {
                     content: "${message(code:'fc.test.timetablejury')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.timetableVersion}) - ${message(code:'fc.program.printpage')} " counter(page)
                 }

@@ -117,13 +117,13 @@ class TeamController {
     }
 
     def print = {
-        def teams = fcService.printTeams(params,GetPrintParams()) 
+        def teams = fcService.printTeams(params,false,false,GetPrintParams()) 
         if (teams.error) {
             flash.message = teams.message
             flash.error = true
             redirect(action:list)
         } else if (teams.content) {
-            fcService.WritePDF(response,teams.content,session.lastContest.GetPrintPrefix(),"teams")
+            fcService.WritePDF(response,teams.content,session.lastContest.GetPrintPrefix(),"teams",true,false,false)
         } else {
             redirect(action:list)
         }

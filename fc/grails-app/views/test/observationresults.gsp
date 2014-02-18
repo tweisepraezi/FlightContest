@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.observationresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})</title>
+        <title>${testInstance.GetTitle(ResultType.Observation)}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.observationresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})</h2>
+                <h2>${testInstance.GetTitle(ResultType.Observation)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
                         <table>

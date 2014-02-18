@@ -130,7 +130,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printAircrafts(Map params,printparams)
+    Map printAircrafts(Map params,boolean a3, boolean landscape,printparams)
     {
         Map aircrafts = [:]
 
@@ -139,7 +139,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/aircraft/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/aircraft/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -665,6 +665,22 @@ class FcService
     Map copyContest(Map params, Contest lastContestInstance)
     {
         Contest contest_instance = new Contest(params)
+		contest_instance.copyContestSettings = false
+		if (params?.copyContestSettings) {
+			contest_instance.copyContestSettings = true
+		}
+		contest_instance.copyRoutes = false
+		if (params?.copyRoutes) {
+			contest_instance.copyRoutes = true
+		}
+		contest_instance.copyCrews = false
+		if (params?.copyCrews) {
+			contest_instance.copyCrews = true
+		}
+		contest_instance.copyTaskSettings = false
+		if (params?.copyTaskSettings) {
+			contest_instance.copyTaskSettings = true
+		}
 		contest_instance.CopyValues(lastContestInstance)
         if(!contest_instance.hasErrors() && contest_instance.save()) {
             return ['instance':contest_instance,'saved':true,'message':getMsg('fc.created',["${contest_instance.title}"])]
@@ -1243,7 +1259,7 @@ class FcService
 	}
 	
 	//--------------------------------------------------------------------------
-    Map printtestContest(Contest contestInstance, boolean landscape, printparams)
+    Map printtestContest(Contest contestInstance, boolean a3, boolean landscape, printparams)
     {
 		Map contest = [:]
 		
@@ -1252,7 +1268,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/contest/listtestprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&landscape=${landscape}"
+            String url = "${printparams.baseuri}/contest/listtestprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -1268,7 +1284,7 @@ class FcService
     }
     
 	//--------------------------------------------------------------------------
-    Map printresultsContest(Contest contestInstance, printparams)
+    Map printresultsContest(Contest contestInstance,boolean a3,boolean landscape,printparams)
     {
 		Map contest = [:]
 		
@@ -1298,7 +1314,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/contest/listresultsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/contest/listresultsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -1314,7 +1330,7 @@ class FcService
     }
     
 	//--------------------------------------------------------------------------
-    Map printpointsContest(Contest contestInstance, printparams)
+    Map printpointsContest(Contest contestInstance,boolean a3,boolean landscape,printparams)
     {
 		Map contest = [:]
 		
@@ -1323,7 +1339,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/contest/pointsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/contest/pointsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -1339,7 +1355,7 @@ class FcService
     }
     
 	//--------------------------------------------------------------------------
-    Map printteamresultsContest(Contest contestInstance, printparams)
+    Map printteamresultsContest(Contest contestInstance, boolean a3, boolean landscape, printparams)
     {
 		Map contest = [:]
 		
@@ -1363,7 +1379,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/contest/listteamresultsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/contest/listteamresultsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -1797,23 +1813,23 @@ class FcService
 					task_instance.printTimetableJuryNumber = true
 					task_instance.printTimetableJuryCrew = true
 					task_instance.printTimetableJuryAircraft = true
-					task_instance.printTimetableJuryAircraftType = false
+					task_instance.printTimetableJuryAircraftType = true
 					task_instance.printTimetableJuryAircraftColour = false
-					task_instance.printTimetableJuryTAS = true
+					task_instance.printTimetableJuryTAS = false
 					task_instance.printTimetableJuryTeam = false
 					task_instance.printTimetableJuryPlanning = true
 					task_instance.printTimetableJuryPlanningEnd = true
 					task_instance.printTimetableJuryTakeoff = true
-					task_instance.printTimetableJuryStartPoint = true
+					task_instance.printTimetableJuryStartPoint = false
 					task_instance.printTimetableJuryCheckPoints = ""
-					task_instance.printTimetableJuryFinishPoint = true
+					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = true
-					task_instance.printTimetableJuryEmptyColumn1 = false
+					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = ""
-					task_instance.printTimetableJuryEmptyColumn2 = false
+					task_instance.printTimetableJuryEmptyColumn2 = true
 					task_instance.printTimetableJuryEmptyTitle2 = ""
-					task_instance.printTimetableJuryEmptyColumn3 = false
+					task_instance.printTimetableJuryEmptyColumn3 = true
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryLandscape = true
 					task_instance.printTimetableJuryA3 = false
@@ -1884,6 +1900,32 @@ class FcService
 					task_instance.printTimetableJuryLandscape = true
 					task_instance.printTimetableJuryA3 = false
 					break
+				case PrintSettings.Tower:
+					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.tower',printLanguage)
+					task_instance.printTimetableJuryNumber = true
+					task_instance.printTimetableJuryCrew = false
+					task_instance.printTimetableJuryAircraft = true
+					task_instance.printTimetableJuryAircraftType = true
+					task_instance.printTimetableJuryAircraftColour = false
+					task_instance.printTimetableJuryTAS = false
+					task_instance.printTimetableJuryTeam = false
+					task_instance.printTimetableJuryPlanning = false
+					task_instance.printTimetableJuryPlanningEnd = false
+					task_instance.printTimetableJuryTakeoff = true
+					task_instance.printTimetableJuryStartPoint = false
+					task_instance.printTimetableJuryCheckPoints = ""
+					task_instance.printTimetableJuryFinishPoint = false
+					task_instance.printTimetableJuryLanding = true
+					task_instance.printTimetableJuryArrival = false
+					task_instance.printTimetableJuryEmptyColumn1 = true
+					task_instance.printTimetableJuryEmptyTitle1 = ""
+					task_instance.printTimetableJuryEmptyColumn2 = true
+					task_instance.printTimetableJuryEmptyTitle2 = ""
+					task_instance.printTimetableJuryEmptyColumn3 = true
+					task_instance.printTimetableJuryEmptyTitle3 = ""
+					task_instance.printTimetableJuryLandscape = false
+					task_instance.printTimetableJuryA3 = false
+					break
 				case PrintSettings.Planning:
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.planningtest',printLanguage)
 					task_instance.printTimetableJuryNumber = true
@@ -1916,7 +1958,7 @@ class FcService
 					task_instance.printTimetableJuryCrew = false
 					task_instance.printTimetableJuryAircraft = true
 					task_instance.printTimetableJuryAircraftType = true
-					task_instance.printTimetableJuryAircraftColour = true
+					task_instance.printTimetableJuryAircraftColour = false
 					task_instance.printTimetableJuryTAS = false
 					task_instance.printTimetableJuryTeam = false
 					task_instance.printTimetableJuryPlanning = false
@@ -1928,7 +1970,7 @@ class FcService
 					task_instance.printTimetableJuryLanding = false
 					task_instance.printTimetableJuryArrival = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
-					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.takeoff.real',printLanguage)
+					task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.takeoff.real',printLanguage)
 					task_instance.printTimetableJuryEmptyColumn2 = true
 					task_instance.printTimetableJuryEmptyTitle2 = ""
 					task_instance.printTimetableJuryEmptyColumn3 = true
@@ -1942,7 +1984,7 @@ class FcService
 					task_instance.printTimetableJuryCrew = false
 					task_instance.printTimetableJuryAircraft = true
 					task_instance.printTimetableJuryAircraftType = true
-					task_instance.printTimetableJuryAircraftColour = true
+					task_instance.printTimetableJuryAircraftColour = false
 					task_instance.printTimetableJuryTAS = false
 					task_instance.printTimetableJuryTeam = false
 					task_instance.printTimetableJuryPlanning = false
@@ -1954,9 +1996,9 @@ class FcService
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
-					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.landing.real',printLanguage)
+					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.landing.field',printLanguage) // getPrintMsg('fc.test.landing.real',printLanguage)
 					task_instance.printTimetableJuryEmptyColumn2 = true
-					task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.landing.field',printLanguage)
+					task_instance.printTimetableJuryEmptyTitle2 = ""
 					task_instance.printTimetableJuryEmptyColumn3 = true
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryLandscape = false
@@ -1965,10 +2007,10 @@ class FcService
 				case PrintSettings.Parking:
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.arrival',printLanguage)
 					task_instance.printTimetableJuryNumber = true
-					task_instance.printTimetableJuryCrew = false
+					task_instance.printTimetableJuryCrew = true
 					task_instance.printTimetableJuryAircraft = true
 					task_instance.printTimetableJuryAircraftType = true
-					task_instance.printTimetableJuryAircraftColour = true
+					task_instance.printTimetableJuryAircraftColour = false
 					task_instance.printTimetableJuryTAS = false
 					task_instance.printTimetableJuryTeam = false
 					task_instance.printTimetableJuryPlanning = false
@@ -3263,9 +3305,15 @@ class FcService
             return task
         }
 
+		boolean a3 = false
+		boolean landscape = false
 		if (isJury) {
+			a3 = task.instance.printTimetableJuryA3
+			landscape = task.instance.printTimetableJuryLandscape
 			println "printtimetableTask Jury (${task.instance.name()})"
 		} else {
+			a3 = task.instance.printTimetableA3
+			landscape = task.instance.printTimetableLandscape
 			println "printtimetableTask Public (${task.instance.name()})"
 		}
 		
@@ -3348,9 +3396,9 @@ class FcService
             boolean first_pdf = true
 			String url = ""
 			if (isJury) {
-				url = "${printparams.baseuri}/task/timetablejuryprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+				url = "${printparams.baseuri}/task/timetablejuryprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
 			} else {
-				url = "${printparams.baseuri}/task/timetableprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+				url = "${printparams.baseuri}/task/timetableprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
 			}
             println "Print: $url"
             renderer.setDocument(url)
@@ -3367,7 +3415,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printflightplansTask(Map params,printparams)
+    Map printflightplansTask(Map params,boolean a3, boolean landscape,printparams)
     {
 		printstart "printflightplansTask"
 		
@@ -3479,7 +3527,7 @@ class FcService
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
 	            if (params["selectedTestID${test_instance.id}"] == "on") {
 					if (!test_instance.crew.disabled) {
-		                String url = "${printparams.baseuri}/test/flightplanprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+		                String url = "${printparams.baseuri}/test/flightplanprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
 		                println "Print: $url"
 		                renderer.setDocument(url)
 		                renderer.layout()
@@ -3506,7 +3554,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printplanningtasksTask(Map params,printparams)
+    Map printplanningtasksTask(Map params,boolean a3, boolean landscape,printparams)
     {
         Map task = getTask(params) 
         if (!task.instance) {
@@ -3566,7 +3614,7 @@ class FcService
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
 	            if (params["selectedTestID${test_instance.id}"] == "on") {
 					if (!test_instance.crew.disabled) {
-		                String url = "${printparams.baseuri}/test/planningtaskprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&results=no"
+		                String url = "${printparams.baseuri}/test/planningtaskprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&results=no"
 		                println "Print: $url"
 		                renderer.setDocument(url)
 		                renderer.layout()
@@ -3691,7 +3739,7 @@ class FcService
 	}
 
     //--------------------------------------------------------------------------
-    Map printresultsTask(Map params,printparams)
+    Map printresultsTask(Map params,boolean a3, boolean landscape,printparams)
     {
         Map task = getTask(params) 
         if (!task.instance) {
@@ -3705,7 +3753,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/task/listresultsprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&printProvisionalResults=${task.instance.printProvisionalResults}"
+            String url = "${printparams.baseuri}/task/listresultsprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printProvisionalResults=${task.instance.printProvisionalResults}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -3721,7 +3769,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printresultclassresultsTask(Map params,printparams)
+    Map printresultclassresultsTask(Map params,boolean a3, boolean landscape,printparams)
     {
         Map task = getTask(params) 
         if (!task.instance) {
@@ -3737,7 +3785,7 @@ class FcService
             boolean first_pdf = true
 			for (ResultClass resultclass_instance in ResultClass.findAllByContest(task.instance.contest,[sort:"id"])) {
 				if (params["resultclass_${resultclass_instance.id}"] == "on") {
-		            String url = "${printparams.baseuri}/task/listresultsprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&resultclassid=${resultclass_instance.id}&printProvisionalResults=${task.instance.printProvisionalResults}"
+		            String url = "${printparams.baseuri}/task/listresultsprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&resultclassid=${resultclass_instance.id}&a3=${a3}&landscape=${landscape}&printProvisionalResults=${task.instance.printProvisionalResults}"
 		            println "Print: $url"
 		            renderer.setDocument(url)
 		            renderer.layout()
@@ -3867,7 +3915,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printTeams(Map params,printparams)
+    Map printTeams(Map params,boolean a3, boolean landscape,printparams)
     {
         Map teams = [:]
 
@@ -3876,7 +3924,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/team/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/team/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -4062,6 +4110,7 @@ class FcService
         
         ResultClass resultclass_instance = new ResultClass(params)
         resultclass_instance.contest = contestInstance
+		resultclass_instance.contestTitle = params.contestTitle
 		setContestRule(resultclass_instance, resultclass_instance.contestRule)
 		
         if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
@@ -4193,7 +4242,7 @@ class FcService
     }
     
 	//--------------------------------------------------------------------------
-    Map printresultsResultClass(ResultClass resultclassInstance, printparams)
+    Map printresultsResultClass(ResultClass resultclassInstance,boolean a3,boolean landscape,printparams)
     {
 		println "printresultsResultClass"
 		
@@ -4225,7 +4274,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/resultClass/listresultsprintable/${resultclassInstance.id}?print=1&lang=${printparams.lang}&resultclassid=${resultclassInstance.id}"
+            String url = "${printparams.baseuri}/resultClass/listresultsprintable/${resultclassInstance.id}?print=1&lang=${printparams.lang}&resultclassid=${resultclassInstance.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -4241,7 +4290,7 @@ class FcService
     }
     
 	//--------------------------------------------------------------------------
-    Map printpointsResultClass(ResultClass resultclassInstance, printparams)
+    Map printpointsResultClass(ResultClass resultclassInstance,boolean a3,boolean landscape,printparams)
     {
 		println "printpointsResultClass"
 		
@@ -4252,7 +4301,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/resultClass/pointsprintable/${resultclassInstance.id}?print=1&lang=${printparams.lang}&resultclassid=${resultclassInstance.id}"
+            String url = "${printparams.baseuri}/resultClass/pointsprintable/${resultclassInstance.id}?print=1&lang=${printparams.lang}&resultclassid=${resultclassInstance.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -4268,7 +4317,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printResultClasses(Map params,printparams)
+    Map printResultClasses(Map params,boolean a3, boolean landscape,printparams)
     {
         Map resultclasses = [:]
 
@@ -4277,7 +4326,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/resultClass/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/resultClass/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -4446,7 +4495,7 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    Map printRoute(Map params,printparams)
+    Map printRoute(Map params,boolean a3, boolean landscape,printparams)
     {
         Map route = getRoute(params)
         if (!route.instance) {
@@ -4458,7 +4507,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/route/showprintable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/route/showprintable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -4474,7 +4523,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printCoord(Map params,printparams,String detail)
+    Map printCoord(Map params,boolean a3, boolean landscape,printparams,String detail)
     {
         Map route = getRoute(params)
         if (!route.instance) {
@@ -4486,7 +4535,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/route/showcoord${detail}printable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/route/showcoord${detail}printable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -4502,7 +4551,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printRoutes(Map params,printparams)
+    Map printRoutes(Map params,boolean a3, boolean landscape,printparams)
     {
         Map routes = [:]
 
@@ -4512,7 +4561,7 @@ class FcService
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             Route.findAllByContest(printparams.contest,[sort:"id"]).each { Route route_instance ->
-	            String url = "${printparams.baseuri}/route/showprintable/${route_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+	            String url = "${printparams.baseuri}/route/showprintable/${route_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
 	            println "Print: $url"
 	            renderer.setDocument(url)
 	            renderer.layout()
@@ -5056,7 +5105,7 @@ class FcService
 	        	afloscheckpoints_instances.each { AflosCheckPoints afloscheckpoints_instance ->
 	        		if (afloscheckpoints_instance.mark == "P${coordresult_instance.mark}") {
 	        			// reset results
-	        			coordresult_instance.ResetResults()
+	        			coordresult_instance.ResetResults(true) // true - with procedure turn
 	        			
 	        			// read utc '09h 36min 05,000sec'
 	        			coordresult_instance.resultCpTimeInput = FcMath.ConvertAFLOSTime(afloscheckpoints_instance.utc) 
@@ -5094,7 +5143,7 @@ class FcService
 	        	}
 	        	if (!found) {
 	        		// reset results
-                    coordresult_instance.ResetResults()
+                    coordresult_instance.ResetResults(true) // true - with procedure turn
                     
 	        		// calculate results
                     coordresult_instance.resultCpNotFound = true
@@ -5226,7 +5275,7 @@ class FcService
 
 		CoordResult.findAllByTest(test.instance,[sort:"id"]).each { CoordResult coordresult_instance ->
 			// reset results
-	        coordresult_instance.ResetResults()
+	        coordresult_instance.ResetResults(true) // true - with procedure turn
 			
     		// calculate results
             coordresult_instance.resultCpNotFound = true
@@ -5949,7 +5998,10 @@ class FcService
 				boolean old_disabled = crew_instance.disabled
             	Aircraft old_aircraft_instance = crew_instance.aircraft
 	            crew_instance.properties = params
-	            
+				if (params.tas) {
+					crew_instance.tas = params.tas.replace(',','.').toBigDecimal()
+				}
+		
 				if (old_disabled != crew_instance.disabled) {
 					println "Crew dis/enabled."
 					crew_instance.planningPenalties = 0
@@ -6091,6 +6143,9 @@ class FcService
 		printstart "saveCrew [$params]"
 		
         Crew crew_instance = new Crew(params)
+		if (params.tas) {
+			crew_instance.tas = params.tas.replace(',','.').toBigDecimal() 
+		}
         crew_instance.contest = contestInstance
 		crew_instance.viewpos = Crew.countByContest(contestInstance)
 		
@@ -6109,10 +6164,13 @@ class FcService
         if (!crew_instance.hasErrors() && crew_instance.save()) {
             
             if (params.registration) {
+				println "Add aircraft $params.registration"
                 Aircraft aircraft_instance = Aircraft.findByRegistrationAndContest(params.registration,contestInstance)
                 if (!aircraft_instance) {
                     aircraft_instance = new Aircraft(params)
-                    aircraft_instance.contest = crew_instance.contest 
+                    aircraft_instance.contest = crew_instance.contest
+					aircraft_instance.type = params.type
+					aircraft_instance.colour = params.colour
                 }
                 if (!aircraft_instance.user1) {
                 	aircraft_instance.user1 = crew_instance
@@ -6557,7 +6615,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printCrews(Map params,printparams)
+    Map printCrews(Map params,boolean a3, boolean landscape,printparams)
     {
         Map crews = [:]
 
@@ -6566,7 +6624,7 @@ class FcService
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            String url = "${printparams.baseuri}/crew/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/crew/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -6635,9 +6693,6 @@ class FcService
 							}
 						}
 						crew_entry.name = crew_name
-						if (crew_entry.tas) {
-							crew_entry.tas = crew_entry.tas.replace('.',',')
-						}
 						if (crew_entry.startNum) {
 							if (crew_entry.startNum.contains('.')) {
 								crew_entry.startNum = crew_entry.startNum.substring(0,crew_entry.startNum.indexOf('.'))
@@ -6889,7 +6944,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map printflightplanTest(Map params,printparams)
+    Map printflightplanTest(Map params,boolean a3, boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -6900,7 +6955,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/flightplanprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/test/flightplanprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -6916,18 +6971,18 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printplanningtaskTest(Map params,printparams,withResult)
+    Map printplanningtaskTest(Map params,boolean a3, boolean landscape,printparams,withResult)
     {
         Map test = getTest(params)
         if (!test.instance) {
             return test
         }
         
-        // Print flightplan
+        // Print planningtask
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/planningtaskprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&results="
+            String url = "${printparams.baseuri}/test/planningtaskprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&results="
             if (withResult) {
             	url += "yes"
             } else {
@@ -6948,7 +7003,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printplanningtaskresultsTest(Map params,printparams)
+    Map printplanningtaskresultsTest(Map params,boolean a3, boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -6959,7 +7014,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/planningtaskresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/test/planningtaskresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -6975,7 +7030,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printflightresultsTest(Map params,printparams)
+    Map printflightresultsTest(Map params,boolean a3, boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -6986,7 +7041,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/flightresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/test/flightresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -7002,7 +7057,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printaflosflightresultsTest(Map params,printparams)
+    Map printaflosflightresultsTest(Map params,boolean a3,boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -7013,7 +7068,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/flightresultsaflosprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/test/flightresultsaflosprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -7029,7 +7084,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printobservationresultsTest(Map params,printparams)
+    Map printobservationresultsTest(Map params,boolean a3, boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -7040,7 +7095,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/observationresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/test/observationresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -7056,7 +7111,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printlandingresultsTest(Map params,printparams)
+    Map printlandingresultsTest(Map params,boolean a3, boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -7067,7 +7122,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/landingresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/test/landingresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -7083,7 +7138,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printspecialresultsTest(Map params,printparams)
+    Map printspecialresultsTest(Map params,boolean a3, boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -7094,7 +7149,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/specialresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}"
+            String url = "${printparams.baseuri}/test/specialresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -7110,7 +7165,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printcrewresultsTest(Map params,printparams)
+    Map printcrewresultsTest(Map params,boolean a3, boolean landscape,printparams)
     {
         Map test = getTest(params)
         if (!test.instance) {
@@ -7128,7 +7183,7 @@ class FcService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/crewresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&printPlanningResults=${test.instance.printPlanningResults}&printFlightResults=${test.instance.printFlightResults}&printObservationResults=${test.instance.printObservationResults}&printLandingResults=${test.instance.printLandingResults}&printSpecialResults=${test.instance.printSpecialResults}&printProvisionalResults=${test.instance.printProvisionalResults}"
+            String url = "${printparams.baseuri}/test/crewresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${test.instance.printPlanningResults}&printFlightResults=${test.instance.printFlightResults}&printObservationResults=${test.instance.printObservationResults}&printLandingResults=${test.instance.printLandingResults}&printSpecialResults=${test.instance.printSpecialResults}&printProvisionalResults=${test.instance.printProvisionalResults}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()
@@ -7144,7 +7199,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map printcrewresultsTask(Map params,printparams)
+    Map printcrewresultsTask(Map params,boolean a3, boolean landscape,printparams)
     {
 		printstart "printcrewresultsTask"
         Map task = getTask(params) 
@@ -7169,7 +7224,7 @@ class FcService
 				if (!test_instance.crew.disabled) {
 					if (isprintcrewresult(params,test_instance)) {
 						printstart "Print $test_instance.crew.name"
-		                String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&printPlanningResults=${task.instance.printPlanningResults}&printFlightResults=${task.instance.printFlightResults}&printObservationResults=${task.instance.printObservationResults}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
+		                String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${task.instance.printPlanningResults}&printFlightResults=${task.instance.printFlightResults}&printObservationResults=${task.instance.printObservationResults}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
 		                println "Print: $url"
 		                renderer.setDocument(url)
 		                renderer.layout()
@@ -7834,6 +7889,9 @@ class FcService
 			testInstance.landingTestPenalties = 0
 			if (testInstance.IsLandingTest1Run()) {
 				testInstance.landingTest1Penalties = 0
+				if (testInstance.landingTest1Measure == "" && testInstance.landingTest1Landing == 1) {
+					testInstance.landingTest1Landing = 3
+				}
 				switch (testInstance.landingTest1Landing) {
 					case 1:
 						testInstance.landingTest1MeasurePenalties = calculateLandingPenalties(testInstance.landingTest1Measure,testInstance.GetLandingTest1PenaltyCalculator())
@@ -7870,6 +7928,9 @@ class FcService
 			}
 			if (testInstance.IsLandingTest2Run()) {
 				testInstance.landingTest2Penalties = 0 
+				if (testInstance.landingTest2Measure == "" && testInstance.landingTest2Landing == 1) {
+					testInstance.landingTest2Landing = 3
+				}
 				switch (testInstance.landingTest2Landing) {
 					case 1:
 						testInstance.landingTest2MeasurePenalties = calculateLandingPenalties(testInstance.landingTest2Measure,testInstance.GetLandingTest2PenaltyCalculator())
@@ -7909,6 +7970,9 @@ class FcService
 			}
 			if (testInstance.IsLandingTest3Run()) {
 				testInstance.landingTest3Penalties = 0 
+				if (testInstance.landingTest3Measure == "" && testInstance.landingTest3Landing == 1) {
+					testInstance.landingTest3Landing = 3
+				}
 				switch (testInstance.landingTest3Landing) {
 					case 1:
 						testInstance.landingTest3MeasurePenalties = calculateLandingPenalties(testInstance.landingTest3Measure,testInstance.GetLandingTest3PenaltyCalculator())
@@ -7951,6 +8015,9 @@ class FcService
 			}
 			if (testInstance.IsLandingTest4Run()) {
 				testInstance.landingTest4Penalties = 0
+				if (testInstance.landingTest4Measure == "" && testInstance.landingTest4Landing == 1) {
+					testInstance.landingTest4Landing = 3
+				}
 				switch (testInstance.landingTest4Landing) {
 					case 1:
 						testInstance.landingTest4MeasurePenalties = calculateLandingPenalties(testInstance.landingTest4Measure,testInstance.GetLandingTest4PenaltyCalculator())
@@ -8110,6 +8177,8 @@ class FcService
 		printstart "saveFlightTest"
 		
         FlightTest flighttest_instance = new FlightTest(params)
+		flighttest_instance.direction = params.direction.toBigDecimal()
+		flighttest_instance.speed = params.speed.toBigDecimal()
         
         flighttest_instance.task = Task.get( params.taskid )
         
@@ -8228,7 +8297,9 @@ class FcService
 			BigDecimal old_direction = flighttestwind_instance.wind.direction
 			BigDecimal old_speed = flighttestwind_instance.wind.speed  
             flighttestwind_instance.properties = params
-
+			flighttestwind_instance.direction = params.direction.toBigDecimal()
+			flighttestwind_instance.speed = params.speed.toBigDecimal()
+	
             flighttestwind_instance.wind.direction = flighttestwind_instance.direction
             flighttestwind_instance.wind.speed = flighttestwind_instance.speed
             
@@ -8376,7 +8447,9 @@ class FcService
     Map savePlanningTest(Map params)
     {
         PlanningTest planningtest_instance = new PlanningTest(params)
-        
+		planningtest_instance.direction = params.direction.toBigDecimal()
+		planningtest_instance.speed = params.speed.toBigDecimal()
+
         planningtest_instance.task = Task.get( params.taskid )
         
         if (!planningtest_instance.direction) {
@@ -8485,7 +8558,9 @@ class FcService
 			BigDecimal old_direction = planningtesttask_instance.wind.direction 
 			BigDecimal old_speed = planningtesttask_instance.wind.speed
             planningtesttask_instance.properties = params
-            
+			planningtesttask_instance.direction = params.direction.toBigDecimal()
+			planningtesttask_instance.speed = params.speed.toBigDecimal()
+	
             if (!planningtesttask_instance.direction) {
             	planningtesttask_instance.direction = 0
             }
@@ -8538,7 +8613,11 @@ class FcService
     //--------------------------------------------------------------------------
     Map savePlanningTestTask(Map params)
     {
+		printstart "savePlanningTestTask"
+		
         PlanningTestTask planningtesttask_instance = new PlanningTestTask(params)
+		planningtesttask_instance.direction = params.direction.toBigDecimal()
+		planningtesttask_instance.speed = params.speed.toBigDecimal()
 
         planningtesttask_instance.planningtest = PlanningTest.get(params.planningtestid)
         planningtesttask_instance.idTitle = PlanningTestTask.countByPlanningtest(planningtesttask_instance.planningtest) + 1
@@ -8552,15 +8631,20 @@ class FcService
         
         Wind windInstance = new Wind(direction:planningtesttask_instance.direction,speed:planningtesttask_instance.speed)
         if(!windInstance.hasErrors() && windInstance.save()) {
+			println "Wind $planningtesttask_instance.direction, $planningtesttask_instance.speed -> ${windInstance.name()} saved."
             planningtesttask_instance.wind = windInstance
+        } else {
+			println "Error: Could not save wind ($planningtesttask_instance.direction, $planningtesttask_instance.speed)."
         }
         
         if(!planningtesttask_instance.hasErrors() && planningtesttask_instance.save()) {
+			printdone ""
             return ['instance':planningtesttask_instance,'saved':true,'message':getMsg('fc.created',["${planningtesttask_instance.name()}"]),
                     'fromlistplanning':params.fromlistplanning,
                     'taskid':planningtesttask_instance.planningtest.task.id,
                     'planningtestid':planningtesttask_instance.planningtest.id]
         } else {
+			printerror ""
             return ['instance':planningtesttask_instance]
         }
     }
@@ -8629,6 +8713,8 @@ class FcService
     //--------------------------------------------------------------------------
     Map updateTestLegPlanningResult(Map params)
     {
+		printstart "updateTestLegPlanningResult"
+		
     	TestLegPlanning testlegplanning_instance = TestLegPlanning.get(params.id)
         if(testlegplanning_instance) {
             if(params.version) {
@@ -8639,7 +8725,10 @@ class FcService
                 }
             }
 
+			params.resultTrueHeading = params.resultTrueHeading.replace('.',',')
+			
             testlegplanning_instance.properties = params
+			testlegplanning_instance.resultLegTimeInput = params.resultLegTimeInput 
 			if (testlegplanning_instance.isDirty()) {
 				testlegplanning_instance.test.planningTestModified = true
 				testlegplanning_instance.test.crewResultsModified = true
@@ -8655,12 +8744,16 @@ class FcService
             
             if(!testlegplanning_instance.hasErrors() && testlegplanning_instance.save()) {
 				String msg = "${getMsg('fc.updated',["${testlegplanning_instance.name()}"])} ${getMsg('fc.testlegplanning.points',["${testlegplanning_instance.penaltyTrueHeading}","${testlegplanning_instance.penaltyLegTime}"])}"
+				printdone msg
                 return ['instance':testlegplanning_instance,'saved':true,'message':msg]
             } else {
+				printerror ""
             	return ['instance':testlegplanning_instance]
             }
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.testlegplanningresult'),params.id])]
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.testlegplanningresult'),params.id])]
+			printerror ret.message
+			return ret
         }
     }
     
@@ -8736,11 +8829,11 @@ class FcService
         
         // calculate penaltyTrueHeading
         int plan_trueheading = FcMath.RoundGrad(testLegPlanningInstance.planTrueHeading)
-        int result_trueheading = testLegPlanningInstance.resultTrueHeading
-		int diff_trueheading =  Math.abs(plan_trueheading - result_trueheading)
-		if (diff_trueheading > 180) {
-			diff_trueheading = 360 - diff_trueheading
+		BigDecimal diff_trueheading_real = Math.abs(plan_trueheading - testLegPlanningInstance.resultTrueHeading)
+		if (diff_trueheading_real > 180) {
+			diff_trueheading_real = 360 - diff_trueheading_real
 		}
+		int diff_trueheading =  FcMath.RoundDiffGrad(diff_trueheading_real)
         if (diff_trueheading > test_instance.GetPlanningTestDirectionCorrectGrad()) {
             testLegPlanningInstance.penaltyTrueHeading = test_instance.GetPlanningTestDirectionPointsPerGrad() * (diff_trueheading - test_instance.GetPlanningTestDirectionCorrectGrad())
         } else {
@@ -8792,6 +8885,7 @@ class FcService
             }
 
             coordresult_instance.properties = params
+			coordresult_instance.resultCpTimeInput = params.resultCpTimeInput
 			if (coordresult_instance.isDirty()) {
 				coordresult_instance.test.flightTestModified = true
 				coordresult_instance.test.crewResultsModified = true
@@ -8866,7 +8960,35 @@ class FcService
             }
 
             // reset results
-            coordresult_instance.ResetResults()
+            coordresult_instance.ResetResults(false) // false - without procedure turn
+
+            calculateTestPenalties(coordresult_instance.test,false)
+            
+            if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
+                return ['instance':coordresult_instance,'saved':true,'message':getMsg('fc.updated',["${coordresult_instance.name()}"])]
+            } else {
+                return ['instance':coordresult_instance]
+            }
+        } else {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.testlegplanningresult'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map resetCoordResultProcedureTurn(Map params)
+    {
+        CoordResult coordresult_instance = CoordResult.get(params.id)
+        if(coordresult_instance) {
+            if(params.version) {
+                long version = params.version.toLong()
+                if(coordresult_instance.version > version) {
+                    coordresult_instance.errors.rejectValue("version", "coordResult.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    return ['instance':coordresult_instance]
+                }
+            }
+
+            // reset results
+            coordresult_instance.ResetResultsProcedureTurn()
 
             calculateTestPenalties(coordresult_instance.test,false)
             
@@ -9965,11 +10087,11 @@ class FcService
 			setContestRule(resultclass_instance, resultclass_instance.contestRule)
 			if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
 				Map ret = ['instance':resultclass_instance,'saved':true,'message':getMsg('fc.created',["${resultclass_instance.name}"])]
-				printdone ret
+				printdone "$ret (modified)"
 				return ret
 			} else {
 				Map ret = ['instance':resultclass_instance]
-				printdone ret
+				printdone "$ret (modified)"
 				return ret
 			}
 		} else {
@@ -9978,7 +10100,7 @@ class FcService
 			p.contestTitle = contestTitle
 			p.contestRule = contestRule
 	        Map ret = saveResultClass(p,contest.instance)
-			printdone ret
+			printdone "$ret (new)"
 			return ret
 		}
     }
@@ -10077,7 +10199,7 @@ class FcService
         p.registration = registration
         p.type = type
         p.colour = colour
-        p.tas = tas
+        p.tas = tas.toString()
         Map ret = saveCrew(p,contest.instance)
 		printdone ret
 		return ret
@@ -10447,7 +10569,11 @@ class FcService
 						test_instance.landingTest4AbnormalLanding = crew_result.landingTest4AbnormalLanding
 						test_instance.landingTest4TouchingObstacle = crew_result.landingTest4TouchingObstacle
 					} else {
-						test_instance.landingTestPenalties = crew_result.landingPenalties
+						if (crew_result?.landingPenalties) {
+							test_instance.landingTestPenalties = crew_result.landingPenalties
+						} else {
+							test_instance.landingTestPenalties = 0
+						}
 					}
 		            calculateTestPenalties(test_instance,false)
 					test_instance.landingTestComplete = crew_result.testComplete
@@ -10677,11 +10803,25 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    public void WritePDF(response,content,prefix,suffix) {
-		printstart "WritePDF 'fc-${prefix}${suffix}.pdf'"
+    public void WritePDF(response, content, String prefix, String suffix, boolean showSize, boolean isA3, boolean isLandscape) 
+	{
+		String size_str = ""
+		if (showSize) {
+			size_str += "-"
+			if (isA3) {
+				size_str += "a3"
+			} else {
+				size_str += "a4"
+			}
+			if (isLandscape) {
+				size_str += "l"
+			}
+		}
+		String file_name = "fc-${prefix}${suffix}${size_str}.pdf"
+		printstart "WritePDF '$file_name'"
         byte[] b = content.toByteArray()
         response.setContentType("application/pdf")
-        response.setHeader("Content-disposition", "attachment; filename=fc-${prefix}${suffix}.pdf")
+        response.setHeader("Content-disposition", "attachment; filename=$file_name")
         response.setContentLength(b.length)
         response.getOutputStream().write(b)
 		content.close()

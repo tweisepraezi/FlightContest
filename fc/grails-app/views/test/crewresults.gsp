@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.crewresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})</title>
+        <title>${testInstance.GetTitle(ResultType.Crew)}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.crewresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetCrewResultsVersion()})<g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${testInstance.GetTitle(ResultType.Crew)}<g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
                         <table>
@@ -138,7 +138,7 @@
 	                                            <tr>
 	                                                <td>${message(code:CoordType.TP.code)}${legNo}</td>
 	                                                <td>${FcMath.GradStr(lastTestLegPlanningInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-	                                                <td>${FcMath.GradStr(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
+	                                                <td>${FcMath.GradStrComma(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
 	                                                <td>${lastTestLegPlanningInstance.penaltyTrueHeading}</td>
 	                                                <td>${FcMath.TimeStr(lastTestLegPlanningInstance.planLegTime)}</td>
 	                                                <td>${FcMath.TimeStr(lastTestLegPlanningInstance.resultLegTime)}</td>
@@ -154,7 +154,7 @@
 	                                        <tr>
 	                                            <td>${message(code:CoordType.FP.code)}</td>
 	                                            <td>${FcMath.GradStr(lastTestLegPlanningInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-	                                            <td>${FcMath.GradStr(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
+	                                            <td>${FcMath.GradStrComma(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
 	                                            <td>${lastTestLegPlanningInstance.penaltyTrueHeading}</td>
 	                                            <td>${FcMath.TimeStr(lastTestLegPlanningInstance.planLegTime)}</td>
 	                                            <td>${FcMath.TimeStr(lastTestLegPlanningInstance.resultLegTime)}</td>
@@ -513,268 +513,16 @@
 	                            </thead>
 	                            <tbody>
 			                       	<g:if test="${testInstance.IsLandingTest1Run()}">
-		                                <tr>
-				                       		<th colspan="4">${message(code:'fc.landingtest.landing1')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing1.precision')})</g:if></th>
-		                                </tr>
-		                                <tr>
-		                                	<g:if test="${testInstance.landingTest1Landing == 2}">
-		                                		<td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>
-		                                		<td>${testInstance.GetLandingTest1NoLandingPoints()} ${message(code:'fc.points')}</td>
-		                                	</g:if>
-		                                 	<g:elseif test="${testInstance.landingTest1Landing == 3}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>
-			                                 	<td>${testInstance.GetLandingTest1OutsideLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</g:elseif>
-		                                 	<g:elseif test="${!testInstance.landingTest1Measure}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>- (${testInstance.landingTest1MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:elseif>
-		                                	<g:else>
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>${testInstance.landingTest1Measure} (${testInstance.landingTest1MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:else>
-		                                 </tr>
-		                                 <g:if test="${testInstance.landingTest1RollingOutside}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.rollingoutside')}:</td>
-		                                 		<td>${testInstance.GetLandingTest1RollingOutsidePoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest1PowerInBox}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.powerinbox')}:</td>
-		                                 		<td>${testInstance.GetLandingTest1PowerInBoxPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest1GoAroundWithoutTouching}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundwithouttouching')}:</td>
-		                                 		<td>${testInstance.GetLandingTest1GoAroundWithoutTouchingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest1GoAroundInsteadStop}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundinsteadstop')}:</td>
-		                                 		<td>${testInstance.GetLandingTest1GoAroundInsteadStopPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest1AbnormalLanding}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.abnormallanding')}:</td>
-		                                 		<td>${testInstance.GetLandingTest1AbnormalLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                <tr>
-		                                    <td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>
-		                                    <td class="subpoints">${testInstance.landingTest1Penalties} ${message(code:'fc.points')}</td>
-		                                </tr>
-			                       		<tr>
-			                       			<tf colspan="4"></tf>
-			                       		</tr>
+			                       	     <g:landingTest1Complete t="${testInstance}" crewResults="${true}"/>
 			                       	</g:if>
 			                       	<g:if test="${testInstance.IsLandingTest2Run()}">
-		                                <tr>
-				                       		<th colspan="4">${message(code:'fc.landingtest.landing2')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing2.precision')})</g:if></th>
-		                                </tr>
-		                                <tr>
-		                                	<g:if test="${testInstance.landingTest2Landing == 2}">
-		                                		<td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>
-		                                		<td>${testInstance.GetLandingTest2NoLandingPoints()} ${message(code:'fc.points')}</td>
-		                                	</g:if>
-		                                 	<g:elseif test="${testInstance.landingTest2Landing == 3}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>
-			                                 	<td>${testInstance.GetLandingTest2OutsideLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</g:elseif>
-		                                 	<g:elseif test="${!testInstance.landingTest2Measure}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>- (${testInstance.landingTest2MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:elseif>
-		                                	<g:else>
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>${testInstance.landingTest2Measure} (${testInstance.landingTest2MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:else>
-		                                 </tr>
-		                                 <g:if test="${testInstance.landingTest2RollingOutside}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.rollingoutside')}:</td>
-		                                 		<td>${testInstance.GetLandingTest2RollingOutsidePoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest2PowerInBox}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.powerinbox')}:</td>
-		                                 		<td>${testInstance.GetLandingTest2PowerInBoxPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest2GoAroundWithoutTouching}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundwithouttouching')}:</td>
-		                                 		<td>${testInstance.GetLandingTest2GoAroundWithoutTouchingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest2GoAroundInsteadStop}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundinsteadstop')}:</td>
-		                                 		<td>${testInstance.GetLandingTest2GoAroundInsteadStopPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest2AbnormalLanding}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.abnormallanding')}:</td>
-		                                 		<td>${testInstance.GetLandingTest2AbnormalLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest2PowerInAir}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.powerinair')}:</td>
-		                                 		<td>${testInstance.GetLandingTest2PowerInAirPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                <tr>
-		                                    <td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>
-		                                    <td class="subpoints">${testInstance.landingTest2Penalties} ${message(code:'fc.points')}</td>
-		                                </tr>
-			                       		<tr>
-			                       			<tf colspan="4"></tf>
-			                       		</tr>
+                                         <g:landingTest2Complete t="${testInstance}" crewResults="${true}"/>
 			                       	</g:if>
 			                       	<g:if test="${testInstance.IsLandingTest3Run()}">
-		                                <tr>
-				                       		<th colspan="4">${message(code:'fc.landingtest.landing3')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing3.precision')})</g:if></th>
-		                                </tr>
-		                                <tr>
-		                                	<g:if test="${testInstance.landingTest3Landing == 2}">
-		                                		<td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>
-		                                		<td>${testInstance.GetLandingTest3NoLandingPoints()} ${message(code:'fc.points')}</td>
-		                                	</g:if>
-		                                 	<g:elseif test="${testInstance.landingTest3Landing == 3}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>
-			                                 	<td>${testInstance.GetLandingTest3OutsideLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</g:elseif>
-		                                 	<g:elseif test="${!testInstance.landingTest3Measure}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>- (${testInstance.landingTest3MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:elseif>
-		                                	<g:else>
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>${testInstance.landingTest3Measure} (${testInstance.landingTest3MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:else>
-		                                 </tr>
-		                                 <g:if test="${testInstance.landingTest3RollingOutside}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.rollingoutside')}:</td>
-		                                 		<td>${testInstance.GetLandingTest3RollingOutsidePoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest3PowerInBox}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.powerinbox')}:</td>
-		                                 		<td>${testInstance.GetLandingTest3PowerInBoxPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest3GoAroundWithoutTouching}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundwithouttouching')}:</td>
-		                                 		<td>${testInstance.GetLandingTest3GoAroundWithoutTouchingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest3GoAroundInsteadStop}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundinsteadstop')}:</td>
-		                                 		<td>${testInstance.GetLandingTest3GoAroundInsteadStopPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest3AbnormalLanding}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.abnormallanding')}:</td>
-		                                 		<td>${testInstance.GetLandingTest3AbnormalLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest3PowerInAir}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.powerinair')}:</td>
-		                                 		<td>${testInstance.GetLandingTest3PowerInAirPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest3FlapsInAir}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.flapsinair')}:</td>
-		                                 		<td>${testInstance.GetLandingTest3FlapsInAirPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                <tr>
-		                                    <td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>
-		                                    <td class="subpoints">${testInstance.landingTest3Penalties} ${message(code:'fc.points')}</td>
-		                                </tr>
-			                       		<tr>
-			                       			<tf colspan="4"></tf>
-			                       		</tr>
+                                         <g:landingTest3Complete t="${testInstance}" crewResults="${true}"/>
 			                       	</g:if>
 			                       	<g:if test="${testInstance.IsLandingTest4Run()}">
-		                                <tr>
-				                       		<th colspan="4">${message(code:'fc.landingtest.landing4')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing4.precision')})</g:if></th>
-		                                </tr>
-		                                <tr>
-		                                	<g:if test="${testInstance.landingTest4Landing == 2}">
-		                                		<td class="detailtitle">${message(code:'fc.landingtest.nolanding')}:</td>
-		                                		<td>${testInstance.GetLandingTest4NoLandingPoints()} ${message(code:'fc.points')}</td>
-		                                	</g:if>
-		                                 	<g:elseif test="${testInstance.landingTest4Landing == 3}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingtest.outsidelanding')}:</td>
-			                                 	<td>${testInstance.GetLandingTest4OutsideLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</g:elseif>
-		                                 	<g:elseif test="${!testInstance.landingTest4Measure}">
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>- (${testInstance.landingTest4MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:elseif>
-		                                	<g:else>
-			                                 	<td class="detailtitle">${message(code:'fc.landingresults.measure')}:</td>
-			                                 	<td>${testInstance.landingTest4Measure} (${testInstance.landingTest4MeasurePenalties} ${message(code:'fc.points')})</td>
-		                                 	</g:else>
-		                                 </tr>
-		                                 <g:if test="${testInstance.landingTest4RollingOutside}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.rollingoutside')}:</td>
-		                                 		<td>${testInstance.GetLandingTest4RollingOutsidePoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest4PowerInBox}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.powerinbox')}:</td>
-		                                 		<td>${testInstance.GetLandingTest4PowerInBoxPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest4GoAroundWithoutTouching}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundwithouttouching')}:</td>
-		                                 		<td>${testInstance.GetLandingTest4GoAroundWithoutTouchingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest4GoAroundInsteadStop}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.goaroundinsteadstop')}:</td>
-		                                 		<td>${testInstance.GetLandingTest4GoAroundInsteadStopPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest4AbnormalLanding}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.abnormallanding')}:</td>
-		                                 		<td>${testInstance.GetLandingTest4AbnormalLandingPoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                 <g:if test="${testInstance.landingTest4TouchingObstacle}">
-		                                 	<tr>
-		                                 		<td class="detailtitle">${message(code:'fc.landingtest.touchingobstacle')}:</td>
-		                                 		<td>${testInstance.GetLandingTest4TouchingObstaclePoints()} ${message(code:'fc.points')}</td>
-		                                 	</tr>
-		                                 </g:if>
-		                                <tr>
-		                                    <td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>
-		                                    <td class="subpoints">${testInstance.landingTest4Penalties} ${message(code:'fc.points')}</td>
-		                                </tr>
-			                       		<tr>
-			                       			<tf colspan="4"></tf>
-			                       		</tr>
+                                         <g:landingTest4Complete t="${testInstance}" crewResults="${true}"/>
 			                       	</g:if>
                                     <g:if test="${testInstance.IsLandingTestAnyRun()}">
                                         <g:if test="${testInstance.landingTestOtherPenalties > 0}">

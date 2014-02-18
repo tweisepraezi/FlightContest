@@ -2,6 +2,22 @@
     <head>
         <style type="text/css">
             @page {
+                <g:if test="${params.a3=='true'}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: A3 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A3;
+                    </g:else> 
+                </g:if>
+                <g:else>
+                    <g:if test="${params.landscape=='true'}">
+                        size: A4 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A4;
+                    </g:else> 
+                </g:else>
                 @top-center {
                     content: "${testInstance.GetViewPos()}"
                 }
@@ -57,18 +73,7 @@
                             </tbody>
                         </table>
                         <br/>
-                        <table>
-                            <tbody>
-                                <tr>
-                                	<td> </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td>${message(code:'fc.penalties')}: ${testInstance.specialTestPenalties} ${message(code:'fc.points')}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <g:specialTestPrintable t="${testInstance}"/>
                     </g:form>
                 </div>
             </div>

@@ -131,7 +131,12 @@
                                 </tr>
                                 <tr>
                                     <td/>
-                                    <td colspan="5"><g:actionSubmit action="printtest" value="${message(code:'fc.print.test')}" tabIndex="61"/> <g:actionSubmit action="printtest_landscape" value="${message(code:'fc.print.test.landscape')}" tabIndex="62"/></td>
+                                    <td colspan="5">
+                                        <g:actionSubmit action="printtest_a4_portrait" value="${message(code:'fc.print.test.a4.portrait')}" tabIndex="61"/> 
+                                        <g:actionSubmit action="printtest_a3_portrait" value="${message(code:'fc.print.test.a3.portrait')}" tabIndex="62"/> 
+                                        <g:actionSubmit action="printtest_a4_landscape" value="${message(code:'fc.print.test.a4.landscape')}" tabIndex="63"/>
+                                        <g:actionSubmit action="printtest_a3_landscape" value="${message(code:'fc.print.test.a3.landscape')}" tabIndex="64"/>
+                                    </td>
                                 </tr>
 	                        </tbody>
 	                    </table>

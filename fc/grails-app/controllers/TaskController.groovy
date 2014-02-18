@@ -103,6 +103,16 @@ class TaskController {
 		}
 	}
 	
+	def updateprintsettingstower = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.Tower,session.printLanguage) 
+        if (task.saved) {
+			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+		} else {
+			flash.message = task.message
+			redirect(controller:"contest",action:"tasks")
+		}
+	}
+	
 	def updateprintsettingsplanning = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.Planning,session.printLanguage) 
         if (task.saved) {
@@ -712,7 +722,7 @@ class TaskController {
            	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
         } else if (task.content) {
-        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"timetable-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}")
+        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"timetable-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}",true,task.instance.printTimetableA3,task.instance.printTimetableLandscape)
 	    } else {
         	redirect(action:listplanning,id:task.instance.id)
 	    }
@@ -728,14 +738,14 @@ class TaskController {
            	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
         } else if (task.content) {
-        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"jurytimetable-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}")
+        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"jurytimetable-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}",true,task.instance.printTimetableJuryA3,task.instance.printTimetableJuryLandscape)
 	    } else {
         	redirect(action:listplanning,id:task.instance.id)
 	    }
 	}
 	
 	def printflightplans = {
-        def task = fcService.printflightplansTask(params,GetPrintParams()) 
+        def task = fcService.printflightplansTask(params,false,false,GetPrintParams()) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -744,14 +754,14 @@ class TaskController {
            	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
         } else if (task.content) {
-        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"flightplans-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}")
+        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"flightplans-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}",true,false,false)
 	    } else {
         	redirect(action:listplanning,id:task.instance.id)
 	    }
 	}
 
     def printplanningtesttask = {
-        def task = fcService.printplanningtasksTask(params,GetPrintParams()) 
+        def task = fcService.printplanningtasksTask(params,false,false,GetPrintParams()) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -760,7 +770,7 @@ class TaskController {
         	flash.error = true
         	redirect(action:listplanning,id:task.instance.id)
         } else if (task.content) {
-        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"planningtasks-task${task.instance.idTitle}")
+        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"planningtasks-task${task.instance.idTitle}",true,false,false)
 	    } else {
 	        redirect(action:listplanning,id:task.instance.id)
 		}
@@ -803,7 +813,7 @@ class TaskController {
 			   flash.error = true
 			redirect(action:listresults,id:task.instance.id)
 		} else {
-			task = fcService.printresultsTask(params,GetPrintParams())
+			task = fcService.printresultsTask(params,false,true,GetPrintParams())
 			if (!task.instance) {
 				flash.message = task.message
 				redirect(controller:"contest",action:"tasks")
@@ -812,7 +822,7 @@ class TaskController {
 			    flash.error = true
 				redirect(action:listresults,id:task.instance.id)
 			} else if (task.content) {
-				fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"results-task${task.instance.idTitle}")
+				fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"results-task${task.instance.idTitle}",true,false,true)
 			} else {
 				redirect(action:listresults,id:task.instance.id)
 			}
@@ -831,7 +841,7 @@ class TaskController {
     }
 	
 	def printresultclassresults = {
-		def task = fcService.printresultclassresultsTask(params,GetPrintParams()) 
+		def task = fcService.printresultclassresultsTask(params,false,true,GetPrintParams()) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -840,7 +850,7 @@ class TaskController {
            	flash.error = true
         	redirect(action:listresults,id:task.instance.id)
         } else if (task.content) {
-        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"classresults-task${task.instance.idTitle}")
+        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"classresults-task${task.instance.idTitle}",true,false,true)
 	    } else {
         	redirect(action:listresults,id:task.instance.id)
 	    }
@@ -877,7 +887,7 @@ class TaskController {
 	}
 	
 	def printcrewresults = {
-        def task = fcService.printcrewresultsTask(params,GetPrintParams()) 
+        def task = fcService.printcrewresultsTask(params,false,false,GetPrintParams()) 
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -886,7 +896,7 @@ class TaskController {
            	flash.error = true
         	redirect(action:listresults,id:task.instance.id)
         } else if (task.content) {
-        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"crewresults-task${task.instance.idTitle}")
+        	fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"crewresults-task${task.instance.idTitle}",true,false,false)
 	    } else {
         	redirect(action:listresults,id:task.instance.id)
 	    }

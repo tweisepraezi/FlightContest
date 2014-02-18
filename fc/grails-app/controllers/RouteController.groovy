@@ -144,61 +144,61 @@ class RouteController {
 	}
     
     def print = {
-        def routes = fcService.printRoutes(params,GetPrintParams()) 
+        def routes = fcService.printRoutes(params,false,false,GetPrintParams()) 
         if (routes.error) {
             flash.message = routes.message
             flash.error = true
             redirect(action:list)
         } else if (routes.found && routes.content) {
-            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"routes")
+            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"routes",true,false,false)
         } else {
             redirect(action:list)
         }
     }
     
     def printroute = {
-        def routes = fcService.printRoute(params,GetPrintParams()) 
-        if (routes.error) {
-            flash.message = routes.message
+        def route = fcService.printRoute(params,false,false,GetPrintParams()) 
+        if (route.error) {
+            flash.message = route.message
             flash.error = true
             redirect(action:list)
-        } else if (routes.content) {
-            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"route")
+        } else if (route.content) {
+            fcService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}",true,false,false)
         } else {
             redirect(action:list)
         }
 	}
 	
     def printcoordall = {
-        def routes = fcService.printCoord(params,GetPrintParams(),"all") 
-        if (routes.error) {
-            flash.message = routes.message
+        def route = fcService.printCoord(params,false,false,GetPrintParams(),"all") 
+        if (route.error) {
+            flash.message = route.message
             flash.error = true
             redirect(action:list)
-        } else if (routes.content) {
-            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"coordall")
+        } else if (route.content) {
+            fcService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-allpoints",true,false,false)
         } else {
             redirect(action:list)
         }
 	}
 	
     def printcoordtp = {
-        def routes = fcService.printCoord(params,GetPrintParams(),"tp") 
-        if (routes.error) {
-            flash.message = routes.message
+        def route = fcService.printCoord(params,false,false,GetPrintParams(),"tp") 
+        if (route.error) {
+            flash.message = route.message
             flash.error = true
             redirect(action:list)
-        } else if (routes.content) {
-            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"coordtp")
+        } else if (route.content) {
+            fcService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
         } else {
             redirect(action:list)
         }
 	}
 	
     def copyroute = {
-        def routes = fcService.copyRoute(params) 
-        if (routes.error) {
-            flash.message = routes.message
+        def route = fcService.copyRoute(params) 
+        if (route.error) {
+            flash.message = route.message
             flash.error = true
             redirect(action:list)
         } else {

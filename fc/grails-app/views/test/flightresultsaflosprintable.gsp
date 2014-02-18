@@ -2,6 +2,22 @@
     <head>
         <style type="text/css">
             @page {
+                <g:if test="${params.a3=='true'}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: A3 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A3;
+                    </g:else> 
+                </g:if>
+                <g:else>
+                    <g:if test="${params.landscape=='true'}">
+                        size: A4 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A4;
+                    </g:else> 
+                </g:else>
                 @top-center {
                     content: "${testInstance.GetViewPos()}"
                 }
@@ -56,136 +72,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <g:if test="${CoordResult.countByTest(testInstance)}" >
-                            <br/>
-                            <table width="100%" border="1" cellspacing="0" cellpadding="2">
-                                <thead>
-                                    <tr>
-                                        <th class="table-head">${message(code:'fc.title')}</th>
-                                        <th class="table-head">${message(code:'fc.aflos.checkpoint')}</th>
-                                        <th colspan="2" class="table-head">${message(code:'fc.cptime')}</th>
-                                        <g:if test="${testInstance.GetFlightTestProcedureTurnNotFlownPoints() > 0}">
-                                            <th class="table-head">${message(code:'fc.procedureturn')}</th>
-                                        </g:if>
-                                        <g:if test="${true || (testInstance.GetFlightTestBadCoursePoints() > 0)}">
-                                            <th class="table-head">${message(code:'fc.badcoursenum')}</th>
-                                        </g:if>
-                                        <g:if test="${true || (testInstance.GetFlightTestMinAltitudeMissedPoints() > 0)}">
-                                            <th class="table-head">${message(code:'fc.altitude')}</th>
-                                        </g:if>
-                                    </tr>
-                                    <tr>
-                                        <th/>
-                                        <th/>
-                                        <th>${message(code:'fc.test.results.plan')}</th>
-                                        <th>${message(code:'fc.test.results.measured')}</th>
-                                        <g:if test="${testInstance.GetFlightTestProcedureTurnNotFlownPoints() > 0}">
-                                            <th/>
-                                        </g:if>
-                                        <g:if test="${true || (testInstance.GetFlightTestBadCoursePoints() > 0)}">
-                                            <th/>
-                                        </g:if>
-                                        <g:if test="${true || (testInstance.GetFlightTestMinAltitudeMissedPoints() > 0)}">
-                                            <th/>
-                                        </g:if>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <g:each var="coordResultInstance" in="${CoordResult.findAllByTest(testInstance,[sort:"id"])}">
-                                        <g:if test="${lastCoordResultInstance}">
-                                            <tr>
-                                                <td>${lastCoordResultInstance.titleCode()}</td>
-                                                <td>${lastCoordResultInstance.mark}</td>
-                                                <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
-                                                <g:if test="${lastCoordResultInstance.resultCpNotFound}">
-                                                    <td>-</td>
-                                                </g:if>
-                                                <g:else>
-                                                    <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
-                                                </g:else>
-                                                <g:if test="${testInstance.GetFlightTestProcedureTurnNotFlownPoints() > 0}">
-	                                                <g:if test="${coordResultInstance.planProcedureTurn}">
-	                                                    <g:if test="${coordResultInstance.resultProcedureTurnEntered}">
-	                                                        <g:if test="${coordResultInstance.resultProcedureTurnNotFlown}">
-	                                                            <td>${message(code:'fc.flighttest.procedureturnnotflown.short')}</td>
-	                                                        </g:if>
-	                                                        <g:else>
-                                                                <td>${message(code:'fc.flighttest.procedureturnflown.short')}</td>
-	                                                        </g:else>
-	                                                    </g:if>
-	                                                    <g:else>
-	                                                        <td/>
-	                                                    </g:else>
-	                                                </g:if>
-	                                                <g:else>
-	                                                    <td/>
-	                                                </g:else>
-	                                            </g:if>
-                                                <g:if test="${true || (testInstance.GetFlightTestBadCoursePoints() > 0)}">
-	                                                <g:if test="${lastCoordResultInstance.resultEntered}">
-                                                        <g:if test="${lastCoordResultInstance.type.IsBadCourseCheckCoord()}">
-	                                                        <td>${lastCoordResultInstance.resultBadCourseNum}</td>
-	                                                    </g:if>
-	                                                    <g:else>
-	                                                        <td/>
-	                                                    </g:else>
-	                                                </g:if>
-	                                                <g:else>
-	                                                    <td/>
-	                                                </g:else>
-	                                            </g:if>
-                                                <g:if test="${true || (testInstance.GetFlightTestMinAltitudeMissedPoints() > 0)}">
-                                                    <g:if test="${lastCoordResultInstance.resultCpNotFound}">
-                                                        <td>-</td>
-                                                    </g:if>
-                                                    <g:else>
-                                                        <td>${lastCoordResultInstance.resultAltitude}${message(code:'fc.foot')}</td>
-                                                    </g:else>
-	                                            </g:if>
-                                            </tr>
-                                        </g:if>
-                                        <g:set var="lastCoordResultInstance" value="${coordResultInstance}" />
-                                    </g:each>
-                                    <g:if test="${lastCoordResultInstance}">
-                                        <tr>
-                                            <td>${lastCoordResultInstance.titleCode()}</td>
-                                            <td>${lastCoordResultInstance.mark}</td>
-                                            <td>${FcMath.TimeStr(lastCoordResultInstance.planCpTime)}</td>
-                                            <g:if test="${lastCoordResultInstance.resultCpNotFound}">
-                                                <td>-</td>
-                                            </g:if>
-                                            <g:else>
-                                                <td>${FcMath.TimeStr(lastCoordResultInstance.resultCpTime)}</td>
-                                            </g:else>
-                                            <g:if test="${testInstance.GetFlightTestProcedureTurnNotFlownPoints() > 0}">
-                                                <td/>
-                                            </g:if>
-                                            <g:if test="${true || (testInstance.GetFlightTestBadCoursePoints() > 0)}">
-	                                            <g:if test="${lastCoordResultInstance.resultEntered}">
-                                                    <g:if test="${lastCoordResultInstance.type.IsBadCourseCheckCoord()}">
-	                                                    <td>${lastCoordResultInstance.resultBadCourseNum}</td>
-	                                                </g:if>
-	                                                <g:else>
-	                                                   <td/>
-	                                                </g:else>
-	                                            </g:if>
-	                                            <g:else>
-	                                               <td/>
-	                                            </g:else>
-	                                        </g:if>
-                                            <g:if test="${true || (testInstance.GetFlightTestMinAltitudeMissedPoints() > 0)}">
-                                                <g:if test="${lastCoordResultInstance.resultCpNotFound}">
-                                                    <td>-</td>
-                                                </g:if>
-                                                <g:else>
-                                                    <td>${lastCoordResultInstance.resultAltitude}${message(code:'fc.foot')}</td>
-                                                </g:else>
-	                                        </g:if>
-                                        </tr>
-                                    </g:if>
-                                </tbody>
-                            </table>
-                        </g:if>
+                        <g:flightTestAFLOSPrintable t="${testInstance}"/>
                     </g:form>
                 </div>
             </div>

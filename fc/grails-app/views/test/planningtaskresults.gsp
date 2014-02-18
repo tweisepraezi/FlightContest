@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.planningresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</title>
+        <title>${testInstance.GetTitle(ResultType.Planningtask)}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.planningresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</h2>
+                <h2>${testInstance.GetTitle(ResultType.Planningtask)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post">
                         <table>
@@ -134,7 +134,7 @@
                                                 <td/>
                                                 <td/>
                                                 <g:if test="${testlegplanning_instance.resultEntered}">
-                                                    <td>${FcMath.GradStr(testlegplanning_instance.resultTrueHeading)}${message(code:'fc.grad')}</td>
+                                                    <td>${FcMath.GradStrComma(testlegplanning_instance.resultTrueHeading)}${message(code:'fc.grad')}</td>
                                                     <td/>
                                                     <td>${testlegplanning_instance.resultLegTimeStr()}${message(code:'fc.time.h')}</td>
                                                 </g:if>

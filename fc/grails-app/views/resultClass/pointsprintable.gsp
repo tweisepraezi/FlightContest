@@ -6,8 +6,8 @@
     <head>
         <style type="text/css">
             @page {
-                <g:if test="${resultclassInstance.printPointsA3}">
-                    <g:if test="${resultclassInstance.printPointsLandscape}">
+                <g:if test="${params.a3=='true'}">
+                    <g:if test="${params.landscape=='true'}">
                         size: A3 landscape;
                     </g:if>
                     <g:else>
@@ -15,13 +15,13 @@
                     </g:else> 
                 </g:if>
                 <g:else>
-                    <g:if test="${resultclassInstance.printPointsLandscape}">
+                    <g:if test="${params.landscape=='true'}">
                         size: A4 landscape;
                     </g:if>
                     <g:else>
                         size: A4;
                     </g:else> 
-                </g:else> 
+                </g:else>
                 @top-center {
                     content: "${print_subtitle} - ${message(code:'fc.program.printpage')} " counter(page)
                 }

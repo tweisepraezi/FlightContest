@@ -182,13 +182,13 @@ class ResultClassController {
 		}
 	
 		def print = {
-			def resultclasses = fcService.printResultClasses(params,GetPrintParams())
+			def resultclasses = fcService.printResultClasses(params,false,false,GetPrintParams())
 			if (resultclasses.error) {
 				flash.message = resultclasses.message
 				flash.error = true
 				redirect(action:list)
 			} else if (resultclasses.content) {
-				fcService.WritePDF(response,resultclasses.content,session.lastContest.GetPrintPrefix(),"classes")
+				fcService.WritePDF(response,resultclasses.content,session.lastContest.GetPrintPrefix(),"classes",true,false,false)
 			} else {
 				redirect(action:list)
 			}
@@ -234,13 +234,13 @@ class ResultClassController {
 		def printresults = {
 			def resultclass = fcService.getResultClass(params)
 			if (resultclass.instance) {
-		        def resultclass_print = fcService.printresultsResultClass(resultclass.instance,GetPrintParams()) 
+		        def resultclass_print = fcService.printresultsResultClass(resultclass.instance,resultclass.instance.contestPrintA3,resultclass.instance.contestPrintLandscape,GetPrintParams()) 
 		        if (resultclass_print.error) {
 		        	flash.message = resultclass_print.message
 		           	flash.error = true
 					redirect(action:"listresults",id:params.id)
 		        } else if (resultclass_print.content) {
-		        	fcService.WritePDF(response,resultclass_print.content,session.lastContest.GetPrintPrefix(),"classresults")
+		        	fcService.WritePDF(response,resultclass_print.content,session.lastContest.GetPrintPrefix(),"classresults",true,resultclass.instance.contestPrintA3,resultclass.instance.contestPrintLandscape)
 			    } else {
 					redirect(action:"listresults",id:params.id)
 			    }
@@ -273,13 +273,13 @@ class ResultClassController {
 		def printpoints = {
 			def resultclass = fcService.getResultClass(params)
 			if (resultclass.instance) {
-		        def resultclass_print = fcService.printpointsResultClass(resultclass.instance,GetPrintParams()) 
+		        def resultclass_print = fcService.printpointsResultClass(resultclass.instance,resultclass.instance.printPointsA3,resultclass.instance.printPointsLandscape,GetPrintParams()) 
 		        if (resultclass_print.error) {
 		        	flash.message = resultclass_print.message
 		           	flash.error = true
 					redirect(action:"editpoints",id:params.id)
 		        } else if (resultclass_print.content) {
-		        	fcService.WritePDF(response,resultclass_print.content,session.lastContest.GetPrintPrefix(),"points")
+		        	fcService.WritePDF(response,resultclass_print.content,session.lastContest.GetPrintPrefix(),"points",true,resultclass.instance.printPointsA3,resultclass.instance.printPointsLandscape)
 			    } else {
 					redirect(action:"editpoints",id:params.id)
 			    }

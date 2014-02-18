@@ -2,8 +2,8 @@
     <head>
 		<style type="text/css">
 			@page {
-                <g:if test="${contestInstance.teamPrintA3}">
-                    <g:if test="${contestInstance.teamPrintLandscape}">
+                <g:if test="${params.a3=='true'}">
+                    <g:if test="${params.landscape=='true'}">
                         size: A3 landscape;
                     </g:if>
                     <g:else>
@@ -11,13 +11,13 @@
                     </g:else> 
                 </g:if>
                 <g:else>
-	                <g:if test="${contestInstance.teamPrintLandscape}">
-	                    size: A4 landscape;
-	                </g:if>
-	                <g:else>
-	                    size: A4;
-	                </g:else> 
-                </g:else> 
+                    <g:if test="${params.landscape=='true'}">
+                        size: A4 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A4;
+                    </g:else> 
+                </g:else>
                 @top-center {
                     content: "${message(code:'fc.contest.listteamresults')} - ${message(code:'fc.program.printpage')} " counter(page)
                 }

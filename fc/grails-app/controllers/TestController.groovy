@@ -59,7 +59,7 @@ class TestController
     }
 
     def printflightplan = {
-        def test = fcService.printflightplanTest(params,GetPrintParams()) 
+        def test = fcService.printflightplanTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startplanning")
@@ -68,7 +68,7 @@ class TestController
         	flash.error = true
         	redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-        	fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"flightplan-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.timetableVersion}")
+        	fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"flightplan-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.timetableVersion}",true,false,false)
         } else {
         	redirect(action:show,id:test.instance.id)
         }
@@ -102,7 +102,7 @@ class TestController
     }
 
     def printplanningtask = {
-        def test = fcService.printplanningtaskTest(params,GetPrintParams(),false) // false - without result 
+        def test = fcService.printplanningtaskTest(params,false,false,GetPrintParams(),false) // false - without result 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startplanning")
@@ -111,7 +111,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtask-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtask-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -232,7 +232,7 @@ class TestController
 	}
 	
     def printplanningtaskresults = {
-        def test = fcService.printplanningtaskresultsTest(params,GetPrintParams()) 
+        def test = fcService.printplanningtaskresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -241,7 +241,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtaskresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetPlanningTestVersion()}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtaskresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetPlanningTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -375,7 +375,7 @@ class TestController
     }
     
     def printflightresults = {
-        def test = fcService.printflightresultsTest(params,GetPrintParams()) 
+        def test = fcService.printflightresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -384,14 +384,14 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"navigationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"navigationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
     }
 
     def printaflosflightresults = {
-        def test = fcService.printaflosflightresultsTest(params,GetPrintParams()) 
+        def test = fcService.printaflosflightresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -400,7 +400,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"aflosresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"navigationmeasure-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -639,7 +639,7 @@ class TestController
     }
     
     def printobservationresults = {
-        def test = fcService.printobservationresultsTest(params,GetPrintParams()) 
+        def test = fcService.printobservationresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -648,7 +648,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"observationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetObservationTestVersion()}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"observationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetObservationTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -779,7 +779,7 @@ class TestController
     }
     
     def printlandingresults = {
-        def test = fcService.printlandingresultsTest(params,GetPrintParams()) 
+        def test = fcService.printlandingresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -788,7 +788,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTestVersion()}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -919,7 +919,7 @@ class TestController
     }
     
     def printspecialresults = {
-        def test = fcService.printspecialresultsTest(params,GetPrintParams()) 
+        def test = fcService.printspecialresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -928,7 +928,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"specialresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetSpecialTestVersion()}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"specialresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetSpecialTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -996,7 +996,7 @@ class TestController
     }
 
     def printcrewresults = {
-        def test = fcService.printcrewresultsTest(params,GetPrintParams()) 
+        def test = fcService.printcrewresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -1005,7 +1005,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"crewresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetCrewResultsVersion()}")
+            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"crewresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetCrewResultsVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }

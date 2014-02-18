@@ -54,9 +54,10 @@
                         <input type="hidden" name="name" value="${params.name}" />
                         <input type="hidden" name="resultCpTimeInput" value="${coordResultInstance.resultCpTimeInput}" />
                         <g:if test="${!coordResultInstance.test.flightTestComplete}">
-                            <g:actionSubmit action="updateprocedureturn" value="${message(code:'fc.update')}" />
+                            <g:actionSubmit action="updateprocedureturn" value="${message(code:'fc.update')}" tabIndex="1"/>
+                            <g:actionSubmit action="resetprocedureturn" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="2"/>
                         </g:if>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                     </g:form>
                 </div>
             </div>

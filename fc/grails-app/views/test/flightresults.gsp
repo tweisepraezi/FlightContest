@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.flightresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})</title>
+        <title>${testInstance.GetTitle(ResultType.Flight)}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.flightresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})</h2>
+                <h2>${testInstance.GetTitle(ResultType.Flight)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post">
                         <table>
@@ -497,8 +497,8 @@
                                             <g:actionSubmit action="importresults" value="${message(code:'fc.flightresults.aflosimport')}" tabIndex="5"/>
                                             <g:actionSubmit action="viewimporterrors" value="${message(code:'fc.flightresults.viewimporterrors')}" tabIndex="6"/>
                                             <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" tabIndex="7"/>
-                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" tabIndex="8"/>
-                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="9"/>
+                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" tabIndex="8"/>
+                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" tabIndex="9"/>
                                             <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="10"/>
                                         </g:if>
                                         <g:else>
@@ -509,8 +509,8 @@
                                                 <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                                             </g:else>
                                             <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="4"/>
-                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" tabIndex="5"/>
-	                                        <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="6"/>
+                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" tabIndex="5"/>
+                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" tabIndex="6"/>
 	                                        <g:if test="${params.next}">
 	                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="7"/>
 	                                        </g:if>

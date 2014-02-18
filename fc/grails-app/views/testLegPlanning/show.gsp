@@ -70,7 +70,7 @@
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.trueheading')}:</td>
-                                    <td>${FcMath.GradStr(testLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
+                                    <td>${FcMath.GradStrComma(testLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
                                 </tr>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.groundspeed')}:</td>

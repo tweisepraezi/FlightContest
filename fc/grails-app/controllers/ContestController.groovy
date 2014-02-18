@@ -1,4 +1,3 @@
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 
@@ -540,15 +539,15 @@ class ContestController {
         redirect(action:"listteamresults")
     }
 
-    def printtest = {
+    def printtest_a4_portrait = {
         if (session?.lastContest) {
-            def contest = fcService.printtestContest(session.lastContest,false,GetPrintParams()) 
+            def contest = fcService.printtestContest(session.lastContest,false,false,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                    flash.error = true
                 redirect(controller:"contest",action:"listresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test-normal")
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,false)
             } else {
                 redirect(action:start)
             }
@@ -557,15 +556,49 @@ class ContestController {
         }
     }
     
-    def printtest_landscape = {
+    def printtest_a4_landscape = {
         if (session?.lastContest) {
-            def contest = fcService.printtestContest(session.lastContest,true,GetPrintParams()) 
+            def contest = fcService.printtestContest(session.lastContest,false,true,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                    flash.error = true
                 redirect(controller:"contest",action:"listresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test-landscape")
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,true)
+            } else {
+                redirect(action:start)
+            }
+        } else {
+            redirect(action:start)
+        }
+    }
+    
+    def printtest_a3_portrait = {
+        if (session?.lastContest) {
+            def contest = fcService.printtestContest(session.lastContest,true,false,GetPrintParams()) 
+            if (contest.error) {
+                flash.message = contest.message
+                   flash.error = true
+                redirect(controller:"contest",action:"listresults")
+            } else if (contest.content) {
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,false)
+            } else {
+                redirect(action:start)
+            }
+        } else {
+            redirect(action:start)
+        }
+    }
+    
+    def printtest_a3_landscape = {
+        if (session?.lastContest) {
+            def contest = fcService.printtestContest(session.lastContest,true,true,GetPrintParams()) 
+            if (contest.error) {
+                flash.message = contest.message
+                   flash.error = true
+                redirect(controller:"contest",action:"listresults")
+            } else if (contest.content) {
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,true)
             } else {
                 redirect(action:start)
             }
@@ -586,13 +619,13 @@ class ContestController {
 
     def printresults = {
         if (session?.lastContest) {
-            def contest = fcService.printresultsContest(session.lastContest,GetPrintParams()) 
+            def contest = fcService.printresultsContest(session.lastContest,session.lastContest.contestPrintA3,session.lastContest.contestPrintLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                    flash.error = true
                 redirect(controller:"contest",action:"listresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"contestresults")
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"contestresults",true,session.lastContest.contestPrintA3,session.lastContest.contestPrintLandscape)
             } else {
                 redirect(action:start)
             }
@@ -613,13 +646,13 @@ class ContestController {
 
     def printteamresults = {
         if (session?.lastContest) {
-            def contest = fcService.printteamresultsContest(session.lastContest,GetPrintParams()) 
+            def contest = fcService.printteamresultsContest(session.lastContest,session.lastContest.teamPrintA3,session.lastContest.teamPrintLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                    flash.error = true
                 redirect(action:"listteamresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"teamresults")
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"teamresults",true,session.lastContest.teamPrintA3,session.lastContest.teamPrintLandscape)
             } else {
                 redirect(action:start)
             }
@@ -658,13 +691,13 @@ class ContestController {
     
     def printpoints = {
         if (session?.lastContest) {
-            def contest = fcService.printpointsContest(session.lastContest,GetPrintParams()) 
+            def contest = fcService.printpointsContest(session.lastContest,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                    flash.error = true
                 redirect(action:"editpoints")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points")
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points",true,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape)
             } else {
                 redirect(action:"editpoints")
             }
@@ -736,12 +769,12 @@ class ContestController {
         fcService.putplanningresultsTask(task1,[[crew:crew1,
                                                  givenTooLate:false,
                                                  exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 98,legTime:"00:14:06"],
-                                                              [trueHeading:205,legTime:"00:12:41"],
-                                                              [trueHeading:154,legTime:"00:12:03"],
-                                                              [trueHeading: 95,legTime:"00:09:56"],
-                                                              [trueHeading:224,legTime:"00:07:43"],
-                                                              [trueHeading:232,legTime:"00:04:25"]],
+                                                 givenValues:[[trueHeading: 98.1,  legTime:"00:14:06"],
+                                                              [trueHeading:205.12, legTime:"00:12:41"],
+                                                              [trueHeading:154.123,legTime:"00:12:03"],
+                                                              [trueHeading: 95,    legTime:"00:09:56"],
+                                                              [trueHeading:223.995,legTime:"00:07:43"],
+                                                              [trueHeading:232,    legTime:"00:04:25"]],
                                                  testComplete:true],
                                                 [crew:crew4,
                                                  givenTooLate:false,
@@ -766,12 +799,12 @@ class ContestController {
                                                 [crew:crew3,
                                                  givenTooLate:false,
                                                  exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
-                                                              [trueHeading:203,legTime:"00:13:35"],
-                                                              [trueHeading:154,legTime:"00:13:04"],
-                                                              [trueHeading:102,legTime:"00:10:57"],
-                                                              [trueHeading:222,legTime:"00:08:19"],
-                                                              [trueHeading:230,legTime:"00:04:42"]],
+                                                 givenValues:[[trueHeading: 98,   legTime:"00:15:11"],
+                                                              [trueHeading:203,   legTime:"00:13:35"],
+                                                              [trueHeading:154,   legTime:"00:13:04"],
+                                                              [trueHeading:101.75,legTime:"00:10:57"],
+                                                              [trueHeading:220.5, legTime:"00:08:19"],
+                                                              [trueHeading:230,   legTime:"00:04:42"]],
                                                  testComplete:true],
                                                 [crew:crew2,
                                                  givenTooLate:false,
@@ -986,12 +1019,12 @@ class ContestController {
         fcService.putplanningresultsTask(task1,[[crew:crew1,
                                                  givenTooLate:false,
                                                  exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 98,legTime:"00:14:06"],
-                                                              [trueHeading:205,legTime:"00:12:41"],
-                                                              [trueHeading:154,legTime:"00:12:03"],
-                                                              [trueHeading: 95,legTime:"00:09:56"],
-                                                              [trueHeading:224,legTime:"00:07:43"],
-                                                              [trueHeading:232,legTime:"00:04:25"]],
+                                                 givenValues:[[trueHeading: 98.1,  legTime:"00:14:06"],
+                                                              [trueHeading:205.12, legTime:"00:12:41"],
+                                                              [trueHeading:154.123,legTime:"00:12:03"],
+                                                              [trueHeading: 95,    legTime:"00:09:56"],
+                                                              [trueHeading:223.995,legTime:"00:07:43"],
+                                                              [trueHeading:232,    legTime:"00:04:25"]],
                                                  testComplete:true],
                                                 [crew:crew4,
                                                  givenTooLate:false,
@@ -1016,12 +1049,12 @@ class ContestController {
                                                 [crew:crew3,
                                                  givenTooLate:false,
                                                  exitRoomTooLate:false,
-                                                 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
-                                                              [trueHeading:203,legTime:"00:13:35"],
-                                                              [trueHeading:154,legTime:"00:13:04"],
-                                                              [trueHeading:102,legTime:"00:10:57"],
-                                                              [trueHeading:222,legTime:"00:08:19"],
-                                                              [trueHeading:230,legTime:"00:04:42"]],
+                                                 givenValues:[[trueHeading: 98,   legTime:"00:15:11"],
+                                                              [trueHeading:203,   legTime:"00:13:35"],
+                                                              [trueHeading:154,   legTime:"00:13:04"],
+                                                              [trueHeading:101.75,legTime:"00:10:57"],
+                                                              [trueHeading:220.5, legTime:"00:08:19"],
+                                                              [trueHeading:230,   legTime:"00:04:42"]],
                                                  testComplete:true],
                                                 [crew:crew2,
                                                  givenTooLate:false,
@@ -1712,19 +1745,19 @@ class ContestController {
     List test1TestLegPlanning3() {
       [[planTrueTrack:89.0,planTestDistance:16.20,planTrueHeading:97.8800763462,planGroundSpeed:68.8869647355,planLegTime:0.2351678589,
         planProcedureTurn:false,planProcedureTurnDuration:0,
-        resultTrueTrack:0,resultTestDistance:16.20,resultTrueHeading:98,resultGroundSpeed:0,resultLegTime:0.235,
+        resultTrueTrack:0,resultTestDistance:16.20,resultTrueHeading:98.1,resultGroundSpeed:0,resultLegTime:0.235,
         resultEntered:true,resultLegTimeInput:"00:00:00",
         penaltyTrueHeading:0,penaltyLegTime:0
        ],
        [planTrueTrack:219.0,planTestDistance:17.44,planTrueHeading:205.3931519488,planGroundSpeed:82.2652474538,planLegTime:0.2119971743,
         planProcedureTurn:true,planProcedureTurnDuration:1,
-        resultTrueTrack:0,resultTestDistance:17.44,resultTrueHeading:205,resultGroundSpeed:0,resultLegTime:0.2113888889,
+        resultTrueTrack:0,resultTestDistance:17.44,resultTrueHeading:205.12,resultGroundSpeed:0,resultLegTime:0.2113888889,
         resultEntered:true,resultLegTimeInput:"00:00:00",
         penaltyTrueHeading:0,penaltyLegTime:0
        ],
        [planTrueTrack:161.0,planTestDistance:13.50,planTrueHeading:154.0394779952,planGroundSpeed:67.2301943440,planLegTime:0.2008026324,
         planProcedureTurn:false,planProcedureTurnDuration:0,
-        resultTrueTrack:0,resultTestDistance:13.50,resultTrueHeading:154,resultGroundSpeed:0,resultLegTime:0.2008333333,
+        resultTrueTrack:0,resultTestDistance:13.50,resultTrueHeading:154.123,resultGroundSpeed:0,resultLegTime:0.2008333333,
         resultEntered:true,resultLegTimeInput:"00:00:00",
         penaltyTrueHeading:0,penaltyLegTime:0
        ],
@@ -1736,7 +1769,7 @@ class ContestController {
        ],
        [planTrueTrack:237.0,planTestDistance:11.36,planTrueHeading:223.9963642250,planGroundSpeed:88.6676760978,planLegTime:0.1281188422,
         planProcedureTurn:true,planProcedureTurnDuration:1,
-        resultTrueTrack:0,resultTestDistance:11.36,resultTrueHeading:224,resultGroundSpeed:0,resultLegTime:0.1286111111,
+        resultTrueTrack:0,resultTestDistance:11.36,resultTrueHeading:223.995,resultGroundSpeed:0,resultLegTime:0.1286111111,
         resultEntered:true,resultLegTimeInput:"00:00:00",
         penaltyTrueHeading:0,penaltyLegTime:0
        ],
@@ -1808,13 +1841,13 @@ class ContestController {
        ],
        [planTrueTrack:86.0,planTestDistance:11.50,planTrueHeading:96.0009550175,planGroundSpeed:64.3975926711,planLegTime:0.1785781040,
         planProcedureTurn:false,planProcedureTurnDuration:0,
-        resultTrueTrack:0,resultTestDistance:11.50,resultTrueHeading:102,resultGroundSpeed:0,resultLegTime:0.1825,
+        resultTrueTrack:0,resultTestDistance:11.50,resultTrueHeading:101.75,resultGroundSpeed:0,resultLegTime:0.1825,
         resultEntered:true,resultLegTimeInput:"00:00:00",
         penaltyTrueHeading:8,penaltyLegTime:9
        ],
        [planTrueTrack:237.0,planTestDistance:11.36,planTrueHeading:223.1679772858,planGroundSpeed:83.5274990113,planLegTime:0.1360031144,
         planProcedureTurn:true,planProcedureTurnDuration:1,
-        resultTrueTrack:0,resultTestDistance:11.36,resultTrueHeading:222,resultGroundSpeed:0,resultLegTime:0.1386111111,
+        resultTrueTrack:0,resultTestDistance:11.36,resultTrueHeading:220.5,resultGroundSpeed:0,resultLegTime:0.1386111111,
         resultEntered:true,resultLegTimeInput:"00:00:00",
         penaltyTrueHeading:0,penaltyLegTime:4
        ],

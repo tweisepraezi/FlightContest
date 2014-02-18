@@ -142,7 +142,7 @@ class Coord
 		
     }
 
-	void ResetResults()
+	void ResetResults(boolean resetProcedureTurn)
 	{
 	    resultLatitude              = ""
 	    resultLongitude             = ""
@@ -151,11 +151,19 @@ class Coord
 	    resultCpTimeInput           = "00:00:00"
 	    resultCpNotFound            = false
 	    resultEntered               = false
-	    resultProcedureTurnNotFlown = false
-	    resultProcedureTurnEntered  = false
+		if (resetProcedureTurn) {
+			resultProcedureTurnNotFlown = false
+			resultProcedureTurnEntered  = false
+		}
 	    resultMinAltitudeMissed     = false
 	    resultBadCourseNum          = 0
 	    penaltyCoord                = 0
+	}
+
+	void ResetResultsProcedureTurn()
+	{
+	    resultProcedureTurnNotFlown = false
+	    resultProcedureTurnEntered  = false
 	}
 
 	void CopyValues(Coord coordInstance)
@@ -219,6 +227,17 @@ class Coord
 				return "${getMsg(type.code)}${titleNumber}"
 			default:
 				return getMsg(type.code)
+		}
+	}
+	
+    String titlePrintCode()
+	{
+		switch (type) {
+			case CoordType.TP:
+            case CoordType.SECRET:
+				return "${getPrintMsg(type.code)}${titleNumber}"
+			default:
+				return getPrintMsg(type.code)
 		}
 	}
 	

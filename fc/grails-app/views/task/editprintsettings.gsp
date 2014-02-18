@@ -13,82 +13,11 @@
                 <div class="block" id="forms">
                     <g:form params="${['taskReturnAction':taskReturnAction,'taskReturnController':taskReturnController,'taskReturnID':taskReturnID]}">
                         <fieldset>
-                            <legend>${message(code:'fc.test.timetable')}</legend>
-                            <p>
-	                            <label>${message(code:'fc.printsubtitle')}:</label>
-	                            <br/>
-	                            <input type="text" id="printTimetablePrintTitle" name="printTimetablePrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetablePrintTitle')}" tabIndex="1"/>
-	                        </p>
-	                        <p>
-                                <div>
-                                    <g:checkBox name="printTimetableNumber" value="${taskInstance.printTimetableNumber}" />
-                                    <label>${message(code:'fc.number')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableCrew" value="${taskInstance.printTimetableCrew}" />
-                                    <label>${message(code:'fc.crew')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableAircraft" value="${taskInstance.printTimetableAircraft}" />
-                                    <label>${message(code:'fc.aircraft')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableTAS" value="${taskInstance.printTimetableTAS}" />
-                                    <label>${message(code:'fc.tas')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableTeam" value="${taskInstance.printTimetableTeam}" />
-                                    <label>${message(code:'fc.team')}</label>
-                                </div>
-                                <g:if test="${taskInstance.planningTestDuration == 0}">
-	                                <div>
-	                                    <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" />
-	                                    <label>${message(code:'fc.test.planning.publish')}</label>
-	                                </div>
-                                </g:if>
-                                <g:else>
-                                    <div>
-                                        <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" />
-                                        <label>${message(code:'fc.test.planning')}</label>
-                                    </div>
-                                </g:else>
-                                <div>
-                                    <g:checkBox name="printTimetableTakeoff" value="${taskInstance.printTimetableTakeoff}" />
-                                    <label>${message(code:'fc.test.takeoff')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableVersion" value="${taskInstance.printTimetableVersion}" />
-                                    <label>${message(code:'fc.version')}</label>
-                                </div>
-                            </p>
-                            <p>
-                                <div>
-                                    <g:checkBox name="printTimetableLandscape" value="${taskInstance.printTimetableLandscape}" />
-                                    <label>${message(code:'fc.printlandscape')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableA3" value="${taskInstance.printTimetableA3}" />
-                                    <label>${message(code:'fc.printa3')}</label>
-                                </div>
-                            </p>
-                            <g:actionSubmit action="updateprintsettingstimetablestandard" value="${message(code:'fc.setprintsettings.standard')}" tabIndex="2"/>
-                            <g:actionSubmit action="updateprintsettingstimetablenone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="3"/>
-                            <g:actionSubmit action="updateprintsettingstimetableall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="4"/>
-                            <p>
-                                <label>${message(code:'fc.test.timetable.change')}:</label>
-                                <br/>
-                                <g:textArea name="printTimetableChange" value="${taskInstance.printTimetableChange}" rows="5" cols="100" tabIndex="5"/>
-                            </p>
-                            <g:actionSubmit action="savechangeprintsettingstimetable" value="${message(code:'fc.savechangeprintsettings')}" tabIndex="6"/>
-                            <g:actionSubmit action="removechangeprintsettingstimetable" value="${message(code:'fc.removechangeprintsettings')}" onclick="return confirm('${message(code:'fc.removechangeprintsettings.areyousure')}');" tabIndex="7"/>
-                            <g:actionSubmit action="addchangeprintsettingstimetable" value="${message(code:'fc.addchangeprintsettings')}" tabIndex="8"/>
-                        </fieldset>
-                        <fieldset>
                             <legend>${message(code:'fc.test.timetablejury')}</legend>
                             <p>
                                 <label>${message(code:'fc.printsubtitle')}:</label>
                                 <br/>
-                                <input type="text" id="printTimetableJuryPrintTitle" name="printTimetableJuryPrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryPrintTitle')}" tabIndex="9"/>
+                                <input type="text" id="printTimetableJuryPrintTitle" name="printTimetableJuryPrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryPrintTitle')}" tabIndex="1"/>
                             </p>
                             <p>
                                 <div>
@@ -216,13 +145,85 @@
                                     <label>${message(code:'fc.printa3')}</label>
                                 </div>
                             </p>
-                            <g:actionSubmit action="updateprintsettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="13"/>
-                            <g:actionSubmit action="updateprintsettingstakeoff" value="${message(code:'fc.flighttest.takeoff.setprintsettings')}" tabIndex="14"/>
-                            <g:actionSubmit action="updateprintsettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="15"/>
-                            <g:actionSubmit action="updateprintsettingsparking" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="16"/>
-                            <g:actionSubmit action="updateprintsettingsstandard" value="${message(code:'fc.setprintsettings.standard')}" tabIndex="17"/>
-                            <g:actionSubmit action="updateprintsettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="18"/>
-                            <g:actionSubmit action="updateprintsettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="19"/>
+                            <g:actionSubmit action="updateprintsettingsstandard" value="${message(code:'fc.setprintsettings.standard')}" tabIndex="13"/>
+                            <g:actionSubmit action="updateprintsettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="14"/>
+                            <g:actionSubmit action="updateprintsettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="15"/>
+                            <g:actionSubmit action="updateprintsettingstakeoff" value="${message(code:'fc.flighttest.takeoff.setprintsettings')}" tabIndex="16"/>
+                            <g:actionSubmit action="updateprintsettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="17"/>
+                            <g:actionSubmit action="updateprintsettingsparking" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="18"/>
+                            <g:actionSubmit action="updateprintsettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="19"/>
+                            <g:actionSubmit action="updateprintsettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="20"/>
+                        </fieldset>
+                        <fieldset>
+                            <legend>${message(code:'fc.test.timetable')}</legend>
+                            <p>
+                                <label>${message(code:'fc.printsubtitle')}:</label>
+                                <br/>
+                                <input type="text" id="printTimetablePrintTitle" name="printTimetablePrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetablePrintTitle')}" tabIndex="21"/>
+                            </p>
+                            <p>
+                                <div>
+                                    <g:checkBox name="printTimetableNumber" value="${taskInstance.printTimetableNumber}" />
+                                    <label>${message(code:'fc.number')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printTimetableCrew" value="${taskInstance.printTimetableCrew}" />
+                                    <label>${message(code:'fc.crew')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printTimetableAircraft" value="${taskInstance.printTimetableAircraft}" />
+                                    <label>${message(code:'fc.aircraft')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printTimetableTAS" value="${taskInstance.printTimetableTAS}" />
+                                    <label>${message(code:'fc.tas')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printTimetableTeam" value="${taskInstance.printTimetableTeam}" />
+                                    <label>${message(code:'fc.team')}</label>
+                                </div>
+                                <g:if test="${taskInstance.planningTestDuration == 0}">
+                                    <div>
+                                        <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" />
+                                        <label>${message(code:'fc.test.planning.publish')}</label>
+                                    </div>
+                                </g:if>
+                                <g:else>
+                                    <div>
+                                        <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" />
+                                        <label>${message(code:'fc.test.planning')}</label>
+                                    </div>
+                                </g:else>
+                                <div>
+                                    <g:checkBox name="printTimetableTakeoff" value="${taskInstance.printTimetableTakeoff}" />
+                                    <label>${message(code:'fc.test.takeoff')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printTimetableVersion" value="${taskInstance.printTimetableVersion}" />
+                                    <label>${message(code:'fc.version')}</label>
+                                </div>
+                            </p>
+                            <p>
+                                <div>
+                                    <g:checkBox name="printTimetableLandscape" value="${taskInstance.printTimetableLandscape}" />
+                                    <label>${message(code:'fc.printlandscape')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printTimetableA3" value="${taskInstance.printTimetableA3}" />
+                                    <label>${message(code:'fc.printa3')}</label>
+                                </div>
+                            </p>
+                            <g:actionSubmit action="updateprintsettingstimetablestandard" value="${message(code:'fc.setprintsettings.standard')}" tabIndex="31"/>
+                            <g:actionSubmit action="updateprintsettingstimetablenone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="32"/>
+                            <g:actionSubmit action="updateprintsettingstimetableall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="33"/>
+                            <p>
+                                <label>${message(code:'fc.test.timetable.change')}:</label>
+                                <br/>
+                                <g:textArea name="printTimetableChange" value="${taskInstance.printTimetableChange}" rows="5" cols="100" tabIndex="34"/>
+                            </p>
+                            <g:actionSubmit action="savechangeprintsettingstimetable" value="${message(code:'fc.savechangeprintsettings')}" tabIndex="35"/>
+                            <g:actionSubmit action="removechangeprintsettingstimetable" value="${message(code:'fc.removechangeprintsettings')}" onclick="return confirm('${message(code:'fc.removechangeprintsettings.areyousure')}');" tabIndex="36"/>
+                            <g:actionSubmit action="addchangeprintsettingstimetable" value="${message(code:'fc.addchangeprintsettings')}" tabIndex="37"/>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>

@@ -2,6 +2,22 @@
     <head>
         <style type="text/css">
             @page {
+                <g:if test="${params.a3=='true'}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: A3 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A3;
+                    </g:else> 
+                </g:if>
+                <g:else>
+                    <g:if test="${params.landscape=='true'}">
+                        size: A4 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A4;
+                    </g:else> 
+                </g:else>
                 @top-center {
                     content: "${testInstance.GetViewPos()}"
                 }
@@ -56,104 +72,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <g:if test="${TestLegPlanning.countByTest(testInstance)}" >
-                            <br/>
-                            <table width="100%" border="1" cellspacing="0" cellpadding="2">
-                                <thead>
-                                    <tr>
-                                        <th class="table-head">${message(code:'fc.title')}</th>
-                                        <th colspan="3" class="table-head">${message(code:'fc.trueheading')}</th>
-                                        <th colspan="3" class="table-head">${message(code:'fc.legtime')}</th>
-                                    </tr>
-                                    <tr>
-                                    	<th/>
-                                        <th>${message(code:'fc.test.results.plan')}</th>
-                                        <th>${message(code:'fc.test.results.given')}</th>
-                                        <th>${message(code:'fc.points')}</th>
-                                        <th>${message(code:'fc.test.results.plan')}</th>
-                                        <th>${message(code:'fc.test.results.given')}</th>
-                                        <th>${message(code:'fc.points')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <g:set var="penaltyTrueHeadingSummary" value="${new Integer(0)}" />
-                                    <g:set var="penaltyLegTimeSummary" value="${new Integer(0)}" />
-                                    <g:set var="legNo" value="${new Integer(0)}" />
-                                    <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
-                                        <g:if test="${lastTestLegPlanningInstance}">
-                                            <g:set var="penaltyTrueHeadingSummary" value="${penaltyTrueHeadingSummary + lastTestLegPlanningInstance.penaltyTrueHeading}" />
-                                            <g:set var="penaltyLegTimeSummary" value="${penaltyLegTimeSummary + lastTestLegPlanningInstance.penaltyLegTime}" />
-                                            <tr>
-                                                <td>${message(code:CoordType.TP.code)}${legNo}</td>
-                                                <td>${FcMath.GradStr(lastTestLegPlanningInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-                                                <td>${FcMath.GradStr(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
-                                                <td>${lastTestLegPlanningInstance.penaltyTrueHeading}</td>
-                                                <td>${FcMath.TimeStr(lastTestLegPlanningInstance.planLegTime)}</td>
-                                                <td>${FcMath.TimeStr(lastTestLegPlanningInstance.resultLegTime)}</td>
-                                                <td>${lastTestLegPlanningInstance.penaltyLegTime}</td>
-                                            </tr>
-                                        </g:if>
-                                        <g:set var="lastTestLegPlanningInstance" value="${testLegPlanningInstance}" />
-                                        <g:set var="legNo" value="${legNo+1}" />
-                                    </g:each>
-                                    <g:if test="${lastTestLegPlanningInstance}">
-                                        <g:set var="penaltyTrueHeadingSummary" value="${penaltyTrueHeadingSummary + lastTestLegPlanningInstance.penaltyTrueHeading}" />
-                                        <g:set var="penaltyLegTimeSummary" value="${penaltyLegTimeSummary + lastTestLegPlanningInstance.penaltyLegTime}" />
-                                        <tr>
-                                            <td>${message(code:CoordType.FP.code)}</td>
-                                            <td>${FcMath.GradStr(lastTestLegPlanningInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-                                            <td>${FcMath.GradStr(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
-                                            <td>${lastTestLegPlanningInstance.penaltyTrueHeading}</td>
-                                            <td>${FcMath.TimeStr(lastTestLegPlanningInstance.planLegTime)}</td>
-                                            <td>${FcMath.TimeStr(lastTestLegPlanningInstance.resultLegTime)}</td>
-                                            <td>${lastTestLegPlanningInstance.penaltyLegTime}</td>
-                                        </tr>
-                                    </g:if>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td/>
-                                        <td/>
-                                        <td/>
-                                        <td>${penaltyTrueHeadingSummary}</td>
-                                        <td/>
-                                        <td/>
-                                        <td>${penaltyLegTimeSummary}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </g:if>
                         <br/>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>${message(code:'fc.planningresults.legpenalties')}: ${testInstance.planningTestLegPenalties} ${message(code:'fc.points')}</td>
-                                </tr>
-                                <g:if test="${testInstance.planningTestGivenTooLate}">
-                                	<tr>
-                                		<td>${message(code:'fc.planningtest.giventolate')}: ${testInstance.GetPlanningTestPlanTooLatePoints()} ${message(code:'fc.points')}</td>
-                                	</tr>
-                                </g:if>
-                                <g:if test="${testInstance.planningTestExitRoomTooLate}">
-                                	<tr>
-                                 		<td>${message(code:'fc.planningtest.exitroomtolate')}: ${testInstance.GetPlanningTestExitRoomTooLatePoints()} ${message(code:'fc.points')}</td>
-                                	</tr>
-                                </g:if>
-                                <g:if test="${testInstance.planningTestOtherPenalties > 0}">
-                                    <tr>
-                                        <td>${message(code:'fc.planningtest.otherpenalties')}: ${testInstance.planningTestOtherPenalties} ${message(code:'fc.points')}</td>
-                                    </tr>
-                                </g:if>
-                                <tr>
-                                	<td> </td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td>${message(code:'fc.penalties')}: ${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
-                                </tr>
-                            </tfoot>
-                        </table>
+                        <g:planningtaskTestPrintable t="${testInstance}"/>
                     </g:form>
                 </div>
             </div>

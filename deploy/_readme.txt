@@ -20,7 +20,7 @@ Windows installer tool:
 Additional sources for installer compilation:
 	Java SDK 1.6 (32 Bit) in folder '..\..\..\Java\jdk1.6.0_30'
 	Apache Tomcat 7.0 (32 Bit) in folder '..\..\..\Server\apache-tomcat-7.0.25-x86'
-	Grails 2.0.1 in folder '..\..\..\Grails\grails-2.0.1'
+	Grails 2.3.4 in folder '..\..\..\Grails\grails-2.3.4'
 
 Deployment sequence:
 	1. Set version number in '..\fc\web-app\licenses\README.txt'
