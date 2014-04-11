@@ -28,7 +28,7 @@
 		</style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.contest.listresults')}</title>
+        <title>${message(code:'fc.contest.printresults')}</title>
     </head>
     <body>
         <div class="box">

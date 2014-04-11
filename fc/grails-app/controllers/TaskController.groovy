@@ -39,7 +39,7 @@ class TaskController {
 	
     def update = {
         def task = fcService.updateTask(params) 
-        if (task.saved) {
+		if (task.saved) {
         	flash.message = task.message
 			// process return action
 			if (params.taskReturnAction) {
@@ -48,6 +48,10 @@ class TaskController {
         		redirect(controller:"contest",action:"tasks")
 			}
         } else if (task.instance) {
+			if (task.error) {
+				flash.error = true
+				flash.message = task.message
+			}
 			render(view:'edit',model:[taskInstance:task.instance])
         } else {
 			flash.message = task.message
@@ -229,7 +233,7 @@ class TaskController {
         	flash.message = task.message
      		redirect(controller:"contest",action:"tasks")
         } else {
-            render(view:'create',model:[taskInstance:task.instance])
+            render(view:'create',model:[taskInstance:task.instance,contestInstance:session.lastContest])
         }
     }
     
@@ -384,27 +388,12 @@ class TaskController {
     def startresults = {
 		fcService.printstart "Start results"
 		if (session?.lastContest) {
-			if (session?.lastResultClassResults) {
-		        def resultclass = fcService.startresultsResultClass(params, session.lastContest, session.lastResultClassResults)
-		        if (resultclass.resultclassid) {
-		            params.id = resultclass.resultclassid
-					fcService.println "last results resultclass $resultclass.resultclassid"
-		            redirect(controller:'resultClass',action:'listresults',params:params)
-		        }
-			} else if (session?.lastContestResults) {
-				fcService.println "last results contest"
-	            redirect(controller:'contest',action:'listresults',params:params)
-			} else if (session?.lastTeamResults) {
-				fcService.println "last results contest"
-	            redirect(controller:'contest',action:'listteamresults',params:params)
-			} else {
-		        def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
-		        if (task.taskid) {
-		            params.id = task.taskid
-					fcService.println "last results task $task.taskid"
-		            redirect(action:listresults,params:params)
-		        }
-			}
+	        def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
+	        if (task.taskid) {
+	            params.id = task.taskid
+				fcService.println "last results task $task.taskid"
+	            redirect(action:listresults,params:params)
+	        }
 			fcService.printdone "last contest"
 		} else {
 			fcService.printdone ""
@@ -421,17 +410,11 @@ class TaskController {
 				fcService.printdone task.message
 	            redirect(controller:"contest",action:"tasks")
 	        } else if (task.instance.hideResults) {
-				session.lastResultClassResults = null
-				session.lastContestResults = true
-				session.lastTeamResults = null
 				session.lastTaskResults = null
 				fcService.printdone "Hide task."
 				redirect(controller:"contest",action:"listresults")
 	        } else {
 				SetLimit()
-				session.lastResultClassResults = null
-				session.lastContestResults = null
-				session.lastTeamResults = null
 	            session.lastTaskResults = task.instance.id
 				// save return action
 				session.taskReturnAction = actionName 
@@ -464,6 +447,52 @@ class TaskController {
 		}
     }
 
+	def startevaluation = {
+		fcService.printstart "Start evaluation"
+		if (session?.lastContest) {
+			boolean last_found = false
+			if (session?.lastContestResults) {
+				last_found = true
+				fcService.println "last results contest"
+				redirect(controller:'contest',action:'listresults',params:params)
+			} else if (session?.lastTeamResults) {
+				last_found = true
+				fcService.println "last results contest"
+				redirect(controller:'contest',action:'listteamresults',params:params)
+			} else if (session?.lastResultClassResults) {
+				def resultclass = fcService.startresultsResultClass(params, session.lastContest, session.lastResultClassResults)
+				if (resultclass.resultclassid) {
+					last_found = true
+					params.id = resultclass.resultclassid
+					fcService.println "last results resultclass $resultclass.resultclassid"
+					redirect(controller:'resultClass',action:'listresults',params:params)
+				}
+			} else {
+				if (session.lastContest.resultClasses) {
+					ResultClass first_resultclass_instance = ResultClass.findByContest(session.lastContest,[sort:"id"])
+					if (first_resultclass_instance) {
+						session.lastResultClassResults = first_resultclass_instance.id
+						def resultclass = fcService.startresultsResultClass(params, session.lastContest, session.lastResultClassResults)
+						if (resultclass.resultclassid) {
+							last_found = true
+							params.id = resultclass.resultclassid
+							fcService.println "last results resultclass $resultclass.resultclassid"
+							redirect(controller:'resultClass',action:'listresults',params:params)
+						}
+					}
+				}
+			}
+			if (!last_found) {
+				session.lastContestResults = true
+				redirect(controller:'contest',action:'listresults',params:params)
+			}
+			fcService.printdone "last contest"
+		} else {
+			fcService.printdone ""
+			redirect(controller:'contest',action:'start')
+		}
+	}
+	
 	def selectall = {
         def task = fcService.selectallTask(params) 
         if (!task.instance) {
@@ -670,7 +699,12 @@ class TaskController {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
-	   		flash.selectedTestIDs = task.selectedtestids
+			if (task.error) {
+				flash.error = true
+				flash.message = task.message
+			} else {
+	   			flash.selectedTestIDs = task.selectedtestids
+			}
 	    	redirect(action:listplanning,id:task.instance.id)
         }
 	}
@@ -681,7 +715,12 @@ class TaskController {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
-	   		flash.selectedTestIDs = task.selectedtestids
+			if (task.error) {
+				flash.error = true
+				flash.message = task.message
+			} else {
+				flash.selectedTestIDs = task.selectedtestids
+			}
 	        redirect(action:listplanning,id:task.instance.id)
         }
 	}

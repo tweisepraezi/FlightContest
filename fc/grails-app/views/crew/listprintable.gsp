@@ -56,6 +56,12 @@
                                     <g:if test="${contestInstance.printCrewAircraft}">
                                         <th>${message(code:'fc.crew.aircraft')}</th>
                                     </g:if>
+                                    <g:if test="${contestInstance.printCrewAircraftType}">
+                                        <th>${message(code:'fc.aircraft.type')}</th>
+                                    </g:if>
+                                    <g:if test="${contestInstance.printCrewAircraftColour}">
+                                        <th>${message(code:'fc.aircraft.colour')}</th>
+                                    </g:if>
                                     <g:if test="${contestInstance.printCrewTAS}">
                                         <th>${message(code:'fc.tas')}</th>
                                     </g:if>
@@ -99,6 +105,12 @@
 	                                    </g:if>
                                         <g:if test="${contestInstance.printCrewAircraft}">
                                             <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.registration}<g:if test="${crewInstance.aircraft?.user1 && crewInstance.aircraft?.user2}">${HTMLFilter.NoWrapStr(' *')}</g:if></g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+                                        </g:if>
+                                        <g:if test="${contestInstance.printCrewAircraftType}">
+                                            <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.type}</g:if></td>
+                                        </g:if>
+                                        <g:if test="${contestInstance.printCrewAircraftColour}">
+                                            <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.colour}</g:if></td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewTAS}">
                                             <td>${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>

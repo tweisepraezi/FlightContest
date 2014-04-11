@@ -45,7 +45,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan=11">${message(code:'fc.coordroute.list')}</th>
+                                    <th class="table-head" colspan=12">${message(code:'fc.coordroute.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
@@ -57,6 +57,7 @@
                                     <th>${message(code:'fc.gatewidth')}</th>
                                     <th>${message(code:'fc.legduration')}</th>
                                     <th>${message(code:'fc.notimecheck')}</th>
+                                    <th>${message(code:'fc.noplanningtest')}</th>
                                     <th>${message(code:'fc.truetrack.map.measure')}</th>
                                     <th>${message(code:'fc.distance.map')}</th>
                                 </tr>
@@ -88,6 +89,12 @@
                                         <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
                                         <td>${coordroute_instance.legDurationName()}</td>
                                         <g:if test="${coordroute_instance.noTimeCheck}">
+                                            <td>${message(code:'fc.yes')}</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>-</td>
+                                        </g:else>
+                                        <g:if test="${coordroute_instance.noPlanningTest}">
                                             <td>${message(code:'fc.yes')}</td>
                                         </g:if>
                                         <g:else>
@@ -148,7 +155,7 @@
                                     </g:if>
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${num+1}</td>
-                                        <td>${routeleg_instance.title}</td>
+                                        <td>${routeleg_instance.GetTitle()}</td>
                                         <td>${routeleg_instance.coordTrueTrackName()}</td>
                                         <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
                                         <td>${routeleg_instance.coordDistanceName()}</td>
@@ -191,7 +198,7 @@
                                     </g:if>
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${num+1}</td>
-                                        <td>${routeleg_instance.title}</td>
+                                        <td>${routeleg_instance.GetTitle()}</td>
                                         <td>${routeleg_instance.coordTrueTrackName()}</td>
                                         <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
                                         <td>${routeleg_instance.coordDistanceName()}</td>
@@ -218,7 +225,8 @@
                         <g:if test="${!routeInstance.Used()}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="8"/>
                         </g:if>
-                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}"  tabIndex="9"/>
+                        <g:actionSubmit action="showmap" value="${message(code:'fc.route.map')}"  tabIndex="9"/>
+                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}"  tabIndex="10"/>
                     </g:form>
                 </div>
             </div>

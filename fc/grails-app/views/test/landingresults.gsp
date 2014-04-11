@@ -125,7 +125,11 @@
 	                                                <g:checkBox name="landingTest1AbnormalLanding" value="${testInstance.landingTest1AbnormalLanding}"/>
 	                                                <label>${message(code:'fc.landingtest.abnormallanding')}</label>
 	                                            </g:if>
-	                                        </div>
+                                                <g:if test="${testInstance.GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                    <g:checkBox name="landingTest1NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest1NotAllowedAerodynamicAuxiliaries}"/>
+                                                    <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
+                                                </g:if>
+                                            </div>
 	                                    </p>
                                         <p>${message(code:'fc.landingresults.landing')}: ${testInstance.landingTest1Penalties} ${message(code:'fc.points')}</p>
 			                        </g:if>
@@ -183,6 +187,10 @@
 					        	                	<g:checkBox name="landingTest2AbnormalLanding" value="${testInstance.landingTest2AbnormalLanding}"/>
 													<label>${message(code:'fc.landingtest.abnormallanding')}</label>
 												</g:if>
+                                                <g:if test="${testInstance.GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                    <g:checkBox name="landingTest2NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest2NotAllowedAerodynamicAuxiliaries}"/>
+                                                    <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
+                                                </g:if>
 					                        	<g:if test="${testInstance.GetLandingTest2PowerInAirPoints() > 0}">
 					        	                	<g:checkBox name="landingTest2PowerInAir" value="${testInstance.landingTest2PowerInAir}"/>
 													<label>${message(code:'fc.landingtest.powerinair')}</label>
@@ -245,6 +253,10 @@
 					        	                	<g:checkBox name="landingTest3AbnormalLanding" value="${testInstance.landingTest3AbnormalLanding}"/>
 													<label>${message(code:'fc.landingtest.abnormallanding')}</label>
 												</g:if>
+                                                <g:if test="${testInstance.GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                    <g:checkBox name="landingTest3NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest3NotAllowedAerodynamicAuxiliaries}"/>
+                                                    <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
+                                                </g:if>
 					                        	<g:if test="${testInstance.GetLandingTest3PowerInAirPoints() > 0}">
 					        	                	<g:checkBox name="landingTest3PowerInAir" value="${testInstance.landingTest3PowerInAir}"/>
 													<label>${message(code:'fc.landingtest.powerinair')}</label>
@@ -311,6 +323,10 @@
 				        	                		<g:checkBox name="landingTest4AbnormalLanding" value="${testInstance.landingTest4AbnormalLanding}"/>
 													<label>${message(code:'fc.landingtest.abnormallanding')}</label>
 												</g:if>
+                                                <g:if test="${testInstance.GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                    <g:checkBox name="landingTest4NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest4NotAllowedAerodynamicAuxiliaries}"/>
+                                                    <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
+                                                </g:if>
 					                        	<g:if test="${testInstance.GetLandingTest4TouchingObstaclePoints() > 0}">
 				        	                		<g:checkBox name="landingTest4TouchingObstacle" value="${testInstance.landingTest4TouchingObstacle}"/>
 													<label>${message(code:'fc.landingtest.touchingobstacle')}</label>

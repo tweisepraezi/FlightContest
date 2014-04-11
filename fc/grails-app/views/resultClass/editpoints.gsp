@@ -272,9 +272,15 @@
                                 <g:if test="${resultclassInstance.landingTest1AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest1AbnormalLandingPoints}">!</g:if>
                             </p>
                             <p>
+                                <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>
+                                <br/>
+                                <input type="text" id="landingTest1NotAllowedAerodynamicAuxiliariesPoints" name="landingTest1NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest1NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="39"/>
+                                <g:if test="${resultclassInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest1NotAllowedAerodynamicAuxiliariesPoints}">!</g:if>
+                            </p>
+                            <p>
                                 <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>
                                 <br/>
-                                <input type="text" id="landingTest1PenaltyCalculator" name="landingTest1PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest1PenaltyCalculator')}" tabIndex="39"/>
+                                <input type="text" id="landingTest1PenaltyCalculator" name="landingTest1PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest1PenaltyCalculator')}" tabIndex="40"/>
                                 <g:if test="${resultclassInstance.landingTest1PenaltyCalculator != resultclassInstance.contestRule.ruleValues.landingTest1PenaltyCalculator}">!</g:if>
                             </p>
                         </fieldset>
@@ -329,15 +335,21 @@
                                 <g:if test="${resultclassInstance.landingTest2AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest2AbnormalLandingPoints}">!</g:if>
                             </p>
                             <p>
+                                <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>
+                                <br/>
+                                <input type="text" id="landingTest2NotAllowedAerodynamicAuxiliariesPoints" name="landingTest2NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest2NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="49"/>
+                                <g:if test="${resultclassInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest2NotAllowedAerodynamicAuxiliariesPoints}">!</g:if>
+                            </p>
+                            <p>
                                 <label>${message(code:'fc.landingtest.powerinair')}* [${message(code:'fc.points')}]:</label>
                                 <br/>
-                                <input type="text" id="landingTest2PowerInAirPoints" name="landingTest2PowerInAirPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest2PowerInAirPoints')}" tabIndex="49"/>
+                                <input type="text" id="landingTest2PowerInAirPoints" name="landingTest2PowerInAirPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest2PowerInAirPoints')}" tabIndex="50"/>
                                 <g:if test="${resultclassInstance.landingTest2PowerInAirPoints != resultclassInstance.contestRule.ruleValues.landingTest2PowerInAirPoints}">!</g:if>
                             </p>
                             <p>
                                 <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>
                                 <br/>
-                                <input type="text" id="landingTest2PenaltyCalculator" name="landingTest2PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest2PenaltyCalculator')}" tabIndex="50"/>
+                                <input type="text" id="landingTest2PenaltyCalculator" name="landingTest2PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest2PenaltyCalculator')}" tabIndex="51"/>
                                 <g:if test="${resultclassInstance.landingTest2PenaltyCalculator != resultclassInstance.contestRule.ruleValues.landingTest2PenaltyCalculator}">!</g:if>
                             </p>
                         </fieldset>
@@ -392,21 +404,27 @@
                                 <g:if test="${resultclassInstance.landingTest3AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest3AbnormalLandingPoints}">!</g:if>
                             </p>
                             <p>
+                                <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>
+                                <br/>
+                                <input type="text" id="landingTest3NotAllowedAerodynamicAuxiliariesPoints" name="landingTest3NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest3NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="69"/>
+                                <g:if test="${resultclassInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest3NotAllowedAerodynamicAuxiliariesPoints}">!</g:if>
+                            </p>
+                            <p>
                                 <label>${message(code:'fc.landingtest.powerinair')}* [${message(code:'fc.points')}]:</label>
                                 <br/>
-                                <input type="text" id="landingTest3PowerInAirPoints" name="landingTest3PowerInAirPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest3PowerInAirPoints')}" tabIndex="69"/>
+                                <input type="text" id="landingTest3PowerInAirPoints" name="landingTest3PowerInAirPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest3PowerInAirPoints')}" tabIndex="70"/>
                                 <g:if test="${resultclassInstance.landingTest3PowerInAirPoints != resultclassInstance.contestRule.ruleValues.landingTest3PowerInAirPoints}">!</g:if>
                             </p>
                             <p>
                                 <label>${message(code:'fc.landingtest.flapsinair')}* [${message(code:'fc.points')}]:</label>
                                 <br/>
-                                <input type="text" id="landingTest3FlapsInAirPoints" name="landingTest3FlapsInAirPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest3FlapsInAirPoints')}" tabIndex="70"/>
+                                <input type="text" id="landingTest3FlapsInAirPoints" name="landingTest3FlapsInAirPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest3FlapsInAirPoints')}" tabIndex="71"/>
                                 <g:if test="${resultclassInstance.landingTest3FlapsInAirPoints != resultclassInstance.contestRule.ruleValues.landingTest3FlapsInAirPoints}">!</g:if>
                             </p>
                             <p>
                                 <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>
                                 <br/>
-                                <input type="text" id="landingTest3PenaltyCalculator" name="landingTest3PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest3PenaltyCalculator')}" tabIndex="71"/>
+                                <input type="text" id="landingTest3PenaltyCalculator" name="landingTest3PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest3PenaltyCalculator')}" tabIndex="72"/>
                                 <g:if test="${resultclassInstance.landingTest3PenaltyCalculator != resultclassInstance.contestRule.ruleValues.landingTest3PenaltyCalculator}">!</g:if>
                             </p>
                         </fieldset>
@@ -460,16 +478,22 @@
                                 <input type="text" id="landingTest4AbnormalLandingPoints" name="landingTest4AbnormalLandingPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest4AbnormalLandingPoints')}" tabIndex="88"/>
                                 <g:if test="${resultclassInstance.landingTest4AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest4AbnormalLandingPoints}">!</g:if>
                             </p>
+                            <p>
+                                <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}* [${message(code:'fc.points')}]:</label>
+                                <br/>
+                                <input type="text" id="landingTest4NotAllowedAerodynamicAuxiliariesPoints" name="landingTest4NotAllowedAerodynamicAuxiliariesPoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest4NotAllowedAerodynamicAuxiliariesPoints')}" tabIndex="89"/>
+                                <g:if test="${resultclassInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest4NotAllowedAerodynamicAuxiliariesPoints}">!</g:if>
+                            </p>
 							<p>
                                 <label>${message(code:'fc.landingtest.touchingobstacle')}* [${message(code:'fc.points')}]:</label>
                                 <br/>
-                                <input type="text" id="landingTest4TouchingObstaclePoints" name="landingTest4TouchingObstaclePoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest4TouchingObstaclePoints')}" tabIndex="89"/>
+                                <input type="text" id="landingTest4TouchingObstaclePoints" name="landingTest4TouchingObstaclePoints" value="${fieldValue(bean:resultclassInstance,field:'landingTest4TouchingObstaclePoints')}" tabIndex="90"/>
                                 <g:if test="${resultclassInstance.landingTest4TouchingObstaclePoints != resultclassInstance.contestRule.ruleValues.landingTest4TouchingObstaclePoints}">!</g:if>
                             </p>
                             <p>
                                 <label>${message(code:'fc.landingtest.penaltycalculator')}*:</label>
                                 <br/>
-                                <input type="text" id="landingTest4PenaltyCalculator" name="landingTest4PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest4PenaltyCalculator')}" tabIndex="90"/>
+                                <input type="text" id="landingTest4PenaltyCalculator" name="landingTest4PenaltyCalculator" value="${fieldValue(bean:resultclassInstance,field:'landingTest4PenaltyCalculator')}" tabIndex="91"/>
                                 <g:if test="${resultclassInstance.landingTest4PenaltyCalculator != resultclassInstance.contestRule.ruleValues.landingTest4PenaltyCalculator}">!</g:if>
                             </p>
                         </fieldset>

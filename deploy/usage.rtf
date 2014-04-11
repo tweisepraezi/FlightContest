@@ -1,127 +1,334 @@
-{\rtf1\ansi\ansicpg1252\deff0\deflang1031\deflangfe1031\deftab708{\fonttbl{\f0\froman\fprq2\fcharset0 Times New Roman;}{\f1\froman\fprq2\fcharset2 Symbol;}{\f2\fswiss\fprq2\fcharset0 Arial;}}
-{\colortbl ;\red0\green0\blue255;}
-{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\nowidctlpar\b\f0\fs36 Flight Contest\par
-\b0\fs24\par
-Programm zur Planung und Auswertung von Motorflug-Navigationsflug-Wettbewerben\par
-\par
-Thomas Weise\par
-Deutscher Pr\'e4zisionsflug-Verein e.V.\par
-\par
-Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes und wertet Ergebnisse f\'fcr Planungstests, Navigationstests, Beobachtungen und/oder Landungen aus. Dabei arbeitet es eng mit AFLOS zusammen, um Strecken f\'fcr die Zeitplanung und Loggerdaten f\'fcr die Auswertung zu erhalten. \par
-\par
-Auswertungen k\'f6nnen nach verschiedenen Regelwerken (Deutschland, Schweiz, FAI) erfolgen, die die Punktevergabe und das Landeschema regeln. Die Punktevergabe eines gew\'e4hlten Regelwerkes kann im Nachhinein modifiziert werden.\par
-\par
-\ul\fs28 Auswertungsm\'f6glichkeiten:\par
-\ulnone\fs24\par
-\pard\nowidctlpar\fi-360\li360\tx360\f1\'b7\tab\f0 Beste Besatzung\par
-\pard\nowidctlpar\fi-360\li360\f1\'b7\tab\f0 Beste Besatzung einer Klasse\par
-\pard\nowidctlpar\li708 Besatzungen k\'f6nnen Klassen zugeordnet werden, um z.B. zwischen regul\'e4ren Besatzungen und Einsteigern zu unterscheiden.\par
-\pard\nowidctlpar\fi-360\li360\f1\'b7\tab\f0 Beste Besatzung bestimmter Teams\par
-\pard\nowidctlpar\li708 Werden Besatzungen Teams (z.B Landes-Vereine) zugeordnet, kann die beste Besatzung der interessierenden Teams (z.B. eines Landes) ermittelt werden.\par
-\pard\nowidctlpar\fi-360\li360\tx360\f1\'b7\tab\f0 Bestes Team\par
-\pard\nowidctlpar\li708 Werden Besatzungen Teams (z.B L\'e4ndern) zugeordnet, kann f\'fcr eine festzulegende Besatzungsanzahl das beste Team ermittelt werden.\par
-\pard\nowidctlpar\fi-360\li360\tx360\f1\'b7\tab\f0 Bester eines bestimmten Einzel-Tests\par
-\pard\nowidctlpar\li708 So z.B. kann der Beste bei Landungen ermittelt werden.\par
-\pard\nowidctlpar\par
-\ul\fs28 Wettbewerbsablauf:\par
-\ulnone\fs24\par
-Ein Wettbewerb umfasst eine oder mehrere Aufgaben.\par
-\par
-Eine Aufgabe hat einen zusammenh\'e4ngenden Zeitplan (f\'fcr Planungstest und Navigationsflug) und umfasst maximal:\par
-\pard\nowidctlpar\fi-360\li621\tx621 -\tab 1 Planungstest\par
-\pard\nowidctlpar\fi-360\li621 -\tab 1 Navigationsflug\par
--\tab Beobachtungen\par
--\tab bis zu 4 Landungen\par
-\pard\nowidctlpar\par
-Die Zeitplanung einer Aufgabe wird erst unmittelbar vor dem Brief\'edng vorgenommen, um auf wetterbedingte Anpassungen der Startzeit reagieren zu k\'f6nnen.\par
-\par
-\ul\fs28\page Wettbewerbsvorbereitung:\par
-\ulnone\fs24\par
-\pard\nowidctlpar\fi-360\li360\tx360 1.\tab Teilnehmerliste\line\par
-\pard\nowidctlpar\li360 Die Teilnehmer sind in einer Excel-Tabelle mit der Flight Contest-Vorlage \'84Samples -> FC-CrewListe-Sample.xls\ldblquote  zu erstellen. Diese Liste muss am Wettbewerbstag sortiert und mit zugeordneten Startnummern vorliegen. Da Spalten und Tabellenbl\'e4tter eingef\'fcgt werden d\'fcrfen, kann diese Vorlage auch zur Planung anderer Belange des Wettbewerbes verwendet werden (Hotel, Kontaktdaten).\par
-\pard\nowidctlpar\par
-\pard\nowidctlpar\fi-360\li360\tx360 2.\tab Strecke(n)\par
-\pard\nowidctlpar\par
-\pard\nowidctlpar\li360 Die Check-Punkte der zu fliegenden Strecken m\'fcssen als AFLOS-Datenbank-Datei (.MDB) oder zum Einlesen in AFLOS als AFLOS-Referenz-Strecken-Datei (.REF) vorliegen. Die einzelnen Check-Punkte k\'f6nnen dabei folgendermassen markiert werden (im Feld Mark):\line\par
-\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $secret\cell Check-Punkt als unbekannte Zeitkontrolle auswerten\line (erscheint nicht im Flugplan der Besatzungen)\cell\row\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $ignore\cell Check-Punkt nicht auswerten\cell\row\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $dist:12,3NM\cell Entfernung vom vorangegangenen Wende-Punkt in nautische Meilen\cell\row\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $dist:22,4km\cell Entfernung vom vorangegangenen Wende-Punkt in Kilometer\cell\row\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $dist:26,5mm\cell Entfernung vom vorangegangenen Wende-Punkt in mm (gemessen mit einer Wettbewerbs-Karte mit dem Ma\'dfstab 1:200000)\cell\row\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $track:142\cell Richtung vom vorangegangenen Check-Punkt in Grad\cell\row\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $duration:10min\cell Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten\cell\row\trowd\trgaph70\trleft360\trbrdrl\brdrs\brdrw10 \trbrdrt\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trpaddl70\trpaddr70\trpaddfl3\trpaddfr3
-\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx2134\clbrdrl\brdrw10\brdrs\clbrdrt\brdrw10\brdrs\clbrdrr\brdrw10\brdrs\clbrdrb\brdrw10\brdrs \cellx9180\pard\intbl\nowidctlpar $notimecheck\cell Keine Zeitauswertung f\'fcr diesen Check-Punkt\cell\row\pard\nowidctlpar\li360\par
-Der vorangegangene Wende-Punkt ist ein Check-Punkt, der ausgewertet wird und keine unbekannte Zeitkontrolle ist.\par
-\par
-Check-Punkte unbekannter Zeitkontrollen mussen mit der Torbreite 2 NM versehen werden, Startpunkt (SP), Endpunkt (FP) und Wendepunkte mit der Torbreite 1 NM.\par
-\par
-F\'fcr pr\'e4zise \'dcbereinstimmung der ausgegebenen Wettbewerbskarte mit den zu verarbeitenden Daten m\'fcssen Entfernungen und Winkel auf der Wettbewerbskarte gemessen und dem Check-Punkt mit $dist und $track zugeordnet werden (bei Pr\'e4zisionsflug-Wettbewerben).\par
-\par
-F\'fcr Landungen zwischen zwei Check-Punkten (Touch&Go) ist f\'fcr den Strecken-Abschnitt eine feste Flugzeit anzugeben. Dazu ist der Check-Punkt nach dem Landefeld mit $duration zu markieren.\par
-\par
-F\'fcr krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. Diese Check-Punkte sind als unbekannte Zeitkontrollen zu markieren, damit sie nicht im Flugplan einer Besatzung erscheinen. Wird die Torbreite nicht mit 2 NM festgelegt, ist der Check-Punkt mit $secret zu markieren. Dar\'fcberhinaus muss die Zeitauswertung mit $notimecheck deaktiviert werden.\par
-\pard\nowidctlpar\page 3.  Aufgabe(n)\par
-\par
-\pard\nowidctlpar\li360 Festlegung der Aufgabenanzahl und der Aufgabeninhalte:\par
-\pard\nowidctlpar\fi-360\li1080\tx1080\f2 -\tab\f0 Planungstest (ja/nein)\par
-\pard\nowidctlpar\fi-360\li1080\f2 -\tab\f0 Navigationstest (ja/nein)\par
-\f2 -\tab\f0 Beobachtungstest (ja/nein)\par
-\f2 -\tab\f0 Landetest (ja/nein, Anzahl der Landungen (bis 4))\line\par
-\pard\nowidctlpar\li360 Einstellungen je Aufgabe festlegen:\par
-\pard\nowidctlpar\fi-360\li1068\tx1068\f2 -\tab\f0 TakeOff-Abstand\par
-\pard\nowidctlpar\fi-360\li1068\f2 -\tab\f0 Zeit T/O -> SP\par
-\f2 -\tab\f0 Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)\par
-\f2 -\tab\f0 Zeit FP -> Landung (-> sp\'e4teste Landezeit)\par
-\f2 -\tab\f0 Zeit FP -> Abstellen des Flugzeuges\line\par
-\pard\nowidctlpar\li360 Auswertungs-Einstellungen des Wettbewerbs festlegen:\par
-\pard\nowidctlpar\fi-360\li1080\tx1080\f2 -\tab\f0 Punkte f\'fcr nicht geflogene Wendescheifen vergeben (ja/nein)\par
-\pard\nowidctlpar\fi-360\li1080\f2 -\tab\f0 Punkte f\'fcr Kursabweichungen > 90 Grad vergeben (ja/nein)\par
-\pard\nowidctlpar\fi-360\li1080\tx1080\f2 -\tab\f0 Punkte f\'fcr Unterschreitung der Mindestflugh\'f6he vergeben (ja/nein)\par
-\f2 -\tab\f0 Wendepunkte f\'fcr Zeitauswertung festlegen (alle/zu wertende Wendepunkte)\par
-\f2 -\tab\f0 Zeitauswertung f\'fcr unbekannte Zeitkontrollen f\'fcr jede Klasse festlegen (ja/nein)\par
-\pard\nowidctlpar\ul\fs28\page Aufgaben der Auswerte-Schiedrichter:\par
-\ulnone\fs24\par
-\pard\nowidctlpar\fi-360\li360\tx360 1.\tab Beobachtungen abfragen -> Punkte von Wendepunkt-Bildern, Strecken-Bildern und Bodenzeichen ermitteln\par
-\pard\nowidctlpar\fi-360\li360 2.\tab AFLOS-Logger einlesen, Besatzungs-Daten kalkulieren und importieren, AFLOS-Karte drucken, AFLOS-Messwerte drucken\par
-3.\tab Dateneingaben\par
-4.\tab Auswertung\par
-\pard\nowidctlpar\par
-1., 2. und 3. kann parallel erfolgen.\par
-\par
-\ul\fs28 Dateneingaben vom Auswerte-Schiedrichter:\par
-\ulnone\fs24\par
-\pard\nowidctlpar\fi-360\li360\tx360\f2 -\tab\f0 Planungstest: Einzel-Werte\par
-\pard\nowidctlpar\fi-360\li360\f2 -\tab\f0 Navigationstest: AFLOS-Logger-Werte\par
-\f2 -\tab\f0 Beobachtungstest: Punkte von Wendepunkt-Bildern, Strecken-Bildern und Bodenzeichen\par
-\f2 -\tab\f0 Landungstest: Landefeld 0, A\'85F, Au\'dferhalb und definierte Fehler (je Landung)\par
-\pard\nowidctlpar\par
-\ul\fs28 Wettbewerbs\'e4nderungen:\par
-\ulnone\fs24\par
-Mit Flight Contest k\'f6nnen eine Vielzahl von \'c4nderungen einfach und schnell erledigt werden.\par
-\par
-\pard\nowidctlpar\fi-360\li360\tx360 1.\tab Besatzung nimmt kurzfritig nicht teil -> Besatzung wird deaktiviert (ohne einen berechneten Zeitplan zu \'e4ndern).\par
-\pard\nowidctlpar\fi-360\li360 2.\tab Besatzung kann nicht wie geplant starten -> Besatzung wird ans Ende der Aufgabe geschoben und erh\'e4lt einen neuen Flugplan.\par
-3.\tab Wendepunkt-\'dcberflugzeit soll nicht gewertet werden -> Zeitauswertung des Wendepunktes wird deaktiviert, was eine Neuberechnung des Ergebnisses ausl\'f6st.\par
-4.\tab Starts verschieben sich zeitlich -> Die Anfangszeit wird korrigiert. Betroffene Besatzungen erhalten einen neuen Flugplan.\par
-5.\tab Flugwind \'e4ndert sich im Laufe der Starts -> Verbliebenen Besatzungen wird anderer Flugwind zugewiesen und sie erhalten einen neuen Flugplan.\par
-6.   Besatzung mu\'df wegen Defekt das Flugzeug wechseln -> Besatzung wird das neue Flugzeug und ggf. eine andere TAS zugewiesen, die bei neuen Aufgaben verwendet werden. Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unver\'e4ndert.\par
-\pard\nowidctlpar\par
-\ul\fs28\page Ben\'f6tigte Technik:\par
-\ulnone\fs24\par
-\pard\nowidctlpar\fi-360\li360\tx360 1.\tab AFLOS-Logger je Besatzung\par
-\pard\nowidctlpar\fi-360\li360\lang1033 2.\tab Windows-PC/Notebook (Windows 7, Vista oder XP, min. 2 GB RAM)\super  *\nosupersub\par
-\lang1031 3.\tab Drucker\super *\nosupersub\par
-4.\tab USB-Serial-Adapter (f\'fcr Notebooks ohne serielle Schnittstelle)\super *\nosupersub\par
-5.\tab Router (optional)\par
-\pard\nowidctlpar\par
-\super *\nosupersub ) sollte doppelt vorhanden sein\par
-\par
-\ul\fs28 Ben\'f6tigte Software-Installationen:\par
-\ulnone\fs24\par
-\pard\fi-360\li360 1.\tab Flight Contest ({\field{\*\fldinst{HYPERLINK "http://github.com/tweisepraezi/FlightContest"}}{\fldrslt{\ul\cf1 http://github.com/tweisepraezi/FlightContest}}}\f0\fs24 )\par
-2.\tab AFLOS 2.12 ({\field{\*\fldinst{HYPERLINK "http://www.aflos.de"}}{\fldrslt{\ul\cf1 http://www.aflos.de}}}\f0\fs24 )\par
-3.\tab Adobe Reader (zum Drucken) ({\field{\*\fldinst{HYPERLINK "http://get.adobe.com/de/reader"}}{\fldrslt{\ul\cf1 http://get.adobe.com/de/reader}}}\f0\fs24 )\par
-\pard\nowidctlpar\par
-}
- 
+{\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff31507\deff0\stshfdbch31505\stshfloch31506\stshfhich31506\stshfbi31507\deflang1031\deflangfe1031\themelang1031\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f1\fbidi \fswiss\fcharset0\fprq2{\*\panose 020b0604020202020204}Arial;}
+{\f3\fbidi \froman\fcharset2\fprq2{\*\panose 05050102010706020507}Symbol;}{\f34\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria Math;}{\flomajor\f31500\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}
+{\fdbmajor\f31501\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\fhimajor\f31502\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria;}
+{\fbimajor\f31503\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\flominor\f31504\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}
+{\fdbminor\f31505\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\fhiminor\f31506\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0502020204030204}Calibri;}
+{\fbiminor\f31507\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f197\fbidi \froman\fcharset238\fprq2 Times New Roman CE;}{\f198\fbidi \froman\fcharset204\fprq2 Times New Roman Cyr;}
+{\f200\fbidi \froman\fcharset161\fprq2 Times New Roman Greek;}{\f201\fbidi \froman\fcharset162\fprq2 Times New Roman Tur;}{\f202\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\f203\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}
+{\f204\fbidi \froman\fcharset186\fprq2 Times New Roman Baltic;}{\f205\fbidi \froman\fcharset163\fprq2 Times New Roman (Vietnamese);}{\f207\fbidi \fswiss\fcharset238\fprq2 Arial CE;}{\f208\fbidi \fswiss\fcharset204\fprq2 Arial Cyr;}
+{\f210\fbidi \fswiss\fcharset161\fprq2 Arial Greek;}{\f211\fbidi \fswiss\fcharset162\fprq2 Arial Tur;}{\f212\fbidi \fswiss\fcharset177\fprq2 Arial (Hebrew);}{\f213\fbidi \fswiss\fcharset178\fprq2 Arial (Arabic);}
+{\f214\fbidi \fswiss\fcharset186\fprq2 Arial Baltic;}{\f215\fbidi \fswiss\fcharset163\fprq2 Arial (Vietnamese);}{\f537\fbidi \froman\fcharset238\fprq2 Cambria Math CE;}{\f538\fbidi \froman\fcharset204\fprq2 Cambria Math Cyr;}
+{\f540\fbidi \froman\fcharset161\fprq2 Cambria Math Greek;}{\f541\fbidi \froman\fcharset162\fprq2 Cambria Math Tur;}{\f544\fbidi \froman\fcharset186\fprq2 Cambria Math Baltic;}{\f545\fbidi \froman\fcharset163\fprq2 Cambria Math (Vietnamese);}
+{\flomajor\f31508\fbidi \froman\fcharset238\fprq2 Times New Roman CE;}{\flomajor\f31509\fbidi \froman\fcharset204\fprq2 Times New Roman Cyr;}{\flomajor\f31511\fbidi \froman\fcharset161\fprq2 Times New Roman Greek;}
+{\flomajor\f31512\fbidi \froman\fcharset162\fprq2 Times New Roman Tur;}{\flomajor\f31513\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\flomajor\f31514\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}
+{\flomajor\f31515\fbidi \froman\fcharset186\fprq2 Times New Roman Baltic;}{\flomajor\f31516\fbidi \froman\fcharset163\fprq2 Times New Roman (Vietnamese);}{\fdbmajor\f31518\fbidi \froman\fcharset238\fprq2 Times New Roman CE;}
+{\fdbmajor\f31519\fbidi \froman\fcharset204\fprq2 Times New Roman Cyr;}{\fdbmajor\f31521\fbidi \froman\fcharset161\fprq2 Times New Roman Greek;}{\fdbmajor\f31522\fbidi \froman\fcharset162\fprq2 Times New Roman Tur;}
+{\fdbmajor\f31523\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\fdbmajor\f31524\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}{\fdbmajor\f31525\fbidi \froman\fcharset186\fprq2 Times New Roman Baltic;}
+{\fdbmajor\f31526\fbidi \froman\fcharset163\fprq2 Times New Roman (Vietnamese);}{\fhimajor\f31528\fbidi \froman\fcharset238\fprq2 Cambria CE;}{\fhimajor\f31529\fbidi \froman\fcharset204\fprq2 Cambria Cyr;}
+{\fhimajor\f31531\fbidi \froman\fcharset161\fprq2 Cambria Greek;}{\fhimajor\f31532\fbidi \froman\fcharset162\fprq2 Cambria Tur;}{\fhimajor\f31535\fbidi \froman\fcharset186\fprq2 Cambria Baltic;}
+{\fhimajor\f31536\fbidi \froman\fcharset163\fprq2 Cambria (Vietnamese);}{\fbimajor\f31538\fbidi \froman\fcharset238\fprq2 Times New Roman CE;}{\fbimajor\f31539\fbidi \froman\fcharset204\fprq2 Times New Roman Cyr;}
+{\fbimajor\f31541\fbidi \froman\fcharset161\fprq2 Times New Roman Greek;}{\fbimajor\f31542\fbidi \froman\fcharset162\fprq2 Times New Roman Tur;}{\fbimajor\f31543\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}
+{\fbimajor\f31544\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}{\fbimajor\f31545\fbidi \froman\fcharset186\fprq2 Times New Roman Baltic;}{\fbimajor\f31546\fbidi \froman\fcharset163\fprq2 Times New Roman (Vietnamese);}
+{\flominor\f31548\fbidi \froman\fcharset238\fprq2 Times New Roman CE;}{\flominor\f31549\fbidi \froman\fcharset204\fprq2 Times New Roman Cyr;}{\flominor\f31551\fbidi \froman\fcharset161\fprq2 Times New Roman Greek;}
+{\flominor\f31552\fbidi \froman\fcharset162\fprq2 Times New Roman Tur;}{\flominor\f31553\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\flominor\f31554\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}
+{\flominor\f31555\fbidi \froman\fcharset186\fprq2 Times New Roman Baltic;}{\flominor\f31556\fbidi \froman\fcharset163\fprq2 Times New Roman (Vietnamese);}{\fdbminor\f31558\fbidi \froman\fcharset238\fprq2 Times New Roman CE;}
+{\fdbminor\f31559\fbidi \froman\fcharset204\fprq2 Times New Roman Cyr;}{\fdbminor\f31561\fbidi \froman\fcharset161\fprq2 Times New Roman Greek;}{\fdbminor\f31562\fbidi \froman\fcharset162\fprq2 Times New Roman Tur;}
+{\fdbminor\f31563\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}{\fdbminor\f31564\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}{\fdbminor\f31565\fbidi \froman\fcharset186\fprq2 Times New Roman Baltic;}
+{\fdbminor\f31566\fbidi \froman\fcharset163\fprq2 Times New Roman (Vietnamese);}{\fhiminor\f31568\fbidi \fswiss\fcharset238\fprq2 Calibri CE;}{\fhiminor\f31569\fbidi \fswiss\fcharset204\fprq2 Calibri Cyr;}
+{\fhiminor\f31571\fbidi \fswiss\fcharset161\fprq2 Calibri Greek;}{\fhiminor\f31572\fbidi \fswiss\fcharset162\fprq2 Calibri Tur;}{\fhiminor\f31575\fbidi \fswiss\fcharset186\fprq2 Calibri Baltic;}
+{\fhiminor\f31576\fbidi \fswiss\fcharset163\fprq2 Calibri (Vietnamese);}{\fbiminor\f31578\fbidi \froman\fcharset238\fprq2 Times New Roman CE;}{\fbiminor\f31579\fbidi \froman\fcharset204\fprq2 Times New Roman Cyr;}
+{\fbiminor\f31581\fbidi \froman\fcharset161\fprq2 Times New Roman Greek;}{\fbiminor\f31582\fbidi \froman\fcharset162\fprq2 Times New Roman Tur;}{\fbiminor\f31583\fbidi \froman\fcharset177\fprq2 Times New Roman (Hebrew);}
+{\fbiminor\f31584\fbidi \froman\fcharset178\fprq2 Times New Roman (Arabic);}{\fbiminor\f31585\fbidi \froman\fcharset186\fprq2 Times New Roman Baltic;}{\fbiminor\f31586\fbidi \froman\fcharset163\fprq2 Times New Roman (Vietnamese);}}
+{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;
+\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;\red192\green192\blue192;}{\*\defchp \fs22\loch\af31506\hich\af31506\dbch\af31505 }{\*\defpap \ql \li0\ri0\sa200\sl276\slmult1
+\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 }\noqfpromote {\stylesheet{\ql \li0\ri0\sa200\sl276\slmult1\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \rtlch\fcs1 \af31507\afs22\alang1025 
+\ltrch\fcs0 \fs22\lang1031\langfe1031\loch\f31506\hich\af31506\dbch\af31505\cgrid\langnp1031\langfenp1031 \snext0 \sqformat \spriority0 Normal;}{\*\cs10 \additive \ssemihidden \sunhideused \spriority1 Default Paragraph Font;}{\*
+\ts11\tsrowd\trftsWidthB3\trpaddl108\trpaddr108\trpaddfl3\trpaddft3\trpaddfb3\trpaddfr3\tblind0\tblindtype3\tscellwidthfts0\tsvertalt\tsbrdrt\tsbrdrl\tsbrdrb\tsbrdrr\tsbrdrdgl\tsbrdrdgr\tsbrdrh\tsbrdrv \ql \li0\ri0\sa200\sl276\slmult1
+\widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \rtlch\fcs1 \af31507\afs22\alang1025 \ltrch\fcs0 \fs22\lang1031\langfe1031\loch\f31506\hich\af31506\dbch\af31505\cgrid\langnp1031\langfenp1031 
+\snext11 \ssemihidden \sunhideused \sqformat Normal Table;}}{\*\rsidtbl \rsid396379\rsid808443\rsid1972453\rsid2312969\rsid3613315\rsid4672508\rsid5247829\rsid5313721\rsid5788035\rsid8409800\rsid15686614}{\mmathPr\mmathFont34\mbrkBin0\mbrkBinSub0
+\msmallFrac0\mdispDef1\mlMargin0\mrMargin0\mdefJc1\mwrapIndent1440\mintLim0\mnaryLim1}{\info{\operator thomwei0}{\creatim\yr2014\mo3\dy6\hr7\min38}{\revtim\yr2014\mo3\dy6\hr8\min14}{\version9}{\edmins0}{\nofpages4}{\nofwords682}{\nofchars5038}
+{\nofcharsws5709}{\vern32773}}{\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/2003/wordml}}\paperw12240\paperh15840\margl1417\margr1417\margt1417\margb1134\gutter0\ltrsect 
+\deftab708\widowctrl\ftnbj\aenddoc\hyphhotz425\trackmoves1\trackformatting1\donotembedsysfont0\relyonvml0\donotembedlingdata1\grfdocevents0\validatexml0\showplaceholdtext0\ignoremixedcontent0\saveinvalidxml0\showxmlerrors0\horzdoc\dghspace120\dgvspace120
+\dghorigin1701\dgvorigin1984\dghshow0\dgvshow3\jcompress\viewkind1\viewscale120\rsidroot5247829 \fet0{\*\wgrffmtfilter 2450}\ilfomacatclnup0\ltrpar \sectd \ltrsect\linex0\sectdefaultcl\sftnbj {\*\pnseclvl1\pnucrm\pnstart1\pnindent720\pnhang {\pntxta .}}
+{\*\pnseclvl2\pnucltr\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl3\pndec\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl4\pnlcltr\pnstart1\pnindent720\pnhang {\pntxta )}}{\*\pnseclvl5\pndec\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}
+{\*\pnseclvl6\pnlcltr\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl7\pnlcrm\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl8\pnlcltr\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}{\*\pnseclvl9
+\pnlcrm\pnstart1\pnindent720\pnhang {\pntxtb (}{\pntxta )}}\pard\plain \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 \rtlch\fcs1 \af31507\afs22\alang1025 \ltrch\fcs0 
+\fs22\lang1031\langfe1031\loch\af31506\hich\af31506\dbch\af31505\cgrid\langnp1031\langfenp1031 {\rtlch\fcs1 \ab\af0\afs36 \ltrch\fcs0 \b\f0\fs36\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Flight Contest
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par \hich\af0\dbch\af31505\loch\f0 Programm zur Planung und Auswertung von Motorflug-Navigationsflug-Wettbewerben
+\par 
+\par \hich\af0\dbch\af31505\loch\f0 Thomas Weise
+\par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Deutscher Pr\'e4\loch\f0 zisionsflug-Verein e.V.
+\par 
+\par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes und wertet Ergebnisse f\'fc\hich\af0\dbch\af31505\loch\f0 \hich\f0 
+r Planungstests, Navigationstests, Beobachtungen und/oder Landungen aus. Dabei arbeitet es eng mit AFLOS zusammen, um Strecken f\'fc\loch\f0 \hich\f0 r die Zeitplanung und Loggerdaten f\'fc\loch\f0 r die Auswertung zu erhalten. 
+\par 
+\par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Auswertungen k\'f6\loch\f0 nnen nach verschiedenen Regelwerken (Deutsch\hich\af0\dbch\af31505\loch\f0 \hich\f0 
+land, Schweiz, FAI) erfolgen, die die Punktevergabe und das Landeschema regeln. Die Punktevergabe eines gew\'e4\loch\f0 hlten Regelwerkes kann im Nachhinein modifiziert werden.
+\par 
+\par }{\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Auswertungsm\'f6\loch\f0 glichkeiten:
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af3\afs24 \ltrch\fcs0 \f3\fs24\insrsid4672508 \loch\af3\dbch\af31505\hich\f3 \'b7\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\hich\af0\dbch\af31505\loch\f0 Beste Besatzung
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af3\afs24 \ltrch\fcs0 \f3\fs24\insrsid4672508 \loch\af3\dbch\af31505\hich\f3 \'b7\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\hich\af0\dbch\af31505\loch\f0 Beste Besatzung einer Klasse
+\par }\pard \ltrpar\ql \li708\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin708\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Besatzungen k\'f6\hich\af0\dbch\af31505\loch\f0 \hich\f0 
+nnen Klassen zugeordnet werden, um z.B. zwischen regul\'e4\loch\f0 ren Besatzungen und Einsteigern zu unterscheiden.
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af3\afs24 \ltrch\fcs0 \f3\fs24\insrsid4672508 \loch\af3\dbch\af31505\hich\f3 \'b7\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\hich\af0\dbch\af31505\loch\f0 Beste Besatzung bestimmter Teams
+\par }\pard \ltrpar\ql \li708\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin708\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+Werden Besatzungen Teams (z.B Landes-Vereine) zugeordnet, kann die beste Besatzung der interessierenden Teams (z.B. \hich\af0\dbch\af31505\loch\f0 eines Landes) ermittelt werden.
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af3\afs24 \ltrch\fcs0 \f3\fs24\insrsid4672508 \loch\af3\dbch\af31505\hich\f3 \'b7\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\hich\af0\dbch\af31505\loch\f0 Bestes Team
+\par }\pard \ltrpar\ql \li708\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin708\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Werden Besatzungen Teams (z.B L\'e4\loch\f0 \hich\f0 
+ndern) zugeordnet, kann f\'fc\loch\f0 r eine festzulegende Besatzungsanzahl das beste Team ermittelt werden.
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af3\afs24 \ltrch\fcs0 \f3\fs24\insrsid4672508 \loch\af3\dbch\af31505\hich\f3 \'b7\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\hich\af0\dbch\af31505\loch\f0 Bester eines bestimmten Einzel-Tests
+\par }\pard \ltrpar\ql \li708\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin708\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 So z.B. \hich\af0\dbch\af31505\loch\f0 kann der Beste bei Landungen ermittelt werden.
+
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }{\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Wettbewerbsablauf:
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par \hich\af0\dbch\af31505\loch\f0 Ein Wettbewerb umfasst eine oder mehrere Aufgaben.
+\par 
+\par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Eine Aufgabe hat einen zusammenh\'e4\loch\f0 \hich\f0 ngenden Zeitplan (f\'fc\loch\f0 r Planungstest und Navigationsflug) und umfasst maximal:
+\par }\pard \ltrpar\ql \fi-360\li621\ri0\nowidctlpar\tx621\wrapdefault\faauto\rin0\lin621\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 -\tab \hich\af0\dbch\af31505\loch\f0 1 Planungstest
+\par }\pard \ltrpar\ql \fi-360\li621\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin621\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 -\tab \hich\af0\dbch\af31505\loch\f0 1 Navig\hich\af0\dbch\af31505\loch\f0 ationsflug
+\par -\tab \hich\af0\dbch\af31505\loch\f0 Beobachtungen
+\par -\tab \hich\af0\dbch\af31505\loch\f0 bis zu 4 Landungen
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Die Zeitplanung einer Aufgabe wird erst unmittelbar vor dem Brief\'ed\loch\f0 \hich\f0 ng vorgenommen, um auf wetterbedingte Anpassungen der Startzeit reagieren zu k\'f6\loch\f0 nnen.
+\par 
+\par }{\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \page \hich\af0\dbch\af31505\loch\f0 Wettbewerbsvorbereitung:
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 1.\tab Teilnehmerliste\line 
+\par }\pard \ltrpar\ql \li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Die Teilnehmer sind in einer Excel-Tabelle mit der Flight Contest-Vorlage 
+\'84\loch\f0 \hich\f0 Samples -> FC-CrewListe-Sample.xls\'93\loch\f0 \hich\f0  zu erstellen. Diese Liste muss am Wettbewerbstag sortiert und mit zugeordneten Startnummern vorliegen. Da Spalten und Tabellenbl\'e4\loch\f0 \hich\f0 tter eingef\'fc\loch\f0 
+gt \hich\af0\dbch\af31505\loch\f0 w\hich\af0\dbch\af31505\loch\f0 \hich\f0 erden d\'fc\loch\f0 rfen, kann diese Vorlage auch zur Planung anderer Belange des Wettbewerbes verwendet werden (Hotel, Kontaktdaten).
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 2.\tab Strecke(n)
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Die Check-Punkte der zu fliegenden Strecken m\'fc\loch\f0 
+ssen als AFLOS-Datenbank-Datei (.MDB) oder zum Einlesen in AFLOS als AF\hich\af0\dbch\af31505\loch\f0 LOS-Referenz-Strecken-Datei (.REF) vorliegen.}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 
+\par }\pard \ltrpar\ql \li0\ri0\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid5247829 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 
+\par }\pard \ltrpar\ql \fi360\li0\ri0\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid5247829 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0 Folgende Strecken}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0 -Typen}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0 \hich\f0  werden unterst\'fc\loch\f0 tzt:}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid5247829 \line }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0   }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0     }{\rtlch\fcs1 
+\af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid1972453 \hich\af0\dbch\af31505\loch\f0 * Normale Strecke}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 
+\par }\pard \ltrpar\ql \li0\ri0\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid5247829 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0     }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0   \hich\af0\dbch\af31505\loch\f0 * }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid1972453 \hich\af0\dbch\af31505\loch\f0 Strecke}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0  }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0 mit u}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 
+\hich\af0\dbch\af31505\loch\f0 nbekannte}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0 n}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0 
+ Zeitkontrollen}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 
+\par \hich\af0\dbch\af31505\loch\f0     }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0   * Zwischenlandung (Touch&Go)}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 
+\par \hich\af0\dbch\af31505\loch\f0     }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0   * Krumme Strecke}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0  }
+{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0     }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 \hich\af0\dbch\af31505\loch\f0   * Pr\loch\af0\dbch\af31505\hich\f0 \'e4
+\hich\af0\dbch\af31505\loch\f0 zisionsflugstrecke
+\par }\pard \ltrpar\ql \li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829\charrsid5247829 
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 3.  Aufgabe(n)
+\par 
+\par }\pard \ltrpar\ql \li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Festlegung der Aufgabenanzahl und der Aufgabeninhalte:
+\par }\pard \ltrpar\ql \fi-360\li1080\ri0\nowidctlpar\tx1080\wrapdefault\faauto\rin0\lin1080\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+Planungstest (ja/nein)
+\par }\pard \ltrpar\ql \fi-360\li1080\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin1080\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+Navigationstest (ja/nein)
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Beobachtungstest (ja/nein)
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Landetest (ja/nein, Anzahl der Landungen (bis 4))\line 
+\par }\pard \ltrpar\ql \li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Einstellungen je Aufgabe festlegen:
+\par }\pard \ltrpar\ql \fi-360\li1068\ri0\nowidctlpar\tx1068\wrapdefault\faauto\rin0\lin1068\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+TakeOff-Abstand
+\par }\pard \ltrpar\ql \fi-360\li1068\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin1068\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+Zeit T/O -> SP
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
+\par }\pard \ltrpar\ql \fi-360\li1068\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin1068\itap0\pararsid396379 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid396379 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid396379 
+\hich\af0\dbch\af31505\loch\f0 Zeit iLDG\hich\af0\dbch\af31505\loch\f0  -> \hich\af0\dbch\af31505\loch\f0 iSP\hich\af0\dbch\af31505\loch\f0  (\hich\af0\dbch\af31505\loch\f0 bei Touch&Go-Landung\hich\af0\dbch\af31505\loch\f0 )
+\par }\pard \ltrpar\ql \fi-360\li1068\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin1068\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 
+Zeit FP -> Landung (-> sp\'e4\loch\f0 teste Landezeit)
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Zeit FP -> Abstellen des Flugzeuges\line 
+\par }\pard \ltrpar\ql \li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Auswertungs-Einstellungen des Wettbewerbs fest\hich\af0\dbch\af31505\loch\f0 legen:
+
+\par }\pard \ltrpar\ql \fi-360\li1080\ri0\nowidctlpar\tx1080\wrapdefault\faauto\rin0\lin1080\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+\hich\f0 Punkte f\'fc\loch\f0 r nicht geflogene Wendescheifen vergeben (ja/nein)
+\par }\pard \ltrpar\ql \fi-360\li1080\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin1080\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 
+Punkte f\'fc\loch\f0 r Kursabweichungen > 90 Grad vergeben (ja/nein)
+\par }\pard \ltrpar\ql \fi-360\li1080\ri0\nowidctlpar\tx1080\wrapdefault\faauto\rin0\lin1080\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+\hich\f0 Punkte f\'fc\loch\f0 \hich\f0 r Unterschreitung der Mindestflugh\'f6\loch\f0 he vergeben (ja/nein)
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Wendepunkte f\'fc\hich\af0\dbch\af31505\loch\f0 
+r Zeitauswertung festlegen (alle/zu wertende Wendepunkte)
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Zeitauswertung f\'fc\loch\f0 \hich\f0 r unbekannte Zeitkontrollen f\'fc\loch\f0 
+r jede Klasse festlegen (ja/nein)
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \page \hich\af0\dbch\af31505\loch\f0 Aufgaben der Auswerte-Schiedrichter:
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 1.\tab 
+Beobachtungen abfragen -> Punkte von Wendepunkt-Bildern, Strecken-Bildern\hich\af0\dbch\af31505\loch\f0  und Bodenzeichen ermitteln
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 2.\tab 
+AFLOS-Logger einlesen, Besatzungs-Daten kalkulieren und importieren, AFLOS-Karte drucken, }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid396379 \hich\af0\dbch\af31505\loch\f0 Navigationsflug-\hich\af0\dbch\af31505\loch\f0 Ergebnis}{\rtlch\fcs1 
+\af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0  drucken
+\par \hich\af0\dbch\af31505\loch\f0 3.\tab Dateneingaben}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid3613315 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 4.\tab Auswertung
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par \hich\af0\dbch\af31505\loch\f0 1., 2. und 3. kann parallel erfolgen.
+\par 
+\par }{\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Dateneingaben vom Auswerte-Schiedrichter\hich\af0\dbch\af31505\loch\f0 :
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+Planungstest: Einzel-Werte
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 
+Navigationstest: AFLOS-Logger-Werte
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 Beobachtungstest: Punkte von Wendepunkt-Bildern, Strecken-Bildern und Bodenzeichen
+\par }{\rtlch\fcs1 \af1\afs24 \ltrch\fcs0 \f1\fs24\insrsid4672508 -\tab }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Landungstest: Landefeld 0, A\'85\loch\f0 \hich\f0 F, Au\'df\loch\f0 
+erhalb und definierte Fehler (je Landung)
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }{\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Wettbewerbs\'e4\hich\af0\dbch\af31505\loch\f0 nderungen:
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par \hich\af0\dbch\af31505\loch\f0 \hich\f0 Mit Flight Contest k\'f6\loch\f0 \hich\f0 nnen eine Vielzahl von \'c4\loch\f0 nderungen einfach und schnell erledigt werden.
+\par 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 1.\tab \hich\f0 
+Besatzung nimmt kurzfritig nicht teil -> Besatzung wird deaktiviert (ohne einen berechneten Zeitplan zu \'e4\loch\f0 ndern).
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 2.\tab Besatzung kann nicht wie geplant\hich\af0\dbch\af31505\loch\f0 \hich\f0 
+ starten -> Besatzung wird ans Ende der Aufgabe geschoben und erh\'e4\loch\f0 lt einen neuen Flugplan.
+\par \hich\af0\dbch\af31505\loch\f0 3.\tab \hich\f0 Wendepunkt-\'dc\loch\f0 \hich\f0 berflugzeit soll nicht gewertet werden -> Zeitauswertung des Wendepunktes wird deaktiviert, was eine Neuberechnung des Ergebnisses ausl\'f6\loch\f0 st.
+\par \hich\af0\dbch\af31505\loch\f0 4.\tab Starts \hich\af0\dbch\af31505\loch\f0 verschieben sich zeitlich -> Die Anfangszeit wird korrigiert. Betroffene Besatzungen erhalten einen neuen Flugplan.
+\par \hich\af0\dbch\af31505\loch\f0 5.\tab \hich\f0 Flugwind \'e4\loch\f0 ndert sich im Laufe der Starts -> Verbliebenen Besatzungen wird anderer Flugwind zugewiesen und sie erhalten einen neuen Flugpl\hich\af0\dbch\af31505\loch\f0 an.
+\par \hich\af0\dbch\af31505\loch\f0 6.  \hich\af0\dbch\af31505\loch\f0 \hich\f0 Besatzung mu\'df\loch\f0 \hich\f0 
+ wegen Defekt das Flugzeug wechseln -> Besatzung wird das neue Flugzeug und ggf. eine andere TAS zugewiesen, die bei neuen Aufgaben verwendet werden. Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unver\'e4\loch\f0 ndert.
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }{\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \page \hich\af0\dbch\af31505\loch\f0 \hich\f0 Ben\'f6\loch\f0 t\hich\af0\dbch\af31505\loch\f0 igte Technik:
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\tx360\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 1.\tab AFLOS-Logger je Besatzung
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\lang1033\langfe1031\langnp1033\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 2.\tab 
+Windows-PC/Notebook (Windows 7, Vista oder XP, min. 2 GB RAM)}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\lang1033\langfe1031\super\langnp1033\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 *}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\lang1033\langfe1031\langnp1033\insrsid4672508 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 3.\tab Drucker}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\super\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 *
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0\pararsid8409800 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid8409800 \hich\af0\dbch\af31505\loch\f0 4.\tab \hich\af0\dbch\af31505\loch\f0 Serielles}{\rtlch\fcs1 
+\af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5313721 \hich\af0\dbch\af31505\loch\f0  Kabel}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid8409800 \hich\af0\dbch\af31505\loch\f0  (}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\hich\af0\dbch\af31505\loch\f0 zum Anschluss des AFLOS-Loggers an die serielle Schnittstelle des }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508\charrsid4672508 \hich\af0\dbch\af31505\loch\f0 Windows-PC}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 s}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508\charrsid4672508 \hich\af0\dbch\af31505\loch\f0 /Notebook}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\hich\af0\dbch\af31505\loch\f0 s}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid8409800 \hich\af0\dbch\af31505\loch\f0 )}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\super\insrsid8409800 \hich\af0\dbch\af31505\loch\f0 *}{\rtlch\fcs1 \af0\afs24 
+\ltrch\fcs0 \f0\fs24\insrsid8409800 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 5}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid8409800 .\tab \hich\af0\dbch\af31505\loch\f0 USB-}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 2.0-}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid8409800 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Serial-Adapter (f\'fc\loch\f0 r Notebooks ohne serielle Schnittstelle)}{\rtlch\fcs1 \af0\afs24 
+\ltrch\fcs0 \f0\fs24\super\insrsid8409800 \hich\af0\dbch\af31505\loch\f0 *}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid8409800 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 6}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 .\tab 
+\hich\af0\dbch\af31505\loch\f0 Router (optional)
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\super\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 *}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 ) sollte doppelt vorhanden sein
+\par 
+\par }{\rtlch\fcs1 \af0\afs28 \ltrch\fcs0 \f0\fs28\ul\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 \hich\f0 Ben\'f6\hich\af0\dbch\af31505\loch\f0 tigte Software-Installationen:
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }\pard \ltrpar\ql \fi-360\li360\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin360\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 1.\tab Flight Contest (}{\field{\*\fldinst {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 HYPERLINK "http://github.com/tweisepraezi/FlightContest"}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 {\*\datafield 
+00d0c9ea79f9bace118c8200aa004ba90b0200000003000000e0c9ea79f9bace118c8200aa004ba90b7200000068007400740070003a002f002f006700690074006800750062002e0063006f006d002f0074007700650069007300650070007200610065007a0069002f0046006c00690067006800740043006f006e007400
+6500730074000000795881f43b1d7f48af2c825dc485276300000000a5ab0000}}}{\fldrslt {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\ul\cf2\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 http://github.com/tweisepraezi/FlightContest}}}\sectd \ltrsect
+\linex0\sectdefaultcl\sftnbj {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 )
+\par }{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 \hich\af0\dbch\af31505\loch\f0 2.\tab AFLOS 2.13}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0  (}{\field{\*\fldinst {\rtlch\fcs1 \af0\afs24 
+\ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 HYPERLINK "http://www.aflos.de"}{\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 {\*\datafield 
+00d0c9ea79f9bace118c8200aa004ba90b0200000003000000e0c9ea79f9bace118c8200aa004ba90b4200000068007400740070003a002f002f007700770077002e00610066006c006f0073002e00640065002f000000795881f43b1d7f48af2c825dc485276300000000a5ab0000}}}{\fldrslt {\rtlch\fcs1 
+\af0\afs24 \ltrch\fcs0 \f0\fs24\ul\cf2\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 http://www.aflos.de}}}\sectd \ltrsect\linex0\sectdefaultcl\sftnbj {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 )
+\par \hich\af0\dbch\af31505\loch\f0 3.\tab Adobe Reader (zum Drucken) \hich\af0\dbch\af31505\loch\f0 (}{\field{\*\fldinst {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 HYPERLINK "http://get.adobe.com/de/reader"}{
+\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid5247829 {\*\datafield 
+00d0c9ea79f9bace118c8200aa004ba90b0200000003000000e0c9ea79f9bace118c8200aa004ba90b5600000068007400740070003a002f002f006700650074002e00610064006f00620065002e0063006f006d002f00640065002f007200650061006400650072000000795881f43b1d7f48af2c825dc485276300000000
+a5ab0000}}}{\fldrslt {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\ul\cf2\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 http://get.adobe.com/de/reader}}}\sectd \ltrsect\linex0\sectdefaultcl\sftnbj {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 
+\f0\fs24\insrsid4672508 \hich\af0\dbch\af31505\loch\f0 )
+\par }\pard \ltrpar\ql \li0\ri0\nowidctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af0\afs24 \ltrch\fcs0 \f0\fs24\insrsid4672508 
+\par }{\*\themedata 504b030414000600080000002100828abc13fa0000001c020000130000005b436f6e74656e745f54797065735d2e786d6cac91cb6ac3301045f785fe83d0b6d8
+72ba28a5d8cea249777d2cd20f18e4b12d6a8f843409c9df77ecb850ba082d74231062ce997b55ae8fe3a00e1893f354e9555e6885647de3a8abf4fbee29bbd7
+2a3150038327acf409935ed7d757e5ee14302999a654e99e393c18936c8f23a4dc072479697d1c81e51a3b13c07e4087e6b628ee8cf5c4489cf1c4d075f92a0b
+44d7a07a83c82f308ac7b0a0f0fbf90c2480980b58abc733615aa2d210c2e02cb04430076a7ee833dfb6ce62e3ed7e14693e8317d8cd0433bf5c60f53fea2fe7
+065bd80facb647e9e25c7fc421fd2ddb526b2e9373fed4bb902e182e97b7b461e6bfad3f010000ffff0300504b030414000600080000002100a5d6a7e7c00000
+00360100000b0000005f72656c732f2e72656c73848fcf6ac3300c87ef85bd83d17d51d2c31825762fa590432fa37d00e1287f68221bdb1bebdb4fc7060abb08
+84a4eff7a93dfeae8bf9e194e720169aaa06c3e2433fcb68e1763dbf7f82c985a4a725085b787086a37bdbb55fbc50d1a33ccd311ba548b63095120f88d94fbc
+52ae4264d1c910d24a45db3462247fa791715fd71f989e19e0364cd3f51652d73760ae8fa8c9ffb3c330cc9e4fc17faf2ce545046e37944c69e462a1a82fe353
+bd90a865aad41ed0b5b8f9d6fd010000ffff0300504b0304140006000800000021006b799616830000008a0000001c0000007468656d652f7468656d652f7468
+656d654d616e616765722e786d6c0ccc4d0ac3201040e17da17790d93763bb284562b2cbaebbf600439c1a41c7a0d29fdbd7e5e38337cedf14d59b4b0d592c9c
+070d8a65cd2e88b7f07c2ca71ba8da481cc52c6ce1c715e6e97818c9b48d13df49c873517d23d59085adb5dd20d6b52bd521ef2cdd5eb9246a3d8b4757e8d3f7
+29e245eb2b260a0238fd010000ffff0300504b030414000600080000002100e35a492797060000551b0000160000007468656d652f7468656d652f7468656d65
+312e786d6cec594d6f1b4518be23f11f467b6f6327761a4775aad8b11b6852a2d82dea71bc3bde9d66766735334eea1b6a8f484888823850891b0704546a252e
+e5d7048aa048fd0bbc33b3bbde89d72469235a417d48bcb3cfbcdf5f33be7aed5eccd0211192f2a4edd52fd73c44129f073409dbdead61ffd29a87a4c2498019
+4f48db9b12e95ddb78ffbdab785d45242608f627721db7bd48a9747d6949fab08ce5659e9204de8db988b18247112e05021f01dd982d2dd76aab4b31a6898712
+1c03d91d2ca894f8d21691344cbc8d9c7c8f018f4449bde03331d0c489bbc7808383ba86c8a9ec32810e316b7bc02ae04743724f798861a9e045dbab998fb7b4
+717509af679b985ab0b7b4af6f3ed9be6c4370b06c788a705430adf71bad2b5b057d03606a1ed7ebf5babd7a41cf00b0ef83aa569632cd467faddec9699640f6
+eb3ced6ead596bb8f812fd9539995b9d4ea7d9ca64b1440dc87e6dcce1d76aab8dcd65076f4016df9cc3373a9bddeeaa8337208b5f9dc3f7afb4561b2ede8022
+46938339b47668bf9f512f2063ceb62be16b005fab65f0190aa2a1082fcd62cc13b530d8627c978b3e203492614513a4a62919631f22b98be391a05873c0eb04
+97ded8255fce2d696648fa82a6aaed7d9862c88a19bd97cf7e78f9ec093abefff4f8fecfc70f1e1cdfffc91272766de3242cef7af1dde77f3dfa04fdf9e4db17
+0fbfacc6cb32feb71f3ffdf5972faa81903f33719e7ff5f8f7a78f9f7ffdd91fdf3fac806f0a3c2ac387342612dd2447689fc7a098b18a2b391989f3ed184698
+96776c26a1c409d65c2ae8f754e4a06f4e31cbbce3c8d121ae056f0ba81f55c0eb93bb8ec083484c14ade07c238a1de02ee7acc345a5156e685e25330f274958
+cd5c4ccab87d8c0fab787771e2f8b73749a172e661e928de8d8823e61ec389c221498842fa1d3f20a442bb3b943a76dda5bee0928f15ba435107d34a930ce9c8
+89a6d9a66d1a835fa6553a83bf1ddbecde461dceaab4de22872e12b202b30ae187843966bc8e270ac755248738666583ef6015550939980abf8ceb49059e0e09
+e3a81710686d15527c2440df92d36f602859956edf65d3d8450a450faa68ee60cecbc82d7ed08d709c5661073489cad80fe4018428467b5c55c177b99b21fa19
+fc809385eebe4d89e3eed3abc12d1a3a22cd0244bf99086d45a8d54e058e69f24fe59851a8c7d6fa17578ea1003effe651854fdfd642bc093da92a13b64f94df
+45b89345b7cb4540dffe9abb8527c91e81309f6f3cef4aeebb92ebfde74beea27c3e6ba19dd55628bb7a6eb053b19991e3c523f298323650534676a499922534
+8aa00f8b7aa3392292e2cc9446f0352bec0e2e14d8ec4182ab8fa98a06114e61c2ae7b9a482833d2a144299770b433cb95b4351ea674650f864d7d64b0054162
+b5cb03bbbca297f3934141c6b49bd09c3f73462b9ac05999ad5cc98882daafc2acae853a33b7ba11cdd43a875ba13238715e35582cac09130882b905acbc0a87
+74cd1a4e26989140dbdd36dfdc2dc60b17e92219e180643ed27acffba86e9c94c78ab90c80d8a9f0913ee69d62b512b79626fb1adccee2a432bbc60276b9f75e
+c74b7904cfbca413f7443ab2a49c9c2c41476dafd55c6e7ac8c769db1bc3a116bec629785deaa10fb3106e877c256cd89f9acc26cb67de6ce58ab94950878b0a
+6bf739859d3a900aa9b6b08c6c6898575908b04473b2f22f37c1ac17a5808df4579062650d82e18d490176745d4bc663e2abb2b34b2bda76f6312ba57ca28818
+44c1111ab189d8c7e07e1daaa04f4025dc4d988aa01fe0264d5bdbbc728b739674e5fb2b83b3eb98a511cecaad4ed13c932ddce4712183792a8907ba55ca6e94
+3bbf2a26e52f48957218ffcf54d1fd04ae0a5602ed011fee7205463a5fdb1e172ae25085d288fa7d019383a91d102d701b0baf21a8e046d9fc17e450ffb73967
+6998b486139fdaa7211214fa918a04217b50964cf49d42ac9ef52e4b9265844c4495c495a9157b440e091bea1ab8aa7bbb87220875534db232607027e3cf7dce
+326814ea21a79c6f4e0d297aafcd817f7bf2b1c90c4ab975d80c34b9fd0b112bbaaadd6fb6e7bdb7ac887e311bb31a795600b3522b686569ff8a229cb3d5da8a
+35a7f17233170ebc38af312c1603510a173e48ff81fe4785cf880963dd50877c1f6a2b829f1a3431081b88ea4b76f040ba40dac5110c4e76d1069326654d9b8d
+4eda6a79b3bee049b7e07bc2d85ab2b3f8fb9cc62e8633979d938b1769ecccc28eadedda425383674fa6282c8df3938c718cf95dabfcc3131fdd05476fc105ff
+84296982097e55121846cf81c903487ecbd16cddf81b0000ffff0300504b0304140006000800000021000dd1909fb60000001b010000270000007468656d652f
+7468656d652f5f72656c732f7468656d654d616e616765722e786d6c2e72656c73848f4d0ac2301484f78277086f6fd3ba109126dd88d0add40384e4350d363f
+2451eced0dae2c082e8761be9969bb979dc9136332de3168aa1a083ae995719ac16db8ec8e4052164e89d93b64b060828e6f37ed1567914b284d262452282e31
+98720e274a939cd08a54f980ae38a38f56e422a3a641c8bbd048f7757da0f19b017cc524bd62107bd5001996509affb3fd381a89672f1f165dfe514173d98505
+28a2c6cce0239baa4c04ca5bbabac4df000000ffff0300504b01022d0014000600080000002100828abc13fa0000001c02000013000000000000000000000000
+00000000005b436f6e74656e745f54797065735d2e786d6c504b01022d0014000600080000002100a5d6a7e7c0000000360100000b0000000000000000000000
+00002b0100005f72656c732f2e72656c73504b01022d00140006000800000021006b799616830000008a0000001c000000000000000000000000001402000074
+68656d652f7468656d652f7468656d654d616e616765722e786d6c504b01022d0014000600080000002100e35a492797060000551b0000160000000000000000
+0000000000d10200007468656d652f7468656d652f7468656d65312e786d6c504b01022d00140006000800000021000dd1909fb60000001b0100002700000000
+0000000000000000009c0900007468656d652f7468656d652f5f72656c732f7468656d654d616e616765722e786d6c2e72656c73504b050600000000050005005d010000970a00000000}
+{\*\colorschememapping 3c3f786d6c2076657273696f6e3d22312e302220656e636f64696e673d225554462d3822207374616e64616c6f6e653d22796573223f3e0d0a3c613a636c724d
+617020786d6c6e733a613d22687474703a2f2f736368656d61732e6f70656e786d6c666f726d6174732e6f72672f64726177696e676d6c2f323030362f6d6169
+6e22206267313d226c743122207478313d22646b3122206267323d226c743222207478323d22646b322220616363656e74313d22616363656e74312220616363
+656e74323d22616363656e74322220616363656e74333d22616363656e74332220616363656e74343d22616363656e74342220616363656e74353d22616363656e74352220616363656e74363d22616363656e74362220686c696e6b3d22686c696e6b2220666f6c486c696e6b3d22666f6c486c696e6b222f3e}
+{\*\latentstyles\lsdstimax267\lsdlockeddef0\lsdsemihiddendef1\lsdunhideuseddef1\lsdqformatdef0\lsdprioritydef99{\lsdlockedexcept \lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority0 \lsdlocked0 Normal;
+\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority9 \lsdlocked0 heading 1;\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 2;\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 3;\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 4;
+\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 5;\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 6;\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 7;\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 8;\lsdqformat1 \lsdpriority9 \lsdlocked0 heading 9;
+\lsdpriority39 \lsdlocked0 toc 1;\lsdpriority39 \lsdlocked0 toc 2;\lsdpriority39 \lsdlocked0 toc 3;\lsdpriority39 \lsdlocked0 toc 4;\lsdpriority39 \lsdlocked0 toc 5;\lsdpriority39 \lsdlocked0 toc 6;\lsdpriority39 \lsdlocked0 toc 7;
+\lsdpriority39 \lsdlocked0 toc 8;\lsdpriority39 \lsdlocked0 toc 9;\lsdqformat1 \lsdpriority35 \lsdlocked0 caption;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority10 \lsdlocked0 Title;\lsdpriority1 \lsdlocked0 Default Paragraph Font;
+\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority11 \lsdlocked0 Subtitle;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority22 \lsdlocked0 Strong;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority20 \lsdlocked0 Emphasis;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority59 \lsdlocked0 Table Grid;\lsdunhideused0 \lsdlocked0 Placeholder Text;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority1 \lsdlocked0 No Spacing;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority60 \lsdlocked0 Light Shading;\lsdsemihidden0 \lsdunhideused0 \lsdpriority61 \lsdlocked0 Light List;\lsdsemihidden0 \lsdunhideused0 \lsdpriority62 \lsdlocked0 Light Grid;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority63 \lsdlocked0 Medium Shading 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority64 \lsdlocked0 Medium Shading 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority65 \lsdlocked0 Medium List 1;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority66 \lsdlocked0 Medium List 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority67 \lsdlocked0 Medium Grid 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority68 \lsdlocked0 Medium Grid 2;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority69 \lsdlocked0 Medium Grid 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority70 \lsdlocked0 Dark List;\lsdsemihidden0 \lsdunhideused0 \lsdpriority71 \lsdlocked0 Colorful Shading;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority72 \lsdlocked0 Colorful List;\lsdsemihidden0 \lsdunhideused0 \lsdpriority73 \lsdlocked0 Colorful Grid;\lsdsemihidden0 \lsdunhideused0 \lsdpriority60 \lsdlocked0 Light Shading Accent 1;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority61 \lsdlocked0 Light List Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority62 \lsdlocked0 Light Grid Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority63 \lsdlocked0 Medium Shading 1 Accent 1;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority64 \lsdlocked0 Medium Shading 2 Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority65 \lsdlocked0 Medium List 1 Accent 1;\lsdunhideused0 \lsdlocked0 Revision;
+\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority34 \lsdlocked0 List Paragraph;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority29 \lsdlocked0 Quote;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority30 \lsdlocked0 Intense Quote;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority66 \lsdlocked0 Medium List 2 Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority67 \lsdlocked0 Medium Grid 1 Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority68 \lsdlocked0 Medium Grid 2 Accent 1;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority69 \lsdlocked0 Medium Grid 3 Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority70 \lsdlocked0 Dark List Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority71 \lsdlocked0 Colorful Shading Accent 1;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority72 \lsdlocked0 Colorful List Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority73 \lsdlocked0 Colorful Grid Accent 1;\lsdsemihidden0 \lsdunhideused0 \lsdpriority60 \lsdlocked0 Light Shading Accent 2;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority61 \lsdlocked0 Light List Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority62 \lsdlocked0 Light Grid Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority63 \lsdlocked0 Medium Shading 1 Accent 2;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority64 \lsdlocked0 Medium Shading 2 Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority65 \lsdlocked0 Medium List 1 Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority66 \lsdlocked0 Medium List 2 Accent 2;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority67 \lsdlocked0 Medium Grid 1 Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority68 \lsdlocked0 Medium Grid 2 Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority69 \lsdlocked0 Medium Grid 3 Accent 2;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority70 \lsdlocked0 Dark List Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority71 \lsdlocked0 Colorful Shading Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority72 \lsdlocked0 Colorful List Accent 2;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority73 \lsdlocked0 Colorful Grid Accent 2;\lsdsemihidden0 \lsdunhideused0 \lsdpriority60 \lsdlocked0 Light Shading Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority61 \lsdlocked0 Light List Accent 3;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority62 \lsdlocked0 Light Grid Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority63 \lsdlocked0 Medium Shading 1 Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority64 \lsdlocked0 Medium Shading 2 Accent 3;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority65 \lsdlocked0 Medium List 1 Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority66 \lsdlocked0 Medium List 2 Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority67 \lsdlocked0 Medium Grid 1 Accent 3;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority68 \lsdlocked0 Medium Grid 2 Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority69 \lsdlocked0 Medium Grid 3 Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority70 \lsdlocked0 Dark List Accent 3;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority71 \lsdlocked0 Colorful Shading Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority72 \lsdlocked0 Colorful List Accent 3;\lsdsemihidden0 \lsdunhideused0 \lsdpriority73 \lsdlocked0 Colorful Grid Accent 3;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority60 \lsdlocked0 Light Shading Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority61 \lsdlocked0 Light List Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority62 \lsdlocked0 Light Grid Accent 4;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority63 \lsdlocked0 Medium Shading 1 Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority64 \lsdlocked0 Medium Shading 2 Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority65 \lsdlocked0 Medium List 1 Accent 4;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority66 \lsdlocked0 Medium List 2 Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority67 \lsdlocked0 Medium Grid 1 Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority68 \lsdlocked0 Medium Grid 2 Accent 4;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority69 \lsdlocked0 Medium Grid 3 Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority70 \lsdlocked0 Dark List Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority71 \lsdlocked0 Colorful Shading Accent 4;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority72 \lsdlocked0 Colorful List Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority73 \lsdlocked0 Colorful Grid Accent 4;\lsdsemihidden0 \lsdunhideused0 \lsdpriority60 \lsdlocked0 Light Shading Accent 5;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority61 \lsdlocked0 Light List Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority62 \lsdlocked0 Light Grid Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority63 \lsdlocked0 Medium Shading 1 Accent 5;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority64 \lsdlocked0 Medium Shading 2 Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority65 \lsdlocked0 Medium List 1 Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority66 \lsdlocked0 Medium List 2 Accent 5;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority67 \lsdlocked0 Medium Grid 1 Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority68 \lsdlocked0 Medium Grid 2 Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority69 \lsdlocked0 Medium Grid 3 Accent 5;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority70 \lsdlocked0 Dark List Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority71 \lsdlocked0 Colorful Shading Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority72 \lsdlocked0 Colorful List Accent 5;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority73 \lsdlocked0 Colorful Grid Accent 5;\lsdsemihidden0 \lsdunhideused0 \lsdpriority60 \lsdlocked0 Light Shading Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority61 \lsdlocked0 Light List Accent 6;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority62 \lsdlocked0 Light Grid Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority63 \lsdlocked0 Medium Shading 1 Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority64 \lsdlocked0 Medium Shading 2 Accent 6;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority65 \lsdlocked0 Medium List 1 Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority66 \lsdlocked0 Medium List 2 Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority67 \lsdlocked0 Medium Grid 1 Accent 6;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority68 \lsdlocked0 Medium Grid 2 Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority69 \lsdlocked0 Medium Grid 3 Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority70 \lsdlocked0 Dark List Accent 6;
+\lsdsemihidden0 \lsdunhideused0 \lsdpriority71 \lsdlocked0 Colorful Shading Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority72 \lsdlocked0 Colorful List Accent 6;\lsdsemihidden0 \lsdunhideused0 \lsdpriority73 \lsdlocked0 Colorful Grid Accent 6;
+\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority19 \lsdlocked0 Subtle Emphasis;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority21 \lsdlocked0 Intense Emphasis;
+\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority31 \lsdlocked0 Subtle Reference;\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority32 \lsdlocked0 Intense Reference;
+\lsdsemihidden0 \lsdunhideused0 \lsdqformat1 \lsdpriority33 \lsdlocked0 Book Title;\lsdpriority37 \lsdlocked0 Bibliography;\lsdqformat1 \lsdpriority39 \lsdlocked0 TOC Heading;}}{\*\datastore 010500000200000018000000
+4d73786d6c322e534158584d4c5265616465722e352e3000000000000000000000060000
+d0cf11e0a1b11ae1000000000000000000000000000000003e000300feff090006000000000000000000000001000000010000000000000000100000feffffff00000000feffffff0000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffdfffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffff52006f006f007400200045006e00740072007900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000500ffffffffffffffffffffffffec69d9888b8b3d4c859eaf6cd158be0f00000000000000000000000070ed
+5cc10b39cf01feffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000
+000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000105000000000000}}

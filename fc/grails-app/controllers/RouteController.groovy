@@ -115,7 +115,7 @@ class RouteController {
 	}
     
 	def importaflosroute = {
-        def route = fcService.importAflosRoute(params,session.lastContest) 
+        def route = fcService.importAflosRoute(params,session.lastContest,"",false,[]) // false - $curved wird nicht ignoriert 
         if (route.saved) {
             flash.message = route.message
 			if (route.error) {
@@ -239,6 +239,16 @@ class RouteController {
         def route = fcService.getRoute(params) 
         if (route.instance) {
             return [routeInstance:route.instance]
+        } else {
+            flash.message = route.message
+            redirect(action:list)
+        }
+    }
+
+    def showmap = {
+        def route = fcService.getRoute(params) 
+        if (route.instance) {
+        	return [routeInstance:route.instance]
         } else {
             flash.message = route.message
             redirect(action:list)

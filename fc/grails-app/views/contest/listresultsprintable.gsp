@@ -19,7 +19,7 @@
                     </g:else> 
                 </g:else>
                 @top-center {
-                    content: "${message(code:'fc.contest.listresults')} - ${message(code:'fc.program.printpage')} " counter(page)
+                    content: "${message(code:'fc.contest.printresults')} - ${message(code:'fc.program.printpage')} " counter(page)
                 }
                 @bottom-center {
                     content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
@@ -28,12 +28,12 @@
 		</style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.contest.listresults')}</title>
+        <title>${message(code:'fc.contest.printresults')}</title>
     </head>
     <body>
         <div class="box">
             <div class="box boxborder" >
-                <h2>${message(code:'fc.contest.listresults')}<g:if test="${contestInstance.contestPrintSubtitle}"> - ${contestInstance.contestPrintSubtitle}</g:if><g:if test="${contestInstance.IsContestResultsProvisional(contestInstance.GetResultSettings(),contestInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${message(code:'fc.contest.printresults')}<g:if test="${contestInstance.contestPrintSubtitle}"> - ${contestInstance.contestPrintSubtitle}</g:if><g:if test="${contestInstance.IsContestResultsProvisional(contestInstance.GetResultSettings(),contestInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <h3>${contestInstance.GetResultTitle(contestInstance.GetResultSettings(),true)}</h3>
                 <div class="block" id="forms" >
                     <g:form>

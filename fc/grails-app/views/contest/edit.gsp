@@ -131,11 +131,19 @@
                                 </tr>
                                 <tr>
                                     <td/>
-                                    <td colspan="5">
-                                        <g:actionSubmit action="printtest_a4_portrait" value="${message(code:'fc.print.test.a4.portrait')}" tabIndex="61"/> 
-                                        <g:actionSubmit action="printtest_a3_portrait" value="${message(code:'fc.print.test.a3.portrait')}" tabIndex="62"/> 
-                                        <g:actionSubmit action="printtest_a4_landscape" value="${message(code:'fc.print.test.a4.landscape')}" tabIndex="63"/>
-                                        <g:actionSubmit action="printtest_a3_landscape" value="${message(code:'fc.print.test.a3.landscape')}" tabIndex="64"/>
+                                    <td/>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
+                                    <td><input type="text" id="a3PortraitFactor" name="a3PortraitFactor" value="${fieldValue(bean:contestInstance,field:'a3PortraitFactor')}" tabIndex="61"/></td>
+                                    <td><input type="text" id="a4LandscapeFactor" name="a4LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a4LandscapeFactor')}" tabIndex="62"/></td>
+                                    <td><input type="text" id="a3LandscapeFactor" name="a3LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a3LandscapeFactor')}" tabIndex="63"/></td>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td/>
+                                    <td><g:actionSubmit action="printtest_a4_portrait" value="${message(code:'fc.print.test.a4.portrait')}" tabIndex="71"/></td>
+                                    <td><g:actionSubmit action="printtest_a3_portrait" value="${message(code:'fc.print.test.a3.portrait')}" tabIndex="72"/></td>
+                                    <td><g:actionSubmit action="printtest_a4_landscape" value="${message(code:'fc.print.test.a4.landscape')}" tabIndex="73"/></td>
+                                    <td><g:actionSubmit action="printtest_a3_landscape" value="${message(code:'fc.print.test.a3.landscape')}" tabIndex="74"/></td>
                                     </td>
                                 </tr>
 	                        </tbody>

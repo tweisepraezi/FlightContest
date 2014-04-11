@@ -88,11 +88,10 @@
 	                                    <g:set var="print_timetablejury_checkpoints" value="${taskInstance.printTimetableJuryCheckPoints},"/>
 	                                    <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(test_instance,[sort:"id"])}">
 	                                        <g:set var="leg_no" value="${leg_no+1}" />
+                                            <g:set var="leg_name" value="${testlegflight_instance.coordTitle.titlePrintCode()}"/>
 	                                        <g:if test="${leg_no==leg_num}">
-	                                            <g:set var="leg_name" value="${message(code:CoordType.FP.code)}"/>
 	                                        </g:if>
 	                                        <g:else>
-	                                            <g:set var="leg_name" value="${message(code:CoordType.TP.code)}${leg_no}"/>
                                                 <g:set var="leg_checkpoint" value="${leg_no},"/>
 	                                            <g:if test="${print_timetablejury_checkpoints.contains(leg_checkpoint)}">
 	                                                <th valign="top">${leg_name}</th>
@@ -157,7 +156,12 @@
     	                                        <td width="1%">${test_instance.takeoffTime?.format('HH:mm')}</td>
     	                                    </g:if>
                                             <g:if test="${taskInstance.printTimetableJuryStartPoint}">
-    	                                        <td width="1%">${test_instance.startTime?.format('HH:mm')}</td>
+                                                <g:if test="${taskInstance.IsFullMinute(taskInstance.risingDurationFormula)}">
+    	                                           <td width="1%">${test_instance.startTime?.format('HH:mm')}</td>
+    	                                        </g:if>
+    	                                        <g:else>
+    	                                           <td width="1%">${test_instance.startTime?.format('HH:mm:ss')}</td>
+    	                                        </g:else>
     	                                    </g:if>
 		                                    <g:set var="leg_no" value="${new Integer(0)}" />
 		                                    <g:set var="leg_num" value="${TestLegFlight.countByTest(test_instance)}" />
@@ -165,15 +169,22 @@
                                             <g:set var="tptime" value="${test_instance.startTime}" />
 		                                    <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(test_instance,[sort:"id"])}">
 		                                        <g:set var="leg_no" value="${leg_no+1}" />
+                                                <g:set var="leg_name" value="${testlegflight_instance.coordTitle.titlePrintCode()}"/>
                                                 <g:set var="tptime" value="${testlegflight_instance.AddPlanLegTime(tptime)}" />
 		                                        <g:if test="${leg_no==leg_num}">
-		                                            <g:set var="leg_name" value="${message(code:CoordType.FP.code)}"/>
 		                                        </g:if>
 		                                        <g:else>
-		                                            <g:set var="leg_name" value="${message(code:CoordType.TP.code)}${leg_no}"/>
                                                     <g:set var="leg_checkpoint" value="${leg_no},"/>
 	                                                <g:if test="${print_timetablejury_checkpoints.contains(leg_checkpoint)}">
-	                                                    <td width="1%">${FcMath.TimeStr(tptime)}</td>
+                                                        <g:if test="${(testlegflight_instance.coordTitle.type == CoordType.iLDG) && taskInstance.IsFullMinute(taskInstance.iLandingDurationFormula)}">
+                                                            <td width="1%">${FcMath.TimeStrShort(tptime)}</td>
+                                                        </g:if>
+                                                        <g:elseif test="${(testlegflight_instance.coordTitle.type == CoordType.iSP) && taskInstance.IsFullMinute(taskInstance.iRisingDurationFormula)}">
+                                                            <td width="1%">${FcMath.TimeStrShort(tptime)}</td>
+                                                        </g:elseif>
+                                                        <g:else>
+	                                                       <td width="1%">${FcMath.TimeStr(tptime)}</td>
+	                                                    </g:else>
 	                                                </g:if>
 		                                        </g:else>
 		                                    </g:each>
@@ -181,10 +192,20 @@
     	                                        <td width="1%">${test_instance.finishTime?.format('HH:mm:ss')}</td>
     	                                    </g:if>
                                             <g:if test="${taskInstance.printTimetableJuryLanding}">
-    	                                        <td width="1%">${test_instance.maxLandingTime?.format('HH:mm:ss')}</td>
+                                                <g:if test="${taskInstance.IsFullMinute(taskInstance.maxLandingDurationFormula)}">
+                                                   <td width="1%">${test_instance.maxLandingTime?.format('HH:mm')}</td>
+                                                </g:if>
+                                                <g:else>
+    	                                           <td width="1%">${test_instance.maxLandingTime?.format('HH:mm:ss')}</td>
+    	                                        </g:else>
     	                                    </g:if>
                                             <g:if test="${taskInstance.printTimetableJuryArrival}">
-    	                                        <td width="1%">${test_instance.arrivalTime?.format('HH:mm:ss')}</td>
+                                                <g:if test="${taskInstance.IsFullMinute(taskInstance.maxLandingDurationFormula)}">
+        	                                        <td width="1%">${test_instance.arrivalTime?.format('HH:mm')}</td>
+                                                </g:if>
+                                                <g:else>
+                                                    <td width="1%">${test_instance.arrivalTime?.format('HH:mm:ss')}</td>
+                                                </g:else>
     	                                    </g:if>
                                             <g:if test="${taskInstance.printTimetableJuryEmptyColumn1}">
                                                 <td width="25%"></td>

@@ -102,7 +102,7 @@ class TestController
     }
 
     def printplanningtask = {
-        def test = fcService.printplanningtaskTest(params,false,false,GetPrintParams(),false) // false - without result 
+        def test = fcService.printplanningtaskTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startplanning")

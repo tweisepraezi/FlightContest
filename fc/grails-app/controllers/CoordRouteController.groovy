@@ -134,7 +134,8 @@ class CoordRouteController {
             flash.message = coordroute.message
             redirect(controller:"route",action:show,id:params.routeid)
 		} else {
-			return [coordRouteInstance:coordroute.instance]
+			boolean exist_ifp = CoordRoute.findByRouteAndType(coordroute.instance.route,CoordType.iFP,[sort:"id", order:"desc"])
+			return [coordRouteInstance:coordroute.instance,existiFP:exist_ifp]
 		}
     }
 

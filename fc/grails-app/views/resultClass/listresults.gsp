@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${resultclassInstance.GetListTitle('fc.contest.listresults')}</title>
+        <title>${resultclassInstance.GetListTitle('fc.contest.printresults')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="task" taskresults="true" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="task" contestevaluation="true" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${resultclassInstance.GetListTitle('fc.contest.listresults')}<g:if test="${resultclassInstance.IsClassResultsProvisional(resultclassInstance.GetClassResultSettings(),resultclassInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
+                <h2>${resultclassInstance.GetListTitle('fc.contest.printresults')}<g:if test="${resultclassInstance.IsClassResultsProvisional(resultclassInstance.GetClassResultSettings(),resultclassInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
                     <g:form params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
                         <table>

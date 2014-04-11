@@ -25,12 +25,7 @@
                                 </tr>
                                 <tr>
                                 	<td class="detailtitle">${message(code:'fc.title')}:</td>
-	                                <g:if test="${params.next}">
-	                                    <td>${message(code:CoordType.TP.code)}${params.name}</td>
-	                                </g:if>
-	                                <g:else>
-	                                    <td>${message(code:CoordType.FP.code)}</td>
-	                                </g:else>
+	                                <td>${testLegPlanningInstance.coordTitle.titleCode()}</td>
                                 </tr>
                             </tbody>
                         </table>

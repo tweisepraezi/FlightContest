@@ -21,7 +21,8 @@ class Coord
 	Float gatewidth2 = 1.0f              // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM), DB-2.3
 	Integer legDuration                  // duration of leg [min], DB-2.3
 	Boolean noTimeCheck = false          // No timecheck, DB-2.3
-
+	Boolean noPlanningTest = false       // No planning test, DB-2.6
+	
     // Speicher für Eingabe der Landkarten-Messung
 	boolean measureEntered = false
 	BigDecimal coordTrueTrack = 0        // Grad
@@ -140,6 +141,8 @@ class Coord
 		legDuration(nullable:true,min:1)
 		noTimeCheck(nullable:true)
 		
+		// DB-2.6 compatibility
+		noPlanningTest(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -188,6 +191,7 @@ class Coord
 	    legDistance = coordInstance.legDistance
 		legDuration = coordInstance.legDuration
 		noTimeCheck = coordInstance.noTimeCheck
+		noPlanningTest = coordInstance.noPlanningTest
 	    secretLegRatio = coordInstance.secretLegRatio
 	    // planCpTime = coordInstance.planCpTime
 	    // planProcedureTurn = coordInstance.planProcedureTurn
@@ -256,6 +260,29 @@ class Coord
         }
     }
     
+	String titleShortMap()
+	{
+		String title = titleCode()
+		switch (type) {
+			case CoordType.TP:
+			case CoordType.SECRET:
+				title += " (${mark})"
+		}
+		return title
+	}
+	
+	String titleMap()
+	{
+		String title = titleCode()
+		switch (type) {
+			case CoordType.TP:
+			case CoordType.SECRET:
+				title += " (${mark})"
+		}
+		title += " - ${name()}"
+		return title
+	}
+	
 	BigDecimal latMath()
 	{
 		BigDecimal ret = latGrad + latMinute/60
@@ -297,31 +324,37 @@ class Coord
 	{
 		String print_name = "${latName()}' ${lonName()}'"
 		if (printSettings) {
-	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
+	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noPlanningTest) {
 				print_name += " ("
 			}
 	    	if (measureTrueTrack != null) {
 	    		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
-				if (measureDistance != null || legDuration != null || noTimeCheck) {
+				if (measureDistance != null || legDuration != null || noTimeCheck || noPlanningTest) {
 					print_name += "; "
 				}
 	    	}
 	    	if (measureDistance != null) {
 	    		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
-				if (legDuration != null || noTimeCheck) {
+				if (legDuration != null || noTimeCheck || noPlanningTest) {
 					print_name += "; "
 				}
 	    	}
 			if (legDuration != null) {
-				if (noTimeCheck) {
+				print_name += "${legDuration}${getMsg('fc.time.min')}"
+				if (noTimeCheck || noPlanningTest) {
 					print_name += "; "
 				}
-				print_name += "${legDuration}${getMsg('fc.time.min')}"
 			}
 			if (noTimeCheck) {
 				print_name += "${getMsg('fc.notimecheck.print')}"
+				if (noPlanningTest) {
+					print_name += "; "
+				}
 			}
-	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck) {
+			if (noPlanningTest) {
+				print_name += "${getMsg('fc.noplanningtest.print')}"
+			}
+	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noPlanningTest) {
 				print_name += ")"
 			}
 		}

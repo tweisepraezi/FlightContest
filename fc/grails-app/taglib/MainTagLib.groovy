@@ -11,6 +11,7 @@ class MainTagLib
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="contest" id="${contestInstance.id}" contesttasks="true" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="task" taskplanning="true" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="task" taskresults="true" />
+	// <g:mainnav link="${createLink(controller:'contest')}" controller="task" contestevaluation="true" />
 	def mainnav = { p ->
 		def c = ""
 		boolean second_nav = false
@@ -34,8 +35,11 @@ class MainTagLib
 			if (Task.findByContestAndHidePlanning(session.lastContest,false)) {
 				outln """    <li> <a class="${if (p.taskplanning) active(p.controller,'task')}" href="${p.link}/../../task/startplanning">${message(code:'fc.task.listplanning')}</a> </li>"""
 			}
-			if (Task.findByContest(session.lastContest)) {
+			if (Task.findByContestAndHideResults(session.lastContest,false)) {
 				outln """    <li> <a class="${if (p.taskresults) active(p.controller,'task')}" href="${p.link}/../../task/startresults">${message(code:'fc.task.listresults')}</a> </li>"""
+			}
+			if (Task.findByContest(session.lastContest)) {
+				outln """    <li> <a class="${if (p.contestevaluation) active(p.controller,'task')}" href="${p.link}/../../task/startevaluation">${message(code:'fc.contest.evaluation')}</a> </li>"""
 			}
 		} else {
 			if (Contest.findByIdIsNotNull([sort:"id"])) {
@@ -107,12 +111,12 @@ class MainTagLib
 				outln """</div>"""
 	            second_nav = true
             }
-        } else if (p.taskplanning || p.taskresults) {
+        } else if (p.taskplanning || p.taskresults || p.contestevaluation) {
             outln """<div class="clear"></div>"""
 			outln """<div class="grid">"""
             outln """  <ul class="nav main">"""
 			for (Task task_instance in Task.findAllByContest(session.lastContest,[sort:"id"])) {
-				   if (p.taskplanning) {
+				if (p.taskplanning) {
 					if (!task_instance.hidePlanning) {
 						outln """    <li> <a class="${if (session.lastTaskPlanning == task_instance.id) "active"}" href="${p.link}/../../task/listplanning/${task_instance.id}" >${task_instance.name()}</a> </li>"""
 					}
@@ -120,15 +124,15 @@ class MainTagLib
 					if (!task_instance.hideResults) {
 						outln """    <li> <a class="${if (session.lastTaskResults == task_instance.id) "active"}" href="${p.link}/../../task/listresults/${task_instance.id}" >${task_instance.name()}</a> </li>"""
 					}
-				   }
+				}
 			}
-			if (p.taskresults) {
-				outln """    <li> <a class="${if (session.lastContestResults) "active"}" href="${p.link}/../../contest/listresults">${message(code:'fc.contest.listresults')}</a> </li>"""
+			if (p.contestevaluation) {
 				if (session.lastContest.resultClasses) {
 					for (ResultClass resultclass_instance in ResultClass.findAllByContest(session.lastContest,[sort:"id"])) {
 						outln """    <li> <a class="${if (session.lastResultClassResults == resultclass_instance.id) "active"}" href="${p.link}/../../resultClass/listresults/${resultclass_instance.id}">${resultclass_instance.name}</a> </li>"""
 					}
 				}
+				outln """    <li> <a class="${if (session.lastContestResults) "active"}" href="${p.link}/../../contest/listresults">${message(code:'fc.contest.listresults')}</a> </li>"""
 				if (session.lastContest.teamCrewNum > 0) {
 					outln """    <li> <a class="${if (session.lastTeamResults) "active"}" href="${p.link}/../../contest/listteamresults">${message(code:'fc.contest.listteamresults')}</a> </li>"""
 				}

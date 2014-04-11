@@ -74,6 +74,10 @@
 	                                <g:checkBox name="noTimeCheck" value="${coordRouteInstance.noTimeCheck}" />
 	                                <label>${message(code:'fc.notimecheck')}</label>
 	                            </div>
+                                <div>
+                                    <g:checkBox name="noPlanningTest" value="${coordRouteInstance.noPlanningTest}" />
+                                    <label>${message(code:'fc.noplanningtest')}</label>
+                                </div>
 	                        </fieldset>
 	                        <fieldset>
 	                        	<legend>${message(code:'fc.measure.fromlasttp')}</legend>
@@ -132,12 +136,26 @@
 	                                       <td>${message(code:'fc.yes')}</td>
 	                                   </tr>
 	                               </g:if>
+                                   <g:if test="${coordRouteInstance.noPlanningTest}">
+                                       <tr>
+                                           <td class="detailtitle">${message(code:'fc.noplanningtest')}:</td>
+                                           <td>${message(code:'fc.yes')}</td>
+                                       </tr>
+                                   </g:if>
+                                   <tr>
+                                       <td class="detailtitle">${message(code:'fc.truetrack.coord')}:</td>
+                                       <td>${coordRouteInstance.coordTrueTrackName()}</td>
+                                   </tr>
                                    <g:if test="${coordRouteInstance.measureTrueTrack}">
 	                                   <tr>
 	                                       <td class="detailtitle">${message(code:'fc.truetrack.map.measure')}:</td>
 	                                       <td>${coordRouteInstance.measureTrueTrackName()}</td>
 	                                   </tr>
 	                               </g:if>
+                                   <tr>
+                                       <td class="detailtitle">${message(code:'fc.distance.coord')}:</td>
+                                       <td>${coordRouteInstance.coordMeasureDistanceName()}</td>
+                                   </tr>
                                    <g:if test="${coordRouteInstance.measureDistance}">
 	                                   <tr>
 	                                       <td class="detailtitle">${message(code:'fc.distance.map.measure')}:</td>

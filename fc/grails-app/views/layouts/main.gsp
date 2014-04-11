@@ -23,9 +23,9 @@
         <div class="container_12">
             <div class="grid"  >
                 <g:if test="${params.print}">
-                    <g:set var="a3_portrait_factor" value="${new BigDecimal(1.414)}"/>
-                    <g:set var="a4_landscape_factor" value="${new BigDecimal(1.0)}"/>
-                    <g:set var="a3_landscape_factor" value="${new BigDecimal(1.0)}"/>
+                    <g:set var="a3_portrait_factor" value="${session.lastContest.a3PortraitFactor}"/>
+                    <g:set var="a4_landscape_factor" value="${session.lastContest.a4LandscapeFactor}"/>
+                    <g:set var="a3_landscape_factor" value="${session.lastContest.a3LandscapeFactor}"/>
                     
                     <g:set var="height_value_diff_left" value="${new Integer(0)}"/>
                     <g:set var="height_value_diff_center" value="${new Integer(0)}"/>

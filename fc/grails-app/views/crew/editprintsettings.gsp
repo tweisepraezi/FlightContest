@@ -42,6 +42,14 @@
                                     <label>${message(code:'fc.aircraft')}</label>
                                 </div>
                                 <div>
+                                    <g:checkBox name="printCrewAircraftType" value="${contestInstance.printCrewAircraftType}" />
+                                    <label>${message(code:'fc.aircraft.type')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printCrewAircraftColour" value="${contestInstance.printCrewAircraftColour}" />
+                                    <label>${message(code:'fc.aircraft.colour')}</label>
+                                </div>
+                                <div>
                                     <g:checkBox name="printCrewTAS" value="${contestInstance.printCrewTAS}" />
                                     <label>${message(code:'fc.tas')}</label>
                                 </div>

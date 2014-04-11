@@ -12,7 +12,7 @@ for /f %%i in ('cd') do set basedir=%%i
 cd %startdir%
 
 set JAVA_HOME=%basedir%\Java\jdk1.6.0_30
-set GRAILS_HOME=%basedir%\Grails\grails-2.3.4
+set GRAILS_HOME=%basedir%\Grails\grails-2.3.6
 set SETUPEXE=%ProgramFiles(x86)%\Inno Setup 5\iscc.exe
 if not exist "%SETUPEXE%" set SETUPEXE=%ProgramFiles%\Inno Setup 5\iscc.exe
 

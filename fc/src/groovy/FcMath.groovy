@@ -1,4 +1,5 @@
 import java.text.*
+import java.util.GregorianCalendar;
 import java.math.*
 
 class FcMath
@@ -108,6 +109,15 @@ class FcMath
 		return ret
 	}
 	
+    //--------------------------------------------------------------------------
+	static void SetFullMinute(CoordType coordType, GregorianCalendar time)
+	{
+		int second = time.get(Calendar.SECOND)
+		if (second > 0) {
+			time.add(Calendar.SECOND, 60 - second)
+		}
+	}
+	
 	static String TimeStr(BigDecimal timeValue)
 	{
 		GregorianCalendar time = new GregorianCalendar()
@@ -123,6 +133,14 @@ class FcMath
 	{
 		if (dateValue) {
 			return dateValue.format('HH:mm:ss')
+		}
+		return ""
+	}
+	
+	static String TimeStrShort(Date dateValue)
+	{
+		if (dateValue) {
+			return dateValue.format('HH:mm')
 		}
 		return ""
 	}

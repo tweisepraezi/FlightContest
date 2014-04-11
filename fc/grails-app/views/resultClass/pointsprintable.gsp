@@ -281,6 +281,13 @@
 			                                <td>${resultclassInstance.landingTest1AbnormalLandingPoints} ${message(code:'fc.points')}</td>
 			                                <td width="1%"><g:if test="${resultclassInstance.landingTest1AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest1AbnormalLandingPoints}">!</g:if></td>
 			                            </tr>
+                                        <g:if test="${resultclassInstance.printPointsZero || resultclassInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints > 0}">
+	                                        <tr>
+	                                            <td width="70%">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>
+	                                            <td>${resultclassInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>
+	                                            <td width="1%"><g:if test="${resultclassInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest1NotAllowedAerodynamicAuxiliariesPoints}">!</g:if></td>
+	                                        </tr>
+                                        </g:if>
 			                            <tr>
 		                                    <td colspan="2">${message(code:'fc.landingtest.penaltycalculator')}:<br/>${resultclassInstance.landingTest1PenaltyCalculator}</td>
 			                                <td width="1%"><g:if test="${resultclassInstance.landingTest1PenaltyCalculator != resultclassInstance.contestRule.ruleValues.landingTest1PenaltyCalculator}">!</g:if></td>
@@ -342,6 +349,13 @@
 			                                <td>${resultclassInstance.landingTest2AbnormalLandingPoints} ${message(code:'fc.points')}</td>
 			                                <td width="1%"><g:if test="${resultclassInstance.landingTest2AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest2AbnormalLandingPoints}">!</g:if></td>
 			                            </tr>
+                                        <g:if test="${resultclassInstance.printPointsZero || resultclassInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints > 0}">
+                                            <tr>
+                                                <td width="70%">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>
+                                                <td>${resultclassInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>
+                                                <td width="1%"><g:if test="${resultclassInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest2NotAllowedAerodynamicAuxiliariesPoints}">!</g:if></td>
+                                            </tr>
+                                        </g:if>
                                         <g:if test="${resultclassInstance.printPointsZero || resultclassInstance.landingTest2PowerInAirPoints > 0}">
 				                            <tr>
 			                                    <td width="70%">${message(code:'fc.landingtest.powerinair')}</td>
@@ -410,6 +424,13 @@
 			                                <td>${resultclassInstance.landingTest3AbnormalLandingPoints} ${message(code:'fc.points')}</td>
 			                                <td width="1%"><g:if test="${resultclassInstance.landingTest3AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest3AbnormalLandingPoints}">!</g:if></td>
 			                            </tr>
+                                        <g:if test="${resultclassInstance.printPointsZero || resultclassInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints > 0}">
+                                            <tr>
+                                                <td width="70%">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>
+                                                <td>${resultclassInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>
+                                                <td width="1%"><g:if test="${resultclassInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest3NotAllowedAerodynamicAuxiliariesPoints}">!</g:if></td>
+                                            </tr>
+                                        </g:if>
                                         <g:if test="${resultclassInstance.printPointsZero || resultclassInstance.landingTest3PowerInAirPoints > 0}">
 				                            <tr>
 			                                    <td width="70%">${message(code:'fc.landingtest.powerinair')}</td>
@@ -485,6 +506,13 @@
 			                                <td>${resultclassInstance.landingTest4AbnormalLandingPoints} ${message(code:'fc.points')}</td>
 			                                <td width="1%"><g:if test="${resultclassInstance.landingTest4AbnormalLandingPoints != resultclassInstance.contestRule.ruleValues.landingTest4AbnormalLandingPoints}">!</g:if></td>
 			                            </tr>
+                                        <g:if test="${resultclassInstance.printPointsZero || resultclassInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints > 0}">
+                                            <tr>
+                                                <td width="70%">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</td>
+                                                <td>${resultclassInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints} ${message(code:'fc.points')}</td>
+                                                <td width="1%"><g:if test="${resultclassInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints != resultclassInstance.contestRule.ruleValues.landingTest4NotAllowedAerodynamicAuxiliariesPoints}">!</g:if></td>
+                                            </tr>
+                                        </g:if>
                                         <g:if test="${resultclassInstance.printPointsZero || resultclassInstance.landingTest4TouchingObstaclePoints > 0}">
 				                            <tr>
 			                                    <td width="70%">${message(code:'fc.landingtest.touchingobstacle')}</td>

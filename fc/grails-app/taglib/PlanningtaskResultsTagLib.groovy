@@ -26,14 +26,13 @@ class PlanningtaskResultsTagLib
 	        outln"""    <tbody>"""
 	        Integer penalty_trueheading_summary = 0
 	        Integer penalty_legtime_summary = 0
-	        Integer legNo = 0
 			TestLegPlanning last_testlegplanning_instance = null
 	        for (TestLegPlanning test_legplanning_instance in TestLegPlanning.findAllByTest(attrs.t,[sort:"id"])) {
 	            if (last_testlegplanning_instance) {
 	                penalty_trueheading_summary += last_testlegplanning_instance.penaltyTrueHeading
 	                penalty_legtime_summary += last_testlegplanning_instance.penaltyLegTime
 	                outln"""<tr>"""
-	                outln"""    <td>${message(code:CoordType.TP.code)}${legNo}</td>"""
+	                outln"""    <td>${last_testlegplanning_instance.coordTitle.titlePrintCode()}</td>"""
 	                outln"""    <td>${FcMath.GradStr(last_testlegplanning_instance.planTrueHeading)}${message(code:'fc.grad')}</td>"""
 	                outln"""    <td>${FcMath.GradStrComma(last_testlegplanning_instance.resultTrueHeading)}${message(code:'fc.grad')}</td>"""
 	                outln"""    <td>${last_testlegplanning_instance.penaltyTrueHeading}</td>"""
@@ -43,13 +42,12 @@ class PlanningtaskResultsTagLib
 	                outln"""</tr>"""
 	            }
 	            last_testlegplanning_instance = test_legplanning_instance
-	            legNo++
 	        }
 	        if (last_testlegplanning_instance) {
 	            penalty_trueheading_summary += last_testlegplanning_instance.penaltyTrueHeading
 	            penalty_legtime_summary += last_testlegplanning_instance.penaltyLegTime
 	            outln"""	<tr>"""
-	            outln"""	    <td>${message(code:CoordType.FP.code)}</td>"""
+	            outln"""	    <td>${last_testlegplanning_instance.coordTitle.titlePrintCode()}</td>"""
 	            outln"""	    <td>${FcMath.GradStr(last_testlegplanning_instance.planTrueHeading)}${message(code:'fc.grad')}</td>"""
 	            outln"""	    <td>${FcMath.GradStrComma(last_testlegplanning_instance.resultTrueHeading)}${message(code:'fc.grad')}</td>"""
 	            outln"""	    <td>${last_testlegplanning_instance.penaltyTrueHeading}</td>"""

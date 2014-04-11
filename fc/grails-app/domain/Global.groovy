@@ -1,7 +1,8 @@
 class Global 
 {
+	// DB-2.7
 	static int DB_MAJOR = 2 
-	static int DB_MINOR = 4
+	static int DB_MINOR = 7
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR

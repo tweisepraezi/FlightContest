@@ -59,12 +59,6 @@
                                 <br/>
                                 <input type="text" id="bestOfAnalysisTaskNum" name="bestOfAnalysisTaskNum" value="${fieldValue(bean:contestInstance,field:'bestOfAnalysisTaskNum')}" tabIndex="7"/>
                             </p>
-                            <p>
-                                <div>
-                                    <g:checkBox name="aflosUpload" value="${contestInstance.aflosUpload}" />
-                                    <label>${message(code:'fc.useuploadedaflos')}</label>
-                                </div>
-                            </p>
                         </fieldset>
                         <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="8"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="9"/>

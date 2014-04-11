@@ -217,23 +217,23 @@ class BootStrap {
 								task_instance.printTimetableJuryNumber = true
 								task_instance.printTimetableJuryCrew = true
 								task_instance.printTimetableJuryAircraft = true
-								task_instance.printTimetableJuryAircraftType = false
+								task_instance.printTimetableJuryAircraftType = true
 								task_instance.printTimetableJuryAircraftColour = false
-								task_instance.printTimetableJuryTAS = true
+								task_instance.printTimetableJuryTAS = false
 								task_instance.printTimetableJuryTeam = false
 								task_instance.printTimetableJuryPlanning = true
 								task_instance.printTimetableJuryPlanningEnd = true
 								task_instance.printTimetableJuryTakeoff = true
-								task_instance.printTimetableJuryStartPoint = true
+								task_instance.printTimetableJuryStartPoint = false
 								task_instance.printTimetableJuryCheckPoints = ""
-								task_instance.printTimetableJuryFinishPoint = true
+								task_instance.printTimetableJuryFinishPoint = false
 								task_instance.printTimetableJuryLanding = true
 								task_instance.printTimetableJuryArrival = true
-								task_instance.printTimetableJuryEmptyColumn1 = false
+								task_instance.printTimetableJuryEmptyColumn1 = true
 								task_instance.printTimetableJuryEmptyTitle1 = ""
-								task_instance.printTimetableJuryEmptyColumn2 = false
+								task_instance.printTimetableJuryEmptyColumn2 = true
 								task_instance.printTimetableJuryEmptyTitle2 = ""
-								task_instance.printTimetableJuryEmptyColumn3 = false
+								task_instance.printTimetableJuryEmptyColumn3 = true
 								task_instance.printTimetableJuryEmptyTitle3 = ""
 								task_instance.printTimetableJuryLandscape = true
 								task_instance.printTimetableJuryA3 = false
@@ -301,6 +301,95 @@ class BootStrap {
 							Task.findAll().each { Task task_instance ->
 								task_instance.takeoffIntervalSlowerAircraft = task_instance.takeoffIntervalNormal
 								task_instance.save()
+							}
+							println " done."
+						}
+						if (global.versionMinor < 5) { // DB-2.5 compatibility
+							print "    2.5 modifications"
+							RouteLeg.findAll().each { RouteLeg routeleg_instance ->
+								String[] title_values = routeleg_instance.title.split(' ') 
+								routeleg_instance.startTitle = CoordTitle.GetCoordTitle(title_values[0])
+								routeleg_instance.endTitle = CoordTitle.GetCoordTitle(title_values[2])
+								routeleg_instance.startTitle.save()
+								routeleg_instance.endTitle.save()
+								routeleg_instance.title = ""
+								routeleg_instance.save()
+							}
+							Test.findAll().each { Test test_instance ->
+								int leg_no = 0
+								int leg_num = TestLegPlanning.countByTest(test_instance)
+								for (TestLegPlanning testlegplanning_instance in TestLegPlanning.findAllByTest(test_instance,[sort:"id"])) {
+									leg_no++
+									if (leg_no == leg_num) {
+										testlegplanning_instance.coordTitle = new CoordTitle(CoordType.FP,0)
+									} else {
+										testlegplanning_instance.coordTitle = new CoordTitle(CoordType.TP,leg_no)
+									}
+									testlegplanning_instance.coordTitle.save()
+									testlegplanning_instance.save()
+								}
+								leg_no = 0
+								leg_num = TestLegFlight.countByTest(test_instance)
+								for (TestLegFlight testlegflight_instance in TestLegFlight.findAllByTest(test_instance,[sort:"id"])) {
+									leg_no++
+									if (leg_no == leg_num) {
+										testlegflight_instance.coordTitle = new CoordTitle(CoordType.FP,0)
+									} else {
+										testlegflight_instance.coordTitle = new CoordTitle(CoordType.TP,leg_no)
+									}
+									testlegflight_instance.coordTitle.save()
+									testlegflight_instance.save()
+								}
+							}
+							println " done."
+						}
+						if (global.versionMinor < 6) { // DB-2.6 compatibility
+							print "    2.6 modifications"
+							Coord.findAll().each { Coord coord_instance ->
+								coord_instance.noPlanningTest = false
+								coord_instance.save()
+							}
+							println " done."
+						}
+						if (global.versionMinor < 7) { // DB-2.7 compatibility
+							print "    2.7 modifications"
+							Contest.findAll().each { Contest contest_instance ->
+								contest_instance.landingTest1NotAllowedAerodynamicAuxiliariesPoints = 0
+								contest_instance.landingTest2NotAllowedAerodynamicAuxiliariesPoints = 0
+								contest_instance.landingTest3NotAllowedAerodynamicAuxiliariesPoints = 0
+								contest_instance.landingTest4NotAllowedAerodynamicAuxiliariesPoints = 0
+								contest_instance.printCrewAircraftType = false
+								contest_instance.printCrewAircraftColour = false
+								contest_instance.a3PortraitFactor = 1.414
+								contest_instance.a4LandscapeFactor = 1
+								contest_instance.a3LandscapeFactor = 1
+								contest_instance.save()
+							}
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+								resultclass_instance.landingTest1NotAllowedAerodynamicAuxiliariesPoints = 0
+								resultclass_instance.landingTest2NotAllowedAerodynamicAuxiliariesPoints = 0
+								resultclass_instance.landingTest3NotAllowedAerodynamicAuxiliariesPoints = 0
+								resultclass_instance.landingTest4NotAllowedAerodynamicAuxiliariesPoints = 0
+								resultclass_instance.save()
+							}
+							Task.findAll().each { Task task_instance ->
+								task_instance.risingDurationFormula = "time+:${task_instance.risingDuration}min"
+								task_instance.maxLandingDurationFormula =  "time:${task_instance.maxLandingDuration}min"
+								task_instance.parkingDuration -= task_instance.maxLandingDuration
+								task_instance.iLandingDurationFormula = "wind:1"
+								task_instance.iRisingDurationFormula = "wind:1"
+								task_instance.save()
+							}
+							TestLeg.findAll().each { TestLeg testleg_instance ->
+								testleg_instance.planFullMinute = false
+								testleg_instance.save()
+							}
+							Test.findAll().each { Test test_instance ->
+								test_instance.landingTest1NotAllowedAerodynamicAuxiliaries = false
+								test_instance.landingTest2NotAllowedAerodynamicAuxiliaries = false
+								test_instance.landingTest3NotAllowedAerodynamicAuxiliaries = false
+								test_instance.landingTest4NotAllowedAerodynamicAuxiliaries = false
+								test_instance.save()
 							}
 							println " done."
 						}

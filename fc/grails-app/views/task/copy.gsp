@@ -48,41 +48,51 @@
                         </fieldset>
                         <fieldset>
                             <p>
-                                <label>${message(code:'fc.task.risingduration')}* [${message(code:'fc.time.min')}]:</label>
-                                <br/>
-                                <input type="text" id="risingDuration" name="risingDuration" value="${fieldValue(bean:taskInstance,field:'risingDuration')}" tabIndex="6"/>
-                            </p>
-                            <p>
                                 <label>${message(code:'fc.task.planningtestduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="7"/>
+                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="6"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.preparationduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="8"/>
+                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="7"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <label>${message(code:'fc.task.risingduration')}*:</label>
                                 <br/>
-                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="9"/>
+                                <input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" tabIndex="8"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.task.maxlandingduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <label>${message(code:'fc.task.maxlandingduration')}*:</label>
                                 <br/>
-                                <input type="text" id="maxLandingDuration" name="maxLandingDuration" value="${fieldValue(bean:taskInstance,field:'maxLandingDuration')}" tabIndex="10"/>
+                                <input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" tabIndex="9"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="11"/>
+                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="10"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="11"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.ilandingduration')}*:</label>
+                                <br/>
+                                <input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" tabIndex="12"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.irisingduration')}*:</label>
+                                <br/>
+                                <input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" tabIndex="13"/>
                             </p>
                         </fieldset>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.task.minnextflightduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="12"/>
+                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="14"/>
                             </p>
                         </fieldset>
                         <g:if test="${contestInstance.resultClasses}">
@@ -236,11 +246,11 @@
                             <p>
                                 <label>${message(code:'fc.task.addtimevalue')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="13"/>
+                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="15"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="14"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="15"/>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="16"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
                     </g:form>
                 </div>
             </div>

@@ -3,8 +3,10 @@ import java.text.*
 
 class RouteLeg 
 {
-	String title
-
+	String title                       // Typumstellung auf startTitle und endTitle, DB-2.5
+	CoordTitle startTitle              // DB-2.5
+	CoordTitle endTitle                // DB-2.5
+	
 	BigDecimal coordTrueTrack          // Grad
 	BigDecimal coordDistance           // NM
 	
@@ -15,6 +17,7 @@ class RouteLeg
 	
 	Integer legDuration                // min, DB-2.3
 	Boolean noTimeCheck = false        // DB-2.3
+	Boolean noPlanningTest = false     // DB-2.6
 	
 	BigDecimal turnTrueTrack           // DB-2.4
 
@@ -33,6 +36,13 @@ class RouteLeg
 		
 		// DB-2.4 compatibility
 		turnTrueTrack(nullable:true)
+		
+		// DB-2.5 compatibility
+		startTitle(nullable:true)
+		endTitle(nullable:true)
+
+		// DB-2.6 compatibility
+		noPlanningTest(nullable:true)
     }
 
 	void CopyValues(RouteLeg routeLegInstance)
@@ -139,5 +149,15 @@ class RouteLeg
 		}
 		
         return  "${trueTrackStr} ${distanceStr}"
+	}
+
+	String GetTitle()
+	{	
+		return "${startTitle.titleCode()}...${endTitle.titleCode()}" 
+	}
+	
+	String GetPrintTitle()
+	{	
+		return "${startTitle.titlePrintCode()}...${endTitle.titlePrintCode()}" 
 	}
 }

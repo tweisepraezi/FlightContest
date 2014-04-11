@@ -53,6 +53,54 @@ class Route
 		}
 	}
 	
+	BigDecimal CenterLatitudeMath()
+	{
+		try {
+			BigDecimal min_latitude = null
+			BigDecimal max_latitude = null
+			CoordRoute.findAllByRoute(this,[sort:"id"]).each { CoordRoute coordroute_instance ->
+				BigDecimal latitude = coordroute_instance.latMath()
+				if (min_latitude == null) {
+					min_latitude = latitude
+				} else if (latitude < min_latitude) {
+					min_latitude = latitude
+				}
+				if (max_latitude == null) {
+					max_latitude = latitude
+				} else if (latitude > max_latitude) {
+					max_latitude = latitude
+				}
+			}
+			return (max_latitude + min_latitude)/2
+		} catch (Exception e) {
+			return 0
+		}
+	}
+	
+	BigDecimal CenterLongitudeMath()
+	{
+		try {
+			BigDecimal min_longitude = null
+			BigDecimal max_longitude = null
+			CoordRoute.findAllByRoute(this,[sort:"id"]).each { CoordRoute coordroute_instance ->
+				BigDecimal longitude = coordroute_instance.lonMath()
+				if (min_longitude == null) {
+					min_longitude = longitude
+				} else if (longitude < min_longitude) {
+					min_longitude = longitude
+				}
+				if (max_longitude == null) {
+					max_longitude = longitude
+				} else if (longitude > max_longitude) {
+					max_longitude = longitude
+				}
+			}
+			return (max_longitude + min_longitude)/2
+		} catch (Exception e) {
+			return 0
+		}
+	}
+	
     String idName()
     {
 		return "${getMsg('fc.route')}-${idTitle}"

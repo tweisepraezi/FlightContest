@@ -54,31 +54,28 @@ hibernate {
 // environment specific settings
 //   dbCreate: enable one of 'create', 'create-drop','update'
 environments {
+	lastdb {
+		dataSource {
+			dbCreate = "update" // last database
+			url = "jdbc:h2:file:~/.grails/.fc-dev/fcdb" // BUG: mem verursacht Fehler
+		}
+	}
 	development {
 		dataSource {
 			dbCreate = "create-drop" // empty database 
-			//dbCreate = "update" // last database
 			url = "jdbc:h2:file:~/.grails/.fc-dev/fcdb" // BUG: mem verursacht Fehler
-			//url = "jdbc:hsqldb:mem:devDB"
-			//url = "jdbc:h2:mem:fcdb"
 		}
 	}
 	test {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:h2:file:~/.grails/.fc-test/fcdb"
-			//url = "jdbc:hsqldb:file:fcdb;shutdown=true"
-			//url = "jdbc:h2:mem:testDb"
 		}
 	}
 	production {
 		dataSource {
 			dbCreate = "update"
 			url = "jdbc:h2:file:fcdb"
-			//url = "jdbc:hsqldb:file:${userHome}/.${appName}/data;shutdown=true"
-			//url = "jdbc:hsqldb:file:d:/.${appName}/fcdb;shutdown=true"
-			//url = "jdbc:hsqldb:file:fcdb;shutdown=true"
-			//url = "jdbc:h2:prodDb"
 		}
 	}
 }

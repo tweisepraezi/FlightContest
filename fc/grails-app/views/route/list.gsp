@@ -42,7 +42,7 @@
 
                             <td>
                                 <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${routeLegCoordInstance.title}
+                                    ${routeLegCoordInstance.GetTitle()}
                                     <br/>                                     
                                 </g:each>
                             </td>
@@ -55,7 +55,7 @@
 
                             <td>
                                 <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${routeLetTestInstance.title}
+                                    ${routeLetTestInstance.GetTitle()}
                                     <br/>                                     
                                 </g:each>
                             </td>

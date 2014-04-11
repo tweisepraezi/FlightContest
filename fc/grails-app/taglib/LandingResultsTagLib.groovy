@@ -58,6 +58,12 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTest1AbnormalLandingPoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest1NotAllowedAerodynamicAuxiliaries) {
+            outln"""    <tr>"""
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
         outln"""        <tr>"""
         outln"""            <td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>"""
         outln"""            <td class="subpoints">${attrs.t.landingTest1Penalties} ${message(code:'fc.points')}</td>"""
@@ -106,6 +112,9 @@ class LandingResultsTagLib
 		}
 		if (attrs.t.landingTest1AbnormalLanding) {
 			outln"""            ${message(code:'fc.landingtest.abnormallanding')}: ${attrs.t.GetLandingTest1AbnormalLandingPoints()} ${message(code:'fc.points')}<br/>"""
+		}
+		if (attrs.t.landingTest1NotAllowedAerodynamicAuxiliaries) {
+			outln"""            ${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}: ${attrs.t.GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}<br/>"""
 		}
         outln"""            </td>"""
         outln"""        </tr>"""
@@ -173,6 +182,12 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTest2AbnormalLandingPoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest2NotAllowedAerodynamicAuxiliaries) {
+            outln"""    <tr>"""
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
         if (attrs.t.landingTest2PowerInAir) {
             outln"""    <tr>"""
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.powerinair')}:</td>"""
@@ -228,6 +243,9 @@ class LandingResultsTagLib
         if (attrs.t.landingTest2AbnormalLanding) {
 			outln"""            ${message(code:'fc.landingtest.abnormallanding')}: ${attrs.t.GetLandingTest2AbnormalLandingPoints()} ${message(code:'fc.points')}<br/>"""
         }
+		if (attrs.t.landingTest2NotAllowedAerodynamicAuxiliaries) {
+			outln"""            ${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}: ${attrs.t.GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}<br/>"""
+		}
 		if (attrs.t.landingTest2PowerInAir) {
 			outln"""            ${message(code:'fc.landingtest.powerinair')}: ${attrs.t.GetLandingTest2PowerInAirPoints()} ${message(code:'fc.points')}<br/>"""
 		}
@@ -297,6 +315,12 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTest3AbnormalLandingPoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest3NotAllowedAerodynamicAuxiliaries) {
+            outln"""    <tr>"""
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
         if (attrs.t.landingTest3PowerInAir) {
             outln"""    <tr>"""
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.powerinair')}:</td>"""
@@ -358,6 +382,9 @@ class LandingResultsTagLib
 		}
 		if (attrs.t.landingTest3AbnormalLanding) {
 			outln"""            ${message(code:'fc.landingtest.abnormallanding')}: ${attrs.t.GetLandingTest3AbnormalLandingPoints()} ${message(code:'fc.points')}<br/>"""
+		}
+		if (attrs.t.landingTest3NotAllowedAerodynamicAuxiliaries) {
+			outln"""            ${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}: ${attrs.t.GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}<br/>"""
 		}
 		if (attrs.t.landingTest3PowerInAir) {
 			outln"""            ${message(code:'fc.landingtest.powerinair')}: ${attrs.t.GetLandingTest3PowerInAirPoints()} ${message(code:'fc.points')}<br/>"""
@@ -431,6 +458,12 @@ class LandingResultsTagLib
             outln"""        <td>${attrs.t.GetLandingTest4AbnormalLandingPoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
+        if (attrs.t.landingTest4NotAllowedAerodynamicAuxiliaries) {
+            outln"""    <tr>"""
+            outln"""        <td class="detailtitle">${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}:</td>"""
+            outln"""        <td>${attrs.t.GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
         if (attrs.t.landingTest4TouchingObstacle) {
             outln"""    <tr>"""
             outln"""        <td class="detailtitle">${message(code:'fc.landingtest.touchingobstacle')}:</td>"""
@@ -485,6 +518,9 @@ class LandingResultsTagLib
         }
 		if (attrs.t.landingTest4AbnormalLanding) {
 			outln"""            ${message(code:'fc.landingtest.abnormallanding')}: ${attrs.t.GetLandingTest4AbnormalLandingPoints()} ${message(code:'fc.points')}<br/>"""
+		}
+		if (attrs.t.landingTest4NotAllowedAerodynamicAuxiliaries) {
+			outln"""            ${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}: ${attrs.t.GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints()} ${message(code:'fc.points')}<br/>"""
 		}
         if (attrs.t.landingTest4TouchingObstacle) {
 			outln"""            ${message(code:'fc.landingtest.touchingobstacle')}: ${attrs.t.GetLandingTest4TouchingObstaclePoints()} ${message(code:'fc.points')}<br/>"""

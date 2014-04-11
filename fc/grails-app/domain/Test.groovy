@@ -69,6 +69,7 @@ class Test
 	boolean landingTest1GoAroundWithoutTouching = false    // DB-2.0
 	boolean landingTest1GoAroundInsteadStop = false        // DB-2.0
 	boolean landingTest1AbnormalLanding = false            // DB-2.0
+	Boolean landingTest1NotAllowedAerodynamicAuxiliaries = false // DB-2.7
 	
 	String  landingTest2Measure = ""                       // DB-2.0
 	int     landingTest2MeasurePenalties = 0               // DB-2.0
@@ -79,6 +80,7 @@ class Test
 	boolean landingTest2GoAroundWithoutTouching = false    // DB-2.0
 	boolean landingTest2GoAroundInsteadStop = false        // DB-2.0
 	boolean landingTest2AbnormalLanding = false            // DB-2.0
+	Boolean landingTest2NotAllowedAerodynamicAuxiliaries = false // DB-2.7
 	boolean landingTest2PowerInAir = false                 // DB-2.0
 	
 	String  landingTest3Measure = ""                       // DB-2.0
@@ -90,6 +92,7 @@ class Test
 	boolean landingTest3GoAroundWithoutTouching = false    // DB-2.0
 	boolean landingTest3GoAroundInsteadStop = false        // DB-2.0
 	boolean landingTest3AbnormalLanding = false            // DB-2.0
+	Boolean landingTest3NotAllowedAerodynamicAuxiliaries = false // DB-2.7
 	boolean landingTest3PowerInAir = false                 // DB-2.0
 	boolean landingTest3FlapsInAir = false                 // DB-2.0
 	
@@ -102,6 +105,7 @@ class Test
 	boolean landingTest4GoAroundWithoutTouching = false    // DB-2.0
 	boolean landingTest4GoAroundInsteadStop = false        // DB-2.0
 	boolean landingTest4AbnormalLanding = false            // DB-2.0
+	Boolean landingTest4NotAllowedAerodynamicAuxiliaries = false // DB-2.7
 	boolean landingTest4TouchingObstacle = false           // DB-2.0
 	
 	int     landingTestOtherPenalties = 0                  // DB-2.0
@@ -151,6 +155,12 @@ class Test
 		flightTestFalseEnvelopeOpened(nullable:true)
 		flightTestSafetyEnvelopeOpened(nullable:true)
 		flightTestFrequencyNotMonitored(nullable:true)
+		
+		// DB-2.7 compatibility
+		landingTest1NotAllowedAerodynamicAuxiliaries(nullable:true)
+		landingTest2NotAllowedAerodynamicAuxiliaries(nullable:true)
+		landingTest3NotAllowedAerodynamicAuxiliaries(nullable:true)
+		landingTest4NotAllowedAerodynamicAuxiliaries(nullable:true)
     }
 
 	static mapping = {
@@ -974,6 +984,16 @@ class Test
 		return task.contest.landingTest1AbnormalLandingPoints
 	}
 	
+	int GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest1NotAllowedAerodynamicAuxiliariesPoints
+			}
+		}
+		return task.contest.landingTest1NotAllowedAerodynamicAuxiliariesPoints
+	}
+	
 	String GetLandingTest1PenaltyCalculator()
 	{
 		if (task.contest.resultClasses) {
@@ -1062,6 +1082,16 @@ class Test
 			}
 		}
 		return task.contest.landingTest2AbnormalLandingPoints
+	}
+	
+	int GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest2NotAllowedAerodynamicAuxiliariesPoints
+			}
+		}
+		return task.contest.landingTest2NotAllowedAerodynamicAuxiliariesPoints
 	}
 	
 	int GetLandingTest2PowerInAirPoints()
@@ -1162,6 +1192,16 @@ class Test
 			}
 		}
 		return task.contest.landingTest3AbnormalLandingPoints
+	}
+	
+	int GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest3NotAllowedAerodynamicAuxiliariesPoints
+			}
+		}
+		return task.contest.landingTest3NotAllowedAerodynamicAuxiliariesPoints
 	}
 	
 	int GetLandingTest3PowerInAirPoints()
@@ -1272,6 +1312,16 @@ class Test
 			}
 		}
 		return task.contest.landingTest4AbnormalLandingPoints
+	}
+	
+	int GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints()
+	{
+		if (task.contest.resultClasses) {
+			if (crew.resultclass) {
+				return crew.resultclass.landingTest4NotAllowedAerodynamicAuxiliariesPoints
+			}
+		}
+		return task.contest.landingTest4NotAllowedAerodynamicAuxiliariesPoints
 	}
 	
 	int GetLandingTest4TouchingObstaclePoints()

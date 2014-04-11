@@ -94,11 +94,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <g:set var="legNo" value="${new Integer(0)}" />
-                                        <g:set var="legNum" value="${TestLegPlanning.countByTest(testInstance)}" />
+                                        <g:set var="leg_no" value="${new Integer(0)}" />
                                         <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
-                                            <g:set var="legNo" value="${legNo+1}" />
-                                            <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
+                                            <g:set var="leg_no" value="${leg_no+1}" />
+                                            <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">
                                             
                                             	<!-- search next id -->
                                             	<g:set var="next" value="${new Integer(0)}" />
@@ -113,13 +112,8 @@
                                                     </g:if>
         		                                </g:each>
         		                                
-                                                <td><g:testlegplanning2 var="${testlegplanning_instance}" name="${legNo}" next="${next}" link="${createLink(controller:'testLegPlanning',action:'edit')}"/></td>
-	                                            <g:if test="${legNo==legNum}">
-	                                                <td>${message(code:CoordType.FP.code)}</td>
-	                                            </g:if>
-	                                            <g:else>
-	                                                <td>${message(code:CoordType.TP.code)}${legNo}</td>
-	                                            </g:else>
+                                                <td><g:testlegplanning2 var="${testlegplanning_instance}" name="${leg_no}" next="${next}" link="${createLink(controller:'testLegPlanning',action:'edit')}"/></td>
+                                                <td>${testlegplanning_instance.coordTitle.titleCode()}</td>
                                                 <td>${message(code:'fc.test.results.plan')}</td>
                                                 <td>${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}${message(code:'fc.mile')}</td>
                                                 <td>${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}${message(code:'fc.grad')}</td>
@@ -127,7 +121,7 @@
                                                 <td>${FcMath.SpeedStr_Planning(testlegplanning_instance.planGroundSpeed)}${message(code:'fc.knot')}</td>
                                                 <td>${testlegplanning_instance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
                                             </tr>
-                                            <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
+                                            <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">
                                                 <td/>
                                                 <td/>
                                                 <td>${message(code:'fc.test.results.given')}</td>
@@ -149,7 +143,7 @@
                                                     <td>${message(code:'fc.unknown')}</td>
                                                 </g:else>
                                             </tr>
-                                            <tr class="${(legNo % 2) == 0 ? '' : 'odd'}">
+                                            <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">
                                                 <td/>
                                                 <td/>
                                                 <td>${message(code:'fc.test.results.penalty')}</td>

@@ -2,6 +2,8 @@ import java.text.*
 
 class TestLeg
 {
+	CoordTitle coordTitle               // DB-2.5
+	
 	// plan
 	BigDecimal planTrueTrack = 0        // Grad
 	BigDecimal planTestDistance = 0     // NM 
@@ -9,6 +11,7 @@ class TestLeg
 	BigDecimal planTrueHeading = 0      // Grad
 	BigDecimal planGroundSpeed = 0      // NM
 	BigDecimal planLegTime = 0          // h
+	Boolean planFullMinute = false      // DB-2.7
 
 	boolean planProcedureTurn = false
 	int planProcedureTurnDuration = 0   // min
@@ -91,6 +94,12 @@ class TestLeg
             }
             return false
 		})
+		
+		// DB-2.5 compatibility
+		coordTitle(nullable:true)
+		
+		// DB-2.7 compatibility
+		planFullMinute(nullable:true)
 	}
 	
     void ResetResults()
@@ -129,6 +138,9 @@ class TestLeg
 		if (planLegTime >= 0) {
 			time.add(Calendar.SECOND, FcMath.Seconds(planLegTime))
 		}
+		if (planFullMinute) {
+			FcMath.SetFullMinute(coordTitle.type,time)
+		}
 	    if (planProcedureTurn && planProcedureTurnDuration) {
             time.add(Calendar.SECOND, 60 * planProcedureTurnDuration )
 	    }
@@ -144,10 +156,34 @@ class TestLeg
         if (planLegTime >= 0) {
 			time.add(Calendar.SECOND, FcMath.RatioSeconds(planLegTime, partRatio))
         }
+		if (planFullMinute) {
+			FcMath.SetFullMinute(coordTitle.type,time)
+		}
         if (planProcedureTurn && planProcedureTurnDuration) {
             time.add(Calendar.SECOND, 60 * planProcedureTurnDuration )
         }
 
         return time.getTime()
     }
+	
+	BigDecimal AddPlanLegTime(BigDecimal timeValue, Date initTime)
+	{
+        GregorianCalendar time = new GregorianCalendar()
+        time.setTime(initTime)
+		int start_seconds = FcMath.Seconds(initTime)
+		
+		time.add(Calendar.SECOND, FcMath.Seconds(timeValue))
+		
+		if (planLegTime >= 0) {
+			time.add(Calendar.SECOND, FcMath.Seconds(planLegTime))
+		}
+		
+		if (planFullMinute) {
+			FcMath.SetFullMinute(coordTitle.type,time)
+		}
+		int end_seconds = FcMath.Seconds(time.getTime())
+
+		//return (FcMath.Seconds(timeValue) + FcMath.Seconds(planLegTime))/3600
+		return (end_seconds - start_seconds)/3600
+	}
 }

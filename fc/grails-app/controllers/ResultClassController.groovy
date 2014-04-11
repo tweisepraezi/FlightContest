@@ -197,7 +197,6 @@ class ResultClassController {
 		def listresults = {
 			def resultclass = fcService.getResultClass(params)
 			if (resultclass.instance) {
-	            session.lastTaskResults = null
 				session.lastResultClassResults = resultclass.instance.id
 				session.lastContestResults = null
 				session.lastTeamResults = null

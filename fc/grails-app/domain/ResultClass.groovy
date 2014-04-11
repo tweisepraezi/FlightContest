@@ -63,6 +63,7 @@ class ResultClass
 	int landingTest1GoAroundWithoutTouchingPoints = 200
 	int landingTest1GoAroundInsteadStopPoints = 200
 	int landingTest1AbnormalLandingPoints = 150
+	Integer landingTest1NotAllowedAerodynamicAuxiliariesPoints = 0 // DB-2.7
 	String landingTest1PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}"
 	
 	int landingTest2MaxPoints = 300
@@ -73,6 +74,7 @@ class ResultClass
 	int landingTest2GoAroundWithoutTouchingPoints = 200
 	int landingTest2GoAroundInsteadStopPoints = 200
 	int landingTest2AbnormalLandingPoints = 150
+	Integer landingTest2NotAllowedAerodynamicAuxiliariesPoints = 0 // DB-2.7
 	int landingTest2PowerInAirPoints = 200
 	String landingTest2PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}"
 	
@@ -84,6 +86,7 @@ class ResultClass
 	int landingTest3GoAroundWithoutTouchingPoints = 200
 	int landingTest3GoAroundInsteadStopPoints = 200
 	int landingTest3AbnormalLandingPoints = 150
+	Integer landingTest3NotAllowedAerodynamicAuxiliariesPoints = 0 // DB-2.7
 	int landingTest3PowerInAirPoints = 200
 	int landingTest3FlapsInAirPoints = 200
 	String landingTest3PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}"
@@ -96,6 +99,7 @@ class ResultClass
 	int landingTest4GoAroundWithoutTouchingPoints = 200
 	int landingTest4GoAroundInsteadStopPoints = 200
 	int landingTest4AbnormalLandingPoints = 150
+	Integer landingTest4NotAllowedAerodynamicAuxiliariesPoints = 0 // DB-2.7
 	int landingTest4TouchingObstaclePoints = 400
 	String landingTest4PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}"
 	
@@ -147,7 +151,6 @@ class ResultClass
 		landingTest1GoAroundInsteadStopPoints(blank:false, min:0)
 		landingTest1AbnormalLandingPoints(blank:false, min:0)
 		landingTest1PenaltyCalculator(blank:false, size:0..4096)
-		
 		
 		landingTest2MaxPoints(blank:false, min:0)
 		landingTest2NoLandingPoints(blank:false, min:0)
@@ -213,6 +216,12 @@ class ResultClass
 		printPointsZero(nullable:true)
 		printPointsLandscape(nullable:true)
 		printPointsA3(nullable:true)
+		
+		// DB-2.7 compatibility
+		landingTest1NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+		landingTest2NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+		landingTest3NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+		landingTest4NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
 	}
 
 	String GetPrintContestTitle()
@@ -388,6 +397,7 @@ class ResultClass
 		landingTest1GoAroundWithoutTouchingPoints = resultClassInstance.landingTest1GoAroundWithoutTouchingPoints
 		landingTest1GoAroundInsteadStopPoints = resultClassInstance.landingTest1GoAroundInsteadStopPoints
 		landingTest1AbnormalLandingPoints = resultClassInstance.landingTest1AbnormalLandingPoints
+		landingTest1NotAllowedAerodynamicAuxiliariesPoints = resultClassInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints
 		landingTest1PenaltyCalculator = resultClassInstance.landingTest1PenaltyCalculator
 		
 		landingTest2MaxPoints = resultClassInstance.landingTest2MaxPoints
@@ -398,6 +408,7 @@ class ResultClass
 		landingTest2GoAroundWithoutTouchingPoints = resultClassInstance.landingTest2GoAroundWithoutTouchingPoints
 		landingTest2GoAroundInsteadStopPoints = resultClassInstance.landingTest2GoAroundInsteadStopPoints
 		landingTest2AbnormalLandingPoints = resultClassInstance.landingTest2AbnormalLandingPoints
+		landingTest2NotAllowedAerodynamicAuxiliariesPoints = resultClassInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints
 		landingTest2PowerInAirPoints = resultClassInstance.landingTest2PowerInAirPoints
 		landingTest2PenaltyCalculator = resultClassInstance.landingTest2PenaltyCalculator
 		
@@ -409,6 +420,7 @@ class ResultClass
 		landingTest3GoAroundWithoutTouchingPoints = resultClassInstance.landingTest3GoAroundWithoutTouchingPoints
 		landingTest3GoAroundInsteadStopPoints = resultClassInstance.landingTest3GoAroundInsteadStopPoints
 		landingTest3AbnormalLandingPoints = resultClassInstance.landingTest3AbnormalLandingPoints
+		landingTest3NotAllowedAerodynamicAuxiliariesPoints = resultClassInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints
 		landingTest3PowerInAirPoints = resultClassInstance.landingTest3PowerInAirPoints
 		landingTest3FlapsInAirPoints = resultClassInstance.landingTest3FlapsInAirPoints
 		landingTest3PenaltyCalculator = resultClassInstance.landingTest3PenaltyCalculator
@@ -421,6 +433,7 @@ class ResultClass
 		landingTest4GoAroundWithoutTouchingPoints = resultClassInstance.landingTest4GoAroundWithoutTouchingPoints
 		landingTest4GoAroundInsteadStopPoints = resultClassInstance.landingTest4GoAroundInsteadStopPoints
 		landingTest4AbnormalLandingPoints = resultClassInstance.landingTest4AbnormalLandingPoints
+		landingTest4NotAllowedAerodynamicAuxiliariesPoints = resultClassInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints
 		landingTest4TouchingObstaclePoints = resultClassInstance.landingTest4TouchingObstaclePoints
 		landingTest4PenaltyCalculator = resultClassInstance.landingTest4PenaltyCalculator
 		

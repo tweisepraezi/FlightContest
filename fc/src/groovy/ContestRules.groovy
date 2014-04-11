@@ -1,6 +1,6 @@
 enum ContestRules 
 {
-	R1 ('fc.contestrule.de.rally.2012',
+	R1 ('fc.contestrule.de.rally.2014',
 		[
 			// General
 			precisionFlying:false,
@@ -51,6 +51,7 @@ enum ContestRules
 			landingTest1GoAroundWithoutTouchingPoints:200,
 			landingTest1GoAroundInsteadStopPoints:200,
 			landingTest1AbnormalLandingPoints:200,
+			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}",
 		
 			landingTest2MaxPoints:300,
@@ -61,6 +62,7 @@ enum ContestRules
 			landingTest2GoAroundWithoutTouchingPoints:200,
 			landingTest2GoAroundInsteadStopPoints:200,
 			landingTest2AbnormalLandingPoints:200,
+			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest2PowerInAirPoints:0,
 			landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}",
 			
@@ -72,6 +74,7 @@ enum ContestRules
 			landingTest3GoAroundWithoutTouchingPoints:200,
 			landingTest3GoAroundInsteadStopPoints:200,
 			landingTest3AbnormalLandingPoints:200,
+			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest3PowerInAirPoints:0,
 			landingTest3FlapsInAirPoints:0,
 			landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}",
@@ -84,6 +87,7 @@ enum ContestRules
 			landingTest4GoAroundWithoutTouchingPoints:200,
 			landingTest4GoAroundInsteadStopPoints:200,
 			landingTest4AbnormalLandingPoints:200,
+			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest4TouchingObstaclePoints:0,
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}"
 		]
@@ -139,6 +143,7 @@ enum ContestRules
 			landingTest1GoAroundWithoutTouchingPoints:0,
 			landingTest1GoAroundInsteadStopPoints:0,
 			landingTest1AbnormalLandingPoints:150,
+			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}",
 		
 			landingTest2MaxPoints:200,
@@ -149,6 +154,7 @@ enum ContestRules
 			landingTest2GoAroundWithoutTouchingPoints:0,
 			landingTest2GoAroundInsteadStopPoints:0,
 			landingTest2AbnormalLandingPoints:150,
+			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest2PowerInAirPoints:200,
 			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}",
 			
@@ -160,6 +166,7 @@ enum ContestRules
 			landingTest3GoAroundWithoutTouchingPoints:0,
 			landingTest3GoAroundInsteadStopPoints:0,
 			landingTest3AbnormalLandingPoints:150,
+			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest3PowerInAirPoints:200,
 			landingTest3FlapsInAirPoints:200,
 			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}",
@@ -172,6 +179,7 @@ enum ContestRules
 			landingTest4GoAroundWithoutTouchingPoints:0,
 			landingTest4GoAroundInsteadStopPoints:0,
 			landingTest4AbnormalLandingPoints:150,
+			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest4TouchingObstaclePoints:400,
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}"
 		]
@@ -227,6 +235,7 @@ enum ContestRules
 			landingTest1GoAroundWithoutTouchingPoints:200,
 			landingTest1GoAroundInsteadStopPoints:200,
 			landingTest1AbnormalLandingPoints:150,
+			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}",
 		
 			landingTest2MaxPoints:300,
@@ -237,6 +246,7 @@ enum ContestRules
 			landingTest2GoAroundWithoutTouchingPoints:200,
 			landingTest2GoAroundInsteadStopPoints:200,
 			landingTest2AbnormalLandingPoints:150,
+			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest2PowerInAirPoints:0,
 			landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}",
 			
@@ -248,6 +258,7 @@ enum ContestRules
 			landingTest3GoAroundWithoutTouchingPoints:200,
 			landingTest3GoAroundInsteadStopPoints:200,
 			landingTest3AbnormalLandingPoints:150,
+			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest3PowerInAirPoints:0,
 			landingTest3FlapsInAirPoints:0,
 			landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}",
@@ -260,6 +271,7 @@ enum ContestRules
 			landingTest4GoAroundWithoutTouchingPoints:200,
 			landingTest4GoAroundInsteadStopPoints:200,
 			landingTest4AbnormalLandingPoints:150,
+			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest4TouchingObstaclePoints:0,
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}"
 		]
@@ -315,6 +327,7 @@ enum ContestRules
 			landingTest1GoAroundWithoutTouchingPoints:0,
 			landingTest1GoAroundInsteadStopPoints:0,
 			landingTest1AbnormalLandingPoints:200,
+			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}",
 		
 			landingTest2MaxPoints:200,
@@ -325,6 +338,7 @@ enum ContestRules
 			landingTest2GoAroundWithoutTouchingPoints:0,
 			landingTest2GoAroundInsteadStopPoints:0,
 			landingTest2AbnormalLandingPoints:200,
+			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest2PowerInAirPoints:200,
 			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}",
 			
@@ -336,6 +350,7 @@ enum ContestRules
 			landingTest3GoAroundWithoutTouchingPoints:0,
 			landingTest3GoAroundInsteadStopPoints:0,
 			landingTest3AbnormalLandingPoints:200,
+			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest3PowerInAirPoints:200,
 			landingTest3FlapsInAirPoints:200,
 			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}",
@@ -348,6 +363,7 @@ enum ContestRules
 			landingTest4GoAroundWithoutTouchingPoints:0,
 			landingTest4GoAroundInsteadStopPoints:0,
 			landingTest4AbnormalLandingPoints:200,
+			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest4TouchingObstaclePoints:400,
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}"
 		]
@@ -403,6 +419,7 @@ enum ContestRules
 			landingTest1GoAroundWithoutTouchingPoints:0,
 			landingTest1GoAroundInsteadStopPoints:0,
 			landingTest1AbnormalLandingPoints:200,
+			landingTest1NotAllowedAerodynamicAuxiliariesPoints:200,
 			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}",
 		
 			landingTest2MaxPoints:200,
@@ -413,6 +430,7 @@ enum ContestRules
 			landingTest2GoAroundWithoutTouchingPoints:0,
 			landingTest2GoAroundInsteadStopPoints:0,
 			landingTest2AbnormalLandingPoints:200,
+			landingTest2NotAllowedAerodynamicAuxiliariesPoints:200,
 			landingTest2PowerInAirPoints:200,
 			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}",
 			
@@ -424,6 +442,7 @@ enum ContestRules
 			landingTest3GoAroundWithoutTouchingPoints:0,
 			landingTest3GoAroundInsteadStopPoints:0,
 			landingTest3AbnormalLandingPoints:200,
+			landingTest3NotAllowedAerodynamicAuxiliariesPoints:200,			
 			landingTest3PowerInAirPoints:200,
 			landingTest3FlapsInAirPoints:200,
 			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}",
@@ -436,6 +455,7 @@ enum ContestRules
 			landingTest4GoAroundWithoutTouchingPoints:0,
 			landingTest4GoAroundInsteadStopPoints:0,
 			landingTest4AbnormalLandingPoints:200,
+			landingTest4NotAllowedAerodynamicAuxiliariesPoints:200,
 			landingTest4TouchingObstaclePoints:400,
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}"
 		]

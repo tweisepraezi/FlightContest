@@ -149,40 +149,58 @@
                                             </g:else>
                                         </tr>
                                     
-                                        <g:set var="legNo" value="${new Integer(0)}" />
-                                        <g:set var="legNum" value="${TestLegFlight.countByTest(testInstance)}" />
-                                        <g:set var="tptime" value="${testInstance.startTime}" />
-                                        <g:set var="totalDistance" value="${new BigDecimal(0)}" />
-                                        <g:each var="testLegFlightInstance" in="${TestLegFlight.findAllByTest(testInstance,[sort:"id"])}">
-                                            <g:set var="legNo" value="${legNo+1}" />
-                                            <g:set var="tptime" value="${testLegFlightInstance.AddPlanLegTime(tptime)}" />
-                                            <g:set var="totalDistance" value="${FcMath.AddDistance(totalDistance,testLegFlightInstance.planTestDistance)}" />
-                                            <g:if test="${testLegFlightInstance.planProcedureTurn}">
-                                                <tr>
-                                                    <td class="center" colspan="8">${message(code:'fc.procedureturn')} (${testLegFlightInstance.test.task.procedureTurnDuration}${message(code:'fc.time.min')})</td>
-                                                </tr>
+                                        <g:set var="leg_no" value="${new Integer(0)}" />
+                                        <g:set var="leg_firstvalue" value="${true}"/>
+                                        <g:set var="leg_procedureturn" value="${false}"/>
+                                        <g:set var="leg_distance" value="${new BigDecimal(0)}" />
+                                        <g:set var="leg_plantruetrack" value="${new BigDecimal(0)}" />
+                                        <g:set var="leg_plantrueheading" value="${new BigDecimal(0)}" />
+                                        <g:set var="leg_plangroundspeed" value="${new BigDecimal(0)}" />
+                                        <g:set var="leg_duration" value="${new BigDecimal(0)}" />
+                                        <g:set var="leg_time" value="${testInstance.startTime}" />
+                                        <g:set var="total_distance" value="${new BigDecimal(0)}" />
+                                        
+                                        <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(testInstance,[sort:"id"])}">
+                                            <g:set var="leg_distance" value="${FcMath.AddDistance(leg_distance,testlegflight_instance.planTestDistance)}" />
+                                            <g:if test="${leg_firstvalue}">
+                                                <g:set var="leg_procedureturn" value="${testlegflight_instance.planProcedureTurn}"/>
+	                                            <g:set var="leg_plantruetrack" value="${testlegflight_instance.planTrueTrack}" />
+	                                            <g:set var="leg_plantrueheading" value="${testlegflight_instance.planTrueHeading}" />
+	                                            <g:set var="leg_plangroundspeed" value="${testlegflight_instance.planGroundSpeed}" />
+	                                        </g:if>
+                                            <g:set var="leg_duration" value="${testlegflight_instance.AddPlanLegTime(leg_duration,leg_time)}" />
+                                            <g:set var="leg_time" value="${testlegflight_instance.AddPlanLegTime(leg_time)}" />
+                                            <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,testlegflight_instance.planTestDistance)}" />
+                                            <g:if test="${testlegflight_instance.coordTitle.type != CoordType.SECRET}">
+	                                            <g:set var="leg_no" value="${leg_no+1}" />
+	                                            <g:if test="${leg_procedureturn}">
+	                                                <tr>
+	                                                    <td class="center" colspan="8">${message(code:'fc.procedureturn')} (${testlegflight_instance.test.task.procedureTurnDuration}${message(code:'fc.time.min')})</td>
+	                                                </tr>
+	                                            </g:if>
+	                                            <tr>
+	                                                <td>${leg_no}</td>
+	                                                <td>${FcMath.DistanceStr(leg_distance)}${message(code:'fc.mile')}</td>
+	                                                <td>${FcMath.GradStr(leg_plantruetrack)}${message(code:'fc.grad')}</td>
+	                                                <td>${FcMath.GradStr(leg_plantrueheading)}${message(code:'fc.grad')}</td>
+	                                                <td>${FcMath.SpeedStr_Flight(leg_plangroundspeed)}${message(code:'fc.knot')}</td>
+	                                                <td>${FcMath.TimeStr(leg_duration)}${message(code:'fc.time.h')}</td>
+	                                                <td>${testlegflight_instance.coordTitle.titleCode()}</td>
+	                                                <td>${FcMath.TimeStr(leg_time)}</td>
+	                                            </tr>
+	                                            <g:set var="leg_distance" value="${new BigDecimal(0)}" />
+                                                <g:set var="leg_duration" value="${new BigDecimal(0)}" />
+                                                <g:set var="leg_firstvalue" value="${true}"/>
                                             </g:if>
-                                            <tr>
-                                                <td>${legNo}</td>
-                                                <td>${FcMath.DistanceStr(testLegFlightInstance.planTestDistance)}${message(code:'fc.mile')}</td>
-                                                <td>${FcMath.GradStr(testLegFlightInstance.planTrueTrack)}${message(code:'fc.grad')}</td>
-                                                <td>${FcMath.GradStr(testLegFlightInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-                                                <td>${FcMath.SpeedStr_Flight(testLegFlightInstance.planGroundSpeed)}${message(code:'fc.knot')}</td>
-                                                <td>${testLegFlightInstance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
-                                                <g:if test="${legNo==legNum}">
-                                                    <td>${message(code:CoordType.FP.code)}</td>
-                                                </g:if>
-                                                <g:else>
-                                                    <td>${message(code:CoordType.TP.code)}${legNo}</td>
-                                                </g:else>
-                                                <td>${FcMath.TimeStr(tptime)}</td>
-                                            </tr>
+                                            <g:else>
+                                                <g:set var="leg_firstvalue" value="${false}"/>
+                                            </g:else>
                                         </g:each>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <td/>
-                                            <td colspan="4">${FcMath.DistanceStr(totalDistance)}${message(code:'fc.mile')} ${message(code:'fc.distance.total')}</td>
+                                            <td colspan="4">${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')} ${message(code:'fc.distance.total')}</td>
                                             <td colspan="2" align="right">${message(code:'fc.test.landing.latest')}:</td>
                                             <td>${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
                                         </tr>

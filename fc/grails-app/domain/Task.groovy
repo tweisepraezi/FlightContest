@@ -27,8 +27,13 @@ class Task
 	int planningTestDuration                 = 60    // duration of planning test [min]
 	int preparationDuration                  = 15    // duration of aircraft preparation [min]
 	int risingDuration                       = 5     // duration from takeoff to start point [min]
+	String risingDurationFormula             = "wind+:2NM" // DB-2.7
     int maxLandingDuration                   = 5     // duration from finish point to landing [min]
-    int parkingDuration                      = 10    // duration from finish point to aircraft parking [min] (> maxLandingDuration)
+	String maxLandingDurationFormula         = "wind+:2NM" // DB-2.7
+    int parkingDuration                      = 5     // change DB-2.7: duration of aircraft parking after landing [min]
+	                                                 // before DB-2.7: duration from finish point to aircraft parking [min] (> maxLandingDuration), 10 min
+	String iLandingDurationFormula           = "wind:1" // DB-2.7
+	String iRisingDurationFormula            = "wind+:2NM" // DB-2.7
 	
 	int minNextFlightDuration                = 30    // duration of aircraft maintenance between two flights [min]
 	int procedureTurnDuration                = 1     // duration of Procedure Turn [min]
@@ -52,23 +57,23 @@ class Task
 	Boolean printTimetableJuryNumber         = true  // DB-2.3
 	Boolean printTimetableJuryCrew           = true  // DB-2.3
 	Boolean printTimetableJuryAircraft       = true  // DB-2.3
-	Boolean printTimetableJuryAircraftType   = false // DB-2.3
+	Boolean printTimetableJuryAircraftType   = true  // DB-2.3
 	Boolean printTimetableJuryAircraftColour = false // DB-2.3
-	Boolean printTimetableJuryTAS            = true  // DB-2.3
+	Boolean printTimetableJuryTAS            = false // DB-2.3
 	Boolean printTimetableJuryTeam           = false // DB-2.3
 	Boolean printTimetableJuryPlanning       = true  // DB-2.3
 	Boolean printTimetableJuryPlanningEnd    = true  // DB-2.3
 	Boolean printTimetableJuryTakeoff        = true  // DB-2.3
-	Boolean printTimetableJuryStartPoint     = true  // DB-2.3
+	Boolean printTimetableJuryStartPoint     = false // DB-2.3
 	String  printTimetableJuryCheckPoints    = ""    // DB-2.3
-	Boolean printTimetableJuryFinishPoint    = true  // DB-2.3
+	Boolean printTimetableJuryFinishPoint    = false // DB-2.3
 	Boolean printTimetableJuryLanding        = true  // DB-2.3
 	Boolean printTimetableJuryArrival        = true  // DB-2.3
-	Boolean printTimetableJuryEmptyColumn1   = false // DB-2.3
+	Boolean printTimetableJuryEmptyColumn1   = true  // DB-2.3
 	String printTimetableJuryEmptyTitle1     = ""    // DB-2.3
-	Boolean printTimetableJuryEmptyColumn2   = false // DB-2.3
+	Boolean printTimetableJuryEmptyColumn2   = true  // DB-2.3
 	String printTimetableJuryEmptyTitle2     = ""    // DB-2.3
-	Boolean printTimetableJuryEmptyColumn3   = false // DB-2.3
+	Boolean printTimetableJuryEmptyColumn3   = true  // DB-2.3
 	String printTimetableJuryEmptyTitle3     = ""    // DB-2.3
 	Boolean printTimetableJuryLandscape      = true  // DB-2.3
 	Boolean printTimetableJuryA3             = false // DB-2.3
@@ -123,11 +128,7 @@ class Task
 		preparationDuration(range:0..240)
 		risingDuration(range:0..240)
         maxLandingDuration(range:0..240)
-		parkingDuration(range:0..240, validator:{ val, obj ->
-			if (val < obj.maxLandingDuration) {
-				return false
-			}
-		})
+		parkingDuration(range:0..240)
 		minNextFlightDuration(range:0..240)
 		procedureTurnDuration(range:0..60)
 		addTimeValue(range:1..60)
@@ -183,11 +184,97 @@ class Task
 		
 		// DB-2.4 compatibility
 		takeoffIntervalSlowerAircraft(nullable:true,range:0..240)
+
+		// DB-2.7 compatibility
+		risingDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+		maxLandingDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+		iLandingDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+		iRisingDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
 	}
 
     static mapping = {
 		tests sort:"id"
 		taskclasses sort:"id"
+	}
+	
+	static boolean DurationValid(val, obj)
+	{
+		if (val) {
+			if (val.startsWith('time+:')) {
+				if (val.endsWith('min')) {
+					String f = val.substring(6,val.size()-3).replace(',','.')
+					if (f.isInteger()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('time:')) {
+				if (val.endsWith('min')) {
+					String f = val.substring(5,val.size()-3).replace(',','.')
+					if (f.isInteger()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('wind+:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(6,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(6,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('wind:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(5,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(5,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('nowind+:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(8,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(8,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('nowind:')) {
+				if (val.endsWith('NM')) {
+					String f = val.substring(7,val.size()-2).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				} else {
+					String f = val.substring(7,val.size()).replace(',','.')
+					if (f.isBigDecimal()) {
+						return true
+					}
+				}
+			} else if (val.startsWith('func+:')) {
+				String f = val.substring(6,val.size())
+				if (f) {
+					return true
+				}
+			} else if (val.startsWith('func:')) {
+				String f = val.substring(5,val.size())
+				if (f) {
+					return true
+				}
+			}
+		}
+		return false
 	}
 	
 	void CopyValues(Task taskInstance)
@@ -210,8 +297,12 @@ class Task
 		planningTestDuration = taskInstance.planningTestDuration
 		preparationDuration = taskInstance.preparationDuration
 		risingDuration = taskInstance.risingDuration
+		risingDurationFormula = taskInstance.risingDurationFormula
 	    maxLandingDuration = taskInstance.maxLandingDuration
+	    maxLandingDurationFormula = taskInstance.maxLandingDurationFormula
 	    parkingDuration = taskInstance.parkingDuration
+		iLandingDurationFormula = taskInstance.iLandingDurationFormula
+		iRisingDurationFormula = taskInstance.iRisingDurationFormula
 		minNextFlightDuration = taskInstance.minNextFlightDuration
 		procedureTurnDuration = taskInstance.procedureTurnDuration
 		addTimeValue = taskInstance.addTimeValue  
@@ -272,8 +363,12 @@ class Task
 		planningTestDuration = taskInstance.planningTestDuration
 		preparationDuration = taskInstance.preparationDuration
 		risingDuration = taskInstance.risingDuration
+		risingDurationFormula = taskInstance.risingDurationFormula
 	    maxLandingDuration = taskInstance.maxLandingDuration
+	    maxLandingDurationFormula = taskInstance.maxLandingDurationFormula
 	    parkingDuration = taskInstance.parkingDuration
+		iLandingDurationFormula = taskInstance.iLandingDurationFormula
+		iRisingDurationFormula = taskInstance.iRisingDurationFormula
 		minNextFlightDuration = taskInstance.minNextFlightDuration
 		procedureTurnDuration = taskInstance.procedureTurnDuration
 		addTimeValue = taskInstance.addTimeValue  
@@ -788,4 +883,8 @@ class Task
 		return null
 	}
 
+	boolean IsFullMinute(String durationValue)
+	{
+		return durationValue.contains('+:')
+	}
 }

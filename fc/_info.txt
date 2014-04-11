@@ -1,16 +1,16 @@
-Code
+ï»¿Code
 ====
 
 <domain class>.list()
 <domain class>.count()
 ----------------------
-Nicht verwenden. Immer einen Bezug zu einem Contest benutzen (außer Contest.list() zur Contest-Wahl).
+Nicht verwenden. Immer einen Bezug zu einem Contest benutzen (auÃŸer Contest.list() zur Contest-Wahl).
 
 Neue DB-Felder
 --------------
 markieren mit // Grund, DB-2.1
 
-Primitve Typen nicht updatefähig, Object-Typen verwenden:
+Primitve Typen nicht updatefÃ¤hig, Object-Typen verwenden:
   boolean -> Boolean
   int -> Integer
 
@@ -19,15 +19,16 @@ Plugins
 
 excel-import-1.0.0
 ------------------
-benötigt zur Übersetzbarkeit joda-time-1.6.2.jar
+benÃ¶tigt zur Ãœbersetzbarkeit joda-time-1.6.2.jar
  
 class-diagram-0.5.2
 -------------------
-benötigt zur Laufzeit Graphviz (K:\Projects\Install\Windows\Graphviz)
+benÃ¶tigt zur Laufzeit Graphviz (K:\Projects\Install\Windows\Graphviz)
 http://localhost:8080/fc/classDiagram
 
 Development
 ===========
+-Dgrails.env=lastdb run-app
 run-app --stacktrace -noreloading
 
 Caused by: java.lang.OutOfMemoryError: PermGen space

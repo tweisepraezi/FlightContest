@@ -128,37 +128,35 @@
 	                                    </tr>
 	                                </thead>
 	                                <tbody>
-	                                    <g:set var="penaltyTrueHeadingSummary" value="${new Integer(0)}" />
-	                                    <g:set var="penaltyLegTimeSummary" value="${new Integer(0)}" />
-	                                    <g:set var="legNo" value="${new Integer(0)}" />
-	                                    <g:each var="testLegPlanningInstance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
-	                                        <g:if test="${lastTestLegPlanningInstance}">
-	                                            <g:set var="penaltyTrueHeadingSummary" value="${penaltyTrueHeadingSummary + lastTestLegPlanningInstance.penaltyTrueHeading}" />
-	                                            <g:set var="penaltyLegTimeSummary" value="${penaltyLegTimeSummary + lastTestLegPlanningInstance.penaltyLegTime}" />
+	                                    <g:set var="penalty_trueheading_summary" value="${new Integer(0)}" />
+	                                    <g:set var="penalty_legtime_summary" value="${new Integer(0)}" />
+	                                    <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
+	                                        <g:if test="${last_testlegplanning_instance}">
+	                                            <g:set var="penalty_trueheading_summary" value="${penalty_trueheading_summary + last_testlegplanning_instance.penaltyTrueHeading}" />
+	                                            <g:set var="penalty_legtime_summary" value="${penalty_legtime_summary + last_testlegplanning_instance.penaltyLegTime}" />
 	                                            <tr>
-	                                                <td>${message(code:CoordType.TP.code)}${legNo}</td>
-	                                                <td>${FcMath.GradStr(lastTestLegPlanningInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-	                                                <td>${FcMath.GradStrComma(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
-	                                                <td>${lastTestLegPlanningInstance.penaltyTrueHeading}</td>
-	                                                <td>${FcMath.TimeStr(lastTestLegPlanningInstance.planLegTime)}</td>
-	                                                <td>${FcMath.TimeStr(lastTestLegPlanningInstance.resultLegTime)}</td>
-	                                                <td>${lastTestLegPlanningInstance.penaltyLegTime}</td>
+	                                                <td>${last_testlegplanning_instance.coordTitle.titleCode()}</td>
+	                                                <td>${FcMath.GradStr(last_testlegplanning_instance.planTrueHeading)}${message(code:'fc.grad')}</td>
+	                                                <td>${FcMath.GradStrComma(last_testlegplanning_instance.resultTrueHeading)}${message(code:'fc.grad')}</td>
+	                                                <td>${last_testlegplanning_instance.penaltyTrueHeading}</td>
+	                                                <td>${FcMath.TimeStr(last_testlegplanning_instance.planLegTime)}</td>
+	                                                <td>${FcMath.TimeStr(last_testlegplanning_instance.resultLegTime)}</td>
+	                                                <td>${last_testlegplanning_instance.penaltyLegTime}</td>
 	                                            </tr>
 	                                        </g:if>
-	                                        <g:set var="lastTestLegPlanningInstance" value="${testLegPlanningInstance}" />
-	                                        <g:set var="legNo" value="${legNo+1}" />
+	                                        <g:set var="last_testlegplanning_instance" value="${testlegplanning_instance}" />
 	                                    </g:each>
-	                                    <g:if test="${lastTestLegPlanningInstance}">
-	                                        <g:set var="penaltyTrueHeadingSummary" value="${penaltyTrueHeadingSummary + lastTestLegPlanningInstance.penaltyTrueHeading}" />
-	                                        <g:set var="penaltyLegTimeSummary" value="${penaltyLegTimeSummary + lastTestLegPlanningInstance.penaltyLegTime}" />
+	                                    <g:if test="${last_testlegplanning_instance}">
+	                                        <g:set var="penalty_trueheading_summary" value="${penalty_trueheading_summary + last_testlegplanning_instance.penaltyTrueHeading}" />
+	                                        <g:set var="penalty_legtime_summary" value="${penalty_legtime_summary + last_testlegplanning_instance.penaltyLegTime}" />
 	                                        <tr>
-	                                            <td>${message(code:CoordType.FP.code)}</td>
-	                                            <td>${FcMath.GradStr(lastTestLegPlanningInstance.planTrueHeading)}${message(code:'fc.grad')}</td>
-	                                            <td>${FcMath.GradStrComma(lastTestLegPlanningInstance.resultTrueHeading)}${message(code:'fc.grad')}</td>
-	                                            <td>${lastTestLegPlanningInstance.penaltyTrueHeading}</td>
-	                                            <td>${FcMath.TimeStr(lastTestLegPlanningInstance.planLegTime)}</td>
-	                                            <td>${FcMath.TimeStr(lastTestLegPlanningInstance.resultLegTime)}</td>
-	                                            <td>${lastTestLegPlanningInstance.penaltyLegTime}</td>
+	                                            <td>${last_testlegplanning_instance.coordTitle.titleCode()}</td>
+	                                            <td>${FcMath.GradStr(last_testlegplanning_instance.planTrueHeading)}${message(code:'fc.grad')}</td>
+	                                            <td>${FcMath.GradStrComma(last_testlegplanning_instance.resultTrueHeading)}${message(code:'fc.grad')}</td>
+	                                            <td>${last_testlegplanning_instance.penaltyTrueHeading}</td>
+	                                            <td>${FcMath.TimeStr(last_testlegplanning_instance.planLegTime)}</td>
+	                                            <td>${FcMath.TimeStr(last_testlegplanning_instance.resultLegTime)}</td>
+	                                            <td>${last_testlegplanning_instance.penaltyLegTime}</td>
 	                                        </tr>
 	                                    </g:if>
 	                                </tbody>
@@ -167,10 +165,10 @@
 	                                        <td/>
 	                                        <td/>
 	                                        <td/>
-	                                        <td>${penaltyTrueHeadingSummary}</td>
+	                                        <td>${penalty_trueheading_summary}</td>
 	                                        <td/>
 	                                        <td/>
-	                                        <td>${penaltyLegTimeSummary}</td>
+	                                        <td>${penalty_legtime_summary}</td>
 	                                    </tr>
 	                                </tfoot>
 			                    </g:if>

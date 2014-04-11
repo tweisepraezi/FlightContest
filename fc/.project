@@ -38,10 +38,5 @@
 			<type>1</type>
 			<location>K:/Projects/GIT/FlightContest/readme.txt</location>
 		</link>
-		<link>
-			<name>screenshots</name>
-			<type>2</type>
-			<location>K:/Projects/GIT/FlightContest/screenshots</location>
-		</link>
 	</linkedResources>
 </projectDescription>

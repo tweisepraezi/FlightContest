@@ -79,11 +79,10 @@
                                     <g:set var="print_timetablejury_checkpoints" value="${taskInstance.printTimetableJuryCheckPoints},"/>
                                     <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(test_instance,[sort:"id"])}">
                                         <g:set var="leg_no" value="${leg_no+1}" />
+                                        <g:set var="leg_name" value="${testlegflight_instance.coordTitle.titleCode()}"/>
                                         <g:if test="${leg_no==leg_num}">
-                                            <g:set var="leg_name" value="${message(code:CoordType.FP.code)}"/>
                                         </g:if>
                                         <g:else>
-                                            <g:set var="leg_name" value="${message(code:CoordType.TP.code)}${leg_no}"/>
                                             <div>
                                                 <g:set var="leg_checkpoint" value="${leg_no},"/>
                                                 <g:if test="${print_timetablejury_checkpoints.contains(leg_checkpoint)}">

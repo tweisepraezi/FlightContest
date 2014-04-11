@@ -6,7 +6,7 @@ class Contest
 	static final int IMAGEHEIGHT = 50                   // DB-2.3
 	static final String TITLESIZE = "2.5em"             // DB-2.3
 	
-	static final String DEMOCONTESTYEAR = "2013"        // Jahr der Demo-Wettbewerbe
+	static final String DEMOCONTESTYEAR = "2014"        // Jahr der Demo-Wettbewerbe
 	
 	String title = "Wettbewerbsname"
 	int mapScale = 200000
@@ -94,6 +94,7 @@ class Contest
 	int landingTest1GoAroundWithoutTouchingPoints = 200 // DB-2.0
 	int landingTest1GoAroundInsteadStopPoints = 200     // DB-2.0
 	int landingTest1AbnormalLandingPoints = 150         // DB-2.0
+	Integer landingTest1NotAllowedAerodynamicAuxiliariesPoints = 0// DB-2.7
 	String landingTest1PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
 
 	int landingTest2MaxPoints = 300                     // DB-2.0
@@ -104,6 +105,7 @@ class Contest
 	int landingTest2GoAroundWithoutTouchingPoints = 200 // DB-2.0
 	int landingTest2GoAroundInsteadStopPoints = 200     // DB-2.0
 	int landingTest2AbnormalLandingPoints = 150         // DB-2.0
+	Integer landingTest2NotAllowedAerodynamicAuxiliariesPoints = 0// DB-2.7
 	int landingTest2PowerInAirPoints = 200              // DB-2.0
 	String landingTest2PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
 	
@@ -115,6 +117,7 @@ class Contest
 	int landingTest3GoAroundWithoutTouchingPoints = 200 // DB-2.0
 	int landingTest3GoAroundInsteadStopPoints = 200     // DB-2.0
 	int landingTest3AbnormalLandingPoints = 150         // DB-2.0
+	Integer landingTest3NotAllowedAerodynamicAuxiliariesPoints = 0// DB-2.7
 	int landingTest3PowerInAirPoints = 200              // DB-2.0
 	int landingTest3FlapsInAirPoints = 200              // DB-2.0
 	String landingTest3PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
@@ -127,6 +130,7 @@ class Contest
 	int landingTest4GoAroundWithoutTouchingPoints = 200 // DB-2.0
 	int landingTest4GoAroundInsteadStopPoints = 200     // DB-2.0
 	int landingTest4AbnormalLandingPoints = 150         // DB-2.0
+	Integer landingTest4NotAllowedAerodynamicAuxiliariesPoints = 0// DB-2.7
 	int landingTest4TouchingObstaclePoints = 400        // DB-2.0
 	String landingTest4PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
 	
@@ -137,6 +141,8 @@ class Contest
 	Boolean printCrewTeam = true                        // DB-2.3
 	Boolean printCrewClass = true                       // DB-2.3
 	Boolean printCrewAircraft = true                    // DB-2.3
+	Boolean printCrewAircraftType = false               // DB-2.7
+	Boolean printCrewAircraftColour = false             // DB-2.7
 	Boolean printCrewTAS = true                         // DB-2.3
 	Boolean printCrewEmptyColumn1 = false               // DB-2.3
 	String printCrewEmptyTitle1 = ""                    // DB-2.3
@@ -167,6 +173,10 @@ class Contest
 	byte[] imageRight = null                            // DB-2.3
 	Integer imageRightHeight = IMAGEHEIGHT              // DB-2.3
 	String titleSize = TITLESIZE                        // DB-2.3
+	BigDecimal a3PortraitFactor = 1.414                 // DB-2.7
+	BigDecimal a4LandscapeFactor = 1                    // DB-2.7
+	BigDecimal a3LandscapeFactor = 1                    // DB-2.7
+
 
 	// transient values
 	static transients = ['copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
@@ -332,6 +342,17 @@ class Contest
 		flightTestFalseEnvelopeOpenedPoints(nullable:true, min:0)
 		flightTestSafetyEnvelopeOpenedPoints(nullable:true, min:0)
 		flightTestFrequencyNotMonitoredPoints(nullable:true, min:0)
+		
+		// DB-2.7 compatibility
+		landingTest1NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+		landingTest2NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+		landingTest3NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+		landingTest4NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+		printCrewAircraftType(nullable:true)
+		printCrewAircraftColour(nullable:true)
+		a3PortraitFactor(nullable:true)
+		a4LandscapeFactor(nullable:true)
+		a3LandscapeFactor(nullable:true)
 	}
 
     static mapping = {
@@ -392,6 +413,7 @@ class Contest
 				landingTest1GoAroundWithoutTouchingPoints = contestInstance.landingTest1GoAroundWithoutTouchingPoints
 				landingTest1GoAroundInsteadStopPoints = contestInstance.landingTest1GoAroundInsteadStopPoints
 				landingTest1AbnormalLandingPoints = contestInstance.landingTest1AbnormalLandingPoints
+				landingTest1NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest1NotAllowedAerodynamicAuxiliariesPoints
 				landingTest1PenaltyCalculator = contestInstance.landingTest1PenaltyCalculator
 				
 				
@@ -403,6 +425,7 @@ class Contest
 				landingTest2GoAroundWithoutTouchingPoints = contestInstance.landingTest2GoAroundWithoutTouchingPoints
 				landingTest2GoAroundInsteadStopPoints = contestInstance.landingTest2GoAroundInsteadStopPoints
 				landingTest2AbnormalLandingPoints = contestInstance.landingTest2AbnormalLandingPoints
+				landingTest2NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest2NotAllowedAerodynamicAuxiliariesPoints
 				landingTest2PowerInAirPoints = contestInstance.landingTest2PowerInAirPoints
 				landingTest2PenaltyCalculator = contestInstance.landingTest2PenaltyCalculator
 				
@@ -414,6 +437,7 @@ class Contest
 				landingTest3GoAroundWithoutTouchingPoints = contestInstance.landingTest3GoAroundWithoutTouchingPoints
 				landingTest3GoAroundInsteadStopPoints = contestInstance.landingTest3GoAroundInsteadStopPoints
 				landingTest3AbnormalLandingPoints = contestInstance.landingTest3AbnormalLandingPoints
+				landingTest3NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest3NotAllowedAerodynamicAuxiliariesPoints
 				landingTest3PowerInAirPoints = contestInstance.landingTest3PowerInAirPoints
 				landingTest3FlapsInAirPoints = contestInstance.landingTest3FlapsInAirPoints
 				landingTest3PenaltyCalculator = contestInstance.landingTest3PenaltyCalculator
@@ -426,6 +450,7 @@ class Contest
 				landingTest4GoAroundWithoutTouchingPoints = contestInstance.landingTest4GoAroundWithoutTouchingPoints
 				landingTest4GoAroundInsteadStopPoints = contestInstance.landingTest4GoAroundInsteadStopPoints
 				landingTest4AbnormalLandingPoints = contestInstance.landingTest4AbnormalLandingPoints
+				landingTest4NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints
 				landingTest4TouchingObstaclePoints = contestInstance.landingTest4TouchingObstaclePoints
 				landingTest4PenaltyCalculator = contestInstance.landingTest4PenaltyCalculator
 			} else {

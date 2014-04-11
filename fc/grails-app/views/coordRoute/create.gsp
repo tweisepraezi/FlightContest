@@ -22,7 +22,7 @@
                             <p>
                                 <label>${message(code:'fc.typename')}:</label>
                                 <br/>
-                                <g:select from="${CoordType.listNextValues(coordRouteInstance.type)}" name="type" value="${coordRouteInstance.type}" optionValue="title" />
+                                <g:select from="${coordRouteInstance.type.ListNextValues(existiFP)}" name="type" value="${coordRouteInstance.type}" optionValue="title" />
                             </p>
                         </fieldset>
                         <fieldset>
@@ -64,6 +64,10 @@
                             <div>
                                 <g:checkBox name="noTimeCheck" value="${coordRouteInstance.noTimeCheck}" />
                                 <label>${message(code:'fc.notimecheck')}</label>
+                            </div>
+                            <div>
+                                <g:checkBox name="noPlanningTest" value="${coordRouteInstance.noPlanningTest}" />
+                                <label>${message(code:'fc.noplanningtest')}</label>
                             </div>
                         </fieldset>
                         <input type="hidden" name="titleNumber" value="${coordRouteInstance.titleNumber}" />

@@ -1,5 +1,5 @@
 
-Flight Contest 2.1.3
+Flight Contest 2.2.0
 Copyright 2013 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de
@@ -24,7 +24,7 @@ http://www.apache.org
 
 ============================================================================
 
-Grails, release 2.3.4
+Grails, release 2.3.6
 
 http://grails.org
 

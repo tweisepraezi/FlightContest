@@ -77,7 +77,7 @@
 	                                        </tr>
 	                                    </g:if>
 	                                    <tr>
-	                                        <td width="20%">${routelegcoord_instance.title}</td>
+	                                        <td width="20%">${routelegcoord_instance.GetPrintTitle()}</td>
 	                                        <td>${routelegcoord_instance.testName()}</td>
 	                                    </tr>
 	                                </g:each>
@@ -99,17 +99,17 @@
                                     </tr>
                                 </thead>
 	                            <tbody>
-	                                <g:each var="routelettest_instance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
-                                        <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routelettest_instance.testDistance())}" />
-                                        <g:set var="course_change" value="${AviationMath.courseChange(routelettest_instance.turnTrueTrack,routelettest_instance.testTrueTrack())}"/>
+	                                <g:each var="routelegtest_instance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
+                                        <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routelegtest_instance.testDistance())}" />
+                                        <g:set var="course_change" value="${AviationMath.courseChange(routelegtest_instance.turnTrueTrack,routelegtest_instance.testTrueTrack())}"/>
                                         <g:if test="${course_change.abs() >= 90}">
                                             <tr>
                                                 <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
                                             </tr>
                                         </g:if>
 	                                    <tr>
-	                                        <td width="20%">${routelettest_instance.title}</td>
-	                                        <td>${routelettest_instance.testName()}</td>
+	                                        <td width="20%">${routelegtest_instance.GetPrintTitle()}</td>
+	                                        <td>${routelegtest_instance.testName()}</td>
 	                                    </tr>
 	                                </g:each>
 	                            </tbody>
