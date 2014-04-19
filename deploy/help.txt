@@ -10,6 +10,7 @@ Inhalt
 - Streckenplanung
 - Flugzeit-Berechnung für Starts und Landungen
 - Landungen
+- Unterstützte Logger
 - Datensicherung eines laufenden Wettbewerbes
 
 
@@ -521,6 +522,70 @@ mit folgenden Feldern aus:
 Drucken Sie nicht die Besatzung aus, da dass dem Regelwerk widerspricht.
 Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig
 über die konkrete Besatzung eines Flugzeuges wissen.
+
+
+Unterstützte Logger
+===================
+
+AFLOS (direkt)
+--------------
+- Logger-Auslese-Software: 'AFLOS 2.13'
+- Logger-Aufzeichung auslesen: 'AFLOS -> Read Data -> Competitor-Nr -> Read AFLOS'
+
+AFLOS (mit Reader)
+------------------
+- Logger-Auslese-Software: 'AFLOS Reader 2.04'
+- Logger-Aufzeichung auslesen und GAC-Datei erzeugen: 'AFLOS Reader -> Competitor-Nr -> Read AFLOS'
+- Logger-Aufzeichung löschen: direkt am AFLOS-Logger
+- GAC-Datei zur Auswertung importieren: 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
+- Einsatz bei Präzisionsflug-Wettbewerben anstelle des direkten Einlesens zwecks
+  * standardisierte Koordinaten-Genauigkeit
+  * zusätzliche Datensicherheit durch separat gespeicherte Logger-Aufzeichungen
+  * paralleles Auslesen mehrerer Logger
+
+AirOpserver basierte Logger
+---------------------------
+- Logger-Auslese-Software: 'Air Observer 1.8'
+- Logger-Einstellung: 'Air Observer -> Logger -> Configure'
+- Logger-Aufzeichung auslesen: 'Air Observer -> Logger -> Download'
+  * Auslesen sehr langsam
+- GAC-Datei erzeugen: 'Air Observer -> File -> Export -> GAC'
+- Logger-Aufzeichung löschen: 'Air Observer -> Logger -> Clear'
+- GAC-Datei zur Auswertung importieren: 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
+
+DG-100
+------
+- Logger-Einstellungs-Software: 'Data Logger Utility S-OPC-0L-110631'
+- Logger-Einstellung: 'Data Logger Utility -> Settings -> Configuration'
+- Logger-Auslese-Software: 'FSNavigator.net 2.0.0.90'
+- Logger-Aufzeichung auslesen: 'FSNavigator.net -> Plugins -> FRPocket device -> Download tracks'
+- GAC-Datei erzeugen: 
+  * 'FSNavigator.net -> Logger-Object -> Save'
+  * 'Flight Contest -> Extras -> Tracks einer GAC-Datei reparieren'
+- Logger-Aufzeichung löschen: 'FSNavigator.net -> Plugins -> FRPocket device -> Clear memory'
+- GAC-Datei zur Auswertung importieren: 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
+
+DG-200
+------ 
+- Logger-Auslese-Software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'
+- Logger-Einstellung: 'DG200Tool.exe -> Device -> Device settings'
+  * Data logging format: "Position,Time,Date,Speed,Altitude" wählen
+  * "Enable WAAS" aktivieren
+  * "Disable data logging if speed falls below a threshold" aktivieren und "30" km/hour einstellen
+  * "Disable data logging if distance is less then teh selected radius" deaktivieren (Standard)
+  * Data logging intervall mode: "By time" aktivieren (Standard) und "1" seconds einstellen
+- Logger-Aufzeichung auslesen: 'DG200Tool.exe -> Device -> Download all track points'
+- GAC-Datei erzeugen:
+  * 'DG200Tool.exe -> File -> Save' aufrufen und "*.gpx" wählen
+  * 'Flight Contest -> Extras -> GPX-Datei in GAC-Datei konvertieren'
+- Logger-Aufzeichung löschen: 'DG200Tool.exe -> Device -> Delete all track points'
+- GAC-Datei zur Auswertung importieren: 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
+- Anforderungen an GPX-Datei-Inhalt
+  * darf nur eine Strecken-Aufzeichnung beinhalten
+    (wenn nein, andere Strecken-Aufzeichnungen manuell in Datei löschen)
+  * Zeiten in UTC
+  * Aufzeichnungs-Intervall: 1 Sekunde
+  * mit Höhen-Angaben in Meter
 
 
 Datensicherung eines laufenden Wettbewerbes

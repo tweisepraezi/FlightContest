@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-08.04.2014
+19.04.2014
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -48,8 +48,19 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Erweiterungen in dieser Version (2.2.0):
-----------------------------------------
+Fehlerbehebungen und Erweiterungen in dieser Version (2.2.1):
+-------------------------------------------------------------
+- Unterstützung des Loggers DG-200
+    Dieser Logger speichert Flug-Informationen in GPX-Dateien.
+    Aus diesen GPX-Dateien müssen mit 'Extras -> GPX-Datei in GAC-Datei konvertieren'
+    GAC-Dateien erzeugt werden, die in AFLOS zu importieren sind.
+    Siehe 'Programme -> Flight Contest -> Help' -> 'Unterstützte Logger'.
+- Fehler in Strecken-Kartenansicht (Strecken-Details -> 'Streckenkarte') behoben
+    Strecken-Punkte wurden manchmal nicht in der korrekten Reihenfolge 
+    miteinander verbunden.
+
+Erweiterungen in Version 2.2.0:
+-------------------------------
 - Unterstützung der AFLOS-Intermediate-Punkte iFP, iLDG, iT/O und iSP.
     Bei Strecken mit einer Touch&Go-Zwischenlandung sind iFP, iLDG und iSP
     in die Strecke einzubauen.

@@ -33,7 +33,7 @@
               map = new google.maps.Map(document.getElementById('map-canvas'),map_options);
               
               <g:set var="last_coordroute_instance" value="${null}"/>
-              <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance)}" status="i">
+              <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:'id'])}" status="i">
                   <g:if test="${last_coordroute_instance}">
                       var coords = [
                         new google.maps.LatLng(${last_coordroute_instance.latMath()},${last_coordroute_instance.lonMath()}),

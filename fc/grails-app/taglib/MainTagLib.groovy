@@ -202,6 +202,8 @@ class MainTagLib
             outln """<div class="grid">"""
 			outln """  <ul class="nav main">"""
             outln """    <li> <a href="${p.link}/../../global/changeglobalsettings">${message(code:'fc.changeglobalsettings')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair.track')}</a> </li>"""
 			if (Environment.currentEnvironment == Environment.DEVELOPMENT ) {
 				outln """    <li> <a href="${p.link}/../../classDiagram" target="_blank">${message(code:'fc.classdiagram')}</a> </li>"""
 				outln """    <li> <a href="${p.link}/../../dbUtil" target="_blank">${message(code:'fc.dbutil')}</a> </li>"""

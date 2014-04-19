@@ -1,3 +1,6 @@
+import java.math.BigDecimal;
+import java.util.Map;
+
 import java.util.Date
 
 import org.xhtmlrenderer.pdf.ITextRenderer

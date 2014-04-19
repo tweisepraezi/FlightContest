@@ -7,4 +7,7 @@
 /target-eclipse
 /CREWLIST-UPLOAD.xls
 /AFLOS-UPLOAD.mdb
+/GAC-UPLOAD.gac
+/GAC-DOWNLOAD.gac
+/GPX-UPLOAD.gpx
 /hs_err*.log

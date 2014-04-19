@@ -8,8 +8,8 @@ class AviationMath
 	// Berechnet Kurs und Entfernung einer Etappe von Koordinate scr... zur Koordinate dest...
 	//   Latitude (Geographische Breite: -90 ... +90 Grad)
 	//   Longitude (Geographische Laenge: -179.999 ... +180 Grad)
-	// Rückgabe: distance in NM
-	//           direction in Grad (0...359.999) 
+	// Rückgabe: dis in NM
+	//           dir in Grad (0...359.999) 
 	{
 		// calculate leg distance
 		BigDecimal latitude_diff = destLatitude - srcLatitude
