@@ -52,10 +52,12 @@ A. Wettbewerbs-Vorbereitung
    - Einstellungen je Aufgabe festlegen:
        * Anfangs-Zeit
        * TakeOff-Abstand (bei vorhandenen Wendeschleifen min. 2 Minuten)
-       * Zeit T/O -> SP (feste Zeit, muss für langsamstes Flugzeug kalkuliert sein)
-       * Vorhandene Wendeschleifen mit 1min fliegen (ja/nein)
-       * Zeit FP -> Landung (-> späteste Landezeit)
-       * Zeit FP -> Abstellen des Flugzeuges
+       * Flugzeit-Berechnungsverfahren T/O -> SP
+       * Flugzeit-Berechnungsverfahren FP -> LDG (zur Ermittlung der spätesten Landezeit)
+       * Zeit Landung -> Abstellen des Flugzeuges
+       * Vorhandene Wendeschleifen mit 1 Minute fliegen (ja/nein)
+       * Flugzeit-Berechnungsverfahren iFP -> iLDG (bei Touch & Go-Landungen)
+       * Flugzeit-Berechnungsverfahren iT/O -> iSP (bei Touch & Go-Landungen)
    - Auswertungs-Einstellungen des Wettbewerbs festlegen:
        * Wendepunkte für Zeitauswertung festlegen (alle/zu wertende Wendepunkte)
        * Zeitauswertung für unbekannte Zeitkontrollen für jede Klasse festlegen
@@ -415,6 +417,12 @@ Eine AFLOS-Referenz-Strecke ist zur Verwendung in 'Flight Contest' zu importiere
 Damit vorgenommene Markierungen funktionieren, importieren Sie die AFLOS-Strecke
 mit der Option "Check-Punkte mit Torbreite 2NM oder Markierung $secret" (Default).
 
+Prüfen Sie Ihre importierte Strecke (Strecken -> Strecken-Name -> Auswerte-Etappen):
+  * Entfernungen plausibel?
+  * Gesamt-Entfernung plausibel?
+  * Wendeschleifen (Kursänderungen > 90 Grad) korrekt?
+    (unerwünschte Wendeschleifen können durch eine $track-Angabe entfernt werden)
+
 
 Flugzeit-Berechnung für Starts und Landungen
 ============================================
@@ -471,6 +479,11 @@ Anwendungsbeispiele:
   wind+:1.3     Berechnete Flugzeit um 30% vergrößern und auf Minute korrigieren.
   wind:1        Flugzeit mit Entfernung und Wind ohne Korrekturen berechnen
   
+Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
+  * Flugzeit T/O -> SP plausibel? (
+  * Flugzeit FP -> LDG (zur Ermittlung der spätesten Landezeit) ausreichend?
+  * Flugzeit iFP -> iLDG (-> iT/O) -> iSP bei Touch & Go-Landungen plausibel?
+
 
 Landungen
 =========

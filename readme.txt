@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-19.04.2014
+05.05.2014
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -48,8 +48,12 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Fehlerbehebungen und Erweiterungen in dieser Version (2.2.1):
--------------------------------------------------------------
+Fehlerbehebungen in dieser Version (2.2.2):
+-------------------------------------------
+- Nach Strecken-Kopie konnte die Strecken-Liste nicht mehr betrachtet werden.
+
+Fehlerbehebungen und Erweiterungen in Version 2.2.1:
+----------------------------------------------------
 - Unterstützung des Loggers DG-200
     Dieser Logger speichert Flug-Informationen in GPX-Dateien.
     Aus diesen GPX-Dateien müssen mit 'Extras -> GPX-Datei in GAC-Datei konvertieren'
