@@ -162,4 +162,9 @@ class RouteLeg
 	{	
 		return "${startTitle.titlePrintCode()}...${endTitle.titlePrintCode()}" 
 	}
+	
+	boolean IsProcedureTurn()
+	{
+		return startTitle.type.IsProcedureTurnCoord()
+	}
 }

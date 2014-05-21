@@ -507,6 +507,9 @@ class DemoContestRoutesService
 			l[10].planTrueHeading = 132.0
 			l[11].planProcedureTurn = false
 			l[11].planProcedureTurnDuration = 0
+		} else if (strecke == ROUTE_7) {
+			l[11].planProcedureTurn = false
+			l[11].planProcedureTurnDuration = 0
 		}
 		return l
 	}
@@ -560,6 +563,8 @@ class DemoContestRoutesService
 		if (strecke == ROUTE_6) {
 			l[12].measureTrueTrack = null
 			l[12].planProcedureTurn = false
+			l[13].planProcedureTurn = false
+		} else if (strecke == ROUTE_7) {
 			l[13].planProcedureTurn = false
 		}
 		return l

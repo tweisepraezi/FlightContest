@@ -6,6 +6,7 @@ class DemoContestService
 	def demoContestRoutesService
 	def demoContestIntermediateService
 	def demoContestCurvedService
+	def demoContestProcedureTurnService
 	
 	int CreateTest(String demoContest)
 	{
@@ -22,6 +23,7 @@ class DemoContestService
 				ret = create_test("21")
 				ret = create_test("22")
 				ret = create_test("23")
+				ret = create_test("24")
 				break
 			case '99':
 				ret = create_test("1")
@@ -29,6 +31,7 @@ class DemoContestService
 				ret = create_test("21")
 				ret = create_test("22")
 				ret = create_test("23")
+				ret = create_test("24")
 				break
 			default:
 				ret = create_test(demoContest)
@@ -60,6 +63,8 @@ class DemoContestService
 		        return demoContestIntermediateService.CreateTest("Demo Wettbewerb (Intermediate)", "demo22", true)
 			case '23':
 		        return demoContestCurvedService.CreateTest("Demo Wettbewerb (Curved)", "demo23", true)
+			case '24':
+		        return demoContestProcedureTurnService.CreateTest("Demo Wettbewerb (Procedure Turn)", "demo24", true)
 		}
 		return 0
 	}
@@ -86,6 +91,9 @@ class DemoContestService
 					break
 				case "Demo Wettbewerb (Curved)":
 					ret_test = demoContestCurvedService.RunTest lastContest, "Demo Wettbewerb (Curved)"
+					break
+				case "Demo Wettbewerb (Procedure Turn)":
+					ret_test = demoContestProcedureTurnService.RunTest lastContest, "Demo Wettbewerb (Procedure Turn)"
 					break
 			}
 		}

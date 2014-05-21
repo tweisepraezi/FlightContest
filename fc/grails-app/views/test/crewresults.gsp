@@ -11,7 +11,7 @@
             <div class="box boxborder" >
                 <h2>${testInstance.GetTitle(ResultType.Crew)}<g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
-                    <g:form id="${testInstance.id}" method="post" >
+                    <g:form id="${testInstance.id}" params="${['crewresultsReturnAction':crewresultsReturnAction,'crewresultsReturnController':crewresultsReturnController,'crewresultsReturnID':crewresultsReturnID]}">
                         <table>
                             <tbody>
                                 <tr>

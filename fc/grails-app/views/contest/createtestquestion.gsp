@@ -25,9 +25,10 @@
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (Strecken)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (Intermediate)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (Curved)']}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (Procedure Turn)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Alle']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Alle mit Tests']}"/>
-	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[1,2,3,11,12,13,14,21,22,23,98,99]" value="1">
+	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[1,2,3,11,12,13,14,21,22,23,24,98,99]" value="1">
 	                                <div>
 	                                    <label>${it.radio} ${it.label}</label>
 	                                </div>

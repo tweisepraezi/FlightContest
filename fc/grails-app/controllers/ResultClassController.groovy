@@ -210,6 +210,9 @@ class ResultClassController {
 				session.teamReturnAction = actionName
 				session.teamReturnController = controllerName
 				session.teamReturnID = params.id
+	            session.crewresultsReturnAction = actionName
+	            session.crewresultsReturnController = controllerName
+	            session.crewresultsReturnID = params.id
 				// assign return action
 				if (session.positionsReturnAction) {
 					return [resultclassInstance:resultclass.instance,,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID]

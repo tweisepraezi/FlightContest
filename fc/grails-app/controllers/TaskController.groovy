@@ -438,6 +438,9 @@ class TaskController {
 				session.showReturnAction = actionName
 				session.showReturnController = controllerName
 				session.showReturnID = params.id
+				session.crewresultsReturnAction = actionName
+				session.crewresultsReturnController = controllerName
+				session.crewresultsReturnID = params.id
 				fcService.printdone ""
 	            return [taskInstance:task.instance]
 	        }

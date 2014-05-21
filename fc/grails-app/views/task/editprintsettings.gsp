@@ -76,7 +76,7 @@
                                 <g:if test="${test_instance}">
                                     <g:set var="leg_no" value="${new Integer(0)}" />
                                     <g:set var="leg_num" value="${TestLegFlight.countByTest(test_instance)}" />
-                                    <g:set var="print_timetablejury_checkpoints" value="${taskInstance.printTimetableJuryCheckPoints},"/>
+                                    <g:set var="print_timetablejury_checkpoints" value=",${taskInstance.printTimetableJuryCheckPoints},"/>
                                     <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(test_instance,[sort:"id"])}">
                                         <g:set var="leg_no" value="${leg_no+1}" />
                                         <g:set var="leg_name" value="${testlegflight_instance.coordTitle.titleCode()}"/>
@@ -84,7 +84,7 @@
                                         </g:if>
                                         <g:else>
                                             <div>
-                                                <g:set var="leg_checkpoint" value="${leg_no},"/>
+                                                <g:set var="leg_checkpoint" value=",${leg_no},"/>
                                                 <g:if test="${print_timetablejury_checkpoints.contains(leg_checkpoint)}">
                                                     <g:checkBox name="${leg_name}" value="${true}" />
                                                 </g:if>

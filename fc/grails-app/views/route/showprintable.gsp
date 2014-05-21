@@ -73,7 +73,7 @@
                                         <g:set var="course_change" value="${AviationMath.courseChange(routelegcoord_instance.turnTrueTrack,routelegcoord_instance.testTrueTrack())}"/>
 	                                    <g:if test="${course_change.abs() >= 90}">
 	                                        <tr>
-	                                            <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
+	                                            <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegcoord_instance.IsProcedureTurn()}"> (${message(code:'fc.procedureturn')})</g:if></td>
 	                                        </tr>
 	                                    </g:if>
 	                                    <tr>
@@ -104,7 +104,7 @@
                                         <g:set var="course_change" value="${AviationMath.courseChange(routelegtest_instance.turnTrueTrack,routelegtest_instance.testTrueTrack())}"/>
                                         <g:if test="${course_change.abs() >= 90}">
                                             <tr>
-                                                <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}</td>
+                                                <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegtest_instance.IsProcedureTurn()}"> (${message(code:'fc.procedureturn')})</g:if></td>
                                             </tr>
                                         </g:if>
 	                                    <tr>

@@ -988,6 +988,10 @@ class TestController
 			session.aircraftReturnAction = actionName
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
+			// assign return action
+			if (session.crewresultsReturnAction) {
+				return [testInstance:test.instance,crewresultsReturnAction:session.crewresultsReturnAction,crewresultsReturnController:session.crewresultsReturnController,crewresultsReturnID:session.crewresultsReturnID]
+			}
            	return [testInstance:test.instance]
         } else {
             flash.message = test.message
@@ -1032,7 +1036,9 @@ class TestController
 	
     def cancel = {
 		// process return action
-		if (params.crewresultsprintquestionReturnAction) {
+		if (params.crewresultsReturnAction) {
+			redirect(action:params.crewresultsReturnAction,controller:params.crewresultsReturnController,id:params.crewresultsReturnID)
+		} else if (params.crewresultsprintquestionReturnAction) {
 			redirect(action:params.crewresultsprintquestionReturnAction,controller:params.crewresultsprintquestionReturnController,id:params.crewresultsprintquestionReturnID)
 		} else if (params.flightplanReturnAction) {
 			redirect(action:params.flightplanReturnAction,controller:params.flightplanReturnController,id:params.flightplanReturnID)

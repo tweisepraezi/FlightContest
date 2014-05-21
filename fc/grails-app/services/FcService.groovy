@@ -233,13 +233,13 @@ class FcService
 							}
 							contest_instance.contestTeamResults += "team_${team_instance.id}"
 						}
-						if (params["team_no_team_crew"] == "on") {
-							if (contest_instance.contestTeamResults) {
-								contest_instance.contestTeamResults += ","
-							}
-							contest_instance.contestTeamResults += "team_no_team_crew"
-
+					}
+					if (params["team_no_team_crew"] == "on") {
+						if (contest_instance.contestTeamResults) {
+							contest_instance.contestTeamResults += ","
 						}
+						contest_instance.contestTeamResults += "team_no_team_crew"
+
 					}
 					break
 				case ResultFilter.Team.toString():
@@ -9680,7 +9680,7 @@ class FcService
 	        		break
         	}
 
-        	// calculate planProcedureTurn
+        	// calculate planProcedureTurn (CoordRoute)
 			if (last_coordroute_instance) {
 				BigDecimal legdir
 				if (coordroute_instance.measureTrueTrack) {
@@ -9692,12 +9692,8 @@ class FcService
 				if (last_legdir != null) {
 					BigDecimal rounded_legdir = FcMath.RoundGrad(legdir)
 					BigDecimal rounded_last_legdir = FcMath.RoundGrad(last_legdir)
-					BigDecimal diff_track = rounded_legdir - rounded_last_legdir
-					if (diff_track < 0) {
-						diff_track += 360
-					}
-					if (diff_track >= 90 && diff_track < 270) {
-						println "Set planProcedureTurn (Coord, $rounded_last_legdir -> $rounded_legdir)"
+					if (IsCourseChangeGreaterEqual90(rounded_legdir,rounded_last_legdir)) {
+						println "Set planProcedureTurn (CoordRoute, $rounded_last_legdir -> $rounded_legdir)"
 						coordroute_instance.planProcedureTurn = true
 						coordroute_instance.save()
 					}
@@ -9709,6 +9705,13 @@ class FcService
 		printdone ""
     }
     
+    //--------------------------------------------------------------------------
+	private boolean IsCourseChangeGreaterEqual90(BigDecimal direction1, BigDecimal direction2)
+	{
+		BigDecimal course_change = AviationMath.courseChange(direction1, direction2)
+		return course_change.abs() >= 90
+	}
+	
     //--------------------------------------------------------------------------
     private BigDecimal addMapDistance(lastMapMeasureDistance, addmeasuredistance)
     {
@@ -10280,7 +10283,7 @@ class FcService
             coordresult_instance.altitude = coordroute_instance.altitude
             coordresult_instance.gatewidth2 = coordroute_instance.gatewidth2
 			
-			// planProcedureTurn
+			// calculate planProcedureTurn (CoordResult)
 			if (last_coordtype.IsProcedureTurnCoord()) {
 				coordresult_instance.planProcedureTurn = coordroute_instance.planProcedureTurn
 			}
@@ -10414,19 +10417,17 @@ class FcService
 				break 
 		}
 		
-        // calculate procedure turn
+        // calculate planProcedureTurn (TestLeg)
         testLegInstance.planProcedureTurn = false
         testLegInstance.planProcedureTurnDuration = 0
         if (procedureTurnDuration > 0 && lastTrueTrack != null) {
-            BigDecimal diff_track = testLegInstance.planTrueTrack - lastTrueTrack
-            if (diff_track < 0) {
-                diff_track += 360
-            }
-            if (diff_track >= 90 && diff_track < 270) {
-				println "Set planProcedureTurn (Leg: $lastTrueTrack -> $testLegInstance.planTrueTrack)"
-        	    testLegInstance.planProcedureTurn = true
-        	    testLegInstance.planProcedureTurnDuration = procedureTurnDuration
-            }
+			if (routeLegInstance.startTitle.type.IsProcedureTurnCoord()) {
+	            if (IsCourseChangeGreaterEqual90(testLegInstance.planTrueTrack,lastTrueTrack)) {
+					println "Set planProcedureTurn (TestLeg: $lastTrueTrack -> $testLegInstance.planTrueTrack)"
+	        	    testLegInstance.planProcedureTurn = true
+	        	    testLegInstance.planProcedureTurnDuration = procedureTurnDuration
+	            }
+			}
         }
 
 		if (routeLegInstance.legDuration) {

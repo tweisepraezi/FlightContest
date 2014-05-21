@@ -204,7 +204,6 @@ enum CoordType
 	{
 		switch(this) {
 			case CoordType.TP:
-			case CoordType.iSP:
 				return true
 		}
 		return false

@@ -56,8 +56,8 @@ A. Wettbewerbs-Vorbereitung
        * Flugzeit-Berechnungsverfahren FP -> LDG (zur Ermittlung der spätesten Landezeit)
        * Zeit Landung -> Abstellen des Flugzeuges
        * Vorhandene Wendeschleifen mit 1 Minute fliegen (ja/nein)
-       * Flugzeit-Berechnungsverfahren iFP -> iLDG (bei Touch & Go-Landungen)
-       * Flugzeit-Berechnungsverfahren iT/O -> iSP (bei Touch & Go-Landungen)
+       * Flugzeit-Berechnungsverfahren iFP -> iLDG (bei Zwischenlandung)
+       * Flugzeit-Berechnungsverfahren iT/O -> iSP (bei Zwischenlandung)
    - Auswertungs-Einstellungen des Wettbewerbs festlegen:
        * Wendepunkte für Zeitauswertung festlegen (alle/zu wertende Wendepunkte)
        * Zeitauswertung für unbekannte Zeitkontrollen für jede Klasse festlegen
@@ -87,12 +87,13 @@ B. Wettbewerbs-Beginn
    -> Aufgaben -> Neue Aufgabe
    - Zeit-Einstellungen festlegen
        * Anfangs-Zeit
-       * TakeOff-Abstand
-       * Zeit T/O -> SP
-       * Flugzeit der Wendeschleife (1 min)
-       * Zeit iFP, iLDG o. iT/O -> iSP (bei Touch&Go-Landungen)
-       * Zeit FP -> Landung
-       * Zeit FP -> Abstellen des Flugzeuges
+       * TakeOff-Abstand (bei vorhandenen Wendeschleifen min. 2 Minuten)
+       * Flugzeit-Berechnungsverfahren T/O -> SP
+       * Flugzeit-Berechnungsverfahren FP -> LDG (zur Ermittlung der spätesten Landezeit)
+       * Zeit Landung -> Abstellen des Flugzeuges
+       * Vorhandene Wendeschleifen mit 1 Minute fliegen (ja/nein)
+       * Flugzeit-Berechnungsverfahren iFP -> iLDG (bei Zwischenlandung)
+       * Flugzeit-Berechnungsverfahren iT/O -> iSP (bei Zwischenlandung)
    - Auswertungsdetails festlegen
        * Planungstest (Rechenaufgabe)
        * Navigationstest (Navigationsflug)
@@ -285,11 +286,12 @@ der Einhaltung des Takeoff-Zeitfensters gemessen wird.
 Landung (LDG) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
 der Einhaltung der spätesten Landezeit gemessen wird.
 
-Intermediate-Punkte sind Konstruktionspunkte für Zwischenlandungen (Touch&Go).
+Intermediate-Punkte sind Konstruktionspunkte für eine Zwischenlandung.
 Beim Intermediate-Endpunkt (iFP) und Intermediate-Startpunkt (iSP) werden
 Überflugzeit und Flughöhe gemessen und ausgewertet. 
 Intermediate-Landung (iLDG) und Intermediate-Takeoff (iT/O) dienen nur
-zur Anzeige im Flugplan einer Besatzung. 
+zur Anzeige im Flugplan einer Besatzung.
+Bei Touch&Go-Zwischenlandung kann auf iT/O verzichtet werden.
 
 In einer Wettbewerbskarte sind Startpunkt, Wendepunkte und Endpunkt 
 einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:
@@ -364,11 +366,22 @@ Strecken-Beispiele            AFLOS                                          Flu
                               FP    -                    1        -          FP         FP    ja   ja   ja
                               LDG   -                    0.05     250        LDG        LDG   ja   nein nein
                                              
-  Zwischenlandung (Touch&Go)  T/O   -                    0.05     250        T/O        T/O   ja   nein nein
+  Touch&Go-Zwischenlandung    T/O   -                    0.05     250        T/O        T/O   ja   nein nein
                               SP    -                    1        -          SP         SP    ja   nein ja
                               CP1   -                    1        -          WP1        WP1   ja   ja   ja
                               iFP   -                    1        -          iFP        iFP   ja   ja   ja
                               iLDG  -                    0.05     250        iLDG       iLDG  nein nein nein
+                              iSP   -                    1        -          iSP        iSP   ja   nein ja
+                              CP2   -                    1        -          WP2        WP2   ja   ja   ja
+                              FP    -                    1        -          FP         FP    ja   ja   ja
+                              LDG   -                    0.05     250        LDG        LDG   ja   nein nein
+  
+  Zwischenlandung mit Pause   T/O   -                    0.05     250        T/O        T/O   ja   nein nein
+                              SP    -                    1        -          SP         SP    ja   nein ja
+                              CP1   -                    1        -          WP1        WP1   ja   ja   ja
+                              iFP   -                    1        -          iFP        iFP   ja   ja   ja
+                              iLDG  -                    0.05     250        iLDG       iLDG  nein nein nein
+                              iT/O  -                    0.05     250        iT/O       iT/O  nein nein nein
                               iSP   -                    1        -          iSP        iSP   ja   nein ja
                               CP2   -                    1        -          WP2        WP2   ja   ja   ja
                               FP    -                    1        -          FP         FP    ja   ja   ja
@@ -431,7 +444,7 @@ Für folgende Punkte können Festlegungen getroffen werden:
   - Abflug bis Startpunkt (T/O -> SP)
   - Finalpunkt bis Landung (FP -> LDG)
   - Intermediate-Landung (iFP -> iLDG)
-  - Intermediate-Startpunkt (iFP, iLDG oder iT/O -> iSP) (Touch&Go)
+  - Intermediate-Startpunkt (iFP, iLDG oder iT/O -> iSP)
 
 Der Standard-Wert neuer Aufgaben "wind+:2NM" bewirkt, dass bei der 
 Flugzeit-Berechnung der Wind der Navigationsflugaufgabe mit berücksichtigt
@@ -472,17 +485,18 @@ Bedeutungen:
 
 Anwendungsbeispiele:
   Ausdruck      Anwendung
-  -------------------------------------------------------------------------------
+  ---------------------------------------------------------------------------------------
   wind+:2NM     Flugplatz mit Standard-Platzrunde von 2NM
   wind+:xNM     Bei größeren Platzrunden eine größere Entfernung x anwenden.
   time+:xmin    Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)
+  time:xmin     Feste Flugzeit von x Minuten (für Zwischenlandung mit Pause iLDG -> iT/O)
   wind+:1.3     Berechnete Flugzeit um 30% vergrößern und auf Minute korrigieren.
   wind:1        Flugzeit mit Entfernung und Wind ohne Korrekturen berechnen
   
 Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
-  * Flugzeit T/O -> SP plausibel? (
+  * Flugzeit T/O -> SP plausibel?
   * Flugzeit FP -> LDG (zur Ermittlung der spätesten Landezeit) ausreichend?
-  * Flugzeit iFP -> iLDG (-> iT/O) -> iSP bei Touch & Go-Landungen plausibel?
+  * Flugzeit iFP -> iLDG (-> iT/O) -> iSP bei Zwischenlandung plausibel?
 
 
 Landungen

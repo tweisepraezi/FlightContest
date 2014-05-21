@@ -1437,6 +1437,10 @@ class Test
 				result_type = "${getMsg('fc.crewresults')}"
 				break
 		}
-		return "${GetStartNum()} - ${taskAircraft.registration} - ${task.name()} - ${result_type} (${getMsg('fc.version')} ${result_version})"
+		if (taskAircraft) {
+			return "${GetStartNum()} - ${taskAircraft.registration} - ${task.name()} - ${result_type} (${getMsg('fc.version')} ${result_version})"
+		} else {
+			return "${GetStartNum()} - ${task.name()} - ${result_type} (${getMsg('fc.version')} ${result_version})"
+		}
 	}
 }
