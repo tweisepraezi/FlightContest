@@ -70,9 +70,11 @@
                         <g:actionSubmit action="editresultsettings" value="${message(code:'fc.contest.resultsettings')}" tabIndex="1"/>
                         <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="2"/>
                         <g:actionSubmit action="printresults" value="${message(code:'fc.print')}" tabIndex="3"/>
+                        <g:actionSubmit action="liveview" value="${message(code:'fc.liveview')}" tabIndex="4"/>
                     </g:form>
                 </div>
             </div>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

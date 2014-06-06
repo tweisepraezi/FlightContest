@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-21.05.2014
+06.06.2014
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -48,8 +48,14 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Fehlerbehebungen in dieser Version (2.2.3):
--------------------------------------------
+Erweiterungen in dieser Version (2.2.4):
+----------------------------------------
+- Live-Ergebnisanzeige
+  Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
+  (siehe 'Programme -> Flight Contest -> Help' -> Abschnitt 'Live-Ergebnisanzeige')
+
+Fehlerbehebungen in Version 2.2.3:
+----------------------------------
 - Unzulässige Wendeschleifen-Berechnungen bei SP,iFP,iLDG,iT/O,iSP und FP
   beseitigt. 
 - Schiedsrichterzeitplan-Druck-Optionen: 

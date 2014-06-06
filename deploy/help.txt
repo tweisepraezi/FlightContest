@@ -5,6 +5,7 @@ Inhalt
 ======
 - Bedien-Tipps
 - Standard-Wettbewerbsablauf
+- Live-Ergebnisanzeige
 - Änderungen bei Wettbewerbs-Durchführung
 - Besatzungsliste erstellen
 - Streckenplanung
@@ -206,6 +207,43 @@ D. Wettbewerbs-Auswertung
          * Vorläufig
    - Plätze berechnen (-> Plätze berechnen).
    - Endergebnis drucken (-> Druck)
+
+
+Live-Ergebnisanzeige
+====================
+Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
+
+- Konfiguration (-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen)
+    Filter:
+      * einzubeziehende Klassen
+      * einzubeziehende Aufgaben
+      * einzubeziehende Teams
+      * einzubeziehende Aufgabendetails
+    Formatierung:
+      * Titel
+      * Untertitel
+      * Spalte für Aufgabenergebnisse
+      * Aufgabentitel im Detailtitel
+         
+- Direkte Anzeige aus 'Flight Contest' heraus (-> Auswertung -> Wettbewerbs-Auswertung -> Live-Ergebnisanzeige)
+    Web-Site wird alle 10 Sekunden automatisch aktualisiert.
+
+- FTP-Upload/Netzwerkfreigabe-Kopie (-> Script fclive_run.groovy)
+    Installationsvoraussetzungen:
+      * Java 6 oder höher
+      * Groovy 2.1.6 oder höher
+      * commons-net-3.3.jar nach 'C:\Program Files (x86)\Groovy\Groovy-<Version>\lib' kopieren
+    Installation:
+      * Script 'C:\Program Files (x86)\Flight Contest\scripts\fclive_run.groovy' auf eine beliebige Stelle
+        auf der lokalen Platte kopieren und konfigurieren
+      * Stylesheet 'C:\Program Files (x86)\Flight Contest\scripts\fclive.css' auf FTP-Server und/oder
+        auf Netzwerkfreigaben hochladen/kopieren.
+      * Script alle 60 Sekunden mit 'Geplante Tasks'/'Task Scheduler' aufrufen
+    Konfiguration 'fclive_run.groovy':
+      * CONTEST_ID - Datenbank-ID des Wettbewerbes (im Link von "Wettbewerb wechseln" zu finden)
+      * LANGUAGE - Ausgabesprache Deutsch 'de' oder Englisch 'en'
+      * FTPConnections - Liste der FTP-Server, wohin Live-Web-Site fclive.htm hochgeladen werden soll.
+      * CopyDestinations - Liste der Netzwerkfreigaben, wohin Live-Web-Site fclive.htm hinkopiert werden soll.
 
 
 Änderungen bei Wettbewerbs-Durchführung

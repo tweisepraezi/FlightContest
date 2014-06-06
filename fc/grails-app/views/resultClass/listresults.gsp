@@ -80,6 +80,7 @@
                     </g:form>
                 </div>
             </div>
+            <p>${message(code:'fc.program.foot')}</p>
         </div>
     </body>
 </html>

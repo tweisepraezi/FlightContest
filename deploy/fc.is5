@@ -4,12 +4,12 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.7.0';    // DB-2.7
 const FCCompatibelDigits = 0; // Number of digits for application compatibility
-const FCVersion = '2.2.3';
+const FCVersion = '2.2.4';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 2.2.3
-AppVersion=2.2.3
-VersionInfoVersion=2.2.3
+AppVerName=Flight Contest 2.2.4
+AppVersion=2.2.4
+VersionInfoVersion=2.2.4
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -60,6 +60,8 @@ Source: "..\fc\web-app\images\fc.ico";                DestDir: "{app}";
 Source: ".\save_aflosdb.bat";                         DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\save_fcdb.bat";                            DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\save_fcprint.bat";                         DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\fclive_run.groovy";                        DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\fclive.css";                               DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-CrewList-Sample.xls";                   DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-CrewList-Test.xls";                     DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-ObservationLog-Sample.xls";             DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;

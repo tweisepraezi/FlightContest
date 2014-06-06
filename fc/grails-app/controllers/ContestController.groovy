@@ -14,6 +14,7 @@ class ContestController {
     def start = {
         fcService.printstart "Start contest"
         
+		session.contestTitle = ""
         boolean restart = false
         
         // check ShowLanguage
@@ -474,6 +475,7 @@ class ContestController {
     }
 
     def listresults = {
+		session.contestTitle = ""
         if (session?.lastContest) {
             session.lastResultClassResults = null
             session.lastContestResults = true
@@ -501,6 +503,27 @@ class ContestController {
         }
     }
 
+    def listresultslive = {
+		if (params.id) {
+			session.lastContest = Contest.get(params.id)
+		}
+		if (session?.lastContest) {
+			def contest = fcService.calculatecontestpositionsContest(session.lastContest,[],[],[])
+            session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
+			return [contestInstance:session.lastContest]
+        } else {
+            redirect(action:start)
+		}
+	}
+	
+	def liveview = {
+		if (session?.lastContest) {
+			redirect(action:listresultslive)
+        } else {
+            redirect(action:start)
+		}
+	}
+	
     def listteamresults = {
         if (session?.lastContest) {
             session.lastResultClassResults = null
