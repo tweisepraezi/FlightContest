@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-06.06.2014
+27.06.2014
 
 Downloads:
 https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
@@ -48,8 +48,22 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Erweiterungen in dieser Version (2.2.4):
-----------------------------------------
+Fehlerbehebungen und Erweiterungen in dieser Version (2.2.5):
+-------------------------------------------------------------
+- Höhenauswertung bei Zwischenlandung (iLDG und iT/O) entfernt.
+- Von der Zeitauswertung deaktivierte und nicht korrekt geflogene Wendepunkte
+  (am Wendepunkt-Tor vorbeigeflogen) werden jetzt bestraft.
+- Aktualisierungs-Probleme bei Live-Ergebnisanzeige beseitigt.
+- 'Programme -> Flight Contest -> Help' -> 'Behebung von AFLOS-Problemen'
+  hinzugefügt
+- Die empfohlene Konfiguration für eine 'Zwischenlandung mit Pause' wurde in den
+  Streckenplanungsbeispielen korrigiert
+  (siehe 'Programme -> Flight Contest -> Help' -> Abschnitt 'Streckenplanung')
+- Eine AFLOS-Kurzanleitung wird mit installiert 
+  (siehe 'Programme -> Flight Contest')
+
+Erweiterungen in Version 2.2.4:
+-------------------------------
 - Live-Ergebnisanzeige
   Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
   (siehe 'Programme -> Flight Contest -> Help' -> Abschnitt 'Live-Ergebnisanzeige')

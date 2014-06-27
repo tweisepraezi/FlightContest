@@ -12,6 +12,7 @@ Inhalt
 - Flugzeit-Berechnung für Starts und Landungen
 - Landungen
 - Unterstützte Logger
+- Behebung von AFLOS-Problemen
 - Datensicherung eines laufenden Wettbewerbes
 
 
@@ -272,6 +273,15 @@ Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
 - Wendepunkt-Überflugzeit einer Aufgabe soll nicht gewertet werden
   -> Zeitauswertung des Wendepunktes deaktivieren
   Bewirkt Neuberechnung des Ergebnisses.
+  Hinweis: 
+    Vorbeiflug am Tor wird weiterhin bestraft.
+    Soll der Vorbeiflug am Tor nicht bestraft werden, sind festgestellte 
+    Vorbeiflüge in den Besatzungs-Navigationsflugergebnissen zu deaktivieren.
+  
+- Unbekannte Zeitkontrolle einer Aufgabe soll nicht gewertet werden
+  -> Zeitauswertung der unbekannten Zeitkontrolle deaktivieren
+  Bewirkt Neuberechnung des Ergebnisses.
+  Hinweis: Vorbeiflug am Tor wird damit auch nicht bestraft.
 
 
 Besatzungsliste erstellen
@@ -419,7 +429,7 @@ Strecken-Beispiele            AFLOS                                          Flu
                               CP1   -                    1        -          WP1        WP1   ja   ja   ja
                               iFP   -                    1        -          iFP        iFP   ja   ja   ja
                               iLDG  -                    0.05     250        iLDG       iLDG  nein nein nein
-                              iT/O  -                    0.05     250        iT/O       iT/O  nein nein nein
+                              iT/O  $duration:60min      0.05     250        iT/O       iT/O  nein nein nein
                               iSP   -                    1        -          iSP        iSP   ja   nein ja
                               CP2   -                    1        -          WP2        WP2   ja   ja   ja
                               FP    -                    1        -          FP         FP    ja   ja   ja
@@ -527,7 +537,6 @@ Anwendungsbeispiele:
   wind+:2NM     Flugplatz mit Standard-Platzrunde von 2NM
   wind+:xNM     Bei größeren Platzrunden eine größere Entfernung x anwenden.
   time+:xmin    Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)
-  time:xmin     Feste Flugzeit von x Minuten (für Zwischenlandung mit Pause iLDG -> iT/O)
   wind+:1.3     Berechnete Flugzeit um 30% vergrößern und auf Minute korrigieren.
   wind:1        Flugzeit mit Entfernung und Wind ohne Korrekturen berechnen
   
@@ -651,6 +660,20 @@ DG-200
   * Zeiten in UTC
   * Aufzeichnungs-Intervall: 1 Sekunde
   * mit Höhen-Angaben in Meter
+
+
+Behebung von AFLOS-Problemen
+============================
+
+'Check-Data -> Calculate' ermittelt wegen "Drop Out" keine Überflugzeiten
+-------------------------------------------------------------------------
+- GAC-File exportieren: 'Flight-Data -> Export Data -> Gen. GAC-File'
+- Fehlerhafte Datenzeilen manuell im GAC-File entfernen (mit Texteditor)
+    Datenzeilen beginnen mit dem Buchstaben 'B'. Zeichen 2 bis 7 enthält die Uhrzeit (in UTC).
+    Fehlerhafte Datenzeilen liegen am Anfang oder Ende der Aufzeichnung.
+    Die Uhrzeit der Calculate-Ergebnis-Liste gibt über die mögliche Problemstelle Auskunft.
+- Korrigiertes GAC-File mit neuer Besatzungsnummer importieren: 'Read Data -> Load GAC-File'
+- 'Check-Data -> Calculate' der neuen Besatzungsnummer importieren
 
 
 Datensicherung eines laufenden Wettbewerbes

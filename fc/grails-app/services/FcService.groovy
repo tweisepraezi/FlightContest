@@ -9279,34 +9279,17 @@ class FcService
 				break
 			default:
 			    // CP-Punkteauswertung
-				String disabled_checkpoints = "${coordResultInstance.test.task.disabledCheckPoints},"
-		        if (disabled_checkpoints.contains("${coordResultInstance.title()},")) {
-					coordResultInstance.penaltyCoord = 0
-		        } else if (coordResultInstance.resultCpNotFound) {
-		        	coordResultInstance.penaltyCoord = test_instance.GetFlightTestCpNotFoundPoints()
-		        } else {
-			        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)
-			        int resultcptime_seconds = FcMath.Seconds(coordResultInstance.resultCpTime)
-			        
-			        int diff_cptime_seconds = Math.abs(plancptime_seconds - resultcptime_seconds)
-			        if (diff_cptime_seconds > test_instance.GetFlightTestCptimeCorrectSecond()) {
-			            coordResultInstance.penaltyCoord = test_instance.GetFlightTestCptimePointsPerSecond() * (diff_cptime_seconds - test_instance.GetFlightTestCptimeCorrectSecond())
-			        } else {
-			            coordResultInstance.penaltyCoord = 0
-			        }
-					if (test_instance.GetFlightTestCptimeMaxPoints() > 0) {
-				        if (coordResultInstance.penaltyCoord > test_instance.GetFlightTestCptimeMaxPoints()) {
-				        	coordResultInstance.penaltyCoord = test_instance.GetFlightTestCptimeMaxPoints()
-				        }
-					}
-		        }
+				calculateCoordResultInstancePenaltyCoord(coordResultInstance)
 				coordResultInstance.resultEntered = true
-				
-		        // calculate resultMinAltitudeMissed
-		        if (coordResultInstance.resultAltitude) {
-		        	coordResultInstance.resultMinAltitudeMissed = coordResultInstance.resultAltitude < coordResultInstance.altitude
-		        }
 				break
+		}
+		
+		// calculate resultMinAltitudeMissed
+		coordResultInstance.resultMinAltitudeMissed = false
+		if (coordResultInstance.type.IsAltitudeCheckCoord()) {
+			if (coordResultInstance.resultAltitude) {
+				coordResultInstance.resultMinAltitudeMissed = coordResultInstance.resultAltitude < coordResultInstance.altitude
+			}
 		}
         
 		println "  Ok: '$coordResultInstance.resultCpTime'"
@@ -9316,36 +9299,34 @@ class FcService
     //--------------------------------------------------------------------------
     private void calculateCoordResultInstancePenaltyCoord(CoordResult coordResultInstance)
     {
-		switch (coordResultInstance.type) {
-			case CoordType.TO:
-			case CoordType.LDG:
-				// nothing
-				break
-			default:
-		        Test test_instance = coordResultInstance.test
-				String disabled_checkpoints = "${coordResultInstance.test.task.disabledCheckPoints},"
-				
-		        if (disabled_checkpoints.contains("${coordResultInstance.title()},")) {
+		if (coordResultInstance.type.IsCpTimeCheckCoord()) {
+	        Test test_instance = coordResultInstance.test
+			String disabled_checkpoints = "${test_instance.task.disabledCheckPoints},"
+			
+	        if (coordResultInstance.resultCpNotFound) {
+				if ((coordResultInstance.type == CoordType.SECRET) && disabled_checkpoints.contains("${coordResultInstance.title()},")) {
 					coordResultInstance.penaltyCoord = 0
-		        } else if (coordResultInstance.resultCpNotFound) {
-		        	coordResultInstance.penaltyCoord = test_instance.GetFlightTestCpNotFoundPoints()
+				} else {
+					coordResultInstance.penaltyCoord = test_instance.GetFlightTestCpNotFoundPoints()
+				}
+	        } else if (disabled_checkpoints.contains("${coordResultInstance.title()},")) {
+				coordResultInstance.penaltyCoord = 0
+	        } else {
+		        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)
+		        int resultcptime_seconds = FcMath.Seconds(coordResultInstance.resultCpTime)
+		        
+		        int diff_cptime_seconds =  Math.abs(plancptime_seconds - resultcptime_seconds)
+		        if (diff_cptime_seconds > test_instance.GetFlightTestCptimeCorrectSecond()) {
+		            coordResultInstance.penaltyCoord = test_instance.GetFlightTestCptimePointsPerSecond() * (diff_cptime_seconds - test_instance.GetFlightTestCptimeCorrectSecond())
 		        } else {
-			        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)
-			        int resultcptime_seconds = FcMath.Seconds(coordResultInstance.resultCpTime)
-			        
-			        int diff_cptime_seconds =  Math.abs(plancptime_seconds - resultcptime_seconds)
-			        if (diff_cptime_seconds > test_instance.GetFlightTestCptimeCorrectSecond()) {
-			            coordResultInstance.penaltyCoord = test_instance.GetFlightTestCptimePointsPerSecond() * (diff_cptime_seconds - test_instance.GetFlightTestCptimeCorrectSecond())
-			        } else {
-			            coordResultInstance.penaltyCoord = 0
-			        }
-					if (test_instance.GetFlightTestCptimeMaxPoints() > 0) {
-				        if (coordResultInstance.penaltyCoord > test_instance.GetFlightTestCptimeMaxPoints()) {
-				        	coordResultInstance.penaltyCoord = test_instance.GetFlightTestCptimeMaxPoints()
-				        }
-					}
+		            coordResultInstance.penaltyCoord = 0
 		        }
-				break
+				if (test_instance.GetFlightTestCptimeMaxPoints() > 0) {
+			        if (coordResultInstance.penaltyCoord > test_instance.GetFlightTestCptimeMaxPoints()) {
+			        	coordResultInstance.penaltyCoord = test_instance.GetFlightTestCptimeMaxPoints()
+			        }
+				}
+	        }
 		}
     }
     

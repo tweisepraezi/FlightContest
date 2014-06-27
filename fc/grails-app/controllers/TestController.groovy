@@ -453,6 +453,7 @@ class TestController
 	 
     def importresults = {
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 	        def ret = fcService.existAnyAflosCrew(session.lastContest)
 	        if (ret.error) {
 	            flash.error = ret.error

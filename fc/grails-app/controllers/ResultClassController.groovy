@@ -10,6 +10,7 @@ class ResultClassController {
 		def list = {
 			fcService.printstart "List resultclasses"
 			if (session?.lastContest) {
+				session.lastContest.refresh()
 				// save return action
 				session.crewReturnAction = actionName
 				session.crewReturnController = controllerName
@@ -121,6 +122,7 @@ class ResultClassController {
 	
 		def create = {
 			if (session?.lastContest) {
+				session.lastContest.refresh()
 				def resultclass = fcService.createResultClass(params,session.lastContest)
 				return [contestInstance:session.lastContest,resultclassInstance:resultclass.instance]
 			} else {
@@ -175,6 +177,7 @@ class ResultClassController {
 				session.lastContest = Contest.get(params.contestid)
 			}
 			if (session?.lastContest) {
+				session.lastContest.refresh()
 				def resultclassList = ResultClass.findAllByContest(session.lastContest,[sort:"name"])
 				return [resultclassInstanceList:resultclassList]
 			}

@@ -186,6 +186,20 @@ enum CoordType
 		return false
 	}
 	
+	boolean IsCpTimeCheckCoord()
+	{
+		switch(this) {
+			case CoordType.SP:
+			case CoordType.iSP:
+			case CoordType.TP:
+			case CoordType.SECRET:
+			case CoordType.FP:
+			case CoordType.iFP:
+				return true
+		}
+		return false
+	}
+	
 	boolean IsAltitudeCheckCoord()
 	{
 		switch(this) {

@@ -10,6 +10,7 @@ class AircraftController {
     def list = {
 		fcService.printstart "List aircrafts"
         if (session?.lastContest) {
+			session.lastContest.refresh()
 			// save return action
 			session.crewReturnAction = actionName 
 			session.crewReturnController = controllerName
@@ -107,6 +108,7 @@ class AircraftController {
             session.lastContest = Contest.get(params.contestid)
         }
         if (session?.lastContest) {
+			session.lastContest.refresh()
             def aircraftList = Aircraft.findAllByContest(session.lastContest,[sort:"registration"])
             return [aircraftInstanceList:aircraftList]
         }

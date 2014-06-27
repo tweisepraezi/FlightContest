@@ -102,6 +102,7 @@ class ContestController {
 
     def editpoints = {
         if (session?.lastContest) {
+			session.lastContest.refresh()
             // assign return action
             if (session.contestReturnAction) {
                 return [contestInstance:session.lastContest,contestReturnAction:session.contestReturnAction,contestReturnController:session.contestReturnController,contestReturnID:session.contestReturnID]
@@ -508,6 +509,7 @@ class ContestController {
 			session.lastContest = Contest.get(params.id)
 		}
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			def contest = fcService.calculatecontestpositionsContest(session.lastContest,[],[],[])
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
 			return [contestInstance:session.lastContest]
@@ -710,8 +712,9 @@ class ContestController {
 
     def editresultsettings = {
         if (session?.lastContest) {
+			session.lastContest.refresh()
             // set return action
-               return [contestInstance:session.lastContest,resultfilter:ResultFilter.Contest,editresultsettingsReturnAction:"listresults",editresultsettingsReturnController:controllerName,editresultsettingsReturnID:params.id]
+            return [contestInstance:session.lastContest,resultfilter:ResultFilter.Contest,editresultsettingsReturnAction:"listresults",editresultsettingsReturnController:controllerName,editresultsettingsReturnID:params.id]
         } else {
             redirect(action:start)
         }
@@ -719,8 +722,9 @@ class ContestController {
     
     def editteamresultsettings = {
         if (session?.lastContest) {
+			session.lastContest.refresh()
             // set return action
-               return [contestInstance:session.lastContest,resultfilter:ResultFilter.Team,editteamresultsettingsReturnAction:"listteamresults",editteamresultsettingsReturnController:controllerName,editteamresultsettingsReturnID:params.id]
+            return [contestInstance:session.lastContest,resultfilter:ResultFilter.Team,editteamresultsettingsReturnAction:"listteamresults",editteamresultsettingsReturnController:controllerName,editteamresultsettingsReturnID:params.id]
         } else {
             redirect(action:start)
         }

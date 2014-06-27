@@ -22,6 +22,7 @@ class AflosController {
 	
 	def uploadaflosdb = {
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			def file = request.getFile('uploadfile')
 			if (file && !file.empty) {
 				String file_name = file.getOriginalFilename()

@@ -9,6 +9,7 @@ class AflosErrorPointsController {
         
         params.sort = "id"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			if (session.lastContest.aflosTest) {
 				fcService.println "List AFLOS errorpoints (aflostest)"
 		        return [contestInstance:session.lastContest, aflosErrorPointsInstanceList: AflosErrorPoints.aflostest.list(params)]
@@ -23,6 +24,7 @@ class AflosErrorPointsController {
 	
 	def crew = {
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			if (session.lastContest.aflosTest) {
 				fcService.println "List AFLOS errorpoints of startnum $params.startnum and route '$params.routename' (aflostest)"
 		        AflosRouteNames aflosroutenames_instance = AflosRouteNames.aflostest.findByName(params.routename) 

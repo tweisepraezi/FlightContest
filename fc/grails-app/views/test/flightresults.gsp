@@ -219,8 +219,21 @@
 	                                                    <g:elseif test="${(coordResultInstance.type == CoordType.LDG) && !coordResultInstance.test.IsFlightTestCheckLanding()}">
                                                             <td/>
 	                                                    </g:elseif>
+                                                        <g:elseif test="${coordResultInstance.type.IsCpTimeCheckCoord()}">
+                                                            <g:if test="${(coordResultInstance.type != CoordType.SECRET) || check_secretpoints}">
+                                                                <g:if test="${(coordResultInstance.type == CoordType.SECRET) && disabled_checkpoints.contains(coordResultInstance.title()+',')}">
+                                                                    <td>${coordResultInstance.GetCpNotFoundShortName()}</td>
+                                                                </g:if>
+                                                                <g:else>
+                                                                    <td class="errors">${coordResultInstance.GetCpNotFoundShortName()}</td>
+                                                                </g:else>
+                                                            </g:if>
+	                                                        <g:else>
+	                                                            <td>${coordResultInstance.GetCpNotFoundShortName()}</td>
+	                                                        </g:else>
+                                                        </g:elseif>
                                                         <g:else>
-                                                            <td class="errors">${coordResultInstance.GetCpNotFoundShortName()}</td>
+                                                            <td>${coordResultInstance.GetCpNotFoundShortName()}</td>
                                                         </g:else>
                                                     </g:if>
                                                     <g:else>
@@ -287,12 +300,17 @@
                                                         <td class="zeropoints">${message(code:'fc.disabled')}</td>
                                                     </g:elseif>
 	                                                <g:elseif test="${disabled_checkpoints.contains(coordResultInstance.title()+',')}">
-	                                                	<g:if test="${coordResultInstance.penaltyCoord}">
-	                                                		<td class="zeropoints">${message(code:'fc.disabled')} (${coordResultInstance.penaltyCoord})</td>
-	                                                	</g:if>
-	                                                	<g:else>
-	                                                		<td class="zeropoints">${message(code:'fc.disabled')}</td>
-	                                                	</g:else>
+                                                        <g:if test="${(coordResultInstance.type != CoordType.SECRET) || check_secretpoints}">
+		                                                	<g:if test="${coordResultInstance.penaltyCoord}">
+	                                                            <td class="points">${coordResultInstance.penaltyCoord} ${message(code:'fc.points')}</td>
+		                                                	</g:if>
+		                                                	<g:else>
+		                                                		<td class="zeropoints">${message(code:'fc.disabled')}</td>
+		                                                	</g:else>
+		                                                </g:if>
+                                                        <g:else>
+                                                            <td class="zeropoints">${message(code:'fc.disabled')}</td>
+                                                        </g:else>
 	                                                </g:elseif>
                                                     <g:elseif test="${(coordResultInstance.type != CoordType.SECRET) || check_secretpoints}">
                                                         <g:set var="points_class" value="points"/>

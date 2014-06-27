@@ -10,6 +10,7 @@ class CrewController {
     def list = {
 		fcService.printstart "List crews"
         if (session?.lastContest) {
+			session.lastContest.refresh()
 			// save return action
 			session.crewReturnAction = actionName 
 			session.crewReturnController = controllerName
@@ -195,6 +196,7 @@ class CrewController {
 			session.lastContest = Contest.get(params.contestid)
 		}
 		if (session?.lastContest) {
+			session.lastContest.refresh()
             def crew_list = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
             return [crewList:crew_list,contestInstance:session.lastContest,resultClasses:session.lastContest.resultClasses]
         }

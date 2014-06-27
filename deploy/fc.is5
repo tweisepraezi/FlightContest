@@ -4,12 +4,12 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.7.0';    // DB-2.7
 const FCCompatibelDigits = 0; // Number of digits for application compatibility
-const FCVersion = '2.2.4';
+const FCVersion = '2.2.5';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 2.2.4
-AppVersion=2.2.4
-VersionInfoVersion=2.2.4
+AppVerName=Flight Contest 2.2.5
+AppVersion=2.2.5
+VersionInfoVersion=2.2.5
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -54,8 +54,10 @@ Source: "..\readme.txt";                              DestDir: "{app}";         
 Source: ".\usage.rtf";                                DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
 Source: ".\help.txt";                                 DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-Manual.pdf";                            DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
+Source: ".\AFLOS-Kurzanleitung.pdf";                  DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
 Source: ".\install-service.bat";                      DestDir: "{app}";
 Source: ".\odbc.vbs";                                 DestDir: "{app}";
+Source: ".\fc-service-start.xml";                     DestDir: "{app}";
 Source: "..\fc\web-app\images\fc.ico";                DestDir: "{app}";
 Source: ".\save_aflosdb.bat";                         DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\save_fcdb.bat";                            DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
@@ -85,6 +87,7 @@ Root: HKLM64; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFla
 Filename: "wscript.exe";                    Parameters: """{app}\odbc.vbs"" ""{app}""";    WorkingDir: "{app}";  Flags: runhidden;
 Filename: "{app}\install-service.bat";      Parameters: "install FlightContest";           WorkingDir: "{app}";  Flags: runhidden;
 Filename: "{app}\tomcat\bin\tomcat7w.exe";  Parameters: "//MS//FlightContest";             WorkingDir: "{app}";  Flags: nowait;
+;Filename: "schtasks.exe";                   Parameters: "/Create /S {computername} /XML ""{app}\fc-service-start.xml"" /TN ""Flight Contest Service Manager"""; WorkingDir: "{app}";  Flags: runhidden;
 
 [UninstallRun]
 Filename: "taskkill";                       Parameters: "/F /IM tomcat7w.exe";             WorkingDir: "{app}";
@@ -113,6 +116,7 @@ Name: "{group}\Präzisionsflug-Verein e.V.";     Filename: "http://www.praeziflug
 Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{commondesktop}";
 Name: "{group}\Help";                           Filename: "{app}\help.txt";                                                                      WorkingDir: "{commondesktop}";
 Name: "{group}\Manual";                         Filename: "{app}\FC-Manual.pdf";                                                                 WorkingDir: "{commondesktop}";
+Name: "{group}\AFLOS Kurzanleitung";            Filename: "{app}\AFLOS-Kurzanleitung.pdf";                                                       WorkingDir: "{commondesktop}";
 Name: "{group}\Usage";                          Filename: "{app}\usage.rtf";                                                                     WorkingDir: "{commondesktop}";
 Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{commondesktop}";
 Name: "{group}\Install AFLOS connection";       Filename: "wscript.exe";                            Parameters: """{app}\odbc.vbs"" ""{app}""";  WorkingDir: "{app}";
@@ -239,7 +243,12 @@ var last_version: string;
     db_dir: string;
     db_backup_dir: string;
     samples_dir: string;
+    fc_service_start_filename: string;
+    fc_service_start_array: TArrayOfString;
+    user_domain: string;
     ret: integer;
+    i: integer;
+    p: integer;
 begin
 
   // get last version
@@ -248,6 +257,7 @@ begin
   // get db directory
   db_dir := ExpandConstant('{app}\fc');
   samples_dir := ExpandConstant('{app}\samples');
+  fc_service_start_filename := ExpandConstant('{app}\fc-service-start.xml');
   
   // db backup
   if not IsCompatibel(last_version,DBVersion,DBCompatibelDigits) then begin
@@ -282,6 +292,16 @@ begin
   if not FileExists( db_dir + '\AFLOS-UPLOAD.mdb' ) then begin
     FileCopy(samples_dir + '\AFLOS-DemoContest.mdb', db_dir + '\AFLOS-UPLOAD.mdb', true);
   end;
+
+  // modify task
+  //if LoadStringsFromFile(fc_service_start_filename, fc_service_start_array) then begin
+  //  user_domain :=  ExpandConstant('{%USERDOMAIN}')
+  //  for i := 0 to GetArrayLength(fc_service_start_array)-1 do begin
+  //    StringChangeEx(fc_service_start_array[i],'${USERID}', user_domain + '\' + ExpandConstant('{username}'), true);
+  //    StringChangeEx(fc_service_start_array[i],'${CMD}',    ExpandConstant('{app}\tomcat\bin\tomcat7w.exe'), true);
+  //  end;
+  //  SaveStringsToFile(fc_service_start_filename, fc_service_start_array, false); // false - no append
+  //end;
 
   // Remove logs
   DelTree( db_dir + '\logs', true, true, true );

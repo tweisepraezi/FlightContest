@@ -9,6 +9,7 @@ class AflosCrewNamesController
     	
         params.sort = "startnum"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			if (session.lastContest.aflosTest) {
 				fcService.println "List AFLOS crewnames (aflostest)"
 				return [contestInstance:session.lastContest, aflosCrewNamesInstanceList: AflosCrewNames.aflostest.list( params ), aflosCrewNamesInstanceTotal: AflosCrewNames.aflostest.count()]

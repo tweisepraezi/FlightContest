@@ -1,5 +1,5 @@
 
-Flight Contest 2.2.4
+Flight Contest 2.2.5
 Copyright 2014 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://www.praeziflug.de
@@ -116,3 +116,10 @@ Special thanks to Eric Meyer for his comprehensive browser reset stylesheet.
 
 http://meyerweb.com/eric/tools/css/reset
 
+============================================================================
+
+AFLOS Kurzanleitung
+
+Mit freundlicher Genehmigung von Ralf-Rainer Schmalstieg.
+
+============================================================================

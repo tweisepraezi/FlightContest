@@ -23,6 +23,7 @@ class MainTagLib
         outln """<div class="grid">"""
 		outln """  <ul class="nav main">"""
         if (session?.lastContest) {
+			session.lastContest.refresh()
 	        outln """    <li> <a class="${if (p.conteststart) active(p.controller,'contest')}" href="${p.link}/../../contest/start">${message(code:'fc.contest')}</a> </li>"""
 			outln """    <li> <a class="${active(p.controller,'route')}" href="${p.link}/../../route/list">${message(code:'fc.route.list')}</a> </li>"""
 	        outln """    <li> <a class="${active(p.controller,'crew')}" href="${p.link}/../../crew/list">${message(code:'fc.crew.list')}</a> </li>"""

@@ -8,6 +8,7 @@ class AflosRouteDefsController {
         session.lastAflosController = controllerName
         
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			if (session.lastContest.aflosTest) {
 				fcService.println "List AFLOS routedefs (aflostest)"
 				return [contestInstance:session.lastContest, aflosRouteDefsInstanceList: AflosRouteDefs.aflostest.list(params), aflosRouteDefsInstanceTotal: AflosRouteDefs.aflostest.count()]

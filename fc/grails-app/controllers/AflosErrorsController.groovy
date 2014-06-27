@@ -9,6 +9,7 @@ class AflosErrorsController {
         
         params.sort = "id"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			if (session.lastContest.aflosTest) {
 				fcService.println "List AFLOS errors (aflostest)"
 		        return [contestInstance:session.lastContest, aflosErrorsInstanceList: AflosErrors.aflostest.list(params)]

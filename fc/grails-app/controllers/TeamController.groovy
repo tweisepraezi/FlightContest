@@ -10,6 +10,7 @@ class TeamController {
     def list = {
 		fcService.printstart "List teams"
         if (session?.lastContest) {
+			session.lastContest.refresh()
 			// save return action
 			session.crewReturnAction = actionName 
 			session.crewReturnController = controllerName
@@ -110,6 +111,7 @@ class TeamController {
             session.lastContest = Contest.get(params.contestid)
         }
         if (session?.lastContest) {
+			session.lastContest.refresh()
             def teamList = Team.findAllByContest(session.lastContest,[sort:"name"])
             return [teamInstanceList:teamList]
         }

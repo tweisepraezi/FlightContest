@@ -317,6 +317,7 @@ class TaskController {
     def startplanning = {
 		fcService.printstart "Start planning"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			def task = fcService.startplanningTask(params, session.lastContest, session.lastTaskPlanning)
 			if (task.taskid) {
 	   			params.id = task.taskid
@@ -333,6 +334,7 @@ class TaskController {
     def listplanning = {
 		fcService.printstart "List planning"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			def task = fcService.getTask(params) 
 	        if (!task.instance) {
 	            flash.message = task.message
@@ -388,6 +390,7 @@ class TaskController {
     def startresults = {
 		fcService.printstart "Start results"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 	        def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
 	        if (task.taskid) {
 	            params.id = task.taskid
@@ -404,6 +407,7 @@ class TaskController {
     def listresults = {
 		fcService.printstart "List results"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 	        def task = fcService.getTask(params) 
 	        if (!task.instance) {
 	            flash.message = task.message
@@ -453,6 +457,7 @@ class TaskController {
 	def startevaluation = {
 		fcService.printstart "Start evaluation"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			boolean last_found = false
 			if (session?.lastContestResults) {
 				last_found = true

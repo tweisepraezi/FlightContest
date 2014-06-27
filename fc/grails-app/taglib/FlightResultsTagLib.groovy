@@ -44,7 +44,7 @@ class FlightResultsTagLib
 			Integer	penalty_procedureturn_summary = 0
 			Integer	penalty_badcourse_summary = 0
 			Integer penalty_altitude_summary = 0
-			String disabled_checkpoints = attrs.t.task.disabledCheckPoints
+			String disabled_checkpoints = "${attrs.t.task.disabledCheckPoints},"
 			boolean check_secretpoints = attrs.t.IsFlightTestCheckSecretPoints()
 			CoordResult last_coordresult_instance = null
 			for (CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
@@ -61,17 +61,17 @@ class FlightResultsTagLib
 					} else {
 						outln"""<td>${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
 					}
-					if (disabled_checkpoints.contains(last_coordresult_instance.title()+',')) {
-						outln"""<td>-</td>"""
-					} else if ((last_coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
+					if ((last_coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
 						outln"""<td>${last_coordresult_instance.penaltyCoord}</td>"""
+					} else if (disabled_checkpoints.contains("${last_coordresult_instance.title()},")) {
+						outln"""<td>-</td>"""
 					} else {
 						outln"""<td>-</td>"""
 					}
 					if (attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) {
 						if (coordresult_instance.planProcedureTurn) {
 							if (coordresult_instance.resultProcedureTurnEntered) {
-								if (disabled_checkpoints.contains(last_coordresult_instance.title()+',')) {
+								if (disabled_checkpoints.contains("${last_coordresult_instance.title()},")) {
 									outln"""<td>-</td>"""
 								} else if (coordresult_instance.resultProcedureTurnNotFlown) {
 									penalty_procedureturn_summary += attrs.t.GetFlightTestProcedureTurnNotFlownPoints()
@@ -131,10 +131,10 @@ class FlightResultsTagLib
 				} else {
 					outln"""	<td>${FcMath.TimeStr(last_coordresult_instance.resultCpTime)}</td>"""
 				}
-				if (disabled_checkpoints.contains(last_coordresult_instance.title()+',')) {
-					outln"""	<td>-</td>"""
-				} else if ((last_coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
+				if ((last_coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
 					outln"""	<td>${last_coordresult_instance.penaltyCoord}</td>"""
+				} else if (disabled_checkpoints.contains("${last_coordresult_instance.title()},")) {
+					outln"""	<td>-</td>"""
 				} else {
 					outln"""	<td>-</td>"""
 				}

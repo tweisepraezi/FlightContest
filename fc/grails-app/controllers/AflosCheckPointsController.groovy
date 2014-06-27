@@ -9,6 +9,7 @@ class AflosCheckPointsController {
         
         params.sort = "id"
 		if (session?.lastContest) {
+			session.lastContest.refresh()
 			if (session.lastContest.aflosTest) {
 				fcService.println "List AFLOS checkpoints (aflostest)"
 				return [contestInstance:session.lastContest, aflosCheckPointsInstanceList: AflosCheckPoints.aflostest.list(params)]
