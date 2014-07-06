@@ -347,6 +347,7 @@ class ContestController {
 	
 	void load_image(Map params) 
 	{
+		session.lastContest.refresh()
 		def file = request.getFile('imagefile')
 		if (file && !file.empty) {
 			String file_name = file.getOriginalFilename()
@@ -388,6 +389,7 @@ class ContestController {
 	void delete_image(Map params)
 	{
 		fcService.printstart "Delete '$params.imageField'"
+		session.lastContest.refresh()
 		session.lastContest.(params.imageField) = null
 		session.lastContest.(params.imageFieldHeight) = Contest.IMAGEHEIGHT
 		session.lastContest.save()
@@ -412,6 +414,7 @@ class ContestController {
 	void actual_image(Map params)
 	{
 		fcService.printstart "Actual '$params.imageFieldHeight'"
+		session.lastContest.refresh()
 		if (params.imageHeight.isInteger()) {
 			session.lastContest.(params.imageFieldHeight) = params.imageHeight.toInteger()
 		}
@@ -421,6 +424,7 @@ class ContestController {
 	
 	def actual_titelsize = {
 		fcService.printstart "Actual 'titleSize'"
+		session.lastContest.refresh()
 		session.lastContest.titleSize = params.titleSize
 		session.lastContest.save()
 		fcService.printdone ""
@@ -429,6 +433,7 @@ class ContestController {
 	
 	def reset_titlesize = {
 		fcService.printstart "Reset 'titleSize'"
+		session.lastContest.refresh()
 		session.lastContest.titleSize = Contest.TITLESIZE
 		session.lastContest.save()
 		fcService.printdone ""

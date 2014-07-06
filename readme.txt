@@ -48,8 +48,12 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Fehlerbehebungen und Erweiterungen in dieser Version (2.2.5):
+Fehlerbehebungen und Erweiterungen in dieser Version (2.2.6):
 -------------------------------------------------------------
+- Aktualisierungs-Probleme bei bestimmten Contest-Optionen beseitigt.
+
+Fehlerbehebungen und Erweiterungen in Version 2.2.5:
+----------------------------------------------------
 - Höhenauswertung bei Zwischenlandung (iLDG und iT/O) entfernt.
 - Von der Zeitauswertung deaktivierte und nicht korrekt geflogene Wendepunkte
   (am Wendepunkt-Tor vorbeigeflogen) werden jetzt bestraft.

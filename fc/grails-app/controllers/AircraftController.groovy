@@ -10,19 +10,24 @@ class AircraftController {
     def list = {
 		fcService.printstart "List aircrafts"
         if (session?.lastContest) {
-			session.lastContest.refresh()
-			// save return action
-			session.crewReturnAction = actionName 
-			session.crewReturnController = controllerName
-			session.crewReturnID = params.id
-			session.aircraftReturnAction = actionName
-			session.aircraftReturnController = controllerName
-			session.aircraftReturnID = params.id
-            def aircraftList = Aircraft.findAllByContest(session.lastContest, [sort:'registration'])
-			fcService.printdone "last contest"
-            return [aircraftInstanceList:aircraftList]
+			try {
+				session.lastContest.refresh()
+				// save return action
+				session.crewReturnAction = actionName 
+				session.crewReturnController = controllerName
+				session.crewReturnID = params.id
+				session.aircraftReturnAction = actionName
+				session.aircraftReturnController = controllerName
+				session.aircraftReturnID = params.id
+	            def aircraftList = Aircraft.findAllByContest(session.lastContest, [sort:'registration'])
+				fcService.printdone "last contest"
+	            return [aircraftInstanceList:aircraftList]
+			} catch (Exception e) {
+				fcService.printerror e.getMessage() // BUG: Exception nach Löschen eines Flugzeuges
+			}
+        } else {
+			fcService.printdone ""
         }
-		fcService.printdone ""
         redirect(controller:'contest',action:'start')
     }
 

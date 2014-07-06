@@ -48,7 +48,8 @@ class CrewController {
     }
 
 	def editprintsettings = {
-		if (session.lastContest) {
+		if (session?.lastContest) {
+			session.lastContest.refresh()
 			return [contestInstance:session.lastContest]
         } else {
             redirect(action:list)
@@ -74,6 +75,7 @@ class CrewController {
     }
 
     def updateprintsettings = {
+		session.lastContest.refresh()
         def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.Modified,session.printLanguage) 
         if (contest.saved) {
         	flash.message = contest.message
@@ -92,6 +94,7 @@ class CrewController {
     }
 
 	def updateprintsettingsstandard = {
+		session.lastContest.refresh()
         def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.Standard,session.printLanguage) 
         if (contest.saved) {
 			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
@@ -102,6 +105,7 @@ class CrewController {
 	}
 	
 	def updateprintsettingsnone = {
+		session.lastContest.refresh()
         def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.None,session.printLanguage) 
         if (contest.saved) {
 			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
@@ -112,6 +116,7 @@ class CrewController {
 	}
 	
 	def updateprintsettingsall = {
+		session.lastContest.refresh()
         def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.All,session.printLanguage) 
         if (contest.saved) {
 			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
