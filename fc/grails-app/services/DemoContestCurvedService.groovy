@@ -21,7 +21,7 @@ class DemoContestCurvedService
 	static final String WIND = "$WIND_DIRECTION/$WIND_SPEED"
 	static final String NOWIND = "0/0"
 	
-	int CreateTest(String testName, String printPrefix, boolean testExists)
+	long CreateTest(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		

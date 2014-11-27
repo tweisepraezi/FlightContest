@@ -76,30 +76,6 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:coordresult var="${coordResultInstance}" name="${legNo}" procedureTurn="false" next="${next}" link="${createLink(controller:'coordResult',action:'edit')}"/></td>
-    def coordresult = { p ->
-	    String t = p.name
-		if (p.procedureTurn) {
-		    if (p.var.resultProcedureTurnEntered) {
-		      t += """ <img src="/fc/images/skin/ok.png"/>"""
-		    } else {
-		        t += " ..."
-		    }
-		} else {
-		    if (p.var.resultEntered) {
-		      t += """ <img src="/fc/images/skin/ok.png"/>"""
-		    } else {
-		        t += " ..."
-		    }
-		}
-		if (p.next) {
-			out << """<a href="${p.link}/${p.var.id}?name=${p.name}&next=${p.next}">${t}</a>""" // .encodeAsHTML()
-		} else {
-			out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
-		}
-    }
-    
-    // ====================================================================================================================
     // <g:coordroute var="${coordRouteInstance}" link="${createLink(controller:'coordRoute',action:'show')}"/>
     def coordroute = { p ->
         out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
@@ -136,8 +112,12 @@ class FcTagLib
             out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.results')})</a>"""
         } else if (p.link == "/fc/task/disabledcheckpoints") {
             out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
-        } else if (p.link == "/fc/task/editprintsettings") {
-			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.editprintsettings')}</a>"""
+        } else if (p.link == "/fc/task/timetable") {
+			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetable')}</a>"""
+        } else if (p.link == "/fc/task/timetablejury") {
+			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetablejury')}</a>"""
+        } else if (p.link == "/fc/task/timetableoverview") {
+            out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetableoverview')}</a>"""
         } else {
         	out << """<a href="${p.link}/${p.var.id}">${p.var.bestOfName().encodeAsHTML()} (${message(code:'fc.task.settings')})</a>"""
         }
@@ -243,22 +223,6 @@ class FcTagLib
     // <g:testlegplanning var="${testLegPlanningInstance}" link="${createLink(controller:'testLegPlanning',action:'show')}"/>
     def testlegplanning = { p ->
         out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
-    }
-    
-    // ====================================================================================================================
-    // <g:testlegplanning2 var="${testLegFlightInstance}" name="${testLeg}" next="${next}" link="${createLink(controller:'testLegFlight',action:'show')}"/>
-    def testlegplanning2 = { p ->
-    	String t = p.name
-        if (p.var.resultEntered) {
-			t += """ <img src="/fc/images/skin/ok.png"/>"""
-        } else {
-        	t += " ..."
-        }
-		if (p.next) {
-			out << """<a href="${p.link}/${p.var.id}?name=${p.name}&next=${p.next}">${t}</a>""" // .encodeAsHTML()
-		} else {
-			out << """<a href="${p.link}/${p.var.id}?name=${p.name}">${t}</a>""" // .encodeAsHTML()
-		}
     }
     
     // ====================================================================================================================

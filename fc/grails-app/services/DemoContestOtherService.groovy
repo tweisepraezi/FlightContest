@@ -4,7 +4,7 @@ class DemoContestOtherService
 {
 	def fcService
 	
-	int CreateTest11(String testName, String printPrefix, boolean testExists)
+	long CreateTest11(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
@@ -88,7 +88,7 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	int CreateTest12(String testName, String printPrefix, boolean testExists)
+	long CreateTest12(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
@@ -187,7 +187,7 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	int CreateTest13(String testName, String printPrefix, boolean testExists)
+	long CreateTest13(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
@@ -205,7 +205,7 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	int CreateTest14(String testName, String printPrefix, boolean testExists)
+	long CreateTest14(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         

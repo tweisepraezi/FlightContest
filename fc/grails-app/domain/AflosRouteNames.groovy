@@ -16,4 +16,9 @@ class AflosRouteNames
 		
 		version false
 	}
+
+	String viewName()
+	{
+		return "$id: $name"
+	}
 }

@@ -29,7 +29,7 @@ class Task
 	int risingDuration                       = 5     // duration from takeoff to start point [min]
 	String risingDurationFormula             = "wind+:2NM" // DB-2.7
     int maxLandingDuration                   = 5     // duration from finish point to landing [min]
-	String maxLandingDurationFormula         = "wind+:2NM" // DB-2.7
+	String maxLandingDurationFormula         = "wind+:6NM" // DB-2.7
     int parkingDuration                      = 5     // change DB-2.7: duration of aircraft parking after landing [min]
 	                                                 // before DB-2.7: duration from finish point to aircraft parking [min] (> maxLandingDuration), 10 min
 	String iLandingDurationFormula           = "wind:1" // DB-2.7
@@ -49,8 +49,12 @@ class Task
 	boolean timetableModified                = true
 	int timetableVersion                     = 0
 	
-	String disabledCheckPoints               = ""    // list of disabled check point titles, separated with ',', DB-1.1
-	
+	String disabledCheckPoints               = ""    // list of check point without time check
+    String disabledCheckPointsNotFound       = ""    // list of check point without not found check, DB-2.8
+    String disabledCheckPointsMinAltitude    = ""    // list of check point without min altitude check, DB-2.8
+    String disabledCheckPointsProcedureTurn  = ""    // list of check point without procedure turn check, DB-2.8
+    String disabledCheckPointsBadCourse      = ""    // list of check point without bad course check, DB-2.8
+    
 	Boolean bestOfAnalysis                   = false // DB-2.3
 	
 	String printTimetableJuryPrintTitle      = ""    // DB-2.3
@@ -61,6 +65,8 @@ class Task
 	Boolean printTimetableJuryAircraftColour = false // DB-2.3
 	Boolean printTimetableJuryTAS            = false // DB-2.3
 	Boolean printTimetableJuryTeam           = false // DB-2.3
+	Boolean printTimetableJuryClass          = false // DB-2.8
+	Boolean printTimetableJuryShortClass     = true  // DB-2.8
 	Boolean printTimetableJuryPlanning       = true  // DB-2.3
 	Boolean printTimetableJuryPlanningEnd    = true  // DB-2.3
 	Boolean printTimetableJuryTakeoff        = true  // DB-2.3
@@ -71,10 +77,12 @@ class Task
 	Boolean printTimetableJuryArrival        = true  // DB-2.3
 	Boolean printTimetableJuryEmptyColumn1   = true  // DB-2.3
 	String printTimetableJuryEmptyTitle1     = ""    // DB-2.3
-	Boolean printTimetableJuryEmptyColumn2   = true  // DB-2.3
+	Boolean printTimetableJuryEmptyColumn2   = false // DB-2.3
 	String printTimetableJuryEmptyTitle2     = ""    // DB-2.3
-	Boolean printTimetableJuryEmptyColumn3   = true  // DB-2.3
+	Boolean printTimetableJuryEmptyColumn3   = false // DB-2.3
 	String printTimetableJuryEmptyTitle3     = ""    // DB-2.3
+	Boolean printTimetableJuryEmptyColumn4   = false // DB-2.8
+	String printTimetableJuryEmptyTitle4     = ""    // DB-2.8
 	Boolean printTimetableJuryLandscape      = true  // DB-2.3
 	Boolean printTimetableJuryA3             = false // DB-2.3
 	
@@ -84,23 +92,36 @@ class Task
 	Boolean printTimetableAircraft           = true  // DB-2.3
 	Boolean printTimetableTAS                = true  // DB-2.3
 	Boolean printTimetableTeam               = false // DB-2.3
+	Boolean printTimetableClass              = false // DB-2.8
+	Boolean printTimetableShortClass         = true  // DB-2.8
 	Boolean printTimetablePlanning           = true  // DB-2.3
 	Boolean printTimetableTakeoff            = true  // DB-2.3
 	Boolean printTimetableVersion            = true  // DB-2.3
 	String printTimetableChange              = ""    // DB-2.3
+    Boolean printTimetableLegTimes           = false // DB-2.8
 	Boolean printTimetableLandscape          = false // DB-2.3
 	Boolean printTimetableA3                 = false // DB-2.3
 	
+    String briefingTime                      = "10:00" // DB-2.8
+    Boolean printTimetableOverviewLegTimes   = true  // DB-2.8
+    Boolean printTimetableOverviewLandscape  = false // DB-2.8
+    Boolean printTimetableOverviewA3         = false // DB-2.8
+    
 	Boolean hidePlanning                     = false // DB-2.3
 	Boolean hideResults                      = false // DB-2.3
 	
 	// transient values 
-	static transients = ['printPlanningResults','printFlightResults','printObservationResults','printLandingResults','printSpecialResults','printProvisionalResults']
+	static transients = ['printPlanningResults','printFlightResults','printObservationResults','printLandingResults','printSpecialResults',
+		                 'printAircraft','printTeam','printClass','printShortClass','printProvisionalResults']
 	boolean printPlanningResults = true
 	boolean printFlightResults = true
 	boolean printObservationResults = true
 	boolean printLandingResults = true
 	boolean printSpecialResults = true
+	boolean printAircraft = true
+	boolean printTeam = false
+	boolean printClass = false
+	boolean printShortClass = false
 	boolean printProvisionalResults = false
 	
     static belongsTo = [contest:Contest]
@@ -190,6 +211,36 @@ class Task
 		maxLandingDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
 		iLandingDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
 		iRisingDurationFormula(nullable:true, validator:{ val, obj -> return DurationValid(val,obj)})
+		
+		// DB-2.8 compatibility
+		printTimetableClass(nullable:true)
+		printTimetableShortClass(nullable:true)
+		printTimetableJuryClass(nullable:true)
+		printTimetableJuryShortClass(nullable:true)
+		printTimetableJuryEmptyColumn4(nullable:true)
+		printTimetableJuryEmptyTitle4(nullable:true)
+        disabledCheckPointsNotFound(nullable:true)
+        disabledCheckPointsMinAltitude(nullable:true)
+        disabledCheckPointsProcedureTurn(nullable:true)
+        disabledCheckPointsBadCourse(nullable:true)
+        printTimetableLegTimes(nullable:true)
+        briefingTime(nullable:true,blank:true, validator:{ val, obj ->
+            if (val == "") {
+                return true
+            }
+            if (val.size() > 5) {
+                return false
+            }
+            try {
+                Date t = Date.parse("HH:mm",val)
+            } catch(Exception e) {
+                return false
+            }
+            return true
+        })
+        printTimetableOverviewLegTimes(nullable:true)
+        printTimetableOverviewLandscape(nullable:true)
+        printTimetableOverviewA3(nullable:true)
 	}
 
     static mapping = {
@@ -887,4 +938,24 @@ class Task
 	{
 		return durationValue.contains('+:')
 	}
+    
+    Test GetFirstTest()
+    {
+        for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"asc"])) {
+            if (test_instance.timeCalculated && !test_instance.crew.disabled) {
+                return test_instance
+            }
+        }
+        return null
+    }
+
+    Test GetLastTest()
+    {
+        for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"desc"])) {
+            if (test_instance.timeCalculated && !test_instance.crew.disabled) {
+                return test_instance
+            }
+        }
+        return null
+    }
 }

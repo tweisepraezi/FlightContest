@@ -14,6 +14,10 @@ Primitve Typen nicht updatefähig, Object-Typen verwenden:
   boolean -> Boolean
   int -> Integer
 
+Texte
+-----
+message(code:'fc.contestrule.differences',args:[attrs.ret.modifynum])
+
 Plugins
 =======
 
@@ -28,7 +32,7 @@ http://localhost:8080/fc/classDiagram
 
 Development
 ===========
--Dgrails.env=lastdb run-app
+-Dgrails.gsp.enable.reload=true -Dgrails.env=lastdb run-app
 run-app --stacktrace -noreloading
 
 Caused by: java.lang.OutOfMemoryError: PermGen space
@@ -55,3 +59,7 @@ Automatische LandingToLate-Berechnung
      - !IsFlightTestCheckLanding()
 2. LDG-Zeiteingabe in coordResult/edit.gsp, wenn
      - IsFlightTestCheckLanding()
+
+Geschütztes Leerzeichen
+-----------------------
+&#x00A0;

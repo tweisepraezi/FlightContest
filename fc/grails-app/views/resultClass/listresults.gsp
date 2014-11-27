@@ -41,7 +41,7 @@
 		                                    </g:if> 
 		                                    <g:else>
 			                                    <g:if test="${crew_instance.classPosition}">
-			                                        <td class="position">${crew_instance.classPosition}</td>
+			                                        <td class="position">${crew_instance.classPosition}<g:if test="${crew_instance.classEqualPosition}"> <a href="${createLink(controller:'resultClass',action:'addposition',params:[resultclassid:resultclassInstance.id,crewid:crew_instance.id])}">+</a></g:if><g:if test="${crew_instance.classAddPosition > 0}"> <a href="${createLink(controller:'resultClass',action:'subposition',params:[resultclassid:resultclassInstance.id,crewid:crew_instance.id])}">-</a></g:if></td>
 			                                    </g:if> 
 			                                    <g:else>
 			                                        <td class="position">${message(code:'fc.test.results.position.none')}</td>

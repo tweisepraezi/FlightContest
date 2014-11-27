@@ -29,35 +29,44 @@
                                 <input type="text" id="printPrefix" name="printPrefix" value="${fieldValue(bean:contestInstance,field:'printPrefix')}" tabIndex="2"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.organizer')}*:</label>
+                                <br/>
+                                <input type="text" id="printOrganizer" name="printOrganizer" value="${fieldValue(bean:contestInstance,field:'printOrganizer')}" tabIndex="3"/>
+                            </p>
+                            <p>
                                 <div>
 	                               	<g:checkBox name="resultClasses" value="${contestInstance.resultClasses}" />
-    	                            <label>${message(code:'fc.resultclasses')}</label>
+    	                            <label>${message(code:'fc.contest.withclasses')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="contestRuleForEachClass" value="${contestInstance.contestRuleForEachClass}" />
+                                    <label>${message(code:'fc.contestrule.foreachclass')}</label>
                                 </div>
                             </p>
                             <p>
                                 <label>${message(code:'fc.contestrule')}*:</label>
                                 <br/>
-                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${contestInstance.contestRule}" tabIndex="3"/>
+                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${contestInstance.contestRule}" tabIndex="4"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.scale')}*:</label>
                                 <br/>
-                                <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:contestInstance,field:'mapScale')}" tabIndex="4"/>
+                                <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:contestInstance,field:'mapScale')}" tabIndex="5"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.timezone')}* [${message(code:'fc.time.hmin')}]:</label>
                                 <br/>
-                                <input type="text" id="timeZone" name="timeZone" value="${fieldValue(bean:contestInstance,field:'timeZone')}" tabIndex="5"/>
+                                <input type="text" id="timeZone" name="timeZone" value="${fieldValue(bean:contestInstance,field:'timeZone')}" tabIndex="6"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.teamcrewnum')}*:</label>
                                 <br/>
-                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="6"/>
+                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="7"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.bestofanalysistasknum')}*:</label>
                                 <br/>
-                                <input type="text" id="bestOfAnalysisTaskNum" name="bestOfAnalysisTaskNum" value="${fieldValue(bean:contestInstance,field:'bestOfAnalysisTaskNum')}" tabIndex="7"/>
+                                <input type="text" id="bestOfAnalysisTaskNum" name="bestOfAnalysisTaskNum" value="${fieldValue(bean:contestInstance,field:'bestOfAnalysisTaskNum')}" tabIndex="8"/>
                             </p>
                             <g:if test="${!contestInstance.aflosTest}">
 	                            <p>
@@ -70,20 +79,36 @@
                         </fieldset>
 	                    <table>
 	                        <tbody>
+                                <tr>
+                                    <td colspan="5">
+                                        <p>
+                                            <label>${message(code:'fc.contest.paper.style')}:</label>
+                                            <br/>
+                                            <g:textArea name="printStyle" value="${contestInstance.printStyle}" rows="5" cols="110" tabIndex="10"/>
+                                        </p>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td/>
+                                    <td/>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.title.size')}:</td>
+                                    <td style="vertical-align:middle"><input type="text" id="titleSize" name="titleSize" value="${fieldValue(bean:contestInstance,field:'titleSize')}" tabIndex="11"/></td>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_titlesize" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="12"/>
+                                </tr>
+                                
 	                            <tr>
 	                                <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.left')}:</td>
 				                    <g:if test="${contestInstance.imageLeft}">
 				                        <td><img src="${createLink(controller:'contest',action:'view_image_left',params:[contestid:contestInstance.id])}" height="${contestInstance.imageLeftHeight}" style="vertical-align:top"/></td>
                                         <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.height')}:</td>
                                         <td style="vertical-align:middle"><input type="text" id="imageLeftHeight" name="imageLeftHeight" value="${fieldValue(bean:contestInstance,field:'imageLeftHeight')}" tabIndex="21"/></td>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="actualimage_imageleft" value="${message(code:'fc.update')}" tabIndex="22"/>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imageleft" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="23"/>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imageleft" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="22"/>
 				                    </g:if>
 				                    <g:else>
-				                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imageleft" value="${message(code:'fc.contest.image.select')}" tabIndex="24"/>
+				                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imageleft" value="${message(code:'fc.contest.image.select')}" tabIndex="23"/>
                                         <td/>
 				                        <td/>
-                                        <td/>
                                         <td/>
 				                    </g:else>
 	                            </tr>
@@ -93,12 +118,10 @@
                                         <td><img src="${createLink(controller:'contest',action:'view_image_center',params:[contestid:contestInstance.id])}" height="${contestInstance.imageCenterHeight}" style="vertical-align:top"/></td>
                                         <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.height')}:</td>
                                         <td style="vertical-align:middle"><input type="text" id="imageCenterHeight" name="imageCenterHeight" value="${fieldValue(bean:contestInstance,field:'imageCenterHeight')}" tabIndex="31"/></td>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="actualimage_imagecenter" value="${message(code:'fc.update')}" tabIndex="32"/>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imagecenter" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="33"/>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imagecenter" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="32"/>
                                     </g:if>
                                     <g:else>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imagecenter" value="${message(code:'fc.contest.image.select')}" tabIndex="34"/>
-                                        <td/>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imagecenter" value="${message(code:'fc.contest.image.select')}" tabIndex="33"/>
                                         <td/>
                                         <td/>
                                         <td/>
@@ -110,48 +133,122 @@
                                         <td><img src="${createLink(controller:'contest',action:'view_image_right',params:[contestid:contestInstance.id])}" height="${contestInstance.imageRightHeight}" style="vertical-align:top"/></td>
                                         <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.height')}:</td>
                                         <td style="vertical-align:middle"><input type="text" id="imageRightHeight" name="imageRightHeight" value="${fieldValue(bean:contestInstance,field:'imageRightHeight')}" tabIndex="41"/></td>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="actualimage_imageright" value="${message(code:'fc.update')}" tabIndex="42"/>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imageright" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="43"/>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imageright" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="42"/>
                                     </g:if>
                                     <g:else>
-                                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imageright" value="${message(code:'fc.contest.image.select')}" tabIndex="44"/>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imageright" value="${message(code:'fc.contest.image.select')}" tabIndex="43"/>
                                         <td/>
+                                        <td/>
+                                        <td/>
+                                    </g:else>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                    <td>
+                                    <td>
+                                    <td colspan="2">
+			                            <p>
+			                                <div>
+			                                    <g:checkBox name="imageBottomOn" value="${contestInstance.imageBottomOn}" />
+			                                    <label>${message(code:'fc.contest.image.bottom.on')}</label>
+			                                </div>
+			                            </p>
+			                        </td>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td/>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.bottom.size')}:</td>
+                                    <td style="vertical-align:middle"><input type="text" id="imageBottomTextSize" name="imageBottomTextSize" value="${fieldValue(bean:contestInstance,field:'imageBottomTextSize')}" tabIndex="51"/></td>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_imagebottomsize" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="52"/>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.bottomleft')}:</td>
+                                    <g:if test="${contestInstance.imageBottomLeft}">
+                                        <td><img src="${createLink(controller:'contest',action:'view_image_bottom_left',params:[contestid:contestInstance.id])}" height="${contestInstance.imageBottomLeftHeight}" style="vertical-align:top"/></td>
+                                        <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.height')}:</td>
+                                        <td style="vertical-align:middle"><input type="text" id="imageBottomLeftHeight" name="imageBottomLeftHeight" value="${fieldValue(bean:contestInstance,field:'imageBottomLeftHeight')}" tabIndex="61"/></td>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imagebottomleft" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="62"/>
+                                    </g:if>
+                                    <g:else>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imagebottomleft" value="${message(code:'fc.contest.image.select')}" tabIndex="63"/>
                                         <td/>
                                         <td/>
                                         <td/>
                                     </g:else>
                                 </tr>
                                 <tr>
-                                    <td/>
-                                    <td/>
-                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.title.size')}:</td>
-                                    <td style="vertical-align:middle"><input type="text" id="titleSize" name="titleSize" value="${fieldValue(bean:contestInstance,field:'titleSize')}" tabIndex="51"/></td>
-                                    <td style="vertical-align:middle"><g:actionSubmit action="actual_titelsize" value="${message(code:'fc.update')}" tabIndex="52"/>
-                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_titlesize" value="${message(code:'fc.contest.title.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="53"/>
-                                </tr>
-                                <tr>
-                                    <td/>
-                                    <td/>
-                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
-                                    <td><input type="text" id="a3PortraitFactor" name="a3PortraitFactor" value="${fieldValue(bean:contestInstance,field:'a3PortraitFactor')}" tabIndex="61"/></td>
-                                    <td><input type="text" id="a4LandscapeFactor" name="a4LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a4LandscapeFactor')}" tabIndex="62"/></td>
-                                    <td><input type="text" id="a3LandscapeFactor" name="a3LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a3LandscapeFactor')}" tabIndex="63"/></td>
-                                </tr>
-                                <tr>
-                                    <td/>
-                                    <td/>
-                                    <td><g:actionSubmit action="printtest_a4_portrait" value="${message(code:'fc.print.test.a4.portrait')}" tabIndex="71"/></td>
-                                    <td><g:actionSubmit action="printtest_a3_portrait" value="${message(code:'fc.print.test.a3.portrait')}" tabIndex="72"/></td>
-                                    <td><g:actionSubmit action="printtest_a4_landscape" value="${message(code:'fc.print.test.a4.landscape')}" tabIndex="73"/></td>
-                                    <td><g:actionSubmit action="printtest_a3_landscape" value="${message(code:'fc.print.test.a3.landscape')}" tabIndex="74"/></td>
+                                    <td>
+                                    <td colspan="4">
+                                        <input type="text" id="imageBottomLeftText" name="imageBottomLeftText" value="${fieldValue(bean:contestInstance,field:'imageBottomLeftText')}" size="110" tabIndex="64"/>
                                     </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.bottomright')}:</td>
+                                    <g:if test="${contestInstance.imageBottomRight}">
+                                        <td><img src="${createLink(controller:'contest',action:'view_image_bottom_right',params:[contestid:contestInstance.id])}" height="${contestInstance.imageBottomRightHeight}" style="vertical-align:top"/></td>
+                                        <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.image.height')}:</td>
+                                        <td style="vertical-align:middle"><input type="text" id="imageBottomRightHeight" name="imageBottomRightHeight" value="${fieldValue(bean:contestInstance,field:'imageBottomRightHeight')}" tabIndex="71"/></td>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="deleteimage_imagebottomright" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="72"/>
+                                    </g:if>
+                                    <g:else>
+                                        <td style="vertical-align:middle"><g:actionSubmit action="selectfilename_imagebottomright" value="${message(code:'fc.contest.image.select')}" tabIndex="73"/>
+                                        <td/>
+                                        <td/>
+                                        <td/>
+                                    </g:else>
+                                </tr>
+                                <tr>
+                                    <td>
+                                    <td colspan="4">
+                                        <input type="text" id="imageBottomRightText" name="imageBottomRightText" value="${fieldValue(bean:contestInstance,field:'imageBottomRightText')}" size="110" tabIndex="74"/>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td/>
+                                    <td><g:actionSubmit action="printtest_a4_portrait" value="${message(code:'fc.print.test.a4.portrait')}" tabIndex="101"/></td>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td><g:actionSubmit action="printtest_a4_landscape" value="${message(code:'fc.print.test.a4.landscape')}" tabIndex="111"/></td>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
+                                    <td><input type="text" id="a4LandscapeFactor" name="a4LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a4LandscapeFactor')}" tabIndex="112"/></td>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a4landscapefactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="113"/>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td><g:actionSubmit action="printtest_a3_portrait" value="${message(code:'fc.print.test.a3.portrait')}" tabIndex="121"/></td>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
+                                    <td><input type="text" id="a3PortraitFactor" name="a3PortraitFactor" value="${fieldValue(bean:contestInstance,field:'a3PortraitFactor')}" tabIndex="122"/></td>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a3portraitfactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="123"/>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td><g:actionSubmit action="printtest_a3_landscape" value="${message(code:'fc.print.test.a3.landscape')}" tabIndex="131"/></td>
+                                    <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
+                                    <td><input type="text" id="a3LandscapeFactor" name="a3LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a3LandscapeFactor')}" tabIndex="132"/></td>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a3landscapefactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="133"/>
+                                </tr>
+                                <tr>
+                                    <td/>
+                                    <td/>
+                                    <td/>
+                                    <td><g:actionSubmit action="savecontest" value="${message(code:'fc.save')}" tabIndex="141"/></td>
+                                    <td/>
                                 </tr>
 	                        </tbody>
 	                    </table>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="101"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="102"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="201"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="202"/>
                     </g:form>
                 </div>
             </div>

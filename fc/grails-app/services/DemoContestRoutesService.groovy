@@ -9,7 +9,7 @@ class DemoContestRoutesService
 	static final String ROUTE_7 = "Strecke 7"
 	static final String ROUTE_7M = "Strecke 7m"
 	
-    int CreateTest(String testName, String printPrefix, boolean testExists) 
+    long CreateTest(String testName, String printPrefix, boolean testExists) 
     {
         fcService.printstart "Create test contest '$testName'"
         

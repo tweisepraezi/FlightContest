@@ -1,0 +1,9 @@
+/* modifications of layout.css for development
+----------------------------------------------- */
+
+h1#branding {
+    color:#888;
+	font-size:1.2em;
+    padding:.4em .4em;
+}
+

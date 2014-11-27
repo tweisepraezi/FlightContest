@@ -27,8 +27,8 @@
                             <td><g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                             <td>${fieldValue(bean:aircraftInstance, field:'type')}</td>
                             <td>${fieldValue(bean:aircraftInstance, field:'colour')}</td>
-                            <td><g:crew var="${aircraftInstance.user1}" link="${createLink(controller:'crew',action:'edit')}"/></td>
-                            <td><g:crew var="${aircraftInstance.user2}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+                            <td><g:crew var="${aircraftInstance.user1}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${aircraftInstance.user1?.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+                            <td><g:crew var="${aircraftInstance.user2}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${aircraftInstance.user2?.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
                         </tr>
                     </g:each>
                 </tbody>

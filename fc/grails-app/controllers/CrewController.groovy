@@ -74,29 +74,23 @@ class CrewController {
         }
     }
 
-    def updateprintsettings = {
+    def saveprintsettings = {
 		session.lastContest.refresh()
-        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.Modified,session.printLanguage) 
-        if (contest.saved) {
-        	flash.message = contest.message
-			// process return action
-			if (params.crewReturnAction) {
-				redirect(action:params.crewReturnAction,controller:params.crewReturnController,id:params.crewReturnID)
-			} else {
-        		redirect(action:list)
-			}
-        } else if (contest.instance) {
-			render(view:'editprintsettings',model:[contestInstance:contest.instance])
-        } else {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.CrewModified)
+		if (contest.instance) {
 			flash.message = contest.message
-			redirect(action:edit,id:params.id)
+			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
+		} else {
+			flash.message = contest.message
+			redirect(controller:"contest",action:"crews")
         }
     }
 
 	def updateprintsettingsstandard = {
 		session.lastContest.refresh()
-        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.Standard,session.printLanguage) 
-        if (contest.saved) {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.CrewStandard) 
+        if (contest.instance) {
+			flash.message = contest.message
 			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
 		} else {
 			flash.message = contest.message
@@ -106,8 +100,9 @@ class CrewController {
 	
 	def updateprintsettingsnone = {
 		session.lastContest.refresh()
-        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.None,session.printLanguage) 
-        if (contest.saved) {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.CrewNone) 
+        if (contest.instance) {
+			flash.message = contest.message
 			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
 		} else {
 			flash.message = contest.message
@@ -117,8 +112,9 @@ class CrewController {
 	
 	def updateprintsettingsall = {
 		session.lastContest.refresh()
-        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.All,session.printLanguage) 
-        if (contest.saved) {
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.CrewAll) 
+        if (contest.instance) {
+			flash.message = contest.message
 			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
 		} else {
 			flash.message = contest.message
@@ -176,15 +172,18 @@ class CrewController {
 			fcService.printstart "Upload '$file_name'"
 			fcService.println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream" 
 			if (file_name.toLowerCase().endsWith('.xls')) {
-				String load_file_name = "CREWLIST-UPLOAD.xls"
+				String uuid = UUID.randomUUID().toString()
+				String load_file_name = "CREWLIST-${uuid}-UPLOAD.xls"
 				file.transferTo(new File(load_file_name))
 		        def crews = fcService.importCrews(file_name, load_file_name, session.lastContest) 
 		        if (crews.saved) {
 		            flash.message = crews.message
+					fcService.DeleteFile(load_file_name)
 					fcService.printdone flash.message
 		        } else if (crews.error) {
 		        	flash.error = crews.error
 		            flash.message = crews.message
+					fcService.DeleteFile(load_file_name)
 					fcService.printerror flash.message
 		        }
 			} else {
@@ -278,6 +277,18 @@ class CrewController {
        	redirect(action:list)
 	}
 	
+    def disablecrews = {
+        def ret = fcService.disableCrews(session.lastContest,params,session)
+        flash.message = ret.message
+        redirect(action:list)
+    }
+    
+    def enablecrews = {
+        def ret = fcService.enableCrews(session.lastContest,params,session)
+        flash.message = ret.message
+        redirect(action:list)
+    }
+    
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,

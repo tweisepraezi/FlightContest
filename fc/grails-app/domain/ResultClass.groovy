@@ -4,6 +4,7 @@ class ResultClass
 // DB-2.0
 {
 	String name
+	String shortName = ""                               // DB-2.8
 	String contestTitle = ""
 	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung
 	Boolean precisionFlying = false                     // DB-2.3
@@ -18,10 +19,17 @@ class ResultClass
 	boolean contestSpecialResults = false               // Sondertest berücksichtigen
 	String contestPrintSubtitle = ""                    // Ausdruck-Untertitel, DB-2.3
 	Boolean contestPrintLandscape = true                // Ausdruck quer, DB-2.1
-	Boolean contestPrintTaskDetails = true              // Ausdruck von Aufgabendetails, DB-2.1
-	Boolean contestPrintTaskNamesInTitle = true         // Ausdruck der Tasknamen im Title, wenn contestPrintTaskDetails = False, DB-2.1
+	Boolean contestPrintTaskDetails = false             // Ausdruck der Aufgabensummen in Liste, DB-2.1
+    String contestPrintTaskTestDetails = ""             // Ausdruck der Aufgabendetails in Liste, DB-2.8
+    Boolean contestPrintLandingDetails = false          // Ausdruck der Landedetails in Liste, DB-2.8
+	Boolean contestPrintTaskNamesInTitle = false        // Ausdruck der Aufgabennamen im Title, DB-2.1
+	Boolean contestPrintAircraft = true                 // Ausdruck des Flugzeuges in Liste, DB-2.8
+	Boolean contestPrintTeam = false                    // Ausdruck des Teams in Liste, DB-2.8
+	Boolean contestPrintClass = false                   // Ausdruck der Klasse in Liste, DB-2.8
+	Boolean contestPrintShortClass = false              // Ausdruck des kurzen Klassennamens in Liste, DB-2.8
 	Boolean contestPrintProvisional = false             // Ausdruck "vorläufig", DB-2.3
 	Boolean contestPrintA3 = false                      // Ausdruck A3, DB-2.3
+    Boolean contestPrintEqualPositions = false          // Ausdruck gleicher Positionen, DB-2.8
 	
 	// PlanningTest
 	int planningTestDirectionCorrectGrad = 2
@@ -111,6 +119,7 @@ class ResultClass
 	Boolean printPointsLandingTest2 = true              // DB-2.3
 	Boolean printPointsLandingTest3 = true              // DB-2.3
 	Boolean printPointsLandingTest4 = true              // DB-2.3
+    String printLandingCalculatorValues = ""            // DB-2.8
 	Boolean printPointsZero = false                     // DB-2.3
 	Boolean printPointsLandscape = false                // DB-2.3
 	Boolean printPointsA3 = false                       // DB-2.3
@@ -222,6 +231,17 @@ class ResultClass
 		landingTest2NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
 		landingTest3NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
 		landingTest4NotAllowedAerodynamicAuxiliariesPoints(nullable:true, min:0)
+
+		// DB-2.8 compatibility
+		shortName(nullable:true,blank:false)
+		contestPrintAircraft(nullable:true)
+		contestPrintTeam(nullable:true)
+		contestPrintClass(nullable:true)
+		contestPrintShortClass(nullable:true)
+        contestPrintTaskTestDetails(nullable:true)
+        contestPrintLandingDetails(nullable:true)
+        contestPrintEqualPositions(nullable:true)
+        printLandingCalculatorValues(nullable:true)
 	}
 
 	String GetPrintContestTitle()
@@ -312,6 +332,62 @@ class ResultClass
 		return false
 	}
 	
+    boolean IsLandingTest1Run()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
+                if (taskclass_instance.resultclass == this) {
+                    if (taskclass_instance.landingTest1Run) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    boolean IsLandingTest2Run()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
+                if (taskclass_instance.resultclass == this) {
+                    if (taskclass_instance.landingTest2Run) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    boolean IsLandingTest3Run()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
+                if (taskclass_instance.resultclass == this) {
+                    if (taskclass_instance.landingTest3Run) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
+    boolean IsLandingTest4Run()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
+                if (taskclass_instance.resultclass == this) {
+                    if (taskclass_instance.landingTest4Run) {
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+    
 	boolean IsSpecialTestRun()
 	{
 		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
@@ -359,6 +435,7 @@ class ResultClass
 		contestTitle = resultClassInstance.contestTitle
 		contestRule = resultClassInstance.contestRule
 		precisionFlying = resultClassInstance.precisionFlying
+        printLandingCalculatorValues = resultClassInstance.printLandingCalculatorValues
 		
 		planningTestDirectionCorrectGrad = resultClassInstance.planningTestDirectionCorrectGrad 
 		planningTestDirectionPointsPerGrad = resultClassInstance.planningTestDirectionPointsPerGrad
@@ -465,7 +542,7 @@ class ResultClass
 	Map GetClassResultSettings()
 	{
 		Map ret = [:]
-		if (!contestPrintTaskDetails && contestPrintTaskNamesInTitle) {
+		if (contestPrintTaskNamesInTitle) {
 			String task_names = ""
 			for (Task task_instance in contest.GetResultTasks(contestTaskResults)) {
 				if (task_names) {
@@ -494,5 +571,9 @@ class ResultClass
 		}
 		return ret
 	}
-	
+
+	String GetDefaultShortName()
+	{
+		return name.substring(0,1)
+	}	
 }

@@ -80,14 +80,14 @@ class LandingResultsTagLib
 	
     // --------------------------------------------------------------------------------------------------------------------
 	def landingTest1Printable = { attrs, body ->
-        outln"""<table width="100%" border="1" cellspacing="0" cellpadding="2">"""
+        outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="name" id="1">"""
         outln"""       		<td>${message(code:'fc.landingtest.landing1')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:'fc.landingtest.landing1.precision')+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="values" id="1">"""
         outln"""        	<td>"""
         if (attrs.t.landingTest1Landing == 2) {
             outln"""   		    ${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTest1NoLandingPoints()} ${message(code:'fc.points')}<br/>"""
@@ -120,7 +120,7 @@ class LandingResultsTagLib
         outln"""        </tr>"""
         outln"""    </tbody>"""
         outln"""    <tfoot>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="summary" id="1">"""
         outln"""            <td>${message(code:'fc.landingresults.landing')}: ${attrs.t.landingTest1Penalties} ${message(code:'fc.points')}</td>"""
         outln"""        </tr>"""
         outln"""    </tfoot>"""
@@ -210,14 +210,14 @@ class LandingResultsTagLib
 	
     // --------------------------------------------------------------------------------------------------------------------
 	def landingTest2Printable = { attrs, body ->
-        outln"""<table width="100%" border="1" cellspacing="0" cellpadding="2">"""
+        outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="name" id="2">"""
         outln"""       		<td>${message(code:'fc.landingtest.landing2')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:'fc.landingtest.landing2.precision')+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="values" id="2">"""
         outln"""        	<td>"""
         if (attrs.t.landingTest2Landing == 2) {
             outln"""       		${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTest2NoLandingPoints()} ${message(code:'fc.points')}<br/>"""
@@ -253,7 +253,7 @@ class LandingResultsTagLib
         outln"""        </tr>"""
         outln"""    </tbody>"""
         outln"""    <tfoot>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="summary" id="2">"""
         outln"""            <td>${message(code:'fc.landingresults.landing')}: ${attrs.t.landingTest2Penalties} ${message(code:'fc.points')}</td>"""
         outln"""        </tr>"""
         outln"""    </tfoot>"""
@@ -350,14 +350,14 @@ class LandingResultsTagLib
 	
     // --------------------------------------------------------------------------------------------------------------------
 	def landingTest3Printable = { attrs, body ->
-        outln"""<table width="100%" border="1" cellspacing="0" cellpadding="2">"""
+        outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="name" id="3">"""
         outln"""       		<td>${message(code:'fc.landingtest.landing3')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:'fc.landingtest.landing3.precision')+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="values" id="3">"""
         outln"""        	<td>"""
         if (attrs.t.landingTest3Landing == 2) {
             outln"""       		${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTest3NoLandingPoints()} ${message(code:'fc.points')}<br/>"""
@@ -396,7 +396,7 @@ class LandingResultsTagLib
         outln"""        </tr>"""
         outln"""    </tbody>"""
         outln"""    <tfoot>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="summary" id="3">"""
         outln"""            <td>${message(code:'fc.landingresults.landing')}: ${attrs.t.landingTest3Penalties} ${message(code:'fc.points')}</td>"""
         outln"""        </tr>"""
         outln"""    </tfoot>"""
@@ -486,14 +486,14 @@ class LandingResultsTagLib
 	
     // --------------------------------------------------------------------------------------------------------------------
 	def landingTest4Printable = { attrs, body ->
-        outln"""<table width="100%" border="1" cellspacing="0" cellpadding="2">"""
+        outln"""<table class="landingresultlist">"""
         outln"""	<thead>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="name" id="4">"""
         outln"""       		<td>${message(code:'fc.landingtest.landing4')}${if (attrs.t.IsPrecisionFlying()) " ("+message(code:'fc.landingtest.landing4.precision')+")" else ""}</td>"""
         outln"""        </tr>"""
         outln"""	</thead>"""
         outln"""    <tbody>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="values" id="4">"""
         outln"""        	<td>"""
         if (attrs.t.landingTest4Landing == 2) {
             outln"""       		${message(code:'fc.landingtest.nolanding')}: ${attrs.t.GetLandingTest4NoLandingPoints()} ${message(code:'fc.points')}<br/>"""
@@ -529,7 +529,7 @@ class LandingResultsTagLib
         outln"""        </tr>"""
         outln"""    </tbody>"""
         outln"""    <tfoot>"""
-        outln"""        <tr>"""
+        outln"""        <tr class="summary" id="4">"""
         outln"""            <td>${message(code:'fc.landingresults.landing')}: ${attrs.t.landingTest4Penalties} ${message(code:'fc.points')}</td>"""
         outln"""        </tr>"""
         outln"""    </tfoot>"""
@@ -538,16 +538,16 @@ class LandingResultsTagLib
 	
     // --------------------------------------------------------------------------------------------------------------------
 	def landingTestSummaryPrintable = { attrs, body ->
-		outln"""<table>"""
+		outln"""<table class="summary">"""
 		outln"""	<tfoot>"""
 		if (attrs.t.IsLandingTestAnyRun()) {
 			if (attrs.t.landingTestOtherPenalties > 0) {
-				outln"""<tr>"""
+				outln"""<tr class="otherpenalties">"""
 				outln"""	<td>${message(code:'fc.landingtest.otherpenalties')}: ${attrs.t.landingTestOtherPenalties} ${message(code:'fc.points')}</td>"""
 				outln"""</tr>"""
 			}
 		}
-		outln"""		<tr>"""
+		outln"""		<tr class="penalties">"""
 		outln"""			<td>${message(code:'fc.penalties')}: ${attrs.t.landingTestPenalties} ${message(code:'fc.points')}</td>"""
 		outln"""		</tr>"""
 		outln"""	</tfoot>"""

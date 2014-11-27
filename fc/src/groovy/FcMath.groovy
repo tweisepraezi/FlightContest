@@ -1,19 +1,23 @@
 import java.text.*
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.math.*
 
 class FcMath
 {
+    //--------------------------------------------------------------------------
 	static BigDecimal AddDistance(BigDecimal distanceValue1, BigDecimal distanceValue2)
 	{
 		return distanceValue1.round(new MathContext(4)) + distanceValue2.round(new MathContext(4))
 	}
 	
+    //--------------------------------------------------------------------------
 	static BigDecimal RoundDistance(BigDecimal distanceValue)
 	{
 		return distanceValue.setScale(2, RoundingMode.HALF_EVEN)
 	}
 	
+    //--------------------------------------------------------------------------
 	static String DistanceStr(BigDecimal distanceValue)
 	{
 		if (distanceValue >= 0) {
@@ -23,16 +27,19 @@ class FcMath
 		return ""
 	}
 
+    //--------------------------------------------------------------------------
 	static int RoundGrad(BigDecimal gradValue)
 	{
 		return gradValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
 	}
 	
+    //--------------------------------------------------------------------------
 	static int RoundDiffGrad(BigDecimal gradDiffValue)
 	{
 		return gradDiffValue.setScale(0, RoundingMode.HALF_DOWN).toInteger()
 	}
 	
+    //--------------------------------------------------------------------------
     static String GradStr(BigDecimal gradValue)
     {
         if (gradValue >= 0) {
@@ -42,6 +49,7 @@ class FcMath
         return ""
     }
 	
+    //--------------------------------------------------------------------------
     static String GradStr(int gradValue)
     {
         if (gradValue >= 0) {
@@ -51,6 +59,7 @@ class FcMath
         return ""
     }
     
+    //--------------------------------------------------------------------------
     static String GradStrComma(BigDecimal gradValue)
     {
         if (gradValue >= 0) {
@@ -60,12 +69,14 @@ class FcMath
         return ""
     }
 	
+    //--------------------------------------------------------------------------
     static String GradStrMinus(BigDecimal gradValue)
     {
         DecimalFormat df = new DecimalFormat("0")
         return df.format(gradValue)
     }
 	
+    //--------------------------------------------------------------------------
     static String RouteGradStr(BigDecimal gradValue)
     {
         if (gradValue >= 0) {
@@ -75,6 +86,7 @@ class FcMath
         return ""
     }
     
+    //--------------------------------------------------------------------------
     static String MinuteStr(BigDecimal minValue)
     {
     	if (minValue >= 0) {
@@ -84,12 +96,14 @@ class FcMath
     	return ""
     }
 
+    //--------------------------------------------------------------------------
 	static int Seconds(BigDecimal timeValue)
 	{
 		BigDecimal seconds = (timeValue * 3600).setScale(0, RoundingMode.HALF_EVEN)
 		return seconds.toInteger()
 	}
 	
+    //--------------------------------------------------------------------------
 	static int Seconds(Date dateValue)
 	{
 		GregorianCalendar time = new GregorianCalendar()
@@ -98,11 +112,13 @@ class FcMath
 		return seconds
 	}
 	
+    //--------------------------------------------------------------------------
 	static BigDecimal Hours(int minutesValue)
 	{
 		return 	minutesValue / 60
 	}
 	
+    //--------------------------------------------------------------------------
 	static int RatioSeconds(BigDecimal timeValue, BigDecimal ratioValue)
 	{
 		int ret = Seconds(timeValue * ratioValue)
@@ -118,6 +134,15 @@ class FcMath
 		}
 	}
 	
+    //--------------------------------------------------------------------------
+    static BigDecimal TimeDiff(Date startTime, Date endTime)
+    {
+        int start_seconds = Seconds(startTime)
+        int end_seconds = Seconds(endTime)
+        return (end_seconds - start_seconds)/3600
+    }
+    
+    //--------------------------------------------------------------------------
 	static String TimeStr(BigDecimal timeValue)
 	{
 		GregorianCalendar time = new GregorianCalendar()
@@ -129,6 +154,31 @@ class FcMath
 		return time.getTime().format("HH:mm:ss")
 	}
 	
+    //--------------------------------------------------------------------------
+    static String TimeStrShort(BigDecimal timeValue)
+    {
+        GregorianCalendar time = new GregorianCalendar()
+        time.set(Calendar.HOUR_OF_DAY, 0)
+        time.set(Calendar.MINUTE, 0)
+        if (timeValue >= 0) {
+            time.set(Calendar.SECOND, Seconds(timeValue))
+        }
+        return time.getTime().format("HH:mm")
+    }
+    
+    //--------------------------------------------------------------------------
+    static String TimeStrMin(BigDecimal timeValue)
+    {
+        GregorianCalendar time = new GregorianCalendar()
+        time.set(Calendar.HOUR_OF_DAY, 0)
+        time.set(Calendar.MINUTE, 0)
+        if (timeValue >= 0) {
+            time.set(Calendar.SECOND, Seconds(timeValue))
+        }
+        return time.getTime().format("m:ss")
+    }
+    
+    //--------------------------------------------------------------------------
 	static String TimeStr(Date dateValue)
 	{
 		if (dateValue) {
@@ -137,6 +187,7 @@ class FcMath
 		return ""
 	}
 	
+    //--------------------------------------------------------------------------
 	static String TimeStrShort(Date dateValue)
 	{
 		if (dateValue) {
@@ -145,6 +196,7 @@ class FcMath
 		return ""
 	}
 	
+    //--------------------------------------------------------------------------
     static String SpeedStr_Planning(BigDecimal speedValue)
     {
         if (speedValue >= 0) {
@@ -154,6 +206,7 @@ class FcMath
         return ""
     }
     
+    //--------------------------------------------------------------------------
     static String SpeedStr_Flight(BigDecimal speedValue)
     {
         if (speedValue >= 0) {
@@ -163,6 +216,7 @@ class FcMath
         return ""
     }
     
+    //--------------------------------------------------------------------------
     static String DistanceMeasureStr(BigDecimal distanceValue)
     {
         if (distanceValue >= 0) {
@@ -172,6 +226,7 @@ class FcMath
         return ""
     }
 
+    //--------------------------------------------------------------------------
     static String RatioStr(BigDecimal ratioValue)
     {
         if (ratioValue >= 0) {
@@ -181,6 +236,7 @@ class FcMath
         return ""
     }
 
+    //--------------------------------------------------------------------------
     static String ConvertAFLOSCoordValue(String aflosCoordValue)
     // "51° 26,9035' N" -> "N 051° 27,00000'" 
     {
@@ -197,6 +253,7 @@ class FcMath
     	return "${a[2]} $gradStr $secondStr"
     }
 
+    //--------------------------------------------------------------------------
     static String ConvertAFLOSTime(String aflosTime)
     {
         String[] at = aflosTime.split()
@@ -213,6 +270,7 @@ class FcMath
 		return "$aflos_hour:$aflos_minute:$seconds"
     }
 	
+    //--------------------------------------------------------------------------
     static String GateWidthStr(Float gateWidthValue)
     {
         if (gateWidthValue) {
@@ -222,4 +280,42 @@ class FcMath
         return "0"
     }
 
+    //--------------------------------------------------------------------------
+    static int CalculateLandingPenalties(String measureValue, String calculatorValue)
+    {
+        int penalty_result = 0
+        if (measureValue) {
+            try {
+                String landing_measure = "'${measureValue}'"
+                Object penalty_calculator = Eval.me(calculatorValue)
+                penalty_result = Eval.me("penalty_calculator",penalty_calculator,"penalty_calculator(${landing_measure})")
+            } catch (Exception e) {
+                penalty_result = -1
+            }
+        }
+        return penalty_result
+    }
+    
+    //--------------------------------------------------------------------------
+    static int CalculateLandingPenalties2(String measureValue, String calculatorValue)
+    {
+        int ret = CalculateLandingPenalties(measureValue, calculatorValue)
+        if (ret == -1) {
+            ret = 0
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    static String GetPrintLandingCalculatorValues(String printValues, String calculatorValue)
+    {
+        String s = ""
+        for (String value in printValues.split(',')) {
+            if (s) {
+                s += ", "
+            }
+            s += "${value}: ${CalculateLandingPenalties2(value, calculatorValue)}"
+        }
+        return s
+    }
 }

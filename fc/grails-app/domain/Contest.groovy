@@ -2,24 +2,39 @@ import java.util.Map;
 
 class Contest 
 {
+	static final String DEFAULT_ORGANIZER = "Deutscher Pr\u00E4zisionsflug-Verein e.V." // DB-2.8
+	static final int PRINTSTYLESIZE = 10000             // DB-2.8
+    static final int PRINTFREETEXTSIZE = 10000          // DB-2.8
+    static final String DEFAULT_FREETEXTSTYLE = "td { font-size: 1000%; padding-top:1cm; }\ntd#1 { padding-top:2cm; }" // DB-2.8
 	static final int IMAGEMAXSIZE = 1048576             // 1MB, DB-2.3
-	static final int IMAGEHEIGHT = 50                   // DB-2.3
-	static final String TITLESIZE = "2.5em"             // DB-2.3
+	static final int IMAGEHEIGHT = 40                   // DB-2.3
+	static final int IMAGEBOTTOMHEIGHT = 40             // DB-2.8
+	static final String TITLESIZE = "2.0em"             // DB-2.3
+	static final String IMAGEBOTTOMTEXTSIZE = "16"      // DB-2.8
+	static final BigDecimal A3PORTRAITFACTOR = 1.414    // DB-2.8
+	static final BigDecimal A4LANDSCAPEFACTOR = 1       // DB-2.8
+	static final BigDecimal A3LANDSCAPEFACTOR = 1       // DB-2.8
 	
-	static final String DEMOCONTESTYEAR = "2014"        // Jahr der Demo-Wettbewerbe
+	static final String LANDING_NO = "NO"               // DB-2.8
+	static final String LANDING_OUT = "OUT"             // DB-2.8
+    
+    static final int LIVE_REFRESHSECONDS = 10           // DB-2.8
+    static final String LIVE_STYLESHEET = "fclive.css"  // DB-2.8
 	
-	String title = "Wettbewerbsname"
+	String title = ""
 	int mapScale = 200000
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
-	boolean resultClasses = false          	            // Klassen, DB-2.0
+	boolean resultClasses = true          	            // Klassen, DB-2.0
 	ContestRules contestRule                            // Wettbewerbsordnung, DB-2.0
+    Boolean contestRuleForEachClass = false             // Eigene Wettbewerbsordnung für jede Klasse, DB-2.8 
 	Boolean precisionFlying = false                     // DB-2.3
 	boolean testExists = false                          // Integrierter Test vorhanden, DB-2.0
 	boolean aflosTest = false                           // Nutzung der AFLOS-Test-Datenbank, DB-2.0
 	boolean aflosUpload = false                         // Nutzung einer geuploadeten AFLO-Datenbank,DB-2.0 
 	Integer bestOfAnalysisTaskNum = 0                   // Anzahl der Aufgaben, aus denen das beste Ergebnis zu nehmen ist, DB-2.3
 	String printPrefix = ""                             // Prefix for print, DB-2.3
-	
+	String printOrganizer = DEFAULT_ORGANIZER           // DB-2.8
+
 	// Wettbewerbs-Auswertung
 	String contestClassResults = ""		                // Zu berücksichtigende Klassen, DB-2.1
 	String contestTaskResults = ""                      // Zu berücksichtigende Aufgaben, DB-2.1
@@ -33,11 +48,18 @@ class Contest
 	String contestPrintTitle = ""                       // Ausdruck-Titel, DB-2.3
 	String contestPrintSubtitle = ""                    // Ausdruck-Untertitel, DB-2.3
 	Boolean contestPrintLandscape = true                // Ausdruck quer, DB-2.1
-	Boolean contestPrintTaskDetails = true              // Ausdruck von Aufgabendetails, DB-2.1
-	Boolean contestPrintTaskNamesInTitle = true         // Ausdruck der Tasknamen im Title, wenn contestPrintTaskDetails = False, DB-2.1
+	Boolean contestPrintTaskDetails = false             // Ausdruck der Aufgabensummen in Liste, DB-2.1
+    String contestPrintTaskTestDetails = ""             // Ausdruck der Aufgabendetails in Liste, DB-2.8
+    Boolean contestPrintLandingDetails = false          // Ausdruck der Landedetails in Liste, DB-2.8
+	Boolean contestPrintTaskNamesInTitle = false        // Ausdruck der Aufgabennamen im Title, DB-2.1
+	Boolean contestPrintAircraft = true                 // Ausdruck des Flugzeuges in Liste, DB-2.8
+	Boolean contestPrintTeam = false                    // Ausdruck des Teams in Liste, DB-2.8
+	Boolean contestPrintClass = false                   // Ausdruck der Klasse in Liste, DB-2.8
+	Boolean contestPrintShortClass = false              // Ausdruck des kurzen Klassennamens in Liste, DB-2.8
 	Boolean contestPrintProvisional = false             // Ausdruck "vorläufig", DB-2.3
 	Boolean contestPrintA3 = false                      // Ausdruck A3, DB-2.3
-	
+    Boolean contestPrintEqualPositions = false          // Ausdruck gleicher Positionen, DB-2.8
+    
 	// Team-Auswertung
 	int teamCrewNum = 0                    	            // Anzahl von Besatzungen, DB-2.0
 	String teamClassResults = ""		                // Zu berücksichtigende Klassen, DB-2.0
@@ -53,7 +75,14 @@ class Contest
 	Boolean teamPrintLandscape = true                   // Ausdruck quer, DB-2.1
 	Boolean teamPrintProvisional = false                // Ausdruck "vorläufig", DB-2.3
 	Boolean teamPrintA3 = false                         // Ausdruck A3, DB-2.3
+    Boolean teamPrintEqualPositions = false             // Ausdruck gleicher Positionen, DB-2.8
 	
+    // Live-Auswertung
+    Integer liveRefreshSeconds = LIVE_REFRESHSECONDS    // Live-Anzeige-Refresh-Zeit in Sekunden, DB-2.8
+    String liveStylesheet = LIVE_STYLESHEET             // Live-Anzeige-Stylesheet, DB-2.8
+    Integer livePositionCalculation = 0                 // Live-Positions-Berechnung (0 = Contest, sonst Task), DB-2.8
+    Boolean liveShowSummary = true                      // Live-Summary-Anzeige, DB-2.8
+    
 	// PlanningTest
 	int planningTestDirectionCorrectGrad = 2
 	int planningTestDirectionPointsPerGrad = 2
@@ -140,6 +169,7 @@ class Contest
 	Boolean printCrewName = true                        // DB-2.3
 	Boolean printCrewTeam = true                        // DB-2.3
 	Boolean printCrewClass = true                       // DB-2.3
+	Boolean printCrewShortClass = false                 // DB-2.8
 	Boolean printCrewAircraft = true                    // DB-2.3
 	Boolean printCrewAircraftType = false               // DB-2.7
 	Boolean printCrewAircraftColour = false             // DB-2.7
@@ -150,6 +180,8 @@ class Contest
 	String printCrewEmptyTitle2 = ""                    // DB-2.3
 	Boolean printCrewEmptyColumn3 = false               // DB-2.3
 	String printCrewEmptyTitle3 = ""                    // DB-2.3
+	Boolean printCrewEmptyColumn4 = false               // DB-2.8
+	String printCrewEmptyTitle4 = ""                    // DB-2.8
 	Boolean printCrewLandscape = false                  // DB-2.3
 	Boolean printCrewA3 = false                         // DB-2.3
 	
@@ -161,10 +193,18 @@ class Contest
 	Boolean printPointsLandingTest2 = true              // DB-2.3
 	Boolean printPointsLandingTest3 = true              // DB-2.3
 	Boolean printPointsLandingTest4 = true              // DB-2.3
+    String printLandingCalculatorValues = ""            // DB-2.8
 	Boolean printPointsZero = false                     // DB-2.3
 	Boolean printPointsLandscape = false                // DB-2.3
 	Boolean printPointsA3 = false                       // DB-2.3
 
+    // FreeText
+    String printFreeText = ""                           // DB-2.8
+    String printFreeTextTitle = ""                      // DB-2.8
+    Boolean printFreeTextLandscape = true               // DB-2.8
+    Boolean printFreeTextA3 = false                     // DB-2.8
+    String printFreeTextStyle = DEFAULT_FREETEXTSTYLE   // DB-2.8
+    
 	// Images
 	byte[] imageLeft = null                             // DB-2.3
 	Integer imageLeftHeight = IMAGEHEIGHT               // DB-2.3
@@ -173,11 +213,19 @@ class Contest
 	byte[] imageRight = null                            // DB-2.3
 	Integer imageRightHeight = IMAGEHEIGHT              // DB-2.3
 	String titleSize = TITLESIZE                        // DB-2.3
-	BigDecimal a3PortraitFactor = 1.414                 // DB-2.7
-	BigDecimal a4LandscapeFactor = 1                    // DB-2.7
-	BigDecimal a3LandscapeFactor = 1                    // DB-2.7
-
-
+	BigDecimal a3PortraitFactor = A3PORTRAITFACTOR      // DB-2.7
+	BigDecimal a4LandscapeFactor = A4LANDSCAPEFACTOR    // DB-2.7
+	BigDecimal a3LandscapeFactor = A3LANDSCAPEFACTOR    // DB-2.7
+	String printStyle = ""                              // DB-2.8
+	Boolean imageBottomOn = false                       // DB-2.8
+	byte[] imageBottomLeft = null                       // DB-2.8
+	Integer imageBottomLeftHeight = IMAGEBOTTOMHEIGHT   // DB-2.8
+	String imageBottomLeftText = ""                     // DB-2.8
+	byte[] imageBottomRight = null                      // DB-2.8
+	Integer imageBottomRightHeight = IMAGEBOTTOMHEIGHT  // DB-2.8
+	String imageBottomRightText = ""                    // DB-2.8
+	String imageBottomTextSize = IMAGEBOTTOMTEXTSIZE    // DB-2.8
+	
 	// transient values
 	static transients = ['copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
 	boolean copyContestSettings = true
@@ -353,6 +401,40 @@ class Contest
 		a3PortraitFactor(nullable:true)
 		a4LandscapeFactor(nullable:true)
 		a3LandscapeFactor(nullable:true)
+		
+		// DB-2.8 compatibility
+		printStyle(nullable:true,maxSize:PRINTSTYLESIZE)
+		printCrewShortClass(nullable:true)
+		imageBottomOn(nullable:true)
+		imageBottomLeft(nullable:true,maxSize:IMAGEMAXSIZE)
+		imageBottomLeftHeight(nullable:true)
+		imageBottomLeftText(nullable:true)
+		imageBottomRight(nullable:true,maxSize:IMAGEMAXSIZE)
+		imageBottomRightHeight(nullable:true)
+		imageBottomRightText(nullable:true)
+		imageBottomTextSize(nullable:true)
+		printOrganizer(blank:false,nullable:true)
+		contestPrintAircraft(nullable:true)
+		contestPrintTeam(nullable:true)
+		contestPrintClass(nullable:true)
+		contestPrintShortClass(nullable:true)
+		printCrewEmptyColumn4(nullable:true)
+		printCrewEmptyTitle4(nullable:true)
+        contestPrintTaskTestDetails(nullable:true)
+        contestPrintLandingDetails(nullable:true)
+        liveRefreshSeconds(nullable:true,blank:false, min:0)
+        liveStylesheet(nullable:true,blank:true)
+        livePositionCalculation(nullable:true)
+        liveShowSummary(nullable:true)
+        contestPrintEqualPositions(nullable:true)
+        teamPrintEqualPositions(nullable:true)
+        printFreeText(nullable:true,maxSize:PRINTFREETEXTSIZE)
+        printFreeTextTitle(nullable:true)
+        printFreeTextLandscape(nullable:true)
+        printFreeTextA3(nullable:true)
+        printFreeTextStyle(nullable:true,maxSize:PRINTSTYLESIZE)
+        contestRuleForEachClass(nullable:true)
+        printLandingCalculatorValues(nullable:true)
 	}
 
     static mapping = {
@@ -372,7 +454,9 @@ class Contest
 				timeZone = contestInstance.timeZone
 				resultClasses = contestInstance.resultClasses
 				contestRule = contestInstance.contestRule
+                contestRuleForEachClass = contestInstance.contestRuleForEachClass
 				precisionFlying = contestInstance.precisionFlying
+                printLandingCalculatorValues = contestInstance.printLandingCalculatorValues
 				teamCrewNum = contestInstance.teamCrewNum
 				bestOfAnalysisTaskNum = contestInstance.bestOfAnalysisTaskNum
 				
@@ -739,7 +823,7 @@ class Contest
         for (Team team_instance in Team.findAllByContest(this,[sort:'contestPosition'])) {
 			if (team_instance.IsActiveTeam()) {
                 int crew_num = 0
-            	for ( Crew crew_instance in Crew.findAllByTeamAndDisabled(team_instance,false,[sort:'teamPenalties'])) {
+            	for ( Crew crew_instance in Crew.findAllByTeamAndDisabledAndDisabledTeam(team_instance,false,false,[sort:'teamPenalties'])) {
             		if (crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_num < teamCrewNum)) {
             			crew_num++
                         for ( Task task_instance in GetResultTasks(resultTaskIDs)) {
@@ -801,7 +885,7 @@ class Contest
 	Map GetResultSettings()
 	{
 		Map ret = [:]
-		if (!contestPrintTaskDetails && contestPrintTaskNamesInTitle) {
+		if (contestPrintTaskNamesInTitle) {
 			String task_names = ""
 			for (Task task_instance in GetResultTasks(contestTaskResults)) {
 				if (task_names) {
@@ -831,6 +915,20 @@ class Contest
 		return ret
 	}
 	
+    List GetResultClasses(String resultClassIDs)
+    {
+        List ret = []
+        if (resultClasses) {
+            String resultclass_ids = "$resultClassIDs,"
+            for (ResultClass resultclass_instance in ResultClass.findAllByContest(this,[sort:"id"])) {
+                if (resultclass_ids.contains("resultclass_${resultclass_instance.id},")) {
+                    ret += resultclass_instance
+                }
+            }
+        }
+        return ret
+    }
+    
 	List GetResultTasks(String resultTaskIDs)
 	{
 		List ret = []
@@ -843,21 +941,98 @@ class Contest
 		return ret
 	}
 	
+    List GetTestDetailsTasks(String testDetailsTaskIDs)
+    {
+        List ret = []
+        String task_ids = "$testDetailsTaskIDs,"
+        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+            if (task_ids.contains("tasktestdetails_${task_instance.id},")) {
+                ret += task_instance
+            }
+        }
+        return ret
+    }
+    
 	List GetResultTeams(String resultTeamIDs)
 	{
 		List ret = []
-		String team_ids = "$resultTeamIDs,"
-		for (Team team_instance in Team.findAllByContest(this,[sort:"id"])) {
-			if (team_ids.contains("team_${team_instance.id},")) {
-				ret += team_instance
-			}
-		}
-		if (team_ids.contains("team_no_team_crew,")) {
-			ret += null
-		}
+        String team_ids = "$resultTeamIDs,"
+        if (team_ids.contains("team_all_teams,")) {
+            for (Team team_instance in Team.findAllByContest(this,[sort:"id"])) {
+                ret += team_instance
+            }
+        } else {
+    		for (Team team_instance in Team.findAllByContest(this,[sort:"id"])) {
+    			if (team_ids.contains("team_${team_instance.id},")) {
+    				ret += team_instance
+    			}
+    		}
+        }
+        if (team_ids.contains("team_no_team_crew,")) {
+            ret += null
+        }
 		return ret
 	}
 	
+    String GetResultClassNames(String resultClassIDs)
+    {
+        String s = ""
+        if (resultClasses) {
+            String resultclass_ids = "$resultClassIDs,"
+            for (ResultClass resultclass_instance in ResultClass.findAllByContest(this,[sort:"id"])) {
+                if (resultclass_ids.contains("resultclass_${resultclass_instance.id},")) {
+                    if (s) {
+                        s += ","
+                    }
+                    s += resultclass_instance.name
+                }
+            }
+        }
+        return s
+    }
+    
+    String GetResultTaskNames(String resultTaskIDs)
+    {
+        String s = ""
+        String task_ids = "$resultTaskIDs,"
+        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+            if (task_ids.contains("task_${task_instance.id},")) {
+                if (s) {
+                    s += ","
+                }
+                s += task_instance.name()
+            }
+        }
+        return s
+    }
+    
+    String GetResultTeamNames(String resultTeamIDs)
+    {
+        String s = ""
+        String team_ids = "$resultTeamIDs,"
+        for (Team team_instance in Team.findAllByContest(this,[sort:"id"])) {
+            if (team_ids.contains("team_${team_instance.id},")) {
+                if (s) {
+                    s += ","
+                }
+                s += team_instance.name
+            } 
+        }
+        if (team_ids.contains("team_no_team_crew,")) {
+            if (s) {
+                s += ","
+            }
+            s += "<Kein Team>"
+        }
+        if (team_ids.contains("team_all_teams,")) {
+            if (s) {
+                s += ","
+            }
+            s += "<Alle Teams>"
+        }
+        return s
+    }
+    
 	String GetPrintPrefix()
 	{
 		String prefix = "" 
@@ -887,4 +1062,11 @@ class Contest
 		return prefix.toLowerCase()
 	}
 	
+    String GetPrintFreeTextTitle()
+    {
+        if (printFreeTextTitle) {
+            return printFreeTextTitle
+        }
+        return getPrintMsg('fc.info')
+    }
 }

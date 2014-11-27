@@ -2,18 +2,19 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.task.editprintsettings')} - ${taskInstance.name()}</title>
+        <title>${message(code:'fc.task.timetablejury')} - ${taskInstance.name()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.task.editprintsettings')} - ${taskInstance.name()}</h2>
+                <h2>${message(code:'fc.task.timetablejury')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.GetTimeTableVersion()}<g:if test="${taskInstance.timetableModified}">*</g:if>)</h2>
                 <div class="block" id="forms">
                     <g:form params="${['taskReturnAction':taskReturnAction,'taskReturnController':taskReturnController,'taskReturnID':taskReturnID]}">
                         <fieldset>
-                            <legend>${message(code:'fc.test.timetablejury')}</legend>
+                            <g:set var="intermediate_tower" value="${false}" />
+                            <g:set var="intermediate_landing" value="${false}" />
                             <p>
                                 <label>${message(code:'fc.printsubtitle')}:</label>
                                 <br/>
@@ -48,6 +49,16 @@
                                     <g:checkBox name="printTimetableJuryTeam" value="${taskInstance.printTimetableJuryTeam}" />
                                     <label>${message(code:'fc.team')}</label>
                                 </div>
+                                <g:if test="${taskInstance.contest.resultClasses}">
+	                                <div>
+	                                    <g:checkBox name="printTimetableJuryClass" value="${taskInstance.printTimetableJuryClass}" />
+	                                    <label>${message(code:'fc.resultclass')}</label>
+	                                </div>
+                                    <div>
+                                        <g:checkBox name="printTimetableJuryShortClass" value="${taskInstance.printTimetableJuryShortClass}" />
+                                        <label>${message(code:'fc.resultclass.short')}</label>
+                                    </div>
+                                </g:if>
                                 <g:if test="${taskInstance.planningTestDuration == 0}">
                                     <div>
                                         <g:checkBox name="printTimetableJuryPlanning" value="${taskInstance.printTimetableJuryPlanning}" />
@@ -94,6 +105,13 @@
                                                 <label>${leg_name}</label>
                                             </div>
                                         </g:else>
+                                        <g:if test="${testlegflight_instance.coordTitle.type == CoordType.iLDG}">
+                                            <g:set var="intermediate_tower" value="${true}" />
+                                            <g:set var="intermediate_landing" value="${true}" />
+                                        </g:if>
+                                        <g:if test="${testlegflight_instance.coordTitle.type == CoordType.iTO}">
+                                            <g:set var="intermediate_tower" value="${true}" />
+                                        </g:if>
                                     </g:each>
                                 </g:if>
                                 <div>
@@ -136,6 +154,15 @@
                             </p>
                             <p>
                                 <div>
+                                    <g:checkBox name="printTimetableJuryEmptyColumn4" value="${taskInstance.printTimetableJuryEmptyColumn4}" />
+                                    <label>${message(code:'fc.test.emptycolumn')} 4</label>
+                                </div>
+                                <p>
+                                    <input type="text" id="printTimetableJuryEmptyTitle4" name="printTimetableJuryEmptyTitle4" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle4')}" tabIndex="13"/>
+                                </p>
+                            </p>
+                            <p>
+                                <div>
                                     <g:checkBox name="printTimetableJuryLandscape" value="${taskInstance.printTimetableJuryLandscape}" />
                                     <label>${message(code:'fc.printlandscape')}</label>
                                 </div>
@@ -144,90 +171,26 @@
                                     <label>${message(code:'fc.printa3')}</label>
                                 </div>
                             </p>
-                            <g:actionSubmit action="updateprintsettingsstandard" value="${message(code:'fc.setprintsettings.standard')}" tabIndex="13"/>
-                            <g:actionSubmit action="updateprintsettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="14"/>
-                            <g:actionSubmit action="updateprintsettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="15"/>
-                            <g:actionSubmit action="updateprintsettingstakeoff" value="${message(code:'fc.flighttest.takeoff.setprintsettings')}" tabIndex="16"/>
-                            <g:actionSubmit action="updateprintsettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="17"/>
-                            <g:actionSubmit action="updateprintsettingsparking" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="18"/>
-                            <g:actionSubmit action="updateprintsettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="19"/>
-                            <g:actionSubmit action="updateprintsettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="20"/>
-                        </fieldset>
-                        <fieldset>
-                            <legend>${message(code:'fc.test.timetable')}</legend>
-                            <p>
-                                <label>${message(code:'fc.printsubtitle')}:</label>
-                                <br/>
-                                <input type="text" id="printTimetablePrintTitle" name="printTimetablePrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetablePrintTitle')}" tabIndex="21"/>
-                            </p>
-                            <p>
-                                <div>
-                                    <g:checkBox name="printTimetableNumber" value="${taskInstance.printTimetableNumber}" />
-                                    <label>${message(code:'fc.number')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableCrew" value="${taskInstance.printTimetableCrew}" />
-                                    <label>${message(code:'fc.crew')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableAircraft" value="${taskInstance.printTimetableAircraft}" />
-                                    <label>${message(code:'fc.aircraft')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableTAS" value="${taskInstance.printTimetableTAS}" />
-                                    <label>${message(code:'fc.tas')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableTeam" value="${taskInstance.printTimetableTeam}" />
-                                    <label>${message(code:'fc.team')}</label>
-                                </div>
-                                <g:if test="${taskInstance.planningTestDuration == 0}">
-                                    <div>
-                                        <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" />
-                                        <label>${message(code:'fc.test.planning.publish')}</label>
-                                    </div>
-                                </g:if>
-                                <g:else>
-                                    <div>
-                                        <g:checkBox name="printTimetablePlanning" value="${taskInstance.printTimetablePlanning}" />
-                                        <label>${message(code:'fc.test.planning')}</label>
-                                    </div>
-                                </g:else>
-                                <div>
-                                    <g:checkBox name="printTimetableTakeoff" value="${taskInstance.printTimetableTakeoff}" />
-                                    <label>${message(code:'fc.test.takeoff')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableVersion" value="${taskInstance.printTimetableVersion}" />
-                                    <label>${message(code:'fc.version')}</label>
-                                </div>
-                            </p>
-                            <p>
-                                <div>
-                                    <g:checkBox name="printTimetableLandscape" value="${taskInstance.printTimetableLandscape}" />
-                                    <label>${message(code:'fc.printlandscape')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printTimetableA3" value="${taskInstance.printTimetableA3}" />
-                                    <label>${message(code:'fc.printa3')}</label>
-                                </div>
-                            </p>
-                            <g:actionSubmit action="updateprintsettingstimetablestandard" value="${message(code:'fc.setprintsettings.standard')}" tabIndex="31"/>
-                            <g:actionSubmit action="updateprintsettingstimetablenone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="32"/>
-                            <g:actionSubmit action="updateprintsettingstimetableall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="33"/>
-                            <p>
-                                <label>${message(code:'fc.test.timetable.change')}:</label>
-                                <br/>
-                                <g:textArea name="printTimetableChange" value="${taskInstance.printTimetableChange}" rows="5" cols="100" tabIndex="34"/>
-                            </p>
-                            <g:actionSubmit action="savechangeprintsettingstimetable" value="${message(code:'fc.savechangeprintsettings')}" tabIndex="35"/>
-                            <g:actionSubmit action="removechangeprintsettingstimetable" value="${message(code:'fc.removechangeprintsettings')}" onclick="return confirm('${message(code:'fc.removechangeprintsettings.areyousure')}');" tabIndex="36"/>
-                            <g:actionSubmit action="addchangeprintsettingstimetable" value="${message(code:'fc.addchangeprintsettings')}" tabIndex="37"/>
+                            <g:actionSubmit action="updatetimetablejurysettingsstandard" value="${message(code:'fc.standard')}" tabIndex="14"/>
+                            <g:actionSubmit action="updatetimetablejurysettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="15"/>
+                            <g:if test="${intermediate_tower}">
+                                <g:actionSubmit action="updatetimetablejurysettingsintermediatetower" value="${message(code:'fc.setprintsettings.tower.intermediate')}" tabIndex="16"/>
+                            </g:if>
+                            <g:actionSubmit action="updatetimetablejurysettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="17"/>
+                            <g:actionSubmit action="updatetimetablejurysettingstakeoff" value="${message(code:'fc.flighttest.takeoff.setprintsettings')}" tabIndex="18"/>
+                            <g:actionSubmit action="updatetimetablejurysettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="19"/>
+                            <g:if test="${intermediate_landing}">
+                                <g:actionSubmit action="updatetimetablejurysettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="20"/>
+                            </g:if>
+                            <g:actionSubmit action="updatetimetablejurysettingsparking" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="21"/>
+                            <g:actionSubmit action="updatetimetablejurysettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="22"/>
+                            <g:actionSubmit action="updatetimetablejurysettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="23"/>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
-                        <g:actionSubmit action="updateprintsettings" value="${message(code:'fc.update')}" tabIndex="101"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="102"/>
+                        <g:actionSubmit action="savetimetablejurysettings" value="${message(code:'fc.save')}" tabIndex="101"/>
+                        <g:actionSubmit action="printtimetablejury" value="${message(code:'fc.print')}"tabIndex="102"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="104"/>
                     </g:form>
                 </div>
             </div>

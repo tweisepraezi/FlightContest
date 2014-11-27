@@ -17,26 +17,33 @@
 				    <g:else>
 				        size: A4;
 				    </g:else> 
-				</g:else> 
-                @top-center {
+				</g:else>
+				@top-left {
+				    content: "${message(code:'fc.crew.list')}"
+				}
+                @top-right {
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
-                @bottom-center {
-                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                @bottom-left {
+                    content: "${contestInstance.printOrganizer}"
+                }
+                @bottom-right {
+                    content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }
         </style>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="layout" content="main" />
+        <style type="text/css">${contestInstance.printStyle}</style>
         <title>${message(code:'fc.crew.list')}</title>
     </head>
     <body>
-        <div class="box">
-            <div class="box boxborder" >
+        <div>
+            <div>
                 <h2>${message(code:'fc.crew.list')} (${crewList.size()})<g:if test="${contestInstance.printCrewPrintTitle}"> - ${contestInstance.printCrewPrintTitle}</g:if></h2>
-                <div class="block" id="forms" >
+                <div>
                     <g:form>
-                         <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                         <table class="crewlist">
                             <thead>
                                 <tr>
                                     <g:if test="${contestInstance.printCrewNumber}">
@@ -46,15 +53,20 @@
                                         <th>${message(code:'fc.crew.name')}</th>
                                     </g:if>
                                     <g:if test="${contestInstance.printCrewTeam}">
-                                        <th>${message(code:'fc.crew.team')}</th>
+                                        <th>${message(code:'fc.team')}</th>
                                     </g:if>
                                     <g:if test="${contestInstance.printCrewClass}">
                                         <g:if test="${resultClasses}">
-                                            <th>${message(code:'fc.crew.resultclass')}</th>
+                                            <th>${message(code:'fc.resultclass')}</th>
+                                        </g:if>
+                                    </g:if>
+                                    <g:if test="${contestInstance.printCrewShortClass}">
+                                        <g:if test="${resultClasses}">
+                                            <th>${message(code:'fc.resultclass.short.short')}</th>
                                         </g:if>
                                     </g:if>
                                     <g:if test="${contestInstance.printCrewAircraft}">
-                                        <th>${message(code:'fc.crew.aircraft')}</th>
+                                        <th>${message(code:'fc.aircraft')}</th>
                                     </g:if>
                                     <g:if test="${contestInstance.printCrewAircraftType}">
                                         <th>${message(code:'fc.aircraft.type')}</th>
@@ -74,55 +86,71 @@
                                     <g:if test="${contestInstance.printCrewEmptyColumn3}">
                                         <th>${contestInstance.printCrewEmptyTitle3}</th>
                                     </g:if>
+                                    <g:if test="${contestInstance.printCrewEmptyColumn4}">
+                                        <th>${contestInstance.printCrewEmptyTitle4}</th>
+                                    </g:if>
                                 </tr>
                             </thead>
                             <tbody>
                                 <g:each in="${crewList}" status="i" var="crewInstance">
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <g:if test="${contestInstance.printCrewNumber}">
-                                            <td>${crewInstance.startNum}</td>
+                                            <td class="num">${crewInstance.startNum}</td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewName}">
-                                            <td>${crewInstance.name}</td>
+                                            <td class="crew">${crewInstance.name}</td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewTeam}">
 	                                        <g:if test="${crewInstance.team}">                          
-	                                            <td>${crewInstance.team.name}</td>
+	                                            <td class="team">${crewInstance.team.name}</td>
 			                                </g:if>
 			                                <g:else>
-			                                    <td>-</td>
+			                                    <td class="team">-</td>
 			                                </g:else>
 			                            </g:if>
 			                            <g:if test="${contestInstance.printCrewClass}">
 	                                        <g:if test="${resultClasses}">
 	                                            <g:if test="${crewInstance.resultclass}">                          
-	                                                <td>${crewInstance.resultclass?.name}</td>
+	                                                <td class="resultclass">${crewInstance.resultclass?.name}</td>
 			                                    </g:if>
 			                                    <g:else>
-			                                        <td>-</td>
+			                                        <td class="resultclass">-</td>
 			                                    </g:else>
 	                                        </g:if>
 	                                    </g:if>
+                                        <g:if test="${contestInstance.printCrewShortClass}">
+                                            <g:if test="${resultClasses}">
+                                                <g:if test="${crewInstance.resultclass}">                          
+                                                    <td class="shortresultclass">${crewInstance.resultclass?.shortName}</td>
+                                                </g:if>
+                                                <g:else>
+                                                    <td class="shortresultclass">-</td>
+                                                </g:else>
+                                            </g:if>
+                                        </g:if>
                                         <g:if test="${contestInstance.printCrewAircraft}">
-                                            <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.registration}<g:if test="${crewInstance.aircraft?.user1 && crewInstance.aircraft?.user2}">${HTMLFilter.NoWrapStr(' *')}</g:if></g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+                                            <td class="aircraft"><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.registration}<g:if test="${crewInstance.aircraft?.user1 && crewInstance.aircraft?.user2}">${HTMLFilter.NoWrapStr(' *')}</g:if></g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewAircraftType}">
-                                            <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.type}</g:if></td>
+                                            <td class="aircrafttype"><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.type}</g:if></td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewAircraftColour}">
-                                            <td><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.colour}</g:if></td>
+                                            <td class="aircraftcolor"><g:if test="${crewInstance.aircraft}">${crewInstance.aircraft.colour}</g:if></td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewTAS}">
-                                            <td>${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>
+                                            <td class="tas">${fieldValue(bean:crewInstance, field:'tas')}${message(code:'fc.knot')}</td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewEmptyColumn1}">
-                                            <td width="10%"></td>
+                                            <td class="empty1"></td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewEmptyColumn2}">
-                                            <td width="10%"></td>
+                                            <td class="empty2"></td>
                                         </g:if>
                                         <g:if test="${contestInstance.printCrewEmptyColumn3}">
-                                            <td width="10%"></td>
+                                            <td class="empty3"></td>
+                                        </g:if>
+                                        <g:if test="${contestInstance.printCrewEmptyColumn4}">
+                                            <td class="empty4"></td>
                                         </g:if>
                                     </tr>
                                 </g:each>

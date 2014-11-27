@@ -24,18 +24,23 @@
                                 <input type="text" id="name" name="name" value="${fieldValue(bean:resultclassInstance,field:'name')}" tabIndex="1"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.resultclass.name.short')}:</label>
+                                <br/>
+                                <input type="text" id="shortName" name="shortName" value="${fieldValue(bean:resultclassInstance,field:'shortName')}" tabIndex="2"/>
+                            </p>
+                            <p>
                                 <label>${message(code:'fc.resultclass.contesttitle')}:</label>
                                 <br/>
-                                <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="2"/>
+                                <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="3"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.contestrule')}*:</label>
                                 <br/>
-                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${contestInstance.contestRule}" tabIndex="3"/>
+                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${contestInstance.contestRule}" tabIndex="4"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="4"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="5"/>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="11"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="12"/>
                     </g:form>
                 </div>
             </div>

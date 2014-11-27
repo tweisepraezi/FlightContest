@@ -16,6 +16,9 @@ class TestLeg
 	boolean planProcedureTurn = false
 	int planProcedureTurnDuration = 0   // min
 	
+    Boolean noPlanningTest = false      // DB-2.8
+    Boolean endCurved = false           // DB-2.8
+    
 	// results
     BigDecimal resultTrueTrack = 0      // Grad
     BigDecimal resultTestDistance = 0   // NM 
@@ -100,6 +103,10 @@ class TestLeg
 		
 		// DB-2.7 compatibility
 		planFullMinute(nullable:true)
+        
+        // DB-2.8 compatibility
+        noPlanningTest(nullable:true)
+        endCurved(nullable:true)
 	}
 	
     void ResetResults()
@@ -118,6 +125,11 @@ class TestLeg
 	String name()
 	{
 		return "${FcMath.GradStr(planTrueHeading)}${getMsg('fc.grad')} ${FcMath.SpeedStr_Planning(planGroundSpeed)}${getMsg('fc.mile')} ${FcMath.TimeStr(planLegTime)}"
+	}
+	
+	String givenName()
+	{
+		return "${getMsg('fc.test.results.given')} ${coordTitle.titleCode()}: ${FcMath.GradStrComma(resultTrueHeading)}${getMsg('fc.grad')} ${FcMath.TimeStr(resultLegTime)}."
 	}
 	
 	String planLegTimeStr()

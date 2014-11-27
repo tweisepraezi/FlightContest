@@ -27,13 +27,13 @@
                                 </tr>
                                 <g:if test="${testInstance.crew.team}">
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.team')}:</td>
                                         <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
                                     </tr>
                                 </g:if>
                                 <g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.resultclass')}:</td>
                                         <td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
                                     </tr>
                                 </g:if>
@@ -87,7 +87,7 @@
 			                            </p>
 	                                    <p>
 	                                        <div>
-                                                <g:radioGroup name="landingTest1Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding'),message(code:'fc.landingtest.outsidelanding')]}" values="[1,2,3]" value="${testInstance.landingTest1Landing}">
+                                                <g:radioGroup name="landingTest1Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding')+" ("+Contest.LANDING_NO+")",message(code:'fc.landingtest.outsidelanding')+" ("+Contest.LANDING_OUT+")"]}" values="[1,2,3]" value="${testInstance.landingTest1Landing}">
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 	                                            <g:if test="${testInstance.landingTest1Landing == 2}">
@@ -149,7 +149,7 @@
 			                            </p>
 				                        <p>
 					                        <div>
-                                                <g:radioGroup name="landingTest2Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding'),message(code:'fc.landingtest.outsidelanding')]}" values="[1,2,3]" value="${testInstance.landingTest2Landing}">
+                                                <g:radioGroup name="landingTest2Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding')+" ("+Contest.LANDING_NO+")",message(code:'fc.landingtest.outsidelanding')+" ("+Contest.LANDING_OUT+")"]}" values="[1,2,3]" value="${testInstance.landingTest2Landing}">
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 												<g:if test="${testInstance.landingTest2Landing == 2}">
@@ -215,7 +215,7 @@
 			                            </p>
 				                        <p>
 					                        <div>
-                                                <g:radioGroup name="landingTest3Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding'),message(code:'fc.landingtest.outsidelanding')]}" values="[1,2,3]" value="${testInstance.landingTest3Landing}">
+                                                <g:radioGroup name="landingTest3Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding')+" ("+Contest.LANDING_NO+")",message(code:'fc.landingtest.outsidelanding')+" ("+Contest.LANDING_OUT+")"]}" values="[1,2,3]" value="${testInstance.landingTest3Landing}">
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 												<g:if test="${testInstance.landingTest3Landing == 2}">
@@ -285,7 +285,7 @@
 			                            </p>
 				                        <p>
 					                        <div>
-                                                <g:radioGroup name="landingTest4Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding'),message(code:'fc.landingtest.outsidelanding')]}" values="[1,2,3]" value="${testInstance.landingTest4Landing}">
+                                                <g:radioGroup name="landingTest4Landing" labels="${[message(code:'fc.landingtest.landing'),message(code:'fc.landingtest.nolanding')+" ("+Contest.LANDING_NO+")",message(code:'fc.landingtest.outsidelanding')+" ("+Contest.LANDING_OUT+")"]}" values="[1,2,3]" value="${testInstance.landingTest4Landing}">
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 												<g:if test="${testInstance.landingTest4Landing == 2}">

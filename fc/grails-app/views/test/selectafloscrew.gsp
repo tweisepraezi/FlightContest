@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.aflos.crewnames.select')}</title>
+        <title>${message(code:'fc.aflos.select')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="route" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.aflos.crewnames.select')}</h2>
+                <h2>${message(code:'fc.aflos.select')}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="['id':testInstance.id]">
                         <table>
@@ -20,13 +20,13 @@
                                 </tr>
                                 <g:if test="${testInstance.crew.team}">
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.team')}:</td>
                                         <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
                                     </tr>
                                 </g:if>
                                 <g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.resultclass')}:</td>
                                         <td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
                                     </tr>
                                 </g:if>
@@ -72,7 +72,24 @@
 									<g:else>
                                         <td><g:select from="${AflosCrewNames.aflos.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
 									</g:else>
-                                </tr> 
+                                </tr>
+                                <tr>
+                                    <g:set var="last_name" value="${testInstance.flighttestwind.flighttest.route.mark}" />
+                                    <td class="detailtitle"><label>${message(code:'fc.aflos.routedefs.routename')}:</label></td>
+                                    <g:if test="${testInstance.crew.contest.aflosTest}">
+                                        <td><g:select from="${AflosRouteNames.aflostest.findAllByNameIsNotNullAndIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.name" value="${last_name}" optionKey="name" optionValue="${{it.viewName()}}" ></g:select></td>
+                                    </g:if>
+                                    <g:elseif test="${testInstance.crew.contest.aflosUpload}">
+                                        <td><g:select from="${AflosRouteNames.aflosupload.findAllByNameIsNotNullAndIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.name" value="${last_name}" optionKey="name" optionValue="${{it.viewName()}}" ></g:select></td>
+                                    </g:elseif>
+                                    <g:else>
+                                        <td><g:select from="${AflosRouteNames.aflos.findAllByNameIsNotNullAndIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.name" value="${last_name}" optionKey="name" optionValue="${{it.viewName()}}" ></g:select></td>
+                                    </g:else>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle"><label>${message(code:'fc.aflos.noremove.existingdata')}:</label></td>
+                                    <td><g:checkBox name="no_remove_existing_data" value="${false}"/></td>
+                                </tr>
                             </tbody>
                         </table>
                         <g:actionSubmit action="importaflosresults" value="${message(code:'fc.import')}" />

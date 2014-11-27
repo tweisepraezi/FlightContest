@@ -20,13 +20,13 @@
                                 </tr>
 		                    	<g:if test="${testInstance.crew.team}">
 	                                <tr>
-	                                    <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+	                                    <td class="detailtitle">${message(code:'fc.team')}:</td>
 	                                    <td>${testInstance.crew.team.name}</td>
 	                                </tr>
     		                    </g:if>
 		                    	<g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
 	                                <tr>
-	                                	<td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+	                                	<td class="detailtitle">${message(code:'fc.resultclass')}:</td>
 	                                	<td>${testInstance.crew.resultclass.name}</td>
     		                        </tr>
     		                    </g:if>

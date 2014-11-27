@@ -1,3 +1,5 @@
+import java.util.Map;
+
 class Crew 
 {
 	String name
@@ -10,6 +12,7 @@ class Crew
 
 	int viewpos = 0
 	boolean disabled = false
+    Boolean disabledTeam = false              // DB-2.8
 	Integer startNum = 0                      // DB-2.2
 	
 	// transient values 
@@ -33,9 +36,13 @@ class Crew
 	
     int contestPosition = 0
 	Boolean noContestPosition = false         // DB-2.1
+    Boolean contestEqualPosition = false      // DB-2.8
+    Integer contestAddPosition = 0            // DB-2.8
 	Integer classPosition = 0                 // DB-2.1
 	Boolean noClassPosition = false           // DB-2.3
-	
+    Boolean classEqualPosition = false        // DB-2.8
+    Integer classAddPosition = 0              // DB-2.8
+
 	static belongsTo = [contest:Contest]
 
 	static constraints = {
@@ -55,6 +62,13 @@ class Crew
 		
 		// DB-2.3 compatibility
 		noClassPosition(nullable:true)
+        
+        // DB-2.8 compatibility
+        contestEqualPosition(nullable:true)
+        contestAddPosition(nullable:true)
+        classEqualPosition(nullable:true)
+        classAddPosition(nullable:true)
+        disabledTeam(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)
@@ -115,7 +129,7 @@ class Crew
 		}
 	}
 	
-	private boolean IsActiveCrew(ResultFilter resultFilter)
+	boolean IsActiveCrew(ResultFilter resultFilter)
 	{
 		if (contest.resultClasses) {
 			if (resultclass) {
@@ -141,6 +155,19 @@ class Crew
 		return true
 	}
 	
+    boolean IsProvisionalCrew(Map resultSettings)
+    {
+        for( Task task_instance in contest.GetResultTasks(contest.contestTaskResults)) {
+            Test test_instance = Test.findByCrewAndTask(this,task_instance)
+            if (test_instance) {
+                if (test_instance.IsTestProvisional(resultSettings)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
 	String GetAFLOSStartNum()
 	{
 		if (mark.contains(':')) {

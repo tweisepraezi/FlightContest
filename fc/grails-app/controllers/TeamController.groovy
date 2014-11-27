@@ -21,9 +21,12 @@ class TeamController {
 			session.teamReturnAction = actionName
 			session.teamReturnController = controllerName
 			session.teamReturnID = params.id
+            session.resultclassReturnAction = actionName
+            session.resultclassReturnController = controllerName
+            session.resultclassReturnID = params.id
             def teamList = Team.findAllByContest(session.lastContest, [sort:'name'])
 			fcService.printdone "last contest"
-            return [teamInstanceList:teamList]
+            return [teamInstanceList:teamList,resultClasses:session.lastContest.resultClasses]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -113,7 +116,7 @@ class TeamController {
         if (session?.lastContest) {
 			session.lastContest.refresh()
             def teamList = Team.findAllByContest(session.lastContest,[sort:"name"])
-            return [teamInstanceList:teamList]
+            return [contestInstance:session.lastContest,teamInstanceList:teamList]
         }
         return [:]
     }
@@ -129,6 +132,36 @@ class TeamController {
         } else {
             redirect(action:list)
         }
+    }
+    
+    def selectall = {
+        def crew = fcService.selectallTeam(session.lastContest) 
+        flash.selectedTeamIDs = crew.selectedteamids
+        redirect(action:list)
+    }
+
+    def deselectall = {
+        redirect(action:list)
+    }
+    
+    def deleteteams = {
+        def ret = fcService.deleteTeams(session.lastContest,params,session)
+        if (ret.deleted) { 
+            flash.message = ret.message
+        }
+        redirect(action:list)
+    }
+    
+    def disableteams = {
+        def ret = fcService.disableTeams(session.lastContest,params,session)
+        flash.message = ret.message
+        redirect(action:list)
+    }
+    
+    def enableteams = {
+        def ret = fcService.enableTeams(session.lastContest,params,session)
+        flash.message = ret.message
+        redirect(action:list)
     }
     
     Map GetPrintParams() {

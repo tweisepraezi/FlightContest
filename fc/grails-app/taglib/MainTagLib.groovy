@@ -52,6 +52,7 @@ class MainTagLib
 				outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
         	}
         }
+        outln """    <li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
         outln """    <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list">${message(code:'fc.settings')}</a> </li>"""
 		if (true) {
 			outln """    <li class="secondary"> <a class="${if (isAflos(p.controller)) "active"}" href="${p.link}/../../aflos/start">${message(code:'fc.aflos')}</a> </li>"""
@@ -94,7 +95,7 @@ class MainTagLib
 					outln """    <li> <a href="${p.link}/../../${p.controller}/editprintsettings">${p.printsettings}</a> </li>"""
 				}
 				if (p.controller == "contest" && session.lastContest && !p.contesttasks) {
-					if (!session.lastContest.resultClasses) {
+					if (!session.lastContest.resultClasses || !session.lastContest.contestRuleForEachClass) {
 						outln """    <li> <a href="${p.link}/../../contest/editpoints">${message(code:'fc.contestrule.points')}</a> </li>"""
 					}
 	                if (Contest.count() > 1) {
@@ -104,6 +105,7 @@ class MainTagLib
 	                outln """    <li> <a href="${p.link}/../../contest/deletequestion">${message(code:'fc.contest.delete')}</a> </li>"""
 					outln """    <li> <a href="${p.link}/../../contest/copyquestion">${message(code:'fc.contest.copy')}</a> </li>"""
 					outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
+                    outln """    <li> <a href="${p.link}/../../contest/editfreetext">${message(code:'fc.contest.printfreetext')}</a> </li>"""
 					if (session.lastContest.testExists) {
 						outln """    <li> <a href="${p.link}/../../contest/runtest">${message(code:'fc.contest.runtest')}</a> </li>"""
 					}
@@ -204,7 +206,7 @@ class MainTagLib
 			outln """  <ul class="nav main">"""
             outln """    <li> <a href="${p.link}/../../global/changeglobalsettings">${message(code:'fc.changeglobalsettings')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
-            outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair.track')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair')}</a> </li>"""
 			if (Environment.currentEnvironment == Environment.DEVELOPMENT ) {
 				outln """    <li> <a href="${p.link}/../../classDiagram" target="_blank">${message(code:'fc.classdiagram')}</a> </li>"""
 				outln """    <li> <a href="${p.link}/../../dbUtil" target="_blank">${message(code:'fc.dbutil')}</a> </li>"""

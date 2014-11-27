@@ -1,6 +1,8 @@
 import java.util.Date;
 import java.util.Map;
 
+import org.junit.After;
+
 class ContestController {
     
     def fcService
@@ -100,6 +102,19 @@ class ContestController {
         }
     }
 
+    def editfreetext = {
+        if (session?.lastContest) {
+            // assign return action
+            if (session.contestReturnAction) {
+                return [contestInstance:session.lastContest,contestReturnAction:session.contestReturnAction,contestReturnController:session.contestReturnController,contestReturnID:session.contestReturnID]
+            }
+            return [contestInstance:session.lastContest]
+        } else {
+            flash.message = contest.message
+            redirect(action:start)
+        }
+    }
+
     def editpoints = {
         if (session?.lastContest) {
 			session.lastContest.refresh()
@@ -141,15 +156,43 @@ class ContestController {
         }
     }
 
+    def savecontest = {
+        def contest = fcService.updateContest(params)
+        if (contest.saved) {
+            flash.message = contest.message
+            session.lastContest = contest.instance
+            redirect(action:edit,id:contest.instance.id)
+        } else if (contest.instance) {
+            render(view:'edit',model:[contestInstance:contest.instance])
+        } else {
+            flash.message = contest.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+
     def savepoints = {
         def contest = fcService.updateContest(params)
         if (contest.saved) {
             flash.message = contest.message
             session.lastContest = contest.instance
-               redirect(action:"editpoints",id:contest.instance.id)
+               redirect(action:editpoints,id:contest.instance.id)
         } else {
             flash.message = contest.message
             redirect(action:editpoints,id:params.id)
+        }
+    }
+
+    def savefreetext = {
+        def contest = fcService.updateContest(params)
+        if (contest.saved) {
+            flash.message = contest.message
+            session.lastContest = contest.instance
+            redirect(action:editfreetext,id:contest.instance.id)
+        } else if (contest.instance) {
+            render(view:'editfreetext',model:[contestInstance:contest.instance])
+        } else {
+            flash.message = contest.message
+            redirect(action:editfreetext,id:params.id)
         }
     }
 
@@ -254,6 +297,12 @@ class ContestController {
         session.lastResultClassResults = null
         session.lastContestResults = null
         session.lastTeamResults = null
+		if (params.flashmessage) {
+			flash.message = params.flashmessage
+		}
+		if (params.flasherror == "true") {
+			flash.error = true
+		}
         redirect(action:'start')
     }
 
@@ -306,21 +355,9 @@ class ContestController {
     }
 
     def change = {
+		println "change"
         session.lastContest = null
         fcService.SetCookie(response, "LastContestID",  "")
-        redirect(action:start)
-    }
-
-    def updatecontest = {
-        session.lastContest = Contest.get(params.contestid)
-        fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
-        session.showLimit = false
-        session.showLimitStartPos = 0
-        session.lastTaskPlanning = null
-        session.lastTaskResults = null
-        session.lastResultClassResults = null
-        session.lastContestResults = null
-        session.lastTeamResults = null
         redirect(action:start)
     }
 
@@ -334,6 +371,14 @@ class ContestController {
 	
 	def selectfilename_imageright = {
 		redirect(action:selectimagefilename,params:['imageField':'imageRight'])
+	}
+	
+	def selectfilename_imagebottomleft = {
+		redirect(action:selectimagefilename,params:['imageField':'imageBottomLeft'])
+	}
+	
+	def selectfilename_imagebottomright = {
+		redirect(action:selectimagefilename,params:['imageField':'imageBottomRight'])
 	}
 	
 	def selectimagefilename = {
@@ -386,12 +431,32 @@ class ContestController {
 		redirect(action:edit)
 	}
 	
+	def deleteimage_imagebottomleft = {
+		delete_bottom_image(['imageField':'imageBottomLeft','imageFieldHeight':'imageBottomLeftHeight'])
+		redirect(action:edit)
+	}
+	
+	def deleteimage_imagebottomright = {
+		delete_bottom_image(['imageField':'imageBottomRight','imageFieldHeight':'imageBottomRightHeight'])
+		redirect(action:edit)
+	}
+	
 	void delete_image(Map params)
 	{
 		fcService.printstart "Delete '$params.imageField'"
 		session.lastContest.refresh()
 		session.lastContest.(params.imageField) = null
 		session.lastContest.(params.imageFieldHeight) = Contest.IMAGEHEIGHT
+		session.lastContest.save()
+		fcService.printdone ""
+	}   
+	
+	void delete_bottom_image(Map params)
+	{
+		fcService.printstart "Delete '$params.imageField'"
+		session.lastContest.refresh()
+		session.lastContest.(params.imageField) = null
+		session.lastContest.(params.imageFieldHeight) = Contest.IMAGEBOTTOMHEIGHT
 		session.lastContest.save()
 		fcService.printdone ""
 	}   
@@ -440,6 +505,42 @@ class ContestController {
 		redirect(action:edit)
 	}
 	
+	def reset_a3portraitfactor = {
+		fcService.printstart "Reset 'a3PortraitFactor'"
+		session.lastContest.refresh()
+		session.lastContest.a3PortraitFactor = Contest.A3PORTRAITFACTOR
+		session.lastContest.save()
+		fcService.printdone ""
+		redirect(action:edit)
+	}
+	
+	def reset_a4landscapefactor = {
+		fcService.printstart "Reset 'a4LandscapeFactor'"
+		session.lastContest.refresh()
+		session.lastContest.a4LandscapeFactor = Contest.A4LANDSCAPEFACTOR
+		session.lastContest.save()
+		fcService.printdone ""
+		redirect(action:edit)
+	}
+	
+	def reset_a3landscapefactor = {
+		fcService.printstart "Reset 'a3LandscapeFactor'"
+		session.lastContest.refresh()
+		session.lastContest.a3LandscapeFactor = Contest.A3LANDSCAPEFACTOR
+		session.lastContest.save()
+		fcService.printdone ""
+		redirect(action:edit)
+	}
+	
+	def reset_imagebottomsize = {
+		fcService.printstart "Reset 'imageBottomTextSize'"
+		session.lastContest.refresh()
+		session.lastContest.imageBottomTextSize = Contest.IMAGEBOTTOMTEXTSIZE
+		session.lastContest.save()
+		fcService.printdone ""
+		redirect(action:edit)
+	}
+	
 	def view_image_left = {
 		if (params.contestid) {
 	        Contest contest = Contest.get(params.contestid)
@@ -458,6 +559,20 @@ class ContestController {
 		if (params.contestid) {
 	        Contest contest = Contest.get(params.contestid)
 			response.outputStream << contest.imageRight
+		}
+	}
+	     
+	def view_image_bottom_left = {
+		if (params.contestid) {
+	        Contest contest = Contest.get(params.contestid)
+			response.outputStream << contest.imageBottomLeft
+		}
+	}
+	     
+	def view_image_bottom_right = {
+		if (params.contestid) {
+	        Contest contest = Contest.get(params.contestid)
+			response.outputStream << contest.imageBottomRight
 		}
 	}
 	     
@@ -501,9 +616,9 @@ class ContestController {
             session.crewresultsReturnID = params.id
             // assign return action
             if (session.positionsReturnAction) {
-                return [contestInstance:session.lastContest,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID]
+                return [contestInstance:session.lastContest,positionsReturnAction:session.positionsReturnAction,positionsReturnController:session.positionsReturnController,positionsReturnID:session.positionsReturnID,resultClasses:session.lastContest.resultClasses]
             }
-            return [contestInstance:session.lastContest]
+            return [contestInstance:session.lastContest,resultClasses:session.lastContest.resultClasses]
         } else {
             redirect(action:start)
         }
@@ -515,9 +630,9 @@ class ContestController {
 		}
 		if (session?.lastContest) {
 			session.lastContest.refresh()
-			def contest = fcService.calculatecontestpositionsContest(session.lastContest,[],[],[])
+			def contest = fcService.calculatelivepositionsContest(session.lastContest)
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
-			return [contestInstance:session.lastContest]
+			return [contestInstance:session.lastContest,liveTest:false]
         } else {
             redirect(action:start)
 		}
@@ -561,6 +676,24 @@ class ContestController {
         }
         redirect(action:"listresults")
     }
+    
+    def addposition = {
+        def contest = fcService.addcontestpositionContest(session.lastContest,params.crewid.toLong())
+        flash.message = contest.message
+        if (contest.error) {
+            flash.error = true
+        }
+        redirect(action:"listresults")
+    }
+
+    def subposition = {
+        def contest = fcService.subcontestpositionContest(session.lastContest,params.crewid.toLong())
+        flash.message = contest.message
+        if (contest.error) {
+            flash.error = true
+        }
+        redirect(action:"listresults")
+    }
 
     def calculateteampositions = {
         def contest = fcService.calculateteampositionsContest(session.lastContest,[],[]) 
@@ -571,13 +704,32 @@ class ContestController {
         redirect(action:"listteamresults")
     }
 
+    def addteamposition = {
+        def contest = fcService.addteampositionContest(session.lastContest,params.teamid.toLong())
+        flash.message = contest.message
+        if (contest.error) {
+            flash.error = true
+        }
+        redirect(action:"listteamresults")
+    }
+
+    def subteamposition = {
+        def contest = fcService.subteampositionContest(session.lastContest,params.teamid.toLong())
+        flash.message = contest.message
+        if (contest.error) {
+            flash.error = true
+        }
+        redirect(action:"listteamresults")
+    }
+
     def printtest_a4_portrait = {
         if (session?.lastContest) {
+			session.lastContest.refresh()
             def contest = fcService.printtestContest(session.lastContest,false,false,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
-                   flash.error = true
-                redirect(controller:"contest",action:"listresults")
+                flash.error = true
+                redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
                 fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,false)
             } else {
@@ -589,16 +741,17 @@ class ContestController {
     }
     
     def printtest_a4_landscape = {
-		fcService.printstart "Actual 'a4LandscapeFactor'"
-		session.lastContest.a4LandscapeFactor = params.a4LandscapeFactor.replace(',','.').toBigDecimal()
-		session.lastContest.save()
-		fcService.printdone ""
         if (session?.lastContest) {
+			session.lastContest.refresh()
+			fcService.printstart "Actual 'a4LandscapeFactor'"
+			session.lastContest.a4LandscapeFactor = params.a4LandscapeFactor.replace(',','.').toBigDecimal()
+			session.lastContest.save()
+			fcService.printdone ""
             def contest = fcService.printtestContest(session.lastContest,false,true,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
-                   flash.error = true
-                redirect(controller:"contest",action:"listresults")
+                flash.error = true
+                redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
                 fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,true)
             } else {
@@ -611,6 +764,7 @@ class ContestController {
     
     def printtest_a3_portrait = {
         if (session?.lastContest) {
+			session.lastContest.refresh()
 			fcService.printstart "Actual 'a3PortraitFactor'"
 			session.lastContest.a3PortraitFactor = params.a3PortraitFactor.replace(',','.').toBigDecimal()
 			session.lastContest.save()
@@ -618,8 +772,8 @@ class ContestController {
             def contest = fcService.printtestContest(session.lastContest,true,false,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
-                   flash.error = true
-                redirect(controller:"contest",action:"listresults")
+                flash.error = true
+                redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
                 fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,false)
             } else {
@@ -632,6 +786,7 @@ class ContestController {
     
     def printtest_a3_landscape = {
         if (session?.lastContest) {
+			session.lastContest.refresh()
 			fcService.printstart "Actual 'a3LandscapeFactor'"
 			session.lastContest.a3LandscapeFactor = params.a3LandscapeFactor.replace(',','.').toBigDecimal()
 			session.lastContest.save()
@@ -639,8 +794,8 @@ class ContestController {
             def contest = fcService.printtestContest(session.lastContest,true,true,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
-                   flash.error = true
-                redirect(controller:"contest",action:"listresults")
+                flash.error = true
+                redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
                 fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,true)
             } else {
@@ -655,7 +810,8 @@ class ContestController {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
-            return [contestInstance:session.lastContest]
+			def crew_list = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
+            return [crewList:crew_list,contestInstance:session.lastContest]
         } else {
             redirect(action:start)
         }
@@ -735,12 +891,24 @@ class ContestController {
         }
     }
     
+    def standardpoints = {
+        def contest = fcService.standardpointsContest(params)
+        if (contest.saved) {
+            flash.message = contest.message
+            session.lastContest = contest.instance
+               redirect(action:editpoints,id:contest.instance.id)
+        } else {
+            flash.message = contest.message
+            redirect(action:editpoints,id:params.id)
+        }
+    }
+
     def printpoints = {
         if (session?.lastContest) {
             def contest = fcService.printpointsContest(session.lastContest,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
-                   flash.error = true
+                flash.error = true
                 redirect(action:"editpoints")
             } else if (contest.content) {
                 fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points",true,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape)
@@ -761,6 +929,32 @@ class ContestController {
         }
     }
 
+    def printfreetext = {
+        if (session?.lastContest) {
+            def contest = fcService.printfreetextContest(session.lastContest,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape,GetPrintParams()) 
+            if (contest.error) {
+                flash.message = contest.message
+                flash.error = true
+                redirect(action:"editfreetext")
+            } else if (contest.content) {
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points",true,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape)
+            } else {
+                redirect(action:"editfreetext")
+            }
+        } else {
+            redirect(action:start)
+        }
+    }
+    
+    def freetextprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            return [contestInstance:session.lastContest]
+        } else {
+            redirect(action:start)
+        }
+    }
+
     Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,
@@ -773,8 +967,8 @@ class ContestController {
     }
     
     def createtest = {
-		int contest_id = demoContestService.CreateTest(params.demoContest)
-        redirect(controller:'contest',action:'activate',id:contest_id)
+		Map ret = demoContestService.CreateTest(params.demoContest)
+        redirect(controller:'contest',action:'activate',id:ret.contestid,params:[flashmessage:ret.message,flasherror:ret.error])
     }
             
     def runtest = {

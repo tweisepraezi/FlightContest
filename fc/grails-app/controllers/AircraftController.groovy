@@ -115,7 +115,7 @@ class AircraftController {
         if (session?.lastContest) {
 			session.lastContest.refresh()
             def aircraftList = Aircraft.findAllByContest(session.lastContest,[sort:"registration"])
-            return [aircraftInstanceList:aircraftList]
+            return [contestInstance:session.lastContest,aircraftInstanceList:aircraftList]
         }
         return [:]
     }

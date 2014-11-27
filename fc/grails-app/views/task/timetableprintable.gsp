@@ -18,57 +18,72 @@
                         size: A4;
                     </g:else> 
                 </g:else>
-                @top-center {
-                    content: "${message(code:'fc.test.timetable')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.timetableVersion}) - ${message(code:'fc.program.printpage')} " counter(page)
+                @top-left {
+                    content: "${message(code:'fc.test.timetable')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})"
                 }
-                @bottom-center {
-                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                @top-right {
+                    content: "${message(code:'fc.program.printpage')} " counter(page)
+                }
+                @bottom-left {
+                    content: "${contestInstance.printOrganizer}"
+                }
+                @bottom-right {
+                    content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }
         </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
+        <style type="text/css">${contestInstance.printStyle}</style>
         <title>${message(code:'fc.test.timetable')}</title>
     </head>
     <body>
-        <div class="box">
-            <div class="box boxborder" >
+        <div>
+            <div>
                 <h2>${message(code:'fc.test.timetable')}<g:if test="${taskInstance.printTimetablePrintTitle}"> - ${taskInstance.printTimetablePrintTitle}</g:if></h2>
                 <h3>${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
-                <div class="block" id="forms" >
+                <div>
                     <g:form>
                         <br/>
-                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                        <table class="timetablelist">
                             <thead>
                                 <tr>
                                     <g:if test="${taskInstance.printTimetableNumber}">
-                                        <th valign="top">${message(code:'fc.number')}</th>
+                                        <th>${message(code:'fc.number')}</th>
                                     </g:if>
                                     <g:if test="${taskInstance.printTimetableCrew}">
-                                        <th valign="top">${message(code:'fc.crew')}</th>
+                                        <th>${message(code:'fc.crew')}</th>
                                     </g:if>
                                     <g:if test="${taskInstance.printTimetableAircraft}">
-                                        <th valign="top">${message(code:'fc.aircraft')}</th>
+                                        <th>${message(code:'fc.aircraft')}</th>
                                     </g:if>
                                     <g:if test="${taskInstance.printTimetableTAS}">
-                                        <th valign="top">${message(code:'fc.tas')}</th>
+                                        <th>${message(code:'fc.tas')}</th>
                                     </g:if>
                                     <g:if test="${taskInstance.printTimetableTeam}">
-                                        <th valign="top">${message(code:'fc.team')}</th>
+                                        <th>${message(code:'fc.team')}</th>
+                                    </g:if>
+                                    <g:if test="${taskInstance.contest.resultClasses}">
+                                        <g:if test="${taskInstance.printTimetableClass}">
+                                            <th>${message(code:'fc.resultclass')}</th>
+                                        </g:if>
+                                        <g:if test="${taskInstance.printTimetableShortClass}">
+                                            <th>${message(code:'fc.resultclass.short.short')}</th>
+                                        </g:if>
                                     </g:if>
                                     <g:if test="${taskInstance.printTimetablePlanning}">
 	                                    <g:if test="${taskInstance.planningTestDuration == 0}">
-	                                        <th valign="top">${message(code:'fc.test.planning.publish')}</th>
+	                                        <th>${message(code:'fc.test.planning.publish')}</th>
 	                                    </g:if>
 	                                    <g:else>
-	                                        <th valign="top">${message(code:'fc.test.planning')}</th>
+	                                        <th>${message(code:'fc.test.planning')}</th>
 	                                    </g:else>
 	                                </g:if>
                                     <g:if test="${taskInstance.printTimetableTakeoff}">
-                                        <th valign="top">${message(code:'fc.test.takeoff')}</th>
+                                        <th>${message(code:'fc.test.takeoff')}</th>
                                     </g:if>
                                     <g:if test="${taskInstance.printTimetableVersion}">
-                                        <th valign="top">${message(code:'fc.test.timetable.unchangedversion.short')}</th>
+                                        <th>${message(code:'fc.test.timetable.unchangedversion.short')}</th>
                                     </g:if>
                                 </tr>
                             </thead>
@@ -77,28 +92,36 @@
                                    	<g:if test="${!test_instance.crew.disabled}">
 	                                    <tr>
                                             <g:if test="${taskInstance.printTimetableNumber}">
-	                                           <td>${test_instance.GetStartNum()}</td>
+	                                           <td class="num">${test_instance.GetStartNum()}</td>
 	                                        </g:if>
                                             <g:if test="${taskInstance.printTimetableCrew}">
-	                                           <td>${test_instance.crew.name}</td>
+	                                           <td class="crew">${test_instance.crew.name}</td>
 	                                        </g:if>
                                             <g:if test="${taskInstance.printTimetableAircraft}">
-	                                           <td>${test_instance.taskAircraft.registration}<g:if test="${test_instance.taskAircraft?.user1 && test_instance.taskAircraft?.user2}">${HTMLFilter.NoWrapStr(' *')}</g:if></td>
+	                                           <td class="aircraft">${test_instance.taskAircraft.registration}<g:if test="${test_instance.taskAircraft?.user1 && test_instance.taskAircraft?.user2}">${HTMLFilter.NoWrapStr(' *')}</g:if></td>
 	                                        </g:if>
                                             <g:if test="${taskInstance.printTimetableTAS}">
-	                                           <td>${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+	                                           <td class="tas">${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
 	                                        </g:if>
                                             <g:if test="${taskInstance.printTimetableTeam}">
-	                                           <td><g:if test="${test_instance.crew.team}">${test_instance.crew.team.name}</g:if></td>
+	                                           <td class="team"><g:if test="${test_instance.crew.team}">${test_instance.crew.team.name}</g:if></td>
 	                                        </g:if>
+                                            <g:if test="${taskInstance.contest.resultClasses}">
+	                                            <g:if test="${taskInstance.printTimetableClass}">
+	                                               <td class="resultclass"><g:if test="${test_instance.crew.resultclass}">${test_instance.crew.resultclass.name}</g:if></td>
+	                                            </g:if>
+                                                <g:if test="${taskInstance.printTimetableShortClass}">
+                                                   <td class="shortresultclass"><g:if test="${test_instance.crew.resultclass}">${test_instance.crew.resultclass.shortName}</g:if></td>
+                                                </g:if>
+                                            </g:if>
                                             <g:if test="${taskInstance.printTimetablePlanning}">
-	                                           <td>${test_instance.testingTime?.format('HH:mm')}</td>
+	                                           <td class="planningtime">${test_instance.testingTime?.format('HH:mm')}</td>
 	                                        </g:if>
                                             <g:if test="${taskInstance.printTimetableTakeoff}">
-	                                           <td>${test_instance.takeoffTime?.format('HH:mm')}</td>
+	                                           <td class="takeofftime">${test_instance.takeoffTime?.format('HH:mm')}</td>
 	                                        </g:if>
                                             <g:if test="${taskInstance.printTimetableVersion}">
-	                                           <td>${test_instance.timetableVersion}</td>
+	                                           <td class="version">${test_instance.timetableVersion}</td>
 	                                        </g:if>
 	                                    </tr>
 	                                </g:if>
@@ -108,6 +131,35 @@
                         <g:if test="${taskInstance.printTimetableVersion}">
                             <p>${message(code:'fc.test.timetable.unchangedversion.short.help')}</p>
                         </g:if>
+                        <g:if test="${taskInstance.printTimetableLegTimes}">
+	                        <div style="page-break-inside:avoid">
+	                            <g:if test="${!taskInstance.printTimetableVersion}">
+	                                <br/>
+	                            </g:if>
+                                <table class="legtimelist">
+                                    <thead>
+                                        <tr>
+                                            <th>${message(code:'fc.tas')}</th>
+                                            <th>${message(code:'fc.legtime.total')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <g:set var="lastTaskTAS" value="${new BigDecimal(0)}"/>
+                                        <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'asc'])}">
+                                            <g:if test="${!test_instance.crew.disabled}">
+                                                <g:if test="${lastTaskTAS != test_instance.taskTAS}">
+                                                    <tr>
+                                                        <td class="tas">${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+                                                        <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(test_instance.takeoffTime,test_instance.maxLandingTime))}${message(code:'fc.time.h')}</td>
+                                                    </tr>
+                                                </g:if>
+                                                <g:set var="lastTaskTAS" value="${test_instance.taskTAS}"/>
+                                            </g:if>
+                                        </g:each>
+                                    </tbody>
+                                </table>
+		                    </div>
+		                </g:if>
                         <g:if test="${taskInstance.printTimetableChange}">
                             <p><g:each var="line" in="${taskInstance.printTimetableChange.readLines()}">${HTMLFilter.NoWrapStr(line)}<br/></g:each></p>
                         </g:if>

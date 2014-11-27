@@ -34,20 +34,20 @@
                                 <input type="text" id="mark" name="mark" value="${fieldValue(bean:crewInstance,field:'mark')}" tabIndex="3"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.crew.team')}:</label>
+                                <label>${message(code:'fc.team')}:</label>
                                 <br/>
                                 <g:select optionKey="id" optionValue="name" from="${Team.findAllByContest(crewInstance.contest,[sort:'name'])}" name="team.id" value="${crewInstance?.team?.id}" noSelection="['null':'']" tabIndex="4"></g:select>
                             </p>
                             <g:if test="${crewInstance.contest.resultClasses}">
 	                            <p>
-	                                <label>${message(code:'fc.crew.resultclass')}:</label>
+	                                <label>${message(code:'fc.resultclass')}:</label>
 	                                <br/>
 	                                <g:select optionKey="id" optionValue="name" from="${ResultClass.findAllByContest(crewInstance.contest,[sort:'name'])}" name="resultclass.id" value="${crewInstance?.resultclass?.id}" noSelection="['null':'']" tabIndex="5"></g:select>
 	                            </p>
 	                        </g:if>
                         </fieldset>
                         <fieldset>
-                            <legend>${message(code:'fc.crew.aircraft')}</legend>
+                            <legend>${message(code:'fc.aircraft')}</legend>
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}:</label>
                                 <br/>
@@ -64,6 +64,10 @@
                                 <div>
                                     <g:checkBox name="disabled" value="${crewInstance.disabled}" />
                                     <label>${message(code:'fc.disabled')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="disabledTeam" value="${crewInstance.disabledTeam}" />
+                                    <label>${message(code:'fc.crew.disabledteam')}</label>
                                 </div>
                             </p>
                         </fieldset>

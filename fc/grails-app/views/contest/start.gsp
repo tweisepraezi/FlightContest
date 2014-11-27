@@ -28,8 +28,16 @@
                                         <td>${fieldValue(bean:contestInstance, field:'printPrefix')}</td>
                                     </tr>
                                     <tr>
-                                    	<td class="detailtitle">${message(code:'fc.resultclasses')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.organizer')}:</td>
+                                        <td>${fieldValue(bean:contestInstance, field:'printOrganizer')}</td>
+                                    </tr>
+                                    <tr>
+                                    	<td class="detailtitle">${message(code:'fc.contest.withclasses')}:</td>
                                     	<td><g:if test="${contestInstance.resultClasses}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.contestrule.foreachclass')}:</td>
+                                        <td><g:if test="${contestInstance.contestRuleForEachClass}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
                                     </tr>
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.contestrule')}:</td>

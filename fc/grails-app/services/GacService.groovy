@@ -13,12 +13,18 @@ class GacService
 	final static boolean WRLOG = false
 	
 	//--------------------------------------------------------------------------
-	boolean RepairTrack(String gacOriginalFileName, String gacRepairFileName)
+	boolean RepairGAC(String gacOriginalFileName, String gacRepairFileName, boolean repairTracks, boolean repairIdenticalTimes)
 	{
 		boolean repaired = true
 		String err_msg = ""
 		
-		printstart "RepairTrack $gacOriginalFileName -> $gacRepairFileName"
+		printstart "RepairGAC $gacOriginalFileName -> $gacRepairFileName"
+		if (repairTracks) {
+			println "Repair tracks"
+		}
+		if (repairIdenticalTimes) {
+			println "Repair identical times"
+		}
 		
 		File gac_original_file = new File(gacOriginalFileName)
 		File gac_repair_file = new File(gacRepairFileName)
@@ -30,6 +36,8 @@ class GacService
 			boolean first = true
 			BigDecimal src_latitude = null
 			BigDecimal src_longitude = null
+			String next_time_utc = null
+			String last_time_utc = null
 			boolean valid_gac_format = false
 			while (true) {
 				line = gac_original_reader.readLine()
@@ -41,8 +49,31 @@ class GacService
 						valid_gac_format = true
 					}	
 					String new_line = ""
+					boolean ignore_line = false 
 					if (line.startsWith("B")) {
 						if (valid_gac_format) {
+
+							// Repair DropOuts
+							String time_utc = line.substring(1,7)
+							if (!first) {
+								if (repairIdenticalTimes) {
+									if (last_time_utc == time_utc) { // Zeile mit doppelter Zeit entfernen
+										ignore_line = true
+										if (WRLOG) {
+											println "Ignore '$line'"
+										}
+									} else { // Zeilen mit fehlenden Zeiten einfügen
+										/*
+										while (time_utc != next_time_utc) {
+											String add_line = line.substring(0,1) + next_time_utc + line.substring(7)
+											WriteLine(gac_repair_writer,add_line)
+											next_time_utc = AddOneSecond(next_time_utc)
+										}
+										*/
+									}
+								}
+							}
+							
 							String old_track = line.substring(39,42)
 							String new_track = old_track
 							
@@ -69,12 +100,14 @@ class GacService
 							}
 							
 							if (!first) {
-								Map leg = AviationMath.calculateLeg(dest_latitude,dest_longitude,src_latitude,src_longitude)
-								new_track = FcMath.GradStr(FcMath.RoundGrad(leg.dir))
-								if (WRLOG) {
-									println "$src_latitude, $src_longitude -> $dest_latitude, $dest_longitude (${line.substring(7,15)}, ${line.substring(15,24)})"
-									if (old_track != new_track) {
-										println "  $old_track -> $new_track"
+								if (repairTracks) {
+									Map leg = AviationMath.calculateLeg(dest_latitude,dest_longitude,src_latitude,src_longitude)
+									new_track = FcMath.GradStr(FcMath.RoundGrad(leg.dir))
+									if (WRLOG) {
+										println "$src_latitude, $src_longitude -> $dest_latitude, $dest_longitude (${line.substring(7,15)}, ${line.substring(15,24)})"
+										if (old_track != new_track) {
+											println "  $old_track -> $new_track"
+										}
 									}
 								}
 							}
@@ -82,13 +115,17 @@ class GacService
 							first = false
 							src_latitude = dest_latitude
 							src_longitude = dest_longitude
+							next_time_utc = AddOneSecond(time_utc)
+							last_time_utc = time_utc
 						} else {
 							new_line = line
 						}
 					} else {
 						new_line = line
 					}
-					WriteLine(gac_repair_writer,new_line)
+					if (!ignore_line) {
+						WriteLine(gac_repair_writer,new_line)
+					}
 				}
 			}
 			if (!valid_gac_format) {
@@ -108,6 +145,16 @@ class GacService
 			printerror err_msg
 		}
 		return repaired
+	}
+	
+	//--------------------------------------------------------------------------
+	String AddOneSecond(String timeUTC)
+	{
+		Date date_utc = Date.parse("HHmmss",timeUTC)
+		GregorianCalendar calendar_utc = new GregorianCalendar()
+		calendar_utc.setTime(date_utc)
+		calendar_utc.add(Calendar.SECOND, 1) // + 1s
+		return calendar_utc.getTime().format("HHmmss")
 	}
 	
 	//--------------------------------------------------------------------------
@@ -202,9 +249,14 @@ class GacService
 	boolean Download(String downloadFileName, String returnFileName, OutputStream outputStream)
 	{
 		printstart "Download $downloadFileName -> $returnFileName"
-		File download_file = new File(downloadFileName)
-		outputStream.write(download_file.getBytes())
-		outputStream.flush()
+		try {
+			File download_file = new File(downloadFileName)
+			outputStream.write(download_file.getBytes())
+			outputStream.flush()
+		} catch (Exception e) {
+			printerror e.getMessage()
+			return false
+		}
 		printdone ""
 		return true
 	}
@@ -284,6 +336,18 @@ class GacService
 		BigDecimal tenth_ground_speed = 10 * groundSpeed
 		DecimalFormat df = new DecimalFormat("0000")
 		return df.format(tenth_ground_speed)
+	}
+	
+	//--------------------------------------------------------------------------
+	void DeleteFile(String fileName)
+	{
+		print "Delete '$fileName'..."
+		File file = new File(fileName)
+		if (file.delete()) {
+			println "Done."
+		} else {
+			println "Error."
+		}
 	}
 	
 	//--------------------------------------------------------------------------

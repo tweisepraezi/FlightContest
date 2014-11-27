@@ -6,10 +6,10 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-27.06.2014
+26.11.2014
 
-Downloads:
-https://www.dropbox.com/sh/7iiyj608t3icgab/L3GRISYuvM
+Downloads und Dokumentationen:
+http://flightcontest.de
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
 'Programme -> Flight Contest -> Readme'.
@@ -48,8 +48,60 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Fehlerbehebungen und Erweiterungen in dieser Version (2.2.6):
--------------------------------------------------------------
+Erweiterungen in dieser Version (2.3-M1):
+-----------------------------------------
+- Kurzer Klassenname eingeführt.
+- Massenhaftes Löschen, Deaktivieren und Aktivieren von Teams und Besatzungen
+  eingeführt.
+- FP->LDG-Berechnungs-Voreinstellwert auf "wind+:6NM" geändert.
+- Planungstest: Deaktivierte Punkte werden mit gedruckt, um die Anfänge zu
+    berechnender Streckenabschnitte klar zu erkennen.
+- Flugplan: Ausdruck der Gesamtflugzeit eingeführt.
+- Separates Einstell-Formular für Besatzungs- und Schiedsrichter-Zeitplan-Druck
+    Druck erfolgt aus Einstell-Formular heraus.
+- Schiedsrichter-Zeitplan: 
+    Einstellungen für Intermediate-Tower und -Landetest eingeführt.
+- Übersichts-Zeitplan eingeführt:
+    * Druckt Briefing-Zeit, wenn angegeben.
+    * Druckt erste und letzte Zeiten für Planungstests, Takoffs und Landungen.
+    * Druckt TAS-abhängige Gesamtflugzeiten.
+- Besatzungs-Zeitplan: 
+    TAS-abhängige Gesamtflugzeiten können zusätzlich mit gedruckt werden.
+- Landemesswert-Eingabe um "out" und "no" erweitert:
+    Als Landemesswert können die Werte "out" (Landung außerhalb der Landbox) 
+    und "no" (keine Landung) eingegeben werden, um Mausbedienung bei der Eingabe
+    zu vermeiden.
+- AFLOS-Logger-Daten-Import: 
+    * Referenzstrecken-Auswahl ergänzt
+        Bei Abstürzen des AFLOS-Calculates kann eine andere (reduzierte) Strecke
+        kalkuliert werden, die dann abweichend von der geplanten Strecke hier 
+        auswählbar ist.
+    * Option "Vorhandene Logger-Daten nicht löschen" ergänzt.
+- Unterschriften-Druck eingeführt.
+- Veranstalter-Druck in Fußzeile eingeführt.
+- Druck eines freien Textes mit Wettbewerbstitel eingeführt.
+- Wettbewerbs-Auswertung erweitert: 
+    * Filter 'Alle Teams'
+    * Option 'Aufgaben-Detail-Ergebnisse'
+    * Die Plazierung gleicher Plätze kann mit +/- festgelegt werden.
+- Check-Punkt-Deaktivierung erweitert:
+    Überflugzeit, Tor vorbei, Procedure Turn, Bad Course und Höhe
+    können jetzt je Check-Punkt separat deaktiviert werden.
+- Live-Ergebnis-Anzeige erweitert:
+    * Gleichzeitige Anzeige der Ergebnisse mehrerer Aufgaben (= Wettbewerbstage)
+    * Konfigurierbare Live-Ergebnis-Positionsberechnung
+- Team-Auswertung: 
+    * Deaktivierung von ganzen Teams möglich.
+    * Deaktivierung einzelner Besatzungen eines Teams von der Team-Auswertung 
+      möglich.
+- Hilfe ('Programme -> Flight Contest -> Help') erweitert:
+    * Kapitel 'Planungstest und Flugzeugvorbereitung' hinzugefügt.
+    * Kapitel 'Behebung von AFLOS-Problemen' überarbeitet.
+    * Kapitel 'Druck-Stil beeinflussen' hinzugefügt:
+        Beeinflussung des Druck-Stils mit CSS-Werten
+
+Fehlerbehebungen in 2.2.6:
+--------------------------
 - Aktualisierungs-Probleme bei bestimmten Contest-Optionen beseitigt.
 
 Fehlerbehebungen und Erweiterungen in Version 2.2.5:

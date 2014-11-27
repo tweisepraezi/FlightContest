@@ -179,7 +179,7 @@ class ResultClassController {
 			if (session?.lastContest) {
 				session.lastContest.refresh()
 				def resultclassList = ResultClass.findAllByContest(session.lastContest,[sort:"name"])
-				return [resultclassInstanceList:resultclassList]
+				return [contestInstance:session.lastContest,resultclassInstanceList:resultclassList]
 			}
 			return [:]
 		}
@@ -236,6 +236,26 @@ class ResultClassController {
 	        redirect(action:"listresults",id:params.id)
 		}
 	
+        def addposition = {
+            ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
+            def resultclass = fcService.addpositionResultClass(resultclass_instance,params.crewid.toLong()) 
+            flash.message = resultclass.message
+            if (resultclass.error) {
+                flash.error = true
+            }
+            redirect(action:"listresults",id:params.resultclassid)
+        }
+    
+        def subposition = {
+            ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
+            def resultclass = fcService.subpositionResultClass(resultclass_instance,params.crewid.toLong()) 
+            flash.message = resultclass.message
+            if (resultclass.error) {
+                flash.error = true
+            }
+            redirect(action:"listresults",id:params.resultclassid)
+        }
+    
 		def printresults = {
 			def resultclass = fcService.getResultClass(params)
 			if (resultclass.instance) {
@@ -259,7 +279,7 @@ class ResultClassController {
 	            ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
 				session.lastContest = resultclass_instance.contest
 				session.contestTitle = resultclass_instance.GetPrintContestTitle()
-	        	return [resultclassInstance:resultclass_instance]
+	        	return [contestInstance:session.lastContest,resultclassInstance:resultclass_instance]
 	        } else {
 	            redirect(action:"listresults",id:params.resultclassid)
 	        }
@@ -275,6 +295,23 @@ class ResultClassController {
 	        }
 		}
 		
+        def standardpoints = {
+            def resultclass = fcService.standardpointsResultClass(params)
+            if (resultclass.saved) {
+                flash.message = resultclass.message
+                redirect(action:editpoints,id:params.id)
+            } else if (resultclass.error) {
+                flash.message = resultclass.message
+                flash.error = true
+                render(view:'editpoints',model:[resultclassInstance:resultclass.instance])
+            } else if (resultclass.instance) {
+                render(view:'editpoints',model:[resultclassInstance:resultclass.instance])
+            } else {
+                flash.message = resultclass.message
+                redirect(action:editpoints,id:params.id)
+            }
+        }
+    
 		def printpoints = {
 			def resultclass = fcService.getResultClass(params)
 			if (resultclass.instance) {
@@ -298,7 +335,7 @@ class ResultClassController {
 	            ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
 				session.lastContest = resultclass_instance.contest
 				session.contestTitle = resultclass_instance.GetPrintContestTitle()
-	        	return [resultclassInstance:resultclass_instance]
+	        	return [contestInstance:session.lastContest,resultclassInstance:resultclass_instance]
 	        } else {
 	            redirect(action:"listresults",id:params.resultclassid)
 	        }

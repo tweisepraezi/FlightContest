@@ -134,9 +134,14 @@
                                 <g:checkBox name="teamPrintA3" value="${contestInstance.teamPrintA3}" />
                                 <label>${message(code:'fc.printa3')}</label>
                             </div>
+                            <br/>
                             <div>
                                 <g:checkBox name="teamPrintProvisional" value="${contestInstance.teamPrintProvisional}" />
                                 <label>${message(code:'fc.printprovisional')}</label>
+                            </div>
+                            <div>
+                                <g:checkBox name="teamPrintEqualPositions" value="${contestInstance.teamPrintEqualPositions}" />
+                                <label>${message(code:'fc.printequalpositions')}</label>
                             </div>
                        	</fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>

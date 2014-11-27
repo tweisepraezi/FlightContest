@@ -222,4 +222,12 @@ enum CoordType
 		}
 		return false
 	}
+    
+    boolean IsCpCheckCoord()
+    {
+        if (IsCpTimeCheckCoord() || IsProcedureTurnCoord() || IsBadCourseCheckCoord() || IsAltitudeCheckCoord()) {
+            return true
+        }
+        return false
+    }
 }

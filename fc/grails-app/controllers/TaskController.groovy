@@ -1,7 +1,6 @@
 
 import org.xhtmlrenderer.pdf.ITextRenderer
 
-
 class TaskController {
 
 	def fcService
@@ -23,7 +22,7 @@ class TaskController {
         }
     }
 
-	def editprintsettings = {
+	def timetable = {
 		def task = fcService.getTask(params)
 		if (task.instance) {
 			// assign return action
@@ -37,6 +36,34 @@ class TaskController {
 		}
 	}
 	
+    def timetablejury = {
+        def task = fcService.getTask(params)
+        if (task.instance) {
+            // assign return action
+            if (session.taskReturnAction) {
+                return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+            }
+            return [taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def timetableoverview = {
+        def task = fcService.getTask(params)
+        if (task.instance) {
+            // assign return action
+            if (session.taskReturnAction) {
+                return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+            }
+            return [taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
     def update = {
         def task = fcService.updateTask(params) 
 		if (task.saved) {
@@ -59,158 +86,198 @@ class TaskController {
         }
     }
 
-    def updateprintsettings = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.Modified,session.printLanguage) 
-        if (task.saved) {
-        	flash.message = task.message
-			// process return action
-			if (params.taskReturnAction) {
-				redirect(action:params.taskReturnAction,controller:params.taskReturnController,id:params.taskReturnID)
-			} else {
-        		redirect(controller:"contest",action:"tasks")
-			}
-        } else if (task.instance) {
-			render(view:'edit',model:[taskInstance:task.instance])
+    def savetimetablejurysettings = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryModified)
+		if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
         } else {
 			flash.message = task.message
 			redirect(action:edit,id:params.id)
         }
     }
 
-	def updateprintsettingsstandard = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.Standard,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingsstandard = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryStandard) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingsnone = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.None,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingsnone = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryNone) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingsall = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.All,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingsall = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryAll) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingstower = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.Tower,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingstower = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryTower) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingsplanning = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.Planning,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingsintermediatetower = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryIntermediateTower) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingstakeoff = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.Takeoff,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingsplanning = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryPlanning) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingslanding = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.Landing,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingstakeoff = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryTakeoff) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingsparking = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.Parking,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingslanding = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryLanding) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingstimetablestandard = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableStandard,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingsintermediatelanding = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryIntermediateLanding) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingstimetablenone = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableNone,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablejurysettingsparking = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryParking) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updateprintsettingstimetableall = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableAll,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+    def savetimetableoverviewsettings = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableOverviewModified)
+        if (task.instance) {
+            flash.message = task.message
+            render(view:'timetableoverview',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+        } else {
+            flash.message = task.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+
+    def savetimetablesettings = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableModified)
+		if (task.instance) {
+			flash.message = task.message
+			render(view:'timetable',,model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+        } else {
+			flash.message = task.message
+			redirect(action:edit,id:params.id)
+        }
+    }
+
+	def updatetimetablesettingsstandard = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableStandard) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetable',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def savechangeprintsettingstimetable = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableSaveChange,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablesettingsnone = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableNone) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetable',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def removechangeprintsettingstimetable = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableRemoveChange,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def updatetimetablesettingsall = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableAll) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetable',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def addchangeprintsettingstimetable = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableAddChange,session.printLanguage) 
-        if (task.saved) {
-			render(view:'editprintsettings',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+	def removechangetimetablesettings = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableRemoveChange) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetable',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+		} else {
+			flash.message = task.message
+			redirect(controller:"contest",action:"tasks")
+		}
+	}
+	
+	def addchangetimetablesettings = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableAddChange) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetable',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
@@ -395,6 +462,9 @@ class TaskController {
 	        if (task.taskid) {
 	            params.id = task.taskid
 				fcService.println "last results task $task.taskid"
+				if (params.message) {
+					flash.message = params.message
+				}
 	            redirect(action:listresults,params:params)
 	        }
 			fcService.printdone "last contest"
@@ -742,7 +812,7 @@ class TaskController {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
-        	return [taskInstance:task.instance ]
+        	return [contestInstance:session.lastContest,taskInstance:task.instance ]
         }
     }
 
@@ -755,7 +825,20 @@ class TaskController {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
-        	return [taskInstance:task.instance ]
+        	return [contestInstance:session.lastContest,taskInstance:task.instance ]
+        }
+    }
+
+    def timetableoverviewprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+        }
+        def task = fcService.gettimetableprintableTask(params)
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else {
+            return [contestInstance:session.lastContest,taskInstance:task.instance ]
         }
     }
 
@@ -791,6 +874,22 @@ class TaskController {
 	    }
 	}
 	
+    def printtimetableoverview = {
+        def task = fcService.printtimetableoverviewTask(params,GetPrintParams()) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+            flash.message = task.message
+            flash.error = true
+            redirect(action:listplanning,id:task.instance.id)
+        } else if (task.content) {
+            fcService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"overviewtimetable-task${task.instance.idTitle}-${task.instance.GetTimeTableVersion()}",true,task.instance.printTimetableOverviewA3,task.instance.printTimetableOverviewLandscape)
+        } else {
+            redirect(action:listplanning,id:task.instance.id)
+        }
+    }
+    
 	def printflightplans = {
         def task = fcService.printflightplansTask(params,false,false,GetPrintParams()) 
         if (!task.instance) {
@@ -909,6 +1008,10 @@ class TaskController {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
         } else {
+			task.instance.printAircraft = params.printAircraft == "true"
+			task.instance.printTeam = params.printTeam == "true"
+			task.instance.printClass = params.printClass == "true"
+			task.instance.printShortClass = params.printShortClass == "true"
 			task.instance.printProvisionalResults = params.printProvisionalResults == "true"
 	        if (params.contestid) {
 	            session.lastContest = Contest.get(params.contestid)
@@ -916,9 +1019,9 @@ class TaskController {
 	        if (params.resultclassid) {
 				ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
 				session.contestTitle = resultclass_instance.GetPrintContestTitle()
-				return [taskInstance:task.instance,resultclassInstance:resultclass_instance]
+				return [contestInstance:session.lastContest,taskInstance:task.instance,resultclassInstance:resultclass_instance]
 			}
-        	return [taskInstance:task.instance]
+        	return [contestInstance:session.lastContest,taskInstance:task.instance]
         }
     }
 

@@ -4,16 +4,22 @@
 
         <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'fc.ico')}" type="image/x-icon" />
 
-        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'reset.css')}" media="screen" />
-        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'text.css')}" media="screen" />
-        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'grid.css')}" media="screen" />
-        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'layout.css')}" media="screen" />
-        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'nav.css')}" media="screen" />
-        
-        <!--[if IE 6]><link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'ie6.css')}" media="screen" /><![endif]-->
-        <!--[if IE 7]><link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'ie.css')}" media="screen" /><![endif]-->
-        
-        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fc.css')}" media="screen" />
+        <g:if test="${!liveTest}">
+	        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'reset.css')}" media="screen" />
+	        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'text.css')}" media="screen" />
+	        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'grid.css')}" media="screen" />
+	        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'layout.css')}" media="screen" />
+	        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'nav.css')}" media="screen" />
+	        
+	        <!--[if IE 6]><link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'ie6.css')}" media="screen" /><![endif]-->
+	        <!--[if IE 7]><link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'ie.css')}" media="screen" /><![endif]-->
+	        
+	        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fc.css')}" media="screen" />
+            <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fcprint.css')}" media="print" />
+	        <g:if test="${grails.util.GrailsUtil.getEnvironment().equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_DEVELOPMENT) || grails.util.GrailsUtil.getEnvironment().equals("lastdb")}">
+	            <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fcdev.css')}" media="screen" />
+	        </g:if>
+	    </g:if>
         
         <g:layoutHead />
 
@@ -91,6 +97,40 @@
                         </g:if>    
                     </g:if>
 
+                    <g:if test="${session?.lastContest?.imageBottomLeft}">
+                        <g:set var="height_value_bottomleft" value="${session.lastContest.imageBottomLeftHeight}"/>
+                        <g:if test="${params.a3=='true'}">
+                            <g:if test="${params.landscape=='true'}">
+                                <g:set var="height_value_bottomleft" value="${(a3_landscape_factor*height_value_bottomleft).toInteger()}"/>
+                            </g:if>
+                            <g:else>
+                                <g:set var="height_value_bottomleft" value="${(a3_portrait_factor*height_value_bottomleft).toInteger()}"/>
+                            </g:else>
+                        </g:if>   
+                        <g:else>
+                            <g:if test="${params.landscape=='true'}">
+                                <g:set var="height_value_bottomleft" value="${(a4_landscape_factor*height_value_bottomleft).toInteger()}"/>
+                            </g:if>    
+                        </g:else>
+                    </g:if>
+                    
+                    <g:if test="${session?.lastContest?.imageBottomRight}">
+                        <g:set var="height_value_bottomright" value="${session.lastContest.imageBottomRightHeight}"/>
+                        <g:if test="${params.a3=='true'}">
+                            <g:if test="${params.landscape=='true'}">
+                                <g:set var="height_value_bottomright" value="${(a3_landscape_factor*height_value_bottomright).toInteger()}"/>
+                            </g:if>
+                            <g:else>
+                                <g:set var="height_value_bottomright" value="${(a3_portrait_factor*height_value_bottomright).toInteger()}"/>
+                            </g:else>
+                        </g:if>   
+                        <g:else>
+                            <g:if test="${params.landscape=='true'}">
+                                <g:set var="height_value_bottomright" value="${(a4_landscape_factor*height_value_bottomright).toInteger()}"/>
+                            </g:if>    
+                        </g:else>
+                    </g:if>
+                    
                     <g:set var="padding_horizontal" value="${new Integer(10)}"/>
                     <g:if test="${params.a3=='true'}">
                         <g:if test="${params.landscape=='true'}">
@@ -182,6 +222,33 @@
                 </g:else>
             </div>
             <g:layoutBody />
+            <g:if test="${params.print}">
+                <g:if test="${session?.lastContest?.imageBottomOn}">
+		            <g:if test="${session?.lastContest?.imageBottomLeft || session?.lastContest?.imageBottomRight}">
+		                <p>
+			                <g:if test="${session?.lastContest?.imageBottomLeft}">
+			                    <img src="${createLink(controller:'contest',action:'view_image_bottom_left',params:[contestid:session.lastContest.id])}" align="left" height="${height_value_bottomleft}" />
+			                </g:if>
+			                <g:if test="${session?.lastContest?.imageBottomRight}">
+			                    <img src="${createLink(controller:'contest',action:'view_image_bottom_right',params:[contestid:session.lastContest.id])}" align="right" height="${height_value_bottomright}" />
+			                </g:if>
+		                </p>
+		            </g:if>
+	                <g:if test="${session?.lastContest?.imageBottomLeftText || session?.lastContest?.imageBottomRightText}">
+	                    <g:if test="${session?.lastContest?.imageBottomLeft || session?.lastContest?.imageBottomRight}">
+	                        <br/>
+	                    </g:if>
+		                <h2 id="signature" style="font-size:${session?.lastContest?.imageBottomTextSize}px;font-weight:normal;clear:both;">
+		                    <g:if test="${session?.lastContest?.imageBottomLeftText}">
+					            <div style="float:left;">${session?.lastContest?.imageBottomLeftText}</div>
+					        </g:if>
+		                    <g:if test="${session?.lastContest?.imageBottomRightText}">
+		                        <div style="float:right;">${session?.lastContest?.imageBottomRightText}</div>
+		                    </g:if>
+		                </h2>
+	                </g:if>
+	            </g:if>
+	        </g:if>
         </div>
     </body>
 </html>

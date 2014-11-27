@@ -18,25 +18,32 @@
                         size: A4;
                     </g:else> 
                 </g:else>
-                @top-center {
-                    content: "${routeInstance.name()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale} - ${message(code:'fc.program.printpage')} " counter(page)
+                @top-left {
+                    content: "${routeInstance.name()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale}"
                 }
-                @bottom-center {
-                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                @top-right {
+                    content: "${message(code:'fc.program.printpage')} " counter(page)
+                }
+                @bottom-left {
+                    content: "${contestInstance.printOrganizer}"
+                }
+                @bottom-right {
+                    content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }
         </style>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="layout" content="main" />
+        <style type="text/css">${contestInstance.printStyle}</style>
         <title>${routeInstance.name()}</title>
     </head>
     <body>
-        <div class="box">
-            <div class="box boxborder" >
+        <div>
+            <div>
                 <h2>${routeInstance.name()}</h2>
-                <div class="block" id="forms" >
+                <div>
                     <g:form>
-                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                        <table class="routecoords">
                             <thead>
                                 <tr>
                                     <th>${message(code:'fc.tpname')}</th>
@@ -49,21 +56,21 @@
                             <tbody>
                                 <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
                                     <tr>
-                                        <td width="10%">${coordroute_instance.titlePrintCode()}</td>
-                                        <td width="10%">${coordroute_instance.mark}</td>
-                                        <td>${coordroute_instance.namePrintable(true)}</td>
-                                        <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
-                                        <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
+                                        <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
+                                        <td class="aflosname">${coordroute_instance.mark}</td>
+                                        <td class="coords">${coordroute_instance.namePrintable(true)}</td>
+                                        <td class="altitude">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
+                                        <td class="gatewidth">${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
                                     </tr>
                                 </g:each>
                             </tbody>
                         </table>
                         <br/>
                        	<div style="page-break-inside:avoid">
-	                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
+	                        <table class="routelegs">
                                 <g:set var="total_distance" value="${new BigDecimal(0)}" />
 	                            <thead>
-	                                <tr>
+	                                <tr class="name">
 	                                    <th colspan="2">${message(code:'fc.routelegcoord.list')}</th>
 	                                </tr>
 	                            </thead>
@@ -72,18 +79,18 @@
                                         <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routelegcoord_instance.testDistance())}" />
                                         <g:set var="course_change" value="${AviationMath.courseChange(routelegcoord_instance.turnTrueTrack,routelegcoord_instance.testTrueTrack())}"/>
 	                                    <g:if test="${course_change.abs() >= 90}">
-	                                        <tr>
+	                                        <tr class="coursechange">
 	                                            <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegcoord_instance.IsProcedureTurn()}"> (${message(code:'fc.procedureturn')})</g:if></td>
 	                                        </tr>
 	                                    </g:if>
-	                                    <tr>
-	                                        <td width="20%">${routelegcoord_instance.GetPrintTitle()}</td>
-	                                        <td>${routelegcoord_instance.testName()}</td>
+	                                    <tr class="value">
+	                                        <td class="from2tp">${routelegcoord_instance.GetPrintTitle()}</td>
+	                                        <td class="trackdistance">${routelegcoord_instance.testName()}</td>
 	                                    </tr>
 	                                </g:each>
 	                            </tbody>
                                 <tfoot>
-                                    <tr>
+                                    <tr class="summary">
                                         <td colspan="2">${message(code:'fc.distance.total')} ${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')}</td>
                                     </tr>
                                 </tfoot>
@@ -91,10 +98,10 @@
 	                    </div>
 	                    <br/>
                        	<div style="page-break-inside:avoid">
-	                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
+	                        <table class="routelegs">
                                 <g:set var="total_distance" value="${new BigDecimal(0)}" />
                                 <thead>
-                                    <tr>
+                                    <tr class="name">
                                         <th colspan="2">${message(code:'fc.routelegtest.list')}</th>
                                     </tr>
                                 </thead>
@@ -103,18 +110,18 @@
                                         <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,routelegtest_instance.testDistance())}" />
                                         <g:set var="course_change" value="${AviationMath.courseChange(routelegtest_instance.turnTrueTrack,routelegtest_instance.testTrueTrack())}"/>
                                         <g:if test="${course_change.abs() >= 90}">
-                                            <tr>
+                                            <tr class="coursechange">
                                                 <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegtest_instance.IsProcedureTurn()}"> (${message(code:'fc.procedureturn')})</g:if></td>
                                             </tr>
                                         </g:if>
-	                                    <tr>
-	                                        <td width="20%">${routelegtest_instance.GetPrintTitle()}</td>
-	                                        <td>${routelegtest_instance.testName()}</td>
+	                                    <tr class="value">
+	                                        <td class="from2tp">${routelegtest_instance.GetPrintTitle()}</td>
+	                                        <td class="trackdistance">${routelegtest_instance.testName()}</td>
 	                                    </tr>
 	                                </g:each>
 	                            </tbody>
                                 <tfoot>
-                                    <tr>
+                                    <tr class="summary">
                                         <td colspan="2">${message(code:'fc.distance.total')} ${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')}</td>
                                     </tr>
                                 </tfoot>

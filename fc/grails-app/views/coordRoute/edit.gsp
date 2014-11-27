@@ -74,9 +74,17 @@
 	                                <g:checkBox name="noTimeCheck" value="${coordRouteInstance.noTimeCheck}" />
 	                                <label>${message(code:'fc.notimecheck')}</label>
 	                            </div>
+	                            <div>
+	                                <g:checkBox name="noGateCheck" value="${coordRouteInstance.noGateCheck}" />
+	                                <label>${message(code:'fc.nogatecheck')}</label>
+	                            </div>
                                 <div>
                                     <g:checkBox name="noPlanningTest" value="${coordRouteInstance.noPlanningTest}" />
                                     <label>${message(code:'fc.noplanningtest')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="endCurved" value="${coordRouteInstance.endCurved}" />
+                                    <label>${message(code:'fc.endcurved.long')}</label>
                                 </div>
 	                        </fieldset>
 	                        <fieldset>
@@ -136,9 +144,21 @@
 	                                       <td>${message(code:'fc.yes')}</td>
 	                                   </tr>
 	                               </g:if>
+                                   <g:if test="${coordRouteInstance.noGateCheck}">
+                                       <tr>
+                                           <td class="detailtitle">${message(code:'fc.nogatecheck')}:</td>
+                                           <td>${message(code:'fc.yes')}</td>
+                                       </tr>
+                                   </g:if>
                                    <g:if test="${coordRouteInstance.noPlanningTest}">
                                        <tr>
                                            <td class="detailtitle">${message(code:'fc.noplanningtest')}:</td>
+                                           <td>${message(code:'fc.yes')}</td>
+                                       </tr>
+                                   </g:if>
+                                   <g:if test="${coordRouteInstance.endCurved}">
+                                       <tr>
+                                           <td class="detailtitle">${message(code:'fc.endcurved.long')}:</td>
                                            <td>${message(code:'fc.yes')}</td>
                                        </tr>
                                    </g:if>

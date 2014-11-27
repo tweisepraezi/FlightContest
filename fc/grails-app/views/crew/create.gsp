@@ -29,20 +29,20 @@
                                 <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}" tabIndex="2"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.crew.team')}:</label>
+                                <label>${message(code:'fc.team')}:</label>
                                 <br/>
                                 <input type="text" id="teamname" name="teamname" value="${fieldValue(bean:crewInstance,field:'teamname')}" tabIndex="3"/>
                             </p>
                             <g:if test="${resultClasses}">
 	                            <p>
-	                                <label>${message(code:'fc.crew.resultclass')}:</label>
+	                                <label>${message(code:'fc.resultclass')}:</label>
 	                                <br/>
 	                                <input type="text" id="resultclassname" name="resultclassname" value="${fieldValue(bean:crewInstance,field:'resultclassname')}" tabIndex="4"/>
 	                            </p>
 	                        </g:if>
                         </fieldset>
                         <fieldset>
-                            <legend>${message(code:'fc.crew.aircraft')}</legend>
+                            <legend>${message(code:'fc.aircraft')}</legend>
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}:</label>
                                 <br/>

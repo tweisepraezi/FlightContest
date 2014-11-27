@@ -27,6 +27,7 @@ ul.main li a.active {
 
 /* zusätzliche Styles
 ----------------------------------------------- */
+
 div.errors {
     background: #fff3f3;
     border: 1px solid red;
@@ -70,6 +71,10 @@ td.errors {
 
 td.center {
     text-align:center;
+}
+
+td.right {
+    text-align:right;
 }
 
 .grad {

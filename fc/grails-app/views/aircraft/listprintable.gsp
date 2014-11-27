@@ -18,25 +18,32 @@
                         size: A4;
                     </g:else> 
                 </g:else>
-                @top-center {
+                @top-left {
+                    content: "${message(code:'fc.aircraft.list')}"
+                }
+                @top-right {
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
-                @bottom-center {
-                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                @bottom-left {
+                    content: "${contestInstance.printOrganizer}"
+                }
+                @bottom-right {
+                    content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }
         </style>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="layout" content="main" />
+        <style type="text/css">${contestInstance.printStyle}</style>
         <title>${message(code:'fc.aircraft.list')}</title>
     </head>
     <body>
-        <div class="box">
-            <div class="box boxborder" >
+        <div>
+            <div>
                 <h2>${message(code:'fc.aircraft.list')} (${aircraftInstanceList.size()})</h2>
-                <div class="block" id="forms" >
+                <div>
                     <g:form>
-                        <table width="100%" border="1" cellspacing="0" cellpadding="2">
+                        <table class="aircraftlist">
                             <thead>
                                 <tr>
                                    <th>${message(code:'fc.aircraft.registration')}</th>
@@ -47,13 +54,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <g:each var="aircraftInstance" in="${aircraftInstanceList}" status="i" >
-                                    <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                                        <td>${aircraftInstance.registration}</td>
-                                        <td>${aircraftInstance.type}</td>
-                                        <td>${aircraftInstance.colour}</td>
-                                        <td>${aircraftInstance.user1?.name}</td>
-                                        <td>${aircraftInstance.user2?.name}</td>
+                                <g:each var="aircraft_instance" in="${aircraftInstanceList}" status="i" >
+                                    <tr>
+                                        <td class="aircraft">${aircraft_instance.registration}</td>
+                                        <td class="aircrafttype">${aircraft_instance.type}</td>
+                                        <td class="aircraftcolor">${aircraft_instance.colour}</td>
+                                        <td class="crew1">${aircraft_instance.user1?.name}</td>
+                                        <td class="crew2">${aircraft_instance.user2?.name}</td>
                                     </tr>
                                 </g:each>
                             </tbody>

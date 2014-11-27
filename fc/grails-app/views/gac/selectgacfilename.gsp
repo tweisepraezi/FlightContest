@@ -15,8 +15,18 @@
                     	<div>
     						<input type="file" size="80" accept="text/plain/*.gac" name="loadgacfile" tabIndex="1"/>
                     	</div>
+                        <p>
+	                        <div>
+	                            <g:checkBox name="repairtracks" value="${repairtracks}" />
+	                            <label>${message(code:'fc.gac.repair.tracks')}</label>
+	                        </div>
+	                        <div>
+	                            <g:checkBox name="identicaltimes" value="${identicaltimes}" />
+	                            <label>${message(code:'fc.gac.repair.identicaltimes')}</label>
+	                        </div>
+                        </p>
                     	<div>
-	    					<input type="submit" value="${message(code:'fc.gac.repair.track')}" tabIndex="2"/>
+	    					<input type="submit" value="${message(code:'fc.gac.repair')}" tabIndex="2"/>
 		                    <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                     	</div>
 					</g:uploadForm>

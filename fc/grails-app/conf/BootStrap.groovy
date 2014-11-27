@@ -61,8 +61,8 @@ class BootStrap {
 								}
 								contest_instance.contestContestTitle = 0
 								contest_instance.contestPrintLandscape = true
-								contest_instance.contestPrintTaskDetails = true
-								contest_instance.contestPrintTaskNamesInTitle = true
+								contest_instance.contestPrintTaskDetails = false
+								contest_instance.contestPrintTaskNamesInTitle = false
 								contest_instance.teamTaskResults = ""
 								for (Task task_instance in contest_instance.tasks) {
 									if (contest_instance.teamTaskResults) {
@@ -92,8 +92,8 @@ class BootStrap {
 									resultclass_instance.contestTaskResults += "task_${task_instance.id}"
 								}
 								resultclass_instance.contestPrintLandscape = true
-								resultclass_instance.contestPrintTaskDetails = true
-								resultclass_instance.contestPrintTaskNamesInTitle = true
+								resultclass_instance.contestPrintTaskDetails = false
+								resultclass_instance.contestPrintTaskNamesInTitle = false
 								resultclass_instance.save()
 							}
 							println " done."
@@ -231,9 +231,9 @@ class BootStrap {
 								task_instance.printTimetableJuryArrival = true
 								task_instance.printTimetableJuryEmptyColumn1 = true
 								task_instance.printTimetableJuryEmptyTitle1 = ""
-								task_instance.printTimetableJuryEmptyColumn2 = true
+								task_instance.printTimetableJuryEmptyColumn2 = false
 								task_instance.printTimetableJuryEmptyTitle2 = ""
-								task_instance.printTimetableJuryEmptyColumn3 = true
+								task_instance.printTimetableJuryEmptyColumn3 = false
 								task_instance.printTimetableJuryEmptyTitle3 = ""
 								task_instance.printTimetableJuryLandscape = true
 								task_instance.printTimetableJuryA3 = false
@@ -391,6 +391,106 @@ class BootStrap {
 								test_instance.landingTest4NotAllowedAerodynamicAuxiliaries = false
 								test_instance.save()
 							}
+							println " done."
+						}
+						if (global.versionMinor < 8) { // DB-2.8 compatibility
+							print "    2.8 modifications"
+							Contest.findAll().each { Contest contest_instance ->
+								contest_instance.printStyle = ""
+								contest_instance.printCrewShortClass = false
+								contest_instance.imageBottomOn = false
+								contest_instance.imageBottomLeft = null
+								contest_instance.imageBottomLeftHeight = Contest.IMAGEBOTTOMHEIGHT
+								contest_instance.imageBottomLeftText = ""
+								contest_instance.imageBottomRight = null
+								contest_instance.imageBottomRightHeight = Contest.IMAGEBOTTOMHEIGHT
+								contest_instance.imageBottomRightText = ""
+								contest_instance.imageBottomTextSize = Contest.IMAGEBOTTOMTEXTSIZE
+								contest_instance.printOrganizer = Contest.DEFAULT_ORGANIZER
+								contest_instance.contestPrintAircraft = true
+								contest_instance.contestPrintTeam = false
+								contest_instance.contestPrintClass = false
+								contest_instance.contestPrintShortClass = false
+								contest_instance.printCrewEmptyColumn4 = false
+								contest_instance.printCrewEmptyTitle4 = ""
+                                contest_instance.contestPrintTaskTestDetails = ""
+                                contest_instance.contestPrintLandingDetails = false
+                                contest_instance.liveRefreshSeconds = Contest.LIVE_REFRESHSECONDS
+                                contest_instance.liveStylesheet = Contest.LIVE_STYLESHEET
+                                contest_instance.livePositionCalculation = 0
+                                contest_instance.liveShowSummary = true
+                                contest_instance.contestPrintEqualPositions = false
+                                contest_instance.teamPrintEqualPositions = false
+                                contest_instance.printFreeText = ""
+                                contest_instance.printFreeTextTitle = ""
+                                contest_instance.printFreeTextLandscape = true
+                                contest_instance.printFreeTextA3 = false
+                                contest_instance.printFreeTextStyle = Contest.DEFAULT_FREETEXTSTYLE
+                                contest_instance.contestRuleForEachClass = true
+                                contest_instance.printLandingCalculatorValues = contest_instance.contestRule.ruleValues.printLandingCalculatorValues
+								contest_instance.save()
+							}
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+								resultclass_instance.shortName = resultclass_instance.GetDefaultShortName()
+								resultclass_instance.contestPrintAircraft = true
+								resultclass_instance.contestPrintTeam = false
+								resultclass_instance.contestPrintClass = false
+								resultclass_instance.contestPrintShortClass = false
+                                resultclass_instance.contestPrintTaskTestDetails = ""
+                                resultclass_instance.contestPrintLandingDetails = false
+                                resultclass_instance.contestPrintEqualPositions = false
+                                resultclass_instance.printLandingCalculatorValues = resultclass_instance.contestRule.ruleValues.printLandingCalculatorValues
+								resultclass_instance.save()
+							}
+							Task.findAll().each { Task task_instance ->
+								task_instance.printTimetableClass = false
+								task_instance.printTimetableShortClass = false
+								task_instance.printTimetableJuryClass = false
+								task_instance.printTimetableJuryShortClass = true
+								task_instance.printTimetableJuryEmptyColumn4 = false
+								task_instance.printTimetableJuryEmptyTitle4 = ""
+                                if (task_instance.disabledCheckPoints) {
+                                    task_instance.disabledCheckPoints += ","
+                                }
+                                task_instance.disabledCheckPointsNotFound = task_instance.disabledCheckPoints
+                                task_instance.disabledCheckPointsMinAltitude = task_instance.disabledCheckPoints
+                                task_instance.disabledCheckPointsProcedureTurn = task_instance.disabledCheckPoints
+                                task_instance.disabledCheckPointsBadCourse = ""
+                                task_instance.printTimetableLegTimes = false
+                                task_instance.briefingTime = ""
+                                task_instance.printTimetableOverviewLegTimes = true
+                                task_instance.printTimetableOverviewLandscape = false
+                                task_instance.printTimetableOverviewA3 = false
+								task_instance.save()
+							}
+                            Team.findAll().each { Team team_instance ->
+                                team_instance.disabled = false
+                                team_instance.contestEqualPosition = false
+                                team_instance.contestAddPosition = 0
+                                team_instance.save()
+                            }
+                            Crew.findAll().each { Crew crew_instance ->
+                                crew_instance.contestEqualPosition = false
+                                crew_instance.contestAddPosition = 0
+                                crew_instance.classEqualPosition = false
+                                crew_instance.classAddPosition = 0
+                                crew_instance.disabledTeam = false
+                                crew_instance.save()
+                            }
+                            Coord.findAll().each { Coord coord_instance ->
+                                coord_instance.noGateCheck = false
+                                coord_instance.endCurved = false
+                                coord_instance.save()
+                            }
+                            RouteLeg.findAll().each { RouteLeg routeleg_instance ->
+                                routeleg_instance.endCurved = false
+                                routeleg_instance.save()
+                            }
+                            TestLeg.findAll().each { TestLeg testleg_instance ->
+                                testleg_instance.noPlanningTest = false
+                                testleg_instance.endCurved = false
+                                testleg_instance.save()
+                            }
 							println " done."
 						}
 						break

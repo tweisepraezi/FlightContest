@@ -5,25 +5,32 @@ Inhalt
 ======
 - Bedien-Tipps
 - Standard-Wettbewerbsablauf
-- Live-Ergebnisanzeige
 - Änderungen bei Wettbewerbs-Durchführung
 - Besatzungsliste erstellen
 - Streckenplanung
 - Flugzeit-Berechnung für Starts und Landungen
+- Planungstest und Flugzeugvorbereitung
 - Landungen
 - Unterstützte Logger
 - Behebung von AFLOS-Problemen
+- Live-Ergebnisanzeige
+- Druck-Stil beeinflussen
 - Datensicherung eines laufenden Wettbewerbes
 
 
 Bedien-Tipps
 ============
 - Fett markierte Texte und Zahlen sowie das Zeichen '...' sind Links, 
-  hinter denen sich weitere Daten verbergen (in Planung und Auswertung).
+  hinter denen sich weitere Daten verbergen.
 - Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
   wodurch das Drücken der Shift-Taste nicht notwendig ist.
+- Bei der Eingabe gebrochener Zahlen kann anstelle des "," auch ein '.' benutzt 
+  werden.
 - Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben 
   eingegeben werden, wodurch das Drücken der Shift-Taste nicht notwendig ist.
+- Bei der Eingabe von Landemesswerten kann der Landemesswert "out" für Landungen
+  außerhalb der Landebox und "no" für keine Landung eingegeben werden, um
+  diese Fehler ohne Maus-Bedienung einzugeben. 
 
 
 Standard-Wettbewerbsablauf
@@ -54,6 +61,7 @@ A. Wettbewerbs-Vorbereitung
    - Einstellungen je Aufgabe festlegen:
        * Anfangs-Zeit
        * TakeOff-Abstand (bei vorhandenen Wendeschleifen min. 2 Minuten)
+       * Dauer des Planungstests und der Flugzeugvorbereitung
        * Flugzeit-Berechnungsverfahren T/O -> SP
        * Flugzeit-Berechnungsverfahren FP -> LDG (zur Ermittlung der spätesten Landezeit)
        * Zeit Landung -> Abstellen des Flugzeuges
@@ -90,6 +98,7 @@ B. Wettbewerbs-Beginn
    - Zeit-Einstellungen festlegen
        * Anfangs-Zeit
        * TakeOff-Abstand (bei vorhandenen Wendeschleifen min. 2 Minuten)
+       * Dauer des Planungstests und der Flugzeugvorbereitung
        * Flugzeit-Berechnungsverfahren T/O -> SP
        * Flugzeit-Berechnungsverfahren FP -> LDG (zur Ermittlung der spätesten Landezeit)
        * Zeit Landung -> Abstellen des Flugzeuges
@@ -115,12 +124,18 @@ B. Wettbewerbs-Beginn
    - Planungstest-Aufgaben für Besatzungen drucken (-> Aufgaben drucken).
    - Zeitplan für Besatzung drucken (-> Zeitplan drucken).
    - Zeitpläne für verschiedene Schiedsrichter drucken
-     (-> Druckeinstellungen, -> Schiedsrichter-Zeitplan drucken).
+     (-> Schiedsrichter-Zeitplan -> Drucken).
    - Flugpläne für Besatzung drucken (-> Flugpläne drucken).
 
 C. Wettbewerbs-Durchführung
 
-10. Navigationsflug-Logger-Auswertung
+10. Planungstest und Flugzeugvorbereitung
+   -> Schiedsrichter-Zeitplan - Planungstest
+   - Planungstest-Aufgaben an Besazungen ausgeben
+   - Nach Rückgabe der Planungstest-Aufgabe durch eine Besatzung
+     Ausgabe des Flugplanes an diese Besatzung
+
+11. Navigationsflug-Logger-Auswertung
    -> Ergebnisse -> Aufgaben-Titel
    - AFLOS: Logger einlesen
    - AFLOS: Calculate mit Referenzstrecke
@@ -129,21 +144,21 @@ C. Wettbewerbs-Durchführung
    - Rot markierte Positionen in Ergebnisliste prüfen und ggf. korrigieren.
    - Ergebnisliste für Besatzung drucken (-> Druck)
      
-11. Planungstest-Ergebniseingabe
+12. Planungstest-Ergebniseingabe
    -> Ergebnisse -> Aufgaben-Titel
    - Werte für Steuerkurs und Flugzeit eintragen (-> Planung -> ... -> 1,2,3 ...).
    - Punkte > 0 (blau markiert) prüfen  
 
-12. Beobachtungstest-Ergebniseingabe
+13. Beobachtungstest-Ergebniseingabe
    -> Ergebnisse -> Aufgaben-Titel
    - Werte für Wendepunkt-Fotos, Strecken-Fotos und Bodenzeichen eintragen
      (-> Beobachtungen -> ...).
 
-13. Landetest-Ergebniseingabe
+14. Landetest-Ergebniseingabe
    -> Ergebnisse -> Aufgaben-Titel
    - Landemesswert und Landefehler eintragen (-> Landung -> ...).
 
-14. Erfasste Ergebnisse an Besatzungen übergeben
+15. Erfasste Ergebnisse an Besatzungen übergeben
    -> Ergebnisse -> Aufgaben-Titel
    - Ggf. Wendepunkte der Zeitauswertung deaktivieren
      (-> Zeitauswertung von Check-Punkten deaktivieren)
@@ -151,11 +166,11 @@ C. Wettbewerbs-Durchführung
 
 D. Wettbewerbs-Auswertung
 
-15. Proteste von Besatzungen verarbeiten
+16. Proteste von Besatzungen verarbeiten
    -> Ergebnisse -> Aufgaben-Titel -> ...
    - Aufgaben-Ergebnisse auf Grund stattgegebener Proteste korrigieren.
    
-16. Klassen-Auswertung (je Klasse)
+17. Klassen-Auswertung (je Klasse)
    -> Auswertung -> Klassen-Titel
    - Auswertungs-Filter und Druck-Formatierung einstellen (-> Klassen-Auswertungs-Einstellungen)
        Filter:
@@ -173,7 +188,7 @@ D. Wettbewerbs-Auswertung
    - Plätze berechnen (-> Plätze berechnen).
    - Endergebnis drucken (-> Druck)
 
-17. Wettbewerbs-Auswertung (bei klassenlosen Wettbewerben oder wenn Klassen zu mischen sind)
+18. Wettbewerbs-Auswertung (bei klassenlosen Wettbewerben oder wenn Klassen zu mischen sind)
    -> Auswertung -> Wettbewerbs-Auswertung
    - Auswertungs-Filter und Druck-Formatierung einstellen (-> Wettbewerbs-Auswertungs-Einstellungen)
        Filter:
@@ -192,7 +207,7 @@ D. Wettbewerbs-Auswertung
    - Plätze berechnen (-> Plätze berechnen).
    - Endergebnis drucken (-> Druck)
 
-18. Team-Auswertung
+19. Team-Auswertung
    -> Auswertung -> Team-Auswertung
    - Auswertungs-Filter und Druck-Formatierung einstellen (-> Team-Auswertungs-Einstellungen)
        Filter:
@@ -210,78 +225,39 @@ D. Wettbewerbs-Auswertung
    - Endergebnis drucken (-> Druck)
 
 
-Live-Ergebnisanzeige
-====================
-Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
-
-- Konfiguration (-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen)
-    Filter:
-      * einzubeziehende Klassen
-      * einzubeziehende Aufgaben
-      * einzubeziehende Teams
-      * einzubeziehende Aufgabendetails
-    Formatierung:
-      * Titel
-      * Untertitel
-      * Spalte für Aufgabenergebnisse
-      * Aufgabentitel im Detailtitel
-         
-- Direkte Anzeige aus 'Flight Contest' heraus (-> Auswertung -> Wettbewerbs-Auswertung -> Live-Ergebnisanzeige)
-    Web-Site wird alle 10 Sekunden automatisch aktualisiert.
-
-- FTP-Upload/Netzwerkfreigabe-Kopie (-> Script fclive_run.groovy)
-    Installationsvoraussetzungen:
-      * Java 6 oder höher
-      * Groovy 2.1.6 oder höher
-      * commons-net-3.3.jar nach 'C:\Program Files (x86)\Groovy\Groovy-<Version>\lib' kopieren
-    Installation:
-      * Script 'C:\Program Files (x86)\Flight Contest\scripts\fclive_run.groovy' auf eine beliebige Stelle
-        auf der lokalen Platte kopieren und konfigurieren
-      * Stylesheet 'C:\Program Files (x86)\Flight Contest\scripts\fclive.css' auf FTP-Server und/oder
-        auf Netzwerkfreigaben hochladen/kopieren.
-      * Script alle 60 Sekunden mit 'Geplante Tasks'/'Task Scheduler' aufrufen
-    Konfiguration 'fclive_run.groovy':
-      * CONTEST_ID - Datenbank-ID des Wettbewerbes (im Link von "Wettbewerb wechseln" zu finden)
-      * LANGUAGE - Ausgabesprache Deutsch 'de' oder Englisch 'en'
-      * FTPConnections - Liste der FTP-Server, wohin Live-Web-Site fclive.htm hochgeladen werden soll.
-      * CopyDestinations - Liste der Netzwerkfreigaben, wohin Live-Web-Site fclive.htm hinkopiert werden soll.
-
-
 Änderungen bei Wettbewerbs-Durchführung
 =======================================
 - Besatzung nimmt kurzfritig nicht teil
-  -> Besatzung deaktivieren
+  -> Besatzung deaktivieren (Besatzungen)
   Zeitplan bleibt unverändert.
   
 - Besatzung kann nicht wie geplant starten
-  -> Besatzung ans Ende der Aufgabe schieben
+  -> Besatzung ans Ende der Aufgabe schieben (Planung)
   Für die betroffene Besatzung wird ein neuer Flugplan berechnet.
   
 - Starts verschieben sich zeitlich
-  -> Anfangszeit betroffener Besatzungen korrigieren
+  -> Anfangszeit betroffener Besatzungen korrigieren (Planung)
   Für die betroffenen Besatzungen wird ein neuer Flugplan berechnet.
   
 - Flugwind ändert sich im Laufe der Starts
-  -> Verbliebenen Besatzungen anderen Flugwind zuweisen.
+  -> Verbliebenen Besatzungen anderen Flugwind zuweisen  (Planung)
   Für die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.
 
 - Besatzung muß wegen Defekt das Flugzeug wechseln
   -> Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen
+     (Besatzungen)
   Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet.
   Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unverändert.
 
 - Wendepunkt-Überflugzeit einer Aufgabe soll nicht gewertet werden
   -> Zeitauswertung des Wendepunktes deaktivieren
+     (Ergebnisse -> Check-Punkte deaktivieren)
   Bewirkt Neuberechnung des Ergebnisses.
-  Hinweis: 
-    Vorbeiflug am Tor wird weiterhin bestraft.
-    Soll der Vorbeiflug am Tor nicht bestraft werden, sind festgestellte 
-    Vorbeiflüge in den Besatzungs-Navigationsflugergebnissen zu deaktivieren.
   
 - Unbekannte Zeitkontrolle einer Aufgabe soll nicht gewertet werden
-  -> Zeitauswertung der unbekannten Zeitkontrolle deaktivieren
+  -> Zeitauswertung und 'Tor verfehlt' der unbekannten Zeitkontrolle
+     deaktivieren (Ergebnisse -> Check-Punkte deaktivieren)
   Bewirkt Neuberechnung des Ergebnisses.
-  Hinweis: Vorbeiflug am Tor wird damit auch nicht bestraft.
 
 
 Besatzungsliste erstellen
@@ -467,8 +443,9 @@ in den AFLOS-Referenz-Daten, die beim Import der Strecke verarbeitet werden:
   * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten
   * $noplanningtest - Diesen Check-Punkt nicht in Flugplanungstest aufnehmen.
   * $notimecheck - Keine Zeitauswertung für diesen Check-Punkt
+  * $nogatecheck - Keine Auswertung des verfehlten Tores für diesen Check-Punkt
   * $curved - Diesen Check-Punkt als Punkt einer krummen Strecke festlegen
-    (= $secret + $noplanningtest + $notimecheck)  
+    (= $secret + $noplanningtest + $notimecheck + $nogatecheck)  
   Der vorangegangene Wendepunkt ist ein Check-Punkt, der importiert wird
   und keine unbekannte Zeitkontrolle ist.
   Alle Markierungen beginnen und enden mit einem Leerzeichen 
@@ -534,8 +511,9 @@ Bedeutungen:
 Anwendungsbeispiele:
   Ausdruck      Anwendung
   ---------------------------------------------------------------------------------------
-  wind+:2NM     Flugplatz mit Standard-Platzrunde von 2NM
+  wind+:2NM     Flugplatz mit Standard-Platzrunde von 2NM (T/O -> SP, iT/O -> iSP)
   wind+:xNM     Bei größeren Platzrunden eine größere Entfernung x anwenden.
+  wind+:6NM     Spätestete Landezeit (FP -> LDG)
   time+:xmin    Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)
   wind+:1.3     Berechnete Flugzeit um 30% vergrößern und auf Minute korrigieren.
   wind:1        Flugzeit mit Entfernung und Wind ohne Korrekturen berechnen
@@ -544,6 +522,73 @@ Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
   * Flugzeit T/O -> SP plausibel?
   * Flugzeit FP -> LDG (zur Ermittlung der spätesten Landezeit) ausreichend?
   * Flugzeit iFP -> iLDG (-> iT/O) -> iSP bei Zwischenlandung plausibel?
+
+
+Planungstest und Flugzeugvorbereitung
+=====================================
+
+Folgende Möglichkeiten bestehen:
+  - Planungstest mit Wettbewerbskarte (ohne Streckenkonstruktion)
+  - Planungstest mit Streckenkonstruktion
+  - Kein Planungstest, nur Flugzeugvorbereitung
+
+Planungstest mit Wettbewerbskarte (ohne Streckenkonstruktion)
+-------------------------------------------------------------
+Aufgaben-Konfiguration:
+  * Dauer des Planungstests: 60 min
+  * Dauer der Flugzeugvorbereitung: 15 min
+Planungstest-Karte: 
+  * Wendepunkte sind bereits eingezeichnet 
+  * Streckenverlauf kann eingezeichnet sein
+Navigationstest-Karte:
+  * Wendepunkte und Streckenverlauf sind eingezeichnet
+Arbeiten der Besatzung:
+  * Besatzung erhält Planungstest-Karte und Planungstest-Aufgabenblatt
+      - Kurs über Grund messen
+      - Steuerkurs und Flugzeit berechnen und
+        in Planungstest-Aufgabenblatt eintragen
+      - Abgabe des Planungstest-Aufgabenblattes
+  * Besatzung erhält Navigationstest-Karte und Flugplan
+      - Navigationstest-Karte vorbereiten (Wendeschleifen,
+        Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)
+
+Planungstest mit Streckenkonstruktion
+-------------------------------------
+Aufgaben-Konfiguration:
+  * Dauer des Planungstests: 75 min (bei komplizierten Strecken ggf. mehr)
+  * Dauer der Flugzeugvorbereitung: 15 min
+Planungstest-Karte: 
+  * Enthält keine Wendepunkte
+Navigationstest-Karte:
+  * Wendepunkte und Streckenverlauf sind eingezeichnet
+Arbeiten der Besatzung:
+  * Besatzung erhält Streckenkonstruktions-Anweisungen, Planungstest-Karte und
+    Planungstest-Aufgabenblatt
+      - Strecke in Planungstest-Karte konstruieren
+      - Kurs über Grund messen
+      - Steuerkurs und Flugzeit berechnen und
+        in Planungstest-Aufgabenblatt eintragen
+      - Abgabe des Planungstest-Aufgabenblattes
+  * Besatzung erhält Navigationstest-Karte und Flugplan
+      - Navigationstest-Karte vorbereiten (Wendeschleifen,
+        Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)
+
+Kein Planungstest
+-----------------
+Aufgaben-Konfiguration:
+  * Dauer des Planungstests: 0 min
+  * Dauer der Flugzeugvorbereitung: 30 min (bei langen Strecken ggf. mehr)
+Navigationstest-Karte:
+  * Wendepunkte und Streckenverlauf sind eingezeichnet
+Arbeiten der Besatzung:
+  * Besatzung erhält Navigationstest-Karte und Flugplan
+      - Navigationstest-Karte vorbereiten (Wendeschleifen,
+        Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)
+
+Hinweis zur Konfiguration des Planungstests:
+  Die Option "Entfernungsmessung beim Planungstest" ist nur sinnvoll,
+  wenn die Entfernungen zw. den Check-Punkten mit der verwendeten Karte
+  ausgemessen und mit $dist in die AFLOS-Strecke eingepflegt wurden.
 
 
 Landungen
@@ -559,29 +604,29 @@ anklickbare Check-Boxen eingegeben.
 Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
   Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2014:
     Alle Landungen
-      {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return 200;}}
+      {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
   Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005:
     Landung 1 und 4
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
     Landung 2 und 3
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return 150;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return null;}}}
 
   FAI Air Rally Flying - Edition 2013:
     Alle Landungen
-      {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return 200;}}
+      {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
   FAI Precision Flying - Edition 2013:
     Landung 1 und 4
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
     Landung 2 und 3
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
 
   Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2014:
     Landung 1 und 4
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return 300;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
     Landung 2 und 3
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return 200;}}}
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
 
 Zur Erfassung der Landungen drucken Sie den Schiedsrichter-Zeitplan einer Aufgabe
 mit folgenden Feldern aus:
@@ -635,7 +680,7 @@ DG-100
 - Logger-Aufzeichung auslesen: 'FSNavigator.net -> Plugins -> FRPocket device -> Download tracks'
 - GAC-Datei erzeugen: 
   * 'FSNavigator.net -> Logger-Object -> Save'
-  * 'Flight Contest -> Extras -> Tracks einer GAC-Datei reparieren'
+  * 'Flight Contest -> Extras -> GAC-Datei reparieren' mit Option 'Tracks aus Koordinaten berechnen'
 - Logger-Aufzeichung löschen: 'FSNavigator.net -> Plugins -> FRPocket device -> Clear memory'
 - GAC-Datei zur Auswertung importieren: 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
 
@@ -665,16 +710,170 @@ DG-200
 Behebung von AFLOS-Problemen
 ============================
 
-'Check-Data -> Calculate' ermittelt wegen "Drop Out" keine Überflugzeiten
--------------------------------------------------------------------------
-- GAC-File exportieren: 'Flight-Data -> Export Data -> Gen. GAC-File'
-- Fehlerhafte Datenzeilen manuell im GAC-File entfernen (mit Texteditor)
-    Datenzeilen beginnen mit dem Buchstaben 'B'. Zeichen 2 bis 7 enthält die Uhrzeit (in UTC).
-    Fehlerhafte Datenzeilen liegen am Anfang oder Ende der Aufzeichnung.
-    Die Uhrzeit der Calculate-Ergebnis-Liste gibt über die mögliche Problemstelle Auskunft.
-- Korrigiertes GAC-File mit neuer Besatzungsnummer importieren: 'Read Data -> Load GAC-File'
-- 'Check-Data -> Calculate' der neuen Besatzungsnummer importieren
+'Check-Data -> Calculate' ermittelt keine Überflugzeiten
+--------------------------------------------------------
+Erscheinungsbilder:
+  - Mit 'Check - Data -> Calculate' wird alleine der Punkt T/O ermittelt.
+  - 'Check - Data -> Calculate' stürzt ab.
 
+Ursachen:
+  - Das Tor von SP wurde nicht durchflogen.
+  - SP wurde vor T/O erkannt.
+  
+Vorgehen:
+  * Kalkulieren Sie gegen eine Kopie der Referenzstrecke ohne T/O-Punkt.
+  * Importieren Sie dessen Ergebnisse.
+  * Lesen Sie den T/O-Punkt manuell ab.
+  * Geben Sie den T/O-Punkt manuell in die Ergebnisliste ein.
+
+Kopie einer Referenzstrecke erstellen:
+  * AFLOS: 'Reference - Data -> Write To File'
+  * Texteditor: Zeile mit T/O löschen
+  * AFLOS: 'Reference - Data -> Edit Ref_Nr': Neue Referenzstrecke anlegen
+  * AFLOS: 'Reference - Data -> Load From File'
+
+Import der Ergebnisse der reduzierten Referenzstrecke:
+  * Wählen Sie bei 'Import AFLOS-Logger-Daten' als Strecken-Name
+    Ihre Referenzstrecken-Kopie aus.
+
+Hinweis:
+  Treten massenhaft Fehlkalkulationen beim AFLOS-Calculate auf,
+  kann die Referenzstrecke nach dem oben beschriebenen Verfahren
+  in mehrere Teil-Referenzstrecken aufgeteilt und gegen jede
+  Teil-Referenzstrecke kalkuliert werden. Mit aktivierter Option
+  'Vorhandene Logger-Daten nicht löschen' können alle Teil-
+  Kalkulationen in die selbe Auswertungs-Liste importiert werden.
+
+
+Live-Ergebnisanzeige
+====================
+Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
+
+- Konfiguration (-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen)
+    Filter:
+      * einzubeziehende Klassen
+      * einzubeziehende Aufgaben
+      * einzubeziehende Teams
+      * einzubeziehende Aufgabendetails
+    Formatierung:
+      * Titel
+      * Untertitel
+      * Spalte für Aufgabenergebnisse
+      * Aufgabentitel im Detailtitel
+         
+- Direkte Anzeige aus 'Flight Contest' heraus (-> Auswertung -> Wettbewerbs-Auswertung -> Live-Ergebnisanzeige)
+    Web-Site wird alle 10 Sekunden automatisch aktualisiert.
+
+- FTP-Upload/Netzwerkfreigabe-Kopie (-> Script fclive_run.groovy)
+    Installationsvoraussetzungen:
+      * Java 6 oder höher
+      * Groovy 2.1.6 oder höher
+      * commons-net-3.3.jar nach 'C:\Program Files (x86)\Groovy\Groovy-<Version>\lib' kopieren
+    Installation:
+      * Script 'C:\Program Files (x86)\Flight Contest\scripts\fclive_run.groovy' auf eine beliebige Stelle
+        auf der lokalen Platte kopieren und konfigurieren
+      * Stylesheet 'C:\Program Files (x86)\Flight Contest\scripts\fclive.css' auf FTP-Server und/oder
+        auf Netzwerkfreigaben hochladen/kopieren.
+      * Script alle 60 Sekunden mit 'Geplante Tasks'/'Task Scheduler' aufrufen
+    Konfiguration 'fclive_run.groovy':
+      * CONTEST_ID - Datenbank-ID des Wettbewerbes (im Link von "Wettbewerb wechseln" zu finden)
+      * LANGUAGE - Ausgabesprache Deutsch 'de' oder Englisch 'en'
+      * FTPConnections - Liste der FTP-Server, wohin Live-Web-Site fclive.htm hochgeladen werden soll.
+      * CopyDestinations - Liste der Netzwerkfreigaben, wohin Live-Web-Site fclive.htm hinkopiert werden soll.
+
+
+Druck-Stil beeinflussen
+=======================
+Ermöglicht Einfluß auf das Aussehen des Druckes.
+-> Wettbewerb -> Einstellungen -> Druck-Stil
+
+CSS-Einstellungen für Titel:
+  
+  h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+      // font-size: Größe des 1. Titels festlegen. 
+      //            Nur nutzbar, wenn die Titelgröße leer ist und keine Grafiken verwendet werden.
+      // margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 1. Titels nach oben und unten festlegen
+    
+  h2 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+      // font-size: Größe des 2. Titels festlegen
+      // margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 2. Titels nach oben und unten festlegen
+    
+  h3 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+      // font-size: Größe des 3. Titels festlegen
+      // margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 3. Titels nach oben und unten festlegen
+      
+CSS-Einstellungen für Unterschrift:
+  
+  h2#signature { margin-top:100px; }
+      // margin-top: Abstand zur Tabelle oder zum Unterschriften-Bild vergrößern
+
+CSS-Einstellungen für Tabellen:
+  Anwendung:
+      table.Tabellenname tr.Zeilenname td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
+      table.Tabellenname tr.Zeilenname td { Eigenschaft1; Eigenschaft2; ... }
+      table.Tabellenname tr#ID td { Eigenschaft1; Eigenschaft2; ... }
+      td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
+      .Spaltenname { Eigenschaft1; Eigenschaft2; ... }
+  Eigenschaften (siehe http://www.w3schools.com/cssref):
+      Kein Umbruch bei Leerzeichen: white-space: nowrap;
+      Spaltenbreite:                width: 10%;
+      Fettdruck:                    font-weight: bold;
+      Kursivdruck:                  font-style: italic;
+      Farbe:                        color: red;
+      Kleinere Textgröße:           font-size: 80%;
+      Text zentriert ausrichten:    text-align: center;
+      Textabstand zum Rahmen oben:  padding-top:2cm;
+  Default-Werte:
+      http://localhost:8080/fc/css/fcprint.css
+  Tabellen-Namen [Geltungsbereich] / (Zeilen-Namen [ID]) Spalten-Namen:
+      planningpoints / (title value) name value modify 
+      flightpoints / (title value) name value modify
+      landingpoints / (title value penaltycalculator) name value modify
+      
+      routecoords / tpname aflosname coords altitude gatewidth
+      routetpcoords / tpname coords
+      routelegs / (name value coursechange summary) from2tp trackdistance
+      
+      crewlist / num crew team resultclass shortresultclass aircraft aircrafttype aircraftcolor tas empty1 empty2 empty3 empty4
+      teamlist / team crew aircraft tas
+      resultclasslist / resultclass shortresultclass crew aircraft tas
+      aircraftlist / aircraft aircrafttype aircraftcolor crew1 crew2
+      
+      timetablelist / num crew aircraft tas team resultclass shortresultclass planningtime takeofftime version
+      legtimelist / tas legtime
+      timetablejurylist / num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass
+                          planningtime planningendtime takeofftime sptime tptime fptime landingtime arrivaltime
+                          empty1 empty2 empty3 empty4
+      timetableoverviewlist / (briefing planning planning takeoff intermediatelanding landing legtimes) col1 col2 col3
+      
+      crewtest / title crew team resultclass aircraft aircrafttype tas
+      info / (wind planning endcurved landinglatest) title separator value
+      planningtasklist / (valuename unit value [#tpname]) distance truetrack trueheading groundspeed legtime tpname
+      flightplanlist / (value [#tpname] procedureturn summary) num distance truetrack trueheading groundspeed legtime tpname tptime
+      
+      planningtaskresultlist / (name1 name2 value [#tpname] summary) tpname plantrueheading trueheading penaltytrueheading
+                               planlegtime legtime penaltylegtime 
+      summary [planningtaskresults] / (legpenalties giventolate exitroomtolate otherpenalties penalties)
+      flightresultlist / (name1 name2 value [#tpname] summary) tpname aflosname plancptime cptime penaltycp penaltyprocedureturn 
+                         penaltybadcourse penaltyaltitudemissed 
+      summary [flightresults] / (checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate
+                          safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened
+                          frequencynotmonitored otherpenalties penalties) 
+      flightmeasurementlist / (name1 name2 value [#tpname]) tpname aflosname plancptime cptime procedureturn badcoursenum altitude
+      summary [observationresults] / (turnpointphotopenalties routephotopenalties groundtargetpenalties penalties)
+      landingresultlist / (name [#1...4] values [#1...4] summary [#1...4])
+      summary [landingresults] / (otherpenalties penalties)
+      summary [specialresults] / (penalties)
+      crewresultsummary / planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties
+                          penalties
+      
+      resultlist / ([#pos]) pos crew aircraft team resultclass shortresultclass planningpenalties flightpenalties observationpenalties 
+                   landingpenalties specialpenalties taskpenalties contestpenalties
+      teamresultlist / ([#pos]) pos team crews teampenalties
+      
+      freetext / #line
+      testlist / testcol1 testcol2 testcol3 testcol4 testcol5
+      
 
 Datensicherung eines laufenden Wettbewerbes
 ===========================================

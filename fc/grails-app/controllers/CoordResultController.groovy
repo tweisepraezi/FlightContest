@@ -27,7 +27,7 @@ class CoordResultController
         def coordresult = fcService.updateCoordResult(params) 
         if (coordresult.saved) {
             flash.message = coordresult.message
-			int next_testid = GetNextTestID(params.testid)
+			long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Flight)
 			if (next_testid) {
 				redirect(controller:"test",action:'flightresults',id:params.testid,params:[next:next_testid])
 			} else {
@@ -185,27 +185,12 @@ class CoordResultController
     }
 
     def cancel = {
-        redirect(controller:"test",action:'flightresults',id:params.testid)
+		long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Flight)
+		if (next_testid) {
+			redirect(controller:"test",action:'flightresults',id:params.testid,params:[next:next_testid])
+		} else {
+			redirect(controller:"test",action:'flightresults',id:params.testid)
+		}
     }
 	
-	int GetNextTestID(String test_id)
-	{
-		int nexttest_id = 0
-		if (test_id) {
-			Test test = Test.get(test_id)
-			if (test) {
-				boolean set_next = false
-				for (Test test_instance2 in Test.findAllByTask(test.task,[sort:'viewpos'])) {
-					if (set_next) {
-		                nexttest_id = test_instance2.id
-						set_next = false
-					}
-		            if (test_instance2.id == test.id) { // BUG: direkter Klassen-Vergleich geht nicht 
-						set_next = true
-		            }
-				}
-			}
-		}
-		return nexttest_id
-	}
 }

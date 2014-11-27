@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.crew.editprintsettings')}</title>
+        <title>${message(code:'fc.crew.print')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.crew.editprintsettings')}</h2>
+                <h2>${message(code:'fc.crew.print')}</h2>
                 <div class="block" id="forms">
                     <g:form params="${['crewReturnAction':crewReturnAction,'crewReturnController':crewReturnController,'crewReturnID':crewReturnID]}">
                         <fieldset>
@@ -36,6 +36,10 @@
 	                                    <g:checkBox name="printCrewClass" value="${contestInstance.printCrewClass}" />
 	                                    <label>${message(code:'fc.resultclass')}</label>
 	                                </div>
+                                    <div>
+                                        <g:checkBox name="printCrewShortClass" value="${contestInstance.printCrewShortClass}" />
+                                        <label>${message(code:'fc.resultclass.short')}</label>
+                                    </div>
 	                            </g:if>
                                 <div>
                                     <g:checkBox name="printCrewAircraft" value="${contestInstance.printCrewAircraft}" />
@@ -81,6 +85,15 @@
                             </p>
                             <p>
                                 <div>
+                                    <g:checkBox name="printCrewEmptyColumn4" value="${contestInstance.printCrewEmptyColumn4}" />
+                                    <label>${message(code:'fc.test.emptycolumn')} 4</label>
+                                </div>
+                                <p>
+                                    <input type="text" id="printCrewEmptyTitle4" name="printCrewEmptyTitle4" value="${fieldValue(bean:contestInstance,field:'printCrewEmptyTitle4')}" tabIndex="5"/>
+                                </p>
+                            </p>
+                            <p>
+                                <div>
                                     <g:checkBox name="printCrewLandscape" value="${contestInstance.printCrewLandscape}" />
                                     <label>${message(code:'fc.printlandscape')}</label>
                                 </div>
@@ -89,14 +102,15 @@
                                     <label>${message(code:'fc.printa3')}</label>
                                 </div>
                             </p>
-                            <g:actionSubmit action="updateprintsettingsstandard" value="${message(code:'fc.setprintsettings.standard')}" tabIndex="5"/>
-                            <g:actionSubmit action="updateprintsettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="6"/>
-                            <g:actionSubmit action="updateprintsettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="7"/>
+                            <g:actionSubmit action="updateprintsettingsstandard" value="${message(code:'fc.standard')}" tabIndex="6"/>
+                            <g:actionSubmit action="updateprintsettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="7"/>
+                            <g:actionSubmit action="updateprintsettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="8"/>
                         </fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}" />
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
-                        <g:actionSubmit action="updateprintsettings" value="${message(code:'fc.update')}" tabIndex="8"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="9"/>
+                        <g:actionSubmit action="saveprintsettings" value="${message(code:'fc.save')}" tabIndex="101"/>
+                        <g:actionSubmit action="print" value="${message(code:'fc.print')}" tabIndex="102"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="103"/>
                     </g:form>
                 </div>
             </div>

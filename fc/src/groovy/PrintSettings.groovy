@@ -1,18 +1,28 @@
 enum PrintSettings 
 {
-	Modified,
-	Standard,
-	None,
-	All,
-	Tower,
-	Planning,
-	Takeoff,
-	Landing, 
-	Parking,
+	CrewAll,
+	CrewModified,
+	CrewStandard,
+	CrewNone,
+	
+    TimetableOverviewModified,
+    
+	TimetableJuryModified,
+	TimetableJuryStandard,
+	TimetableJuryNone,
+	TimetableJuryAll,
+	TimetableJuryTower,
+	TimetableJuryIntermediateTower,
+	TimetableJuryPlanning,
+	TimetableJuryTakeoff,
+	TimetableJuryLanding, 
+	TimetableJuryIntermediateLanding, 
+	TimetableJuryParking,
+	
+	TimetableModified,
 	TimetableStandard,
 	TimetableNone,
 	TimetableAll,
-	TimetableSaveChange,
 	TimetableRemoveChange,
 	TimetableAddChange
 }

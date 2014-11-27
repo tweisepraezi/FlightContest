@@ -24,6 +24,9 @@
                                 <tr>
                                 	<th>${message(code:'fc.test.results.position')}</th>
                                    	<th>${message(code:'fc.crew')}</th>
+		                            <g:if test="${resultClasses}">
+		                                <th>${message(code:'fc.resultclass')}</th>
+		                            </g:if>
                                    	<th>${message(code:'fc.aircraft')}</th>
                                    	<th>${message(code:'fc.team')}</th>
                                    	<g:each var="task_instance1" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
@@ -39,12 +42,20 @@
                                     		<td class="position">${message(code:'fc.disabled')}</td>
 	                                    </g:if> <g:else>
 		                                    <g:if test="${crew_instance.contestPosition}">
-		                                        <td class="position">${crew_instance.contestPosition}</td>
+		                                        <td class="position">${crew_instance.contestPosition}<g:if test="${crew_instance.contestEqualPosition}"> <a href="${createLink(controller:'contest',action:'addposition',params:[crewid:crew_instance.id])}">+</a></g:if><g:if test="${crew_instance.contestAddPosition > 0}"> <a href="${createLink(controller:'contest',action:'subposition',params:[crewid:crew_instance.id])}">-</a></g:if></td>
 		                                    </g:if> <g:else>
 		                                        <td class="position">${message(code:'fc.test.results.position.none')}</td>
 		                                    </g:else>
 	                                    </g:else>
                                         <td class="positioncrew"><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/></td>
+                                        <g:if test="${resultClasses}">
+                                            <g:if test="${crew_instance.resultclass}">                          
+                                                <td><g:resultclass var="${crew_instance.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
+                                            </g:if>
+                                            <g:else>
+                                                <td>-</td>
+                                            </g:else>
+                                        </g:if>
                                         <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
                                         <g:if test="${crew_instance.team}">                          
                                             <td><g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/></td>

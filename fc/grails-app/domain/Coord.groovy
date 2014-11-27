@@ -20,7 +20,9 @@ class Coord
     int gatewidth = 1                    // Typumstellung auf Float gatewidth2, DB-2.3
 	Float gatewidth2 = 1.0f              // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM), DB-2.3
 	Integer legDuration                  // duration of leg [min], DB-2.3
-	Boolean noTimeCheck = false          // No timecheck, DB-2.3
+    Boolean endCurved = false            // End of curved, DB-2.8
+	Boolean noTimeCheck = false          // No time check, DB-2.3
+    Boolean noGateCheck = false          // No gate check, DB-2.8
 	Boolean noPlanningTest = false       // No planning test, DB-2.6
 	
     // Speicher für Eingabe der Landkarten-Messung
@@ -143,6 +145,10 @@ class Coord
 		
 		// DB-2.6 compatibility
 		noPlanningTest(nullable:true)
+        
+        // DB-2.8 compatibility
+        noGateCheck(nullable:true)
+        endCurved(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -190,7 +196,9 @@ class Coord
 	    legMeasureDistance = coordInstance.legMeasureDistance
 	    legDistance = coordInstance.legDistance
 		legDuration = coordInstance.legDuration
+        endCurved = coordInstance.endCurved
 		noTimeCheck = coordInstance.noTimeCheck
+        noGateCheck = coordInstance.noGateCheck
 		noPlanningTest = coordInstance.noPlanningTest
 	    secretLegRatio = coordInstance.secretLegRatio
 	    // planCpTime = coordInstance.planCpTime
@@ -320,41 +328,74 @@ class Coord
 		return "${latName()} ${lonName()}"
 	}
 
+	String givenName()
+	{
+		String s = "${getMsg('fc.test.results.given')} ${titleCode()} ${mark}:"
+		if (resultCpNotFound) {
+			s += " ${GetCpNotFoundName()}" 
+		}
+		s += " ${FcMath.TimeStr(resultCpTime)}"
+		s += " ${resultAltitude}${getMsg('fc.foot')}" 
+		if (type.IsBadCourseCheckCoord()) {
+			s += " ${resultBadCourseNum} ${getMsg('fc.badcoursenum')}"
+		}
+		s += "."
+		return s
+	}
+	
+	String givenProcedureTurn()
+	{
+		String s = "${getMsg('fc.test.results.given')}: "
+		if (resultProcedureTurnNotFlown) {
+			s += getMsg('fc.flighttest.procedureturnnotflown')
+		} else {
+			s += getMsg('fc.flighttest.procedureturnflown')
+		}
+		s += "."
+		return s
+	}
+	
 	String namePrintable(boolean printSettings) // BUG: ' wird nicht korrekt gedruckt
 	{
 		String print_name = "${latName()}' ${lonName()}'"
 		if (printSettings) {
-	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noPlanningTest) {
+	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 				print_name += " ("
 			}
 	    	if (measureTrueTrack != null) {
 	    		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
-				if (measureDistance != null || legDuration != null || noTimeCheck || noPlanningTest) {
+				if (measureDistance != null || legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 	    	}
 	    	if (measureDistance != null) {
 	    		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
-				if (legDuration != null || noTimeCheck || noPlanningTest) {
+				if (legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 	    	}
 			if (legDuration != null) {
 				print_name += "${legDuration}${getMsg('fc.time.min')}"
-				if (noTimeCheck || noPlanningTest) {
+				if (noTimeCheck || noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 			}
 			if (noTimeCheck) {
 				print_name += "${getMsg('fc.notimecheck.print')}"
-				if (noPlanningTest) {
+				if (noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 			}
+            if (noGateCheck) {
+                print_name += "${getMsg('fc.nogatecheck.print')}"
+                if (noPlanningTest) {
+                    print_name += "; "
+                }
+            }
 			if (noPlanningTest) {
 				print_name += "${getMsg('fc.noplanningtest.print')}"
 			}
-	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noPlanningTest) {
+	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 				print_name += ")"
 			}
 		}

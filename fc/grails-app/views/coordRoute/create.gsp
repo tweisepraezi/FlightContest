@@ -66,6 +66,10 @@
                                 <label>${message(code:'fc.notimecheck')}</label>
                             </div>
                             <div>
+                                <g:checkBox name="noGateCheck" value="${coordRouteInstance.noGateCheck}" />
+                                <label>${message(code:'fc.nogatecheck')}</label>
+                            </div>
+                            <div>
                                 <g:checkBox name="noPlanningTest" value="${coordRouteInstance.noPlanningTest}" />
                                 <label>${message(code:'fc.noplanningtest')}</label>
                             </div>

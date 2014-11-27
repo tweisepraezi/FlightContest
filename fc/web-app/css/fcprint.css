@@ -1,0 +1,126 @@
+body {
+	margin: 0 0 0 0;
+}
+
+table {
+    width: 100%;
+}
+
+table th {
+    vertical-align: top;
+}
+
+table,  table th, table td {
+	border: 1px solid black;
+    border-collapse: collapse;
+    padding: 2px;
+}
+
+.empty1, .empty2, .empty3, .empty4 {
+    width: 10%;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.crewtest, table.crewtest th, table.crewtest td {
+    border-style: none;
+    vertical-align: top;
+}
+
+table.crewtest td.crew, table.crewtest td.aircraft, table.crewtest td.tas {
+    font-weight: bold;
+}
+
+table.crewresultsummary tr.penalties {
+    font-weight: bold;
+}
+
+table.crewresultsummary td {
+    border-style: none;
+}
+
+table.info, table.info th, table.info td {
+    border-style: none;
+}
+
+table.info td.title, table.info td.separator {
+	width: 1%;
+}
+
+table.summary th, table.summary td {
+    border-style: none;
+}
+
+table.summary tr.penalties {
+    font-weight: bold;
+}
+
+table.flightplanlist tr.procedureturn td {
+    text-align: center;
+}
+
+table.landingresultlist {
+    width: 100%;
+    border-style: none;
+}
+
+table.routecoords td.tpname, table.routecoords td.aflosname {
+    width: 10%;
+}
+
+table.routelegs td.from2tp {
+    width: 20%;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.timetableoverviewlist,  table.timetableoverviewlist th, table.timetableoverviewlist td {
+    width: auto;
+	border-style: none;
+}
+
+table.timetableoverviewlist tr.briefing td {
+    padding-bottom: 0.5em;
+}
+
+table.timetableoverviewlist tr.landing td {
+	padding-bottom: 2em;
+}
+
+table.timetableoverviewlist td {
+    font-size: 2em;
+}
+
+table.timetableoverviewlist td.col2 {
+    padding-left: 1.5em;
+}
+
+table.timetableoverviewlist td.col3 {
+    padding-left: 0.5em;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.legtimelist {
+    width: 0%;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.planningpoints td.name, table.flightpoints td.name, table.landingpoints td.name {
+    width: 80%;
+}
+
+table.planningpoints td.modify, table.flightpoints td.modify, table.landingpoints td.modify {
+    width: 1%;
+    border-left-style: none;
+}
+
+table.planningpoints .value, table.flightpoints .value, table.landingpoints .value {
+    border-right-style: none;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.freetext, table.freetext th, table.freetext td {
+    border-style: none;
+}
+
+table.freetext td {
+    text-align: center;
+}

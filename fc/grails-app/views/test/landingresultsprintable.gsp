@@ -18,21 +18,28 @@
                         size: A4;
                     </g:else> 
                 </g:else>
-                @top-center {
+                @top-left {
+                    content: "${message(code:'fc.landingresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}"
+                }
+                @top-right {
                     content: "${testInstance.GetViewPos()}"
                 }
-                @bottom-center {
-                    content: "${message(code:'fc.program.printfoot.left')} - ${message(code:'fc.program.printfoot.right')}"
+                @bottom-left {
+                    content: "${contestInstance.printOrganizer}"
+                }
+                @bottom-right {
+                    content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }
         </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
+        <style type="text/css">${contestInstance.printStyle}</style>
         <title>${message(code:'fc.landingresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
     </head>
     <body>
-        <div class="box">
-            <div class="box boxborder" >
+        <div>
+            <div>
                 <h2>${message(code:'fc.landingresults')} ${testInstance.GetStartNum()}</h2>
                 <g:if test="${!testInstance.landingTestComplete}">
 	                <h3>${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()}) [${message(code:'fc.provisional')}]</h3>
@@ -40,38 +47,9 @@
                 <g:else>
 	                <h3>${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})</h3>
                 </g:else>
-                <div class="block" id="forms" >
+                <div>
                     <g:form>
-                        <table width="100%">
-                            <tbody>
-                                <tr>
-                                    <td>${message(code:'fc.crew')}: ${testInstance.crew.name}</td>
-			                    	<g:if test="${testInstance.crew.team}">
-		                            	<td>${message(code:'fc.crew.team')}: ${testInstance.crew.team.name}</td>
-	    		                    </g:if>
-			                    	<g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
-		                                <td>${message(code:'fc.crew.resultclass')}: ${testInstance.crew.resultclass.name}</td>
-	    		                    </g:if>
-                                </tr>
-                                <tr>
-                                    <td>${message(code:'fc.aircraft.registration')}:
-                                        <g:if test="${testInstance.taskAircraft}">
-                                            ${testInstance.taskAircraft.registration}
-                                        </g:if> <g:else>
-                                            ${message(code:'fc.noassigned')}
-                                        </g:else>
-                                    </td>
-                                    <td>${message(code:'fc.aircraft.type')}: 
-                                        <g:if test="${testInstance.taskAircraft}">
-		                                    ${testInstance.taskAircraft.type}
-                                        </g:if> <g:else>
-                                            ${message(code:'fc.noassigned')}
-                                        </g:else>
-                                    </td>
-                                    <td>${message(code:'fc.tas')}: ${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <g:crewTestPrintable t="${testInstance}"/>
                        	<g:if test="${testInstance.IsLandingTest1Run()}">
 	                        <br/>
 	                        <g:landingTest1Printable t="${testInstance}"/>

@@ -16,8 +16,9 @@ class RouteLeg
 	BigDecimal legDistance             // NM
 	
 	Integer legDuration                // min, DB-2.3
-	Boolean noTimeCheck = false        // DB-2.3
+	Boolean noTimeCheck = false        // DB-2.3, wird nicht benutzt
 	Boolean noPlanningTest = false     // DB-2.6
+    Boolean endCurved = false          // DB-2.8
 	
 	BigDecimal turnTrueTrack           // DB-2.4
 
@@ -43,6 +44,9 @@ class RouteLeg
 
 		// DB-2.6 compatibility
 		noPlanningTest(nullable:true)
+        
+        // DB-2.8 compatibility
+        endCurved(nullable:true)
     }
 
 	void CopyValues(RouteLeg routeLegInstance)
@@ -57,6 +61,8 @@ class RouteLeg
 		legMeasureDistance = routeLegInstance.legMeasureDistance
 		legDistance = routeLegInstance.legDistance
 		turnTrueTrack = routeLegInstance.turnTrueTrack
+        noPlanningTest = routeLegInstance.noPlanningTest
+        endCurved = routeLegInstance.endCurved
 		
 		if (!this.save()) {
 			throw new Exception("RouteLeg.CopyValues could not save")

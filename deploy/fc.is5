@@ -2,14 +2,14 @@
 
 [Code]
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
-const DBVersion = '2.7.0';    // DB-2.7
+const DBVersion = '2.8.0';    // DB-2.8
 const FCCompatibelDigits = 0; // Number of digits for application compatibility
-const FCVersion = '2.2.6';
+const FCVersion = '2.3.0';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 2.2.6
-AppVersion=2.2.6
-VersionInfoVersion=2.2.6
+AppVerName=Flight Contest 2.3-M1
+AppVersion=2.3-M1
+VersionInfoVersion=2.3.0
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://www.praeziflug.de
 ;AppUpdatesURL=https://github.com/tweisepraezi/FlightContest/downloads/FCSetup.exe
@@ -50,11 +50,11 @@ Source: "..\..\..\Server\apache-tomcat-7.0.25-x86\*"; DestDir: "{app}\tomcat";  
 Source: ".\fc-service.bat";                           DestDir: "{app}\tomcat\bin";
 Source: ".\tomcat-users.xml";                         DestDir: "{app}\tomcat\conf";
 Source: "..\output\fc.war";                           DestDir: "{app}\tomcat\webapps";
-Source: "..\readme.txt";                              DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
-Source: ".\usage.rtf";                                DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
-Source: ".\help.txt";                                 DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
-Source: ".\FC-Manual.pdf";                            DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
-Source: ".\AFLOS-Kurzanleitung.pdf";                  DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly;
+Source: "..\readme.txt";                              DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
+Source: ".\usage.rtf";                                DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
+Source: ".\help.txt";                                 DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
+Source: ".\FC-Manual.pdf";                            DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
+Source: ".\AFLOS-Kurzanleitung.pdf";                  DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\install-service.bat";                      DestDir: "{app}";
 Source: ".\odbc.vbs";                                 DestDir: "{app}";
 Source: ".\fc-service-start.xml";                     DestDir: "{app}";
@@ -74,7 +74,7 @@ Source: ".\rules\FAI_rally_flying_rules_2013.pdf";    DestDir: "{app}\rules";   
 Source: ".\rules\DE_Praezisionsflug_2005.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Navigationsflug_2014.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\CH_Praezisionsflug_2014.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
-Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly; AfterInstall: MyAfterInstall;
+Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly; AfterInstall: MyAfterInstall;
 
 [Dirs]
 Name: "C:\FCSave";    Flags: uninsneveruninstall;     Permissions: everyone-modify;

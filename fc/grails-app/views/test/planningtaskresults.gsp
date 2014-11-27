@@ -27,13 +27,13 @@
                                 </tr>
                                 <g:if test="${testInstance.crew.team}">
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.team')}:</td>
                                         <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
                                     </tr>
                                 </g:if>
                                 <g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.resultclass')}:</td>
                                         <td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
                                     </tr>
                                 </g:if>
@@ -75,106 +75,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <g:if test="${TestLegPlanning.countByTest(testInstance)}" >
-                            <div>
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th colspan="8" class="table-head">${message(code:'fc.planningresults.legresultlist')}</th>
-                                        </tr>
-                                        <tr>
-                                            <th>${message(code:'fc.number')}</th>
-                                            <th>${message(code:'fc.title')}</th>
-                                            <th/>
-                                            <th>${message(code:'fc.distance')}</th>
-                                            <th>${message(code:'fc.truetrack')}</th>
-                                            <th>${message(code:'fc.trueheading')}</th>
-                                            <th>${message(code:'fc.groundspeed')}</th>
-                                            <th>${message(code:'fc.legtime')}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <g:set var="leg_no" value="${new Integer(0)}" />
-                                        <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
-                                            <g:set var="leg_no" value="${leg_no+1}" />
-                                            <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">
-                                            
-                                            	<!-- search next id -->
-                                            	<g:set var="next" value="${new Integer(0)}" />
-		                                        <g:set var="setnext" value="${false}" />
-        		                                <g:each var="testlegplanning_instance2" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
-                                                    <g:if test="${setnext}">
-	       				                                <g:set var="next" value="${testlegplanning_instance2.id}" />
-						                                <g:set var="setnext" value="${false}" />
-                                                    </g:if>
-                                                    <g:if test="${testlegplanning_instance2 == testlegplanning_instance}">
-				                                        <g:set var="setnext" value="${true}" />
-                                                    </g:if>
-        		                                </g:each>
-        		                                
-                                                <td><g:testlegplanning2 var="${testlegplanning_instance}" name="${leg_no}" next="${next}" link="${createLink(controller:'testLegPlanning',action:'edit')}"/></td>
-                                                <td>${testlegplanning_instance.coordTitle.titleCode()}</td>
-                                                <td>${message(code:'fc.test.results.plan')}</td>
-                                                <td>${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}${message(code:'fc.mile')}</td>
-                                                <td>${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}${message(code:'fc.grad')}</td>
-                                                <td>${FcMath.GradStr(testlegplanning_instance.planTrueHeading)}${message(code:'fc.grad')}</td>
-                                                <td>${FcMath.SpeedStr_Planning(testlegplanning_instance.planGroundSpeed)}${message(code:'fc.knot')}</td>
-                                                <td>${testlegplanning_instance.planLegTimeStr()}${message(code:'fc.time.h')}</td>
-                                            </tr>
-                                            <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">
-                                                <td/>
-                                                <td/>
-                                                <td>${message(code:'fc.test.results.given')}</td>
-                                                <td/>
-                                                <td/>
-                                                <g:if test="${testlegplanning_instance.resultEntered}">
-                                                    <td>${FcMath.GradStrComma(testlegplanning_instance.resultTrueHeading)}${message(code:'fc.grad')}</td>
-                                                    <td/>
-                                                    <td>${testlegplanning_instance.resultLegTimeStr()}${message(code:'fc.time.h')}</td>
-                                                </g:if>
-                                                <g:else>
-                                                    <g:if test="${testlegplanning_instance.test.task.planningTestDirectionMeasure}">
-                                                        <td>${message(code:'fc.unknown')}</td>
-                                                    </g:if>
-                                                    <g:else>
-                                                        <td/>
-                                                    </g:else>
-                                                    <td/>
-                                                    <td>${message(code:'fc.unknown')}</td>
-                                                </g:else>
-                                            </tr>
-                                            <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">
-                                                <td/>
-                                                <td/>
-                                                <td>${message(code:'fc.test.results.penalty')}</td>
-                                                <g:if test="${testlegplanning_instance.resultEntered}">
-                                                    <td/>
-                                                    <td/>
-                                                    <g:set var="points_class" value="points"/>
-                                                    <g:if test="${!testlegplanning_instance.penaltyTrueHeading}">
-                                                        <g:set var="points_class" value="zeropoints"/>
-                                                    </g:if>
-                                                    <td class="${points_class}">${testlegplanning_instance.penaltyTrueHeading} ${message(code:'fc.points')}</td>
-                                                    <td/>
-                                                    <g:set var="points_class" value="points"/>
-                                                    <g:if test="${!testlegplanning_instance.penaltyLegTime}">
-                                                        <g:set var="points_class" value="zeropoints"/>
-                                                    </g:if>
-                                                    <td class="${points_class}">${testlegplanning_instance.penaltyLegTime} ${message(code:'fc.points')}</td>
-                                                </g:if>
-                                                <g:else>
-                                                    <td/>
-                                                    <td/>
-                                                    <td>${message(code:'fc.unknown')}</td>
-                                                    <td/>
-                                                    <td>${message(code:'fc.unknown')}</td>
-                                                </g:else>
-                                            </tr>
-                                        </g:each>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </g:if>
+                        <g:planningtaskTestResults t="${testInstance}"/>
                         <g:if test="${!testInstance.planningTestComplete}">
 	                        <fieldset>
 		                        <p>

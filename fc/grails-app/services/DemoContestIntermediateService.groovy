@@ -19,7 +19,7 @@ class DemoContestIntermediateService
 	static final String WIND = "$WIND_DIRECTION/$WIND_SPEED"
 	static final String NOWIND = "0/0"
 	
-	int CreateTest(String testName, String printPrefix, boolean testExists)
+	long CreateTest(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
@@ -191,9 +191,9 @@ class DemoContestIntermediateService
 				[name:"Crew",count:3,table:Crew.findAllByContest(lastContest,[sort:"id"]),data:testCrew()],
 				[name:"Task",count:7,table:Task.findAllByContest(lastContest,[sort:"id"]),data:testTask()],
 				
-				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_60'",     count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,false,false)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_90'",     count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,false,false)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_120'",    count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,false,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_60'",     count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,false,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_90'",     count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,false,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_120'",    count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,false,false)],
 				
 				[name:"TestLegFlight '$ROUTE_NAME ($NOWIND) - $CREW_60'",       count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(ROUTE_NAME,false,false,false)],
 				[name:"TestLegFlight '$ROUTE_NAME ($NOWIND) - $CREW_90'",       count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegFlight90(ROUTE_NAME,false,false,false)],
@@ -203,9 +203,9 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME ($NOWIND) - $CREW_90'",         count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME,false,false,false)],
 				[name:"CoordResult '$ROUTE_NAME ($NOWIND) - $CREW_120'",        count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME,false,false,false)],
 				
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND) - $CREW_60'",       count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,true,false)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND) - $CREW_90'",       count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,true,false)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND) - $CREW_120'",      count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,true,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND) - $CREW_60'",       count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,true,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND) - $CREW_90'",       count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,true,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND) - $CREW_120'",      count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,true,false)],
 				
 				[name:"TestLegFlight '$ROUTE_NAME ($WIND) - $CREW_60'",         count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(ROUTE_NAME,true,false,false)],
 				[name:"TestLegFlight '$ROUTE_NAME ($WIND) - $CREW_90'",         count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegFlight90(ROUTE_NAME,true,false,false)],
@@ -215,9 +215,9 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME ($WIND) - $CREW_90'",           count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME,true,false,false)],
 				[name:"CoordResult '$ROUTE_NAME ($WIND) - $CREW_120'",          count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind,     Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME,true,false,false)],
 				
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) - $CREW_60'",      count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) - $CREW_90'",      count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) - $CREW_120'",     count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) - $CREW_60'",      count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) - $CREW_90'",      count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) - $CREW_120'",     count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,true,true)],
 				
 				[name:"TestLegFlight '$ROUTE_NAME ($WIND+) - $CREW_60'",        count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(ROUTE_NAME,true,true,false)],
 				[name:"TestLegFlight '$ROUTE_NAME ($WIND+) - $CREW_90'",        count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegFlight90(ROUTE_NAME,true,true,false)],
@@ -227,9 +227,9 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME ($WIND+) - $CREW_90'",          count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME,true,true,false)],
 				[name:"CoordResult '$ROUTE_NAME ($WIND+) - $CREW_120'",         count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_iup, Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME,true,true,false)],
 				
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) All - $CREW_60'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) All - $CREW_90'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) All - $CREW_120'", count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) All - $CREW_60'",  count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,true,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) All - $CREW_90'",  count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,true,false)],
+				[name:"TestLegPlanning '$ROUTE_NAME ($WIND+) All - $CREW_120'", count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME,true,false)],
 				
 				[name:"TestLegFlight '$ROUTE_NAME ($WIND+) All - $CREW_60'",    count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(ROUTE_NAME,true,true,true)],
 				[name:"TestLegFlight '$ROUTE_NAME ($WIND+) All - $CREW_90'",    count:7, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegFlight90(ROUTE_NAME,true,true,true)],
@@ -239,9 +239,9 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME ($WIND+) All - $CREW_90'",      count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME,true,true,true)],
 				[name:"CoordResult '$ROUTE_NAME ($WIND+) All - $CREW_120'",     count:10,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_iall,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME,true,true,true)],
 				
-				[name:"TestLegPlanning '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_60'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME_NOITO,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_90'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME_NOITO,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_120'", count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME_NOITO,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_60'",  count:6, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME_NOITO,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_90'",  count:6, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME_NOITO,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_120'", count:6, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME_NOITO,true,true)],
 				
 				[name:"TestLegFlight '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_60'",    count:6, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(ROUTE_NAME_NOITO,true,true,true)],
 				[name:"TestLegFlight '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_90'",    count:6, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegFlight90(ROUTE_NAME_NOITO,true,true,true)],
@@ -251,9 +251,9 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_90'",      count:9, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME_NOITO,true,true,true)],
 				[name:"CoordResult '$ROUTE_NAME_NOITO ($WIND+) All - $CREW_120'",     count:9, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noito,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME_NOITO,true,true,true)],
 
-				[name:"TestLegPlanning '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_60'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME_NOILDG,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_90'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME_NOILDG,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_120'", count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME_NOILDG,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_60'",  count:6, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME_NOILDG,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_90'",  count:6, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME_NOILDG,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_120'", count:6, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME_NOILDG,true,true)],
 				
 				[name:"TestLegFlight '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_60'",    count:6, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(ROUTE_NAME_NOILDG,true,true,true)],
 				[name:"TestLegFlight '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_90'",    count:6, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegFlight90(ROUTE_NAME_NOILDG,true,true,true)],
@@ -263,9 +263,9 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_90'",      count:9, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME_NOILDG,true,true,true)],
 				[name:"CoordResult '$ROUTE_NAME_NOILDG ($WIND+) All - $CREW_120'",     count:9, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noildg,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME_NOILDG,true,true,true)],
 
-				[name:"TestLegPlanning '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_60'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME_NOITOLDG,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_90'",  count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME_NOITOLDG,true,true)],
-				[name:"TestLegPlanning '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_120'", count:4, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME_NOITOLDG,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_60'",  count:5, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME_NOITOLDG,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_90'",  count:5, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME_NOITOLDG,true,true)],
+				[name:"TestLegPlanning '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_120'", count:5, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testTestLegPlanning120(ROUTE_NAME_NOITOLDG,true,true)],
 				
 				[name:"TestLegFlight '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_60'",    count:5, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(ROUTE_NAME_NOITOLDG,true,true,true)],
 				[name:"TestLegFlight '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_90'",    count:5, table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegFlight90(ROUTE_NAME_NOITOLDG,true,true,true)],
@@ -470,62 +470,260 @@ class DemoContestIntermediateService
 	}
 	
 	List testTestLegPlanning60(String routeName, boolean withWind, boolean withiFullMinute) {
-		  List l
-		  if (!withWind) {
-			  l = [
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-			  ]
-		  } else {
-			  l = [
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				  [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-			  ]
-		  }
-		  return l
+        List l
+        if (routeName == ROUTE_NAME) {
+        	if (!withWind) {
+        		l = [
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+        		]
+        	} else {
+        		l = [
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:withiFullMinute,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:withiFullMinute,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+        			[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+        		]
+        	}
+        } else if (routeName == ROUTE_NAME_NOITO) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0444444444,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        } else if (routeName == ROUTE_NAME_NOILDG) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0444444444,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        } else if (routeName == ROUTE_NAME_NOITOLDG) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:3,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:60,planLegTime:0.0166666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:3,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0666666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:45,planLegTime:0.0222222222,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        }
+        return l
 	}
 	
 	List testTestLegPlanning90(String routeName, boolean withWind, boolean withiFullMinute) {
 		List l
-        if (!withWind) {
-			l = [
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-			]
-		} else {
-			l = [
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-			]
-		}
+        if (routeName == ROUTE_NAME) {
+            if (!withWind) {
+    			l = [
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    			]
+    		} else {
+    			l = [
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:withiFullMinute,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:withiFullMinute,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    			]
+    		}
+        } else if (routeName == ROUTE_NAME_NOITO) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0266666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        } else if (routeName == ROUTE_NAME_NOILDG) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0266666667,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        } else if (routeName == ROUTE_NAME_NOITOLDG) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:3,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:90,planLegTime:0.0111111111,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:3,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0400000000,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:75,planLegTime:0.0133333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        }
 		return l
 	}
 	
 	List testTestLegPlanning120(String routeName, boolean withWind, boolean withiFullMinute) {
 		List l
-        if (!withWind) {
-			l = [
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-			]
-		} else {
-			l = [
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0],
-			]
-		}
+        if (routeName == ROUTE_NAME) {
+            if (!withWind) {
+    			l = [
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    			]
+    		} else {
+    			l = [
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:withiFullMinute,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:withiFullMinute,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    				[planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,          planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+    			]
+    		}
+        } else if (routeName == ROUTE_NAME_NOITO) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0190476190,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        } else if (routeName == ROUTE_NAME_NOILDG) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:2,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0190476190,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        } else if (routeName == ROUTE_NAME_NOITOLDG) {
+            if (!withWind) {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:3,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:120,planLegTime:0.0083333333,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            } else {
+                l = [
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:3,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0285714286,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:true],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                    [planTrueTrack:0,planTestDistance:1,planTrueHeading:0,planGroundSpeed:105,planLegTime:0.0095238095,planFullMinute:false,planProcedureTurn:false,planProcedureTurnDuration:0,noPlanningTest:false],
+                ]
+            }
+        }
 		return l
 	}
 	

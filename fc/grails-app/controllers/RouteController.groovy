@@ -213,7 +213,7 @@ class RouteController {
         }
         def route = fcService.getRoute(params) 
         if (route.instance) {
-            return [routeInstance:route.instance]
+            return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
             flash.message = route.message
             redirect(action:list)
@@ -226,7 +226,7 @@ class RouteController {
         }
         def route = fcService.getRoute(params) 
         if (route.instance) {
-            return [routeInstance:route.instance]
+            return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
             flash.message = route.message
             redirect(action:list)
@@ -239,7 +239,7 @@ class RouteController {
         }
         def route = fcService.getRoute(params) 
         if (route.instance) {
-            return [routeInstance:route.instance]
+            return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
             flash.message = route.message
             redirect(action:list)

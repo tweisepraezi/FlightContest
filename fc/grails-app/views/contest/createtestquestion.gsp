@@ -15,9 +15,9 @@
                         <fieldset>
                             <p>
                                 <g:set var="print_title_labels" value="${[]}"/>
-                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb '+Contest.DEMOCONTESTYEAR]}"/>
-                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb '+Contest.DEMOCONTESTYEAR+' (mit Klassen)']}"/>
-                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb '+Contest.DEMOCONTESTYEAR+' (kombinierter Wettbewerb)']}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (mit Klassen)']}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb']}"/>
+                                <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (kombinierter Wettbewerb)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb Auswertung ohne Klassen']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb Auswertung mit Klassen']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (100 Besatzungen)']}"/>
@@ -28,7 +28,7 @@
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Demo Wettbewerb (Procedure Turn)']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Alle']}"/>
                                 <g:set var="print_title_labels" value="${print_title_labels += ['Alle mit Tests']}"/>
-	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[1,2,3,11,12,13,14,21,22,23,24,98,99]" value="1">
+	                            <g:radioGroup name="demoContest" labels="${print_title_labels}" values="[2,1,3,11,12,13,14,21,22,23,24,98,99]" value="2">
 	                                <div>
 	                                    <label>${it.radio} ${it.label}</label>
 	                                </div>

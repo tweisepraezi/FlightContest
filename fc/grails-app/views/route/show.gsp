@@ -45,7 +45,7 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan=12">${message(code:'fc.coordroute.list')}</th>
+                                    <th class="table-head" colspan=13">${message(code:'fc.coordroute.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
@@ -57,6 +57,7 @@
                                     <th>${message(code:'fc.gatewidth')}</th>
                                     <th>${message(code:'fc.legduration')}</th>
                                     <th>${message(code:'fc.notimecheck')}</th>
+                                    <th>${message(code:'fc.nogatecheck')}</th>
                                     <th>${message(code:'fc.noplanningtest')}</th>
                                     <th>${message(code:'fc.truetrack.map.measure')}</th>
                                     <th>${message(code:'fc.distance.map')}</th>
@@ -82,13 +83,19 @@
         		                                
                                         <td><g:coordroutenum var="${coordroute_instance}" num="${i+1}" next="${next}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
                                         <td>${coordroute_instance.titleWithRatio()}</td>
-                                        <td>${coordroute_instance.mark}<g:if test="${coordroute_instance.planProcedureTurn}"> (${message(code:'fc.procedureturn.symbol')})</g:if></td>
+                                        <td><g:if test="${coordroute_instance.planProcedureTurn}"> (${message(code:'fc.procedureturn.symbol')})</g:if><g:if test="${coordroute_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${coordroute_instance.mark}</td>
                                         <td>${coordroute_instance.latName()}</td>
                                         <td>${coordroute_instance.lonName()}</td>
                                         <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
                                         <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
                                         <td>${coordroute_instance.legDurationName()}</td>
                                         <g:if test="${coordroute_instance.noTimeCheck}">
+                                            <td>${message(code:'fc.yes')}</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>-</td>
+                                        </g:else>
+                                        <g:if test="${coordroute_instance.noGateCheck}">
                                             <td>${message(code:'fc.yes')}</td>
                                         </g:if>
                                         <g:else>
@@ -155,7 +162,7 @@
                                     </g:if>
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${num+1}</td>
-                                        <td>${routeleg_instance.GetTitle()}</td>
+                                        <td>${routeleg_instance.GetTitle()}<g:if test="${routeleg_instance.endCurved}">${message(code:'fc.endcurved')}</g:if></td>
                                         <td>${routeleg_instance.coordTrueTrackName()}</td>
                                         <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
                                         <td>${routeleg_instance.coordDistanceName()}</td>
@@ -198,7 +205,7 @@
                                     </g:if>
                                     <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                                         <td>${num+1}</td>
-                                        <td>${routeleg_instance.GetTitle()}</td>
+                                        <td>${routeleg_instance.GetTitle()}<g:if test="${routeleg_instance.endCurved}">${message(code:'fc.endcurved')}</g:if></td>
                                         <td>${routeleg_instance.coordTrueTrackName()}</td>
                                         <td>${routeleg_instance.mapMeasureTrueTrackName()}</td>
                                         <td>${routeleg_instance.coordDistanceName()}</td>

@@ -35,16 +35,16 @@
                                 			<td class="position">${message(code:'fc.disabled')}</td>
                                 		</g:if>
                                 		<g:elseif test="${team_instance.contestPosition}">
-	                                        <td class="position">${team_instance.contestPosition}</td>
+	                                        <td class="position">${team_instance.contestPosition}<g:if test="${team_instance.contestEqualPosition}"> <a href="${createLink(controller:'contest',action:'addteamposition',params:[teamid:team_instance.id])}">+</a></g:if><g:if test="${team_instance.contestAddPosition > 0}"> <a href="${createLink(controller:'contest',action:'subteamposition',params:[teamid:team_instance.id])}">-</a></g:if></td>
 	                                    </g:elseif>
 	                                    <g:else>
 	                                        <td class="position">${message(code:'fc.test.results.position.none')}</td>
 	                                    </g:else>
-                                        <td><g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}"/></td>
+                                        <td><g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}"/><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
                                         <g:set var="team_provisional" value="${false}"/>
                                         <td>
                                         	<g:set var="crew_num" value="${new Integer(0)}"/>
-                                        	<g:each var="crew_instance" in="${Crew.findAllByTeamAndDisabled(team_instance,false,[sort:'teamPenalties'])}">
+                                        	<g:each var="crew_instance" in="${Crew.findAllByTeamAndDisabledAndDisabledTeam(team_instance,false,false,[sort:'teamPenalties'])}">
                                         		<g:if test="${crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_instance.teamPenalties != -1) && (crew_num < contestInstance.teamCrewNum)}">
                                         			<g:set var="crew_num" value="${crew_num+1}"/>
 			                                        <g:set var="test_provisional" value="${false}"/>

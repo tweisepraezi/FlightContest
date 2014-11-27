@@ -27,13 +27,13 @@
                                 </tr>
 		                    	<g:if test="${testInstance.crew.team}">
 	                                <tr>
-	                                    <td class="detailtitle">${message(code:'fc.crew.team')}:</td>
+	                                    <td class="detailtitle">${message(code:'fc.team')}:</td>
 	                                    <td><g:team var="${testInstance.crew.team}" link="${createLink(controller:'team',action:'edit')}"/></td>
 	                                </tr>
     		                    </g:if>
 		                    	<g:if test="${testInstance.task.contest.resultClasses && testInstance.crew.resultclass}">
 	                                <tr>
-	                                	<td class="detailtitle">${message(code:'fc.crew.resultclass')}:</td>
+	                                	<td class="detailtitle">${message(code:'fc.resultclass')}:</td>
 	                                	<td><g:resultclass var="${testInstance.crew.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
     		                        </tr>
     		                    </g:if>
@@ -140,7 +140,7 @@
                                             <td/>
                                             <td/>
                                             <td/>
-                                            <td/>
+                                            <td>${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime))}${message(code:'fc.time.h')}</td>
                                             <td>${message(code:CoordType.SP.code)}</td>
                                             <g:if test="${testInstance.timeCalculated}">
                                                 <td>${FcMath.TimeStr(testInstance.startTime)}</td>
@@ -181,9 +181,9 @@
 	                                            <tr>
 	                                                <td>${leg_no}</td>
 	                                                <td>${FcMath.DistanceStr(leg_distance)}${message(code:'fc.mile')}</td>
-	                                                <td>${FcMath.GradStr(leg_plantruetrack)}${message(code:'fc.grad')}</td>
-	                                                <td>${FcMath.GradStr(leg_plantrueheading)}${message(code:'fc.grad')}</td>
-	                                                <td>${FcMath.SpeedStr_Flight(leg_plangroundspeed)}${message(code:'fc.knot')}</td>
+	                                                <td><g:if test="${testlegflight_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${FcMath.GradStr(leg_plantruetrack)}${message(code:'fc.grad')}</td>
+	                                                <td><g:if test="${testlegflight_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${FcMath.GradStr(leg_plantrueheading)}${message(code:'fc.grad')}</td>
+	                                                <td><g:if test="${testlegflight_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${FcMath.SpeedStr_Flight(leg_plangroundspeed)}${message(code:'fc.knot')}</td>
 	                                                <td>${FcMath.TimeStr(leg_duration)}${message(code:'fc.time.h')}</td>
 	                                                <td>${testlegflight_instance.coordTitle.titleCode()}</td>
 	                                                <td>${FcMath.TimeStr(leg_time)}</td>
@@ -196,13 +196,18 @@
                                                 <g:set var="leg_firstvalue" value="${false}"/>
                                             </g:else>
                                         </g:each>
+                                        <tr>
+                                            <td colspan="5"/> 
+                                            <td>${FcMath.TimeStr(FcMath.TimeDiff(leg_time,testInstance.maxLandingTime))}${message(code:'fc.time.h')}</td>
+                                            <td>${message(code:CoordType.LDG.code)}</td>
+                                            <td>${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
+                                        </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <td/>
-                                            <td colspan="4">${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')} ${message(code:'fc.distance.total')}</td>
-                                            <td colspan="2" align="right">${message(code:'fc.test.landing.latest')}:</td>
-                                            <td>${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
+                                            <td colspan="4">${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')} ${message(code:'fc.distance.sp2fp')}</td>
+                                            <td colspan="3">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))}${message(code:'fc.time.h')} ${message(code:'fc.legtime.total')}</td>
                                         </tr>
                                     </tfoot>
                                 </table>

@@ -6,18 +6,28 @@ class Team
 	// results
 	int contestPenalties = 0
     int contestPosition = 0
+    Boolean contestEqualPosition = false      // DB-2.8
+    Integer contestAddPosition = 0            // DB-2.8
+
+	Boolean disabled = false               // DB-2.8
 	
 	static belongsTo = [contest:Contest]
 
 	static constraints = {
 		name(blank:false)
 		contest(nullable:false)
+
+		// DB-2.8 compatibility
+        disabled(nullable:true)
+        contestEqualPosition(nullable:true)
+        contestAddPosition(nullable:true)
 	}
 
 	void CopyValues(Team teamInstance)
 	{
 		name = teamInstance.name
-	
+        disabled = teamInstance.disabled
+        
 		if (!this.save()) {
 			throw new Exception("Team.CopyValues could not save")
 		}
@@ -25,8 +35,11 @@ class Team
 	
 	boolean IsActiveTeam()
 	{
+        if (disabled) {
+            return false
+        }
 		int crew_num = 0
-		for (Crew crew_instance in Crew.findAllByTeamAndDisabled(this,false,[sort:"id"])) {
+		for (Crew crew_instance in Crew.findAllByTeamAndDisabledAndDisabledTeam(this,false,false,[sort:"id"])) {
 			if (contest.resultClasses) {
 				if (crew_instance.resultclass) {
 					for(String team_class_result in crew_instance.contest.teamClassResults.split(',')) {
