@@ -45,7 +45,14 @@
 		                                <g:else>
 		                                	<td/>
 		                                </g:else>
-		                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:elseif test="${crew_instance.disabledTeam}"> (${message(code:'fc.crew.disabledteam')})</g:elseif></td>
+		                                <td>
+		                                    <g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/>
+		                                    <g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if>
+		                                    <g:else>
+		                                        <g:if test="${crew_instance.disabledTeam}"> (${message(code:'fc.crew.disabledteam')})</g:if>
+                                                <g:if test="${crew_instance.disabledContest}"> (${message(code:'fc.crew.disabledcontest')})</g:if>
+		                                    </g:else>
+		                                </td>
 		                                <g:if test="${resultClasses}">
 		                                    <g:if test="${crew_instance.resultclass}">                          
 		                                        <td><g:resultclass var="${crew_instance.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>

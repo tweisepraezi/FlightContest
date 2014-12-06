@@ -184,7 +184,8 @@ class Contest
 	String printCrewEmptyTitle4 = ""                    // DB-2.8
 	Boolean printCrewLandscape = false                  // DB-2.3
 	Boolean printCrewA3 = false                         // DB-2.3
-	
+    Integer printCrewOrder = 0                          // DB-2.9
+    
 	// Points print settings
 	String printPointsPrintTitle = ""                   // DB-2.3
 	Boolean printPointsPlanningTest = true              // DB-2.3
@@ -435,6 +436,9 @@ class Contest
         printFreeTextStyle(nullable:true,maxSize:PRINTSTYLESIZE)
         contestRuleForEachClass(nullable:true)
         printLandingCalculatorValues(nullable:true)
+        
+        // DB-2.9 compatibility
+        printCrewOrder(nullable:true)
 	}
 
     static mapping = {
@@ -871,7 +875,7 @@ class Contest
 			if (!crew_instance.disabled && !crew_instance.noContestPosition) {
 	            for (Task task_instance in GetResultTasks(resultTaskIDs)) {
 	            	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
-					if (test_instance) {
+					if (test_instance && !test_instance.disabledCrew) {
 		            	if (test_instance.IsTestResultsProvisional(resultSettings)) {
 							return true
 						}

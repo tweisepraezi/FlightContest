@@ -3,6 +3,7 @@ import java.util.Map;
 class Test 
 {
 	Crew crew
+    Boolean disabledCrew = false                           // DB-2.9
 	PlanningTestTask planningtesttask
 	FlightTestWind flighttestwind
 	
@@ -70,7 +71,10 @@ class Test
 	boolean landingTest1GoAroundInsteadStop = false        // DB-2.0
 	boolean landingTest1AbnormalLanding = false            // DB-2.0
 	Boolean landingTest1NotAllowedAerodynamicAuxiliaries = false // DB-2.7
-	
+    Boolean landingTest1PowerInAir = false                 // DB-2.9
+    Boolean landingTest1FlapsInAir = false                 // DB-2.9
+    Boolean landingTest1TouchingObstacle = false           // DB-2.9
+
 	String  landingTest2Measure = ""                       // DB-2.0
 	int     landingTest2MeasurePenalties = 0               // DB-2.0
 	int     landingTest2Penalties = 0                      // DB-2.0
@@ -82,7 +86,9 @@ class Test
 	boolean landingTest2AbnormalLanding = false            // DB-2.0
 	Boolean landingTest2NotAllowedAerodynamicAuxiliaries = false // DB-2.7
 	boolean landingTest2PowerInAir = false                 // DB-2.0
-	
+    Boolean landingTest2FlapsInAir = false                 // DB-2.9
+    Boolean landingTest2TouchingObstacle = false           // DB-2.9
+
 	String  landingTest3Measure = ""                       // DB-2.0
 	int     landingTest3MeasurePenalties = 0               // DB-2.0
 	int     landingTest3Penalties = 0                      // DB-2.0
@@ -95,7 +101,8 @@ class Test
 	Boolean landingTest3NotAllowedAerodynamicAuxiliaries = false // DB-2.7
 	boolean landingTest3PowerInAir = false                 // DB-2.0
 	boolean landingTest3FlapsInAir = false                 // DB-2.0
-	
+    Boolean landingTest3TouchingObstacle = false           // DB-2.9
+    
 	String  landingTest4Measure = ""                       // DB-2.0
 	int     landingTest4MeasurePenalties = 0               // DB-2.0
 	int     landingTest4Penalties = 0                      // DB-2.0
@@ -106,6 +113,8 @@ class Test
 	boolean landingTest4GoAroundInsteadStop = false        // DB-2.0
 	boolean landingTest4AbnormalLanding = false            // DB-2.0
 	Boolean landingTest4NotAllowedAerodynamicAuxiliaries = false // DB-2.7
+    Boolean landingTest4PowerInAir = false                 // DB-2.9
+    Boolean landingTest4FlapsInAir = false                 // DB-2.9
 	boolean landingTest4TouchingObstacle = false           // DB-2.0
 	
 	int     landingTestOtherPenalties = 0                  // DB-2.0
@@ -161,6 +170,17 @@ class Test
 		landingTest2NotAllowedAerodynamicAuxiliaries(nullable:true)
 		landingTest3NotAllowedAerodynamicAuxiliaries(nullable:true)
 		landingTest4NotAllowedAerodynamicAuxiliaries(nullable:true)
+        
+        // DB-2.9 compatibility
+        disabledCrew(nullable:true)
+        landingTest1PowerInAir(nullable:true)
+        landingTest1FlapsInAir(nullable:true)
+        landingTest1TouchingObstacle(nullable:true)
+        landingTest2FlapsInAir(nullable:true)
+        landingTest2TouchingObstacle(nullable:true)
+        landingTest3TouchingObstacle(nullable:true)
+        landingTest4PowerInAir(nullable:true)
+        landingTest4FlapsInAir(nullable:true)
     }
 
 	static mapping = {
@@ -1001,7 +1021,161 @@ class Test
 		return task.contest.flightTestFrequencyNotMonitoredPoints
 	}
 	
-	int GetLandingTest1MaxPoints()
+    String GetPrecisionFlyingLandingText(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return "fc.landingtest.landing1.precision"
+            case 2: return "fc.landingtest.landing2.precision"
+            case 3: return "fc.landingtest.landing3.precision"
+            case 4: return "fc.landingtest.landing4.precision"
+        }
+        return ""
+    }
+    
+    int GetLandingTestMaxPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1MaxPoints()
+            case 2: return GetLandingTest2MaxPoints()
+            case 3: return GetLandingTest3MaxPoints()
+            case 4: return GetLandingTest4MaxPoints()
+        }
+        return 0
+    }
+
+    int GetLandingTestNoLandingPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1NoLandingPoints()
+            case 2: return GetLandingTest2NoLandingPoints()
+            case 3: return GetLandingTest3NoLandingPoints()
+            case 4: return GetLandingTest4NoLandingPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestOutsideLandingPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1OutsideLandingPoints()
+            case 2: return GetLandingTest2OutsideLandingPoints()
+            case 3: return GetLandingTest3OutsideLandingPoints()
+            case 4: return GetLandingTest4OutsideLandingPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestRollingOutsidePoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1RollingOutsidePoints()
+            case 2: return GetLandingTest2RollingOutsidePoints()
+            case 3: return GetLandingTest3RollingOutsidePoints()
+            case 4: return GetLandingTest4RollingOutsidePoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestPowerInBoxPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1PowerInBoxPoints()
+            case 2: return GetLandingTest2PowerInBoxPoints()
+            case 3: return GetLandingTest3PowerInBoxPoints()
+            case 4: return GetLandingTest4PowerInBoxPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestGoAroundWithoutTouchingPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1GoAroundWithoutTouchingPoints()
+            case 2: return GetLandingTest2GoAroundWithoutTouchingPoints()
+            case 3: return GetLandingTest3GoAroundWithoutTouchingPoints()
+            case 4: return GetLandingTest4GoAroundWithoutTouchingPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestGoAroundInsteadStopPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1GoAroundInsteadStopPoints()
+            case 2: return GetLandingTest2GoAroundInsteadStopPoints()
+            case 3: return GetLandingTest3GoAroundInsteadStopPoints()
+            case 4: return GetLandingTest4GoAroundInsteadStopPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestAbnormalLandingPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1AbnormalLandingPoints()
+            case 2: return GetLandingTest2AbnormalLandingPoints()
+            case 3: return GetLandingTest3AbnormalLandingPoints()
+            case 4: return GetLandingTest4AbnormalLandingPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints()
+            case 2: return GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints()
+            case 3: return GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints()
+            case 4: return GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestPowerInAirPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1PowerInAirPoints()
+            case 2: return GetLandingTest2PowerInAirPoints()
+            case 3: return GetLandingTest3PowerInAirPoints()
+            case 4: return GetLandingTest4PowerInAirPoints()
+        }
+        return 0
+    }
+    
+    int GetLandingTestFlapsInAirPoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1FlapsInAirPoints()
+            case 2: return GetLandingTest2FlapsInAirPoints()
+            case 3: return GetLandingTest3FlapsInAirPoints()
+            case 4: return GetLandingTest4FlapsInAirPoints()
+        }
+        return 0
+    }
+
+    int GetLandingTestTouchingObstaclePoints(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1TouchingObstaclePoints()
+            case 2: return GetLandingTest2TouchingObstaclePoints()
+            case 3: return GetLandingTest3TouchingObstaclePoints()
+            case 4: return GetLandingTest4TouchingObstaclePoints()
+        }
+        return 0
+    }
+    
+    String GetLandingTestPenaltyCalculator(int landingTestPoints)
+    {
+        switch (landingTestPoints) {
+            case 1: return GetLandingTest1PenaltyCalculator()
+            case 2: return GetLandingTest2PenaltyCalculator()
+            case 3: return GetLandingTest3PenaltyCalculator()
+            case 4: return GetLandingTest4PenaltyCalculator()
+        }
+        return 0
+    }
+    
+	private int GetLandingTest1MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1011,7 +1185,7 @@ class Test
 		return task.contest.landingTest1MaxPoints
 	}
 	
-	int GetLandingTest1NoLandingPoints()
+	private int GetLandingTest1NoLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1021,7 +1195,7 @@ class Test
 		return task.contest.landingTest1NoLandingPoints
 	}
 	
-	int GetLandingTest1OutsideLandingPoints()
+	private int GetLandingTest1OutsideLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1031,7 +1205,7 @@ class Test
 		return task.contest.landingTest1OutsideLandingPoints
 	}
 	
-	int GetLandingTest1RollingOutsidePoints()
+	private int GetLandingTest1RollingOutsidePoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1041,7 +1215,7 @@ class Test
 		return task.contest.landingTest1RollingOutsidePoints
 	}
 	
-	int GetLandingTest1PowerInBoxPoints()
+	private int GetLandingTest1PowerInBoxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1051,7 +1225,7 @@ class Test
 		return task.contest.landingTest1PowerInBoxPoints
 	}
 	
-	int GetLandingTest1GoAroundWithoutTouchingPoints()
+	private int GetLandingTest1GoAroundWithoutTouchingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1061,7 +1235,7 @@ class Test
 		return task.contest.landingTest1GoAroundWithoutTouchingPoints
 	}
 	
-	int GetLandingTest1GoAroundInsteadStopPoints()
+	private int GetLandingTest1GoAroundInsteadStopPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1071,7 +1245,7 @@ class Test
 		return task.contest.landingTest1GoAroundInsteadStopPoints
 	}
 	
-	int GetLandingTest1AbnormalLandingPoints()
+	private int GetLandingTest1AbnormalLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1081,7 +1255,7 @@ class Test
 		return task.contest.landingTest1AbnormalLandingPoints
 	}
 	
-	int GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints()
+	private int GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1091,7 +1265,22 @@ class Test
 		return task.contest.landingTest1NotAllowedAerodynamicAuxiliariesPoints
 	}
 	
-	String GetLandingTest1PenaltyCalculator()
+    private int GetLandingTest1PowerInAirPoints()
+    {
+        return 0
+    }
+    
+    private int GetLandingTest1FlapsInAirPoints()
+    {
+        return 0
+    }
+
+    private int GetLandingTest1TouchingObstaclePoints()
+    {
+        return 0
+    }
+    
+	private String GetLandingTest1PenaltyCalculator()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1101,7 +1290,7 @@ class Test
 		return task.contest.landingTest1PenaltyCalculator
 	}
 
-	int GetLandingTest2MaxPoints()
+	private int GetLandingTest2MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1111,7 +1300,7 @@ class Test
 		return task.contest.landingTest2MaxPoints
 	}
 	
-	int GetLandingTest2NoLandingPoints()
+	private int GetLandingTest2NoLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1121,7 +1310,7 @@ class Test
 		return task.contest.landingTest2NoLandingPoints
 	}
 	
-	int GetLandingTest2OutsideLandingPoints()
+	private int GetLandingTest2OutsideLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1131,7 +1320,7 @@ class Test
 		return task.contest.landingTest2OutsideLandingPoints
 	}
 	
-	int GetLandingTest2RollingOutsidePoints()
+	private int GetLandingTest2RollingOutsidePoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1141,7 +1330,7 @@ class Test
 		return task.contest.landingTest2RollingOutsidePoints
 	}
 	
-	int GetLandingTest2PowerInBoxPoints()
+	private int GetLandingTest2PowerInBoxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1151,7 +1340,7 @@ class Test
 		return task.contest.landingTest2PowerInBoxPoints
 	}
 	
-	int GetLandingTest2GoAroundWithoutTouchingPoints()
+	private int GetLandingTest2GoAroundWithoutTouchingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1161,7 +1350,7 @@ class Test
 		return task.contest.landingTest2GoAroundWithoutTouchingPoints
 	}
 	
-	int GetLandingTest2GoAroundInsteadStopPoints()
+	private int GetLandingTest2GoAroundInsteadStopPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1171,7 +1360,7 @@ class Test
 		return task.contest.landingTest2GoAroundInsteadStopPoints
 	}
 	
-	int GetLandingTest2AbnormalLandingPoints()
+	private int GetLandingTest2AbnormalLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1181,7 +1370,7 @@ class Test
 		return task.contest.landingTest2AbnormalLandingPoints
 	}
 	
-	int GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints()
+	private int GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1191,7 +1380,7 @@ class Test
 		return task.contest.landingTest2NotAllowedAerodynamicAuxiliariesPoints
 	}
 	
-	int GetLandingTest2PowerInAirPoints()
+	private int GetLandingTest2PowerInAirPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1201,7 +1390,17 @@ class Test
 		return task.contest.landingTest2PowerInAirPoints
 	}
 	
-	String GetLandingTest2PenaltyCalculator()
+    private int GetLandingTest2FlapsInAirPoints()
+    {
+        return 0
+    }
+
+    private int GetLandingTest2TouchingObstaclePoints()
+    {
+        return 0
+    }
+    
+	private String GetLandingTest2PenaltyCalculator()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1211,7 +1410,7 @@ class Test
 		return task.contest.landingTest2PenaltyCalculator
 	}
 
-	int GetLandingTest3MaxPoints()
+	private int GetLandingTest3MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1221,7 +1420,7 @@ class Test
 		return task.contest.landingTest3MaxPoints
 	}
 	
-	int GetLandingTest3NoLandingPoints()
+	private int GetLandingTest3NoLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1231,7 +1430,7 @@ class Test
 		return task.contest.landingTest3NoLandingPoints
 	}
 	
-	int GetLandingTest3OutsideLandingPoints()
+	private int GetLandingTest3OutsideLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1241,7 +1440,7 @@ class Test
 		return task.contest.landingTest3OutsideLandingPoints
 	}
 	
-	int GetLandingTest3RollingOutsidePoints()
+	private int GetLandingTest3RollingOutsidePoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1251,7 +1450,7 @@ class Test
 		return task.contest.landingTest3RollingOutsidePoints
 	}
 	
-	int GetLandingTest3PowerInBoxPoints()
+	private int GetLandingTest3PowerInBoxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1261,7 +1460,7 @@ class Test
 		return task.contest.landingTest3PowerInBoxPoints
 	}
 	
-	int GetLandingTest3GoAroundWithoutTouchingPoints()
+	private int GetLandingTest3GoAroundWithoutTouchingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1271,7 +1470,7 @@ class Test
 		return task.contest.landingTest3GoAroundWithoutTouchingPoints
 	}
 	
-	int GetLandingTest3GoAroundInsteadStopPoints()
+	private int GetLandingTest3GoAroundInsteadStopPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1281,7 +1480,7 @@ class Test
 		return task.contest.landingTest3GoAroundInsteadStopPoints
 	}
 	
-	int GetLandingTest3AbnormalLandingPoints()
+	private int GetLandingTest3AbnormalLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1291,7 +1490,7 @@ class Test
 		return task.contest.landingTest3AbnormalLandingPoints
 	}
 	
-	int GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints()
+	private int GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1301,7 +1500,7 @@ class Test
 		return task.contest.landingTest3NotAllowedAerodynamicAuxiliariesPoints
 	}
 	
-	int GetLandingTest3PowerInAirPoints()
+	private int GetLandingTest3PowerInAirPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1311,7 +1510,7 @@ class Test
 		return task.contest.landingTest3PowerInAirPoints
 	}
 	
-	int GetLandingTest3FlapsInAirPoints()
+	private int GetLandingTest3FlapsInAirPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1321,7 +1520,12 @@ class Test
 		return task.contest.landingTest3FlapsInAirPoints
 	}
 	
-	String GetLandingTest3PenaltyCalculator()
+    private int GetLandingTest3TouchingObstaclePoints()
+    {
+        return 0
+    }
+    
+	private String GetLandingTest3PenaltyCalculator()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1331,7 +1535,7 @@ class Test
 		return task.contest.landingTest3PenaltyCalculator
 	}
 
-	int GetLandingTest4MaxPoints()
+	private int GetLandingTest4MaxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1341,7 +1545,7 @@ class Test
 		return task.contest.landingTest4MaxPoints
 	}
 	
-	int GetLandingTest4NoLandingPoints()
+	private int GetLandingTest4NoLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1351,7 +1555,7 @@ class Test
 		return task.contest.landingTest4NoLandingPoints
 	}
 	
-	int GetLandingTest4OutsideLandingPoints()
+	private int GetLandingTest4OutsideLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1361,7 +1565,7 @@ class Test
 		return task.contest.landingTest4OutsideLandingPoints
 	}
 	
-	int GetLandingTest4RollingOutsidePoints()
+	private int GetLandingTest4RollingOutsidePoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1371,7 +1575,7 @@ class Test
 		return task.contest.landingTest4RollingOutsidePoints
 	}
 	
-	int GetLandingTest4PowerInBoxPoints()
+	private int GetLandingTest4PowerInBoxPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1381,7 +1585,7 @@ class Test
 		return task.contest.landingTest4PowerInBoxPoints
 	}
 	
-	int GetLandingTest4GoAroundWithoutTouchingPoints()
+	private int GetLandingTest4GoAroundWithoutTouchingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1391,7 +1595,7 @@ class Test
 		return task.contest.landingTest4GoAroundWithoutTouchingPoints
 	}
 	
-	int GetLandingTest4GoAroundInsteadStopPoints()
+	private int GetLandingTest4GoAroundInsteadStopPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1401,7 +1605,7 @@ class Test
 		return task.contest.landingTest4GoAroundInsteadStopPoints
 	}
 	
-	int GetLandingTest4AbnormalLandingPoints()
+	private int GetLandingTest4AbnormalLandingPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1411,7 +1615,7 @@ class Test
 		return task.contest.landingTest4AbnormalLandingPoints
 	}
 	
-	int GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints()
+	private int GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1421,7 +1625,17 @@ class Test
 		return task.contest.landingTest4NotAllowedAerodynamicAuxiliariesPoints
 	}
 	
-	int GetLandingTest4TouchingObstaclePoints()
+    private int GetLandingTest4PowerInAirPoints()
+    {
+        return 0
+    }
+    
+    private int GetLandingTest4FlapsInAirPoints()
+    {
+        return 0
+    }
+    
+	private int GetLandingTest4TouchingObstaclePoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1431,7 +1645,7 @@ class Test
 		return task.contest.landingTest4TouchingObstaclePoints
 	}
 	
-	String GetLandingTest4PenaltyCalculator()
+	private String GetLandingTest4PenaltyCalculator()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
 			if (crew.resultclass) {
@@ -1508,7 +1722,7 @@ class Test
 		boolean set_next = false
 		for (Test test_instance2 in Test.findAllByTask(this.task,[sort:'viewpos'])) {
 			if (set_next) {
-				if (!test_instance2.crew.disabled) {
+				if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
 					boolean get_next = false
 					switch (resultType) {
 						case ResultType.Planningtask:

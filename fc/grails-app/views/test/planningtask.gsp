@@ -84,30 +84,30 @@
                                             <th colspan="6" class="table-head">${message(code:'fc.testlegplanning.list')}</th>
                                         </tr>
                                         <tr>
+                                            <th>${message(code:'fc.tpname')}</th>
                                             <th>${message(code:'fc.distance')}</th>
                                             <th>${message(code:'fc.truetrack')}</th>
                                             <th>${message(code:'fc.trueheading')}</th>
                                             <th>${message(code:'fc.groundspeed')}</th>
                                             <th>${message(code:'fc.legtime')}</th>
-                                            <th>${message(code:'fc.tpname')}</th>
                                         </tr>
                                         <tr>
+                                            <th/>
                                             <th>[${message(code:'fc.mile')}]</th>
                                             <th>[${message(code:'fc.grad')}]</th>
                                             <th>[${message(code:'fc.grad')}]</th>
                                             <th>[${message(code:'fc.knot')}]</th>
                                             <th>[${message(code:'fc.time.minsec')}]</th>
-                                            <th/>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-	                                        <td>-</td>
-	                                        <td>-</td>
-	                                        <td>-</td>
-	                                        <td>-</td>
-	                                        <td>-</td>
                                             <td>${new CoordTitle(CoordType.SP,0).titleCode()}</td>
+	                                        <td>-</td>
+	                                        <td>-</td>
+	                                        <td>-</td>
+	                                        <td>-</td>
+	                                        <td>-</td>
                                         </tr>
                                         <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
                                             <g:if test="${!testlegplanning_instance.test.IsPlanningTestDistanceMeasure()}">
@@ -117,6 +117,7 @@
                                                 <g:set var="test_direction" value="${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}" />
                                             </g:if>
                                             <tr>
+                                                <td>${testlegplanning_instance.coordTitle.titleCode()}</td>
                                                 <g:if test="${!testlegplanning_instance.noPlanningTest}">
                                                     <td>${test_distance}</td>
                                                     <td>${test_direction}</td>
@@ -131,7 +132,6 @@
                                                     <td>-</td>
                                                     <td>-</td>
                                                 </g:else>
-                                                <td>${testlegplanning_instance.coordTitle.titleCode()}</td>
                                             </tr>
                                         </g:each>
                                     </tbody>

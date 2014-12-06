@@ -13,6 +13,7 @@ class Crew
 	int viewpos = 0
 	boolean disabled = false
     Boolean disabledTeam = false              // DB-2.8
+    Boolean disabledContest = false           // DB-2.9
 	Integer startNum = 0                      // DB-2.2
 	
 	// transient values 
@@ -69,6 +70,9 @@ class Crew
         classEqualPosition(nullable:true)
         classAddPosition(nullable:true)
         disabledTeam(nullable:true)
+        
+        // DB-2.9 compatibility
+        disabledContest(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)

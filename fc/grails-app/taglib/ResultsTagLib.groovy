@@ -22,7 +22,11 @@ class ResultsTagLib
             outln"""        <td class="title"/><td class="team"/>"""
         }
         if (attrs.t.taskAircraft) {
-            outln"""        <td class="title">${message(code:'fc.aircraft.type')}:</td><td class="aircrafttype">${attrs.t.taskAircraft.type}</td>"""
+            if (attrs.t.taskAircraft.type) {
+                outln"""    <td class="title">${message(code:'fc.aircraft.type')}:</td><td class="aircrafttype">${attrs.t.taskAircraft.type}</td>"""
+            } else {
+                outln"""    <td class="title"/><td class="aircrafttype"/>"""
+            }
         } else {
             outln"""        <td class="title">${message(code:'fc.aircraft.type')}:</td><td class="aircrafttype">${message(code:'fc.noassigned')}</td>"""
         }

@@ -65,35 +65,35 @@
                             <table class="planningtasklist">
                                 <thead>
                                     <tr class="valuename">
-                                        <th>${message(code:'fc.distance')}</th>
-                                        <th>${message(code:'fc.truetrack')}</th>
-                                        <th>${message(code:'fc.trueheading')}</th>
-                                        <th>${message(code:'fc.groundspeed')}</th>
-                                        <th>${message(code:'fc.legtime')}</th>
-                                        <th>${message(code:'fc.tpname')}</th>
+                                        <th class="tpname">${message(code:'fc.tpname')}</th>
+                                        <th class="distance">${message(code:'fc.distance')}</th>
+                                        <th class="truetrack">${message(code:'fc.truetrack')}</th>
+                                        <th class="trueheading">${message(code:'fc.trueheading')}*</th>
+                                        <th class="groundspeed">${message(code:'fc.groundspeed')}</th>
+                                        <th class="legtime">${message(code:'fc.legtime')}*</th>
                                     </tr>
                                     <tr class="unit">
-                                        <th>[${message(code:'fc.mile')}]</th>
-                                        <th>[${message(code:'fc.grad')}]</th>
-                                        <th>[${message(code:'fc.grad')}]</th>
-                                        <th>[${message(code:'fc.knot')}]</th>
+                                        <th class="tpname"/>
+                                        <th class="distance">[${message(code:'fc.mile')}]</th>
+                                        <th class="truetrack">[${message(code:'fc.grad')}]</th>
+                                        <th class="trueheading">[${message(code:'fc.grad')}]</th>
+                                        <th class="groundspeed">[${message(code:'fc.knot')}]</th>
                                         <g:if test="${params.results=='yes'}">
-                                            <th>[${message(code:'fc.time.hminsec2')}]</th>
+                                            <th class="legtime">[${message(code:'fc.time.hminsec2')}]</th>
                                         </g:if>
                                         <g:else>
-                                            <th>[${message(code:'fc.time.minsec')}]</th>
+                                            <th class="legtime">[${message(code:'fc.time.minsec')}]</th>
                                         </g:else>
-                                        <th/>
                                     </tr>
                                 </thead>
                                 <tbody>
                                      <tr class="value" id="${message(code:CoordType.SP.code)}">
+                                         <td class="tpname">${message(code:CoordType.SP.code)}</td>
                                          <td class="distance">-</td>
                                          <td class="truetrack">-</td>
                                          <td class="trueheading">-</td>
                                          <td class="groundspeed">-</td>
                                          <td class="legtime">-</td>
-                                         <td class="tpname">${message(code:CoordType.SP.code)}</td>
                                      </tr>
                                     <g:each var="testlegplanning_instance" in="${TestLegPlanning.findAllByTest(testInstance,[sort:"id"])}">
                                         <g:if test="${!testlegplanning_instance.test.IsPlanningTestDistanceMeasure()}">
@@ -105,32 +105,52 @@
                                         <tr class="value" id="${testlegplanning_instance.coordTitle.titleCode()}">
                                             <g:if test="${!testlegplanning_instance.noPlanningTest}">
 	                                            <g:if test="${params.results=='yes'}">
+                                                    <td class="tpname">${testlegplanning_instance.coordTitle.titleCode()}</td>
 	                                                <td class="distance">${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}</td>
 	                                                <td class="truetrack">${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}</td>
 	                                                <td class="trueheading">${FcMath.GradStr(testlegplanning_instance.planTrueHeading)}</td>
 	                                                <td class="groundspeed">${FcMath.SpeedStr_Planning(testlegplanning_instance.planGroundSpeed)}</td>
 	                                                <td class="legtime">${testlegplanning_instance.planLegTimeStr()}</td>
-                                                    <td class="tpname">${testlegplanning_instance.coordTitle.titleCode()}</td>
 	                                            </g:if>
 	                                            <g:else>
+                                                    <td class="tpname">${testlegplanning_instance.coordTitle.titlePrintCode()}</td>
 	                                                <td class="distance">${test_distance}</td>
 	                                                <td class="truetrack">${test_direction}</td>
 	                                                <td class="trueheading"/>
 	                                                <td class="groundspeed"/>
 	                                                <td class="legtime"/>
-                                                    <td class="tpname">${testlegplanning_instance.coordTitle.titlePrintCode()}</td>
 	                                            </g:else>
 	                                         </g:if>
 	                                         <g:else>
+                                                <td class="tpname">${testlegplanning_instance.coordTitle.titlePrintCode()}</td>
                                                 <td class="distance">-</td>
                                                 <td class="truetrack">-</td>
                                                 <td class="trueheading">-</td>
                                                 <td class="groundspeed">-</td>
                                                 <td class="legtime">-</td>
-                                                <td class="tpname">${testlegplanning_instance.coordTitle.titlePrintCode()}</td>
 	                                         </g:else>
                                         </tr>
                                     </g:each>
+                                </tbody>
+                            </table>
+                            <br/>
+                            <table class="info">
+                                <tbody>
+                                    <g:if test="${params.results!='yes'}">
+                                        <tr class="planninginfo">
+                                            <td class="title" colspan="3">${message(code:'fc.test.planning.taskinfo')}</td>
+                                        </tr>
+	                                    <tr class="planningignore">
+	                                        <td class="title">-</td>
+                                            <td class="separator"></td>
+	                                        <td class="value">${message(code:'fc.test.planning.ignore')}</td>
+	                                    </tr>
+	                                </g:if>
+                                    <tr class="planningevaluation">
+                                        <td class="title">*</td>
+                                        <td class="separator"></td>
+                                        <td class="value">${message(code:'fc.test.planning.evaluation')}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </g:if>

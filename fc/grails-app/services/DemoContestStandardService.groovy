@@ -2122,7 +2122,7 @@ class DemoContestStandardService
     List test2Team() {
       [[name:"Deutschland",contestPenalties:178,contestPosition:2],
        [name:"Schweiz",    contestPenalties:175,contestPosition:1],
-       [name:'Polen',      contestPenalties:0,  contestPosition:0],
+       [name:'Polen',      contestPenalties:-1, contestPosition:0],
       ]    
 	}
 	

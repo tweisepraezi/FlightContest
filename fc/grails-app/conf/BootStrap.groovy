@@ -493,6 +493,37 @@ class BootStrap {
                             }
 							println " done."
 						}
+                        if (global.versionMinor < 8) { // DB-2.9 compatibility
+                            print "    2.9 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.printCrewOrder = 0
+                                contest_instance.save()
+                            }
+                            Crew.findAll().each { Crew crew_instance ->
+                                crew_instance.disabledContest = false
+                                crew_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.landingTest1Points = 1
+                                task_instance.landingTest2Points = 2
+                                task_instance.landingTest3Points = 3
+                                task_instance.landingTest4Points = 4
+                                task_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.disabledCrew = false
+                                test_instance.landingTest1PowerInAir = false
+                                test_instance.landingTest1FlapsInAir = false
+                                test_instance.landingTest1TouchingObstacle = false
+                                test_instance.landingTest2FlapsInAir = false
+                                test_instance.landingTest2TouchingObstacle = false
+                                test_instance.landingTest3TouchingObstacle = false
+                                test_instance.landingTest4PowerInAir = false
+                                test_instance.landingTest4FlapsInAir = false
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
 						break
 				}
 				global.versionMajor = global.DB_MAJOR

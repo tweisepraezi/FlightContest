@@ -209,13 +209,13 @@
                                     <g:if test="${end_curved}">
                                         <tr class="endcurved">
                                             <td class="title">${message(code:'fc.endcurved')}</td>
-                                            <td class="separator">-</td>
+                                            <td class="separator"></td>
                                             <td class="value">${message(code:'fc.endcurved.info')}</td>
                                         </tr>
                                     </g:if>
                                     <tr class="landinglatest">
                                         <td class="title">${message(code:CoordType.LDG.code)}</td>
-                                        <td class="separator">-</td>
+                                        <td class="separator"></td>
                                         <td class="value">${message(code:'fc.test.landing.latest')}</td>
                                     </tr>
                                 </tbody>

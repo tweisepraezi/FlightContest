@@ -69,6 +69,10 @@
                                     <g:checkBox name="disabledTeam" value="${crewInstance.disabledTeam}" />
                                     <label>${message(code:'fc.crew.disabledteam')}</label>
                                 </div>
+                                <div>
+                                    <g:checkBox name="disabledContest" value="${crewInstance.disabledContest}" />
+                                    <label>${message(code:'fc.crew.disabledcontest')}</label>
+                                </div>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${crewInstance?.id}"/>

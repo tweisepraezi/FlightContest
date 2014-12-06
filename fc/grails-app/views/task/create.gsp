@@ -143,19 +143,19 @@
 				                        <div style="margin-left:20px">
 			                                <div>
 				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest1Run" value="${false}" />
-			    	                            <label>${message(code:'fc.landingtest.landing1')}<g:if test="${resultclass_instance.precisionFlying}"> (${message(code:'fc.landingtest.landing1.precision')})</g:if></label>
+			    	                            <label>${message(code:'fc.landingtest.landing1')}</label>
 			                                </div>
 			                                <div>
 				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest2Run" value="${false}" />
-			    	                            <label>${message(code:'fc.landingtest.landing2')}<g:if test="${resultclass_instance.precisionFlying}"> (${message(code:'fc.landingtest.landing2.precision')})</g:if></label>
+			    	                            <label>${message(code:'fc.landingtest.landing2')}</label>
 			                                </div>
 			                                <div>
 				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest3Run" value="${false}" />
-			    	                            <label>${message(code:'fc.landingtest.landing3')}<g:if test="${resultclass_instance.precisionFlying}"> (${message(code:'fc.landingtest.landing3.precision')})</g:if></label>
+			    	                            <label>${message(code:'fc.landingtest.landing3')}</label>
 			                                </div>
 			                                <div>
 				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest4Run" value="${false}" />
-			    	                            <label>${message(code:'fc.landingtest.landing4')}<g:if test="${resultclass_instance.precisionFlying}"> (${message(code:'fc.landingtest.landing4.precision')})</g:if></label>
+			    	                            <label>${message(code:'fc.landingtest.landing4')}</label>
 			                                </div>
 	                                	</div>
 		                                <div>
@@ -212,19 +212,19 @@
 			                        <div style="margin-left:20px">
 		                                <div>
 			                               	<g:checkBox name="landingTest1Run" value="${taskInstance.landingTest1Run}" />
-		    	                            <label>${message(code:'fc.landingtest.landing1')}<g:if test="${contestInstance.precisionFlying}"> (${message(code:'fc.landingtest.landing1.precision')})</g:if></label>
+		    	                            <label>${message(code:'fc.landingtest.landing1')}</label>
 		                                </div>
 		                                <div>
 			                               	<g:checkBox name="landingTest2Run" value="${taskInstance.landingTest2Run}" />
-		    	                            <label>${message(code:'fc.landingtest.landing2')}<g:if test="${contestInstance.precisionFlying}"> (${message(code:'fc.landingtest.landing2.precision')})</g:if></label>
+		    	                            <label>${message(code:'fc.landingtest.landing2')}</label>
 		                                </div>
 		                                <div>
 			                               	<g:checkBox name="landingTest3Run" value="${taskInstance.landingTest3Run}" />
-		    	                            <label>${message(code:'fc.landingtest.landing3')}<g:if test="${contestInstance.precisionFlying}"> (${message(code:'fc.landingtest.landing3.precision')})</g:if></label>
+		    	                            <label>${message(code:'fc.landingtest.landing3')}</label>
 		                                </div>
 		                                <div>
 			                               	<g:checkBox name="landingTest4Run" value="${taskInstance.landingTest4Run}" />
-		    	                            <label>${message(code:'fc.landingtest.landing4')}<g:if test="${contestInstance.precisionFlying}"> (${message(code:'fc.landingtest.landing4.precision')})</g:if></label>
+		    	                            <label>${message(code:'fc.landingtest.landing4')}</label>
 		                                </div>
 	                                </div>
 	                                <div>
@@ -234,6 +234,19 @@
 	                            </p>
 	                    	</fieldset>
 	                   	</g:else>
+                        <fieldset>
+                            <label>${message(code:'fc.landingtest.landing1')}:</label>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="95"/>
+                            <br/>
+                            <label>${message(code:'fc.landingtest.landing2')}:</label>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="96"/>
+                            <br/>
+                            <label>${message(code:'fc.landingtest.landing3')}:</label>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="97"/>
+                            <br/>
+                            <label>${message(code:'fc.landingtest.landing4')}:</label>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="98"/>
+                        </fieldset>
                         <fieldset>
                             <p>
                                 <div>
@@ -246,11 +259,11 @@
                             <p>
                                 <label>${message(code:'fc.task.addtimevalue')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="15"/>
+                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="101"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="16"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="102"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="103"/>
                     </g:form>
                 </div>
             </div>

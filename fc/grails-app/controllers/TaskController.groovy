@@ -285,7 +285,7 @@ class TaskController {
 	}
 	
     def create = {
-        def task = fcService.createTask(params) 
+        def task = fcService.createTask(params,session.lastContest) 
         return [taskInstance:task.instance,contestInstance:session.lastContest]
     }
 	
@@ -758,6 +758,32 @@ class TaskController {
         }
 	}
 	
+    def disablecrew = {
+        def task = fcService.disableCrewsTask(params,session)
+        if (task.instance) {
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            redirect(action:listplanning,id:task.instance.id)
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def enablecrew = {
+        def task = fcService.enableCrewsTask(params,session)
+        if (task.instance) {
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            redirect(action:listplanning,id:task.instance.id)
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
 	def calculatetimetable = {
         def task = fcService.calculatetimetableTask(params) 
         flash.message = task.message

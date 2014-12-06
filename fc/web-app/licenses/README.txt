@@ -1,5 +1,5 @@
 
-Flight Contest 2.3-M1
+Flight Contest 2.3-M2
 Copyright 2014 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://flightcontest.de

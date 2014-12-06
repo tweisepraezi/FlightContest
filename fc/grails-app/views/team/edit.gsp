@@ -26,7 +26,15 @@
                         </fieldset>
                         <fieldset>
                         	<legend>${message(code:'fc.crew.list')}</legend>
-                        	<p><g:each var="${crew_instance}" in="${Crew.findAllByTeam(teamInstance,[sort:"id"])}"><br/>${crew_instance.name}<g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:elseif test="${crew_instance.disabledTeam}"> (${message(code:'fc.crew.disabledteam')})</g:elseif></g:each></p>
+                        	<p>
+                        	   <g:each var="${crew_instance}" in="${Crew.findAllByTeam(teamInstance,[sort:"id"])}"><br/>${crew_instance.name}
+                        	       <g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if>
+                        	       <g:else>
+                        	           <g:if test="${crew_instance.disabledTeam}"> (${message(code:'fc.crew.disabledteam')})</g:if>
+                        	           <g:if test="${crew_instance.disabledContest}"> (${message(code:'fc.crew.disabledcontest')})</g:if>
+                        	       </g:else>
+                        	   </g:each>
+                        	</p>
                         </fieldset>
                         <fieldset>
                             <p>

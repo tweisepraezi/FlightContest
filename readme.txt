@@ -6,7 +6,7 @@ Program for planning and valuating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-26.11.2014
+05.12.2014
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -48,8 +48,25 @@ Weitere nützliche Funktionen von Flight Contest:
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
 
 
-Erweiterungen in dieser Version (2.3-M1):
+Erweiterungen in dieser Version (2.3-M2):
 -----------------------------------------
+- Einzelne Besatzungen können für eine Aufgabe deaktiviert werden.
+    Wird diese Aufgabe bei einer Wettbewerbs- oder Team-Auswertung
+    einbezogen, wird diese Besatzung automatisch weggelassen.
+- Besatzungs-Druck:
+    Die Reihenfolge des Ausdrucks kann durch eine Aufgabe festgelegt werden.
+    Einzelne für die Aufgabe deaktivierte Besatzungen werden dann weggelassen.
+- Wettbewerbs-/Klassen-Auswertung:
+    Deaktivierung einzelner Besatzungen möglich.
+- Wahl der Landepunkt-Wertung je Landung möglich.
+    Bei Präzisionsflug-Landungen, wo unterschiedliche schwere Landungen 
+    mit unterschiedlichen Strafpunkten bewertet werden, kann eine vom
+    Standard abweichende Reihenfolge jetzt unter Aufgaben-Einstellungen 
+    konfiguriert werden.
+- 'Programme -> Flight Contest -> Help' -> 'Auswertungen' hinzugefügt
+
+Erweiterungen in Version 2.3-M1:
+--------------------------------
 - Kurzer Klassenname eingeführt.
 - Massenhaftes Löschen, Deaktivieren und Aktivieren von Teams und Besatzungen
   eingeführt.

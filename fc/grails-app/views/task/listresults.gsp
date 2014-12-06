@@ -167,6 +167,9 @@
 										<g:if test="${testInstance.crew.disabled}">
 											<td colspan="8">${message(code:'fc.disabled')}</td>
 										</g:if>
+                                        <g:elseif test="${testInstance.disabledCrew}">
+                                            <td colspan="8">${message(code:'fc.test.crewdisabled')}</td>
+                                        </g:elseif>
 										<g:else>
 			                                <g:if test="${taskInstance.IsPlanningTestRun()}">
 			                                	<g:if test="${testInstance.IsPlanningTestRun()}">

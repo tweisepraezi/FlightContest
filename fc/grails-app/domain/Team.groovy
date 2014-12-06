@@ -38,6 +38,9 @@ class Team
         if (disabled) {
             return false
         }
+        if (contestPenalties == -1) {
+            return false
+        }
 		int crew_num = 0
 		for (Crew crew_instance in Crew.findAllByTeamAndDisabledAndDisabledTeam(this,false,false,[sort:"id"])) {
 			if (contest.resultClasses) {

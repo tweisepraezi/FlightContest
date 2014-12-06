@@ -123,6 +123,9 @@
 										<g:if test="${testInstance.crew.disabled}">
 											<td colspan="8">${message(code:'fc.disabled')}</td>
 										</g:if>
+                                        <g:elseif test="${testInstance.disabledCrew}">
+                                            <td colspan="8">${message(code:'fc.test.crewdisabled')}</td>
+                                        </g:elseif>
 										<g:else>
 		                                    <g:if test="${testInstance.planningtesttask}">
 		                                        <td colspan="2"><g:planningtesttask var="${testInstance.planningtesttask}" link="${createLink(controller:'planningTestTask',action:'edit')}"/> <a href="${createLink(controller:'test',action:'planningtask')}/${testInstance.id}">${message(code:'fc.test.planningtask.here')}</a></td>
@@ -169,7 +172,8 @@
                                 </g:else>
                                 <td colspan="2"><g:actionSubmit action="assignplanningtesttask" value="${message(code:'fc.planningtesttask.assign')}"/></td>
                                 <td><g:actionSubmit action="assignflighttestwind" value="${message(code:'fc.flighttestwind.assign')}"/></td>
-                                <td colspan="5"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}"/></td>
+                                <td colspan="3"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}"/></td>
+                                <td colspan="2"><g:actionSubmit action="disablecrew" value="${message(code:'fc.test.disablecrew')}"/></td>
                             </tr>
                             <tr class="join">
                             	<td colspan="2"><g:actionSubmit action="selectend" value="${message(code:'fc.selectend')}"/></td>
@@ -181,7 +185,8 @@
                                 </g:else>
                             	<td colspan="2"><g:actionSubmit action="printplanningtesttask" value="${message(code:'fc.planningtesttask.print')}"/></td>
                             	<td></td>
-                            	<td colspan="5"><g:actionSubmit action="printflightplans" value="${message(code:'fc.test.flightplan.print')}" /></td>
+                            	<td colspan="3"><g:actionSubmit action="printflightplans" value="${message(code:'fc.test.flightplan.print')}" /></td>
+                                <td colspan="2"><g:actionSubmit action="enablecrew" value="${message(code:'fc.test.enablecrew')}"/></td>
                             </tr>
                             <tr class="join">
                                 <td colspan="2"><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}"/></td>
@@ -190,8 +195,8 @@
                                 </g:if>
                                 <g:else>
                                 	<td colspan="2"><g:actionSubmit action="resetsequence" value="${message(code:'fc.test.sequence.toreset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
-								</g:else>						                            
-                                <td colspan="2"></td>
+								</g:else>
+								<td colspan="2"></td>
                                 <td></td>
                                 <td colspan="5"><g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" /> <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" /></td>
                             </tr>

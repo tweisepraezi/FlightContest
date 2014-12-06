@@ -42,8 +42,12 @@ table.info, table.info th, table.info td {
     border-style: none;
 }
 
-table.info td.title, table.info td.separator {
-	width: 1%;
+table.info td.title {
+    width: 1%;
+}
+
+table.info td.separator {
+    width: 2%;
 }
 
 table.summary th, table.summary td {
@@ -100,6 +104,25 @@ table.timetableoverviewlist td.col3 {
 /* -------------------------------------------------------------------------------------------------------------------- */
 table.legtimelist {
     width: 0%;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.planningtasklist tr.valuename th.legtime, table.planningtasklist tr.valuename th.trueheading {
+	border-top: 2px solid black;
+}
+
+table.planningtasklist .legtime {
+	border-left: 2px solid black;
+    border-right: 4px solid black;
+}
+
+table.planningtasklist .trueheading {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+
+table.planningtasklist tr#FP td.legtime, table.planningtasklist tr#FP td.trueheading {
+	border-bottom: 2px solid black;
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */

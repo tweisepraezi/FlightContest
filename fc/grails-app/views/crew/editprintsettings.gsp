@@ -106,6 +106,25 @@
                             <g:actionSubmit action="updateprintsettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="7"/>
                             <g:actionSubmit action="updateprintsettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="8"/>
                         </fieldset>
+                        <fieldset>
+                            <label>${message(code:'fc.crew.printsettings.order')}:</label>
+                            <br/>
+                            <g:set var="order_labels" value="${[message(code:'fc.crew.printsettings.order.crewlist')]}"/>
+                            <g:set var="order_values" value="${[0]}"/>
+                            <g:set var="order_value" value="${0}"/>
+                            <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"id"])}">
+                                <g:set var="order_labels" value="${order_labels += message(code:'fc.crew.printsettings.order.task',args:[task_instance.bestOfName()])}"/>
+                                <g:set var="order_values" value="${order_values += task_instance.id}"/>
+                                <g:if test="${contestInstance.printCrewOrder == task_instance.id}">
+                                    <g:set var="order_value" value="${contestInstance.printCrewOrder}"/>
+                                </g:if>
+                            </g:each>
+                            <g:radioGroup name="printCrewOrder" labels="${order_labels}" values="${order_values}" value="${order_value}">
+                                <div>
+                                    <label>${it.radio} ${it.label}</label>
+                                </div>
+                            </g:radioGroup>
+                        </fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}" />
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
                         <g:actionSubmit action="saveprintsettings" value="${message(code:'fc.save')}" tabIndex="101"/>

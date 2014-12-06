@@ -37,7 +37,14 @@
 	                                	<td/>
 	                                	<td/>
 	                                </g:else>
-	                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+	                                <td>
+	                                   <g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/>
+	                                   <g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if>
+	                                   <g:else>
+                                           <g:if test="${crew_instance.disabledTeam}"> (${message(code:'fc.crew.disabledteam')})</g:if>
+	                                       <g:if test="${crew_instance.disabledContest}"> (${message(code:'fc.crew.disabledcontest')})</g:if>
+	                                   </g:else>
+	                                </td>
 	                                <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/></td>
 	                                <td>${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}</td>
 		                        </tr>

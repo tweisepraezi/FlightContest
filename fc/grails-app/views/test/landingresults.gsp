@@ -78,7 +78,7 @@
                        	<g:if test="${testInstance.IsLandingTestAnyRun()}">
                        		<g:if test="${testInstance.IsLandingTest1Run()}">
 		                        <fieldset>
-		                            <legend>${message(code:'fc.landingtest.landing1')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing1.precision')})</g:if></legend>
+		                            <legend>${message(code:'fc.landingtest.landing1')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:testInstance.GetPrecisionFlyingLandingText(testInstance.task.landingTest1Points))})</g:if></legend>
 			                        <g:if test="${!testInstance.landingTestComplete}">
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
@@ -91,43 +91,55 @@
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 	                                            <g:if test="${testInstance.landingTest1Landing == 2}">
-	                                                (${testInstance.GetLandingTest1NoLandingPoints()} ${message(code:'fc.points')})
+	                                                (${testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest1Points)} ${message(code:'fc.points')})
 	                                            </g:if>
 	                                            <g:elseif test="${testInstance.landingTest1Landing == 3}">
-	                                                (${testInstance.GetLandingTest1OutsideLandingPoints()} ${message(code:'fc.points')})
+	                                                (${testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest1Points)} ${message(code:'fc.points')})
 	                                            </g:elseif>
 	                                            <g:else>
 	                                                (${testInstance.landingTest1MeasurePenalties} ${message(code:'fc.points')})
 	                                            </g:else>
 	                                        </div>
 	                                        <div>
-	                                            <g:if test="${testInstance.GetLandingTest1RollingOutsidePoints() > 0}">
+	                                            <g:if test="${testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest1Points) > 0}">
 	                                                <g:checkBox name="landingTest1RollingOutside" value="${testInstance.landingTest1RollingOutside}"/>
 	                                                <label>${message(code:'fc.landingtest.rollingoutside')}</label>
 	                                            </g:if>
-	                                            <g:if test="${testInstance.GetLandingTest1PowerInBoxPoints() > 0}">
+	                                            <g:if test="${testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest1Points) > 0}">
 	                                                <g:checkBox name="landingTest1PowerInBox" value="${testInstance.landingTest1PowerInBox}"/>
 	                                                <label>${message(code:'fc.landingtest.powerinbox')}</label>
 	                                            </g:if>
 	                                        </div>
 	                                        <div>
-	                                            <g:if test="${testInstance.GetLandingTest1GoAroundWithoutTouchingPoints() > 0}">
+	                                            <g:if test="${testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest1Points) > 0}">
 	                                                <g:checkBox name="landingTest1GoAroundWithoutTouching" value="${testInstance.landingTest1GoAroundWithoutTouching}"/>
 	                                                <label>${message(code:'fc.landingtest.goaroundwithouttouching')}</label>
 	                                            </g:if>
-	                                            <g:if test="${testInstance.GetLandingTest1GoAroundInsteadStopPoints() > 0}">
+	                                            <g:if test="${testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest1Points) > 0}">
 	                                                <g:checkBox name="landingTest1GoAroundInsteadStop" value="${testInstance.landingTest1GoAroundInsteadStop}"/>
 	                                                <label>${message(code:'fc.landingtest.goaroundinsteadstop')}</label>
 	                                            </g:if>
 	                                        </div>
 	                                        <div>
-	                                            <g:if test="${testInstance.GetLandingTest1AbnormalLandingPoints() > 0}">
+	                                            <g:if test="${testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest1Points) > 0}">
 	                                                <g:checkBox name="landingTest1AbnormalLanding" value="${testInstance.landingTest1AbnormalLanding}"/>
 	                                                <label>${message(code:'fc.landingtest.abnormallanding')}</label>
 	                                            </g:if>
-                                                <g:if test="${testInstance.GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                <g:if test="${testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest1Points) > 0}">
                                                     <g:checkBox name="landingTest1NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest1NotAllowedAerodynamicAuxiliaries}"/>
                                                     <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
+                                                </g:if>
+                                                <g:if test="${testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest1Points) > 0}">
+                                                    <g:checkBox name="landingTest1PowerInAir" value="${testInstance.landingTest1PowerInAir}"/>
+                                                    <label>${message(code:'fc.landingtest.powerinair')}</label>
+                                                </g:if>
+                                                <g:if test="${testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest1Points) > 0}">
+                                                    <g:checkBox name="landingTest1FlapsInAir" value="${testInstance.landingTest1FlapsInAir}"/>
+                                                    <label>${message(code:'fc.landingtest.flapsinair')}</label>
+                                                </g:if>
+                                                <g:if test="${testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest1Points) > 0}">
+                                                    <g:checkBox name="landingTest1TouchingObstacle" value="${testInstance.landingTest1TouchingObstacle}"/>
+                                                    <label>${message(code:'fc.landingtest.touchingobstacle')}</label>
                                                 </g:if>
                                             </div>
 	                                    </p>
@@ -140,7 +152,7 @@
                             </g:if>
                        		<g:if test="${testInstance.IsLandingTest2Run()}">
 		                        <fieldset>
-		                            <legend>${message(code:'fc.landingtest.landing2')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing2.precision')})</g:if></legend>
+		                            <legend>${message(code:'fc.landingtest.landing2')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:testInstance.GetPrecisionFlyingLandingText(testInstance.task.landingTest2Points))})</g:if></legend>
 			                        <g:if test="${!testInstance.landingTestComplete}">
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
@@ -153,48 +165,56 @@
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 												<g:if test="${testInstance.landingTest2Landing == 2}">
-													(${testInstance.GetLandingTest2NoLandingPoints()} ${message(code:'fc.points')})
+													(${testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest2Points)} ${message(code:'fc.points')})
 												</g:if>
 												<g:elseif test="${testInstance.landingTest2Landing == 3}">
-													(${testInstance.GetLandingTest2OutsideLandingPoints()} ${message(code:'fc.points')})
+													(${testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest2Points)} ${message(code:'fc.points')})
 												</g:elseif>
 												<g:else>
 													(${testInstance.landingTest2MeasurePenalties} ${message(code:'fc.points')})
 												</g:else>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest2RollingOutsidePoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest2Points) > 0}">
 					        	                	<g:checkBox name="landingTest2RollingOutside" value="${testInstance.landingTest2RollingOutside}"/>
 													<label>${message(code:'fc.landingtest.rollingoutside')}</label>
 												</g:if>
-					                        	<g:if test="${testInstance.GetLandingTest2PowerInBoxPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest2Points) > 0}">
 					        	                	<g:checkBox name="landingTest2PowerInBox" value="${testInstance.landingTest2PowerInBox}"/>
 													<label>${message(code:'fc.landingtest.powerinbox')}</label>
 												</g:if>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest2GoAroundWithoutTouchingPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest2Points) > 0}">
 					        	                	<g:checkBox name="landingTest2GoAroundWithoutTouching" value="${testInstance.landingTest2GoAroundWithoutTouching}"/>
 													<label>${message(code:'fc.landingtest.goaroundwithouttouching')}</label>
 												</g:if>
-					                        	<g:if test="${testInstance.GetLandingTest2GoAroundInsteadStopPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest2Points) > 0}">
 				        	                		<g:checkBox name="landingTest2GoAroundInsteadStop" value="${testInstance.landingTest2GoAroundInsteadStop}"/>
 													<label>${message(code:'fc.landingtest.goaroundinsteadstop')}</label>
 												</g:if>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest2AbnormalLandingPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest2Points) > 0}">
 					        	                	<g:checkBox name="landingTest2AbnormalLanding" value="${testInstance.landingTest2AbnormalLanding}"/>
 													<label>${message(code:'fc.landingtest.abnormallanding')}</label>
 												</g:if>
-                                                <g:if test="${testInstance.GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                <g:if test="${testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest2Points) > 0}">
                                                     <g:checkBox name="landingTest2NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest2NotAllowedAerodynamicAuxiliaries}"/>
                                                     <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
                                                 </g:if>
-					                        	<g:if test="${testInstance.GetLandingTest2PowerInAirPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest2Points) > 0}">
 					        	                	<g:checkBox name="landingTest2PowerInAir" value="${testInstance.landingTest2PowerInAir}"/>
 													<label>${message(code:'fc.landingtest.powerinair')}</label>
 												</g:if>
+                                                <g:if test="${testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest2Points) > 0}">
+                                                    <g:checkBox name="landingTest2FlapsInAir" value="${testInstance.landingTest2FlapsInAir}"/>
+                                                    <label>${message(code:'fc.landingtest.flapsinair')}</label>
+                                                </g:if>
+                                                <g:if test="${testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest2Points) > 0}">
+                                                    <g:checkBox name="landingTest2TouchingObstacle" value="${testInstance.landingTest2TouchingObstacle}"/>
+                                                    <label>${message(code:'fc.landingtest.touchingobstacle')}</label>
+                                                </g:if>
 				    	                    </div>
 				                        </p>
 				                        <p>${message(code:'fc.landingresults.landing')}: ${testInstance.landingTest2Penalties} ${message(code:'fc.points')}</p>
@@ -206,7 +226,7 @@
                             </g:if>
                        		<g:if test="${testInstance.IsLandingTest3Run()}">
 		                        <fieldset>
-		                            <legend>${message(code:'fc.landingtest.landing3')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing3.precision')})</g:if></legend>
+		                            <legend>${message(code:'fc.landingtest.landing3')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:testInstance.GetPrecisionFlyingLandingText(testInstance.task.landingTest3Points))})</g:if></legend>
 			                        <g:if test="${!testInstance.landingTestComplete}">
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
@@ -219,52 +239,56 @@
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 												<g:if test="${testInstance.landingTest3Landing == 2}">
-													(${testInstance.GetLandingTest3NoLandingPoints()} ${message(code:'fc.points')})
+													(${testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest3Points)} ${message(code:'fc.points')})
 												</g:if>
 												<g:elseif test="${testInstance.landingTest3Landing == 3}">
-													(${testInstance.GetLandingTest3OutsideLandingPoints()} ${message(code:'fc.points')})
+													(${testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest3Points)} ${message(code:'fc.points')})
 												</g:elseif>
 												<g:else>
 													(${testInstance.landingTest3MeasurePenalties} ${message(code:'fc.points')})
 												</g:else>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest3RollingOutsidePoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest3Points) > 0}">
 					        	                	<g:checkBox name="landingTest3RollingOutside" value="${testInstance.landingTest3RollingOutside}"/>
 													<label>${message(code:'fc.landingtest.rollingoutside')}</label>
 												</g:if>
-					                        	<g:if test="${testInstance.GetLandingTest3PowerInBoxPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest3Points) > 0}">
 					        	                	<g:checkBox name="landingTest3PowerInBox" value="${testInstance.landingTest3PowerInBox}"/>
 													<label>${message(code:'fc.landingtest.powerinbox')}</label>
 												</g:if>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest3GoAroundWithoutTouchingPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest3Points) > 0}">
 					        	                	<g:checkBox name="landingTest3GoAroundWithoutTouching" value="${testInstance.landingTest3GoAroundWithoutTouching}"/>
 													<label>${message(code:'fc.landingtest.goaroundwithouttouching')}</label>
 												</g:if>
-					                        	<g:if test="${testInstance.GetLandingTest3GoAroundInsteadStopPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest3Points) > 0}">
 				        	                		<g:checkBox name="landingTest3GoAroundInsteadStop" value="${testInstance.landingTest3GoAroundInsteadStop}"/>
 													<label>${message(code:'fc.landingtest.goaroundinsteadstop')}</label>
 												</g:if>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest3AbnormalLandingPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest3Points) > 0}">
 					        	                	<g:checkBox name="landingTest3AbnormalLanding" value="${testInstance.landingTest3AbnormalLanding}"/>
 													<label>${message(code:'fc.landingtest.abnormallanding')}</label>
 												</g:if>
-                                                <g:if test="${testInstance.GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                <g:if test="${testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest3Points) > 0}">
                                                     <g:checkBox name="landingTest3NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest3NotAllowedAerodynamicAuxiliaries}"/>
                                                     <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
                                                 </g:if>
-					                        	<g:if test="${testInstance.GetLandingTest3PowerInAirPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest3Points) > 0}">
 					        	                	<g:checkBox name="landingTest3PowerInAir" value="${testInstance.landingTest3PowerInAir}"/>
 													<label>${message(code:'fc.landingtest.powerinair')}</label>
 												</g:if>
-					                        	<g:if test="${testInstance.GetLandingTest3FlapsInAirPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest3Points) > 0}">
 				        	                		<g:checkBox name="landingTest3FlapsInAir" value="${testInstance.landingTest3FlapsInAir}"/>
 													<label>${message(code:'fc.landingtest.flapsinair')}</label>
 												</g:if>
+                                                <g:if test="${testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest3Points) > 0}">
+                                                    <g:checkBox name="landingTest3TouchingObstacle" value="${testInstance.landingTest3TouchingObstacle}"/>
+                                                    <label>${message(code:'fc.landingtest.touchingobstacle')}</label>
+                                                </g:if>
 				    	                    </div>
 				                        </p>
 				                        <p>${message(code:'fc.landingresults.landing')}: ${testInstance.landingTest3Penalties} ${message(code:'fc.points')}</p>
@@ -276,7 +300,7 @@
                             </g:if>
                        		<g:if test="${testInstance.IsLandingTest4Run()}">
 		                        <fieldset>
-		                            <legend>${message(code:'fc.landingtest.landing4')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:'fc.landingtest.landing4.precision')})</g:if></legend>
+		                            <legend>${message(code:'fc.landingtest.landing4')}<g:if test="${testInstance.IsPrecisionFlying()}"> (${message(code:testInstance.GetPrecisionFlyingLandingText(testInstance.task.landingTest4Points))})</g:if></legend>
 			                        <g:if test="${!testInstance.landingTestComplete}">
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
@@ -289,45 +313,53 @@
                                                     <label>${it.radio} ${it.label}</label>
                                                 </g:radioGroup>
 												<g:if test="${testInstance.landingTest4Landing == 2}">
-													(${testInstance.GetLandingTest4NoLandingPoints()} ${message(code:'fc.points')})
+													(${testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest4Points)} ${message(code:'fc.points')})
 												</g:if>
 												<g:elseif test="${testInstance.landingTest4Landing == 3}">
-													(${testInstance.GetLandingTest4OutsideLandingPoints()} ${message(code:'fc.points')})
+													(${testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest4Points)} ${message(code:'fc.points')})
 												</g:elseif>
 												<g:else>
 													(${testInstance.landingTest4MeasurePenalties} ${message(code:'fc.points')})
 												</g:else>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest4RollingOutsidePoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest4Points) > 0}">
 					        	                	<g:checkBox name="landingTest4RollingOutside" value="${testInstance.landingTest4RollingOutside}"/>
 													<label>${message(code:'fc.landingtest.rollingoutside')}</label>
 												</g:if>
-					                        	<g:if test="${testInstance.GetLandingTest4PowerInBoxPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest4Points) > 0}">
 					        	                	<g:checkBox name="landingTest4PowerInBox" value="${testInstance.landingTest4PowerInBox}"/>
 													<label>${message(code:'fc.landingtest.powerinbox')}</label>
 												</g:if>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest4GoAroundWithoutTouchingPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest4Points) > 0}">
 					        	                	<g:checkBox name="landingTest4GoAroundWithoutTouching" value="${testInstance.landingTest4GoAroundWithoutTouching}"/>
 													<label>${message(code:'fc.landingtest.goaroundwithouttouching')}</label>
 												</g:if>
-					                        	<g:if test="${testInstance.GetLandingTest4GoAroundInsteadStopPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest4Points) > 0}">
 				        	                		<g:checkBox name="landingTest4GoAroundInsteadStop" value="${testInstance.landingTest4GoAroundInsteadStop}"/>
 													<label>${message(code:'fc.landingtest.goaroundinsteadstop')}</label>
 												</g:if>
 				    	                    </div>
 					                        <div>
-					                        	<g:if test="${testInstance.GetLandingTest4AbnormalLandingPoints() > 0}">
+					                        	<g:if test="${testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest4Points) > 0}">
 				        	                		<g:checkBox name="landingTest4AbnormalLanding" value="${testInstance.landingTest4AbnormalLanding}"/>
 													<label>${message(code:'fc.landingtest.abnormallanding')}</label>
 												</g:if>
-                                                <g:if test="${testInstance.GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints() > 0}">
+                                                <g:if test="${testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest4Points) > 0}">
                                                     <g:checkBox name="landingTest4NotAllowedAerodynamicAuxiliaries" value="${testInstance.landingTest4NotAllowedAerodynamicAuxiliaries}"/>
                                                     <label>${message(code:'fc.landingtest.notallowedaerodynamicauxiliaries')}</label>
                                                 </g:if>
-					                        	<g:if test="${testInstance.GetLandingTest4TouchingObstaclePoints() > 0}">
+                                                <g:if test="${testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest4Points) > 0}">
+                                                    <g:checkBox name="landingTest4PowerInAir" value="${testInstance.landingTest4PowerInAir}"/>
+                                                    <label>${message(code:'fc.landingtest.powerinair')}</label>
+                                                </g:if>
+                                                <g:if test="${testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest4Points) > 0}">
+                                                    <g:checkBox name="landingTest4FlapsInAir" value="${testInstance.landingTest4FlapsInAir}"/>
+                                                    <label>${message(code:'fc.landingtest.flapsinair')}</label>
+                                                </g:if>
+					                        	<g:if test="${testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest4Points) > 0}">
 				        	                		<g:checkBox name="landingTest4TouchingObstacle" value="${testInstance.landingTest4TouchingObstacle}"/>
 													<label>${message(code:'fc.landingtest.touchingobstacle')}</label>
 												</g:if>

@@ -61,7 +61,12 @@
                                         		</g:if>
                                         	</g:each>
                                         </td>
-	                                    <td class="positionpenalties">${team_instance.contestPenalties} ${message(code:'fc.points')}<g:if test="${team_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
+                                        <g:if test="${team_instance.contestPenalties != -1}">
+	                                        <td class="positionpenalties">${team_instance.contestPenalties} ${message(code:'fc.points')}<g:if test="${team_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                    </g:if>
+	                                    <g:else>
+	                                        <td>-</td>
+	                                    </g:else>
                                     </tr>
                                 </g:each>
                             </tbody>

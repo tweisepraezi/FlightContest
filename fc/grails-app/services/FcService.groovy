@@ -1240,7 +1240,7 @@ class FcService
 								if (task_instance in tastSettings) {
 									Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
 									int task_penalties = 0
-									if (test_instance) {
+									if (test_instance && !test_instance.disabledCrew) {
 										if (test_instance.IsPlanningTestRun()) {
 											crew_instance.planningPenalties += test_instance.planningTestPenalties
 											if (resultSettings["Planning"]) {
@@ -1296,7 +1296,7 @@ class FcService
 									if (task_instance in tastSettings) {
 										Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
 										int task_penalties = 0
-										if (test_instance) {
+										if (test_instance && !test_instance.disabledCrew) {
 											if (test_instance.IsPlanningTestRun()) {
 												crew_instance.planningPenalties += test_instance.planningTestPenalties
 												if (resultSettings["Planning"]) {
@@ -1383,7 +1383,7 @@ class FcService
             // search lowest penalty
             int min_penalty = 100000
             for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
-				if (!crew_instance.disabled && (crew_instance.contestPenalties != -1)) {
+				if (!crew_instance.disabledContest && !crew_instance.disabled && (crew_instance.contestPenalties != -1)) {
 					if (!teamSettings || (crew_instance.team in teamSettings)) {
                         if (!ignoreProvisional || !crew_instance.IsProvisionalCrew(resultSettings)) {
     						if (resultclassInstance) {
@@ -1420,15 +1420,15 @@ class FcService
             // set position
             int set_position = -1
             for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
-				if (crew_instance.disabled || (crew_instance.contestPenalties == -1)) {
+				if (crew_instance.disabledContest || crew_instance.disabled || (crew_instance.contestPenalties == -1)) {
 					if (resultclassInstance) {
 						crew_instance.classPosition = 0
-						crew_instance.noClassPosition = false
+						crew_instance.noClassPosition = true
                         crew_instance.classEqualPosition = false
                         crew_instance.classAddPosition = 0
 					} else {
 						crew_instance.contestPosition = 0
-						crew_instance.noContestPosition = false
+						crew_instance.noContestPosition = true
                         crew_instance.contestEqualPosition = false
                         crew_instance.contestAddPosition = 0
 					}
@@ -1583,24 +1583,32 @@ class FcService
 		Map team_result_settings = contestInstance.GetTeamResultSettings()
 		calculate_crew_penalties(contestInstance,null,contestInstance.GetResultTasks(contestInstance.teamTaskResults),null,team_result_settings,ResultFilter.Team)
 
-		// calculate team penalties
-		for (Team team_instance in Team.findAllByContest(contestInstance,[sort:"id"])) {
-			printstart team_instance.name
-			team_instance.contestPenalties = 0
-			int crew_num = 0
-			for (Crew crew_instance in Crew.findAllByTeamAndDisabledAndDisabledTeam(team_instance,false,false,[sort:"teamPenalties"])) {
-				if (crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_instance.teamPenalties != -1)) {
-					crew_num++
-					if (crew_num > contestInstance.teamCrewNum) {
-						break
-					}
-					team_instance.contestPenalties += crew_instance.teamPenalties
-					println "$crew_instance.name (${crew_instance.resultclass?.name}): $crew_instance.teamPenalties"
-				}
-			}
-			team_instance.save()
-			printdone "$team_instance.contestPenalties"
-		}
+        // calculate team penalties
+        for (Team team_instance in Team.findAllByContest(contestInstance,[sort:"id"])) {
+            printstart team_instance.name
+            team_instance.contestPenalties = 0
+            int crew_num = 0
+            int team_penalties = 0
+            for (Crew crew_instance in Crew.findAllByTeamAndDisabledAndDisabledTeam(team_instance,false,false,[sort:"teamPenalties"])) {
+                if (crew_instance.IsActiveCrew(ResultFilter.Team) && (crew_instance.teamPenalties != -1)) {
+                    crew_num++
+                    if (crew_num > contestInstance.teamCrewNum) {
+                        break
+                    }
+                    team_penalties += crew_instance.teamPenalties
+                    println "$crew_instance.name (${crew_instance.resultclass?.name}): $crew_instance.teamPenalties"
+                }
+            }
+            if (crew_num >= contestInstance.teamCrewNum) {
+                team_instance.contestPenalties = team_penalties
+                team_instance.save()
+                printdone "$team_instance.contestPenalties"
+            } else {
+                team_instance.contestPenalties = -1
+                team_instance.save()
+                printdone "$team_instance.contestPenalties (no team)"
+            }
+        }
 		
 		// calculate team positions
 		calculatepositions_team(contestInstance)
@@ -2070,6 +2078,18 @@ class FcService
 				if (is_modified(params.landingTest4Run,task_instance.landingTest4Run)) {
 					calculate_penalties = true
 				}
+                if (is_modified(params.landingTest1Points,task_instance.landingTest1Points)) {
+                    calculate_penalties = true
+                }
+                if (is_modified(params.landingTest2Points,task_instance.landingTest2Points)) {
+                    calculate_penalties = true
+                }
+                if (is_modified(params.landingTest3Points,task_instance.landingTest3Points)) {
+                    calculate_penalties = true
+                }
+                if (is_modified(params.landingTest4Points,task_instance.landingTest4Points)) {
+                    calculate_penalties = true
+                }
 				if (is_modified(params.specialTestRun,task_instance.specialTestRun)) {
 					calculate_penalties = true
 				}			
@@ -2806,7 +2826,7 @@ class FcService
 					detail_name = getMsg('fc.addchangeprintsettings')
 					int last_timetable_version = 0
 					for (Test test_instance in Test.findAllByTask(task_instance,[sort:"timetableVersion"])) {
-						if (!test_instance.crew.disabled) {
+						if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 							if (test_instance.timetableVersion > 1) {
 								if (last_timetable_version != test_instance.timetableVersion) {
 									if (task_instance.printTimetableChange) {
@@ -2881,9 +2901,10 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    Map createTask(Map params)
+    Map createTask(Map params, Contest contestInstance)
     {
         Task task_instance = new Task()
+        task_instance.contest = contestInstance
         task_instance.properties = params
         return ['instance':task_instance]
     }
@@ -3273,7 +3294,7 @@ class FcService
         PlanningTestTask planningtesttask_instance = PlanningTestTask.findByPlanningtest(task.instance.planningtest) 
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
-				if (!test_instance.crew.disabled) {
+				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	                test_instance.planningtesttask = planningtesttask_instance
 	                calulateTestLegPlannings(test_instance)
 					test_instance.ResetPlanningTestResults()
@@ -3296,7 +3317,7 @@ class FcService
             params.testInstanceIDs.each { String test_id ->
                 if (test_id) {
                     Test test_instance = Test.get(test_id)
-					if (!test_instance.crew.disabled) {
+					if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	                    test_instance.planningtesttask = planningtesttask_instance 
 	                    calulateTestLegPlannings(test_instance)
 						test_instance.ResetPlanningTestResults()
@@ -3354,7 +3375,7 @@ class FcService
         FlightTestWind flighttestwind_instance = FlightTestWind.findByFlighttest(task.instance.flighttest)
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
-				if (!test_instance.crew.disabled) {
+				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 					setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
 				}
             }
@@ -3374,7 +3395,7 @@ class FcService
             params.testInstanceIDs.each { String test_id ->
                 if (test_id) {
                     Test test_instance = Test.get(test_id)
-					if (!test_instance.crew.disabled) {
+					if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 						setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
 					}
                 }
@@ -3408,7 +3429,7 @@ class FcService
 	{
 		printstart "calculate_task_time"
 		Test.findAllByTask(taskInstance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 				if (calculateTimes) {
 					calulate_testlegflight(test_instance)
 				}
@@ -3433,7 +3454,7 @@ class FcService
 	{
 		printstart "reset_task_timecalculated"
 		Test.findAllByTask(taskInstance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 		        test_instance.timeCalculated = false
 				test_instance.ResetFlightTestResults()
 				test_instance.CalculateTestPenalties()
@@ -3471,7 +3492,7 @@ class FcService
 
     	// set viewpos for aircraft of user1 
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	        	if (test_instance.taskAircraft) {
 	        		if (test_instance.taskAircraft.user1 == test_instance.crew) {
 	        			test_instance.viewpos = 4000+test_instance.taskTAS
@@ -3482,7 +3503,7 @@ class FcService
 
         // set viewpos for aircraft of user2 
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (test_instance.taskAircraft) {
 	                if (test_instance.taskAircraft.user2 == test_instance.crew) {
 	                    test_instance.viewpos = 3000+test_instance.taskTAS
@@ -3493,7 +3514,7 @@ class FcService
 
         // set viewpos for user without aircraft 
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (!test_instance.taskAircraft) {
 	                test_instance.viewpos = 2000+test_instance.taskTAS
 	            }
@@ -3502,7 +3523,7 @@ class FcService
 
         // set viewpos for disabled user 
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (test_instance.crew.disabled) {
+			if (test_instance.disabledCrew || test_instance.crew.disabled) {
                 test_instance.viewpos = 1000+test_instance.taskTAS
 			}
         }
@@ -3837,6 +3858,54 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map disableCrewsTask(Map params,session)
+    {
+        Map task = getTask(params)
+        if (!task.instance) {
+            return task
+        }
+
+        int disable_num = 0
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+            if (params["selectedTestID${test_instance.id}"] == "on") {
+                if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                    test_instance.disabledCrew = true
+                    test_instance.save()
+                    resetPositionCrew(test_instance.crew)
+                    test_instance.crew.save()
+                    disable_num++
+                }
+            }
+        }
+        task.message = getMsg('fc.crew.disabled',["${disable_num}"])
+        return task
+    }
+    
+    //--------------------------------------------------------------------------
+    Map enableCrewsTask(Map params,session)
+    {
+        Map task = getTask(params)
+        if (!task.instance) {
+            return task
+        }
+
+        int enable_num = 0
+        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+            if (params["selectedTestID${test_instance.id}"] == "on") {
+                if (test_instance.disabledCrew && !test_instance.crew.disabled) {
+                    test_instance.disabledCrew = false
+                    test_instance.save()
+                    resetPositionCrew(test_instance.crew)
+                    test_instance.crew.save()
+                    enable_num++
+                }
+            }
+        }
+        task.message = getMsg('fc.crew.enabled',["${enable_num}"])
+        return task
+    }
+    
+    //--------------------------------------------------------------------------
     Map calculatetimetableTask(Map params)
     {
         printstart "calculatetimetableTask"
@@ -3867,7 +3936,7 @@ class FcService
         // FlightTestWind assigned to all crews?
         boolean call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (!test_instance.flighttestwind) {
 	                call_return = true
 	            }
@@ -3993,7 +4062,7 @@ class FcService
 		// FlightTestWind assigned to all crews?
 		boolean call_return = false
 		Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 				if (!test_instance.flighttestwind) {
 					call_return = true
 				}
@@ -4021,7 +4090,7 @@ class FcService
 		// Timetable calculated?
 		call_return = false
 		Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 				if (!test_instance.timeCalculated) {
 					call_return = true
 				}
@@ -4036,7 +4105,7 @@ class FcService
 		// Warnings?
 		call_return = false
 		Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 				if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
 					call_return = true
 				}
@@ -4088,7 +4157,7 @@ class FcService
         // FlightTestWind assigned to all crews?
         boolean call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (!test_instance.flighttestwind) {
 	                call_return = true
 	            }
@@ -4116,7 +4185,7 @@ class FcService
         // Timetable calculated?  
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (!test_instance.timeCalculated) {
 	                call_return = true
 	            }
@@ -4131,7 +4200,7 @@ class FcService
         // Warnings?  
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
 	                call_return = true
 	            }
@@ -4199,7 +4268,7 @@ class FcService
         // FlightTestWind assigned to all crews?
         boolean call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-            if (!test_instance.crew.disabled) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                 if (!test_instance.flighttestwind) {
                     call_return = true
                 }
@@ -4227,7 +4296,7 @@ class FcService
         // Timetable calculated?  
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-            if (!test_instance.crew.disabled) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                 if (!test_instance.timeCalculated) {
                     call_return = true
                 }
@@ -4242,7 +4311,7 @@ class FcService
         // Warnings?  
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-            if (!test_instance.crew.disabled) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                 if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
                     call_return = true
                 }
@@ -4305,7 +4374,7 @@ class FcService
         // FlightTestWind assigned to all crews?
         boolean call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (!test_instance.flighttestwind) {
 	                call_return = true
 	            }
@@ -4335,7 +4404,7 @@ class FcService
         // Timetable calculated?  
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (!test_instance.timeCalculated) {
 	                call_return = true
 	            }
@@ -4351,7 +4420,7 @@ class FcService
         // Warnings?  
         call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (test_instance.arrivalTimeWarning || test_instance.takeoffTimeWarning) {
 	                call_return = true
 	            }
@@ -4368,7 +4437,7 @@ class FcService
 		boolean someone_selected = false
         Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
-				if (!test_instance.crew.disabled) {
+				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 					someone_selected = true
 				}
             }
@@ -4387,7 +4456,7 @@ class FcService
             boolean first_pdf = true
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
 	            if (params["selectedTestID${test_instance.id}"] == "on") {
-					if (!test_instance.crew.disabled) {
+					if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 		                String url = "${printparams.baseuri}/test/flightplanprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
 		                println "Print: $url"
 		                renderer.setDocument(url)
@@ -4439,7 +4508,7 @@ class FcService
         // PlanningTestTask assigned to all crews?
         boolean call_return = false
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 	            if (!test_instance.planningtesttask) {
 	                call_return = true
 	            }
@@ -4455,7 +4524,7 @@ class FcService
 		boolean someone_selected = false
         Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
-				if (!test_instance.crew.disabled) {
+				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 					someone_selected = true
 				}
             }
@@ -4474,7 +4543,7 @@ class FcService
             boolean first_pdf = true
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
 	            if (params["selectedTestID${test_instance.id}"] == "on") {
-					if (!test_instance.crew.disabled) {
+					if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 		                String url = "${printparams.baseuri}/test/planningtaskprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&results=no"
 		                println "Print: $url"
 		                renderer.setDocument(url)
@@ -4535,7 +4604,7 @@ class FcService
             // search lowest penalty
             int min_penalty = 100000
             for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
-				if (!test_instance.crew.disabled) {
+				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 					if (!resultclassInstances || (test_instance.crew.resultclass in resultclassInstances)) {
                         if (!ignoreProvisional || !test_instance.crew.IsProvisionalCrew(resultSettings)) {
                             int task_penalties = test_instance.taskPenalties
@@ -4556,7 +4625,7 @@ class FcService
             // set position
             int set_position = -1
             for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
-				if (test_instance.crew.disabled) {
+				if (test_instance.disabledCrew || test_instance.crew.disabled) {
                     test_instance.taskPosition = 0
                     test_instance.save()
 				} else if (resultclassInstances && !test_instance.crew.resultclass) {
@@ -4598,7 +4667,7 @@ class FcService
 		// Positions calculated?
 		boolean no_position_error = false
 		Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-			if (test_instance.crew.disabled) {
+			if (test_instance.disabledCrew || test_instance.crew.disabled) {
 				if (test_instance.taskPosition) {
 					no_position_error = true
 				}
@@ -7241,6 +7310,7 @@ class FcService
 				boolean modify_aircraft = crew_instance.aircraft.toString() != params.aircraft 
 				boolean old_disabled = crew_instance.disabled
                 boolean old_disabled_team = crew_instance.disabledTeam
+                boolean old_disabled_contest = crew_instance.disabledContest
             	Aircraft old_aircraft_instance = crew_instance.aircraft
 	            crew_instance.properties = params
 				if (params.tas) {
@@ -7254,6 +7324,10 @@ class FcService
                 if (old_disabled_team != crew_instance.disabledTeam) {
                     println "Crew for team evaluation dis/enabled."
                     resetTeamPositionCrew(crew_instance)
+                }
+                if (old_disabled_contest != crew_instance.disabledContest) {
+                    println "Crew for contest evaluation dis/enabled."
+                    resetContestPositionCrew(crew_instance)
                 }
 
 	            if (old_aircraft_instance) {
@@ -7522,7 +7596,7 @@ class FcService
             if (params["selectedCrewID${crew_instance.id}"] == "on") {
                 if (!crew_instance.disabled) {
                     crew_instance.disabled = true
-                    println "Crew disabled."
+                    println "Crew $crew_instance.name disabled."
                     resetPositionCrew(crew_instance)
                     crew_instance.save()
                     disable_num++
@@ -7546,8 +7620,104 @@ class FcService
             if (params["selectedCrewID${crew_instance.id}"] == "on") {
                 if (crew_instance.disabled) {
                     crew_instance.disabled = false
-                    println "Crew enabled."
+                    println "Crew $crew_instance.name enabled."
                     resetPositionCrew(crew_instance)
+                    crew_instance.save()
+                    enable_num++
+                }
+            }
+        }
+        
+        Map ret = ['enabled':enable_num > 0,'message':getMsg('fc.crew.enabled',["${enable_num}"])]
+        printdone ret
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map disableTeamCrews(Contest contestInstance, Map params, session)
+    {
+        printstart "disableTeamCrews"
+        
+        int disable_num = 0
+         
+        Crew.findAllByContest(contestInstance,[sort:"viewpos"]).each { Crew crew_instance ->
+            if (params["selectedCrewID${crew_instance.id}"] == "on") {
+                if (!crew_instance.disabledTeam) {
+                    crew_instance.disabledTeam = true
+                    println "Crew $crew_instance.name for team evaluation disabled."
+                    resetTeamPositionCrew(crew_instance)
+                    crew_instance.save()
+                    disable_num++
+                }
+            }
+        }
+        
+        Map ret = ['disabled':disable_num > 0,'message':getMsg('fc.crew.disabled',["${disable_num}"])]
+        printdone ret
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map enableTeamCrews(Contest contestInstance, Map params, session)
+    {
+        printstart "enableTeamCrews"
+        
+        int enable_num = 0
+         
+        Crew.findAllByContest(contestInstance,[sort:"viewpos"]).each { Crew crew_instance ->
+            if (params["selectedCrewID${crew_instance.id}"] == "on") {
+                if (crew_instance.disabledTeam) {
+                    crew_instance.disabledTeam = false
+                    println "Crew $crew_instance.name for team evaluation enabled."
+                    resetTeamPositionCrew(crew_instance)
+                    crew_instance.save()
+                    enable_num++
+                }
+            }
+        }
+        
+        Map ret = ['enabled':enable_num > 0,'message':getMsg('fc.crew.enabled',["${enable_num}"])]
+        printdone ret
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map disableContestCrews(Contest contestInstance, Map params, session)
+    {
+        printstart "disableContestCrews"
+        
+        int disable_num = 0
+         
+        Crew.findAllByContest(contestInstance,[sort:"viewpos"]).each { Crew crew_instance ->
+            if (params["selectedCrewID${crew_instance.id}"] == "on") {
+                if (!crew_instance.disabledContest) {
+                    crew_instance.disabledContest = true
+                    println "Crew $crew_instance.name for contest evaluation disabled."
+                    resetContestPositionCrew(crew_instance)
+                    crew_instance.save()
+                    disable_num++
+                }
+            }
+        }
+        
+        Map ret = ['disabled':disable_num > 0,'message':getMsg('fc.crew.disabled',["${disable_num}"])]
+        printdone ret
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map enableContestCrews(Contest contestInstance, Map params, session)
+    {
+        printstart "enableContestCrews"
+        
+        int enable_num = 0
+         
+        Crew.findAllByContest(contestInstance,[sort:"viewpos"]).each { Crew crew_instance ->
+            if (params["selectedCrewID${crew_instance.id}"] == "on") {
+                if (crew_instance.disabledContest) {
+                    crew_instance.disabledContest = false
+                    println "Crew $crew_instance.name for contest evaluation enabled."
+                    resetContestPositionCrew(crew_instance)
                     crew_instance.save()
                     enable_num++
                 }
@@ -7629,15 +7799,6 @@ class FcService
         for (Crew crew_instance in Crew.findAllByContest(crewInstance.contest,[sort:"id"])) {
             boolean run = false
             if (crew_instance != crewInstance) {
-                /*
-                if (crewInstance.contest.resultClasses) {
-                    if (crewInstance.resultclass && crewInstance.resultclass == crew_instance.resultclass) {
-                        run = true
-                    }
-                } else {
-                    run = true
-                }
-                */
                 run = true
             }
             if (run) {
@@ -7667,6 +7828,40 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    private void resetContestPositionCrew(Crew crewInstance)
+    {
+        crewInstance.contestPenalties = 0
+        crewInstance.contestPosition = 0
+        crewInstance.noContestPosition = false
+        crewInstance.contestEqualPosition = false
+        crewInstance.contestAddPosition = 0
+        crewInstance.classPosition = 0
+        crewInstance.noClassPosition = false
+        crewInstance.classEqualPosition = false
+        crewInstance.classAddPosition = 0
+        for (Crew crew_instance in Crew.findAllByContest(crewInstance.contest,[sort:"id"])) {
+            boolean run = false
+            if (crew_instance != crewInstance) {
+                run = true
+            }
+            if (run) {
+                
+                crew_instance.contestPenalties = 0
+                crew_instance.contestPosition = 0
+                crew_instance.noContestPosition = false
+                crew_instance.contestEqualPosition = false
+                crew_instance.contestAddPosition = 0
+                crew_instance.classPosition = 0
+                crew_instance.noClassPosition = false
+                crew_instance.classEqualPosition = false
+                crew_instance.classAddPosition = 0
+                crew_instance.save()
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------
     private void resetTeamPositionCrew(Crew crewInstance)
     {
         crewInstance.teamPenalties = 0
@@ -7677,15 +7872,6 @@ class FcService
         for (Crew crew_instance in Crew.findAllByContest(crewInstance.contest,[sort:"id"])) {
             boolean run = false
             if (crew_instance != crewInstance) {
-                /*
-                if (crewInstance.contest.resultClasses) {
-                    if (crewInstance.resultclass && crewInstance.resultclass == crew_instance.resultclass) {
-                        run = true
-                    }
-                } else {
-                    run = true
-                }
-                */
                 run = true
             }
             if (run) {
@@ -8588,7 +8774,7 @@ class FcService
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             for ( Test test_instance in Test.findAllByTask(task.instance,[sort:"viewpos"])) {
-				if (!test_instance.crew.disabled) {
+				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 					if (isprintcrewresult(params,test_instance)) {
 						printstart "Print $test_instance.crew.name"
 		                String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${task.instance.printPlanningResults}&printFlightResults=${task.instance.printFlightResults}&printObservationResults=${task.instance.printObservationResults}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
@@ -9055,7 +9241,8 @@ class FcService
 				}
 			}
 			if (testInstance.landingTest1RollingOutside || testInstance.landingTest1PowerInBox || testInstance.landingTest1GoAroundWithoutTouching ||
-				testInstance.landingTest1GoAroundInsteadStop || testInstance.landingTest1AbnormalLanding || testInstance.landingTest1NotAllowedAerodynamicAuxiliaries) 
+				testInstance.landingTest1GoAroundInsteadStop || testInstance.landingTest1AbnormalLanding || testInstance.landingTest1NotAllowedAerodynamicAuxiliaries ||
+                testInstance.landingTest1PowerInAir || testInstance.landingTest1FlapsInAir || testInstance.landingTest1TouchingObstacle) 
 			{
 				measures += "+"
 			}
@@ -9078,7 +9265,7 @@ class FcService
 			}
 			if (testInstance.landingTest2RollingOutside || testInstance.landingTest2PowerInBox || testInstance.landingTest2GoAroundWithoutTouching ||
 				testInstance.landingTest2GoAroundInsteadStop || testInstance.landingTest2AbnormalLanding || testInstance.landingTest2NotAllowedAerodynamicAuxiliaries ||
-				testInstance.landingTest2PowerInAir) 
+				testInstance.landingTest2PowerInAir || testInstance.landingTest2FlapsInAir || testInstance.landingTest2TouchingObstacle) 
 			{
 				measures += "+"
 			}
@@ -9101,7 +9288,7 @@ class FcService
 			}
 			if (testInstance.landingTest3RollingOutside || testInstance.landingTest3PowerInBox || testInstance.landingTest3GoAroundWithoutTouching ||
 				testInstance.landingTest3GoAroundInsteadStop || testInstance.landingTest3AbnormalLanding || testInstance.landingTest3NotAllowedAerodynamicAuxiliaries ||
-				testInstance.landingTest3PowerInAir || testInstance.landingTest3FlapsInAir)
+				testInstance.landingTest3PowerInAir || testInstance.landingTest3FlapsInAir || testInstance.landingTest3TouchingObstacle)
 			{
 				measures += "+"
 			}
@@ -9124,7 +9311,7 @@ class FcService
 			}
 			if (testInstance.landingTest4RollingOutside || testInstance.landingTest4PowerInBox || testInstance.landingTest4GoAroundWithoutTouching ||
 				testInstance.landingTest4GoAroundInsteadStop || testInstance.landingTest4AbnormalLanding || testInstance.landingTest4NotAllowedAerodynamicAuxiliaries ||
-				testInstance.landingTest4TouchingObstacle)
+				testInstance.landingTest4PowerInAir || testInstance.landingTest4FlapsInAir || testInstance.landingTest4TouchingObstacle)
 			{
 				measures += "+"
 			}
@@ -9140,7 +9327,7 @@ class FcService
 			if (testInstance.landingTest1Landing == 1) {
 				if (!testInstance.landingTest1Measure) {
 					error += " ${getMsg('fc.landingresults.measure1.empty')}"
-				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest1Measure,testInstance.GetLandingTest1PenaltyCalculator()) == -1) {
+				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest1Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest1Points)) == -1) {
 					error += " " + getMsg('fc.landingresults.measure1.invalid',[testInstance.landingTest1Measure])
 				}
 			}
@@ -9152,7 +9339,7 @@ class FcService
 						error += ", "
 					}
 					error += getMsg('fc.landingresults.measure2.empty')
-				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest2Measure,testInstance.GetLandingTest2PenaltyCalculator()) == -1) {
+				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest2Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest2Points)) == -1) {
 					if (error) {
 						error += ", "
 					}
@@ -9167,7 +9354,7 @@ class FcService
 						error += ", "
 					}
 					error += getMsg('fc.landingresults.measure3.empty')
-				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest3Measure,testInstance.GetLandingTest3PenaltyCalculator()) == -1) {
+				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest3Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest3Points)) == -1) {
 					if (error) {
 						error += ", "
 					}
@@ -9182,7 +9369,7 @@ class FcService
 						error += ", "
 					}
 					error += getMsg('fc.landingresults.measure4.empty')
-				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest4Measure,testInstance.GetLandingTest4PenaltyCalculator()) == -1) {
+				} else if (FcMath.CalculateLandingPenalties(testInstance.landingTest4Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest4Points)) == -1) {
 					if (error) {
 						error += ", "
 					}
@@ -9442,37 +9629,46 @@ class FcService
 				}
 				switch (testInstance.landingTest1Landing) {
 					case 1:
-						testInstance.landingTest1MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest1Measure,testInstance.GetLandingTest1PenaltyCalculator())
+						testInstance.landingTest1MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest1Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest1Points))
 						testInstance.landingTest1Penalties += testInstance.landingTest1MeasurePenalties
 						break
 					case 2:
-						testInstance.landingTest1Penalties += testInstance.GetLandingTest1NoLandingPoints()
+						testInstance.landingTest1Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest1Points)
 						break
 					case 3:
-						testInstance.landingTest1Penalties += testInstance.GetLandingTest1OutsideLandingPoints()
+						testInstance.landingTest1Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest1Points)
 						break
 				}
 				if (testInstance.landingTest1RollingOutside) {
-					testInstance.landingTest1Penalties += testInstance.GetLandingTest1RollingOutsidePoints()
+					testInstance.landingTest1Penalties += testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest1Points)
 				}
 				if (testInstance.landingTest1PowerInBox) {
-					testInstance.landingTest1Penalties += testInstance.GetLandingTest1PowerInBoxPoints()
+					testInstance.landingTest1Penalties += testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest1Points)
 				}
 				if (testInstance.landingTest1GoAroundWithoutTouching) {
-					testInstance.landingTest1Penalties += testInstance.GetLandingTest1GoAroundWithoutTouchingPoints()
+					testInstance.landingTest1Penalties += testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest1Points)
 				}
 				if (testInstance.landingTest1GoAroundInsteadStop) {
-					testInstance.landingTest1Penalties += testInstance.GetLandingTest1GoAroundInsteadStopPoints()
+					testInstance.landingTest1Penalties += testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest1Points)
 				}
 				if (testInstance.landingTest1AbnormalLanding) {
-					testInstance.landingTest1Penalties += testInstance.GetLandingTest1AbnormalLandingPoints()
+					testInstance.landingTest1Penalties += testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest1Points)
 				}
 				if (testInstance.landingTest1NotAllowedAerodynamicAuxiliaries) {
-					testInstance.landingTest1Penalties += testInstance.GetLandingTest1NotAllowedAerodynamicAuxiliariesPoints()
+					testInstance.landingTest1Penalties += testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest1Points)
 				}
-				if (testInstance.GetLandingTest1MaxPoints() > 0) {
-					if (testInstance.landingTest1Penalties > testInstance.GetLandingTest1MaxPoints()) {
-						testInstance.landingTest1Penalties = testInstance.GetLandingTest1MaxPoints()
+                if (testInstance.landingTest1PowerInAir) {
+                    testInstance.landingTest1Penalties += testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest1Points)
+                }
+                if (testInstance.landingTest1FlapsInAir) {
+                    testInstance.landingTest1Penalties += testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest1Points)
+                }
+                if (testInstance.landingTest1TouchingObstacle) {
+                    testInstance.landingTest1Penalties += testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest1Points)
+                }
+				if (testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest1Points) > 0) {
+					if (testInstance.landingTest1Penalties > testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest1Points)) {
+						testInstance.landingTest1Penalties = testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest1Points)
 					}
 				}
 				testInstance.landingTestPenalties += testInstance.landingTest1Penalties
@@ -9484,40 +9680,46 @@ class FcService
 				}
 				switch (testInstance.landingTest2Landing) {
 					case 1:
-						testInstance.landingTest2MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest2Measure,testInstance.GetLandingTest2PenaltyCalculator())
+						testInstance.landingTest2MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest2Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest2Points))
 						testInstance.landingTest2Penalties += testInstance.landingTest2MeasurePenalties
 						break
 					case 2:
-						testInstance.landingTest2Penalties += testInstance.GetLandingTest2NoLandingPoints()
+						testInstance.landingTest2Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest2Points)
 						break
 					case 3: 
-						testInstance.landingTest2Penalties += testInstance.GetLandingTest2OutsideLandingPoints()
+						testInstance.landingTest2Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest2Points)
 						break
 				}
 				if (testInstance.landingTest2RollingOutside) {
-					testInstance.landingTest2Penalties += testInstance.GetLandingTest2RollingOutsidePoints()
+					testInstance.landingTest2Penalties += testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest2Points)
 				}
 				if (testInstance.landingTest2PowerInBox) {
-					testInstance.landingTest2Penalties += testInstance.GetLandingTest2PowerInBoxPoints()
+					testInstance.landingTest2Penalties += testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest2Points)
 				}
 				if (testInstance.landingTest2GoAroundWithoutTouching) {
-					testInstance.landingTest2Penalties += testInstance.GetLandingTest2GoAroundWithoutTouchingPoints()
+					testInstance.landingTest2Penalties += testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest2Points)
 				}
 				if (testInstance.landingTest2GoAroundInsteadStop) {
-					testInstance.landingTest2Penalties += testInstance.GetLandingTest2GoAroundInsteadStopPoints()
+					testInstance.landingTest2Penalties += testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest2Points)
 				}
 				if (testInstance.landingTest2AbnormalLanding) {
-					testInstance.landingTest2Penalties += testInstance.GetLandingTest2AbnormalLandingPoints()
+					testInstance.landingTest2Penalties += testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest2Points)
 				}
 				if (testInstance.landingTest2NotAllowedAerodynamicAuxiliaries) {
-					testInstance.landingTest2Penalties += testInstance.GetLandingTest2NotAllowedAerodynamicAuxiliariesPoints()
+					testInstance.landingTest2Penalties += testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest2Points)
 				}
 				if (testInstance.landingTest2PowerInAir) {
-					testInstance.landingTest2Penalties += testInstance.GetLandingTest2PowerInAirPoints()
+					testInstance.landingTest2Penalties += testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest2Points)
 				}
-				if (testInstance.GetLandingTest2MaxPoints() > 0) {
-					if (testInstance.landingTest2Penalties > testInstance.GetLandingTest2MaxPoints()) {
-						testInstance.landingTest2Penalties = testInstance.GetLandingTest2MaxPoints()
+                if (testInstance.landingTest2FlapsInAir) {
+                    testInstance.landingTest2Penalties += testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest2Points)
+                }
+                if (testInstance.landingTest2TouchingObstacle) {
+                    testInstance.landingTest2Penalties += testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest2Points)
+                }
+				if (testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest2Points) > 0) {
+					if (testInstance.landingTest2Penalties > testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest2Points)) {
+						testInstance.landingTest2Penalties = testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest2Points)
 					}
 				}
 				testInstance.landingTestPenalties += testInstance.landingTest2Penalties
@@ -9529,43 +9731,46 @@ class FcService
 				}
 				switch (testInstance.landingTest3Landing) {
 					case 1:
-						testInstance.landingTest3MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest3Measure,testInstance.GetLandingTest3PenaltyCalculator())
+						testInstance.landingTest3MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest3Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest3Points))
 						testInstance.landingTest3Penalties += testInstance.landingTest3MeasurePenalties
 						break
 					case 2:
-						testInstance.landingTest3Penalties += testInstance.GetLandingTest3NoLandingPoints()
+						testInstance.landingTest3Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest3Points)
 						break
 					case 3: 
-						testInstance.landingTest3Penalties += testInstance.GetLandingTest3OutsideLandingPoints()
+						testInstance.landingTest3Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest3Points)
 						break
 				}
 				if (testInstance.landingTest3RollingOutside) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3RollingOutsidePoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest3Points)
 				}
 				if (testInstance.landingTest3PowerInBox) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3PowerInBoxPoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest3Points)
 				}
 				if (testInstance.landingTest3GoAroundWithoutTouching) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3GoAroundWithoutTouchingPoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest3Points)
 				}
 				if (testInstance.landingTest3GoAroundInsteadStop) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3GoAroundInsteadStopPoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest3Points)
 				}
 				if (testInstance.landingTest3AbnormalLanding) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3AbnormalLandingPoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest3Points)
 				}
 				if (testInstance.landingTest3NotAllowedAerodynamicAuxiliaries) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3NotAllowedAerodynamicAuxiliariesPoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest3Points)
 				}
 				if (testInstance.landingTest3PowerInAir) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3PowerInAirPoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest3Points)
 				}
 				if (testInstance.landingTest3FlapsInAir) {
-					testInstance.landingTest3Penalties += testInstance.GetLandingTest3FlapsInAirPoints()
+					testInstance.landingTest3Penalties += testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest3Points)
 				}
-				if (testInstance.GetLandingTest3MaxPoints() > 0) {
-					if (testInstance.landingTest3Penalties > testInstance.GetLandingTest3MaxPoints()) {
-						testInstance.landingTest3Penalties = testInstance.GetLandingTest3MaxPoints()
+                if (testInstance.landingTest3TouchingObstacle) {
+                    testInstance.landingTest3Penalties += testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest3Points)
+                }
+				if (testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest3Points) > 0) {
+					if (testInstance.landingTest3Penalties > testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest3Points)) {
+						testInstance.landingTest3Penalties = testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest3Points)
 					}
 				}
 				testInstance.landingTestPenalties += testInstance.landingTest3Penalties
@@ -9577,40 +9782,46 @@ class FcService
 				}
 				switch (testInstance.landingTest4Landing) {
 					case 1:
-						testInstance.landingTest4MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest4Measure,testInstance.GetLandingTest4PenaltyCalculator())
+						testInstance.landingTest4MeasurePenalties = FcMath.CalculateLandingPenalties2(testInstance.landingTest4Measure,testInstance.GetLandingTestPenaltyCalculator(testInstance.task.landingTest4Points))
 						testInstance.landingTest4Penalties += testInstance.landingTest4MeasurePenalties
 						break
 					case 2:
-						testInstance.landingTest4Penalties += testInstance.GetLandingTest4NoLandingPoints()
+						testInstance.landingTest4Penalties += testInstance.GetLandingTestNoLandingPoints(testInstance.task.landingTest4Points)
 						break
 					case 3: 
-						testInstance.landingTest4Penalties += testInstance.GetLandingTest4OutsideLandingPoints()
+						testInstance.landingTest4Penalties += testInstance.GetLandingTestOutsideLandingPoints(testInstance.task.landingTest4Points)
 						break
 				}
 				if (testInstance.landingTest4RollingOutside) {
-					testInstance.landingTest4Penalties += testInstance.GetLandingTest4RollingOutsidePoints()
+					testInstance.landingTest4Penalties += testInstance.GetLandingTestRollingOutsidePoints(testInstance.task.landingTest4Points)
 				}
 				if (testInstance.landingTest4PowerInBox) {
-					testInstance.landingTest4Penalties += testInstance.GetLandingTest4PowerInBoxPoints()
+					testInstance.landingTest4Penalties += testInstance.GetLandingTestPowerInBoxPoints(testInstance.task.landingTest4Points)
 				}
 				if (testInstance.landingTest4GoAroundWithoutTouching) {
-					testInstance.landingTest4Penalties += testInstance.GetLandingTest4GoAroundWithoutTouchingPoints()
+					testInstance.landingTest4Penalties += testInstance.GetLandingTestGoAroundWithoutTouchingPoints(testInstance.task.landingTest4Points)
 				}
 				if (testInstance.landingTest4GoAroundInsteadStop) {
-					testInstance.landingTest4Penalties += testInstance.GetLandingTest4GoAroundInsteadStopPoints()
+					testInstance.landingTest4Penalties += testInstance.GetLandingTestGoAroundInsteadStopPoints(testInstance.task.landingTest4Points)
 				}
 				if (testInstance.landingTest4AbnormalLanding) {
-					testInstance.landingTest4Penalties += testInstance.GetLandingTest4AbnormalLandingPoints()
+					testInstance.landingTest4Penalties += testInstance.GetLandingTestAbnormalLandingPoints(testInstance.task.landingTest4Points)
 				}
 				if (testInstance.landingTest4NotAllowedAerodynamicAuxiliaries) {
-					testInstance.landingTest4Penalties += testInstance.GetLandingTest4NotAllowedAerodynamicAuxiliariesPoints()
+					testInstance.landingTest4Penalties += testInstance.GetLandingTestNotAllowedAerodynamicAuxiliariesPoints(testInstance.task.landingTest4Points)
 				}
+                if (testInstance.landingTest4PowerInAir) {
+                    testInstance.landingTest4Penalties += testInstance.GetLandingTestPowerInAirPoints(testInstance.task.landingTest4Points)
+                }
+                if (testInstance.landingTest4FlapsInAir) {
+                    testInstance.landingTest4Penalties += testInstance.GetLandingTestFlapsInAirPoints(testInstance.task.landingTest4Points)
+                }
 				if (testInstance.landingTest4TouchingObstacle) {
-					testInstance.landingTest4Penalties += testInstance.GetLandingTest4TouchingObstaclePoints()
+					testInstance.landingTest4Penalties += testInstance.GetLandingTestTouchingObstaclePoints(testInstance.task.landingTest4Points)
 				}
-				if (testInstance.GetLandingTest4MaxPoints() > 0) {
-					if (testInstance.landingTest4Penalties > testInstance.GetLandingTest4MaxPoints()) {
-						testInstance.landingTest4Penalties = testInstance.GetLandingTest4MaxPoints()
+				if (testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest4Points) > 0) {
+					if (testInstance.landingTest4Penalties > testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest4Points)) {
+						testInstance.landingTest4Penalties = testInstance.GetLandingTestMaxPoints(testInstance.task.landingTest4Points)
 					}
 				}
 				testInstance.landingTestPenalties += testInstance.landingTest4Penalties
@@ -11257,7 +11468,7 @@ class FcService
         Date last_arrival_time = first_date
         
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 
 	            // calculate arrivalTimeWarning by arrivalTime
 	            test_instance.arrivalTimeWarning = false
@@ -11272,7 +11483,7 @@ class FcService
 	            boolean found_aircraft = false
 	            GregorianCalendar last_takeoff_time = null
 	            Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
-					if (!test_instance2.crew.disabled) {
+					if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
 		                if (test_instance.taskAircraft == test_instance2.taskAircraft) {
 		                	if (test_instance == test_instance2) {
 		                		found_aircraft = true
@@ -11298,7 +11509,7 @@ class FcService
 				last_takeoff_time = null
 				BigDecimal last_tasktas = 0
 				Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance2 ->
-					if (!test_instance2.crew.disabled) {
+					if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
 						if (test_instance == test_instance2) {
 							found_predecessor = true
 						}
@@ -11343,7 +11554,7 @@ class FcService
         Date last_arrival_time = first_date
         
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 				if (test_instance.flighttestwind) {
 					printstart "$test_instance.crew.name"
 					
@@ -11669,7 +11880,7 @@ class FcService
         printstart "calulateTestLegFlights: ${taskInstance.name()}"
 		boolean something_calculated = false
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
-			if (!test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 				if (test_instance.flighttestwind) {
 					if (!test_instance.timeCalculated) {
 						calulate_testlegflight(test_instance)
@@ -12450,6 +12661,10 @@ class FcService
 						test_instance.landingTest1GoAroundWithoutTouching = crew_result.landingTest1GoAroundWithoutTouching
 						test_instance.landingTest1GoAroundInsteadStop = crew_result.landingTest1GoAroundInsteadStop
 						test_instance.landingTest1AbnormalLanding = crew_result.landingTest1AbnormalLanding
+                        test_instance.landingTest1NotAllowedAerodynamicAuxiliaries = crew_result.landingTest1NotAllowedAerodynamicAuxiliaries
+                        test_instance.landingTest1PowerInAir = crew_result.landingTest1PowerInAir
+                        test_instance.landingTest1FlapsInAir = crew_result.landingTest1FlapsInAir
+                        test_instance.landingTest1TouchingObstacle = crew_result.landingTest1TouchingObstacle
 						test_instance.landingTest2Measure = crew_result.landingTest2Measure
 						test_instance.landingTest2Landing = crew_result.landingTest2Landing
 						test_instance.landingTest2RollingOutside = crew_result.landingTest2RollingOutside
@@ -12457,7 +12672,10 @@ class FcService
 						test_instance.landingTest2GoAroundWithoutTouching = crew_result.landingTest2GoAroundWithoutTouching
 						test_instance.landingTest2GoAroundInsteadStop = crew_result.landingTest2GoAroundInsteadStop
 						test_instance.landingTest2AbnormalLanding = crew_result.landingTest2AbnormalLanding
+                        test_instance.landingTest2NotAllowedAerodynamicAuxiliaries = crew_result.landingTest2NotAllowedAerodynamicAuxiliaries
 						test_instance.landingTest2PowerInAir = crew_result.landingTest2PowerInAir
+                        test_instance.landingTest2FlapsInAir = crew_result.landingTest2FlapsInAir
+                        test_instance.landingTest2TouchingObstacle = crew_result.landingTest2TouchingObstacle
 						test_instance.landingTest3Measure = crew_result.landingTest3Measure
 						test_instance.landingTest3Landing = crew_result.landingTest3Landing
 						test_instance.landingTest3RollingOutside = crew_result.landingTest3RollingOutside
@@ -12465,8 +12683,10 @@ class FcService
 						test_instance.landingTest3GoAroundWithoutTouching = crew_result.landingTest3GoAroundWithoutTouching
 						test_instance.landingTest3GoAroundInsteadStop = crew_result.landingTest3GoAroundInsteadStop
 						test_instance.landingTest3AbnormalLanding = crew_result.landingTest3AbnormalLanding
+                        test_instance.landingTest3NotAllowedAerodynamicAuxiliaries = crew_result.landingTest3NotAllowedAerodynamicAuxiliaries
 						test_instance.landingTest3PowerInAir = crew_result.landingTest3PowerInAir
 						test_instance.landingTest3FlapsInAir = crew_result.landingTest3FlapsInAir
+                        test_instance.landingTest3TouchingObstacle = crew_result.landingTest3TouchingObstacle
 						test_instance.landingTest4Measure = crew_result.landingTest4Measure
 						test_instance.landingTest4Landing = crew_result.landingTest4Landing
 						test_instance.landingTest4RollingOutside = crew_result.landingTest4RollingOutside
@@ -12474,6 +12694,9 @@ class FcService
 						test_instance.landingTest4GoAroundWithoutTouching = crew_result.landingTest4GoAroundWithoutTouching
 						test_instance.landingTest4GoAroundInsteadStop = crew_result.landingTest4GoAroundInsteadStop
 						test_instance.landingTest4AbnormalLanding = crew_result.landingTest4AbnormalLanding
+                        test_instance.landingTest4NotAllowedAerodynamicAuxiliaries = crew_result.landingTest4NotAllowedAerodynamicAuxiliaries
+                        test_instance.landingTest4PowerInAir = crew_result.landingTest4PowerInAir
+                        test_instance.landingTest4FlapsInAir = crew_result.landingTest4FlapsInAir
 						test_instance.landingTest4TouchingObstacle = crew_result.landingTest4TouchingObstacle
 					} else {
 						if (crew_result?.landingPenalties) {

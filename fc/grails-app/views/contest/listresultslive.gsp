@@ -187,7 +187,7 @@
                     </tbody>
                 </table>
             </div>
-            <p class="programinfo">${message(code:'fc.program.foot.live')}
+            <p class="programinfo">${contestInstance.printOrganizer}</p>
         </div>
     </body>
 </html>

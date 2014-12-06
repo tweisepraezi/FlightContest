@@ -201,8 +201,31 @@ class CrewController {
 		}
 		if (session?.lastContest) {
 			session.lastContest.refresh()
-            def crew_list = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
-            return [crewList:crew_list,contestInstance:session.lastContest,resultClasses:session.lastContest.resultClasses]
+            
+            Task task_instance = null
+            if (session.lastContest.printCrewOrder > 0) {
+                task_instance = Task.get(session.lastContest.printCrewOrder)
+                if (task_instance) {
+                    if (task_instance.contest != session.lastContest) {
+                        task_instance = null
+                    }
+                }
+            }
+            
+            if (task_instance) {
+                def test_list = Test.findAllByTask(task_instance,[sort:'viewpos'])
+                int crew_num = 0
+                for (Test test_instance in test_list) {
+                    if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                        crew_num++
+                    }
+                }
+                return [testList:test_list,crewNum:crew_num,contestInstance:session.lastContest]
+            } else {
+                def crew_list = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
+                int crew_num = crew_list.size()
+                return [crewList:crew_list,crewNum:crew_num,contestInstance:session.lastContest]
+            }
         }
         return [:]
     }
@@ -269,23 +292,43 @@ class CrewController {
         }
 	}
 	
-	def deletecrews = {
+    def deletecrews = {
         def ret = fcService.deleteCrews(session.lastContest,params,session)
-		if (ret.deleted) { 
-			flash.message = ret.message
-		}
-       	redirect(action:list)
-	}
-	
-    def disablecrews = {
-        def ret = fcService.disableCrews(session.lastContest,params,session)
         flash.message = ret.message
         redirect(action:list)
     }
     
-    def enablecrews = {
-        def ret = fcService.enableCrews(session.lastContest,params,session)
-        flash.message = ret.message
+    def runcommand = {
+        switch (params.crewcommand) {
+            case CrewCommands.SELECTCOMMAND.toString():
+                flash.message = message(code:'fc.crew.selectcommand.noselection')
+                flash.error = true
+                break
+            case CrewCommands.DISABLECREWS.toString():
+                def ret = fcService.disableCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+            case CrewCommands.ENABLECREWS.toString():
+                def ret = fcService.enableCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+            case CrewCommands.DISABLETEAMCREWS.toString():
+                def ret = fcService.disableTeamCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+            case CrewCommands.ENABLETEAMCREWS.toString():
+                def ret = fcService.enableTeamCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+            case CrewCommands.DISABLECONTESTCREWS.toString():
+                def ret = fcService.disableContestCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+            case CrewCommands.ENABLECONTESTCREWS.toString():
+                def ret = fcService.enableContestCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+        }
         redirect(action:list)
     }
     

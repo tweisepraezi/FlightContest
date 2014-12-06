@@ -16,6 +16,10 @@ class Task
 	boolean landingTest2Run                  = false // DB-2.0
 	boolean landingTest3Run                  = false // DB-2.0
 	boolean landingTest4Run                  = false // DB-2.0
+    Integer landingTest1Points               = 1     // DB-2.9
+    Integer landingTest2Points               = 2     // DB-2.9
+    Integer landingTest3Points               = 3     // DB-2.9
+    Integer landingTest4Points               = 4     // DB-2.9
 	boolean specialTestRun                   = false
 	String specialTestTitle                  = ""    // DB-2.3
 
@@ -225,7 +229,7 @@ class Task
         disabledCheckPointsBadCourse(nullable:true)
         printTimetableLegTimes(nullable:true)
         briefingTime(nullable:true,blank:true, validator:{ val, obj ->
-            if (val == "") {
+            if (!val) {
                 return true
             }
             if (val.size() > 5) {
@@ -241,6 +245,12 @@ class Task
         printTimetableOverviewLegTimes(nullable:true)
         printTimetableOverviewLandscape(nullable:true)
         printTimetableOverviewA3(nullable:true)
+        
+        // DB-2.9 compatibility
+        landingTest1Points(nullable:true)
+        landingTest2Points(nullable:true)
+        landingTest3Points(nullable:true)
+        landingTest4Points(nullable:true)
 	}
 
     static mapping = {
@@ -942,7 +952,7 @@ class Task
     Test GetFirstTest()
     {
         for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"asc"])) {
-            if (test_instance.timeCalculated && !test_instance.crew.disabled) {
+            if (test_instance.timeCalculated && !test_instance.disabledCrew && !test_instance.crew.disabled) {
                 return test_instance
             }
         }
@@ -952,10 +962,30 @@ class Task
     Test GetLastTest()
     {
         for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"desc"])) {
-            if (test_instance.timeCalculated && !test_instance.crew.disabled) {
+            if (test_instance.timeCalculated && !test_instance.disabledCrew && !test_instance.crew.disabled) {
                 return test_instance
             }
         }
         return null
+    }
+    
+    String GetLandingPointsText(int landingTestPoints)
+    {
+        if (!contest.precisionFlying || (contest.resultClasses && contest.contestRuleForEachClass)) {
+            switch (landingTestPoints) {
+                case 1: return "fc.landingtest.points1"
+                case 2: return "fc.landingtest.points2"
+                case 3: return "fc.landingtest.points3"
+                case 4: return "fc.landingtest.points4"
+            }
+        } else {
+            switch (landingTestPoints) {
+                case 1: return "fc.landingtest.points1.precision"
+                case 2: return "fc.landingtest.points2.precision"
+                case 3: return "fc.landingtest.points3.precision"
+                case 4: return "fc.landingtest.points4.precision"
+            }
+        }
+        return ""
     }
 }

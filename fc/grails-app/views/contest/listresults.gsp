@@ -64,16 +64,28 @@
 		                                    <td>-</td>
 		                                </g:else>
                                         <g:set var="test_provisional" value="${false}"/>
+                                        <g:set var="test_disabled" value="${false}"/>
                                         <g:each var="task_instance2" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
                                         	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance2)}"/>
                                         	<g:if test="${test_instance}">
-                                        	   <td>${test_instance.GetResultPenalties(contestInstance.GetResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
+                                                <g:if test="${!test_instance.disabledCrew}">
+                                        	        <td>${test_instance.GetResultPenalties(contestInstance.GetResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
+                                        	    </g:if>
+                                        	    <g:else>
+                                                    <g:set var="test_disabled" value="${true}"/>
+                                        	        <td>-</td>
+                                        	    </g:else>
                                         	</g:if>
                                         	<g:else>
                                         	   <td>-</td>
                                         	</g:else>
 		                                </g:each>
-	                                    <td class="positionpenalties">${crew_instance.contestPenalties} ${message(code:'fc.points')}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                <g:if test="${!test_disabled}">
+	                                        <td class="positionpenalties">${crew_instance.contestPenalties} ${message(code:'fc.points')}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                    </g:if>
+	                                    <g:else>
+	                                        <td>-</td>
+	                                    </g:else>
                                     </tr>
                                 </g:each>
                             </tbody>

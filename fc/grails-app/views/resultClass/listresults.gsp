@@ -36,7 +36,7 @@
                                 <g:each var="crew_instance" in="${Crew.findAllByContest(resultclassInstance.contest,[sort:'classPosition'])}" status="i">
                                 	<g:if test="${crew_instance.resultclass == resultclassInstance}">
 	                                    <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-	                                    	<g:if test="${crew_instance.disabled}">
+	                                    	<g:if test="${crew_instance.disabled || crew_instance.noClassPosition}">
 	                                    		<td class="position">${message(code:'fc.disabled')}</td>
 		                                    </g:if> 
 		                                    <g:else>
@@ -57,17 +57,28 @@
 	                                        </g:else>
 	                                        
 	                                        <g:set var="test_provisional" value="${false}"/>
+                                            <g:set var="test_disabled" value="${false}"/>
 	                                        <g:each var="task_instance" in="${resultclassInstance.contest.GetResultTasks(resultclassInstance.contestTaskResults)}">
 	                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
 	                                        	<g:if test="${test_instance}">
-	                                        	    <td>${test_instance.GetResultPenalties(resultclassInstance.GetClassResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsTestClassResultsProvisional(resultclassInstance.GetClassResultSettings(),resultclassInstance)}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
+                                                    <g:if test="${!test_instance.disabledCrew}">
+	                                        	        <td>${test_instance.GetResultPenalties(resultclassInstance.GetClassResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsTestClassResultsProvisional(resultclassInstance.GetClassResultSettings(),resultclassInstance)}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
+                                                    </g:if>
+                                                    <g:else>
+                                                        <g:set var="test_disabled" value="${true}"/>
+                                                        <td>-</td>
+                                                    </g:else>
 	                                        	</g:if>
 	                                        	<g:else>
 	                                        	    <td>-</td>
 	                                        	</g:else>
 			                                </g:each>
-			                                
-		                                    <td class="positionpenalties">${crew_instance.contestPenalties} ${message(code:'fc.points')}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
+                                            <g:if test="${!test_disabled}">
+			                                    <td class="positionpenalties">${crew_instance.contestPenalties} ${message(code:'fc.points')}<g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
+                                            </g:if>
+                                            <g:else>
+                                                <td>-</td>
+                                            </g:else>
 	                                    </tr>
 	                            	</g:if>
                                 </g:each>
