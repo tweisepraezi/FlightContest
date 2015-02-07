@@ -30,10 +30,11 @@ class Contest
 	Boolean precisionFlying = false                     // DB-2.3
 	boolean testExists = false                          // Integrierter Test vorhanden, DB-2.0
 	boolean aflosTest = false                           // Nutzung der AFLOS-Test-Datenbank, DB-2.0
-	boolean aflosUpload = false                         // Nutzung einer geuploadeten AFLO-Datenbank,DB-2.0 
+	boolean aflosUpload = false                         // Nutzung einer geuploadeten AFLOS-Datenbank, DB-2.0 
 	Integer bestOfAnalysisTaskNum = 0                   // Anzahl der Aufgaben, aus denen das beste Ergebnis zu nehmen ist, DB-2.3
 	String printPrefix = ""                             // Prefix for print, DB-2.3
 	String printOrganizer = DEFAULT_ORGANIZER           // DB-2.8
+    String contestUUID = UUID.randomUUID().toString()   // DB-2.10
 
 	// Wettbewerbs-Auswertung
 	String contestClassResults = ""		                // Zu berücksichtigende Klassen, DB-2.1
@@ -167,6 +168,7 @@ class Contest
 	String printCrewPrintTitle = ""                     // DB-2.3
 	Boolean printCrewNumber = true                      // DB-2.3
 	Boolean printCrewName = true                        // DB-2.3
+    Boolean printCrewEmail = false                      // DB-2.10
 	Boolean printCrewTeam = true                        // DB-2.3
 	Boolean printCrewClass = true                       // DB-2.3
 	Boolean printCrewShortClass = false                 // DB-2.8
@@ -174,6 +176,7 @@ class Contest
 	Boolean printCrewAircraftType = false               // DB-2.7
 	Boolean printCrewAircraftColour = false             // DB-2.7
 	Boolean printCrewTAS = true                         // DB-2.3
+    Boolean printCrewUUID = false                       // DB-2.10
 	Boolean printCrewEmptyColumn1 = false               // DB-2.3
 	String printCrewEmptyTitle1 = ""                    // DB-2.3
 	Boolean printCrewEmptyColumn2 = false               // DB-2.3
@@ -439,6 +442,11 @@ class Contest
         
         // DB-2.9 compatibility
         printCrewOrder(nullable:true)
+        
+        // DB-2.10 compatibility
+        contestUUID(nullable:true)
+        printCrewEmail(nullable:true)
+        printCrewUUID(nullable:true)
 	}
 
     static mapping = {

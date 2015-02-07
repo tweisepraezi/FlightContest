@@ -85,7 +85,7 @@
 	                                    </g:if>
 	                                    <tr class="value">
 	                                        <td class="from2tp">${routelegcoord_instance.GetPrintTitle()}</td>
-	                                        <td class="trackdistance">${routelegcoord_instance.testName()}</td>
+	                                        <td class="trackdistance">${routelegcoord_instance.testPrintName()}</td>
 	                                    </tr>
 	                                </g:each>
 	                            </tbody>
@@ -116,7 +116,7 @@
                                         </g:if>
 	                                    <tr class="value">
 	                                        <td class="from2tp">${routelegtest_instance.GetPrintTitle()}</td>
-	                                        <td class="trackdistance">${routelegtest_instance.testName()}</td>
+	                                        <td class="trackdistance">${routelegtest_instance.testPrintName()}</td>
 	                                    </tr>
 	                                </g:each>
 	                            </tbody>

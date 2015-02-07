@@ -10,7 +10,8 @@ class Test
 	int viewpos = 0
 	BigDecimal taskTAS = 0
 	Aircraft taskAircraft                                  // DB-2.3
-	
+    Integer aflosStartNum = 0                              // DB-2.10
+    
 	// planning
 	boolean timeCalculated = false
 	int timetableVersion = 0
@@ -52,6 +53,7 @@ class Test
     boolean flightTestComplete = false
 	boolean flightTestModified = true                      // Änderungsanzeige, DB-2.0
 	int     flightTestVersion = 0                          // Änderungsanzeige, DB-2.0
+    String  flightTestLink = ""                            // DB-2.10
 
     int     observationTestRoutePhotoPenalties = 0
     int     observationTestTurnPointPhotoPenalties = 0
@@ -181,6 +183,10 @@ class Test
         landingTest3TouchingObstacle(nullable:true)
         landingTest4PowerInAir(nullable:true)
         landingTest4FlapsInAir(nullable:true)
+        
+        // DB-2.10 compatibility
+        aflosStartNum(nullable:true)
+        flightTestLink(nullable:true)
     }
 
 	static mapping = {
@@ -561,9 +567,9 @@ class Test
         return false
     }
 
-    String GetSpecialTestTitle()
+    String GetSpecialTestTitle(boolean isPrint)
     {
-        String print_title = getMsg('fc.specialresults')
+        String print_title = GetMsg('fc.specialresults',isPrint)
         if (task.contest.resultClasses) {
             if (crew.resultclass) {
                 TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
@@ -1665,57 +1671,128 @@ class Test
 		return crew.startNum  
 	}
 	
-	String GetTitle(ResultType resultType)
+    int GetAFLOSStartNum()
+    {
+        int start_num = aflosStartNum
+        if (start_num <= 0) {
+            start_num = crew.startNum
+        }
+        return start_num
+    }
+    
+    String GetTitle(ResultType resultType)
+    {
+        return GetTitle(resultType, false) // false - no print
+    }
+    
+	String GetTitle(ResultType resultType, boolean isPrint)
 	{
 		int result_version = 0
+        boolean provisional = true
 		switch (resultType) {
 			case ResultType.Planningtask:
 				result_version = GetPlanningTestVersion()
+                provisional = !planningTestComplete
 				break
 			case ResultType.Flight:
 				result_version = GetFlightTestVersion()
+                provisional = !flightTestComplete
 				break
 			case ResultType.Observation:
 				result_version = GetObservationTestVersion()
+                provisional = !observationTestComplete
 				break
 			case ResultType.Landing:
 				result_version = GetLandingTestVersion()
+                provisional = !landingTestComplete
 				break
 			case ResultType.Special:	
 				result_version = GetSpecialTestVersion()
+                provisional = !specialTestComplete
 				break
 			case ResultType.Crew:
 				result_version = GetCrewResultsVersion()
+                // TODO: provisional = !
 				break
 		}
 		String result_type = ""
 		switch (resultType) {
 			case ResultType.Planningtask:
-				result_type = "${getMsg('fc.planningresults')}"
+				result_type = "${GetMsg('fc.planningresults',isPrint)}"
 				break
 			case ResultType.Flight:
-				result_type = "${getMsg('fc.flightresults')}"
+				result_type = "${GetMsg('fc.flightresults',isPrint)}"
 				break
 			case ResultType.Observation:
-				result_type = "${getMsg('fc.observationresults')}"
+				result_type = "${GetMsg('fc.observationresults',isPrint)}"
 				break
 			case ResultType.Landing:
-				result_type = "${getMsg('fc.landingresults')}"
+				result_type = "${GetMsg('fc.landingresults',isPrint)}"
 				break
 			case ResultType.Special:	
-				result_type = "${GetSpecialTestTitle()}"
+				result_type = "${GetSpecialTestTitle(isPrint)}"
 				break
 			case ResultType.Crew:
-				result_type = "${getMsg('fc.crewresults')}"
+				result_type = "${GetMsg('fc.crewresults',isPrint)}"
 				break
 		}
+        String ret = "${GetStartNum()} - "
 		if (taskAircraft) {
-			return "${GetStartNum()} - ${taskAircraft.registration} - ${task.name()} - ${result_type} (${getMsg('fc.version')} ${result_version})"
-		} else {
-			return "${GetStartNum()} - ${task.name()} - ${result_type} (${getMsg('fc.version')} ${result_version})"
+            ret += "${taskAircraft.registration} - "
 		}
+        ret += "${task.name()} - ${result_type} (${GetMsg('fc.version',isPrint)} ${result_version})"
+        if (provisional) {
+            ret += " [${GetMsg('fc.provisional',isPrint)}]"
+        }
+        return ret
 	}
 	
+    private String GetMsg(String msgID, boolean isPrint)
+    {
+        if (isPrint) {
+            return getPrintMsg(msgID)
+        }
+        return getMsg(msgID)
+    }
+    
+    String GetEMailTitle(ResultType resultType)
+    {
+        return "${task.contest.title}: ${GetTitle(ResultType.Flight,true)}" // true - print 
+    }
+    
+    String GetFileName(ResultType resultType)
+    {
+        int result_version = 0
+        String result_type = ""
+        switch (resultType) {
+            case ResultType.Planningtask:
+                result_version = GetPlanningTestVersion()
+                result_type = "planningtaskresults"
+                break
+            case ResultType.Flight:
+                result_version = GetFlightTestVersion()
+                result_type = "navigationresults"
+                break
+            case ResultType.Observation:
+                result_version = GetObservationTestVersion()
+                result_type = "observationresults"
+                break
+            case ResultType.Landing:
+                result_version = GetLandingTestVersion()
+                result_type = "landingresults"
+                break
+            case ResultType.Special:    
+                result_version = GetSpecialTestVersion()
+                result_type = "specialresults"
+                break
+            case ResultType.Crew:
+                result_version = GetCrewResultsVersion()
+                result_type = "crewresults"
+                break
+        }
+        return "${result_type}-task${task.idTitle}-${result_version}"
+    }
+    
 	long GetNextTestID(ResultType resultType)
 	{
 		long nexttest_id = 0
@@ -1790,5 +1867,13 @@ class Test
             }
         }
         return ""
+    }
+    
+    boolean IsEMailPossible()
+    {
+        if (aflosStartNum && NetTools.EMailList(crew.email) && BootStrap.global.IsEMailPossible() && BootStrap.global.IsFTPPossible()) {
+            return true
+        }
+        return false
     }
 }

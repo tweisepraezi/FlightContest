@@ -19,7 +19,7 @@
                     </g:else> 
                 </g:else>
                 @top-left {
-                    content: "${testInstance.GetSpecialTestTitle()} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}"
+                    content: "${testInstance.GetSpecialTestTitle(true)} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}"
                 }
                 @top-right {
                     content: "${testInstance.GetViewPos()}"
@@ -35,12 +35,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <style type="text/css">${contestInstance.printStyle}</style>
-        <title>${testInstance.GetSpecialTestTitle()} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
+        <title>${testInstance.GetSpecialTestTitle(true)} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
     </head>
     <body>
         <div>
             <div>
-                <h2>${testInstance.GetSpecialTestTitle()} ${testInstance.GetStartNum()}</h2>
+                <h2>${testInstance.GetSpecialTestTitle(true)} ${testInstance.GetStartNum()}</h2>
                 <g:if test="${!testInstance.specialTestComplete}">
 	                <h3>${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()}) [${message(code:'fc.provisional')}]</h3>
                 </g:if>

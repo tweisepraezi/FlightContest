@@ -41,7 +41,7 @@ class DemoContestIntermediateService
 		fcService.printdone ""
 
 		// Crews and Aircrafts
-		fcService.importCrewList(contest,"C:\\Program Files (x86)\\Flight Contest\\samples\\FC-CrewList-Test.xls")
+		fcService.importCrewList(contest,"C:\\Program Files (x86)\\Flight Contest\\samples\\FC-CrewList-Test.xls",false) // false - mit Start-Nr. 13
 		
 		// Flight Tests
 		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false)

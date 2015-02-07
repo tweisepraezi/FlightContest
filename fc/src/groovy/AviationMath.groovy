@@ -6,8 +6,8 @@ class AviationMath
 	static Map calculateLeg(BigDecimal destLatitude, BigDecimal destLongitude,
 		                    BigDecimal srcLatitude, BigDecimal srcLongitude)
 	// Berechnet Kurs und Entfernung einer Etappe von Koordinate scr... zur Koordinate dest...
-	//   Latitude (Geographische Breite: -90 ... +90 Grad)
-	//   Longitude (Geographische Laenge: -179.999 ... +180 Grad)
+	//   Latitude: Geographische Breite (-90 ... +90 Grad)
+	//   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
 	// Rückgabe: dis in NM
 	//           dir in Grad (0...359.999) 
 	{
@@ -41,7 +41,7 @@ class AviationMath
 		}
 		
 		// return Map
-		return [dis:distance,dir:direction]
+		return [dis:distance, dir:direction]
 	}
 	
 	//--------------------------------------------------------------------------
@@ -49,11 +49,11 @@ class AviationMath
 							 BigDecimal trueTrack, BigDecimal valueDistance)
 	// Berechnet Vorhaltewinkel, Geschwindigkeit über Grund und Flugzeit des Flugzeuges
 	// unter Berücksichtigung des Windes.
-	// windDirection: Windrichtung 0 ... 359.999 Grad
-	// windSpeed: Windgeschwindigkeit in kt
-	// valueTAS: TAS des Flugzeuges in kt
-	// trueTrack: Kurs des Flugzeuges über Grund in Grad
-	// valueDistance: Entfernung der Etappe in NM
+	//   windDirection: Windrichtung 0 ... 359.999 Grad
+	//   windSpeed: Windgeschwindigkeit in kn
+	//   valueTAS: TAS des Flugzeuges in kn
+	//   trueTrack: Kurs des Flugzeuges über Grund in Grad
+	//   valueDistance: Entfernung der Etappe in NM
 	// Rückgabe: trueheading
 	//           groundspeed
 	//           legtime
@@ -93,7 +93,7 @@ class AviationMath
        BigDecimal legtime = valueDistance / groundspeed 
 	   
 	   // return Map
-	   return [trueheading:trueheading,groundspeed:groundspeed,legtime:legtime]
+	   return [trueheading:trueheading, groundspeed:groundspeed, legtime:legtime]
 	}
 	
 	//--------------------------------------------------------------------------
@@ -122,4 +122,127 @@ class AviationMath
 		}
 		return ret
 	}
+    
+    //--------------------------------------------------------------------------
+    static Map getCoordinate(BigDecimal startLatitude, BigDecimal startLongitude,
+                             BigDecimal valueTrack, BigDecimal valueDistance)
+    // Berechnet Koordinate aus Start-Koordinate, Kurs und Entfernung
+    //   startLatitude: Geographische Breite (-90 ... +90 Grad)
+    //   startLongitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   valueTrack: Kurs in Grad (0 ... 359.999 Grad)
+    //   valueDistance: Entfernung in NM
+    // Rückgabe: lat, lon
+    {
+        BigDecimal latitude_dist = 0
+        BigDecimal longitude_dist = 0
+        if ((valueTrack >= 0) && (valueTrack < 90)) {
+            latitude_dist = valueDistance * Math.cos(Math.toRadians(valueTrack))
+            longitude_dist = valueDistance * Math.sin(Math.toRadians(valueTrack))
+        } else if ((valueTrack >= 90) && (valueTrack < 180)) {
+            BigDecimal track_value = valueTrack - 90
+            latitude_dist = valueDistance * Math.sin(Math.toRadians(track_value))
+            longitude_dist = valueDistance * Math.cos(Math.toRadians(track_value))
+        } else if ((valueTrack >= 180) && (valueTrack < 270)) {
+            BigDecimal track_value = valueTrack - 180
+            latitude_dist = valueDistance * Math.cos(Math.toRadians(track_value))
+            longitude_dist = valueDistance * Math.sin(Math.toRadians(track_value))
+        } else if ((valueTrack >= 270) && (valueTrack < 360)) {
+            BigDecimal track_value = valueTrack - 270
+            latitude_dist = valueDistance * Math.sin(Math.toRadians(track_value))
+            longitude_dist = valueDistance * Math.cos(Math.toRadians(track_value))
+        } else {
+            throw new Exception("Invalid track ${valueTrack}")
+        }
+        
+        BigDecimal latitude_diff = latitude_dist / 60
+        BigDecimal latitude
+        if ((valueTrack >= 0) && (valueTrack < 90)) {
+            latitude = startLatitude + latitude_diff
+        } else if ((valueTrack >= 90) && (valueTrack < 180)) {
+            latitude = startLatitude - latitude_diff
+        } else if ((valueTrack >= 180) && (valueTrack < 270)) {
+            latitude = startLatitude - latitude_diff
+        } else if ((valueTrack >= 270) && (valueTrack < 360)) {
+            latitude = startLatitude + latitude_diff
+        }
+
+        BigDecimal longitude_diff = longitude_dist / (60 * Math.cos( Math.toRadians((startLatitude + latitude)/2) ))
+        BigDecimal longitude
+        if ((valueTrack >= 0) && (valueTrack < 90)) {
+            longitude = startLongitude + longitude_diff
+        } else if ((valueTrack >= 90) && (valueTrack < 180)) {
+            longitude = startLongitude + longitude_diff
+        } else if ((valueTrack >= 180) && (valueTrack < 270)) {
+            longitude = startLongitude - longitude_diff
+        } else if ((valueTrack >= 270) && (valueTrack < 360)) {
+            longitude = startLongitude - longitude_diff
+        }
+
+        // return Map
+        return [lat:latitude, lon:longitude]
+    }
+    
+    //--------------------------------------------------------------------------
+    static BigDecimal getOrthogonalTrackRight(BigDecimal valueTrack)
+    // Berechnet senkrechten Kurs in Uhrzeigersinn (+ 90 Grad)
+    //   valueTrack: Kurs in Grad (0 ... 359.999 Grad)
+    // Rückgabe: Kurs in Grad (0 ... 359.999 Grad)
+    {
+        BigDecimal track = valueTrack + 90
+        if (track > 360) {
+            track -= 360
+        }
+        return track
+    }
+    
+    //--------------------------------------------------------------------------
+    static BigDecimal getOrthogonalTrackLeft(BigDecimal valueTrack)
+    // Berechnet senkrechten Kurs gegen Uhrzeigersinn (- 90 Grad)
+    //   valueTrack: Kurs in Grad (0 ... 359.999 Grad)
+    // Rückgabe: Kurs in Grad (0 ... 359.999 Grad)
+    {
+        BigDecimal track = valueTrack - 90
+        if (track < 0) {
+            track += 360
+        }
+        return track
+    }
+    
+    //--------------------------------------------------------------------------
+    static Map getGate(BigDecimal srcLatitude, BigDecimal srcLongitude,
+                       BigDecimal destLatitude, BigDecimal destLongitude,
+                       Float gateWidth)
+    // Berechnet Koordinaten eines Gates an Koordinate dest... 
+    // aus einer Etappe von von Koordinate scr... zur Koordinate dest...
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   gateWidth: Gate-Breite in NM
+    // Rückgabe: coordLeft.lat, coordLeft.lon, coordRight.lat, coordRight.lon
+    {
+        BigDecimal track_value = calculateLeg(destLatitude, destLongitude, srcLatitude, srcLongitude).dir
+        
+        BigDecimal left_track = getOrthogonalTrackLeft(track_value)
+        BigDecimal right_track = getOrthogonalTrackRight(track_value)
+        
+        Map left_coord = getCoordinate(destLatitude, destLongitude, left_track, gateWidth/2)
+        Map right_coord = getCoordinate(destLatitude, destLongitude, right_track, gateWidth/2)
+        
+        // return Map
+        return [coordLeft:left_coord, coordRight:right_coord]
+    }
+
+    //--------------------------------------------------------------------------
+    static Map getShowPoint(BigDecimal showLatitude, BigDecimal showLongitude, Float showDistance)
+    // Berechnet Anzeige-Bereich um eine Koordinate
+    //   showLatitude: Geographische Breite (-90 ... +90 Grad)
+    //   showLongitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   showDistance: Entfernung des Anzeige-Bereiches um Koorodinate in NM
+    // Rückgabe: latmin, latmax, lonmin, lonmax
+    {
+        Map left_coord = getCoordinate(showLatitude, showLongitude, 270, showDistance)
+        Map right_coord = getCoordinate(showLatitude, showLongitude, 90, showDistance)
+        Map top_coord = getCoordinate(showLatitude, showLongitude, 0, showDistance)
+        Map bottom_coord = getCoordinate(showLatitude, showLongitude, 180, showDistance)
+        return [latmin:bottom_coord.lat,latmax:top_coord.lat,lonmin:left_coord.lon,lonmax:right_coord.lon]
+    }
 }

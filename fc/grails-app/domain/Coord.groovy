@@ -17,7 +17,7 @@ class Coord
     String lonDirection = 'E'
 
     int altitude = 500                   // Altitude (Höhe) in ft 
-    int gatewidth = 1                    // Typumstellung auf Float gatewidth2, DB-2.3
+    int gatewidth = 1                    // UNUSED: gatewidth, migriert nach gatewidth2 (Float), DB-2.3
 	Float gatewidth2 = 1.0f              // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM), DB-2.3
 	Integer legDuration                  // duration of leg [min], DB-2.3
     Boolean endCurved = false            // End of curved, DB-2.8
@@ -307,6 +307,12 @@ class Coord
     	return "${latDirection} ${FcMath.GradStr(latGrad)}${getMsg('fc.grad')} ${FcMath.MinuteStr(latMinute)}${getMsg('fc.min')}"
     }
 
+    String latPrintName()
+    {
+        //return "${latGrad}${getMsg('fc.grad')}${latMinute}${getMsg('fc.min')}${latDirection}"
+        return "${latDirection} ${FcMath.GradStr(latGrad)}${getPrintMsg('fc.grad')} ${FcMath.MinuteStr(latMinute)}${getPrintMsg('fc.min')}"
+    }
+
 	BigDecimal lonMath()
 	{
 		BigDecimal ret = lonGrad + lonMinute/60
@@ -321,6 +327,12 @@ class Coord
     {
         //return "${lonGrad}${getMsg('fc.grad')}${lonMinute}${getMsg('fc.min')}${lonDirection}"
         return "${lonDirection} ${FcMath.GradStr(lonGrad)}${getMsg('fc.grad')} ${FcMath.MinuteStr(lonMinute)}${getMsg('fc.min')}"
+    }
+
+    String lonPrintName()
+    {
+        //return "${lonGrad}${getMsg('fc.grad')}${lonMinute}${getMsg('fc.min')}${lonDirection}"
+        return "${lonDirection} ${FcMath.GradStr(lonGrad)}${getPrintMsg('fc.grad')} ${FcMath.MinuteStr(lonMinute)}${getPrintMsg('fc.min')}"
     }
 
 	String name()
@@ -357,43 +369,43 @@ class Coord
 	
 	String namePrintable(boolean printSettings) // BUG: ' wird nicht korrekt gedruckt
 	{
-		String print_name = "${latName()}' ${lonName()}'"
+		String print_name = "${latPrintName()}' ${lonPrintName()}'"
 		if (printSettings) {
 	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 				print_name += " ("
 			}
 	    	if (measureTrueTrack != null) {
-	    		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getMsg('fc.grad')}"
+	    		print_name += "${FcMath.RouteGradStr(measureTrueTrack)}${getPrintMsg('fc.grad')}"
 				if (measureDistance != null || legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 	    	}
 	    	if (measureDistance != null) {
-	    		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
+	    		print_name += "${FcMath.DistanceMeasureStr(measureDistance)}${getPrintMsg('fc.mm')}"
 				if (legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 	    	}
 			if (legDuration != null) {
-				print_name += "${legDuration}${getMsg('fc.time.min')}"
+				print_name += "${legDuration}${getPrintMsg('fc.time.min')}"
 				if (noTimeCheck || noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 			}
 			if (noTimeCheck) {
-				print_name += "${getMsg('fc.notimecheck.print')}"
+				print_name += "${getPrintMsg('fc.notimecheck.print')}"
 				if (noGateCheck || noPlanningTest) {
 					print_name += "; "
 				}
 			}
             if (noGateCheck) {
-                print_name += "${getMsg('fc.nogatecheck.print')}"
+                print_name += "${getPrintMsg('fc.nogatecheck.print')}"
                 if (noPlanningTest) {
                     print_name += "; "
                 }
             }
 			if (noPlanningTest) {
-				print_name += "${getMsg('fc.noplanningtest.print')}"
+				print_name += "${getPrintMsg('fc.noplanningtest.print')}"
 			}
 	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 				print_name += ")"

@@ -1,12 +1,12 @@
 ﻿Flight Contest
 
 Programm zur Planung und Auswertung von Navigationsflug-Wettbewerben
-Program for planning and valuating of General Aviation championships
+Program for planning and evaluating of General Aviation championships
 
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-05.12.2014
+07.02.2015
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -46,10 +46,29 @@ Weitere nützliche Funktionen von Flight Contest:
 * Sehr schnelle Logger-Daten-Nutzung des FAI-zertifizierten Loggers AFLOS 
   (ohne Umweg über Datei-Export und -Import).
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
+* Live-Ergebnis-Anzeige (Live Ranking) zur Anzeige der vorläufigen
+  Rangliste während eines laufenden Debriefings.
+* Kartenanzeige mit Goggle Maps für Strecken und Navigationsflüge.
+* E-Mail-Versand der Navigationsflugkarten an Teilnehmer.
+* Unterstützung des offenen Logger-Datenformates GPX.
 
-
-Erweiterungen in dieser Version (2.3-M2):
+Erweiterungen in dieser Version (2.3-M3):
 -----------------------------------------
+- Import Excel-Besatzungsliste erweitert:
+    * Zusätzliche E-Mail-Spalte (mehrere E-Mails mit Komma trennen)
+    * Option "Start-Nr. 13 weglassen"
+- 'Programme -> Flight Contest -> Help' -> 
+  'Installations-abhängige Konfiguration' hinzugefügt
+- Neue Navigationsflug-Ergebnis-Anzeige
+    * Navigationsflugkarte mit Google Maps
+    * Checkpunkte können hier mit einem Klick angezeigt werden
+    * E-Mail-Versand der Navigationsflugkarte
+    * Anzeige des erfolgreichen E-Mail-Versands in der Ergebnisliste
+- Anzeige von GPX-Dateien mit Google Maps ('Extras -> GPX-Anzeige')
+- Anzeige von GAC-Dateien mit Google Maps ('Extras -> GAC-Anzeige')
+
+Erweiterungen in Version 2.3-M2:
+--------------------------------
 - Einzelne Besatzungen können für eine Aufgabe deaktiviert werden.
     Wird diese Aufgabe bei einer Wettbewerbs- oder Team-Auswertung
     einbezogen, wird diese Besatzung automatisch weggelassen.
@@ -81,7 +100,8 @@ Erweiterungen in Version 2.3-M1:
 - Übersichts-Zeitplan eingeführt:
     * Druckt Briefing-Zeit, wenn angegeben.
     * Druckt erste und letzte Zeiten für Planungstests, Takoffs und Landungen.
-    * Druckt TAS-abhängige Gesamtflugzeiten.
+    * Druckt Takeoff-Abstand.
+    * Druckt TAS-abhängige Gesamtflugzeiten (von Takeoff bis Landung).
 - Besatzungs-Zeitplan: 
     TAS-abhängige Gesamtflugzeiten können zusätzlich mit gedruckt werden.
 - Landemesswert-Eingabe um "out" und "no" erweitert:
@@ -162,7 +182,7 @@ Fehlerbehebungen und Erweiterungen in Version 2.2.1:
 ----------------------------------------------------
 - Unterstützung des Loggers DG-200
     Dieser Logger speichert Flug-Informationen in GPX-Dateien.
-    Aus diesen GPX-Dateien müssen mit 'Extras -> GPX-Datei in GAC-Datei konvertieren'
+    Aus diesen GPX-Dateien müssen mit 'Extras -> GPX-GAC-Konverter'
     GAC-Dateien erzeugt werden, die in AFLOS zu importieren sind.
     Siehe 'Programme -> Flight Contest -> Help' -> 'Unterstützte Logger'.
 - Fehler in Strecken-Kartenansicht (Strecken-Details -> 'Streckenkarte') behoben

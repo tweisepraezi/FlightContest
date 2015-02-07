@@ -52,6 +52,9 @@
                                     <g:if test="${contestInstance.printCrewName}">
                                         <th>${message(code:'fc.crew.name')}</th>
                                     </g:if>
+                                    <g:if test="${contestInstance.printCrewEmail}">
+                                        <th>${message(code:'fc.crew.email')}</th>
+                                    </g:if>
                                     <g:if test="${contestInstance.printCrewTeam}">
                                         <th>${message(code:'fc.team')}</th>
                                     </g:if>
@@ -76,6 +79,9 @@
                                     </g:if>
                                     <g:if test="${contestInstance.printCrewTAS}">
                                         <th>${message(code:'fc.tas')}</th>
+                                    </g:if>
+                                    <g:if test="${contestInstance.printCrewUUID}">
+                                        <th>${message(code:'fc.crew.uuid')}</th>
                                     </g:if>
                                     <g:if test="${contestInstance.printCrewEmptyColumn1}">
                                         <th>${contestInstance.printCrewEmptyTitle1}</th>

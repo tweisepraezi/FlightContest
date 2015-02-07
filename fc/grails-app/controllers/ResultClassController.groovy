@@ -175,6 +175,7 @@ class ResultClassController {
 		def listprintable = {
 			if (params.contestid) {
 				session.lastContest = Contest.get(params.contestid)
+                session.printLanguage = params.lang
 			}
 			if (session?.lastContest) {
 				session.lastContest.refresh()
@@ -278,6 +279,7 @@ class ResultClassController {
 	        if (params.resultclassid) {
 	            ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
 				session.lastContest = resultclass_instance.contest
+                session.printLanguage = params.lang
 				session.contestTitle = resultclass_instance.GetPrintContestTitle()
 	        	return [contestInstance:session.lastContest,resultclassInstance:resultclass_instance]
 	        } else {
@@ -334,6 +336,7 @@ class ResultClassController {
 	        if (params.resultclassid) {
 	            ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
 				session.lastContest = resultclass_instance.contest
+                session.printLanguage = params.lang
 				session.contestTitle = resultclass_instance.GetPrintContestTitle()
 	        	return [contestInstance:session.lastContest,resultclassInstance:resultclass_instance]
 	        } else {

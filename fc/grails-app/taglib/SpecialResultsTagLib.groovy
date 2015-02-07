@@ -9,9 +9,9 @@ class SpecialResultsTagLib
         outln"""    <thead>"""
         outln"""        <tr>"""
         if (attrs.t.specialTestComplete) {
-            outln"""        <th colspan="4" class="table-head">${attrs.t.GetSpecialTestTitle()} (${message(code:'fc.version')} ${attrs.t.GetSpecialTestVersion()})</th>"""
+            outln"""        <th colspan="4" class="table-head">${attrs.t.GetSpecialTestTitle(false)} (${message(code:'fc.version')} ${attrs.t.GetSpecialTestVersion()})</th>"""
         } else {
-            outln"""        <th colspan="4" class="table-head">${attrs.t.GetSpecialTestTitle()} (${message(code:'fc.version')} ${attrs.t.GetSpecialTestVersion()}) [${message(code:'fc.provisional')}]</th>"""
+            outln"""        <th colspan="4" class="table-head">${attrs.t.GetSpecialTestTitle(false)} (${message(code:'fc.version')} ${attrs.t.GetSpecialTestVersion()}) [${message(code:'fc.provisional')}]</th>"""
         }
         outln"""        </tr>"""
         outln"""    </thead>"""

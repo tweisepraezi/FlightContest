@@ -238,6 +238,12 @@ class FcTagLib
     }
 
     // ====================================================================================================================
+    // <g:windtextprintable var="${windInstance}" />
+    def windtextprintable = { p ->
+        out << "${p.var.printName()}" // .encodeAsHTML()
+    }
+
+    // ====================================================================================================================
 	// <g:wrpoints test="${testInstance.flightTestTakeoffMissed}" titlecode="fc.flighttest.takeoffmissed" points="${testInstance.GetFlightTestTakeoffMissedPoints()}" />
 	def wrpoints = { p ->
 		if (p.test) {

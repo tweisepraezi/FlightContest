@@ -17,11 +17,11 @@ class DemoContestStandardService
 		Map team2 = fcService.putTeam(contest,"Schweiz")
 		
 		// Crews and Aircrafts
-		Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","K1","D-EAAA","","",85)
-		Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","K1","D-EAAD","","",80)
-		Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","K2","D-EAAE","","",80)
-		Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","Schweiz","K2","D-EAAB","","",70)
-		Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","Schweiz","K2","D-EAAC","","",70)
+		Map crew1 = fcService.putCrew(contest,3, "Besatzung 3", "crew3.fc@localhost", "Deutschland","K1","D-EAAA","","",85)
+		Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","crew18.fc@localhost","Deutschland","K1","D-EAAD","","",80)
+		Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","crew19.fc@localhost","Deutschland","K2","D-EAAE","","",80)
+		Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","crew11.fc@localhost","Schweiz","K2","D-EAAB","","",70)
+		Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","crew13.fc@localhost","Schweiz","K2","D-EAAC","","",70)
 		
 		// Route
 		fcService.printstart "Route"
@@ -266,11 +266,11 @@ class DemoContestStandardService
 		Map team2 = fcService.putTeam(contest,"Schweiz")
 		
 		// Crews with Teams, ResultClasses and Aircrafts
-		Map crew1 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","Pr\u00E4zi","D-EAAA","","",85)
-		Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","Tourist","D-EAAD","","",80)
-		Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","Pr\u00E4zi","D-EAAE","","",80)
-		Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","Schweiz","Tourist","D-EAAB","","",70)
-		Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","Schweiz","Pr\u00E4zi","D-EAAC","","",70)
+		Map crew1 = fcService.putCrew(contest,3, "Besatzung 3", "crew3.fc@localhost", "Deutschland","Pr\u00E4zi","D-EAAA","","",85)
+		Map crew2 = fcService.putCrew(contest,18,"Besatzung 18","crew18.fc@localhost","Deutschland","Tourist","D-EAAD","","",80)
+		Map crew3 = fcService.putCrew(contest,19,"Besatzung 19","crew19.fc@localhost","Deutschland","Pr\u00E4zi","D-EAAE","","",80)
+		Map crew4 = fcService.putCrew(contest,11,"Besatzung 11","crew11.fc@localhost","Schweiz","Tourist","D-EAAB","","",70)
+		Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","crew13.fc@localhost","Schweiz","Pr\u00E4zi","D-EAAC","","",70)
 		
 		// additional team
 		Map team3 = fcService.putTeam(contest,'Polen')
@@ -524,23 +524,23 @@ class DemoContestStandardService
 		
 		// Crews with Teams, ResultClasses and Aircrafts
 		// DMM
-		Map crew3 = fcService.putCrew(contest,3,"Besatzung 3","Deutschland","DMM","D-EAAA","","",85)
-		Map crew18 = fcService.putCrew(contest,18,"Besatzung 18","Deutschland","DMM","D-EAAD","","",80)
-		Map crew19 = fcService.putCrew(contest,19,"Besatzung 19","Deutschland","DMM","D-EAAE","","",80)
-		Map crew11 = fcService.putCrew(contest,11,"Besatzung 11","Deutschland","DMM","D-EAAB","","",70)
-		Map crew13 = fcService.putCrew(contest,13,"Besatzung 13","Deutschland","DMM","D-EAAC","","",70)
+		Map crew3 = fcService.putCrew(contest,3,"Besatzung 3","","Deutschland","DMM","D-EAAA","","",85)
+		Map crew18 = fcService.putCrew(contest,18,"Besatzung 18","","Deutschland","DMM","D-EAAD","","",80)
+		Map crew19 = fcService.putCrew(contest,19,"Besatzung 19","","Deutschland","DMM","D-EAAE","","",80)
+		Map crew11 = fcService.putCrew(contest,11,"Besatzung 11","","Deutschland","DMM","D-EAAB","","",70)
+		Map crew13 = fcService.putCrew(contest,13,"Besatzung 13","","Deutschland","DMM","D-EAAC","","",70)
 		// RuB-Wettbewerb
-		Map crew1 = fcService.putCrew(contest,1,"Besatzung 1","Deutschland","RuB-Wettbewerb","D-EABA","","",85)
-		Map crew2 = fcService.putCrew(contest,2,"Besatzung 2","Deutschland","RuB-Wettbewerb","D-EABB","","",70)
-		Map crew4 = fcService.putCrew(contest,4,"Besatzung 4","Deutschland","RuB-Wettbewerb","D-EABC","","",90)
-		Map crew5 = fcService.putCrew(contest,5,"Besatzung 5","Deutschland","RuB-Wettbewerb","D-EABD","","",90)
-		Map crew7 = fcService.putCrew(contest,7,"Besatzung 7","Deutschland","RuB-Wettbewerb","D-EABE","","",80)
+		Map crew1 = fcService.putCrew(contest,1,"Besatzung 1","","Deutschland","RuB-Wettbewerb","D-EABA","","",85)
+		Map crew2 = fcService.putCrew(contest,2,"Besatzung 2","","Deutschland","RuB-Wettbewerb","D-EABB","","",70)
+		Map crew4 = fcService.putCrew(contest,4,"Besatzung 4","","Deutschland","RuB-Wettbewerb","D-EABC","","",90)
+		Map crew5 = fcService.putCrew(contest,5,"Besatzung 5","","Deutschland","RuB-Wettbewerb","D-EABD","","",90)
+		Map crew7 = fcService.putCrew(contest,7,"Besatzung 7","","Deutschland","RuB-Wettbewerb","D-EABE","","",80)
 		// RuB-Tourist
-		Map crew8 = fcService.putCrew(contest,8,"Besatzung 8","Deutschland","RuB-Tourist","D-EACA","","",70)
-		Map crew9 = fcService.putCrew(contest,9,"Besatzung 9","Deutschland","RuB-Tourist","D-EACB","","",85)
-		Map crew10 = fcService.putCrew(contest,10,"Besatzung 10","Deutschland","RuB-Tourist","D-EACC","","",75)
-		Map crew12 = fcService.putCrew(contest,12,"Besatzung 12","Deutschland","RuB-Tourist","D-EACD","","",90)
-		Map crew14 = fcService.putCrew(contest,14,"Besatzung 14","Deutschland","RuB-Tourist","D-EACE","","",100)
+		Map crew8 = fcService.putCrew(contest,8,"Besatzung 8","","Deutschland","RuB-Tourist","D-EACA","","",70)
+		Map crew9 = fcService.putCrew(contest,9,"Besatzung 9","","Deutschland","RuB-Tourist","D-EACB","","",85)
+		Map crew10 = fcService.putCrew(contest,10,"Besatzung 10","","Deutschland","RuB-Tourist","D-EACC","","",75)
+		Map crew12 = fcService.putCrew(contest,12,"Besatzung 12","","Deutschland","RuB-Tourist","D-EACD","","",90)
+		Map crew14 = fcService.putCrew(contest,14,"Besatzung 14","","Deutschland","RuB-Tourist","D-EACE","","",100)
 		
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"DMM","Deutsche Motorflugmeisterschaft Navigationsflug",ContestRules.R1)
@@ -834,11 +834,11 @@ class DemoContestStandardService
     }
 	
     List test1Crew() {
-       [[startNum:3, name:"Besatzung 3", mark:"3: Besatzung 3",  team:[name:"Deutschland"],tas:85,contestPenalties:218,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
-        [startNum:18,name:"Besatzung 18",mark:"18: Besatzung 18",team:[name:"Deutschland"],tas:80,contestPenalties:133,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-        [startNum:19,name:"Besatzung 19",mark:"19: Besatzung 19",team:[name:"Deutschland"],tas:80,contestPenalties:568,contestPosition:5,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
-        [startNum:11,name:"Besatzung 11",mark:"11: Besatzung 11",team:[name:"Schweiz"],    tas:70,contestPenalties:384,contestPosition:4,noContestPosition:false,aircraft:[registration:"D-EAAB",type:"",colour:""]],
-        [startNum:13,name:"Besatzung 13",mark:"13: Besatzung 13",team:[name:"Schweiz"],    tas:70,contestPenalties:135,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
+       [[startNum:3, name:"Besatzung 3", email:"crew3.fc@localhost", mark:"",team:[name:"Deutschland"],tas:85,contestPenalties:218,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
+        [startNum:18,name:"Besatzung 18",email:"crew18.fc@localhost",mark:"",team:[name:"Deutschland"],tas:80,contestPenalties:133,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAD",type:"",colour:""]],
+        [startNum:19,name:"Besatzung 19",email:"crew19.fc@localhost",mark:"",team:[name:"Deutschland"],tas:80,contestPenalties:568,contestPosition:5,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+        [startNum:11,name:"Besatzung 11",email:"crew11.fc@localhost",mark:"",team:[name:"Schweiz"],    tas:70,contestPenalties:384,contestPosition:4,noContestPosition:false,aircraft:[registration:"D-EAAB",type:"",colour:""]],
+        [startNum:13,name:"Besatzung 13",email:"crew13.fc@localhost",mark:"",team:[name:"Schweiz"],    tas:70,contestPenalties:135,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
        ]
     }
 	
@@ -2104,11 +2104,11 @@ class DemoContestStandardService
     }
     
     List test2Crew() {
-      [[startNum:3, name:"Besatzung 3", mark:"3: Besatzung 3",  team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:58, classPosition:2,noClassPosition:false,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
-       [startNum:18,name:"Besatzung 18",mark:"18: Besatzung 18",team:[name:"Deutschland"],resultclass:[name:"Tourist",   shortName:"T",contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
-       [startNum:19,name:"Besatzung 19",mark:"19: Besatzung 19",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,noClassPosition:false,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
-       [startNum:11,name:"Besatzung 11",mark:"11: Besatzung 11",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   shortName:"T",contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
-       [startNum:13,name:"Besatzung 13",mark:"13: Besatzung 13",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,noClassPosition:false,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
+      [[startNum:3, name:"Besatzung 3", email:"crew3.fc@localhost", mark:"",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:85,contestPenalties:58, classPosition:2,noClassPosition:false,contestPosition:2,noContestPosition:false,aircraft:[registration:"D-EAAA",type:"",colour:""]],
+       [startNum:18,name:"Besatzung 18",email:"crew18.fc@localhost",mark:"",team:[name:"Deutschland"],resultclass:[name:"Tourist",   shortName:"T",contestTitle:""],                                tas:80,contestPenalties:120,classPosition:1,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAD",type:"",colour:""]],
+       [startNum:19,name:"Besatzung 19",email:"crew19.fc@localhost",mark:"",team:[name:"Deutschland"],resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:80,contestPenalties:358,classPosition:3,noClassPosition:false,contestPosition:3,noContestPosition:false,aircraft:[registration:"D-EAAE",type:"",colour:""]],
+       [startNum:11,name:"Besatzung 11",email:"crew11.fc@localhost",mark:"",team:[name:"Schweiz"],    resultclass:[name:"Tourist",   shortName:"T",contestTitle:""],                                tas:70,contestPenalties:130,classPosition:2,noClassPosition:false,contestPosition:0,noContestPosition:true,aircraft:[registration:"D-EAAB",type:"",colour:""]],
+       [startNum:13,name:"Besatzung 13",email:"crew13.fc@localhost",mark:"",team:[name:"Schweiz"],    resultclass:[name:"Pr\u00E4zi",shortName:"P",contestTitle:"Pr\u00E4zisionsflugmeisterschaft"],tas:70,contestPenalties:45, classPosition:1,noClassPosition:false,contestPosition:1,noContestPosition:false,aircraft:[registration:"D-EAAC",type:"",colour:""]],
       ]
     }
 	

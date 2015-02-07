@@ -6,6 +6,11 @@
 //                             "file:${userHome}/.grails/${appName}-config.properties",
 //                             "file:${userHome}/.grails/${appName}-config.groovy"]
 
+// FC: User specific configuration (Mail, Upload, etc.)
+grails.config.locations = [ "file:${userHome}/.fc/config.groovy",
+                            "file:${userHome}/.fc/migrate_db.groovy"
+                          ]
+
 // if(System.properties["${appName}.config.location"]) {
 //    grails.config.locations << "file:" + System.properties["${appName}.config.location"]
 // }

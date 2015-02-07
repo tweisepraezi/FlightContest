@@ -26,7 +26,6 @@ class ContestController {
                 restart = true
             }
             session.showLanguage = show_language
-            BootStrap.global.showLanguage = show_language
         }
 
         if (restart) {
@@ -37,7 +36,6 @@ class ContestController {
             String print_language = fcService.GetCookie("PrintLanguage",Languages.de.toString())
             if (print_language) {
                 session.printLanguage = print_language
-                BootStrap.global.printLanguage = print_language
             }
             
             // ShowLimitCrewNum
@@ -818,6 +816,7 @@ class ContestController {
     def listtestprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
 			def crew_list = Crew.findAllByContestAndDisabled(session.lastContest,false,[sort:"viewpos"])
             return [crewList:crew_list,contestInstance:session.lastContest]
@@ -846,6 +845,7 @@ class ContestController {
     def listresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
             return [contestInstance:session.lastContest]
         } else {
@@ -873,6 +873,7 @@ class ContestController {
     def listteamresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Team)
             return [contestInstance:session.lastContest]
         } else {
@@ -932,6 +933,7 @@ class ContestController {
     def pointsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
             return [contestInstance:session.lastContest]
         } else {
             redirect(action:start)
@@ -946,7 +948,7 @@ class ContestController {
                 flash.error = true
                 redirect(action:"editfreetext")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points",true,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape)
+                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"freetext",true,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape)
             } else {
                 redirect(action:"editfreetext")
             }
@@ -958,6 +960,7 @@ class ContestController {
     def freetextprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
             return [contestInstance:session.lastContest]
         } else {
             redirect(action:start)

@@ -28,7 +28,7 @@ class DemoContestProcedureTurnService
 		fcService.printdone ""
 		
 		// Crews and Aircrafts
-        fcService.putCrew(contest,1,CREW_60,"","",AIRCRAFT_60,"","",60)
+        fcService.putCrew(contest,1,CREW_60,"","","",AIRCRAFT_60,"","",60)
 		
 		// Task Procdure Turn
 		Map task_pt = fcService.putTask(contest,"$ROUTE_NAME_PT ($NOWIND)",START_TIME,2,"wind:1","wind:1",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false)

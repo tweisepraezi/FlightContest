@@ -78,6 +78,10 @@
                                             <td class="col2">${first_test.takeoffTime.format('HH:mm')}</td>
                                             <td class="col3">- ${last_test.takeoffTime.format('HH:mm')}</td>
                                         </tr>
+                                        <tr class="takeoffintervall">
+                                            <td class="col1">${message(code:'fc.task.takeoffinterval')}:</td>
+                                            <td class="col2" colspan="2">${taskInstance.takeoffIntervalNormal} ${message(code:'fc.time.min')}</td>
+                                        </tr>
                                         <g:if test="${first_test.GetIntermediateLandingTime(true)}">
                                             <tr class="intermediatelanding">
                                                 <td class="col1">${message(code:'fc.landingtest.landings.intermediate')}:</td>

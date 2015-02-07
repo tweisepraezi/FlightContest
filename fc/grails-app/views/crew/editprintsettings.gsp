@@ -28,6 +28,10 @@
                                     <label>${message(code:'fc.crew.name')}</label>
                                 </div>
                                 <div>
+                                    <g:checkBox name="printCrewEmail" value="${contestInstance.printCrewEmail}" />
+                                    <label>${message(code:'fc.crew.email')}</label>
+                                </div>
+                                <div>
                                     <g:checkBox name="printCrewTeam" value="${contestInstance.printCrewTeam}" />
                                     <label>${message(code:'fc.team')}</label>
                                 </div>
@@ -56,6 +60,10 @@
                                 <div>
                                     <g:checkBox name="printCrewTAS" value="${contestInstance.printCrewTAS}" />
                                     <label>${message(code:'fc.tas')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printCrewUUID" value="${contestInstance.printCrewUUID}" />
+                                    <label>${message(code:'fc.crew.uuid')}</label>
                                 </div>
                                 <div>
                                     <g:checkBox name="printCrewEmptyColumn1" value="${contestInstance.printCrewEmptyColumn1}" />

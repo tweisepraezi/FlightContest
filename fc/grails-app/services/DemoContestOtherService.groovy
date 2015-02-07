@@ -16,13 +16,13 @@ class DemoContestOtherService
         Map task2 = fcService.putTask(contest,"Task-2","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",false,false, false,true,false, false,true, true,false,false, false,false,false,false, false)
 
         // Crews with Teams, ResultClasses and Aircrafts
-        Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","Deutschland","","D-EAAA","","",85)
-        Map crew12 = fcService.putCrew(contest,12,"Crew 1-2","Deutschland","","D-EAAE","","",80)
-        Map crew13 = fcService.putCrew(contest,13,"Crew 1-3","Schweiz","","D-EAAC","","",70)
-        Map crew21 = fcService.putCrew(contest,21,"Crew 2-1","Deutschland","","D-EAAD","","",80)
-        Map crew22 = fcService.putCrew(contest,22,"Crew 2-2","Schweiz","","D-EAAB","","",70)
-        Map crew31 = fcService.putCrew(contest,31,"Crew 3-1","Deutschland","","D-EAAF","","",80)
-        Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","Schweiz","","D-EAAG","","",70)
+        Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","crew1.1.fc@localhost","Deutschland","","D-EAAA","","",85)
+        Map crew12 = fcService.putCrew(contest,12,"Crew 1-2","crew1.2.fc@localhost","Deutschland","","D-EAAE","","",80)
+        Map crew13 = fcService.putCrew(contest,13,"Crew 1-3","crew1.3.fc@localhost","Schweiz","","D-EAAC","","",70)
+        Map crew21 = fcService.putCrew(contest,21,"Crew 2-1","crew2.1.fc@localhost","Deutschland","","D-EAAD","","",80)
+        Map crew22 = fcService.putCrew(contest,22,"Crew 2-2","crew2.2.fc@localhost","Schweiz","","D-EAAB","","",70)
+        Map crew31 = fcService.putCrew(contest,31,"Crew 3-1","crew3.1.fc@localhost","Deutschland","","D-EAAF","","",80)
+        Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","crew3.2.fc@localhost","Schweiz","","D-EAAG","","",70)
 
         fcService.putsequenceTask(task1,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
         fcService.putsequenceTask(task2,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
@@ -105,13 +105,13 @@ class DemoContestOtherService
         Map resultclass3 = fcService.putResultClass(contest,"Class-3","",ContestRules.R1)
         
         // Crews with Teams, ResultClasses and Aircrafts
-        Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","Deutschland","Class-1","D-EAAA","","",85)
-        Map crew12 = fcService.putCrew(contest,12,"Crew 1-2","Deutschland","Class-1","D-EAAE","","",80)
-        Map crew13 = fcService.putCrew(contest,13,"Crew 1-3","Schweiz","Class-1","D-EAAC","","",70)
-        Map crew21 = fcService.putCrew(contest,21,"Crew 2-1","Deutschland","Class-2","D-EAAD","","",80)
-        Map crew22 = fcService.putCrew(contest,22,"Crew 2-2","Schweiz","Class-2","D-EAAB","","",70)
-        Map crew31 = fcService.putCrew(contest,31,"Crew 3-1","Deutschland","Class-3","D-EAAF","","",80)
-        Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","Schweiz","Class-3","D-EAAG","","",70)
+        Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","crew1.1.fc@localhost","Deutschland","Class-1","D-EAAA","","",85)
+        Map crew12 = fcService.putCrew(contest,12,"Crew 1-2","crew1.2.fc@localhost","Deutschland","Class-1","D-EAAE","","",80)
+        Map crew13 = fcService.putCrew(contest,13,"Crew 1-3","crew1.3.fc@localhost","Schweiz","Class-1","D-EAAC","","",70)
+        Map crew21 = fcService.putCrew(contest,21,"Crew 2-1","crew2.1.fc@localhost","Deutschland","Class-2","D-EAAD","","",80)
+        Map crew22 = fcService.putCrew(contest,22,"Crew 2-2","crew2.2.fc@localhost","Schweiz","Class-2","D-EAAB","","",70)
+        Map crew31 = fcService.putCrew(contest,31,"Crew 3-1","crew3.1.fc@localhost","Deutschland","Class-3","D-EAAF","","",80)
+        Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","crew3.2.fc@localhost","Schweiz","Class-3","D-EAAG","","",70)
 
         // TaskClass properties
         fcService.puttaskclassTask(task1,resultclass1,false,false, true,true,true, false,true, true,false,false, false,false,false,false)
@@ -197,7 +197,7 @@ class DemoContestOtherService
     
         // Crews and Aircrafts
         (1..100).each {
-            fcService.putCrew(contest,it,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
+            fcService.putCrew(contest,it,"Name-${it.toString()}","crew-${it.toString()}.fc@localhost","Deutschland","","D-${it.toString()}","C172","rot",110)
         }
         
         fcService.printdone ""
@@ -215,7 +215,7 @@ class DemoContestOtherService
     
         // Crews and Aircrafts
         (1..20).each {
-            fcService.putCrew(contest,it,"Name-${it.toString()}","Deutschland","","D-${it.toString()}","C172","rot",110)
+            fcService.putCrew(contest,it,"Name-${it.toString()}","crew-${it.toString()}.fc@localhost","Deutschland","","D-${it.toString()}","C172","rot",110)
         }
         
         fcService.printdone ""

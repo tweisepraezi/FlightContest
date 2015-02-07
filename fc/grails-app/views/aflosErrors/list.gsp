@@ -44,13 +44,13 @@
                         <tr class="${(aflosErrorsInstance.startnum % 2) == 0 ? 'odd' : ''}">
                             <td>${aflosErrorsInstance.startnum}</td>
 							<g:if test="${contestInstance?.aflosTest}">
-                                <td>${AflosCrewNames.aflostest.findByStartnumAndNameIsNotNull(aflosErrorsInstance.startnum).name}</td>
+                                <td>${AflosCrewNames.aflostest.findByStartnumAndPointsNotEqual(aflosErrorsInstance.startnum,0).name}</td>
 							</g:if>
 							<g:elseif test="${contestInstance?.aflosUpload}">
-                                <td>${AflosCrewNames.aflosupload.findByStartnumAndNameIsNotNull(aflosErrorsInstance.startnum).name}</td>
+                                <td>${AflosCrewNames.aflosupload.findByStartnumAndPointsNotEqual(aflosErrorsInstance.startnum,0).name}</td>
 							</g:elseif>
 							<g:else>
-                                <td>${AflosCrewNames.aflos.findByStartnumAndNameIsNotNull(aflosErrorsInstance.startnum).name}</td>
+                                <td>${AflosCrewNames.aflos.findByStartnumAndPointsNotEqual(aflosErrorsInstance.startnum,0).name}</td>
 							</g:else>
                             <td>${aflosErrorsInstance.routename.name}</td>
                             <td>${aflosErrorsInstance.checkPointErrors}</td>

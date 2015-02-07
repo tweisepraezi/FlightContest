@@ -1,4 +1,5 @@
 import java.util.List;
+import org.springframework.web.context.request.RequestContextHolder
 
 class BootStrap {
 
@@ -14,6 +15,7 @@ class BootStrap {
 		boolean db_upgrade = false
 		boolean db_nodowngradedable = false
 		boolean db_nocompatible = false
+        boolean db_migrate = false
 		
 		if (Global.count() == 0) {
 			global = new Global()
@@ -524,6 +526,29 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 9) { // DB-2.10 compatibility
+                            print "    2.10 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.contestUUID = UUID.randomUUID().toString()
+                                contest_instance.printCrewEmail = false
+                                contest_instance.printCrewUUID = false
+                                contest_instance.save()
+                            }
+                            Crew.findAll().each { Crew crew_instance ->
+                                crew_instance.uuid = UUID.randomUUID().toString()
+                                crew_instance.email = ""
+                                crew_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.aflosStartNum = test_instance.crew.GetOldAFLOSStartNum()
+                                test_instance.flightTestLink = ""
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < global.DB_MINOR) {
+                            db_migrate = true
+                        }
 						break
 				}
 				global.versionMajor = global.DB_MAJOR
@@ -542,13 +567,50 @@ class BootStrap {
 				break
 		}
 		
+        if (grailsApplication.config.flightcontest.migrate_force) {
+            db_migrate = true
+            println "  Force table migration"
+        }
+        if (db_migrate) {
+            if (grailsApplication.config.flightcontest.migrate_tables) {
+                println "  Run table migration..."
+                try {
+                    grailsApplication.config.flightcontest.migrate_tables.each { table, value  ->
+                        println "    Table ${table}"
+                        Class table_clazz = grailsApplication.getDomainClass(table).clazz
+                        value.data.each { data_id, fields ->
+                            println "      Search ${value.key} == ${data_id}"
+                            if (value.key == "id") {
+                                data_id = data_id.toLong()
+                            }
+                            def table_obj = table_clazz.findWhere((value.key):data_id)
+                            if (table_obj) {
+                                println "        Row found."
+                                fields.each { field_name, field_value ->
+                                    String old_field_value = table_obj."${field_name}"
+                                    table_obj."${field_name}" = field_value
+                                    println "        Field ${field_name}: '${old_field_value}' -> '${field_value}'"
+                                }
+                                table_obj.save()
+                            }
+                        }
+                    }
+                    println "  Done"
+                } catch (Exception e) {
+                    println "  Exception ${e.getMessage()}"
+                }
+            }
+        }
+        
 		// add method getMsg to all domain classes
 		grailsApplication.domainClasses.each { domain_class ->
 			domain_class.metaClass.getMsg = {
-	            return messageSource.getMessage(it, null, new Locale(global.showLanguage))
+                def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+	            return messageSource.getMessage(it, null, new Locale(session_obj.showLanguage))
 			}
 			domain_class.metaClass.getPrintMsg = {
-	            return messageSource.getMessage(it, null, new Locale(global.printLanguage))
+                def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+	            return messageSource.getMessage(it, null, new Locale(session_obj.printLanguage))
 			}
 		}
 		

@@ -45,8 +45,8 @@ class DemoContestRoutesService
 		fcService.printdone ""
 		
 		// Crews and Aircrafts
-		Map crew1 = fcService.putCrew(contest,1,"Besatzung 120","","","D-EAAA","","",120)
-		Map crew2 = fcService.putCrew(contest,2,"Besatzung 60", "","","D-EAAB","","",60)
+		Map crew1 = fcService.putCrew(contest,1,"Besatzung 120","","","","D-EAAA","","",120)
+		Map crew2 = fcService.putCrew(contest,2,"Besatzung 60", "","","","D-EAAB","","",60)
 
         // Flight Tests
         Map task5 = fcService.putTask(contest,ROUTE_5,"09:00",2,"time:10min","time:10min",5,"wind:1","wind:1",false,true,false,false,false, false,true, true,true,true, false,false,false,false, false)

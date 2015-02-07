@@ -23,7 +23,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.crew.mark}"></g:if></td>
+                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
                                 </tr>
                                 <g:if test="${testInstance.crew.team}">
                                     <tr>

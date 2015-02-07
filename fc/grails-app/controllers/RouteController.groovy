@@ -1,6 +1,7 @@
 class RouteController {
     
 	def fcService
+    def gpxService
 	
     def index = { redirect(action:list,params:params) }
 
@@ -210,6 +211,7 @@ class RouteController {
     def showprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def route = fcService.getRoute(params) 
         if (route.instance) {
@@ -223,6 +225,7 @@ class RouteController {
     def showcoordallprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def route = fcService.getRoute(params) 
         if (route.instance) {
@@ -236,6 +239,7 @@ class RouteController {
     def showcoordtpprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def route = fcService.getRoute(params) 
         if (route.instance) {
@@ -246,10 +250,38 @@ class RouteController {
         }
     }
 
-    def showmap = {
+    def showmapold = {
         def route = fcService.getRoute(params) 
         if (route.instance) {
         	return [routeInstance:route.instance]
+        } else {
+            flash.message = route.message
+            redirect(action:list)
+        }
+    }
+    
+    def showmap = {
+        def route = fcService.getRoute(params) 
+        if (route.instance) {
+            gpxService.printstart "Process '${route.instance.name()}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name)
+            if (converter.ok) {
+                gpxService.printdone ""
+                session.gpxviewerReturnAction = 'show'
+                session.gpxviewerReturnController = controllerName
+                session.gpxviewerReturnID = params.id
+                session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no"])
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                redirect(action:'show',id:params.id)
+            }
         } else {
             flash.message = route.message
             redirect(action:list)

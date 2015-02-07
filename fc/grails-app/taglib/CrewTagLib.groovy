@@ -12,6 +12,9 @@ class CrewTagLib
         if (attrs.contest.printCrewName) {
             outln"""<td class="crew">${attrs.crew.name}</td>"""
         }
+        if (attrs.contest.printCrewEmail) {
+            outln"""<td class="email">${attrs.crew.email}</td>"""
+        }
         if (attrs.contest.printCrewTeam) {
             if (attrs.crew.team) {                          
                 outln"""<td class="team">${attrs.crew.team.name}</td>"""
@@ -64,6 +67,9 @@ class CrewTagLib
         }
         if (attrs.contest.printCrewTAS) {
             outln"""<td class="tas">${fieldValue(bean:attrs.crew, field:'tas')}${message(code:'fc.knot')}</td>"""
+        }
+        if (attrs.contest.printCrewUUID) {
+            outln"""<td class="id">${fieldValue(bean:attrs.crew, field:'uuid')}</td>"""
         }
         if (attrs.contest.printCrewEmptyColumn1) {
             outln"""<td class="empty1"/>"""

@@ -1,6 +1,8 @@
 class TestController 
 {
 	def fcService
+    def gpxService
+    def mailService
 
     def show = {
         def test = fcService.getTest(params) 
@@ -48,6 +50,7 @@ class TestController
     def flightplanprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getflightplanprintableTest(params) 
         if (test.instance) {
@@ -91,6 +94,7 @@ class TestController
     def planningtaskprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getTest(params) 
         if (test.instance) {
@@ -266,6 +270,7 @@ class TestController
     def planningtaskresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getplanningtaskresultsprintableTest(params) 
         if (test.instance) {
@@ -425,6 +430,7 @@ class TestController
     def flightresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getflightresultsprintableTest(params) 
         if (test.instance) {
@@ -438,6 +444,7 @@ class TestController
     def flightresultsaflosprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getflightresultsprintableTest(params) 
         if (test.instance) {
@@ -537,7 +544,7 @@ class TestController
 	def viewimporterrors = {
         def test = fcService.getTest(params) 
         if (test.instance) {
-			String start_num = test.instance.crew.GetAFLOSStartNum()
+			int start_num = test.instance.GetAFLOSStartNum()
 			redirect(controller:"aflosErrorPoints",action:"crew",params:[startnum:start_num,routename:test.instance.flighttestwind.flighttest.route.mark])
         } else {
 			redirect(action:flightresults,id:params.id)
@@ -674,6 +681,7 @@ class TestController
     def observationresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getobservationresultsprintableTest(params) 
         if (test.instance) {
@@ -825,6 +833,7 @@ class TestController
     def landingresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getlandingresultsprintableTest(params) 
         if (test.instance) {
@@ -965,6 +974,7 @@ class TestController
     def specialresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getspecialresultsprintableTest(params) 
         if (test.instance) {
@@ -1046,6 +1056,7 @@ class TestController
     def crewresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def test = fcService.getresultsprintableTest(params) 
         if (test.instance) {
@@ -1062,6 +1073,166 @@ class TestController
         }
 	}
 	
+    def showmap = {
+        def test = fcService.getTest(params)
+        if (test.instance) {
+            gpxService.printstart "Show map of '${test.instance.crew.name}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name)
+            if (converter.ok && converter.track) {
+                gpxService.printdone ""
+                //session.gpxviewerReturnAction = 'flightresults'
+                //session.gpxviewerReturnController = controllerName
+                //session.gpxviewerReturnID = params.id
+                session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes"])
+            } else {
+                flash.error = true
+                if (converter.ok && !converter.track) {
+                    flash.message = message(code:'fc.gpx.noflight',args:[test.instance.crew.name])
+                } else {
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[test.instance.crew.name])
+                }
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                redirect(action:'flightresults',id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def sendmail = {
+        def test = fcService.getTest(params)
+        if (test.instance) {
+            gpxService.printstart "Send mail of '${test.instance.crew.name}' to '${test.instance.crew.email}'"
+            
+            // Calculate flight test version
+            if (test.instance.flightTestModified) {
+                test.instance.flightTestVersion++
+                test.instance.flightTestModified = false
+                test.instance.save()
+                gpxService.println "flightTestVersion $test.instance.flightTestVersion of '$test.instance.crew.name' saved."
+            }
+            
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-EMAIL.gpx"
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name)
+            if (converter.ok && converter.track) {
+                
+                // FTP upload gpx
+                Map ret = gpxService.SendFTP(
+                    grailsApplication.config.flightcontest,
+                    test.instance.crew.uuid, 
+                    "file:${webroot_dir + upload_gpx_file_name}", 
+                    "${test.instance.GetFileName(ResultType.Flight)}.gpx"
+                )
+
+                // FTP upload html
+                if (!ret.error) {
+                    ret = gpxService.SendFTP(
+                        grailsApplication.config.flightcontest,
+                        test.instance.crew.uuid,
+                        "http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}",
+                        "${test.instance.GetFileName(ResultType.Flight)}.htm"
+                    )
+                }
+                
+                if (!ret.error) {
+                    try {
+                        Map email = GetEMailBody(test.instance)
+                        
+                        // Send email
+                        mailService.sendMail {
+                            from grailsApplication.config.flightcontest.mail.from
+                            to NetTools.EMailList(test.instance.crew.email).toArray()
+                            if (grailsApplication.config.flightcontest.mail.cc) {
+                              cc NetTools.EMailList(grailsApplication.config.flightcontest.mail.cc).toArray()
+                            }
+                            subject test.instance.GetEMailTitle(ResultType.Flight)
+                            html email.body
+                            // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
+                        }
+                        
+                        // Save link
+                        test.instance.flightTestLink = email.link
+                        test.instance.save()
+                        gpxService.println "Link '${test.instance.flightTestLink}' saved."
+                        
+                        flash.message = message(code:'fc.net.mail.sent',args:[test.instance.crew.email])
+                    } catch (Exception e) {
+                        flash.message = e.getMessage() 
+                        flash.error = true
+                    }
+                } else {
+                    flash.message = ret.message 
+                    flash.error = true
+                }
+                gpxService.println flash.message
+                
+                gpxService.DeleteFile(webroot_dir + upload_gpx_file_name)
+                gpxService.printdone ""
+                if (nexttest_id) {
+                    redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])
+                } else {
+                    redirect(action:'flightresults',id:params.id)
+                }
+            } else {
+                flash.error = true
+                if (converter.ok && !converter.track) {
+                    flash.message = message(code:'fc.gpx.noflight',args:[test.instance.crew.name])
+                } else {
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[test.instance.crew.name])
+                }
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                if (nexttest_id) {
+                    redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])
+                } else {
+                    redirect(action:'flightresults',id:params.id)
+                }
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    private Map GetEMailBody(Test testInstance)
+    {
+        Map ret = [:]
+        String s = "<p>Lieber Sportfreund,</p>"
+        
+        String crew_dir = "${grailsApplication.config.flightcontest.ftp.publicurl}${grailsApplication.config.flightcontest.ftp.directory}/${testInstance.crew.uuid}"
+        
+        String view_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.htm"
+        s += """<p>Dein Flug (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
+        
+        String gpx_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.gpx"
+        s += """<p>Dein Flug (GPX Viewer): <a href="${gpx_url}">${gpx_url}</a></p>"""
+        
+        String results_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.pdf"
+        // TODO: s += """<p>Deine Ergebnisse (PDF Viewer): <a href="${results_url}">${results_url}</a></p>"""
+        
+        s += """<p>${testInstance.task.contest.printOrganizer}</p>"""
+        
+        ret += [body:s,link:view_url]
+        
+        return ret
+    }
+
+    private String GetEMailGpxURL(Test testInstance)
+    {
+        String crew_dir = "${grailsApplication.config.flightcontest.ftp.publicurl}${grailsApplication.config.flightcontest.ftp.directory}/${testInstance.crew.uuid}"
+        String gpx_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.gpx"
+        return gpx_url
+    }
+    
     def cancel = {
 		// process return action
 		if (params.crewresultsReturnAction) {

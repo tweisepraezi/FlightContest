@@ -124,7 +124,12 @@ class CrewController {
 	
     def create = {
         def crew = fcService.createCrew(params)
-		crew.instance.startNum = Crew.countByContest(session.lastContest) + 1
+        crew.instance.startNum = 1
+        for(Crew crew_instance in Crew.findAllByContest(session.lastContest)) {
+            if (crew_instance.startNum >= crew.instance.startNum) {
+                crew.instance.startNum = crew_instance.startNum + 1
+            }
+        }
         return [crewInstance:crew.instance,resultClasses:session.lastContest.resultClasses]
     }
 
@@ -162,7 +167,7 @@ class CrewController {
 	}
 
 	def selectfilename = {
-		[:]
+		[noStartnum13:false]
     }
 	
 	def importcrews = {
@@ -172,10 +177,11 @@ class CrewController {
 			fcService.printstart "Upload '$file_name'"
 			fcService.println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream" 
 			if (file_name.toLowerCase().endsWith('.xls')) {
+                boolean no_startnum_13 = params?.noStartnum13 == 'on'
 				String uuid = UUID.randomUUID().toString()
 				String load_file_name = "CREWLIST-${uuid}-UPLOAD.xls"
 				file.transferTo(new File(load_file_name))
-		        def crews = fcService.importCrews(file_name, load_file_name, session.lastContest) 
+		        def crews = fcService.importCrews(file_name, load_file_name, no_startnum_13, session.lastContest) 
 		        if (crews.saved) {
 		            flash.message = crews.message
 					fcService.DeleteFile(load_file_name)
@@ -198,6 +204,7 @@ class CrewController {
     def listprintable = {
 		if (params.contestid) {
 			session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
 		}
 		if (session?.lastContest) {
 			session.lastContest.refresh()

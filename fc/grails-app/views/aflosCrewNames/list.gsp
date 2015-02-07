@@ -26,21 +26,21 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="2" class="table-head">${message(code:'fc.aflos.crewnames.list')}</th>
+                        <th colspan="3" class="table-head">${message(code:'fc.aflos.crewnames.list')} (${aflosCrewNamesInstanceTotal})</th>
                     </tr>
                     <tr>
                        <th>${message(code:'fc.aflos.crewnames.startno')}</th>
                        <th>${message(code:'fc.aflos.crewnames.name')}</th>
+                       <th>${message(code:'fc.aflos.crewnames.points')}</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <g:each var="aflosCrewNamesInstance" in="${aflosCrewNamesInstanceList}" status="i" >
-                        <g:if test="${aflosCrewNamesInstance.points}">
-                            <tr class="${(aflosCrewNamesInstance.startnum % 2) == 0 ? 'odd' : ''}">
-                                <td>${aflosCrewNamesInstance.startnum}</td>
-                                <td>${aflosCrewNamesInstance.name}</td>
-                            </tr>
-                        </g:if>
+                    <g:each var="afloscrewaames_instance" in="${aflosCrewNamesInstanceList}" status="i" >
+                        <tr class="${(afloscrewaames_instance.startnum % 2) == 0 ? 'odd' : ''}">
+                            <td>${afloscrewaames_instance.startnum}</td>
+                            <td>${afloscrewaames_instance.name}</td>
+                            <td>${afloscrewaames_instance.points}</td>
+                        </tr>
                     </g:each>
                 </tbody>
             </table>

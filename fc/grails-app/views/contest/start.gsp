@@ -65,6 +65,10 @@
 	                                        <td><g:if test="${contestInstance.aflosUpload}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
 	                                    </tr>
                                     </g:if>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.contest.uuid')}:</td>
+                                        <td>${fieldValue(bean:contestInstance, field:'contestUUID')}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </g:form>

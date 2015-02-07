@@ -15,16 +15,6 @@ class PlanningTestTaskController {
         }
     }
 
-	def showprintable = {
-        def planningtesttask = fcService.getPlanningTestTask(params) 
-        if (planningtesttask.instance) {
-        	return [planningTestTaskInstance:planningtesttask.instance]
-        } else {
-            flash.message = planningtesttask.message
-            redirect(controller:"contest",action:"tasks")
-        }
-    }
-
     def edit = {
         def planningtesttask = fcService.getPlanningTestTask(params) 
         if (planningtesttask.instance) {

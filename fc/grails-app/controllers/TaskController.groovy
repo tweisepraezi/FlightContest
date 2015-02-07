@@ -832,6 +832,7 @@ class TaskController {
 	def timetableprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def task = fcService.gettimetableprintableTask(params) 
         if (!task.instance) {
@@ -845,6 +846,7 @@ class TaskController {
 	def timetablejuryprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def task = fcService.gettimetableprintableTask(params) 
         if (!task.instance) {
@@ -858,6 +860,7 @@ class TaskController {
     def timetableoverviewprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
         }
         def task = fcService.gettimetableprintableTask(params)
         if (!task.instance) {
@@ -1041,6 +1044,7 @@ class TaskController {
 			task.instance.printProvisionalResults = params.printProvisionalResults == "true"
 	        if (params.contestid) {
 	            session.lastContest = Contest.get(params.contestid)
+                session.printLanguage = params.lang
 	        }
 	        if (params.resultclassid) {
 				ResultClass resultclass_instance = ResultClass.get(params.resultclassid)

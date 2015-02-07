@@ -16,6 +16,7 @@ Inhalt
 - Behebung von AFLOS-Problemen
 - Live-Ergebnisanzeige
 - Druck-Stil beeinflussen
+- Installations-abhängige Konfiguration
 - Datensicherung eines laufenden Wettbewerbes
 
 
@@ -272,24 +273,38 @@ Die Liste erfasst folgende Daten:
   Nr. (Start-Nummer) (optional)
   Pilot
   Copilot (optional)
+  E-Mail (optional) (mehrere E-Mails mit Komma trennen)
   Mannschaft (optional)
-  Klasse (für Wettbewerbe mit unterscheidlichen Auswerte-Klassen)
-  TAS (kt)
+  Klasse (für Wettbewerbe mit unterschiedlichen Auswerte-Klassen)
+  TAS (kn)
   Flugzeug-Kennzeichen
-  Flugzeug-Typ (optional)
-  Flugzeug-Farbe (optional)
+  Flugzeug-Typ (optional) (vermeiden Sie hier Leerzeichen)
+  Flugzeug-Farbe (optional) (vermeiden Sie hier Leerzeichen)
 
-Diese Liste muss am Wettbewerbstag sortiert und mit zugeordneten Start-Nummern vorliegen.
-Da Spalten und Tabellenblätter eingefügt werden dürfen, kann diese Vorlage auch 
-zur Planung anderer Belange des Wettbewerbes verwendet werden (Hotel, Kontaktdaten).
+Diese Liste muss am Wettbewerbstag sortiert vorliegen.
+
+Start-Nummern nur angegeben, wenn eine besondere Nummerierung benötigt wird.
+Nicht angegebene Start-Nummern erhalten beim Import automatisch eine Nummer
+(die jeweils erste Nummer nach der höchsten existierenden Nummer).
+
+Diese Vorlage kann auch zur Planung anderer Belange des Wettbewerbes 
+(Hotel, Kontaktdaten) verwendet werden. Dazu dürfen Spalten, Zeilen und
+Tabellenblätter nach folgenden Regeln eingefügt werden:
+* Beliebig viele weitere Spalten am Ende (nach der Spalte 'Farbe/Color')
+* Beliebig viele weitere Zeilen nach einer der letzten zu importierenden
+  Besatzung folgenden Leerzeile
+* Beliebig viele Tabellenblätter an beliebigen Positionen.
+  Importiert werden nur Daten aus dem Tabellenblatt 'Crews'.
 
 Besatzungslisten werden mit 'Besatzungen -> Import Excel-Besatzungsliste' in die
-'Flight Contest'-Datenbank aufgenommen.
-Besatzungen ohne Start-Nummer wird dabei automatisch eine Start-Nummer zugewiesen.
+'Flight Contest'-Datenbank aufgenommen. Bei angegebener Option 
+"Start-Nr. 13 weglassen" wird die Nummer 13 nicht verwendet bzw. bei Angabe durch
+eine andere Startnummer ersetzt.
+
 Importiert werden nur Besatzungsnamen (Pilot + Copilot), die noch nicht in der 
 'Flight Contest'-Datenbank vorhanden sind. Korrekturen bereits importierter
 Besatzungsnamen (Pilot oder Copilot) bewirken den erneuten Import der Besatzung 
-bei Zuordnung einer weiteren Start-Nummer. Korrigieren Sie deshalb Besatzungen nach
+mit Zuordnung einer weiteren Start-Nummer. Korrigieren Sie deshalb Besatzungen nach
 einem Import nur noch in 'Flight Contest'.
 
 
@@ -748,7 +763,7 @@ DG-100
 - Logger-Aufzeichung auslesen: 'FSNavigator.net -> Plugins -> FRPocket device -> Download tracks'
 - GAC-Datei erzeugen: 
   * 'FSNavigator.net -> Logger-Object -> Save'
-  * 'Flight Contest -> Extras -> GAC-Datei reparieren' mit Option 'Tracks aus Koordinaten berechnen'
+  * 'Flight Contest -> Extras -> GAC-Reparatur' mit Option 'Tracks aus Koordinaten berechnen'
 - Logger-Aufzeichung löschen: 'FSNavigator.net -> Plugins -> FRPocket device -> Clear memory'
 - GAC-Datei zur Auswertung importieren: 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
 
@@ -764,7 +779,7 @@ DG-200
 - Logger-Aufzeichung auslesen: 'DG200Tool.exe -> Device -> Download all track points'
 - GAC-Datei erzeugen:
   * 'DG200Tool.exe -> File -> Save' aufrufen und "*.gpx" wählen
-  * 'Flight Contest -> Extras -> GPX-Datei in GAC-Datei konvertieren'
+  * 'Flight Contest -> Extras -> GPX-GAC-Konverter'
 - Logger-Aufzeichung löschen: 'DG200Tool.exe -> Device -> Delete all track points'
 - GAC-Datei zur Auswertung importieren: 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
 - Anforderungen an GPX-Datei-Inhalt
@@ -902,7 +917,7 @@ CSS-Einstellungen für Tabellen:
       routetpcoords / tpname coords
       routelegs / (name value coursechange summary) from2tp trackdistance
       
-      crewlist / num crew team resultclass shortresultclass aircraft aircrafttype aircraftcolor tas empty1 empty2 empty3 empty4
+      crewlist / num crew email team resultclass shortresultclass aircraft aircrafttype aircraftcolor tas id empty1 empty2 empty3 empty4
       teamlist / team crew aircraft tas
       resultclasslist / resultclass shortresultclass crew aircraft tas
       aircraftlist / aircraft aircrafttype aircraftcolor crew1 crew2
@@ -912,7 +927,7 @@ CSS-Einstellungen für Tabellen:
       timetablejurylist / num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass
                           planningtime planningendtime takeofftime sptime tptime fptime landingtime arrivaltime
                           empty1 empty2 empty3 empty4
-      timetableoverviewlist / (briefing planning planning takeoff intermediatelanding landing legtimes) col1 col2 col3
+      timetableoverviewlist / (briefing planning planning takeoff takeoffintervall intermediatelanding landing legtimes) col1 col2 col3
       
       crewtest / title crew team resultclass aircraft aircrafttype tas
       info / (wind planning endcurved landinglatest planninginfo planningignore planningevaluation) title separator value
@@ -942,6 +957,62 @@ CSS-Einstellungen für Tabellen:
       freetext / #line
       testlist / testcol1 testcol2 testcol3 testcol4 testcol5
       
+
+Installations-abhängige Konfiguration
+=====================================
+Ermöglicht Einstellungen, die nicht installiert werden können.
+-> Extras -> Einstellungen -> Konfiguration
+
+Änderungen erst wirksam nach Neustart von 'Flight Contest'.
+
+Sollte 'Flight Contest' nach Änderungen nicht mehr starten, ist die letzte
+Änderung in 'C:\Users\<Benutzer-Name>\.fc\config.groovy' rückgängig
+zu machen oder diese Datei zu löschen.
+
+E-Mail-Versand konfigurieren
+----------------------------
+grails {
+  mail {
+    host = "TODO"       // SMTP-Server-Adresse (DNS-Name oder IP-Adresse)
+    port = 587          // SMTP-Server-Port (für Client-Verbindungen)
+    username = "TODO"   // SMTP-Server-Login-Name
+    password = "TODO"   // SMTP-Server-Passwort
+  } 
+}
+flightcontest {
+  mail {
+    from = "TODO"       // Absender-E-Mail-Adresse (muss auf SMTP-Server gültig sein)
+    cc = "TODO"         // E-Mail-Adresse des Auswerte-Schiedsrichters
+  }
+  testmail {
+    to = "TODO"         // Ziel-E-Mail-Adresse
+    subject = "Flight Contest: Test-E-Mail"
+    body = "Flight Contest hat erfolgreich eine E-Mail versandt." 
+  }
+}
+
+FTP-Versand konfigurieren
+-------------------------
+flightcontest {
+  ftp {
+    host = "TODO"       // FTP-Server-Adresse (DNS-Name oder IP-Adresse)
+    port = 21           // FTP-Server-Port
+    username = "TODO"   // FTP-Server-Login-Name
+    password = "TODO"   // FTP-Server-Passwort
+    directory = "/TODO" // Basis-Verzeichnis auf FTP-Server (muss existieren)
+    publicurl = "TODO"  // Öffentlicher Zugang zu hochgeladenen Dateien
+    testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Quell-URL
+  }
+}
+
+Im Basis-Verzeichnis auf dem FTP-Server muss für den FTP-Test 
+das Unter-Verzeichns "_ftptest" existieren.
+
+Im Basis-Verzeichnis auf dem FTP-Server muss für GPX-Dateien ein eigener
+MIME-Typ konfiguriert werden. Dazu in Datei '.htaccess' folgende Zeile
+hinzufügen:
+    AddType application/gpx .gpx
+
 
 Datensicherung eines laufenden Wettbewerbes
 ===========================================

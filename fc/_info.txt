@@ -18,6 +18,28 @@ Texte
 -----
 message(code:'fc.contestrule.differences',args:[attrs.ret.modifynum])
 
+Zugriff auf Konfiguration
+-------------------------
+grailsApplication.config.grails.mail.host = ...
+
+Drucken
+-------
+fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"freetext",true,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape)
+
+HTML: Neue Seite in neuem Tab öffnen
+------------------------------------
+Button, der Seite in neuem Tab aufruft: onclick="this.form.target='_blank';return true;"
+Alle anderen Buttons:                   onclick="this.form.target='_self';return true;" 
+
+HTML: Button mit Rückfrage
+--------------------------
+onclick="return confirm('${message(code:'fc.areyousure')}'); 
+
+Session
+-------
+import org.springframework.web.context.request.RequestContextHolder
+def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+
 Plugins
 =======
 
@@ -30,10 +52,24 @@ class-diagram-0.5.2
 benötigt zur Laufzeit Graphviz (K:\Projects\Install\Windows\Graphviz)
 http://localhost:8080/fc/classDiagram
 
+mail
+----
+http://grails.org/plugin/mail
+http://grails.asia/grails-mail-plugin-example
+
 Development
 ===========
+
+Runtime
+-------
 -Dgrails.gsp.enable.reload=true -Dgrails.env=lastdb run-app
 run-app --stacktrace -noreloading
+
+Java Tasks
+----------
+TODO
+BUG
+UNUSED
 
 Caused by: java.lang.OutOfMemoryError: PermGen space
 ====================================================
@@ -63,3 +99,14 @@ Automatische LandingToLate-Berechnung
 Geschütztes Leerzeichen
 -----------------------
 &#x00A0;
+
+Interessante Test-Daten
+=======================
+2.1.2_2013_RuB (UZK, PT)
+  2  - SP, FP nicht getroffen, PT WP6 nicht geflogen
+2.2.0_2014_Allgäuflug (UZK, iLDG)
+  19 - SP,UZK1...WP2 nicht getroffen
+2.2.4_2014_SWDR (Curved, iLDG)
+  2  - Kreisen vor WP9, viele Fehlerstellen
+2.2.6_2014_RuB (UZK, PT)
+  20 - Gegenkurs vor UZK6

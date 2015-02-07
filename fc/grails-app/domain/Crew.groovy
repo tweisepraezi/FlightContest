@@ -3,7 +3,7 @@ import java.util.Map;
 class Crew 
 {
 	String name
-    String mark = ""
+    String mark = ""                          // UNUSED: mark, migriert nach Test.aflosStartNum (Integer), DB-2.10
 	// String country = ""                    entfernt mit DB-2.0
 	Aircraft aircraft
 	Team team                                 // Team, DB-2.0
@@ -15,7 +15,10 @@ class Crew
     Boolean disabledTeam = false              // DB-2.8
     Boolean disabledContest = false           // DB-2.9
 	Integer startNum = 0                      // DB-2.2
-	
+    
+    String uuid = UUID.randomUUID().toString()// DB-2.10
+    String email = ""                         // DB-2.10
+
 	// transient values 
 	static transients = ['name2','registration','type','colour','teamname','resultclassname'] 
 	String name2 
@@ -73,6 +76,10 @@ class Crew
         
         // DB-2.9 compatibility
         disabledContest(nullable:true)
+        
+        // DB-2.10 compatibility
+        uuid(nullable:true)
+        email(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)
@@ -172,11 +179,20 @@ class Crew
         return false
     }
     
-	String GetAFLOSStartNum()
+	int GetOldAFLOSStartNum()
 	{
-		if (mark.contains(':')) {
-			return mark.substring(0, mark.indexOf(':') )
-		}
-		return startNum.toString()
+        int aflos_start_num = 0
+        if (mark) {
+            String s = mark
+            if (mark.contains(':')) {
+                s = mark.substring(0, mark.indexOf(':') )
+            }
+            if (s.isInteger()) {
+                aflos_start_num = s.toInteger()
+            }
+        } else {
+            aflos_start_num = startNum
+        }
+        return aflos_start_num
 	}
 }

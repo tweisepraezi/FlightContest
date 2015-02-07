@@ -53,7 +53,7 @@ class MainTagLib
         	}
         }
         outln """    <li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
-        outln """    <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list">${message(code:'fc.settings')}</a> </li>"""
+        outln """    <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
 		if (true) {
 			outln """    <li class="secondary"> <a class="${if (isAflos(p.controller)) "active"}" href="${p.link}/../../aflos/start">${message(code:'fc.aflos')}</a> </li>"""
         }
@@ -204,14 +204,23 @@ class MainTagLib
 			outln """<div class="clear"></div>"""
             outln """<div class="grid">"""
 			outln """  <ul class="nav main">"""
+            outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info" >${message(code:'fc.info')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../global/changeglobalsettings">${message(code:'fc.changeglobalsettings')}</a> </li>"""
-            outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
+            if (BootStrap.global.IsTestEMailPossible()) {
+                outln """    <li> <a href="${p.link}/../../global/testmail">${message(code:'fc.net.mail.test')}</a> </li>"""
+            }
+            if (BootStrap.global.IsTestFTPPossible()) {
+                outln """    <li> <a href="${p.link}/../../global/testftp">${message(code:'fc.net.ftp.test')}</a> </li>"""
+            }
+            outln """    <li> <a href="${p.link}/../../gpx/selectgpxfilename">${message(code:'fc.gpx.show')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../gpx/selectgacfilename">${message(code:'fc.gpx.gacshow')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
 			if (Environment.currentEnvironment == Environment.DEVELOPMENT ) {
+                outln """    <li> <a href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
+                outln """    <li> <a href="${p.link}/../../dbUtil" target="_blank">${message(code:'fc.dbutil')}</a> </li>"""
 				outln """    <li> <a href="${p.link}/../../classDiagram" target="_blank">${message(code:'fc.classdiagram')}</a> </li>"""
-				outln """    <li> <a href="${p.link}/../../dbUtil" target="_blank">${message(code:'fc.dbutil')}</a> </li>"""
 			}
-			outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
             outln """  </ul>"""
 			outln """</div>"""
             outln """<div class="clear"></div>"""

@@ -13,7 +13,7 @@ class FcService
     boolean transactional = true
     def messageSource
 	def logService
-	def excelImportService
+	def fcExcelImportService
 	
     static int mmPerNM = 1852000
 	static int mmPerkm = 1000000
@@ -435,6 +435,9 @@ class FcService
 				if (params["printCrewName"]) {
 					contestInstance.printCrewName = params.printCrewName == "on"
 				}
+                if (params["printCrewEmail"]) {
+                    contestInstance.printCrewEmail = params.printCrewEmail == "on"
+                }
 				if (params["printCrewTeam"]) {
 					contestInstance.printCrewTeam = params.printCrewTeam == "on"
 				}
@@ -456,6 +459,9 @@ class FcService
 				if (params["printCrewTAS"]) {
 					contestInstance.printCrewTAS = params.printCrewTAS == "on"
 				}
+                if (params["printCrewUUID"]) {
+                    contestInstance.printCrewUUID = params.printCrewUUID == "on"
+                }
 				if (params["printCrewEmptyColumn1"]) {
 					contestInstance.printCrewEmptyColumn1 = params.printCrewEmptyColumn1 == "on"
 				}
@@ -480,6 +486,7 @@ class FcService
 				contestInstance.printCrewPrintTitle = ""
 				contestInstance.printCrewNumber = true
 				contestInstance.printCrewName = true
+                contestInstance.printCrewEmail = false
 				contestInstance.printCrewTeam = true
 				contestInstance.printCrewClass = true
 				contestInstance.printCrewShortClass = false
@@ -487,6 +494,7 @@ class FcService
 				contestInstance.printCrewAircraftType = false
 				contestInstance.printCrewAircraftColour = false
 				contestInstance.printCrewTAS = true
+                contestInstance.printCrewUUID = false
 				contestInstance.printCrewEmptyColumn1 = false
 				contestInstance.printCrewEmptyTitle1 = ""
 				contestInstance.printCrewEmptyColumn2 = false
@@ -503,6 +511,7 @@ class FcService
 				contestInstance.printCrewPrintTitle = ""
 				contestInstance.printCrewNumber = false
 				contestInstance.printCrewName = false
+                contestInstance.printCrewEmail = false
 				contestInstance.printCrewTeam = false
 				contestInstance.printCrewClass = false
 				contestInstance.printCrewShortClass = false
@@ -510,6 +519,7 @@ class FcService
 				contestInstance.printCrewAircraftType = false
 				contestInstance.printCrewAircraftColour = false
 				contestInstance.printCrewTAS = false
+                contestInstance.printCrewUUID = false
 				contestInstance.printCrewEmptyColumn1 = false
 				contestInstance.printCrewEmptyTitle1 = ""
 				contestInstance.printCrewEmptyColumn2 = false
@@ -526,6 +536,7 @@ class FcService
 				contestInstance.printCrewPrintTitle = ""
 				contestInstance.printCrewNumber = true
 				contestInstance.printCrewName = true
+                contestInstance.printCrewEmail = true
 				contestInstance.printCrewTeam = true
 				contestInstance.printCrewClass = true
 				contestInstance.printCrewShortClass = true
@@ -533,6 +544,7 @@ class FcService
 				contestInstance.printCrewAircraftType = true
 				contestInstance.printCrewAircraftColour = true
 				contestInstance.printCrewTAS = true
+                contestInstance.printCrewUUID = true
 				contestInstance.printCrewEmptyColumn1 = true
 				contestInstance.printCrewEmptyTitle1 = ""
 				contestInstance.printCrewEmptyColumn2 = true
@@ -3081,6 +3093,7 @@ class FcService
 					}
 					calculateTestPenalties(test_instance,false)
 					test_instance.flightTestModified = true
+                    test_instance.flightTestLink = ""
 					test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
@@ -3141,6 +3154,7 @@ class FcService
 					}
 					calculateTestPenalties(test_instance,false)
 					test_instance.flightTestModified = true
+                    test_instance.flightTestLink = ""
 					test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
@@ -6314,15 +6328,15 @@ class FcService
     Map existAnyAflosCrew(Contest contestInstance)
     {
 		if (contestInstance.aflosTest) {
-	    	if (AflosCrewNames.aflostest.count() > 0) {
+	    	if (AflosCrewNames.aflostest.countByPointsNotEqual(0) > 0) {
 	            return [:]
 	        }
 		} else if (contestInstance.aflosUpload) {
-	    	if (AflosCrewNames.aflosupload.count() > 0) {
+	    	if (AflosCrewNames.aflosupload.countByPointsNotEqual(0) > 0) {
 	            return [:]
 	        }
 		} else {
-	    	if (AflosCrewNames.aflos.count() > 0) {
+	    	if (AflosCrewNames.aflos.countByPointsNotEqual(0) > 0) {
 	            return [:]
 	        }
 		}
@@ -6508,13 +6522,14 @@ class FcService
 				testInstance.flightTestLandingTooLate = false
 			}
 
+            testInstance.flightTestModified = true
+            testInstance.flightTestLink = ""
+            testInstance.crewResultsModified = true
+            testInstance.aflosStartNum = afloscrewnames_instance.startnum
+            
 	    	// Penalties berechnen
 	        calculateTestPenalties(testInstance,false)
 	        testInstance.save()
-	        
-	        // save imported crew
-	        testInstance.crew.mark = afloscrewnames_instance.viewName()
-	        testInstance.crew.save()
 	        
 			if (!aflos_errors) {
 				Map ret = ['error':true,'message':getMsg('fc.aflos.points.notcomplete',[afloscrewnames_instance.viewName()])]
@@ -6588,6 +6603,11 @@ class FcService
             coordresult_instance.save()
 		}
 		
+        test.instance.flightTestModified = true
+        test.instance.flightTestLink = ""
+        test.instance.crewResultsModified = true
+        test.instance.aflosStartNum = 0
+        
     	// Penalties berechnen
         calculateTestPenalties(test.instance,false)
         test.instance.save()
@@ -8176,18 +8196,19 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importCrews(String fileName, String loadFileName, Contest contestInstance)
+    Map importCrews(String fileName, String loadFileName, boolean noStartnum13, Contest contestInstance)
     {
 		printstart "importCrews $fileName [$loadFileName]"
 		int new_crew_num = 0
 		int new_crew_error_num = 0
 		int exist_crew_num = 0
+        boolean valid_excel_file = true
 		try {
 			CrewExcelImporter crew_importer = new CrewExcelImporter(loadFileName)
 			
 			List crews = []
 			int i = 0
-			List crew_list = excelImportService.convertColumnMapConfigManyRows(crew_importer.workbook, crew_importer.CONFIG_CREWS_COLUMN_MAP, null, null, [:], -1)
+			List crew_list = fcExcelImportService.convertColumnMapConfigManyRows(crew_importer.workbook, crew_importer.CONFIG_CREWS_COLUMN_MAP, null, null, crew_importer.CONFIG_CREWS_PROPERTY_CONFIGURATION_MAP, -1)
 			for (Map crew_entry in crew_list) {
 				if (i == 0) {
 					int col_num = 0
@@ -8197,69 +8218,106 @@ class FcService
 						}
 					}
 					if (col_num != crew_importer.CONFIG_CREWS_COLUMN_NUM) {
-						return []
+                        valid_excel_file = false
+						break
 					}
 				} else {
 					Map new_entry = [:]
 					crew_importer.CONFIG_CREWS_COLUMN_MAP.columnMap.each { key, value ->
 						new_entry += [(value):""]
 					}
+                    boolean empty_row = true
 					crew_entry.each { key, value ->
 						if (value) {
-							new_entry[(key)] = value.toString()
+                            if (value.toString() == crew_importer.CONFIG_CREWS_EMPTY_VALUE) {
+                                new_entry[(key)] = ""
+                            } else {
+							    new_entry[(key)] = value.toString()
+                                empty_row = false
+                            }
 						}
 					}
+                    if (empty_row) {
+                        break
+                    }
 					crews += new_entry
 				}
 				i++
 			}
 	
-			crews.each { Map crew_entry ->
-				if (crew_entry.name) {
-					String crew_name = crew_entry.name.trim()
-					if (crew_name) {
-						if (crew_entry.name2) {
-							String crew_name2 = crew_entry.name2.trim()
-							if (crew_name2) {
-								if (crew_name.contains(',') || crew_name2.contains(',')) {
-									crew_name += "; " + crew_name2
-								} else {
-									crew_name += ", " + crew_name2
-								}
-							}
-						}
-						crew_entry.name = crew_name
-						if (crew_entry.startNum) {
-							if (crew_entry.startNum.contains('.')) {
-								crew_entry.startNum = crew_entry.startNum.substring(0,crew_entry.startNum.indexOf('.'))
-							}
-							try {
-								crew_entry.startNum = crew_entry.startNum.toInteger()
-							} catch (Exception e) {
-								crew_entry.startNum = 1
-							}
-							while (Crew.findByStartNumAndContest(crew_entry.startNum,contestInstance)) {
-								crew_entry.startNum++
-							}
-						}
-						printstart crew_name
-
-						Crew crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
-						if (crew) {
-							printdone "Crew already exists."
-							exist_crew_num++
-						} else {
-							Map ret = saveCrew(crew_entry,contestInstance)
-							printdone "Created $ret"
-							if (ret.saved) {
-								new_crew_num++
-							} else {
-								new_crew_error_num++
-							}
-						}
-					}
-				}
-			}
+            if (valid_excel_file) {
+    			crews.each { Map crew_entry ->
+    				if (crew_entry.name) {
+    					String crew_name = crew_entry.name.trim()
+    					if (crew_name) {
+    						if (crew_entry.name2) {
+    							String crew_name2 = crew_entry.name2.trim()
+    							if (crew_name2) {
+    								if (crew_name.contains(',') || crew_name2.contains(',')) {
+    									crew_name += "; " + crew_name2
+    								} else {
+    									crew_name += ", " + crew_name2
+    								}
+    							}
+    						}
+    						crew_entry.name = crew_name
+                            
+    						if (crew_entry.startNum) {
+    							if (crew_entry.startNum.contains('.')) {
+    								crew_entry.startNum = crew_entry.startNum.substring(0,crew_entry.startNum.indexOf('.'))
+    							}
+    							try {
+    								crew_entry.startNum = crew_entry.startNum.toInteger()
+    							} catch (Exception e) {
+    								crew_entry.startNum = 1
+    							}
+                                if (noStartnum13) {
+                                    if (crew_entry.startNum == 13) {
+                                        crew_entry.startNum++
+                                    }
+                                }
+    						} else {
+                                crew_entry.startNum = 1
+                                for(Crew crew_instance in Crew.findAllByContest(contestInstance)) {
+                                    if (crew_instance.startNum >= crew_entry.startNum) {
+                                        crew_entry.startNum = crew_instance.startNum + 1
+                                        if (noStartnum13) {
+                                            if (crew_entry.startNum == 13) {
+                                                crew_entry.startNum++
+                                            }
+                                        }
+                                    }
+                                }
+    						}
+                            
+                            // doppelte Startnummer auflösen
+                            while (Crew.findByStartNumAndContest(crew_entry.startNum,contestInstance)) {
+                                crew_entry.startNum++
+                                if (noStartnum13) {
+                                    if (crew_entry.startNum == 13) {
+                                        crew_entry.startNum++
+                                    }
+                                }
+                            }
+                            
+    						printstart crew_name
+    						Crew crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
+    						if (crew) {
+    							printdone "Crew already exists."
+    							exist_crew_num++
+    						} else {
+    							Map ret = saveCrew(crew_entry,contestInstance)
+    							printdone "Created $ret"
+    							if (ret.saved) {
+    								new_crew_num++
+    							} else {
+    								new_crew_error_num++
+    							}
+    						}
+    					}
+    				}
+    			}
+            }
 		} catch (Exception e) {
 			Map ret = ['error':true,'message':getMsg('fc.notimported.msg',[fileName,e.getMessage()])]
 			printerror ret
@@ -8267,7 +8325,9 @@ class FcService
 		}
 		
 		Map ret
-		if (new_crew_num) {
+		if (!valid_excel_file) {
+            ret = ['error':true,'message':getMsg('fc.notimported.excel.invalid',[fileName])]
+		} else if (new_crew_num) {
 			ret = ['saved':true,'message':getMsg('fc.imported.crews',[fileName,new_crew_num])]
 		} else if (new_crew_error_num) {
 			ret = ['error':true,'message':getMsg('fc.notimported.crews.error',[fileName,new_crew_error_num])]
@@ -8279,12 +8339,12 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-	void importCrewList(Map contest, String fileName)
+	void importCrewList(Map contest, String fileName, boolean noStartnum13)
 	{
 		printstart "Import '$fileName'"
 		//fcService.println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream"
 		if (fileName.toLowerCase().endsWith('.xls')) {
-			def crews = importCrews(fileName, fileName, contest.instance)
+			def crews = importCrews(fileName, fileName, noStartnum13, contest.instance)
 			if (crews.saved) {
 				printdone crews.message
 			} else if (crews.error) {
@@ -8932,6 +8992,7 @@ class FcService
 		test.instance.properties = params
 		if (test.instance.isDirty()) {
 			test.instance.flightTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 
@@ -8965,6 +9026,7 @@ class FcService
 		test.instance.properties = params
 		if (test.instance.isDirty()) {
 			test.instance.flightTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 		
@@ -10589,15 +10651,16 @@ class FcService
 			
             testlegplanning_instance.properties = params
 			testlegplanning_instance.resultLegTimeInput = params.resultLegTimeInput 
-			if (testlegplanning_instance.isDirty()) {
-				testlegplanning_instance.test.planningTestModified = true
-				testlegplanning_instance.test.crewResultsModified = true
-			}
 	
             Map ret = calculateLegPlanningInstance(testlegplanning_instance,false)
             if (ret)
             {
             	return ret
+            }
+            
+            if (testlegplanning_instance.isDirty()) {
+                testlegplanning_instance.test.planningTestModified = true
+                testlegplanning_instance.test.crewResultsModified = true
             }
             
             calculateTestPenalties(testlegplanning_instance.test,false)
@@ -10746,10 +10809,6 @@ class FcService
 
             coordresult_instance.properties = params
 			coordresult_instance.resultCpTimeInput = params.resultCpTimeInput
-			if (coordresult_instance.isDirty()) {
-				coordresult_instance.test.flightTestModified = true
-				coordresult_instance.test.crewResultsModified = true
-			}
 				
             Map ret = calculateCoordResultInstance(coordresult_instance,false,false)
             if (ret)
@@ -10757,6 +10816,12 @@ class FcService
                 return ret
             }
             
+            if (coordresult_instance.isDirty()) {
+                coordresult_instance.test.flightTestModified = true
+                coordresult_instance.test.flightTestLink = ""
+                coordresult_instance.test.crewResultsModified = true
+            }
+
             calculateTestPenalties(coordresult_instance.test,false)
 	
             if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
@@ -10798,6 +10863,7 @@ class FcService
             coordresult_instance.properties = params
 			if (coordresult_instance.isDirty()) {
 				coordresult_instance.test.flightTestModified = true
+                coordresult_instance.test.flightTestLink = ""
 				coordresult_instance.test.crewResultsModified = true
 			}
             coordresult_instance.resultProcedureTurnEntered = true
@@ -12306,12 +12372,13 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putCrew(Map contest, int startNum, String name, String teamname, String resultclassname, String registration, String type, String colour, BigDecimal tas)
+    Map putCrew(Map contest, int startNum, String name, String email, String teamname, String resultclassname, String registration, String type, String colour, BigDecimal tas)
     {
 		printstart "putCrew"
         Map p = [:]
 		p.startNum = startNum
         p.name = name
+        p.email = email
 		p.teamname = teamname
 		p.resultclassname = resultclassname 
         p.registration = registration

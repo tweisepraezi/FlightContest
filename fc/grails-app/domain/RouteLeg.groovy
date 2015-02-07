@@ -16,7 +16,7 @@ class RouteLeg
 	BigDecimal legDistance             // NM
 	
 	Integer legDuration                // min, DB-2.3
-	Boolean noTimeCheck = false        // DB-2.3, wird nicht benutzt
+	Boolean noTimeCheck = false        // UNUSED: noTimeCheck, DB-2.3
 	Boolean noPlanningTest = false     // DB-2.6
     Boolean endCurved = false          // DB-2.8
 	
@@ -95,6 +95,14 @@ class RouteLeg
     	return "-"
     }
     
+    String mapMeasureDistancePrintName()
+    {
+        if (legMeasureDistance != null) {
+            return  "${FcMath.DistanceMeasureStr(legMeasureDistance)}${getPrintMsg('fc.mm')}"
+        }
+        return "-"
+    }
+    
     String mapDistanceName()
     {
     	if (legDistance != null) {
@@ -158,6 +166,26 @@ class RouteLeg
 		
         return  "${trueTrackStr} ${distanceStr}"
 	}
+
+    String testPrintName()
+    {
+        String trueTrackStr = "${FcMath.GradStr(testTrueTrack())}${getPrintMsg('fc.grad')}"
+        if (measureTrueTrack != null) {
+            trueTrackStr += " ${getPrintMsg('fc.distance.map.short')}"
+        } else {
+            trueTrackStr += " ${getPrintMsg('fc.distance.coord.short')}"
+        }
+        
+        String distanceStr = "${FcMath.DistanceStr(testDistance())}${getPrintMsg('fc.mile')}"
+        if (legDistance != null) {
+            distanceStr += " (${mapMeasureDistancePrintName()})"
+            distanceStr += " ${getPrintMsg('fc.distance.map.short')}"
+        } else {
+            distanceStr += " ${getPrintMsg('fc.distance.coord.short')}"
+        }
+        
+        return  "${trueTrackStr} ${distanceStr}"
+    }
 
 	String GetTitle()
 	{	

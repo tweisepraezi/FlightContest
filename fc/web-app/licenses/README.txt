@@ -1,6 +1,6 @@
 
-Flight Contest 2.3-M2
-Copyright 2014 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 2.3-M3
+Copyright 2009-2015 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://flightcontest.de
 
@@ -45,6 +45,26 @@ http://java.com/license
 
 ============================================================================
 
+AFLOS, Advanced Flight Logging System
+BeHeTec GmbH & Co. KG, Bertram Henn
+
+http://www.aflos.de
+
+============================================================================
+
+AFLOS Kurzanleitung
+
+Mit freundlicher Genehmigung von Ralf-Rainer Schmalstieg.
+
+============================================================================
+
+GPX Viewer
+Jürgen Berkemeier
+
+http://www.j-berkemeier.de/GPXViewer
+
+============================================================================
+ 
 Fluid 960 Grid System
 Version 1.0.5
 2009-06-20
@@ -115,11 +135,5 @@ The files in the 960 Grid System are free of charge, licensed under GPL/MIT.
 Special thanks to Eric Meyer for his comprehensive browser reset stylesheet.
 
 http://meyerweb.com/eric/tools/css/reset
-
-============================================================================
-
-AFLOS Kurzanleitung
-
-Mit freundlicher Genehmigung von Ralf-Rainer Schmalstieg.
 
 ============================================================================

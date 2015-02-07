@@ -187,7 +187,7 @@
 											<g:if test="${taskInstance.IsFlightTestRun()}">
 												<g:if test="${testInstance.IsFlightTestRun()}">
 													<g:if test="${testInstance.timeCalculated}">
-				                                    	<td>${testInstance.flightTestPenalties} <g:if test="${!testInstance.flightTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'flightresults')}/${testInstance.id}${next_flight}">${message(code:'fc.test.results.here')}</a></td>
+				                                    	<td>${testInstance.flightTestPenalties} <g:if test="${!testInstance.flightTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'flightresults')}/${testInstance.id}${next_flight}">${message(code:'fc.test.results.here')}</a><g:if test="${testInstance.flightTestLink}"> <a href="${testInstance.flightTestLink}" target="_blank"><img src="${createLinkTo(dir:'images',file:'email.png')}"/></a></g:if></td>
 													</g:if> <g:else>
 														<td>${message(code:'fc.nocalculated')}</td>
 													</g:else>

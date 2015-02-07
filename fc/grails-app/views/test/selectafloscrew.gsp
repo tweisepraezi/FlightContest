@@ -16,7 +16,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td>${testInstance.crew.startNum}: <g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.crew.mark}"> (${message(code:'fc.aflos')}: ${testInstance.crew.mark})</g:if></td>
+                                    <td>${testInstance.crew.startNum}: <g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.aflosStartNum}"> (${message(code:'fc.aflos')}: ${testInstance.aflosStartNum})</g:if></td>
                                 </tr>
                                 <g:if test="${testInstance.crew.team}">
                                     <tr>
@@ -61,16 +61,16 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <g:set var="last_startnum" value="${testInstance.crew.GetAFLOSStartNum()}" />
+                                    <g:set var="last_startnum" value="${testInstance.GetAFLOSStartNum()}" />
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.crewnames.name')}:</label></td>
 									<g:if test="${testInstance.crew.contest.aflosTest}">
-                                        <td><g:select from="${AflosCrewNames.aflostest.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+                                        <td><g:select from="${AflosCrewNames.aflostest.findAllByPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
 									</g:if>
 									<g:elseif test="${testInstance.crew.contest.aflosUpload}">
-                                        <td><g:select from="${AflosCrewNames.aflosupload.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+                                        <td><g:select from="${AflosCrewNames.aflosupload.findAllByPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
 									</g:elseif>
 									<g:else>
-                                        <td><g:select from="${AflosCrewNames.aflos.findAllByNameIsNotNullAndPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
+                                        <td><g:select from="${AflosCrewNames.aflos.findAllByPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
 									</g:else>
                                 </tr>
                                 <tr>

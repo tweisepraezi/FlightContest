@@ -220,20 +220,20 @@
                             </tfoot>
                         </table>
                         <input type="hidden" name="id" value="${routeInstance?.id}"/>
-                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" tabIndex="1"/>
+                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" onclick="this.form.target='_self';return true;" tabIndex="1"/>
                         <g:if test="${!routeInstance.Used()}">
-                            <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}"  tabIndex="2"/>
-                            <g:actionSubmit action="createsecretcoordroutes" value="${message(code:'fc.coordroute.addsecret')}"  tabIndex="3"/>
-                            <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}"  tabIndex="4"/>
+                            <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
+                            <g:actionSubmit action="createsecretcoordroutes" value="${message(code:'fc.coordroute.addsecret')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
+                            <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}" onclick="this.form.target='_self';return true;" tabIndex="4"/>
                         </g:if>
-                        <g:actionSubmit action="printroute" value="${message(code:'fc.print')}"  tabIndex="5"/>
-                        <g:actionSubmit action="printcoordall" value="${message(code:'fc.printcoord.all')}"  tabIndex="6"/>
-                        <g:actionSubmit action="printcoordtp" value="${message(code:'fc.printcoord.tp')}"  tabIndex="7"/>
+                        <g:actionSubmit action="printroute" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="5"/>
+                        <g:actionSubmit action="printcoordall" value="${message(code:'fc.printcoord.all')}" onclick="this.form.target='_self';return true;" tabIndex="6"/>
+                        <g:actionSubmit action="printcoordtp" value="${message(code:'fc.printcoord.tp')}" onclick="this.form.target='_self';return true;" tabIndex="7"/>
                         <g:if test="${!routeInstance.Used()}">
-                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="8"/>
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="8"/>
                         </g:if>
-                        <g:actionSubmit action="showmap" value="${message(code:'fc.route.map')}"  tabIndex="9"/>
-                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}"  tabIndex="10"/>
+                        <g:actionSubmit action="showmap" value="${message(code:'fc.route.map')}" onclick="this.form.target='_blank';return true;" tabIndex="9"/>
+                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="10"/>
                     </g:form>
                 </div>
             </div>

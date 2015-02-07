@@ -81,7 +81,7 @@
     	                       	<g:if test="${testInstance.IsSpecialTestRun()}">
 	                                <div>
 	                                    <g:checkBox name="printSpecialResults" value="${testInstance.printSpecialResults}" />
-	                                    <label>${message(code:'fc.specialresults')}<g:if test="${testInstance.IsSpecialTestTitle()}"> [${testInstance.GetSpecialTestTitle()}]</g:if> (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})<g:if test="${!testInstance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
+	                                    <label>${message(code:'fc.specialresults')}<g:if test="${testInstance.IsSpecialTestTitle()}"> [${testInstance.GetSpecialTestTitle(false)}]</g:if> (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})<g:if test="${!testInstance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
 	                                </div>
 	                            </g:if>
                             </p>

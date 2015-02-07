@@ -52,7 +52,7 @@
                                     <td class="title">${message(code:'fc.wind')}:</td>
                                     <td class="value">
 	                                    <g:if test="${testInstance.planningtesttask}">
-	                                        <g:windtext var="${testInstance.planningtesttask.wind}" />
+	                                        <g:windtextprintable var="${testInstance.planningtesttask.wind}" />
 	                                    </g:if> <g:else>
 	                                        ${message(code:'fc.noassigned')}                                    
 	                                    </g:else>
@@ -102,10 +102,10 @@
                                         <g:if test="${!testlegplanning_instance.test.IsPlanningTestDirectionMeasure()}">
                                             <g:set var="test_direction" value="${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}" />
                                         </g:if>
-                                        <tr class="value" id="${testlegplanning_instance.coordTitle.titleCode()}">
+                                        <tr class="value" id="${testlegplanning_instance.coordTitle.titlePrintCode()}">
                                             <g:if test="${!testlegplanning_instance.noPlanningTest}">
 	                                            <g:if test="${params.results=='yes'}">
-                                                    <td class="tpname">${testlegplanning_instance.coordTitle.titleCode()}</td>
+                                                    <td class="tpname">${testlegplanning_instance.coordTitle.titlePrintCode()}</td>
 	                                                <td class="distance">${FcMath.DistanceStr(testlegplanning_instance.planTestDistance)}</td>
 	                                                <td class="truetrack">${FcMath.GradStr(testlegplanning_instance.planTrueTrack)}</td>
 	                                                <td class="trueheading">${FcMath.GradStr(testlegplanning_instance.planTrueHeading)}</td>

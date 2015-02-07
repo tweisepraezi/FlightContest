@@ -29,20 +29,20 @@
                                 <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}" tabIndex="2"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.crew.import.name')}:</label>
+                                <label>${message(code:'fc.crew.email')} (${message(code:'fc.email.more')}):</label>
                                 <br/>
-                                <input type="text" id="mark" name="mark" value="${fieldValue(bean:crewInstance,field:'mark')}" tabIndex="3"/>
+                                <input type="text" id="email" name="email" value="${fieldValue(bean:crewInstance,field:'email')}" tabIndex="3"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.team')}:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="name" from="${Team.findAllByContest(crewInstance.contest,[sort:'name'])}" name="team.id" value="${crewInstance?.team?.id}" noSelection="['null':'']" tabIndex="4"></g:select>
+                                <g:select optionKey="id" optionValue="name" from="${Team.findAllByContest(crewInstance.contest,[sort:'name'])}" name="team.id" value="${crewInstance?.team?.id}" noSelection="['null':'']" tabIndex="5"></g:select>
                             </p>
                             <g:if test="${crewInstance.contest.resultClasses}">
 	                            <p>
 	                                <label>${message(code:'fc.resultclass')}:</label>
 	                                <br/>
-	                                <g:select optionKey="id" optionValue="name" from="${ResultClass.findAllByContest(crewInstance.contest,[sort:'name'])}" name="resultclass.id" value="${crewInstance?.resultclass?.id}" noSelection="['null':'']" tabIndex="5"></g:select>
+	                                <g:select optionKey="id" optionValue="name" from="${ResultClass.findAllByContest(crewInstance.contest,[sort:'name'])}" name="resultclass.id" value="${crewInstance?.resultclass?.id}" noSelection="['null':'']" tabIndex="6"></g:select>
 	                            </p>
 	                        </g:if>
                         </fieldset>
@@ -51,12 +51,12 @@
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="registration" from="${Aircraft.findAllByContest(crewInstance.contest,[sort:'registration'])}" name="aircraft.id" value="${crewInstance?.aircraft?.id}" noSelection="['null':'']" tabIndex="6"></g:select>
+                                <g:select optionKey="id" optionValue="registration" from="${Aircraft.findAllByContest(crewInstance.contest,[sort:'registration'])}" name="aircraft.id" value="${crewInstance?.aircraft?.id}" noSelection="['null':'']" tabIndex="7"></g:select>
                             </p>
                             <p>
                                 <label>${message(code:'fc.tas')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
-                                <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" tabIndex="7"/>
+                                <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" tabIndex="8"/>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -75,11 +75,14 @@
                                 </div>
                             </p>
                         </fieldset>
+                        <fieldset>
+                            ${message(code:'fc.crew.uuid')}: ${fieldValue(bean:crewInstance, field:'uuid')}
+                        </fieldset>
                         <input type="hidden" name="id" value="${crewInstance?.id}"/>
                         <input type="hidden" name="version" value="${crewInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="8"/>
-                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="9"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="10"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="101"/>
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="102"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="103"/>
                     </g:form>
                 </div>
             </div>

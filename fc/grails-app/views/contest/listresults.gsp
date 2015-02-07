@@ -90,10 +90,10 @@
                                 </g:each>
                             </tbody>
                         </table>
-                        <g:actionSubmit action="editresultsettings" value="${message(code:'fc.contest.resultsettings')}" tabIndex="1"/>
-                        <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="2"/>
-                        <g:actionSubmit action="printresults" value="${message(code:'fc.print')}" tabIndex="3"/>
-                        <g:actionSubmit action="liveview" value="${message(code:'fc.liveview')}" tabIndex="4"/>
+                        <g:actionSubmit action="editresultsettings" value="${message(code:'fc.contest.resultsettings')}" onclick="this.form.target='_self';return true;" tabIndex="1"/>
+                        <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
+                        <g:actionSubmit action="printresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
+                        <g:actionSubmit action="liveview" value="${message(code:'fc.liveview')}" onclick="this.form.target='_blank';return true;" tabIndex="4"/>
                     </g:form>
                 </div>
             </div>

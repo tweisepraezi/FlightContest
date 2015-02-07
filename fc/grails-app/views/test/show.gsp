@@ -220,7 +220,7 @@
                                     <td>${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.flightresults')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.flightresults')}<g:if test="${testInstance.aflosStartNum}"> (${message(code:'fc.aflos')}: ${testInstance.aflosStartNum})</g:if>:</td>
                                     <td>${testInstance.flightTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                                 <tr>

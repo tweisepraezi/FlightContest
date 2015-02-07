@@ -165,10 +165,10 @@
 	                    <g:if test="${testInstance.IsSpecialTestRun() && testInstance.printSpecialResults}">
                         	<div style="page-break-inside:avoid">
                                 <g:if test="${!testInstance.specialTestComplete}">
-                                    <h3>${testInstance.GetSpecialTestTitle()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+                                    <h3>${testInstance.GetSpecialTestTitle(true)} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()}) [${message(code:'fc.provisional')}]</h3>
                                 </g:if>
                                 <g:else>
-                                    <h3>${testInstance.GetSpecialTestTitle()} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})</h3>
+                                    <h3>${testInstance.GetSpecialTestTitle(true)} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})</h3>
                                 </g:else>
                                 <g:specialTestPrintable t="${testInstance}"/>
 							</div>

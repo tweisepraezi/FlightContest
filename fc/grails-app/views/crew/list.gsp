@@ -22,6 +22,7 @@
 	                    <tr>
                             <th>${message(code:'fc.crew.startnum')}</th>
 	                        <th>${message(code:'fc.crew.name')}</th>
+                            <th>${message(code:'fc.crew.email')}</th>
 	                        <th>${message(code:'fc.team')}</th>
                             <g:if test="${resultClasses}">
                                 <th>${message(code:'fc.resultclass')}</th>
@@ -41,6 +42,7 @@
 	                                <td><g:checkBox name="${crew_id}" value="${false}" /> ${crew_instance.startNum}</td>
 	                            </g:else>
                                 <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+                                <td>${fieldValue(bean:crew_instance, field:'email')}</td>
                                 <g:if test="${crew_instance.team}">                          
                                     <td>
                                         <g:team var="${crew_instance.team}" link="${createLink(controller:'team',action:'edit')}"/>

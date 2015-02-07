@@ -63,7 +63,7 @@ class CoordTitle // DB-2.5
             case CoordType.SECRET:
 				return "${getPrintMsg(type.code)}${number}"
 			default:
-				return getMsg(type.code)
+				return getPrintMsg(type.code)
 		}
 	}
 }
