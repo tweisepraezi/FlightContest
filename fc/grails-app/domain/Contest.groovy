@@ -19,7 +19,6 @@ class Contest
 	static final String LANDING_OUT = "OUT"             // DB-2.8
     
     static final int LIVE_REFRESHSECONDS = 10           // DB-2.8
-    static final String LIVE_STYLESHEET = "fclive.css"  // DB-2.8
 	
 	String title = ""
 	int mapScale = 200000
@@ -80,7 +79,7 @@ class Contest
 	
     // Live-Auswertung
     Integer liveRefreshSeconds = LIVE_REFRESHSECONDS    // Live-Anzeige-Refresh-Zeit in Sekunden, DB-2.8
-    String liveStylesheet = LIVE_STYLESHEET             // Live-Anzeige-Stylesheet, DB-2.8
+    String liveStylesheet = Global.LIVE_STYLESHEET      // Live-Anzeige-Stylesheet, DB-2.8
     Integer livePositionCalculation = 0                 // Live-Positions-Berechnung (0 = Contest, sonst Task), DB-2.8
     Boolean liveShowSummary = true                      // Live-Summary-Anzeige, DB-2.8
     

@@ -231,11 +231,6 @@
                                 <input type="text" id="liveRefreshSeconds" name="liveRefreshSeconds" value="${fieldValue(bean:contestInstance,field:'liveRefreshSeconds')}" tabIndex="3"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.contest.liveresults.stylesheet')}:</label>
-                                <br/>
-                                <input type="text" id="liveStylesheet" name="liveStylesheet" value="${fieldValue(bean:contestInstance,field:'liveStylesheet')}" tabIndex="4"/>
-                            </p>
-                            <p>
 	                            <div>
 	                                <g:checkBox name="liveShowSummary" value="${contestInstance.liveShowSummary}" />
 	                                <label>${message(code:'fc.contest.liveresults.showsummary')}</label>

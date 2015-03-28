@@ -30,7 +30,8 @@ goto :eof
 
 ::-------------------------------------------------------------------
 :done
-if exist "%USERPROFILE%\.grails\install.bat" call "%USERPROFILE%\.grails\install.bat"
+set post_install="C:\FCSave\.fc\install_setup.bat"
+if exist %post_install% call %post_install%
 echo.
 echo Done.
 pause

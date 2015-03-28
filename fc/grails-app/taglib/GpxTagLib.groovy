@@ -66,7 +66,7 @@ class GpxTagLib
                     }
                 }
                 if (!p.hide) {
-                    outln"""<button type="button" id="${i}" onmousedown="showPos=${i};wr_pos(${i});return true;" class="${button_class} gpxview:map:skaliere2:${p.latmin}:${p.latmax}:${p.lonmin}:${p.lonmax}" tabIndex="${tab_index}">${button_text}</button>"""
+                    outln"""<button type="button" id="${i}" onmousedown="showPos=${i};wr_pos(${i});return true;" class="${button_class} gpxview:map:skaliere:${p.latcenter},${p.loncenter},${p.radius}" tabIndex="${tab_index}">${button_text}</button>"""
                     tab_index++
                     i++
                 }
@@ -102,7 +102,7 @@ class GpxTagLib
         outln"""<script>"""
         outln"""    var Legende_fnm = false;"""
         outln"""    var Fullscreenbutton = true;"""
-        outln"""    var Unit = 'airwater';"""
+        outln"""    var Unit = 'air';"""
         outln"""    var Overviewmapcontrol = true;"""
         outln"""    var Shwpshadow = false;"""
         outln"""    var Legende_rr = false;"""

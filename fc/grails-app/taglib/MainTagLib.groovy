@@ -42,6 +42,9 @@ class MainTagLib
 			if (Task.findByContest(session.lastContest)) {
 				outln """    <li> <a class="${if (p.contestevaluation) active(p.controller,'task')}" href="${p.link}/../../task/startevaluation">${message(code:'fc.contest.evaluation')}</a> </li>"""
 			}
+            if (BootStrap.global.liveContestID == session.lastContest.id) {
+                outln """    <li> <a class="${active(p.controller,'flightcontest')}" href="${p.link}/../../global/livesettings">${message(code:'fc.livesettings.short')}</a> </li>"""
+            }
 		} else {
 			if (Contest.findByIdIsNotNull([sort:"id"])) {
 				Contest.list().each { contestInstance ->
@@ -52,6 +55,7 @@ class MainTagLib
 				outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
         	}
         }
+        
         outln """    <li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
         outln """    <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
 		if (true) {
@@ -102,7 +106,9 @@ class MainTagLib
 	                    outln """    <li> <a href="${p.link}/../../contest/change">${message(code:'fc.contest.change')}</a> </li>"""
 					}
 					outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
-	                outln """    <li> <a href="${p.link}/../../contest/deletequestion">${message(code:'fc.contest.delete')}</a> </li>"""
+                    if (BootStrap.global.liveContestID != session.lastContest.id) {
+                        outln """    <li> <a href="${p.link}/../../contest/deletequestion">${message(code:'fc.contest.delete')}</a> </li>"""
+                    }
 					outln """    <li> <a href="${p.link}/../../contest/copyquestion">${message(code:'fc.contest.copy')}</a> </li>"""
 					outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
                     outln """    <li> <a href="${p.link}/../../contest/editfreetext">${message(code:'fc.contest.printfreetext')}</a> </li>"""
@@ -206,6 +212,12 @@ class MainTagLib
 			outln """  <ul class="nav main">"""
             outln """    <li> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info" >${message(code:'fc.info')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../global/changeglobalsettings">${message(code:'fc.changeglobalsettings')}</a> </li>"""
+            if (BootStrap.global.IsLivePossible()) {
+                outln """    <li> <a href="${p.link}/../../global/livesettings">${message(code:'fc.livesettings')}</a> </li>"""
+            }
+            if (BootStrap.global.IsWebMailPossible()) {
+                outln """    <li> <a href="${p.link}/../../global/start_webmail" target="_blank">${message(code:'fc.net.webmail')}</a> </li>"""
+            }
             if (BootStrap.global.IsTestEMailPossible()) {
                 outln """    <li> <a href="${p.link}/../../global/testmail">${message(code:'fc.net.mail.test')}</a> </li>"""
             }

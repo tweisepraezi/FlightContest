@@ -1001,14 +1001,15 @@ class FcService
     Map deleteContest(Map params)
     {
         Contest contest_instance = Contest.get(params.id)
-        
         if (contest_instance) {
+            if (BootStrap.global.liveContestID == contest_instance.id) {
+                return ['notdeleted':true,'message':getMsg('fc.notdeleted.live',[getMsg('fc.contest'),params.id])]
+            }
             try {
             	Task.findAllByContest(contest_instance,[sort:"id"]).each { Task task_instance ->
             		task_instance.delete()
             	}
                 contest_instance.delete()
-                
                 return ['deleted':true,'message':getMsg('fc.deleted',["${contest_instance.title}"])]
             }
             catch(org.springframework.dao.DataIntegrityViolationException e) {

@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-07.02.2015
+28.03.2015
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -52,40 +52,8 @@ Weitere nützliche Funktionen von Flight Contest:
 * E-Mail-Versand der Navigationsflugkarten an Teilnehmer.
 * Unterstützung des offenen Logger-Datenformates GPX.
 
-Erweiterungen in dieser Version (2.3-M3):
------------------------------------------
-- Import Excel-Besatzungsliste erweitert:
-    * Zusätzliche E-Mail-Spalte (mehrere E-Mails mit Komma trennen)
-    * Option "Start-Nr. 13 weglassen"
-- 'Programme -> Flight Contest -> Help' -> 
-  'Installations-abhängige Konfiguration' hinzugefügt
-- Neue Navigationsflug-Ergebnis-Anzeige
-    * Navigationsflugkarte mit Google Maps
-    * Checkpunkte können hier mit einem Klick angezeigt werden
-    * E-Mail-Versand der Navigationsflugkarte
-    * Anzeige des erfolgreichen E-Mail-Versands in der Ergebnisliste
-- Anzeige von GPX-Dateien mit Google Maps ('Extras -> GPX-Anzeige')
-- Anzeige von GAC-Dateien mit Google Maps ('Extras -> GAC-Anzeige')
-
-Erweiterungen in Version 2.3-M2:
---------------------------------
-- Einzelne Besatzungen können für eine Aufgabe deaktiviert werden.
-    Wird diese Aufgabe bei einer Wettbewerbs- oder Team-Auswertung
-    einbezogen, wird diese Besatzung automatisch weggelassen.
-- Besatzungs-Druck:
-    Die Reihenfolge des Ausdrucks kann durch eine Aufgabe festgelegt werden.
-    Einzelne für die Aufgabe deaktivierte Besatzungen werden dann weggelassen.
-- Wettbewerbs-/Klassen-Auswertung:
-    Deaktivierung einzelner Besatzungen möglich.
-- Wahl der Landepunkt-Wertung je Landung möglich.
-    Bei Präzisionsflug-Landungen, wo unterschiedliche schwere Landungen 
-    mit unterschiedlichen Strafpunkten bewertet werden, kann eine vom
-    Standard abweichende Reihenfolge jetzt unter Aufgaben-Einstellungen 
-    konfiguriert werden.
-- 'Programme -> Flight Contest -> Help' -> 'Auswertungen' hinzugefügt
-
-Erweiterungen in Version 2.3-M1:
---------------------------------
+Erweiterungen in dieser Version (2.3.0):
+----------------------------------------
 - Kurzer Klassenname eingeführt.
 - Massenhaftes Löschen, Deaktivieren und Aktivieren von Teams und Besatzungen
   eingeführt.
@@ -127,6 +95,9 @@ Erweiterungen in Version 2.3-M1:
 - Live-Ergebnis-Anzeige erweitert:
     * Gleichzeitige Anzeige der Ergebnisse mehrerer Aufgaben (= Wettbewerbstage)
     * Konfigurierbare Live-Ergebnis-Positionsberechnung
+- Live-Ergebnis-Anzeige-Konfiguration ('Extras -> Live-Einstellungen')
+    Hier wird die Live-Anzeige konfiguriert sowie ein- und ausgeschaltet.
+    'Programme -> Flight Contest -> Help' -> 'Live-Ergebnisanzeige'
 - Team-Auswertung: 
     * Deaktivierung von ganzen Teams möglich.
     * Deaktivierung einzelner Besatzungen eines Teams von der Team-Auswertung 
@@ -136,6 +107,44 @@ Erweiterungen in Version 2.3-M1:
     * Kapitel 'Behebung von AFLOS-Problemen' überarbeitet.
     * Kapitel 'Druck-Stil beeinflussen' hinzugefügt:
         Beeinflussung des Druck-Stils mit CSS-Werten
+- Einzelne Besatzungen können für eine Aufgabe deaktiviert werden.
+    Wird diese Aufgabe bei einer Wettbewerbs- oder Team-Auswertung
+    einbezogen, wird diese Besatzung automatisch weggelassen.
+- Besatzungs-Druck:
+    Die Reihenfolge des Ausdrucks kann durch eine Aufgabe festgelegt werden.
+    Einzelne für die Aufgabe deaktivierte Besatzungen werden dann weggelassen.
+- Wettbewerbs-/Klassen-Auswertung:
+    Deaktivierung einzelner Besatzungen möglich.
+- Wahl der Landepunkt-Wertung je Landung möglich.
+    Bei Präzisionsflug-Landungen, wo unterschiedliche schwere Landungen 
+    mit unterschiedlichen Strafpunkten bewertet werden, kann eine vom
+    Standard abweichende Reihenfolge jetzt unter Aufgaben-Einstellungen 
+    konfiguriert werden.
+- 'Programme -> Flight Contest -> Help' -> 'Auswertungen' hinzugefügt
+- Import Excel-Besatzungsliste erweitert:
+    * Zusätzliche E-Mail-Spalte (mehrere E-Mails mit Komma trennen)
+    * Option "Start-Nr. 13 weglassen"
+- 'Programme -> Flight Contest -> Help' -> 
+  'Installations-abhängige Konfiguration' hinzugefügt
+- Neue Navigationsflug-Ergebnis-Anzeige
+    * Navigationsflugkarte mit Google Maps
+    * Checkpunkte können hier mit einem Klick angezeigt werden
+    * E-Mail-Versand der Navigationsflugkarte
+        Neben der Besatzung wird diese E-Mail auch an den 
+        Auswerte-Schiedsrichter versandt.
+    * Anzeige des erfolgreichen E-Mail-Versands in der Ergebnisliste
+- Abruf der E-Mails an den Auswerte-Schiedsrichter ('Extras -> Web-Mail')
+- Anzeige von GPX-Dateien mit Google Maps ('Extras -> GPX-Anzeige')
+- Anzeige von GAC-Dateien mit Google Maps ('Extras -> GAC-Anzeige')
+- Aktualisierung der FAI Regelwerke
+    FAI Precision Flying - Edition 2015
+    FAI Air Rally Flying - Edition 2015
+- Aufteilung des Regelwerkes "FAI Air Rally Flying" in 2 Regelwerke
+    FAI Air Rally Flying - Unlimited - Edition 2015
+    FAI Air Rally Flying - Advanced - Edition 2015
+- Aktualisierung des deutschen Regelwerkes
+    Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2015
+    Änderungen gegenüber 2014 sind am rechten Rand mit einem Strich markiert.
 
 Fehlerbehebungen in 2.2.6:
 --------------------------
@@ -237,9 +246,6 @@ Erweiterungen in Version 2.2.0:
     Gelände-Ansicht.
     Zur Prüfung der Genauigkeit der verwendeten Koordinaten.
     Erfordert bei Aufruf Verbindung ins Internet.
-- Einbindung der Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2014
-  im Start-Menü.
-    Gegenüber der Ausgabe 2012 haben sich die zu vergebenen Strafpunkte nicht verändert. 
 - Bedienungsanleitung
     'Programme -> Flight Contest -> Manual'
 
@@ -391,9 +397,6 @@ Erweiterungen in Version 2.0.0:
     * $notimecheck    - Keine Zeitauswertung für diesen Check-Punkt
   Details zur Anwendung dieser und aller anderen Markierungen sind in 
   'Programme -> Flight Contest -> Help' im Abschnitt 'Streckenplanung' zu finden.
-- Aktualisierung der FAI Regelwerke
-    FAI Precision Flying - Edition 2013
-    FAI Air Rally Flying - Edition 2013
 - Vollständige Unterstützung der Punkte-Auswertung für 'FAI Air Rally Flying'
     Punkte pro Sekunde Zeitüberschreitung des Takeoff-Zeitfensters wird ermittelt
 

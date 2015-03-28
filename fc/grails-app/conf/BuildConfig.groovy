@@ -69,6 +69,7 @@ grails.project.dependency.resolution = {
 		compile ":excel-import:1.0.0"
 		compile ":joda-time:1.4"
         compile ":mail:1.0.7"
+        compile ":quartz:1.0.2"
 		//compile ":poi:3.7"
 		compile ":class-diagram:0.5.2"
 		compile ":db-util:0.4"

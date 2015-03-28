@@ -57,6 +57,18 @@ mail
 http://grails.org/plugin/mail
 http://grails.asia/grails-mail-plugin-example
 
+Quartz
+------
+compile ":quartz:1.0.2"
+http://grails-plugins.github.io/grails-quartz/
+K:\Projects\GIT\FlightContest\fc\target\work\plugins\quartz-1.0.2
+
+Quartz2
+-------
+compile ":quartz2:2.1.6.2"  
+http://grails.org/plugin/quartz2
+https://github.com/9ci/grails-quartz2
+
 Development
 ===========
 

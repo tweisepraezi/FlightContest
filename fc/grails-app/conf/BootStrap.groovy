@@ -418,7 +418,7 @@ class BootStrap {
                                 contest_instance.contestPrintTaskTestDetails = ""
                                 contest_instance.contestPrintLandingDetails = false
                                 contest_instance.liveRefreshSeconds = Contest.LIVE_REFRESHSECONDS
-                                contest_instance.liveStylesheet = Contest.LIVE_STYLESHEET
+                                contest_instance.liveStylesheet = Global.LIVE_STYLESHEET
                                 contest_instance.livePositionCalculation = 0
                                 contest_instance.liveShowSummary = true
                                 contest_instance.contestPrintEqualPositions = false
@@ -546,6 +546,13 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 10) { // DB-2.11 compatibility
+                            print "    2.10 modifications"
+                            global.liveContestID = 0
+                            global.liveUploadSeconds = Global.LIVE_UPLOADSECONDS
+                            global.liveLanguage = "de"
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }
@@ -567,6 +574,12 @@ class BootStrap {
 				break
 		}
 		
+        if (global.liveContestID) {
+            global.liveContestID = 0
+            global.save()
+            println "  Live disabled."
+        }
+        
         if (grailsApplication.config.flightcontest.migrate_force) {
             db_migrate = true
             println "  Force table migration"

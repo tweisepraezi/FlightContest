@@ -106,6 +106,10 @@ table.legtimelist {
     width: 0%;
 }
 
+table.legtimelist th.tas, th.legtime {
+    white-space: nowrap;
+}
+
 /* -------------------------------------------------------------------------------------------------------------------- */
 table.planningtasklist tr.valuename th.legtime, table.planningtasklist tr.valuename th.trueheading {
 	border-top: 2px solid black;

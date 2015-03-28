@@ -14,6 +14,8 @@ class GpxService
 {
 	def logService
     def messageSource
+    def servletContext
+    def grailsApplication
     
 	final static BigDecimal ftPerMeter = 3.2808 // 1 meter = 3,2808 feet
 	
@@ -21,9 +23,9 @@ class GpxService
 	
 	final static String GACFORMAT_DEF = "I033639GSP4042TRT4346FXA"
     
-    final static Float GPXSHOWPPOINT_GATEDISTANCE = 0.5f         // Größe der Anzeigeumgebung um Gate in NM
-    final static Float GPXSHOWPPOINT_SECRETGATEDISTANCE = 1.0f   // Größe der Anzeigeumgebung um Secret Gate in NM
-    final static Float GPXSHOWPPOINT_AIRFIELDDISTANCE = 2.0f     // Größe der Anzeigeumgebung um Flugplatz in NM
+    final static Float GPXSHOWPPOINT_RADIUS_GATE = 1.0f         // Anzeigeradius um Gate in NM
+    final static Float GPXSHOWPPOINT_RADIUS_SECRETGATE = 2.0f    // Anzeigeradius um Secret Gate in NM
+    final static Float GPXSHOWPPOINT_RADIUS_AIRFIELD = 4.0f      // Anzeigeradius um Flugplatz in NM
     final static int GPXSHOWPPOINT_SCALE = 4                     // Nachkommastellen für Koordinaten
 	
 	final static boolean WRLOG = false
@@ -454,16 +456,14 @@ class GpxService
                 Map new_point = [name:coordroute_instance.titleCode()]
                 new_point += ErrorPoints(testInstance,coordroute_instance)
                 if (coordroute_instance.type == CoordType.SECRET) {
-                    new_point += AviationMath.getShowPoint(coordroute_instance.latMath(), coordroute_instance.lonMath(), GPXSHOWPPOINT_SECRETGATEDISTANCE)
+                    new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_SECRETGATE]
                 } else if (coordroute_instance.type.IsCpCheckCoord()) {
-                    new_point += AviationMath.getShowPoint(coordroute_instance.latMath(), coordroute_instance.lonMath(), GPXSHOWPPOINT_GATEDISTANCE)
+                    new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_GATE]
                 } else {
-                    new_point += AviationMath.getShowPoint(coordroute_instance.latMath(), coordroute_instance.lonMath(), GPXSHOWPPOINT_AIRFIELDDISTANCE)
+                    new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
                 }
-                new_point.latmin.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-                new_point.latmax.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-                new_point.lonmin.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-                new_point.lonmax.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
+                new_point.latcenter = new_point.latcenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
+                new_point.loncenter = new_point.loncenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
                 points += new_point
             //}
         }
@@ -835,51 +835,31 @@ class GpxService
 		return df.format(tenth_ground_speed)
 	}
 	
-	//--------------------------------------------------------------------------
-	void DeleteFile(String fileName)
-	{
-		print "Delete '$fileName'..."
-		File file = new File(fileName)
-		if (file.delete()) {
-			println "Done."
-		} else {
-			println "Error."
-		}
-	}
-	
     //--------------------------------------------------------------------------
     Map SendFTP(Object configFlightContest, String baseDir, String sourceURL, String destFileName)
     {
         printstart "SendFTP ${configFlightContest.ftp.host}:${configFlightContest.ftp.port}"
         Map ret = [:]
         try {
-            String dest_file_name = "${configFlightContest.ftp.directory}/$baseDir/${destFileName}"
+            String dest_file_name = "/${baseDir}/${destFileName}"
             println "${configFlightContest.ftp.host}:${configFlightContest.ftp.port}${dest_file_name}"
             new FTPClient().with {
                 connect(configFlightContest.ftp.host, configFlightContest.ftp.port)
                 enterLocalPassiveMode()
                 if (login(configFlightContest.ftp.username, configFlightContest.ftp.password)) {
-                    if (configFlightContest.ftp.directory) {
-                        if (changeWorkingDirectory(configFlightContest.ftp.directory)) {
-                            if (changeWorkingDirectory(baseDir) || makeDirectory(baseDir)) {
-                                if (destFileName && sourceURL) {
-                                    if (storeFile(dest_file_name, new URL(sourceURL).openStream())) {
-                                        ret.message = getMsg('fc.net.ftp.filecopyok',[sourceURL,dest_file_name])
-                                    } else {
-                                        ret.message = getMsg('fc.net.ftp.filecopyerror',[sourceURL,dest_file_name])
-                                        ret.error = true
-                                    }
-                                }
+                    if (changeWorkingDirectory(baseDir) || makeDirectory(baseDir)) {
+                        if (destFileName && sourceURL) {
+                            def file = new URL(sourceURL).openStream()
+                            if (storeFile(dest_file_name, file)) {
+                                ret.message = getMsg('fc.net.ftp.filecopyok',[sourceURL,dest_file_name])
                             } else {
-                                ret.message = getMsg('fc.net.ftp.dircreateerror',[dir])
+                                ret.message = getMsg('fc.net.ftp.filecopyerror',[sourceURL,dest_file_name])
                                 ret.error = true
                             }
-                        } else {
-                            ret.message = getMsg('fc.net.ftp.nobasedestdirerror',[configFlightContest.ftp.directory])
-                            ret.error = true
+                            file.close()
                         }
                     } else {
-                        ret.message = getMsg('fc.net.ftp.nobasedirerror')
+                        ret.message = getMsg('fc.net.ftp.dircreateerror',[dir])
                         ret.error = true
                     }
                 } else {
@@ -895,6 +875,206 @@ class GpxService
             printerror ret.message
         }
         return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map SendFTP2(Object configFlightContest, String baseDir, String sourceURL, String destFileName) // TODO: getMsg
+    {
+        printstart "SendFTP ${configFlightContest.ftp.host}:${configFlightContest.ftp.port}"
+        Map ret = [:]
+        try {
+            String dest_file_name = "/${baseDir}/${destFileName}"
+            println "${configFlightContest.ftp.host}:${configFlightContest.ftp.port}${dest_file_name}"
+            new FTPClient().with {
+                connect(configFlightContest.ftp.host, configFlightContest.ftp.port)
+                enterLocalPassiveMode()
+                if (login(configFlightContest.ftp.username, configFlightContest.ftp.password)) {
+                    if (changeWorkingDirectory(baseDir) || makeDirectory(baseDir)) {
+                        if (destFileName && sourceURL) {
+                            def file = new URL(sourceURL).openStream()
+                            if (storeFile(dest_file_name, file)) {
+                                ret.message = "getMsg('fc.net.ftp.filecopyok',[sourceURL,dest_file_name])"
+                            } else {
+                                ret.message = "getMsg('fc.net.ftp.filecopyerror',[sourceURL,dest_file_name])"
+                                ret.error = true
+                            }
+                            file.close()
+                        }
+                    } else {
+                        ret.message = "getMsg('fc.net.ftp.dircreateerror',[dir])"
+                        ret.error = true
+                    }
+                } else {
+                    ret.message = "getMsg('fc.net.ftp.loginerror',[configFlightContest.ftp.username])"
+                    ret.error = true
+                }
+                disconnect()
+            }
+            printdone ""
+        } catch (Exception e) {
+            ret.error = true
+            ret.message = """getMsg('fc.net.ftp.connecterror',["${configFlightContest.ftp.host}:${configFlightContest.ftp.port}"]) + ": ${e.getMessage()}" """
+            printerror ret.message
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    public boolean PublishLiveResults(long liveContestID)
+    // Return: false - Error
+    {
+        boolean ret = true
+        if (BootStrap.global.IsLivePossible()) {
+            printstart "PublishLiveResults ${new Date()}"
+            long live_contest_id = liveContestID
+            if (!live_contest_id) {
+                live_contest_id = BootStrap.global.liveContestID
+            }
+            Contest.findAllById(live_contest_id).each { Contest contest_instance ->
+                printstart "Contest '${contest_instance.title}'"
+                
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir =  servletContext.getRealPath("/")
+                String live_html_file_name = "${webroot_dir}gpxupload/LIVE-${uuid}.htm"
+                
+                String live_url
+                if (liveContestID) {
+                    live_url = "http://localhost:8080/fc/contest/listnoliveresults/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
+                } else {
+                    live_url = "http://localhost:8080/fc/contest/listresultslive/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
+                }
+                printstart "${live_url} -> ${live_html_file_name}"
+                byte[] utf8_bom = new byte[3]
+                utf8_bom[0] = (byte) 0xEF
+                utf8_bom[1] = (byte) 0xBB
+                utf8_bom[2] = (byte) 0xBF
+                def live_html_file = new File(live_html_file_name).newOutputStream()
+                live_html_file << new String(utf8_bom)
+                live_html_file << new URL(live_url).openStream()
+                live_html_file.close()
+                printdone ""
+                
+                if (BootStrap.global.IsLiveFTPUploadPossible()) {
+                    printstart "FTP-Upload"
+                    String working_dir = grailsApplication.config.flightcontest.live.ftpupload.workingdir
+                    if (!working_dir.startsWith("/")) {
+                        working_dir = "/${working_dir}"
+                    }
+                    if (!working_dir.endsWith("/")) {
+                        working_dir += "/"
+                    }
+                    Map ret_ftp = SendFTP2(
+                        grailsApplication.config.flightcontest,
+                        working_dir,
+                        "file:${live_html_file_name}",
+                        grailsApplication.config.flightcontest.live.ftpupload.name
+                    )
+                    if (ret_ftp.error) {
+                        ret = false
+                        printerror ""
+                    } else {
+                        printdone ""
+                    }
+                }
+                
+                if (BootStrap.global.IsLiveCopyPossible()) {
+                    printstart "Copy"
+                    grailsApplication.config.flightcontest.live.copy.each { i, dest ->
+                        String dest_file_name = dest.replaceAll('\\\\','/')
+                        printstart "Copy to '$dest_file_name'"
+                        def src_file = new File(live_html_file_name).newInputStream()
+                        try {
+                            def dest_file = new File(dest_file_name).newOutputStream()  
+                            dest_file << src_file
+                            dest_file.close()
+                        } catch (Exception e) {
+                            ret = false
+                            println "Error: ${e.getMessage()}"
+                        }
+                        src_file.close()
+                        printdone ""
+                    }
+                    printdone ""
+                }
+                
+                DeleteFile(live_html_file_name)
+                
+                printdone ""
+            }
+            printdone ""
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    public boolean UploadStylesheet(String stylesheetName)
+    // Return: false - Error
+    {
+        boolean ret = true
+        if (BootStrap.global.IsLivePossible()) {
+            printstart "UploadStylesheet ${new Date()}"
+            String webroot_dir =  servletContext.getRealPath("/")
+            String stylesheet_file_name = "${webroot_dir}css/${stylesheetName}"
+            
+            if (BootStrap.global.IsLiveFTPUploadPossible()) {
+                printstart "FTP-Upload"
+                String working_dir = grailsApplication.config.flightcontest.live.ftpupload.workingdir
+                if (!working_dir.startsWith("/")) {
+                    working_dir = "/${working_dir}"
+                }
+                if (!working_dir.endsWith("/")) {
+                    working_dir += "/"
+                }
+                Map ret_ftp = SendFTP2(
+                    grailsApplication.config.flightcontest,
+                    working_dir,
+                    "file:${stylesheet_file_name}",
+                    stylesheetName
+                )
+                if (ret_ftp.error) {
+                    ret = false
+                    printerror ""
+                } else {
+                    printdone ""
+                }
+            }
+            
+            if (BootStrap.global.IsLiveCopyPossible()) {
+                printstart "Copy"
+                grailsApplication.config.flightcontest.live.copy.each { i, dest ->
+                    String dest_file_name = dest.replaceAll('\\\\','/')
+                    dest_file_name = "${dest_file_name.substring(0,dest_file_name.lastIndexOf('/')+1)}${stylesheetName}"
+                    printstart "Copy to '$dest_file_name'"
+                    def src_file = new File(stylesheet_file_name).newInputStream()
+                    try {
+                        def dest_file = new File(dest_file_name).newOutputStream()  
+                        dest_file << src_file
+                        dest_file.close()
+                    } catch (Exception e) {
+                        ret = false
+                        println "Error: ${e.getMessage()}"
+                    }
+                    src_file.close()
+                    printdone ""
+                }
+                printdone ""
+            }
+            
+            printdone ""
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    void DeleteFile(String fileName)
+    {
+        print "Delete '$fileName'..."
+        File file = new File(fileName)
+        if (file.delete()) {
+            println "Done."
+        } else {
+            println "Error."
+        }
     }
     
     //--------------------------------------------------------------------------

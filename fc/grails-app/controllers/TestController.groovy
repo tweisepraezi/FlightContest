@@ -1208,7 +1208,7 @@ class TestController
         Map ret = [:]
         String s = "<p>Lieber Sportfreund,</p>"
         
-        String crew_dir = "${grailsApplication.config.flightcontest.ftp.publicurl}${grailsApplication.config.flightcontest.ftp.directory}/${testInstance.crew.uuid}"
+        String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${testInstance.crew.uuid}"
         
         String view_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.htm"
         s += """<p>Dein Flug (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
@@ -1228,7 +1228,7 @@ class TestController
 
     private String GetEMailGpxURL(Test testInstance)
     {
-        String crew_dir = "${grailsApplication.config.flightcontest.ftp.publicurl}${grailsApplication.config.flightcontest.ftp.directory}/${testInstance.crew.uuid}"
+        String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${testInstance.crew.uuid}"
         String gpx_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.gpx"
         return gpx_url
     }

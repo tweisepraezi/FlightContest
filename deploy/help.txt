@@ -14,9 +14,9 @@ Inhalt
 - Auswertungen
 - Unterstützte Logger
 - Behebung von AFLOS-Problemen
-- Live-Ergebnisanzeige
 - Druck-Stil beeinflussen
 - Installations-abhängige Konfiguration
+- Live-Ergebnisanzeige
 - Datensicherung eines laufenden Wettbewerbes
 
 
@@ -618,7 +618,7 @@ Besondere Landefehler wie 'Keine Landung', 'Abnormale Landung' usw. werden durch
 anklickbare Check-Boxen eingegeben.
 
 Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
-  Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2014:
+  Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2015:
     Alle Landungen
       {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
@@ -629,11 +629,11 @@ Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return null;}}}
     Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.
 
-  FAI Air Rally Flying - Edition 2013:
+  FAI Air Rally Flying - Edition 2015:
     Alle Landungen
       {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
-  FAI Precision Flying - Edition 2013:
+  FAI Precision Flying - Edition 2015:
     Landung 1 und 4
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
     Landung 2 und 3
@@ -828,43 +828,6 @@ Hinweis:
   Kalkulationen in die selbe Auswertungs-Liste importiert werden.
 
 
-Live-Ergebnisanzeige
-====================
-Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
-
-- Konfiguration (-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen)
-    Filter:
-      * einzubeziehende Klassen
-      * einzubeziehende Aufgaben
-      * einzubeziehende Teams
-      * einzubeziehende Aufgabendetails
-    Formatierung:
-      * Titel
-      * Untertitel
-      * Spalte für Aufgabenergebnisse
-      * Aufgabentitel im Detailtitel
-         
-- Direkte Anzeige aus 'Flight Contest' heraus (-> Auswertung -> Wettbewerbs-Auswertung -> Live-Ergebnisanzeige)
-    Web-Site wird alle 10 Sekunden automatisch aktualisiert.
-
-- FTP-Upload/Netzwerkfreigabe-Kopie (-> Script fclive_run.groovy)
-    Installationsvoraussetzungen:
-      * Java 6 oder höher
-      * Groovy 2.1.6 oder höher
-      * commons-net-3.3.jar nach 'C:\Program Files (x86)\Groovy\Groovy-<Version>\lib' kopieren
-    Installation:
-      * Script 'C:\Program Files (x86)\Flight Contest\scripts\fclive_run.groovy' auf eine beliebige Stelle
-        auf der lokalen Platte kopieren und konfigurieren
-      * Stylesheet 'C:\Program Files (x86)\Flight Contest\scripts\fclive.css' auf FTP-Server und/oder
-        auf Netzwerkfreigaben hochladen/kopieren.
-      * Script alle 60 Sekunden mit 'Geplante Tasks'/'Task Scheduler' aufrufen
-    Konfiguration 'fclive_run.groovy':
-      * CONTEST_ID - Datenbank-ID des Wettbewerbes (im Link von "Wettbewerb wechseln" zu finden)
-      * LANGUAGE - Ausgabesprache Deutsch 'de' oder Englisch 'en'
-      * FTPConnections - Liste der FTP-Server, wohin Live-Web-Site fclive.htm hochgeladen werden soll.
-      * CopyDestinations - Liste der Netzwerkfreigaben, wohin Live-Web-Site fclive.htm hinkopiert werden soll.
-
-
 Druck-Stil beeinflussen
 =======================
 Ermöglicht Einfluß auf das Aussehen des Druckes.
@@ -960,13 +923,13 @@ CSS-Einstellungen für Tabellen:
 
 Installations-abhängige Konfiguration
 =====================================
-Ermöglicht Einstellungen, die nicht installiert werden können.
+Ermöglicht Anpassungen der Einsatzumgebung der 'Flight Contest'-Installation
 -> Extras -> Einstellungen -> Konfiguration
 
 Änderungen erst wirksam nach Neustart von 'Flight Contest'.
 
 Sollte 'Flight Contest' nach Änderungen nicht mehr starten, ist die letzte
-Änderung in 'C:\Users\<Benutzer-Name>\.fc\config.groovy' rückgängig
+Änderung in 'C:\FCSave\.fc\config.groovy' rückgängig
 zu machen oder diese Datei zu löschen.
 
 E-Mail-Versand konfigurieren
@@ -991,27 +954,133 @@ flightcontest {
   }
 }
 
+E-Mail-Abruf konfigurieren
+--------------------------
+grails {
+  webmail {
+    url = "TODO"                // Adresse des Web-Mail-Dienstes 
+    loginname_name = "TODO"     // Name des Benutzername-Feldes
+    loginpassword_name = "TODO" // Name des Passwort-Feldes
+    username = "TODO"           // Login-Name
+    password = "TODO"           // Passwort
+  }
+}
+
 FTP-Versand konfigurieren
 -------------------------
 flightcontest {
   ftp {
-    host = "TODO"       // FTP-Server-Adresse (DNS-Name oder IP-Adresse)
+    host = "results.flightcontest.de" // FTP-Server-Adresse
     port = 21           // FTP-Server-Port
-    username = "TODO"   // FTP-Server-Login-Name
-    password = "TODO"   // FTP-Server-Passwort
-    directory = "/TODO" // Basis-Verzeichnis auf FTP-Server (muss existieren)
-    publicurl = "TODO"  // Öffentlicher Zugang zu hochgeladenen Dateien
+    username = "TODO"   // FTP-Login-Name
+    password = "TODO"   // FTP-Passwort
+    contesturl = "TODO" // Öffentlicher Zugang zum Wettbewerbs-Verzeichnis
+                        // auf FTP-Server (z.B. "http://results.flightcontest.de/demo")
     testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Quell-URL
   }
 }
 
-Im Basis-Verzeichnis auf dem FTP-Server muss für den FTP-Test 
-das Unter-Verzeichns "_ftptest" existieren.
+Im Root-Verzeichnis des FTP-Servers müssen 2 Verzeichnisse existieren:
+  GM_Utils-5.13 - GPX-Viewer-JavaScript-Bibliothek
+  Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis
+    (obiges Beispiel: "demo")
 
-Im Basis-Verzeichnis auf dem FTP-Server muss für GPX-Dateien ein eigener
+Die genannte Version des GPX-Views kann folgendem Verzeichnis entnommen werden:
+    C:\Program Files (x86)\Flight Contest\tomcat\webapps\fc\GM_Utils
+
+Im Root-Verzeichnis des FTP-Server muss für GPX-Dateien ein eigener
 MIME-Typ konfiguriert werden. Dazu in Datei '.htaccess' folgende Zeile
 hinzufügen:
     AddType application/gpx .gpx
+    
+Der FTP-Login-Name muss Schreibrechte auf das Wettbewerbs-Verzeichnis erhalten,
+nicht jedoch auf das Root-Verzeichnis des FTP-Servers.
+
+Live-Anzeige konfigurieren
+--------------------------
+flightcontest {
+  live {
+    ftpupload {            // FTP-Upload des Live-Ergebnisses
+       workingdir = "/"    //   Verzeichnis auf dem FTP-Server
+       name = "fclive.htm" //   Dateiname
+    }
+    copy {                 // Kopie des Live-Ergebnisses
+       dest = "TODO"       //   Verzeichnis und Dateiname
+                           //     z.B. "C:/Live/fclive.htm" (lokale Kopie)
+                           //          "//Server/Share/fclive.htm" (Share-Kopie)
+                           //   Mehrere Kopien erlaubt
+                           //     (dest1 = ...)  
+                           //     (dest2 = ...)  
+    }
+  }
+}
+
+Der FTP-Upload erfordert einen konfigurierten FTP-Versand.
+
+Lokale und Share-Kopien können nicht direkt im Firefox geöffnet werden.
+  Folgendermaßen zum Öffnen einer lokalen Kopie vorgehen:
+    1. Link in neuem Tab öffnen
+         -> C:/Live/fclive.htm
+    2. In der Adresszeile dem Link "file:///" voranstellen
+         -> file:///C:/Live/fclive.htm
+  Folgendermaßen zum Öffnen einer Share-Kopie vorgehen:
+    1. Link in neuem Tab öffnen
+         -> Server/Share/fclive.htm
+    2. In der Adresszeile dem Link "file://///" voranstellen
+         -> file://///Server/Share/fclive.htm
+
+
+Live-Ergebnisanzeige
+====================
+Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
+
+Zuerst Anpassung der Einsatzumgebung vornehmen:
+-> Installations-abhängige Konfiguration -> Live-Anzeige konfigurieren
+
+Wettbewerbs-Einstellungen
+-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen
+
+  Es werden die selben Filter-Kriterien wie bei der Wettbewerbs-Auswertung angewendet.
+  Live-spezifische Einstellungen:
+    * Live-Ergebnis-Refresh: 10 Sekunden (Standard)
+        Intervall, mit dem sich die Live-Ergebnis-Datei selbst im Browser aktualisiert.
+    * Live-Ergebnis-Wettbewerbs-Summe:
+        Wenn aktiviert, wird die Summe der Strafpunkte aller Aufgaben mit ausgegeben.
+        Nur sinnvoll, wenn es mehrere Aufgaben (= Wettbewerbstage) gibt.
+    * Live-Ergebnis-Positionsberechnung:
+        Auswahl, welche Aufgabe die Live-Ergebnis-Plazierung bestimmt.
+        Hier kann auch Wettbewerbs-Summe gewählt werden.
+
+  Vorgenommene Einstellungen können mit der integrierten Live-Anzeige geprüft werden.
+  -> Auswertung -> Wettbewerbs-Auswertung -> Live-Ergebnisanzeige
+
+Live-Anzeige im laufenden Wettbewerb
+-> Extras -> Live-Einstellungen
+
+  Vorbereitung:
+    * Upload-Zeit: 60 Sekunden (Standard)
+        Intervall, mit dem die Live-Ergebnis-Datei erzeugt und hochgeladen wird.
+        Nach Änderung 'Speichern' betätigen
+    * Sprache: Deutsch (Standard)
+        Nach Änderung 'Speichern' betätigen
+    * Live-Stylesheet hochladen
+        Einmal auszuführen, wenn neue Upload-Ziele konfiguriert wurden.
+    * Live-Ergebnis löschen
+        Einmal auszuführen, wenn neue Upload-Ziele konfiguriert wurden.
+        Kann auch ausgeführt werden, um den Inhalt einer hochgeladenen
+        Live-Ergebnis-Datei zu löschen.
+    * Öffentliche Links
+        Hier können die hochgeladenen Live-Ergebnis-Dateien geprüft werden.
+
+  Live-Aktualisierung:
+    * Live-Ergebnis-Anzeige für Wettbewerb
+        Wettbewerb wählen, für den eine Live-Ergebnis-Anzeige erfolgen soll.  
+        Zum Aktivieren 'Speichern' betätigen
+    * Live-Ergebnis-Anzeige einschalten
+        Live-Ergebnis-Anzeige für den aktiven Wettbewerb einschalten.
+    * Live-Ergebnis-Anzeige ausschalten
+        Live-Ergebnis-Anzeige auschalten.
+        Der letzte Stand der Live-Ergebnis-Datei wird eingefroren.
 
 
 Datensicherung eines laufenden Wettbewerbes

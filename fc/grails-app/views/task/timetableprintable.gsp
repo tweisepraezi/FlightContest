@@ -139,8 +139,8 @@
                                 <table class="legtimelist">
                                     <thead>
                                         <tr>
-                                            <th>${message(code:'fc.tas')}</th>
-                                            <th>${message(code:'fc.legtime.total')}</th>
+                                            <th class="tas">${message(code:'fc.tas')}</th>
+                                            <th class="legtime">${message(code:'fc.legtime.total')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

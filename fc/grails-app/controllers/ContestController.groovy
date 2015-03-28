@@ -345,6 +345,7 @@ class ContestController {
             }
         } else if (contest.notdeleted) {
             flash.message = contest.message
+            flash.error = true
             redirect(action:start,id:params.id)
         } else {
             flash.message = contest.message
@@ -645,6 +646,29 @@ class ContestController {
 		}
 	}
 	
+    def listnoliveresults = {
+        fcService.printstart "listnoliveresults"
+        if (params.id && params.id.isLong()) {
+            fcService.print "Get contest with id '${params.id}'"
+            session.lastContest = Contest.get(params.id)
+            fcService.println "Done."
+        }
+        if (params.lang) {
+            fcService.println "Set showLanguage to '${params.lang}'"
+            session.showLanguage = params.lang
+        }
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            // def contest = fcService.calculatelivepositionsContest(session.lastContest)
+            session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
+            fcService.printdone "Show live html."
+            return [contestInstance:session.lastContest,liveTest:false,params:null]
+        } else {
+            fcService.printdone "Start."
+            redirect(action:start)
+        }
+    }
+    
 	def liveview = {
 		if (session?.lastContest) {
 			redirect(action:listresultslive)

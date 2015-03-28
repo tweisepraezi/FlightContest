@@ -64,31 +64,34 @@ JB.GPX2GM.units.enus =  {
 	alt: "ft",
 	pace: "min/mile"
 };
-JB.GPX2GM.units.airwater =  {
+JB.GPX2GM.units.airwater = JB.GPX2GM.units.water =  {
+	way: "sm",
+	speed: "kn",
+	alt: "ft",
+	pace: "min/sm"
+};
+JB.GPX2GM.units.air =  {
 	way: "NM",
 	speed: "kn",
 	alt: "ft",
 	pace: "min/NM"
 };
+
 JB.GPX2GM.strings = {};
 JB.GPX2GM.strings.de = {
 	lenght: "L\u00e4nge",
 	way: "Strecke",
-	//way_unit: "km",
 	tstart: "Startzeit",
 	time: "Zeit",
 	time_unit: "Stunden",
 	altdiff: "H\u00F6hendifferenz",
 	alt: "H\u00F6he",
-	//alt_unit: "m",
 	grade: "Stg.",
 	grade_unit: "%",
 	avspeed: "V<sub>m</sub>",
 	speed2: "Geschw.",
 	speed: "V",
-	//speed_unit: "km/h",
 	pace: "Pace",
-	//pace_unit: "min/km",
 	hr2: "Puls",
 	hr: "HF",
 	hr_unit: "1/min",
@@ -105,7 +108,6 @@ JB.GPX2GM.strings.de = {
 JB.GPX2GM.strings.en = {
 	lenght: "Length",
 	way: "Way",
-	//way_unit: "km",
 	tstart: "Start time",
 	time: "Time",
 	time_unit: "hours",
@@ -117,9 +119,7 @@ JB.GPX2GM.strings.en = {
 	avspeed: "V<sub>m</sub>",
 	speed2: "Speed",
 	speed: "V",
-	//speed_unit: "km/h",
 	pace: "Pace",
-	//pace_unit: "min/km",
 	hr2: "Heart rate",
 	hr: "HR",
 	hr_unit: "1/min",
