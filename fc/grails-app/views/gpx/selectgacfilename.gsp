@@ -15,6 +15,14 @@
                     	<div>
     						<input type="file" size="80" accept="text/plain/*.gac" name="loadgacfile" tabIndex="1"/>
                     	</div>
+                    	<g:if test="${contestInstance && Route.findByContest(contestInstance)}">
+	                        <p>
+	                            <div>
+		                            <label>${message(code:'fc.route')}: </label>
+		                            <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance,[sort:"id"])}" name="routeid" value="${Route.findByContest(contestInstance,[sort:"id"]).id}" noSelection="${[id:'']}" ></g:select>
+	                            </div>
+	                        </p>
+	                    </g:if>
                     	<div>
 	    					<input type="submit" value="${message(code:'fc.gpx.showmap')}" tabIndex="11"/>
 		                    <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="12"/>

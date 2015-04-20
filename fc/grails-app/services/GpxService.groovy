@@ -14,6 +14,7 @@ class GpxService
 {
 	def logService
     def messageSource
+    def mailService
     def servletContext
     def grailsApplication
     
@@ -198,7 +199,7 @@ class GpxService
 			def gpx = new XmlParser().parse(gpx_reader)
 			if (gpx.trk.size() == 1) { // only 1 track allowed
 				def gpx_track_name = gpx.trk.name[0].text()
-				def track_points = gpx.trk..trkpt
+				def track_points = gpx.trk.trkseg.trkpt
 				
 				// write header
 				WriteLine(gac_writer,"AFCGPX:$GPXGACCONVERTER_VERSION")
@@ -263,8 +264,9 @@ class GpxService
 	}
 	
     //--------------------------------------------------------------------------
-    boolean ConvertGAC2GPX(String gacFileName, String gpxFileName)
+    Map ConvertGAC2GPX(String gacFileName, String gpxFileName, Route routeInstance)
     {
+        Map ret = [:]
         boolean converted = true
         String err_msg = ""
         
@@ -373,6 +375,9 @@ class GpxService
                     }
                 }
             }
+            if (routeInstance) {
+                GPXRoute(routeInstance, xml)
+            }
         }
         gac_reader.close()
         gpx_writer.close()
@@ -382,7 +387,11 @@ class GpxService
         } else {
             printerror err_msg
         }
-        return converted
+        if (routeInstance) {
+            ret += [gpxShowPoints:GPXShowPoints(routeInstance,null)]
+        }
+        ret += [ok:converted]
+        return ret
     }
     
     //--------------------------------------------------------------------------
@@ -402,6 +411,59 @@ class GpxService
             GPXRoute(routeInstance, xml)
         }
         gpx_writer.close()
+
+        if (converted) {
+            printdone ""
+        } else {
+            printerror err_msg
+        }
+        ret += [gpxShowPoints:GPXShowPoints(routeInstance,null)]
+        ret += [ok:converted]
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map AddRoute2GPX(Route routeInstance, String gpxFileName)
+    {
+        Map ret = [:]
+        boolean converted = true
+        String err_msg = ""
+        
+        printstart "AddRoute2GPX ${routeInstance.name()} -> ${gpxFileName}"
+
+        File gpx_file = new File(gpxFileName)
+        
+        String new_gpx_filename = "${gpxFileName}.new"
+        File new_gpx_file = new File(new_gpx_filename)
+        BufferedWriter gpx_writer = new_gpx_file.newWriter()
+        MarkupBuilder xml = new MarkupBuilder(gpx_writer)
+        gpx_writer.writeLine(XMLHEADER)
+        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+
+            FileReader gpx_reader = new FileReader(gpx_file)
+            def gpx = new XmlParser().parse(gpx_reader)
+            if (gpx.trk.size() == 1) { // only 1 track allowed
+                xml.trk {
+                    name gpx.trk.name[0].text()
+                    xml.trkseg {
+                        gpx.trk.trkseg.trkpt.each { p ->
+                            xml.trkpt(lat:p.'@lat', lon:p.'@lon') {
+                                ele p.ele[0].text()
+                                time p.time[0].text()
+                            }
+                        }
+                    }
+                }
+                gpx.trk.text()
+            }
+            gpx_reader.close()
+            
+            GPXRoute(routeInstance, xml)
+        }
+        gpx_writer.close()
+        
+        gpx_file.delete()
+        new_gpx_file.renameTo(new File(gpxFileName))
 
         if (converted) {
             printdone ""
@@ -1063,6 +1125,132 @@ class GpxService
             printdone ""
         }
         return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    public void BackgroundUpload()
+    {
+        boolean found = false
+        String webroot_dir = servletContext.getRealPath("/")
+        String analyze_dir = webroot_dir + "jobs"
+        File analyze_dir1 = new File(analyze_dir)
+        analyze_dir1.eachFile() { File file ->
+            if (file.isFile()) {
+                if (!found) {
+                    printstart "BackgroundUpload ${new Date()}"
+                    found = true
+                }
+                
+                printstart "Process '${file}'"
+                
+                LineNumberReader job_file_reader = file.newReader()
+                String line = ""
+                String ftp1_basedir
+                String ftp1_sourceurl
+                String ftp1_destfilename
+                String ftp2_basedir
+                String ftp2_sourceurl
+                String ftp2_destfilename
+                String email_to
+                String email_subject
+                String email_body
+                String save_link
+                String test_id
+                String remove_file
+                while (true) {
+                    line = job_file_reader.readLine()
+                    if (line == null) {
+                        break
+                    }
+                    if (!ftp1_basedir) {
+                        ftp1_basedir = line
+                    } else if (!ftp1_sourceurl) {
+                        ftp1_sourceurl = line
+                    } else if (!ftp1_destfilename) {
+                        ftp1_destfilename = line
+                    } else if (!ftp2_basedir) {
+                        ftp2_basedir = line
+                    } else if (!ftp2_sourceurl) {
+                        ftp2_sourceurl = line
+                    } else if (!ftp2_destfilename) {
+                        ftp2_destfilename = line
+                    } else if (!email_to) {
+                        email_to = line
+                    } else if (!email_subject) {
+                        email_subject = line
+                    } else if (!email_body) {
+                        email_body = line
+                    } else if (!save_link) {
+                        save_link = line
+                    } else if (!test_id) {
+                        test_id = line 
+                    } else if (!remove_file) {
+                        remove_file = line
+                    }
+                }
+                job_file_reader.close()
+                
+                if (ftp1_basedir && ftp1_sourceurl && ftp1_destfilename &&
+                    ftp2_basedir && ftp2_sourceurl && ftp2_destfilename &&
+                    email_to && email_subject && email_body && save_link && test_id && remove_file) {
+                    
+                    // FTP upload gpx
+                    Map ret = SendFTP2(
+                        grailsApplication.config.flightcontest,ftp1_basedir,ftp1_sourceurl,ftp1_destfilename
+                    )
+    
+                    // FTP upload html
+                    if (!ret.error) {
+                        ret = SendFTP2(
+                            grailsApplication.config.flightcontest,ftp2_basedir,ftp2_sourceurl,ftp2_destfilename
+                            
+                        )
+                    }
+                    
+                    if (!ret.error) {
+                        try {
+                            // Send email
+                            mailService.sendMail {
+                                from grailsApplication.config.flightcontest.mail.from
+                                to NetTools.EMailList(email_to).toArray()
+                                if (grailsApplication.config.flightcontest.mail.cc) {
+                                  cc NetTools.EMailList(grailsApplication.config.flightcontest.mail.cc).toArray()
+                                }
+                                subject email_subject
+                                html email_body
+                                // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
+                            }
+                            
+                            // Save link
+                            Test test_instance = Test.get(test_id.toLong())
+                            test_instance.flightTestLink = save_link
+                            test_instance.save()
+                            
+                            println "E-Mail send."
+                        } catch (Exception e) {
+                            println "Error: ${e.getMessage()}" 
+                            ret.error = true
+                        }
+                    }
+                    
+                    if (!ret.error) {
+                        DeleteFile(remove_file)
+                        String new_file_name = webroot_dir + "jobs\\done\\" + file.name
+                        file.renameTo(new File(new_file_name))
+                        printdone new_file_name
+                    } else {
+                        String new_file_name = webroot_dir + "jobs\\error\\" + file.name
+                        file.renameTo(new File(new_file_name))
+                        printerror new_file_name
+                    }
+                } else {
+                    printerror ""
+                }
+            }
+        }
+        if (found) {
+            printdone ""
+        }
     }
     
     //--------------------------------------------------------------------------

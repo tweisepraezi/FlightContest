@@ -101,7 +101,7 @@
 				                            <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1))}">
 				                                <g:set var="detail_num" value="${detail_num+1}"/>
 				                            </g:if>
-	                                    	<th colspan="${detail_num}">${task_instance.bestOfName()}</th>
+	                                    	<th colspan="${detail_num}">${task_instance.bestOfNamePrintable()}</th>
 		                                </g:each>
 	                                </g:if>
                                    	<th>${message(code:'fc.test.results.summary')}</th>

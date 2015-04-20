@@ -23,7 +23,7 @@
                         content: "${resultclassInstance.GetPrintTitle2('fc.test.results')}"
                     </g:if>
                     <g:else>
-                        content: "${message(code:'fc.test.results')} - ${taskInstance.name()}"
+                        content: "${message(code:'fc.test.results')} - ${taskInstance.printName()}"
                     </g:else>
                 }
                 @top-right {
@@ -56,7 +56,7 @@
        			<g:else>
                 	<h2>${message(code:'fc.test.results')}<g:if test="${taskInstance.IsTaskResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 </g:else>
-               	<h3>${taskInstance.name()}</h3>
+               	<h3>${taskInstance.printName()}</h3>
                 <div>
                     <g:form>
                     	<g:if test="${resultclassInstance}">

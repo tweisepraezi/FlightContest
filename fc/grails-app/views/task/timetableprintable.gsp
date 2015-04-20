@@ -19,7 +19,7 @@
                     </g:else> 
                 </g:else>
                 @top-left {
-                    content: "${message(code:'fc.test.timetable')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})"
+                    content: "${message(code:'fc.test.timetable')} - ${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})"
                 }
                 @top-right {
                     content: "${message(code:'fc.program.printpage')} " counter(page)
@@ -41,7 +41,7 @@
         <div>
             <div>
                 <h2>${message(code:'fc.test.timetable')}<g:if test="${taskInstance.printTimetablePrintTitle}"> - ${taskInstance.printTimetablePrintTitle}</g:if></h2>
-                <h3>${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
+                <h3>${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
                 <div>
                     <g:form>
                         <br/>

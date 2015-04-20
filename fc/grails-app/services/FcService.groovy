@@ -644,7 +644,6 @@ class FcService
         
 		setContestRule(contest_instance, contest_instance.contestRule)
 		
-		contest_instance.printOrganizer = Contest.DEFAULT_ORGANIZER
 		contest_instance.imageBottomLeftText = getPrintMsg('fc.contest.image.bottomleft.text')
 		contest_instance.imageBottomRightText = getPrintMsg('fc.contest.image.bottomright.text')
 		
@@ -1977,14 +1976,14 @@ class FcService
             return ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
         }
 		
-		println "gettimetableprintableTask (${task_instance.name()})"
+		println "gettimetableprintableTask (${task_instance.printName()})"
 		
 		// Calculate timetable version
 		if (task_instance.timetableModified) {
 			task_instance.timetableVersion++
 			task_instance.timetableModified = false
 			task_instance.save()
-			println "gettimetableprintableTask: timetableVersion $task_instance.timetableVersion of '${task_instance.name()}' saved."
+			println "gettimetableprintableTask: timetableVersion $task_instance.timetableVersion of '${task_instance.printName()}' saved."
 		}
 
         return ['instance':task_instance]
@@ -3306,6 +3305,7 @@ class FcService
         }
 
         // set single PlanningTestTask to all selected Tests
+        int assign_num = 0
         PlanningTestTask planningtesttask_instance = PlanningTestTask.findByPlanningtest(task.instance.planningtest) 
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
@@ -3315,11 +3315,20 @@ class FcService
 					test_instance.ResetPlanningTestResults()
 					test_instance.CalculateTestPenalties()
 	                test_instance.save()
+                    assign_num++
 				}
             }
         }
         
-		printdone ""
+        if (!assign_num) {
+            task.message = getMsg('fc.planningtesttask.someonemustselected.assign')
+            task.error = true
+            printerror task.message
+            return task
+        }
+        
+        task.message = getMsg('fc.planningtesttask.assigned',[assign_num])
+		printdone task.message
         return task
     }
     
@@ -3364,7 +3373,7 @@ class FcService
 			printerror task.message
             return task
         }
-
+        
         // FlightTestWind exists?
         if (!FlightTestWind.countByFlighttest(task.instance.flighttest)) {
             task.message = getMsg('fc.flighttestwind.notfound')
@@ -3372,31 +3381,44 @@ class FcService
 			printerror task.message
             return task
         }
-
+        println "X"
+        
         // Multiple FlightTestWinds?  
         if (FlightTestWind.countByFlighttest(task.instance.flighttest) > 0) {
             List test_instance_ids = [""]
+            int assign_num = 0
             Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
                 if (params["selectedTestID${test_instance.id}"] == "on") {
                     test_instance_ids += test_instance.id.toString()
+                    assign_num++
                 }
             }
             task.testinstanceids = test_instance_ids
+            if (!assign_num) {
+                task.message = getMsg('fc.flighttestwind.someonemustselected.assign')
+                task.error = true
+                printerror task.message
+                return task
+            }
+            
 			printdone ""
             return task
         }
-
+        
+        // Code wird ab hier nicht mehr ausgeführt
+        
         // set single FlightTestWind to all selected Tests
         FlightTestWind flighttestwind_instance = FlightTestWind.findByFlighttest(task.instance.flighttest)
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
 				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
 					setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
+                    assign_num++
 				}
             }
         }
-
-		printdone ""
+        
+        printdone ""
         return task
     }
     
@@ -4545,7 +4567,7 @@ class FcService
             }
         }
 		if (!someone_selected) {
-            task.message = getMsg('fc.planningtesttask.someonemustselected')
+            task.message = getMsg('fc.planningtesttask.someonemustselected.print')
             task.error = true
 			printerror task.message
             return task
@@ -8443,7 +8465,7 @@ class FcService
 			test_instance.task.timetableVersion++
 			test_instance.task.timetableModified = false
 			test_instance.task.save()
-			println "getflightplanprintableTest: timetableVersion $test_instance.task.timetableVersion of '${test_instance.task.name()}' saved."
+			println "getflightplanprintableTest: timetableVersion $test_instance.task.timetableVersion of '${test_instance.task.printName()}' saved."
 			test_instance.timetableVersion = test_instance.task.timetableVersion
 			test_instance.save()
 			println "getflightplanprintableTest: $test_instance,crew.name saved."

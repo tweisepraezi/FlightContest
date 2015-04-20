@@ -19,7 +19,7 @@
                     </g:else> 
                 </g:else>
                 @top-left {
-                    content: "${message(code:'fc.flightresults.aflos')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}"
+                    content: "${message(code:'fc.flightresults.aflos')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}"
                 }
                 @top-right {
                     content: "${testInstance.GetViewPos()}"
@@ -35,17 +35,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <style type="text/css">${contestInstance.printStyle}</style>
-        <title>${message(code:'fc.flightresults.aflos')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()}</title>
+        <title>${message(code:'fc.flightresults.aflos')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}</title>
     </head>
     <body>
         <div>
             <div>
                 <h2>${message(code:'fc.flightresults.aflos')} ${testInstance.GetStartNum()}</h2>
                 <g:if test="${!testInstance.flightTestComplete}">
-	                <h3>${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()}) [${message(code:'fc.provisional')}]</h3>
                 </g:if>
                 <g:else>
-	                <h3>${testInstance?.task.name()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})</h3>
+	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})</h3>
                 </g:else>
                 <div>
                     <g:form>

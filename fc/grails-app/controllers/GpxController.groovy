@@ -4,11 +4,19 @@ class GpxController
     def gpxService
     
 	def selectgpxfilename = {
-		[:]
+        if (session?.lastContest) {
+            [contestInstance:session.lastContest]
+        } else {
+            [contestInstance:null]
+        }
     }
 	
     def selectgacfilename = {
-        [:]
+        if (session?.lastContest) {
+            [contestInstance:session.lastContest]
+        } else {
+            [contestInstance:null]
+        }
     }
     
 	def showmapgpx = {
@@ -24,8 +32,18 @@ class GpxController
                 gpxService.printstart "Upload $original_filename -> $upload_filename"
                 file.transferTo(new File(webroot_dir,upload_filename))
                 gpxService.printdone ""
-                gpxService.printdone ""
+                
                 session.gpxShowPoints = null
+                Route route_instance = null
+                if (params.routeid && params.routeid.isLong()) {
+                    route_instance = Route.get(params.routeid)
+                }
+                if (route_instance) {
+                    Map converter = gpxService.AddRoute2GPX(route_instance,webroot_dir + upload_filename)
+                    session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                }
+
+                gpxService.printdone ""
                 redirect(action:'startgpxviewer',params:[uploadFilename:upload_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
 			} else {
 				flash.error = true
@@ -53,11 +71,20 @@ class GpxController
                 gpxService.printstart "Upload $original_filename -> $upload_file_name"
                 file.transferTo(new File(upload_file_name))
                 gpxService.printdone ""
+                
+                Route route_instance = null
+                if (params.routeid && params.routeid.isLong()) {
+                    route_instance = Route.get(params.routeid)
+                }
 
-                if (gpxService.ConvertGAC2GPX(upload_file_name, webroot_dir + upload_gpx_file_name)) {
+                Map converter = gpxService.ConvertGAC2GPX(upload_file_name, webroot_dir + upload_gpx_file_name, route_instance)
+                if (converter.ok) {
                     gpxService.DeleteFile(upload_file_name)
                     gpxService.printdone ""
                     session.gpxShowPoints = null
+                    if (route_instance) {
+                        session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                    }
                     redirect(action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
                 } else {
                     flash.error = true

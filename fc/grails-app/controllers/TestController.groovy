@@ -1125,57 +1125,84 @@ class TestController
             Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name)
             if (converter.ok && converter.track) {
                 
-                // FTP upload gpx
-                Map ret = gpxService.SendFTP(
-                    grailsApplication.config.flightcontest,
-                    test.instance.crew.uuid, 
-                    "file:${webroot_dir + upload_gpx_file_name}", 
-                    "${test.instance.GetFileName(ResultType.Flight)}.gpx"
-                )
-
-                // FTP upload html
-                if (!ret.error) {
-                    ret = gpxService.SendFTP(
-                        grailsApplication.config.flightcontest,
-                        test.instance.crew.uuid,
-                        "http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}",
-                        "${test.instance.GetFileName(ResultType.Flight)}.htm"
-                    )
-                }
-                
-                if (!ret.error) {
+                if (Global.RUN_UPLOAD_JOB) {
+                    Map email = GetEMailBody(test.instance)
+                    String job_file_name = "jobs/JOB-${uuid}.job"
                     try {
-                        Map email = GetEMailBody(test.instance)
-                        
-                        // Send email
-                        mailService.sendMail {
-                            from grailsApplication.config.flightcontest.mail.from
-                            to NetTools.EMailList(test.instance.crew.email).toArray()
-                            if (grailsApplication.config.flightcontest.mail.cc) {
-                              cc NetTools.EMailList(grailsApplication.config.flightcontest.mail.cc).toArray()
-                            }
-                            subject test.instance.GetEMailTitle(ResultType.Flight)
-                            html email.body
-                            // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
-                        }
-                        
-                        // Save link
-                        test.instance.flightTestLink = email.link
-                        test.instance.save()
-                        gpxService.println "Link '${test.instance.flightTestLink}' saved."
-                        
-                        flash.message = message(code:'fc.net.mail.sent',args:[test.instance.crew.email])
+                        File job_file = new File(webroot_dir + job_file_name)
+                        BufferedWriter job_writer = job_file.newWriter()
+                        gpxService.WriteLine(job_writer,test.instance.crew.uuid) // 1
+                        gpxService.WriteLine(job_writer,"file:${webroot_dir + upload_gpx_file_name}") // 2
+                        gpxService.WriteLine(job_writer,"${test.instance.GetFileName(ResultType.Flight)}.gpx") // 3
+                        gpxService.WriteLine(job_writer,test.instance.crew.uuid) // 4
+                        gpxService.WriteLine(job_writer,"http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}") // 5
+                        gpxService.WriteLine(job_writer,"${test.instance.GetFileName(ResultType.Flight)}.htm") // 6
+                        gpxService.WriteLine(job_writer,test.instance.crew.email) // 7
+                        gpxService.WriteLine(job_writer,test.instance.GetEMailTitle(ResultType.Flight)) // 8
+                        gpxService.WriteLine(job_writer,email.body) // 9
+                        gpxService.WriteLine(job_writer,email.link) // 10
+                        gpxService.WriteLine(job_writer,test.instance.id.toString()) // 11
+                        gpxService.WriteLine(job_writer,webroot_dir + upload_gpx_file_name) // 12
+                        job_writer.close()
+                        flash.message = message(code:'fc.net.mail.prepared',args:[test.instance.crew.email])
+                        gpxService.println "Job '${job_file_name}' created." 
                     } catch (Exception e) {
-                        flash.message = e.getMessage() 
-                        flash.error = true
+                        gpxService.println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')" 
                     }
                 } else {
-                    flash.message = ret.message 
-                    flash.error = true
+                    // FTP upload gpx
+                    Map ret = gpxService.SendFTP(
+                        grailsApplication.config.flightcontest,
+                        test.instance.crew.uuid, 
+                        "file:${webroot_dir + upload_gpx_file_name}", 
+                        "${test.instance.GetFileName(ResultType.Flight)}.gpx"
+                    )
+    
+                    // FTP upload html
+                    if (!ret.error) {
+                        ret = gpxService.SendFTP(
+                            grailsApplication.config.flightcontest,
+                            test.instance.crew.uuid,
+                            "http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}",
+                            "${test.instance.GetFileName(ResultType.Flight)}.htm"
+                        )
+                    }
+                    
+                    if (!ret.error) {
+                        try {
+                            Map email = GetEMailBody(test.instance)
+                            
+                            // Send email
+                            mailService.sendMail {
+                                from grailsApplication.config.flightcontest.mail.from
+                                to NetTools.EMailList(test.instance.crew.email).toArray()
+                                if (grailsApplication.config.flightcontest.mail.cc) {
+                                  cc NetTools.EMailList(grailsApplication.config.flightcontest.mail.cc).toArray()
+                                }
+                                subject test.instance.GetEMailTitle(ResultType.Flight)
+                                html email.body
+                                // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
+                            }
+                            
+                            // Save link
+                            test.instance.flightTestLink = email.link
+                            test.instance.save()
+                            gpxService.println "Link '${test.instance.flightTestLink}' saved."
+                            
+                            flash.message = message(code:'fc.net.mail.sent',args:[test.instance.crew.email])
+                        } catch (Exception e) {
+                            flash.message = e.getMessage() 
+                            flash.error = true
+                        }
+                    } else {
+                        flash.message = ret.message 
+                        flash.error = true
+                    }
+                    gpxService.println flash.message
+                    
+                    gpxService.DeleteFile(webroot_dir + upload_gpx_file_name)
                 }
-                gpxService.println flash.message
                 
-                gpxService.DeleteFile(webroot_dir + upload_gpx_file_name)
                 gpxService.printdone ""
                 if (nexttest_id) {
                     redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])

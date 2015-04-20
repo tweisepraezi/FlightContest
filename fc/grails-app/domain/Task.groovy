@@ -470,6 +470,11 @@ class Task
 		return "${getMsg('fc.task')}-${idTitle}"
     }
     
+    String idNamePrintable()
+    {
+        return "${getPrintMsg('fc.task')}-${idTitle}"
+    }
+    
 	String name()
 	{
 		if(title) {
@@ -479,6 +484,15 @@ class Task
 		}
 	}
 	
+    String printName()
+    {
+        if(title) {
+            return title
+        } else {
+            return idNamePrintable()
+        }
+    }
+    
 	String bestOfName()
 	{
 		if ((contest.bestOfAnalysisTaskNum > 0) && bestOfAnalysis) {
@@ -488,6 +502,15 @@ class Task
 		}
 	}
 	
+    String bestOfNamePrintable()
+    {
+        if ((contest.bestOfAnalysisTaskNum > 0) && bestOfAnalysis) {
+            return "${name()} [${contest.bestOfAnalysisTaskNum}]"
+        } else {
+            return printName()
+        }
+    }
+    
 	int GetTimeTableVersion()
 	{
 		if (timetableModified) {

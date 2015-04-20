@@ -9,6 +9,8 @@ class Global
     static final int LIVE_UPLOADSECONDS = 60           // DB-2.11
     static final String LIVE_STYLESHEET = "fclive.css" // DB-2.11
     
+    static final boolean RUN_UPLOAD_JOB = true         // DB-2.11 (2.3.2)
+    
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
 	String showLanguage = "de"                         // UNUSED: Global.showLanguage, DB-2.10

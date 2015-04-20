@@ -41,7 +41,7 @@
         <div>
             <div>
                 <h2><g:if test="${params.results=='yes'}">${message(code:'fc.test.planningtask.withresults')}</g:if><g:else>${message(code:'fc.test.planningtask')}</g:else> ${testInstance.GetStartNum()}</h2>
-                <h3>${testInstance?.task.name()}</h3>
+                <h3>${testInstance?.task.printName()}</h3>
                 <div>
                     <g:form>
                         <g:crewTestPrintable t="${testInstance}"/>

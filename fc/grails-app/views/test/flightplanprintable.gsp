@@ -41,7 +41,7 @@
         <div>
             <div>
                 <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()}</h2>
-                <h3>${testInstance.task.name()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h3>
+                <h3>${testInstance.task.printName()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h3>
                 <div>
                     <g:form>
                         <g:crewTestPrintable t="${testInstance}"/>
