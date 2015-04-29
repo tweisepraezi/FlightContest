@@ -3,7 +3,8 @@ import java.util.Map;
 class DemoContestStandardService
 {
 	def fcService
-	
+    def evaluationService
+    
 	long CreateTest1(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
@@ -240,9 +241,9 @@ class DemoContestStandardService
 												 landingTest4NotAllowedAerodynamicAuxiliaries:false,landingTest4TouchingObstacle:false,
 												 testComplete:true],
 											   ])
-		fcService.runcalculatepositionsTask(task1)
-		fcService.runcalculatecontestpositionsContest(contest,[],[task1],[team1,team2])
-		fcService.runcalculateteampositionsContest(contest,[],[task1])
+		evaluationService.runcalculatepositionsTask(task1)
+		evaluationService.runcalculatecontestpositionsContest(contest,[],[task1],[team1,team2])
+		evaluationService.runcalculateteampositionsContest(contest,[],[task1])
 
 		fcService.printdone ""
 		
@@ -490,12 +491,12 @@ class DemoContestStandardService
 												 landingTest4TouchingObstacle:false,
 												 testComplete:true],
 											   ])
-		fcService.runcalculatepositionsTask(task1)
-		fcService.runcalculatepositionsResultClass(resultclass1,[task1],[team1,team2,team3])
-		fcService.runcalculatepositionsResultClass(resultclass2,[task1],[team1,team2,team3])
-		fcService.runcalculatepositionsResultClass(resultclass3,[task1],[team1,team2,team3])
-		fcService.runcalculatecontestpositionsContest(contest,[resultclass1],[task1],[team1,team2,team3])
-		fcService.runcalculateteampositionsContest(contest,[resultclass1,resultclass2,resultclass3],[task1])
+		evaluationService.runcalculatepositionsTask(task1)
+		evaluationService.runcalculatepositionsResultClass(resultclass1,[task1],[team1,team2,team3])
+		evaluationService.runcalculatepositionsResultClass(resultclass2,[task1],[team1,team2,team3])
+		evaluationService.runcalculatepositionsResultClass(resultclass3,[task1],[team1,team2,team3])
+		evaluationService.runcalculatecontestpositionsContest(contest,[resultclass1],[task1],[team1,team2,team3])
+		evaluationService.runcalculateteampositionsContest(contest,[resultclass1,resultclass2,resultclass3],[task1])
 		
 		fcService.printdone ""
 		

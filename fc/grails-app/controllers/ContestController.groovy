@@ -6,6 +6,7 @@ import org.junit.After;
 class ContestController {
     
     def fcService
+    def evaluationService
 	def demoContestService
 
     def index = { redirect(action:start,params:params) }
@@ -624,24 +625,24 @@ class ContestController {
     }
 
     def listresultslive = {
-        fcService.printstart "listresultslive"
+        evaluationService.printstart "listresultslive"
 		if (params.id && params.id.isLong()) {
-            fcService.print "Get contest with id '${params.id}'"
+            evaluationService.print "Get contest with id '${params.id}'"
 			session.lastContest = Contest.get(params.id)
-            fcService.println "Done."
+            evaluationService.println "Done."
 		}
         if (params.lang) {
-            fcService.println "Set showLanguage to '${params.lang}'"
+            evaluationService.println "Set showLanguage to '${params.lang}'"
             session.showLanguage = params.lang
         }
 		if (session?.lastContest) {
 			session.lastContest.refresh()
-			def contest = fcService.calculatelivepositionsContest(session.lastContest)
+			def contest = evaluationService.calculatelivepositionsContest(session.lastContest)
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
-            fcService.printdone "Show live html."
+            evaluationService.printdone "Show live html."
 			return [contestInstance:session.lastContest,liveTest:false,params:null]
         } else {
-            fcService.printdone "Start."
+            evaluationService.printdone "Start."
             redirect(action:start)
 		}
 	}
@@ -659,7 +660,6 @@ class ContestController {
         }
         if (session?.lastContest) {
             session.lastContest.refresh()
-            // def contest = fcService.calculatelivepositionsContest(session.lastContest)
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
             fcService.printdone "Show live html."
             return [contestInstance:session.lastContest,liveTest:false,params:null]
@@ -700,7 +700,7 @@ class ContestController {
     }
 
     def calculatepositions = {
-        def contest = fcService.calculatecontestpositionsContest(session.lastContest,[],[],[])
+        def contest = evaluationService.calculatecontestpositionsContest(session.lastContest,[],[],[])
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -709,7 +709,7 @@ class ContestController {
     }
     
     def addposition = {
-        def contest = fcService.addcontestpositionContest(session.lastContest,params.crewid.toLong())
+        def contest = evaluationService.addcontestpositionContest(session.lastContest,params.crewid.toLong())
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -718,7 +718,7 @@ class ContestController {
     }
 
     def subposition = {
-        def contest = fcService.subcontestpositionContest(session.lastContest,params.crewid.toLong())
+        def contest = evaluationService.subcontestpositionContest(session.lastContest,params.crewid.toLong())
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -727,7 +727,7 @@ class ContestController {
     }
 
     def calculateteampositions = {
-        def contest = fcService.calculateteampositionsContest(session.lastContest,[],[]) 
+        def contest = evaluationService.calculateteampositionsContest(session.lastContest,[],[]) 
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -736,7 +736,7 @@ class ContestController {
     }
 
     def addteamposition = {
-        def contest = fcService.addteampositionContest(session.lastContest,params.teamid.toLong())
+        def contest = evaluationService.addteampositionContest(session.lastContest,params.teamid.toLong())
         flash.message = contest.message
         if (contest.error) {
             flash.error = true
@@ -745,7 +745,7 @@ class ContestController {
     }
 
     def subteamposition = {
-        def contest = fcService.subteampositionContest(session.lastContest,params.teamid.toLong())
+        def contest = evaluationService.subteampositionContest(session.lastContest,params.teamid.toLong())
         flash.message = contest.message
         if (contest.error) {
             flash.error = true

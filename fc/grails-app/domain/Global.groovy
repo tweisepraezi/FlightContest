@@ -6,10 +6,9 @@ class Global
 	static int DB_MAJOR = 2
 	static int DB_MINOR = 11
 	
-    static final int LIVE_UPLOADSECONDS = 60           // DB-2.11
-    static final String LIVE_STYLESHEET = "fclive.css" // DB-2.11
-    
-    static final boolean RUN_UPLOAD_JOB = true         // DB-2.11 (2.3.2)
+    static final int LIVE_UPLOADSECONDS = 60
+    static final String LIVE_STYLESHEET = "fclive.css"
+    static final String EMAIL_SENDING   = "_email_sending"
     
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR

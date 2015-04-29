@@ -1,7 +1,8 @@
 class ResultClassController {
 	
 		def fcService
-		
+        def evaluationService
+        
 		def index = { redirect(action:list,params:params) }
 	
 		// the delete, save and update actions only accept POST requests
@@ -229,7 +230,7 @@ class ResultClassController {
 	
 		def calculatepositions = {
 			ResultClass resultclass_instance = ResultClass.get(params.id)
-	        def resultclass = fcService.calculatepositionsResultClass(resultclass_instance,[],[]) 
+	        def resultclass = evaluationService.calculatepositionsResultClass(resultclass_instance,[],[]) 
 	        flash.message = resultclass.message
 			if (resultclass.error) {
 				flash.error = true
@@ -239,7 +240,7 @@ class ResultClassController {
 	
         def addposition = {
             ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
-            def resultclass = fcService.addpositionResultClass(resultclass_instance,params.crewid.toLong()) 
+            def resultclass = evaluationService.addpositionResultClass(resultclass_instance,params.crewid.toLong()) 
             flash.message = resultclass.message
             if (resultclass.error) {
                 flash.error = true
@@ -249,7 +250,7 @@ class ResultClassController {
     
         def subposition = {
             ResultClass resultclass_instance = ResultClass.get(params.resultclassid)
-            def resultclass = fcService.subpositionResultClass(resultclass_instance,params.crewid.toLong()) 
+            def resultclass = evaluationService.subpositionResultClass(resultclass_instance,params.crewid.toLong()) 
             flash.message = resultclass.message
             if (resultclass.error) {
                 flash.error = true

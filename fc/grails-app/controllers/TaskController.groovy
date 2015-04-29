@@ -4,7 +4,8 @@ import org.xhtmlrenderer.pdf.ITextRenderer
 class TaskController {
 
 	def fcService
-	
+    def evaluationService
+    
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
@@ -950,7 +951,7 @@ class TaskController {
 	}
 
 	def calculatepositions = {
-        def task = fcService.calculatepositionsTask(params) 
+        def task = evaluationService.calculatepositionsTask(params) 
         flash.message = task.message
         if (!task.instance) {
             redirect(controller:"contest",action:"tasks")

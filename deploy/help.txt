@@ -449,7 +449,7 @@ Strecken-Beispiele            AFLOS                                          Flu
 in den AFLOS-Referenz-Daten, die beim Import der Strecke verarbeitet werden:
   * $secret - Check-Punkt als unbekannte Zeitkontrolle importieren,
     für unbekannte Zeitkontrollen mit von 2NM abweichender Torbreite,
-	erscheint nicht im Flugplan der Besatzungen
+    erscheint nicht im Flugplan der Besatzungen
   * $ignore - Check-Punkt nicht importieren
   * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
     (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
@@ -1106,7 +1106,7 @@ Sicherung der AFLOS-Datenbank:
   2. Rufen Sie das Script 
      'Programme -> Flight Contest -> Scripts -> Save AFLOS database' auf.
      Die Datenbank wird mit Datum und Uhrzeit versehen
-	 ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-AFLOS.mdb).
+     ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-AFLOS.mdb).
   3. Starten Sie AFLOS erneut.
      Brechen Sie den Dialog 'Open AFLOS Database' ab, ohne eine andere Datenbank zu laden.
 
@@ -1115,14 +1115,14 @@ Sicherung der 'Flight Contest'-Datenbank:
   2. Rufen Sie das Script 
      'Programme -> Flight Contest -> Scripts -> Save contest database' auf.
      Die Datenbank wird mit Datum und Uhrzeit versehen
-	 ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-fcdb.h2.db).
+     ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-fcdb.h2.db).
   3. Starten Sie den Dienst 'Apache Tomcat FlightContest'.
 
 Sicherung der 'Flight Contest'-Ausdrucke (Firefox):
   Empfohlene Firefox-Einstellungen:
-	Allgemein -> Den Download-Manager anzeigen, wenn ein Download startet: ein
+    Allgemein -> Den Download-Manager anzeigen, wenn ein Download startet: ein
     Allgemein -> Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
-	Anwendungen -> Adobe Acrobat Document: Datei speichern
+    Anwendungen -> Adobe Acrobat Document: Datei speichern
   Diese Einstellungen stellen sicher, dass alle Ausdrucke im Sicherungsverzeichnis 
   C:\FCSave gespeichert werden. Öffnen der PDF und Ausdruck erfolgt dann über
   den Download-Manager.
@@ -1141,13 +1141,13 @@ Datenwiederherstellung der AFLOS-Datenbank:
     nach 'C:\AFLOS\AFLOS_System\AFLOS.mdb'.
   - Sollte Ihnen AFLOS bei laufender Nutzung abgestürzt sein, starten Sie AFLOS
     erneut und brechen Sie den Dialog 'Open AFLOS Database' ab, ohne eine andere 
-	Datenbank zu laden. Dadurch bleibt der Datenbank-Bestand erhalten,
-	der vor dem Absturz vorhanden war. Bevor Sie weiter machen, sollten Sie
-	die AFLOS-Datenbank wie oben beschrieben sichern.
+    Datenbank zu laden. Dadurch bleibt der Datenbank-Bestand erhalten,
+    der vor dem Absturz vorhanden war. Bevor Sie weiter machen, sollten Sie
+    die AFLOS-Datenbank wie oben beschrieben sichern.
 
 Datenwiederherstellung der 'Flight Contest'-Datenbank:
   - Zur Datenwiederherstellung muss der Dienst 'Apache Tomcat FlightContest'
     gestoppt sein.
   - Kopieren Sie 'C:\FCSave\<Datum>-<Uhrzeit>-fcdb.h2.db'
     nach 'C:\Program Files (x86)\Flight Contest\fc\fcdb.h2.db'.
-	Hierfür benötigen Sie Administrator-Privilegien.
+    Hierfür benötigen Sie Administrator-Privilegien.

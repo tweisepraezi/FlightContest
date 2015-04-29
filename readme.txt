@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-20.04.2015
+29.04.2015
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -52,8 +52,16 @@ Weitere nützliche Funktionen von Flight Contest:
 * E-Mail-Versand der Navigationsflugkarten an Teilnehmer.
 * Unterstützung des offenen Logger-Datenformates GPX.
 
-Fehlerbehebungen und Erweiterungen in dieser Version (2.3.2):
+Fehlerbehebungen und Erweiterungen in dieser Version (2.3.3):
 -------------------------------------------------------------
+- Kollisionen zwischen Live-Anzeige und Auswerter-Eingaben reduziert
+- Streckenkarte: Check-Punkt-Zoom-Faktoren berücksichtigen jetzt 
+  konfigurierte Gate-Breiten
+- Ein laufender E-Mail-Versand der Navigationsflugkarte im Hintergrund 
+  wird jetzt in Ergebnisliste mit einem Symbol angezeigt.
+
+Fehlerbehebungen und Erweiterungen in Version 2.3.2:
+----------------------------------------------------
 - Fehlerbehebung GPX-GAC-Konverter
 - GAC-Anzeige ('Extras -> GAC-Anzeige') um Strecken-Anzeige erweitert
 - GPX-Anzeige ('Extras -> GPX-Anzeige') um Strecken-Anzeige erweitert

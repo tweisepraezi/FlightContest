@@ -19,13 +19,12 @@ class GpxService
     def grailsApplication
     
 	final static BigDecimal ftPerMeter = 3.2808 // 1 meter = 3,2808 feet
-	
+    final static BigDecimal kmPerNM = 1.852f    // 1 NM = 1.852 km
+    
 	final static String GPXGACCONVERTER_VERSION = "1.0"
 	
 	final static String GACFORMAT_DEF = "I033639GSP4042TRT4346FXA"
     
-    final static Float GPXSHOWPPOINT_RADIUS_GATE = 1.0f         // Anzeigeradius um Gate in NM
-    final static Float GPXSHOWPPOINT_RADIUS_SECRETGATE = 2.0f    // Anzeigeradius um Secret Gate in NM
     final static Float GPXSHOWPPOINT_RADIUS_AIRFIELD = 4.0f      // Anzeigeradius um Flugplatz in NM
     final static int GPXSHOWPPOINT_SCALE = 4                     // Nachkommastellen für Koordinaten
 	
@@ -518,9 +517,9 @@ class GpxService
                 Map new_point = [name:coordroute_instance.titleCode()]
                 new_point += ErrorPoints(testInstance,coordroute_instance)
                 if (coordroute_instance.type == CoordType.SECRET) {
-                    new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_SECRETGATE]
+                    new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:(coordroute_instance.gatewidth2/2)]
                 } else if (coordroute_instance.type.IsCpCheckCoord()) {
-                    new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_GATE]
+                    new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:(coordroute_instance.gatewidth2/2)]
                 } else {
                     new_point += [latcenter:coordroute_instance.latMath(),loncenter:coordroute_instance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
                 }
@@ -1233,6 +1232,13 @@ class GpxService
                         }
                     }
                     
+                    if (ret.error) {
+                        // Save link
+                        Test test_instance = Test.get(test_id.toLong())
+                        test_instance.flightTestLink = ""
+                        test_instance.save()
+                    }
+                            
                     if (!ret.error) {
                         DeleteFile(remove_file)
                         String new_file_name = webroot_dir + "jobs\\done\\" + file.name
