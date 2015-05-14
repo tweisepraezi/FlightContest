@@ -91,6 +91,12 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    String TestEMailAddress()
+    {
+        return grailsApplication.config.flightcontest.testmail.to
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     boolean IsFTPPossible()
     {
         if (grailsApplication.config.flightcontest.ftp.host

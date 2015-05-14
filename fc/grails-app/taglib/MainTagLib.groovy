@@ -219,7 +219,7 @@ class MainTagLib
                 outln """    <li> <a href="${p.link}/../../global/start_webmail" target="_blank">${message(code:'fc.net.webmail')}</a> </li>"""
             }
             if (BootStrap.global.IsTestEMailPossible()) {
-                outln """    <li> <a href="${p.link}/../../global/testmail">${message(code:'fc.net.mail.test')}</a> </li>"""
+                outln """    <li title="${BootStrap.global.TestEMailAddress()}"> <a href="${p.link}/../../global/testmail">${message(code:'fc.net.mail.test')}</a> </li>"""
             }
             if (BootStrap.global.IsTestFTPPossible()) {
                 outln """    <li> <a href="${p.link}/../../global/testftp">${message(code:'fc.net.ftp.test')}</a> </li>"""

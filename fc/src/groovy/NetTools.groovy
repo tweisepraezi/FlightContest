@@ -30,4 +30,16 @@ class NetTools
         }
         return email_list
     }
+    
+    static List EMailReducedList(String emailAdresses, String reduceEmailAdresses)
+    {
+        List email_list = []
+        List reduce_list = EMailList(reduceEmailAdresses)
+        for (String email in EMailList(emailAdresses)) {
+            if (!(email in reduce_list)) {
+                email_list += email
+            }
+        }
+        return email_list
+    }
 }

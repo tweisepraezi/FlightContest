@@ -1,5 +1,7 @@
 class Route 
 {
+    def grailsApplication
+    
 	String title
     int idTitle
     String mark = ""
@@ -122,4 +124,27 @@ class Route
 		}
 		return false
 	}
+    
+    String GetFileName()
+    {
+        return "${name()}"
+    }
+    
+    String GetEMailTitle()
+    {
+        return "${contest.title}: ${name()}" 
+    }
+    
+    boolean IsEMailPossible()
+    {
+        if (BootStrap.global.IsEMailPossible() && BootStrap.global.IsFTPPossible()) {
+            return true
+        }
+        return false
+    }
+    
+    String EMailAddress()
+    {
+        return grailsApplication.config.flightcontest.mail.cc
+    }
 }

@@ -1108,7 +1108,8 @@ class TestController
     def sendmail = {
         def test = fcService.getTest(params)
         if (test.instance) {
-            gpxService.printstart "Send mail of '${test.instance.crew.name}' to '${test.instance.crew.email}'"
+            String email_to = test.instance.EMailAddress()
+            gpxService.printstart "Send mail of '${test.instance.crew.name}' to '${email_to}'"
             
             // Calculate flight test version
             if (test.instance.flightTestModified) {
@@ -1137,7 +1138,7 @@ class TestController
                     gpxService.WriteLine(job_writer,test.instance.crew.uuid) // 4
                     gpxService.WriteLine(job_writer,"http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}") // 5
                     gpxService.WriteLine(job_writer,"${test.instance.GetFileName(ResultType.Flight)}.htm") // 6
-                    gpxService.WriteLine(job_writer,test.instance.crew.email) // 7
+                    gpxService.WriteLine(job_writer,email_to) // 7
                     gpxService.WriteLine(job_writer,test.instance.GetEMailTitle(ResultType.Flight)) // 8
                     gpxService.WriteLine(job_writer,email.body) // 9
                     gpxService.WriteLine(job_writer,email.link) // 10
@@ -1149,7 +1150,7 @@ class TestController
                     test.instance.flightTestLink = Global.EMAIL_SENDING
                     test.instance.save()
                     
-                    flash.message = message(code:'fc.net.mail.prepared',args:[test.instance.crew.email])
+                    flash.message = message(code:'fc.net.mail.prepared',args:[email_to])
                     gpxService.println "Job '${job_file_name}' created." 
                 } catch (Exception e) {
                     gpxService.println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')" 
@@ -1157,7 +1158,7 @@ class TestController
                                 
                 gpxService.printdone ""
                 if (test.instance.flightTestComplete) {
-                    redirect(controller:"task",action:"startresults")
+                    redirect(controller:"task",action:"startresults",params:[message:flash.message])
                 } else {
                     if (nexttest_id) {
                         redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])

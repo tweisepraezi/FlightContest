@@ -1740,7 +1740,12 @@ class Test
 		if (taskAircraft) {
             ret += "${taskAircraft.registration} - "
 		}
-        ret += "${task.name()} - ${result_type} (${GetMsg('fc.version',isPrint)} ${result_version})"
+        if (isPrint) {
+            ret += "${task.printName()}"
+        } else {
+            ret += "${task.name()}"
+        }
+        ret += " - ${result_type} (${GetMsg('fc.version',isPrint)} ${result_version})"
         if (provisional) {
             ret += " [${GetMsg('fc.provisional',isPrint)}]"
         }
@@ -1875,5 +1880,10 @@ class Test
             return true
         }
         return false
+    }
+    
+    String EMailAddress()
+    {
+        return crew.email
     }
 }

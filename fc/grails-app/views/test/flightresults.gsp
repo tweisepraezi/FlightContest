@@ -261,7 +261,7 @@
                                                 <g:actionSubmit action="showmap" value="${message(code:'fc.flightresults.map')}" onclick="this.form.target='_blank';return true;" tabIndex="10"/>
                                             </g:if>
                                             <g:if test="${testInstance.IsEMailPossible()}">
-                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" tabIndex="11"/>
+                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="11"/>
                                             </g:if>
                                             <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="12"/>
                                         </g:if>
@@ -279,7 +279,7 @@
                                                 <g:actionSubmit action="showmap" value="${message(code:'fc.flightresults.map')}" onclick="this.form.target='_blank';return true;" tabIndex="7"/>
                                             </g:if>
                                             <g:if test="${testInstance.IsEMailPossible()}">
-                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" tabIndex="8"/>
+                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="8"/>
                                             </g:if>
 	                                        <g:if test="${params.next}">
 	                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="9"/>

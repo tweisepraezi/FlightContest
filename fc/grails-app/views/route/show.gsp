@@ -233,7 +233,10 @@
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="8"/>
                         </g:if>
                         <g:actionSubmit action="showmap" value="${message(code:'fc.route.map')}" onclick="this.form.target='_blank';return true;" tabIndex="9"/>
-                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="10"/>
+                        <g:if test="${routeInstance.IsEMailPossible()}">
+                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="10"/>
+                        </g:if>
+                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="11"/>
                     </g:form>
                 </div>
             </div>

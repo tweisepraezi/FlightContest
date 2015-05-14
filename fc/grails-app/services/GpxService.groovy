@@ -1189,12 +1189,14 @@ class GpxService
                 }
                 job_file_reader.close()
                 
+                Map ret = [:]
+                
                 if (ftp1_basedir && ftp1_sourceurl && ftp1_destfilename &&
                     ftp2_basedir && ftp2_sourceurl && ftp2_destfilename &&
                     email_to && email_subject && email_body && save_link && test_id && remove_file) {
                     
                     // FTP upload gpx
-                    Map ret = SendFTP2(
+                    ret = SendFTP2(
                         grailsApplication.config.flightcontest,ftp1_basedir,ftp1_sourceurl,ftp1_destfilename
                     )
     
@@ -1213,7 +1215,10 @@ class GpxService
                                 from grailsApplication.config.flightcontest.mail.from
                                 to NetTools.EMailList(email_to).toArray()
                                 if (grailsApplication.config.flightcontest.mail.cc) {
-                                  cc NetTools.EMailList(grailsApplication.config.flightcontest.mail.cc).toArray()
+                                    List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,email_to)
+                                    if (cc_list) {
+                                        cc cc_list.toArray()
+                                    }
                                 }
                                 subject email_subject
                                 html email_body
@@ -1221,9 +1226,11 @@ class GpxService
                             }
                             
                             // Save link
-                            Test test_instance = Test.get(test_id.toLong())
-                            test_instance.flightTestLink = save_link
-                            test_instance.save()
+                            if (test_id.toLong()) {
+                                Test test_instance = Test.get(test_id.toLong())
+                                test_instance.flightTestLink = save_link
+                                test_instance.save()
+                            }
                             
                             println "E-Mail send."
                         } catch (Exception e) {
@@ -1234,23 +1241,26 @@ class GpxService
                     
                     if (ret.error) {
                         // Save link
-                        Test test_instance = Test.get(test_id.toLong())
-                        test_instance.flightTestLink = ""
-                        test_instance.save()
+                        if (test_id.toLong()) {
+                            Test test_instance = Test.get(test_id.toLong())
+                            test_instance.flightTestLink = ""
+                            test_instance.save()
+                        }
                     }
                             
-                    if (!ret.error) {
-                        DeleteFile(remove_file)
-                        String new_file_name = webroot_dir + "jobs\\done\\" + file.name
-                        file.renameTo(new File(new_file_name))
-                        printdone new_file_name
-                    } else {
-                        String new_file_name = webroot_dir + "jobs\\error\\" + file.name
-                        file.renameTo(new File(new_file_name))
-                        printerror new_file_name
-                    }
                 } else {
-                    printerror ""
+                    println "No data."
+                    ret.error = true
+                }
+                if (!ret.error) {
+                    DeleteFile(remove_file)
+                    String new_file_name = webroot_dir + "jobs\\done\\" + file.name
+                    file.renameTo(new File(new_file_name))
+                    printdone new_file_name
+                } else {
+                    String new_file_name = webroot_dir + "jobs\\error\\" + file.name
+                    file.renameTo(new File(new_file_name))
+                    printerror new_file_name
                 }
             }
         }

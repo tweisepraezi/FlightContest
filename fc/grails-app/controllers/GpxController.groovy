@@ -117,6 +117,21 @@ class GpxController
         return [:]
     }
     
+    def startroutegpxviewer = {
+        Route route_instance = Route.get(params.id)
+        if (route_instance) {
+            session.printLanguage = params.printLanguage
+            String file_name = "${route_instance.GetFileName()}.gpx"
+            String original_filename = route_instance.GetEMailTitle().encodeAsHTML()
+            render(view:"ftpgpxviewer",model:[fileName:file_name,originalFilename:original_filename,printLanguage:params.printLanguage,lang:params.printLanguage,showProfiles:params.showProfiles,gpxShowPoints:HTMLFilter.GetList(params.gpxShowPoints)])
+        }
+        return [:]
+    }
+
+    def ftpgpxviewer = {
+        return [:]
+    }
+
     def startftpgpxviewer = {
         Test test_instance = Test.get(params.id)
         if (test_instance) {
@@ -125,10 +140,6 @@ class GpxController
             String original_filename = test_instance.GetEMailTitle(ResultType.Flight).encodeAsHTML()
             render(view:"ftpgpxviewer",model:[fileName:file_name,originalFilename:original_filename,printLanguage:params.printLanguage,lang:params.printLanguage,showProfiles:params.showProfiles,gpxShowPoints:HTMLFilter.GetList(params.gpxShowPoints)])
         }
-        return [:]
-    }
-
-    def ftpgpxviewer = {
         return [:]
     }
 

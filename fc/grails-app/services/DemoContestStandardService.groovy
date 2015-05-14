@@ -11,7 +11,7 @@ class DemoContestStandardService
 		
 		// Contest
 		Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,true,testExists)
-		Map task1 = fcService.putTask(contest,"20. Februar","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, false)
+		Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, false)
 
 		// Teams
 		Map team1 = fcService.putTeam(contest,"Deutschland")
@@ -256,7 +256,7 @@ class DemoContestStandardService
 		
 		// Contest
 		Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,true,testExists)
-		Map task1 = fcService.putTask(contest,"20. Februar","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false)
+		Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false)
 
 		// Classes with properties
 		Map resultclass1 = fcService.putResultClass(contest,"Pr\u00E4zi","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -859,7 +859,7 @@ class DemoContestStandardService
     }
 	
     List test1Task() {
-      [[title:"20. Februar",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
+      [[title:"",firstTime:"09:00",takeoffIntervalNormal:3,takeoffIntervalSlowerAircraft:3,takeoffIntervalFasterAircraft:30,planningTestDuration:60,
         preparationDuration:15,risingDurationFormula:"time:8min",maxLandingDurationFormula:"time:10min",parkingDuration:5,minNextFlightDuration:30,
         procedureTurnDuration:1,addTimeValue:3,planningTestDistanceMeasure:false,planningTestDirectionMeasure:true]
       ]

@@ -255,7 +255,10 @@ class GlobalController {
                 from grailsApplication.config.flightcontest.mail.from
                 to NetTools.EMailList(grailsApplication.config.flightcontest.testmail.to).toArray()
                 if (grailsApplication.config.flightcontest.mail.cc) {
-                    cc NetTools.EMailList(grailsApplication.config.flightcontest.mail.cc).toArray()
+                    List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,grailsApplication.config.flightcontest.testmail.to)
+                    if (cc_list) {
+                        cc cc_list.toArray()
+                    }
                 }
                 subject grailsApplication.config.flightcontest.testmail.subject
                 body grailsApplication.config.flightcontest.testmail.body

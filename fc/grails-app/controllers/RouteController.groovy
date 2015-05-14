@@ -1,3 +1,5 @@
+import java.util.Map;
+
 class RouteController {
     
 	def fcService
@@ -286,6 +288,90 @@ class RouteController {
             flash.message = route.message
             redirect(action:list)
         }
+    }
+
+    def sendmail = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            def route = fcService.getRoute(params)
+            if (route.instance) {
+                String email_to = route.instance.EMailAddress()
+                gpxService.printstart "Send mail of '${route.instance.name()}' to '${email_to}'"
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name)
+                if (converter.ok) {
+                    Map email = GetEMailBody(session.lastContest, route.instance)
+                    
+                    String job_file_name = "jobs/JOB-${uuid}.job"
+                    BufferedWriter job_writer = null
+                    try {
+                        // create email job
+                        File job_file = new File(webroot_dir + job_file_name)
+                        job_writer = job_file.newWriter()
+                        gpxService.WriteLine(job_writer,session.lastContest.contestUUID) // 1
+                        gpxService.WriteLine(job_writer,"file:${webroot_dir + upload_gpx_file_name}") // 2
+                        gpxService.WriteLine(job_writer,"${route.instance.GetFileName()}.gpx") // 3
+                        gpxService.WriteLine(job_writer,session.lastContest.contestUUID) // 4
+                        gpxService.WriteLine(job_writer,"http://localhost:8080/fc/gpx/startroutegpxviewer?id=${route.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}") // 5
+                        gpxService.WriteLine(job_writer,"${route.instance.GetFileName()}.htm") // 6
+                        gpxService.WriteLine(job_writer,email_to) // 7
+                        gpxService.WriteLine(job_writer,route.instance.GetEMailTitle()) // 8
+                        gpxService.WriteLine(job_writer,email.body) // 9
+                        gpxService.WriteLine(job_writer,email.link) // 10
+                        gpxService.WriteLine(job_writer,"0") // 11
+                        gpxService.WriteLine(job_writer,webroot_dir + upload_gpx_file_name) // 12
+                        job_writer.close()
+                        job_writer = null
+                        
+                        // set sending link
+                        //session.lastContest.routeLink = Global.EMAIL_SENDING
+                        //session.lastContest.save()
+                        
+                        flash.message = message(code:'fc.net.mail.prepared',args:[email_to])
+                        gpxService.println "Job '${job_file_name}' created." 
+                    } catch (Exception e) {
+                        gpxService.println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')"
+                        if (job_writer) {
+                            job_writer.close()
+                        } 
+                    }
+                    gpxService.printdone ""
+                    redirect(action:'show',id:params.id)
+                } else {
+                    flash.error = true
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                    gpxService.DeleteFile(upload_gpx_file_name)
+                    gpxService.printerror flash.message
+                    redirect(action:'show',id:params.id)
+                }
+
+            } else {
+                flash.message = route.message
+                redirect(action:list)
+            }
+        } else {
+            redirect(controller:'contest',action:'start')
+        }
+    }
+    
+    private Map GetEMailBody(Contest contestInstance, Route routeInstance)
+    {
+        Map ret = [:]
+        String s = ""
+        
+        String contest_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${contestInstance.contestUUID}"
+        
+        String view_url = "${contest_dir}/${routeInstance.GetFileName()}.htm"
+        s += """<p>Strecke (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
+        
+        String gpx_url = "${contest_dir}/${routeInstance.GetFileName()}.gpx"
+        s += """<p>Strecke (GPX Viewer): <a href="${gpx_url}">${gpx_url}</a></p>"""
+        
+        ret += [body:s,link:view_url]
+        
+        return ret
     }
 
 	Map GetPrintParams() {
