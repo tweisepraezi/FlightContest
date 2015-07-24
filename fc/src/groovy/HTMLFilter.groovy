@@ -15,4 +15,12 @@ class HTMLFilter {
     {
         return Eval.me(sourceStr.replace("%20",' '))
     }
+    
+    static String EncodeAsHTML(String sourceScr)
+    // repair iText problems
+    {
+        String s = sourceScr
+        s = s.replace('&','&amp;')
+        return s
+    }
 }

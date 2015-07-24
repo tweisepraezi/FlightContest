@@ -52,8 +52,13 @@ Weitere nützliche Funktionen von Flight Contest:
 * E-Mail-Versand der Navigationsflugkarten an Teilnehmer.
 * Unterstützung des offenen Logger-Datenformates GPX.
 
-Fehlerbehebungen und Erweiterungen in dieser Version (2.3.5):
+Fehlerbehebungen und Erweiterungen in dieser Version (2.3.6):
 -------------------------------------------------------------
+- Probleme von Ausdrucken mit Wettbewerbsnamen, die Umlaute enthalten,
+  beseitigt.
+
+Fehlerbehebungen und Erweiterungen in 2.3.5:
+--------------------------------------------
 - Anzeige und E-Mail-Versand der Navigationsflugkarte wird jetzt 
   nur bei AFLOS-Datenbank mit zutreffender Referenzstrecke ermöglicht
   (für mehrtägige Wettbewerbe mit mehreren AFLOS-Datenbanken)

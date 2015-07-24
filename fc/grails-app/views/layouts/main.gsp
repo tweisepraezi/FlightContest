@@ -193,10 +193,10 @@
 	                        <img src="${createLink(controller:'contest',action:'view_image_center',params:[contestid:session.lastContest.id])}" align="center" height="${height_value_center}" style="vertical-align:top;" />
 	                    </g:if>
 	                    <g:elseif test="${session?.contestTitle}">
-	                        ${session.contestTitle.encodeAsHTML()}
+	                        ${HTMLFilter.EncodeAsHTML(session.contestTitle)}
 	                    </g:elseif>
 	                    <g:elseif test="${session?.lastContest}">
-	                        ${session.lastContest.name().encodeAsHTML()}
+	                        ${HTMLFilter.EncodeAsHTML(session.lastContest.name())}
 	                    </g:elseif>
 	                    <g:else>
 	                        ${message(code:'fc.program.title')}
@@ -210,10 +210,10 @@
 				<g:else>
 	                <h1 id="branding">
 	                    <g:if test="${session?.contestTitle}">
-	                    	${session.contestTitle.encodeAsHTML()}
+	                    	${HTMLFilter.EncodeAsHTML(session.contestTitle)}
 	                    </g:if>
 	                    <g:elseif test="${session?.lastContest}">
-	                        ${session.lastContest.name().encodeAsHTML()}
+	                        ${HTMLFilter.EncodeAsHTML(session.lastContest.name())}
 	                    </g:elseif>
 	                    <g:else>
 	                        ${message(code:'fc.program.title')}
