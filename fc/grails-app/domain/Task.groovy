@@ -1011,4 +1011,17 @@ class Task
         }
         return ""
     }
+    
+    boolean IsEMailPossible()
+    {
+        if (   BootStrap.global.IsEMailPossible() 
+            && BootStrap.global.IsFTPPossible()
+            && flighttest?.route?.mark
+            && AflosTools.GetAflosRouteName(contest, flighttest.route.mark)
+           ) 
+        {
+            return true
+        }
+        return false
+    }
 }

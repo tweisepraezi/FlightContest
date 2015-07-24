@@ -14,7 +14,9 @@ class FcService
     def messageSource
 	def logService
 	def fcExcelImportService
-	
+    def servletContext
+    def gpxService
+    
     static int mmPerNM = 1852000
 	static int mmPerkm = 1000000
 	static int maxCookieAge = 31536000 // seconds (1 Jahr)
@@ -2458,11 +2460,11 @@ class FcService
     {
     	Task task_instance = null
         if (lastTaskPlanning) {
-            task_instance = Task.findByIdAndContestAndHideResults(lastTaskPlanning,contestInstance,false)
+            task_instance = Task.findByIdAndContestAndHidePlanning(lastTaskPlanning,contestInstance,false)
         }
         if (!task_instance) {
 			if (contestInstance) {
-	        	Task.findAllByContestAndHideResults(contestInstance,false,[sort:"id"]).each { 
+	        	Task.findAllByContestAndHidePlanning(contestInstance,false,[sort:"id"]).each { 
 					if (!it.hidePlanning) {
 		        		if (!task_instance) {
 		        			task_instance = it
@@ -2474,6 +2476,7 @@ class FcService
         if (task_instance) {
             return ['taskid':task_instance.id]
         }
+        return ['taskid':0]
     }
     
     //--------------------------------------------------------------------------
@@ -2495,6 +2498,7 @@ class FcService
         if (task_instance) {
             return ['taskid':task_instance.id]
         }
+        return ['taskid':0]
     }
     
     //--------------------------------------------------------------------------
@@ -4932,16 +4936,9 @@ class FcService
 	{
 		printstart "importRoute"
 		Map ret = [:]
-		AflosRouteNames aflos_route_name = null
-		if (contest.instance.aflosTest) {
-            aflos_route_name = AflosRouteNames.aflostest.findByName(routeName)
-		} else if (contest.instance.aflosUpload) {
-            aflos_route_name = AflosRouteNames.aflosupload.findByName(routeName)
-		} else {
-            aflos_route_name = AflosRouteNames.aflos.findByName(routeName)
-		}
-		if (aflos_route_name) {
-			Map params = [aflosroutenames:[id:aflos_route_name.id,secretcoordrouteidentification:secretCoordRouteIdentification]]
+		AflosRouteNames aflosroutenames_instance = AflosTools.GetAflosRouteName(contest.instance,routeName)
+		if (aflosroutenames_instance) {
+			Map params = [aflosroutenames:[id:aflosroutenames_instance.id,secretcoordrouteidentification:secretCoordRouteIdentification]]
 			ret = importAflosRoute(params, contest.instance,routeTitle,ignoreCurved,ignorePoints)
 		}
 		printdone ret
@@ -5438,30 +5435,13 @@ class FcService
 		
 		Contest contest_instance = testInstance.crew.contest
 		
-		AflosCrewNames afloscrewnames_instance = null
-		if (contest_instance.aflosTest) {
-			afloscrewnames_instance = AflosCrewNames.aflostest.findByStartnumAndPointsNotEqual(startNum,0)
-			//aflostest.
-		} else if (contest_instance.aflosUpload) {
-			afloscrewnames_instance = AflosCrewNames.aflosupload.findByStartnumAndPointsNotEqual(startNum,0)
-			//aflosupload.
-		} else {
-			afloscrewnames_instance = AflosCrewNames.aflos.findByStartnumAndPointsNotEqual(startNum,0)
-			//aflos.
-		}
+		AflosCrewNames afloscrewnames_instance = AflosTools.GetAflosCrewName(contest_instance,startNum)
         if (!afloscrewnames_instance) {
         	Map ret = ['error':true,'message':getMsg('fc.aflos.points.crewnotfound',[startNum])]
 			printerror ret.message
 			return ret
         }
-        AflosRouteNames aflosroutenames_instance = null
-		if (contest_instance.aflosTest) {
-			aflosroutenames_instance = AflosRouteNames.aflostest.findByName(routeName)
-		} else if (contest_instance.aflosUpload) {
-			aflosroutenames_instance = AflosRouteNames.aflosupload.findByName(routeName)
-		} else {
-			aflosroutenames_instance = AflosRouteNames.aflos.findByName(routeName)
-		}
+        AflosRouteNames aflosroutenames_instance = AflosTools.GetAflosRouteName(contest_instance,routeName)
         if (!aflosroutenames_instance) {
         	Map ret = ['error':true,'message':getMsg('fc.aflos.points.routenotfound',[routeName])]
 			printerror ret.message
@@ -5485,14 +5465,7 @@ class FcService
             int height_errors = 0
 	        CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
 	        	boolean found = false
-				List afloscheckpoints_instances = null
-				if (contest_instance.aflosTest) {
-					afloscheckpoints_instances = AflosCheckPoints.aflostest.findAllByStartnumAndRoutename(startNum,aflosroutenames_instance,[sort:"id"])
-				} else if (contest_instance.aflosUpload) {
-					afloscheckpoints_instances = AflosCheckPoints.aflosupload.findAllByStartnumAndRoutename(startNum,aflosroutenames_instance,[sort:"id"])
-				} else {
-					afloscheckpoints_instances = AflosCheckPoints.aflos.findAllByStartnumAndRoutename(startNum,aflosroutenames_instance,[sort:"id"])
-				}
+				List afloscheckpoints_instances = AflosTools.GetAflosCheckPoints(contest_instance, routeName, startNum)
 	        	afloscheckpoints_instances.each { AflosCheckPoints afloscheckpoints_instance ->
 	        		if (afloscheckpoints_instance.mark == "P${coordresult_instance.mark}") {
 	        			// reset results
@@ -7939,6 +7912,88 @@ class FcService
 			printerror task.message 
         }
 		printdone ""
+        return task
+    }
+    
+    //--------------------------------------------------------------------------
+    Map emailnavigationresultsTask(Map params,String printLanguage)
+    {
+        printstart "emailnavigationresultsTask"
+        Map task = getTask(params) 
+        if (!task.instance) {
+            printerror "No task."
+            return task
+        }
+
+        // Send email of all navigationresults
+        for ( Test test_instance in Test.findAllByTask(task.instance,[sort:"viewpos"])) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (test_instance.IsFlightTestRun()) {
+                    if (test_instance.IsEMailPossible()) {
+                        String email_to = test_instance.EMailAddress()
+                        printstart "Send mail of '${test_instance.crew.name}' to '${email_to}'"
+                        
+                        // Calculate flight test version
+                        if (test_instance.flightTestModified) {
+                            test_instance.flightTestVersion++
+                            test_instance.flightTestModified = false
+                            test_instance.save()
+                            println "flightTestVersion $test_instance.flightTestVersion of '$test_instance.crew.name' saved."
+                        }
+                        
+                        long nexttest_id = test_instance.GetNextTestID(ResultType.Flight)
+                        String uuid = UUID.randomUUID().toString()
+                        String webroot_dir = servletContext.getRealPath("/")
+                        String upload_gpx_file_name = "gpxupload/GPX-${uuid}-EMAIL.gpx"
+                        Map converter = gpxService.ConvertTest2GPX(test_instance, webroot_dir + upload_gpx_file_name)
+                        if (converter.ok && converter.track) {
+                            
+                            Map email = test_instance.GetEMailBody()
+                            String job_file_name = "jobs/JOB-${uuid}.job"
+                            try {
+                                // create email job
+                                File job_file = new File(webroot_dir + job_file_name)
+                                BufferedWriter job_writer = job_file.newWriter()
+                                gpxService.WriteLine(job_writer,test_instance.crew.uuid) // 1
+                                gpxService.WriteLine(job_writer,"file:${webroot_dir + upload_gpx_file_name}") // 2
+                                gpxService.WriteLine(job_writer,"${test_instance.GetFileName(ResultType.Flight)}.gpx") // 3
+                                gpxService.WriteLine(job_writer,test_instance.crew.uuid) // 4
+                                gpxService.WriteLine(job_writer,"http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test_instance.id}&printLanguage=${printLanguage}&lang=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}") // 5
+                                gpxService.WriteLine(job_writer,"${test_instance.GetFileName(ResultType.Flight)}.htm") // 6
+                                gpxService.WriteLine(job_writer,email_to) // 7
+                                gpxService.WriteLine(job_writer,test_instance.GetEMailTitle(ResultType.Flight)) // 8
+                                gpxService.WriteLine(job_writer,email.body) // 9
+                                gpxService.WriteLine(job_writer,email.link) // 10
+                                gpxService.WriteLine(job_writer,test_instance.id.toString()) // 11
+                                gpxService.WriteLine(job_writer,webroot_dir + upload_gpx_file_name) // 12
+                                job_writer.close()
+                                
+                                // set sending link
+                                test_instance.flightTestLink = Global.EMAIL_SENDING
+                                test_instance.save()
+                                
+                                println "Job '${job_file_name}' created." 
+                            } catch (Exception e) {
+                                println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')" 
+                            }
+                                            
+                            printdone ""
+                        } else {
+                            String error_message = ""
+                            if (converter.ok && !converter.track) {
+                                error_message = message(code:'fc.gpx.noflight',args:[test_instance.crew.name])
+                            } else {
+                                error_message = message(code:'fc.gpx.gacnotconverted',args:[test_instance.crew.name])
+                            }
+                            gpxService.DeleteFile(upload_gpx_file_name)
+                            printerror error_message
+                        }
+                    }
+                }
+            }
+        }
+        
+        printdone ""
         return task
     }
     

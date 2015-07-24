@@ -391,6 +391,8 @@ class TaskController {
 	   			params.id = task.taskid
 				fcService.println "last planning task $task.taskid"
 	   			redirect(action:listplanning,params:params)
+	   		} else {
+               redirect(controller:'contest',action:'start')
 	   		}
 			fcService.printdone "last contest"
 		} else {
@@ -467,11 +469,13 @@ class TaskController {
 					flash.message = params.message
 				}
 	            redirect(action:listresults,params:params)
+	        } else {
+                redirect(controller:'contest',action:'start')
 	        }
 			fcService.printdone "last contest"
 		} else {
 			fcService.printdone ""
-			redirect(controller:'contest',action:'start')
+            redirect(controller:'contest',action:'start')
 		}
     }
 
@@ -1080,6 +1084,21 @@ class TaskController {
         	redirect(action:listresults,id:task.instance.id)
 	    }
 	}
+    
+    def emailnavigationresults = {
+        def task = fcService.emailnavigationresultsTask(params,session.printLanguage)
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+            flash.message = task.message
+            flash.error = true
+            redirect(action:listresults,id:task.instance.id)
+        } else {
+            redirect(action:listresults,id:task.instance.id)
+        }
+
+    }
 
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),

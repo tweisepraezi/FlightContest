@@ -154,4 +154,16 @@ class Global
         }
         return false
     }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsAFLOSPossible()
+    {
+        if (   grailsApplication.config.flightcontest.aflos
+            && grailsApplication.config.flightcontest.aflos.showmenu
+           )
+        {
+            return true
+        }
+        return false
+    }
 }

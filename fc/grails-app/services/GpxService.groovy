@@ -981,15 +981,17 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    public boolean PublishLiveResults(long liveContestID)
-    // Return: false - Error
+    public Map PublishLiveResults(long liveContestID, boolean uploadNoLiveResults)
     {
-        boolean ret = true
+        Map ret = [error:false,failedDestinations:[]]
         if (BootStrap.global.IsLivePossible()) {
             printstart "PublishLiveResults ${new Date()}"
             long live_contest_id = liveContestID
             if (!live_contest_id) {
                 live_contest_id = BootStrap.global.liveContestID
+                println "Contest $live_contest_id (Live enabled)"
+            } else {
+                println "Contest $live_contest_id"
             }
             Contest.findAllById(live_contest_id).each { Contest contest_instance ->
                 printstart "Contest '${contest_instance.title}'"
@@ -999,7 +1001,7 @@ class GpxService
                 String live_html_file_name = "${webroot_dir}gpxupload/LIVE-${uuid}.htm"
                 
                 String live_url
-                if (liveContestID) {
+                if (uploadNoLiveResults) {
                     live_url = "http://localhost:8080/fc/contest/listnoliveresults/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
                 } else {
                     live_url = "http://localhost:8080/fc/contest/listresultslive/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
@@ -1031,7 +1033,8 @@ class GpxService
                         grailsApplication.config.flightcontest.live.ftpupload.name
                     )
                     if (ret_ftp.error) {
-                        ret = false
+                        ret.error = true
+                        ret.failedDestinations += grailsApplication.config.flightcontest.ftp.host
                         printerror ""
                     } else {
                         printdone ""
@@ -1049,7 +1052,8 @@ class GpxService
                             dest_file << src_file
                             dest_file.close()
                         } catch (Exception e) {
-                            ret = false
+                            ret.error = true
+                            ret.failedDestinations += dest_file_name
                             println "Error: ${e.getMessage()}"
                         }
                         src_file.close()
@@ -1068,10 +1072,9 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    public boolean UploadStylesheet(String stylesheetName)
-    // Return: false - Error
+    public Map UploadStylesheet(String stylesheetName)
     {
-        boolean ret = true
+        Map ret = [error:false,failedDestinations:[]]
         if (BootStrap.global.IsLivePossible()) {
             printstart "UploadStylesheet ${new Date()}"
             String webroot_dir =  servletContext.getRealPath("/")
@@ -1093,7 +1096,8 @@ class GpxService
                     stylesheetName
                 )
                 if (ret_ftp.error) {
-                    ret = false
+                    ret.error = true
+                    ret.failedDestinations += grailsApplication.config.flightcontest.ftp.host
                     printerror ""
                 } else {
                     printdone ""
@@ -1112,7 +1116,8 @@ class GpxService
                         dest_file << src_file
                         dest_file.close()
                     } catch (Exception e) {
-                        ret = false
+                        ret.error = true
+                        ret.failedDestinations += dest_file_name
                         println "Error: ${e.getMessage()}"
                     }
                     src_file.close()
@@ -1190,69 +1195,81 @@ class GpxService
                 job_file_reader.close()
                 
                 Map ret = [:]
+                boolean test_instance_locked = false
                 
-                if (ftp1_basedir && ftp1_sourceurl && ftp1_destfilename &&
-                    ftp2_basedir && ftp2_sourceurl && ftp2_destfilename &&
-                    email_to && email_subject && email_body && save_link && test_id && remove_file) {
-                    
-                    // FTP upload gpx
-                    ret = SendFTP2(
-                        grailsApplication.config.flightcontest,ftp1_basedir,ftp1_sourceurl,ftp1_destfilename
-                    )
-    
-                    // FTP upload html
-                    if (!ret.error) {
-                        ret = SendFTP2(
-                            grailsApplication.config.flightcontest,ftp2_basedir,ftp2_sourceurl,ftp2_destfilename
-                            
-                        )
-                    }
-                    
-                    if (!ret.error) {
-                        try {
-                            // Send email
-                            mailService.sendMail {
-                                from grailsApplication.config.flightcontest.mail.from
-                                to NetTools.EMailList(email_to).toArray()
-                                if (grailsApplication.config.flightcontest.mail.cc) {
-                                    List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,email_to)
-                                    if (cc_list) {
-                                        cc cc_list.toArray()
-                                    }
-                                }
-                                subject email_subject
-                                html email_body
-                                // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
+                if (   ftp1_basedir && ftp1_sourceurl && ftp1_destfilename
+                    && ftp2_basedir && ftp2_sourceurl && ftp2_destfilename
+                    && email_to && email_subject && email_body && save_link && remove_file
+                    && test_id && test_id.toLong() 
+                   ) 
+                {
+                    try {
+                        Test test_instance = Test.get(test_id.toLong())
+                        if (!test_instance?.isDirty()) {
+                        
+                            // FTP upload gpx
+                            ret = SendFTP2(
+                                grailsApplication.config.flightcontest,ftp1_basedir,ftp1_sourceurl,ftp1_destfilename
+                            )
+            
+                            // FTP upload html
+                            if (!ret.error) {
+                                ret = SendFTP2(
+                                    grailsApplication.config.flightcontest,ftp2_basedir,ftp2_sourceurl,ftp2_destfilename
+                                    
+                                )
                             }
                             
-                            // Save link
-                            if (test_id.toLong()) {
-                                Test test_instance = Test.get(test_id.toLong())
-                                test_instance.flightTestLink = save_link
+                            if (!ret.error) {
+                                try {
+                                    // Send email
+                                    mailService.sendMail {
+                                        from grailsApplication.config.flightcontest.mail.from
+                                        to NetTools.EMailList(email_to).toArray()
+                                        if (grailsApplication.config.flightcontest.mail.cc) {
+                                            List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,email_to)
+                                            if (cc_list) {
+                                                cc cc_list.toArray()
+                                            }
+                                        }
+                                        subject email_subject
+                                        html email_body
+                                        // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
+                                    }
+                                    
+                                    // Save link
+                                    println "Save link '$save_link'"
+                                    test_instance.flightTestLink = save_link
+                                    test_instance.save()
+                                    
+                                    println "E-Mail send."
+                                } catch (Exception e) {
+                                    println "Error: ${e.getMessage()}" 
+                                    ret.error = true
+                                }
+                            }
+                            
+                            if (ret.error) {
+                                // Save link
+                                println "Save link ''"
+                                test_instance.flightTestLink = ""
                                 test_instance.save()
                             }
-                            
-                            println "E-Mail send."
-                        } catch (Exception e) {
-                            println "Error: ${e.getMessage()}" 
-                            ret.error = true
+                        } else {
+                            println "Test instance locked: dirty"
+                            test_instance_locked = true
                         }
+                    } catch (Exception e) {
+                        println "Test instance locked: ${e.getMessage()}" 
+                        test_instance_locked = true
                     }
-                    
-                    if (ret.error) {
-                        // Save link
-                        if (test_id.toLong()) {
-                            Test test_instance = Test.get(test_id.toLong())
-                            test_instance.flightTestLink = ""
-                            test_instance.save()
-                        }
-                    }
-                            
                 } else {
                     println "No data."
                     ret.error = true
                 }
-                if (!ret.error) {
+                if (test_instance_locked) {
+                    printdone ""
+                } else if (!ret.error) {
                     DeleteFile(remove_file)
                     String new_file_name = webroot_dir + "jobs\\done\\" + file.name
                     file.renameTo(new File(new_file_name))

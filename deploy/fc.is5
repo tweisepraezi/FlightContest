@@ -4,12 +4,12 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.11.0';    // DB-2.11
 const FCCompatibelDigits = 0; // Number of digits for application compatibility
-const FCVersion = '2.3.4';
+const FCVersion = '2.3.5';
 [Setup]
 AppName=Flight Contest
-AppVerName=Flight Contest 2.3.4
-AppVersion=2.3.4
-VersionInfoVersion=2.3.4
+AppVerName=Flight Contest 2.3.5
+AppVersion=2.3.5
+VersionInfoVersion=2.3.5
 AppCopyright=(C) 2009-2015 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://flightcontest.de
@@ -62,7 +62,9 @@ Source: ".\fc-service-start.xml";                     DestDir: "{app}";
 Source: "..\fc\web-app\images\fc.ico";                DestDir: "{app}";
 Source: ".\save_aflosdb.bat";                         DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\save_fcdb.bat";                            DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
-Source: ".\save_fcprint.bat";                         DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\save_fcsave.bat";                          DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\start_fc.bat";                             DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\stop_fc.bat";                              DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-CrewList-Sample.xls";                   DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-CrewList-Test.xls";                     DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-ObservationLog-Sample.xls";             DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
@@ -85,6 +87,7 @@ Root: HKLM64; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFla
 [Run]
 Filename: "wscript.exe";                    Parameters: """{app}\odbc.vbs"" ""{app}""";    WorkingDir: "{app}";  Flags: runhidden;
 Filename: "{app}\install-service.bat";      Parameters: "install FlightContest";           WorkingDir: "{app}";  Flags: runhidden;
+Filename: "sc.exe";                         Parameters: "sdset FlightContest D:AR(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPWPDTLOCRRC;;;IU)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)"; WorkingDir: "{app}";  Flags: runhidden;
 Filename: "{app}\tomcat\bin\tomcat7w.exe";  Parameters: "//MS//FlightContest";             WorkingDir: "{app}";  Flags: nowait;
 ;Filename: "schtasks.exe";                   Parameters: "/Create /S {computername} /XML ""{app}\fc-service-start.xml"" /TN ""Flight Contest Service Manager"""; WorkingDir: "{app}";  Flags: runhidden;
 
@@ -123,7 +126,9 @@ Name: "{group}\Install AFLOS connection";       Filename: "wscript.exe";        
 Name: "{group}\Uninstall Flight Contest";                                            Filename: "{uninstallexe}";
 Name: "{group}\Scripts\Save AFLOS database";                                         Filename: "{app}\scripts\save_aflosdb.bat";                 WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\Save contest database";                                       Filename: "{app}\scripts\save_fcdb.bat";                    WorkingDir: "{commondesktop}";
-Name: "{group}\Scripts\Save contest prints";                                         Filename: "{app}\scripts\save_fcprint.bat";                 WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\Save saved files";                                            Filename: "{app}\scripts\save_fcsave.bat";                  WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\Start Flight Contest";                                        Filename: "{app}\scripts\start_fc.bat";                     WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\Stop Flight Contest";                                         Filename: "{app}\scripts\stop_fc.bat";                      WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-CrewList-Sample.xls";                                      Filename: "{app}\samples\FC-CrewList-Sample.xls";           WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-ObservationLog-Sample.xls";                                Filename: "{app}\samples\FC-ObservationLog-Sample.xls";     WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2015";               Filename: "{app}\rules\FAI_precision_flying_rules_2015.pdf";WorkingDir: "{commondesktop}";

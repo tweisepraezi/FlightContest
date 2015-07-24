@@ -6,25 +6,22 @@ setlocal ENABLEDELAYEDEXPANSION
 :: Thomas Weise
 :: Version 1.0.0
 
-:: Directory where prints will be saved.
-set dest_dir=C:\FCSave
-
-:: Directory where downloaded prints has been saved.
-set print_dir=%TEMP%
-
-:: Prefix and suffix of Flight Contest prints.
-set print_prefix=fc-
-set print_suffix=*.pdf
+:: Directory where saved files will be copied.
+set dest_dir=D:\Wettbewerb-Saved
 
 :: ---------------------------------------------------------------------------------------------------------
 :run
 call :SETDATETIME
 
-echo Save new Flight Contest prints.
+set save_dir=C:\FCSave
+set save_prefix=
+set save_suffix=*.*
+
+echo Copy new files of %save_dir% to %dest_dir%.
 echo.
 
 if not exist "%dest_dir%" goto dest_dir_error
-if not exist "%print_dir%" goto print_dir_error
+if not exist "%save_dir%" goto save_dir_error
 
 :: /D:m-d-y  Copies files changed on or after the specified date.
 ::           If no date is given, copies only those files whose
@@ -36,12 +33,12 @@ if not exist "%print_dir%" goto print_dir_error
 set flag1=/L /D /C /F
 set flag2=   /D /C /F
 
-xcopy "%print_dir%\%print_prefix%%print_suffix%" "%dest_dir%" %flag2%
+xcopy "%save_dir%\%save_prefix%%save_suffix%" "%dest_dir%" %flag2%
 
 echo.
 echo Done.
 echo.
-echo Prints saved successfully to '%dest_dir%'.
+echo Files saved successfully to '%dest_dir%'.
 echo.
 echo.
 pause
@@ -73,12 +70,9 @@ pause
 goto :EOF
 
 :: ---------------------------------------------------------------------------------------------------------
-:print_dir_error
+:save_dir_error
 echo.
-echo ERROR: Directory '%print_dir%' does not exist.
-echo.
-echo Copy this batch to desktop and change variable 'print_dir'.
-echo.
+echo ERROR: Directory '%save_dir%' does not exist.
 echo.
 pause
 goto :EOF

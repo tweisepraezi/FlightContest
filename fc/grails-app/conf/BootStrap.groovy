@@ -593,7 +593,9 @@ class BootStrap {
                         Class table_clazz = grailsApplication.getDomainClass(table).clazz
                         value.data.each { data_id, fields ->
                             println "      Search ${value.key} == ${data_id}"
-                            if (value.key == "id") {
+                            if (value.type == "int") {
+                                data_id = data_id.toInteger()
+                            } else if (value.key == "id") {
                                 data_id = data_id.toLong()
                             }
                             def table_obj = table_clazz.findWhere((value.key):data_id)

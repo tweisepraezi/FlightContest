@@ -56,7 +56,7 @@
                                             <td class="col2">${taskInstance.briefingTime}</td>
                                         </tr>
                                     </g:if>
-                                    <g:if test="${taskInstance.IsPlanningTestRun()}">
+                                    <g:if test="${taskInstance.IsFlightTestRun()}">
                                         <g:if test="${taskInstance.planningTestDuration == 0}">
                                             <tr class="planning">
                                                 <td class="col1">${message(code:'fc.test.planning.publish')}:</td>
@@ -71,8 +71,6 @@
                                                 <td class="col3">- ${last_test.endTestingTime.format('HH:mm')}</td>
                                             </tr>
                                         </g:else>
-                                    </g:if>
-                                    <g:if test="${taskInstance.IsFlightTestRun()}">
                                         <tr class="takeoff">
                                             <td class="col1">${message(code:'fc.test.takeoff')}:</td>
                                             <td class="col2">${first_test.takeoffTime.format('HH:mm')}</td>
@@ -94,26 +92,26 @@
                                             <td class="col2">${first_test.maxLandingTime.format('HH:mm')}</td>
                                             <td class="col3">- ${last_test.maxLandingTime.format('HH:mm')}</td>
                                         </tr>
-                                    </g:if>
-                                    <g:if test="${taskInstance.printTimetableOverviewLegTimes}">
-                                        <g:set var="last_tasktas" value="${new BigDecimal(0)}"/>
-                                        <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'asc'])}">
-							                <g:if test="${!test_instance.crew.disabled}">
-							                    <g:if test="${last_tasktas != test_instance.taskTAS}">
-							                        <tr class="legtimes">
-							                            <g:if test="${!last_tasktas}">
-							                                <td class="col1">${message(code:'fc.legtime.total')}:</td>
-							                            </g:if>
-							                            <g:else>
-							                                <td class="col1"/>
-							                            </g:else>
-							                            <td class="col2">${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
-							                            <td class="col3">${FcMath.TimeStrShort(FcMath.TimeDiff(test_instance.takeoffTime,test_instance.maxLandingTime))}${message(code:'fc.time.h')}</td>
-							                        </tr>
-							                    </g:if>
-							                    <g:set var="last_tasktas" value="${test_instance.taskTAS}"/>
-							                </g:if>
-                                        </g:each>
+	                                    <g:if test="${taskInstance.printTimetableOverviewLegTimes}">
+	                                        <g:set var="last_tasktas" value="${new BigDecimal(0)}"/>
+	                                        <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'asc'])}">
+	                                            <g:if test="${!test_instance.crew.disabled}">
+	                                                <g:if test="${last_tasktas != test_instance.taskTAS}">
+	                                                    <tr class="legtimes">
+	                                                        <g:if test="${!last_tasktas}">
+	                                                            <td class="col1">${message(code:'fc.legtime.total')}:</td>
+	                                                        </g:if>
+	                                                        <g:else>
+	                                                            <td class="col1"/>
+	                                                        </g:else>
+	                                                        <td class="col2">${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+	                                                        <td class="col3">${FcMath.TimeStrShort(FcMath.TimeDiff(test_instance.takeoffTime,test_instance.maxLandingTime))}${message(code:'fc.time.h')}</td>
+	                                                    </tr>
+	                                                </g:if>
+	                                                <g:set var="last_tasktas" value="${test_instance.taskTAS}"/>
+	                                            </g:if>
+	                                        </g:each>
+	                                    </g:if>
                                     </g:if>
                                 </tbody>
                             </table>

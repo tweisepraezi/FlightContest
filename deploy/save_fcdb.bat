@@ -4,7 +4,7 @@ setlocal ENABLEEXTENSIONS
 setlocal ENABLEDELAYEDEXPANSION
 
 :: Thomas Weise
-:: Version 1.0.0
+:: Version 1.1.0
 
 :: Directory where Flight Contest databases will be saved.
 set dest_dir=C:\FCSave
@@ -24,12 +24,19 @@ echo.
 
 if not exist "%dest_dir%" goto dest_dir_error
 if not exist "%fcdb_dir%\%fcdb_name%" goto fcdb_error
-if exist "%fcdb_dir%\%fcdb_lock_name%" goto fcdb_run_error
+
+set stop_fcdb=0
+if exist "%fcdb_dir%\%fcdb_lock_name%" set stop_fcdb=1
 
 echo.
-echo   Copy '%fcdb_dir%\%fcdb_name%' to '%dest_dir%'
+if "%stop_fcdb%" == "1" echo "Stop FlightContest"
+if "%stop_fcdb%" == "1" net stop FlightContest
+echo Copy '%fcdb_dir%\%fcdb_name%' to '%dest_dir%'
 copy "%fcdb_dir%\%fcdb_name%" "%dest_dir%"
 ren "%dest_dir%\%fcdb_name%" %cdate%-%ctime%-%fcdb_name%
+if "%stop_fcdb%" == "1" echo.
+if "%stop_fcdb%" == "1" echo "Start FlightContest"
+if "%stop_fcdb%" == "1" net start FlightContest
 
 set fcdb_saved_name=%dest_dir%\%cdate%-%ctime%-%fcdb_name%
 if not exist "%fcdb_saved_name%" goto fcdb_saved_error

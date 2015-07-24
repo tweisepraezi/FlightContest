@@ -1080,4 +1080,12 @@ class Contest
         }
         return getPrintMsg('fc.info')
     }
+    
+    boolean IsAFLOSPossible()
+    {
+        if (BootStrap.global.IsAFLOSPossible()) {
+            return true
+        }
+        return false
+    }
 }

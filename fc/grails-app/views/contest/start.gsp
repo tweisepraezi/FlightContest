@@ -59,7 +59,7 @@
                                         <td class="detailtitle">${message(code:'fc.bestofanalysistasknum')}:</td>
                                         <td>${fieldValue(bean:contestInstance, field:'bestOfAnalysisTaskNum')}</td>
                                     </tr>
-                                    <g:if test="${!contestInstance.aflosTest}">
+                                    <g:if test="${!contestInstance.aflosTest && contestInstance.IsAFLOSPossible()}">
 	                                    <tr>
 	                                        <td class="detailtitle">${message(code:'fc.useuploadedaflos')}:</td>
 	                                        <td><g:if test="${contestInstance.aflosUpload}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>

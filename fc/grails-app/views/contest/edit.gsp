@@ -68,7 +68,7 @@
                                 <br/>
                                 <input type="text" id="bestOfAnalysisTaskNum" name="bestOfAnalysisTaskNum" value="${fieldValue(bean:contestInstance,field:'bestOfAnalysisTaskNum')}" tabIndex="8"/>
                             </p>
-                            <g:if test="${!contestInstance.aflosTest}">
+                            <g:if test="${!contestInstance.aflosTest && contestInstance.IsAFLOSPossible()}">
 	                            <p>
 	                                <div>
 	                                    <g:checkBox name="aflosUpload" value="${contestInstance.aflosUpload}" />

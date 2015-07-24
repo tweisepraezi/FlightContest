@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-14.05.2015
+24.07.2015
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -52,8 +52,27 @@ Weitere nützliche Funktionen von Flight Contest:
 * E-Mail-Versand der Navigationsflugkarten an Teilnehmer.
 * Unterstützung des offenen Logger-Datenformates GPX.
 
-Fehlerbehebungen und Erweiterungen in dieser Version (2.3.4):
+Fehlerbehebungen und Erweiterungen in dieser Version (2.3.5):
 -------------------------------------------------------------
+- Anzeige und E-Mail-Versand der Navigationsflugkarte wird jetzt 
+  nur bei AFLOS-Datenbank mit zutreffender Referenzstrecke ermöglicht
+  (für mehrtägige Wettbewerbe mit mehreren AFLOS-Datenbanken)
+- Ausdrucke mit Wettbewerbsnamen, die das Zeichen & enthalten,
+  sind jetzt möglich
+- 'Ergebnisse -> Alle Navigationsflüge als E-Mail versenden' eingeführt
+- 'Extras -> Live-Einstellungen -> Live-Ergebnis einmal berechnen' eingeführt
+- Scripte zum Starten und Stoppen von Flight Contest eingeführt:
+    Start -> Alle Programme -> Flight Contest -> Scripts
+      -> Start Flight Contest
+      -> Stop Flight Contest
+- Flight Contest - Datenbanksicherung stoppt und startet Flight Contest
+  jetzt automatisch
+    Start -> Alle Programme -> Flight Contest -> Scripts
+       -> Save contest database
+- Die AFLOS-Datenbank-Tabellenanzeige für Entwicklungszwecke wurde entfernt.
+
+Fehlerbehebungen und Erweiterungen in Version 2.3.4:
+----------------------------------------------------
 - E-Mail-Versand bei leerem Aufgaben-Namen funktionierte nicht.
 - E-Mail-Versand einer Strecke an die Wettbewerbsleitung eingeführt. 
 - Anzeige der Ziel-E-Mail-Adresse als Tool-Tipp über E-Mail-Button.

@@ -2,6 +2,8 @@ import java.util.Map;
 
 class Test 
 {
+    def grailsApplication
+
 	Crew crew
     Boolean disabledCrew = false                           // DB-2.9
 	PlanningTestTask planningtesttask
@@ -1874,16 +1876,71 @@ class Test
         return ""
     }
     
+    String EMailAddress()
+    {
+        return crew.email
+    }
+    
     boolean IsEMailPossible()
     {
-        if (aflosStartNum && NetTools.EMailList(crew.email) && BootStrap.global.IsEMailPossible() && BootStrap.global.IsFTPPossible()) {
+        if (   aflosStartNum 
+            && NetTools.EMailList(crew.email)
+            && BootStrap.global.IsEMailPossible()
+            && BootStrap.global.IsFTPPossible()
+            && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
+            && AflosTools.GetAflosCrewName(task.contest, crew.startNum)
+            && AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, crew.startNum)
+           ) 
+        {
             return true
         }
         return false
     }
     
-    String EMailAddress()
+    boolean IsShowMapPossible()
     {
-        return crew.email
+        if (   aflosStartNum
+            && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
+            && AflosTools.GetAflosCrewName(task.contest, crew.startNum)
+            && AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, crew.startNum)
+           ) {
+            return true
+        }
+        return false
     }
+    
+    boolean IsAFLOSPossible()
+    {
+        if (   aflosStartNum 
+            && BootStrap.global.IsAFLOSPossible()
+           ) 
+        {
+            return true
+        }
+        return false
+    }
+    
+    Map GetEMailBody()
+    {
+        Map ret = [:]
+        String s = "<p>Lieber Sportfreund,</p>"
+        
+        String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${crew.uuid}"
+        
+        String view_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.htm"
+        s += """<p>Dein Flug (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
+        
+        String gpx_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.gpx"
+        s += """<p>Dein Flug (GPX Viewer): <a href="${gpx_url}">${gpx_url}</a></p>"""
+        
+        String results_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.pdf"
+        // TODO: s += """<p>Deine Ergebnisse (PDF Viewer): <a href="${results_url}">${results_url}</a></p>"""
+        
+        s += """<p>${task.contest.printOrganizer}</p>"""
+        
+        ret += [body:s,link:view_url]
+        
+        return ret
+    }
+
 }

@@ -28,23 +28,21 @@
                             <g:if test="${first_test && last_test}">
 	                            <table>
 	                                <tbody>
-	                                    <g:if test="${taskInstance.IsPlanningTestRun()}">
-		                                    <g:if test="${taskInstance.planningTestDuration == 0}">
-		                                        <tr>
-		                                            <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</td>
-		                                            <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
-		                                            <td/>
-		                                        </tr>
-		                                    </g:if>
-		                                    <g:else>
-			                                    <tr>
-			                                        <td class="detailtitle">${message(code:'fc.planningtest')}:</td>
-			                                        <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
-                                                    <td/>
-		                                        </tr>
-		                                    </g:else>
-		                                </g:if>
 	                                    <g:if test="${taskInstance.IsFlightTestRun()}">
+                                            <g:if test="${taskInstance.planningTestDuration == 0}">
+                                                <tr>
+                                                    <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</td>
+                                                    <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
+                                                    <td/>
+                                                </tr>
+                                            </g:if>
+                                            <g:else>
+                                                <tr>
+                                                    <td class="detailtitle">${message(code:'fc.planningtest')}:</td>
+                                                    <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
+                                                    <td/>
+                                                </tr>
+                                            </g:else>
 		                                    <tr>
 		                                        <td class="detailtitle">${message(code:'fc.test.takeoff')}:</td>
 		                                        <td>${first_test.takeoffTime.format('HH:mm')} - ${last_test.takeoffTime.format('HH:mm')}</td>

@@ -1126,7 +1126,7 @@ class TestController
             Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name)
             if (converter.ok && converter.track) {
                 
-                Map email = GetEMailBody(test.instance)
+                Map email = test.instance.GetEMailBody()
                 String job_file_name = "jobs/JOB-${uuid}.job"
                 try {
                     // create email job
@@ -1187,29 +1187,6 @@ class TestController
         }
     }
     
-    private Map GetEMailBody(Test testInstance)
-    {
-        Map ret = [:]
-        String s = "<p>Lieber Sportfreund,</p>"
-        
-        String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${testInstance.crew.uuid}"
-        
-        String view_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.htm"
-        s += """<p>Dein Flug (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
-        
-        String gpx_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.gpx"
-        s += """<p>Dein Flug (GPX Viewer): <a href="${gpx_url}">${gpx_url}</a></p>"""
-        
-        String results_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.pdf"
-        // TODO: s += """<p>Deine Ergebnisse (PDF Viewer): <a href="${results_url}">${results_url}</a></p>"""
-        
-        s += """<p>${testInstance.task.contest.printOrganizer}</p>"""
-        
-        ret += [body:s,link:view_url]
-        
-        return ret
-    }
-
     private String GetEMailGpxURL(Test testInstance)
     {
         String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${testInstance.crew.uuid}"

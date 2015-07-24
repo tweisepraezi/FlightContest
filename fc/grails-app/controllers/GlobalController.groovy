@@ -30,7 +30,7 @@ class GlobalController {
             session.gpxviewerReturnID = params.id
             return [globalInstance:BootStrap.global,contestInstance:session.lastContest,url:params.url]
         }
-        redirect(controller:'contest',action:'start')
+        return [globalInstance:BootStrap.global,url:params.url]
     }
     
     def list = {
@@ -169,11 +169,14 @@ class GlobalController {
                 }
             }
         }
+        /*
         if (session?.lastContest) {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
         } else {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
         }
+        */
+        redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
     def disablelive = {
@@ -181,11 +184,14 @@ class GlobalController {
         BootStrap.global.liveContestID = 0
         BootStrap.global.save()
         gpxService.println "Live disabled."
+        /*
         if (session?.lastContest) {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
         } else {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
         }
+        */
+        redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
     def enablelive = {
@@ -200,57 +206,87 @@ class GlobalController {
             }
             gpxService.println "Live enabled."
         }
+        /*
         if (session?.lastContest) {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
         } else {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
         }
+        */
+        redirect(action:livesettings,params:['newwindow':params.newwindow])
+    }
+    
+    def liverunonce = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            LiveJob.triggerNow([ContestID:session.lastContest.id])
+            gpxService.println "Live run once."
+        }
+        /*
+        if (session?.lastContest) {
+            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
+        } else {
+            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
+        }
+        */
+        redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
     def uploadlivestylesheet = {
         String stylesheet_name = Global.LIVE_STYLESHEET
         gpxService.printstart "Upload live stylesheet ${stylesheet_name}"
-        if (gpxService.UploadStylesheet(stylesheet_name)) {
+        Map ret = gpxService.UploadStylesheet(stylesheet_name)
+        if (!ret.error) {
             flash.message = message(code:'fc.uploaded',args:[stylesheet_name])
             flash.error = false
         } else {
-            flash.message = message(code:'fc.notuploaded',args:[stylesheet_name]) 
+            flash.message = message(code:'fc.notuploaded.destinations',args:[stylesheet_name,ret.failedDestinations]) 
             flash.error = true
         }
         gpxService.printdone flash.message
+        /*
         if (session?.lastContest) {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
         } else {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
         }
+        */
+        redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
     def uploadnoliveresults = {
         gpxService.printstart "Upload no live results"
         long live_contest_id = params.liveContestID.toLong()
         if (live_contest_id) {
-            if (gpxService.PublishLiveResults(live_contest_id)) {
+            Map ret = gpxService.PublishLiveResults(live_contest_id,true)
+            if (!ret.error) {
                 flash.message = message(code:'fc.uploaded.noliveresults')
                 flash.error = false
             } else {
-                flash.message = message(code:'fc.notuploaded.noliveresults')
+                flash.message = message(code:'fc.notuploaded.noliveresults',args:[ret.failedDestinations])
                 flash.error = true
             }
         } else {
-            flash.message = message(code:'fc.notuploaded.noliveresults')
+            flash.message = message(code:'fc.notuploaded.noliveresults.nocontest')
             flash.error = true
         }
         gpxService.printdone flash.message
+        /*
         if (session?.lastContest) {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
         } else {
             render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
         }
-
+        */
+        redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
     def testmail = {
         try {
+            String send_subject = grailsApplication.config.flightcontest.testmail.subject
+            if (session?.lastContest) {
+                send_subject += " (${session.lastContest.title})"
+            }
             mailService.sendMail {
                 from grailsApplication.config.flightcontest.mail.from
                 to NetTools.EMailList(grailsApplication.config.flightcontest.testmail.to).toArray()
@@ -260,7 +296,7 @@ class GlobalController {
                         cc cc_list.toArray()
                     }
                 }
-                subject grailsApplication.config.flightcontest.testmail.subject
+                subject send_subject
                 body grailsApplication.config.flightcontest.testmail.body
             }
             flash.message = message(code:'fc.net.mail.sent',args:[grailsApplication.config.flightcontest.testmail.to])

@@ -42,9 +42,6 @@ class MainTagLib
 			if (Task.findByContest(session.lastContest)) {
 				outln """    <li> <a class="${if (p.contestevaluation) active(p.controller,'task')}" href="${p.link}/../../task/startevaluation">${message(code:'fc.contest.evaluation')}</a> </li>"""
 			}
-            if (BootStrap.global.liveContestID == session.lastContest.id) {
-                outln """    <li> <a class="${active(p.controller,'flightcontest')}" href="${p.link}/../../global/livesettings">${message(code:'fc.livesettings.short')}</a> </li>"""
-            }
 		} else {
 			if (Contest.findByIdIsNotNull([sort:"id"])) {
 				Contest.list().each { contestInstance ->
@@ -56,10 +53,17 @@ class MainTagLib
         	}
         }
         
-        outln """    <li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
-        outln """    <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
-		if (true) {
+        outln """        <li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
+        outln """        <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
+		if (BootStrap.global.IsAFLOSPossible()) {
 			outln """    <li class="secondary"> <a class="${if (isAflos(p.controller)) "active"}" href="${p.link}/../../aflos/start">${message(code:'fc.aflos')}</a> </li>"""
+        }
+        if (BootStrap.global.IsLivePossible()) {
+            if (BootStrap.global.liveContestID == session?.lastContest?.id) {
+                outln """<li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="${p.link}/../../global/livesettings?newwindow=true" target="_blank">${message(code:'fc.livesettings.short.on')}</a> </li>"""
+            } else {
+                outln """<li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="${p.link}/../../global/livesettings?newwindow=true" target="_blank">${message(code:'fc.livesettings.short')}</a> </li>"""
+            }
         }
         outln """  </ul>"""
 		outln """</div>"""

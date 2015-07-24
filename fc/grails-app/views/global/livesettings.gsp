@@ -16,7 +16,7 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:form method="post" >
+                    <g:form method="post">
                         <fieldset>
                             <label>${message(code:'fc.livesettings.view.contest')}:</label>
                             <br/>
@@ -63,16 +63,20 @@
                                 </g:each>
                             </p>
                         </fieldset>
+                        <input type="hidden" name="newwindow" value="${params.newwindow}" />
                         <g:actionSubmit action="savelivesettings" value="${message(code:'fc.save')}" tabIndex="101"/>
                         <g:if test="${contestInstance && !globalInstance.liveContestID}">
-                            <g:actionSubmit action="enablelive" value="${message(code:'fc.livesettings.view.enablelive')}" tabIndex="102"/>
+                            <g:actionSubmit action="liverunonce" value="${message(code:'fc.livesettings.view.liverunonce')}" tabIndex="102"/>
+                            <g:actionSubmit action="enablelive" value="${message(code:'fc.livesettings.view.enablelive')}" tabIndex="103"/>
+                            <g:actionSubmit action="uploadlivestylesheet" value="${message(code:'fc.livesettings.view.uploadstylesheet')}" tabIndex="105"/>
+                            <g:actionSubmit action="uploadnoliveresults" value="${message(code:'fc.livesettings.view.removeresults')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="106"/>
                         </g:if>
                         <g:if test="${globalInstance.liveContestID}">
-                            <g:actionSubmit action="disablelive" value="${message(code:'fc.livesettings.view.disablelive')}" tabIndex="103"/>
+                            <g:actionSubmit action="disablelive" value="${message(code:'fc.livesettings.view.disablelive')}" tabIndex="104"/>
                         </g:if>
-                        <g:actionSubmit action="uploadlivestylesheet" value="${message(code:'fc.livesettings.view.uploadstylesheet')}" tabIndex="104"/>
-                        <g:actionSubmit action="uploadnoliveresults" value="${message(code:'fc.livesettings.view.removeresults')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="105"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="106"/>
+                        <g:if test="${!(params.newwindow=='true')}">
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="107"/>
+                        </g:if>
                     </g:form>
                 </div>
             </div>

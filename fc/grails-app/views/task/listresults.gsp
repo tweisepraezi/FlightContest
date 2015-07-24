@@ -248,6 +248,17 @@
 	                            </g:else>
                                 <td colspan="${results_columns}"><g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.crewresults.all.print')}" tabIndex="1"/> <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="2"/> <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="3"/></td>
                             </tr>
+                           <g:if test="${taskInstance.IsEMailPossible()}">
+	                            <tr class="">
+	                                <g:if test="${taskInstance.contest.resultClasses}">
+	                                    <td colspan="5"></td>
+	                                </g:if>
+	                                <g:else>
+	                                    <td colspan="4"></td>
+	                                </g:else>
+	                                <td colspan="${results_columns}"><g:actionSubmit action="emailnavigationresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="4"/></td>
+	                            </tr>
+	                       </g:if>
                         </tfoot>
                     </table>
                 </g:form>

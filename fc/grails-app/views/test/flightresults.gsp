@@ -251,13 +251,13 @@
                                                 <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
                                             </g:elseif>
                                             <g:actionSubmit action="importresults" value="${message(code:'fc.flightresults.aflosimport')}" onclick="this.form.target='_self';return true;" tabIndex="5"/>
-                                            <g:if test="${testInstance.aflosStartNum}">
+                                            <g:if test="${testInstance.IsAFLOSPossible()}">
                                                 <g:actionSubmit action="viewimporterrors" value="${message(code:'fc.flightresults.viewimporterrors')}" onclick="this.form.target='_self';return true;" tabIndex="6"/>
                                             </g:if>
                                             <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" onclick="this.form.target='_self';return true;" tabIndex="7"/>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="8"/>
                                             <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" onclick="this.form.target='_self';return true;" tabIndex="9"/>
-                                            <g:if test="${testInstance.aflosStartNum}">
+                                            <g:if test="${testInstance.IsShowMapPossible()}">
                                                 <g:actionSubmit action="showmap" value="${message(code:'fc.flightresults.map')}" onclick="this.form.target='_blank';return true;" tabIndex="10"/>
                                             </g:if>
                                             <g:if test="${testInstance.IsEMailPossible()}">
@@ -275,7 +275,7 @@
                                             <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="4"/>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="5"/>
                                             <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" onclick="this.form.target='_self';return true;" tabIndex="6"/>
-                                            <g:if test="${testInstance.aflosStartNum}">
+                                            <g:if test="${testInstance.IsShowMapPossible()}">
                                                 <g:actionSubmit action="showmap" value="${message(code:'fc.flightresults.map')}" onclick="this.form.target='_blank';return true;" tabIndex="7"/>
                                             </g:if>
                                             <g:if test="${testInstance.IsEMailPossible()}">
