@@ -51,6 +51,13 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="warning">${message(code:'fc.task.selectplanningtesttask.recalculatewarning')}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <g:actionSubmit action="setplanningtesttask" value="${message(code:'fc.assign')}" />
                         <g:actionSubmit action="listplanning" value="${message(code:'fc.cancel')}" />

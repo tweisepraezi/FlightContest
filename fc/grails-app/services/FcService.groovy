@@ -2576,7 +2576,7 @@ class FcService
         }
 
         // Multiple PlanningTestTasks?  
-        if (PlanningTestTask.countByPlanningtest(task.instance.planningtest) > 1) {
+        if (PlanningTestTask.countByPlanningtest(task.instance.planningtest) > 0) {
             List test_instance_ids = [""]
             Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
                 if (params["selectedTestID${test_instance.id}"] == "on") {
@@ -2588,6 +2588,8 @@ class FcService
             return task
         }
 
+        // Code wird ab hier nicht mehr ausgeführt
+        
         // set single PlanningTestTask to all selected Tests
         int assign_num = 0
         PlanningTestTask planningtesttask_instance = PlanningTestTask.findByPlanningtest(task.instance.planningtest) 
@@ -2665,7 +2667,6 @@ class FcService
 			printerror task.message
             return task
         }
-        println "X"
         
         // Multiple FlightTestWinds?  
         if (FlightTestWind.countByFlighttest(task.instance.flighttest) > 0) {
@@ -10699,7 +10700,7 @@ class FcService
 	            if (last_takeoff_time) {
 	                if (test_instance.takeoffTime < last_takeoff_time.getTime()) {
 	                    test_instance.takeoffTimeWarning = true
-						println "Takeoff time warning by aircraft ($test_instance.crew.name)."
+						println "Takeoff time warning by aircraft ($test_instance.crew.name): '$test_instance.takeoffTime' < '${last_takeoff_time.getTime()}'"
 	                }
 	            }
 				
@@ -10745,6 +10746,7 @@ class FcService
         first_time.setTime(first_date)
 
         GregorianCalendar start_time = new GregorianCalendar()
+        start_time.setTime(first_date)
         start_time.set(Calendar.HOUR_OF_DAY, first_time.get(Calendar.HOUR_OF_DAY))
         start_time.set(Calendar.MINUTE,      first_time.get(Calendar.MINUTE))
         start_time.set(Calendar.SECOND,      0)
@@ -10872,7 +10874,7 @@ class FcService
         testInstance.takeoffTime = time.getTime()
         
         // calulate startTime
-		Map calculated_time = TimeCalculator(CoordType.SP, testInstance,taskInstance.risingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind)
+		Map calculated_time = TimeCalculator(CoordType.SP, taskInstance.risingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
 			FcMath.SetFullMinute(CoordType.SP, time)
@@ -10889,7 +10891,7 @@ class FcService
         testInstance.finishTime = time.getTime()
         
         // calculate maxLandingTime
-		calculated_time = TimeCalculator(CoordType.LDG, testInstance, taskInstance.maxLandingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind)
+		calculated_time = TimeCalculator(CoordType.LDG, taskInstance.maxLandingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
 			FcMath.SetFullMinute(CoordType.LDG, time)
@@ -10902,7 +10904,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-	private Map TimeCalculator(CoordType coordType, Test testInstance, String givenFormula, Route routeInstance, Wind windInstance)
+	private Map TimeCalculator(CoordType coordType, String givenFormula, Route routeInstance, Wind windInstance, BigDecimal valueTAS)
 	// return seconds
 	{
 		BigDecimal ret_hours = -1 
@@ -10926,13 +10928,13 @@ class FcService
 			if (givenFormula.endsWith('NM')) {
 				String f = givenFormula.substring(6,givenFormula.size()-2).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), true, true, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), true, true, routeInstance, windInstance, valueTAS)
 					ret_fullminute = true
 				}
 			} else {
 				String f = givenFormula.substring(6,givenFormula.size()).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), true, false, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), true, false, routeInstance, windInstance, valueTAS)
 					ret_fullminute = true
 				}
 			}
@@ -10940,25 +10942,25 @@ class FcService
 			if (givenFormula.endsWith('NM')) {
 				String f = givenFormula.substring(5,givenFormula.size()-2).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), true, true, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), true, true, routeInstance, windInstance, valueTAS)
 				}
 			} else {
 				String f = givenFormula.substring(5,givenFormula.size()).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), true, false, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), true, false, routeInstance, windInstance, valueTAS)
 				}
 			}
 		} else if (givenFormula.startsWith('nowind+:')) {
 			if (givenFormula.endsWith('NM')) {
 				String f = givenFormula.substring(8,givenFormula.size()-2).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), false, true, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), false, true, routeInstance, windInstance, valueTAS)
 					ret_fullminute = true
 				}
 			} else {
 				String f = givenFormula.substring(8,givenFormula.size()).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), false, false, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), false, false, routeInstance, windInstance, valueTAS)
 					ret_fullminute = true
 				}
 			}
@@ -10966,24 +10968,24 @@ class FcService
 			if (givenFormula.endsWith('NM')) {
 				String f = givenFormula.substring(7,givenFormula.size()-2).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), false, true, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), false, true, routeInstance, windInstance, valueTAS)
 				}
 			} else {
 				String f = givenFormula.substring(7,givenFormula.size()).replace(',','.')
 				if (f.isBigDecimal()) {
-					ret_hours = TimeCalculatorLeg(coordType, testInstance, f.toBigDecimal(), false, false, routeInstance, windInstance)
+					ret_hours = TimeCalculatorLeg(coordType, f.toBigDecimal(), false, false, routeInstance, windInstance, valueTAS)
 				}
 			}
 		} else if (givenFormula.startsWith('func+:')) {
 			String f = givenFormula.substring(6,givenFormula.size())
 			if (f) {
 				ret_fullminute = true
-				ret_hours = TimeCalculatorFunc(coordType, testInstance, f)
+				ret_hours = TimeCalculatorFunc(coordType, f, routeInstance, windInstance, valueTAS)
 			}
 		} else if (givenFormula.startsWith('func:')) {
 			String f = givenFormula.substring(5,givenFormula.size())
 			if (f) {
-				ret_hours = TimeCalculatorFunc(coordType, testInstance, f)
+				ret_hours = TimeCalculatorFunc(coordType, f, routeInstance, windInstance, valueTAS)
 			}
 		}
 
@@ -10997,7 +10999,7 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-	private BigDecimal TimeCalculatorLeg(CoordType coordType, Test testInstance, BigDecimal f, boolean withWind, boolean addDistance, Route routeInstance, Wind windInstance)
+	private BigDecimal TimeCalculatorLeg(CoordType coordType, BigDecimal f, boolean withWind, boolean addDistance, Route routeInstance, Wind windInstance, BigDecimal valueTAS)
 	// return hours
 	{
 		Wind wind = new Wind(direction:0,speed:0)
@@ -11017,23 +11019,21 @@ class FcService
 		}
 
 		if (addDistance) {
-			println "TimeCalculatorLeg $coordType: tas:$testInstance.taskTAS, wind:${wind.name()}, track:$leg_truetrack, dist:$leg_distance, add distance:$f"
-			return LegTime(testInstance.taskTAS,wind,leg_truetrack,leg_distance+f)
+			println "TimeCalculatorLeg $coordType: tas:$valueTAS, wind:${wind.name()}, track:$leg_truetrack, dist:$leg_distance, add distance:$f"
+			return LegTime(valueTAS,wind,leg_truetrack,leg_distance+f)
 		} else {
-			println "TimeCalculatorLeg $coordType: tas:$testInstance.taskTAS, wind:${wind.name()}, track:$leg_truetrack, dist:$leg_distance, multiplier:$f"
-			return f*LegTime(testInstance.taskTAS,wind,leg_truetrack,leg_distance)
+			println "TimeCalculatorLeg $coordType: tas:$valueTAS, wind:${wind.name()}, track:$leg_truetrack, dist:$leg_distance, multiplier:$f"
+			return f*LegTime(valueTAS,wind,leg_truetrack,leg_distance)
 		}
 	}
 	
     //--------------------------------------------------------------------------
-	private BigDecimal TimeCalculatorFunc(CoordType coordType, Test testInstance, String calculatorValue) 
+	private BigDecimal TimeCalculatorFunc(CoordType coordType, String calculatorValue, Route routeInstance, Wind windInstance, BigDecimal valueTAS) 
 	// return hours
 	{
-		Wind wind = testInstance.flighttestwind.wind
-		
 		BigDecimal leg_distance = 0
 		BigDecimal leg_truetrack = 0
-		for (RouteLegCoord routelegcoord_instance in RouteLegCoord.findAllByRoute(testInstance.flighttestwind.flighttest.route,[sort:"id"])) {
+		for (RouteLegCoord routelegcoord_instance in RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])) {
 			if (routelegcoord_instance.endTitle.type == coordType) {
 				leg_truetrack = routelegcoord_instance.testTrueTrack()
 				leg_distance = routelegcoord_instance.testDistance()
@@ -11042,8 +11042,8 @@ class FcService
 			}
 		}
 
-		println "TimeCalculatorFunc $coordType: tas:$testInstance.taskTAS, wind:${wind.name()}, truetrack:$leg_truetrack, dist:$leg_distance, calculator:$calculatorValue"
-		return FuncTime(testInstance.taskTAS,wind,leg_truetrack,leg_distance,calculatorValue)
+		println "TimeCalculatorFunc $coordType: tas:$valueTAS, wind:${windInstance.name()}, truetrack:$leg_truetrack, dist:$leg_distance, calculator:$calculatorValue"
+		return FuncTime(valueTAS,windInstance,leg_truetrack,leg_distance,calculatorValue)
 	}
 	
 	//--------------------------------------------------------------------------
@@ -11283,12 +11283,12 @@ class FcService
 	    testLegInstance.planGroundSpeed = ret.groundspeed
 		switch (testLegInstance.coordTitle.type) {
 			case CoordType.iLDG:
-				Map calculated_time = TimeCalculator(CoordType.iLDG,testInstance,testInstance.task.iLandingDurationFormula, routeInstance, windInstance)
+				Map calculated_time = TimeCalculator(CoordType.iLDG, testInstance.task.iLandingDurationFormula, routeInstance, windInstance, valueTAS)
 				testLegInstance.planLegTime = calculated_time.hours
 				testLegInstance.planFullMinute = calculated_time.fullminute
 				break
 			case CoordType.iSP:
-				Map calculated_time = TimeCalculator(CoordType.iSP,testInstance,testInstance.task.iRisingDurationFormula, routeInstance, windInstance)
+				Map calculated_time = TimeCalculator(CoordType.iSP, testInstance.task.iRisingDurationFormula, routeInstance, windInstance, valueTAS)
 				testLegInstance.planLegTime = calculated_time.hours
 				testLegInstance.planFullMinute = calculated_time.fullminute
 				break
@@ -11997,7 +11997,9 @@ class FcService
 			
 			printdone ""
 		}
-		
+        
+        calulateTimetableWarnings(task_instance)
+        
 		printdone ""
 	}
 	

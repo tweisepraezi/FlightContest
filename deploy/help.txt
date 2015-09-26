@@ -242,8 +242,23 @@ D. Wettbewerbs-Auswertung
   Für die betroffenen Besatzungen wird ein neuer Flugplan berechnet.
   
 - Flugwind ändert sich im Laufe der Starts
-  -> Verbliebenen Besatzungen anderen Flugwind zuweisen  (Planung)
+  -> Verbliebenen Besatzungen anderen Flugwind zuweisen (Planung)
   Für die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.
+
+- Planungstest soll mit einem anderen Wind als dem ursprünglich
+  vorgegeben Wind bewertet werden
+  -> Dem Planungstest eine neue Planungsaufgabe mit anderem Wind zuweisen
+     und Besatzung diese neue Planungsaufgabe zuweisen (Planung)
+
+- TAS einer Besatzung ändert sich, nachdem bereits Planungstests und
+  Flugpläne berechnet wurden
+  -> Besatzung markieren und einmal nach unten und oben schieben
+     (Planung)
+  Geänderte TAS wird in die Aufgabe übernommen.
+  Planungstest wird sofort neu berechnet.
+  Flugplan wird mit 'Zeitplan berechnen' neu berechnet.
+  Hierbei können Warnungen für Folgeflugzeuge entstehen.
+  Ggf. Besatzung ans Ende der Aufgabe schieben.
 
 - Besatzung muß wegen Defekt das Flugzeug wechseln
   -> Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen
@@ -252,15 +267,14 @@ D. Wettbewerbs-Auswertung
   Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unverändert.
 
 - Wendepunkt-Überflugzeit einer Aufgabe soll nicht gewertet werden
-  -> Zeitauswertung des Wendepunktes deaktivieren
+  -> 'Zeitauswertung' des Wendepunktes deaktivieren
      (Ergebnisse -> Check-Punkte deaktivieren)
   Bewirkt Neuberechnung des Ergebnisses.
   
 - Unbekannte Zeitkontrolle einer Aufgabe soll nicht gewertet werden
-  -> Zeitauswertung und 'Tor verfehlt' der unbekannten Zeitkontrolle
+  -> 'Zeitauswertung' und 'Tor verfehlt' der unbekannten Zeitkontrolle
      deaktivieren (Ergebnisse -> Check-Punkte deaktivieren)
   Bewirkt Neuberechnung des Ergebnisses.
-
 
 Besatzungsliste erstellen
 =========================

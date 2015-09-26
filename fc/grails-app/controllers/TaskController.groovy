@@ -615,11 +615,14 @@ class TaskController {
         if (!task.instance) {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+            flash.message = task.message
+            flash.error = true
+            redirect(action:listplanning,id:task.instance.id)
+        } else if (task.testinstanceids?.size > 1) {
+            redirect(action:selectplanningtesttask,id:task.instance.id,params:[testInstanceIDs:task.testinstanceids])
         } else {
             flash.message = task.message
-            if (task.error) {
-                flash.error = true
-            }
             redirect(action:listplanning,id:task.instance.id)
         }
     }
