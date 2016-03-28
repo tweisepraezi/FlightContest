@@ -35,9 +35,13 @@ class FlightTestWindController {
         def flighttestwind = fcService.updateFlightTestWind(params) 
         if (flighttestwind.saved) {
         	flash.message = flighttestwind.message
-        	redirect(controller:"flightTest",action:show,id:flighttestwind.flighttestid)
+            if (params.flighttestwindReturnAction) {
+                redirect(action:params.flighttestwindReturnAction,controller:params.flighttestwindReturnController,id:params.flighttestwindReturnID)
+            } else {
+        	    redirect(controller:"flightTest",action:show,id:flighttestwind.flighttestid)
+            }
         } else if (flighttestwind.instance) {
-        	render(view:'edit',model:[flightTestWindInstance:flighttestwind.instance])
+        	render(view:'edit',model:[flightTestWindInstance:flighttestwind.instance,flighttestwindReturnAction:session.flighttestwindReturnAction,flighttestwindReturnController:session.flighttestwindReturnController,flighttestwindReturnID:session.flighttestwindReturnID])
         } else {
         	flash.message = flighttestwind.message
             redirect(action:edit,id:params.id)

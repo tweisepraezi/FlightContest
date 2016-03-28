@@ -6,6 +6,11 @@ class HTMLFilter {
 		return sourceScr.replace(' ','&#160;') // = 00A0 - Dauerleerzeichen
 	}
 	
+    static String GetStr(String sourceStr)
+    {
+        return sourceStr.replace(' ',"%20")
+    }
+    
     static String GetStr(List sourceList)
     {
         return sourceList.inspect().replace(' ',"%20")

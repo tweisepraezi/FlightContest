@@ -28,9 +28,27 @@ class FcMath
 	}
 
     //--------------------------------------------------------------------------
+    static BigDecimal GradDiff(BigDecimal gradValue1, BigDecimal gradValue2)
+    {
+        BigDecimal grad_diff = gradValue2 - gradValue1
+        if (grad_diff > 180) {
+            grad_diff -= 360
+        } else if (grad_diff < -180) {
+            grad_diff += 360
+        }
+        return grad_diff
+    }
+    
+    //--------------------------------------------------------------------------
 	static int RoundGrad(BigDecimal gradValue)
 	{
-		return gradValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
+        int round_grad = gradValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
+        if (round_grad < 0) {
+            round_grad += 360
+        } else if (round_grad >= 360) {
+            round_grad -= 360
+        }
+		return round_grad
 	}
 	
     //--------------------------------------------------------------------------
@@ -87,15 +105,11 @@ class FcMath
     }
     
     //--------------------------------------------------------------------------
-    static String MinuteStr(BigDecimal minValue)
+    static int RoundAltitude(BigDecimal altitudeValue)
     {
-    	if (minValue >= 0) {
-    		DecimalFormat df = new DecimalFormat("00.00000")
-    		return df.format(minValue)
-    	}
-    	return ""
+        return altitudeValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
     }
-
+    
     //--------------------------------------------------------------------------
 	static int Seconds(BigDecimal timeValue)
 	{
@@ -236,40 +250,6 @@ class FcMath
         return ""
     }
 
-    //--------------------------------------------------------------------------
-    static String ConvertAFLOSCoordValue(String aflosCoordValue)
-    // "51° 26,9035' N" -> "N 051° 27,00000'" 
-    {
-    	String[] a = aflosCoordValue.split()
-    	
-    	String gradStr = a[0]
-    	while (gradStr.size() < 4) {
-    		gradStr = "0$gradStr"
-    	}
-		gradStr = "${gradStr.substring(0,gradStr.size()-1)}\u00b0" // ° -> \u00b0 
-    	
-    	String secondStr = "${a[1].substring(0,a[1].size()-1)}0'"
-		
-    	return "${a[2]} $gradStr $secondStr"
-    }
-
-    //--------------------------------------------------------------------------
-    static String ConvertAFLOSTime(String aflosTime)
-    {
-        String[] at = aflosTime.split()
-		
-		String aflos_hour = at[0].replaceFirst('h','')
-		String aflos_minute = at[1].replaceFirst('min','')
-		String aflos_seconds = at[2].replaceFirst('sec','') // old at[2].replaceFirst(',000sec','')
-		aflos_seconds = aflos_seconds.replaceFirst(',','.')
-		BigDecimal seconds_decimal = aflos_seconds.toBigDecimal() 
-		BigDecimal seconds_decimal_rounded = seconds_decimal.setScale(0, RoundingMode.HALF_EVEN)
-		DecimalFormat df = new DecimalFormat("00")
-		String seconds = df.format(seconds_decimal_rounded)
-
-		return "$aflos_hour:$aflos_minute:$seconds"
-    }
-	
     //--------------------------------------------------------------------------
     static String GateWidthStr(Float gateWidthValue)
     {

@@ -12,16 +12,20 @@ class LogService
 	//--------------------------------------------------------------------------
 	LogService(boolean printSystem, File logFile = null, boolean logAppend = false)
 	{
-		this.printSystem = printSystem
-		if (logFile) {
-			logFileWriter = logFile.newWriter(logAppend)
-		}
+        if (BootStrap.global.IsLogPossible()) {
+    		this.printSystem = printSystem
+    		if (logFile) {
+    			logFileWriter = logFile.newWriter(logAppend)
+    		}
+        }
 	}
 	
 	//--------------------------------------------------------------------------
 	LogService()
 	{
-		this.printSystem = true
+        if (BootStrap.global.IsLogPossible()) {
+            this.printSystem = true
+        }
 	}
 	
 	//--------------------------------------------------------------------------
@@ -33,9 +37,9 @@ class LogService
 	String Trenner = " "
 	
 	//--------------------------------------------------------------------------
-	private boolean printSystem
+	private boolean printSystem = false
 	private Writer logWriter = new StringWriter()
-	private Writer logFileWriter
+	private Writer logFileWriter = null
 
 	private int startNum = 0
 	private int newLineNum = 0

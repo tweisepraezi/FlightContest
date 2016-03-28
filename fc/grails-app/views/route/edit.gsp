@@ -23,11 +23,13 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:routeInstance,field:'title')}"/>
                             </p>
-                            <p>
-                                <label>${message(code:'fc.route.import.name')}:</label>
-                                <br/>
-                                <input type="text" id="mark" name="mark" value="${fieldValue(bean:routeInstance,field:'mark')}"/>
-                            </p>
+                            <g:if test="${routeInstance.mark || routeInstance.ExistAnyAflosRoute()}">
+	                            <p>
+	                                <label>${message(code:'fc.route.aflosimport.name')}:</label>
+	                                <br/>
+	                                <input type="text" id="mark" name="mark" value="${fieldValue(bean:routeInstance,field:'mark')}"/>
+	                            </p>
+	                        </g:if>
                         </fieldset>
                         <input type="hidden" name="id" value="${routeInstance?.id}" />
                         <input type="hidden" name="version" value="${routeInstance?.version}" />

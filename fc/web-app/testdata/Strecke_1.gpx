@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gpx version='1.1' creator='Flight Contest - flightcontest.de - Version 2'>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <route number='1' />
+      </flightcontest>
+    </extensions>
+    <name>Strecke 1</name>
+    <rtept lat='52.0816166667' lon='13.8201166667'>
+      <name>SP</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='52.0853500000' lon='14.1113166667'>
+      <name>UZK1</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='52.0870500000' lon='14.2592500000'>
+      <name>WP1</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='52.0227833333' lon='14.1736166667'>
+      <name>UZK2</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.8619833333' lon='13.9610333333'>
+      <name>WP2</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.7438833333' lon='14.0272500000'>
+      <name>UZK3</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.6474500000' lon='14.0809500000'>
+      <name>WP3</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.6497166667' lon='14.1383166667'>
+      <name>UZK4</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.6589166667' lon='14.3900000000'>
+      <name>WP4</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.6336666667' lon='14.3267666667'>
+      <name>UZK5</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.5566500000' lon='14.1346500000'>
+      <name>WP5</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+    <rtept lat='51.5058833333' lon='13.9747500000'>
+      <name>FP</name>
+      <ele>152.4018532065</ele>
+    </rtept>
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='TO' number='1' lat='52.0361783333' lon='13.7372016667' alt='180' width='0.01' dir='274' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>T/O</name>
+    <rtept lat='52.036261463635663544177004132447924196943252657850583394368490' lon='13.737211116288808001185182418139862914330251442152075469493865966796875' />
+    <rtept lat='52.036095202964336455822995867552075803056747342149416605631510' lon='13.737192217128763339840763642134280342332885993528179824352264404296875' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='SP' number='1' lat='52.0816166667' lon='13.8201166667' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>SP</name>
+    <rtept lat='52.08994818704022341669849964773675310425460338592529296875' lon='13.819833794427602462654819814869000538237742148339748382568359375' />
+    <rtept lat='52.07328514635977658330150035226324689574539661407470703125' lon='13.8203994861744233207959076270565645927490550093352794647216796875' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='SECRET' number='1' lat='52.0853500000' lon='14.1113166667' alt='500' width='2.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='99.0000000000' track='89.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>UZK1</name>
+    <rtept lat='52.1020130406804468333969992954735062085092067718505859375' lon='14.1107508219924843464882076471411664897459559142589569091796875' />
+    <rtept lat='52.0686869593195531666030007045264937914907932281494140625' lon='14.11188230016955373753656426405456159045570529997348785400390625' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='TP' number='1' lat='52.0870500000' lon='14.2592500000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='150.0000000000' track='89.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>WP1</name>
+    <rtept lat='52.0953818764262986844126857022274634800851345062255859375' lon='14.2589963903670943595968466366397109368335804902017116546630859375' />
+    <rtept lat='52.0787181235737013155873142977725365199148654937744140625' lon='14.259503562285506296375588164426773118975688703358173370361328125' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='SECRET' number='2' lat='52.0227833333' lon='14.1736166667' alt='500' width='2.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='46.0000000000' track='219.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>UZK2</name>
+    <rtept lat='52.012220405728365086788441355262572566668192545573' lon='14.194564853588125601423649158050466212444007396697998046875' />
+    <rtept lat='52.033346260871634913211558644737427433331807454427' lon='14.1526635320868073904689151021329962532036006450653076171875' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='TP' number='2' lat='51.8619833333' lon='13.9610333333' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='161.5000000000' track='219.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>WP2</name>
+    <rtept lat='51.8567187755281912948259711508095885316530863444010' lon='13.971492937789192649012796465513019938953220844268798828125' />
+    <rtept lat='51.8672478910718087051740288491904114683469136555990' lon='13.9505725047160421993418115249596667126752436161041259765625' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='SECRET' number='3' lat='51.7438833333' lon='14.0272500000' alt='500' width='2.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='68.5000000000' track='161.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>UZK3</name>
+    <rtept lat='51.749342975513620198118266083990116991723577181498209635' lon='14.0526837573202711615671933742532928590662777423858642578125' />
+    <rtept lat='51.738423691086379801881733916009883008276422818501790365' lon='14.0018193160782291676602628882619683281518518924713134765625' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='TP' number='3' lat='51.6474500000' lon='14.0809500000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='125.0000000000' track='161.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>WP3</name>
+    <rtept lat='51.6501689577635150989169214123345833892623583475748698' lon='14.0936454805489326305600883415536372922360897064208984375' />
+    <rtept lat='51.6447310422364849010830785876654166107376416524251302' lon='14.06825528083941902772746601613107486627995967864990234375' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='SECRET' number='4' lat='51.6497166667' lon='14.1383166667' alt='500' width='2.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='19.5000000000' track='86.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>UZK4</name>
+    <rtept lat='51.666349643703820814676515738028683699667453765869140625' lon='14.1366092923177039677115747640101517390576191246509552001953125' />
+    <rtept lat='51.633083689696179185323484261971316300332546234130859375' lon='14.14002341472514964095261074117360067248228006064891815185546875' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='TP' number='4' lat='51.6589166667' lon='14.3900000000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='106.4500000000' track='86.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>WP4</name>
+    <rtept lat='51.66723557301453246302366248225249970952669779459635' lon='14.38920980624466542298171833902387106718379072844982147216796875' />
+    <rtept lat='51.65059776038546753697633751774750029047330220540365' lon='14.39079004870917328130601464675208944754558615386486053466796875' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='SECRET' number='5' lat='51.6336666667' lon='14.3267666667' alt='500' width='2.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='25.5000000000' track='237.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>UZK5</name>
+    <rtept lat='51.61965126603437017273701504412504921977718671162923177' lon='14.341295444964272686204794382547333952970802783966064453125' />
+    <rtept lat='51.64768206736562982726298495587495078022281328837076823' lon='14.31223339834960389527944339960185970994643867015838623046875' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='TP' number='5' lat='51.5566500000' lon='14.1346500000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='105.2000000000' track='237.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>WP5</name>
+    <rtept lat='51.549648049924416719321425735718851986651619275410970052' lon='14.141916994510904639485715517110975270043127238750457763671875' />
+    <rtept lat='51.563651950075583280678574264281148013348380724589029948' lon='14.127381886666999790470866660285764737636782228946685791015625' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='FP' number='1' lat='51.5058833333' lon='13.9747500000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='62.4000000000' track='244.0000000000' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>FP</name>
+    <rtept lat='51.498460793710255688986561987500560159484545389811198' lon='13.980835585743192951750646368935804275679402053356170654296875' />
+    <rtept lat='51.513305872889744311013438012499439840515454610188802' lon='13.9686634228452161691491628658923218608833849430084228515625' />
+  </rte>
+  <rte>
+    <extensions>
+      <flightcontest>
+        <gate type='LDG' number='1' lat='51.4917633333' lon='13.8806016667' alt='300' width='0.02' dir='254' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' />
+      </flightcontest>
+    </extensions>
+    <name>LDG</name>
+    <rtept lat='51.491923543579075407614757242669156767078675329685211181640625' lon='13.880527883152233362726371469764163890658892341889441013336181640625' />
+    <rtept lat='51.491603123020924592385242757330843232921324670314788818359375' lon='13.8806754499884722164458919657636926103805308230221271514892578125' />
+  </rte>
+</gpx>

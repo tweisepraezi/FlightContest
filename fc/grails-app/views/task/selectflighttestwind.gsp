@@ -26,7 +26,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.flighttestwind')}:</label></td>
-                                    <td><g:select optionKey="id" optionValue="${{it.wind.name()}}" from="${FlightTestWind.findAllByFlighttest(taskInstance.flighttest,[sort:"id"])}" name="flighttestwind.id" value="${taskInstance?.flighttest?.id}" ></g:select></td>
+                                    <td><g:select optionKey="id" optionValue="${{it.name()}}" from="${FlightTestWind.findAllByFlighttest(taskInstance.flighttest,[sort:"id"])}" name="flighttestwind.id" value="${taskInstance?.flighttest?.id}" ></g:select></td>
                                 </tr> 
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.task.selectflighttestwind.tocrews')}:</td>

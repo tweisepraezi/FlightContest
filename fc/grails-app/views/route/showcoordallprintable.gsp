@@ -18,8 +18,16 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
-                    content: "${routeInstance.name()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale}"
+                    content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale}"
                 }
                 @top-right {
                     content: "${message(code:'fc.program.printpage')} " counter(page)
@@ -35,39 +43,37 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="layout" content="main" />
         <style type="text/css">${contestInstance.printStyle}</style>
-        <title>${routeInstance.name()}</title>
+        <title>${routeInstance.printName()}</title>
     </head>
     <body>
-        <div>
-            <div>
-                <h2>${routeInstance.name()}</h2>
-                <div>
-                    <g:form>
-                        <table class="routecoords">
-                            <thead>
-                                <tr>
-                                    <th>${message(code:'fc.tpname')}</th>
-                                    <th>${message(code:'fc.aflos')}</th>
-                                    <th>${message(code:'fc.coordroute.list')}</th>
-                                    <th>${message(code:'fc.altitude')}</th>
-                                    <th>${message(code:'fc.gatewidth.short')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    <tr>
-                                        <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
-                                        <td class="aflosname">${coordroute_instance.mark}</td>
-                                        <td class="coords">${coordroute_instance.namePrintable(true)}</td>
-                                        <td class="altitude">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
-                                        <td class="gatewidth">${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
-                                    </tr>
-                                </g:each>
-                            </tbody>
-                        </table>
-                    </g:form>
-                </div>
-            </div>
-        </div>
+        <h2>${routeInstance.printName()}</h2>
+        <g:form>
+            <table class="routecoords">
+                <thead>
+                    <tr>
+                        <th>${message(code:'fc.tpname')}</th>
+                        <g:if test="${routeInstance.mark}">
+                            <th>${message(code:'fc.aflos')}</th>
+                        </g:if>
+                        <th>${message(code:'fc.coordroute.list')}</th>
+                        <th>${message(code:'fc.altitude')}</th>
+                        <th>${message(code:'fc.gatewidth.short')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
+                        <tr>
+                            <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
+                            <g:if test="${routeInstance.mark}">
+                                <td class="aflosname">${coordroute_instance.mark}</td>
+                            </g:if>
+                            <td class="coords">${coordroute_instance.namePrintable(true,false)}</td>
+                            <td class="altitude">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
+                            <td class="gatewidth">${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
+        </g:form>
     </body>
 </html>

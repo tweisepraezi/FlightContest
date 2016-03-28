@@ -26,10 +26,12 @@
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td>${coordRouteInstance.title()}</td>
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.aflos.checkpoint')}:</td>
-                                    <td>${coordRouteInstance.mark}</td>
-                                </tr>
+                                <g:if test="${coordRouteInstance.route.showAflosMark}" >
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.aflos.checkpoint')}:</td>
+	                                    <td>${coordRouteInstance.mark}</td>
+	                                </tr>
+	                            </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.latitude')}:</td>
                                     <td>${coordRouteInstance.latName()}</td>

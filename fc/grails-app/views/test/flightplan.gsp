@@ -112,7 +112,7 @@
                                             <th>${message(code:'fc.groundspeed')}</th>
                                             <th>${message(code:'fc.legtime')}</th>
                                             <th>${message(code:'fc.tpname')}</th>
-                                            <th>${message(code:'fc.tptime')}</th>
+                                            <th>${message(code:'fc.time.local')}</th>
                                         </tr>
                                     </thead>
                                     <tbody>

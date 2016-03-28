@@ -18,6 +18,14 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
                     content: "${message(code:'fc.team.list')}"
                 }
@@ -38,47 +46,41 @@
         <title>${message(code:'fc.team.list')}</title>
     </head>
     <body>
-        <div>
-            <div>
-                <h2>${message(code:'fc.team.list')} (${teamInstanceList.size()})</h2>
-                <div>
-                    <g:form>
-                        <table class="teamlist">
-                            <thead>
-                                <tr>
-                                   <th>${message(code:'fc.team.name')}</th>
-                                   <th>${message(code:'fc.crew')}</th>
-			                       <th>${message(code:'fc.aircraft')}</th>
-			                       <th>${message(code:'fc.tas')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <g:each var="team_instance" in="${teamInstanceList}" status="i" >
-			                    	<g:if test="${!team_instance.disabled && Crew.findByTeam(team_instance)}">
-                                        <g:set var="j" value="${new Integer(0)}"/>
-										<g:each var="crew_instance" in="${Crew.findAllByTeam(team_instance,[sort:'name'])}">
-										    <g:if test="${!crew_instance.disabled && !crew_instance.disabledTeam}">
-			                                    <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-			                                    	<g:if test="${j==0}">
-			                                        	<td class="team">${team_instance.name}</td>
-			                                        </g:if>
-			                                        <g:else>
-			                                        	<td class="team"/>
-			                                        </g:else>
-			                                        <td class="crew">${crew_instance.name}</td>
-			                                        <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
-			                                        <td class="tas">${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}</td>
-			                                    </tr>
-                                                <g:set var="j" value="${j+1}"/>
-			                                </g:if>
-		                                </g:each>
-				                	</g:if>
-                                </g:each>
-                            </tbody>
-                        </table>
-                    </g:form>
-                </div>
-            </div>
-        </div>
+        <h2>${message(code:'fc.team.list')} (${teamInstanceList.size()})</h2>
+        <g:form>
+            <table class="teamlist">
+                <thead>
+                    <tr>
+                        <th>${message(code:'fc.team.name')}</th>
+                        <th>${message(code:'fc.crew')}</th>
+                        <th>${message(code:'fc.aircraft')}</th>
+                        <th>${message(code:'fc.tas')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:each var="team_instance" in="${teamInstanceList}" status="i" >
+           	            <g:if test="${!team_instance.disabled && Crew.findByTeam(team_instance)}">
+                            <g:set var="j" value="${new Integer(0)}"/>
+                            <g:each var="crew_instance" in="${Crew.findAllByTeam(team_instance,[sort:'name'])}">
+                                <g:if test="${!crew_instance.disabled && !crew_instance.disabledTeam}">
+                                    <tr class="value" id="${crew_instance.startNum}">
+                           	            <g:if test="${j==0}">
+                               	            <td class="team">${team_instance.name}</td>
+                                        </g:if>
+                                        <g:else>
+                               	            <td class="team"/>
+                                        </g:else>
+                                        <td class="crew">${crew_instance.name}</td>
+                                        <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+                                        <td class="tas">${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}</td>
+                                    </tr>
+                                    <g:set var="j" value="${j+1}"/>
+                                </g:if>
+                            </g:each>
+        	            </g:if>
+                    </g:each>
+                </tbody>
+            </table>
+        </g:form>
     </body>
 </html>

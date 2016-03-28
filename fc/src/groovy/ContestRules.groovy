@@ -1,6 +1,6 @@
 enum ContestRules 
 {
-	R1 ('fc.contestrule.de.nav.2015',
+	R1 ('fc.contestrule.de.nav.2016',
 		[
 			// General
 			precisionFlying:false,
@@ -186,7 +186,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}",
 		]
 	),
-	R3 ('fc.contestrule.fai.rally.2015.unlimited',
+	R3 ('fc.contestrule.fai.rally.2016.unlimited',
 		[
 			// General
 			precisionFlying:false,
@@ -279,7 +279,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}",
 		]
 	),
-	R4 ('fc.contestrule.fai.precision.2015',
+	R4 ('fc.contestrule.fai.precision.2016',
 		[
 			// General
 			precisionFlying:true,
@@ -465,7 +465,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}",
 		]
 	),
-    R6 ('fc.contestrule.fai.rally.2015.advanced',
+    R6 ('fc.contestrule.fai.rally.2016.advanced',
         [
             // General
             precisionFlying:false,

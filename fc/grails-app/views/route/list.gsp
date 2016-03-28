@@ -5,7 +5,7 @@
         <title>${message(code:'fc.route.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" importaction="${message(code:'fc.route.import')}" printaction="${message(code:'fc.route.print')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" importaction="." printaction="${message(code:'fc.route.print')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <table>
@@ -15,9 +15,8 @@
                     </tr>
                     <tr>
                        <th>${message(code:'fc.title')}</th>
-                       <th colspan="2">${message(code:'fc.coordroute.list')}</th>
-                       <th colspan="2">${message(code:'fc.routelegcoord.list')}</th>
-                       <th colspan="2">${message(code:'fc.routelegtest.list')}</th>
+                       <th>${message(code:'fc.distance.to2ldg')}</th>
+                       <th>${message(code:'fc.distance.sp2fp')}</th>
                        <th>${message(code:'fc.planningtesttask.list')}</th>
                        <th>${message(code:'fc.flighttest.list')}</th>
                     </tr>
@@ -27,45 +26,18 @@
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
                             <td><g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/></td>
 
-                            <td>
-                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${coordRouteInstance.titleCode()}
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-                            <td>
-                                <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${coordRouteInstance.name()}
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-
-                            <td>
-                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${routeLegCoordInstance.GetTitle()}
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-                            <td>
-                                <g:each var="routeLegCoordInstance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${routeLegCoordInstance.testName()}
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-
-                            <td>
-                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${routeLetTestInstance.GetTitle()}
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-                            <td>
-                                <g:each var="routeLetTestInstance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:"id"])}">
-                                    ${routeLetTestInstance.testName()}
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-
+                            <g:set var="distance_to2ldg" value="${new BigDecimal(0)}" />
+                            <g:each var="routeleg_instance" in="${routeInstance.routelegs}">
+                                <g:set var="distance_to2ldg" value="${FcMath.AddDistance(distance_to2ldg,routeleg_instance.testDistance())}" />
+                            </g:each>
+                            <td>${FcMath.DistanceStr(distance_to2ldg)}${message(code:'fc.mile')}</td>
+                            
+                            <g:set var="distance_sp2fp" value="${new BigDecimal(0)}" />
+                            <g:each var="routeleg_instance" in="${routeInstance.testlegs}">
+                                <g:set var="distance_sp2fp" value="${FcMath.AddDistance(distance_sp2fp,routeleg_instance.testDistance())}" />
+                            </g:each>
+                            <td>${FcMath.DistanceStr(distance_sp2fp)}${message(code:'fc.mile')}</td>
+                            
                             <td>
                                 <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance,[sort:"id"])}">
                                     <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>

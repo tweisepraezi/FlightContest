@@ -7,11 +7,14 @@ class BootStrap {
 	def grailsApplication
 	
     static Global global = null 
+    static TempData tempData = null
     
     def init = { servletContext ->
 		println "Init..."
 				
-		boolean db_loaded = false
+        tempData = new TempData()
+        
+        boolean db_loaded = false
 		boolean db_upgrade = false
 		boolean db_nodowngradedable = false
 		boolean db_nocompatible = false
@@ -495,7 +498,7 @@ class BootStrap {
                             }
 							println " done."
 						}
-                        if (global.versionMinor < 8) { // DB-2.9 compatibility
+                        if (global.versionMinor < 9) { // DB-2.9 compatibility (in FC 2.3 wurde auf < 8 getestet) 
                             print "    2.9 modifications"
                             Contest.findAll().each { Contest contest_instance ->
                                 contest_instance.printCrewOrder = 0
@@ -526,7 +529,7 @@ class BootStrap {
                             }
                             println " done."
                         }
-                        if (global.versionMinor < 9) { // DB-2.10 compatibility
+                        if (global.versionMinor < 10) { // DB-2.10 compatibility (in FC 2.3 wurde auf < 9 getestet)
                             print "    2.10 modifications"
                             Contest.findAll().each { Contest contest_instance ->
                                 contest_instance.contestUUID = UUID.randomUUID().toString()
@@ -546,11 +549,68 @@ class BootStrap {
                             }
                             println " done."
                         }
-                        if (global.versionMinor < 10) { // DB-2.11 compatibility
-                            print "    2.10 modifications"
+                        if (global.versionMinor < 11) { // DB-2.11 compatibility (in FC 2.3 wurde auf < 10 getestet)
+                            print "    2.11 modifications"
                             global.liveContestID = 0
                             global.liveUploadSeconds = Global.LIVE_UPLOADSECONDS
                             global.liveLanguage = "de"
+                            println " done."
+                        }
+                        if (global.versionMinor < 12) { // DB-2.12 compatibility
+                            print "    2.12 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.coordPresentation = CoordPresentation.DEGREEMINUTE
+                                contest_instance.reserve = ""
+                                contest_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.loggerData = new LoggerDataTest()
+                                test_instance.loggerDataStartUtc = ""
+                                test_instance.loggerDataEndUtc = ""
+                                test_instance.loggerResult = new LoggerResult()
+                                test_instance.showAflosMark = true
+                                test_instance.reserve = ""
+                                test_instance.save()
+                            }
+                            int id_title = 0
+                            BigDecimal wind_direction = 270.0
+                            for (FlightTestWind flighttestwind_instance in FlightTestWind.findAll()) {
+                                id_title++
+                                wind_direction = flighttestwind_instance.wind.direction
+                                flighttestwind_instance.TODirection = wind_direction
+                                flighttestwind_instance.TOOffset = 0.0
+                                flighttestwind_instance.TOOrthogonalOffset = 0.0
+                                flighttestwind_instance.LDGDirection = wind_direction
+                                flighttestwind_instance.LDGOffset = 0.0
+                                flighttestwind_instance.LDGOrthogonalOffset = 0.0
+                                flighttestwind_instance.iTOiLDGDirection = wind_direction
+                                flighttestwind_instance.iTOiLDGOffset = 0.0
+                                flighttestwind_instance.iTOiLDGOrthogonalOffset = 0.0
+                                flighttestwind_instance.idTitle = id_title
+                                flighttestwind_instance.save()
+                            }
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.showAflosMark = true
+                                route_instance.save()
+                            }
+                            Coord.findAll().each { Coord coord_instance ->
+                                switch (coord_instance.type) {
+                                    case CoordType.TO:
+                                    case CoordType.iTO:
+                                        coord_instance.gateDirection = wind_direction
+                                        coord_instance.save()
+                                        break
+                                    case CoordType.LDG:
+                                    case CoordType.iLDG:
+                                        coord_instance.gateDirection = wind_direction
+                                        coord_instance.save()
+                                        break
+                                }
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.reserve = ""
+                                task_instance.save()
+                            }
                             println " done."
                         }
                         if (global.versionMinor < global.DB_MINOR) {
@@ -628,6 +688,10 @@ class BootStrap {
 	            return messageSource.getMessage(it, null, new Locale(session_obj.printLanguage))
 			}
 		}
+        
+        if (!global.IsLogPossible()) {
+            println "  No log."
+        }
 		
 		println "Init done."
     }

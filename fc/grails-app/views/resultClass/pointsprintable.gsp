@@ -22,6 +22,14 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
                     content: "${print_subtitle}"
                 }
@@ -42,15 +50,9 @@
         <title>${resultclassInstance.GetPrintTitle('fc.contestrule.classpoints')}</title>
     </head>
     <body>
-        <div>
-            <div>
-                <h3>${print_subtitle}</h3>
-                <div>
-                    <g:form>
-                        <g:pointsPrintable i="${resultclassInstance}"/>
-                    </g:form>
-                </div>
-            </div>
-        </div>
+        <h3>${print_subtitle}</h3>
+        <g:form>
+            <g:pointsPrintable i="${resultclassInstance}"/>
+        </g:form>
     </body>
 </html>

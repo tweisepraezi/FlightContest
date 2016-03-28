@@ -13,7 +13,7 @@
                 <div class="block" id="forms" >
                 	<g:uploadForm action="loadimage">
                     	<div>
-    						<input type="file" size="80" accept="image/jpeg/*.jpg" name="imagefile" tabIndex="1"/>
+    						<input type="file" size="80" accept=".jpg" name="imagefile" tabIndex="1"/>
                     	</div>
                     	<div>
                             <input type="hidden" name="imageField" value="${params.imageField}" />

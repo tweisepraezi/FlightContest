@@ -13,7 +13,7 @@
                 <div class="block" id="forms" >
                 	<g:uploadForm action="loadgac">
                     	<div>
-    						<input type="file" size="80" accept="text/plain/*.gac" name="loadgacfile" tabIndex="1"/>
+    						<input type="file" size="80" accept="${LoggerFileTools.GAC_EXTENSION}" name="loadgacfile" tabIndex="1"/>
                     	</div>
                         <p>
 	                        <div>

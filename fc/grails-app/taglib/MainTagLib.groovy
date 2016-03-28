@@ -1,11 +1,9 @@
-import grails.util.Environment
-
 class MainTagLib 
 {
     // --------------------------------------------------------------------------------------------------------------------
 	// <g:mainnav link="${createLink(controller:'contest')}" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" />
-	// <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" printaction="${message(code:'fc.aircraft.print')}" importaction="${message(code:'fc.route.import')}" />
+	// <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" printaction="${message(code:'fc.aircraft.print')}" importaction="${message(code:'fc.route.aflosimport')}" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="contest" show="${message(code:'fc.contest.show')}" id="${contestInstance.id}" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="contest" id="${contestInstance.id}" conteststart="true" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="contest" id="${contestInstance.id}" contesttasks="true" />
@@ -58,6 +56,12 @@ class MainTagLib
 		if (BootStrap.global.IsAFLOSPossible()) {
 			outln """    <li class="secondary"> <a class="${if (isAflos(p.controller)) "active"}" href="${p.link}/../../aflos/start">${message(code:'fc.aflos')}</a> </li>"""
         }
+        if (BootStrap.global.IsDBUtilPossible()) {
+            outln """    <li class="secondary"> <a href="${p.link}/../../dbUtil">${message(code:'fc.dbutil')}</a> </li>"""
+        }
+        if (Global.IsDevelopmentEnvironment()) {
+            outln """    <li class="secondary"> <a href="${p.link}/../../contest/runmodultests">${message(code:'fc.contest.modultests')}</a> </li>"""
+        }
         if (BootStrap.global.IsLivePossible()) {
             if (BootStrap.global.liveContestID == session?.lastContest?.id) {
                 outln """<li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="${p.link}/../../global/livesettings?newwindow=true" target="_blank">${message(code:'fc.livesettings.short.on')}</a> </li>"""
@@ -85,7 +89,10 @@ class MainTagLib
 				}
 				if (p.importaction) {
 					if (p.controller == "route") {
-						outln """    <li> <a href="${p.link}/../../${p.controller}/importroute">${p.importaction}</a> </li>"""
+                        if (session.lastContest && AflosTools.ExistAnyAflosRoute(session.lastContest)) {
+                            outln """    <li> <a href="${p.link}/../../${p.controller}/importaflosroute">${message(code:'fc.route.aflosimport')}</a> </li>"""
+                        }
+                        outln """    <li> <a href="${p.link}/../../${p.controller}/importfileroute">${message(code:'fc.route.fileimport')}</a> </li>"""
 					} else if (p.controller == "crew") {
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
 					}
@@ -232,9 +239,8 @@ class MainTagLib
             outln """    <li> <a href="${p.link}/../../gpx/selectgacfilename">${message(code:'fc.gpx.gacshow')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
-			if (Environment.currentEnvironment == Environment.DEVELOPMENT ) {
+			if (Global.IsDevelopmentEnvironment()) {
                 outln """    <li> <a href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
-                outln """    <li> <a href="${p.link}/../../dbUtil" target="_blank">${message(code:'fc.dbutil')}</a> </li>"""
 				outln """    <li> <a href="${p.link}/../../classDiagram" target="_blank">${message(code:'fc.classdiagram')}</a> </li>"""
 			}
             outln """  </ul>"""

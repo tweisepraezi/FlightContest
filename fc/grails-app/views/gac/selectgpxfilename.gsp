@@ -13,7 +13,7 @@
                 <div class="block" id="forms">
                 	<g:uploadForm action="loadgpx">
                     	<div>
-    						<input type="file" size="80" accept="text/plain/*.gpx" name="loadgpxfile" tabIndex="1"/>
+    						<input type="file" size="80" accept="${LoggerFileTools.GPX_EXTENSION}" name="loadgpxfile" tabIndex="1"/>
                     	</div>
                     	<div>
 	    					<input type="submit" value="${message(code:'fc.gac.convert.gpx')}" tabIndex="11"/>

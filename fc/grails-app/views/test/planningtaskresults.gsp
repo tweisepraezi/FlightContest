@@ -136,30 +136,35 @@
                                 <tr>
                                     <td colspan="2">
                                         <g:if test="${!testInstance.planningTestComplete}">
+                                            <g:if test="${params.next}">
+                                                <g:actionSubmit action="planningtaskresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="11"/>
+                                            </g:if>
+                                            <g:else>
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="12"/>
+                                            </g:else>
                                             <g:if test="${testInstance.planningTestLegComplete}">
 	                                            <g:if test="${params.next}">
-	                                                <g:actionSubmit action="planningtaskresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="2"/>
+	                                                <g:actionSubmit action="planningtaskresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="13"/>
 	                                            </g:if>
-                                                <g:actionSubmit action="planningtaskresultsready" value="${message(code:'fc.results.ready')}" tabIndex="3"/>
-					                        	<g:actionSubmit action="planningtaskresultssave" value="${message(code:'fc.save')}" tabIndex="4"/>
+                                                <g:actionSubmit action="planningtaskresultsready" value="${message(code:'fc.results.ready')}" tabIndex="14"/>
+					                        	<g:actionSubmit action="planningtaskresultssave" value="${message(code:'fc.save')}" tabIndex="15"/>
                                             </g:if>
-                                            <g:elseif test="${params.next}">
-                                                <g:actionSubmit action="planningtaskresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
-                                            </g:elseif>
-                                            <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="5"/>
-                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
+                                            <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="16"/>
+                                            <g:if test="${params.next}">
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
+                                            </g:if>
                                         </g:if>
                                         <g:else>
                                             <g:if test="${params.next}">
-                                                <g:actionSubmit action="planningtaskresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
+                                                <g:actionSubmit action="planningtaskresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="41"/>
                                             </g:if>
                                             <g:else>
-                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="42"/>
                                             </g:else>
-                                            <g:actionSubmit action="planningtaskresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="4"/>
-                                            <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="5"/>
+                                            <g:actionSubmit action="planningtaskresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="43"/>
+                                            <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="44"/>
                                             <g:if test="${params.next}">
-                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="45"/>
                                             </g:if>
                                         </g:else>
                                     </td>

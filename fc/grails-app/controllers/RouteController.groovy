@@ -2,6 +2,8 @@ import java.util.Map;
 
 class RouteController {
     
+    def domainService
+    def printService
 	def fcService
     def gpxService
 	
@@ -16,6 +18,15 @@ class RouteController {
 			session.lastContest.refresh()
             def routeList = Route.findAllByContest(session.lastContest,[sort:"id"])
 			fcService.printdone "last contest"
+            session.planningtesttaskReturnAction = actionName
+            session.planningtesttaskReturnController = controllerName
+            session.planningtesttaskReturnID = params.id
+            session.flighttestReturnAction = actionName
+            session.flighttestReturnController = controllerName
+            session.flighttestReturnID = params.id
+            session.routeReturnAction = actionName
+            session.routeReturnController = controllerName
+            session.routeReturnID = params.id
             return [routeInstanceList:routeList]
         }
 		fcService.printdone ""
@@ -23,7 +34,7 @@ class RouteController {
     }
 
     def show = {
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         if (route.instance) {
         	return [routeInstance:route.instance]
         } else {
@@ -33,7 +44,7 @@ class RouteController {
     }
 
     def edit = {
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         if (route.instance) {
         	return [routeInstance:route.instance]
         } else {
@@ -85,21 +96,21 @@ class RouteController {
     }
 	
 	def cancel = {
-        def route = fcService.getRoute(params) 
-        if (route.instance) {
-            redirect(action:show,id:route.instance.id)
+        // process return action
+        if (session.routeReturnAction) {
+            redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID)
         } else {
-        	redirect(action:list)
+       	    redirect(action:list)
         }
 	}
 	
 	def createcoordroutes = {
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         redirect(controller:'coordRoute',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
 	}
 
     def createsecretcoordroutes = {
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         redirect(controller:'coordRoute',action:'create',params:['secret':true,'route.id':route.instance.id,'routeid':route.instance.id])
     }
 
@@ -107,7 +118,7 @@ class RouteController {
 		[contestInstance:session.lastContest]
     }
 	
-	def importroute = {
+	def importaflosroute = {
 		def route = fcService.existAnyAflosRoute(session.lastContest)
 		if (route.error) {
 			flash.error = route.error
@@ -118,8 +129,8 @@ class RouteController {
 		}
 	}
     
-	def importaflosroute = {
-        def route = fcService.importAflosRoute(params,session.lastContest,"",false,[]) // false - $curved wird nicht ignoriert 
+	def importaflosroute2 = {
+        def route = fcService.importAflosRoute2(params,session.lastContest,"",false,[]) // false - $curved wird nicht ignoriert 
         if (route.saved) {
             flash.message = route.message
 			if (route.error) {
@@ -132,6 +143,25 @@ class RouteController {
         redirect(action:list)
 	}
 	
+    def importfileroute = {
+        redirect(action:selectfile)
+    }
+    
+    def importfileroute2 = {
+        def file = request.getFile('routefile')
+        Map import_route = fcService.importFileRoute2(RouteFileTools.GPX_EXTENSION, session.lastContest, file)
+        if (!import_route.found) {
+            import_route = fcService.importFileRoute2("", session.lastContest, file)
+        }
+        flash.error = import_route.error
+        flash.message = import_route.message
+        redirect(action:list)
+    }
+    
+    def selectfile = {
+        return [:]
+    }
+    
 	def calculateroutelegs = {
         def route = fcService.caculateroutelegsRoute(params) 
         if (route.error) {
@@ -148,52 +178,52 @@ class RouteController {
 	}
     
     def print = {
-        def routes = fcService.printRoutes(params,false,false,GetPrintParams()) 
+        Map routes = printService.printRoutes(params,false,false,GetPrintParams()) 
         if (routes.error) {
             flash.message = routes.message
             flash.error = true
             redirect(action:list)
         } else if (routes.found && routes.content) {
-            fcService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"routes",true,false,false)
+            printService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"routes",true,false,false)
         } else {
             redirect(action:list)
         }
     }
     
     def printroute = {
-        def route = fcService.printRoute(params,false,false,GetPrintParams()) 
+        Map route = printService.printRoute(params,false,false,GetPrintParams()) 
         if (route.error) {
             flash.message = route.message
             flash.error = true
             redirect(action:list)
         } else if (route.content) {
-            fcService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}",true,false,false)
+            printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}",true,false,false)
         } else {
             redirect(action:list)
         }
 	}
 	
     def printcoordall = {
-        def route = fcService.printCoord(params,false,false,GetPrintParams(),"all") 
+        Map route = printService.printCoord(params,false,false,GetPrintParams(),"all") 
         if (route.error) {
             flash.message = route.message
             flash.error = true
             redirect(action:list)
         } else if (route.content) {
-            fcService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-allpoints",true,false,false)
+            printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-allpoints",true,false,false)
         } else {
             redirect(action:list)
         }
 	}
 	
     def printcoordtp = {
-        def route = fcService.printCoord(params,false,false,GetPrintParams(),"tp") 
+        Map route = printService.printCoord(params,false,false,GetPrintParams(),"tp") 
         if (route.error) {
             flash.message = route.message
             flash.error = true
             redirect(action:list)
         } else if (route.content) {
-            fcService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
+            printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
         } else {
             redirect(action:list)
         }
@@ -215,7 +245,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -229,7 +259,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -243,7 +273,7 @@ class RouteController {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         if (route.instance) {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
@@ -252,24 +282,41 @@ class RouteController {
         }
     }
 
-    def showmapold = {
-        def route = fcService.getRoute(params) 
+    def showofflinemap = {
+        Map route = domainService.GetRoute(params) 
         if (route.instance) {
-        	return [routeInstance:route.instance]
+            gpxService.printstart "Show offline map of '${route.instance.name()}'"
+            String uuid = UUID.randomUUID().toString()
+            String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, upload_gpx_file_name, false, true) // false - no Print, true - Points
+            if (converter.ok) {
+                gpxService.printdone ""
+                session.gpxviewerReturnAction = 'show'
+                session.gpxviewerReturnController = controllerName
+                session.gpxviewerReturnID = params.id
+                session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                redirect(controller:'gpx',action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",showZoom:"yes"])
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                redirect(action:'show',id:params.id)
+            }
         } else {
             flash.message = route.message
             redirect(action:list)
         }
     }
-    
+
     def showmap = {
-        def route = fcService.getRoute(params) 
+        Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            gpxService.printstart "Process '${route.instance.name()}'"
+            gpxService.printstart "Show map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name)
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, true) // false - no Print, true - Points
             if (converter.ok) {
                 gpxService.printdone ""
                 session.gpxviewerReturnAction = 'show'
@@ -290,17 +337,45 @@ class RouteController {
         }
     }
 
+    def gpxexport = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            gpxService.printstart "Export '${route.instance.name()}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, false) // false - no Print, false - no Points
+            if (converter.ok) {
+                String route_file_name = route.instance.name() + '.gpx'
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                gpxService.Download(webroot_dir + upload_gpx_file_name, route_file_name, response.outputStream)
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                redirect(action:'show',id:params.id)
+            }
+        } else {
+            flash.message = route.message
+            redirect(action:list)
+        }
+    }
+
     def sendmail = {
         if (session?.lastContest) {
             session.lastContest.refresh()
-            def route = fcService.getRoute(params)
+            Map route = domainService.GetRoute(params)
             if (route.instance) {
                 String email_to = route.instance.EMailAddress()
                 gpxService.printstart "Send mail of '${route.instance.name()}' to '${email_to}'"
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name)
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true) // true - Print, true - Points
                 if (converter.ok) {
                     Map email = GetEMailBody(session.lastContest, route.instance)
                     

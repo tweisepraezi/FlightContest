@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.aflos.select')}</title>
+        <title>${message(code:'fc.flightresults.recalculate')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="route" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.aflos.select')}</h2>
+                <h2>${message(code:'fc.flightresults.recalculate')}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="['id':testInstance.id]">
                         <table>
@@ -60,40 +60,28 @@
                         </table>
                         <table>
                             <tbody>
-                                <tr>
-                                    <g:set var="last_startnum" value="${testInstance.GetAFLOSStartNum()}" />
-                                    <td class="detailtitle"><label>${message(code:'fc.aflos.crewnames.name')}:</label></td>
-									<g:if test="${testInstance.crew.contest.aflosTest}">
-                                        <td><g:select from="${AflosCrewNames.aflostest.findAllByPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
-									</g:if>
-									<g:elseif test="${testInstance.crew.contest.aflosUpload}">
-                                        <td><g:select from="${AflosCrewNames.aflosupload.findAllByPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
-									</g:elseif>
-									<g:else>
-                                        <td><g:select from="${AflosCrewNames.aflos.findAllByPointsNotEqual(0,[sort:"id"])}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" ></g:select></td>
-									</g:else>
-                                </tr>
-                                <tr>
-                                    <g:set var="last_name" value="${testInstance.flighttestwind.flighttest.route.mark}" />
-                                    <td class="detailtitle"><label>${message(code:'fc.aflos.routedefs.routename')}:</label></td>
-                                    <g:if test="${testInstance.crew.contest.aflosTest}">
-                                        <td><g:select from="${AflosRouteNames.aflostest.findAllByNameIsNotNullAndIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.name" value="${last_name}" optionKey="name" optionValue="${{it.viewName()}}" ></g:select></td>
-                                    </g:if>
-                                    <g:elseif test="${testInstance.crew.contest.aflosUpload}">
-                                        <td><g:select from="${AflosRouteNames.aflosupload.findAllByNameIsNotNullAndIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.name" value="${last_name}" optionKey="name" optionValue="${{it.viewName()}}" ></g:select></td>
-                                    </g:elseif>
-                                    <g:else>
-                                        <td><g:select from="${AflosRouteNames.aflos.findAllByNameIsNotNullAndIdNotEqual(0,[sort:"id"])}" name="aflosroutenames.name" value="${last_name}" optionKey="name" optionValue="${{it.viewName()}}" ></g:select></td>
-                                    </g:else>
-                                </tr>
+                                   <tr>
+                                       <g:set var="last_startutc" value="${testInstance.loggerDataStartUtc}" />
+                                       <td class="detailtitle"><label>${message(code:'fc.flightresults.recalculate.startlocaltime')}:</label></td>
+                                       <td><g:select from="${testInstance.GetTrackPoints("", "")}" name="loggerdata_startutc" value="${last_startutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
+                                   </tr>
+                                   <tr>
+                                       <g:set var="last_endutc" value="${testInstance.loggerDataEndUtc}" />
+                                       <td class="detailtitle"><label>${message(code:'fc.flightresults.recalculate.endlocaltime')}:</label></td>
+                                       <td><g:select from="${testInstance.GetTrackPoints("", "")}" name="loggerdata_endutc" value="${last_endutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
+                                   </tr>
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.noremove.existingdata')}:</label></td>
                                     <td><g:checkBox name="no_remove_existing_data" value="${false}"/></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <g:actionSubmit action="importaflosresults" value="${message(code:'fc.import')}" />
-                        <g:actionSubmit action="cancelaflosresults" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="recalculateresults" value="${message(code:'fc.flightresults.recalculate.loggerdata')}" tabIndex="1"/>
+                        <g:if test="${testInstance.IsAFLOSImportPossible()}">
+                            <g:actionSubmit action="importaflos" value="${message(code:'fc.flightresults.aflosimport')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
+                        </g:if>
+                        <g:actionSubmit action="importlogger" value="${message(code:'fc.flightresults.loggerimport')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
+                        <g:actionSubmit action="cancelimportcrew" value="${message(code:'fc.cancel')}" tabIndex="10"/>
                     </g:form>
                 </div>
             </div>

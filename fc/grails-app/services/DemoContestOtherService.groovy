@@ -4,12 +4,12 @@ class DemoContestOtherService
 {
 	def fcService
 	
-	long CreateTest11(String testName, String printPrefix, boolean testExists)
+	long CreateTest11(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,true,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,aflosDB,testExists)
         
         // Tasks
         Map task1 = fcService.putTask(contest,"Task-1","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",false,false, true,false,false, false,true, true,false,false, false,false,false,false, false)
@@ -88,12 +88,12 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	long CreateTest12(String testName, String printPrefix, boolean testExists)
+	long CreateTest12(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,true,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,aflosDB,testExists)
         
         // Tasks
         Map task1 = fcService.putTask(contest,"Task-1","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
@@ -187,12 +187,12 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	long CreateTest13(String testName, String printPrefix, boolean testExists)
+	long CreateTest13(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
         Map task1 = fcService.putTask(contest,"","11:00",3,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
     
         // Crews and Aircrafts
@@ -205,12 +205,12 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	long CreateTest14(String testName, String printPrefix, boolean testExists)
+	long CreateTest14(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
         Map task1 = fcService.putTask(contest,"","11:00",3,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
     
         // Crews and Aircrafts

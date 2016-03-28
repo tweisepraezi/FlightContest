@@ -5,23 +5,25 @@
         <title>${message(code:'fc.route.show')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" importaction="${message(code:'fc.route.import')}" />
+        <g:mainnav link="${createLink(controller:'contest')}" controller="route" newaction="${message(code:'fc.route.new')}" importaction="." />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
                 <h2>${message(code:'fc.route.show')}</h2>
                 <div class="block" id="forms" >
-                    <g:form>
+                    <g:form params="${['routeReturnAction':routeReturnAction,'routeReturnController':routeReturnController,'routeReturnID':routeReturnID]}">
                         <table>
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td colspan="2">${routeInstance.name()}</td>
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.route.import.name')}:</td>
-                                    <td colspan="2">${routeInstance.mark}</td>
-                                </tr>
+                                <g:if test="${routeInstance.showAflosMark}">
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.route.aflosimport.name')}:</td>
+	                                    <td colspan="2">${routeInstance.mark}</td>
+	                                </tr>
+	                            </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
                                     <td colspan="2">
@@ -45,16 +47,19 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th class="table-head" colspan=13">${message(code:'fc.coordroute.list')}</th>
+                                    <th class="table-head" colspan=14">${message(code:'fc.coordroute.list')}</th>
                                 </tr>
                                 <tr>
                                     <th>${message(code:'fc.number')}</th>
                                     <th>${message(code:'fc.title')}</th>
-                                    <th>${message(code:'fc.aflos.checkpoint')}</th>
+                                    <g:if test="${routeInstance.showAflosMark}" >
+                                        <th>${message(code:'fc.aflos.checkpoint')}</th>
+                                    </g:if>
                                     <th>${message(code:'fc.latitude')}</th>
                                     <th>${message(code:'fc.longitude')}</th>
                                     <th>${message(code:'fc.altitude')}</th>
                                     <th>${message(code:'fc.gatewidth')}</th>
+                                    <th>${message(code:'fc.gatedirection')}</th>
                                     <th>${message(code:'fc.legduration')}</th>
                                     <th>${message(code:'fc.notimecheck')}</th>
                                     <th>${message(code:'fc.nogatecheck')}</th>
@@ -81,13 +86,21 @@
                                             </g:if>
      		                            </g:each>
         		                                
-                                        <td><g:coordroutenum var="${coordroute_instance}" num="${i+1}" next="${next}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
-                                        <td>${coordroute_instance.titleWithRatio()}</td>
-                                        <td><g:if test="${coordroute_instance.planProcedureTurn}"> (${message(code:'fc.procedureturn.symbol')})</g:if><g:if test="${coordroute_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${coordroute_instance.mark}</td>
-                                        <td>${coordroute_instance.latName()}</td>
-                                        <td>${coordroute_instance.lonName()}</td>
+                                        <td style="white-space: nowrap;"><g:coordroutenum var="${coordroute_instance}" num="${i+1}" next="${next}" link="${createLink(controller:'coordRoute',action:'edit')}"/></td>
+                                        <td style="white-space: nowrap;">${coordroute_instance.titleWithRatio()}<g:if test="${coordroute_instance.planProcedureTurn}"> (${message(code:'fc.procedureturn.symbol')})</g:if><g:if test="${coordroute_instance.endCurved}">${message(code:'fc.endcurved')}</g:if></td>
+                                        <g:if test="${routeInstance.showAflosMark}" >
+                                            <td style="white-space: nowrap;">${coordroute_instance.mark}</td>
+                                        </g:if>
+                                        <td style="white-space: nowrap;">${coordroute_instance.latName()}</td>
+                                        <td style="white-space: nowrap;">${coordroute_instance.lonName()}</td>
                                         <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
                                         <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
+                                        <g:if test="${coordroute_instance.type.IsRunwayCoord()}">
+                                            <td>${coordroute_instance.gateDirection}${message(code:'fc.grad')}</td>
+                                        </g:if>
+                                        <g:else>
+                                            <td>-</td>
+                                        </g:else>
                                         <td>${coordroute_instance.legDurationName()}</td>
                                         <g:if test="${coordroute_instance.noTimeCheck}">
                                             <td>${message(code:'fc.yes')}</td>
@@ -232,11 +245,14 @@
                         <g:if test="${!routeInstance.Used()}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="8"/>
                         </g:if>
-                        <g:actionSubmit action="showmap" value="${message(code:'fc.route.map')}" onclick="this.form.target='_blank';return true;" tabIndex="9"/>
+                        <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="9"/>
+                        <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="10"/>
+                        <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxrexport')}" onclick="this.form.target='_self';return true;" tabIndex="11"/>
                         <g:if test="${routeInstance.IsEMailPossible()}">
-                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="10"/>
+                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="12"/>
                         </g:if>
-                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="11"/>
+                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="13"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="14"/>
                     </g:form>
                 </div>
             </div>

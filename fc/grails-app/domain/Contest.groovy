@@ -22,6 +22,7 @@ class Contest
 	
 	String title = ""
 	int mapScale = 200000
+    CoordPresentation coordPresentation = CoordPresentation.DEGREEMINUTE // DB-2.12 
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
 	boolean resultClasses = true          	            // Klassen, DB-2.0
 	ContestRules contestRule                            // Wettbewerbsordnung, DB-2.0
@@ -228,6 +229,8 @@ class Contest
 	Integer imageBottomRightHeight = IMAGEBOTTOMHEIGHT  // DB-2.8
 	String imageBottomRightText = ""                    // DB-2.8
 	String imageBottomTextSize = IMAGEBOTTOMTEXTSIZE    // DB-2.8
+    
+    String reserve = ""                                 // DB-2.12
 	
 	// transient values
 	static transients = ['copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
@@ -446,6 +449,10 @@ class Contest
         contestUUID(nullable:true)
         printCrewEmail(nullable:true)
         printCrewUUID(nullable:true)
+        
+        // DB-2.12 compatibility
+        coordPresentation(nullable:true)
+        reserve(nullable:true)
 	}
 
     static mapping = {

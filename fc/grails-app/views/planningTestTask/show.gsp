@@ -37,10 +37,11 @@
                             </tbody>
                         </table>
                         <input type="hidden" name="id" value="${planningTestTaskInstance?.id}" />
-                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
+                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" tabIndex="1"/>
                         <g:if test="${!Test.findByPlanningtesttask(planningTestTaskInstance)}">
-                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" />
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="2"/>
                         </g:if>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
                     </g:form>
                 </div>
             </div>

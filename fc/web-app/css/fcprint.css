@@ -67,6 +67,10 @@ table.landingresultlist {
     border-style: none;
 }
 
+table.routecoords td {
+    vertical-align: top;
+}
+
 table.routecoords td.tpname, table.routecoords td.aflosname {
     width: 10%;
 }

@@ -140,7 +140,7 @@ class FcTagLib
     // ====================================================================================================================
     // <g:flighttestwind var="${flightTestWindInstance}" link="${createLink(controller:'flightTestWind',action:'show')}"/>
     def flighttestwind = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.wind.name()}</a>""" // .encodeAsHTML()
+        out << """<a href="${p.link}/${p.var.id}">${p.var.name()}</a>""" // .encodeAsHTML()
     }
 
     // ====================================================================================================================

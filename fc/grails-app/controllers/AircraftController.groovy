@@ -1,5 +1,6 @@
 class AircraftController {
 
+    def printService
 	def fcService
 	
     def index = { redirect(action:list,params:params) }
@@ -122,13 +123,13 @@ class AircraftController {
     }
 
     def print = {
-        def aircrafts = fcService.printAircrafts(params,false, false,GetPrintParams()) 
+        Map aircrafts = printService.printAircrafts(params,false, false,GetPrintParams()) 
         if (aircrafts.error) {
             flash.message = aircrafts.message
             flash.error = true
             redirect(action:list)
         } else if (aircrafts.content) {
-            fcService.WritePDF(response,aircrafts.content,session.lastContest.GetPrintPrefix(),"aircraft",true,false,false)
+            printService.WritePDF(response,aircrafts.content,session.lastContest.GetPrintPrefix(),"aircraft",true,false,false)
         } else {
             redirect(action:list)
         }

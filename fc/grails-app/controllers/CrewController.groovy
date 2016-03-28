@@ -1,5 +1,6 @@
 class CrewController {
     
+    def printService
 	def fcService
 	
     def index = { redirect(action:list,params:params) }
@@ -238,13 +239,13 @@ class CrewController {
     }
 
 	def print = {
-        def crews = fcService.printCrews(params,session.lastContest.printCrewA3,session.lastContest.printCrewLandscape,GetPrintParams()) 
+        Map crews = printService.printCrews(params,session.lastContest.printCrewA3,session.lastContest.printCrewLandscape,GetPrintParams()) 
         if (crews.error) {
             flash.message = crews.message
             flash.error = true
             redirect(action:list)
         } else if (crews.content) {
-            fcService.WritePDF(response,crews.content,session.lastContest.GetPrintPrefix(),"crews",true,session.lastContest.printCrewA3,session.lastContest.printCrewLandscape)
+            printService.WritePDF(response,crews.content,session.lastContest.GetPrintPrefix(),"crews",true,session.lastContest.printCrewA3,session.lastContest.printCrewLandscape)
         } else {
             redirect(action:list)
         }

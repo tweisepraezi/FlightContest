@@ -23,7 +23,11 @@ class GpxController
 		def file = request.getFile('loadgpxfile')
 		if (file && !file.empty) {
 			String original_filename = file.getOriginalFilename()
-			gpxService.printstart "Process '$original_filename'"
+            if (params.offlinemap) {
+                gpxService.printstart "Show offline map of '$original_filename'"
+            } else {
+                gpxService.printstart "Show map of '$original_filename'"
+            }
 			gpxService.println file.getContentType() // "text/xml" 
 			if (original_filename.toLowerCase().endsWith('.gpx')) {
 				String uuid = UUID.randomUUID().toString()
@@ -39,12 +43,18 @@ class GpxController
                     route_instance = Route.get(params.routeid)
                 }
                 if (route_instance) {
-                    Map converter = gpxService.AddRoute2GPX(route_instance,webroot_dir + upload_filename)
+                    Map converter = gpxService.AddRoute2GPX(route_instance, webroot_dir + upload_filename)
                     session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                } else {
+                    session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + upload_filename))
                 }
 
                 gpxService.printdone ""
-                redirect(action:'startgpxviewer',params:[uploadFilename:upload_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
+                if (params.offlinemap) {
+                    redirect(action:'startofflineviewer',params:[uploadFilename:upload_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
+                } else {
+                    redirect(action:'startgpxviewer',params:[uploadFilename:upload_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
+                }
 			} else {
 				flash.error = true
 				flash.message = message(code:'fc.gac.gpxfileerror',args:[original_filename])
@@ -60,7 +70,11 @@ class GpxController
         def file = request.getFile('loadgacfile')
         if (file && !file.empty) {
             String original_filename = file.getOriginalFilename()
-            gpxService.printstart "Process '$original_filename'"
+            if (params.offlinemap) {
+                gpxService.printstart "Show offline map of '$original_filename'"
+            } else {
+                gpxService.printstart "Show map of '$original_filename'"
+            }
             gpxService.println file.getContentType() // "text/xml"
             if (original_filename.toLowerCase().endsWith('.gac')) {
                 String uuid = UUID.randomUUID().toString()
@@ -84,8 +98,14 @@ class GpxController
                     session.gpxShowPoints = null
                     if (route_instance) {
                         session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                    } else {
+                        session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + upload_filename))
                     }
-                    redirect(action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
+                    if (params.offlinemap) {
+                        redirect(action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
+                    } else {
+                        redirect(action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
+                    }
                 } else {
                     flash.error = true
                     flash.message = message(code:'fc.gpx.gacnotconverted',args:[upload_file_name])
@@ -105,12 +125,28 @@ class GpxController
         }
     }
 	
-    def startgpxviewer = {
+    def startofflineviewer = {
+        gpxService.printstart "startofflineviewer ($params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints)"
         if (session.gpxShowPoints) {
-            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
+            render(view:"offlineviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
         } else {
-            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles])
+            render(view:"offlineviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints])
         }
+        gpxService.printdone ""
+    }
+    
+    def offlineviewer = {
+        return [:]
+    }
+    
+    def startgpxviewer = {
+        gpxService.printstart "startgpxviewer ($params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints)"
+        if (session.gpxShowPoints) {
+            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
+        } else {
+            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints])
+        }
+        gpxService.printdone ""
     }
     
     def gpxviewer = {
@@ -144,10 +180,17 @@ class GpxController
     }
 
     def deletegpxfile = {
-        String file_name = servletContext.getRealPath("/") + params.filename
-        gpxService.printstart "deletegpxfile"
-        gpxService.DeleteFile(file_name)
+        String file_name = params.filename
+        gpxService.printstart "deletegpxfile $file_name"
+        gpxService.DeleteFile(file_name) 
         session.gpxShowPoints = null
+        gpxService.printdone ""
+    }
+    
+    def calculatexy = {
+        gpxService.printstart "calculatexy ($params.gpxFileName, $params.maxX, $params.maxY, $params.centerLat, $params.centerLon, $params.radius, $params.moveDir)"
+        response.contentType = "text/xml"
+        response.outputStream << gpxService.ConvertGPX2XYXML(params.gpxFileName, params.maxX.toInteger(), params.maxY.toInteger(), params.centerLat, params.centerLon, params.radius, params.moveDir, session.lastContest.timeZone, session.lastContest.coordPresentation)
         gpxService.printdone ""
     }
     

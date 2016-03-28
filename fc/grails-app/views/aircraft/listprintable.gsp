@@ -18,6 +18,14 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
                     content: "${message(code:'fc.aircraft.list')}"
                 }
@@ -38,36 +46,30 @@
         <title>${message(code:'fc.aircraft.list')}</title>
     </head>
     <body>
-        <div>
-            <div>
-                <h2>${message(code:'fc.aircraft.list')} (${aircraftInstanceList.size()})</h2>
-                <div>
-                    <g:form>
-                        <table class="aircraftlist">
-                            <thead>
-                                <tr>
-                                   <th>${message(code:'fc.aircraft.registration')}</th>
-                                   <th>${message(code:'fc.aircraft.type')}</th>
-                                   <th>${message(code:'fc.aircraft.colour')}</th>
-                                   <th>${message(code:'fc.aircraft.crew1')}</th>
-                                   <th>${message(code:'fc.aircraft.crew2')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <g:each var="aircraft_instance" in="${aircraftInstanceList}" status="i" >
-                                    <tr>
-                                        <td class="aircraft">${aircraft_instance.registration}</td>
-                                        <td class="aircrafttype">${aircraft_instance.type}</td>
-                                        <td class="aircraftcolor">${aircraft_instance.colour}</td>
-                                        <td class="crew1">${aircraft_instance.user1?.name}</td>
-                                        <td class="crew2">${aircraft_instance.user2?.name}</td>
-                                    </tr>
-                                </g:each>
-                            </tbody>
-                        </table>
-                    </g:form>
-                </div>
-            </div>
-        </div>
+        <h2>${message(code:'fc.aircraft.list')} (${aircraftInstanceList.size()})</h2>
+        <g:form>
+            <table class="aircraftlist">
+                <thead>
+                    <tr>
+                       <th>${message(code:'fc.aircraft.registration')}</th>
+                       <th>${message(code:'fc.aircraft.type')}</th>
+                       <th>${message(code:'fc.aircraft.colour')}</th>
+                       <th>${message(code:'fc.aircraft.crew1')}</th>
+                       <th>${message(code:'fc.aircraft.crew2')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:each var="aircraft_instance" in="${aircraftInstanceList}" status="i" >
+                        <tr class="value" id="${aircraft_instance.registration}">
+                            <td class="aircraft">${aircraft_instance.registration}</td>
+                            <td class="aircrafttype">${aircraft_instance.type}</td>
+                            <td class="aircraftcolor">${aircraft_instance.colour}</td>
+                            <td class="crew1">${aircraft_instance.user1?.name}</td>
+                            <td class="crew2">${aircraft_instance.user2?.name}</td>
+                        </tr>
+                    </g:each>
+                </tbody>
+            </table>
+        </g:form>
     </body>
 </html>

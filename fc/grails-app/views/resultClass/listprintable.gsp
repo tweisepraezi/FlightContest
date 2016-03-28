@@ -18,6 +18,14 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
                     content: "${message(code:'fc.resultclass.list')}"
                 }
@@ -38,50 +46,44 @@
         <title>${message(code:'fc.resultclass.list')}</title>
     </head>
     <body>
-        <div>
-            <div>
-                <h2>${message(code:'fc.resultclass.list')} (${resultclassInstanceList.size()})</h2>
-                <div>
-                    <g:form>
-                        <table class="resultclasslist">
-                            <thead>
-                                <tr>
-                                   <th>${message(code:'fc.resultclass.name')}</th>
-                                   <th>${message(code:'fc.resultclass.name.short.short')}</th>
-                                   <th>${message(code:'fc.crew')}</th>
-			                       <th>${message(code:'fc.aircraft')}</th>
-			                       <th>${message(code:'fc.tas')}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <g:each var="resultclass_instance" in="${resultclassInstanceList}" status="i" >
-                                	<g:if test="${Crew.findByResultclass(resultclass_instance)}">
-                                        <g:set var="j" value="${new Integer(0)}"/>
-										<g:each var="crew_instance" in="${Crew.findAllByResultclass(resultclass_instance,[sort:'name'])}">
-                                            <g:if test="${!crew_instance.disabled}">
-			                                    <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-			                                    	<g:if test="${j==0}">
-			                                        	<td class="resultclass">${resultclass_instance.name}</td>
-			                                        	<td class="shortresultclass">${resultclass_instance.shortName}</td>
-			                                        </g:if>
-			                                        <g:else>
-			                                        	<td class="resultclass"/>
-			                                        	<td class="shortresultclass"/>
-			                                        </g:else>
-			                                        <td class="crew">${crew_instance.name}</td>
-			                                        <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
-			                                        <td class="tas">${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}</td>
-			                                    </tr>
-	                                            <g:set var="j" value="${j+1}"/>
-	                                        </g:if>
-		                                </g:each>
-				                	</g:if>
-                                </g:each>
-                            </tbody>
-                        </table>
-                    </g:form>
-                </div>
-            </div>
-        </div>
+        <h2>${message(code:'fc.resultclass.list')} (${resultclassInstanceList.size()})</h2>
+        <g:form>
+            <table class="resultclasslist">
+                <thead>
+                    <tr>
+                       <th>${message(code:'fc.resultclass.name')}</th>
+                       <th>${message(code:'fc.resultclass.name.short.short')}</th>
+                       <th>${message(code:'fc.crew')}</th>
+                       <th>${message(code:'fc.aircraft')}</th>
+                       <th>${message(code:'fc.tas')}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <g:each var="resultclass_instance" in="${resultclassInstanceList}" status="i" >
+                    	<g:if test="${Crew.findByResultclass(resultclass_instance)}">
+                            <g:set var="j" value="${new Integer(0)}"/>
+                            <g:each var="crew_instance" in="${Crew.findAllByResultclass(resultclass_instance,[sort:'name'])}">
+                                <g:if test="${!crew_instance.disabled}">
+                                    <tr class="value" id="${crew_instance.startNum}">
+	                           	        <g:if test="${j==0}">
+	                               	        <td class="resultclass">${resultclass_instance.name}</td>
+	                               	        <td class="shortresultclass">${resultclass_instance.shortName}</td>
+	                                    </g:if>
+	                                    <g:else>
+	                               	        <td class="resultclass"/>
+	                               	        <td class="shortresultclass"/>
+	                                    </g:else>
+	                                    <td class="crew">${crew_instance.name}</td>
+	                                    <td class="aircraft"><g:if test="${crew_instance.aircraft}">${crew_instance.aircraft.registration}</g:if><g:else>${message(code:'fc.noassigned')}</g:else></td>
+	                                    <td class="tas">${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}</td>
+                                    </tr>
+                                    <g:set var="j" value="${j+1}"/>
+                                </g:if>
+                            </g:each>
+        	            </g:if>
+                    </g:each>
+                </tbody>
+            </table>
+        </g:form>
     </body>
 </html>

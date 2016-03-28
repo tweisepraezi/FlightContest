@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title><g:layoutTitle default="${message(code:'fc.gpx.showmap')}" /> - ${message(code:'fc.program.title')}</title>
+        <title><g:layoutTitle default="${titletext}" /> - ${message(code:'fc.program.title')}</title>
         <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'fc.ico')}" type="image/x-icon" />
         <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'reset.css')}" media="screen" />
         <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'text.css')}" media="screen" />

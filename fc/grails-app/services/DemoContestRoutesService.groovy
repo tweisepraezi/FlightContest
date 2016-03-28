@@ -3,30 +3,48 @@ class DemoContestRoutesService
 	def fcService
 	
 	static final String ROUTE_5 = "Strecke 5"
+    static final String ROUTE_5_GPX = "Strecke_5.gpx"
 	static final String ROUTE_5M = "Strecke 5m"
 	static final String ROUTE_6 = "Strecke 6"
+    static final String ROUTE_6_GPX = "Strecke_6.gpx"
 	static final String ROUTE_6M = "Strecke 6m"
 	static final String ROUTE_7 = "Strecke 7"
+    static final String ROUTE_7_GPX = "Strecke_7.gpx"
 	static final String ROUTE_7M = "Strecke 7m"
 	
-    long CreateTest(String testName, String printPrefix, boolean testExists) 
+    long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
         
         // Routes
+        Map route5 = [:]
         fcService.printstart ROUTE_5
-		Map route5 = fcService.importRoute(contest,ROUTE_5,ROUTE_5,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        if (aflosDB) {
+            route5 = fcService.importAflosRoute(contest,ROUTE_5,ROUTE_5,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route5 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_5_GPX)
+        }
         fcService.printdone ""
         
+        Map route6 = [:]
         fcService.printstart ROUTE_6
-		Map route6 = fcService.importRoute(contest,ROUTE_6,ROUTE_6,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        if (aflosDB) {
+            route6 = fcService.importAflosRoute(contest,ROUTE_6,ROUTE_6,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route6 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_6_GPX)
+        }
         fcService.printdone ""
 		
+        Map route7 = [:]
         fcService.printstart ROUTE_7
-		Map route7 = fcService.importRoute(contest,ROUTE_7,ROUTE_7,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        if (aflosDB) {
+            route7 = fcService.importAflosRoute(contest,ROUTE_7,ROUTE_7,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route7 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_7_GPX)
+        }
         fcService.printdone ""
 		
         fcService.printstart ROUTE_5M
@@ -51,19 +69,19 @@ class DemoContestRoutesService
         // Flight Tests
         Map task5 = fcService.putTask(contest,ROUTE_5,"09:00",2,"time:10min","time:10min",5,"wind:1","wind:1",false,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
         Map flighttest5 = fcService.putFlightTest(task5,"",route5)
-        Map flighttestwind5 = fcService.putFlightTestWind(flighttest5,0,0)
+        Map flighttestwind5 = fcService.putFlightTestWind(flighttest5,0,0,0,0,0,0,0,0,0,0,0)
         fcService.putflighttestwindTask(task5,flighttestwind5)
 		fcService.runcalculatetimetableTask(task5)
 		
         Map task6 = fcService.putTask(contest,ROUTE_6,"09:00",2,"time:10min","time:10min",5,"wind:1","wind:1",false,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
         Map flighttest6 = fcService.putFlightTest(task6,"",route6)
-        Map flighttestwind6 = fcService.putFlightTestWind(flighttest6,0,0)
+        Map flighttestwind6 = fcService.putFlightTestWind(flighttest6,0,0,0,0,0,0,0,0,0,0,0)
         fcService.putflighttestwindTask(task6,flighttestwind6)
 		fcService.runcalculatetimetableTask(task6)
 		
         Map task7 = fcService.putTask(contest,ROUTE_7,"09:00",2,"time:10min","time:10min",5,"wind:1","wind:1",false,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
         Map flighttest7 = fcService.putFlightTest(task7,"",route7)
-        Map flighttestwind7 = fcService.putFlightTestWind(flighttest7,0,0)
+        Map flighttestwind7 = fcService.putFlightTestWind(flighttest7,0,0,0,0,0,0,0,0,0,0,0)
         fcService.putflighttestwindTask(task7,flighttestwind7)
 		fcService.runcalculatetimetableTask(task7)
 		
@@ -72,7 +90,7 @@ class DemoContestRoutesService
 		return contest.instance.id
     }
 
-    Map RunTest(Contest lastContest, String contestName)
+    Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
     {
 		Map ret_test = [:]
         if (lastContest && lastContest.title == contestName) {
@@ -156,7 +174,7 @@ class DemoContestRoutesService
                 [name:"CoordResult 'Besatzung 60' '$ROUTE_6'",   count:39,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(task6,Crew.findByContestAndName(lastContest,"Besatzung 60")),[sort:"id"]),data:testCoordResult60(ROUTE_6)],    
                 [name:"CoordResult 'Besatzung 120' '$ROUTE_7'",  count:39,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(task7,Crew.findByContestAndName(lastContest,"Besatzung 120")),[sort:"id"]),data:testCoordResult120(ROUTE_7)],    
                 [name:"CoordResult 'Besatzung 60' '$ROUTE_7'",   count:39,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(task7,Crew.findByContestAndName(lastContest,"Besatzung 60")),[sort:"id"]),data:testCoordResult60(ROUTE_7)],    
-               ]
+               ],aflosDB
             )
             fcService.printdone "Test '$lastContest.title'"
             ret_test.error = ret.error

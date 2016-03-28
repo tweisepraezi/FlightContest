@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-26.09.2015
+28.03.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -19,10 +19,6 @@ Die Bedienungsanleitung finden Sie im Startmenü unter
 
 Weitere Hilfe finden Sie im Startmenü unter
 'Programme -> Flight Contest -> Help'
-
-Vorbereitungs- und Nutzungshinweise finden Sie im Startmenü unter
-'Programme -> Flight Contest -> Usage'.
-
 
 Flight Contest ist eine moderne, auf Java-Techniken basierende, mehrsprachige
 und netzwerkfähige Open-Source-Datenbank-Anwendung:
@@ -43,17 +39,71 @@ Wettbewerbsmanagement. Dazu zählen die Unterstützung
   (gleichzeitig stattfindende Wettbewerbe mit einem gemeinsamen Startfeld).
  
 Weitere nützliche Funktionen von Flight Contest:
+* Direkte Strafpunkt-Berechnung beim Laden einer Logger-Datendatei
+  (GAC und GPX).
 * Sehr schnelle Logger-Daten-Nutzung des FAI-zertifizierten Loggers AFLOS 
   (ohne Umweg über Datei-Export und -Import).
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
+* Online-Kartenanzeige für Strecken und Navigationsflüge.
+  (Goggle Maps und Open Street Map)
+* Offline-Anzeige für Strecken und Navigationsflüge.
+* E-Mail-Versand der Navigationsflug-Karten an Teilnehmer.
 * Live-Ergebnis-Anzeige (Live Ranking) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
-* Kartenanzeige mit Goggle Maps für Strecken und Navigationsflüge.
-* E-Mail-Versand der Navigationsflugkarten an Teilnehmer.
-* Unterstützung des offenen Logger-Datenformates GPX.
 
-Fehlerbehebungen und Erweiterungen in dieser Version (2.3.7):
--------------------------------------------------------------
+
+Erweiterungen in dieser Version (3.0):
+--------------------------------------
+- Navigationsflug-Logger-Auswertung erweitert:
+    * Mit 'Import Logger-Daten' werden Logger-Daten direkt aus einer
+      ausgewählten GAC- oder GPX-Datei geladen und daraus sofort
+      Fehlerpunkte berechnet.
+    * Mit 'Import AFLOS-Daten -> Kalkuliere AFLOS-Daten' werden 
+      Logger-Daten direkt aus einer AFLOS-Datenbank gelesen
+      und daraus sofort Fehlerpunkte berechnet.
+    * Das Laden in AFLOS kalkulierter AFLOS-Daten ist mit
+      'Import AFLOS-Daten -> Import AFLOS-Kalkulation' weiter 
+      erreichbar.
+    * Aus den geladenen Logger-Daten können mit 'Neu kalkulieren' 
+      Fehlerpunkte neu berechnet werden. 
+      Dabei können die auszuwertenden Logger-Zeiten angepasst werden. 
+      Anzuwenden, wenn T/O nicht erkannt wurde oder wenn Korrekturen
+      an T/O-LDG-Richtung und/oder T/O-LDG-Gate notwendig waren.
+- Offline-Anzeige der Navigationsflug-Karte
+- Ausdruck der Navigationsflug-Karte mit der Ergebnisliste:
+    Beim Ausdruck aller Besatzungsergebnisse kann die Navigationsflug-Karte
+    separat abgewählt werden.
+- Navigationsflug-Ergebnis-Export 
+    Mit 'GPX-Export' wird das Ergebnis als GPX-Datei exportiert.
+    Dieses kann mit 'Extras -> GPX-Anzeige' oder einem beliebigen anderen
+    GPX-Viewer angezeigt werden.
+- Koordinatendarstellung in den Contest-Einstellungen wählbar:
+   Die Koordinatendarstellung kann zwischen "Grad Dezimal", "Grad/Minuten Dezimal"
+   und "Grad/Minuten/Sekunden" gewählt werden.
+   Der Strecken-Druck (Strecke -> Druck) druckt alle 3 Darstellungen untereinander.
+- Strecken-Export
+    Mit 'GPX-Export' wird eine Strecke als GPX-Datei exportiert.
+    Diese kann mit 'Extras -> GPX-Anzeige' oder einem beliebigen anderen
+    GPX-Viewer angezeigt werden. 
+- Strecken-Import
+    Mit "Strecken -> Import Strecke" kann eine Strecke aus einer GPX-Datei 
+    importiert werden, die entweder mit dem Strecken-Export oder dem 
+    Navigationsflug-Ergebnis-Export exportiert wurde.
+    GPX-Strecken aus anderen Quellen und Strecken anderer Formate 
+    werden nicht unterstützt.
+- Ausdrucke müssen beim Drucken nicht mehr eingepasst werden.
+- Unbekannte Zeitkontrollen werden in Englisch mit 'SC' abgekürzt (vorher 'Secret').
+- Aktualisierung folgender Regelwerke
+    Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2016
+    FAI Precision Flying - Edition 2016
+    FAI Air Rally Flying - Edition 2016
+- Beachten Sie die erhöhten Anfoderungen an die Leistungsfähigkeit
+  Ihres Computers, wenn Sie diese Version einsetzen wollen:
+    min. 8 GB RAM
+    CPU Intel® Core™ i5 oder i7 (min. 2 Cores, min. 2 GHz)
+
+Fehlerbehebungen und Erweiterungen in Version 2.3.7:
+----------------------------------------------------
 - Das Scheitern der erneuten Zuweisung von Planungsaufgaben wurde behoben.
 - Beim Zuweisen von Planungsaufgaben erscheint jetzt ein zusätzliches
   Abfragefenster, was auf das Löschen bereits eingegebener Ergebnisse
@@ -66,7 +116,7 @@ Fehlerbehebungen in Version 2.3.6:
 
 Fehlerbehebungen und Erweiterungen in 2.3.5:
 --------------------------------------------
-- Anzeige und E-Mail-Versand der Navigationsflugkarte wird jetzt 
+- Anzeige und E-Mail-Versand der Navigationsflug-Karte wird jetzt 
   nur bei AFLOS-Datenbank mit zutreffender Referenzstrecke ermöglicht
   (für mehrtägige Wettbewerbe mit mehreren AFLOS-Datenbanken)
 - Ausdrucke mit Wettbewerbsnamen, die das Zeichen & enthalten,
@@ -92,9 +142,9 @@ Fehlerbehebungen und Erweiterungen in Version 2.3.4:
 Fehlerbehebungen und Erweiterungen in Version 2.3.3:
 ----------------------------------------------------
 - Kollisionen zwischen Live-Anzeige und Auswerter-Eingaben reduziert
-- Streckenkarte: Check-Punkt-Zoom-Faktoren berücksichtigen jetzt 
+- Strecken-Karte: Check-Punkt-Zoom-Faktoren berücksichtigen jetzt 
   konfigurierte Gate-Breiten
-- Ein laufender E-Mail-Versand der Navigationsflugkarte im Hintergrund 
+- Ein laufender E-Mail-Versand der Navigationsflug-Karte im Hintergrund 
   wird jetzt in Ergebnisliste mit einem Symbol angezeigt.
 
 Fehlerbehebungen und Erweiterungen in Version 2.3.2:
@@ -102,7 +152,7 @@ Fehlerbehebungen und Erweiterungen in Version 2.3.2:
 - Fehlerbehebung GPX-GAC-Konverter
 - GAC-Anzeige ('Extras -> GAC-Anzeige') um Strecken-Anzeige erweitert
 - GPX-Anzeige ('Extras -> GPX-Anzeige') um Strecken-Anzeige erweitert
-- E-Mail-Versand der Navigationsflugkarte im Hintergrund
+- E-Mail-Versand der Navigationsflug-Karte im Hintergrund
 - Druck-Abstürze bei leerem Aufgaben-Namen beseitigt
 - Der eingetragene Veranstalter bei einem neuem Wettbewerb wird nun übernommen.
 - Meldungen beim Setzen von Planungsaufgaben und dem Zuweisen des Flugwinds.
@@ -182,9 +232,9 @@ Erweiterungen in Version 2.3.0:
 - 'Programme -> Flight Contest -> Help' -> 
   'Installations-abhängige Konfiguration' hinzugefügt
 - Neue Navigationsflug-Ergebnis-Anzeige
-    * Navigationsflugkarte mit Google Maps
+    * Navigationsflug-Karte mit Google
     * Checkpunkte können hier mit einem Klick angezeigt werden
-    * E-Mail-Versand der Navigationsflugkarte
+    * E-Mail-Versand der Navigationsflug-Karte
         Neben der Besatzung wird diese E-Mail auch an den 
         Auswerte-Schiedsrichter versandt.
     * Anzeige des erfolgreichen E-Mail-Versands in der Ergebnisliste
@@ -249,7 +299,7 @@ Fehlerbehebungen und Erweiterungen in Version 2.2.1:
     Aus diesen GPX-Dateien müssen mit 'Extras -> GPX-GAC-Konverter'
     GAC-Dateien erzeugt werden, die in AFLOS zu importieren sind.
     Siehe 'Programme -> Flight Contest -> Help' -> 'Unterstützte Logger'.
-- Fehler in Strecken-Kartenansicht (Strecken-Details -> 'Streckenkarte') behoben
+- Fehler in Strecken-Kartenansicht (Strecken-Details -> 'Strecken-Karte') behoben
     Strecken-Punkte wurden manchmal nicht in der korrekten Reihenfolge 
     miteinander verbunden.
 
@@ -296,7 +346,7 @@ Erweiterungen in Version 2.2.0:
     bei zu mischenden Klassen erfolgt unter 'Wettbewerbs-Auswertung',
     ansonsten unter dem Klassen-Namen.
     Die Ermittlung des Team-Endergebisses erfolgt unter 'Team-Auswertung'.
-- Strecken-Kartenansicht (Strecken-Details -> 'Streckenkarte')
+- Strecken-Kartenansicht (Strecken-Details -> 'Strecken-Karte')
     Ermöglicht Ansicht einer importierten Strecke mit Google Maps in der
     Gelände-Ansicht.
     Zur Prüfung der Genauigkeit der verwendeten Koordinaten.
@@ -791,73 +841,17 @@ Auf einem oder mehreren Clients läuft 'Flight Context' im Web-Browser.
 Server und Client können auf einem Windows-Rechner liegen.
 
 Beste Darstellung im Client mit dem Web-Browser 'Firefox'.
-'Internet Explorer' ebenfalls möglich.
-
-
-Interaktion mit AFLOS:
----------------------
-Minimale empfohlene AFLOS Version: 2.13
-
-'Flight Contest' kann AFLOS-Daten von 2 Quellen lesen:
-1. direkt von 'AFLOS', wenn 'AFLOS' und 'Flight Contest' 
-   auf dem selben PC installiert sind oder
-2. aus hochgeladenen AFLOS-Datenbanken.
-
-Fall 2 ist zu benutzen, wenn ein 'Flight Contest'-Server verwendet wird, 
-auf dem kein 'AFLOS' vorhanden oder benutzt wird.
-
-Das Hochladen von Datenbanken erfolgt mit 'AFLOS -> Datenbank hochladen'.
-Dadurch wird beim aktiven Wettbewerb die Einstellung
-'Hochgeladene AFLOS-Datenbank benutzen' aktiviert.
-
-Installationshinweise, wenn 'AFLOS' und 'Flight Contest' auf dem selben
-PC installiert sind und dort auch benutzt werden sollen:
-Wird AFLOS nicht in dem Verzeichnis C:\AFLOS installiert,
-führen Sie nach der ersten Benutzung von AFLOS den Punkt
-'Programme -> Flight Contest -> Install AFLOS connection' aus
-(in Windows Vista oder Windows 7 als Administrator).
-Kann trotzdem nicht direkt auf AFLOS-Daten zugegriffen werden,
-kann immer Fall 2 (Hochladen der AFLOS-Datenbank) angewendet werden.
-
-'Flight Contest' importiert Strecken und Logger-Messwerte entweder direkt
-aus der zuletzt oder gerade geöffneten AFLOS-Datenbank (Fall 1)
-oder aus der zuletzt hochgeladenen AFLOS-Datenbank (Fall 2).
-
-Import von Strecken (Strecken -> Import AFLOS-Strecke):
-Stellen Sie zum Import sicher, dass Check-Punkte unbekannter Zeitkontrollen 
-in AFLOS eine Torbreite von 2NM oder die Markierung $secret haben.
-
-Import von Logger-Messwerten (Auswertung -> Navigationsflug -> Import AFLOS-Logger-Daten):
-Stellen Sie zum Import sicher, dass die aus dem Logger eingelesenen Messwerte
-für eine konkrete Besatzung (= Comp.-Nr.) und Strecke (= Ref.-Nr.) und der 
-aktivierten Option 'Procedure Turn' in AFLOS mit 'Check-Data -> Calculate' 
-berechnet wurden.
-Fehlerhaft errechnete Kursabweichungen können nach dem Import manuell korrigiert werden
-(Klick auf Zahl in Nr.-Spalte für den gewünschten Check-Punkt).
-Nicht auswertbare Logger-Messwerte können nicht importiert werden. 
-'Flight Contest -> AFLOS -> Erfasste Fehlerstati'
-oder 'AFLOS -> Check -Overview' zeigen Status von AFLOS-Messungen an:
-  Flight O.K.      Auswertbarer Flug ohne Flugfehler
-  Flight not O.K.  Auswertbarer Flug mit Flugfehlern
-  Check Error !    Nicht auswertbarer Flug
-    (-> Import-Fehler 'AFLOS-Logger-Daten von ... enthalten Fehler.')
-  Für eine AFLOS-Besatzung nicht vorhandener Eintrag
-    (-> Import-Fehler 'AFLOS-Logger-Daten von ... nicht komplett.')
 
 
 Mögliche Betriebssysteme der Server-Installation:
 ------------------------------------------------
-Windows XP ServicePack 2
-Windows Vista ServicePack 1
-Windows 7 
+Alle Windows-Versionen (ab Windows XP)
 
 
 Server starten:
 ---------------
 Starten des Dienstemanagers 'Apache Tomcat FlightContest':
   'Programme -> Flight Contest -> Flight Contest Service Manager'
-(in Windows Vista oder Windows 7 werden Administrator-Privilegien
- automatisch angefordert)
 
 Auf Icon des Dienstemanagers 'Apache Tomcat FlightContest' ausführen:
   Kontextmenüpunkt 'Start Service' aufrufen
@@ -919,12 +913,6 @@ zum letzten funktionstüchtigen 'Flight Contest' zurückgekehrt werden:
   5. Letztes funktionstüchtiges 'Flight Contest' installieren
   
 
-Logs:
------
-  Sind hier zu finden:
-    <Installationsverzeichnis>\fc\logs
-
-
 Cookies:
 --------
   Speichert folgende Cookies für 1 Jahr:
@@ -932,4 +920,3 @@ Cookies:
     ShowLanguage     - Bediensprache
     PrintLanguage    - Drucksprache
     ShowLimitCrewNum - Zeilenzahl beim Blättern
-

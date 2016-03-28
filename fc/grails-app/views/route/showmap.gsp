@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>${message(code:'fc.route.map')}</title>
+        <title>${message(code:'fc.onlinemap')}</title>
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <style>
@@ -89,7 +89,7 @@
                       raiseOnDrag: false,
                       map: map,
                       title: '${coordroute_instance.titleMap()}',
-                      labelContent: "${coordroute_instance.titleShortMap()}",
+                      labelContent: "${coordroute_instance.titleShortMap(false)}",
                       labelAnchor: new google.maps.Point(40, 60),
                       labelClass: "labels", // the CSS class for the label
                       labelStyle: {opacity: 0.75}

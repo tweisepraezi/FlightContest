@@ -53,6 +53,18 @@
                                 <br/>
                                 <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:contestInstance,field:'mapScale')}" tabIndex="5"/>
                             </p>
+                            <label>${message(code:'fc.coordpresentation')}:</label>
+                            <g:set var="format_labels" value="${[]}"/>
+                            <g:each var="format_code" in="${CoordPresentation.GetCodes()}">
+                                <g:set var="format_labels" value="${format_labels+message(code:format_code)}"/>
+                            </g:each>
+                            <g:set var="format_values" value="${CoordPresentation.GetValues()}"/>
+                            <g:radioGroup name="coordPresentation" labels="${format_labels}" values="${format_values}" value="${contestInstance.coordPresentation}">
+                                <div>
+                                    <label>${it.radio} ${it.label}</label>
+                                </div>
+                            </g:radioGroup>
+                            <br/>
                             <p>
                                 <label>${message(code:'fc.timezone')}* [${message(code:'fc.time.hmin')}]:</label>
                                 <br/>

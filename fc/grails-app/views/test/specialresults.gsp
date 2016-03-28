@@ -80,24 +80,30 @@
                         </g:else>
                         <g:if test="${!testInstance.specialTestComplete}">
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="specialresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="2"/>
+                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="11"/>
+                                <g:actionSubmit action="specialresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="12"/>
                             </g:if>
-                        	<g:actionSubmit action="specialresultsready" value="${message(code:'fc.results.ready')}" tabIndex="3"/>
-                        	<g:actionSubmit action="specialresultssave" value="${message(code:'fc.save')}" tabIndex="4"/>
-                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="5"/>
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
+                            <g:else>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="13"/>
+                            </g:else>
+                        	<g:actionSubmit action="specialresultsready" value="${message(code:'fc.results.ready')}" tabIndex="14"/>
+                        	<g:actionSubmit action="specialresultssave" value="${message(code:'fc.save')}" tabIndex="15"/>
+                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="16"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
+                            </g:if>
                         </g:if>
                         <g:else>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="2"/>
+                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="41"/>
                             </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="42"/>
                             </g:else>
-                        	<g:actionSubmit action="specialresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="4"/>
-                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="5"/>
+                        	<g:actionSubmit action="specialresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="43"/>
+                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="44"/>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="45"/>
                             </g:if>
                         </g:else>
                     </g:form>

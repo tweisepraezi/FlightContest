@@ -230,4 +230,16 @@ enum CoordType
         }
         return false
     }
+    
+    boolean IsRunwayCoord()
+    {
+        switch(this) {
+            case CoordType.TO:
+            case CoordType.iTO:
+            case CoordType.LDG:
+            case CoordType.iLDG:
+                return true
+        }
+        return false
+    }
 }

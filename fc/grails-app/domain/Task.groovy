@@ -113,12 +113,15 @@ class Task
     
 	Boolean hidePlanning                     = false // DB-2.3
 	Boolean hideResults                      = false // DB-2.3
+    
+    String reserve                           = ""    // DB-2.12
 	
 	// transient values 
-	static transients = ['printPlanningResults','printFlightResults','printObservationResults','printLandingResults','printSpecialResults',
+	static transients = ['printPlanningResults','printFlightResults','printFlightMap','printObservationResults','printLandingResults','printSpecialResults',
 		                 'printAircraft','printTeam','printClass','printShortClass','printProvisionalResults']
 	boolean printPlanningResults = true
 	boolean printFlightResults = true
+    boolean printFlightMap = true
 	boolean printObservationResults = true
 	boolean printLandingResults = true
 	boolean printSpecialResults = true
@@ -251,6 +254,9 @@ class Task
         landingTest2Points(nullable:true)
         landingTest3Points(nullable:true)
         landingTest4Points(nullable:true)
+        
+        // DB-2.12 compatibility
+        reserve(nullable:true)
 	}
 
     static mapping = {
@@ -834,6 +840,28 @@ class Task
 		return flightTestCheckLanding
 	}
 	
+    int GetDetailNum()
+    {
+        int detail_num = 0
+        if (printPlanningResults) {
+            detail_num++
+        }
+        if (printFlightResults) {
+            detail_num++
+        }
+        // printFlightMap not relevant
+        if (printObservationResults) {
+            detail_num++
+        }
+        if (printLandingResults) {
+            detail_num++
+        }
+        if (printSpecialResults) {
+            detail_num++
+        }
+        return detail_num
+    }
+    
 	boolean IsTaskResultsProvisional(Map resultSettings)
 	{
 		if (printProvisionalResults) {
@@ -1016,11 +1044,13 @@ class Task
     {
         if (   BootStrap.global.IsEMailPossible() 
             && BootStrap.global.IsFTPPossible()
-            && flighttest?.route?.mark
-            && AflosTools.GetAflosRouteName(contest, flighttest.route.mark)
-           ) 
+           )
         {
-            return true
+            for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"desc"])) {
+                if (test_instance.IsEMailPossible()) {
+                    return true
+                }
+            }
         }
         return false
     }

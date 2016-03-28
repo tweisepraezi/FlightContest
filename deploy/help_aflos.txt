@@ -1,0 +1,290 @@
+Thomas Weise
+Deutscher Präzisionsflug-Verein e.V.
+
+Inhalt
+======
+- Interaktion mit AFLOS
+- Streckenplanung mit AFLOS
+- Behebung von AFLOS-Problemen
+- Datensicherung der AFLOS-Datenbank während eines laufenden Wettbewerbes
+
+
+Interaktion mit AFLOS
+=====================
+Minimale empfohlene AFLOS Version: 2.15
+
+Installationshinweise:
+Wird AFLOS nicht in dem Verzeichnis C:\AFLOS installiert,
+führen Sie nach der ersten Benutzung von AFLOS den Punkt 
+'Programme -> Flight Contest -> Install AFLOS connection' 
+als Administrator aus.
+
+'Flight Contest' kann Strecken und Logger-Messwerte direkt
+aus der zuletzt oder gerade geöffneten AFLOS-Datenbank importieren.
+
+Import von Strecken (Strecken -> Import AFLOS-Strecke):
+Stellen Sie zum Import sicher, dass Check-Punkte unbekannter Zeitkontrollen 
+in AFLOS eine Torbreite von 2NM oder die Markierung $secret haben.
+
+Import von Logger-Messwerten:
+1. Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Kalkuliere AFLOS-Daten:
+    Logger-Daten werden direkt aus einer AFLOS-Datenbank gelesen 
+    und daraus sofort Fehlerpunkte berechnet.
+2. Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Import AFLOS-Kalkulation:
+    Stellen Sie zum Import sicher, dass die aus dem Logger eingelesenen Messwerte
+    für eine konkrete Besatzung (= Comp.-Nr.) und Strecke (= Ref.-Nr.) und der 
+    aktivierten Option 'Procedure Turn' in AFLOS mit 'Check-Data -> Calculate' 
+    berechnet wurden.
+
+
+Streckenplanung mit AFLOS
+=========================
+Startpunkt (SP), Check-Punkte (CP) und Endpunkt (FP = Finish point)
+sind Logger-Messpunkte einer Strecke, wo Überflugzeit und Flughöhe gemessen
+sowie vorangegangene Kursänderungen >= 90 Grad festgestellt werden.
+
+Wendepunkte (WP o. TP = Turn point) sind Check-Punkte,
+wo eine Kursänderung erfolgt und die im Flugplan einer Besatzung stehen.
+
+Unbekannte Zeitkontrollen (UZK o. SC) sind Check-Punkte für 
+Zeitmessungen auf der Strecke, die nicht im Flugplan einer Besatzung stehen.
+
+Takeoff (TO) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
+der Einhaltung des Takeoff-Zeitfensters gemessen wird.
+
+Landung (LDG) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
+der Einhaltung der spätesten Landezeit gemessen wird.
+
+Intermediate-Punkte sind Konstruktionspunkte für eine Zwischenlandung.
+Beim Intermediate-Endpunkt (iFP) und Intermediate-Startpunkt (iSP) werden
+Überflugzeit und Flughöhe gemessen und ausgewertet. 
+Intermediate-Landung (iLDG) und Intermediate-Takeoff (iTO) dienen nur
+zur Anzeige im Flugplan einer Besatzung.
+Bei einer Touch&Go-Zwischenlandung ist auf iTO zu verzichten.
+
+In einer Wettbewerbs-Karte sind Startpunkt, Wendepunkte und Endpunkt 
+einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:
+  Wettbewerbssprache "Deutsch":  SP, WP1, WP2, ..., FP
+  Wettbewerbssprache "Englisch": SP, TP1, TP2, ..., FP
+Intermediate-Punkte sind mit folgenden Bezeichnungen anzugeben:
+  iFP, iLDG, iTO, iSP
+  
+Eine Wettbewerbsstrecke muss in AFLOS als Referenz-Strecke (Reference - Data)
+eingegeben werden. Dabei sind neben den Koordinaten (in Grad und Dezimal-Minuten),
+der Bodenhöhe über Normal-Null (Altitude, in ft) und der minimalen 
+Flug-Höhe über Boden (Minimum, in ft, i.d.R. 500) folgende Eingaben nötig:
+- Check-Punkte unbekannter Zeitkontrollen mussen mit der Torbreite (Gate_Width)
+  2 NM versehen werden, SP, FP und Wendepunkte mit der Torbreite 1 NM.
+- Für präzise Übereinstimmung der ausgegebenen Wettbewerbs-Karte 
+  mit den zu verarbeitenden Daten müssen bei Präzisionsflug-Wettbewerben 
+  Entfernungen auf der Wettbewerbs-Karte gemessen und dem Check-Punkt
+  im Feld 'Mark' mit folgenden Einträgen zugeordnet werden:
+    * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
+      (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000) oder
+      $dist:22,6km - Entfernung vom vorangegangenen Wendepunkt in km
+      (bei Entnahme der Entfernung aus einer digitalen Karte)
+  Der vorangegangene Wendepunkt ist ein Check-Punkt, der keine 
+  unbekannte Zeitkontrolle ist.
+- Für krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. 
+  Diese sind mit "$curved" zu markieren, damit sie nicht im Flugplanungstest
+  und im Flugplan einer Besatzung erscheinen und keine Zeitauswertung bewirken. 
+  Die Torbreite sollte mit >= 2 NM gewählt werden, damit Abweichungen nicht 
+  zu viele manuell nachzuprüfende Logger-Fehler verursachen.
+  Der Wendepunkt, mit dem die krumme Strecke endet, ist mit $noplanningtest
+  zu markieren, damit die krumme Strecke nicht im Flugplanungstest enthalten ist. 
+  Vor oder nach einem krummen Strecken-Abschnitt sind auch Wendeschleifen 
+  erlaubt. Diese können aber bei Bedarf durch eine abweichende 
+  Richtungsangabe ($track) außer Kraft gesetzt werden. 
+  Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
+  auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke. 
+- Zur Auswertung der Einhaltung des Takeoff-Zeitfensters und der spätesten Landezeit
+  müssen Takeoff und Landung in der AFLOS-Referenzstrecke mit einer
+  Torbreite (Gate_Width) > 0 und einem Kurs (Heading) > 0 konfiguriert werden.
+  Torbreiten müssen sehr klein gewählt werden (0.01...0.09NM), damit das Rollen 
+  der Flugzeuge auf die Startbahn nicht als Takeoff-Zeit erfasst wird.
+  Geeignete Takeoff- und Landungs-Tore können folgendermassen in AFLOS 
+  aus einem gemessenen Flug ermittelt werden:
+    * 'Flight - Map' aktivieren.
+    * Competitor und Referenzstrecke wählen.
+    * Mit Plus-Zeichen auf die Startbahn zoomen.
+    * 'Show Points' aktivieren.
+    * 'Info' (roter Pfeil mit i) aktivieren.
+    * Zeiger auf einen Punkt setzen, der für das jeweilige Tor günstig liegt.
+    * Rechts unten werden die Punktdaten angezeigt.
+    * Latitude, Longitude und Track (=Heading) eines geeigneten Punktes
+      in die Referenzstrecke übernehmen.
+
+Strecken-Beispiele            AFLOS                                          Flugplan   Auswertung   
+                              Point Mark                 Gate     Heading    Punkt      Punkt Zeit Kurs Höhe
+
+  Normal                      TO    -                    0.05     250        TO         TO    ja   nein nein
+                              SP    -                    1        -          SP         SP    ja   nein ja
+                              CP1   -                    1        -          WP1        WP1   ja   ja   ja
+                              CP2   -                    1        -          WP2        WP2   ja   ja   ja
+                              CP3   -                    1        -          WP3        WP3   ja   ja   ja
+                              CP4   -                    1        -          WP4        WP4   ja   ja   ja
+                              FP    -                    1        -          FP         FP    ja   ja   ja
+                              LDG   -                    0.05     250        LDG        LDG   ja   nein nein
+                                             
+  Unbekannte Zeitkontrollen   TO    -                    0.05     250        TO         TO    ja   nein nein
+                              SP    -                    1        -          SP         SP    ja   nein ja
+                              CP1   -                    1        -          WP1        WP1   ja   ja   ja
+                              CP2   $secret              2        -          -          UZK1  ja   ja   ja
+                              CP3   $secret              2        -          -          UZK2  ja   ja   ja
+                              CP4   -                    1        -          WP2        WP2   ja   ja   ja
+                              FP    -                    1        -          FP         FP    ja   ja   ja
+                              LDG   -                    0.05     250        LDG        LDG   ja   nein nein
+                                             
+  Touch&Go-Zwischenlandung    TO    -                    0.05     250        TO         TO    ja   nein nein
+                              SP    -                    1        -          SP         SP    ja   nein ja
+                              CP1   -                    1        -          WP1        WP1   ja   ja   ja
+                              iFP   -                    1        -          iFP        iFP   ja   ja   ja
+                              iLDG  -                    0.05     250        iLDG       iLDG  nein nein nein
+                              iSP   -                    1        -          iSP        iSP   ja   nein ja
+                              CP2   -                    1        -          WP2        WP2   ja   ja   ja
+                              FP    -                    1        -          FP         FP    ja   ja   ja
+                              LDG   -                    0.05     250        LDG        LDG   ja   nein nein
+  
+  Zwischenlandung mit Pause   TO    -                    0.05     250        TO         TO    ja   nein nein
+                              SP    -                    1        -          SP         SP    ja   nein ja
+                              CP1   -                    1        -          WP1        WP1   ja   ja   ja
+                              iFP   -                    1        -          iFP        iFP   ja   ja   ja
+                              iLDG  -                    0.05     250        iLDG       iLDG  nein nein nein
+                              iTO   $duration:60min      0.05     250        iTO        iTO   nein nein nein
+                              iSP   -                    1        -          iSP        iSP   ja   nein ja
+                              CP2   -                    1        -          WP2        WP2   ja   ja   ja
+                              FP    -                    1        -          FP         FP    ja   ja   ja
+                              LDG   -                    0.05     250        LDG        LDG   ja   nein nein
+  
+  Krumme Strecke              TO    -                    0.05     250        TO         TO    ja   nein nein
+                              SP    -                    1        -          SP         SP    ja   nein ja
+                              CP1   -                    1        -          WP1        WP1   ja   ja   ja
+                              CP2   $curved              2        -          -          UZK1  nein ja   ja
+                              CP3   $curved              2        -          -          UZK2  nein ja   ja
+                              CP4   $noplanningtest      1        -          WP2        WP2   ja   ja   ja
+                              FP    -                    1        -          FP         FP    ja   ja   ja
+                              LDG   -                    0.05     250        LDG        LDG   ja   nein nein
+                              
+  Präzisionsflugstrecke       TO    -                    0.05     250        TO         TO    ja   nein nein
+                              SP    $dist:1,2km          1        -          SP         SP    ja   nein ja
+                              CP1   $dist:1,2km          1        -          WP1        WP1   ja   ja   ja
+                              CP2   $secret $dist:1,2km  1        -          -          UZK1  ja   ja   ja
+                              CP3   $secret $dist:2,4km  1        -          -          UZK2  ja   ja   ja
+                              CP4   $dist:1,2km          1        -          WP2        WP2   ja   ja   ja
+                              FP    $dist:1,2km          1        -          FP         FP    ja   ja   ja
+                              LDG   -                    0.05     250        LDG        LDG   ja   nein nein
+  
+Übersicht über alle möglichen Markierungen eines Check-Punktes im Feld 'Mark'
+in den AFLOS-Referenz-Daten, die beim Import der Strecke verarbeitet werden:
+  * $secret - Check-Punkt als unbekannte Zeitkontrolle importieren,
+    für unbekannte Zeitkontrollen mit von 2NM abweichender Torbreite,
+    erscheint nicht im Flugplan der Besatzungen
+  * $ignore - Check-Punkt nicht importieren
+  * $dist:26,5mm - Entfernung vom vorangegangenen Wendepunkt in mm
+    (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000)
+  * $dist:12,3NM - Entfernung vom vorangegangenen Wendepunkt in NM
+  * $dist:22,4km - Entfernung vom vorangegangenen Wendepunkt in km
+  * $track:142 - Richtung vom vorangegangenen Check-Punkt in Grad
+  * $duration:10min - Feste Flugzeit vom vorangegangenen Check-Punkt in Minuten
+  * $noplanningtest - Diesen Check-Punkt nicht in Flugplanungstest aufnehmen.
+  * $notimecheck - Keine Zeitauswertung für diesen Check-Punkt
+  * $nogatecheck - Keine Auswertung des verfehlten Tores für diesen Check-Punkt
+  * $curved - Diesen Check-Punkt als Punkt einer krummen Strecke festlegen
+    (= $secret + $noplanningtest + $notimecheck + $nogatecheck)  
+  Der vorangegangene Wendepunkt ist ein Check-Punkt, der importiert wird
+  und keine unbekannte Zeitkontrolle ist.
+  Alle Markierungen beginnen und enden mit einem Leerzeichen 
+  (bzw. Feldanfang und -ende).
+
+Eine AFLOS-Referenz-Strecke ist zur Verwendung in 'Flight Contest' zu importieren.
+Damit vorgenommene Markierungen funktionieren, importieren Sie die AFLOS-Strecke
+mit der Option "Check-Punkte mit Torbreite 2NM oder Markierung $secret" (Default).
+
+Prüfen Sie Ihre importierte Strecke (Strecken -> Strecken-Name -> Auswerte-Etappen):
+  * Entfernungen plausibel?
+  * Gesamt-Entfernung plausibel?
+  * Wendeschleifen (Kursänderungen > 90 Grad) korrekt?
+    (unerwünschte Wendeschleifen können durch eine $track-Angabe entfernt werden)
+
+
+Behebung von AFLOS-Problemen
+============================
+
+'Check-Data -> Calculate' ermittelt keine Überflugzeiten
+--------------------------------------------------------
+Erscheinungsbilder:
+  - Mit 'Check - Data -> Calculate' wird alleine der Punkt TO ermittelt.
+  - 'Check - Data -> Calculate' stürzt ab.
+
+Ursachen:
+  - Das Tor von SP wurde nicht durchflogen.
+  - SP wurde vor TO erkannt.
+  
+Vorgehen:
+  * Kalkulieren Sie gegen eine Kopie der Referenzstrecke ohne TO-Punkt.
+  * Importieren Sie dessen Ergebnisse.
+  * Lesen Sie den TO-Punkt manuell ab.
+  * Geben Sie den TO-Punkt manuell in die Ergebnisliste ein.
+
+Kopie einer Referenzstrecke erstellen:
+  * AFLOS: 'Reference - Data -> Write To File'
+  * Texteditor: Zeile mit TO löschen
+  * AFLOS: 'Reference - Data -> Edit Ref_Nr': Neue Referenzstrecke anlegen
+  * AFLOS: 'Reference - Data -> Load From File'
+
+Import der Ergebnisse der reduzierten Referenzstrecke:
+  * Wählen Sie bei 'Import AFLOS-Daten' als Strecken-Name
+    Ihre Referenzstrecken-Kopie aus.
+
+Hinweis:
+  Treten massenhaft Fehlkalkulationen beim AFLOS-Calculate auf,
+  kann die Referenzstrecke nach dem oben beschriebenen Verfahren
+  in mehrere Teil-Referenzstrecken aufgeteilt und gegen jede
+  Teil-Referenzstrecke kalkuliert werden. Mit aktivierter Option
+  'Vorhandene Logger-Daten nicht löschen' können alle Teil-
+  Kalkulationen in die selbe Auswertungs-Liste importiert werden.
+
+'Check-Data -> Calculate' liefert unerwartete Bad Courses ganzer Etappen bei GAC-Import
+---------------------------------------------------------------------------------------
+Ursache:
+  - Die GAC-Datei enthält keine Kurs-Informationen.
+Vorgehen:
+  * GAC-Datei reparieren mit 'Flight Contest -> Extras -> GAC-Reparatur' 
+    mit Option 'Tracks aus Koordinaten berechnen'
+  * GAC-Datei importieren mit 'AFLOS -> Read Data -> Competitor-Nr -> Load GAC-File'
+
+
+Datensicherung der AFLOS-Datenbank während eines laufenden Wettbewerbes
+=======================================================================
+Datensicherungen der AFLOS-Datenbank sind nur notwendig, wenn Sie die AFLOS-Anwendung
+zum Einlesen der AFLOS-Logger verwenden wollen.
+
+Datensicherungen erfolgen ins Verzeichnis 'C:\FCSave',
+welches durch die 'Flight Contest'-Installation angelegt wird.
+
+Datensicherungen dienen vor allem als Schutz vor Ausfall oder Verlust 
+des Windows-Rechners, auf dem der Wettbewerb ausgewertet wird.
+Kopieren Sie deshalb das Sicherungsverzeichnis 'C:\FCSave'
+nach Abschluss eines Wettbewerbstages oder nach Erreichen eines besonders
+wichtigen Zeitpunktes Ihres Wettbewerbes auf ein externes Speichermedium, 
+nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.
+
+Sicherung der AFLOS-Datenbank:
+  1. Schließen Sie AFLOS mit 'Quit'.
+     Brechen Sie den Dialog 'Save AFLOS Database' ab, ohne eine Datenbank zu speichern.
+  2. Rufen Sie das Script 
+     'Programme -> Flight Contest -> Scripts -> Save AFLOS database' auf.
+     Die Datenbank wird mit Datum und Uhrzeit versehen
+     ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-AFLOS.mdb).
+  3. Starten Sie AFLOS erneut.
+     Brechen Sie den Dialog 'Open AFLOS Database' ab, ohne eine andere Datenbank zu laden.
+
+Datenwiederherstellung der AFLOS-Datenbank:
+  - Zur Datenwiederherstellung muss AFLOS geschlossen sein.
+  - Kopieren Sie 'C:\FCSave\<Datum>-<Uhrzeit>-AFLOS.mdb'
+    nach 'C:\AFLOS\AFLOS_System\AFLOS.mdb'.
+  - Sollte Ihnen AFLOS bei laufender Nutzung abgestürzt sein, starten Sie AFLOS
+    erneut und brechen Sie den Dialog 'Open AFLOS Database' ab, ohne eine andere 
+    Datenbank zu laden. Dadurch bleibt der Datenbank-Bestand erhalten,
+    der vor dem Absturz vorhanden war. Bevor Sie weiter machen, sollten Sie
+    die AFLOS-Datenbank wie oben beschrieben sichern.

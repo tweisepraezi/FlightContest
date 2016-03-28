@@ -8,6 +8,8 @@ class DemoContestCurvedService
 	static final String ROUTE_NAME = "Strecke 9"
 	static final String ROUTE_NAME_CURVED = "Strecke 9 (Curved)"
 	static final String ROUTE_NAME_NORMAL = "Strecke 9 (Normal)"
+    static final String ROUTE_NAME_CURVED_GPX = "Strecke_9_Curved.gpx"
+    static final String ROUTE_NAME_NORMAL_GPX = "Strecke_9_Normal.gpx"
 
 	static final String CREW_60 = "Crew 60kt"
 	static final String CREW_90 = "Crew 90kt"
@@ -21,17 +23,25 @@ class DemoContestCurvedService
 	static final String WIND = "$WIND_DIRECTION/$WIND_SPEED"
 	static final String NOWIND = "0/0"
 	
-	long CreateTest(String testName, String printPrefix, boolean testExists)
+	long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
 		
 		// Routes
 		fcService.printstart ROUTE_NAME
-		Map route_curved = fcService.importRoute(contest,ROUTE_NAME,ROUTE_NAME_CURVED,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-		Map route_normal = fcService.importRoute(contest,ROUTE_NAME,ROUTE_NAME_NORMAL,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,true,[])
+        Map route_curved = [:]
+        Map route_normal = [:]
+        if (aflosDB) {
+            route_curved = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_CURVED,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+            route_normal = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NORMAL,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,true,[])
+        } else {
+            route_curved = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_CURVED_GPX)
+            route_normal = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NORMAL_GPX)
+        }
+        
 		fcService.printdone ""
 		
 		// Crews and Aircrafts
@@ -43,7 +53,7 @@ class DemoContestCurvedService
 		Map planningtesttask_curved = fcService.putPlanningTestTask(planningtest_curved,"",route_curved,0,0)
 		fcService.putplanningtesttaskTask(task_curved,planningtesttask_curved)
 		Map flighttest_curved = fcService.putFlightTest(task_curved,"",route_curved)
-		Map flighttestwind_curved = fcService.putFlightTestWind(flighttest_curved,0,0)
+		Map flighttestwind_curved = fcService.putFlightTestWind(flighttest_curved,0,0,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_curved,flighttestwind_curved)
 		fcService.runcalculatetimetableTask(task_curved)
 		
@@ -53,7 +63,7 @@ class DemoContestCurvedService
 		Map planningtesttask_normal = fcService.putPlanningTestTask(planningtest_normal,"",route_normal,0,0)
 		fcService.putplanningtesttaskTask(task_normal,planningtesttask_normal)
 		Map flighttest_normal = fcService.putFlightTest(task_normal,"",route_normal)
-		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0)
+		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_normal,flighttestwind_normal)
 		fcService.runcalculatetimetableTask(task_normal)
 		
@@ -63,7 +73,7 @@ class DemoContestCurvedService
 		Map planningtesttask_curved_wind = fcService.putPlanningTestTask(planningtest_curved_wind,"",route_curved,WIND_DIRECTION,WIND_SPEED)
 		fcService.putplanningtesttaskTask(task_curved_wind,planningtesttask_curved_wind)
 		Map flighttest_curved_wind = fcService.putFlightTest(task_curved_wind,"",route_curved)
-		Map flighttestwind_curved_wind = fcService.putFlightTestWind(flighttest_curved_wind,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_curved_wind = fcService.putFlightTestWind(flighttest_curved_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_curved_wind,flighttestwind_curved_wind)
 		fcService.runcalculatetimetableTask(task_curved_wind)
 		
@@ -73,7 +83,7 @@ class DemoContestCurvedService
 		Map planningtesttask_normal_wind = fcService.putPlanningTestTask(planningtest_normal_wind,"",route_normal,WIND_DIRECTION,WIND_SPEED)
 		fcService.putplanningtesttaskTask(task_normal_wind,planningtesttask_normal_wind)
 		Map flighttest_normal_wind = fcService.putFlightTest(task_normal_wind,"",route_normal)
-		Map flighttestwind_normal_wind = fcService.putFlightTestWind(flighttest_normal_wind,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_normal_wind = fcService.putFlightTestWind(flighttest_normal_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_normal_wind,flighttestwind_normal_wind)
 		fcService.runcalculatetimetableTask(task_normal_wind)
 		
@@ -82,7 +92,7 @@ class DemoContestCurvedService
 		return contest.instance.id
 	}
 	
-	Map RunTest(Contest lastContest, String contestName)
+	Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -173,7 +183,7 @@ class DemoContestCurvedService
 				[name:"CoordResult '$ROUTE_NAME_NORMAL ($WIND) - $CREW_60'",       count:8,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal_wind,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testCoordResult60(     ROUTE_NAME_NORMAL,true)],
 				[name:"CoordResult '$ROUTE_NAME_NORMAL ($WIND) - $CREW_90'",       count:8,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal_wind,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(     ROUTE_NAME_NORMAL,true)],
 				[name:"CoordResult '$ROUTE_NAME_NORMAL ($WIND) - $CREW_120'",      count:8,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal_wind,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(    ROUTE_NAME_NORMAL,true)],
-			   ]
+			   ],aflosDB
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error

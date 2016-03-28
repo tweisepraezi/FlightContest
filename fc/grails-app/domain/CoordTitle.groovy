@@ -3,7 +3,7 @@ class CoordTitle // DB-2.5
 	CoordType type
 	int number
 	
-	static belongsTo = [RouteLegCoord,RouteLegTest]
+	static belongsTo = [RouteLeg,TestLegFlight,TestLegPlanning,CalcResult] // BUG: RouteLeg anstelle von RouteLegCoord & RouteLegTest angegeben, DB-2.12
 	
 	CoordTitle(CoordType type, int number)
 	{
@@ -20,6 +20,9 @@ class CoordTitle // DB-2.5
 		} else if (coordTitleValue.startsWith("WP") || coordTitleValue.startsWith("TP")) {
 			int tp_num = coordTitleValue.substring(2).toInteger()
 			return new CoordTitle(CoordType.TP,tp_num)
+        } else if (coordTitleValue.startsWith("SC")) {
+            int secret_num = coordTitleValue.substring(2).toInteger()
+            return new CoordTitle(CoordType.SECRET,secret_num)
 		} else if (coordTitleValue.startsWith("UZK")) {
 			int secret_num = coordTitleValue.substring(3).toInteger()
 			return new CoordTitle(CoordType.SECRET,secret_num)

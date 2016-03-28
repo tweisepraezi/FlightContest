@@ -16,7 +16,9 @@ class FlightResultsTagLib
             outln"""            <tr>"""
             outln"""                <th>${message(code:'fc.number')}</th>"""
             outln"""                <th>${message(code:'fc.title')}</th>"""
-            outln"""                <th>${message(code:'fc.aflos.checkpoint')}</th>"""
+            if (attrs.t.showAflosMark) {
+                outln"""            <th>${message(code:'fc.aflos.checkpoint')}</th>"""
+            }
             outln"""                <th/>"""
             //outln"""              <th>${message(code:'fc.latitude')}</th>"""
             //outln"""              <th>${message(code:'fc.longitude')}</th>"""
@@ -39,7 +41,9 @@ class FlightResultsTagLib
                     outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                     outln"""        <td>${coordresult_link(coordresult_instance, leg_no.toString(), true, createLink(controller:'coordResult',action:'editprocedureturn'),0)}</td>"""
                     outln"""        <td>${message(code:'fc.procedureturn')}</td>"""
-                    outln"""        <td/>"""
+                    if (attrs.t.showAflosMark) {
+                        outln"""    <td/>"""
+                    }
                     outln"""        <td>${message(code:'fc.test.results.measured')}</td>"""
                     //outln"""      <td/>"""
                     //outln"""      <td/>"""
@@ -64,7 +68,9 @@ class FlightResultsTagLib
                     outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                     outln"""        <td/>"""
                     outln"""        <td/>"""
-                    outln"""        <td/>"""
+                    if (attrs.t.showAflosMark) {
+                        outln"""    <td/>"""
+                    }
                     outln"""        <td>${message(code:'fc.test.results.penalty')}</td>"""
                     //outln"""      <td/>"""
                     //outln"""      <td/>"""
@@ -103,7 +109,9 @@ class FlightResultsTagLib
                 }
                 outln"""            <td>${coordresult_link(coordresult_instance, leg_no.toString(), false, createLink(controller:'coordResult',action:'edit'), next_id)}</td>"""
                 outln"""            <td>${coordresult_instance.titleCode()}</td>"""
-                outln"""            <td>${coordresult_instance.mark}</td>"""
+                if (attrs.t.showAflosMark) {
+                    outln"""        <td>${coordresult_instance.mark}</td>"""
+                }
                 outln"""            <td>${message(code:'fc.test.results.plan')}</td>"""
                 //outln"""          <td>${coordresult_instance.latName()}</td>"""
                 //outln"""          <td>${coordresult_instance.lonName()}</td>"""
@@ -118,7 +126,9 @@ class FlightResultsTagLib
                 outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                 outln"""            <td/>"""
                 outln"""            <td/>"""
-                outln"""            <td/>"""
+                if (attrs.t.showAflosMark) {
+                    outln"""        <td/>"""
+                }
                 outln"""            <td>${message(code:'fc.test.results.measured')}</td>"""
                 //outln"""          <td>${coordresult_instance.resultLatitude}</td>"""
                 //outln"""          <td>${coordresult_instance.resultLongitude}</td>"""
@@ -181,7 +191,9 @@ class FlightResultsTagLib
                 outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                 outln"""            <td/>"""
                 outln"""            <td/>"""
-                outln"""            <td/>"""
+                if (attrs.t.showAflosMark) {
+                    outln"""        <td/>"""
+                }
                 outln"""            <td>${message(code:'fc.test.results.penalty')}</td>"""
                 //outln"""          <td/>"""
                 //outln"""          <td/>"""
@@ -268,7 +280,9 @@ class FlightResultsTagLib
             outln"""            <tr>"""
             outln"""                <td/>"""
             outln"""                <td/>"""
-            outln"""                <td/>"""
+            if (attrs.t.showAflosMark) {
+                outln"""            <td/>"""
+            }
             outln"""                <td>${message(code:'fc.test.results.summary')}</td>"""
             //outln"""              <td/>"""
             //outln"""              <td/>"""
@@ -279,6 +293,179 @@ class FlightResultsTagLib
             outln"""    </table>"""
             outln"""</div>"""
         }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def flightTestLoggerResults = { attrs, body ->
+        if (attrs.t.IsLoggerResult()) {
+            
+            boolean notfound_message = false
+            for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(attrs.t.loggerResult,[sort:'utc'])) {
+                if (calcresult_instance.coordTitle) {
+                    switch (calcresult_instance.coordTitle.type) {
+                        case CoordType.TO:
+                        case CoordType.LDG:
+                        case CoordType.iTO:
+                        case CoordType.iLDG:
+                            if (calcresult_instance.gateNotFound) {
+                                notfound_message = true
+                            }
+                            break
+                    }
+                }
+            }
+            if (notfound_message) {
+                outln"""<div class="errors">"""
+                outln"""    <p class="errors">${message(code:'fc.flightresults.loggerresults.toldgnotfound')}</p>"""
+                outln"""</div>"""
+            }
+            
+            boolean show_judgeactions = attrs.allowJudgeActions == "true"
+            outln"""<table>"""
+            outln"""    <thead>"""
+            outln"""        <tr>"""
+            if (show_judgeactions) {
+                outln"""        <th colspan="9" class="table-head">${message(code:'fc.flightresults.calculatedpoints')}</th>"""
+            } else {
+                outln"""        <th colspan="8" class="table-head">${message(code:'fc.flightresults.allcalculatedpoints')}</th>"""
+            }
+            outln"""        </tr>"""
+            outln"""        <tr>"""
+            outln"""            <th>${message(code:'fc.title')}</th>"""
+            outln"""            <th>${message(code:'fc.time.local')}</th>"""
+            outln"""            <th>${message(code:'fc.latitude')}</th>"""
+            outln"""            <th>${message(code:'fc.longitude')}</th>"""
+            outln"""            <th>${message(code:'fc.altitude')}</th>"""
+            outln"""            <th>${message(code:'fc.task.disabledcheckpoints.notfound')}</th>"""
+            outln"""            <th>${message(code:'fc.flighttest.procedureturnnotflown.short2')}</th>"""
+            outln"""            <th>${message(code:'fc.task.disabledcheckpoints.badcourse')}</th>"""
+            if (show_judgeactions) {
+                outln"""        <th></th>"""
+            }
+            outln"""        </tr>"""
+            outln"""    </thead>"""
+            outln"""    <tbody>"""
+            int leg_no = 0
+            for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(attrs.t.loggerResult,[sort:'utc'])) {
+                leg_no++
+                boolean show_point = true
+                if (attrs.showAll != "true") {
+                    if (calcresult_instance.badCourse && !calcresult_instance.badCourseSeconds) {
+                        show_point = false
+                    }
+                }
+                if (show_point) {
+                    wr_calcresult(calcresult_instance, leg_no, attrs.t.task.contest.timeZone, show_judgeactions)
+                }
+            }
+            outln"""    </tbody>"""
+            if (false) {
+                outln"""<tfoot>"""
+                outln"""    <tr>"""
+                if (show_judgeactions) {
+                    outln"""    <td colspan="9" class="errors">${message(code:'fc.flightresults.loggerresults.toldgnotfound')}</td>"""
+                } else {
+                    outln"""    <td colspan="8" class="errors">${message(code:'fc.flightresults.loggerresults.toldgnotfound')}</td>"""
+                }
+                outln"""    </tr>"""
+                outln"""</tfoot>"""
+            }
+            outln"""</table>"""
+         }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    private void wr_calcresult(CalcResult calcresultInstance, int legNo, String timeZone, boolean showJudgeActions)
+    {
+        String show_class = ""
+        if (calcresultInstance.hide) {
+            show_class = "hide"
+        } else if (calcresultInstance.judgeDisabled) {
+            show_class = "judgedisabled"
+        } else if (calcresultInstance.gateNotFound) {
+            if (calcresultInstance.noGateMissed) {
+                show_class = "warnings"
+            } else {
+                show_class = "errors"
+            }
+        } else if (calcresultInstance.gateMissed) {
+            if (calcresultInstance.noGateMissed) {
+                show_class = "warnings"
+            } else {
+                show_class = "errors"
+            }
+        } else if (calcresultInstance.badTurn) {
+            if (calcresultInstance.noBadTurn) {
+                show_class = "warnings"
+            } else {
+                show_class = "errors"
+            }
+        } else if (calcresultInstance.badCourseSeconds) {
+            if (calcresultInstance.noBadCourse) {
+                show_class = "warnings"
+            } else {
+                show_class = "errors"
+            }
+        }
+        outln"""    <tr class="${(legNo % 2) == 0 ? 'odd' : ''}">"""
+        if (calcresultInstance.coordTitle) {
+            outln"""    <td class="${show_class}">${calcresultInstance.coordTitle.titleCode()}</td>"""
+        } else {
+            outln"""    <td class="${show_class}">-</td>"""
+        }
+        outln"""        <td class="${show_class}">${calcresultInstance.GetLocalTime(timeZone)}</td>"""
+        outln"""        <td class="${show_class}">${calcresultInstance.latitude}${message(code:'fc.grad')}</td>"""
+        outln"""        <td class="${show_class}">${calcresultInstance.longitude}${message(code:'fc.grad')}</td>"""
+        outln"""        <td class="${show_class}">${calcresultInstance.altitude}${message(code:'fc.foot')}</td>"""
+        if (calcresultInstance.gateNotFound || calcresultInstance.gateMissed) {
+            String gatemissed_msg = message(code:'fc.yes')
+            if (calcresultInstance.noGateMissed) {
+                gatemissed_msg = message(code:'fc.no')
+            }
+            if (calcresultInstance.gateFlyBy) {
+                gatemissed_msg += " (${message(code:'fc.task.disabledcheckpoints.flyby')})"
+            }
+            if (calcresultInstance.gateNotFound) {
+                gatemissed_msg += " (${message(code:'fc.task.disabledcheckpoints.gatenotfound')})"
+            }
+            outln"""    <td class="${show_class}">${gatemissed_msg}</td>"""
+        } else {
+            outln"""    <td class="${show_class}">-</td>"""
+        }
+        if (calcresultInstance.badTurn) {
+            String badturn_msg = message(code:'fc.yes')
+            if (calcresultInstance.noBadTurn) {
+                badturn_msg = message(code:'fc.no')
+            }
+            outln"""    <td class="${show_class}">${badturn_msg}</td>"""
+        } else {
+            outln"""    <td class="${show_class}">-</td>"""
+        }
+        if (calcresultInstance.badCourse) {
+            String badcourse_msg = message(code:'fc.yes')
+            if (calcresultInstance.noBadCourse) {
+                badcourse_msg = message(code:'fc.no')
+            }
+            if (calcresultInstance.badCourseSeconds) {
+                outln"""<td class="${show_class}">${badcourse_msg} (${calcresultInstance.badCourseSeconds}${message(code:'fc.time.s')})</td>"""
+            } else {
+                outln"""<td class="${show_class}">${badcourse_msg}</td>"""
+            }
+        } else {
+            outln"""    <td class="${show_class}">-</td>"""
+        }
+        if (showJudgeActions) {
+            if (calcresultInstance.IsJudgeAction()) {
+                if (calcresultInstance.judgeDisabled) {
+                    outln"""<td><a href="${createLink(controller:'test',action:'judgeenablecalcresult',params:[calcresultid:calcresultInstance.id])}">+</a></td>"""
+                } else {
+                    outln"""<td><a href="${createLink(controller:'test',action:'judgedisablecalcresult',params:[calcresultid:calcresultInstance.id])}">-</a></td>"""
+                }
+            } else {
+                outln"""    <td/>"""
+            }
+        }
+        outln"""    </tr>"""
     }
     
     // --------------------------------------------------------------------------------------------------------------------
@@ -587,7 +774,9 @@ class FlightResultsTagLib
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.title')}</th>"""
-			outln"""			<th>${message(code:'fc.aflos.checkpoint')}</th>"""
+            if (attrs.t.showAflosMark) {
+                outln"""    	<th>${message(code:'fc.aflos.checkpoint')}</th>"""
+            }
 			outln"""			<th colspan="3">${message(code:'fc.cptime')}</th>"""
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
 				outln"""		<th>${message(code:'fc.procedureturn')}</th>"""
@@ -601,7 +790,9 @@ class FlightResultsTagLib
 			outln"""		</tr>"""
 			outln"""		<tr class="name2">"""
 			outln"""			<th/>"""
-			outln"""			<th/>"""
+            if (attrs.t.showAflosMark) {
+                outln"""		<th/>"""
+            }
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
 			outln"""			<th>${message(code:'fc.points')}</th>"""
@@ -630,7 +821,9 @@ class FlightResultsTagLib
 					}
 					outln"""<tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
 					outln"""	<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-					outln"""	<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                    if (attrs.t.showAflosMark) {
+                        outln"""<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                    }
 					outln"""	<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
 					if (last_coordresult_instance.resultCpNotFound) {
 						outln"""<td class="cptime">-</td>"""
@@ -722,7 +915,9 @@ class FlightResultsTagLib
 				}
 				outln"""    <tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
 				outln"""		<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-				outln"""		<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                if (attrs.t.showAflosMark) {
+                    outln"""	<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                }
 				outln"""		<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
 				if (last_coordresult_instance.resultCpNotFound) {
 					outln"""	<td class="cptime">-</td>"""
@@ -793,7 +988,9 @@ class FlightResultsTagLib
 			outln"""	<tfoot>"""
 			outln"""		<tr class="summary">"""
 			outln"""			<td class="tpname"/>"""
-			outln"""			<td class="aflosname"/>"""
+            if (attrs.t.showAflosMark) {
+                outln"""		<td class="aflosname"/>"""
+            }
 			outln"""			<td class="plancptime"/>"""
 			outln"""			<td class="cptime"/>"""
 			outln"""			<td class="penaltycp">${penalty_coord_summary}</td>"""
@@ -886,7 +1083,9 @@ class FlightResultsTagLib
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.title')}</th>"""
-			outln"""			<th>${message(code:'fc.aflos.checkpoint')}</th>"""
+            if (attrs.t.showAflosMark) {
+                outln"""		<th>${message(code:'fc.aflos.checkpoint')}</th>"""
+            }
 			outln"""			<th colspan="2">${message(code:'fc.cptime')}</th>"""
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
 				outln"""		<th>${message(code:'fc.procedureturn')}</th>"""
@@ -900,7 +1099,9 @@ class FlightResultsTagLib
 			outln"""		</tr>"""
 			outln"""		<tr class="name2">"""
 			outln"""			<th/>"""
-			outln"""			<th/>"""
+            if (attrs.t.showAflosMark) {
+                outln"""		<th/>"""
+            }
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
@@ -920,7 +1121,9 @@ class FlightResultsTagLib
 				if (last_coordresult_instance) {
 					outln"""<tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
 					outln"""	<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-					outln"""	<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                    if (attrs.t.showAflosMark) {
+                        outln"""<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                    }
 					outln"""	<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
 					if (last_coordresult_instance.resultCpNotFound) {
 						outln"""<td class="cptime">-</td>"""
@@ -971,7 +1174,9 @@ class FlightResultsTagLib
 			if (last_coordresult_instance) {
 				outln"""	<tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
 				outln"""		<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-				outln"""		<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                if (attrs.t.showAflosMark) {
+                    outln"""	<td class="aflosname">${last_coordresult_instance.mark}</td>"""
+                }
 				outln"""		<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
 				if (last_coordresult_instance.resultCpNotFound) {
 					outln"""	<td class="cptime">-</td>"""
@@ -1010,6 +1215,14 @@ class FlightResultsTagLib
 		}
 	}
 	
+    // --------------------------------------------------------------------------------------------------------------------
+    def flightTestMapPrintable = { attrs, body ->
+        if (attrs.flightMapFileName) {
+            outln"""<img src="${attrs.flightMapFileName}" style="width:100%;" />"""
+            outln"""<div>${message(code:'fc.offlinemap.noevaluation')}</div>"""
+        }
+    }
+    
     // --------------------------------------------------------------------------------------------------------------------
     private String coordresult_link(CoordResult coordResultInstance, String name, boolean procedureTurn, String link, long next_id)
     {

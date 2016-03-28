@@ -27,9 +27,19 @@ class PlanningTestTask
 	String name()
 	{
 		if(title) {
-			return title
+			return "${title} (${idTitle})"
 		} else {
             return idName()
 		}
 	}
+    
+    boolean Used()
+    {
+        for (Test test_instance in Test.findAllByTask(planningtest.task,[sort:"id"])) {
+            if (!test_instance.crew.disabled && !test_instance.disabledCrew && (test_instance.planningtesttask == this)) {
+                return true
+            }
+        }
+        return false
+    }
 }

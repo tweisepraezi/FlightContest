@@ -5,9 +5,11 @@ import org.junit.After;
 
 class ContestController {
     
+    def printService
     def fcService
     def evaluationService
 	def demoContestService
+    def testService
 
     def index = { redirect(action:start,params:params) }
 
@@ -756,13 +758,13 @@ class ContestController {
     def printtest_a4_portrait = {
         if (session?.lastContest) {
 			session.lastContest.refresh()
-            def contest = fcService.printtestContest(session.lastContest,false,false,GetPrintParams()) 
+            Map contest = printService.printtestContest(session.lastContest,false,false,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                 flash.error = true
                 redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,false)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,false)
             } else {
                 redirect(action:start)
             }
@@ -778,13 +780,13 @@ class ContestController {
 			session.lastContest.a4LandscapeFactor = params.a4LandscapeFactor.replace(',','.').toBigDecimal()
 			session.lastContest.save()
 			fcService.printdone ""
-            def contest = fcService.printtestContest(session.lastContest,false,true,GetPrintParams()) 
+            Map contest = printService.printtestContest(session.lastContest,false,true,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                 flash.error = true
                 redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,true)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,false,true)
             } else {
                 redirect(action:start)
             }
@@ -800,13 +802,13 @@ class ContestController {
 			session.lastContest.a3PortraitFactor = params.a3PortraitFactor.replace(',','.').toBigDecimal()
 			session.lastContest.save()
 			fcService.printdone ""
-            def contest = fcService.printtestContest(session.lastContest,true,false,GetPrintParams()) 
+            Map contest = printService.printtestContest(session.lastContest,true,false,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                 flash.error = true
                 redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,false)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,false)
             } else {
                 redirect(action:start)
             }
@@ -822,13 +824,13 @@ class ContestController {
 			session.lastContest.a3LandscapeFactor = params.a3LandscapeFactor.replace(',','.').toBigDecimal()
 			session.lastContest.save()
 			fcService.printdone ""
-            def contest = fcService.printtestContest(session.lastContest,true,true,GetPrintParams()) 
+            Map contest = printService.printtestContest(session.lastContest,true,true,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                 flash.error = true
                 redirect(controller:"contest",action:"edit")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,true)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"test",true,true,true)
             } else {
                 redirect(action:start)
             }
@@ -851,13 +853,13 @@ class ContestController {
 
     def printresults = {
         if (session?.lastContest) {
-            def contest = fcService.printresultsContest(session.lastContest,session.lastContest.contestPrintA3,session.lastContest.contestPrintLandscape,GetPrintParams()) 
+            Map contest = printService.printresultsContest(session.lastContest,session.lastContest.contestPrintA3,session.lastContest.contestPrintLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                    flash.error = true
                 redirect(controller:"contest",action:"listresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"contestresults",true,session.lastContest.contestPrintA3,session.lastContest.contestPrintLandscape)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"contestresults",true,session.lastContest.contestPrintA3,session.lastContest.contestPrintLandscape)
             } else {
                 redirect(action:start)
             }
@@ -879,13 +881,13 @@ class ContestController {
 
     def printteamresults = {
         if (session?.lastContest) {
-            def contest = fcService.printteamresultsContest(session.lastContest,session.lastContest.teamPrintA3,session.lastContest.teamPrintLandscape,GetPrintParams()) 
+            Map contest = printService.printteamresultsContest(session.lastContest,session.lastContest.teamPrintA3,session.lastContest.teamPrintLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                    flash.error = true
                 redirect(action:"listteamresults")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"teamresults",true,session.lastContest.teamPrintA3,session.lastContest.teamPrintLandscape)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"teamresults",true,session.lastContest.teamPrintA3,session.lastContest.teamPrintLandscape)
             } else {
                 redirect(action:start)
             }
@@ -939,13 +941,13 @@ class ContestController {
 
     def printpoints = {
         if (session?.lastContest) {
-            def contest = fcService.printpointsContest(session.lastContest,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape,GetPrintParams()) 
+            Map contest = printService.printpointsContest(session.lastContest,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                 flash.error = true
                 redirect(action:"editpoints")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points",true,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"points",true,session.lastContest.printPointsA3,session.lastContest.printPointsLandscape)
             } else {
                 redirect(action:"editpoints")
             }
@@ -966,13 +968,13 @@ class ContestController {
 
     def printfreetext = {
         if (session?.lastContest) {
-            def contest = fcService.printfreetextContest(session.lastContest,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape,GetPrintParams()) 
+            Map contest = printService.printfreetextContest(session.lastContest,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape,GetPrintParams()) 
             if (contest.error) {
                 flash.message = contest.message
                 flash.error = true
                 redirect(action:"editfreetext")
             } else if (contest.content) {
-                fcService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"freetext",true,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape)
+                printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"freetext",true,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape)
             } else {
                 redirect(action:"editfreetext")
             }
@@ -1003,15 +1005,22 @@ class ContestController {
     }
     
     def createtest = {
-		Map ret = demoContestService.CreateTest(params.demoContest)
+        boolean aflos_db = params?.aflos_db == 'on'
+		Map ret = demoContestService.CreateTest(params.demoContest, aflos_db)
         redirect(controller:'contest',action:'activate',id:ret.contestid,params:[flashmessage:ret.message,flasherror:ret.error])
     }
             
     def runtest = {
-        Map ret = demoContestService.RunTest(session.lastContest)
+        Map ret = demoContestService.RunTest(session.lastContest, session.lastContest.aflosTest)
 		flash.error = ret.error
 		flash.message = ret.message
         redirect(controller:'contest',action:start)
     }
 
+    def runmodultests = {
+        Map ret = testService.RunTest()
+        flash.error = ret.error
+        flash.message = ret.message
+        redirect(controller:'contest',action:start)
+    }
 }

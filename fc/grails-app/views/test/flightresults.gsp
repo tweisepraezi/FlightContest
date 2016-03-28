@@ -68,13 +68,14 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.wind')}:</td>
                                     <g:if test="${testInstance.flighttestwind}">
-                                        <td><g:windtext var="${testInstance.flighttestwind}" /></td>
+                                        <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>
                                 </tr>
                             </tbody>
                         </table>
+                        <g:flightTestLoggerResults t="${testInstance}" showAll="false" allowJudgeActions="${(!testInstance.flightTestComplete).toString()}" />
                         <g:flightTestResults t="${testInstance}"/>
                         <g:if test="${!testInstance.flightTestComplete}">
                             <g:set var="show_takeoffmissed" value="${true}"/>
@@ -240,49 +241,63 @@
                                 <tr>
                                     <td colspan="2">
                                         <g:if test="${!testInstance.flightTestComplete}">
+                                            <g:if test="${params.next}">
+                                                <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="11"/>
+                                            </g:if>
+                                            <g:else>
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="12"/>
+                                            </g:else>
                                             <g:if test="${testInstance.flightTestCheckPointsComplete}">
                                                 <g:if test="${params.next}">
-                                                    <g:actionSubmit action="flightresultsreadynext" value="${message(code:'fc.results.readynext')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
+                                                    <g:actionSubmit action="flightresultsreadynext" value="${message(code:'fc.results.readynext')}" onclick="this.form.target='_self';return true;" tabIndex="13"/>
                                                 </g:if>
-                                                <g:actionSubmit action="flightresultsready" value="${message(code:'fc.results.ready')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
-					                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" onclick="this.form.target='_self';return true;" tabIndex="4"/>
+                                                <g:actionSubmit action="flightresultsready" value="${message(code:'fc.results.ready')}" onclick="this.form.target='_self';return true;" tabIndex="14"/>
+					                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" onclick="this.form.target='_self';return true;" tabIndex="15"/>
                                             </g:if>
-                                            <g:elseif test="${params.next}">
-                                                <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
-                                            </g:elseif>
-                                            <g:actionSubmit action="importresults" value="${message(code:'fc.flightresults.aflosimport')}" onclick="this.form.target='_self';return true;" tabIndex="5"/>
-                                            <g:if test="${testInstance.IsAFLOSPossible()}">
-                                                <g:actionSubmit action="viewimporterrors" value="${message(code:'fc.flightresults.viewimporterrors')}" onclick="this.form.target='_self';return true;" tabIndex="6"/>
+                                            <g:if test="${testInstance.IsLoggerData()}">
+                                                <g:actionSubmit action="recalculatecrew" value="${message(code:'fc.flightresults.recalculate')}" onclick="this.form.target='_self';return true;" tabIndex="16"/>
                                             </g:if>
-                                            <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" onclick="this.form.target='_self';return true;" tabIndex="7"/>
-                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="8"/>
-                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" onclick="this.form.target='_self';return true;" tabIndex="9"/>
+                                            <g:else>
+	                                            <g:if test="${testInstance.IsAFLOSImportPossible()}">
+	                                                <g:actionSubmit action="importaflos" value="${message(code:'fc.flightresults.aflosimport')}" onclick="this.form.target='_self';return true;" tabIndex="17"/>
+	                                            </g:if>
+                                                <g:actionSubmit action="importlogger" value="${message(code:'fc.flightresults.loggerimport')}" onclick="this.form.target='_self';return true;" tabIndex="18"/>
+                                            </g:else>
+                                            <g:actionSubmit action="setnoflightresults" value="${message(code:'fc.flightresults.setnoresults')}" onclick="this.form.target='_self';return true;" tabIndex="19"/>
                                             <g:if test="${testInstance.IsShowMapPossible()}">
-                                                <g:actionSubmit action="showmap" value="${message(code:'fc.flightresults.map')}" onclick="this.form.target='_blank';return true;" tabIndex="10"/>
+                                                <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="20"/>
+                                                <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="21"/>
+                                                <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxrexport')}" onclick="this.form.target='_self';return true;" tabIndex="22"/>
                                             </g:if>
+                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="23"/>
+                                            <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="24"/>
                                             <g:if test="${testInstance.IsEMailPossible()}">
-                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="11"/>
+                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="25"/>
                                             </g:if>
-                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="12"/>
+                                            <g:if test="${params.next}">
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="26"/>
+                                            </g:if>
                                         </g:if>
                                         <g:else>
                                             <g:if test="${params.next}">
-                                                <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
+                                                <g:actionSubmit action="flightresultsgotonext" value="${message(code:'fc.results.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="41"/>
                                             </g:if>
                                             <g:else>
-                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
+                                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="42"/>
                                             </g:else>
-                                            <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="4"/>
-                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="5"/>
-                                            <g:actionSubmit action="printaflosflightresults" value="${message(code:'fc.printaflos')}" onclick="this.form.target='_self';return true;" tabIndex="6"/>
+                                            <g:actionSubmit action="flightresultsreopen" value="${message(code:'fc.results.reopen')}" onclick="this.form.target='_self';return true;" tabIndex="43"/>
                                             <g:if test="${testInstance.IsShowMapPossible()}">
-                                                <g:actionSubmit action="showmap" value="${message(code:'fc.flightresults.map')}" onclick="this.form.target='_blank';return true;" tabIndex="7"/>
+                                                <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="44"/>
+                                                <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="45"/>
+                                                <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxrexport')}" onclick="this.form.target='_self';return true;" tabIndex="46"/>
                                             </g:if>
+                                            <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="47"/>
+                                            <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="48"/>
                                             <g:if test="${testInstance.IsEMailPossible()}">
-                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="8"/>
+                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="49"/>
                                             </g:if>
 	                                        <g:if test="${params.next}">
-	                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="9"/>
+	                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="50"/>
 	                                        </g:if>
                                         </g:else>
                                     </td>

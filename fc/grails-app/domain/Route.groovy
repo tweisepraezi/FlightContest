@@ -5,13 +5,17 @@ class Route
 	String title
     int idTitle
     String mark = ""
-	
+    Boolean showAflosMark = false                          // DB-2.12
+    
 	static belongsTo = [contest:Contest]
 
 	static hasMany = [coords:CoordRoute,routelegs:RouteLegCoord,testlegs:RouteLegTest]
 
 	static constraints = {
 		contest(nullable:false)
+        
+        // DB-2.12 compatibility
+        showAflosMark(nullable:true)
 	}
 
 	static mapping = {
@@ -108,6 +112,11 @@ class Route
 		return "${getMsg('fc.route')}-${idTitle}"
     }
     
+    String idNamePrintable()
+    {
+        return "${getPrintMsg('fc.route')}-${idTitle}"
+    }
+
 	String name()
 	{
 		if(title) {
@@ -117,6 +126,15 @@ class Route
 		}
 	}
 	
+    String printName()
+    {
+        if(title) {
+            return title
+        } else {
+            return idNamePrintable()
+        }
+    }
+    
 	boolean Used()
 	{
 		if (PlanningTestTask.findByRoute(this) || FlightTest.findByRoute(this)) {
@@ -127,12 +145,12 @@ class Route
     
     String GetFileName()
     {
-        return "${name()}"
+        return "route-${idTitle}"
     }
     
     String GetEMailTitle()
     {
-        return "${contest.title}: ${name()}" 
+        return "${contest.title}: ${printName()}" 
     }
     
     boolean IsEMailPossible()
@@ -146,5 +164,22 @@ class Route
     String EMailAddress()
     {
         return grailsApplication.config.flightcontest.mail.cc
+    }
+    
+    boolean IsIntermediateRunway()
+    {
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,,[sort:"id"])) {
+            switch (coordroute_instance.type) {
+                case CoordType.iLDG:
+                case CoordType.iTO:
+                    return true
+            }
+        }
+        return false
+    }
+    
+    boolean ExistAnyAflosRoute()
+    {
+        return AflosTools.ExistAnyAflosRoute(contest)
     }
 }

@@ -37,6 +37,10 @@
 	                                    <g:checkBox name="printFlightResults" value="${taskInstance.printFlightResults}" />
 	                                    <label>${message(code:'fc.flightresults')}</label>
 	                                </div>
+                                    <div>
+                                        <g:checkBox name="printFlightMap" value="${taskInstance.printFlightMap}" />
+                                        <label>${message(code:'fc.flightmaps')}</label>
+                                    </div>
 	                            </g:if>
     	                       	<g:if test="${taskInstance.IsObservationTestRun()}">
 	                                <div>

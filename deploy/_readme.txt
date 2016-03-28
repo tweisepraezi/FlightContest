@@ -6,9 +6,7 @@ Deutscher Präzisionsflug-Verein e.V.
 
 Supported platforms:
 --------------------
-Windows 7
-Windows Vista ServicePack 1
-Windows XP ServicePack 2
+Windows
 
 
 Build installer for Windows:
@@ -16,6 +14,7 @@ Build installer for Windows:
 Windows installer tool:
 	Inno Setup 5.4.3 (http://www.innosetup.com)
 	  Register extension is5 for open with 'C:\Program Files (x86)\Inno Setup 5\Compil32.exe'
+      by create key 'HKCR\.is5' with default REG_SZ value 'is5_auto_file'
 
 Additional sources for installer compilation:
 	Java SDK 1.6 (32 Bit) in folder '..\..\..\Java\jdk1.6.0_30'

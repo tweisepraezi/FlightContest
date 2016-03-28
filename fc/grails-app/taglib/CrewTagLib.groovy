@@ -5,7 +5,7 @@ class CrewTagLib
     
     // --------------------------------------------------------------------------------------------------------------------
     def crewPrintable = { attrs, body ->
-        outln"""<tr>"""
+        outln"""<tr class="value" id="${attrs.crew.startNum}">"""
         if (attrs.contest.printCrewNumber) {
             outln"""<td class="num">${attrs.crew.startNum}</td>"""
         }

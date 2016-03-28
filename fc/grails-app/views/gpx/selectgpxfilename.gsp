@@ -13,19 +13,20 @@
                 <div class="block" id="forms">
                 	<g:uploadForm action="showmapgpx">
                     	<div>
-    						<input type="file" size="80" accept="text/plain/*.gpx" name="loadgpxfile" tabIndex="1"/>
+    						<input type="file" size="80" accept="${LoggerFileTools.GPX_EXTENSION}" name="loadgpxfile" tabIndex="1"/>
                     	</div>
                         <g:if test="${contestInstance && Route.findByContest(contestInstance)}">
                             <p>
                                 <div>
                                     <label>${message(code:'fc.route')}: </label>
-                                    <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance,[sort:"id"])}" name="routeid" value="${Route.findByContest(contestInstance,[sort:"id"]).id}" noSelection="${[id:'']}" ></g:select>
+                                    <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance,[sort:"id"])}" name="routeid" value="" noSelection="${[id:'']}" ></g:select>
                                 </div>
                             </p>
                         </g:if>
                     	<div>
-	    					<input type="submit" value="${message(code:'fc.gpx.showmap')}" tabIndex="11"/>
-		                    <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="12"/>
+                            <input type="submit" name="offlinemap" value="${message(code:'fc.offlinemap')}" tabIndex="11"/>
+	    					<input type="submit" name="googlemap" value="${message(code:'fc.onlinemap')}" tabIndex="12"/>
+		                    <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="13"/>
                     	</div>
 					</g:uploadForm>
                 </div>

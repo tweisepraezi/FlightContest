@@ -1,11 +1,16 @@
+import java.util.Map;
+
 class TestController 
 {
+    def domainService
+    def printService
 	def fcService
     def gpxService
+    def calcService
     def mailService
 
     def show = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.taskReturnAction = actionName
@@ -25,7 +30,7 @@ class TestController
     }
 
     def flightplan = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -62,7 +67,7 @@ class TestController
     }
 
     def printflightplan = {
-        def test = fcService.printflightplanTest(params,false,false,GetPrintParams()) 
+        Map test = printService.printflightplanTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startplanning")
@@ -71,19 +76,22 @@ class TestController
         	flash.error = true
         	redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-        	fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"flightplan-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.timetableVersion}",true,false,false)
+        	printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"flightplan-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.timetableVersion}",true,false,false)
         } else {
         	redirect(action:show,id:test.instance.id)
         }
     }
 
     def planningtask = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
 			session.crewReturnController = controllerName
 			session.crewReturnID = params.id
+            session.routeReturnAction = actionName
+            session.routeReturnController = controllerName
+            session.routeReturnID = params.id
            	return [testInstance:test.instance,planningtaskReturnAction:"startplanning",planningtaskReturnController:"task",planningtaskReturnID:test.instance.task.id]
         } else {
             flash.message = test.message
@@ -96,7 +104,7 @@ class TestController
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
             return [contestInstance:session.lastContest,testInstance:test.instance]
         } else {
@@ -106,7 +114,7 @@ class TestController
     }
 
     def printplanningtask = {
-        def test = fcService.printplanningtaskTest(params,false,false,false,GetPrintParams()) 
+        Map test = printService.printplanningtaskTest(params,false,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startplanning")
@@ -115,14 +123,14 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtask-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}",true,false,false)
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtask-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
     }
 
     def printplanningtaskwithresults = {
-        def test = fcService.printplanningtaskTest(params,false,false,true,GetPrintParams()) 
+        Map test = printService.printplanningtaskTest(params,false,false,true,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startplanning")
@@ -131,14 +139,14 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtaskwithresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}",true,false,false)
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtaskwithresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
     }
 
     def planningtaskresults = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -192,7 +200,7 @@ class TestController
 	}
 	
 	def planningtaskresultsgotonext = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Planningtask)
@@ -252,7 +260,7 @@ class TestController
 	}
 	
     def printplanningtaskresults = {
-        def test = fcService.printplanningtaskresultsTest(params,false,false,GetPrintParams()) 
+        Map test = printService.printplanningtaskresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -261,7 +269,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtaskresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetPlanningTestVersion()}",true,false,false)
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"planningtaskresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetPlanningTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -282,7 +290,7 @@ class TestController
 	}
 	
     def flightresults = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -291,6 +299,12 @@ class TestController
 			session.aircraftReturnAction = actionName
 			session.aircraftReturnController = controllerName
 			session.aircraftReturnID = params.id
+            session.flighttestwindReturnAction = actionName
+            session.flighttestwindReturnController = controllerName
+            session.flighttestwindReturnID = params.id
+            session.routeReturnAction = actionName
+            session.routeReturnController = controllerName
+            session.routeReturnID = params.id
 			return [testInstance:test.instance]
         } else {
             flash.message = test.message
@@ -336,7 +350,7 @@ class TestController
     }
     
 	def flightresultsgotonext = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Flight)
@@ -396,34 +410,40 @@ class TestController
     }
     
     def printflightresults = {
-        def test = fcService.printflightresultsTest(params,false,false,GetPrintParams()) 
-        if (!test.instance) {
+        String webroot_dir = servletContext.getRealPath("/")
+        Map test = printService.printflightresultsTest(params,false,false,webroot_dir,GetPrintParams()) 
+        if (test.instance) {
+            if (test.error) {
+                flash.message = test.message
+                flash.error = true
+                redirect(action:show,id:test.instance.id)
+            } else if (test.content) {
+                printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"navigationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}",true,false,false)
+            } else {
+                redirect(action:show,id:test.instance.id)
+            }
+        } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
-        } else if (test.error) {
-            flash.message = test.message
-            flash.error = true
-            redirect(action:show,id:test.instance.id)
-        } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"navigationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}",true,false,false)
-        } else {
-            redirect(action:show,id:test.instance.id)
         }
     }
 
-    def printaflosflightresults = {
-        def test = fcService.printaflosflightresultsTest(params,false,false,GetPrintParams()) 
-        if (!test.instance) {
+    def printmeasureflightresults = {
+        String webroot_dir = servletContext.getRealPath("/")
+        Map test = printService.printmeasureflightresultsTest(params,false,false,webroot_dir,GetPrintParams()) 
+        if (test.instance) {
+            if (test.error) {
+                flash.message = test.message
+                flash.error = true
+                redirect(action:show,id:test.instance.id)
+            } else if (test.content) {
+                printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"navigationmeasure-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}",true,false,false)
+            } else {
+                redirect(action:show,id:test.instance.id)
+            }
+        } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
-        } else if (test.error) {
-            flash.message = test.message
-            flash.error = true
-            redirect(action:show,id:test.instance.id)
-        } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"navigationmeasure-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}",true,false,false)
-        } else {
-            redirect(action:show,id:test.instance.id)
         }
     }
 
@@ -434,21 +454,21 @@ class TestController
         }
         def test = fcService.getflightresultsprintableTest(params) 
         if (test.instance) {
-            return [contestInstance:session.lastContest,testInstance:test.instance]
+            return [contestInstance:session.lastContest,testInstance:test.instance,flightMapFileName:params.flightMapFileName]
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
         }
 	}
 	
-    def flightresultsaflosprintable = {
+    def flightresultsmeasureprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
         def test = fcService.getflightresultsprintableTest(params) 
         if (test.instance) {
-            return [contestInstance:session.lastContest,testInstance:test.instance]
+            return [contestInstance:session.lastContest,testInstance:test.instance,flightMapFileName:params.flightMapFileName]
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -474,7 +494,7 @@ class TestController
         }
     }
 	 
-    def importresults = {
+    def importaflos = {
 		if (session?.lastContest) {
 			session.lastContest.refresh()
 	        def ret = fcService.existAnyAflosCrew(session.lastContest)
@@ -483,15 +503,15 @@ class TestController
 	            flash.message = ret.message
 	            redirect(action:flightresults,id:params.id)
 	        } else {
-	            redirect(action:selectafloscrew,id:params.id)
+	            redirect(action:importafloscrew,id:params.id)
 	        }
 		} else {
             redirect(controller:"task",action:"startresults")
 		}
     }
 	 
-    def selectafloscrew = {
-        def test = fcService.getTest(params) 
+    def importafloscrew = {
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -503,15 +523,84 @@ class TestController
             redirect(controller:"contest",action:"tasks")
         }
     }
+    
+    def importlogger = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            redirect(action:importloggercrew,id:params.id)
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def importloggercrew = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            // save return action
+            session.crewReturnAction = actionName
+            session.crewReturnController = controllerName
+            session.crewReturnID = params.id
+            return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def recalculateresults = {
+        def ret = fcService.recalculateResultsTest(params)
+        if (ret.saved) {
+            flash.message = ret.message
+            if (ret.error) {
+                flash.error = ret.error
+            }
+            Map test = domainService.GetTest(params)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:flightresults,id:params.id)
+            }
+        } else if (ret.error) {
+            flash.error = ret.error
+            flash.message = ret.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+    
+    def calculateaflosresults = {
+        def ret = fcService.calculateAflosResultsTest(params)
+        if (ret.saved) {
+            flash.message = ret.message
+            if (ret.error) {
+                flash.error = ret.error
+            }
+            Map test = domainService.GetTest(params)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:flightresults,id:params.id)
+            }
+        } else if (ret.error) {
+            flash.error = ret.error
+            flash.message = ret.message
+            redirect(action:flightresults,id:params.id)
+        } else {
+            redirect(action:flightresults,id:params.id)
+        }
+    }
 	    
     def importaflosresults = {
-        def ret = fcService.importAflosResultsTest(params) 
+        def ret = fcService.importAflosTrackPointsAndCalcTest(params) 
         if (ret.saved) {
             flash.message = ret.message
             if (ret.error) {
             	flash.error = ret.error
             }
-			def test = fcService.getTest(params)
+			Map test = domainService.GetTest(params)
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
 			if (nexttest_id) {
 				redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
@@ -521,38 +610,103 @@ class TestController
         } else if (ret.error) {
             flash.error = ret.error
             flash.message = ret.message
-			redirect(action:flightresults,id:params.id)
+            Map test = domainService.GetTest(params)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:flightresults,id:params.id)
+            }
         } else {
 			redirect(action:flightresults,id:params.id)
         }
     }
-	    
-    def cancelaflosresults = {
-		def test = fcService.getTest(params)
+    
+    def importloggerfile = {
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
-			if (nexttest_id) {
-				redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
-			} else {
-				redirect(action:flightresults,id:params.id)
-			}
+            def file = request.getFile('loggerfile')
+            Map calc = fcService.calculateLoggerResultTest(LoggerFileTools.GAC_EXTENSION, test.instance, file, false)
+            if (!calc.found) {
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.GPX_EXTENSION, test.instance, file, false)
+            }
+            if (!calc.found) {
+                calc = fcService.calculateLoggerResultTest("", test.instance, file, false)
+            }
+            flash.error = calc.error
+            flash.message = calc.message
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:flightresults,id:params.id)
+            }
         } else {
-			redirect(action:flightresults,id:params.id)
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
         }
     }
 	    
-	def viewimporterrors = {
-        def test = fcService.getTest(params) 
+    def recalculatecrew = {
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
-			int start_num = test.instance.GetAFLOSStartNum()
-			redirect(controller:"aflosErrorPoints",action:"crew",params:[startnum:start_num,routename:test.instance.flighttestwind.flighttest.route.mark])
+            // save return action
+            session.crewReturnAction = actionName 
+            session.crewReturnController = controllerName
+            session.crewReturnID = params.id
+            return [testInstance:test.instance]
         } else {
-			redirect(action:flightresults,id:params.id)
-		}
-	}
-	
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def judgeenablecalcresult = {
+        def ret = fcService.changeCalcResultTest(params, true)
+        if (ret.saved) {
+            flash.message = ret.message
+            if (ret.error) {
+                flash.error = ret.error
+            }
+            long nexttest_id = ret.instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(action:flightresults,id:ret.instance.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:flightresults,id:ret.instance.id)
+            }
+        } else if (ret.error) {
+            flash.error = ret.error
+            flash.message = ret.message
+            redirect(action:flightresults,id:ret.instance.id)
+        } else {
+            redirect(action:flightresults,id:ret.instance.id)
+        }
+    }
+    
+    def judgedisablecalcresult = {
+        def ret = fcService.changeCalcResultTest(params, false)
+        if (ret.saved) {
+            flash.message = ret.message
+            if (ret.error) {
+                flash.error = ret.error
+            }
+            long nexttest_id = ret.instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(action:flightresults,id:ret.instance.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:flightresults,id:ret.instance.id)
+            }
+        } else if (ret.error) {
+            flash.error = ret.error
+            flash.message = ret.message
+            redirect(action:flightresults,id:ret.instance.id)
+        } else {
+            redirect(action:flightresults,id:ret.instance.id)
+        }
+    }
+    
     def observationresults = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -603,7 +757,7 @@ class TestController
     }
     
 	def observationresultsgotonext = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Observation)
@@ -663,7 +817,7 @@ class TestController
     }
     
     def printobservationresults = {
-        def test = fcService.printobservationresultsTest(params,false,false,GetPrintParams()) 
+        Map test = printService.printobservationresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -672,7 +826,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"observationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetObservationTestVersion()}",true,false,false)
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"observationresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetObservationTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -693,7 +847,7 @@ class TestController
 	}
 	
     def landingresults = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -757,7 +911,7 @@ class TestController
     }
     
 	def landingresultsgotonext = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Landing)
@@ -815,7 +969,7 @@ class TestController
     }
     
     def printlandingresults = {
-        def test = fcService.printlandingresultsTest(params,false,false,GetPrintParams()) 
+        Map test = printService.printlandingresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -824,7 +978,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTestVersion()}",true,false,false)
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -845,7 +999,7 @@ class TestController
 	}
 	
     def specialresults = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -896,7 +1050,7 @@ class TestController
     }
     
 	def specialresultsgotonext = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Special)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Special)
@@ -956,7 +1110,7 @@ class TestController
     }
     
     def printspecialresults = {
-        def test = fcService.printspecialresultsTest(params,false,false,GetPrintParams()) 
+        Map test = printService.printspecialresultsTest(params,false,false,GetPrintParams()) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -965,7 +1119,7 @@ class TestController
             flash.error = true
             redirect(action:show,id:test.instance.id)
         } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"specialresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetSpecialTestVersion()}",true,false,false)
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"specialresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetSpecialTestVersion()}",true,false,false)
         } else {
             redirect(action:show,id:test.instance.id)
         }
@@ -986,7 +1140,7 @@ class TestController
 	}
 	
 	def crewresultsgotonext = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Crew)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Crew)
@@ -1006,7 +1160,7 @@ class TestController
 	}
 	
 	def crewresultsprintquestion = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// set return action
            	return [testInstance:test.instance,crewresultsprintquestionReturnAction:"crewresults",crewresultsprintquestionReturnController:controllerName,crewresultsprintquestionReturnID:params.id]
@@ -1017,7 +1171,7 @@ class TestController
 	}
 	
     def crewresults = {
-        def test = fcService.getTest(params) 
+        Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// save return action
 			session.crewReturnAction = actionName 
@@ -1038,18 +1192,21 @@ class TestController
     }
 
     def printcrewresults = {
-        def test = fcService.printcrewresultsTest(params,false,false,GetPrintParams()) 
-        if (!test.instance) {
+        String webroot_dir = servletContext.getRealPath("/")
+        Map test = printService.printcrewresultsTest(params,false,false,webroot_dir,GetPrintParams()) 
+        if (test.instance) {
+            if (test.error) {
+                flash.message = test.message
+                flash.error = true
+                redirect(action:show,id:test.instance.id)
+            } else if (test.content) {
+                printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"crewresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetCrewResultsVersion()}",true,false,false)
+            } else {
+                redirect(action:show,id:test.instance.id)
+            }
+        } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
-        } else if (test.error) {
-            flash.message = test.message
-            flash.error = true
-            redirect(action:show,id:test.instance.id)
-        } else if (test.content) {
-            fcService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"crewresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetCrewResultsVersion()}",true,false,false)
-        } else {
-            redirect(action:show,id:test.instance.id)
         }
     }
 
@@ -1062,30 +1219,56 @@ class TestController
         if (test.instance) {
 			test.instance.printPlanningResults = params.printPlanningResults == "true"
 			test.instance.printFlightResults = params.printFlightResults == "true"
+            test.instance.printFlightMap = params.printFlightMap == "true"
 			test.instance.printObservationResults = params.printObservationResults == "true"
 			test.instance.printLandingResults = params.printLandingResults == "true"
 			test.instance.printSpecialResults = params.printSpecialResults == "true"
 			test.instance.printProvisionalResults = params.printProvisionalResults == "true"
-            return [contestInstance:session.lastContest,testInstance:test.instance]
+            return [contestInstance:session.lastContest,testInstance:test.instance,flightMapFileName:params.flightMapFileName]
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
         }
 	}
 	
+    def showofflinemap = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            gpxService.printstart "Show offline map of '${test.instance.crew.name}'"
+            String uuid = UUID.randomUUID().toString()
+            String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
+            Map converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, false, true) // false - no Print, true - Points
+            if (converter.ok && converter.track) {
+                gpxService.printdone ""
+                session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                redirect(controller:'gpx',action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showZoom:"yes",showPoints:"yes"])
+            } else {
+                flash.error = true
+                if (converter.ok && !converter.track) {
+                    flash.message = message(code:'fc.gpx.noflight',args:[test.instance.crew.name])
+                } else {
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[test.instance.crew.name])
+                }
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                redirect(action:'flightresults',id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
     def showmap = {
-        def test = fcService.getTest(params)
+        Map test = domainService.GetTest(params)
         if (test.instance) {
             gpxService.printstart "Show map of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name)
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, true) // false - no Print, true - Points
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
-                //session.gpxviewerReturnAction = 'flightresults'
-                //session.gpxviewerReturnController = controllerName
-                //session.gpxviewerReturnID = params.id
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
                 redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes"])
             } else {
@@ -1105,8 +1288,41 @@ class TestController
         }
     }
     
+    def gpxexport = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            gpxService.printstart "Export logger data of '${test.instance.crew.name}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, false) // false - no Print, false - no Points
+            if (converter.ok && converter.track) {
+                String logger_file_name = test.instance.GetTitle(ResultType.Flight) + '.gpx'
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${logger_file_name}")
+                gpxService.Download(webroot_dir + upload_gpx_file_name, logger_file_name, response.outputStream)
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printdone ""
+            } else {
+                flash.error = true
+                if (converter.ok && !converter.track) {
+                    flash.message = message(code:'fc.gpx.noflight',args:[test.instance.crew.name])
+                } else {
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[test.instance.crew.name])
+                }
+                gpxService.DeleteFile(upload_gpx_file_name)
+                gpxService.printerror flash.message
+                redirect(action:'flightresults',id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+
+    }
+     
     def sendmail = {
-        def test = fcService.getTest(params)
+        Map test = domainService.GetTest(params)
         if (test.instance) {
             String email_to = test.instance.EMailAddress()
             gpxService.printstart "Send mail of '${test.instance.crew.name}' to '${email_to}'"
@@ -1123,7 +1339,7 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-EMAIL.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name)
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, true, true) // true - Print, true - Points
             if (converter.ok && converter.track) {
                 
                 Map email = test.instance.GetEMailBody()
@@ -1196,8 +1412,8 @@ class TestController
     
     def cancel = {
 		// process return action
-		if (params.crewresultsReturnAction) {
-			redirect(action:params.crewresultsReturnAction,controller:params.crewresultsReturnController,id:params.crewresultsReturnID)
+        if (params.crewresultsReturnAction) {
+            redirect(action:params.crewresultsReturnAction,controller:params.crewresultsReturnController,id:params.crewresultsReturnID)
 		} else if (params.crewresultsprintquestionReturnAction) {
 			redirect(action:params.crewresultsprintquestionReturnAction,controller:params.crewresultsprintquestionReturnController,id:params.crewresultsprintquestionReturnID)
 		} else if (params.flightplanReturnAction) {
@@ -1211,6 +1427,20 @@ class TestController
 		}
     }
 	
+    def cancelimportcrew = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:flightresults,id:params.id)
+            }
+        } else {
+            redirect(action:flightresults,id:params.id)
+        }
+    }
+        
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,

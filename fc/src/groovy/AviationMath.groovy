@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.Map;
 
 class AviationMath 
@@ -189,7 +190,7 @@ class AviationMath
     // Rückgabe: Kurs in Grad (0 ... 359.999 Grad)
     {
         BigDecimal track = valueTrack + 90
-        if (track > 360) {
+        if (track >= 360) {
             track -= 360
         }
         return track
@@ -209,26 +210,100 @@ class AviationMath
     }
     
     //--------------------------------------------------------------------------
+    static BigDecimal getDiametricalTrack(BigDecimal valueTrack)
+    // Berechnet Gegenkurs
+    //   valueTrack: Kurs in Grad (0 ... 359.999 Grad)
+    // Rückgabe: Kurs in Grad (0 ... 359.999 Grad)
+    {
+        BigDecimal track = valueTrack + 180
+        if (track >= 360 ) {
+            track -= 360
+        }
+        return track
+    }
+    
+    //--------------------------------------------------------------------------
     static Map getGate(BigDecimal srcLatitude, BigDecimal srcLongitude,
                        BigDecimal destLatitude, BigDecimal destLongitude,
                        Float gateWidth)
     // Berechnet Koordinaten eines Gates an Koordinate dest... 
-    // aus einer Etappe von von Koordinate scr... zur Koordinate dest...
+    // aus einer Etappe von der Koordinate scr... zur Koordinate dest...
     //   Latitude: Geographische Breite (-90 ... +90 Grad)
     //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
     //   gateWidth: Gate-Breite in NM
     // Rückgabe: coordLeft.lat, coordLeft.lon, coordRight.lat, coordRight.lon
     {
-        BigDecimal track_value = calculateLeg(destLatitude, destLongitude, srcLatitude, srcLongitude).dir
+        BigDecimal gate_track = calculateLeg(destLatitude, destLongitude, srcLatitude, srcLongitude).dir
         
-        BigDecimal left_track = getOrthogonalTrackLeft(track_value)
-        BigDecimal right_track = getOrthogonalTrackRight(track_value)
+        BigDecimal left_track = getOrthogonalTrackLeft(gate_track)
+        BigDecimal right_track = getOrthogonalTrackRight(gate_track)
         
         Map left_coord = getCoordinate(destLatitude, destLongitude, left_track, gateWidth/2)
         Map right_coord = getCoordinate(destLatitude, destLongitude, right_track, gateWidth/2)
         
         // return Map
-        return [coordLeft:left_coord, coordRight:right_coord]
+        return [coordLeft:left_coord, coordRight:right_coord, gateTrack:gate_track]
+    }
+
+    //--------------------------------------------------------------------------
+    static Map getGate(BigDecimal gateLatitude, BigDecimal gateLongitude,
+                       BigDecimal gateTrack, BigDecimal gateOffset, 
+                       BigDecimal gateOrthogonalOffset, Float gateWidth)
+    // Berechnet Koordinaten eines Gates an Koordinate gateLatitude/gateLongitude
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   gateTrack: Gate-Richtung in Grad (0 ... 359.999 Grad)
+    //   gateOffset: Positionsabweichung längs zur Startbahn [NM]
+    //   gateOrthogonalOffset: Positionsabweichung quer zur Startbahn [NM]
+    //   gateWidth: Gate-Breite in NM
+    // Rückgabe: coordLeft.lat, coordLeft.lon, coordRight.lat, coordRight.lon
+    {
+        Map gate_coord = [lat:gateLatitude, lon:gateLongitude]
+        
+        BigDecimal left_track = getOrthogonalTrackLeft(gateTrack)
+        BigDecimal right_track = getOrthogonalTrackRight(gateTrack)
+        
+        if (gateOffset) {
+            gate_coord = getCoordinate(gate_coord.lat, gate_coord.lon, gateTrack, gateOffset)
+        }
+        if (gateOrthogonalOffset) {
+            gate_coord = getCoordinate(gate_coord.lat, gate_coord.lon, left_track, gateOrthogonalOffset)
+        }
+        
+        Map left_coord = getCoordinate(gate_coord.lat, gate_coord.lon, left_track, gateWidth/2)
+        Map right_coord = getCoordinate(gate_coord.lat, gate_coord.lon, right_track, gateWidth/2)
+        
+        // return Map
+        return [coord:gate_coord, coordLeft:left_coord, coordRight:right_coord, gateTrack:gateTrack]
+    }
+
+    //--------------------------------------------------------------------------
+    static Map getGateAtDistance(BigDecimal srcLatitude, BigDecimal srcLongitude,
+                                 BigDecimal destLatitude, BigDecimal destLongitude,
+                                 BigDecimal gateDistance, Float gateWidth)
+    // Berechnet Koordinaten eines Gates, welches in der Entfernung gateDistance
+    // von der Koordinate srcLatitude/srcLongitude
+    // in Richtung der Etappe von der Koordinate scr... zur Koordinate dest...  liegt
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   gateDistance: Entfernung des Gates von srcLatitude/srcLongitude
+    //   gateWidth: Gate-Breite in NM
+    // Rückgabe: coordLeft.lat, coordLeft.lon, coordRight.lat, coordRight.lon
+    {
+        Map leg = calculateLeg(destLatitude, destLongitude, srcLatitude, srcLongitude)
+        if (gateDistance > leg.dis) {
+            gateDistance = 0.8 * leg.dis
+        }
+        Map dest_coord = getCoordinate(srcLatitude, srcLongitude, leg.dir, gateDistance)
+        
+        BigDecimal left_track = getOrthogonalTrackLeft(leg.dir)
+        BigDecimal right_track = getOrthogonalTrackRight(leg.dir)
+        
+        Map left_coord = getCoordinate(dest_coord.lat, dest_coord.lon, left_track, gateWidth/2)
+        Map right_coord = getCoordinate(dest_coord.lat, dest_coord.lon, right_track, gateWidth/2)
+        
+        // return Map
+        return [coordLeft:left_coord, coordRight:right_coord, gateTrack:leg.dir]
     }
 
     //--------------------------------------------------------------------------
@@ -245,4 +320,22 @@ class AviationMath
         Map bottom_coord = getCoordinate(showLatitude, showLongitude, 180, showDistance)
         return [latmin:bottom_coord.lat,latmax:top_coord.lat,lonmin:left_coord.lon,lonmax:right_coord.lon]
     }
+    
+    //--------------------------------------------------------------------------
+    static Map getShowRect(BigDecimal minLatitude, BigDecimal maxLatitude, BigDecimal minLongitude, BigDecimal maxLongitude, BigDecimal marginDistance)
+    // Berechnet Anzeige-Bereich um eine Rechteck
+    //   minLatitude, maxLatitude: Geographische Breite (-90 ... +90 Grad)
+    //   minLongitude, maxLongitude : Geographische Laenge (-179.999 ... +180 Grad)
+    //   showDistance: Anzeige-Bereiches um Rechteck in NM
+    // Rückgabe: latmin, latmax, lonmin, lonmax
+    {
+        BigDecimal lat_average = (minLatitude + maxLatitude) / 2
+        BigDecimal lon_average = (minLongitude + maxLongitude) / 2
+        
+        Map left_coord = getCoordinate(lat_average, minLongitude, 270, marginDistance)
+        Map right_coord = getCoordinate(lat_average, maxLongitude, 90, marginDistance)
+        Map top_coord = getCoordinate(maxLatitude, lon_average, 0, marginDistance)
+        Map bottom_coord = getCoordinate(minLatitude, lon_average, 180, marginDistance)
+        return [latmin:bottom_coord.lat,latmax:top_coord.lat,lonmin:left_coord.lon,lonmax:right_coord.lon]
+    } 
 }

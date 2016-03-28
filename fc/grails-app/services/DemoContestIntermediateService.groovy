@@ -6,7 +6,11 @@ class DemoContestIntermediateService
 	static final String ROUTE_NAME_NOITO = "Strecke 8 (noiTO)"
 	static final String ROUTE_NAME_NOILDG = "Strecke 8 (noiLDG)"
 	static final String ROUTE_NAME_NOITOLDG = "Strecke 8 (noiTOLDG)"
-	
+    static final String ROUTE_NAME_GPX = "Strecke_8.gpx"
+    static final String ROUTE_NAME_NOITO_GPX = "Strecke_8_noiTO.gpx"
+    static final String ROUTE_NAME_NOILDG_GPX = "Strecke_8_noiLDG.gpx"
+    static final String ROUTE_NAME_NOITOLDG_GPX = "Strecke_8_noiTOLDG.gpx"
+
 	static final String CREW_60 = "Crew 60kt"
 	static final String CREW_90 = "Crew 90kt"
 	static final String CREW_120 = "Crew 120kt"
@@ -19,25 +23,45 @@ class DemoContestIntermediateService
 	static final String WIND = "$WIND_DIRECTION/$WIND_SPEED"
 	static final String NOWIND = "0/0"
 	
-	long CreateTest(String testName, String printPrefix, boolean testExists)
+	long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
 		
 		// Routes
+        Map route = [:]
+        Map route_noito = [:]
+        Map route_noildg = [:]
+        Map route_noitoldg = [:]
 		fcService.printstart ROUTE_NAME
-		Map route = fcService.importRoute(contest,ROUTE_NAME,ROUTE_NAME,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        if (aflosDB) {
+            route = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_GPX)
+        }
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOITO
-		Map route_noito = fcService.importRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITO,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O'])
+        if (aflosDB) {
+            route_noito = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITO,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O'])
+        } else {
+            route_noito = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITO_GPX)
+        }
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOILDG
-		Map route_noildg = fcService.importRoute(contest,ROUTE_NAME,ROUTE_NAME_NOILDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iLDG'])
+        if (aflosDB) {
+            route_noildg = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOILDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iLDG'])
+        } else {
+            route_noildg = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOILDG_GPX)
+        }
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOITOLDG
-		Map route_noitoldg = fcService.importRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITOLDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O','iLDG'])
+        if (aflosDB) {
+            route_noitoldg = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITOLDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O','iLDG'])
+        } else {
+            route_noitoldg = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITOLDG_GPX)
+        }
 		fcService.printdone ""
 
 		// Crews and Aircrafts
@@ -49,7 +73,7 @@ class DemoContestIntermediateService
         Map planningtesttask_normal = fcService.putPlanningTestTask(planningtest_normal,"",route,0,0)
         fcService.putplanningtesttaskTask(task_normal,planningtesttask_normal)
 		Map flighttest_normal = fcService.putFlightTest(task_normal,"",route)
-		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0)
+		Map flighttestwind_normal = fcService.putFlightTestWind(flighttest_normal,0,0,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_normal,flighttestwind_normal)
 		fcService.runcalculatetimetableTask(task_normal)
 		
@@ -58,7 +82,7 @@ class DemoContestIntermediateService
         Map planningtesttask_wind = fcService.putPlanningTestTask(planningtest_wind,"",route,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind,planningtesttask_wind)
 		Map flighttest_wind = fcService.putFlightTest(task_wind,"",route)
-		Map flighttestwind_wind = fcService.putFlightTestWind(flighttest_wind,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_wind = fcService.putFlightTestWind(flighttest_wind,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_wind,flighttestwind_wind)
 		fcService.runcalculatetimetableTask(task_wind)
 		
@@ -67,7 +91,7 @@ class DemoContestIntermediateService
         Map planningtesttask_wind_iup = fcService.putPlanningTestTask(planningtest_wind_iup,"",route,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_iup,planningtesttask_wind_iup)
 		Map flighttest_wind_iup = fcService.putFlightTest(task_wind_iup,"",route)
-		Map flighttestwind_wind_iup = fcService.putFlightTestWind(flighttest_wind_iup,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_wind_iup = fcService.putFlightTestWind(flighttest_wind_iup,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_wind_iup,flighttestwind_wind_iup)
 		fcService.runcalculatetimetableTask(task_wind_iup)
 		
@@ -76,7 +100,7 @@ class DemoContestIntermediateService
         Map planningtesttask_wind_iall = fcService.putPlanningTestTask(planningtest_wind_iall,"",route,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_iall,planningtesttask_wind_iall)
 		Map flighttest_wind_iall = fcService.putFlightTest(task_wind_iall,"",route)
-		Map flighttestwind_wind_iall = fcService.putFlightTestWind(flighttest_wind_iall,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_wind_iall = fcService.putFlightTestWind(flighttest_wind_iall,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_wind_iall,flighttestwind_wind_iall)
 		fcService.runcalculatetimetableTask(task_wind_iall)
 		
@@ -85,7 +109,7 @@ class DemoContestIntermediateService
         Map planningtesttask_wind_noito = fcService.putPlanningTestTask(planningtest_wind_noito,"",route_noito,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_noito,planningtesttask_wind_noito)
 		Map flighttest_wind_noito = fcService.putFlightTest(task_wind_noito,"",route_noito)
-		Map flighttestwind_wind_noito = fcService.putFlightTestWind(flighttest_wind_noito,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_wind_noito = fcService.putFlightTestWind(flighttest_wind_noito,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_wind_noito,flighttestwind_wind_noito)
 		fcService.runcalculatetimetableTask(task_wind_noito)
 		
@@ -94,7 +118,7 @@ class DemoContestIntermediateService
         Map planningtesttask_wind_noildg = fcService.putPlanningTestTask(planningtest_wind_noildg,"",route_noildg,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_noildg,planningtesttask_wind_noildg)
 		Map flighttest_wind_noildg = fcService.putFlightTest(task_wind_noildg,"",route_noildg)
-		Map flighttestwind_wind_noildg = fcService.putFlightTestWind(flighttest_wind_noildg,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_wind_noildg = fcService.putFlightTestWind(flighttest_wind_noildg,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_wind_noildg,flighttestwind_wind_noildg)
 		fcService.runcalculatetimetableTask(task_wind_noildg)
 		
@@ -103,7 +127,7 @@ class DemoContestIntermediateService
         Map planningtesttask_wind_noitoldg = fcService.putPlanningTestTask(planningtest_wind_noitoldg,"",route_noitoldg,WIND_DIRECTION,WIND_SPEED)
         fcService.putplanningtesttaskTask(task_wind_noitoldg,planningtesttask_wind_noitoldg)
 		Map flighttest_wind_noitoldg = fcService.putFlightTest(task_wind_noitoldg,"",route_noitoldg)
-		Map flighttestwind_wind_noitoldg = fcService.putFlightTestWind(flighttest_wind_noitoldg,WIND_DIRECTION,WIND_SPEED)
+		Map flighttestwind_wind_noitoldg = fcService.putFlightTestWind(flighttest_wind_noitoldg,WIND_DIRECTION,WIND_SPEED,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_wind_noitoldg,flighttestwind_wind_noitoldg)
 		fcService.runcalculatetimetableTask(task_wind_noitoldg)
 		
@@ -112,7 +136,7 @@ class DemoContestIntermediateService
 		return contest.instance.id
 	}
 	
-	Map RunTest(Contest lastContest, String contestName)
+	Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -275,7 +299,7 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_90'",      count:8, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME_NOITOLDG,true,true,true)],
 				[name:"CoordResult '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_120'",     count:8, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME_NOITOLDG,true,true,true)],
 
-			   ]
+			   ],aflosDB
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error

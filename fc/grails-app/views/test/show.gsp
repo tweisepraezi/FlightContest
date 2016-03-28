@@ -245,6 +245,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <g:flightTestLoggerResults t="${testInstance}" showAll="true" allowJudgeActions="false" />
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
                     </g:form>
                 </div>

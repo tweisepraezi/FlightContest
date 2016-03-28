@@ -69,6 +69,18 @@ td.errors {
     color: red;
 }
 
+td.warnings {
+    color: blue;
+}
+
+td.judgedisabled {
+    color: darkviolet;
+}
+
+td.hide {
+    color: grey;
+}
+
 td.center {
     text-align:center;
 }
@@ -82,7 +94,7 @@ td.right {
 }
 
 .minute {
-    width:60px;
+    width:40px;
 }
 
 .direction {
@@ -112,5 +124,10 @@ td.secretgatewidth {
 
 p.warning {
     background: yellow;
+}
+
+p.errors {
+    font-weight:bold;
+	margin:0 5px 0 5px;
 }
 

@@ -1,13 +1,18 @@
+import java.math.BigDecimal;
+
 class FlightTest 
 {
 	String title
 	Route route
 
 	// transient Wind values
-	static transients = ['direction','speed']
+	static transients = ['direction','speed','TODirection','LDGDirection','iTOiLDGDirection']
 	BigDecimal direction = 0.0
 	BigDecimal speed = 0.0
-	
+    BigDecimal TODirection = 0.0
+    BigDecimal LDGDirection = 0.0
+    BigDecimal iTOiLDGDirection = 0.0
+
 	static belongsTo = [task:Task]
 
 	static hasMany = [flighttestwinds:FlightTestWind]
@@ -17,6 +22,9 @@ class FlightTest
 		route(nullable:true)
         direction(range:0.0f..<360.0f,scale:10)
         speed(range:0.0f..<1000.0f,scale:10)
+        TODirection(range:0..<360,scale:10)
+        LDGDirection(range:0..<360,scale:10)
+        iTOiLDGDirection(range:0..<360,scale:10)
 		task(nullable:false)
 	}
 

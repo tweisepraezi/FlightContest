@@ -14,6 +14,9 @@ class FlightTestController {
 			session.flighttestwindReturnAction = actionName
 			session.flighttestwindReturnController = controllerName
 			session.flighttestwindReturnID = params.id
+            session.routeReturnAction = actionName
+            session.routeReturnController = controllerName
+            session.routeReturnID = params.id
 			// assign return action
 			if (session.flighttestReturnAction) {
 				return [flightTestInstance:flighttest.instance,flighttestReturnAction:session.flighttestReturnAction,flighttestReturnController:session.flighttestReturnController,flighttestReturnID:session.flighttestReturnID]

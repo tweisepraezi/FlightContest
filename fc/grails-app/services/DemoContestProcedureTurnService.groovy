@@ -7,7 +7,8 @@ class DemoContestProcedureTurnService
 	
 	static final String ROUTE_NAME = "Strecke 10"
 	static final String ROUTE_NAME_PT = "Strecke 10 (Procedure Turn)"
-
+    static final String ROUTE_NAME_PT_GPX = "Strecke_10_ProcedureTurn.gpx"
+    
 	static final String CREW_60 = "Crew 60kt"
 	static final String AIRCRAFT_60 = "D-60"
 	
@@ -15,16 +16,21 @@ class DemoContestProcedureTurnService
 	
 	static final String NOWIND = "0/0"
 	
-	long CreateTest(String testName, String printPrefix, boolean testExists)
+	long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,true,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
 		
 		// Routes
+        Map route_pt = [:]
 		fcService.printstart ROUTE_NAME
-		Map route_pt = fcService.importRoute(contest,ROUTE_NAME,ROUTE_NAME_PT,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        if (aflosDB) {
+            route_pt = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_PT,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route_pt = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_PT_GPX)
+        }
 		fcService.printdone ""
 		
 		// Crews and Aircrafts
@@ -33,7 +39,7 @@ class DemoContestProcedureTurnService
 		// Task Procdure Turn
 		Map task_pt = fcService.putTask(contest,"$ROUTE_NAME_PT ($NOWIND)",START_TIME,2,"wind:1","wind:1",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
 		Map flighttest_pt = fcService.putFlightTest(task_pt,"",route_pt)
-		Map flighttestwind_pt = fcService.putFlightTestWind(flighttest_pt,0,0)
+		Map flighttestwind_pt = fcService.putFlightTestWind(flighttest_pt,0,0,0,0,0,0,0,0,0,0,0)
 		fcService.putflighttestwindTask(task_pt,flighttestwind_pt)
 		fcService.runcalculatetimetableTask(task_pt)
 		
@@ -42,7 +48,7 @@ class DemoContestProcedureTurnService
 		return contest.instance.id
 	}
 	
-	Map RunTest(Contest lastContest, String contestName)
+	Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -77,7 +83,7 @@ class DemoContestProcedureTurnService
 				
 				[name:"CoordResult '$ROUTE_NAME_PT ($NOWIND) - $CREW_60'",     count:11,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_pt,     Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testCoordResult60(     ROUTE_NAME_PT,false)],
 				
-			   ]
+			   ],aflosDB
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error

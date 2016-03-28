@@ -27,16 +27,36 @@
                             <p>
                                 <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
                                 <br/>
-                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestWindInstance,field:'direction')}"/>
+                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestWindInstance,field:'direction')}" tabIndex="1"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
-                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestWindInstance,field:'speed')}"/>
+                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestWindInstance,field:'speed')}" tabIndex="2"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <fieldset>
+                            <legend>${message(code:'fc.runway')}</legend>
+                            <p>
+                                <label>${message(code:'fc.runway.direction.to')} [${message(code:'fc.grad')}]:</label>
+                                <br/>
+                                <input type="text" id="TODirection" name="TODirection" value="${fieldValue(bean:flightTestWindInstance,field:'TODirection')}" tabIndex="3"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.runway.direction.ldg')} [${message(code:'fc.grad')}]:</label>
+                                <br/>
+                                <input type="text" id="LDGDirection" name="LDGDirection" value="${fieldValue(bean:flightTestWindInstance,field:'LDGDirection')}" tabIndex="4"/>
+                            </p>
+                            <g:if test="${flightTestWindInstance.flighttest.route.IsIntermediateRunway()}">
+	                            <p>
+	                                <label>${message(code:'fc.runway.direction.itoildg')} [${message(code:'fc.grad')}]:</label>
+	                                <br/>
+	                                <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${fieldValue(bean:flightTestWindInstance,field:'iTOiLDGDirection')}" tabIndex="5"/>
+	                            </p>
+	                        </g:if>
+                        </fieldset>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="101"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="102"/>
                     </g:form>
                 </div>
             </div>

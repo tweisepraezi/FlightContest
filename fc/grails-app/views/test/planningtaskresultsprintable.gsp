@@ -18,6 +18,14 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
                     content: "${message(code:'fc.planningresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}"
                 }
@@ -38,23 +46,19 @@
         <title>${message(code:'fc.planningresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}</title>
     </head>
     <body>
+        <h2>${message(code:'fc.planningresults')} ${testInstance.GetStartNum()}</h2>
+        <g:if test="${!testInstance.planningTestComplete}">
+            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+        </g:if>
+        <g:else>
+            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</h3>
+        </g:else>
         <div>
-            <div>
-                <h2>${message(code:'fc.planningresults')} ${testInstance.GetStartNum()}</h2>
-                <g:if test="${!testInstance.planningTestComplete}">
-	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()}) [${message(code:'fc.provisional')}]</h3>
-                </g:if>
-                <g:else>
-	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})</h3>
-                </g:else>
-                <div>
-                    <g:form>
-                        <g:crewTestPrintable t="${testInstance}"/>
-                        <br/>
-                        <g:planningtaskTestPrintable t="${testInstance}"/>
-                    </g:form>
-                </div>
-            </div>
+            <g:form>
+                <g:crewTestPrintable t="${testInstance}"/>
+                <br/>
+                <g:planningtaskTestPrintable t="${testInstance}"/>
+            </g:form>
         </div>
     </body>
 </html>

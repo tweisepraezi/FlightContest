@@ -25,8 +25,8 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.flighttestwind.list')}:</td>
                                     <td>
-                                        <g:each var="flightTestWindInstance" in="${flightTestInstance.flighttestwinds}">
-                                            <g:flighttestwind var="${flightTestWindInstance}" link="${createLink(controller:'flightTestWind',action:'edit')}"/>
+                                        <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
+                                            <g:flighttestwind var="${flighttestwind_instance}" link="${createLink(controller:'flightTestWind',action:'edit')}"/>
                                             <br/>
                                         </g:each>
                                     </td>
@@ -35,8 +35,8 @@
                         </table>
                         <input type="hidden" name="id" value="${flightTestInstance?.id}" />
                         <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" />
-                        <g:each var="flightTestWindInstance" in="${flightTestInstance.flighttestwinds}">
-                            <g:if test="${Test.findByFlighttestwind(flightTestWindInstance)}">
+                        <g:each var="flighttestwind_instance" in="${FlightTestWind.findAllByFlighttest(flightTestInstance,[sort:"id"])}">
+                            <g:if test="${Test.findByFlighttestwind(flighttestwind_instance)}">
                                 <g:set var="foundTest" value="${true}" />
                             </g:if>
                         </g:each>

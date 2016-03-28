@@ -8,6 +8,9 @@ class PlanningTestTaskController {
     def show = {
         def planningtesttask = fcService.getPlanningTestTask(params) 
         if (planningtesttask.instance) {
+            session.routeReturnAction = actionName
+            session.routeReturnController = controllerName
+            session.routeReturnID = params.id
         	return [planningTestTaskInstance:planningtesttask.instance]
         } else {
             flash.message = planningtesttask.message
@@ -84,8 +87,8 @@ class PlanningTestTaskController {
 	
 	def cancel = {
 		// process return action
-		if (params.planningtesttaskReturnAction) {
-			redirect(action:params.planningtesttaskReturnAction,controller:params.planningtesttaskReturnController,id:params.planningtesttaskReturnID)
+		if (session.planningtesttaskReturnAction) {
+			redirect(action:session.planningtesttaskReturnAction,controller:session.planningtesttaskReturnController,id:session.planningtesttaskReturnID)
 		} else if (params.fromlistplanning) {
             redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else {

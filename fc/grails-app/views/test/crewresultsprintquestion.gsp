@@ -65,6 +65,10 @@
 	                                    <g:checkBox name="printFlightResults" value="${testInstance.printFlightResults}" />
 	                                    <label>${message(code:'fc.flightresults')} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})<g:if test="${!testInstance.flightTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
 	                                </div>
+                                    <div>
+                                        <g:checkBox name="printFlightMap" value="${testInstance.printFlightMap}" />
+                                        <label>${message(code:'fc.flightmap')} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})<g:if test="${!testInstance.flightTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
+                                    </div>
 	                            </g:if>
     	                       	<g:if test="${testInstance.IsObservationTestRun()}">
 	                                <div>

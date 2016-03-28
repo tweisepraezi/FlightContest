@@ -13,7 +13,7 @@
                 <div class="block" id="forms" >
                 	<g:uploadForm action="importcrews">
                     	<div>
-    						<input type="file" size="80" accept="application/msexcel/*.xls" name="loadfile" tabIndex="1"/>
+    						<input type="file" size="80" accept=".xls" name="loadfile" tabIndex="1"/>
                     	</div>
                         <p>
                             <div>

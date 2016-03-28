@@ -18,6 +18,14 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
                     content: "${message(code:'fc.landingresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}"
                 }
@@ -38,39 +46,35 @@
         <title>${message(code:'fc.landingresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}</title>
     </head>
     <body>
+        <h2>${message(code:'fc.landingresults')} ${testInstance.GetStartNum()}</h2>
+        <g:if test="${!testInstance.landingTestComplete}">
+            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+        </g:if>
+        <g:else>
+            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})</h3>
+        </g:else>
         <div>
-            <div>
-                <h2>${message(code:'fc.landingresults')} ${testInstance.GetStartNum()}</h2>
-                <g:if test="${!testInstance.landingTestComplete}">
-	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()}) [${message(code:'fc.provisional')}]</h3>
-                </g:if>
-                <g:else>
-	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})</h3>
-                </g:else>
-                <div>
-                    <g:form>
-                        <g:crewTestPrintable t="${testInstance}"/>
-                       	<g:if test="${testInstance.IsLandingTest1Run()}">
-	                        <br/>
-	                        <g:landingTest1Printable t="${testInstance}"/>
-                       	</g:if>
-                       	<g:if test="${testInstance.IsLandingTest2Run()}">
-	                        <br/>
-                            <g:landingTest2Printable t="${testInstance}"/>
-                       	</g:if>
-                       	<g:if test="${testInstance.IsLandingTest3Run()}">
-	                        <br/>
-                            <g:landingTest3Printable t="${testInstance}"/>
-                       	</g:if>
-                       	<g:if test="${testInstance.IsLandingTest4Run()}">
-	                        <br/>
-                            <g:landingTest4Printable t="${testInstance}"/>
-                       	</g:if>
-                       	<br/>
-                       	<g:landingTestSummaryPrintable t="${testInstance}"/>
-                    </g:form>
-                </div>
-            </div>
+            <g:form>
+                <g:crewTestPrintable t="${testInstance}"/>
+               	<g:if test="${testInstance.IsLandingTest1Run()}">
+                    <br/>
+                    <g:landingTest1Printable t="${testInstance}"/>
+               	</g:if>
+               	<g:if test="${testInstance.IsLandingTest2Run()}">
+                    <br/>
+                    <g:landingTest2Printable t="${testInstance}"/>
+               	</g:if>
+               	<g:if test="${testInstance.IsLandingTest3Run()}">
+                    <br/>
+                    <g:landingTest3Printable t="${testInstance}"/>
+               	</g:if>
+               	<g:if test="${testInstance.IsLandingTest4Run()}">
+                    <br/>
+                    <g:landingTest4Printable t="${testInstance}"/>
+               	</g:if>
+               	<br/>
+               	<g:landingTestSummaryPrintable t="${testInstance}"/>
+            </g:form>
         </div>
     </body>
 </html>

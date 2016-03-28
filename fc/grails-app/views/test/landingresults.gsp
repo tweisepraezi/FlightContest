@@ -415,24 +415,30 @@
                         </table>
                         <g:if test="${!testInstance.landingTestComplete}">
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="landingresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="7"/>
+                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="11"/>
+                                <g:actionSubmit action="landingresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="12"/>
                             </g:if>
-                        	<g:actionSubmit action="landingresultsready" value="${message(code:'fc.results.ready')}" tabIndex="8"/>
-                        	<g:actionSubmit action="landingresultssave" value="${message(code:'fc.save')}" tabIndex="9"/>
-                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="10"/>
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="11"/>
+                            <g:else>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="13"/>
+                            </g:else>
+                        	<g:actionSubmit action="landingresultsready" value="${message(code:'fc.results.ready')}" tabIndex="14"/>
+                        	<g:actionSubmit action="landingresultssave" value="${message(code:'fc.save')}" tabIndex="15"/>
+                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="16"/>
+                            <g:if test="${params.next}">
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
+                            </g:if>
                         </g:if>
                         <g:else>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="7"/>
+                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="41"/>
                             </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="8"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="42"/>
                             </g:else>
-                        	<g:actionSubmit action="landingresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="9"/>
-                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="10"/>
+                        	<g:actionSubmit action="landingresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="43"/>
+                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="44"/>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="11"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="45"/>
                             </g:if>
                         </g:else>
                     </g:form>

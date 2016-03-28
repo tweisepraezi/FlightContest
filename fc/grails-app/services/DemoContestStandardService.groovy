@@ -5,12 +5,12 @@ class DemoContestStandardService
 	def fcService
     def evaluationService
     
-	long CreateTest1(String testName, String printPrefix, boolean testExists)
+	long CreateTest1(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,true,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,aflosDB,testExists)
 		Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, false)
 
 		// Teams
@@ -25,10 +25,15 @@ class DemoContestStandardService
 		Map crew5 = fcService.putCrew(contest,13,"Besatzung 13","crew13.fc@localhost","Schweiz","K2","D-EAAC","","",70)
 		
 		// Route
-		fcService.printstart "Route"
-		Map route1 = fcService.importRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-		fcService.printdone ""
-		
+        Map route1 = [:]
+        fcService.printstart "Route"
+        if (aflosDB) {
+            route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route1 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
+        }
+        fcService.printdone ""
+        
 		// Planning Test
 		Map planningtest1 = fcService.putPlanningTest(task1,"")
 		Map planningtesttask1 = fcService.putPlanningTestTask(planningtest1,"",route1,130,20)
@@ -36,7 +41,7 @@ class DemoContestStandardService
 
 		// Flight Test
 		Map flighttest1 = fcService.putFlightTest(task1,"",route1)
-		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15)
+		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0)
 		fcService.putflighttestwindTask(task1,flighttestwind1)
 		
 		// Planning
@@ -103,6 +108,7 @@ class DemoContestStandardService
 		  
 		fcService.importflightresultsTask(task1,[[crew:crew1,
 												  startNum:3,
+                                                  gac:"Crew_3.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -115,6 +121,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew4,
 												  startNum:11,
+                                                  gac:"Crew_11.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -127,6 +134,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew5,
 												  startNum:13,
+                                                  gac:"Crew_13.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -139,6 +147,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew3,
 												  startNum:19,
+                                                  gac:"Crew_19.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -151,6 +160,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew2,
 												  startNum:18,
+                                                  gac:"Crew_18.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -161,7 +171,7 @@ class DemoContestStandardService
 												  safetyEnvelopeOpened:false,
 												  frequencyNotMonitored:false,
 												  testComplete:true],
-												])
+												],aflosDB)
 		fcService.putobservationresultsTask(task1, [
 													[crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
 													[crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -250,12 +260,12 @@ class DemoContestStandardService
 		return contest.instance.id
 	}
 
-	long CreateTest2(String testName, String printPrefix, boolean testExists)
+	long CreateTest2(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,true,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,aflosDB,testExists)
 		Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false)
 
 		// Classes with properties
@@ -285,10 +295,15 @@ class DemoContestStandardService
 		fcService.puttaskclassTask(task1,resultclass3,true,true,true,true,false, false,true, true,true,true, false,false,false,false)
 		
 		// Route
-		fcService.printstart "Route"
-		Map route1 = fcService.importRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-		fcService.printdone ""
-		
+        fcService.printstart "Route"
+        Map route1 = [:]
+        if (aflosDB) {
+            route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route1 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
+        }
+        fcService.printdone ""
+        
 		// Planning Test
 		Map planningtest1 = fcService.putPlanningTest(task1,"")
 		Map planningtesttask1 = fcService.putPlanningTestTask(planningtest1,"",route1,130,20)
@@ -296,7 +311,7 @@ class DemoContestStandardService
 		
 		// Flight Test
 		Map flighttest1 = fcService.putFlightTest(task1,"",route1)
-		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15)
+		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0)
 		fcService.putflighttestwindTask(task1,flighttestwind1)
 		
 		// Planning
@@ -363,6 +378,7 @@ class DemoContestStandardService
 		  
 		fcService.importflightresultsTask(task1,[[crew:crew1,
 												  startNum:3,
+                                                  gac:"Crew_3.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -375,6 +391,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew4,
 												  startNum:11,
+                                                  gac:"Crew_11.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -387,6 +404,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew5,
 												  startNum:13,
+                                                  gac:"Crew_13.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -399,6 +417,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew3,
 												  startNum:19,
+                                                  gac:"Crew_19.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -411,6 +430,7 @@ class DemoContestStandardService
 												  testComplete:true],
 												 [crew:crew2,
 												  startNum:18,
+                                                  gac:"Crew_18.gac",
 												  takeoffMissed:false,
 												  badCourseStartLanding:false,
 												  landingTooLate:false,
@@ -421,7 +441,7 @@ class DemoContestStandardService
 												  safetyEnvelopeOpened:false,
 												  frequencyNotMonitored:false,
 												  testComplete:true],
-												])
+												],aflosDB)
 		fcService.putobservationresultsTask(task1, [
 													[crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
 													[crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -503,21 +523,31 @@ class DemoContestStandardService
 		return contest.instance.id
 	}
 
-	long CreateTest3(String testName, String printPrefix, boolean testExists)
+	long CreateTest3(String testName, String printPrefix, boolean testExists, boolean aflosDB)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,true,0,ContestRules.R1,true,testExists) // 0 - keine Team-Auswertung
+        Map contest = fcService.putContest(testName,printPrefix,200000,true,0,ContestRules.R1,aflosDB,testExists) // 0 - keine Team-Auswertung
 		
 		// Route 1
+        Map route1 = [:]
 		fcService.printstart "Route 1"
-		Map route1 = fcService.importRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        if (aflosDB) {
+            route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route1 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
+        }
 		fcService.printdone ""
 		
 		// Route 2
+        Map route2 = [:]
 		fcService.printstart "Route 2"
-		Map route2 = fcService.importRoute(contest,"Strecke 2","Strecke 2",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        if (aflosDB) {
+            route2 = fcService.importAflosRoute(contest,"Strecke 2","Strecke 2",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
+        } else {
+            route2 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_2.gpx")
+        }
 		fcService.printdone ""
 		
 		// Teams
@@ -566,7 +596,7 @@ class DemoContestStandardService
 		fcService.putplanningtesttaskcrewsTask(task1,planningtesttask1,[crew3,crew11,crew13,crew19,crew18])
 		
 		Map flighttest1 = fcService.putFlightTest(task1,"",route1)
-		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15)
+		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1,300,15,274,0,0,260,-0.05,0,0,0,0)
 		fcService.putflighttestwindcrewsTask(task1,flighttestwind1,[crew3,crew11,crew13,crew19,crew18])
 		
 		fcService.putsequenceTask(task1,[crew3,crew11,crew13,crew19,crew18])
@@ -584,7 +614,7 @@ class DemoContestStandardService
 		fcService.putplanningtesttaskcrewsTask(task2,planningtesttask2,[crew3,crew11,crew13,crew19,crew18])
 		
 		Map flighttest2 = fcService.putFlightTest(task2,"",route2)
-		Map flighttestwind2 = fcService.putFlightTestWind(flighttest2,300,15)
+		Map flighttestwind2 = fcService.putFlightTestWind(flighttest2,300,15,274,0,0,260,-0.05,0,0,0,0)
 		fcService.putflighttestwindcrewsTask(task2,flighttestwind2,[crew3,crew11,crew13,crew19,crew18])
 		
 		fcService.putsequenceTask(task2,[crew3,crew11,crew13,crew19,crew18])
@@ -602,7 +632,7 @@ class DemoContestStandardService
 		fcService.putplanningtesttaskTask(task3,planningtesttask3)
 		
 		Map flighttest3 = fcService.putFlightTest(task3,"",route1)
-		Map flighttestwind3 = fcService.putFlightTestWind(flighttest3,300,15)
+		Map flighttestwind3 = fcService.putFlightTestWind(flighttest3,300,15,274,0,0,260,-0.05,0,0,0,0)
 		fcService.putflighttestwindTask(task3,flighttestwind3)
 		
 		fcService.putsequenceTask(task3,[crew14,crew4,crew5,crew12,crew3,crew1,crew9,crew18,crew19,crew7,crew10,crew11,crew13,crew2,crew8])
@@ -613,7 +643,7 @@ class DemoContestStandardService
 		return contest.instance.id
 	}
 
-	Map RunTest1(Contest lastContest, String contestName)
+	Map RunTest1(Contest lastContest, String contestName, boolean aflosDB)
 	{
 		Map ret_test = [:]
         if (lastContest && lastContest.title == contestName) {
@@ -643,7 +673,7 @@ class DemoContestStandardService
                 [name:"CoordResult 'Besatzung 11'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
                 [name:"CoordResult 'Besatzung 13'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
                 [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(lastContest),[sort:"id"]),data:test1Test()],
-                ]
+               ],aflosDB
             )
             fcService.printdone "Test '$lastContest.title'"
             ret_test.error = ret.error
@@ -655,7 +685,7 @@ class DemoContestStandardService
 		return ret_test
 	}
 	
-	Map RunTest2(Contest lastContest, String contestName)
+	Map RunTest2(Contest lastContest, String contestName, boolean aflosDB)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -687,7 +717,7 @@ class DemoContestStandardService
 				[name:"CoordResult 'Besatzung 11'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],
 				[name:"CoordResult 'Besatzung 13'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],
 				[name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(lastContest),[sort:"id"]),data:test2Test()],
-				]
+			   ],aflosDB
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error
@@ -699,7 +729,7 @@ class DemoContestStandardService
 		return ret_test
 	}
 	
-	Map RunTest3(Contest lastContest, String contestName)
+	Map RunTest3(Contest lastContest, String contestName, boolean aflosDB)
 	{
 		Map ret_test = [:]
         if (lastContest && lastContest.title == contestName) {
@@ -731,7 +761,7 @@ class DemoContestStandardService
                 [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
                 [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
                 [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(lastContest),[sort:"id"]),data:test2Test()],
-                ]
+               ],aflosDB
             )
             fcService.printdone "Test '$lastContest.title'"
             ret_test.error = ret.error
@@ -1451,8 +1481,8 @@ class DemoContestStandardService
        [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:33:34",planProcedureTurn:false,
-        resultLatitude:"N 051\u00b0 29,50800'",resultLongitude:"E 013\u00b0 52,83280'",resultAltitude:337,
-        resultCpTime:"11:27:25",
+        resultLatitude:"N 051\u00b0 29,52040'",resultLongitude:"E 013\u00b0 52,92050'",resultAltitude:337,
+        resultCpTime:"11:27:19",
         resultCpNotFound:false,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
@@ -1581,8 +1611,8 @@ class DemoContestStandardService
        [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"14:18:50",planProcedureTurn:false,
-        resultLatitude:"N 051\u00b0 29,50580'",resultLongitude:"E 013\u00b0 52,83610'",resultAltitude:307,
-        resultCpTime:"14:12:10",
+        resultLatitude:"N 051\u00b0 29,51960'",resultLongitude:"E 013\u00b0 52,90880'",resultAltitude:306,
+        resultCpTime:"14:12:03",
         resultCpNotFound:false,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
@@ -1693,8 +1723,8 @@ class DemoContestStandardService
        [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:06:07",planProcedureTurn:false,
-        resultLatitude:"",resultLongitude:"",resultAltitude:0,
-        resultCpTime:"02:00:00",
+        resultLatitude:"N 051\u00b0 32,96050'",resultLongitude:"E 014\u00b0 08,53140'",resultAltitude:1775,
+        resultCpTime:"13:06:06",
         resultCpNotFound:true,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:200
@@ -1711,8 +1741,8 @@ class DemoContestStandardService
        [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:21:50",planProcedureTurn:false,
-        resultLatitude:"N 051\u00b0 29,50790'",resultLongitude:"E 013\u00b0 52,83230'",resultAltitude:305,
-        resultCpTime:"13:16:59",
+        resultLatitude:"N 051\u00b0 29,52080'",resultLongitude:"E 013\u00b0 52,91520'",resultAltitude:302,
+        resultCpTime:"13:16:54",
         resultCpNotFound:false,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
@@ -1796,8 +1826,8 @@ class DemoContestStandardService
        [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:33:13",planProcedureTurn:false,
-        resultLatitude:"",resultLongitude:"",resultAltitude:0,
-        resultCpTime:"02:00:00",
+        resultLatitude:"N 051\u00b0 37,95600'",resultLongitude:"E 014\u00b0 08,42100'",resultAltitude:1675,
+        resultCpTime:"11:33:26",
         resultCpNotFound:true,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:200
@@ -1841,8 +1871,8 @@ class DemoContestStandardService
        [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:08:48",planProcedureTurn:false,
-        resultLatitude:"N 051\u00b0 29,50910'",resultLongitude:"E 013\u00b0 52,83120'",resultAltitude:321,
-        resultCpTime:"12:02:55",
+        resultLatitude:"N 051\u00b0 29,52090'",resultLongitude:"E 013\u00b0 52,91070'",resultAltitude:318,
+        resultCpTime:"12:02:49",
         resultCpNotFound:false,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
@@ -1971,8 +2001,8 @@ class DemoContestStandardService
        [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:14:48",planProcedureTurn:false,
-        resultLatitude:"N 051\u00b0 29,50860'",resultLongitude:"E 013\u00b0 52,83220'",resultAltitude:320,
-        resultCpTime:"12:12:41",
+        resultLatitude:"N 051\u00b0 29,51970'",resultLongitude:"E 013\u00b0 52,91080'",resultAltitude:318,
+        resultCpTime:"12:12:36",
         resultCpNotFound:false,resultBadCourseNum:0,
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0

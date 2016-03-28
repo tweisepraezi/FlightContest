@@ -18,11 +18,19 @@
                         size: A4;
                     </g:else> 
                 </g:else>
+                <g:if test="${params.landscape=='true'}">
+                    margin-top: 8%;
+                    margin-bottom: 8%;
+                </g:if>
+                <g:else>
+                    margin-top: 10%;
+                    margin-bottom: 10%;
+                </g:else>
                 @top-left {
                     content: "${message(code:'fc.flightresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}"
                 }
                 @top-right {
-                    content: "${testInstance.GetViewPos()}"
+                    content: "${testInstance.GetViewPos()}-" counter(page)
                 }
                 @bottom-left {
                     content: "${contestInstance.printOrganizer}"
@@ -38,23 +46,22 @@
         <title>${message(code:'fc.flightresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}</title>
     </head>
     <body>
+        <h2>${message(code:'fc.flightresults')} ${testInstance.GetStartNum()}</h2>
+        <g:if test="${!testInstance.flightTestComplete}">
+            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+        </g:if>
+        <g:else>
+            <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})</h3>
+        </g:else>
         <div>
-            <div>
-                <h2>${message(code:'fc.flightresults')} ${testInstance.GetStartNum()}</h2>
-                <g:if test="${!testInstance.flightTestComplete}">
-	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()}) [${message(code:'fc.provisional')}]</h3>
-                </g:if>
-                <g:else>
-	                <h3>${testInstance?.task.printName()} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})</h3>
-                </g:else>
-                <div>
-                    <g:form>
-                        <g:crewTestPrintable t="${testInstance}"/>
-                        <br/>
-                        <g:flightTestPrintable t="${testInstance}"/>
-                    </g:form>
+            <g:form>
+                <div style="page-break-inside:avoid">
+                    <g:crewTestPrintable t="${testInstance}"/>
+                    <br/>
+                    <g:flightTestPrintable t="${testInstance}"/>
                 </div>
-            </div>
+                <g:flightTestMapPrintable t="${testInstance}" flightMapFileName="${flightMapFileName}" />
+            </g:form>
         </div>
     </body>
 </html>

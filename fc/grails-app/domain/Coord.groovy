@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.text.*
 
 class Coord
@@ -7,14 +8,20 @@ class Coord
 	String mark
 	
 	// Latitude (Geographische Breite)
+    String latDirection = 'N'
 	int latGrad
 	BigDecimal latMinute = 0.0
-	String latDirection = 'N'
+    BigDecimal latGradDecimal = 0.0
+    Integer latMin = 0
+    BigDecimal latSecondDecimal = 0.0
 
     // Longitude (Geographische Laenge)
+    String lonDirection = 'E'
     int lonGrad
     BigDecimal lonMinute = 0.0
-    String lonDirection = 'E'
+    BigDecimal lonGradDecimal = 0.0
+    Integer lonMin = 0
+    BigDecimal lonSecondDecimal = 0.0
 
     int altitude = 500                   // Altitude (Höhe) in ft 
     int gatewidth = 1                    // UNUSED: gatewidth, migriert nach gatewidth2 (Float), DB-2.3
@@ -24,7 +31,8 @@ class Coord
 	Boolean noTimeCheck = false          // No time check, DB-2.3
     Boolean noGateCheck = false          // No gate check, DB-2.8
 	Boolean noPlanningTest = false       // No planning test, DB-2.6
-	
+    BigDecimal gateDirection = 270.0     // Richtung der Startbahn (T/O,LDG,iT/O,iLDG), Grad, DB-2.12
+    
     // Speicher für Eingabe der Landkarten-Messung
 	boolean measureEntered = false
 	BigDecimal coordTrueTrack = 0        // Grad
@@ -53,22 +61,32 @@ class Coord
     int resultBadCourseNum              = 0
     int penaltyCoord                    = 0           // Points
 	
-    static transients = ['resultCpTimeInput']
+    static transients = ['resultCpTimeInput','latGradDecimal','lonGradDecimal','latMin','lonMin','latSecondDecimal','lonSecondDecimal']
     
     static constraints = {
 		type()
         titleNumber(range:1..<100)
 		mark(nullable:true)
+        
+        latDirection(inList:['N','S'])
         latGrad(range:0..90)
+        latGradDecimal(range:-90..90, scale:5)
         latMinute(range:0..<60, scale:10, validator:{val,obj->
             if (val > 0 && obj.latGrad == 90 ) {
                 return false
             }
         })
-        latDirection(inList:['N','S'])
+        latMin(range:0..<60)
+        latSecondDecimal(range:0..<60, scale:4)
         
+        lonDirection(inList:['E','W'])
         lonGrad(range:0..180, validator:{val,obj->
             if (val == 180 && obj.lonDirection == 'W') {
+                return false
+            }
+        })
+        lonGradDecimal(range:-180..180, scale:5, validator:{val,obj->
+            if (val == -180) {
                 return false
             }
         })
@@ -77,7 +95,9 @@ class Coord
                 return false
             }
         })
-        lonDirection(inList:['E','W'])
+        lonMin(range:0..<60)
+        lonSecondDecimal(range:0..<60, scale:4)
+        
         altitude(range:0..100000)
         gatewidth()
 		coordTrueTrack(scale:10)
@@ -149,6 +169,9 @@ class Coord
         // DB-2.8 compatibility
         noGateCheck(nullable:true)
         endCurved(nullable:true)
+        
+        // DB-2.12 compatibility
+        gateDirection(nullable:true,range:0..<360,scale:0)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -268,14 +291,21 @@ class Coord
         }
     }
     
-	String titleShortMap()
+	String titleShortMap(boolean isPrint)
 	{
-		String title = titleCode()
+		String title
+        if (isPrint) {
+            title = titlePrintCode()
+        }  else {
+            title = titleCode()
+        }
+        /*
 		switch (type) {
 			case CoordType.TP:
 			case CoordType.SECRET:
 				title += " (${mark})"
 		}
+		*/
 		return title
 	}
 	
@@ -303,14 +333,34 @@ class Coord
 	
     String latName()
     {
-        //return "${latGrad}${getMsg('fc.grad')}${latMinute}${getMsg('fc.min')}${latDirection}"
-    	return "${latDirection} ${FcMath.GradStr(latGrad)}${getMsg('fc.grad')} ${FcMath.MinuteStr(latMinute)}${getMsg('fc.min')}"
+        return latName(route.contest.coordPresentation)
+    }
+    
+    String latName(CoordPresentation coordPresentation)
+    {
+        switch (coordPresentation) {
+            case CoordPresentation.DEGREEMINUTE:
+                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(latMinute)}${getMsg('fc.min')} ${latDirection}"
+            case CoordPresentation.DEGREEMINUTESECOND:
+                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(latMinute)}${getMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(latMinute)}${getMsg('fc.sec')} ${latDirection}"
+        }
+        return "${CoordPresentation.LAT} ${CoordPresentation.DecimalGradStr(latMath())}${getMsg('fc.grad')}" // CoordPresentation.DEGREE
     }
 
     String latPrintName()
     {
-        //return "${latGrad}${getMsg('fc.grad')}${latMinute}${getMsg('fc.min')}${latDirection}"
-        return "${latDirection} ${FcMath.GradStr(latGrad)}${getPrintMsg('fc.grad')} ${FcMath.MinuteStr(latMinute)}${getPrintMsg('fc.min')}"
+        return latPrintName(route.contest.coordPresentation)
+    }
+
+    String latPrintName(CoordPresentation coordPresentation)
+    {
+        switch (coordPresentation) {
+            case CoordPresentation.DEGREEMINUTE:
+                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getPrintMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(latMinute)}${getPrintMsg('fc.min')} ${latDirection}"
+            case CoordPresentation.DEGREEMINUTESECOND:
+                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getPrintMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(latMinute)}${getPrintMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(latMinute)}${getPrintMsg('fc.sec')} ${latDirection}"
+        }
+        return "${CoordPresentation.LAT} ${CoordPresentation.DecimalGradStr(latMath())}${getPrintMsg('fc.grad')}" // CoordPresentation.DEGREE
     }
 
 	BigDecimal lonMath()
@@ -325,14 +375,34 @@ class Coord
 	
     String lonName()
     {
-        //return "${lonGrad}${getMsg('fc.grad')}${lonMinute}${getMsg('fc.min')}${lonDirection}"
-        return "${lonDirection} ${FcMath.GradStr(lonGrad)}${getMsg('fc.grad')} ${FcMath.MinuteStr(lonMinute)}${getMsg('fc.min')}"
+        return lonName(route.contest.coordPresentation)
+    }
+    
+    String lonName(CoordPresentation coordPresentation)
+    {
+        switch (coordPresentation) {
+            case CoordPresentation.DEGREEMINUTE:
+                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(lonMinute)}${getMsg('fc.min')} ${lonDirection}"
+            case CoordPresentation.DEGREEMINUTESECOND:
+                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(lonMinute)}${getMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(lonMinute)}${getMsg('fc.sec')} ${lonDirection}"
+        }
+        return "${CoordPresentation.LON} ${CoordPresentation.DecimalGradStr(lonMath())}${getMsg('fc.grad')}" // CoordPresentation.DEGREE
     }
 
     String lonPrintName()
     {
-        //return "${lonGrad}${getMsg('fc.grad')}${lonMinute}${getMsg('fc.min')}${lonDirection}"
-        return "${lonDirection} ${FcMath.GradStr(lonGrad)}${getPrintMsg('fc.grad')} ${FcMath.MinuteStr(lonMinute)}${getPrintMsg('fc.min')}"
+        return lonPrintName(route.contest.coordPresentation)
+    }
+    
+    String lonPrintName(CoordPresentation coordPresentation)
+    {
+        switch (coordPresentation) {
+            case CoordPresentation.DEGREEMINUTE:
+                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getPrintMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(lonMinute)}${getPrintMsg('fc.min')} ${lonDirection}"
+            case CoordPresentation.DEGREEMINUTESECOND:
+                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getPrintMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(lonMinute)}${getPrintMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(lonMinute)}${getPrintMsg('fc.sec')} ${lonDirection}"
+        }
+        return "${CoordPresentation.LON} ${CoordPresentation.DecimalGradStr(lonMath())}${getPrintMsg('fc.grad')}" // CoordPresentation.DEGREE
     }
 
 	String name()
@@ -367,9 +437,14 @@ class Coord
 		return s
 	}
 	
-	String namePrintable(boolean printSettings) // BUG: ' wird nicht korrekt gedruckt
+	String namePrintable(boolean printSettings, boolean showAllCoordPresentations)
 	{
-		String print_name = "${latPrintName()}' ${lonPrintName()}'"
+		String print_name = ""
+        if (showAllCoordPresentations) {
+            print_name = "${latPrintName(CoordPresentation.DEGREE)}, ${lonPrintName(CoordPresentation.DEGREE)}"
+        } else {
+            print_name = "${latPrintName()}, ${lonPrintName()}"
+        }
 		if (printSettings) {
 	    	if (measureDistance != null || measureTrueTrack != null || legDuration != null || noTimeCheck || noGateCheck || noPlanningTest) {
 				print_name += " ("
@@ -411,6 +486,12 @@ class Coord
 				print_name += ")"
 			}
 		}
+        if (showAllCoordPresentations) {
+            print_name += "<br/>"
+            print_name += "${latPrintName(CoordPresentation.DEGREEMINUTE)}, ${lonPrintName(CoordPresentation.DEGREEMINUTE)}"
+            print_name += "<br/>"
+            print_name += "${latPrintName(CoordPresentation.DEGREEMINUTESECOND)}, ${lonPrintName(CoordPresentation.DEGREEMINUTESECOND)}"
+        }
 		return print_name
 	}
 
@@ -470,4 +551,9 @@ class Coord
 		}
 		return getMsg('fc.flighttest.cpnotfound.short')
 	}
+    
+    String GetResultLocalTime()
+    {
+        return FcMath.TimeStr(resultCpTime)
+    }
 }

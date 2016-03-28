@@ -13,7 +13,7 @@
                 <div class="block" id="forms" >
                 	<g:uploadForm action="uploadaflosdb">
                     	<div>
-    						<input type="file" size="80" accept="application/msaccess/*.mdb" name="uploadfile" tabIndex="1"/>
+    						<input type="file" size="80" accept=".mdb" name="uploadfile" tabIndex="1"/>
                     	</div>
                     	<div>
 	    					<input type="submit" value="${message(code:'fc.upload')}" tabIndex="2"/>

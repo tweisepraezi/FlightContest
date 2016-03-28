@@ -30,7 +30,7 @@
                             <p>
                                 <label>${message(code:'fc.title')}:</label>
                                 <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}"/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:flightTestInstance,field:'title')}" tabIndex="1"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.route')}*:</label>
@@ -43,16 +43,34 @@
                             <p>
                                 <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
                                 <br/>
-                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestInstance,field:'direction')}"/>
+                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestInstance,field:'direction')}" tabIndex="2"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
-                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestInstance,field:'speed')}"/>
+                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestInstance,field:'speed')}" tabIndex="3"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <fieldset>
+                            <legend>${message(code:'fc.runway')}</legend>
+                            <p>
+                                <label>${message(code:'fc.runway.direction.to')} [${message(code:'fc.grad')}]:</label>
+                                <br/>
+                                <input type="text" id="TODirection" name="TODirection" value="${fieldValue(bean:flightTestInstance,field:'TODirection')}" tabIndex="4"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.runway.direction.ldg')} [${message(code:'fc.grad')}]:</label>
+                                <br/>
+                                <input type="text" id="LDGDirection" name="LDGDirection" value="${fieldValue(bean:flightTestInstance,field:'LDGDirection')}" tabIndex="5"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.runway.direction.itoildg')} [${message(code:'fc.grad')}]:</label>
+                                <br/>
+                                <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${fieldValue(bean:flightTestInstance,field:'iTOiLDGDirection')}" tabIndex="6"/>
+                            </p>
+                        </fieldset>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="101"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="102"/>
                     </g:form>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 <g:applyLayout name="map">
 	<html>
 	    <head>
+           <g:set var="titletext" value="${message(code:'fc.onlinemap')}"/>
 	       <g:gpxViewerHead/>
 	    </head>
 	    <body>

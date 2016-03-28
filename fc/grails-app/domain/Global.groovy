@@ -1,10 +1,12 @@
+import grails.util.Environment
+
 class Global 
 {
     def grailsApplication
     
-	// DB-2.11
+	// Actual database version: DB-2.12
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 11
+	static int DB_MINOR = 12
 	
     static final int LIVE_UPLOADSECONDS = 60
     static final String LIVE_STYLESHEET = "fclive.css"
@@ -47,6 +49,14 @@ class Global
 		}
 		return false
 	}
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    static boolean IsDevelopmentEnvironment() 
+    {
+        if (Environment.currentEnvironment == Environment.DEVELOPMENT || grails.util.GrailsUtil.getEnvironment().equals("lastdb")) {
+            return true
+        }
+    }
     
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsEMailPossible()
@@ -158,6 +168,9 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsAFLOSPossible()
     {
+        if (IsDevelopmentEnvironment()) {
+            return true
+        }
         if (   grailsApplication.config.flightcontest.aflos
             && grailsApplication.config.flightcontest.aflos.showmenu
            )
@@ -166,4 +179,41 @@ class Global
         }
         return false
     }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsDBUtilPossible()
+    {
+        if (IsDevelopmentEnvironment()) {
+            return true
+        }
+        if (   grailsApplication.config.flightcontest.dbutil
+            && grailsApplication.config.flightcontest.dbutil.showmenu
+           )
+        {
+            return true
+        }
+        return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsLogPossible()
+    {
+        if (IsDevelopmentEnvironment()) {
+            if (    grailsApplication.config.flightcontest.wrlog
+                && !grailsApplication.config.flightcontest.wrlog.enable
+               )
+            {
+                return false
+            }
+            return true
+        }
+        if (   grailsApplication.config.flightcontest.wrlog
+            && grailsApplication.config.flightcontest.wrlog.enable
+           )
+        {
+            return true
+        }
+        return false
+    }
+    
 }

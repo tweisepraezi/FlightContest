@@ -48,6 +48,10 @@
                                         <td>1:${fieldValue(bean:contestInstance, field:'mapScale')}</td>
                                     </tr>
                                     <tr>
+                                        <td class="detailtitle">${message(code:'fc.coordpresentation')}:</td>
+                                        <td>${message(code:contestInstance.coordPresentation.code)}</td>
+                                    </tr>
+                                    <tr>
                                         <td class="detailtitle">${message(code:'fc.timezone')}:</td>
                                         <td>${fieldValue(bean:contestInstance, field:'timeZone')}${message(code:'fc.time.h')}</td>
                                     </tr>

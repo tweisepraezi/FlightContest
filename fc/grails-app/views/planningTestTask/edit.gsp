@@ -30,25 +30,47 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:planningTestTaskInstance,field:'title')}"/>
                             </p>
-                            <p>
-                                <label>${message(code:'fc.route')}*:</label>
-                                <br/>
-                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance,[sort:"id"])}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
-                            </p>
                         </fieldset>
-                        <fieldset>
-                            <legend>${message(code:'fc.wind')}</legend>
-                            <p>
-                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
+                        <g:if test="${!planningTestTaskInstance.Used()}">
+                            <fieldset>
+                                <p>
+                                    <label>${message(code:'fc.route')}*:</label>
+                                    <br/>
+                                    <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance,[sort:"id"])}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
+                                </p>
+                            </fieldset>
+                         </g:if>
+                         <g:else>
+                            <fieldset>
+                                <legend>${message(code:'fc.route')}</legend>
+                                <p/>
                                 <br/>
-                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:planningTestTaskInstance,field:'direction')}"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
+                                <p>${planningTestTaskInstance.route.name()}</p>
+                            </fieldset>
+                         </g:else>
+                        <g:if test="${!planningTestTaskInstance.Used()}">
+	                        <fieldset>
+	                            <legend>${message(code:'fc.wind')}</legend>
+	                            <p>
+	                                <label>${message(code:'fc.wind.direction')}* [${message(code:'fc.grad')}]:</label>
+	                                <br/>
+	                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:planningTestTaskInstance,field:'direction')}"/>
+	                            </p>
+	                            <p>
+	                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
+	                                <br/>
+	                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:planningTestTaskInstance,field:'speed')}"/>
+	                            </p>
+	                        </fieldset>
+                        </g:if>
+                        <g:else>
+                            <fieldset>
+                                <legend>${message(code:'fc.wind')}</legend>
+                                <p/>
                                 <br/>
-                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:planningTestTaskInstance,field:'speed')}"/>
-                            </p>
-                        </fieldset>
+                                <p>${planningTestTaskInstance.wind.name()}</p>
+                            </fieldset>
+                        </g:else>
                         <input type="hidden" name="id" value="${planningTestTaskInstance?.id}" />
                         <input type="hidden" name="version" value="${planningTestTaskInstance?.version}" />
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" />

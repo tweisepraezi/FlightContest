@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Map;
 
 class Test 
@@ -13,6 +14,7 @@ class Test
 	BigDecimal taskTAS = 0
 	Aircraft taskAircraft                                  // DB-2.3
     Integer aflosStartNum = 0                              // DB-2.10
+    Boolean showAflosMark = false                          // DB-2.12
     
 	// planning
 	boolean timeCalculated = false
@@ -138,10 +140,18 @@ class Test
 	int taskPenalties = 0
     int taskPosition = 0
     
+    LoggerDataTest loggerData = null                       // DB-2.12
+    String loggerDataStartUtc = ""                         // DB-2.12
+    String loggerDataEndUtc = ""                           // DB-2.12
+    LoggerResult loggerResult = null                       // DB-2.12
+    
+    String reserve = ""                                    // DB-2.12
+    
 	// transient values 
-	static transients = ['printPlanningResults','printFlightResults','printObservationResults','printLandingResults','printSpecialResults','printProvisionalResults',]
+	static transients = ['printPlanningResults','printFlightResults','printFlightMap','printObservationResults','printLandingResults','printSpecialResults','printProvisionalResults',]
 	boolean printPlanningResults = true
 	boolean printFlightResults = true
+    boolean printFlightMap = true
 	boolean printObservationResults = true
 	boolean printLandingResults = true
 	boolean printSpecialResults = true
@@ -189,6 +199,14 @@ class Test
         // DB-2.10 compatibility
         aflosStartNum(nullable:true)
         flightTestLink(nullable:true)
+        
+        // DB-2.12 compatibility
+        loggerData(nullable:true)
+        loggerDataStartUtc(nullable:true)
+        loggerDataEndUtc(nullable:true)
+        loggerResult(nullable:true)
+        showAflosMark(nullable:true)
+        reserve(nullable:true)
     }
 
 	static mapping = {
@@ -685,6 +703,28 @@ class Test
 		return provisional
 	}
 
+    int GetDetailNum()
+    {
+        int detail_num = 0
+        if (printPlanningResults) {
+            detail_num++
+        }
+        if (printFlightResults) {
+            detail_num++
+        }
+        // printFlightMap not relevant
+        if (printObservationResults) {
+            detail_num++
+        }
+        if (printLandingResults) {
+            detail_num++
+        }
+        if (printSpecialResults) {
+            detail_num++
+        }
+        return detail_num
+    }
+    
 	boolean IsTestClassResultsProvisional(Map resultSettings, ResultClass resultclassInstance)
 	{
 		if (crew.resultclass == resultclassInstance) {
@@ -1673,15 +1713,6 @@ class Test
 		return crew.startNum  
 	}
 	
-    int GetAFLOSStartNum()
-    {
-        int start_num = aflosStartNum
-        if (start_num <= 0) {
-            start_num = crew.startNum
-        }
-        return start_num
-    }
-    
     String GetTitle(ResultType resultType)
     {
         return GetTitle(resultType, false) // false - no print
@@ -1883,13 +1914,44 @@ class Test
     
     boolean IsEMailPossible()
     {
-        if (   aflosStartNum 
-            && NetTools.EMailList(crew.email)
+        if (   NetTools.EMailList(crew.email)
             && BootStrap.global.IsEMailPossible()
             && BootStrap.global.IsFTPPossible()
-            && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
-            && AflosTools.GetAflosCrewName(task.contest, crew.startNum)
-            && AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, crew.startNum)
+           )
+        {
+            if (IsLoggerData()) {
+                return true
+            } else if (   aflosStartNum 
+                       && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
+                       && AflosTools.GetAflosCrewName(task.contest, aflosStartNum)
+                       //&& AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, aflosStartNum)
+                      ) 
+            {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsShowMapPossible()
+    {
+        if (IsLoggerData()) {
+            return true
+        } else if (   aflosStartNum
+                   && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
+                   && AflosTools.GetAflosCrewName(task.contest, aflosStartNum)
+                   //&& AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, aflosStartNum)
+                  ) 
+        {
+            return true
+        }
+        return false
+    }
+    
+    boolean IsAFLOSImportPossible()
+    {
+        if (   AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
+            && AflosTools.ExistAnyAflosCrew(task.contest)
            ) 
         {
             return true
@@ -1897,23 +1959,11 @@ class Test
         return false
     }
     
-    boolean IsShowMapPossible()
+    boolean IsAFLOSResultsPossible()
     {
-        if (   aflosStartNum
-            && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
-            && AflosTools.GetAflosCrewName(task.contest, crew.startNum)
-            && AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, crew.startNum)
-           ) {
-            return true
-        }
-        return false
-    }
-    
-    boolean IsAFLOSPossible()
-    {
-        if (   aflosStartNum 
-            && BootStrap.global.IsAFLOSPossible()
-           ) 
+        if (   AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
+            && AflosTools.ExistAnyAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark)
+           )
         {
             return true
         }
@@ -1943,4 +1993,75 @@ class Test
         return ret
     }
 
+    boolean IsLoggerData()
+    {
+        return TrackPoint.countByLoggerdata(loggerData) > 0
+    }
+    
+    boolean IsLoggerResult()
+    {
+        return CalcResult.countByLoggerresult(loggerResult) > 0
+            
+    }
+    
+    boolean IsLoggerResultWithoutRunwayMissed()
+    {
+        if (IsLoggerResult()) {
+            for (CalcResult calc_result in CalcResult.findAllByLoggerresultAndGateNotFound(loggerResult,true)) {
+                if (calc_result.coordTitle.type.IsRunwayCoord()) {
+                    return false
+                }
+            }
+            return true
+        }
+        return false
+    }
+    
+    List GetTrackPoints(String loggerDataStartUtc, String loggerDataEndUtc)
+    {
+        List track_points = []
+        if (IsLoggerData()) {
+            TrackPoint.findAllByLoggerdata(loggerData,[sort:"id"]).each { TrackPoint trackpoint_instance ->
+                boolean add_trackpoint = true
+                if (loggerDataStartUtc) {
+                    if (trackpoint_instance.utc < loggerDataStartUtc) {
+                        add_trackpoint = false
+                    }
+                }
+                if (loggerDataEndUtc) {
+                    if (trackpoint_instance.utc > loggerDataEndUtc) {
+                        add_trackpoint = false
+                    }
+                }
+                if (add_trackpoint) {
+                    Map new_point = [utc:       trackpoint_instance.utc,
+                                     latitude:  trackpoint_instance.latitude,
+                                     longitude: trackpoint_instance.longitude,
+                                     altitude:  trackpoint_instance.altitude,
+                                     track:     trackpoint_instance.track
+                                    ]
+                    track_points += new_point
+                }
+            }
+        }
+        return track_points
+    }
+    
+    String GetLoggerDataFirstUtc()
+    {
+        if (IsLoggerData()) {
+            return TrackPoint.findByLoggerdata(loggerData,[sort:"id"]).utc
+        }
+        return ""
+    }
+    
+    String GetLoggerDataLastUtc()
+    {
+        if (IsLoggerData()) {
+            return TrackPoint.findByLoggerdata(loggerData,[sort:"id", order:"desc"]).utc
+        }
+        return ""
+
+    }
+    
 }
