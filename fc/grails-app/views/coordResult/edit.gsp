@@ -81,7 +81,7 @@
                                 <p>
                                     <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultAltitude" name="resultAltitude" value="${fieldValue(bean:coordResultInstance,field:'resultAltitude')}" tabIndex="3"/>
+                                    <input type="text" id="resultAltitude" name="resultAltitude" value="${coordResultInstance.resultAltitude}" tabIndex="3"/>
                                 </p>
                                 <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                     <p>

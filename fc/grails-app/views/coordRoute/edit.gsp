@@ -40,14 +40,14 @@
 	                            <legend>${message(code:'fc.latitude')}*</legend>
                                 <div>
                                     <g:if test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREE}">
-                                        <input type="text" id="latGradDecimal" name="latGradDecimal" value="${coordRouteInstance.latGradDecimal}"  tabIndex="1"/>
+                                        <input type="text" id="latGradDecimal" name="latGradDecimal" value="${coordRouteInstance.latGradDecimal.toFloat()}"  tabIndex="1"/>
                                         <label>${message(code:'fc.grad')}</label>
                                     </g:if>
                                     <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE}">
 		                                <g:select class="direction" id="latDirection" name="latDirection" from="${coordRouteInstance.constraints.latDirection.inList}" value="${coordRouteInstance.latDirection}"  tabIndex="2"/>
 		                                <input class="grad" type="text" id="latGrad" name="latGrad" value="${fieldValue(bean:coordRouteInstance,field:'latGrad')}"  tabIndex="3"/>
 		                                <label>${message(code:'fc.grad')}</label>
-		                                <input type="text" id="latMinute" name="latMinute" value="${coordRouteInstance.latMinute}" tabIndex="4"/>
+		                                <input type="text" id="latMinute" name="latMinute" value="${coordRouteInstance.latMinute.toFloat()}" tabIndex="4"/>
 		                                <label>${message(code:'fc.min')}</label>
     		                        </g:elseif>
                                     <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTESECOND}">
@@ -56,7 +56,7 @@
                                         <label>${message(code:'fc.grad')}</label>
                                         <input class="minute" type="text" id="latMin" name="latMin" value="${fieldValue(bean:coordRouteInstance,field:'latMin')}" tabIndex="7"/>
                                         <label>${message(code:'fc.min')}</label>
-                                        <input type="text" id="latSecondDecimal" name="latSecondDecimal" value="${coordRouteInstance.latSecondDecimal}" tabIndex="8"/>
+                                        <input type="text" id="latSecondDecimal" name="latSecondDecimal" value="${coordRouteInstance.latSecondDecimal.toFloat()}" tabIndex="8"/>
                                         <label>${message(code:'fc.sec')}</label>
                                     </g:elseif>
                                 </div>
@@ -65,14 +65,14 @@
 	                            <legend>${message(code:'fc.longitude')}*</legend>
 	                            <div>
                                     <g:if test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREE}">
-                                        <input type="text" id="lonGradDecimal" name="lonGradDecimal" value="${coordRouteInstance.lonGradDecimal}"  tabIndex="11"/>
+                                        <input type="text" id="lonGradDecimal" name="lonGradDecimal" value="${coordRouteInstance.lonGradDecimal.toFloat()}"  tabIndex="11"/>
                                         <label>${message(code:'fc.grad')}</label>
                                     </g:if>
                                     <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE}">
 		                                <g:select class="direction" id="lonDirection" name="lonDirection" from="${coordRouteInstance.constraints.lonDirection.inList}" value="${coordRouteInstance.lonDirection}"  tabIndex="12"/>
 		                                <input class="grad" type="text" id="lonGrad" name="lonGrad" value="${fieldValue(bean:coordRouteInstance,field:'lonGrad')}"  tabIndex="13"/>
 		                                <label>${message(code:'fc.grad')}</label>
-		                                <input type="text" id="lonMinute" name="lonMinute" value="${coordRouteInstance.lonMinute}" tabIndex="14"/>
+		                                <input type="text" id="lonMinute" name="lonMinute" value="${coordRouteInstance.lonMinute.toFloat()}" tabIndex="14"/>
 		                                <label>${message(code:'fc.min')}</label>
 		                            </g:elseif>
                                     <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTESECOND}">
@@ -81,7 +81,7 @@
                                         <label>${message(code:'fc.grad')}</label>
                                         <input class="minute" type="text" id="lonMin" name="lonMin" value="${fieldValue(bean:coordRouteInstance,field:'lonMin')}" tabIndex="17"/>
                                         <label>${message(code:'fc.min')}</label>
-                                        <input type="text" id="lonSecondDecimal" name="lonSecondDecimal" value="${coordRouteInstance.lonSecondDecimal}" tabIndex="18"/>
+                                        <input type="text" id="lonSecondDecimal" name="lonSecondDecimal" value="${coordRouteInstance.lonSecondDecimal.toFloat()}" tabIndex="18"/>
                                         <label>${message(code:'fc.sec')}</label>
                                     </g:elseif>
 	                            </div>
@@ -90,7 +90,7 @@
 	                            <p>
 	                                <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
 	                                <br/>
-	                                <input type="text" id="altitude" name="altitude" value="${fieldValue(bean:coordRouteInstance,field:'altitude')}" tabIndex="21"/>
+	                                <input type="text" id="altitude" name="altitude" value="${coordRouteInstance.altitude}" tabIndex="21"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
@@ -101,13 +101,13 @@
                                     <p>
                                         <label>${message(code:'fc.gatedirection')}* [${message(code:'fc.grad')}]:</label>
                                         <br/>
-                                        <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:coordRouteInstance,field:'gateDirection')}" tabIndex="28"/>
+                                        <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:coordRouteInstance,field:'gateDirection')}" tabIndex="23"/>
                                     </p>
                                 </g:if>
 	                            <p>
 	                                <label>${message(code:'fc.legduration')} [${message(code:'fc.time.min')}]:</label>
 	                                <br/>
-	                                <input type="text" id="legDuration" name="legDuration" value="${fieldValue(bean:coordRouteInstance,field:'legDuration')}" tabIndex="23"/>
+	                                <input type="text" id="legDuration" name="legDuration" value="${fieldValue(bean:coordRouteInstance,field:'legDuration')}" tabIndex="24"/>
 	                            </p>
 	                            <div>
 	                                <g:checkBox name="noTimeCheck" value="${coordRouteInstance.noTimeCheck}" />
@@ -143,12 +143,12 @@
 	                            <p>
 	                                <label>${message(code:'fc.truetrack.map.measure')} [${message(code:'fc.grad')}]:</label>
 	                                <br/>
-	                                <input type="text" id="measureTrueTrack" name="measureTrueTrack" value="${fieldValue(bean:coordRouteInstance,field:'measureTrueTrack')}" tabIndex="24"/>
+	                                <input type="text" id="measureTrueTrack" name="measureTrueTrack" value="${fieldValue(bean:coordRouteInstance,field:'measureTrueTrack')}" tabIndex="25"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.distance.map.measure')} [${message(code:'fc.mm')}]:</label>
 	                                <br/>
-	                                <input type="text" id="measureDistance" name="measureDistance" value="${fieldValue(bean:coordRouteInstance,field:'measureDistance')}" tabIndex="25"/>
+	                                <input type="text" id="measureDistance" name="measureDistance" value="${fieldValue(bean:coordRouteInstance,field:'measureDistance')}" tabIndex="26"/>
 	                            </p>
 	                        </fieldset>
 	                    </g:if>
@@ -219,18 +219,18 @@
 	                            <p>
 	                                <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
 	                                <br/>
-	                                <input type="text" id="altitude" name="altitude" value="${fieldValue(bean:coordRouteInstance,field:'altitude')}" tabIndex="26"/>
+	                                <input type="text" id="altitude" name="altitude" value="${fieldValue(bean:coordRouteInstance,field:'altitude')}" tabIndex="27"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
 	                                <br/>
-	                                <input type="text" id="gatewidth2" name="gatewidth2" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth2')}" tabIndex="27"/>
+	                                <input type="text" id="gatewidth2" name="gatewidth2" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth2')}" tabIndex="28"/>
 	                            </p>
 	                            <g:if test="${coordRouteInstance.type.IsRunwayCoord()}">
 	                                <p>
 	                                    <label>${message(code:'fc.gatedirection')}* [${message(code:'fc.grad')}]:</label>
 	                                    <br/>
-	                                    <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:coordRouteInstance,field:'gateDirection')}" tabIndex="28"/>
+	                                    <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:coordRouteInstance,field:'gateDirection')}" tabIndex="29"/>
 	                                </p>
 	                            </g:if>
                             </fieldset>

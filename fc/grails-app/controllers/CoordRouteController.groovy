@@ -26,7 +26,7 @@ class CoordRouteController {
     }
 
     def updatereturn = {
-        def coordroute = fcService.updateCoordRoute(params) 
+        def coordroute = fcService.updateCoordRoute(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
             redirect(controller:"route",action:show,id:coordroute.instance.route.id)
@@ -43,7 +43,7 @@ class CoordRouteController {
     }
 
     def updatenext = {
-        def coordroute = fcService.updateCoordRoute(params) 
+        def coordroute = fcService.updateCoordRoute(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
 			
@@ -140,7 +140,7 @@ class CoordRouteController {
     }
 
     def save = {
-        def coordroute = fcService.saveCoordRoute(params) 
+        def coordroute = fcService.saveCoordRoute(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
         	redirect(controller:"route",action:show,id:coordroute.instance.route.id)

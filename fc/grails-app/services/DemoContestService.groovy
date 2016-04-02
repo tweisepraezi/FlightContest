@@ -8,45 +8,45 @@ class DemoContestService
 	def demoContestCurvedService
 	def demoContestProcedureTurnService
 	
-	Map CreateTest(String demoContest, boolean aflosDB)
+	Map CreateTest(String demoContest, boolean aflosDB, String showLanguage)
 	{
 		Map ret = [:]
 		switch (demoContest) {
 			case '98':
-                ret = create_test( "2",ret,true,aflosDB)
+                ret = create_test( "2",ret,true,aflosDB,showLanguage)
                 long contest_id = ret.contestid
-				ret = create_test( "1",ret,true,aflosDB)
-				ret = create_test( "3",ret,true,aflosDB)
-				ret = create_test("11",ret,true,aflosDB)
-				ret = create_test("12",ret,true,aflosDB)
-				ret = create_test("13",ret,true,aflosDB)
-				ret = create_test("14",ret,true,aflosDB)
-				ret = create_test("21",ret,true,aflosDB)
-				ret = create_test("22",ret,true,aflosDB)
-				ret = create_test("23",ret,true,aflosDB)
-				ret = create_test("24",ret,true,aflosDB)
+				ret = create_test( "1",ret,true,aflosDB,showLanguage)
+				ret = create_test( "3",ret,true,aflosDB,showLanguage)
+				ret = create_test("11",ret,true,aflosDB,showLanguage)
+				ret = create_test("12",ret,true,aflosDB,showLanguage)
+				ret = create_test("13",ret,true,aflosDB,showLanguage)
+				ret = create_test("14",ret,true,aflosDB,showLanguage)
+				ret = create_test("21",ret,true,aflosDB,showLanguage)
+				ret = create_test("22",ret,true,aflosDB,showLanguage)
+				ret = create_test("23",ret,true,aflosDB,showLanguage)
+				ret = create_test("24",ret,true,aflosDB,showLanguage)
                 ret.contestid = contest_id
 				break
 			case '99':
-                ret = create_test( "2",ret,true,aflosDB)
+                ret = create_test( "2",ret,true,aflosDB,showLanguage)
                 long contest_id = ret.contestid
-				ret = create_test( "1",ret,true,aflosDB)
-				ret = create_test("21",ret,true,aflosDB)
-				ret = create_test("22",ret,true,aflosDB)
-				ret = create_test("23",ret,true,aflosDB)
-				ret = create_test("24",ret,true,aflosDB)
+				ret = create_test( "1",ret,true,aflosDB,showLanguage)
+				ret = create_test("21",ret,true,aflosDB,showLanguage)
+				ret = create_test("22",ret,true,aflosDB,showLanguage)
+				ret = create_test("23",ret,true,aflosDB,showLanguage)
+				ret = create_test("24",ret,true,aflosDB,showLanguage)
                 ret.contestid = contest_id
 				break
 			default:
-				ret = create_test(demoContest,true,aflosDB)
+				ret = create_test(demoContest,true,aflosDB,showLanguage)
 				break
 		}
 		return ret
 	}
 	
-	Map create_test(String demoContest, Map retValue, boolean runTest, boolean aflosDB)
+	Map create_test(String demoContest, Map retValue, boolean runTest, boolean aflosDB, String showLanguage)
 	{
-		Map ret = create_test(demoContest, runTest, aflosDB)
+		Map ret = create_test(demoContest, runTest, aflosDB, showLanguage)
 		if (ret.error) {
 			retValue.error = true
 		}
@@ -62,7 +62,7 @@ class DemoContestService
 		return retValue
 	}
 	
-	Map create_test(String demoContest, boolean runTest, boolean aflosDB)
+	Map create_test(String demoContest, boolean runTest, boolean aflosDB, String showLanguage)
 	{
 		Map ret = [:]
 		long contest_id = 0
@@ -91,7 +91,7 @@ class DemoContestService
 		        contest_id = demoContestOtherService.CreateTest14("Demo Wettbewerb (20 Besatzungen)", "demo14", false, aflosDB)
 				break
 			case '21':
-		        contest_id = demoContestRoutesService.CreateTest("Demo Wettbewerb (Strecken)", "demo21", true, aflosDB)
+		        contest_id = demoContestRoutesService.CreateTest("Demo Wettbewerb (Strecken)", "demo21", true, aflosDB, showLanguage)
 				ret = run_test(contest_id, runTest, aflosDB)
 				break
 			case '22':

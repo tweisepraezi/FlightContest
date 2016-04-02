@@ -40,18 +40,18 @@
                             <p>
                                 <label>${message(code:'fc.runway.direction.to')} [${message(code:'fc.grad')}]:</label>
                                 <br/>
-                                <input type="text" id="TODirection" name="TODirection" value="${fieldValue(bean:flightTestWindInstance,field:'TODirection')}" tabIndex="3"/>
+                                <input type="text" id="TODirection" name="TODirection" value="${flightTestWindInstance.TODirection}" tabIndex="3"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.runway.direction.ldg')} [${message(code:'fc.grad')}]:</label>
                                 <br/>
-                                <input type="text" id="LDGDirection" name="LDGDirection" value="${fieldValue(bean:flightTestWindInstance,field:'LDGDirection')}" tabIndex="4"/>
+                                <input type="text" id="LDGDirection" name="LDGDirection" value="${flightTestWindInstance.LDGDirection}" tabIndex="4"/>
                             </p>
                             <g:if test="${flightTestWindInstance.flighttest.route.IsIntermediateRunway()}">
 	                            <p>
 	                                <label>${message(code:'fc.runway.direction.itoildg')} [${message(code:'fc.grad')}]:</label>
 	                                <br/>
-	                                <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${fieldValue(bean:flightTestWindInstance,field:'iTOiLDGDirection')}" tabIndex="5"/>
+	                                <input type="text" id="iTOiLDGDirection" name="iTOiLDGDirection" value="${flightTestWindInstance.iTOiLDGDirection}" tabIndex="5"/>
 	                            </p>
 	                        </g:if>
                         </fieldset>

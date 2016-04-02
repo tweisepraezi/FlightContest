@@ -69,7 +69,7 @@ class FlightTestController {
     }
 
     def save = {
-        def flighttest = fcService.saveFlightTest(params) 
+        def flighttest = fcService.saveFlightTest(session.showLanguage, params)
         if (flighttest.saved) {
         	flash.message = flighttest.message
             if (flighttest.fromlistplanning) {

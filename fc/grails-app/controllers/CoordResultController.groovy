@@ -24,7 +24,7 @@ class CoordResultController
     }
 
     def updatereturn = {
-        def coordresult = fcService.updateCoordResult(params) 
+        def coordresult = fcService.updateCoordResult(session.showLanguage, params) 
         if (coordresult.saved) {
             flash.message = coordresult.message
 			long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Flight)
@@ -46,7 +46,7 @@ class CoordResultController
     }
 
     def updatenext = {
-        def coordresult = fcService.updateCoordResult(params) 
+        def coordresult = fcService.updateCoordResult(session.showLanguage, params) 
         if (coordresult.saved) {
             flash.message = coordresult.message
 

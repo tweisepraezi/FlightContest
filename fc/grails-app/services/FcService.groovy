@@ -4011,7 +4011,7 @@ class FcService
                 				coordroute_instance.latGrad = latValue.toInteger()
                 				break
                 			case 2:
-                				coordroute_instance.latMinute = latValue.replace(',','.').toBigDecimal()
+                				coordroute_instance.latMinute = FcMath.toBigDecimal(latValue)
                 				break
                 		}
                 	}
@@ -4026,7 +4026,7 @@ class FcService
                                 coordroute_instance.lonGrad = lonValue.toInteger()
                                 break
                             case 2:
-                                coordroute_instance.lonMinute = lonValue.replace(',','.').toBigDecimal()
+                                coordroute_instance.lonMinute = FcMath.toBigDecimal(lonValue)
                                 break
                         }
                     }
@@ -5123,8 +5123,10 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map updateCoordRoute(Map params)
+    Map updateCoordRoute(String showLanguage, Map params)
     {
+        printstart "updateCoordRoute $showLanguage $params"
+        
         CoordRoute coordroute_instance = CoordRoute.get(params.id)
         
         if (coordroute_instance) {
@@ -5133,6 +5135,7 @@ class FcService
                 long version = params.version.toLong()
                 if(coordroute_instance.version > version) {
                     coordroute_instance.errors.rejectValue("version", "coordRoute.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    printerror ""
                     return ['instance':coordroute_instance]
                 }
             }
@@ -5151,12 +5154,15 @@ class FcService
                 }
                 
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
-                    return ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
+                    Map ret = ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
+                    printdone ret.message
+                    return ret
                 } else {
+                    printerror ""
                     return ['instance':coordroute_instance]
                 }
 			} else {
-                params = calculateCoordRoute(params, coordroute_instance.route.contest.coordPresentation)
+                params = calculateCoordRoute(showLanguage, params, coordroute_instance.route.contest.coordPresentation)
     			
                 coordroute_instance.properties = params
     			if (coordroute_instance.gatewidth2 == null) {
@@ -5173,13 +5179,18 @@ class FcService
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
                     calculateSecretLegRatio(coordroute_instance.route)
                     calculateRouteLegs(coordroute_instance.route)
-                    return ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
+                    Map ret = ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
+                    printdone ret.message
+                    return ret
                 } else {
+                    printerror ""
                     return ['instance':coordroute_instance]
                 }
 			}
         } else {
-            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+            printerror ret.message
+            return ret
         }
     }
     
@@ -5297,9 +5308,9 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map saveCoordRoute(Map params)
+    Map saveCoordRoute(String showLanguage, Map params)
     {
-		printstart "saveCoordRoute $params"
+		printstart "saveCoordRoute $showLanguage $params"
 		
         Route route_instance = Route.get(params.routeid)
     	CoordRoute last_coordroute_instance = CoordRoute.findByRoute(route_instance,[sort:"id", order:"desc"]) // last
@@ -5354,7 +5365,7 @@ class FcService
 			}
         }
         
-        params = calculateCoordRoute(params, route_instance.contest.coordPresentation)
+        params = calculateCoordRoute(showLanguage, params, route_instance.contest.coordPresentation)
 		
 		// new CoordRoute
     	CoordRoute coordroute_instance = new CoordRoute(params)
@@ -5442,15 +5453,15 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map calculateCoordRoute(Map params, CoordPresentation coordPresentation) 
+    private Map calculateCoordRoute(String showLanguage, Map params, CoordPresentation coordPresentation) 
     {
-        params.gatewidth2 = params.gatewidth2.replace('.',',')
+        params.gatewidth2 = Languages.GetLanguageDecimal(showLanguage, params.gatewidth2)
         switch (coordPresentation) {
             case CoordPresentation.DEGREE:
-                params.latGradDecimal = params.latGradDecimal.replace(',','.')
-                params.lonGradDecimal = params.lonGradDecimal.replace(',','.')
-                Map lat = CoordPresentation.GetDirectionGradDecimalMinute(params.latGradDecimal.toBigDecimal(), true)
-                Map lon = CoordPresentation.GetDirectionGradDecimalMinute(params.lonGradDecimal.toBigDecimal(), false)
+                params.latGradDecimal = Languages.GetLanguageDecimal(showLanguage, params.latGradDecimal)
+                params.lonGradDecimal = Languages.GetLanguageDecimal(showLanguage, params.lonGradDecimal)
+                Map lat = CoordPresentation.GetDirectionGradDecimalMinute(FcMath.toBigDecimal(params.latGradDecimal), true)
+                Map lon = CoordPresentation.GetDirectionGradDecimalMinute(FcMath.toBigDecimal(params.lonGradDecimal), false)
                 params.latDirection = lat.direction
                 params.lonDirection = lon.direction
                 params.latGrad = lat.grad
@@ -5459,14 +5470,14 @@ class FcService
                 params.lonMinute = lon.minute
                 break
             case CoordPresentation.DEGREEMINUTE:
-                params.latMinute = params.latMinute.replace('.',',')
-                params.lonMinute = params.lonMinute.replace('.',',')
+                params.latMinute = Languages.GetLanguageDecimal(showLanguage, params.latMinute)
+                params.lonMinute = Languages.GetLanguageDecimal(showLanguage, params.lonMinute)
                 break
             case CoordPresentation.DEGREEMINUTESECOND:
-                params.latSecondDecimal = params.latSecondDecimal.replace(',','.')
-                params.lonSecondDecimal = params.lonSecondDecimal.replace(',','.')
-                params.latMinute = params.latMin.toBigDecimal() + params.latSecondDecimal.toBigDecimal() / 60
-                params.lonMinute = params.lonMin.toBigDecimal() + params.lonSecondDecimal.toBigDecimal() / 60
+                params.latSecondDecimal = Languages.GetLanguageDecimal(showLanguage, params.latSecondDecimal)
+                params.lonSecondDecimal = Languages.GetLanguageDecimal(showLanguage, params.lonSecondDecimal)
+                params.latMinute = FcMath.toBigDecimal(params.latMin) + FcMath.toBigDecimal(params.latSecondDecimal) / 60
+                params.lonMinute = FcMath.toBigDecimal(params.lonMin) + FcMath.toBigDecimal(params.lonSecondDecimal) / 60
                 break
         }
         return params
@@ -5791,7 +5802,7 @@ class FcService
             	Aircraft old_aircraft_instance = crew_instance.aircraft
 	            crew_instance.properties = params
 				if (params.tas) {
-					crew_instance.tas = params.tas.replace(',','.').toBigDecimal()
+					crew_instance.tas = FcMath.toBigDecimal(params.tas)
 				}
 		
 				if (old_disabled != crew_instance.disabled) {
@@ -5899,7 +5910,7 @@ class FcService
 		
         Crew crew_instance = new Crew(params)
 		if (params.tas) {
-			crew_instance.tas = params.tas.replace(',','.').toBigDecimal() 
+			crew_instance.tas = FcMath.toBigDecimal(params.tas) 
 		}
         crew_instance.contest = contestInstance
 		crew_instance.viewpos = Crew.countByContest(contestInstance)
@@ -8352,9 +8363,9 @@ class FcService
 
     
     //--------------------------------------------------------------------------
-    Map saveFlightTest(Map params)
+    Map saveFlightTest(String showLanguage, Map params)
     {
-		printstart "saveFlightTest"
+		printstart "saveFlightTest $showLanguage $params"
 		
         FlightTest flighttest_instance = new FlightTest(params)
 		flighttest_instance.direction = params.direction.toBigDecimal()
@@ -8378,6 +8389,8 @@ class FcService
             Wind windInstance = new Wind(direction:flighttest_instance.direction,speed:flighttest_instance.speed)
             windInstance.save()
             
+            params = checkFlightTestWindParams(showLanguage, params)
+        
             FlightTestWind flighttestwind_instance = new FlightTestWind(params)
             flighttestwind_instance.wind = windInstance
             flighttestwind_instance.flighttest = flighttest_instance
@@ -8555,10 +8568,12 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map updateFlightTestWind(Map params)
+    Map updateFlightTestWind(String showLanguage, Map params)
     {
-		printstart "updateFlightTestWind"
+		printstart "updateFlightTestWind $showLanguage $params"
 		
+        params = checkFlightTestWindParams(showLanguage, params)
+        
         FlightTestWind flighttestwind_instance = FlightTestWind.get(params.id)
         
         if (flighttestwind_instance) {
@@ -8575,8 +8590,8 @@ class FcService
 			BigDecimal old_speed = flighttestwind_instance.wind.speed  
             flighttestwind_instance.properties = params
             if (params.direction != null && params.speed != null) {
-                flighttestwind_instance.direction = params.direction.toBigDecimal()
-                flighttestwind_instance.speed = params.speed.toBigDecimal()
+                flighttestwind_instance.direction = FcMath.toBigDecimal(params.direction)
+                flighttestwind_instance.speed = FcMath.toBigDecimal(params.speed)
                 flighttestwind_instance.wind.direction = flighttestwind_instance.direction
                 flighttestwind_instance.wind.speed = flighttestwind_instance.speed
             }
@@ -8648,8 +8663,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map saveFlightTestWind(Map params)
+    Map saveFlightTestWind(String showLanguage, Map params)
     {
+        printstart "saveFlightTestWind $showLanguage $params"
+        
+        params = checkFlightTestWindParams(showLanguage, params)
+        
         FlightTestWind flighttestwind_instance = new FlightTestWind(params)
         
         flighttestwind_instance.flighttest = FlightTest.get(params.flighttestid)
@@ -8661,13 +8680,57 @@ class FcService
         }
         
         if(!flighttestwind_instance.hasErrors() && flighttestwind_instance.save()) {
-            return ['instance':flighttestwind_instance,'saved':true,'message':getMsg('fc.created',["${flighttestwind_instance.name()}"]),
-                    'fromlistplanning':params.fromlistplanning,
-                    'taskid':flighttestwind_instance.flighttest.task.id,
-                    'flighttestid':flighttestwind_instance.flighttest.id]
+            Map ret = ['instance':flighttestwind_instance,'saved':true,'message':getMsg('fc.created',["${flighttestwind_instance.name()}"]),
+                       'fromlistplanning':params.fromlistplanning,
+                       'taskid':flighttestwind_instance.flighttest.task.id,
+                       'flighttestid':flighttestwind_instance.flighttest.id]
+            printdone ret
+            return ret
         } else {
+            printerror ""
             return ['instance':flighttestwind_instance]
         }
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map checkFlightTestWindParams(String showLanguage, Map params)
+    {
+        if (showLanguage) {
+            if (params.direction != null) {
+                params.direction = Languages.GetLanguageDecimal(showLanguage, params.direction)
+            }
+            if (params.speed != null) {
+                params.speed = Languages.GetLanguageDecimal(showLanguage, params.speed)
+            }
+            if (params.TODirection != null) {
+                params.TODirection = Languages.GetLanguageDecimal(showLanguage, params.TODirection)
+            }
+            if (params.TOOffset != null) {
+                params.TOOffset = Languages.GetLanguageDecimal(showLanguage, params.TOOffset)
+            }
+            if (params.TOOrthogonalOffset != null) {
+                params.TOOrthogonalOffset = Languages.GetLanguageDecimal(showLanguage, params.TOOrthogonalOffset)
+            }
+            if (params.LDGDirection != null) {
+                params.LDGDirection = Languages.GetLanguageDecimal(showLanguage, params.LDGDirection)
+            }
+            if (params.LDGOffset != null) {
+                params.LDGOffset = Languages.GetLanguageDecimal(showLanguage, params.LDGOffset)
+            }
+            if (params.LDGOrthogonalOffset != null) {
+                params.LDGOrthogonalOffset = Languages.GetLanguageDecimal(showLanguage, params.LDGOrthogonalOffset)
+            }
+            if (params.iTOiLDGDirection != null) {
+                params.iTOiLDGDirection = Languages.GetLanguageDecimal(showLanguage, params.iTOiLDGDirection)
+            }
+            if (params.iTOiLDGOffset != null) {
+                params.iTOiLDGOffset = Languages.GetLanguageDecimal(showLanguage, params.iTOiLDGOffset)
+            }
+            if (params.iTOiLDGOrthogonalOffset != null) {
+                params.iTOiLDGOrthogonalOffset = Languages.GetLanguageDecimal(showLanguage, params.iTOiLDGOrthogonalOffset)
+            }
+        }
+        return params
     }
     
     //--------------------------------------------------------------------------
@@ -8875,8 +8938,8 @@ class FcService
 			BigDecimal old_speed = planningtesttask_instance.wind.speed
             planningtesttask_instance.properties = params
             if (params.direction != null && params.speed != null) {
-                planningtesttask_instance.direction = params.direction.toBigDecimal()
-                planningtesttask_instance.speed = params.speed.toBigDecimal()
+                planningtesttask_instance.direction = FcMath.toBigDecimal(params.direction)
+                planningtesttask_instance.speed = FcMath.toBigDecimal(params.speed)
                 if (!planningtesttask_instance.direction) {
                 	planningtesttask_instance.direction = 0
                 }
@@ -8932,8 +8995,8 @@ class FcService
 		printstart "savePlanningTestTask"
 		
         PlanningTestTask planningtesttask_instance = new PlanningTestTask(params)
-		planningtesttask_instance.direction = params.direction.toBigDecimal()
-		planningtesttask_instance.speed = params.speed.toBigDecimal()
+		planningtesttask_instance.direction = FcMath.toBigDecimal(params.direction)
+		planningtesttask_instance.speed = FcMath.toBigDecimal(params.speed)
 
         planningtesttask_instance.planningtest = PlanningTest.get(params.planningtestid)
         planningtesttask_instance.idTitle = PlanningTestTask.countByPlanningtest(planningtesttask_instance.planningtest) + 1
@@ -9027,9 +9090,9 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map updateTestLegPlanningResult(Map params)
+    Map updateTestLegPlanningResult(String showLanguage, Map params)
     {
-		printstart "updateTestLegPlanningResult"
+		printstart "updateTestLegPlanningResult $showLanguage $params"
 		
     	TestLegPlanning testlegplanning_instance = TestLegPlanning.get(params.id)
         if(testlegplanning_instance) {
@@ -9041,8 +9104,8 @@ class FcService
                 }
             }
 
-			params.resultTrueHeading = params.resultTrueHeading.replace('.',',')
-			
+            params.resultTrueHeading = Languages.GetLanguageDecimal(showLanguage, params.resultTrueHeading)
+            
             testlegplanning_instance.properties = params
 			testlegplanning_instance.resultLegTimeInput = params.resultLegTimeInput 
 	
@@ -9189,7 +9252,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map updateCoordResult(Map params)
+    Map updateCoordResult(String showLanguage, Map params)
     {
         CoordResult coordresult_instance = CoordResult.get(params.id)
         if(coordresult_instance) {
@@ -9201,6 +9264,8 @@ class FcService
                 }
             }
 
+            params.resultAltitude = Languages.GetLanguageDecimal(showLanguage, params.resultAltitude)
+            
             coordresult_instance.properties = params
 			coordresult_instance.resultCpTimeInput = params.resultCpTimeInput
 				
@@ -10731,7 +10796,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map putCoordRoute(Map route, CoordType type, int titleNumber, String mark, String latDirection, int latGrad, BigDecimal latMinute, String lonDirection, int lonGrad, BigDecimal lonMinute, int altitude, Float gatewidth2, BigDecimal measureDistance, BigDecimal measureTrueTrack)
+    Map putCoordRoute(String showLanguage, Map route, CoordType type, int titleNumber, String mark, String latDirection, int latGrad, BigDecimal latMinute, String lonDirection, int lonGrad, BigDecimal lonMinute, int altitude, Float gatewidth2, BigDecimal measureDistance, BigDecimal measureTrueTrack)
     {
 		printstart "putCoordRoute"
         Map p = [:]
@@ -10751,7 +10816,7 @@ class FcService
         p.gatewidth2 = gatewidth2.toString()
 		p.measureDistance = measureDistance
         p.measureTrueTrack = measureTrueTrack
-        Map ret = saveCoordRoute(p)
+        Map ret = saveCoordRoute(showLanguage, p)
 		printdone ret
 		return ret
     }
@@ -10783,9 +10848,9 @@ class FcService
         p.taskid = task.instance.id
         p.title = title
         p.route = route.instance
-        p.direction = 0
-        p.speed = 0
-        Map ret = saveFlightTest(p)
+        p.direction = "0"
+        p.speed = "0"
+        Map ret = saveFlightTest("", p)
 		printdone ret
 		return ret
     }
@@ -10798,9 +10863,9 @@ class FcService
         p.taskid = task.instance.id
         p.title = title
         p.route = route.instance
-        p.direction = direction
-        p.speed = speed
-        Map ret = saveFlightTest(p)
+        p.direction = direction.toString()
+        p.speed = speed.toString()
+        Map ret = saveFlightTest("", p)
 		printdone ret
 		return ret
     }
@@ -10814,7 +10879,7 @@ class FcService
 		printstart "putFlightTestWind"
         Map p = [:]
         p.flighttestid = flighttest.instance.id
-        p.direction = direction
+        p.direction = direction.toString()
         p.TODirection = toDirection
         p.TOOffset = toOffset
         p.TOOrthogonalOffset = toOrthogonalOffset
@@ -10825,7 +10890,7 @@ class FcService
         p.iTOiLDGOffset = itoildgOffset
         p.iTOiLDGOrthogonalOffset = itoildgOrthogonalOffset
         p.speed = speed
-        Map ret = saveFlightTestWind(p)
+        Map ret = saveFlightTestWind("", p)
 		printdone ret
 		return ret
     }
@@ -10837,8 +10902,8 @@ class FcService
         Map p = [:]
         p.taskid = task.instance.id
         p.title = title
-        p.direction = 0
-        p.speed = 0
+        p.direction = "0"
+        p.speed = "0"
         Map ret = savePlanningTest(p)
 		printdone ret
 		return ret
@@ -10853,8 +10918,8 @@ class FcService
         p.title = title
         p.taskTitle = taskTitle
         p.route = route.instance
-        p.direction = direction
-        p.speed = speed
+        p.direction = direction.toString()
+        p.speed = speed.toString()
         Map ret = savePlanningTest(p)
 		printdone ret
 		return ret
@@ -10868,8 +10933,8 @@ class FcService
         p.planningtestid = planningtest.instance.id
         p.title = title
         p.route = route.instance
-        p.direction = direction
-        p.speed = speed
+        p.direction = direction.toString()
+        p.speed = speed.toString()
         Map ret = savePlanningTestTask(p)
 		printdone ret
 		return ret

@@ -32,7 +32,7 @@ class FlightTestWindController {
     }
 
     def update = {
-        def flighttestwind = fcService.updateFlightTestWind(params) 
+        def flighttestwind = fcService.updateFlightTestWind(session.showLanguage, params) 
         if (flighttestwind.saved) {
         	flash.message = flighttestwind.message
             if (params.flighttestwindReturnAction) {
@@ -54,7 +54,7 @@ class FlightTestWindController {
     }
 
     def save = {
-        def flighttestwind = fcService.saveFlightTestWind(params) 
+        def flighttestwind = fcService.saveFlightTestWind(session.showLanguage, params) 
         if (flighttestwind.saved) {
         	flash.message = flighttestwind.message
             if (flighttestwind.fromlistplanning) {

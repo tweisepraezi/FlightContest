@@ -24,7 +24,7 @@ class TestLegPlanningController
     }
 
     def updatereturn = {
-        def testlegplanning = fcService.updateTestLegPlanningResult(params) 
+        def testlegplanning = fcService.updateTestLegPlanningResult(session.showLanguage, params) 
         if (testlegplanning.saved) {
             flash.message = testlegplanning.message
 			long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Planningtask)
@@ -46,7 +46,7 @@ class TestLegPlanningController
     }
 
     def updatenext = {
-        def testlegplanning = fcService.updateTestLegPlanningResult(params) 
+        def testlegplanning = fcService.updateTestLegPlanningResult(session.showLanguage, params) 
         if (testlegplanning.saved) {
             flash.message = testlegplanning.message
 

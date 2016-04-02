@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-28.03.2016
+02.04.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -97,7 +97,7 @@ Erweiterungen in dieser Version (3.0):
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2016
     FAI Precision Flying - Edition 2016
     FAI Air Rally Flying - Edition 2016
-- Beachten Sie die erhöhten Anfoderungen an die Leistungsfähigkeit
+- Beachten Sie die erhöhten Anforderungen an die Leistungsfähigkeit
   Ihres Computers, wenn Sie diese Version einsetzen wollen:
     min. 8 GB RAM
     CPU Intel® Core™ i5 oder i7 (min. 2 Cores, min. 2 GHz)

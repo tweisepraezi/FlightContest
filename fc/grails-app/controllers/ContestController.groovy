@@ -777,7 +777,7 @@ class ContestController {
         if (session?.lastContest) {
 			session.lastContest.refresh()
 			fcService.printstart "Actual 'a4LandscapeFactor'"
-			session.lastContest.a4LandscapeFactor = params.a4LandscapeFactor.replace(',','.').toBigDecimal()
+			session.lastContest.a4LandscapeFactor = FcMath.toBigDecimal(params.a4LandscapeFactor)
 			session.lastContest.save()
 			fcService.printdone ""
             Map contest = printService.printtestContest(session.lastContest,false,true,GetPrintParams()) 
@@ -799,7 +799,7 @@ class ContestController {
         if (session?.lastContest) {
 			session.lastContest.refresh()
 			fcService.printstart "Actual 'a3PortraitFactor'"
-			session.lastContest.a3PortraitFactor = params.a3PortraitFactor.replace(',','.').toBigDecimal()
+			session.lastContest.a3PortraitFactor = FcMath.toBigDecimal(params.a3PortraitFactor)
 			session.lastContest.save()
 			fcService.printdone ""
             Map contest = printService.printtestContest(session.lastContest,true,false,GetPrintParams()) 
@@ -821,7 +821,7 @@ class ContestController {
         if (session?.lastContest) {
 			session.lastContest.refresh()
 			fcService.printstart "Actual 'a3LandscapeFactor'"
-			session.lastContest.a3LandscapeFactor = params.a3LandscapeFactor.replace(',','.').toBigDecimal()
+			session.lastContest.a3LandscapeFactor = FcMath.toBigDecimal(params.a3LandscapeFactor)
 			session.lastContest.save()
 			fcService.printdone ""
             Map contest = printService.printtestContest(session.lastContest,true,true,GetPrintParams()) 
@@ -1006,7 +1006,7 @@ class ContestController {
     
     def createtest = {
         boolean aflos_db = params?.aflos_db == 'on'
-		Map ret = demoContestService.CreateTest(params.demoContest, aflos_db)
+		Map ret = demoContestService.CreateTest(params.demoContest, aflos_db, session.showLanguage)
         redirect(controller:'contest',action:'activate',id:ret.contestid,params:[flashmessage:ret.message,flasherror:ret.error])
     }
             

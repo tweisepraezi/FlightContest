@@ -298,4 +298,11 @@ class FcMath
         }
         return s
     }
+    
+    //--------------------------------------------------------------------------
+    static BigDecimal toBigDecimal(String stringValue)
+    {
+        stringValue = stringValue.replace(',','.')
+        return stringValue.toBigDecimal()
+    }
 }
