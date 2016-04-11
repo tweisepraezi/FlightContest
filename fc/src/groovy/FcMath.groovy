@@ -140,7 +140,7 @@ class FcMath
 	}
 	
     //--------------------------------------------------------------------------
-	static void SetFullMinute(CoordType coordType, GregorianCalendar time)
+	static void SetFullMinute(GregorianCalendar time)
 	{
 		int second = time.get(Calendar.SECOND)
 		if (second > 0) {

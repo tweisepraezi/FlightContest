@@ -151,7 +151,7 @@ class TestLeg
 			time.add(Calendar.SECOND, FcMath.Seconds(planLegTime))
 		}
 		if (planFullMinute) {
-			FcMath.SetFullMinute(coordTitle.type,time)
+			FcMath.SetFullMinute(time)
 		}
 	    if (planProcedureTurn && planProcedureTurnDuration) {
             time.add(Calendar.SECOND, 60 * planProcedureTurnDuration )
@@ -169,7 +169,7 @@ class TestLeg
 			time.add(Calendar.SECOND, FcMath.RatioSeconds(planLegTime, partRatio))
         }
 		if (planFullMinute) {
-			FcMath.SetFullMinute(coordTitle.type,time)
+			FcMath.SetFullMinute(time)
 		}
         if (planProcedureTurn && planProcedureTurnDuration) {
             time.add(Calendar.SECOND, 60 * planProcedureTurnDuration )
@@ -191,7 +191,7 @@ class TestLeg
 		}
 		
 		if (planFullMinute) {
-			FcMath.SetFullMinute(coordTitle.type,time)
+			FcMath.SetFullMinute(time)
 		}
 		int end_seconds = FcMath.Seconds(time.getTime())
 

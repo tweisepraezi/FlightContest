@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>gpx2gac</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>_readme_gpx2gac.txt</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/deploy/_readme_gpx2gac.txt</location>
+		</link>
+		<link>
+			<name>gpx2gac.is5</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/deploy/gpx2gac.is5</location>
+		</link>
+		<link>
+			<name>src/AviationMath.groovy</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/fc/src/groovy/AviationMath.groovy</location>
+		</link>
+		<link>
+			<name>src/FcMath.groovy</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/fc/src/groovy/FcMath.groovy</location>
+		</link>
+		<link>
+			<name>src/GPX2GAC.groovy</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/fc/src/groovy/GPX2GAC.groovy</location>
+		</link>
+	</linkedResources>
+</projectDescription>

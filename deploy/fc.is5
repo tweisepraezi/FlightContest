@@ -8,8 +8,8 @@ const FCVersion = '3.0.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.0.RC2
-AppVersion=3.0.RC2
+AppVerName=Flight Contest 3.0.RC3
+AppVersion=3.0.RC3
 ; no milestone
 VersionInfoVersion=3.0.0
 
@@ -119,7 +119,7 @@ Name: "{userdesktop}\Flight Contest";           Filename: "http://localhost:8080
   ;nur sichtbar, wenn User zur Administrator-Gruppe gehört
 Name: "{group}\Flight Contest Service Manager"; Filename: "{app}\tomcat\bin\tomcat7w.exe";          Parameters: "//MS//FlightContest";           WorkingDir: "{app}";
 Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";
-Name: "{group}\Präzisionsflug-Verein e.V.";     Filename: "http://www.praeziflug.de";                                                            WorkingDir: "{commondesktop}";
+Name: "{group}\flightcontest.de";               Filename: "http://flightcontest.de";                                                             WorkingDir: "{commondesktop}";
 Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{commondesktop}";
 Name: "{group}\Help";                           Filename: "{app}\help.txt";                                                                      WorkingDir: "{commondesktop}";
 Name: "{group}\Manual";                         Filename: "{app}\FC-Manual.pdf";                                                                 WorkingDir: "{commondesktop}";
@@ -139,7 +139,7 @@ Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2016";          
 Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2016";               Filename: "{app}\rules\\FAI_rally_flying_rules_2016.pdf";   WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsregeln Präzisionsflug Deutschland 2005";             Filename: "{app}\rules\\DE_Praezisionsflug_2005.pdf";       WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2016";           Filename: "{app}\rules\\DE_Navigationsflug_2016.pdf";       WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\National Rules and Regulations Navigation Flying Germany 2016"; Filename: "{app}\rules\\DE_Navigationsflug_2016_en.pdf";    WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Germany National Rules and Regulations Navigation Flying 2016"; Filename: "{app}\rules\\DE_Navigationsflug_2016_en.pdf";    WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2014"; Filename: "{app}\rules\\CH_Praezisionsflug_2014.pdf";       WorkingDir: "{commondesktop}";
 
 [Code]

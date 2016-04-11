@@ -99,7 +99,7 @@ class GpxController
                     if (route_instance) {
                         session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
                     } else {
-                        session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + upload_filename))
+                        session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + upload_gpx_file_name))
                     }
                     if (params.offlinemap) {
                         redirect(action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])

@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-02.04.2016
+11.04.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -101,6 +101,7 @@ Erweiterungen in dieser Version (3.0):
   Ihres Computers, wenn Sie diese Version einsetzen wollen:
     min. 8 GB RAM
     CPU Intel® Core™ i5 oder i7 (min. 2 Cores, min. 2 GHz)
+- Eigenständige Installation für den GPX-GAC-Konverter
 
 Fehlerbehebungen und Erweiterungen in Version 2.3.7:
 ----------------------------------------------------

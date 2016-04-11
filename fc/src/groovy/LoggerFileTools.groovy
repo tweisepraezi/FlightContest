@@ -48,7 +48,7 @@ class LoggerFileTools
                     break
                 }
                 if (line) {
-                    if (line == GpxService.GACFORMAT_DEF) {
+                    if (line == GPX2GAC.GACFORMAT_DEF) {
                         valid_format = true
                     }
                     boolean ignore_line = false

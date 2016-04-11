@@ -75,7 +75,8 @@ class GacController
 				file.transferTo(new File(upload_file_name))
 				gpxService.printdone ""
 				
-				if (gpxService.ConvertGPX2GAC(upload_file_name, download_file_name)) {
+                Map convert_ret = GPX2GAC.Convert(upload_file_name, download_file_name)
+				if (convert_ret.converted) {
 					String gac_file_name = file_name.substring(0, file_name.length()-4) + '-converted.gac'
 					response.setContentType("application/octet-stream")
 					response.setHeader("Content-Disposition", "Attachment;Filename=${gac_file_name}")
@@ -90,7 +91,11 @@ class GacController
 					gpxService.printdone flash.message
 				} else {
 					flash.error = true
-					flash.message = message(code:'fc.gac.gpxnotconverted',args:[file_name])
+                    if (!convert_ret.onetrack) {
+                        flash.message = message(code:'fc.gac.gpxnotconverted.multipletracks',args:[file_name])
+                    } else {
+                        flash.message = message(code:'fc.gac.gpxnotconverted',args:[file_name,convert_ret.errmsg])
+                    }
 					gpxService.DeleteFile(upload_file_name)
 					gpxService.DeleteFile(download_file_name)
 					gpxService.printdone flash.message

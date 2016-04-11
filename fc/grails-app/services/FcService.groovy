@@ -10187,7 +10187,7 @@ class FcService
 		Map calculated_time = TimeCalculator(CoordType.SP, taskInstance.risingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
-			FcMath.SetFullMinute(CoordType.SP, time)
+			FcMath.SetFullMinute(time)
 		}
         testInstance.startTime = time.getTime()
         
@@ -10204,7 +10204,7 @@ class FcService
 		calculated_time = TimeCalculator(CoordType.LDG, taskInstance.maxLandingDurationFormula, testInstance.flighttestwind.flighttest.route, testInstance.flighttestwind.wind, testInstance.taskTAS)
         time.add(Calendar.SECOND, FcMath.Seconds(calculated_time.hours))
 		if (calculated_time.fullminute) {
-			FcMath.SetFullMinute(CoordType.LDG, time)
+			FcMath.SetFullMinute(time)
 		}
         testInstance.maxLandingTime = time.getTime() 
 

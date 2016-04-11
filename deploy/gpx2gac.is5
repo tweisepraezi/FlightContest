@@ -1,0 +1,54 @@
+; Inno Setup 5
+
+[Setup]
+AppName=Flight Contest GPX GAC Converter
+
+AppVerName=Flight Contest GPX GAC Converter 1.0
+AppVersion=1.0.0
+; no milestone
+VersionInfoVersion=1.0.0
+
+AppCopyright=(C) 2016 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+AppPublisherURL=http://flightcontest.de
+;AppUpdatesURL=http://flightcontest.de
+AppSupportURL=http://flightcontest.de
+
+DefaultDirName={pf}\Flight Contest GPX GAC Converter
+DefaultGroupName=Flight Contest GPX GAC Converter
+
+OutputDir=..\output
+OutputBaseFilename=FCGpx2GacSetup
+
+LicenseFile=..\fc\web-app\licenses\GPL_License.txt
+;InfoBeforeFile=..\readme.txt
+UninstallDisplayIcon={app}\gpx2gac.ico
+
+DisableProgramGroupPage=yes
+MinVersion=0,5
+
+[Languages]
+Name: "en"; MessagesFile: "compiler:Default.isl";
+;Name: "de"; MessagesFile: "German-2-5.1.11.isl";
+
+[Files]
+Source: "..\..\..\Java\jdk1.6.0_30\jre\*";         DestDir: "{app}\java";  Flags: ignoreversion recursesubdirs;          Excludes: "doc,demo,include,sample,src.zip";
+Source: "..\fc\web-app\licenses\GPL_License.txt";  DestDir: "{app}";       Flags: overwritereadonly uninsremovereadonly; Attribs: readonly; 
+Source: "..\output\gpx2gac.jar";                   DestDir: "{app}";
+Source: "..\gpx2gac\src\gpx2gac.png";              DestDir: "{app}";
+Source: "gpx2gac.ico";                             DestDir: "{app}";
+
+[InstallDelete]
+Type: filesandordirs; Name: "{app}\java";
+
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}\java";
+
+[Icons]
+Name: "{userdesktop}\GPX GAC Converter";  Filename: "{app}\java\bin\javaw.exe"; Parameters:"-cp ""{app}\gpx2gac.jar"" org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"; WorkingDir: "{userdesktop}";    IconFilename: "{app}\gpx2gac.ico";
+  ;nur sichtbar, wenn User zur Administrator-Gruppe gehört
+Name: "{group}\Converter";                Filename: "{app}\java\bin\javaw.exe"; Parameters:"-cp ""{app}\gpx2gac.jar"" org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"; WorkingDir: "{commondesktop}";  IconFilename: "{app}\gpx2gac.ico";
+  ;IconFilename: "{app}\fc.ico";
+Name: "{group}\flightcontest.de";         Filename: "http://flightcontest.de"; WorkingDir: "{commondesktop}";
+Name: "{group}\Lizenz";                   Filename: "{app}\GPL_License.txt";   WorkingDir: "{commondesktop}";
+Name: "{group}\Uninstall Converter";      Filename: "{uninstallexe}";               
