@@ -346,7 +346,7 @@ class RouteController {
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
             Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, false) // false - no Print, false - no Points
             if (converter.ok) {
-                String route_file_name = route.instance.name() + '.gpx'
+                String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")
                 response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
                 gpxService.Download(webroot_dir + upload_gpx_file_name, route_file_name, response.outputStream)

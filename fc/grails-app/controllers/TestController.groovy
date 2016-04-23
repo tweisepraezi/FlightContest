@@ -1297,7 +1297,7 @@ class TestController
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
             Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, false) // false - no Print, false - no Points
             if (converter.ok && converter.track) {
-                String logger_file_name = test.instance.GetTitle(ResultType.Flight) + '.gpx'
+                String logger_file_name = (test.instance.GetTitle(ResultType.Flight) + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")
                 response.setHeader("Content-Disposition", "Attachment;Filename=${logger_file_name}")
                 gpxService.Download(webroot_dir + upload_gpx_file_name, logger_file_name, response.outputStream)
