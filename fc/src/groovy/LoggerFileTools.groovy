@@ -5,7 +5,7 @@ class LoggerFileTools
     
     final static String LOGGER_EXTENSIONS = "${LoggerFileTools.GAC_EXTENSION}, ${LoggerFileTools.GPX_EXTENSION}"
     
-    final static boolean GAC_REPAIRIDENTICLATIMES = false
+    final static boolean REMOVE_IDENTICAL_TIMES = true
     
     //--------------------------------------------------------------------------
     static Map ReadLoggerFile(String fileExtension, Test testInstance, String loggerFileName)
@@ -38,9 +38,9 @@ class LoggerFileTools
         LineNumberReader gac_reader = gac_file.newReader()
         try {
             boolean first = true
-            String last_time_utc = null
             BigDecimal last_latitude = null
             BigDecimal last_longitude = null
+            def last_track = null
             String last_utc = FcTime.UTC_GPX_DATE
             while (true) {
                 String line = gac_reader.readLine()
@@ -64,21 +64,17 @@ class LoggerFileTools
                                 }
                             }
                             
-                            // Repair DropOuts
-                            String time_utc = line.substring(1,7)
-                            if (!first) {
-                                if (GAC_REPAIRIDENTICLATIMES) {
-                                    if (last_time_utc == time_utc) { // Zeile mit doppelter Zeit entfernen
-                                        ignore_line = true
-                                    }
-                                }
-                            }
-                            
                             // UTC
                             String utc_h = line.substring(1,3)
                             String utc_min = line.substring(3,5)
                             String utc_s = line.substring(5,7)
                             String utc = FcTime.UTCGetNextDateTime(last_utc, "${utc_h}:${utc_min}:${utc_s}")
+                            
+                            /*
+                            if (utc == "2015-01-01T12:19:06Z") {
+                                int j = 0
+                            }
+                            */
                             
                             // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                             String latitude_grad = line.substring(7,9)
@@ -109,8 +105,18 @@ class LoggerFileTools
                             // Track in Grad
                             def track = null
                             if (last_latitude != null && last_longitude != null) {
-                                Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
-                                track = FcMath.RoundGrad(leg.dir)
+                                if ((latitude == last_latitude) && (longitude == last_longitude)) {
+                                    track = last_track
+                                } else {
+                                    Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
+                                    track = FcMath.RoundGrad(leg.dir)
+                                }
+                            }
+                            
+                            if (REMOVE_IDENTICAL_TIMES) {
+                                if (utc == last_utc) {
+                                    ignore_line = true
+                                }
                             }
                             
                             // save track point
@@ -125,13 +131,14 @@ class LoggerFileTools
                                 trackpoint_instance.save()
                                 
                                 track_point_num++
+                                
+                                last_utc = utc
+                                last_latitude = latitude
+                                last_longitude = longitude
+                                last_track = track
                             }
                             
                             first = false
-                            last_time_utc = time_utc
-                            last_utc = utc
-                            last_latitude = latitude
-                            last_longitude = longitude
                         }
                     }
                 }
@@ -169,8 +176,11 @@ class LoggerFileTools
                 boolean first = true
                 BigDecimal last_latitude = null
                 BigDecimal last_longitude = null
+                def last_track = null
                 String last_utc = FcTime.UTC_GPX_DATE
                 track_points.each {
+                    
+                    boolean ignore_line = false
                     
                     // remove old track points
                     if (first) {
@@ -185,6 +195,12 @@ class LoggerFileTools
                     String utc_time = FcTime.UTCGetTime(it.time[0].text())
                     String utc = FcTime.UTCGetNextDateTime(last_utc, utc_time)
                     
+                    //
+                    if (utc == "2015-01-01T12:19:06Z") {
+                        int j = 0
+                    }
+                    //
+                    
                     // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                     BigDecimal latitude = it.'@lat'.toBigDecimal()
 
@@ -198,25 +214,40 @@ class LoggerFileTools
                     // Track in Grad
                     def track = null
                     if (last_latitude != null && last_longitude != null) {
-                        Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
-                        track = FcMath.RoundGrad(leg.dir)
+                        if ((latitude == last_latitude) && (longitude == last_longitude)) {
+                            track = last_track
+                        } else {
+                            Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
+                            track = FcMath.RoundGrad(leg.dir)
+                        }
+                    }
+                    
+                    if (REMOVE_IDENTICAL_TIMES) {
+                        if (utc == last_utc) { // Zeile mit doppelter Zeit entfernen
+                            ignore_line = true
+                        }
                     }
                     
                     // save track point
-                    TrackPoint trackpoint_instance = new TrackPoint()
-                    trackpoint_instance.loggerdata = testInstance.loggerData
-                    trackpoint_instance.utc = utc
-                    trackpoint_instance.latitude = latitude
-                    trackpoint_instance.longitude = longitude
-                    trackpoint_instance.altitude = altitude
-                    trackpoint_instance.track = track
-                    trackpoint_instance.save()
-                    track_point_num++
+                    if (!ignore_line) {
+                        TrackPoint trackpoint_instance = new TrackPoint()
+                        trackpoint_instance.loggerdata = testInstance.loggerData
+                        trackpoint_instance.utc = utc
+                        trackpoint_instance.latitude = latitude
+                        trackpoint_instance.longitude = longitude
+                        trackpoint_instance.altitude = altitude
+                        trackpoint_instance.track = track
+                        trackpoint_instance.save()
+                        
+                        track_point_num++
+                        
+                        last_utc = utc
+                        last_latitude = latitude
+                        last_longitude = longitude
+                        last_track = track
+                    }
                     
                     first = false
-                    last_utc = utc
-                    last_latitude = latitude
-                    last_longitude = longitude
                 }
             } else {
             }

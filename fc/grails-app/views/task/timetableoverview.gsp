@@ -67,7 +67,7 @@
 		                                    <tr><td span="2">.</td></tr>
 		                                    <g:set var="last_tasktas" value="${new BigDecimal(0)}"/>
 		                                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'asc'])}">
-		                                        <g:if test="${!test_instance.crew.disabled}">
+		                                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 		                                            <g:if test="${last_tasktas != test_instance.taskTAS}">
 		                                                <tr>
 		                                                    <g:if test="${!last_tasktas}">

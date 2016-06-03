@@ -93,7 +93,7 @@
                 </thead>
                 <tbody>
                     <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'viewpos'])}">
-                       	<g:if test="${!test_instance.crew.disabled}">
+                       	<g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
                             <tr class="value" id="${test_instance.crew.startNum}">
                                 <g:if test="${taskInstance.printTimetableNumber}">
                                     <td class="num">${test_instance.GetStartNum()}</td>
@@ -150,7 +150,7 @@
                         <tbody>
                             <g:set var="lastTaskTAS" value="${new BigDecimal(0)}"/>
                             <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'asc'])}">
-                                <g:if test="${!test_instance.crew.disabled}">
+                                <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
                                     <g:if test="${lastTaskTAS != test_instance.taskTAS}">
                                         <tr class="value" id="${test_instance.taskTAS.toInteger()}">
                                             <td class="tas">${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>

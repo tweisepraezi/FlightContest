@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-23.04.2016
+03.06.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de

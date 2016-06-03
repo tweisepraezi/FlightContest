@@ -909,7 +909,14 @@ CSS-Einstellungen für Tabellen:
       
       freetext / #line
       testlist / testcol1 testcol2 testcol3 testcol4 testcol5
-      
+  Beispiele:
+    Besatzungs-Liste: Zeilen verkleinern
+      table.crewlist tr.value td { font-size: 90%; }
+    Schiedsrichter-Zeitplan: Zeilen verkleinern
+      table.timetablejurylist tr.value td { font-size: 90%; }
+    Ergebnis-Liste: Zeilen verkleinern
+      table.resultlist td { font-size: 90%; }
+
 
 Installations-abhängige Konfiguration
 =====================================

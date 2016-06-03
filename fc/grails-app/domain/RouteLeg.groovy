@@ -52,8 +52,8 @@ class RouteLeg
 	void CopyValues(RouteLeg routeLegInstance)
 	{
 		title = routeLegInstance.title
-		startTitle = routeLegInstance.startTitle
-		endTitle = routeLegInstance.endTitle
+		startTitle = new CoordTitle(routeLegInstance.startTitle.type, routeLegInstance.startTitle.number)
+		endTitle = new CoordTitle(routeLegInstance.endTitle.type, routeLegInstance.endTitle.number)
 		coordTrueTrack = routeLegInstance.coordTrueTrack
 		coordDistance = routeLegInstance.coordDistance
 		measureTrueTrack = routeLegInstance.measureTrueTrack

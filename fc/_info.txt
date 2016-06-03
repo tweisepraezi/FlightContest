@@ -172,6 +172,12 @@ Interessante Test-Daten
     2.3.6_2015_NIR
         3  - WP3 verpasst (FC-Calc: BC vor WP3), 2 BC vor WP6 (-> Korrektur auf 1 BC)
         
+    3.0.RC4_2016_DMNav
+        41 - Tag-2 - 41.gac enthält alle Zeiten doppelt
+        32 - Tag-2 - 32.gpx enthält viele 1s-Kursabweichungen (Meßpunkte mit identischen Kooordinaten)
+        35 - Tag-2 - 35.gpx enthält viele 1s-Kursabweichungen (Meßpunkte mit identischen Kooordinaten)
+        35 - Tag-2 - 35-2.gpx: 1s-Kursabweichung 2015-05-28T12:19:06Z unklar (Meßpunkt mit identischen Kooordinaten)
+        
     BC = Bad Course
     BT = Bad Turn
     PT = Procedure Turn

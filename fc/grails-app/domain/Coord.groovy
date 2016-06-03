@@ -224,6 +224,7 @@ class Coord
         noGateCheck = coordInstance.noGateCheck
 		noPlanningTest = coordInstance.noPlanningTest
 	    secretLegRatio = coordInstance.secretLegRatio
+        gateDirection = coordInstance.gateDirection
 	    // planCpTime = coordInstance.planCpTime
 	    // planProcedureTurn = coordInstance.planProcedureTurn
 	    // resultLatitude = coordInstance.resultLatitude

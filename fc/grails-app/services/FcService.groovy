@@ -187,18 +187,17 @@ class FcService
 				contest_instance.bestOfAnalysisTaskNum = 0
 			}
 			
-            contest_instance.contestPrintTaskTestDetails = ""
-            for (Task task_instance in contest_instance.tasks) {
-                if (params["tasktestdetails_${task_instance.id}"] == "on") {
-                    if (contest_instance.contestPrintTaskTestDetails) {
-                        contest_instance.contestPrintTaskTestDetails += ","
-                    }
-                    contest_instance.contestPrintTaskTestDetails += "tasktestdetails_${task_instance.id}"
-                }
-            }
-            
 			switch (params.resultfilter) {
 				case ResultFilter.Contest.toString():
+                    contest_instance.contestPrintTaskTestDetails = ""
+                    for (Task task_instance in contest_instance.tasks) {
+                        if (params["tasktestdetails_${task_instance.id}"] == "on") {
+                            if (contest_instance.contestPrintTaskTestDetails) {
+                                contest_instance.contestPrintTaskTestDetails += ","
+                            }
+                            contest_instance.contestPrintTaskTestDetails += "tasktestdetails_${task_instance.id}"
+                        }
+                    }
 					contest_instance.contestClassResults = ""
 					for (ResultClass resultclass_instance in contest_instance.resultclasses) {
 						if (params["resultclass_${resultclass_instance.id}"] == "on") {

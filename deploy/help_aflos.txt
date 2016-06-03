@@ -27,10 +27,17 @@ Stellen Sie zum Import sicher, dass Check-Punkte unbekannter Zeitkontrollen
 in AFLOS eine Torbreite von 2NM oder die Markierung $secret haben.
 
 Import von Logger-Messwerten:
-1. Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Kalkuliere AFLOS-Daten:
+  Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Kalkuliere AFLOS-Daten:
     Logger-Daten werden direkt aus einer AFLOS-Datenbank gelesen 
     und daraus sofort Fehlerpunkte berechnet.
-2. Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Import AFLOS-Kalkulation:
+  Voraussetzungen:
+    - AFLOS-Datenbank muss Referenzstrecke enthalten. Diese muss aber keine Koordinaten 
+      beinhalten.
+    - AFLOS-Name der Flight Contest-Strecke muss mit Namen der AFLOS-Referenzstrecke
+      übereinstimmen (Strecken -> Name -> Bearbeiten).
+    
+Import von AFLOS-Kalkulationen:
+  Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Import AFLOS-Kalkulation:
     Stellen Sie zum Import sicher, dass die aus dem Logger eingelesenen Messwerte
     für eine konkrete Besatzung (= Comp.-Nr.) und Strecke (= Ref.-Nr.) und der 
     aktivierten Option 'Procedure Turn' in AFLOS mit 'Check-Data -> Calculate' 

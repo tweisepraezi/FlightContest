@@ -8,6 +8,8 @@ class AflosTools
     private static final String PRAEFIX_CHECKPOINTS = "P"
     private static final String PRAEFIX_ERRORPOINTS = "-Bad "
     
+    final static boolean REMOVE_IDENTICAL_TIMES = true
+    
     //--------------------------------------------------------------------------
     static boolean ExistAnyAflosRoute(Contest contestInstance)
     {
@@ -280,23 +282,44 @@ class AflosTools
         List aflos_crew_names = AflosTools.GetAflosCrewNames(testInstance.task.contest,startNum)
         if (aflos_crew_names) {
             String last_utc = FcTime.UTC_GPX_DATE
+            BigDecimal last_latitude = null
+            BigDecimal last_longitude = null
+            def last_track = null
             for (AflosCrewNames afloscrewnames_instance in aflos_crew_names) {
                 Map last_point = [latitude:null, longitude:null]
                 for (int measure_point = 0; measure_point < afloscrewnames_instance.measurePointsNum; measure_point++) {
+                    boolean ignore_line = false
+                    
                     Map new_point = GetAflosCrewNamesPoint(last_utc, afloscrewnames_instance, measure_point, last_point.latitude, last_point.longitude)
                     
-                    TrackPoint trackpoint_instance = new TrackPoint()
-                    trackpoint_instance.loggerdata = testInstance.loggerData
-                    trackpoint_instance.utc = new_point.utc
-                    trackpoint_instance.latitude = new_point.latitude
-                    trackpoint_instance.longitude = new_point.longitude
-                    trackpoint_instance.altitude = new_point.altitude
-                    trackpoint_instance.track = new_point.track
-                    trackpoint_instance.save()
-        
-                    last_point = new_point
-                    last_utc = new_point.utc
-                    found = true
+                    if (REMOVE_IDENTICAL_TIMES) {
+                        if (new_point.utc == last_utc) { // Zeile mit doppelter Zeit entfernen
+                            ignore_line = true
+                        }
+                    }
+                    
+                    if (!ignore_line) {
+                        if ((new_point.latitude == last_latitude) && (new_point.longitude == last_longitude)) {
+                            new_point.track = last_track
+                        }
+                        
+                        TrackPoint trackpoint_instance = new TrackPoint()
+                        trackpoint_instance.loggerdata = testInstance.loggerData
+                        trackpoint_instance.utc = new_point.utc
+                        trackpoint_instance.latitude = new_point.latitude
+                        trackpoint_instance.longitude = new_point.longitude
+                        trackpoint_instance.altitude = new_point.altitude
+                        trackpoint_instance.track = new_point.track
+                        trackpoint_instance.save()
+            
+                        last_point = new_point
+                        last_utc = new_point.utc
+                        last_latitude = new_point.latitude
+                        last_longitude = new_point.longitude
+                        last_track = new_point.track
+                        
+                        found = true
+                    }
                 }
             }
         }

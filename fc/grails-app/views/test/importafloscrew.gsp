@@ -62,6 +62,9 @@
                             <tbody>
                                 <tr>
                                     <g:set var="last_startnum" value="${testInstance.aflosStartNum}" />
+                                    <g:if test="${!last_startnum}">
+                                        <g:set var="last_startnum" value="${testInstance.crew.startNum}" />
+                                    </g:if>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.crewnames.crewnumber')}:</label></td>
                                     <td><g:select from="${AflosTools.GetAflosCrewNames(testInstance.crew.contest)}" name="afloscrewnames.startnum" value="${last_startnum}" optionKey="startnum" optionValue="${{it.viewName()}}" noSelection="${['null':'']}"></g:select></td>
                                 </tr>

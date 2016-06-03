@@ -53,7 +53,6 @@
         <h2>${message(code:'fc.program.printtest')}</h2>
         <h3>${message(code:'fc.program.printtest.subtitle')} (${num})</h3>
         <g:form>
-          	<br/>
             <table class="testlist">
                 <thead>
                     <tr>

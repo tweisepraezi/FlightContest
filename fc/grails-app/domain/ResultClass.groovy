@@ -432,6 +432,7 @@ class ResultClass
 	void CopyValues(ResultClass resultClassInstance)
 	{
 		name = resultClassInstance.name
+        shortName = resultClassInstance.shortName
 		contestTitle = resultClassInstance.contestTitle
 		contestRule = resultClassInstance.contestRule
 		precisionFlying = resultClassInstance.precisionFlying

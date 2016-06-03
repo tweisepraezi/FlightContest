@@ -25,7 +25,7 @@ class GacController
 				boolean repair_tracks = params?.repairtracks == 'on'
 				boolean repair_identicaltimes = params?.identicaltimes == 'on'
 				if (gpxService.RepairGAC(upload_file_name, download_file_name, repair_tracks, repair_identicaltimes)) {
-					String repair_file_name = file_name.substring(0, file_name.length()-4) + '-repaired.gac'
+					String repair_file_name = (file_name.substring(0, file_name.length()-4) + '-repaired.gac').replace(' ',"_")
 					response.setContentType("application/octet-stream")
 					response.setHeader("Content-Disposition", "Attachment;Filename=${repair_file_name}")
 					
@@ -77,7 +77,7 @@ class GacController
 				
                 Map convert_ret = GPX2GAC.Convert(upload_file_name, download_file_name)
 				if (convert_ret.converted) {
-					String gac_file_name = file_name.substring(0, file_name.length()-4) + '-converted.gac'
+					String gac_file_name = (file_name.substring(0, file_name.length()-4) + '-converted.gac').replace(' ',"_")
 					response.setContentType("application/octet-stream")
 					response.setHeader("Content-Disposition", "Attachment;Filename=${gac_file_name}")
 					
