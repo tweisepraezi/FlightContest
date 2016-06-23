@@ -26,6 +26,7 @@
                             <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
                             <g:set var="last_test" value="${taskInstance.GetLastTest()}"/>
                             <g:if test="${first_test && last_test}">
+                                <g:set var="first_landing_time" value="${first_test.GetIntermediateLandingTime(true)}"/>
 	                            <table>
 	                                <tbody>
 	                                    <g:if test="${taskInstance.IsFlightTestRun()}">
@@ -34,6 +35,11 @@
                                                     <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</td>
                                                     <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
                                                     <td/>
+                                                    <g:if test="${first_landing_time}">
+                                                        <td/>
+                                                        <td/>
+                                                    </g:if>
+                                                    <td/>
                                                 </tr>
                                             </g:if>
                                             <g:else>
@@ -41,21 +47,34 @@
                                                     <td class="detailtitle">${message(code:'fc.planningtest')}:</td>
                                                     <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
                                                     <td/>
+                                                    <g:if test="${first_landing_time}">
+                                                        <td/>
+                                                        <td/>
+                                                    </g:if>
+                                                    <td/>
                                                 </tr>
                                             </g:else>
 		                                    <tr>
 		                                        <td class="detailtitle">${message(code:'fc.test.takeoff')}:</td>
 		                                        <td>${first_test.takeoffTime.format('HH:mm')} - ${last_test.takeoffTime.format('HH:mm')}</td>
                                                 <td/>
+                                                <g:if test="${first_landing_time}">
+                                                    <td/>
+                                                    <td/>
+                                                </g:if>
+                                                <td/>
 		                                    </tr>
 	                                        <tr>
 	                                            <td class="detailtitle">${message(code:'fc.task.takeoffinterval')}:</td>
 	                                            <td colspan="2">${taskInstance.takeoffIntervalNormal} ${message(code:'fc.time.min')}</td>
 	                                        </tr>
-		                                    <g:if test="${first_test.GetIntermediateLandingTime(true)}">
+		                                    <g:if test="${first_landing_time}">
                                                 <tr>
                                                     <td class="detailtitle">${message(code:'fc.landingtest.landings.intermediate')}:</td>
-                                                    <td>${first_test.GetIntermediateLandingTime(true)} - ${last_test.GetIntermediateLandingTime(true)}</td>
+                                                    <td>${first_landing_time} - ${last_test.GetIntermediateLandingTime(true)}</td>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
                                                     <td/>
                                                 </tr>
 		                                    </g:if>
@@ -63,11 +82,16 @@
 		                                        <td class="detailtitle">${message(code:'fc.landingtest.landings')}:</td>
   		                                        <td>${first_test.maxLandingTime.format('HH:mm')} - ${last_test.maxLandingTime.format('HH:mm')}</td>
                                                 <td/>
+                                                <g:if test="${first_landing_time}">
+                                                    <td/>
+                                                    <td/>
+                                                </g:if>
+                                                <td/>
 		                                    </tr>
 		                                    <tr><td span="2">.</td></tr>
 		                                    <g:set var="last_tasktas" value="${new BigDecimal(0)}"/>
-		                                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'asc'])}">
-		                                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
+		                                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'desc'])}">
+		                                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.timeCalculated}">
 		                                            <g:if test="${last_tasktas != test_instance.taskTAS}">
 		                                                <tr>
 		                                                    <g:if test="${!last_tasktas}">
@@ -77,7 +101,12 @@
 		                                                        <td/>
 		                                                    </g:else>
 		                                                    <td>${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')} - ${FcMath.TimeStrShort(FcMath.TimeDiff(test_instance.takeoffTime,test_instance.maxLandingTime))}${message(code:'fc.time.h')}</td>
-		                                                    <td>${message(code:CoordType.TO.code)} -> ${message(code:CoordType.SP.code)}: ${FcMath.TimeStrMin(FcMath.TimeDiff(test_instance.takeoffTime,test_instance.startTime))}${message(code:'fc.time.min')}</td>
+		                                                    <td>${message(code:CoordType.TO.code)} -> ${message(code:CoordType.SP.code)}: ${FcMath.TimeStrMin(test_instance.GetTO2SPTime())}${message(code:'fc.time.min')}</td>
+                                                            <g:if test="${first_landing_time}">
+                                                                <td>${message(code:CoordType.iFP.code)} -> ${message(code:CoordType.iLDG.code)}: ${FcMath.TimeStrMin(test_instance.GetiFP2iLDGTime())}${message(code:'fc.time.min')}</td>
+                                                                <td>${message(code:CoordType.iLDG.code)} -> ${message(code:CoordType.iSP.code)}: ${FcMath.TimeStrMin(test_instance.GetiLDG2iSPTime())}${message(code:'fc.time.min')}</td>
+                                                            </g:if>
+                                                            <td>${message(code:CoordType.FP.code)} -> ${message(code:CoordType.LDG.code)}: ${FcMath.TimeStrMin(test_instance.GetFP2LDGTime())}${message(code:'fc.time.min')}</td>
 		                                                </tr>
 		                                            </g:if>
 		                                            <g:set var="last_tasktas" value="${test_instance.taskTAS}"/>

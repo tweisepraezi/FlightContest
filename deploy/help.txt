@@ -506,19 +506,19 @@ Für folgende Punkte können Festlegungen getroffen werden:
   - Intermediate-Landung (iFP -> iLDG)
   - Intermediate-Startpunkt (iFP, iLDG oder iTO -> iSP)
 
-Der Standard-Wert neuer Aufgaben "wind+:2NM" bewirkt, dass bei der 
-Flugzeit-Berechnung der Wind der Navigationsflugaufgabe mit berücksichtigt
-wird, die Entfernung zwischen den Punkten zur Berechnung um 2NM vergößert wird 
-(was der Länge der Standard-Platzrunde entspricht) und die berechnete 
+Der Standard-Wert neuer Aufgaben "wind+:3NM" bewirkt, dass bei der 
+Flugzeit-Berechnung der Wind der Navigationsflugaufgabe mit berücksichtigt wird,
+die Entfernung zwischen den Punkten zur Berechnung um 3NM vergößert wird 
+(was sich für eine Standard-Platzrunde bewährt hat) und die berechnete 
 Überflug-Zeit auf ganze Minuten aufgerundet wird.
 
 Für jeden genannten Punkt können folgende Ausdrücke verwendet werden: 
   Ausdruck (Beispiel)  Angewendete Formel                   Aufrunden auf ganze Minuten
   -------------------------------------------------------------------------------------
-  wind+:2NM            LegTime(tas,wind,track,dist + 2)     ja
-  wind:2NM             LegTime(tas,wind,track,dist + 2)     nein
-  nowind+:2.5NM        LegTime(tas,null,track,dist + 2.5)   ja
-  nowind:2.5NM         LegTime(tas,null,track,dist + 2.5)   nein
+  wind+:3NM            LegTime(tas,wind,track,dist + 3)     ja
+  wind:3NM             LegTime(tas,wind,track,dist + 3)     nein
+  nowind+:3.5NM        LegTime(tas,null,track,dist + 3.5)   ja
+  nowind:3.5NM         LegTime(tas,null,track,dist + 3.5)   nein
   wind+:1.3            1.3 * LegTime(tas,wind,track,dist)   ja
   wind:1.3             1.3 * LegTime(tas,wind,track,dist)   nein
   nowind+:1.3          1.3 * LegTime(tas,null,track,dist)   ja
@@ -540,13 +540,13 @@ Bedeutungen:
   time    - Feste Zeit in Minuten für alle Besatzungen.
   1.3     - Die berechnete Zeit wird mit dem angegebenen Faktor (hier mit 1.3)
             multipliziert.
-  2NM     - Die Zeitberechnung erfolgt unter Vergrößerung der Entfernung zwischen 
-            den Punkten um den angegebenen Wert (hier um 2NM).
+  3NM     - Die Zeitberechnung erfolgt unter Vergrößerung der Entfernung zwischen 
+            den Punkten um den angegebenen Wert (hier um 3NM).
 
 Anwendungsbeispiele:
   Ausdruck      Anwendung
   ---------------------------------------------------------------------------------------
-  wind+:2NM     Flugplatz mit Standard-Platzrunde von 2NM (TO -> SP, iTO -> iSP)
+  wind+:3NM     Flugplatz mit Standard-Platzrunde (TO -> SP, iTO -> iSP)
   wind+:xNM     Bei größeren Platzrunden eine größere Entfernung x anwenden.
   wind+:6NM     Spätestete Landezeit (FP -> LDG)
   time+:xmin    Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)
@@ -881,6 +881,7 @@ CSS-Einstellungen für Tabellen:
                           planningtime planningendtime takeofftime sptime tptime fptime landingtime arrivaltime
                           empty1 empty2 empty3 empty4
       timetableoverviewlist / (briefing planning planning takeoff takeoffintervall intermediatelanding landing) (legtimes [#tas]) col1 col2 col3
+      timetableoverviewlist2 / (head) (times [#tas]) tas to2sp ifp2ildg ildg2isp fp2ldg
       
       crewtest / title crew team resultclass aircraft aircrafttype tas
       info / (wind planning endcurved landinglatest planninginfo planningignore planningevaluation) title separator value

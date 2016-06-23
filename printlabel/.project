@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>printlabel</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.groovy.core.groovyNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>_readme_printlabel.txt</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/deploy/_readme_printlabel.txt</location>
+		</link>
+		<link>
+			<name>printlabel.is5</name>
+			<type>1</type>
+			<location>K:/Projects/GIT/FlightContest/deploy/printlabel.is5</location>
+		</link>
+	</linkedResources>
+</projectDescription>

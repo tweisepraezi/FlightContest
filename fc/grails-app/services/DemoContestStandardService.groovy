@@ -11,7 +11,6 @@ class DemoContestStandardService
 		
 		// Contest
 		Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,aflosDB,testExists)
-		Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, false)
 
 		// Teams
 		Map team1 = fcService.putTeam(contest,"Deutschland")
@@ -33,6 +32,9 @@ class DemoContestStandardService
             route1 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
         }
         fcService.printdone ""
+        
+        // Task
+        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, false)
         
 		// Planning Test
 		Map planningtest1 = fcService.putPlanningTest(task1,"")
@@ -266,7 +268,6 @@ class DemoContestStandardService
 		
 		// Contest
 		Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,aflosDB,testExists)
-		Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false)
 
 		// Classes with properties
 		Map resultclass1 = fcService.putResultClass(contest,"Pr\u00E4zi","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -286,6 +287,9 @@ class DemoContestStandardService
 		// additional team
 		Map team3 = fcService.putTeam(contest,'Polen')
 		
+        // Task
+        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false)
+        
 		// TaskClass properties
 		fcService.puttaskclassTask(task1,resultclass1,true,true,false,false,false, false,true, true,true,true, true,true,true,true)
 		fcService.puttaskclassTask(task1,resultclass2,false,false,true,true,true, true,false, true,true,true, true,true,true,true)

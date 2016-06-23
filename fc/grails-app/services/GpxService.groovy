@@ -1131,6 +1131,25 @@ class GpxService
                     points += new_point
                 }
             }
+        } else if (gpx.trk.size() == 0) { // no track
+            gpx.rte.each { p ->
+                if (p.extensions.flightcontest.gate) {
+                    Map new_point = [name:p.name.text()]
+                    new_point += [latcenter:p.extensions.flightcontest.gate.'@lat'[0], loncenter:p.extensions.flightcontest.gate.'@lon'[0]]
+                    switch (p.extensions.flightcontest.gate.'@type'[0]) {
+                        case "TO":
+                        case "LDG":
+                        case "iTO":
+                        case "iLDG":
+                            new_point += [radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
+                            break
+                        default:
+                            new_point += [radius:GPXSHOWPPOINT_RADIUS_CHECKPOINT]
+                            break
+                    }
+                    points += new_point
+                }
+            }
         }
         gpx_reader.close()
 

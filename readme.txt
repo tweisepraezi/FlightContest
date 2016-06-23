@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-03.06.2016
+23.06.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -102,6 +102,12 @@ Erweiterungen in dieser Version (3.0):
     min. 8 GB RAM
     CPU Intel® Core™ i5 oder i7 (min. 2 Cores, min. 2 GHz)
 - Eigenständige Installation für den GPX-GAC-Konverter
+- Voreinstellwerte für Flugzeit-Berechnung der Starts und Landungen geändert:
+    TO -> SP: wind+:3NM, iFP -> iLDG: wind+:2NM, iLDG -> iSP: wind+:3NM
+- Besatzungs-Liste: Kommando 'Startnummern sortieren' eingeführt
+- Planung: Kommando 'Zeitplan-Export' eingeführt
+- Anwendung "Print Label" für Label-Drucker Brother QL-570
+    Druckt Label mit Daten des 'Zeitplan-Export'-Kommandos.
 
 Fehlerbehebungen und Erweiterungen in Version 2.3.7:
 ----------------------------------------------------

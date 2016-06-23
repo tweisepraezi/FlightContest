@@ -834,6 +834,29 @@ class TaskController {
         }
 	}
 
+    def exporttimetable = {
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        String upload_file_name = "gpxupload/TXT-${uuid}-UPLOAD.txt"
+        def task = fcService.exporttimetableTask(params, webroot_dir + upload_file_name)
+        if (task.instance) {
+            if (!task.error) {
+                String timetable_file_name = (task.instance.name() + '.txt').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${timetable_file_name}")
+                fcService.Download(webroot_dir + upload_file_name, timetable_file_name, response.outputStream)
+                fcService.DeleteFile(webroot_dir + upload_file_name)
+            }
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            redirect(action:listplanning,id:task.instance.id)
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+
 	def timetableprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)

@@ -52,7 +52,8 @@
             <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
             <g:set var="last_test" value="${taskInstance.GetLastTest()}"/>
             <g:if test="${first_test && last_test}">
-                <table class="timetableoverviewlist">
+                <g:set var="first_landing_time" value="${first_test.GetIntermediateLandingTime(true)}"/>
+                <table class="timetableoverviewlist" style="page-break-after:always;">
                     <tbody>
                         <g:if test="${taskInstance.briefingTime}">
                             <tr class="briefing">
@@ -98,7 +99,7 @@
                             </tr>
 	                        <g:if test="${taskInstance.printTimetableOverviewLegTimes}">
 	                            <g:set var="last_tasktas" value="${new BigDecimal(0)}"/>
-	                            <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'asc'])}">
+	                            <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'desc'])}">
 	                                <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 	                                    <g:if test="${last_tasktas != test_instance.taskTAS}">
 	                                        <tr class="legtimes" id="${test_instance.taskTAS.toInteger()}">
@@ -117,6 +118,36 @@
 	                            </g:each>
 	                        </g:if>
                         </g:if>
+                    </tbody>
+                </table>
+                <table class="timetableoverviewlist2">
+                    <tbody>
+                        <tr class="head">
+                            <td/>
+                            <td>${message(code:CoordType.TO.code)} -> ${message(code:CoordType.SP.code)}</td>
+                            <g:if test="${first_landing_time}">
+                                <td>${message(code:CoordType.iFP.code)} -> ${message(code:CoordType.iLDG.code)}</td>
+                                <td>${message(code:CoordType.iLDG.code)} -> ${message(code:CoordType.iSP.code)}</td>
+                            </g:if>
+                            <td>${message(code:CoordType.FP.code)} -> ${message(code:CoordType.LDG.code)}</td>
+                        </tr>
+	                    <g:set var="last_tasktas" value="${new BigDecimal(0)}"/>
+	                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskTAS',order:'desc'])}">
+	                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.timeCalculated}">
+	                            <g:if test="${last_tasktas != test_instance.taskTAS}">
+	                                <tr class="times" id="${test_instance.taskTAS.toInteger()}">
+	                                    <td class="tas">${fieldValue(bean:test_instance, field:'taskTAS')}${message(code:'fc.knot')}</td>
+	                                    <td class="to2sp">${FcMath.TimeStrMin(test_instance.GetTO2SPTime())}${message(code:'fc.time.min')}</td>
+                                        <g:if test="${first_landing_time}">
+                                            <td class="ifp2ildg">${FcMath.TimeStrMin(test_instance.GetiFP2iLDGTime())}${message(code:'fc.time.min')}</td>
+                                            <td class="ildg2isp">${FcMath.TimeStrMin(test_instance.GetiLDG2iSPTime())}${message(code:'fc.time.min')}</td>
+                                        </g:if>
+                                        <td class="fp2ldg">${FcMath.TimeStrMin(test_instance.GetFP2LDGTime())}${message(code:'fc.time.min')}</td>
+	                                </tr>
+	                            </g:if>
+	                            <g:set var="last_tasktas" value="${test_instance.taskTAS}"/>
+	                        </g:if>
+	                    </g:each>
                     </tbody>
                 </table>
             </g:if>

@@ -198,7 +198,8 @@
 								</g:else>
 								<td colspan="2"></td>
                                 <td></td>
-                                <td colspan="5"><g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" /> <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" /></td>
+                                <td colspan="3"><g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" /> <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" /></td>
+                                <td colspan="2"><g:actionSubmit action="exporttimetable" value="${message(code:'fc.test.timetable.export')}" /></td>
                             </tr>
                         </tfoot>
                     </table>

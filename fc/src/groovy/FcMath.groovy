@@ -211,6 +211,16 @@ class FcMath
 	}
 	
     //--------------------------------------------------------------------------
+    static String SpeedStr_TAS(BigDecimal speedValue)
+    {
+        if (speedValue >= 0) {
+            DecimalFormat df = new DecimalFormat("#0.#")
+            return df.format(speedValue)
+        }
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
     static String SpeedStr_Planning(BigDecimal speedValue)
     {
         if (speedValue >= 0) {

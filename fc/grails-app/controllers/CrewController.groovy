@@ -306,6 +306,17 @@ class CrewController {
         redirect(action:list)
     }
     
+    def sortstartnum = {
+        [noStartnum13:false]
+    }
+    
+    def sortstartnumrun = {
+        boolean no_startnum_13 = params?.noStartnum13 == 'on'
+        def ret = fcService.sortStartNumCrews(session.lastContest,params,session,no_startnum_13)
+        flash.message = ret.message
+        redirect(action:list)
+    }
+    
     def runcommand = {
         switch (params.crewcommand) {
             case CrewCommands.SELECTCOMMAND.toString():

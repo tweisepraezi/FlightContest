@@ -3149,6 +3149,64 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map exporttimetableTask(Map params, String uploadFileName)
+    {
+        printstart "exporttimetableTask $uploadFileName"
+        
+        Map task = domainService.GetTask(params)
+        if (!task.instance) {
+            return task
+        }
+        try {
+            List export_values = []
+            Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+                if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                    if (params["selectedTestID${test_instance.id}"] == "on") {
+                        Map new_value = [startnum:    test_instance.crew.startNum,
+                                         crew:        test_instance.crew.name,
+                                         aircraft:    test_instance.crew.aircraft.registration,
+                                         resultclass: test_instance.crew.resultclass.name,
+                                         tas:         FcMath.SpeedStr_TAS(test_instance.crew.tas),
+                                         testtime:    FcMath.TimeStrShort(test_instance.testingTime),
+                                         takeofftime: FcMath.TimeStrShort(test_instance.takeoffTime),
+                                        ]
+                        export_values += new_value
+                    }
+                }
+            }
+            if (export_values.size() > 0) {
+                File upload_file = new File(uploadFileName)
+                BufferedWriter upload_writer =  upload_file.newWriter("UTF-8")
+                upload_writer.writeLine "CONTEST:${task.instance.contest.title}"
+                upload_writer.writeLine "TASK:${task.instance.printName()}"
+                for (Map export_value in export_values) {
+                    upload_writer.writeLine ""
+                    upload_writer.writeLine "STARTNUM:${export_value.startnum}"
+                    upload_writer.writeLine "CREW:${export_value.crew}"
+                    upload_writer.writeLine "AIRCRAFT:${export_value.aircraft}"
+                    upload_writer.writeLine "CLASS:${export_value.resultclass}"
+                    upload_writer.writeLine "TAS:${export_value.tas}"
+                    upload_writer.writeLine "PLANNINGTIME:${export_value.testtime}"
+                    upload_writer.writeLine "TAKEOFFTIME:${export_value.takeofftime}"
+                }
+                upload_writer.close()
+            } else {
+                task.message = getMsg('fc.test.timetable.export.someonemustselected')
+                task.error = true
+                printerror task.message
+                return task
+            }
+            printdone ""
+        } catch (Exception e) {
+            task.message = e.getMessage()
+            task.error = true
+            printerror e.getMessage()
+        }
+        return task
+
+    }
+    
+    //--------------------------------------------------------------------------
     Map positionscalculatedTask(Map params)
     {
         Map task = domainService.GetTask(params)
@@ -6000,9 +6058,10 @@ class FcService
 			}
 			
             Task.findAllByContest(contestInstance,[sort:"id"]).each { Task task_instance ->
-				if (!task_instance.hidePlanning) {
+				//if (!task_instance.hidePlanning) {
 	                Test test_instance = new Test()
 	                test_instance.crew = crew_instance
+                    test_instance.disabledCrew = true
 					test_instance.taskTAS = crew_instance.tas
 					test_instance.taskAircraft = crew_instance.aircraft
 	                test_instance.viewpos = Crew.countByContest(contestInstance) - 1
@@ -6011,7 +6070,7 @@ class FcService
                     test_instance.loggerData = new LoggerDataTest()
                     test_instance.loggerResult = new LoggerResult()
 	                test_instance.save()
-				}
+				//}
             }
 			
             String msg
@@ -6799,6 +6858,44 @@ class FcService
 		}
 	}
 	
+    //--------------------------------------------------------------------------
+    Map sortStartNumCrews(Contest contestInstance, Map params, session, boolean noStartnum13)
+    {
+        printstart "sortStartNumCrews"
+        
+        // search for last crew num
+        int last_crew_num = 0
+        for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"viewpos"])) {
+            if (crew_instance.startNum > last_crew_num) {
+                last_crew_num = crew_instance.startNum
+            }
+        }
+        println "Last crew num: $last_crew_num"
+        
+        // add last_crew num
+        for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"viewpos"])) {
+            crew_instance.startNum += last_crew_num
+            crew_instance.save()
+        }
+        
+        // set new crew num
+        int crew_num = 0
+        for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"viewpos"])) {
+            crew_num++
+            if (noStartnum13) {
+                if (crew_num == 13) {
+                    crew_num++
+                }
+            }
+            crew_instance.startNum = crew_num
+            crew_instance.save()
+        }
+
+        Map ret = ['message':getMsg('fc.crew.sorted')]
+        printdone ret
+        return ret
+    }
+
     //--------------------------------------------------------------------------
     Map getresultsprintableTest(Map params)
     {
@@ -11572,6 +11669,22 @@ class FcService
 		}
 	}
 	
+    //--------------------------------------------------------------------------
+    boolean Download(String downloadFileName, String returnFileName, OutputStream outputStream)
+    {
+        printstart "Download $downloadFileName -> $returnFileName"
+        try {
+            File download_file = new File(downloadFileName)
+            outputStream.write(download_file.getBytes())
+            outputStream.flush()
+        } catch (Exception e) {
+            printerror e.getMessage()
+            return false
+        }
+        printdone ""
+        return true
+    }
+    
 	//--------------------------------------------------------------------------
 	void printstart(out)
 	{

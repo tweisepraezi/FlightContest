@@ -2063,5 +2063,54 @@ class Test
         return ""
 
     }
+
+    BigDecimal GetTO2SPTime()
+    {
+        return FcMath.TimeDiff(takeoffTime, startTime)
+    }
     
+    BigDecimal GetFP2LDGTime()
+    {
+        return FcMath.TimeDiff(finishTime, maxLandingTime)
+    }
+    
+    BigDecimal GetiFP2iLDGTime()
+    {
+        Date ifp_time =null
+        Date ildg_time = null
+        Date tp_time = startTime
+        for (TestLegFlight testlegflight_instance in TestLegFlight.findAllByTest(this,[sort:"id"])) {
+            tp_time = testlegflight_instance.AddPlanLegTime(tp_time)
+            if (testlegflight_instance.coordTitle.type == CoordType.iFP) {
+                ifp_time = tp_time
+            }
+            if (testlegflight_instance.coordTitle.type == CoordType.iLDG) {
+                ildg_time = tp_time
+            }
+            if (ifp_time && ildg_time) {
+                return FcMath.TimeDiff(ifp_time, ildg_time)
+            }
+        }
+        return 0
+    }
+    
+    BigDecimal GetiLDG2iSPTime()
+    {
+        Date ildg_time = null
+        Date isp_time =null
+        Date tp_time = startTime
+        for (TestLegFlight testlegflight_instance in TestLegFlight.findAllByTest(this,[sort:"id"])) {
+            tp_time = testlegflight_instance.AddPlanLegTime(tp_time)
+            if (testlegflight_instance.coordTitle.type == CoordType.iLDG) {
+                ildg_time = tp_time
+            }
+            if (testlegflight_instance.coordTitle.type == CoordType.iSP) {
+                isp_time = tp_time
+            }
+            if (ildg_time && isp_time) {
+                return FcMath.TimeDiff(ildg_time, isp_time)
+            }
+        }
+        return 0
+    }
 }
