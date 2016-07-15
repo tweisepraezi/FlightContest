@@ -25,9 +25,9 @@ class TeamController {
             session.resultclassReturnAction = actionName
             session.resultclassReturnController = controllerName
             session.resultclassReturnID = params.id
-            def teamList = Team.findAllByContest(session.lastContest, [sort:'name'])
+            def team_list = Team.findAllByContest(session.lastContest, [sort:'name'])
 			fcService.printdone "last contest"
-            return [teamInstanceList:teamList,resultClasses:session.lastContest.resultClasses]
+            return [teamInstanceList:team_list, teamresultClasses:session.lastContest.resultClasses]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -117,8 +117,22 @@ class TeamController {
         }
         if (session?.lastContest) {
 			session.lastContest.refresh()
-            def teamList = Team.findAllByContest(session.lastContest,[sort:"name"])
-            return [contestInstance:session.lastContest,teamInstanceList:teamList]
+            def team_list = Team.findAllByContest(session.lastContest,[sort:"name"])
+            int team_num = 0
+            for (def team_instance in team_list) {
+                if (!team_instance.disabled && Crew.findByTeam(team_instance)) {
+                    boolean crew_found = false
+                    for (Crew crew_instance in Crew.findAllByTeam(team_instance,[sort:'name'])) {
+                        if (!crew_instance.disabled && !crew_instance.disabledTeam) {
+                            crew_found = true
+                        }
+                    }
+                    if (crew_found) {
+                        team_num++
+                    }
+                }
+            }
+            return [contestInstance:session.lastContest, teamInstanceList:team_list, teamNum:team_num]
         }
         return [:]
     }

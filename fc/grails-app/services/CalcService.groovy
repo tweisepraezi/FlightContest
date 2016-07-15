@@ -137,7 +137,7 @@ class CalcService
                                     break
                                 }
                             }
-                        } 
+                        }
                     }
                 }
                 last_p = p
@@ -339,6 +339,7 @@ class CalcService
         Map ret = [gateFound:false, additionalGateFound:false, onGateLine:false, onAdvancedGateLine:false, lastPointNearer:false]
         
         boolean analyze_default_gate = true
+        boolean run_exception = false
         for (Map g in gateList) {
             if (isGateTrackOk(g.gateTrack, trackPoint2.track)) {
                 Map track_line = [x1:trackPoint1.longitude, y1:trackPoint1.latitude, x2:trackPoint2.longitude, y2:trackPoint2.latitude, track:trackPoint2.track, utc:trackPoint2.utc]
@@ -352,6 +353,9 @@ class CalcService
                 }
                 */
                 Map line_crossed = isLineCrossed(track_line, gate_line, advanced_gate_line)
+                if (line_crossed.runException) {
+                    run_exception = true
+                }
                 boolean is_gate_line_crossed = false
                 switch (g.coordType) {
                     case CoordType.TO:
@@ -387,6 +391,9 @@ class CalcService
                 }
             }
             analyze_default_gate = false
+            if (run_exception) {
+                //println "  Exception at $trackPoint1 $trackPoint2"
+            }
         }
         return ret
     }
@@ -394,29 +401,33 @@ class CalcService
     //--------------------------------------------------------------------------
     private Map isLineCrossed(Map trackLine, Map gateLine, Map advancedGateLine)
     {
-        Map cross_point = getCrossPoint(gateLine, trackLine)
+        Map ret = [onTrackLine:false, onGateLine:false, onAdvancedGateLine:false, lastPointNearer:false, runException:false]
         
-        Map ret = [onTrackLine:false, onGateLine:false, onAdvancedGateLine:false, lastPointNearer:false]
+        try {
+            Map cross_point = getCrossPoint(gateLine, trackLine)
         
-        ret.onTrackLine = isPointOnLine(cross_point, trackLine, "Track")
-        ret.onGateLine = isPointOnLine(cross_point, gateLine, "Gate")
-        ret.onAdvancedGateLine = isPointOnLine(cross_point, advancedGateLine, "AdvancedGate")
-                    
-        if (ret.onTrackLine) {
-            BigDecimal dist_1 = getPointDistance(cross_point.x, cross_point.y, trackLine.x1, trackLine.y1)
-            BigDecimal dist_2 = getPointDistance(cross_point.x, cross_point.y, trackLine.x2, trackLine.y2)
-            if (dist_1 < dist_2) {
-                ret.lastPointNearer = true
+            ret.onTrackLine = isPointOnLine(cross_point, trackLine, "Track")
+            ret.onGateLine = isPointOnLine(cross_point, gateLine, "Gate")
+            ret.onAdvancedGateLine = isPointOnLine(cross_point, advancedGateLine, "AdvancedGate")
+                        
+            if (ret.onTrackLine) {
+                BigDecimal dist_1 = getPointDistance(cross_point.x, cross_point.y, trackLine.x1, trackLine.y1)
+                BigDecimal dist_2 = getPointDistance(cross_point.x, cross_point.y, trackLine.x2, trackLine.y2)
+                if (dist_1 < dist_2) {
+                    ret.lastPointNearer = true
+                }
             }
+            
+            /*
+            if (ret.onTrackLine) {
+                println "isLineCrossed: onGateLine: $ret.onGateLine, ${RouteGradStr2(cross_point.x)}, ${RouteGradStr2(cross_point.y)}"
+            } else {
+                println "Not isLineCrossed: ${RouteGradStr2(cross_point.x)}, ${RouteGradStr2(cross_point.y)}"
+            }
+            */
+        } catch (Exception e) {
+            ret.runException = true
         }
-        
-        /*
-        if (ret.onTrackLine) {
-            println "isLineCrossed: onGateLine: $ret.onGateLine, ${RouteGradStr2(cross_point.x)}, ${RouteGradStr2(cross_point.y)}"
-        } else {
-            println "Not isLineCrossed: ${RouteGradStr2(cross_point.x)}, ${RouteGradStr2(cross_point.y)}"
-        }
-        */
         
         return ret
     }
@@ -881,36 +892,40 @@ class CalcService
                         break
                 }
                 
-                // standard gate
-                Map gate = AviationMath.getGate(
-                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                    coordroute_instance.gatewidth2
-                )
-                Map advanced_gate = AviationMath.getGate(
-                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                    ADVANCED_GATE_WIDTH
-                )
-                boolean procedure_turn = coordroute_instance.planProcedureTurn
-                if (testInstance.task.procedureTurnDuration == 0) {
-                    procedure_turn = false
+                if ((coordroute_instance.type == CoordType.iSP) && (last_coordroute_instance.type == CoordType.iFP)) {
+                    // no standard gate
+                } else {
+                    // standard gate
+                    Map gate = AviationMath.getGate(
+                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                        coordroute_instance.gatewidth2
+                    )
+                    Map advanced_gate = AviationMath.getGate(
+                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                        ADVANCED_GATE_WIDTH
+                    )
+                    boolean procedure_turn = coordroute_instance.planProcedureTurn
+                    if (testInstance.task.procedureTurnDuration == 0) {
+                        procedure_turn = false
+                    }
+                    Map new_gate = [coordType:coordroute_instance.type, 
+                                    coordTypeNumber:coordroute_instance.titleNumber,
+                                    coordLeft:gate.coordLeft,
+                                    coordRight:gate.coordRight,
+                                    advancedCoordLeft:advanced_gate.coordLeft,
+                                    advancedCoordRight:advanced_gate.coordRight,
+                                    gateTrack:FcMath.RoundGrad(gate.gateTrack),
+                                    gateWidth:coordroute_instance.gatewidth2,
+                                    gateLatitude:coordroute_instance.latMath(),
+                                    gateLongitude:coordroute_instance.lonMath(),
+                                    gateAltitude:coordroute_instance.altitude,
+                                    procedureTurn:procedure_turn,
+                                    additionalGate:false
+                                   ]
+                    gates += new_gate
                 }
-                Map new_gate = [coordType:coordroute_instance.type, 
-                                coordTypeNumber:coordroute_instance.titleNumber,
-                                coordLeft:gate.coordLeft,
-                                coordRight:gate.coordRight,
-                                advancedCoordLeft:advanced_gate.coordLeft,
-                                advancedCoordRight:advanced_gate.coordRight,
-                                gateTrack:FcMath.RoundGrad(gate.gateTrack),
-                                gateWidth:coordroute_instance.gatewidth2,
-                                gateLatitude:coordroute_instance.latMath(),
-                                gateLongitude:coordroute_instance.lonMath(),
-                                gateAltitude:coordroute_instance.altitude,
-                                procedureTurn:procedure_turn,
-                                additionalGate:false
-                               ]
-                gates += new_gate
                 
                 add_sp_gate = false
             }

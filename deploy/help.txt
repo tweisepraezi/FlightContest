@@ -1145,3 +1145,4 @@ Datenwiederherstellung der 'Flight Contest'-Datenbank:
   - Kopieren Sie 'C:\FCSave\<Datum>-<Uhrzeit>-fcdb.h2.db'
     nach 'C:\Program Files (x86)\Flight Contest\fc\fcdb.h2.db'.
     Hierfür benötigen Sie Administrator-Privilegien.
+

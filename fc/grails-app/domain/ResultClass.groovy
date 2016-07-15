@@ -529,7 +529,7 @@ class ResultClass
 	    	if (crew_instance.resultclass == this) {
                 for (Task task_instance in contest.GetResultTasks(resultTaskIDs)) {
                 	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
-					if (test_instance) {
+					if (test_instance && !test_instance.disabledCrew) {
 	                	if (test_instance.IsTestClassResultsProvisional(resultSettings,this)) {
 							return true
 						}

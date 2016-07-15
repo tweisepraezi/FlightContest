@@ -33,11 +33,13 @@
                                 <br/>
                                 <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="3"/>
                             </p>
-                            <p>
-                                <label>${message(code:'fc.contestrule')}*:</label>
-                                <br/>
-                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${resultclassInstance.contestRule}" tabIndex="4"/>
-                            </p>
+                            <g:if test="${resultclassInstance.contest.contestRuleForEachClass}">
+	                            <p>
+	                                <label>${message(code:'fc.contestrule')}*:</label>
+	                                <br/>
+	                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${resultclassInstance.contestRule}" tabIndex="4"/>
+	                            </p>
+	                        </g:if>
                         </fieldset>
                         <input type="hidden" name="id" value="${resultclassInstance?.id}"/>
                         <input type="hidden" name="version" value="${resultclassInstance?.version}"/>

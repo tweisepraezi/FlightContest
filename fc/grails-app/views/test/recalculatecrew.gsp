@@ -66,6 +66,14 @@
                                        <td><g:select from="${testInstance.GetTrackPoints("", "")}" name="loggerdata_startutc" value="${last_startutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
                                    </tr>
                                    <tr>
+                                       <td>${message(code:CoordType.TO.code)}:</td>
+                                       <td>${FcMath.TimeStr(testInstance.takeoffTime)}</td>
+                                   </tr>
+                                   <tr>
+                                       <td>${message(code:CoordType.LDG.code)}:</td>
+                                       <td>${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
+                                   </tr>
+                                   <tr>
                                        <g:set var="last_endutc" value="${testInstance.loggerDataEndUtc}" />
                                        <td class="detailtitle"><label>${message(code:'fc.flightresults.recalculate.endlocaltime')}:</label></td>
                                        <td><g:select from="${testInstance.GetTrackPoints("", "")}" name="loggerdata_endutc" value="${last_endutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>

@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-23.06.2016
+15.07.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -60,10 +60,15 @@ Erweiterungen in dieser Version (3.0):
       Fehlerpunkte berechnet.
     * Mit 'Import AFLOS-Daten -> Kalkuliere AFLOS-Daten' werden 
       Logger-Daten direkt aus einer AFLOS-Datenbank gelesen
-      und daraus sofort Fehlerpunkte berechnet.
+      und daraus sofort Fehlerpunkte berechnet,
+      sofern der AFLOS-Name der 'Flight Contest'-Strecke, 
+      die dem Navigationstest zugeordnet worden ist, 
+      mit dem Namen einer existierenden AFLOS-Referenzstrecke,
+      die keine Koordinaten beinhalten muss, übereinstimmt.
     * Das Laden in AFLOS kalkulierter AFLOS-Daten ist mit
       'Import AFLOS-Daten -> Import AFLOS-Kalkulation' weiter 
-      erreichbar.
+      erreichbar, sofern die AFLOS-Referenzstrecke in 'Flight Contest'
+      als Strecke importiert und dem Navigationstest zugeordnet worden ist.
     * Aus den geladenen Logger-Daten können mit 'Neu kalkulieren' 
       Fehlerpunkte neu berechnet werden. 
       Dabei können die auszuwertenden Logger-Zeiten angepasst werden. 

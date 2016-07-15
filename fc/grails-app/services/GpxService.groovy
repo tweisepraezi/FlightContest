@@ -1582,25 +1582,29 @@ class GpxService
                         }
                     }
                 }
-                Map gate = AviationMath.getGate(
-                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                    coordroute_instance.gatewidth2
-                )
-                xml.rte {
-                    wrGate(coordroute_instance, xml)
-                    // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                    xml.name coordroute_instance.titleShortMap(isPrint)
-                    xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
-                        // xml.ele altitude_meter
-                    }
-                    xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
-                        // xml.ele altitude_meter
+                if ((coordroute_instance.type == CoordType.iSP) && (last_coordroute_instance.type == CoordType.iFP)) {
+                    // no standard gate
+                } else {
+                    Map gate = AviationMath.getGate(
+                        last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                        coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                        coordroute_instance.gatewidth2
+                    )
+                    xml.rte {
+                        wrGate(coordroute_instance, xml)
+                        // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                        xml.name coordroute_instance.titleShortMap(isPrint)
+                        xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                            // xml.ele altitude_meter
+                        }
+                        xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                            // xml.ele altitude_meter
+                        }
                     }
                 }
                 first = false
             }
-            if ((coordroute_instance.type == CoordType.iSP) && (last_coordroute_instance.type != CoordType.iFP)) {
+            if (coordroute_instance.type == CoordType.iSP) {
                 first = true
             }
             last_coordroute_instance = coordroute_instance

@@ -46,7 +46,7 @@
         <title>${message(code:'fc.team.list')}</title>
     </head>
     <body>
-        <h2>${message(code:'fc.team.list')} (${teamInstanceList.size()})</h2>
+        <h2>${message(code:'fc.team.list')} (${teamNum})</h2>
         <g:form>
             <table class="teamlist">
                 <thead>

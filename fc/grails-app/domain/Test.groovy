@@ -1961,8 +1961,10 @@ class Test
     
     boolean IsAFLOSResultsPossible()
     {
-        if (   AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
-            && AflosTools.ExistAnyAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark)
+        Route route_instance = flighttestwind.flighttest.route
+        if (   route_instance.showAflosMark
+            && AflosTools.GetAflosRouteName(task.contest, route_instance.mark)
+            && AflosTools.ExistAnyAflosCheckPoints(task.contest, route_instance.mark)
            )
         {
             return true

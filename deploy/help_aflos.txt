@@ -42,6 +42,10 @@ Import von AFLOS-Kalkulationen:
     für eine konkrete Besatzung (= Comp.-Nr.) und Strecke (= Ref.-Nr.) und der 
     aktivierten Option 'Procedure Turn' in AFLOS mit 'Check-Data -> Calculate' 
     berechnet wurden.
+  Voraussetzung:
+    - Die in der AFLOS-Datenbank zur Kalkulation benutzte Referenzstrecke 
+      muss in Flight Contest als Strecke importiert und dem Navigationstest
+      zugeordnet worden sein.
 
 
 Streckenplanung mit AFLOS
