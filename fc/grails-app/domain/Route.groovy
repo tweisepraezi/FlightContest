@@ -182,4 +182,17 @@ class Route
     {
         return AflosTools.ExistAnyAflosRoute(contest)
     }
+    
+    boolean IsAflosReferenceExportPossible()
+    {
+        if (mark) {
+            return true
+        }
+        /*
+        if (showAflosMark || AflosTools.GetAflosRouteName(contest, mark)) {
+            return true
+        }
+        */
+        return false
+    }
 }

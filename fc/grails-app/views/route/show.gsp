@@ -18,7 +18,7 @@
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td colspan="2">${routeInstance.name()}</td>
                                 </tr>
-                                <g:if test="${routeInstance.showAflosMark}">
+                                <g:if test="${routeInstance.showAflosMark || routeInstance.mark}">
 	                                <tr>
 	                                    <td class="detailtitle">${message(code:'fc.route.aflosimport.name')}:</td>
 	                                    <td colspan="2">${routeInstance.mark}</td>
@@ -247,12 +247,15 @@
                         </g:if>
                         <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="9"/>
                         <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="10"/>
-                        <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxrexport')}" onclick="this.form.target='_self';return true;" tabIndex="11"/>
-                        <g:if test="${routeInstance.IsEMailPossible()}">
-                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="12"/>
+                        <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxexport')}" onclick="this.form.target='_self';return true;" tabIndex="11"/>
+                        <g:if test="${routeInstance.IsAflosReferenceExportPossible()}">
+                            <g:actionSubmit action="aflosrefexport" value="${message(code:'fc.aflosrefexport')}" onclick="this.form.target='_self';return true;" tabIndex="12"/>
                         </g:if>
-                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="13"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="14"/>
+                        <g:if test="${routeInstance.IsEMailPossible()}">
+                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="13"/>
+                        </g:if>
+                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="14"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="15"/>
                     </g:form>
                 </div>
             </div>

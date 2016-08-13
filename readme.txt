@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-15.07.2016
+13.08.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -74,6 +74,15 @@ Erweiterungen in dieser Version (3.0):
       Dabei können die auszuwertenden Logger-Zeiten angepasst werden. 
       Anzuwenden, wenn T/O nicht erkannt wurde oder wenn Korrekturen
       an T/O-LDG-Richtung und/oder T/O-LDG-Gate notwendig waren.
+- Hilfe zu AFLOS-Themen ist unter 'Programme -> Flight Contest -> AFLOS Help'
+  mit folgenden Themen zu finden:
+    * Interaktion mit AFLOS
+    * AFLOS-Kalkulation im Nachhinein anwenden
+        Vorgehen, um die AFLOS-Kalkulation bei Versagen der integrierten
+        Flight Contest-Kalkulation zu aktivieren
+    * Streckenplanung mit AFLOS
+    * Behebung von AFLOS-Problemen
+    * Datensicherung der AFLOS-Datenbank während eines laufenden Wettbewerbes
 - Offline-Anzeige der Navigationsflug-Karte
 - Ausdruck der Navigationsflug-Karte mit der Ergebnisliste:
     Beim Ausdruck aller Besatzungsergebnisse kann die Navigationsflug-Karte

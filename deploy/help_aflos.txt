@@ -4,6 +4,7 @@ Deutscher Präzisionsflug-Verein e.V.
 Inhalt
 ======
 - Interaktion mit AFLOS
+- AFLOS-Kalkulation im Nachhinein anwenden
 - Streckenplanung mit AFLOS
 - Behebung von AFLOS-Problemen
 - Datensicherung der AFLOS-Datenbank während eines laufenden Wettbewerbes
@@ -46,6 +47,22 @@ Import von AFLOS-Kalkulationen:
     - Die in der AFLOS-Datenbank zur Kalkulation benutzte Referenzstrecke 
       muss in Flight Contest als Strecke importiert und dem Navigationstest
       zugeordnet worden sein.
+
+
+AFLOS-Kalkulation im Nachhinein anwenden
+========================================
+Versagt die integrierte Flight Contest-Kalkulation, kann mit folgendem Vorgehen
+die AFLOS-Kalkulation aktiviert werden:
+  1. Referenzstrecke ohne Koordinaten anlegen
+     AFLOS -> Reference - Data -> Edit Ref_Nr -> Nummer und Name festlegen -> Add Ref_Nr
+  2. AFLOS-Name der benutzten Strecke setzen (mit dem unter 1. verwendeten Namen)
+     Flight Contest -> Strecken -> Benutzte Strecke -> Bearbeiten
+  3. REF-Datei exporieren 
+     Flight Contest -> Strecken -> Benutzte Strecke -> AFLOS-Referenzstrecken-Export
+  4. REF-Datei importieren
+     AFLOS -> Reference - Data -> Angelegte Strecke -> Load From File
+Nun können Überflugzeiten und Fehlerstellen mit der angelegten Referenze-Strecke kalkuliert
+und dessen Ergebnisse im Flight Contest-Navigationsflug importiert werden.
 
 
 Streckenplanung mit AFLOS

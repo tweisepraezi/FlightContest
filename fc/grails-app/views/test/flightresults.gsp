@@ -267,7 +267,7 @@
                                             <g:if test="${testInstance.IsShowMapPossible()}">
                                                 <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="20"/>
                                                 <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="21"/>
-                                                <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxrexport')}" onclick="this.form.target='_self';return true;" tabIndex="22"/>
+                                                <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxexport')}" onclick="this.form.target='_self';return true;" tabIndex="22"/>
                                             </g:if>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="23"/>
                                             <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="24"/>
@@ -289,7 +289,7 @@
                                             <g:if test="${testInstance.IsShowMapPossible()}">
                                                 <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="44"/>
                                                 <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="45"/>
-                                                <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxrexport')}" onclick="this.form.target='_self';return true;" tabIndex="46"/>
+                                                <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxexport')}" onclick="this.form.target='_self';return true;" tabIndex="46"/>
                                             </g:if>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="47"/>
                                             <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="48"/>

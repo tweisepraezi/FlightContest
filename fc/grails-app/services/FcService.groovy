@@ -4857,7 +4857,12 @@ class FcService
             for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
         		if (calcresult_instance.IsCoordTitleEqual(coordresult_instance.type, coordresult_instance.titleNumber)) {
                     found = true
-                    
+
+                    // set aflos mark                    
+                    if (showAflosMark && !coordresult_instance.mark) {
+                        coordresult_instance.mark = CoordRoute.findByRouteAndTypeAndTitleNumber(testInstance.flighttestwind.flighttest.route, coordresult_instance.type, coordresult_instance.titleNumber).mark
+                    }
+
         			// reset results
         			coordresult_instance.ResetResults(true) // true - with procedure turn
 
@@ -4883,7 +4888,7 @@ class FcService
                             height_errors++
                         }
                     }
-
+                    
         			// save results
                     coordresult_instance.save()
                     

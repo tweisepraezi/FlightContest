@@ -365,6 +365,42 @@ class RouteController {
         }
     }
 
+    def aflosrefexport = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            gpxService.printstart "Export '${route.instance.name()}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_ref_file_name = "gpxupload/REF-${uuid}-UPLOAD.ref"
+            Map converter = AflosTools.ConvertRoute2REF(route.instance, webroot_dir + upload_ref_file_name)
+            if (converter.ok) {
+                String route_file_name = (route.instance.mark + '.ref').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                gpxService.Download(webroot_dir + upload_ref_file_name, route_file_name, response.outputStream)
+                gpxService.DeleteFile(upload_ref_file_name)
+                if (converter.modified) {
+                    gpxService.printdone "Modified."
+                } else {
+                    gpxService.printdone ""
+                }
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                gpxService.DeleteFile(upload_ref_file_name)
+                if (converter.modified) {
+                    gpxService.printerror "${flash.message}. Modified."
+                } else{
+                    gpxService.printerror flash.message
+                }
+                redirect(action:'show',id:params.id)
+            }
+        } else {
+            flash.message = route.message
+            redirect(action:list)
+        }
+    }
+
     def sendmail = {
         if (session?.lastContest) {
             session.lastContest.refresh()

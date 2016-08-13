@@ -597,4 +597,178 @@ class AflosTools
         return aflosAltitude.split()[0].toInteger()
     }
     
+    //--------------------------------------------------------------------------
+    static Map ConvertRoute2REF(Route routeInstance, String refFileName)
+    {
+        BufferedWriter gpx_writer = null
+        CharArrayWriter gpx_data = null
+        File ref_file = new File(refFileName)
+        gpx_writer = ref_file.newWriter()
+
+        CoordRoute last_coordroute_instance = null
+        boolean route_modified = false
+        int num = 0
+        int cp_num = 0
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+            
+            String last_mark = coordroute_instance.mark
+            switch (coordroute_instance.type) {
+                case CoordType.TP:
+                case CoordType.SECRET:
+                    cp_num++
+                    coordroute_instance.mark = "${coordroute_instance.type.aflosMark}${cp_num}"
+                    break
+                default:
+                    coordroute_instance.mark = coordroute_instance.type.aflosMark
+                    break
+            }
+            if (last_mark != coordroute_instance.mark) {
+                coordroute_instance.save()
+                route_modified = true
+            }
+            
+            num++
+            BigDecimal direction = 0.0
+            BigDecimal distance = 0
+            switch (coordroute_instance.type) {
+                case CoordType.TO:
+                    direction = coordroute_instance.gateDirection
+                    break
+                case CoordType.LDG:
+                case CoordType.iTO:
+                case CoordType.iLDG:
+                    Map leg = AviationMath.calculateLeg(coordroute_instance.latMath(),coordroute_instance.lonMath(),last_coordroute_instance.latMath(),last_coordroute_instance.lonMath())
+                    direction = coordroute_instance.gateDirection
+                    distance = leg.dis
+                    break
+                default:
+                    Map leg = AviationMath.calculateLeg(coordroute_instance.latMath(),coordroute_instance.lonMath(),last_coordroute_instance.latMath(),last_coordroute_instance.lonMath())
+                    direction = leg.dir
+                    distance = leg.dis
+                    break
+            }
+            String mark = ""
+            if (coordroute_instance.type == CoordType.SECRET) {
+                if (mark) {
+                    mark += ' '
+                }
+                mark += '$secret'
+            }
+            if (coordroute_instance.measureDistance) {
+                if (mark) {
+                    mark += ' '
+                }
+                mark += '$dist:' + DistanceMeasureStr(coordroute_instance.measureDistance) + 'mm'
+            }
+            if (coordroute_instance.measureTrueTrack) {
+                if (mark) {
+                    mark += ' '
+                }
+                mark += '$track:' + coordroute_instance.measureTrueTrack
+            }
+            if (coordroute_instance.legDuration) {
+                if (mark) {
+                    mark += ' '
+                }
+                mark += '$duration:' + coordroute_instance.legDuration + 'min'
+
+            }
+            if (coordroute_instance.noTimeCheck) {
+                if (mark) {
+                    mark += ' '
+                }
+                mark += '$notimecheck'
+            }
+            if (coordroute_instance.noGateCheck) {
+                if (mark) {
+                    mark += ' '
+                }
+                mark += '$nogatecheck'
+            }
+            if (coordroute_instance.noPlanningTest) {
+                if (mark) {
+                    mark += ' '
+                }
+                mark += '$noplanningtest'
+            }
+            Map wr = [name: coordroute_instance.mark,
+                      lat:  "${coordroute_instance.latDirection} ${FcMath.GradStr(coordroute_instance.latGrad)} ${MinuteStr(coordroute_instance.latMinute)}",
+                      lon:  "${coordroute_instance.lonDirection} ${FcMath.GradStr(coordroute_instance.lonGrad)} ${MinuteStr(coordroute_instance.lonMinute)}",
+                      alt:  coordroute_instance.altitude,
+                      dir:  "${DirectionStr(direction)}",
+                      dis:  "${DirectionStr(distance)}",
+                      gat:  "${GateWidthStr(coordroute_instance.gatewidth2)}",
+                      latM: "${CoordStr(coordroute_instance.latMath())}",
+                      lonM: "${CoordStr(coordroute_instance.lonMath())}",
+                     ]
+            gpx_writer.writeLine('"' + "${wr.name};${wr.lat};${wr.lon}; ${wr.alt}; ${wr.dir}; ${wr.dis}; ${wr.gat}; 0; ${num}; ${wr.lonM}; ${wr.latM};${mark};" + '"')
+            
+            last_coordroute_instance = coordroute_instance
+        }
+        gpx_writer.writeLine('"End Of File;"')
+        gpx_writer.close()
+        
+        if (!routeInstance.showAflosMark) {
+            routeInstance.showAflosMark = true
+            routeInstance.save()
+            route_modified = true
+        }
+        
+        return [ok:true, modified:route_modified]
+    }
+    
+    //--------------------------------------------------------------------------
+    private static String MinuteStr(BigDecimal minuteValue)
+    {
+        if (minuteValue >= 0) {
+            DecimalFormat df = new DecimalFormat("00.00000")
+            return df.format(minuteValue).replaceAll(',','.')
+        }
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private static String DirectionStr(BigDecimal dirValue)
+    {
+        if (dirValue >= 0) {
+            DecimalFormat df = new DecimalFormat("0.##")
+            return df.format(dirValue).replaceAll(',','.')
+        }
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private static String GateWidthStr(Float gateWidth)
+    {
+        if (gateWidth >= 0) {
+            if (gateWidth == gateWidth.toInteger()) {
+                return gateWidth.toInteger().toString()
+            } else {
+                DecimalFormat df = new DecimalFormat("0.##")
+                return df.format(gateWidth).replaceAll(',','.')
+            }
+        }
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private static String CoordStr(BigDecimal coordValue)
+    {
+        if (coordValue >= 0) {
+            coordValue.setScale(13)
+            DecimalFormat df = new DecimalFormat("0.#############")
+            return df.format(coordValue).replaceAll(',','.')
+        }
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private static String DistanceMeasureStr(BigDecimal distanceValue)
+    {
+        if (distanceValue >= 0) {
+            DecimalFormat df = new DecimalFormat("0.0#")
+            return df.format(distanceValue).replaceAll(',','.')
+        }
+        return ""
+    }
 }
