@@ -59,7 +59,7 @@
                             </tbody>
                         </table>
                         <div>
-                            <p>${message(code:'fc.flightresults.loggerimport.info',args:[LoggerFileTools.LOGGER_EXTENSIONS])}</p>
+                            <p>${message(code:'fc.loggerdata.selectloggerfilename.info',args:[LoggerFileTools.LOGGER_EXTENSIONS])}</p>
                             <input type="file" size="80" accept="${LoggerFileTools.LOGGER_EXTENSIONS}" name="loggerfile" tabIndex="1"/>
                         </div>
                         <br/>

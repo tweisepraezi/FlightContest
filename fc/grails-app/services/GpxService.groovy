@@ -235,7 +235,7 @@ class GpxService
                                 break
                             }
                             if (line) {
-                                if (line == GPX2GAC.GACFORMAT_DEF) {
+                                if (line.startsWith("I")) { // if (line == GPX2GAC.GACFORMAT_DEF) {
                                     valid_gac_format = true
                                 }   
                                 boolean ignore_line = false 
@@ -318,6 +318,138 @@ class GpxService
             }
         }
         gac_reader.close()
+        gpx_writer.close()
+
+        if (converted) {
+            printdone ""
+        } else {
+            printerror err_msg
+        }
+        if (routeInstance) {
+            ret += [gpxShowPoints:GetShowPointsRoute(routeInstance,null)]
+        }
+        ret += [ok:converted]
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map ConvertIGC2GPX(String igcFileName, String gpxFileName, Route routeInstance)
+    {
+        Map ret = [:]
+        boolean converted = true
+        String err_msg = ""
+        
+        printstart "ConvertIGC2GPX $igcFileName -> $gpxFileName"
+        
+        File igc_file = new File(igcFileName)
+        File gpx_file = new File(gpxFileName)
+        
+        boolean repairIdenticalTimes = false
+        String line = ""
+        
+        LineNumberReader igc_reader = igc_file.newReader()
+        BufferedWriter gpx_writer = gpx_file.newWriter()
+        MarkupBuilder xml = new MarkupBuilder(gpx_writer)
+        gpx_writer.writeLine(XMLHEADER)
+        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+            xml.trk {
+                xml.name GPXGACTRACKNAME
+                xml.trkseg {
+                    try {
+                        boolean first = true
+                        String last_time_utc = null
+                        BigDecimal latitude = null
+                        BigDecimal longitude = null
+                        boolean valid_gac_format = false
+                        String last_utc = FcTime.UTC_GPX_DATE
+                        while (true) {
+                            line = igc_reader.readLine()
+                            if (line == null) {
+                                break
+                            }
+                            if (line) {
+                                if (line.startsWith("I")) { // if (line == LoggerFileTools.IGCFORMAT_DEF) {
+                                    valid_gac_format = true
+                                }   
+                                boolean ignore_line = false 
+                                if (line.startsWith("B")) {
+                                    if (valid_gac_format) {
+                                        
+                                        // Repair DropOuts
+                                        String time_utc = line.substring(1,7)
+                                        if (!first) {
+                                            if (repairIdenticalTimes) {
+                                                if (last_time_utc == time_utc) { // Zeile mit doppelter Zeit entfernen
+                                                    ignore_line = true
+                                                    if (WRLOG) {
+                                                        println "Ignore '$line'"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                        // UTC
+                                        String utc_h = line.substring(1,3)
+                                        String utc_min = line.substring(3,5)
+                                        String utc_s = line.substring(5,7)
+                                        String utc = FcTime.UTCGetNextDateTime(last_utc, "${utc_h}:${utc_min}:${utc_s}")
+                                        
+                                        // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
+                                        String latitude_grad = line.substring(7,9)
+                                        BigDecimal latitude_grad_math = latitude_grad.toBigDecimal()
+                                        String latidude_minute = line.substring(9,11) + '.' + line.substring(11,14)
+                                        BigDecimal latidude_minute_math = latidude_minute.toBigDecimal()
+                                        boolean latitude_north = line.substring(14,15) == 'N'
+                                        latitude = latitude_grad_math + (latidude_minute_math / 60)
+                                        if (!latitude_north) {
+                                            latitude *= -1
+                                        }
+                                        
+                                        // Longitude (Geographische Laenge: -179.999 (W) ... +180 Grad (E))
+                                        String longitude_grad = line.substring(15,18)
+                                        BigDecimal longitude_grad_math = longitude_grad.toBigDecimal()
+                                        String longitude_minute = line.substring(18,20) + '.' + line.substring(20,23)
+                                        BigDecimal longitude_minute_math = longitude_minute.toBigDecimal()
+                                        boolean longitude_east = line.substring(23,24) == 'E'
+                                        longitude = longitude_grad_math + (longitude_minute_math / 60)
+                                        if (!longitude_east) {
+                                            longitude *= -1
+                                        }
+                                        
+                                        // Altitude (Höhe)
+                                        int altitude_meter = line.substring(30,35).toInteger()
+                                        
+                                        // write gpx tag
+                                        if (!ignore_line) {
+                                            // println "UTC: $utc, Latitude: $latitude, Longitude: $longitude, Altitude: ${altitude_meter}m"
+                                            xml.trkpt(lat:latitude,lon:longitude) {
+                                                xml.ele altitude_meter
+                                                xml.time utc
+                                            }
+                                        }
+                                        
+                                        first = false
+                                        last_time_utc = time_utc
+                                        last_utc = utc
+                                    }
+                                }
+                            }
+                        }
+                        if (!valid_gac_format) {
+                            converted = false
+                            err_msg = "No supported gac format."
+                        }
+                    } catch (Exception e) {
+                        converted = false
+                        err_msg = e.getMessage()
+                    }
+                }
+            }
+            if (routeInstance) {
+                GPXRoute(routeInstance, null, false, xml) // false - no Print
+            }
+        }
+        igc_reader.close()
         gpx_writer.close()
 
         if (converted) {

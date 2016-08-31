@@ -2,19 +2,21 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.gpx.selectgpxfilename')}</title>
+        <title>${message(code:'fc.loggerdata.show')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="gac" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.gpx.selectgpxfilename')}</h2>
+                <h2>${message(code:'fc.loggerdata.show')}</h2>
                 <div class="block" id="forms">
-                	<g:uploadForm action="showmapgpx">
+                	<g:uploadForm action="showmaploggerdata">
                     	<div>
-    						<input type="file" size="80" accept="${LoggerFileTools.GPX_EXTENSION}" name="loadgpxfile" tabIndex="1"/>
+                            <p>${message(code:'fc.loggerdata.selectloggerfilename.info',args:[LoggerFileTools.LOGGER_EXTENSIONS])}</p>
+    						<input type="file" size="80" accept="${LoggerFileTools.LOGGER_EXTENSIONS}" name="loadloggerfile" tabIndex="1"/>
                     	</div>
+                    	<br/>
                         <g:if test="${contestInstance && Route.findByContest(contestInstance)}">
                             <p>
                                 <div>
@@ -22,6 +24,7 @@
                                     <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(contestInstance,[sort:"id"])}" name="routeid" value="" noSelection="${[id:'']}" ></g:select>
                                 </div>
                             </p>
+                            <br/>
                         </g:if>
                     	<div>
                             <input type="submit" name="offlinemap" value="${message(code:'fc.offlinemap')}" tabIndex="11"/>

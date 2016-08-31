@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-13.08.2016
+31.08.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -40,7 +40,7 @@ Wettbewerbsmanagement. Dazu zählen die Unterstützung
  
 Weitere nützliche Funktionen von Flight Contest:
 * Direkte Strafpunkt-Berechnung beim Laden einer Logger-Datendatei
-  (GAC und GPX).
+  (GAC, GPX und IGC).
 * Sehr schnelle Logger-Daten-Nutzung des FAI-zertifizierten Loggers AFLOS 
   (ohne Umweg über Datei-Export und -Import).
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
@@ -56,7 +56,7 @@ Erweiterungen in dieser Version (3.0):
 --------------------------------------
 - Navigationsflug-Logger-Auswertung erweitert:
     * Mit 'Import Logger-Daten' werden Logger-Daten direkt aus einer
-      ausgewählten GAC- oder GPX-Datei geladen und daraus sofort
+      ausgewählten GAC-, GPX- oder IGC-Datei geladen und daraus sofort
       Fehlerpunkte berechnet.
     * Mit 'Import AFLOS-Daten -> Kalkuliere AFLOS-Daten' werden 
       Logger-Daten direkt aus einer AFLOS-Datenbank gelesen
@@ -74,6 +74,9 @@ Erweiterungen in dieser Version (3.0):
       Dabei können die auszuwertenden Logger-Zeiten angepasst werden. 
       Anzuwenden, wenn T/O nicht erkannt wurde oder wenn Korrekturen
       an T/O-LDG-Richtung und/oder T/O-LDG-Gate notwendig waren.
+- Anzeige von Logger-Aufzeichnungen ('Extras -> Logger-Daten-Anzeige')
+    Zeigt Logger-Daten aus GAC-, GPX- oder IGC-Dateien
+    mit Google/OSM- oder Offline-Karte an.
 - Hilfe zu AFLOS-Themen ist unter 'Programme -> Flight Contest -> AFLOS Help'
   mit folgenden Themen zu finden:
     * Interaktion mit AFLOS
@@ -89,7 +92,7 @@ Erweiterungen in dieser Version (3.0):
     separat abgewählt werden.
 - Navigationsflug-Ergebnis-Export 
     Mit 'GPX-Export' wird das Ergebnis als GPX-Datei exportiert.
-    Dieses kann mit 'Extras -> GPX-Anzeige' oder einem beliebigen anderen
+    Dieses kann mit 'Extras -> Logger-Daten-Anzeige' oder einem beliebigen anderen
     GPX-Viewer angezeigt werden.
 - Koordinatendarstellung in den Contest-Einstellungen wählbar:
    Die Koordinatendarstellung kann zwischen "Grad Dezimal", "Grad/Minuten Dezimal"
@@ -97,7 +100,7 @@ Erweiterungen in dieser Version (3.0):
    Der Strecken-Druck (Strecke -> Druck) druckt alle 3 Darstellungen untereinander.
 - Strecken-Export
     Mit 'GPX-Export' wird eine Strecke als GPX-Datei exportiert.
-    Diese kann mit 'Extras -> GPX-Anzeige' oder einem beliebigen anderen
+    Diese kann mit 'Extras -> Logger-Daten-Anzeige' oder einem beliebigen anderen
     GPX-Viewer angezeigt werden. 
 - Strecken-Import
     Mit "Strecken -> Import Strecke" kann eine Strecke aus einer GPX-Datei 
@@ -171,8 +174,6 @@ Fehlerbehebungen und Erweiterungen in Version 2.3.3:
 Fehlerbehebungen und Erweiterungen in Version 2.3.2:
 ----------------------------------------------------
 - Fehlerbehebung GPX-GAC-Konverter
-- GAC-Anzeige ('Extras -> GAC-Anzeige') um Strecken-Anzeige erweitert
-- GPX-Anzeige ('Extras -> GPX-Anzeige') um Strecken-Anzeige erweitert
 - E-Mail-Versand der Navigationsflug-Karte im Hintergrund
 - Druck-Abstürze bei leerem Aufgaben-Namen beseitigt
 - Der eingetragene Veranstalter bei einem neuem Wettbewerb wird nun übernommen.
@@ -260,8 +261,6 @@ Erweiterungen in Version 2.3.0:
         Auswerte-Schiedsrichter versandt.
     * Anzeige des erfolgreichen E-Mail-Versands in der Ergebnisliste
 - Abruf der E-Mails an den Auswerte-Schiedsrichter ('Extras -> Web-Mail')
-- Anzeige von GPX-Dateien mit Google Maps ('Extras -> GPX-Anzeige')
-- Anzeige von GAC-Dateien mit Google Maps ('Extras -> GAC-Anzeige')
 - Aktualisierung der FAI Regelwerke
     FAI Precision Flying - Edition 2015
     FAI Air Rally Flying - Edition 2015

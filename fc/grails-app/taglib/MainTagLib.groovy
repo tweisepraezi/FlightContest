@@ -235,8 +235,7 @@ class MainTagLib
             if (BootStrap.global.IsTestFTPPossible()) {
                 outln """    <li> <a href="${p.link}/../../global/testftp">${message(code:'fc.net.ftp.test')}</a> </li>"""
             }
-            outln """    <li> <a href="${p.link}/../../gpx/selectgpxfilename">${message(code:'fc.gpx.show')}</a> </li>"""
-            outln """    <li> <a href="${p.link}/../../gpx/selectgacfilename">${message(code:'fc.gpx.gacshow')}</a> </li>"""
+            outln """    <li> <a href="${p.link}/../../gpx/selectloggerfilename">${message(code:'fc.loggerdata.show')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
 			if (Global.IsDevelopmentEnvironment()) {

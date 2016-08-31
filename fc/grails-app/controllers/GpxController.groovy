@@ -3,15 +3,7 @@ class GpxController
 
     def gpxService
     
-	def selectgpxfilename = {
-        if (session?.lastContest) {
-            [contestInstance:session.lastContest]
-        } else {
-            [contestInstance:null]
-        }
-    }
-	
-    def selectgacfilename = {
+    def selectloggerfilename = {
         if (session?.lastContest) {
             [contestInstance:session.lastContest]
         } else {
@@ -19,48 +11,81 @@ class GpxController
         }
     }
     
-	def showmapgpx = {
-		def file = request.getFile('loadgpxfile')
+	def showmaploggerdata = {
+		def file = request.getFile('loadloggerfile')
 		if (file && !file.empty) {
 			String original_filename = file.getOriginalFilename()
+            String file_extension = original_filename.substring(original_filename.lastIndexOf('.')).toLowerCase()
             if (params.offlinemap) {
                 gpxService.printstart "Show offline map of '$original_filename'"
             } else {
                 gpxService.printstart "Show map of '$original_filename'"
             }
 			gpxService.println file.getContentType() // "text/xml" 
-			if (original_filename.toLowerCase().endsWith('.gpx')) {
-				String uuid = UUID.randomUUID().toString()
-                String webroot_dir = servletContext.getRealPath("/")
-				String upload_filename = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-                gpxService.printstart "Upload $original_filename -> $upload_filename"
-                file.transferTo(new File(webroot_dir,upload_filename))
+			String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+			String upload_filename = "gpxupload/LOGGERDATA-${uuid}-UPLOAD${file_extension}"
+            String gpx_filename = "gpxupload/LOGGERDATA-${uuid}-UPLOAD.gpx"
+            
+            gpxService.printstart "Upload $original_filename -> $upload_filename"
+            file.transferTo(new File(webroot_dir,upload_filename))
+            gpxService.printdone ""
+            
+            Route route_instance = null
+            if (params.routeid && params.routeid.isLong()) {
+                route_instance = Route.get(params.routeid)
+            }
+            
+            String notconverted_message = ""
+            Map converter = [:]
+            switch (file_extension) {
+                case LoggerFileTools.GPX_EXTENSION:
+                    if (route_instance) {
+                        converter = gpxService.AddRoute2GPX(route_instance, webroot_dir + gpx_filename)
+                    } else {
+                        converter = [ok:true]
+                    }
+                    break
+                case LoggerFileTools.GAC_EXTENSION:
+                    converter = gpxService.ConvertGAC2GPX(webroot_dir + upload_filename, webroot_dir + gpx_filename, route_instance)
+                    if (converter.ok) {
+                        gpxService.DeleteFile(upload_filename)
+                    }
+                    notconverted_message = message(code:'fc.gpx.gacnotconverted',args:[original_filename])
+                    break
+                case LoggerFileTools.IGC_EXTENSION:
+                    converter = gpxService.ConvertIGC2GPX(webroot_dir + upload_filename, webroot_dir + gpx_filename, route_instance)
+                    if (converter.ok) {
+                        gpxService.DeleteFile(upload_filename)
+                    }
+                    notconverted_message = message(code:'fc.gpx.gacnotconverted',args:[original_filename])
+                    break
+                default:
+                    notconverted_message = message(code:'fc.loggerdata.loggerfileerror',args:[original_filename])
+                    break
+            }
+            
+            if (converter.ok) {
                 gpxService.printdone ""
-                
                 session.gpxShowPoints = null
-                Route route_instance = null
-                if (params.routeid && params.routeid.isLong()) {
-                    route_instance = Route.get(params.routeid)
-                }
                 if (route_instance) {
-                    Map converter = gpxService.AddRoute2GPX(route_instance, webroot_dir + upload_filename)
                     session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
                 } else {
-                    session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + upload_filename))
+                    session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + gpx_filename))
                 }
-
-                gpxService.printdone ""
                 if (params.offlinemap) {
-                    redirect(action:'startofflineviewer',params:[uploadFilename:upload_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
+                    redirect(action:'startofflineviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
                 } else {
-                    redirect(action:'startgpxviewer',params:[uploadFilename:upload_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
+                    redirect(action:'startgpxviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
                 }
-			} else {
-				flash.error = true
-				flash.message = message(code:'fc.gac.gpxfileerror',args:[original_filename])
-				gpxService.printerror flash.message
-				redirect(controller:'global',action:'info')
-			}
+            } else {
+                flash.error = true
+                flash.message = notconverted_message
+                gpxService.DeleteFile(upload_filename)
+                gpxService.DeleteFile(gpx_filename)
+                gpxService.printdone flash.message
+                redirect(controller:'global',action:'info')
+            }
 		} else {
 			redirect(controller:'global',action:'info')
 		}
