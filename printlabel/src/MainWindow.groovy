@@ -24,8 +24,8 @@ class MainWindow
     String selected_file = ''
     String current_directory = '.'
     
-    static final int SIZE_X = 450
-    static final int SIZE_Y = 160
+    static final int SIZE_X = 650
+    static final int SIZE_Y = 180
     
     //--------------------------------------------------------------------------
     public static void main(String[] args)
@@ -42,7 +42,7 @@ class MainWindow
         } else { // from jar
             image_icon = swing.imageIcon('/printlabel.png').image
         }
-        frame = swing.frame(title: 'Flight Contest Print Label 1.0',
+        frame = swing.frame(title: 'Flight Contest Print Label 1.0.2',
                             size: [SIZE_X,SIZE_Y],
                             minimumSize: [SIZE_X,SIZE_Y],
                             locationRelativeTo: null,
@@ -182,10 +182,10 @@ class MainWindow
                         }
                         
                         if (print_ret.printed) {
-                            info_text.text = "<html>Done: '${selected_file}'<br/>has been successfully printed.<br/></html>"
+                            info_text.text = "<html>Done: '${selected_file}'<br/>has been successfully printed.<br/><br/></html>"
                             info_text.foreground = java.awt.Color.BLACK
                         } else {
-                            info_text.text = "<html>Error: '${selected_file}'<br/>could not be printed (${print_ret.errmsg}).<br/>"
+                            info_text.text = "<html>Error: '${selected_file}'<br/>could not be printed (${print_ret.errmsg}).<br/><br/>"
                             info_text.foreground = java.awt.Color.RED
                             println info_text.text
                         }

@@ -29,7 +29,7 @@ class DemoContestProcedureTurnService
         if (aflosDB) {
             route_pt = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_PT,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route_pt = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_PT_GPX)
+            route_pt = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_PT_GPX)
         }
 		fcService.printdone ""
 		

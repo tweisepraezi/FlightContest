@@ -29,7 +29,7 @@ class DemoContestStandardService
         if (aflosDB) {
             route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route1 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
+            route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
         }
         fcService.printdone ""
         
@@ -304,7 +304,7 @@ class DemoContestStandardService
         if (aflosDB) {
             route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route1 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
+            route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
         }
         fcService.printdone ""
         
@@ -540,7 +540,7 @@ class DemoContestStandardService
         if (aflosDB) {
             route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route1 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
+            route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
         }
 		fcService.printdone ""
 		
@@ -550,7 +550,7 @@ class DemoContestStandardService
         if (aflosDB) {
             route2 = fcService.importAflosRoute(contest,"Strecke 2","Strecke 2",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route2 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_2.gpx")
+            route2 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_2.gpx")
         }
 		fcService.printdone ""
 		

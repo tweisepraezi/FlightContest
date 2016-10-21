@@ -5,6 +5,7 @@ Inhalt
 ======
 - Bedien-Tipps
 - Standard-Wettbewerbsablauf
+- Zu erledigende Aufgaben
 - Änderungen bei Wettbewerbs-Durchführung
 - Besatzungsliste erstellen
 - Streckenplanung
@@ -44,8 +45,9 @@ A. Wettbewerbs-Vorbereitung
    - Koordinaten und Höhen mit Google Earth ermitteln
    - Bei Päzisionsflug-Strecken exakte Karten-Entfernungen (mm) 
      dem gedruckten Karten-Material entnehmen
-   - Strecke in 'Flight Contest' eingeben, mit integrierter 
-     Online-Kartenanzeige prüfen und als GPX-Datei exportieren
+   - Strecke in 'Flight Contest' eingeben oder aus anderen Quellen
+     importieren (GPX, REF, TXT), mit integrierter Online-Kartenanzeige
+     prüfen und als GPX-Datei exportieren
 2. Besatzungs-Liste
    Excel-Tabelle mit Flight Contest-Excel-Vorlage vorbereiten
    - Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls
@@ -88,7 +90,7 @@ B. Wettbewerbs-Beginn
      * Ggf. Punkte für Kursabweichungen > 90 Grad mit 0 einstellen
      * Ggf. Punkte für Unterschreitung der Mindestflughöhe mit 0 einstellen
 5. Strecken importieren 
-   -> Strecken -> Import Strecke
+   -> Strecken -> Import FC-Strecke
    - Vorbereitete Strecke(n) im 'Flight Contest'-GPX-Format importieren.
 6. Besatzungen importieren
    -> Besatzungen -> Import Excel-Besatzungsliste
@@ -224,6 +226,91 @@ D. Wettbewerbs-Auswertung
          * Vorläufig
    - Plätze berechnen (-> Plätze berechnen).
    - Endergebnis drucken (-> Druck)
+
+
+Zu erledigende Aufgaben
+=======================
+
+Aufgaben des Wettbewerbs-Ausrichters:
+-------------------------------------
+
+Vor Wettbewerbstag
+- Wettbewerbsstrecke ausarbeiten 
+  (Koordinaten, Karten, Bilder, Bodenzeichen, Funk, Wendeschleifen, Unbekannte Zeitkontrollen)
+- An- u. Abflugstrecke ausarbeiten (Entfernungen/Zeit-Bedarf, Karten, Funk, Tower-Kommunikation)
+- Wenn Planungstest Streckenkonstruktion beinhaltet: deren Beschreibung
+- Unterlagenumschläge vorbereiten (Karten, Bilder,  An- u. Abflugstrecke, Funk-Frequenzen,
+                                   ggf. Beschreibung Streckenkonstruktion)
+
+Am Wettbewerbstag
+- Loggerausgabe
+  * Logger einschalten
+  * Logger-Nummer dokumentieren
+- Unterlagenumschläge komplettieren
+  * Besatzungsspezifische Label aufkleben
+  * Besatzungsspezifische Eingabeformulare für Planungstest hinzufügen
+- Briefing
+  * Strecke (Wendeschleifen, Unbekannte Zeitkontrollen, An-/Abflugverfahren, Funk, Tower-Kommunikation)
+  * Ablauf (Unterlagenausgabe, Unterlagenabgabe nach Ankunft, Erscheinen zum Debriefing/Loggerauswertung)
+  * Wetter
+- Vorbereitungsraum für Planungstest und Flugvorbereitung koordinieren
+  * Unterlagenumschlag-Ausgabe
+  * Rücknahme Planungstest-Eingabeformulare
+  * Besatzungsspezifischen Flugplan ausgeben
+  * Zeit des Verlassens des Vorbereitungsraumes dokumentieren
+- Eingeschalter Logger bei abfliegenden Besatzungen prüfen
+- Landungen vermessen
+  * Landefeld dokumentieren (0, Feld-Name, Out)
+  * Abnormale Landung dokumentieren
+- Ankommende Besatzungen koordinieren 
+  * Überwachung der Zeit für Unterlagenkomplettierung
+  * Unterlagenentgegennahme
+  * Begleitung zum Briefing
+  * Eintritt in Briefingraum
+- Bilder-/Bodenzeichen-Auswertung
+- Vollständige Ergebnisse an Besatzungen verteilen
+- Rückfragen/Proteste entgegennehmen u. entscheiden
+- Urkunden erstellen
+- Siegerehrung
+
+Aufgaben des Auswerte-Schiedsrichters:
+--------------------------------------
+
+Vor Wettbewerbstag
+- Strecke importieren und auf Plausibilität überprüfen (Wendeschleifen, Exaktheit der Koordinaten)
+- Vorläufigen Zeitplan des Wettbewerbstages berechnen (angenommene Start-/Landerichtung, ohne Wind)
+
+Vor Briefing
+- Zeitplan des Wettbewerbstages berechnen
+  (unter Berücksichtigung der festgelegten Start-/Landerichtung und des Windes)
+- Zeitpläne u. Auswertelisten für Aushang u. verschiedene Schiedsrichter drucken
+  * Übersichts- und Besatzungszeitplan für Aushang
+  * Besatzungsliste für Loggerausgabe
+  * Schiedsrichter-Zeitplan für Tower (Flugzeug, Takeoff-Zeit, Späteste Landezeit)
+  * Schiedsrichter-Zeitplan für Vorbereitungsraum (Besatzung, Flugzeug, Ausgabezeit)
+  * Schiedsrichter-Zeitplan für Landungen (Flugzeug, Späteste Landezeit)
+  * Schiedsrichter-Zeitplan für Unterlagenabgabe (Flugzeug, Späteste Landezeit, Parken)
+- Besatzungsspezifische Label für Unterlagenumschläge drucken
+- Besatzungsspezifische Eingabeformulare für Planungstest drucken
+- Besatzungsspezifische Flugpläne drucken
+
+Während Planungstest/Flugvorbereitung
+- Dateneingabe Planungstest
+- Formulare für Bilder-/Bodenzeichen-Auswertung drucken
+
+Nach Ankunft der ersten Besatzung (Debriefing)
+- Loggerauswertung
+- Loggerrücknahme
+- Dateneingabe Bilder-/Bodenzeichen-Auswertung
+- Dateneingabe Landungen
+- Teil-Ergebnis für Besatzung drucken und übergeben
+- Live-Auswertung aktualisieren
+
+Nach Debriefing
+- Vollständige Ergebnisse für Besatzungen drucken
+- Vorläufige Endauswertung erstellen
+- Entscheidungen zu Rückfragen/Protesten verarbeiten
+- Endauswertung erstellen
 
 
 Änderungen bei Wettbewerbs-Durchführung
@@ -406,23 +493,24 @@ Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig
 
 Einzugebende Eigenschaften der Check-Punkte einer Strecke:
 
-  Punkt                       Check-      Gate              in         Auswertung   
-                              Punkt       Breite  Richtung  Flugplan   Zeit Kurs Höhe
+  Punkt                       Check-       Gate              in         Auswertung   
+                              Punkt        Breite  Richtung  Flugplan   Zeit Kurs Höhe
 
-  Takeoff                     TO          0.05    250       ja         ja   nein nein
-  Startpunkt                  SP          1       -         ja         ja   nein ja
-  Wendepunkt                  WP1         1       -         ja         ja   ja   ja
-  Unbekannte Zeitkontrolle    UZK1        2       -         nein       ja   ja   ja
-  Touch&Go-Landung            iFP         1       -         ja         ja   ja   ja
-                              iLDG  (1)   0.05    250       ja         nein nein nein
-                              iSP         1       -         ja         ja   nein ja
-  Krummer Streckenabschnitt   UZK2  (1)   2       -         nein       nein ja   ja
-                              WP2   (2)   1       -         ja         ja   ja   ja
-  Finalpunkt                  FP          1       -         ja         ja   ja   ja
-  Landung                     LDG         0.05    250       ja         ja   nein nein
+  Takeoff                     TO           0.05    250       ja         ja   nein nein
+  Startpunkt                  SP           1       -         ja         ja   nein ja
+  Wendepunkt                  WP1          1       -         ja         ja   ja   ja
+  Unbekannte Zeitkontrolle    UZK1         2       -         nein       ja   ja   ja
+  Touch&Go-Landung            iFP          1       -         ja         ja   ja   ja
+                              iLDG  (1,2)  0.05    250       ja         nein nein nein
+                              iSP   (2)    1       -         ja         ja   nein ja
+  Krummer Streckenabschnitt   UZK2  (1,2)  2       -         nein       nein ja   ja
+                              WP2   (2,3)  1       -         ja         ja   ja   ja
+  Finalpunkt                  FP           1       -         ja         ja   ja   ja
+  Landung                     LDG          0.05    250       ja         ja   nein nein
 
-  (1) Keine Zeitauswertung, Keine Torauswertung, Kein Flugplanungstest
-  (2) Kein Flugplanungstest, Check-Punkt nach krummer Strecke
+  (1) Keine Zeitauswertung, Keine Torauswertung
+  (2) Kein Flugplanungstest
+  (3) Check-Punkt nach krummer Strecke
   
 Strecken-Beispiele            Check-      Gate              in         Auswertung   
                               Punkt       Breite  Richtung  Flugplan   Zeit Kurs Höhe
@@ -449,8 +537,8 @@ Strecken-Beispiele            Check-      Gate              in         Auswertun
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               iFP         1       -         ja         ja   ja   ja
-                              iLDG  (1)   0.05    250       ja         nein nein nein
-                              iSP         1       -         ja         ja   nein ja
+                              iLDG (1,2)  0.05    250       ja         nein nein nein
+                              iSP  (2)    1       -         ja         ja   nein ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
                               LDG         0.05    250       ja         ja   nein nein
@@ -459,9 +547,9 @@ Strecken-Beispiele            Check-      Gate              in         Auswertun
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               iFP         1       -         ja         ja   ja   ja
-                              iLDG  (1)   0.05    250       ja         nein nein nein
-                              iTO   (1)   0.05    250       ja         nein nein nein
-                              iSP         1       -         ja         ja   nein ja
+                              iLDG (1,2)  0.05    250       ja         nein nein nein
+                              iTO  (1,2)  0.05    250       ja         nein nein nein
+                              iSP  (2)    1       -         ja         ja   nein ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
                               LDG         0.05    250       ja         ja   nein nein
@@ -469,9 +557,9 @@ Strecken-Beispiele            Check-      Gate              in         Auswertun
   Krumme Strecke              TO          0.05    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
-                              UZK1  (1)   2       -         nein       nein ja   ja
-                              UZK2  (1)   2       -         nein       nein ja   ja
-                              WP2   (2)   1       -         ja         ja   ja   ja
+                              UZK1 (1,2)  2       -         nein       nein ja   ja
+                              UZK2 (1,2)  2       -         nein       nein ja   ja
+                              WP2  (2,3)  1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
                               LDG         0.05    250       ja         ja   nein nein
   
@@ -479,6 +567,18 @@ Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte
 nacheinander eingeben werden können und das Einfügen von Check-Punkten nicht möglich ist. 
 Alle Eigenschaften bis auf den Check-Punkt-Typ sind bis zur ersten Nutzung änderbar.
 Flug-Höhe und Tor-Breite sind auch nach der ersten Nutzung änderbar.
+
+Mit 'Strecken -> Import Strecke' können Strecken folgender Formate auch importiert werden:
+- GPX-Datei, die von einem Fremd-Programm (z.B. 'Flight Planner') erzeugt wurde.
+  Darf nur genau eine Strecke (<rte>...</ret>) beinhalten.
+  Muss Höhenangaben beinhalten 
+  (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
+- REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.
+- TXT-Datei, die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
+  Latitude,Logitude,Altitude (in Meter)
+  z.B. '48.830855,10.210301,624.84'
+  Werte mit Komma getrennt (Leerzeichen vor/nach Zahlen werden ignoriert)
+  Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 
 Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
 - Google/OSM-Karte: 
@@ -489,7 +589,7 @@ Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
   * Wendeschleifen (Kursänderungen > 90 Grad) korrekt?
 
 Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' zur Weitergabe
-an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import Strecke' 
+an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
 in sein 'Flight Contest' zur Nutzung importieren kann.
 
 Alternativ ist die Eingabe und Weitergabe von Strecken mit AFLOS-Datenbanken möglich
@@ -666,6 +766,19 @@ Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
     Landung 2 und 3
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
     Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.
+
+  Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2016:
+    Alle Landungen
+      {x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}
+  Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2016:
+    Alle Landungen
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}
+  Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2016:
+    Alle Landungen
+      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}
+  Navigationsflug-Reglement Österreich - Ausgabe 2016:
+    Alle Landungen
+      {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
 Zur Erfassung der Landungen drucken Sie den Schiedsrichter-Zeitplan einer Aufgabe
 mit folgenden Feldern aus:

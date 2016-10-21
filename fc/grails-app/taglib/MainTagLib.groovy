@@ -92,6 +92,7 @@ class MainTagLib
                         if (session.lastContest && AflosTools.ExistAnyAflosRoute(session.lastContest)) {
                             outln """    <li> <a href="${p.link}/../../${p.controller}/importaflosroute">${message(code:'fc.route.aflosimport')}</a> </li>"""
                         }
+                        outln """    <li> <a href="${p.link}/../../${p.controller}/importfcroute">${message(code:'fc.route.fcfileimport')}</a> </li>"""
                         outln """    <li> <a href="${p.link}/../../${p.controller}/importfileroute">${message(code:'fc.route.fileimport')}</a> </li>"""
 					} else if (p.controller == "crew") {
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""

@@ -38,8 +38,8 @@ class DemoContestCurvedService
             route_curved = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_CURVED,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
             route_normal = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NORMAL,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,true,[])
         } else {
-            route_curved = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_CURVED_GPX)
-            route_normal = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NORMAL_GPX)
+            route_curved = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_CURVED_GPX)
+            route_normal = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NORMAL_GPX)
         }
         
 		fcService.printdone ""

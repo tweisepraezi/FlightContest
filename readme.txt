@@ -6,7 +6,7 @@ Program for planning and evaluating of General Aviation championships
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-31.08.2016
+21.10.2016
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -95,25 +95,49 @@ Erweiterungen in dieser Version (3.0):
     Dieses kann mit 'Extras -> Logger-Daten-Anzeige' oder einem beliebigen anderen
     GPX-Viewer angezeigt werden.
 - Koordinatendarstellung in den Contest-Einstellungen wählbar:
-   Die Koordinatendarstellung kann zwischen "Grad Dezimal", "Grad/Minuten Dezimal"
-   und "Grad/Minuten/Sekunden" gewählt werden.
+   Die Koordinatendarstellung kann zwischen 'Grad Dezimal', 'Grad/Minuten Dezimal'
+   und 'Grad/Minuten/Sekunden' gewählt werden.
    Der Strecken-Druck (Strecke -> Druck) druckt alle 3 Darstellungen untereinander.
 - Strecken-Export
     Mit 'GPX-Export' wird eine Strecke als GPX-Datei exportiert.
     Diese kann mit 'Extras -> Logger-Daten-Anzeige' oder einem beliebigen anderen
     GPX-Viewer angezeigt werden. 
-- Strecken-Import
-    Mit "Strecken -> Import Strecke" kann eine Strecke aus einer GPX-Datei 
+- FC-Strecken-Import
+    Mit 'Strecken -> Import FC-Strecke' kann eine Strecke aus einer GPX-Datei 
     importiert werden, die entweder mit dem Strecken-Export oder dem 
     Navigationsflug-Ergebnis-Export exportiert wurde.
-    GPX-Strecken aus anderen Quellen und Strecken anderer Formate 
-    werden nicht unterstützt.
+    GPX-Strecken, die mit anderen Programmen erzeugt wurden,
+    können mit 'Strecken-Import' importiert werden. 
+- Strecken-Import
+    Mit 'Strecken -> Import Strecke' können Strecken folgender Formate 
+    importiert werden:
+    * GPX-Datei, die von einem Fremd-Programm (z.B. 'Flight Planner') erzeugt wurde.
+      Darf nur genau eine Strecke (<rte>...</ret>) beinhalten.
+      Muss Höhenangaben beinhalten 
+      (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
+    * REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde. 
+    * TXT-Datei, die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
+        Latitude,Logitude,Altitude (in Meter)
+        z.B. '48.830855,10.210301,624.84'
+        Werte mit Komma getrennt (Leerzeichen vor/nach Zahlen werden ignoriert)
+        Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 - Ausdrucke müssen beim Drucken nicht mehr eingepasst werden.
 - Unbekannte Zeitkontrollen werden in Englisch mit 'SC' abgekürzt (vorher 'Secret').
 - Aktualisierung folgender Regelwerke
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2016
     FAI Precision Flying - Edition 2016
     FAI Air Rally Flying - Edition 2016
+- Regelwerke für Österreich hinzugefügt:
+    Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2016
+    Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2016
+    Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2016
+    Navigationsflug-Reglement Österreich - Ausgabe 2016
+  Einschränkungen:
+    * "Mitführen von verbotenem elektronischen Equipment" kann nicht 
+      angegebenen werden.
+    * 20% Punkteaufschlag bei Präzisionsflug-Reglement kann nicht automatisch
+      brechnet werden.
+    Fügen Sie diese Punkte unter "Sonstige Strafpunkte" hinzu.
 - Beachten Sie die erhöhten Anforderungen an die Leistungsfähigkeit
   Ihres Computers, wenn Sie diese Version einsetzen wollen:
     min. 8 GB RAM
@@ -123,8 +147,11 @@ Erweiterungen in dieser Version (3.0):
     TO -> SP: wind+:3NM, iFP -> iLDG: wind+:2NM, iLDG -> iSP: wind+:3NM
 - Besatzungs-Liste: Kommando 'Startnummern sortieren' eingeführt
 - Planung: Kommando 'Zeitplan-Export' eingeführt
-- Anwendung "Print Label" für Label-Drucker Brother QL-570
+- Anwendung 'Print Label' für Label-Drucker Brother QL-570
     Druckt Label mit Daten des 'Zeitplan-Export'-Kommandos.
+- Hilfe ('Programme -> Flight Contest -> Help') erweitert:
+    'Zu erledigende Aufgaben' beschreibt Aufgaben 
+    des Wettbewerbs-Ausrichters und des Auswerte-Schiedsrichters
 
 Fehlerbehebungen und Erweiterungen in Version 2.3.7:
 ----------------------------------------------------

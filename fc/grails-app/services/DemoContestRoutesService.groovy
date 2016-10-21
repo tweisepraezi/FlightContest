@@ -25,7 +25,7 @@ class DemoContestRoutesService
         if (aflosDB) {
             route5 = fcService.importAflosRoute(contest,ROUTE_5,ROUTE_5,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route5 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_5_GPX)
+            route5 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_5_GPX)
         }
         fcService.printdone ""
         
@@ -34,7 +34,7 @@ class DemoContestRoutesService
         if (aflosDB) {
             route6 = fcService.importAflosRoute(contest,ROUTE_6,ROUTE_6,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route6 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_6_GPX)
+            route6 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_6_GPX)
         }
         fcService.printdone ""
 		
@@ -43,7 +43,7 @@ class DemoContestRoutesService
         if (aflosDB) {
             route7 = fcService.importAflosRoute(contest,ROUTE_7,ROUTE_7,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route7 = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_7_GPX)
+            route7 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_7_GPX)
         }
         fcService.printdone ""
 		

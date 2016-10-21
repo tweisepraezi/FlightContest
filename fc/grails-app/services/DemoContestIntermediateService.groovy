@@ -39,28 +39,28 @@ class DemoContestIntermediateService
         if (aflosDB) {
             route = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
         } else {
-            route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_GPX)
+            route = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_GPX)
         }
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOITO
         if (aflosDB) {
             route_noito = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITO,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O'])
         } else {
-            route_noito = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITO_GPX)
+            route_noito = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITO_GPX)
         }
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOILDG
         if (aflosDB) {
             route_noildg = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOILDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iLDG'])
         } else {
-            route_noildg = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOILDG_GPX)
+            route_noildg = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOILDG_GPX)
         }
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOITOLDG
         if (aflosDB) {
             route_noitoldg = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITOLDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O','iLDG'])
         } else {
-            route_noitoldg = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITOLDG_GPX)
+            route_noitoldg = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITOLDG_GPX)
         }
 		fcService.printdone ""
 

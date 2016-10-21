@@ -178,6 +178,7 @@ Interessante Test-Daten
         35 - Tag-2 - 35.gpx enthält viele 1s-Kursabweichungen (Meßpunkte mit identischen Kooordinaten)
         35 - Tag-2 - 35-2.gpx: 1s-Kursabweichung 2015-05-28T12:19:06Z unklar (Meßpunkt mit identischen Kooordinaten)
     3.0.RC6_2016_SWDR
+        Dateien für Strecken-Import
         2  - 3.7. - Logger-Aufzeichnung vor TO mit identischen Punkten
         
     BC = Bad Course

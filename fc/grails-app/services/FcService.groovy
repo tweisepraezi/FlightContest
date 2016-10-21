@@ -4509,31 +4509,31 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importFileRoute(String fileExtension, Contest contestInstance, String originalFileName)
+    Map importDemoFcRoute(String fileExtension, Contest contestInstance, String originalFileName)
     {
-        printstart "importFileRoute '$originalFileName'"
+        printstart "importDemoFcRoute '$originalFileName'"
         
         Map ret = [saved: false, error: false, message: "", instance: null]
 
         String webroot_dir = servletContext.getRealPath("/")
         
         // read file
-        Map reader = import_route(fileExtension, contestInstance, webroot_dir + "testdata/" + originalFileName)
+        Map reader = import_fc_route(fileExtension, contestInstance, webroot_dir + "testdata/" + originalFileName)
         
         if (!reader.valid) {
             ret.error = true
-            ret.message = getMsg('fc.route.fileimport.invalidroutefile',[originalFileName])
+            ret.message = getMsg('fc.route.fcfileimport.invalidroutefile',[originalFileName])
             printerror ret.message
         } else if (reader.errors) {
             ret.error = true
-            ret.message = getMsg('fc.route.fileimport.readerrors',[originalFileName, reader.errors])
+            ret.message = getMsg('fc.route.fcfileimport.readerrors',[originalFileName, reader.errors])
             printerror ret.message
         } else if (!reader.gatenum) {
             ret.error = true
-            ret.message = getMsg('fc.route.fileimport.noroutedata',[originalFileName])
+            ret.message = getMsg('fc.route.fcfileimport.noroutedata',[originalFileName])
             printerror ret.message
         } else {
-            ret.message = getMsg('fc.route.fileimport.routeok',[originalFileName])
+            ret.message = getMsg('fc.route.fcfileimport.routeok',[originalFileName])
             ret.saved =  true
             ret.instance = reader.route
             printdone ret.message
@@ -4543,22 +4543,20 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importFileRoute2(String fileExtension, Contest contestInstance, def file)
-    // fileExtension - '.gac', '.gpx'
-    // Return        - found = true, wenn zutreffende Logger-Datei  
+    Map importFcRoute(String fileExtension, Contest contestInstance, def file)
     {
         Map ret = [found: false, error: false, message: ""]
         
         String original_filename = file.getOriginalFilename()
         if (!fileExtension) {
             ret.error = true
-            ret.message = getMsg('fc.route.fileimport.noroutefile',[original_filename, RouteFileTools.ROUTE_EXTENSIONS])
+            ret.message = getMsg('fc.route.fcfileimport.noroutefile',[original_filename, RouteFileTools.FC_ROUTE_EXTENSIONS])
         } else if (!original_filename) {
             ret.found = true
             ret.error = true
-            ret.message = getMsg('fc.route.fileimport.nofile')
+            ret.message = getMsg('fc.route.fcfileimport.nofile')
         } else {
-            printstart "importFileRoute2 '$original_filename'"
+            printstart "importFcRoute '$original_filename'"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 
                 ret.found = true
@@ -4572,7 +4570,85 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_route(fileExtension, contestInstance, webroot_dir + upload_filename)
+                Map reader = import_fc_route(fileExtension, contestInstance, webroot_dir + upload_filename)
+                
+                // delete file
+                DeleteFile(webroot_dir + upload_filename)
+                
+                if (!reader.valid) {
+                    ret.error = true
+                    ret.message = getMsg('fc.route.fcfileimport.invalidroutefile',[original_filename])
+                } else if (reader.errors) {
+                    ret.error = true
+                    ret.message = getMsg('fc.route.fcfileimport.readerrors',[original_filename, reader.errors])
+                } else if (!reader.gatenum) {
+                    ret.error = true
+                    ret.message = getMsg('fc.route.fcfileimport.noroutedata',[original_filename])
+                } else {
+                    ret.message = getMsg('fc.route.fcfileimport.routeok',[original_filename])
+                }
+            }
+            printdone ""
+        }
+        
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map import_fc_route(String fileExtension, Contest contestInstance, String loadFileName)
+    {
+        printstart "import_fc_route '$loadFileName'"
+        
+        // read file
+        Map reader = RouteFileTools.ReadFcRouteFile(fileExtension, contestInstance, loadFileName)
+        
+        // calculate legs
+        if (reader.valid && !reader.errors && reader.route) {
+            printstart "Calculate legs"
+            try {
+                calculateAllCoordMapDistances(reader.route)
+                calculateSecretLegRatio(reader.route)
+                calculateRouteLegs(reader.route)
+                printdone ""
+            } catch (Exception e) {
+                reader.errors = e.getMessage()
+                printerror reader.errors
+            }
+        }
+        
+        printdone ""
+        return reader
+    }
+    
+    //--------------------------------------------------------------------------
+    Map importFileRoute(String fileExtension, Contest contestInstance, def file, Map importParams)
+    {
+        Map ret = [found: false, error: false, message: ""]
+        
+        String original_filename = file.getOriginalFilename()
+        if (!fileExtension) {
+            ret.error = true
+            ret.message = getMsg('fc.route.fileimport.noroutefile',[original_filename, RouteFileTools.FC_ROUTE_EXTENSIONS])
+        } else if (!original_filename) {
+            ret.found = true
+            ret.error = true
+            ret.message = getMsg('fc.route.fileimport.nofile')
+        } else {
+            printstart "importFcRoute '$original_filename'"
+            if (original_filename.toLowerCase().endsWith(fileExtension)) {
+                
+                ret.found = true
+                
+                // upload file
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String upload_filename = "gpxupload/ROUTE-${uuid}-UPLOAD${fileExtension}"
+                printstart "Upload $original_filename -> $upload_filename"
+                file.transferTo(new File(webroot_dir, upload_filename))
+                printdone ""
+                
+                // read file
+                Map reader = import_file_route(fileExtension, contestInstance, webroot_dir + upload_filename, original_filename, importParams)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -4597,12 +4673,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_route(String fileExtension, Contest contestInstance, String loadFileName)
+    private Map import_file_route(String fileExtension, Contest contestInstance, String loadFileName, String originalFileName, Map importParams)
     {
-        printstart "import_route '$loadFileName'"
+        printstart "import_file_route '$loadFileName' $importParams"
         
         // read file
-        Map reader = RouteFileTools.ReadRouteFile(fileExtension, contestInstance, loadFileName)
+        Map reader = RouteFileTools.ReadRouteFile(fileExtension, contestInstance, loadFileName, originalFileName, importParams)
         
         // calculate legs
         if (reader.valid && !reader.errors && reader.route) {

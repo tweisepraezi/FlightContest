@@ -8,8 +8,8 @@ const FCVersion = '3.0.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.0.RC9
-AppVersion=3.0.RC9
+AppVerName=Flight Contest 3.0.0
+AppVersion=3.0.0
 ; no milestone
 VersionInfoVersion=3.0.0
 
@@ -34,11 +34,11 @@ MinVersion=0,5
 
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl";
-Name: "de"; MessagesFile: "German-2-5.1.11.isl";
+Name: "de"; MessagesFile: "German-5-5-3.isl";
 
 [Messages]
-en.BeveledLabel=Flight Contest
-de.BeveledLabel=Flight Contest
+;en.BeveledLabel=Flight Contest
+;de.BeveledLabel=Flight Contest
 
 [CustomMessages]
 en.AdminNecessary=You need administrator privileges to install 'Flight Contest'.
@@ -79,6 +79,7 @@ Source: ".\rules\DE_Praezisionsflug_2005.pdf";        DestDir: "{app}\rules";   
 Source: ".\rules\DE_Navigationsflug_2016.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Navigationsflug_2016_en.pdf";     DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\CH_Praezisionsflug_2014.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\AT_Motorflug_2016.pdf";              DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly; AfterInstall: MyAfterInstall;
 
 [Dirs]
@@ -141,6 +142,7 @@ Name: "{group}\Rules\Wettbewerbsregeln Präzisionsflug Deutschland 2005";        
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2016";           Filename: "{app}\rules\\DE_Navigationsflug_2016.pdf";       WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Germany National Rules and Regulations Navigation Flying 2016"; Filename: "{app}\rules\\DE_Navigationsflug_2016_en.pdf";    WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2014"; Filename: "{app}\rules\\CH_Praezisionsflug_2014.pdf";       WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Motorflug-Wettbewerbsordnung Österreich 2016";                  Filename: "{app}\rules\\AT_Motorflug_2016.pdf";             WorkingDir: "{commondesktop}";
 
 [Code]
 //---------------------------------------------------------------------------------------------------------

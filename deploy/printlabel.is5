@@ -3,10 +3,10 @@
 [Setup]
 AppName=Flight Contest Print Label
 
-AppVerName=Flight Contest Print Label 1.0
-AppVersion=1.0.0
+AppVerName=Flight Contest Print Label 1.0.2
+AppVersion=1.0.2
 ; no milestone
-VersionInfoVersion=1.0.0
+VersionInfoVersion=1.0.2
 
 AppCopyright=(C) 2016 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -32,12 +32,14 @@ Name: "en"; MessagesFile: "compiler:Default.isl";
 ;Name: "de"; MessagesFile: "German-2-5.1.11.isl";
 
 [Files]
-Source: "..\..\..\Java\jdk1.6.0_30\jre\*";         DestDir: "{app}\java";  Flags: ignoreversion recursesubdirs;          Excludes: "doc,demo,include,sample,src.zip";
-Source: "..\fc\web-app\licenses\GPL_License.txt";  DestDir: "{app}";       Flags: overwritereadonly uninsremovereadonly; Attribs: readonly; 
-Source: "..\output\printlabel.jar";                DestDir: "{app}";
-Source: "..\printlabel\src\printlabel.png";        DestDir: "{app}";
-Source: "..\printlabel\src\FCLabel.lbx";           DestDir: "{app}";
-Source: "printlabel.ico";                          DestDir: "{app}";
+Source: "..\..\..\Groovy\Groovy-2.1.6\bin\jacob-1.14.3-x86.dll"; DestDir: "{sys}";       Flags: onlyifdoesntexist uninsneveruninstall;
+Source: "..\..\..\Groovy\Groovy-2.1.6\bin\jacob-1.14.3-x64.dll"; DestDir: "{sys}";       Flags: onlyifdoesntexist uninsneveruninstall;
+Source: "..\..\..\Java\jdk1.6.0_30\jre\*";                       DestDir: "{app}\java";  Flags: ignoreversion recursesubdirs;          Excludes: "doc,demo,include,sample,src.zip";
+Source: "..\fc\web-app\licenses\GPL_License.txt";                DestDir: "{app}";       Flags: overwritereadonly uninsremovereadonly; Attribs: readonly; 
+Source: "..\output\printlabel.jar";                              DestDir: "{app}";
+Source: "..\printlabel\src\printlabel.png";                      DestDir: "{app}";
+Source: "..\printlabel\src\FCLabel.lbx";                         DestDir: "{app}";
+Source: "printlabel.ico";                                        DestDir: "{app}";
 
 [InstallDelete]
 Type: filesandordirs; Name: "{app}\java";

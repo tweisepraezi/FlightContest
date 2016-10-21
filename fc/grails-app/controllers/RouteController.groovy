@@ -143,23 +143,60 @@ class RouteController {
         redirect(action:list)
 	}
 	
-    def importfileroute = {
-        redirect(action:selectfile)
+    def selectfcroute = {
+        return [:]
     }
     
-    def importfileroute2 = {
+    def importfcroute = {
+        redirect(action:selectfcroute)
+    }
+    
+    def importfcroute2 = {
         def file = request.getFile('routefile')
-        Map import_route = fcService.importFileRoute2(RouteFileTools.GPX_EXTENSION, session.lastContest, file)
+        Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, file)
         if (!import_route.found) {
-            import_route = fcService.importFileRoute2("", session.lastContest, file)
+            import_route = fcService.importFcRoute("", session.lastContest, file)
         }
         flash.error = import_route.error
         flash.message = import_route.message
         redirect(action:list)
     }
     
-    def selectfile = {
+    def selectfileroute = {
         return [:]
+    }
+    
+    def importfileroute = {
+        redirect(action:selectfileroute)
+    }
+    
+    def importfileroute2 = {
+        def file = request.getFile('routefile')
+        Map import_params = [firstcoordto:params?.firstcoordto == 'on',
+                             todirection:params?.todirection.isBigDecimal()?params?.todirection.toBigDecimal():0.0,
+                             curved:params?.curved == 'on',
+                             curvedstartpos:params?.curvedstartpos.isInteger()?params?.curvedstartpos.toInteger():null,
+                             curvedendpos:params?.curvedendpos.isInteger()?params?.curvedendpos.toInteger():null,
+                             ildg:params?.ildg == 'on', 
+                             ildgpos:params?.ildgpos.isInteger()?params?.ildgpos.toInteger():null, 
+                             ildgdirection:params?.ildgdirection.isBigDecimal()?params?.ildgdirection.toBigDecimal():0.0,
+                             ldg:params?.ldg.toInteger(),
+                             ldgdirection:params?.ldgdirection.isBigDecimal()?params?.ldgdirection.toBigDecimal():0.0,
+                             autosecret:params?.autosecret == 'on' 
+                            ]
+        Map import_route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, file, import_params)
+        if (!import_route.found) {
+            import_route = fcService.importFileRoute(RouteFileTools.REF_EXTENSION, session.lastContest, file, import_params)
+        }
+        if (!import_route.found) {
+            import_route = fcService.importFileRoute(RouteFileTools.TXT_EXTENSION, session.lastContest, file, import_params)
+        }
+        if (!import_route.found) {
+            import_route = fcService.importFileRoute("", session.lastContest, file, import_params)
+        }
+        flash.error = import_route.error
+        flash.message = import_route.message
+        redirect(action:list)
     }
     
 	def calculateroutelegs = {
