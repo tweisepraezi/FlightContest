@@ -17,17 +17,18 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['editpointsReturnAction':editpointsReturnAction,'editpointsReturnController':editpointsReturnController,'editpointsReturnID':editpointsReturnID]}" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <g:set var="ret" value="${[modifynum:0]}"/>
-                        <g:editPoints i="${resultclassInstance}" recalculatepoints="${message(code:'fc.resultclass.recalculatepoints')}" ret="${ret}"/>
+                        <g:editPoints i="${resultclassInstance}" recalculatepoints="${message(code:'fc.resultclass.recalculatepoints')}" ret="${ret}" ti="${ti}"/>
                         <input type="hidden" name="id" value="${resultclassInstance?.id}"/>
                         <input type="hidden" name="version" value="${resultclassInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="101"/>
-                        <g:actionSubmit action="savepoints" value="${message(code:'fc.save')}" tabIndex="102"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="savepoints" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
                         <g:if test="${ret.modifynum > 0}">
-                            <g:actionSubmit action="standardpoints" value="${message(code:'fc.standard')}" tabIndex="103"/>
+                            <g:actionSubmit action="standardpoints" value="${message(code:'fc.standard')}" tabIndex="${ti[0]++}"/>
                         </g:if>
-                        <g:actionSubmit action="printpoints" value="${message(code:'fc.print')}"  tabIndex="104"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="105"/>
+                        <g:actionSubmit action="printpoints" value="${message(code:'fc.print')}"  tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

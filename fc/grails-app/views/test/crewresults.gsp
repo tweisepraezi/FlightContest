@@ -15,7 +15,7 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
+                                    <td><g:task var="${testInstance.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -61,35 +61,47 @@
                         </table>
                         <table>
                             <tbody>
+                                <g:set var="task_penalties" value="${new Integer(0)}" />
 	                           	<g:if test="${testInstance.IsPlanningTestRun()}">
+	                           	   <g:set var="task_penalties" value="${task_penalties + testInstance.planningTestPenalties}" />
     	                        	<tr>
         	                            <td class="detailtitle">${message(code:'fc.planningresults.planning')}:</td>
         	                            <td>${testInstance.planningTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})<g:if test="${!testInstance.planningTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 			                     	</tr>
 	                            </g:if>
    	                        	<g:if test="${testInstance.IsFlightTestRun()}">
+   	                        	   <g:set var="task_penalties" value="${task_penalties + testInstance.flightTestPenalties}" />
 			                    	<tr>
 			                     		<td class="detailtitle">${message(code:'fc.flightresults.flight')}:</td>
         	                            <td>${testInstance.flightTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetFlightTestVersion()})<g:if test="${!testInstance.flightTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 			                    	</tr>
 	                            </g:if>
                             	<g:if test="${testInstance.IsObservationTestRun()}">
+                            	   <g:set var="task_penalties" value="${task_penalties + testInstance.observationTestPenalties}" />
 			                    	<tr>
 			                     		<td class="detailtitle">${message(code:'fc.observationresults.observations')}:</td>
         	                            <td>${testInstance.observationTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})<g:if test="${!testInstance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 			                    	</tr>
 	                            </g:if>
                             	<g:if test="${testInstance.IsLandingTestRun()}">
+                            	   <g:set var="task_penalties" value="${task_penalties + testInstance.landingTestPenalties}" />
 			                    	<tr>
 			                     		<td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>
         	                            <td>${testInstance.landingTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})<g:if test="${!testInstance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 			                    	</tr>
 			                    </g:if>
 	                           	<g:if test="${testInstance.IsSpecialTestRun()}">
+	                           	   <g:set var="task_penalties" value="${task_penalties + testInstance.specialTestPenalties}" />
 			                     	<tr>
 			                     		<td class="detailtitle">${message(code:'fc.specialresults.other')}:</td>
         	                            <td>${testInstance.specialTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetSpecialTestVersion()})<g:if test="${!testInstance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 			                    	</tr>
+	                            </g:if>
+	                            <g:if test="${testInstance.IsIncreaseEnabled()}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.task.increaseenabled.short',args:[testInstance.GetIncreaseValue()])}:</td>
+                                        <td>${testInstance.GetIncreasePenalties(task_penalties)} ${message(code:'fc.points')} </td>
+                                    </tr>
 	                            </g:if>
 	                        </tbody>
                             <tfoot>
@@ -110,7 +122,7 @@
                             <g:flightTestCrewResults t="${testInstance}"/>
 	                    </g:if>
 	                    <g:if test="${testInstance.IsObservationTestRun()}">
-                            <g:observationTestCrewResults t="${testInstance}"/>
+                            <g:observationTestComplete t="${testInstance}" crewResults="${true}"/>
 	                    </g:if>
 	                    <g:if test="${testInstance.IsLandingTestRun()}">
 	                        <table>
@@ -133,7 +145,7 @@
                                          <g:landingTest4Complete t="${testInstance}" crewResults="${true}"/>
 			                       	</g:if>
                                     <g:if test="${testInstance.IsLandingTestAnyRun()}">
-                                        <g:if test="${testInstance.landingTestOtherPenalties > 0}">
+                                        <g:if test="${testInstance.landingTestOtherPenalties != 0}">
                                             <tr>
                                                 <th class="detailtitle">${message(code:'fc.landingtest.otherpenalties')}:</th>
                                                 <td>${testInstance.landingTestOtherPenalties} ${message(code:'fc.points')}</td>

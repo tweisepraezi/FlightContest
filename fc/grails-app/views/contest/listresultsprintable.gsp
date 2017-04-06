@@ -77,32 +77,54 @@
                                         <g:set var="detail_num" value="${detail_num+1}"/>
                                     </g:if>
                                     <g:if test="${contestInstance.contestObservationResults && task_instance.IsObservationTestRun()}">
-                                        <g:set var="detail_num" value="${detail_num+1}"/>
+                                        <g:set var="observation_detail_written" value="${false}"/>
+                                        <g:if test="${contestInstance.contestPrintObservationDetails}">
+                                            <g:if test="${task_instance.IsObservationTestTurnpointRun()}">
+                                                <g:set var="detail_num" value="${detail_num+1}"/>
+                                                <g:set var="observation_detail_written" value="${true}"/>
+                                            </g:if>
+                                            <g:if test="${task_instance.IsObservationTestEnroutePhotoRun()}">
+                                                <g:set var="detail_num" value="${detail_num+1}"/>
+                                                <g:set var="observation_detail_written" value="${true}"/>
+                                            </g:if>
+                                            <g:if test="${task_instance.IsObservationTestEnrouteCanvasRun()}">
+                                                <g:set var="detail_num" value="${detail_num+1}"/>
+                                                <g:set var="observation_detail_written" value="${true}"/>
+                                            </g:if>
+                                        </g:if>
+                                        <g:if test="${!observation_detail_written}">
+                                            <g:set var="detail_num" value="${detail_num+1}"/>
+                                        </g:if>
                                     </g:if>
                                     <g:if test="${contestInstance.contestLandingResults && task_instance.IsLandingTestRun()}">
+                                        <g:set var="landing_detail_written" value="${false}"/>
                                         <g:if test="${contestInstance.contestPrintLandingDetails}">
                                             <g:if test="${task_instance.IsLandingTest1Run()}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
+                                                <g:set var="landing_detail_written" value="${true}"/>
                                             </g:if>
                                             <g:if test="${task_instance.IsLandingTest2Run()}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
+                                                <g:set var="landing_detail_written" value="${true}"/>
                                             </g:if>
                                             <g:if test="${task_instance.IsLandingTest3Run()}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
+                                                <g:set var="landing_detail_written" value="${true}"/>
                                             </g:if>
                                             <g:if test="${task_instance.IsLandingTest4Run()}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
+                                                <g:set var="landing_detail_written" value="${true}"/>
                                             </g:if>
                                         </g:if>
-                                        <g:else>
+                                        <g:if test="${!landing_detail_written}">
                                             <g:set var="detail_num" value="${detail_num+1}"/>
-                                        </g:else>
+                                        </g:if>
                                     </g:if>
                                     <g:if test="${contestInstance.contestSpecialResults && task_instance.IsSpecialTestRun()}">
                                         <g:set var="detail_num" value="${detail_num+1}"/>
                                     </g:if>
                                 </g:if>
-                                <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1))}">
+                                <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">
                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                 </g:if>
                          	    <th colspan="${detail_num}">${task_instance.bestOfNamePrintable()}</th>
@@ -139,45 +161,69 @@
 	                                        <th>${message(code:'fc.flightresults.flight.short')}</th>
 	                                    </g:if>
 	                                    <g:if test="${contestInstance.contestObservationResults && task_instance.IsObservationTestRun()}">
-	                                        <g:set var="detail_num" value="${detail_num+1}"/>
-	                                        <th>${message(code:'fc.observationresults.observations.short')}</th>
+                                            <g:set var="observation_detail_written" value="${false}"/>
+                                            <g:if test="${contestInstance.contestPrintObservationDetails}">
+                                                <g:if test="${task_instance.IsObservationTestTurnpointRun()}">
+                                                    <g:set var="detail_num" value="${detail_num+1}"/>
+                                                    <th>${message(code:'fc.observationresults.turnpoint.short')}</th>
+                                                    <g:set var="observation_detail_written" value="${true}"/>
+                                                </g:if>
+                                                <g:if test="${task_instance.IsObservationTestEnroutePhotoRun()}">
+                                                    <g:set var="detail_num" value="${detail_num+1}"/>
+                                                    <th>${message(code:'fc.observationresults.enroutephoto.short')}</th>
+                                                    <g:set var="observation_detail_written" value="${true}"/>
+                                                </g:if>
+                                                <g:if test="${task_instance.IsObservationTestEnrouteCanvasRun()}">
+                                                    <g:set var="detail_num" value="${detail_num+1}"/>
+                                                    <th>${message(code:'fc.observationresults.enroutecanvas.short')}</th>
+                                                    <g:set var="observation_detail_written" value="${true}"/>
+                                                </g:if>
+                                            </g:if>
+                                            <g:if test="${!observation_detail_written}">
+	                                            <g:set var="detail_num" value="${detail_num+1}"/>
+	                                            <th>${message(code:'fc.observationresults.observations.short')}</th>
+	                                        </g:if>
 	                                    </g:if>
 	                                    <g:if test="${contestInstance.contestLandingResults && task_instance.IsLandingTestRun()}">
+                                            <g:set var="landing_detail_written" value="${false}"/>
 	                                        <g:if test="${contestInstance.contestPrintLandingDetails}">
 	                                            <g:if test="${task_instance.IsLandingTest1Run()}">
 	                                                <g:set var="detail_num" value="${detail_num+1}"/>
 	                                                <th>${message(code:'fc.landingresults.landing1')}</th>
+                                                    <g:set var="landing_detail_written" value="${true}"/>
 	                                            </g:if>
 	                                            <g:if test="${task_instance.IsLandingTest2Run()}">
 	                                                <g:set var="detail_num" value="${detail_num+1}"/>
 	                                                <th>${message(code:'fc.landingresults.landing2')}</th>
+                                                    <g:set var="landing_detail_written" value="${true}"/>
 	                                            </g:if>
 	                                            <g:if test="${task_instance.IsLandingTest3Run()}">
 	                                                <g:set var="detail_num" value="${detail_num+1}"/>
 	                                                <th>${message(code:'fc.landingresults.landing3')}</th>
+                                                    <g:set var="landing_detail_written" value="${true}"/>
 	                                            </g:if>
 	                                            <g:if test="${task_instance.IsLandingTest4Run()}">
 	                                                <g:set var="detail_num" value="${detail_num+1}"/>
 	                                                <th>${message(code:'fc.landingresults.landing4')}</th>
+                                                    <g:set var="landing_detail_written" value="${true}"/>
 	                                            </g:if>
 	                                        </g:if>
-	                                        <g:else>
+                                            <g:if test="${!landing_detail_written}">
 	                                            <g:set var="detail_num" value="${detail_num+1}"/>
 	                                            <th>${message(code:'fc.landingresults.landing.short')}</th>
-	                                        </g:else>
+	                                        </g:if>
 	                                    </g:if>
 	                                    <g:if test="${contestInstance.contestSpecialResults && task_instance.IsSpecialTestRun()}">
 	                                        <g:set var="detail_num" value="${detail_num+1}"/>
 	                                        <th>${message(code:'fc.specialresults.other.short')}</th>
 	                                    </g:if>
 	                                </g:if>
-	                                <g:else>
-	                                    <g:set var="detail_num" value="${detail_num+1}"/>
-	                                    <th>${message(code:'fc.test.results.summary.short')}</th>
-	                                </g:else>
-	                                <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1))}">
+	                                <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">
 	                                    <th>${message(code:'fc.test.results.summary.short')}</th>
 	                                </g:if>
+	                                <g:elseif test="${contestInstance.contestPrintTaskTestDetails && (detail_num==0)}">
+	                                    <th>${message(code:'fc.test.results.summary.short')}</th>
+	                                </g:elseif>
 	                            </g:each>
 	                        </g:if>
 	                        <th/>
@@ -212,6 +258,7 @@
                                     <g:set var="detail_num" value="${new Integer(0)}"/>
                              	    <g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
                              	    <g:if test="${test_instance}">
+                                        <g:set var="taskpenalties_written" value="${false}"/>
                                         <g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">
                                             <g:if test="${contestInstance.contestPlanningResults && task_instance.IsPlanningTestRun()}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
@@ -232,15 +279,51 @@
                                                 </g:else>
                                             </g:if>
                                             <g:if test="${contestInstance.contestObservationResults && task_instance.IsObservationTestRun()}">
-                                                <g:set var="detail_num" value="${detail_num+1}"/>
-                                                <g:if test="${test_instance.IsObservationTestRun()}">
-                                                    <td class="observationpenalties">${test_instance.observationTestPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
+                                                <g:set var="observation_detail_written" value="${false}"/>
+                                                <g:if test="${contestInstance.contestPrintObservationDetails}">
+													<g:if test="${task_instance.IsObservationTestTurnpointRun()}">
+													    <g:set var="detail_num" value="${detail_num+1}"/>
+													    <g:if test="${test_instance.IsObservationTestRun() && test_instance.IsObservationTestTurnpointRun()}">
+													        <td class="observationpenalties">${test_instance.observationTestTurnPointPhotoPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
+													    </g:if>
+													    <g:else>
+													        <td class="observationpenalties">-</td>
+													    </g:else>
+													    <g:set var="observation_detail_written" value="${true}"/>
+													</g:if>
+													<g:if test="${task_instance.IsObservationTestEnroutePhotoRun()}">
+													    <g:set var="detail_num" value="${detail_num+1}"/>
+													    <g:if test="${test_instance.IsObservationTestRun() && test_instance.IsObservationTestEnroutePhotoRun()}">
+													        <td class="observationpenalties">${test_instance.observationTestRoutePhotoPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
+													    </g:if>
+													    <g:else>
+													        <td class="observationpenalties">-</td>
+													    </g:else>
+													    <g:set var="observation_detail_written" value="${true}"/>
+													</g:if>
+													<g:if test="${task_instance.IsObservationTestEnrouteCanvasRun()}">
+													    <g:set var="detail_num" value="${detail_num+1}"/>
+													    <g:if test="${test_instance.IsObservationTestRun() && test_instance.IsObservationTestEnrouteCanvasRun()}">
+													        <td class="observationpenalties">${test_instance.observationTestGroundTargetPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
+													    </g:if>
+													    <g:else>
+													        <td class="observationpenalties">-</td>
+													    </g:else>
+													    <g:set var="observation_detail_written" value="${true}"/>
+													</g:if>
                                                 </g:if>
-                                                <g:else>
-                                                    <td class="observationpenalties">-</td>
-                                                </g:else>
+                                                <g:if test="${!observation_detail_written}">
+	                                                <g:set var="detail_num" value="${detail_num+1}"/>
+	                                                <g:if test="${test_instance.IsObservationTestRun()}">
+	                                                    <td class="observationpenalties">${test_instance.observationTestPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
+	                                                </g:if>
+	                                                <g:else>
+	                                                    <td class="observationpenalties">-</td>
+	                                                </g:else>
+	                                            </g:if>
                                             </g:if>
                                             <g:if test="${contestInstance.contestLandingResults && task_instance.IsLandingTestRun()}">
+                                                <g:set var="landing_detail_written" value="${false}"/>
                                                 <g:if test="${contestInstance.contestPrintLandingDetails}">
                                                     <g:if test="${task_instance.IsLandingTest1Run()}">
                                                         <g:set var="detail_num" value="${detail_num+1}"/>
@@ -250,6 +333,7 @@
                                                         <g:else>
                                                             <td class="landingpenalties">-</td>
                                                         </g:else>
+                                                        <g:set var="landing_detail_written" value="${true}"/>
                                                     </g:if>
                                                     <g:if test="${task_instance.IsLandingTest2Run()}">
                                                         <g:set var="detail_num" value="${detail_num+1}"/>
@@ -259,6 +343,7 @@
                                                         <g:else>
                                                             <td class="landingpenalties">-</td>
                                                         </g:else>
+                                                        <g:set var="landing_detail_written" value="${true}"/>
                                                     </g:if>
                                                     <g:if test="${task_instance.IsLandingTest3Run()}">
                                                         <g:set var="detail_num" value="${detail_num+1}"/>
@@ -268,6 +353,7 @@
                                                         <g:else>
                                                             <td class="landingpenalties">-</td>
                                                         </g:else>
+                                                        <g:set var="landing_detail_written" value="${true}"/>
                                                     </g:if>
                                                     <g:if test="${task_instance.IsLandingTest4Run()}">
                                                         <g:set var="detail_num" value="${detail_num+1}"/>
@@ -277,9 +363,10 @@
                                                         <g:else>
                                                             <td class="landingpenalties">-</td>
                                                         </g:else>
+                                                        <g:set var="landing_detail_written" value="${true}"/>
                                                     </g:if>
                                                 </g:if>
-                                                <g:else>
+                                                <g:if test="${!landing_detail_written}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:if test="${test_instance.IsLandingTestRun()}">
                                                         <td class="landingpenalties">${test_instance.landingTestPenalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
@@ -287,7 +374,7 @@
                                                     <g:else>
                                                         <td class="landingpenalties">-</td>
                                                     </g:else>
-                                                </g:else>
+                                                </g:if>
                                             </g:if>
                                             <g:if test="${contestInstance.contestSpecialResults && task_instance.IsSpecialTestRun()}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
@@ -300,11 +387,11 @@
                                             </g:if>
                                         </g:if>
                                         <g:else>
-                                            <g:set var="detail_num" value="${detail_num+1}"/>
-                                            <td class="taskpenalties">${test_instance.GetResultPenalties(contestInstance.GetResultSettings())}<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [<g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">${message(code:'fc.provisional.short')}</g:if><g:else>${message(code:'fc.provisional')}</g:else>]<g:set var="test_provisional" value="${true}"/></g:if></td>
+                                            <td class="taskpenalties">${test_instance.GetResultPenalties(contestInstance.GetResultSettings())}<g:if test="${test_instance.IsIncreaseEnabled()}"> ${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])}</g:if><g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [<g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">${message(code:'fc.provisional.short')}</g:if><g:else>${message(code:'fc.provisional')}</g:else>]<g:set var="test_provisional" value="${true}"/></g:if></td>
+                                            <g:set var="taskpenalties_written" value="${true}"/>
                                         </g:else>
-                                        <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1))}">
-                                            <td class="taskpenalties">${test_instance.GetResultPenalties(contestInstance.GetResultSettings())}<g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [<g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">${message(code:'fc.provisional.short')}</g:if><g:else>${message(code:'fc.provisional')}</g:else>]<g:set var="test_provisional" value="${true}"/></g:if></td>
+                                        <g:if test="${contestInstance.contestPrintTaskDetails  && !taskpenalties_written && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">
+                                            <td class="taskpenalties">${test_instance.GetResultPenalties(contestInstance.GetResultSettings())}<g:if test="${test_instance.IsIncreaseEnabled()}"> ${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])}</g:if><g:if test="${test_instance.IsTestResultsProvisional(contestInstance.GetResultSettings())}"> [<g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">${message(code:'fc.provisional.short')}</g:if><g:else>${message(code:'fc.provisional')}</g:else>]<g:set var="test_provisional" value="${true}"/></g:if></td>
                                         </g:if>
                              	    </g:if>
                                     <g:else>

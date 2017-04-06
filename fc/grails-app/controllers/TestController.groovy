@@ -4,6 +4,7 @@ class TestController
 {
     def domainService
     def printService
+    def imageService
 	def fcService
     def gpxService
     def calcService
@@ -289,6 +290,89 @@ class TestController
         }
 	}
 	
+    def planningtaskformimportcrew = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            redirect(action:planningtaskformimport,id:params.id)
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def planningtaskformimport = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            // save return action
+            session.crewReturnAction = actionName
+            session.crewReturnController = controllerName
+            session.crewReturnID = params.id
+            return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def planningtaskformimportimagefile = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+            def file = request.getFile('imagefile')
+            Map img = imageService.LoadImage(ImageService.JPG_EXTENSION, file, test.instance, "scannedPlanningTest", Test.SCANNEDIMAGEMAXSIZE)
+            if (!img.found) {
+                img = imageService.LoadImage("", file, test.instance, "scannedPlanningTest", Test.SCANNEDIMAGEMAXSIZE)
+            }
+            flash.error = img.error
+            flash.message = img.message
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+            if (nexttest_id) {
+                redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:planningtaskresults,id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+        
+    def planningtaskformdeleteimagefile = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+            delete_imagefile(['testInstance':test.instance,'imageField':'scannedPlanningTest'])
+            flash.message = message(code:'fc.planningtesttask.deleteform.deleted')
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+            if (nexttest_id) {
+                redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:planningtaskresults,id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def planningtaskformimage = {
+        if (params.testid) {
+            Test test = Test.get(params.testid)
+            response.outputStream << test.scannedPlanningTest
+        }
+    }
+    
+    def planningtaskformimportcancel = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+            if (nexttest_id) {
+                redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:planningtaskresults,id:params.id)
+            }
+        } else {
+            redirect(action:planningtaskresults,id:params.id)
+        }
+    }
+        
     def flightresults = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
@@ -494,6 +578,20 @@ class TestController
         }
     }
 	 
+    def observationprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+            return [contestInstance:session.lastContest,testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startplanning")
+        }
+    }
+
     def importaflos = {
 		if (session?.lastContest) {
 			session.lastContest.refresh()
@@ -727,7 +825,12 @@ class TestController
         if (test.error) {
             flash.error = true
             flash.message = test.message
-            redirect(action:observationresults,id:params.id)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            if (nexttest_id) {
+                redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:observationresults,id:params.id)
+            }
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults",params:[message:test.message])
@@ -739,7 +842,12 @@ class TestController
         if (test.error) {
             flash.error = true
             flash.message = test.message
-            redirect(action:observationresults,id:params.id)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            if (nexttest_id) {
+                redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:observationresults,id:params.id)
+            }
         } else if (test.instance) {
             flash.message = test.message
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
@@ -784,7 +892,12 @@ class TestController
         if (test.error) {
             flash.error = true
             flash.message = test.message
-            redirect(action:observationresults,id:params.id)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            if (nexttest_id) {
+                redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:observationresults,id:params.id)
+            }
         } else if (test.instance) {
             flash.message = test.message
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
@@ -849,6 +962,97 @@ class TestController
         }
 	}
 	
+    def observationformimportcrew = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            redirect(action:observationformimport,id:params.id)
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def observationformimport = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            // save return action
+            session.crewReturnAction = actionName
+            session.crewReturnController = controllerName
+            session.crewReturnID = params.id
+            return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def observationformimportimagefile = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+            def file = request.getFile('imagefile')
+            Map img = imageService.LoadImage(ImageService.JPG_EXTENSION, file, test.instance, "scannedObservationTest", Test.SCANNEDIMAGEMAXSIZE)
+            if (!img.found) {
+                img = imageService.LoadImage("", file, test.instance, "scannedObservationTest", Test.SCANNEDIMAGEMAXSIZE)
+            }
+            flash.error = img.error
+            flash.message = img.message
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            if (nexttest_id) {
+                redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:observationresults,id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+        
+    def observationformdeleteimagefile = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+            delete_imagefile(['testInstance':test.instance,'imageField':'scannedObservationTest'])
+            flash.message = message(code:'fc.observation.deleteform.deleted')
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            if (nexttest_id) {
+                redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:observationresults,id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def observationformimage = {
+        if (params.testid) {
+            Test test = Test.get(params.testid)
+            response.outputStream << test.scannedObservationTest
+        }
+    }
+    
+    def observationformimportcancel = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            if (nexttest_id) {
+                redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
+            } else {
+                redirect(action:observationresults,id:params.id)
+            }
+        } else {
+            redirect(action:observationresults,id:params.id)
+        }
+    }
+        
+    private void delete_imagefile(Map params)
+    {
+        fcService.printstart "Delete '$params.imageField'"
+        params.testInstance.(params.imageField) = null
+        params.testInstance.save()
+        fcService.printdone ""
+    }   
+    
     def landingresults = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
@@ -1221,9 +1425,11 @@ class TestController
         def test = fcService.getresultsprintableTest(params) 
         if (test.instance) {
 			test.instance.printPlanningResults = params.printPlanningResults == "true"
+            test.instance.printPlanningResultsScan = params.printPlanningResultsScan == "true"
 			test.instance.printFlightResults = params.printFlightResults == "true"
             test.instance.printFlightMap = params.printFlightMap == "true"
 			test.instance.printObservationResults = params.printObservationResults == "true"
+            test.instance.printObservationResultsScan = params.printObservationResultsScan == "true"
 			test.instance.printLandingResults = params.printLandingResults == "true"
 			test.instance.printSpecialResults = params.printSpecialResults == "true"
 			test.instance.printProvisionalResults = params.printProvisionalResults == "true"
@@ -1240,7 +1446,7 @@ class TestController
             gpxService.printstart "Show offline map of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, false, true) // false - no Print, true - Points
+            Map converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, false, true, false) // false - no Print, true - Points, false - no wrEnrouteSign
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
@@ -1269,7 +1475,7 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, true) // false - no Print, true - Points
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, true, true) // false - no Print, true - Points, true - wrEnrouteSign
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
@@ -1298,7 +1504,7 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, false) // false - no Print, false - no Points
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, false, true) // false - no Print, false - no Points, true - wrEnrouteSign
             if (converter.ok && converter.track) {
                 String logger_file_name = (test.instance.GetTitle(ResultType.Flight) + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -1342,7 +1548,7 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-EMAIL.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, true, true) // true - Print, true - Points
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, true, true, true) // true - Print, true - Points, true - wrEnrouteSign
             if (converter.ok && converter.track) {
                 
                 Map email = test.instance.GetEMailBody()

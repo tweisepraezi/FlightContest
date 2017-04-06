@@ -8,6 +8,7 @@ class ResultClass
 	String contestTitle = ""
 	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung
 	Boolean precisionFlying = false                     // DB-2.3
+    Integer increaseFactor = 0                          // DB-2.13
 	
 	// Klassen-Auswertung
 	String contestTaskResults = ""                      // Zu berücksichtigende Aufgaben, DB-2.1
@@ -21,6 +22,7 @@ class ResultClass
 	Boolean contestPrintLandscape = true                // Ausdruck quer, DB-2.1
 	Boolean contestPrintTaskDetails = false             // Ausdruck der Aufgabensummen in Liste, DB-2.1
     String contestPrintTaskTestDetails = ""             // Ausdruck der Aufgabendetails in Liste, DB-2.8
+    Boolean contestPrintObservationDetails = false      // Ausdruck der Beobachtungsdetails in Liste, DB-2.13
     Boolean contestPrintLandingDetails = false          // Ausdruck der Landedetails in Liste, DB-2.8
 	Boolean contestPrintTaskNamesInTitle = false        // Ausdruck der Aufgabennamen im Title, DB-2.1
 	Boolean contestPrintAircraft = true                 // Ausdruck des Flugzeuges in Liste, DB-2.8
@@ -39,7 +41,8 @@ class ResultClass
 	int planningTestMaxPoints = 350
 	int planningTestPlanTooLatePoints = 50
 	int planningTestExitRoomTooLatePoints = 100
-
+    Integer planningTestForbiddenCalculatorsPoints = 0  // DB-2.13
+    
 	// FlightTest
 	int flightTestTakeoffMissedPoints = 200
 	Integer flightTestTakeoffCorrectSecond = 60         // DB-2.3
@@ -61,7 +64,18 @@ class ResultClass
 	Integer flightTestFalseEnvelopeOpenedPoints = 0     // DB-2.3
 	Integer flightTestSafetyEnvelopeOpenedPoints = 0    // DB-2.3
 	Integer flightTestFrequencyNotMonitoredPoints = 0   // DB-2.3
+    Integer flightTestForbiddenEquipmentPoints = 0      // DB-2.13
 
+    // ObservationTest
+    EnrouteValueUnit observationTestEnrouteValueUnit = EnrouteValueUnit.mm // DB-2.13
+    Float observationTestEnrouteCorrectValue = 5.0f     // DB-2.13
+    Float observationTestEnrouteInexactValue = 10.0f    // DB-2.13
+    Integer observationTestEnrouteInexactPoints = 10    // DB-2.13
+    Integer observationTestEnrouteNotFoundPoints = 20   // DB-2.13
+    Integer observationTestEnrouteFalsePoints = 40      // DB-2.13
+    Integer observationTestTurnpointNotFoundPoints = 40 // DB-2.13
+    Integer observationTestTurnpointFalsePoints = 80    // DB-2.13
+            
 	// LandingTest
 	int landingTest1MaxPoints = 300
 	int landingTest1NoLandingPoints = 300
@@ -113,12 +127,18 @@ class ResultClass
 	
 	// Points print settings
 	String printPointsPrintTitle = ""                   // DB-2.3
+    Boolean printPointsGeneral = true                   // DB-2.13
 	Boolean printPointsPlanningTest = true              // DB-2.3
 	Boolean printPointsFlightTest = true                // DB-2.3
+    Boolean printPointsObservationTest = true           // DB-2.13
 	Boolean printPointsLandingTest1 = true              // DB-2.3
 	Boolean printPointsLandingTest2 = true              // DB-2.3
 	Boolean printPointsLandingTest3 = true              // DB-2.3
 	Boolean printPointsLandingTest4 = true              // DB-2.3
+    Boolean printPointsLandingField = true              // DB-2.13
+    String landingFieldImageName = ""                   // DB-2.13
+    Boolean printPointsTurnpointSign = false            // DB-2.13
+    Boolean printPointsEnrouteCanvas = false            // DB-2.13
     String printLandingCalculatorValues = ""            // DB-2.8
 	Boolean printPointsZero = false                     // DB-2.3
 	Boolean printPointsLandscape = false                // DB-2.3
@@ -242,6 +262,26 @@ class ResultClass
         contestPrintLandingDetails(nullable:true)
         contestPrintEqualPositions(nullable:true)
         printLandingCalculatorValues(nullable:true)
+        
+        // DB-2.13 compatibility
+        planningTestForbiddenCalculatorsPoints(nullable:true, min:0)
+        flightTestForbiddenEquipmentPoints(nullable:true, min:0)
+        observationTestEnrouteValueUnit(nullable:true)
+        observationTestEnrouteCorrectValue(nullable:true, min:0.0f)
+        observationTestEnrouteInexactValue(nullable:true, min:0.0f)
+        observationTestEnrouteInexactPoints(nullable:true, min:0)
+        observationTestEnrouteNotFoundPoints(nullable:true, min:0)
+        observationTestEnrouteFalsePoints(nullable:true, min:0)
+        observationTestTurnpointNotFoundPoints(nullable:true, min:0)
+        observationTestTurnpointFalsePoints(nullable:true, min:0)
+        increaseFactor(nullable:true, min:0)
+        printPointsGeneral(nullable:true)
+        printPointsObservationTest(nullable:true)
+        contestPrintObservationDetails(nullable:true)
+        printPointsLandingField(nullable:true)
+        landingFieldImageName(nullable:true)
+        printPointsTurnpointSign(nullable:true)
+        printPointsEnrouteCanvas(nullable:true)
 	}
 
 	String GetPrintContestTitle()
@@ -276,132 +316,198 @@ class ResultClass
 		return "${getMsg(msgID)} - ${name}"
 	}
 	
-	boolean IsPlanningTestRun()
+	boolean IsPlanningTestRun(Task taskInstance)
 	{
-		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-				if (taskclass_instance.resultclass == this) {
-					if (taskclass_instance.planningTestRun) {
-						return true
-					}
-				}
-			}
-		}
-		return false
+		TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+		return taskclass_instance.planningTestRun
 	}
 	
-	boolean IsFlightTestRun()
-	{
-		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-				if (taskclass_instance.resultclass == this) {
-					if (taskclass_instance.flightTestRun) {
-						return true
-					}
-				}
-			}
-		}
-		return false
-	}
-	
-	boolean IsObservationTestRun()
-	{
-		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-				if (taskclass_instance.resultclass == this) {
-					if (taskclass_instance.observationTestRun) {
-						return true
-					}
-				}
-			}
-		}
-		return false
-	}
-	
-	boolean IsLandingTestRun()
-	{
-		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-				if (taskclass_instance.resultclass == this) {
-					if (taskclass_instance.landingTestRun) {
-						return true
-					}
-				}
-			}
-		}
-		return false
-	}
-	
-    boolean IsLandingTest1Run()
+    boolean IsPlanningTestRun()
     {
         for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-                if (taskclass_instance.resultclass == this) {
-                    if (taskclass_instance.landingTest1Run) {
-                        return true
-                    }
-                }
+            if (IsPlanningTestRun(task_instance)) {
+                return true
             }
         }
         return false
+    }
+    
+    boolean IsFlightTestRun(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.flightTestRun
+    }
+    
+    boolean IsFlightTestRun()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsFlightTestRun(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsObservationTestRun(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.observationTestRun
+    }
+    
+    boolean IsObservationTestRun()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsObservationTestRun(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsObservationTestTurnpointRun(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.observationTestTurnpointRun
+    }
+    
+    boolean IsObservationTestTurnpointRun()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsObservationTestRun(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsObservationTestEnroutePhotoRun(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.observationTestEnroutePhotoRun
+    }
+    
+    boolean IsObservationTestEnroutePhotoRun()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsObservationTestRun(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsObservationTestEnrouteCanvasRun(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.observationTestEnrouteCanvasRun
+    }
+    
+    boolean IsObservationTestEnrouteCanvasRun()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsObservationTestRun(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsLandingTestRun(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.landingTestRun
+    }
+    
+    boolean IsLandingTestRun()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsLandingTestRun(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsLandingTest1Run(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.landingTest1Run
+    }
+    
+    boolean IsLandingTest1Run()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsLandingTest1Run(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsLandingTest2Run(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.landingTest2Run
     }
     
     boolean IsLandingTest2Run()
     {
         for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-                if (taskclass_instance.resultclass == this) {
-                    if (taskclass_instance.landingTest2Run) {
-                        return true
-                    }
-                }
+            if (IsLandingTest2Run(task_instance)) {
+                return true
             }
         }
         return false
+    }
+    
+    boolean IsLandingTest3Run(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.landingTest3Run
     }
     
     boolean IsLandingTest3Run()
     {
         for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-                if (taskclass_instance.resultclass == this) {
-                    if (taskclass_instance.landingTest3Run) {
-                        return true
-                    }
-                }
+            if (IsLandingTest3Run(task_instance)) {
+                return true
             }
         }
         return false
+    }
+    
+    boolean IsLandingTest4Run(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.landingTest4Run
     }
     
     boolean IsLandingTest4Run()
     {
         for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-            for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-                if (taskclass_instance.resultclass == this) {
-                    if (taskclass_instance.landingTest4Run) {
-                        return true
-                    }
-                }
+            if (IsLandingTest4Run(task_instance)) {
+                return true
             }
         }
         return false
     }
     
-	boolean IsSpecialTestRun()
-	{
-		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
-			for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-				if (taskclass_instance.resultclass == this) {
-					if (taskclass_instance.specialTestRun) {
-						return true
-					}
-				}
-			}
-		}
-		return false
-	}
-	
+    boolean IsSpecialTestRun(Task taskInstance)
+    {
+        TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(taskInstance,this,[sort:"id"])
+        return taskclass_instance.specialTestRun
+    }
+    
+    boolean IsSpecialTestRun()
+    {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+            if (IsSpecialTestRun(task_instance)) {
+                return true
+            }
+        }
+        return false
+    }
+    
 	Map GetTeamResultSettings()
 	{
 		Map ret = [:]
@@ -434,8 +540,12 @@ class ResultClass
 		name = resultClassInstance.name
         shortName = resultClassInstance.shortName
 		contestTitle = resultClassInstance.contestTitle
+        
 		contestRule = resultClassInstance.contestRule
+        
 		precisionFlying = resultClassInstance.precisionFlying
+        increaseFactor = resultClassInstance.increaseFactor
+        landingFieldImageName = resultClassInstance.landingFieldImageName
         printLandingCalculatorValues = resultClassInstance.printLandingCalculatorValues
 		
 		planningTestDirectionCorrectGrad = resultClassInstance.planningTestDirectionCorrectGrad 
@@ -445,7 +555,8 @@ class ResultClass
 		planningTestMaxPoints = resultClassInstance.planningTestMaxPoints
 		planningTestPlanTooLatePoints = resultClassInstance.planningTestPlanTooLatePoints
 		planningTestExitRoomTooLatePoints = resultClassInstance.planningTestExitRoomTooLatePoints
-		
+        planningTestForbiddenCalculatorsPoints = resultClassInstance.planningTestForbiddenCalculatorsPoints
+        
 		flightTestTakeoffMissedPoints = resultClassInstance.flightTestTakeoffMissedPoints
 		flightTestTakeoffCorrectSecond = resultClassInstance.flightTestTakeoffCorrectSecond
 		flightTestTakeoffCheckSeconds = resultClassInstance.flightTestTakeoffCheckSeconds
@@ -466,7 +577,17 @@ class ResultClass
 		flightTestFalseEnvelopeOpenedPoints = resultClassInstance.flightTestFalseEnvelopeOpenedPoints
 		flightTestSafetyEnvelopeOpenedPoints = resultClassInstance.flightTestSafetyEnvelopeOpenedPoints
 		flightTestFrequencyNotMonitoredPoints = resultClassInstance.flightTestFrequencyNotMonitoredPoints
+        flightTestForbiddenEquipmentPoints = resultClassInstance.flightTestForbiddenEquipmentPoints
 
+        observationTestEnrouteValueUnit = resultClassInstance.observationTestEnrouteValueUnit
+        observationTestEnrouteCorrectValue = resultClassInstance.observationTestEnrouteCorrectValue
+        observationTestEnrouteInexactValue = resultClassInstance.observationTestEnrouteInexactValue
+        observationTestEnrouteInexactPoints = resultClassInstance.observationTestEnrouteInexactPoints
+        observationTestEnrouteNotFoundPoints = resultClassInstance.observationTestEnrouteNotFoundPoints
+        observationTestEnrouteFalsePoints = resultClassInstance.observationTestEnrouteFalsePoints
+        observationTestTurnpointNotFoundPoints = resultClassInstance.observationTestTurnpointNotFoundPoints
+        observationTestTurnpointFalsePoints = resultClassInstance.observationTestTurnpointFalsePoints
+                
 		landingTest1MaxPoints = resultClassInstance.landingTest1MaxPoints
 		landingTest1NoLandingPoints = resultClassInstance.landingTest1NoLandingPoints
 		landingTest1OutsideLandingPoints = resultClassInstance.landingTest1OutsideLandingPoints

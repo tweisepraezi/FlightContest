@@ -48,7 +48,7 @@ class DemoContestCurvedService
 		fcService.importCrewList(contest,"C:\\Program Files (x86)\\Flight Contest\\samples\\FC-CrewList-Test.xls",false) // false - mit Start-Nr. 13
 		
 		// Task Curved
-		Map task_curved = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
+		Map task_curved = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_curved = fcService.putPlanningTest(task_curved,"")
 		Map planningtesttask_curved = fcService.putPlanningTestTask(planningtest_curved,"",route_curved,0,0)
 		fcService.putplanningtesttaskTask(task_curved,planningtesttask_curved)
@@ -58,7 +58,7 @@ class DemoContestCurvedService
 		fcService.runcalculatetimetableTask(task_curved)
 		
 		// Task Normal
-		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
+		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_normal = fcService.putPlanningTest(task_normal,"")
 		Map planningtesttask_normal = fcService.putPlanningTestTask(planningtest_normal,"",route_normal,0,0)
 		fcService.putplanningtesttaskTask(task_normal,planningtesttask_normal)
@@ -68,7 +68,7 @@ class DemoContestCurvedService
 		fcService.runcalculatetimetableTask(task_normal)
 		
 		// Task Curved + Wind
-		Map task_curved_wind = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($WIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
+		Map task_curved_wind = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($WIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_curved_wind = fcService.putPlanningTest(task_curved_wind,"")
 		Map planningtesttask_curved_wind = fcService.putPlanningTestTask(planningtest_curved_wind,"",route_curved,WIND_DIRECTION,WIND_SPEED)
 		fcService.putplanningtesttaskTask(task_curved_wind,planningtesttask_curved_wind)
@@ -78,7 +78,7 @@ class DemoContestCurvedService
 		fcService.runcalculatetimetableTask(task_curved_wind)
 		
 		// Task Normal + Wind
-		Map task_normal_wind = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($WIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false)
+		Map task_normal_wind = fcService.putTask(contest,"$ROUTE_NAME_NORMAL ($WIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
 		Map planningtest_normal_wind = fcService.putPlanningTest(task_normal_wind,"")
 		Map planningtesttask_normal_wind = fcService.putPlanningTestTask(planningtest_normal_wind,"",route_normal,WIND_DIRECTION,WIND_SPEED)
 		fcService.putplanningtesttaskTask(task_normal_wind,planningtesttask_normal_wind)
@@ -201,27 +201,29 @@ class DemoContestCurvedService
 	
 	List testCoordRoute(String routeName) {
 		List l
+        String N = CoordPresentation.NORTH
+        String E = CoordPresentation.EAST
 		if (routeName == ROUTE_NAME_CURVED) {
 			l = [
-				[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:0,             measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
-				[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
-				[mark:"CP", type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.6000000185, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.2,planProcedureTurn:false],
-				[mark:"CP1",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:185.1971440349,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.4,planProcedureTurn:true],
-				[mark:"CP2",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:277.7942879958,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.6,planProcedureTurn:false],
-				[mark:"CP3",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:370.3914320122,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.8,planProcedureTurn:false],
-				[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:462.9914320308,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:true],
-				[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:0,             measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"CP", type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.6000000185, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.2,planProcedureTurn:false],
+				[mark:"CP1",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:185.1971440349,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.4,planProcedureTurn:true],
+				[mark:"CP2",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:277.7942879958,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.6,planProcedureTurn:false],
+				[mark:"CP3",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:370.3914320122,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0.8,planProcedureTurn:false],
+				[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:462.9914320308,measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:true],
+				[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
 			]
 		} else if (routeName == ROUTE_NAME_NORMAL) {
 			l = [
-				[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:0,             measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
-				[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
-				[mark:"CP", type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.6000000185, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
-				[mark:"CP1",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:92.5971440164, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:true],
-				[mark:"CP2",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:92.5971439609, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
-				[mark:"CP3",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:92.5971440164, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
-				[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:92.6000000185, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:true],
-				[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:0,             measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"CP", type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,gatewidth2:1.0,coordTrueTrack:0,  coordMeasureDistance:92.6000000185, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"CP1",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:92.5971440164, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:true],
+				[mark:"CP2",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:92.5971439609, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"CP3",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:90, coordMeasureDistance:92.5971440164, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
+				[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:92.6000000185, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:true],
+				[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  gatewidth2:1.0,coordTrueTrack:180,coordMeasureDistance:92.5999999630, measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,  planProcedureTurn:false],
 			]
 		}
 		return l
@@ -341,52 +343,54 @@ class DemoContestCurvedService
 	
 	List testCoordResult60(String routeName, boolean withWind) {
 		List l
+        String N = CoordPresentation.NORTH
+        String E = CoordPresentation.EAST
 		if (routeName == ROUTE_NAME_CURVED) {
 			if (!withWind) {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
-					[mark:"CP", type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:00"],
-					[mark:"CP1",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:30:00"],
-					[mark:"CP2",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
-					[mark:"CP3",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:50:00"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:00:00"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:10:00"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
+					[mark:"CP", type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:00"],
+					[mark:"CP1",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:30:00"],
+					[mark:"CP2",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
+					[mark:"CP3",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:50:00"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:00:00"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:10:00"],
 				]
 			} else {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
-					[mark:"CP", type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:20"],
-					[mark:"CP1",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:28:20"],
-					[mark:"CP2",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:36:20"],
-					[mark:"CP3",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:44:20"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:54:40"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:04:40"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
+					[mark:"CP", type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:20"],
+					[mark:"CP1",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:28:20"],
+					[mark:"CP2",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:36:20"],
+					[mark:"CP3",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:44:20"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:54:40"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:04:40"],
 				]
 			}
 		} else if (routeName == ROUTE_NAME_NORMAL) {
 			if (!withWind) {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
-					[mark:"CP", type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:00"],
-					[mark:"CP1",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:31:00"],
-					[mark:"CP2",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:41:00"],
-					[mark:"CP3",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:51:00"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:02:00"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:12:00"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
+					[mark:"CP", type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:00"],
+					[mark:"CP1",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:31:00"],
+					[mark:"CP2",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:41:00"],
+					[mark:"CP3",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:51:00"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:02:00"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:12:00"],
 				]
 			} else {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
-					[mark:"CP", type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:20"],
-					[mark:"CP1",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:29:20"],
-					[mark:"CP2",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:37:20"],
-					[mark:"CP3",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:45:20"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"10:56:40"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:06:40"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:10:00"],
+					[mark:"CP", type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:20:20"],
+					[mark:"CP1",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:29:20"],
+					[mark:"CP2",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:37:20"],
+					[mark:"CP3",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"10:45:20"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"10:56:40"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:06:40"],
 				]
 			}
 		}
@@ -453,52 +457,54 @@ class DemoContestCurvedService
 	
 	List testCoordResult90(String routeName, boolean withWind) {
 		List l
+        String N = CoordPresentation.NORTH
+        String E = CoordPresentation.EAST
 		if (routeName == ROUTE_NAME_CURVED) {
 			if (!withWind) {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
-					[mark:"CP", type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:40"],
-					[mark:"CP1",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:53:20"],
-					[mark:"CP2",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:00:00"],
-					[mark:"CP3",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:06:40"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:13:20"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:23:20"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
+					[mark:"CP", type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:40"],
+					[mark:"CP1",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:53:20"],
+					[mark:"CP2",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:00:00"],
+					[mark:"CP3",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:06:40"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:13:20"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:23:20"],
 				]
 			} else {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
-					[mark:"CP", type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:46"],
-					[mark:"CP1",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:52:29"],
-					[mark:"CP2",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:58:12"],
-					[mark:"CP3",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:03:55"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:41"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:20:41"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
+					[mark:"CP", type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:46"],
+					[mark:"CP1",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"10:52:29"],
+					[mark:"CP2",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:58:12"],
+					[mark:"CP3",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:03:55"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:41"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:20:41"],
 				]
 			}
 		} else if (routeName == ROUTE_NAME_NORMAL) {
 			if (!withWind) {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
-					[mark:"CP", type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:40"],
-					[mark:"CP1",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:54:20"],
-					[mark:"CP2",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:01:00"],
-					[mark:"CP3",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:07:40"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:15:20"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:25:20"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
+					[mark:"CP", type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:40"],
+					[mark:"CP1",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:54:20"],
+					[mark:"CP2",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:01:00"],
+					[mark:"CP3",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:07:40"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:15:20"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:25:20"],
 				]
 			} else {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
-					[mark:"CP", type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:46"],
-					[mark:"CP1",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:53:29"],
-					[mark:"CP2",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:59:12"],
-					[mark:"CP3",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:04:55"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:12:41"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:22:41"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"10:30:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:40:00"],
+					[mark:"CP", type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"10:46:46"],
+					[mark:"CP1",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"10:53:29"],
+					[mark:"CP2",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"10:59:12"],
+					[mark:"CP3",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:04:55"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:12:41"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:22:41"],
 				]
 			}
 		}
@@ -565,52 +571,54 @@ class DemoContestCurvedService
 	
 	List testCoordResult120(String routeName, boolean withWind) {
 		List l
+        String N = CoordPresentation.NORTH
+        String E = CoordPresentation.EAST
 		if (routeName == ROUTE_NAME_CURVED) {
 			if (!withWind) {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
-					[mark:"CP", type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:00"],
-					[mark:"CP1",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"11:20:00"],
-					[mark:"CP2",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:25:00"],
-					[mark:"CP3",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:30:00"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:35:00"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:45:00"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
+					[mark:"CP", type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:00"],
+					[mark:"CP1",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"11:20:00"],
+					[mark:"CP2",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:25:00"],
+					[mark:"CP3",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:30:00"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:35:00"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:45:00"],
 				]
 			} else {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
-					[mark:"CP", type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:02"],
-					[mark:"CP1",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"11:19:29"],
-					[mark:"CP2",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:23:56"],
-					[mark:"CP3",type:CoordType.SECRET,latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:28:23"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:33:25"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:43:25"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
+					[mark:"CP", type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:02"],
+					[mark:"CP1",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:false,planCpTime:"11:19:29"],
+					[mark:"CP2",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:23:56"],
+					[mark:"CP3",type:CoordType.SECRET,latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:28:23"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:33:25"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:43:25"],
 				]
 			}
 		} else if (routeName == ROUTE_NAME_NORMAL) {
 			if (!withWind) {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
-					[mark:"CP", type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:00"],
-					[mark:"CP1",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"11:21:00"],
-					[mark:"CP2",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:26:00"],
-					[mark:"CP3",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:31:00"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:37:00"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:47:00"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
+					[mark:"CP", type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:00"],
+					[mark:"CP1",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"11:21:00"],
+					[mark:"CP2",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:26:00"],
+					[mark:"CP3",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:31:00"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:37:00"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:47:00"],
 				]
 			} else {
 				l = [
-					[mark:"T/O",type:CoordType.TO,    latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
-					[mark:"SP", type:CoordType.SP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
-					[mark:"CP", type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:02"],
-					[mark:"CP1",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"11:20:29"],
-					[mark:"CP2",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:24:56"],
-					[mark:"CP3",type:CoordType.TP,    latDirection:'N',latGrad:0,latMinute:27.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:29:23"],
-					[mark:"FP", type:CoordType.FP,    latDirection:'N',latGrad:0,latMinute:17.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:35:25"],
-					[mark:"LDG",type:CoordType.LDG,   latDirection:'N',latGrad:0,latMinute: 7.0, lonDirection:'E',lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:45:25"],
+					[mark:"T/O",type:CoordType.TO,    latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:00:00"],
+					[mark:"SP", type:CoordType.SP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:10:00"],
+					[mark:"CP", type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:45.0, altitude:500,planProcedureTurn:false,planCpTime:"11:15:02"],
+					[mark:"CP1",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:9,  lonMinute:55.0, altitude:500,planProcedureTurn:true, planCpTime:"11:20:29"],
+					[mark:"CP2",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute: 5.0, altitude:500,planProcedureTurn:false,planCpTime:"11:24:56"],
+					[mark:"CP3",type:CoordType.TP,    latDirection:N,latGrad:0,latMinute:27.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:false,planCpTime:"11:29:23"],
+					[mark:"FP", type:CoordType.FP,    latDirection:N,latGrad:0,latMinute:17.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:500,planProcedureTurn:true, planCpTime:"11:35:25"],
+					[mark:"LDG",type:CoordType.LDG,   latDirection:N,latGrad:0,latMinute: 7.0, lonDirection:E,lonGrad:10, lonMinute:15.0, altitude:0,  planProcedureTurn:false,planCpTime:"11:45:25"],
 				]
 			}
 		}

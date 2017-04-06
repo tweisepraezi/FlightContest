@@ -1,22 +1,23 @@
 enum CoordType 
 {
-	UNKNOWN ('Unknown', '',     0.0, '',        '',        'fc.coordtype.unknown'),
-	TO      ('T/O',     'T/O',  0.0, '',        '',        'fc.coordtype.to'     ),
-	SP      ('SP',      'SP',   0.0, '',        '',        'fc.coordtype.sp'     ),
-    SECRET  ('Secret',  'CP',   2.0, '$secret', '$curved', 'fc.coordtype.secret' ),
-	TP      ('TP',      'CP',   0.0, '',        '',        'fc.coordtype.tp'     ),
-	FP      ('FP',      'FP',   0.0, '',        '',        'fc.coordtype.fp'     ),
-	LDG     ('LDG',     'LDG',  0.0, '',        '',        'fc.coordtype.ldg'    ),
-	iFP     ('iFPi',    'iFP',  0.0, '',        '',        'fc.coordtype.ifp'    ),
-	iLDG    ('iLDGi',   'iLDG', 0.0, '',        '',        'fc.coordtype.ildg'   ),
-	iTO     ('iT/Oi',   'iT/O', 0.0, '',        '',        'fc.coordtype.ito'    ),
-	iSP     ('iSPi',    'iSP',  0.0, '',        '',        'fc.coordtype.isp'    )
+	UNKNOWN ('Unknown', '-',    '',     0.0, '',        '',        'fc.coordtype.unknown'),
+	TO      ('T/O',     'TO',   'T/O',  0.0, '',        '',        'fc.coordtype.to'     ),
+	SP      ('SP',      'SP',   'SP',   0.0, '',        '',        'fc.coordtype.sp'     ),
+    SECRET  ('Secret',  'SC',   'CP',   2.0, '$secret', '$curved', 'fc.coordtype.secret' ),
+	TP      ('TP',      'TP',   'CP',   0.0, '',        '',        'fc.coordtype.tp'     ),
+	FP      ('FP',      'FP',   'FP',   0.0, '',        '',        'fc.coordtype.fp'     ),
+	LDG     ('LDG',     'LDG',  'LDG',  0.0, '',        '',        'fc.coordtype.ldg'    ),
+	iFP     ('iFPi',    'iFP',  'iFP',  0.0, '',        '',        'fc.coordtype.ifp'    ),
+	iLDG    ('iLDGi',   'iLDG', 'iLDG', 0.0, '',        '',        'fc.coordtype.ildg'   ),
+	iTO     ('iT/Oi',   'iTO',  'iT/O', 0.0, '',        '',        'fc.coordtype.ito'    ),
+	iSP     ('iSPi',    'iSP',  'iSP',  0.0, '',        '',        'fc.coordtype.isp'    )
 
 	// "$title," muss eindeutig sein, da Werte in Task.disabledCheckPoints gespeichert werden! 
 	 
-	CoordType(String title, String aflosMark, Float aflosGateWidth, String secretMark,  String secretMark2, String code)
+	CoordType(String title, String export, String aflosMark, Float aflosGateWidth, String secretMark,  String secretMark2, String code)
 	{
 		this.title = title
+        this.export = export
 		this.aflosMark = aflosMark
 		this.aflosGateWidth = aflosGateWidth
 		this.secretMark = secretMark
@@ -25,6 +26,7 @@ enum CoordType
 	}
 	
 	final String title
+    final String export 
 	final String aflosMark
 	final Float aflosGateWidth
 	final String secretMark
@@ -53,7 +55,7 @@ enum CoordType
 		return null
 	}
 	
-	List ListNextValues(existiFP)
+	List ListNextValues(boolean existiFP)
 	{
 		List l = []
         switch(this) {
@@ -238,6 +240,87 @@ enum CoordType
             case CoordType.iTO:
             case CoordType.LDG:
             case CoordType.iLDG:
+                return true
+        }
+        return false
+    }
+    
+    boolean IsEnrouteStartCoord()
+    {
+        switch(this) {
+            case CoordType.SP:
+            case CoordType.iSP:
+                return true
+        }
+        return false
+
+    }
+    
+    boolean IsEnrouteFinishCoord()
+    {
+        switch(this) {
+            case CoordType.FP:
+            case CoordType.iFP:
+                return true
+        }
+        return false
+
+    }
+    
+    boolean IsTurnpointSignCoord()
+    {
+        switch(this) {
+            case CoordType.SP:
+            case CoordType.iSP:
+            case CoordType.TP:
+            case CoordType.FP:
+            case CoordType.iFP:
+                return true
+        }
+        return false
+
+    }
+    
+    boolean IsTurnpointSignNextCoord(boolean existiFP)
+    {
+        for (CoordType coord_type in ListNextValues(existiFP)) {
+            if (coord_type.IsTurnpointSignCoord()) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsEnrouteSignCoord()
+    {
+        switch(this) {
+            case CoordType.SP:
+            case CoordType.iSP:
+            case CoordType.TP:
+                return true
+        }
+        return false
+
+    }
+    
+    boolean IsEnrouteCalculateSignCoord()
+    {
+        switch(this) {
+            case CoordType.SP:
+            case CoordType.iSP:
+            case CoordType.TP:
+            case CoordType.SECRET:
+                return true
+        }
+        return false
+
+    }
+    
+    boolean IsDeleteAllowedCoord()
+    {
+        switch(this) {
+            case CoordType.TP:
+            case CoordType.SECRET:
                 return true
         }
         return false

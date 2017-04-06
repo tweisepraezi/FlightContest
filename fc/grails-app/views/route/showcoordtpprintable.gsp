@@ -50,7 +50,7 @@
         <g:form>
             <table class="routetpcoords">
                 <thead>
-                    <tr>
+                    <tr class="title">
                         <th>${message(code:'fc.tpname')}</th>
                         <th>${message(code:'fc.coordroute.list')}</th>
                     </tr>
@@ -58,10 +58,10 @@
                 <tbody>
                     <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
                         <g:if test="${coordroute_instance.type != CoordType.SECRET}">
-                         <tr>
-                             <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
-                             <td class="coords">${coordroute_instance.namePrintable(false,false)}</td>
-                         </tr>
+                            <tr class="value">
+                                <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
+                                <td class="coords">${coordroute_instance.namePrintable(false,false)}</td>
+                            </tr>
                         </g:if>
                     </g:each>
                 </tbody>

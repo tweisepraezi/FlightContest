@@ -41,7 +41,7 @@
 	                            <g:else>
 	                                <td><g:checkBox name="${crew_id}" value="${false}" /> ${crew_instance.startNum}</td>
 	                            </g:else>
-                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:if test="${crew_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[crew_instance.GetIncreaseFactor()])})</g:if></td>
                                 <td>${fieldValue(bean:crew_instance, field:'email')}</td>
                                 <g:if test="${crew_instance.team}">                          
                                     <td>
@@ -96,13 +96,13 @@
                         <tr>
                             <g:if test="${resultClasses}">
                                 <td colspan="7">
-                                    <g:select from="${CrewCommands.values()}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="8"/>
+                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="8"/>
                                     <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="9" />
                                 </td>
                             </g:if>
                             <g:else>
                                 <td colspan="6">
-                                    <g:select from="${CrewCommands.values()}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="8"/>
+                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="8"/>
                                     <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="9" />
                                 </td>
                             </g:else>

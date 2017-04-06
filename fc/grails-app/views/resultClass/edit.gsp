@@ -37,7 +37,7 @@
 	                            <p>
 	                                <label>${message(code:'fc.contestrule')}*:</label>
 	                                <br/>
-	                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${resultclassInstance.contestRule}" tabIndex="4"/>
+	                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${resultclassInstance.contestRule}" tabIndex="4"/>
 	                            </p>
 	                        </g:if>
                         </fieldset>

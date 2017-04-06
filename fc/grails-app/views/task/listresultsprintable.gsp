@@ -69,6 +69,7 @@
 	                <g:set var="taskclass_instance" value="${taskInstance.GetTaskClass(resultclassInstance)}"></g:set>
 		            <g:set var="results_columns" value="${taskclass_instance.GetResultColumns()}"></g:set>
 		            <g:set var="landing_result_any_columns" value="${taskclass_instance.GetLandingResultAnyColumns()}"></g:set>
+                    <g:set var="observation_result_any_columns" value="${taskclass_instance.GetObservationResultAnyColumns()}"></g:set>
 	                <thead>
 	                    <tr>
 	    	                <th>${message(code:'fc.test.results.position.short')}</th>
@@ -92,7 +93,12 @@
 	                            <th>${message(code:'fc.flightresults.flight.short')}</th>
 		                    </g:if>
 		                    <g:if test="${taskclass_instance.observationTestRun}">
-		                        <th>${message(code:'fc.observationresults.observations.short')}</th>
+                                <g:if test="${observation_result_any_columns > 0}">
+                                    <th colspan="${observation_result_any_columns}">${message(code:'fc.observationresults.observations')}</th>
+                                </g:if>
+                                <g:else>
+    		                        <th>${message(code:'fc.observationresults.observations.short')}</th>
+                                </g:else>
 		                    </g:if>
 	                        <g:if test="${taskclass_instance.landingTestRun}">
 			                    <g:if test="${landing_result_any_columns > 0}">
@@ -105,11 +111,11 @@
 		                    <g:if test="${taskclass_instance.specialTestRun}">
 		                        <th>${message(code:'fc.specialresults.other.short')}</th>
 		                    </g:if>
-		                    <g:if test="${results_columns > 1}">
+		                    <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
 	                            <th>${message(code:'fc.test.results.summary')}</th>
 		                    </g:if>
 	                    </tr>
-	                    <g:if test="${landing_result_any_columns > 0}">
+	                    <g:if test="${landing_result_any_columns > 0 || observation_result_any_columns > 0}">
 		                    <tr>
 		                        <th/>
 		                        <th/>
@@ -132,24 +138,44 @@
                                 	<th/>
                                	</g:if>
                                 <g:if test="${taskclass_instance.observationTestRun}">
-                                	<th/>
+                                    <g:if test="${observation_result_any_columns > 0}">
+                                        <g:if test="${taskclass_instance.observationTestTurnpointRun}">
+                                            <th>${message(code:'fc.observationresults.turnpoint.short')}</th>
+                                        </g:if>
+                                        <g:if test="${taskclass_instance.observationTestEnroutePhotoRun}">
+                                            <th>${message(code:'fc.observationresults.enroutephoto.short')}</th>
+                                        </g:if>
+                                        <g:if test="${taskclass_instance.observationTestEnrouteCanvasRun}">
+                                            <th>${message(code:'fc.observationresults.enroutecanvas.short')}</th>
+                                        </g:if>
+                                    </g:if>
+                                    <g:else>
+                                        <th/>
+                                    </g:else>
                                 </g:if>
-                                <g:if test="${taskclass_instance.landingTest1Run}">
-                                    <th>${message(code:'fc.landingresults.landing1.short')}</th>
-                                </g:if>
-                                <g:if test="${taskclass_instance.landingTest2Run}">
-                                    <th>${message(code:'fc.landingresults.landing2.short')}</th>
-                                </g:if>
-                                <g:if test="${taskclass_instance.landingTest3Run}">
-                                    <th>${message(code:'fc.landingresults.landing3.short')}</th>
-                                </g:if>
-                                <g:if test="${taskclass_instance.landingTest4Run}">
-                                    <th>${message(code:'fc.landingresults.landing4.short')}</th>
+                                <g:if test="${taskclass_instance.landingTestRun}">
+                                    <g:if test="${landing_result_any_columns > 0}">
+		                                <g:if test="${taskclass_instance.landingTest1Run}">
+		                                    <th>${message(code:'fc.landingresults.landing1.short')}</th>
+		                                </g:if>
+		                                <g:if test="${taskclass_instance.landingTest2Run}">
+		                                    <th>${message(code:'fc.landingresults.landing2.short')}</th>
+		                                </g:if>
+		                                <g:if test="${taskclass_instance.landingTest3Run}">
+		                                    <th>${message(code:'fc.landingresults.landing3.short')}</th>
+		                                </g:if>
+		                                <g:if test="${taskclass_instance.landingTest4Run}">
+		                                    <th>${message(code:'fc.landingresults.landing4.short')}</th>
+		                                </g:if>
+		                            </g:if>
+		                            <g:else>
+                                        <th/>
+		                            </g:else>
                                 </g:if>
                                 <g:if test="${taskclass_instance.specialTestRun}">
                                 	<th/>
                                 </g:if>
-                                <g:if test="${results_columns > 1}">
+                                <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
                                 	<th/>
                                 </g:if>
                         	</tr>
@@ -206,8 +232,8 @@
 		                                <g:if test="${test_instance.IsSpecialTestRun()}">
 		                                	<td class="specialpenalties">${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                </g:if>
-		                                <g:if test="${results_columns > 1}">
-    	                                    <td class="taskpenalties">${test_instance.taskPenalties}<g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
+    	                                    <td class="taskpenalties">${test_instance.taskPenalties}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
     	                                </g:if>
 			                        </tr>
 			                    </g:if>
@@ -256,7 +282,7 @@
                             <g:if test="${taskInstance.IsSpecialTestRun()}">
                                 <th>${message(code:'fc.specialresults.other.short')}</th>
                             </g:if>
-                            <g:if test="${results_columns > 1}">
+                            <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
                               	<th>${message(code:'fc.test.results.summary')}</th>
                             </g:if>
                         </tr>
@@ -300,7 +326,7 @@
                                 <g:if test="${taskInstance.IsSpecialTestRun()}">
                                     <th/>
                                 </g:if>
-                                <g:if test="${results_columns > 1}">
+                                <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
                                    	<th/>
                                 </g:if>
 		                    </tr>
@@ -356,8 +382,8 @@
 				                     <g:if test="${test_instance.IsSpecialTestRun()}">
 				                         <td class="specialpenalties">${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                     </g:if>
-				                     <g:if test="${results_columns > 1}">
-		    	                         <td class="taskpenalties">${test_instance.taskPenalties}<g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                     <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
+		    	                         <td class="taskpenalties">${test_instance.taskPenalties}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
 		    	                     </g:if>
 		                         </tr>
 		                     </g:if> 

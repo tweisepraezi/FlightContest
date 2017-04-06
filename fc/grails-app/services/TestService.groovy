@@ -426,30 +426,30 @@ class TestService
         int error_num = 0
     
         // N
-        if (CoordPresentation.GetDirectionGradDecimalMinute(   0.0,true ) != [direction:'N',grad:0,minute:  0]) {error_num++; println "1-1"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(  10.5,true ) != [direction:'N',grad:10,minute:30]) {error_num++; println "1-2"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(  52.0,true ) != [direction:'N',grad:52,minute: 0]) {error_num++; println "1-3"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(  90.0,true ) != [direction:'N',grad:90,minute: 0]) {error_num++; println "1-4"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(   0.0,true ) != [direction:CoordPresentation.NORTH,grad:0,minute:  0]) {error_num++; println "1-1"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(  10.5,true ) != [direction:CoordPresentation.NORTH,grad:10,minute:30]) {error_num++; println "1-2"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(  52.0,true ) != [direction:CoordPresentation.NORTH,grad:52,minute: 0]) {error_num++; println "1-3"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(  90.0,true ) != [direction:CoordPresentation.NORTH,grad:90,minute: 0]) {error_num++; println "1-4"}
         
         // S
-        if (CoordPresentation.GetDirectionGradDecimalMinute( -10.5,true ) != [direction:'S',grad:10,minute:30]) {error_num++; println "2-1"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute( -52.0,true ) != [direction:'S',grad:52,minute: 0]) {error_num++; println "2-2"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute( -90.0,true ) != [direction:'S',grad:90,minute: 0]) {error_num++; println "2-3"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute( -10.5,true ) != [direction:CoordPresentation.SOUTH,grad:10,minute:30]) {error_num++; println "2-1"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute( -52.0,true ) != [direction:CoordPresentation.SOUTH,grad:52,minute: 0]) {error_num++; println "2-2"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute( -90.0,true ) != [direction:CoordPresentation.SOUTH,grad:90,minute: 0]) {error_num++; println "2-3"}
         
         // E
-        if (CoordPresentation.GetDirectionGradDecimalMinute(   0.0,false) != [direction:'E',grad:  0,minute: 0]) {error_num++; println "3-1"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(   1.0,false) != [direction:'E',grad:  1,minute: 0]) {error_num++; println "3-2"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(  16.0,false) != [direction:'E',grad: 16,minute: 0]) {error_num++; println "3-3"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(  16.5,false) != [direction:'E',grad: 16,minute:30]) {error_num++; println "3-4"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute( 179.0,false) != [direction:'E',grad:179,minute: 0]) {error_num++; println "3-5"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute( 180.0,false) != [direction:'E',grad:180,minute: 0]) {error_num++; println "3-6"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(   0.0,false) != [direction:CoordPresentation.EAST,grad:  0,minute: 0]) {error_num++; println "3-1"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(   1.0,false) != [direction:CoordPresentation.EAST,grad:  1,minute: 0]) {error_num++; println "3-2"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(  16.0,false) != [direction:CoordPresentation.EAST,grad: 16,minute: 0]) {error_num++; println "3-3"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(  16.5,false) != [direction:CoordPresentation.EAST,grad: 16,minute:30]) {error_num++; println "3-4"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute( 179.0,false) != [direction:CoordPresentation.EAST,grad:179,minute: 0]) {error_num++; println "3-5"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute( 180.0,false) != [direction:CoordPresentation.EAST,grad:180,minute: 0]) {error_num++; println "3-6"}
         
         // W
-        if (CoordPresentation.GetDirectionGradDecimalMinute(  -1.0,false) != [direction:'W',grad:  1,minute: 0]) {error_num++; println "4-1"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute( -16.0,false) != [direction:'W',grad: 16,minute: 0]) {error_num++; println "4-2"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute( -16.5,false) != [direction:'W',grad: 16,minute:30]) {error_num++; println "4-3"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(-179.0,false) != [direction:'W',grad:179,minute: 0]) {error_num++; println "4-4"}
-        if (CoordPresentation.GetDirectionGradDecimalMinute(-180.0,false) != [direction:'W',grad:180,minute: 0]) {error_num++; println "4-5"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(  -1.0,false) != [direction:CoordPresentation.WEST,grad:  1,minute: 0]) {error_num++; println "4-1"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute( -16.0,false) != [direction:CoordPresentation.WEST,grad: 16,minute: 0]) {error_num++; println "4-2"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute( -16.5,false) != [direction:CoordPresentation.WEST,grad: 16,minute:30]) {error_num++; println "4-3"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(-179.0,false) != [direction:CoordPresentation.WEST,grad:179,minute: 0]) {error_num++; println "4-4"}
+        if (CoordPresentation.GetDirectionGradDecimalMinute(-180.0,false) != [direction:CoordPresentation.WEST,grad:180,minute: 0]) {error_num++; println "4-5"}
         
         if (error_num) {
             printerror "$error_num tests failed."

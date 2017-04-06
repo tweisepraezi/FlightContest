@@ -215,7 +215,13 @@ class PlanningtaskResultsTagLib
             outln"""        <td>${attrs.t.GetPlanningTestExitRoomTooLatePoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
-        if (attrs.t.planningTestOtherPenalties > 0) {
+        if (attrs.t.planningTestForbiddenCalculators) {
+            outln"""    <tr>"""
+            outln"""        <td class="detailtitle">${message(code:'fc.planningtest.forbiddencalculators')}:</td>"""
+            outln"""        <td>${attrs.t.GetPlanningTestForbiddenCalculatorsPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
+        if (attrs.t.planningTestOtherPenalties != 0) {
             outln"""    <tr>"""
             outln"""        <td class="detailtitle">${message(code:'fc.planningtest.otherpenalties')}:</td>"""
             outln"""        <td>${attrs.t.planningTestOtherPenalties} ${message(code:'fc.points')}</td>"""
@@ -318,7 +324,12 @@ class PlanningtaskResultsTagLib
          	outln"""		<td>${message(code:'fc.planningtest.exitroomtolate')}: ${attrs.t.GetPlanningTestExitRoomTooLatePoints()} ${message(code:'fc.points')}</td>"""
         	outln"""	</tr>"""
         }
-        if (attrs.t.planningTestOtherPenalties > 0) {
+        if (attrs.t.planningTestForbiddenCalculators) {
+            outln"""    <tr class="exitroomtolate">"""
+            outln"""        <td>${message(code:'fc.planningtest.forbiddencalculators')}: ${attrs.t.GetPlanningTestForbiddenCalculatorsPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
+        if (attrs.t.planningTestOtherPenalties != 0) {
             outln"""	<tr class="otherpenalties">"""
             outln"""	    <td>${message(code:'fc.planningtest.otherpenalties')}: ${attrs.t.planningTestOtherPenalties} ${message(code:'fc.points')}</td>"""
             outln"""	</tr>"""
@@ -349,6 +360,14 @@ class PlanningtaskResultsTagLib
         }
         return """<a href="${link}/${testLegPlanningInstance.id}?name=${name}">${t}</a>"""
     }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def planningtaskTestScannedPrintable = { attrs, body ->
+        if (attrs.t.scannedPlanningTest) {
+            outln"""<br/>"""
+            outln"""<img class="scannedplanningtest" src="${createLink(controller:'test',action:'planningtaskformimage',params:[testid:attrs.t.id])}" />"""
+        }
+    } // def planningtaskTestScannedPrintable
     
 	// --------------------------------------------------------------------------------------------------------------------
 	private void outln(str)

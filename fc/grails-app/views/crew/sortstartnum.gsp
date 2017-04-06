@@ -12,12 +12,14 @@
                 <h2>${message(code:'fc.crew.sortstartnum')}</h2>
                 <div class="block" id="forms" >
                 	<g:form action="sortstartnumrun">
-                        <p>
-                            <div>
-                                <g:checkBox name="noStartnum13" value="${noStartnum13}" />
-                                <label>${message(code:'fc.crew.import.nostartnum13')}</label>
-                            </div>
-                        </p>
+                	    <g:if test="${contestInstance.unsuitableStartNum}">
+	                        <p>
+	                            <div>
+	                                <g:checkBox name="noUnsuitableStartNum" value="${noUnsuitableStartNum}" />
+	                                <label>${message(code:'fc.crew.import.nostartnum',args:[contestInstance.unsuitableStartNum])}</label>
+	                            </div>
+	                        </p>
+                        </g:if>
                     	<div>
 	    					<input type="submit" value="${message(code:'fc.crew.runcommand')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="1"/>
 		                    <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" tabIndex="2"/>

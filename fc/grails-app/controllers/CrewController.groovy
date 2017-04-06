@@ -28,7 +28,7 @@ class CrewController {
             def crew_list = Crew.findAllByContest(session.lastContest, [sort:'viewpos'])
 			def active_crew_list = Crew.findAllByContestAndDisabled(session.lastContest, false, [sort:'viewpos'])
 			fcService.printdone "last contest"
-            return [crewList:crew_list,activeCrewList:active_crew_list,resultClasses:session.lastContest.resultClasses]
+            return [crewList:crew_list,activeCrewList:active_crew_list,resultClasses:session.lastContest.resultClasses,contestInstance:session.lastContest]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -168,7 +168,7 @@ class CrewController {
 	}
 
 	def selectfilename = {
-		[noStartnum13:false]
+		[noUnsuitableStartNum:false,contestInstance:session.lastContest]
     }
 	
 	def importcrews = {
@@ -178,11 +178,11 @@ class CrewController {
 			fcService.printstart "Upload '$file_name'"
 			fcService.println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream" 
 			if (file_name.toLowerCase().endsWith('.xls')) {
-                boolean no_startnum_13 = params?.noStartnum13 == 'on'
+                boolean no_unsuitable_startnum = params?.noUnsuitableStartNum == 'on'
 				String uuid = UUID.randomUUID().toString()
 				String load_file_name = "CREWLIST-${uuid}-UPLOAD.xls"
 				file.transferTo(new File(load_file_name))
-		        def crews = fcService.importCrews(file_name, load_file_name, no_startnum_13, session.lastContest) 
+		        def crews = fcService.importCrews(file_name, load_file_name, no_unsuitable_startnum, session.lastContest) 
 		        if (crews.saved) {
 		            flash.message = crews.message
 					fcService.DeleteFile(load_file_name)
@@ -307,12 +307,12 @@ class CrewController {
     }
     
     def sortstartnum = {
-        [noStartnum13:false]
+        [noUnsuitableStartNum:false,contestInstance:session.lastContest]
     }
     
     def sortstartnumrun = {
-        boolean no_startnum_13 = params?.noStartnum13 == 'on'
-        def ret = fcService.sortStartNumCrews(session.lastContest,params,session,no_startnum_13)
+        boolean no_unsuitable_startnum = params?.noUnsuitableStartNum == 'on'
+        def ret = fcService.sortStartNumCrews(session.lastContest,params,session,no_unsuitable_startnum)
         flash.message = ret.message
         redirect(action:list)
     }
@@ -345,6 +345,14 @@ class CrewController {
                 break
             case CrewCommands.ENABLECONTESTCREWS.toString():
                 def ret = fcService.enableContestCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+            case CrewCommands.DISABLEINCREASECREWS.toString():
+                def ret = fcService.disableIncreaseCrews(session.lastContest,params,session)
+                flash.message = ret.message
+                break
+            case CrewCommands.ENABLEINCREASECREWS.toString():
+                def ret = fcService.enableIncreaseCrews(session.lastContest,params,session)
                 flash.message = ret.message
                 break
         }

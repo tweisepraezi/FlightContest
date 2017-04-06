@@ -45,4 +45,36 @@ class FlightTest
             return idName()
 		}
 	}
+    
+    boolean IsObservationSignUsed()
+    {
+        for (Test test_instance in Test.findAllByTask(task)) {
+            if (test_instance.IsObservationSignUsed()) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean CanObservationsAdd()
+    {
+        if (route.IsObservationSignOk()) {
+            if (!IsObservationSignUsed()) {
+                if (!Test.findByTaskAndObservationTestComplete(task,true)) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    boolean CanObservationsRemove()
+    {
+        if (IsObservationSignUsed()) {
+            if (!Test.findByTaskAndObservationTestComplete(task,true)) {
+                return true
+            }
+        }
+        return false
+    }
 }

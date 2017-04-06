@@ -12,6 +12,7 @@
                 <h2>${message(code:'fc.internal')}</h2>
                 <div class="block" id="forms" >
                     <g:form controller="contest">
+                        <p>Session timeout: ${session.maxInactiveInterval/60}min</p>
                         <table>
                             <tbody>
                                 <g:if test="${contestInstance}">

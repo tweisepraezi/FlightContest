@@ -1,9 +1,10 @@
+import java.math.BigDecimal;
 import java.util.Map;
 
 class Crew 
 {
 	String name
-    String mark = ""                          // UNUSED: mark, migriert nach Test.aflosStartNum (Integer), DB-2.10
+    String mark = ""                          // UNUSED: Crew.mark, migriert nach Test.aflosStartNum (Integer), DB-2.10
 	// String country = ""                    entfernt mit DB-2.0
 	Aircraft aircraft
 	Team team                                 // Team, DB-2.0
@@ -11,10 +12,12 @@ class Crew
     BigDecimal tas = 90
 
 	int viewpos = 0
+    Integer startNum = 0                      // DB-2.2
+    
 	boolean disabled = false
     Boolean disabledTeam = false              // DB-2.8
     Boolean disabledContest = false           // DB-2.9
-	Integer startNum = 0                      // DB-2.2
+    Boolean increaseEnabled = false           // DB-2.13 
     
     String uuid = UUID.randomUUID().toString()// DB-2.10
     String email = ""                         // DB-2.10
@@ -80,6 +83,9 @@ class Crew
         // DB-2.10 compatibility
         uuid(nullable:true)
         email(nullable:true)
+        
+        // DB-2.13 compatibility
+        increaseEnabled(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)
@@ -195,4 +201,20 @@ class Crew
         }
         return aflos_start_num
 	}
+    
+    Integer GetIncreaseFactor()
+    {
+        if (contest.resultClasses && contest.contestRuleForEachClass) {
+            if (resultclass) {
+                return resultclass.increaseFactor
+            }
+        }
+        return contest.increaseFactor
+    }
+    
+    boolean IsIncreaseEnabled()
+    {
+        return increaseEnabled && (GetIncreaseFactor() > 0)
+    }
+    
 }

@@ -21,8 +21,8 @@ class DemoContestOtherService
         Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","crew3.2.fc@localhost","Schweiz","","D-EAAG","","",70)
 
         // Tasks
-        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",false,false, true,false,false, false,true, true,false,false, false,false,false,false, false)
-        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",false,false, false,true,false, false,true, true,false,false, false,false,false,false, false)
+        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",false,false, true,false,false, false,true, true,false,false, false,false,false,false, false,false,false, false,false)
+        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",false,false, false,true,false, false,true, true,false,false, false,false,false,false, false,false,false, false,false)
 
         fcService.putsequenceTask(task1,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
         fcService.putsequenceTask(task2,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
@@ -110,18 +110,18 @@ class DemoContestOtherService
         Map crew32 = fcService.putCrew(contest,32,"Crew 3-2","crew3.2.fc@localhost","Schweiz","Class-3","D-EAAG","","",70)
 
         // Tasks
-        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
-        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
+        Map task1 = fcService.putTask(contest,"Task-1","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false,false,false, false,false)
+        Map task2 = fcService.putTask(contest,"Task-2","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false,false,false, false,false)
 
         // TaskClass properties
-        fcService.puttaskclassTask(task1,resultclass1,false,false, true,true,true, false,true, true,false,false, false,false,false,false)
-        fcService.puttaskclassTask(task1,resultclass2,false,false, true,true,true, false,true, true,false,false, false,false,false,false)
-        fcService.puttaskclassTask(task1,resultclass3,false,false, true,true,true, false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass1,false,false, true,true,true, false,true, true,false,false, false,false,false,false, false,false,false)
+        fcService.puttaskclassTask(task1,resultclass2,false,false, true,true,true, false,true, true,false,false, false,false,false,false, false,false,false)
+        fcService.puttaskclassTask(task1,resultclass3,false,false, true,true,true, false,true, true,false,false, false,false,false,false, false,false,false)
         
         // TaskClass properties
-        fcService.puttaskclassTask(task2,resultclass1,false,false, true,false,false, false,true, true,false,false, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass2,false,false, false,true,false, false,true, true,false,false, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass3,false,false, false,false,true, false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass1,false,false, true,false,false, false,true, true,false,false, false,false,false,false, false,false,false)
+        fcService.puttaskclassTask(task2,resultclass2,false,false, false,true,false, false,true, true,false,false, false,false,false,false, false,false,false)
+        fcService.puttaskclassTask(task2,resultclass3,false,false, false,false,true, false,true, true,false,false, false,false,false,false, false,false,false)
         
         fcService.putsequenceTask(task1,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
         fcService.putsequenceTask(task2,[crew11,crew12,crew13,crew21,crew22,crew31,crew32])
@@ -199,7 +199,7 @@ class DemoContestOtherService
             fcService.putCrew(contest,it,"Name-${it.toString()}","crew-${it.toString()}.fc@localhost","Deutschland","","D-${it.toString()}","C172","rot",110)
         }
         
-        Map task1 = fcService.putTask(contest,"","11:00",3,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
+        Map task1 = fcService.putTask(contest,"","11:00",3,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false,false,false, false,false)
         
         fcService.printdone ""
         
@@ -217,7 +217,7 @@ class DemoContestOtherService
             fcService.putCrew(contest,it,"Name-${it.toString()}","crew-${it.toString()}.fc@localhost","Deutschland","","D-${it.toString()}","C172","rot",110)
         }
         
-        Map task1 = fcService.putTask(contest,"","11:00",3,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false)
+        Map task1 = fcService.putTask(contest,"","11:00",3,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,false,false, false,false,false,false, false,false,false, false,false)
     
         fcService.printdone ""
         

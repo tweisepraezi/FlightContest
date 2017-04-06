@@ -1,17 +1,38 @@
+import java.awt.geom.Line2D;
 import java.util.Map;
 
 class RouteFileTools
 {
     final static String GPX_EXTENSION = ".gpx"
+    final static String KML_EXTENSION = ".kml"
+    final static String KMZ_EXTENSION = ".kmz"
     final static String REF_EXTENSION = ".ref"
     final static String TXT_EXTENSION = ".txt"
     
-    final static String ROUTE_EXTENSIONS = "${RouteFileTools.GPX_EXTENSION}, ${RouteFileTools.REF_EXTENSION}, ${RouteFileTools.TXT_EXTENSION}"
+    final static String ROUTE_EXTENSIONS = "${RouteFileTools.GPX_EXTENSION}, ${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}, ${RouteFileTools.REF_EXTENSION}, ${RouteFileTools.TXT_EXTENSION}"
     final static String FC_ROUTE_EXTENSIONS = "${RouteFileTools.GPX_EXTENSION}"
+    final static String TXT_EXTENSIONS = "${RouteFileTools.TXT_EXTENSION}"
     
     final static Float DEFAULT_GATEWIDTH_RUNWAY = 0.02f
     final static Float DEFAULT_GATEWIDTH_TP = 1.0f
-    final static Float DEFAULT_GATEWIDTH_SC = 2.0f
+    
+    final static String ALT = "Alt"
+    final static String GATE = "Gate"
+    final static String DURATION = "Duration"
+    final static String DIST = "Dist"
+    final static String TRACK = "Track"
+    final static String UNIT_mm = "mm"
+    final static String UNIT_m = "m"
+    final static String UNIT_ft = "ft"
+    final static String UNIT_NM = "NM"
+    final static String UNIT_min = "min"
+    final static String UNIT_GRAD = (char)176 // direction
+    final static String UNIT_TPcorrect = "yes"
+    final static String UNIT_TPincorrect = "no"
+    final static String UNIT_TPnotimecheck = "notime"
+    final static String UNIT_TPnogatecheck = "nogate"
+    final static String UNIT_TPnoplanningtest = "noplan"
+    final static String UNIT_TPendcurved = "endcurved"
     
     //--------------------------------------------------------------------------
     static Map ReadRouteFile(String fileExtension, Contest contestInstance, String routeFileName, String originalFileName, Map importParams)
@@ -22,6 +43,12 @@ class RouteFileTools
         switch (fileExtension) {
             case GPX_EXTENSION:
                 Map route_data = ReadGPXFile(contestInstance, routeFileName, originalFileName)
+                return create_route(contestInstance, route_data, importParams)
+            case KML_EXTENSION:
+                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, false)
+                return create_route(contestInstance, route_data, importParams)
+            case KMZ_EXTENSION:
+                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, true)
                 return create_route(contestInstance, route_data, importParams)
             case REF_EXTENSION:
                 Map route_data = ReadREFFile(contestInstance, routeFileName, originalFileName)
@@ -102,6 +129,88 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
+    private static Map ReadKMLFile(Contest contestInstance, String kmFileName, String originalFileName, boolean kmzFile)
+    // Return: gates     - List of gates (lat, lon, alt)
+    //         routename - Name of route
+    //         valid     - true, if valid route file format
+    //         errors    - <> ""
+    {
+        List gates = []
+        String route_name = ""
+        boolean valid_format = false
+        String read_errors = ""
+        
+        File km_file = new File(kmFileName)
+        def km_reader = null
+        if (kmzFile) {
+            def kmz_file = new java.util.zip.ZipFile(km_file)
+            kmz_file.entries().findAll { !it.directory }.each {
+                if (!km_reader) {
+                    km_reader = kmz_file.getInputStream(it)
+                }
+            }
+        } else {
+            km_reader = new FileReader(km_file)
+        }
+
+        try {
+            def kml = new XmlParser().parse(km_reader)
+            if (kml.Document.Placemark.LineString.coordinates) {
+                
+                route_name = kml.Document.Placemark.name.text()
+                if (route_name) {
+                    int num = 0
+                    while (Route.findByContestAndTitle(contestInstance, route_name)) {
+                        num++
+                        route_name = "${kml.Document.Placemark.name.text()} ($num)"
+                    }
+                }
+                
+                String coordinates = kml.Document.Placemark.LineString.coordinates.text()
+                BigDecimal last_latitude = null
+                BigDecimal last_longitude = null
+                def last_track = null
+                for (coordinate in coordinates.split(' ')) {
+                    valid_format = true
+                    
+                    List coord = coordinate.split(',')
+                    BigDecimal latitude = coord[1].toBigDecimal()
+                    BigDecimal longitude = coord[0].toBigDecimal()
+                    
+                    Map lat = CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)
+                    Map lon = CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)
+                    Integer alt = (coord[2].toBigDecimal() * GpxService.ftPerMeter).toInteger()
+                    
+                    def track = null
+                    if (last_latitude != null && last_longitude != null) {
+                        if ((latitude == last_latitude) && (longitude == last_longitude)) {
+                            track = last_track
+                        } else {
+                            Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
+                            track = leg.dir // FcMath.RoundGrad(leg.dir)
+                        }
+                    }
+                    
+                    Map gate = [lat:lat, lon:lon, alt:alt, track:track, next_track:null]
+                    gates += gate
+                    
+                    last_latitude = latitude
+                    last_longitude = longitude
+                    last_track = track
+                }
+                
+            }
+        } catch (Exception e) {
+            read_errors += e.getMessage()
+        }
+        if (!km_reader) {
+            km_reader.close()
+        }
+        
+        return [gates: gates, routename: route_name, valid: valid_format, errors: read_errors]
+    }
+    
+    //--------------------------------------------------------------------------
     private static Map ReadREFFile(Contest contestInstance, String refFileName, String originalFileName)
     // Return: gates     - List of gates (lat, lon, alt)
     //         routename - Name of route
@@ -151,7 +260,7 @@ class RouteFileTools
                         BigDecimal latitude_grad_math = latitude_grad.toBigDecimal()
                         String latidude_minute = latitude_str.substring(6,14)
                         BigDecimal latidude_minute_math = latidude_minute.toBigDecimal()
-                        boolean latitude_north = latitude_str.substring(0,1) == 'N'
+                        boolean latitude_north = latitude_str.substring(0,1) == CoordPresentation.NORTH
                         BigDecimal latitude = latitude_grad_math + (latidude_minute_math / 60)
                         if (!latitude_north) {
                             latitude *= -1
@@ -164,7 +273,7 @@ class RouteFileTools
                         BigDecimal longitude_grad_math = longitude_grad.toBigDecimal()
                         String longitude_minute = longitude_str.substring(6,14)
                         BigDecimal longitude_minute_math = longitude_minute.toBigDecimal()
-                        boolean longitude_east = longitude_str.substring(0,1) == 'E'
+                        boolean longitude_east = longitude_str.substring(0,1) == CoordPresentation.EAST
                         BigDecimal longitude = longitude_grad_math + (longitude_minute_math / 60)
                         if (!longitude_east) {
                             longitude *= -1
@@ -232,39 +341,69 @@ class RouteFileTools
             BigDecimal last_latitude = null
             BigDecimal last_longitude = null
             def last_track = null
+            int line_num = 0
             while (true) {
                 String line = txt_reader.readLine()
                 if (line == null) {
                     break
                 }
+                line_num++
                 if (line && !line.startsWith('#')) {
                     valid_format = true
-                    def line_values = line.split(',')
+                    String line1 = line 
+                    while (line1.contains('  ')) {
+                        line1 = line1.replaceAll('  ', ' ')
+                    }
+                    def line_values = line1.split(',')
                     if (line_values.size() == 3) {
+                        Map lat = [:]
+                        Map lon = [:]
+                        Map alt = [:]
+                        boolean invalid = false
+                        String s = ""
                         
-                        BigDecimal latitude = line_values[0].trim().toBigDecimal()
-                        BigDecimal longitude = line_values[1].trim().toBigDecimal()
-                        
-                        Map lat = CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)
-                        Map lon = CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)
-                        Integer alt = (line_values[2].trim().toBigDecimal() * GpxService.ftPerMeter).toInteger()
-                        
-                        def track = null
-                        if (last_latitude != null && last_longitude != null) {
-                            if ((latitude == last_latitude) && (longitude == last_longitude)) {
-                                track = last_track
-                            } else {
-                                Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
-                                track = leg.dir
-                            }
+                        s = line_values[0].trim()
+                        lat = contestInstance.coordPresentation.GetDirectionGradDecimalMinute(s,true,true)
+                        if (lat.invalid) {
+                            invalid = true
                         }
+                        s = line_values[1].trim()
+                        lon = contestInstance.coordPresentation.GetDirectionGradDecimalMinute(s,true,false)
+                        if (lon.invalid) {
+                            invalid = true
+                        }
+                        s = line_values[2].trim()
+                        alt = GetAltitude(s)
+                        if (alt.invalid) {
+                            invalid = true
+                        }
+
+                        if (!invalid) {
+                            BigDecimal latitude = CoordPresentation.GetDecimalGrad(lat)
+                            BigDecimal longitude = CoordPresentation.GetDecimalGrad(lon)
+                            
+                            def track = null
+                            if (last_latitude != null && last_longitude != null) {
+                                if ((latitude == last_latitude) && (longitude == last_longitude)) {
+                                    track = last_track
+                                } else {
+                                    Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
+                                    track = leg.dir
+                                }
+                            }
+                            
+                            Map gate = [lat:lat, lon:lon, alt:alt.alt, track:track, next_track:null]
+                            gates += gate
                         
-                        Map gate = [lat:lat, lon:lon, alt:alt, track:track, next_track:null]
-                        gates += gate
-                        
-                        last_latitude = latitude
-                        last_longitude = longitude
-                        last_track = track
+                            last_latitude = latitude
+                            last_longitude = longitude
+                            last_track = track
+                        } else {
+                            if (read_errors) {
+                                read_errors += ", "
+                            }
+                            read_errors += line_num.toString()
+                        }
                     }
                 }
             }
@@ -275,6 +414,31 @@ class RouteFileTools
         txt_reader.close()
         
         return [gates: gates, routename: route_name, valid: valid_format, errors: read_errors]
+    }
+    
+    //--------------------------------------------------------------------------
+    private static Map GetAltitude(String altStr)
+    {
+        Map ret = [invalid:true, alt:0]
+        
+        if (altStr.startsWith(ALT) && (altStr.endsWith(UNIT_ft) || altStr.endsWith(UNIT_m))) {
+            String s = altStr.substring(ALT.size()).trim()
+            if (s.endsWith(UNIT_ft)) {
+                s = s.substring(0,s.size()-UNIT_ft.size())
+                if (s.isInteger()) {
+                    ret.alt = s.toInteger()
+                    ret.invalid = false
+                }
+            } else if (s.endsWith(UNIT_m)) {
+                s = s.substring(0,s.size()-UNIT_m.size())
+                if (s.isBigDecimal()) {
+                    ret.alt = (s.toBigDecimal() * GpxService.ftPerMeter).toInteger()
+                    ret.invalid = false
+                }
+            }
+        }
+        
+        return ret
     }
     
     //--------------------------------------------------------------------------
@@ -301,8 +465,8 @@ class RouteFileTools
         
         String read_errors = ""
         int gate_pos = 0
-        int tp_pos = 1
-        int sc_pos = 1
+        int tp_num = 1
+        int sc_num = 1
         
         int to_pos = 0
         if (importParams.firstcoordto) {
@@ -373,6 +537,22 @@ class RouteFileTools
         route_instance.contest = contestInstance
         route_instance.idTitle = Route.countByContest(contestInstance) + 1
         route_instance.title = routeData.routename
+        route_instance.turnpointRoute = contestInstance.turnpointRule.GetTurnpointRoute()
+        route_instance.turnpointMapMeasurement = contestInstance.turnpointMapMeasurement
+        if (route_instance.turnpointRoute == TurnpointRoute.Unassigned) {
+            route_instance.turnpointRoute = TurnpointRoute.None
+            route_instance.turnpointMapMeasurement = false
+        }
+        route_instance.enroutePhotoRoute = EnrouteRoute.None
+        route_instance.enrouteCanvasRoute = EnrouteRoute.None
+        route_instance.enroutePhotoMeasurement = contestInstance.enroutePhotoRule.GetEnrouteMeasurement()
+        if (route_instance.enroutePhotoMeasurement == EnrouteMeasurement.Unassigned) {
+            route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
+        }
+        route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
+        if (route_instance.enrouteCanvasMeasurement == EnrouteMeasurement.Unassigned) {
+            route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
+        }
         if (!route_instance.save()) {
             return [gatenum: coord_num, valid: false, errors: "Could not save route ${routeData.routename}"]
         }
@@ -400,7 +580,7 @@ class RouteFileTools
             // SP
             } else if (gate_pos == to_pos + 1) {
                 coordroute_instance.type = CoordType.SP
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP // TODO: Gatewidth from rule
+                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
             // FP
             } else if (gate_pos == fp_pos) {
                 coordroute_instance.type = CoordType.FP
@@ -428,36 +608,36 @@ class RouteFileTools
             // Curved (TP, SC..., TP)
             } else if (importParams.curved && gate_pos == importParams.curvedstartpos ) {
                 coordroute_instance.type = CoordType.TP
-                coordroute_instance.titleNumber = tp_pos
+                coordroute_instance.titleNumber = tp_num
                 coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
-                tp_pos++
+                tp_num++
             } else if (importParams.curved && gate_pos == importParams.curvedendpos) {
                 coordroute_instance.type = CoordType.TP
-                coordroute_instance.titleNumber = tp_pos
+                coordroute_instance.titleNumber = tp_num
                 coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
                 coordroute_instance.noPlanningTest = true
                 coordroute_instance.endCurved = true
-                tp_pos++
+                tp_num++
             } else if (importParams.curved && gate_pos > importParams.curvedstartpos && gate_pos < importParams.curvedendpos) {
                 coordroute_instance.type = CoordType.SECRET
-                coordroute_instance.titleNumber = sc_pos
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_SC // TODO: Gatewidth from rule
+                coordroute_instance.titleNumber = sc_num
+                coordroute_instance.gatewidth2 = contestInstance.scGateWidth
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
-                sc_pos++
+                sc_num++
             // SC
             } else if (track_diff != null && track_diff < 1) {
                 coordroute_instance.type = CoordType.SECRET
-                coordroute_instance.titleNumber = sc_pos
-                coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_SC // TODO: Gatewidth from rule
-                sc_pos++
+                coordroute_instance.titleNumber = sc_num
+                coordroute_instance.gatewidth2 = contestInstance.scGateWidth
+                sc_num++
             // TP
             } else {
                 coordroute_instance.type = CoordType.TP
-                coordroute_instance.titleNumber = tp_pos
+                coordroute_instance.titleNumber = tp_num
                 coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
-                tp_pos++
+                tp_num++
             }
             
             coordroute_instance.latDirection = gate.lat.direction
@@ -470,8 +650,6 @@ class RouteFileTools
             
             coordroute_instance.altitude = gate.alt
             
-            coordroute_instance.measureEntered = true
-
             if (!coordroute_instance.save()) {
                 read_errors = "Could not save ${coordroute_instance.title()}"
             }
@@ -537,6 +715,22 @@ class RouteFileTools
                             route_instance.contest = contestInstance
                             route_instance.idTitle = Route.countByContest(contestInstance) + 1
                             route_instance.title = route_name
+                            route_instance.turnpointRoute = contestInstance.turnpointRule.GetTurnpointRoute()
+                            route_instance.turnpointMapMeasurement = contestInstance.turnpointMapMeasurement
+                            if (route_instance.turnpointRoute == TurnpointRoute.Unassigned) {
+                                route_instance.turnpointRoute = TurnpointRoute.None
+                                route_instance.turnpointMapMeasurement = false
+                            }
+                            route_instance.enroutePhotoRoute = EnrouteRoute.None
+                            route_instance.enrouteCanvasRoute = EnrouteRoute.None
+                            route_instance.enroutePhotoMeasurement = contestInstance.enroutePhotoRule.GetEnrouteMeasurement()
+                            if (route_instance.enroutePhotoMeasurement == EnrouteMeasurement.Unassigned) {
+                                route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
+                            }
+                            route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
+                            if (route_instance.enrouteCanvasMeasurement == EnrouteMeasurement.Unassigned) {
+                                route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
+                            }
                             route_instance.save()
                             //println "Route saved."
                             first = false
@@ -585,7 +779,14 @@ class RouteFileTools
                         if (duration) {
                             coordroute_instance.legDuration = duration.toInteger()
                         }
-                        coordroute_instance.measureEntered = true
+                        String assignedsign = rte.extensions.flightcontest.gate.'@assignedsign'[0] // Version 3
+                        if (assignedsign) {
+                            coordroute_instance.assignedSign = TurnpointSign.(assignedsign.toString())
+                        }
+                        String correctsign = rte.extensions.flightcontest.gate.'@correctsign'[0] // Version 3
+                        if (correctsign) {
+                            coordroute_instance.correctSign = TurnpointCorrect.(correctsign.toString())
+                        }
 
                         if (!coordroute_instance.save()) {
                             read_errors = "Could not save ${coordroute_instance.title()}"
@@ -596,11 +797,595 @@ class RouteFileTools
                     }
                 }
             }
+            
+            // Observations (Version 3)
+            if (route_instance) {
+                if (gpx.extensions.flightcontest.observationsettings) {
+                    boolean save_route = false
+                    String turnpoint = gpx.extensions.flightcontest.observationsettings.'@turnpoint'[0]
+                    if (turnpoint) {
+                        route_instance.turnpointRoute = TurnpointRoute.(turnpoint.toString())
+                        save_route = true
+                    }
+                    String turnpointmapmeasurement = gpx.extensions.flightcontest.observationsettings.'@turnpointmapmeasurement'[0]
+                    if (turnpointmapmeasurement) {
+                        route_instance.turnpointMapMeasurement = turnpointmapmeasurement == "yes"
+                        save_route = true
+                    }
+                    String enroutephoto = gpx.extensions.flightcontest.observationsettings.'@enroutephoto'[0]
+                    if (enroutephoto) {
+                        route_instance.enroutePhotoRoute = EnrouteRoute.(enroutephoto.toString())
+                        save_route = true
+                    }
+                    String enroutephotomeasurement = gpx.extensions.flightcontest.observationsettings.'@enroutephotomeasurement'[0]
+                    if (enroutephotomeasurement) {
+                        route_instance.enroutePhotoMeasurement = EnrouteMeasurement.(enroutephotomeasurement.toString())
+                        save_route = true
+                    }
+                    String enroutecanvas = gpx.extensions.flightcontest.observationsettings.'@enroutecanvas'[0]
+                    if (enroutecanvas) {
+                        route_instance.enrouteCanvasRoute = EnrouteRoute.(enroutecanvas.toString())
+                        save_route = true
+                    }
+                    String enroutecanvasmeasurement = gpx.extensions.flightcontest.observationsettings.'@enroutecanvasmeasurement'[0]
+                    if (enroutecanvasmeasurement) {
+                        route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.(enroutecanvasmeasurement.toString())
+                        save_route = true
+                    }
+                    if (save_route) {
+                        route_instance.save()
+                    }
+                }
+                if (gpx.extensions.flightcontest.enroutephotosigns) {
+                    for (enroutephotosign in gpx.extensions.flightcontest.enroutephotosigns.enroutephotosign) {
+                        CoordEnroutePhoto coordenroutephoto_instance = new CoordEnroutePhoto()
+                        coordenroutephoto_instance.route = route_instance
+                        coordenroutephoto_instance.enroutePhotoName = enroutephotosign.'@photoname'
+                        coordenroutephoto_instance.enrouteViewPos = enroutephotosign.'@viewpos'.toInteger()
+                        coordenroutephoto_instance.save()
+                    }
+                }
+                if (gpx.extensions.flightcontest.enroutecanvassigns) {
+                    for (enroutecanvassign in gpx.extensions.flightcontest.enroutecanvassigns.enroutecanvassign) {
+                        CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
+                        coordenroutecanvas_instance.route = route_instance
+                        coordenroutecanvas_instance.enrouteCanvasSign = EnrouteCanvasSign.(enroutecanvassign.'@canvasname')
+                        coordenroutecanvas_instance.enrouteViewPos = enroutecanvassign.'@viewpos'.toInteger()
+                        coordenroutecanvas_instance.save()
+                    }
+                }
+                if (gpx.wpt.size() > 0) {
+                    for (wpt in gpx.wpt) {
+                        if (wpt.extensions.flightcontest.enroutephotosign) {
+                            CoordEnroutePhoto coordenroutephoto_instance = new CoordEnroutePhoto()
+                            coordenroutephoto_instance.route = route_instance
+                            
+                            coordenroutephoto_instance.enroutePhotoName = wpt.extensions.flightcontest.enroutephotosign.'@photoname'[0]
+                            coordenroutephoto_instance.enrouteViewPos = wpt.extensions.flightcontest.enroutephotosign.'@viewpos'[0].toInteger()
+                            
+                            Map lat = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lat'.toBigDecimal(), true)
+                            coordenroutephoto_instance.latDirection = lat.direction
+                            coordenroutephoto_instance.latGrad = lat.grad
+                            coordenroutephoto_instance.latMinute = lat.minute
+                            
+                            Map lon = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lon'.toBigDecimal(), false)
+                            coordenroutephoto_instance.lonDirection = lon.direction
+                            coordenroutephoto_instance.lonGrad = lon.grad
+                            coordenroutephoto_instance.lonMinute = lon.minute
+                            
+                            coordenroutephoto_instance.type = CoordType.(wpt.extensions.flightcontest.enroutephotosign.'@type'[0])
+                            coordenroutephoto_instance.titleNumber = wpt.extensions.flightcontest.enroutephotosign.'@number'[0].toInteger()
+                            
+                            String dist = wpt.extensions.flightcontest.enroutephotosign.'@dist'[0]
+                            if (dist) {
+                                coordenroutephoto_instance.enrouteDistance = dist.toBigDecimal()
+                            }
+                            String measuredist = wpt.extensions.flightcontest.enroutephotosign.'@measuredist'[0]
+                            if (measuredist) {
+                                coordenroutephoto_instance.measureDistance = measuredist.toBigDecimal()
+                            }
+                            String orthogonaldist = wpt.extensions.flightcontest.enroutephotosign.'@orthogonaldist'[0]
+                            if (orthogonaldist) {
+                                coordenroutephoto_instance.enrouteOrthogonalDistance = orthogonaldist.toInteger()
+                            }
+                            
+                            //coordenroutephoto_instance.calculateCoordEnrouteValues(coordenroutephoto_instance.route.enroutePhotoRoute)
+                            coordenroutephoto_instance.save()
+                        }
+                        if (wpt.extensions.flightcontest.enroutecanvassign) {
+                            CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
+                            coordenroutecanvas_instance.route = route_instance
+                            
+                            coordenroutecanvas_instance.enrouteCanvasSign = EnrouteCanvasSign.(wpt.extensions.flightcontest.enroutecanvassign.'@canvasname'[0])
+                            coordenroutecanvas_instance.enrouteViewPos = wpt.extensions.flightcontest.enroutecanvassign.'@viewpos'[0].toInteger()
+                            
+                            Map lat = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lat'.toBigDecimal(), true)
+                            coordenroutecanvas_instance.latDirection = lat.direction
+                            coordenroutecanvas_instance.latGrad = lat.grad
+                            coordenroutecanvas_instance.latMinute = lat.minute
+                            
+                            Map lon = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lon'.toBigDecimal(), false)
+                            coordenroutecanvas_instance.lonDirection = lon.direction
+                            coordenroutecanvas_instance.lonGrad = lon.grad
+                            coordenroutecanvas_instance.lonMinute = lon.minute
+                            
+                            coordenroutecanvas_instance.type = CoordType.(wpt.extensions.flightcontest.enroutecanvassign.'@type'[0])
+                            coordenroutecanvas_instance.titleNumber = wpt.extensions.flightcontest.enroutecanvassign.'@number'[0].toInteger()
+                            
+                            String dist = wpt.extensions.flightcontest.enroutecanvassign.'@dist'[0]
+                            if (dist) {
+                                coordenroutecanvas_instance.enrouteDistance = dist.toBigDecimal()
+                            }
+                            String measuredist = wpt.extensions.flightcontest.enroutecanvassign.'@measuredist'[0]
+                            if (measuredist) { 
+                                coordenroutecanvas_instance.measureDistance = measuredist.toBigDecimal()
+                            }
+                            String orthogonaldist = wpt.extensions.flightcontest.enroutecanvassign.'@orthogonaldist'[0]
+                            if (orthogonaldist) {
+                                coordenroutecanvas_instance.enrouteOrthogonalDistance = orthogonaldist.toInteger()
+                            }
+                            
+                            //coordenroutecanvas_instance.calculateCoordEnrouteValues(coordenroutecanvas_instance.route.enrouteCanvasRoute)
+                            coordenroutecanvas_instance.save()
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             read_errors += e.getMessage()
         }
         gpx_reader.close()
         
         return [gatenum: gate_num, valid: valid_format, errors: read_errors, route: route_instance]
-    }        
+    }       
+     
+    //--------------------------------------------------------------------------
+    static Map ReadImportSignFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, ImportSign importSign)
+    // Return: importedsignnum - Number of imported signs 
+    //         filesignnum     - Number of signs in file 
+    //         valid           - true, if valid route file format
+    //         errors          - <> ""
+    {
+        switch (fileExtension) {
+            case TXT_EXTENSION:
+                Map sign_data = ReadImportSignTXTFile(routeInstance, routeFileName, importSign)
+                return add_sign_data(routeInstance, importSign, sign_data)
+        }
+        return [importedsignnum: 0, filesignnum: 0, valid: false, errors: ""]
+    }
+    
+    //--------------------------------------------------------------------------
+    private static Map ReadImportSignTXTFile(Route routeInstance, String txtFileName, ImportSign importSign)
+    // Return: import_signs - List of enroute signs
+    //         valid        - true, if valid route file format
+    //         errors       - <> ""
+    {
+        List import_signs = []
+        boolean valid_format = false
+        int invalid_line_num = 0
+        String read_errors = ""
+        int line_pos = 0
+        
+        File txt_file = new File(txtFileName)
+        LineNumberReader txt_reader = txt_file.newReader()
+        
+        try {
+            while (true) {
+                String line = txt_reader.readLine()
+                if (line == null) {
+                    break
+                }
+                line_pos++
+                if (line && line.trim() && !line.startsWith('#')) {
+                    valid_format = true
+                    Map import_sign = importSign.GetLineValues(line)
+                    if (!import_sign.value_num_ok) {
+                        invalid_line_num++
+                        if (read_errors) {
+                            read_errors += ", "
+                        }
+                        read_errors += line_pos.toString()
+                    } else {
+                        boolean invalid_line = false
+                        if (import_sign.name) {
+                            if (importSign.IsEnroutePhoto()) {
+                                // check non canvas name
+                                for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
+                                    if (sign.canvasName == import_sign.name) {
+                                        invalid_line = true
+                                        break
+                                    }
+                                }
+                                // check duplicate name
+                                if (!invalid_line) {
+                                    if (CoordEnroutePhoto.findByEnroutePhotoNameAndRoute(import_sign.name,routeInstance)) {
+                                        invalid_line = true
+                                    }
+                                }
+                            } else if (importSign.IsEnrouteCanvas()) { 
+                                // check canvas name
+                                boolean invalid = true
+                                for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
+                                    if (sign.canvasName == import_sign.name) {
+                                        invalid = false
+                                        break
+                                    }
+                                }
+                                if (invalid) {
+                                    invalid_line = true
+                                }
+                                // check duplicate name
+                                if (!invalid_line && !routeInstance.contest.enrouteCanvasMultiple) {
+                                    if (CoordEnrouteCanvas.findByEnrouteCanvasSignAndRoute(EnrouteCanvasSign.(import_sign.name),routeInstance)) {
+                                        invalid_line = true
+                                    }
+                                }
+                            } else {
+                                invalid_line = true
+                            }
+                        } 
+                        if (import_sign.lat) {
+                            import_sign += [lat_value:routeInstance.contest.coordPresentation.GetDirectionGradDecimalMinute(import_sign.lat,true,true)]
+                            if (import_sign.lat_value.invalid) {
+                                invalid_line = true
+                            }
+                        }
+                        if (import_sign.lon) {
+                            import_sign += [lon_value:routeInstance.contest.coordPresentation.GetDirectionGradDecimalMinute(import_sign.lon,true,false)]
+                            if (import_sign.lon_value.invalid) {
+                                invalid_line = true
+                            }
+                        }
+                        if (import_sign.alt) {
+                            import_sign += [alt_value:GetAltitude(import_sign.alt)]
+                            if (import_sign.alt_value.invalid) {
+                                invalid_line = true
+                            }
+                        }
+                        if (import_sign.tpname) {
+                            if (importSign.IsEnroutePhoto() || importSign.IsEnrouteCanvas()) { // check from turnpoints of enroute signs
+                                boolean invalid = true
+                                for (CoordTitle coord_title in routeInstance.GetEnrouteCoordTitles(false)) {
+                                    if (import_sign.tpname == coord_title.titleExport()) {
+                                        import_sign += [tptype:coord_title.type, tpnumber:coord_title.number]
+                                        invalid = false
+                                        break
+                                    }
+                                }
+                                if (invalid) {
+                                    invalid_line = true
+                                }
+                            } else if (importSign.IsTurnpoint()) { // check turnpoint signs
+                                boolean invalid = true
+                                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id"])) {
+                                    if (coordroute_instance.type.IsTurnpointSignCoord()) {
+                                        if (import_sign.tpname == coordroute_instance.titleExport()) {
+                                            import_sign += [tptype:coordroute_instance.type, tpnumber:coordroute_instance.titleNumber]
+                                            invalid = false
+                                            break
+                                        }
+                                    }
+                                }
+                                if (invalid) {
+                                    invalid_line = true
+                                }
+                            } else if (importSign == ImportSign.RouteCoord) {
+                                boolean invalid = true
+                                for (CoordType coord_type in CoordType.values()) {
+                                    if (import_sign.tpname.startsWith(coord_type.export)) {
+                                        import_sign += [tptype:coord_type]
+                                        invalid = false
+                                        break
+                                    }
+                                }
+                                if (invalid) {
+                                    invalid_line = true
+                                }
+                            } else {
+                                invalid_line = true
+                            }
+                        }
+                        if (import_sign.nm) {
+                            if (import_sign.nm.endsWith(UNIT_NM)) {
+                                String s = import_sign.nm.substring(0,import_sign.nm.size()-UNIT_NM.size())
+                                if (s.isBigDecimal()) {
+                                    import_sign += [nm_value:s.toBigDecimal()]
+                                } else {
+                                    invalid_line = true
+                                }
+                            } else {
+                                invalid_line = true
+                            }
+                        }
+                        if (import_sign.mm) {
+                            if (import_sign.mm.endsWith(UNIT_mm)) {
+                                String s = import_sign.mm.substring(0,import_sign.mm.size()-UNIT_mm.size())
+                                if (s.isBigDecimal()) {
+                                    import_sign += [mm_value:s.toBigDecimal()]
+                                } else {
+                                    invalid_line = true
+                                }
+
+                            } else {
+                                invalid_line = true
+                            }
+                        }
+                        if (import_sign.tpsign) {
+                            if (importSign == ImportSign.TurnpointPhoto) { // check for turnpoint photo signs
+                                boolean invalid = true
+                                for (TurnpointSign sign in TurnpointSign.GetTurnpointSigns(false)) {
+                                    if (sign.title == import_sign.tpsign) {
+                                        invalid = false
+                                        break
+                                    }
+                                }
+                                if (invalid) {
+                                    invalid_line = true
+                                }
+                            } else if (importSign == ImportSign.TurnpointCanvas) { // check for turnpoint canvas signs
+                                boolean invalid = true
+                                for (TurnpointSign sign in TurnpointSign.GetTurnpointSigns(true)) {
+                                    if (sign.title == import_sign.tpsign) {
+                                        invalid = false
+                                        break
+                                    }
+                                }
+                                if (invalid) {
+                                    invalid_line = true
+                                }
+                            } else {
+                                invalid_line = true
+                            }
+                        }
+                        if (import_sign.tpcorrect) {
+                            if ((import_sign.tpcorrect == UNIT_TPcorrect) || (import_sign.tpcorrect == UNIT_TPincorrect)) {
+                                // nothing
+                            } else {
+                                invalid_line = true
+                            }
+                        }
+                        if (invalid_line) {
+                            invalid_line_num++
+                            if (read_errors) {
+                                read_errors += ", "
+                            }
+                            read_errors += line_pos.toString()
+                        } else {
+                            import_signs += import_sign
+                        }
+                    }
+                }
+            }
+            
+        } catch (Exception e) {
+            read_errors += e.getMessage()
+        }
+        txt_reader.close()
+        
+        return [import_signs: import_signs, valid: valid_format, invalidlinenum: invalid_line_num, errors: read_errors]
+    }
+    
+    //--------------------------------------------------------------------------
+    private static Map add_sign_data(Route routeInstance, ImportSign importSign, Map signData)
+    {
+        if (!signData.valid || signData.invalidlinenum || signData.errors) {
+            return [importedsignnum: 0, filesignnum: 0, valid: signData.valid, invalidlinenum: signData.invalidlinenum, errors: signData.errors]
+        }
+        
+        int imported_sign_num = 0
+        int invalid_line_num = 0
+        String read_errors = ""
+        int tp_num = 1
+        int sc_num = 1
+        for (Map import_sign in signData.import_signs) {
+            if (importSign.IsEnroutePhoto()) {
+                if (CoordEnroutePhoto.countByRoute(routeInstance) < routeInstance.contest.maxEnroutePhotos) {
+                    CoordEnroutePhoto coordenroutephoto_instance = new CoordEnroutePhoto()
+                    coordenroutephoto_instance.route = routeInstance
+                    coordenroutephoto_instance.enroutePhotoName = import_sign.name
+                    coordenroutephoto_instance.enrouteViewPos = CoordEnroutePhoto.countByRoute(routeInstance) + 1
+                    if (import_sign.lat) {
+                        coordenroutephoto_instance.latDirection = import_sign.lat_value.direction
+                        coordenroutephoto_instance.latGrad = import_sign.lat_value.grad
+                        coordenroutephoto_instance.latMinute = import_sign.lat_value.minute
+                    }
+                    if (import_sign.lon) {
+                        coordenroutephoto_instance.lonDirection = import_sign.lon_value.direction
+                        coordenroutephoto_instance.lonGrad = import_sign.lon_value.grad
+                        coordenroutephoto_instance.lonMinute = import_sign.lon_value.minute
+                    }
+                    if (import_sign.tpname) {
+                        coordenroutephoto_instance.type = import_sign.tptype
+                        coordenroutephoto_instance.titleNumber = import_sign.tpnumber
+                    }
+                    if (import_sign.nm) {
+                        coordenroutephoto_instance.enrouteDistance = import_sign.nm_value
+                    }
+                    if (import_sign.mm) {
+                        coordenroutephoto_instance.measureDistance = import_sign.mm_value
+                    }
+                    coordenroutephoto_instance.calculateCoordEnrouteValues(routeInstance.enroutePhotoRoute)
+                    if (coordenroutephoto_instance.save()) {
+                        routeInstance.calculateEnroutPhotoViewPos()
+                        imported_sign_num++
+                    } else {
+                        invalid_line_num++
+                        if (read_errors) {
+                            read_errors += ", "
+                        }
+                        read_errors += import_sign.name
+                    }
+                }
+            } else if (importSign.IsEnrouteCanvas()) {
+                if (CoordEnrouteCanvas.countByRoute(routeInstance) < routeInstance.contest.maxEnrouteCanvas) {
+                    CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
+                    coordenroutecanvas_instance.route = routeInstance
+                    coordenroutecanvas_instance.enrouteCanvasSign = EnrouteCanvasSign.(import_sign.name)
+                    coordenroutecanvas_instance.enrouteViewPos = CoordEnrouteCanvas.countByRoute(routeInstance) + 1
+                    if (import_sign.lat) {
+                        coordenroutecanvas_instance.latDirection = import_sign.lat_value.direction
+                        coordenroutecanvas_instance.latGrad = import_sign.lat_value.grad
+                        coordenroutecanvas_instance.latMinute = import_sign.lat_value.minute
+                    }
+                    if (import_sign.lon) {
+                        coordenroutecanvas_instance.lonDirection = import_sign.lon_value.direction
+                        coordenroutecanvas_instance.lonGrad = import_sign.lon_value.grad
+                        coordenroutecanvas_instance.lonMinute = import_sign.lon_value.minute
+                    }
+                    if (import_sign.tpname) {
+                        coordenroutecanvas_instance.type = import_sign.tptype
+                        coordenroutecanvas_instance.titleNumber = import_sign.tpnumber
+                    }
+                    if (import_sign.nm) {
+                        coordenroutecanvas_instance.enrouteDistance = import_sign.nm_value
+                    }
+                    if (import_sign.mm) {
+                        coordenroutecanvas_instance.measureDistance = import_sign.mm_value
+                    }
+                    coordenroutecanvas_instance.calculateCoordEnrouteValues(routeInstance.enrouteCanvasRoute)
+                    if (coordenroutecanvas_instance.save()) {
+                        routeInstance.calculateEnroutCanvasViewPos()
+                        imported_sign_num++
+                    } else {
+                        invalid_line_num++
+                        if (read_errors) {
+                            read_errors += ", "
+                        }
+                        read_errors += import_sign.name
+                    }
+                }
+            } else  if (importSign.IsTurnpoint()) {
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id"])) {
+                    if ((import_sign.tptype == coordroute_instance.type) && (import_sign.tpnumber == coordroute_instance.titleNumber)) {
+                        switch (importSign) {
+                            case ImportSign.TurnpointPhoto:
+                            case ImportSign.TurnpointCanvas:
+                                coordroute_instance.assignedSign = TurnpointSign.(import_sign.tpsign)
+                                break
+                            case ImportSign.TurnpointTrueFalse:
+                                switch (import_sign.tpcorrect) {
+                                    case RouteFileTools.UNIT_TPcorrect:
+                                        coordroute_instance.correctSign = TurnpointCorrect.True
+                                        break
+                                    case RouteFileTools.UNIT_TPincorrect:
+                                        coordroute_instance.correctSign = TurnpointCorrect.False
+                                        break
+                                }
+                                break
+                        }
+                        if (coordroute_instance.save()) {
+                            imported_sign_num++
+                        } else {
+                            invalid_line_num++
+                            if (read_errors) {
+                                read_errors += ", "
+                            }
+                            read_errors += import_sign.tpname
+                        }
+                        break
+                    }
+                }
+            } else if (importSign ==ImportSign.RouteCoord) {
+                CoordRoute coordroute_instance = new CoordRoute()
+                coordroute_instance.route = routeInstance
+                
+                coordroute_instance.type = import_sign.tptype
+                if (import_sign.tptype == CoordType.SECRET) {
+                    coordroute_instance.titleNumber = sc_num
+                    sc_num++
+                } else if (import_sign.tptype == CoordType.TP) {
+                    coordroute_instance.titleNumber = tp_num
+                    tp_num++
+                }
+
+                coordroute_instance.latDirection = import_sign.lat_value.direction
+                coordroute_instance.latGrad = import_sign.lat_value.grad
+                coordroute_instance.latMinute = import_sign.lat_value.minute
+                
+                coordroute_instance.lonDirection = import_sign.lon_value.direction
+                coordroute_instance.lonGrad = import_sign.lon_value.grad
+                coordroute_instance.lonMinute = import_sign.lon_value.minute
+                
+                coordroute_instance.altitude = import_sign.alt_value.alt
+                
+                if (import_sign.tptype.IsRunwayCoord()) {
+                    coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_RUNWAY
+                } else if (import_sign.tptype == CoordType.SECRET) {
+                    coordroute_instance.gatewidth2 = routeInstance.contest.scGateWidth
+                } else {
+                    coordroute_instance.gatewidth2 = DEFAULT_GATEWIDTH_TP
+                }
+                
+                if (import_sign.other) {
+                    for (String o in import_sign.other) {
+                        if (o.startsWith(GATE) && (o.endsWith(UNIT_GRAD) || o.endsWith(UNIT_NM))) {
+                            String s = o.substring(GATE.size()).trim()
+                            while (s.contains('  ')) {
+                                s = s.replaceAll('  ', ' ')
+                            }
+                            def gate_values = s.split(' ')
+                            for (String g in gate_values) {
+                                if (g.endsWith(UNIT_GRAD)) {
+                                    s = g.substring(0,g.size()-UNIT_GRAD.size())
+                                    if (s.isBigDecimal()) {
+                                        coordroute_instance.gateDirection = s.toBigDecimal()
+                                    }
+                                } else if (g.endsWith(UNIT_NM)) {
+                                    s = g.substring(0,g.size()-UNIT_NM.size())
+                                    if (s.isFloat()) {
+                                        coordroute_instance.gatewidth2 = s.toFloat()
+                                    }
+                                }
+                            }
+                        }
+                        if (o.startsWith(DURATION) && o.endsWith(UNIT_min)) {
+                            String s = o.substring(DURATION.size()).trim()
+                            s = s.substring(0,s.size()-UNIT_min.size())
+                            if (s.isInteger()) {
+                                coordroute_instance.legDuration = s.toInteger()
+                            }
+                        }
+                        if (o.startsWith(DIST) && o.endsWith(UNIT_mm)) {
+                            String s = o.substring(DIST.size()).trim()
+                            s = s.substring(0,s.size()-UNIT_mm.size())
+                            if (s.isBigDecimal()) {
+                                coordroute_instance.measureDistance = s.toBigDecimal()
+                            }
+                        }
+                        if (o.startsWith(TRACK) && o.endsWith(UNIT_GRAD)) {
+                            String s = o.substring(TRACK.size()).trim()
+                            s = s.substring(0,s.size()-UNIT_GRAD.size())
+                            if (s.isBigDecimal()) {
+                                coordroute_instance.measureTrueTrack = s.toBigDecimal()
+                            }
+                        }
+                        if (o == RouteFileTools.UNIT_TPnotimecheck) {
+                            coordroute_instance.noTimeCheck = true
+                        }
+                        if (o == RouteFileTools.UNIT_TPnogatecheck) {
+                            coordroute_instance.noGateCheck = true
+                        }
+                        if (o == RouteFileTools.UNIT_TPnoplanningtest) {
+                            coordroute_instance.noPlanningTest = true
+                        }
+                        if (o == RouteFileTools.UNIT_TPendcurved) {
+                            coordroute_instance.endCurved = true
+                        }
+                    }
+                }
+
+                if (coordroute_instance.save()) {
+                    imported_sign_num++
+                } else {
+                    invalid_line_num++
+                    if (read_errors) {
+                        read_errors += ", "
+                    }
+                    read_errors += import_sign.tpname
+                }
+            }
+        }
+   
+        return [importedsignnum: imported_sign_num, filesignnum: signData.import_signs.size(), valid: true, invalidlinenum: invalid_line_num, errors: read_errors]
+    }
 }

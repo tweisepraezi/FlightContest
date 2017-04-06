@@ -1,9 +1,9 @@
-
 import org.xhtmlrenderer.pdf.ITextRenderer
 
 class TaskController {
 
     def domainService
+    def imageService
     def printService
 	def fcService
     def evaluationService
@@ -662,7 +662,7 @@ class TaskController {
         	redirect(action:listplanning,id:task.instance.id)
         }
     }
-
+    
     def selectflighttestwind = {
         Map task = domainService.GetTask(params) 
         if (!task.instance) {
@@ -681,6 +681,22 @@ class TaskController {
             redirect(controller:"contest",action:"tasks")
         } else {
         	redirect(action:listplanning,id:task.instance.id)
+        }
+    }
+
+    def printobservation = {
+        def task = printService.printobservationTask(params,false,false,GetPrintParams())
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+            flash.message = task.message
+            flash.error = true
+            redirect(action:listplanning,id:task.instance.id)
+        } else if (task.content) {
+            printService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"observation-task${task.instance.idTitle}",true,false,false)
+        } else {
+            redirect(action:listplanning,id:task.instance.id)
         }
     }
 
@@ -1126,6 +1142,178 @@ class TaskController {
 
     }
 
+    def planningtaskformimportextern = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
+            if (task.taskid) {
+                redirect(action:planningtaskformimport,id:task.taskid,params:['imagefile':params.imagefile])
+            } else {
+                redirect(controller:"task",action:"startresults")
+            }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def planningtaskformimport = {
+        Map task = domainService.GetTask(params) 
+        if (task.instance) {
+            File image_file = new File(params.imagefile)
+            Map img = imageService.LoadImage2(ImageService.JPG_EXTENSION, image_file, Test.SCANNEDIMAGEMAXSIZE)
+            if (!img.found) {
+                img = imageService.LoadImage2("", image_file, Test.SCANNEDIMAGEMAXSIZE)
+            }
+            if (img.found) {
+                BootStrap.tempData.AddData(params.imagefile, img.bytes)
+            }
+            if (img.error) {
+                flash.error = img.error
+                flash.message = img.message
+            }
+            return [taskInstance:task.instance,imagefile:params.imagefile]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def planningtaskformimportsave = {
+        if (params.testid) {
+            Test test_instance = Test.get(params.testid)
+            test_instance.scannedPlanningTest = BootStrap.tempData.GetData(params.imagefile)
+            test_instance.save()
+        }
+        BootStrap.tempData.RemoveData(params.imagefile)
+        redirect(controller:"task",action:"startresults")
+    }
+
+    def loggerformimportextern = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
+            if (task.taskid) {
+                redirect(action:loggerformimport,id:task.taskid,params:['loggerfile':params.loggerfile])
+            } else {
+                redirect(controller:"task",action:"startresults")
+            }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def loggerformimport = {
+        Map task = domainService.GetTask(params) 
+        if (task.instance) {
+            return [taskInstance:task.instance,loggerfile:params.loggerfile]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def loggerformimportsave = {
+        if (params.testid) {
+            Test test_instance = Test.get(params.testid)
+            Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile)
+            if (!calc.found) {
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile)
+            }
+            if (!calc.found) {
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile)
+            }
+            if (!calc.found) {
+                calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, false)
+            }
+            flash.error = calc.error
+            flash.message = calc.message
+            long nexttest_id = test_instance.GetNextTestID(ResultType.Flight)
+            if (nexttest_id) {
+                redirect(controller:'test',action:'flightresults',id:test_instance.id,params:[next:nexttest_id])
+            } else {
+                redirect(controller:'test',action:'flightresults',id:test_instance.id)
+            }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def loggerimportcancel = {
+        redirect(controller:"task",action:"startresults")
+    }
+    
+    def observationprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        Map task = domainService.GetTask(params) 
+        if (task.instance) {
+            return [contestInstance:session.lastContest,taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"task",action:"startplanning")
+        }
+    }
+
+    def observationformimportextern = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
+            if (task.taskid) {
+                redirect(action:observationformimport,id:task.taskid,params:['imagefile':params.imagefile])
+            } else {
+                redirect(controller:"task",action:"startresults")
+            }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def observationformimport = {
+        Map task = domainService.GetTask(params) 
+        if (task.instance) {
+            File image_file = new File(params.imagefile)
+            Map img = imageService.LoadImage2(ImageService.JPG_EXTENSION, image_file, Test.SCANNEDIMAGEMAXSIZE)
+            if (!img.found) {
+                img = imageService.LoadImage2("", image_file, Test.SCANNEDIMAGEMAXSIZE)
+            }
+            if (img.found) {
+                BootStrap.tempData.AddData(params.imagefile, img.bytes)
+            }
+            if (img.error) {
+                flash.error = img.error
+                flash.message = img.message
+            }
+            return [taskInstance:task.instance,imagefile:params.imagefile]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def observationformimportsave = {
+        if (params.testid) {
+            Test test_instance = Test.get(params.testid)
+            test_instance.scannedObservationTest = BootStrap.tempData.GetData(params.imagefile)
+            test_instance.save()
+        }
+        BootStrap.tempData.RemoveData(params.imagefile)
+        redirect(controller:"task",action:"startresults")
+    }
+    
+    def formimage = {
+        if (params.taskid) {
+            Task task = Task.get(params.taskid)
+            response.outputStream << BootStrap.tempData.GetData(params.imagefile)
+        }
+    }
+    
+    def formimportcancel = {
+        BootStrap.tempData.RemoveData(params.imagefile)
+        redirect(controller:"task",action:"startresults")
+    }
+    
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,

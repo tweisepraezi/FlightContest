@@ -34,7 +34,7 @@ class DemoContestStandardService
         fcService.printdone ""
         
         // Task
-        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, false)
+        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, true,true,true,true, true,true,true, false,false)
         
 		// Planning Test
 		Map planningtest1 = fcService.putPlanningTest(task1,"")
@@ -57,8 +57,9 @@ class DemoContestStandardService
 
 		// Results
 		fcService.putplanningresultsTask(task1,[[crew:crew1,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 98.1,  legTime:"00:14:06"],
 															  [trueHeading:205.12, legTime:"00:12:41"],
 															  [trueHeading:154.123,legTime:"00:12:03"],
@@ -67,8 +68,9 @@ class DemoContestStandardService
 															  [trueHeading:232,    legTime:"00:04:25"]],
 												 testComplete:true],
 												[crew:crew4,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 99,legTime:"00:18:00"],
 															  [trueHeading:203,legTime:"00:15:44"],
 															  [trueHeading:153,legTime:"00:15:31"],
@@ -77,8 +79,9 @@ class DemoContestStandardService
 															  [trueHeading:229,legTime:"00:05:20"]],
 												 testComplete:true],
 												[crew:crew5,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading:100,legTime:"00:18:03"],
 															  [trueHeading:203,legTime:"00:15:37"],
 															  [trueHeading:153,legTime:"00:15:35"],
@@ -87,8 +90,9 @@ class DemoContestStandardService
 															  [trueHeading:229,legTime:"00:05:21"]],
 												 testComplete:true],
 												[crew:crew3,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 98,   legTime:"00:15:11"],
 															  [trueHeading:203,   legTime:"00:13:35"],
 															  [trueHeading:154,   legTime:"00:13:04"],
@@ -97,8 +101,9 @@ class DemoContestStandardService
 															  [trueHeading:230,   legTime:"00:04:42"]],
 												 testComplete:true],
 												[crew:crew2,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
 															  [trueHeading:204,legTime:"00:13:38"],
 															  [trueHeading:153,legTime:"00:13:03"],
@@ -110,70 +115,75 @@ class DemoContestStandardService
 		  
 		fcService.importflightresultsTask(task1,[[crew:crew1,
 												  startNum:3,
-                                                  gac:"Crew_3.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_3.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew4,
 												  startNum:11,
-                                                  gac:"Crew_11.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_11.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew5,
 												  startNum:13,
-                                                  gac:"Crew_13.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_13.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew3,
 												  startNum:19,
-                                                  gac:"Crew_19.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_19.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew2,
 												  startNum:18,
-                                                  gac:"Crew_18.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_18.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
-												],aflosDB)
+												],aflosDB,LoggerFileTools.GAC_EXTENSION)
 		fcService.putobservationresultsTask(task1, [
 													[crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
 													[crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -288,15 +298,15 @@ class DemoContestStandardService
 		Map team3 = fcService.putTeam(contest,'Polen')
 		
         // Task
-        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false)
+        Map task1 = fcService.putTask(contest,"","09:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
         
 		// TaskClass properties
-		fcService.puttaskclassTask(task1,resultclass1,true,true,false,false,false, false,true, true,true,true, true,true,true,true)
-		fcService.puttaskclassTask(task1,resultclass2,false,false,true,true,true, true,false, true,true,true, true,true,true,true)
+		fcService.puttaskclassTask(task1,resultclass1,true,true,false,false,false, false,true, true,true,true, true,true,true,true, true,true,true)
+		fcService.puttaskclassTask(task1,resultclass2,false,false,true,true,true, true,false, true,true,true, true,true,true,true, true,true,true)
 
 		// additional class
 		Map resultclass3 = fcService.putResultClass(contest,"Observer","",ContestRules.R1)
-		fcService.puttaskclassTask(task1,resultclass3,true,true,true,true,false, false,true, true,true,true, false,false,false,false)
+		fcService.puttaskclassTask(task1,resultclass3,true,true,true,true,false, false,true, true,true,true, false,false,false,false, false,false,false)
 		
 		// Route
         fcService.printstart "Route"
@@ -329,8 +339,9 @@ class DemoContestStandardService
 
 		// Results
 		fcService.putplanningresultsTask(task1,[[crew:crew1,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 98.1,  legTime:"00:14:06"],
 															  [trueHeading:205.12, legTime:"00:12:41"],
 															  [trueHeading:154.123,legTime:"00:12:03"],
@@ -339,8 +350,9 @@ class DemoContestStandardService
 															  [trueHeading:232,    legTime:"00:04:25"]],
 												 testComplete:true],
 												[crew:crew4,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 99,legTime:"00:18:00"],
 															  [trueHeading:203,legTime:"00:15:44"],
 															  [trueHeading:153,legTime:"00:15:31"],
@@ -349,8 +361,9 @@ class DemoContestStandardService
 															  [trueHeading:229,legTime:"00:05:20"]],
 												 testComplete:true],
 												[crew:crew5,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading:100,legTime:"00:18:03"],
 															  [trueHeading:203,legTime:"00:15:37"],
 															  [trueHeading:153,legTime:"00:15:35"],
@@ -359,8 +372,9 @@ class DemoContestStandardService
 															  [trueHeading:229,legTime:"00:05:21"]],
 												 testComplete:true],
 												[crew:crew3,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 98,   legTime:"00:15:11"],
 															  [trueHeading:203,   legTime:"00:13:35"],
 															  [trueHeading:154,   legTime:"00:13:04"],
@@ -369,8 +383,9 @@ class DemoContestStandardService
 															  [trueHeading:230,   legTime:"00:04:42"]],
 												 testComplete:true],
 												[crew:crew2,
-												 givenTooLate:false,
-												 exitRoomTooLate:false,
+												 planningTestGivenTooLate:false,
+												 planningTestExitRoomTooLate:false,
+                                                 planningTestForbiddenCalculators:false,
 												 givenValues:[[trueHeading: 98,legTime:"00:15:11"],
 															  [trueHeading:204,legTime:"00:13:38"],
 															  [trueHeading:153,legTime:"00:13:03"],
@@ -382,70 +397,75 @@ class DemoContestStandardService
 		  
 		fcService.importflightresultsTask(task1,[[crew:crew1,
 												  startNum:3,
-                                                  gac:"Crew_3.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_3.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew4,
 												  startNum:11,
-                                                  gac:"Crew_11.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_11.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew5,
 												  startNum:13,
-                                                  gac:"Crew_13.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_13.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew3,
 												  startNum:19,
-                                                  gac:"Crew_19.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_19.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
 												 [crew:crew2,
 												  startNum:18,
-                                                  gac:"Crew_18.gac",
-												  takeoffMissed:false,
-												  badCourseStartLanding:false,
-												  landingTooLate:false,
-												  givenTooLate:false,
-												  safetyAndRulesInfringement:false,
-												  instructionsNotFollowed:false,
-												  falseEnvelopeOpened:false,
-												  safetyEnvelopeOpened:false,
-												  frequencyNotMonitored:false,
+                                                  fileName:"Crew_18.gac",
+												  flightTestTakeoffMissed:false,
+												  flightTestBadCourseStartLanding:false,
+												  flightTestLandingTooLate:false,
+												  flightTestGivenTooLate:false,
+												  flightTestSafetyAndRulesInfringement:false,
+												  flightTestInstructionsNotFollowed:false,
+												  flightTestFalseEnvelopeOpened:false,
+												  flightTestSafetyEnvelopeOpened:false,
+												  flightTestFrequencyNotMonitored:false,
+                                                  flightTestForbiddenEquipment:false,
 												  testComplete:true],
-												],aflosDB)
+												],aflosDB,LoggerFileTools.GAC_EXTENSION)
 		fcService.putobservationresultsTask(task1, [
 													[crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
 													[crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -589,11 +609,11 @@ class DemoContestStandardService
         // TaskClass properties
 		
 		// 1 - 23. August
-        Map task1 = fcService.putTask(contest,"23. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false,  false,true, true,false,false, true,true,true,true, false)
+        Map task1 = fcService.putTask(contest,"23. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false,  false,true, true,false,false, true,true,true,true, true,true,true, false,false)
 		
-        fcService.puttaskclassTask(task1,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,true,true,true)
-        fcService.puttaskclassTask(task1,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
-        fcService.puttaskclassTask(task1,resultclass3,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task1,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,true,true,true, true,true,true)
+        fcService.puttaskclassTask(task1,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false, false,false,false)
+        fcService.puttaskclassTask(task1,resultclass3,false,false,false,false,false,  false,true, true,false,false, false,false,false,false, false,false,false)
 		
 		Map planningtest1 = fcService.putPlanningTest(task1,"")
 		Map planningtesttask1 = fcService.putPlanningTestTask(planningtest1,"",route1,130,20)
@@ -607,11 +627,11 @@ class DemoContestStandardService
 		fcService.runcalculatetimetableTask(task1)
 		
 		// 2 - 24. August
-		Map task2 = fcService.putTask(contest,"24. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,false,false, false,true, false,true,true, false,false,false,false, false)
+		Map task2 = fcService.putTask(contest,"24. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,false,false, false,true, false,true,true, false,false,false,false, false,false,false, false,false)
 		
-        fcService.puttaskclassTask(task2,resultclass1,true,true,true,false,false,     false,true, true,false,false, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
-        fcService.puttaskclassTask(task2,resultclass3,false,false,false,false,false,  false,true, true,false,false, false,false,false,false)
+        fcService.puttaskclassTask(task2,resultclass1,true,true,true,false,false,     false,true, true,false,false, false,false,false,false, false,false,false)
+        fcService.puttaskclassTask(task2,resultclass2,false,false,false,false,false,  false,true, true,false,false, false,false,false,false, false,false,false)
+        fcService.puttaskclassTask(task2,resultclass3,false,false,false,false,false,  false,true, true,false,false, false,false,false,false, false,false,false)
 		
 		Map planningtest2 = fcService.putPlanningTest(task2,"")
 		Map planningtesttask2 = fcService.putPlanningTestTask(planningtest2,"",route2,130,20)
@@ -625,11 +645,11 @@ class DemoContestStandardService
 		fcService.runcalculatetimetableTask(task2)
 
 		// 3 - 25. August
-		Map task3 = fcService.putTask(contest,"25. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false,  false,true, true,false,false, true,false,false,false, false)
+		Map task3 = fcService.putTask(contest,"25. August","10:00",3,"time:8min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,true,true,false,  false,true, true,false,false, true,false,false,false, false,false,false, false,false)
 		
-		fcService.puttaskclassTask(task3,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,false,false,false)
-		fcService.puttaskclassTask(task3,resultclass2,true,true,true,true,false,      false,true, true,false,false, true,false,false,false)
-		fcService.puttaskclassTask(task3,resultclass3,true,true,true,true,false,      false,true, true,false,false, true,false,false,false)
+		fcService.puttaskclassTask(task3,resultclass1,true,true,true,true,false,      false,true, true,false,false, true,false,false,false, false,false,false)
+		fcService.puttaskclassTask(task3,resultclass2,true,true,true,true,false,      false,true, true,false,false, true,false,false,false, false,false,false)
+		fcService.puttaskclassTask(task3,resultclass3,true,true,true,true,false,      false,true, true,false,false, true,false,false,false, false,false,false)
 		
 		Map planningtest3 = fcService.putPlanningTest(task3,"")
 		Map planningtesttask3 = fcService.putPlanningTestTask(planningtest3,"",route1,130,20)
@@ -782,60 +802,62 @@ class DemoContestStandardService
     }
 	
     List test1CoordRoute() {
+      String N = CoordPresentation.NORTH
+      String E = CoordPresentation.EAST
       [[type:CoordType.TO,    mark:"T/O",
-        latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+        latGrad:52,latMinute:2.1707,latDirection:N,lonGrad:13,lonMinute:44.2321,lonDirection:E,altitude:180,gatewidth2:0.01f,
         coordTrueTrack:0,coordMeasureDistance:0,
         measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.SP,    mark:"SP",
-        latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
+        latGrad:52,latMinute:4.897,latDirection:N,lonGrad:13,lonMinute:49.207,lonDirection:E,altitude:500,gatewidth2:1.0,
         coordTrueTrack:48.2896815944,coordMeasureDistance:37.9424006312,
         measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.SECRET,mark:"CP1",
-        latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
+        latGrad:52,latMinute:5.121,latDirection:N,lonGrad:14,lonMinute:6.679,lonDirection:E,altitude:500,gatewidth2:2.0,
         coordTrueTrack:88.8048175589,coordMeasureDistance:99.4440780950,
         measureTrueTrack:89.0,measureDistance:99.0,legMeasureDistance:99.0,legDistance:10.6911447084,secretLegRatio:0.6598765432,planProcedureTurn:false],
        [type:CoordType.TP,    mark:"CP2",
-        latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
+        latGrad:52,latMinute:5.223,latDirection:N,lonGrad:14,lonMinute:15.555,lonDirection:E,altitude:500,gatewidth2:1.0,
         coordTrueTrack:88.9286028152,coordMeasureDistance:149.9577105678,
         measureTrueTrack:89.0,measureDistance:150.0,legMeasureDistance:51.0,legDistance:5.5075593952,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.SECRET,mark:"CP3",
-        latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
+        latGrad:52,latMinute:1.367,latDirection:N,lonGrad:14,lonMinute:10.417,lonDirection:E,altitude:500,gatewidth2:2.0,
         coordTrueTrack:219.3292360731,coordMeasureDistance:46.1613175609,
         measureTrueTrack:219.0,measureDistance:46.0,legMeasureDistance:46.0,legDistance:4.9676025918,secretLegRatio:0.2849770642,planProcedureTurn:true],
        [type:CoordType.TP,    mark:"CP4",
-        latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
+        latGrad:51,latMinute:51.719,latDirection:N,lonGrad:13,lonMinute:57.662,lonDirection:E,altitude:500,gatewidth2:1.0,
         coordTrueTrack:219.1791259770,coordMeasureDistance:161.4133764552,
         measureTrueTrack:219.0,measureDistance:161.5,legMeasureDistance:115.5,legDistance:12.4730021598,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.SECRET,mark:"CP5",
-        latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
+        latGrad:51,latMinute:44.633,latDirection:N,lonGrad:14,lonMinute:1.635,lonDirection:E,altitude:500,gatewidth2:2.0,
         coordTrueTrack:160.8781319787,coordMeasureDistance:69.4482392126,
         measureTrueTrack:161.0,measureDistance:68.5,legMeasureDistance:68.5,legDistance:7.3974082073,secretLegRatio:0.5481481481,planProcedureTurn:false],
        [type:CoordType.TP,    mark:"CP6",
-        latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
+        latGrad:51,latMinute:38.847,latDirection:N,lonGrad:14,lonMinute:4.857,lonDirection:E,altitude:500,gatewidth2:1.0,
         coordTrueTrack:160.9571657647,coordMeasureDistance:126.1284271762,
         measureTrueTrack:161.0,measureDistance:125.0,legMeasureDistance:56.5,legDistance:6.1015118790,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.SECRET,mark:"CP7",
-        latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
+        latGrad:51,latMinute:38.983,latDirection:N,lonGrad:14,lonMinute:8.299,lonDirection:E,altitude:500,gatewidth2:2.0,
         coordTrueTrack:86.3563657892,coordMeasureDistance:19.8166630762,
         measureTrueTrack:86.0,measureDistance:19.5,legMeasureDistance:19.5,legDistance:2.1058315335,secretLegRatio:0.1834782609,planProcedureTurn:false],
        [type:CoordType.TP,    mark:"CP8",
-        latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
+        latGrad:51,latMinute:39.535,latDirection:N,lonGrad:14,lonMinute:23.4,lonDirection:E,altitude:500,gatewidth2:1.0,
         coordTrueTrack:86.6280647396,coordMeasureDistance:106.7215488986,
         measureTrueTrack:86.0,measureDistance:106.45,legMeasureDistance:86.95,legDistance:9.3898488121,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.SECRET,mark:"CP9",
-        latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
+        latGrad:51,latMinute:38.02,latDirection:N,lonGrad:14,lonMinute:19.606,lonDirection:E,altitude:500,gatewidth2:2.0,
         coordTrueTrack:237.2378249684,coordMeasureDistance:25.9240833138,
         measureTrueTrack:237.0,measureDistance:25.5,legMeasureDistance:25.5,legDistance:2.7537796976,secretLegRatio:0.2420774648,planProcedureTurn:true],
        [type:CoordType.TP,    mark:"CP10",
-        latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
+        latGrad:51,latMinute:33.399,latDirection:N,lonGrad:14,lonMinute:8.079,lonDirection:E,altitude:500,gatewidth2:1.0,
         coordTrueTrack:237.1648386550,coordMeasureDistance:104.8406641113,
         measureTrueTrack:237.0,measureDistance:105.2,legMeasureDistance:79.7,legDistance:8.6069114471,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.FP,    mark:"FP",
-        latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
+        latGrad:51,latMinute:30.353,latDirection:N,lonGrad:13,lonMinute:58.485,lonDirection:E,altitude:500,gatewidth2:1.0,
         coordTrueTrack:242.9619395538,coordMeasureDistance:62.0480855033,
         measureTrueTrack:244.0,measureDistance:62.4,legMeasureDistance:62.4,legDistance:6.7386609071,secretLegRatio:0,planProcedureTurn:false],
        [type:CoordType.LDG,   mark:"LDG",
-        latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+        latGrad:51,latMinute:29.5058,latDirection:N,lonGrad:13,lonMinute:52.8361,lonDirection:E,altitude:300,gatewidth2:0.02f,
         coordTrueTrack:256.4547835436,coordMeasureDistance:33.4955075819,
         measureTrueTrack:null,measureDistance:null,legMeasureDistance:null,legDistance:null,secretLegRatio:0,planProcedureTurn:false]
       ]
@@ -1365,7 +1387,9 @@ class DemoContestStandardService
     }
 	
     List test1CoordResult3() {
-      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+      String N = CoordPresentation.NORTH
+      String E = CoordPresentation.EAST
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:N,lonGrad:13,lonMinute:44.2321,lonDirection:E,altitude:180,gatewidth2:0.01f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:21:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 02,17190'",resultLongitude:"E 013\u00b0 44,23030'",resultAltitude:237,
@@ -1374,7 +1398,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:N,lonGrad:13,lonMinute:49.207,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:29:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,84870'",resultLongitude:"E 013\u00b0 49,21010'",resultAltitude:1375,
@@ -1383,7 +1407,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:N,lonGrad:14,lonMinute:6.679,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:35:35",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,29710'",resultLongitude:"E 014\u00b0 06,67800'",resultAltitude:1409,
@@ -1392,7 +1416,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:9
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:N,lonGrad:14,lonMinute:15.555,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:38:58",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,24970'",resultLongitude:"E 014\u00b0 15,53960'",resultAltitude:1609,
@@ -1401,7 +1425,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:N,lonGrad:14,lonMinute:10.417,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:43:38",planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,29270'",resultLongitude:"E 014\u00b0 10,54200'",resultAltitude:1399,
@@ -1410,7 +1434,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:N,lonGrad:13,lonMinute:57.662,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:52:50",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,69550'",resultLongitude:"E 013\u00b0 57,68880'",resultAltitude:1629,
@@ -1419,7 +1443,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:N,lonGrad:14,lonMinute:1.635,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:57:28",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,68110'",resultLongitude:"E 014\u00b0 01,81410'",resultAltitude:1496,
@@ -1428,7 +1452,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:11
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:N,lonGrad:14,lonMinute:4.857,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:01:17",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,88340'",resultLongitude:"E 014\u00b0 04,96680'",resultAltitude:1569,
@@ -1437,7 +1461,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:5
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:N,lonGrad:14,lonMinute:8.299,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:02:35",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,11140'",resultLongitude:"E 014\u00b0 08,27210'",resultAltitude:1707,
@@ -1446,7 +1470,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:18
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:N,lonGrad:14,lonMinute:23.4,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:08:23",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,52840'",resultLongitude:"E 014\u00b0 23,41510'",resultAltitude:1523,
@@ -1455,7 +1479,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:N,lonGrad:14,lonMinute:19.606,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:11:31",planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 37,97560'",resultLongitude:"E 014\u00b0 19,65030'",resultAltitude:1387,
@@ -1464,7 +1488,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:8
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:N,lonGrad:14,lonMinute:8.079,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:18:13",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,44220'",resultLongitude:"E 014\u00b0 08,05000'",resultAltitude:1615,
@@ -1473,7 +1497,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:N,lonGrad:13,lonMinute:58.485,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:23:34",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,34350'",resultLongitude:"E 013\u00b0 58,49930'",resultAltitude:1358,
@@ -1482,7 +1506,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:N,lonGrad:13,lonMinute:52.8361,lonDirection:E,altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:33:34",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 29,52040'",resultLongitude:"E 013\u00b0 52,92050'",resultAltitude:337,
@@ -1495,7 +1519,9 @@ class DemoContestStandardService
     }
 	
     List test1CoordResult18() {
-      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+      String N = CoordPresentation.NORTH
+      String E = CoordPresentation.EAST
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:N,lonGrad:13,lonMinute:44.2321,lonDirection:E,altitude:180,gatewidth2:0.01f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:03:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 02,17410'",resultLongitude:"E 013\u00b0 44,23230'",resultAltitude:227,
@@ -1504,7 +1530,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:N,lonGrad:13,lonMinute:49.207,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:11:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,83500'",resultLongitude:"E 013\u00b0 49,22100'",resultAltitude:1170,
@@ -1513,7 +1539,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:N,lonGrad:14,lonMinute:6.679,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:17:56",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,17800'",resultLongitude:"E 014\u00b0 06,68980'",resultAltitude:1236,
@@ -1522,7 +1548,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:N,lonGrad:14,lonMinute:15.555,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:21:30",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,13820'",resultLongitude:"E 014\u00b0 15,54840'",resultAltitude:1290,
@@ -1531,7 +1557,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:N,lonGrad:14,lonMinute:10.417,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:26:25",planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,27670'",resultLongitude:"E 014\u00b0 10,60120'",resultAltitude:1198,
@@ -1540,7 +1566,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:N,lonGrad:13,lonMinute:57.662,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:36:14",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,74450'",resultLongitude:"E 013\u00b0 57,59730'",resultAltitude:965,
@@ -1549,7 +1575,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:N,lonGrad:14,lonMinute:1.635,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:41:08",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,66360'",resultLongitude:"E 014\u00b0 01,74150'",resultAltitude:1225,
@@ -1558,7 +1584,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:N,lonGrad:14,lonMinute:4.857,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:45:10",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,83570'",resultLongitude:"E 014\u00b0 04,76570'",resultAltitude:1395,
@@ -1567,7 +1593,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:N,lonGrad:14,lonMinute:8.299,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:46:33",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,90780'",resultLongitude:"E 014\u00b0 08,31320'",resultAltitude:1405,
@@ -1576,7 +1602,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:6
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:N,lonGrad:14,lonMinute:23.4,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:52:40",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,52900'",resultLongitude:"E 014\u00b0 23,38740'",resultAltitude:2166,
@@ -1585,7 +1611,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:N,lonGrad:14,lonMinute:19.606,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:55:57",planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 38,01820'",resultLongitude:"E 014\u00b0 19,59790'",resultAltitude:1822,
@@ -1594,7 +1620,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:N,lonGrad:14,lonMinute:8.079,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"14:03:07",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,42810'",resultLongitude:"E 014\u00b0 08,03690'",resultAltitude:1384,
@@ -1603,7 +1629,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:N,lonGrad:13,lonMinute:58.485,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"14:08:50",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,43140'",resultLongitude:"E 013\u00b0 58,42820'",resultAltitude:1502,
@@ -1612,7 +1638,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:N,lonGrad:13,lonMinute:52.8361,lonDirection:E,altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"14:18:50",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 29,51960'",resultLongitude:"E 013\u00b0 52,90880'",resultAltitude:306,
@@ -1625,7 +1651,9 @@ class DemoContestStandardService
     }
 	
     List test1CoordResult19() {
-      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+      String N = CoordPresentation.NORTH
+      String E = CoordPresentation.EAST
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:N,lonGrad:13,lonMinute:44.2321,lonDirection:E,altitude:180,gatewidth2:0.01f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:06:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 02,17160'",resultLongitude:"E 013\u00b0 44,23470'",resultAltitude:205,
@@ -1634,7 +1662,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:N,lonGrad:13,lonMinute:49.207,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:14:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,00160'",resultLongitude:"E 013\u00b0 49,20850'",resultAltitude:1001,
@@ -1643,7 +1671,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:21
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:N,lonGrad:14,lonMinute:6.679,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:20:56",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,29600'",resultLongitude:"E 014\u00b0 06,67890'",resultAltitude:1490,
@@ -1652,7 +1680,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:14
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:N,lonGrad:14,lonMinute:15.555,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:24:30",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,37350'",resultLongitude:"E 014\u00b0 15,56770'",resultAltitude:1595,
@@ -1661,7 +1689,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:15
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:N,lonGrad:14,lonMinute:10.417,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:29:25",planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,12430'",resultLongitude:"E 014\u00b0 10,91000'",resultAltitude:1412,
@@ -1670,7 +1698,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:18
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:N,lonGrad:13,lonMinute:57.662,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:39:14",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,53060'",resultLongitude:"E 013\u00b0 58,04620'",resultAltitude:1435,
@@ -1679,7 +1707,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:16
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:N,lonGrad:14,lonMinute:1.635,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:44:08",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,66070'",resultLongitude:"E 014\u00b0 01,74090'",resultAltitude:1923,
@@ -1688,7 +1716,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:11
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:N,lonGrad:14,lonMinute:4.857,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:48:10",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,90240'",resultLongitude:"E 014\u00b0 05,07120'",resultAltitude:2058,
@@ -1697,7 +1725,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:N,lonGrad:14,lonMinute:8.299,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:49:33",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,64160'",resultLongitude:"E 014\u00b0 08,33550'",resultAltitude:1687,
@@ -1706,7 +1734,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:11
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:N,lonGrad:14,lonMinute:23.4,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:55:40",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,61940'",resultLongitude:"E 014\u00b0 23,36750'",resultAltitude:1774,
@@ -1715,7 +1743,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:14
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:N,lonGrad:14,lonMinute:19.606,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:58:57",planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 37,31980'",resultLongitude:"E 014\u00b0 20,31900'",resultAltitude:2359,
@@ -1724,7 +1752,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:N,lonGrad:14,lonMinute:8.079,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:06:07",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 32,96050'",resultLongitude:"E 014\u00b0 08,53140'",resultAltitude:1775,
@@ -1733,7 +1761,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:200
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:N,lonGrad:13,lonMinute:58.485,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:11:50",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,21180'",resultLongitude:"E 013\u00b0 58,60650'",resultAltitude:1291,
@@ -1742,7 +1770,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:14
        ],
-       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:N,lonGrad:13,lonMinute:52.8361,lonDirection:E,altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"13:21:50",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 29,52080'",resultLongitude:"E 013\u00b0 52,91520'",resultAltitude:302,
@@ -1755,7 +1783,9 @@ class DemoContestStandardService
     }
 	
     List test1CoordResult11() {
-      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+      String N = CoordPresentation.NORTH
+      String E = CoordPresentation.EAST
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:N,lonGrad:13,lonMinute:44.2321,lonDirection:E,altitude:180,gatewidth2:0.01f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:45:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 02,17200'",resultLongitude:"E 013\u00b0 44,23130'",resultAltitude:209,
@@ -1764,7 +1794,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:N,lonGrad:13,lonMinute:49.207,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:53:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,66460'",resultLongitude:"E 013\u00b0 49,22740'",resultAltitude:1678,
@@ -1773,7 +1803,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:N,lonGrad:14,lonMinute:6.679,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:00:47",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,93310'",resultLongitude:"E 014\u00b0 06,67050'",resultAltitude:1816,
@@ -1782,7 +1812,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:8
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:N,lonGrad:14,lonMinute:15.555,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:04:48",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,15430'",resultLongitude:"E 014\u00b0 15,57610'",resultAltitude:1622,
@@ -1791,7 +1821,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:4
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:N,lonGrad:14,lonMinute:10.417,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:10:19",planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,22360'",resultLongitude:"E 014\u00b0 10,69030'",resultAltitude:1659,
@@ -1800,7 +1830,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:17
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:N,lonGrad:13,lonMinute:57.662,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:21:38",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,80050'",resultLongitude:"E 013\u00b0 57,51850'",resultAltitude:1571,
@@ -1809,7 +1839,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:6
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:N,lonGrad:14,lonMinute:1.635,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:27:08",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,63940'",resultLongitude:"E 014\u00b0 01,71880'",resultAltitude:1970,
@@ -1818,7 +1848,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:N,lonGrad:14,lonMinute:4.857,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:31:40",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,83070'",resultLongitude:"E 014\u00b0 04,75630'",resultAltitude:1827,
@@ -1827,7 +1857,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:4
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:N,lonGrad:14,lonMinute:8.299,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:33:13",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 37,95600'",resultLongitude:"E 014\u00b0 08,42100'",resultAltitude:1675,
@@ -1836,7 +1866,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:200
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:N,lonGrad:14,lonMinute:23.4,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:40:06",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,39500'",resultLongitude:"E 014\u00b0 23,40800'",resultAltitude:1839,
@@ -1845,7 +1875,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:N,lonGrad:14,lonMinute:19.606,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:43:46",planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 38,01920'",resultLongitude:"E 014\u00b0 19,61850'",resultAltitude:2007,
@@ -1854,7 +1884,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:N,lonGrad:14,lonMinute:8.079,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:52:07",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,47440'",resultLongitude:"E 014\u00b0 07,98900'",resultAltitude:1574,
@@ -1863,7 +1893,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:5
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:N,lonGrad:13,lonMinute:58.485,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:58:48",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,43450'",resultLongitude:"E 013\u00b0 58,43000'",resultAltitude:1644,
@@ -1872,7 +1902,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:5
        ],
-       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:N,lonGrad:13,lonMinute:52.8361,lonDirection:E,altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:08:48",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 29,52090'",resultLongitude:"E 013\u00b0 52,91070'",resultAltitude:318,
@@ -1885,7 +1915,9 @@ class DemoContestStandardService
     }
 	
     List test1CoordResult13() {
-      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:'N',lonGrad:13,lonMinute:44.2321,lonDirection:'E',altitude:180,gatewidth2:0.01f,
+      String N = CoordPresentation.NORTH
+      String E = CoordPresentation.EAST
+      [[type:CoordType.TO,    mark:"T/O", latGrad:52,latMinute:2.1707,latDirection:N,lonGrad:13,lonMinute:44.2321,lonDirection:E,altitude:180,gatewidth2:0.01f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:51:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 02,17260'",resultLongitude:"E 013\u00b0 44,23400'",resultAltitude:214,
@@ -1894,7 +1926,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:'N',lonGrad:13,lonMinute:49.207,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.SP,    mark:"SP",  latGrad:52,latMinute:4.897,latDirection:N,lonGrad:13,lonMinute:49.207,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"10:59:00",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 04,81010'",resultLongitude:"E 013\u00b0 49,21410'",resultAltitude:985,
@@ -1903,7 +1935,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:'N',lonGrad:14,lonMinute:6.679,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP1", latGrad:52,latMinute:5.121,latDirection:N,lonGrad:14,lonMinute:6.679,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:06:47",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,00180'",resultLongitude:"E 014\u00b0 06,69910'",resultAltitude:1293,
@@ -1912,7 +1944,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:1
        ],
-       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:'N',lonGrad:14,lonMinute:15.555,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP2", latGrad:52,latMinute:5.223,latDirection:N,lonGrad:14,lonMinute:15.555,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:10:48",planProcedureTurn:false,
         resultLatitude:"N 052\u00b0 05,15960'",resultLongitude:"E 014\u00b0 15,55880'",resultAltitude:1240,
@@ -1921,7 +1953,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:3
        ],
-       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:'N',lonGrad:14,lonMinute:10.417,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP3", latGrad:52,latMinute:1.367,latDirection:N,lonGrad:14,lonMinute:10.417,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:16:19",planProcedureTurn:true,
         resultLatitude:"N 052\u00b0 01,26100'",resultLongitude:"E 014\u00b0 10,64230'",resultAltitude:1281,
@@ -1930,7 +1962,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:8
        ],
-       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:'N',lonGrad:13,lonMinute:57.662,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP4", latGrad:51,latMinute:51.719,latDirection:N,lonGrad:13,lonMinute:57.662,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:27:38",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 51,74850'",resultLongitude:"E 013\u00b0 57,59490'",resultAltitude:1424,
@@ -1939,7 +1971,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:'N',lonGrad:14,lonMinute:1.635,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP5", latGrad:51,latMinute:44.633,latDirection:N,lonGrad:14,lonMinute:1.635,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:33:08",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 44,63130'",resultLongitude:"E 014\u00b0 01,65960'",resultAltitude:1307,
@@ -1948,7 +1980,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:15
        ],
-       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:'N',lonGrad:14,lonMinute:4.857,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP6", latGrad:51,latMinute:38.847,latDirection:N,lonGrad:14,lonMinute:4.857,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:37:40",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,85720'",resultLongitude:"E 014\u00b0 04,88720'",resultAltitude:1149,
@@ -1957,7 +1989,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:'N',lonGrad:14,lonMinute:8.299,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP7", latGrad:51,latMinute:38.983,latDirection:N,lonGrad:14,lonMinute:8.299,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:39:13",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 38,76200'",resultLongitude:"E 014\u00b0 08,31770'",resultAltitude:995,
@@ -1966,7 +1998,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:10
        ],
-       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:'N',lonGrad:14,lonMinute:23.4,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP8", latGrad:51,latMinute:39.535,latDirection:N,lonGrad:14,lonMinute:23.4,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:46:06",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 39,46530'",resultLongitude:"E 014\u00b0 23,41820'",resultAltitude:895,
@@ -1975,7 +2007,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:'N',lonGrad:14,lonMinute:19.606,lonDirection:'E',altitude:500,gatewidth2:2.0,
+       [type:CoordType.SECRET,mark:"CP9", latGrad:51,latMinute:38.02,latDirection:N,lonGrad:14,lonMinute:19.606,lonDirection:E,altitude:500,gatewidth2:2.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:49:46",planProcedureTurn:true,
         resultLatitude:"N 051\u00b0 37,98390'",resultLongitude:"E 014\u00b0 19,65190'",resultAltitude:1212,
@@ -1984,7 +2016,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:true,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:2
        ],
-       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:'N',lonGrad:14,lonMinute:8.079,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.TP,    mark:"CP10",latGrad:51,latMinute:33.399,latDirection:N,lonGrad:14,lonMinute:8.079,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"11:58:07",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 33,27590'",resultLongitude:"E 014\u00b0 08,20140'",resultAltitude:1389,
@@ -1993,7 +2025,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:4
        ],
-       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:'N',lonGrad:13,lonMinute:58.485,lonDirection:'E',altitude:500,gatewidth2:1.0,
+       [type:CoordType.FP,    mark:"FP",  latGrad:51,latMinute:30.353,latDirection:N,lonGrad:13,lonMinute:58.485,lonDirection:E,altitude:500,gatewidth2:1.0,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:04:48",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 30,42410'",resultLongitude:"E 013\u00b0 58,43490'",resultAltitude:1299,
@@ -2002,7 +2034,7 @@ class DemoContestStandardService
         resultProcedureTurnNotFlown:false,resultProcedureTurnEntered:false,resultMinAltitudeMissed:false,
         resultEntered:true,penaltyCoord:0
        ],
-       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:'N',lonGrad:13,lonMinute:52.8361,lonDirection:'E',altitude:300,gatewidth2:0.02f,
+       [type:CoordType.LDG,   mark:"LDG", latGrad:51,latMinute:29.5058,latDirection:N,lonGrad:13,lonMinute:52.8361,lonDirection:E,altitude:300,gatewidth2:0.02f,
         legMeasureDistance:null,legDistance:null,measureTrueTrack:null,secretLegRatio:0,
         planCpTime:"12:14:48",planProcedureTurn:false,
         resultLatitude:"N 051\u00b0 29,51970'",resultLongitude:"E 013\u00b0 52,91080'",resultAltitude:318,
@@ -2026,12 +2058,13 @@ class DemoContestStandardService
         maxLandingTime:"11:33:34",
         arrivalTime:"11:38:34",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:58,flightTestPenalties:58,
@@ -2050,12 +2083,13 @@ class DemoContestStandardService
         maxLandingTime:"14:18:50",
         arrivalTime:"14:23:50",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:13,flightTestPenalties:13,
@@ -2074,12 +2108,13 @@ class DemoContestStandardService
         maxLandingTime:"13:21:50",
         arrivalTime:"13:26:50",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:21,planningTestPenalties:21,
         flightTestCheckPointPenalties:337,flightTestPenalties:337,
@@ -2098,12 +2133,13 @@ class DemoContestStandardService
         maxLandingTime:"12:08:48",
         arrivalTime:"12:13:48",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:2,planningTestPenalties:2,
         flightTestCheckPointPenalties:252,flightTestPenalties:252,
@@ -2122,12 +2158,13 @@ class DemoContestStandardService
         maxLandingTime:"12:14:48",
         arrivalTime:"12:19:48",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:45,flightTestPenalties:45,
@@ -2248,12 +2285,13 @@ class DemoContestStandardService
         maxLandingTime:"11:33:34",
         arrivalTime:"11:38:34",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:58,flightTestPenalties:58,
@@ -2272,12 +2310,13 @@ class DemoContestStandardService
         maxLandingTime:"14:18:50",
         arrivalTime:"14:23:50",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:13,flightTestPenalties:13,
@@ -2296,12 +2335,13 @@ class DemoContestStandardService
         maxLandingTime:"13:21:50",
         arrivalTime:"13:26:50",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:21,planningTestPenalties:21,
         flightTestCheckPointPenalties:337,flightTestPenalties:337,
@@ -2320,12 +2360,13 @@ class DemoContestStandardService
         maxLandingTime:"12:08:48",
         arrivalTime:"12:13:48",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:2,planningTestPenalties:2,
         flightTestCheckPointPenalties:252,flightTestPenalties:252,
@@ -2344,12 +2385,13 @@ class DemoContestStandardService
         maxLandingTime:"12:14:48",
         arrivalTime:"12:19:48",
         arrivalTimeWarning:false,takeoffTimeWarning:false,
-        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,
+        planningTestGivenTooLate:false,planningTestExitRoomTooLate:false,planningTestForbiddenCalculators:false,
         planningTestLegComplete:true,planningTestComplete:true,
         flightTestTakeoffMissed:false,flightTestBadCourseStartLanding:false,
         flightTestLandingTooLate:false,flightTestGivenTooLate:false,
 		flightTestSafetyAndRulesInfringement:false, flightTestInstructionsNotFollowed:false,
-		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,flightTestFrequencyNotMonitored:false,
+		flightTestFalseEnvelopeOpened:false,flightTestSafetyEnvelopeOpened:false,
+        flightTestFrequencyNotMonitored:false,flightTestForbiddenEquipment:false,
         flightTestCheckPointsComplete:true,flightTestComplete:true,
         planningTestLegPenalties:0,planningTestPenalties:0,
         flightTestCheckPointPenalties:45,flightTestPenalties:45,

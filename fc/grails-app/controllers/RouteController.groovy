@@ -24,9 +24,9 @@ class RouteController {
             session.flighttestReturnAction = actionName
             session.flighttestReturnController = controllerName
             session.flighttestReturnID = params.id
-            session.routeReturnAction = actionName
-            session.routeReturnController = controllerName
-            session.routeReturnID = params.id
+            //session.routeReturnAction = actionName
+            //session.routeReturnController = controllerName
+            //session.routeReturnID = params.id
             return [routeInstanceList:routeList]
         }
 		fcService.printdone ""
@@ -36,6 +36,9 @@ class RouteController {
     def show = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
+            session.routeReturnAction = 'list'
+            session.routeReturnController = controllerName
+            session.routeReturnID = params.id
         	return [routeInstance:route.instance]
         } else {
             flash.message = route.message
@@ -46,6 +49,9 @@ class RouteController {
     def edit = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
+            session.routeReturnAction = 'show'
+            session.routeReturnController = controllerName
+            session.routeReturnID = params.id
         	return [routeInstance:route.instance]
         } else {
             flash.message = route.message
@@ -67,14 +73,17 @@ class RouteController {
     }
 
     def create = {
-		def route = fcService.createRoute(params)
+		def route = fcService.createRoute(params,session.lastContest)
         return [routeInstance:route.instance]
     }
 
     def save = {
         def route = fcService.saveRoute(params,session.lastContest) 
+        flash.message = route.message
+        if (route.error) {
+            flash.error = true
+        }
         if (route.saved) {
-        	flash.message = route.message
         	redirect(action:show,id:route.instance.id)
         } else {
             render(view:'create',model:[routeInstance:route.instance])
@@ -112,6 +121,26 @@ class RouteController {
     def createsecretcoordroutes = {
         Map route = domainService.GetRoute(params) 
         redirect(controller:'coordRoute',action:'create',params:['secret':true,'route.id':route.instance.id,'routeid':route.instance.id])
+    }
+    
+    def createenroutephoto = {
+        Map route = domainService.GetRoute(params)
+        redirect(controller:'coordEnroutePhoto',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
+    }
+    
+    def removeallenroutephoto = {
+        Map route = domainService.GetRoute(params)
+        redirect(controller:'coordEnroutePhoto',action:'removeall',params:['route.id':route.instance.id,'routeid':route.instance.id])
+    }
+
+    def createenroutecanvas = {
+        Map route = domainService.GetRoute(params)
+        redirect(controller:'coordEnrouteCanvas',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])
+    }
+    
+    def removeallenroutecanvas = {
+        Map route = domainService.GetRoute(params)
+        redirect(controller:'coordEnrouteCanvas',action:'removeall',params:['route.id':route.instance.id,'routeid':route.instance.id])
     }
 
 	def selectaflosroute = {
@@ -167,7 +196,10 @@ class RouteController {
     }
     
     def importfileroute = {
-        redirect(action:selectfileroute)
+        if (session?.lastContest) {
+            String line_content = ImportSign.GetImportTxtLineContent(session.lastContest)
+            redirect(action:selectfileroute, params:[lineContent:line_content])
+        }
     }
     
     def importfileroute2 = {
@@ -186,6 +218,12 @@ class RouteController {
                             ]
         Map import_route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, file, import_params)
         if (!import_route.found) {
+            import_route = fcService.importFileRoute(RouteFileTools.KML_EXTENSION, session.lastContest, file, import_params)
+        }
+        if (!import_route.found) {
+            import_route = fcService.importFileRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, file, import_params)
+        }
+        if (!import_route.found) {
             import_route = fcService.importFileRoute(RouteFileTools.REF_EXTENSION, session.lastContest, file, import_params)
         }
         if (!import_route.found) {
@@ -197,6 +235,55 @@ class RouteController {
         flash.error = import_route.error
         flash.message = import_route.message
         redirect(action:list)
+    }
+    
+    def selectimporttxt = {
+        return [:]
+    }
+    
+    def importcoord = {
+        session.routeReturnAction = "show"
+        session.routeReturnController = controllerName
+        session.routeReturnID = params.id
+        Route route_instance = Route.get(params.id)
+        Map turnpoint_sign_data = ImportSign.GetRouteCoordData(route_instance)
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import',routeid:params.id,importSign:turnpoint_sign_data.importsign,lineContent:turnpoint_sign_data.linecontent])
+    }
+    
+    def importturnpointsign = {
+        session.routeReturnAction = "show"
+        session.routeReturnController = controllerName
+        session.routeReturnID = params.id
+        Route route_instance = Route.get(params.id)
+        Map turnpoint_sign_data = ImportSign.GetTurnpointSignData(route_instance)
+        redirect(action:selectimporttxt, params:[titlecode:turnpoint_sign_data.titlecode,routeid:params.id,importSign:turnpoint_sign_data.importsign,lineContent:turnpoint_sign_data.linecontent])
+    }
+    
+    def importenroutephoto = {
+        session.routeReturnAction = "show"
+        session.routeReturnController = controllerName
+        session.routeReturnID = params.id
+        Route route_instance = Route.get(params.id)
+        Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, true)
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.photo.import',routeid:params.id,importSign:enroute_sign_data.importsign,lineContent:enroute_sign_data.linecontent])
+    }
+    
+    def importenroutecanvas = {
+        session.routeReturnAction = "show"
+        session.routeReturnController = controllerName
+        session.routeReturnID = params.id
+        Route route_instance = Route.get(params.id)
+        Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, false)
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.canvas.import',routeid:params.id,importSign:enroute_sign_data.importsign,lineContent:enroute_sign_data.linecontent])
+    }
+    
+    def importenroutesign = {
+        Route route_instance = Route.get(params.routeid)
+        def file = request.getFile('txtfile')
+        Map import_txt = fcService.importSignFile(RouteFileTools.TXT_EXTENSION, route_instance, file, ImportSign.(params.importSign))
+        flash.error = import_txt.error
+        flash.message = import_txt.message
+        redirect(action:"show",controller:"route",id:route_instance.id)
     }
     
 	def calculateroutelegs = {
@@ -325,7 +412,7 @@ class RouteController {
             gpxService.printstart "Show offline map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, upload_gpx_file_name, false, true) // false - no Print, true - Points
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, upload_gpx_file_name, false, true, false) // false - no Print, true - Points, false - no wrEnrouteSign
             if (converter.ok) {
                 gpxService.printdone ""
                 session.gpxviewerReturnAction = 'show'
@@ -353,7 +440,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, true) // false - no Print, true - Points
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, true, true) // false - no Print, true - Points, true - wrEnrouteSign
             if (converter.ok) {
                 gpxService.printdone ""
                 session.gpxviewerReturnAction = 'show'
@@ -381,7 +468,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, false) // false - no Print, false - no Points
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, false, true) // false - no Print, false - no Points, true - wrEnrouteSign
             if (converter.ok) {
                 String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -448,7 +535,7 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
-                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true) // true - Print, true - Points
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true, true) // true - Print, true - Points, true - wrEnrouteSign
                 if (converter.ok) {
                     Map email = GetEMailBody(session.lastContest, route.instance)
                     

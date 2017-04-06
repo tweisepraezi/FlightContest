@@ -71,7 +71,7 @@ class GpxController
                 if (route_instance) {
                     session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
                 } else {
-                    session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + gpx_filename))
+                    session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + gpx_filename, false)) // false - no wrEnrouteSign
                 }
                 if (params.offlinemap) {
                     redirect(action:'startofflineviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
@@ -124,7 +124,7 @@ class GpxController
                     if (route_instance) {
                         session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
                     } else {
-                        session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + upload_gpx_file_name))
+                        session.gpxShowPoints = HTMLFilter.GetStr(gpxService.GetShowPoints(webroot_dir + upload_gpx_file_name, false)) // false - no wrEnrouteSign
                     }
                     if (params.offlinemap) {
                         redirect(action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])

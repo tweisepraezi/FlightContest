@@ -15,7 +15,7 @@ class Test
 	Aircraft taskAircraft                                  // DB-2.3
     Integer aflosStartNum = 0                              // DB-2.10
     Boolean showAflosMark = false                          // DB-2.12
-    
+
 	// planning
 	boolean timeCalculated = false
 	int timetableVersion = 0
@@ -35,6 +35,7 @@ class Test
 	boolean planningTestLegComplete = false
 	boolean planningTestGivenTooLate = false
 	boolean planningTestExitRoomTooLate = false
+    Boolean planningTestForbiddenCalculators = false       // DB-2.13
 	int     planningTestOtherPenalties = 0                 // DB-2.0
 	int     planningTestPenalties = 0
 	boolean planningTestComplete = false
@@ -52,6 +53,7 @@ class Test
 	Boolean flightTestFalseEnvelopeOpened = false          // DB-2.3
 	Boolean flightTestSafetyEnvelopeOpened = false         // DB-2.3
 	Boolean flightTestFrequencyNotMonitored = false        // DB-2.3
+    Boolean flightTestForbiddenEquipment = false           // DB-2.13
     int     flightTestOtherPenalties = 0                   // DB-2.0
     int     flightTestPenalties = 0
     boolean flightTestComplete = false
@@ -59,14 +61,17 @@ class Test
 	int     flightTestVersion = 0                          // Änderungsanzeige, DB-2.0
     String  flightTestLink = ""                            // DB-2.10
 
-    int     observationTestRoutePhotoPenalties = 0
     int     observationTestTurnPointPhotoPenalties = 0
+    int     observationTestRoutePhotoPenalties = 0
     int     observationTestGroundTargetPenalties = 0
+    Integer observationTestOtherPenalties = 0              // DB-2.13
     int     observationTestPenalties = 0
 	boolean observationTestComplete = false
 	boolean observationTestModified = true                 // Änderungsanzeige, DB-2.0
 	int     observationTestVersion = 0                     // Änderungsanzeige, DB-2.0
-
+    EnrouteValueUnit observationTestEnroutePhotoValueUnit  // DB-2.13
+    EnrouteValueUnit observationTestEnrouteCanvasValueUnit // DB-2.13
+    
 	String  landingTest1Measure = ""                       // DB-2.0
 	int     landingTest1MeasurePenalties = 0               // DB-2.0
 	int     landingTest1Penalties = 0                      // DB-2.0
@@ -147,19 +152,29 @@ class Test
     
     String reserve = ""                                    // DB-2.12
     
+    final static int SCANNEDIMAGEMAXSIZE = 1048576         // 1MB, DB-2.13
+    
+    byte[] scannedPlanningTest                             // DB-2.13
+    byte[] scannedObservationTest                          // DB-2.13
+
 	// transient values 
-	static transients = ['printPlanningResults','printFlightResults','printFlightMap','printObservationResults','printLandingResults','printSpecialResults','printProvisionalResults',]
+	static transients = ['printPlanningResults','printPlanningResultsScan',
+                         'printFlightResults','printFlightMap',
+                         'printObservationResults','printObservationResultsScan',
+                         'printLandingResults','printSpecialResults','printProvisionalResults',]
 	boolean printPlanningResults = true
+    boolean printPlanningResultsScan = true
 	boolean printFlightResults = true
     boolean printFlightMap = true
 	boolean printObservationResults = true
+    boolean printObservationResultsScan = true
 	boolean printLandingResults = true
 	boolean printSpecialResults = true
 	boolean printProvisionalResults = false
 	
 	static belongsTo = [task:Task]
 	
-	static hasMany = [testlegplannings:TestLegPlanning,testlegflights:TestLegFlight,coordresults:CoordResult]
+	static hasMany = [testlegplannings:TestLegPlanning,testlegflights:TestLegFlight,coordresults:CoordResult,turnpointdata:TurnpointData,enroutephotodata:EnroutePhotoData,enroutecanvasdata:EnrouteCanvasData]
 	
     static constraints = {
 		crew(nullable:true)
@@ -168,8 +183,8 @@ class Test
 		taskTAS(scale:10)
 		planningTestOtherPenalties()
 		flightTestOtherPenalties()
-		landingTestOtherPenalties(min:0)
-		landingTestPenalties(min:0)
+		landingTestOtherPenalties()
+		landingTestPenalties()
 		
 		// DB-2.3 compatibility
 		taskAircraft(nullable:true)
@@ -207,12 +222,23 @@ class Test
         loggerResult(nullable:true)
         showAflosMark(nullable:true)
         reserve(nullable:true)
+        
+        // DB-2.13 compatibility
+        planningTestForbiddenCalculators(nullable:true)
+        flightTestForbiddenEquipment(nullable:true)
+        observationTestEnroutePhotoValueUnit(nullable:true)
+        observationTestEnrouteCanvasValueUnit(nullable:true)
+        observationTestOtherPenalties(nullable:true)
+        scannedPlanningTest(nullable:true,maxSize:SCANNEDIMAGEMAXSIZE)
+        scannedObservationTest(nullable:true,maxSize:SCANNEDIMAGEMAXSIZE)
     }
 
 	static mapping = {
 		testlegplannings sort:"id"
 		testlegflights sort:"id"
 		coordresults sort:"id"
+        enroutedata sort:"id"
+        turnpointdata sort:"id"
 	}
 	
 	void ResetPlanningTestResults()
@@ -221,6 +247,7 @@ class Test
 		planningTestLegComplete = false
 		planningTestGivenTooLate = false
 		planningTestExitRoomTooLate = false
+        planningTestForbiddenCalculators = false
 		planningTestPenalties = 0
 		planningTestComplete = false
 	}
@@ -238,17 +265,20 @@ class Test
 		flightTestFalseEnvelopeOpened = false
 		flightTestSafetyEnvelopeOpened = false
 		flightTestFrequencyNotMonitored = false
+        flightTestForbiddenEquipment = false
 		flightTestPenalties = 0
 		flightTestComplete = false
 	}
 	
 	void ResetObservationTestResults()
 	{
+        observationTestTurnPointPhotoPenalties = 0
 		observationTestRoutePhotoPenalties = 0
-		observationTestTurnPointPhotoPenalties = 0
 		observationTestGroundTargetPenalties = 0
 		observationTestPenalties = 0
 		observationTestComplete = false
+        observationTestEnroutePhotoValueUnit = null
+        observationTestEnrouteCanvasValueUnit = null
 	}
 	
 	void ResetLandingTestResults()
@@ -334,6 +364,9 @@ class Test
 		if (IsSpecialTestRun()) {
 			taskPenalties += specialTestPenalties
 		}
+        if (IsIncreaseEnabled()) {
+            taskPenalties += GetIncreasePenalties(taskPenalties)
+        }
 		crew.planningPenalties = 0
 		crew.flightPenalties = 0
 		crew.observationPenalties = 0
@@ -400,6 +433,48 @@ class Test
 		return task.observationTestRun
 	}
 	
+    boolean IsObservationTestTurnpointRun()
+    {
+        if (task.contest.resultClasses) {
+            if (crew.resultclass) {
+                TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+                if (taskclass_instance) {
+                    return taskclass_instance.observationTestTurnpointRun
+                }
+            }
+            return false
+        }
+        return task.observationTestTurnpointRun
+    }
+    
+    boolean IsObservationTestEnroutePhotoRun()
+    {
+        if (task.contest.resultClasses) {
+            if (crew.resultclass) {
+                TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+                if (taskclass_instance) {
+                    return taskclass_instance.observationTestEnroutePhotoRun
+                }
+            }
+            return false
+        }
+        return task.observationTestEnroutePhotoRun
+    }
+    
+    boolean IsObservationTestEnrouteCanvasRun()
+    {
+        if (task.contest.resultClasses) {
+            if (crew.resultclass) {
+                TaskClass taskclass_instance = TaskClass.findByTaskAndResultclass(task,crew.resultclass)
+                if (taskclass_instance) {
+                    return taskclass_instance.observationTestEnrouteCanvasRun
+                }
+            }
+            return false
+        }
+        return task.observationTestEnrouteCanvasRun
+    }
+    
 	boolean IsLandingTestRun()
 	{
 		if (task.contest.resultClasses) {
@@ -656,6 +731,9 @@ class Test
 				penalties += specialTestPenalties
 			}
 		}
+        if (IsIncreaseEnabled()) {
+            penalties += GetIncreasePenalties(penalties)
+        }
 		return penalties
 	}
 	
@@ -709,6 +787,7 @@ class Test
         if (printPlanningResults) {
             detail_num++
         }
+        // printPlanningResultsScan not relevant
         if (printFlightResults) {
             detail_num++
         }
@@ -716,6 +795,7 @@ class Test
         if (printObservationResults) {
             detail_num++
         }
+        // printObservationResultsScan not relevant
         if (printLandingResults) {
             detail_num++
         }
@@ -785,6 +865,11 @@ class Test
             return false
         }
         return task.contest.precisionFlying
+    }
+    
+    Integer GetIncreaseFactor()
+    {
+        return crew.GetIncreaseFactor()
     }
     
     String GetPrintLandingCalculatorValues()
@@ -868,6 +953,16 @@ class Test
 		return task.contest.planningTestExitRoomTooLatePoints
 	}
 	
+    int GetPlanningTestForbiddenCalculatorsPoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.planningTestForbiddenCalculatorsPoints
+            }
+        }
+        return task.contest.planningTestForbiddenCalculatorsPoints
+    }
+    
 	int GetFlightTestTakeoffMissedPoints()
 	{
 		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -1069,6 +1164,96 @@ class Test
 		return task.contest.flightTestFrequencyNotMonitoredPoints
 	}
 	
+    int GetFlightTestForbiddenEquipmentPoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.flightTestForbiddenEquipmentPoints
+            }
+        }
+        return task.contest.flightTestForbiddenEquipmentPoints
+    }
+    
+    EnrouteValueUnit GetObservationTestEnrouteValueUnit()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestEnrouteValueUnit
+            }
+        }
+        return task.contest.observationTestEnrouteValueUnit
+    }
+    
+    Float GetObservationTestEnrouteCorrectValue()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestEnrouteCorrectValue
+            }
+        }
+        return task.contest.observationTestEnrouteCorrectValue
+    }
+    
+    Float GetObservationTestEnrouteInexactValue()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestEnrouteInexactValue
+            }
+        }
+        return task.contest.observationTestEnrouteInexactValue
+    }
+    
+    Float GetObservationTestEnrouteInexactPoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestEnrouteInexactPoints
+            }
+        }
+        return task.contest.observationTestEnrouteInexactPoints
+    }
+    
+    Integer GetObservationTestEnrouteNotFoundPoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestEnrouteNotFoundPoints
+            }
+        }
+        return task.contest.observationTestEnrouteNotFoundPoints
+    }
+    
+    Integer GetObservationTestEnrouteFalsePoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestEnrouteFalsePoints
+            }
+        }
+        return task.contest.observationTestEnrouteFalsePoints
+    }
+    
+    Integer GetObservationTestTurnpointNotFoundPoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestTurnpointNotFoundPoints
+            }
+        }
+        return task.contest.observationTestTurnpointNotFoundPoints
+    }
+    
+    Integer GetObservationTestTurnpointFalsePoints()
+    {
+        if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+            if (crew.resultclass) {
+                return crew.resultclass.observationTestTurnpointFalsePoints
+            }
+        }
+        return task.contest.observationTestTurnpointFalsePoints
+    }
+    
     String GetPrecisionFlyingLandingText(int landingTestPoints)
     {
         switch (landingTestPoints) {
@@ -1713,6 +1898,11 @@ class Test
 		return crew.startNum  
 	}
 	
+    String name()
+    {
+        return "${crew.startNum} - ${taskAircraft.registration} - ${crew.name}"
+    }
+    
     String GetTitle(ResultType resultType)
     {
         return GetTitle(resultType, false) // false - no print
@@ -2114,5 +2304,208 @@ class Test
             }
         }
         return 0
+    }
+    
+    boolean IsIncreaseEnabled()
+    {
+        return task.increaseEnabled && crew.IsIncreaseEnabled()
+    }
+    
+    int GetIncreasePenalties(int addPenalties)
+    {
+        return crew.GetIncreaseFactor() * addPenalties / 100
+    }
+    
+    String GetIncreaseValue()
+    {
+        return crew.GetIncreaseFactor().toString() + "%"
+    }
+    
+    TurnpointRoute GetTurnpointRoute()
+    {
+        if (task.flighttest) {
+            return task.flighttest.route.turnpointRoute
+        }
+        return TurnpointRoute.None
+    }
+    
+    EnrouteMeasurement GetEnroutePhotoMeasurement(boolean ignoreObservationTestEnroutePhotoValueUnit = false)
+    {
+        if (!ignoreObservationTestEnroutePhotoValueUnit) {
+            if (observationTestEnroutePhotoValueUnit) {
+                return observationTestEnroutePhotoValueUnit.GetEnrouteMeasurement()
+            }
+        }
+        if (task.flighttest) {
+            return task.flighttest.route.enroutePhotoMeasurement
+        }
+        return EnrouteMeasurement.None
+    }
+    
+    EnrouteMeasurement GetEnroutePhotoResultMeasurement()
+    {
+        if (task.flighttest) {
+            return task.flighttest.route.enroutePhotoRoute.GetEnrouteResultMeasurement()
+        }
+        return EnrouteMeasurement.None
+    }
+    
+    EnrouteMeasurement GetEnrouteCanvasMeasurement(boolean ignoreObservationTestEnrouteCanvasValueUnit = false)
+    {
+        if (!ignoreObservationTestEnrouteCanvasValueUnit) {
+            if (observationTestEnrouteCanvasValueUnit) {
+                return observationTestEnrouteCanvasValueUnit.GetEnrouteMeasurement()
+            }
+        }
+        if (task.flighttest) {
+            return task.flighttest.route.enrouteCanvasMeasurement
+        }
+        return EnrouteMeasurement.None
+    }
+    
+    EnrouteMeasurement GetEnrouteCanvasResultMeasurement()
+    {
+        if (task.flighttest) {
+            return task.flighttest.route.enrouteCanvasRoute.GetEnrouteResultMeasurement()
+        }
+        return EnrouteMeasurement.None
+    }
+    
+    boolean IsObservationJudgeSign()
+    {
+        if (task.flighttest) {
+            if (task.flighttest.route.turnpointMapMeasurement && IsObservationTestTurnpointRun()) {
+                return true
+            }
+            if (GetEnroutePhotoMeasurement(true) == EnrouteMeasurement.Map && IsObservationTestEnroutePhotoRun()) {
+                return true
+            }
+            if (GetEnrouteCanvasMeasurement(true) == EnrouteMeasurement.Map && IsObservationTestEnrouteCanvasRun()) {
+                return true
+            }
+        }
+        return false
+    }
+
+    boolean IsObservationTestInexactValue()
+    {
+        float v = GetObservationTestEnrouteInexactValue()
+        return (v > 0) && (GetObservationTestEnrouteInexactPoints() > 0)
+    }
+
+    String GetObservationTestEnrouteCorrectValueStr(boolean isPrint)
+    {
+        return FcMath.EnrouteValueStr(GetObservationTestEnrouteCorrectValue()) + GetMsg(GetObservationTestEnrouteValueUnit().code,isPrint)
+    }
+    
+    String GetObservationTestEnrouteInexactValueStr(boolean isPrint)
+    {
+        return FcMath.EnrouteValueStr(GetObservationTestEnrouteInexactValue()) + GetMsg(GetObservationTestEnrouteValueUnit().code,isPrint)
+    }
+    
+    Map GetEnrouteDistanceNM(BigDecimal distanceNM)
+    {
+        Map ret = [correct_min:0, correct_max:0, inexact_min:0, inexact_max:0]
+        
+        int inexact_points = GetObservationTestEnrouteInexactPoints()
+        BigDecimal correct_check_value = GetObservationTestEnrouteCorrectValue()
+        BigDecimal inexact_check_value = GetObservationTestEnrouteInexactValue()
+        
+        if (GetObservationTestEnrouteValueUnit() == EnrouteValueUnit.mm) {
+            correct_check_value = FcMath.RoundDistance(task.contest.Convert_mm2NM(correct_check_value))
+            inexact_check_value = FcMath.RoundDistance(task.contest.Convert_mm2NM(inexact_check_value))
+        }
+        
+        return [inexact_points: inexact_points,
+                correct_min: distanceNM - correct_check_value, 
+                correct_max: distanceNM + correct_check_value,
+                inexact_min: distanceNM - inexact_check_value,
+                inexact_max: distanceNM + inexact_check_value
+               ]
+    }
+    
+    Map GetEnrouteDistancemm(BigDecimal distancemm)
+    {
+        Map ret = [correct_min:0, correct_max:0, inexact_min:0, inexact_max:0]
+        
+        int inexact_points = GetObservationTestEnrouteInexactPoints()
+        BigDecimal correct_check_value = GetObservationTestEnrouteCorrectValue()
+        BigDecimal inexact_check_value = GetObservationTestEnrouteInexactValue()
+        
+        if (GetObservationTestEnrouteValueUnit() == EnrouteValueUnit.NM) {
+            correct_check_value = FcMath.RoundMeasureDistance(task.contest.Convert_NM2mm(correct_check_value))
+            inexact_check_value = FcMath.RoundMeasureDistance(task.contest.Convert_NM2mm(inexact_check_value))
+        }
+        
+        return [inexact_points: inexact_points,
+                correct_min: distancemm - correct_check_value, 
+                correct_max: distancemm + correct_check_value,
+                inexact_min: distancemm - inexact_check_value,
+                inexact_max: distancemm + inexact_check_value
+               ]
+    }
+    
+    String GetEnrouteDistanceResultsNM(BigDecimal distanceNM)
+    {
+        String s = ""
+        Map nm_values = GetEnrouteDistanceNM(distanceNM)
+        if (nm_values.inexact_points) {
+            s += "${FcMath.DistanceStr(nm_values.inexact_min)}/"
+        }
+        s += "${FcMath.DistanceStr(nm_values.correct_min)} - ${FcMath.DistanceStr(nm_values.correct_max)}"
+        if (nm_values.inexact_points) {
+            s += "/${FcMath.DistanceStr(nm_values.inexact_max)}"
+        }
+        return s
+    }
+    
+    String GetEnrouteDistanceResultsmm(BigDecimal distancemm)
+    {
+        String s = ""
+        Map mm_values = GetEnrouteDistancemm(distancemm)
+        if (mm_values.inexact_points) {
+            s += "${FcMath.DistanceMeasureStr(mm_values.inexact_min)}/"
+        }
+        s += "${FcMath.DistanceMeasureStr(mm_values.correct_min)} - ${FcMath.DistanceMeasureStr(mm_values.correct_max)}"
+        if (mm_values.inexact_points) {
+            s += "/${FcMath.DistanceMeasureStr(mm_values.inexact_max)}"
+        }
+        return s
+    }
+    
+    EnrouteValueUnit GetObservationTestEnroutePhotoValueUnit()
+    {
+        if (observationTestEnroutePhotoValueUnit) {
+            return observationTestEnroutePhotoValueUnit
+        }
+        return task.flighttest.route.enroutePhotoMeasurement.GetEnrouteValueUnit()
+    }
+    
+    EnrouteValueUnit GetObservationTestEnrouteCanvasValueUnit()
+    {
+        if (observationTestEnrouteCanvasValueUnit) {
+            return observationTestEnrouteCanvasValueUnit
+        }
+        return task.flighttest.route.enrouteCanvasMeasurement.GetEnrouteValueUnit()
+    }
+    
+    boolean IsObservationSignUsed()
+    {
+        if (TurnpointData.findByTest(this) || EnroutePhotoData.findByTest(this) || EnrouteCanvasData.findByTest(this)) {
+            return true
+        }
+        return false
+    }
+    
+    static Test GetFirstTest(Task taskInstance, ResultClass resultclassInstance)
+    {
+        if (resultclassInstance) {
+            for (Test test_instance in Test.findAllByTask(taskInstance)) {
+                if (test_instance.crew.resultclass == resultclassInstance) {
+                    return test_instance
+                }
+            }
+        }
+        return Test.findByTask(taskInstance)
     }
 }

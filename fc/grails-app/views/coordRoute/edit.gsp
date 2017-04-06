@@ -17,6 +17,7 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -36,96 +37,7 @@
                             </tbody>
                         </table>
                         <g:if test="${!coordRouteInstance.route.Used()}">
-	                        <fieldset>
-	                            <legend>${message(code:'fc.latitude')}*</legend>
-                                <div>
-                                    <g:if test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREE}">
-                                        <input type="text" id="latGradDecimal" name="latGradDecimal" value="${coordRouteInstance.latGradDecimal.toFloat()}"  tabIndex="1"/>
-                                        <label>${message(code:'fc.grad')}</label>
-                                    </g:if>
-                                    <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE}">
-		                                <g:select class="direction" id="latDirection" name="latDirection" from="${coordRouteInstance.constraints.latDirection.inList}" value="${coordRouteInstance.latDirection}"  tabIndex="2"/>
-		                                <input class="grad" type="text" id="latGrad" name="latGrad" value="${fieldValue(bean:coordRouteInstance,field:'latGrad')}"  tabIndex="3"/>
-		                                <label>${message(code:'fc.grad')}</label>
-		                                <input type="text" id="latMinute" name="latMinute" value="${coordRouteInstance.latMinute.toFloat()}" tabIndex="4"/>
-		                                <label>${message(code:'fc.min')}</label>
-    		                        </g:elseif>
-                                    <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTESECOND}">
-                                        <g:select class="direction" id="latDirection" name="latDirection" from="${coordRouteInstance.constraints.latDirection.inList}" value="${coordRouteInstance.latDirection}"  tabIndex="5"/>
-                                        <input class="grad" type="text" id="latGrad" name="latGrad" value="${fieldValue(bean:coordRouteInstance,field:'latGrad')}"  tabIndex="6"/>
-                                        <label>${message(code:'fc.grad')}</label>
-                                        <input class="minute" type="text" id="latMin" name="latMin" value="${fieldValue(bean:coordRouteInstance,field:'latMin')}" tabIndex="7"/>
-                                        <label>${message(code:'fc.min')}</label>
-                                        <input type="text" id="latSecondDecimal" name="latSecondDecimal" value="${coordRouteInstance.latSecondDecimal.toFloat()}" tabIndex="8"/>
-                                        <label>${message(code:'fc.sec')}</label>
-                                    </g:elseif>
-                                </div>
-	                        </fieldset>
-	                        <fieldset>
-	                            <legend>${message(code:'fc.longitude')}*</legend>
-	                            <div>
-                                    <g:if test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREE}">
-                                        <input type="text" id="lonGradDecimal" name="lonGradDecimal" value="${coordRouteInstance.lonGradDecimal.toFloat()}"  tabIndex="11"/>
-                                        <label>${message(code:'fc.grad')}</label>
-                                    </g:if>
-                                    <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTE}">
-		                                <g:select class="direction" id="lonDirection" name="lonDirection" from="${coordRouteInstance.constraints.lonDirection.inList}" value="${coordRouteInstance.lonDirection}"  tabIndex="12"/>
-		                                <input class="grad" type="text" id="lonGrad" name="lonGrad" value="${fieldValue(bean:coordRouteInstance,field:'lonGrad')}"  tabIndex="13"/>
-		                                <label>${message(code:'fc.grad')}</label>
-		                                <input type="text" id="lonMinute" name="lonMinute" value="${coordRouteInstance.lonMinute.toFloat()}" tabIndex="14"/>
-		                                <label>${message(code:'fc.min')}</label>
-		                            </g:elseif>
-                                    <g:elseif test="${coordRouteInstance.route.contest.coordPresentation == CoordPresentation.DEGREEMINUTESECOND}">
-                                        <g:select class="direction" id="lonDirection" name="lonDirection" from="${coordRouteInstance.constraints.lonDirection.inList}" value="${coordRouteInstance.lonDirection}"  tabIndex="15"/>
-                                        <input class="grad" type="text" id="lonGrad" name="lonGrad" value="${fieldValue(bean:coordRouteInstance,field:'lonGrad')}"  tabIndex="16"/>
-                                        <label>${message(code:'fc.grad')}</label>
-                                        <input class="minute" type="text" id="lonMin" name="lonMin" value="${fieldValue(bean:coordRouteInstance,field:'lonMin')}" tabIndex="17"/>
-                                        <label>${message(code:'fc.min')}</label>
-                                        <input type="text" id="lonSecondDecimal" name="lonSecondDecimal" value="${coordRouteInstance.lonSecondDecimal.toFloat()}" tabIndex="18"/>
-                                        <label>${message(code:'fc.sec')}</label>
-                                    </g:elseif>
-	                            </div>
-	                        </fieldset>
-	                        <fieldset>
-	                            <p>
-	                                <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
-	                                <br/>
-	                                <input type="text" id="altitude" name="altitude" value="${coordRouteInstance.altitude}" tabIndex="21"/>
-	                            </p>
-	                            <p>
-	                                <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
-	                                <br/>
-	                                <input type="text" id="gatewidth2" name="gatewidth2" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth2')}" tabIndex="22"/>
-	                            </p>
-                                <g:if test="${coordRouteInstance.type.IsRunwayCoord()}">
-                                    <p>
-                                        <label>${message(code:'fc.gatedirection')}* [${message(code:'fc.grad')}]:</label>
-                                        <br/>
-                                        <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:coordRouteInstance,field:'gateDirection')}" tabIndex="23"/>
-                                    </p>
-                                </g:if>
-	                            <p>
-	                                <label>${message(code:'fc.legduration')} [${message(code:'fc.time.min')}]:</label>
-	                                <br/>
-	                                <input type="text" id="legDuration" name="legDuration" value="${fieldValue(bean:coordRouteInstance,field:'legDuration')}" tabIndex="24"/>
-	                            </p>
-	                            <div>
-	                                <g:checkBox name="noTimeCheck" value="${coordRouteInstance.noTimeCheck}" />
-	                                <label>${message(code:'fc.notimecheck')}</label>
-	                            </div>
-	                            <div>
-	                                <g:checkBox name="noGateCheck" value="${coordRouteInstance.noGateCheck}" />
-	                                <label>${message(code:'fc.nogatecheck')}</label>
-	                            </div>
-                                <div>
-                                    <g:checkBox name="noPlanningTest" value="${coordRouteInstance.noPlanningTest}" />
-                                    <label>${message(code:'fc.noplanningtest')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="endCurved" value="${coordRouteInstance.endCurved}" />
-                                    <label>${message(code:'fc.endcurved.long')}</label>
-                                </div>
-	                        </fieldset>
+                            <g:editCoordRoute coordRoute="${coordRouteInstance}" ti="${ti}"/>
 	                        <fieldset>
 	                        	<legend>${message(code:'fc.measure.fromlasttp')}</legend>
 		                        <table>
@@ -143,12 +55,12 @@
 	                            <p>
 	                                <label>${message(code:'fc.truetrack.map.measure')} [${message(code:'fc.grad')}]:</label>
 	                                <br/>
-	                                <input type="text" id="measureTrueTrack" name="measureTrueTrack" value="${fieldValue(bean:coordRouteInstance,field:'measureTrueTrack')}" tabIndex="25"/>
+	                                <input type="text" id="measureTrueTrack" name="measureTrueTrack" value="${fieldValue(bean:coordRouteInstance,field:'measureTrueTrack')}" tabIndex="${ti[0]++}"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.distance.map.measure')} [${message(code:'fc.mm')}]:</label>
 	                                <br/>
-	                                <input type="text" id="measureDistance" name="measureDistance" value="${fieldValue(bean:coordRouteInstance,field:'measureDistance')}" tabIndex="26"/>
+	                                <input type="text" id="measureDistance" name="measureDistance" value="${fieldValue(bean:coordRouteInstance,field:'measureDistance')}" tabIndex="${ti[0]++}"/>
 	                            </p>
 	                        </fieldset>
 	                    </g:if>
@@ -213,55 +125,115 @@
 	                                       <td>${coordRouteInstance.measureDistanceName()}</td>
 	                                   </tr>
 	                               </g:if>
+	                               <g:if test="${coordRouteInstance.route.IsObservationSignUsed() && coordRouteInstance.route.turnpointRoute.IsTurnpointSign() && coordRouteInstance.type.IsTurnpointSignCoord()}">
+                                       <tr>
+	                                        <g:if test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.AssignPhoto}">
+	                                            <td class="detailtitle">${message(code:'fc.observation.turnpoint.photo.short')}:</td>
+	                                        </g:if>
+	                                        <g:elseif test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.AssignCanvas}">
+	                                            <td class="detailtitle">${message(code:'fc.observation.turnpoint.canvas.short')}:</td>
+	                                        </g:elseif>
+	                                        <g:elseif test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto}">
+	                                            <td class="detailtitle">${message(code:'fc.observation.turnpoint.photo.short')}:</td>
+	                                        </g:elseif>
+	                                        <td>${coordRouteInstance.GetTurnpointSign()}</td>
+	                                   </tr>
+	                               </g:if>
                                 </tbody>
                             </table>
                             <fieldset>
 	                            <p>
 	                                <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
 	                                <br/>
-	                                <input type="text" id="altitude" name="altitude" value="${fieldValue(bean:coordRouteInstance,field:'altitude')}" tabIndex="27"/>
+	                                <input type="text" id="altitude" name="altitude" value="${fieldValue(bean:coordRouteInstance,field:'altitude')}" tabIndex="${ti[0]++}"/>
 	                            </p>
 	                            <p>
 	                                <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
 	                                <br/>
-	                                <input type="text" id="gatewidth2" name="gatewidth2" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth2')}" tabIndex="28"/>
+	                                <input type="text" id="gatewidth2" name="gatewidth2" value="${fieldValue(bean:coordRouteInstance,field:'gatewidth2')}" tabIndex="${ti[0]++}"/>
 	                            </p>
 	                            <g:if test="${coordRouteInstance.type.IsRunwayCoord()}">
 	                                <p>
 	                                    <label>${message(code:'fc.gatedirection')}* [${message(code:'fc.grad')}]:</label>
 	                                    <br/>
-	                                    <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:coordRouteInstance,field:'gateDirection')}" tabIndex="29"/>
+	                                    <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:coordRouteInstance,field:'gateDirection')}" tabIndex="${ti[0]++}"/>
 	                                </p>
 	                            </g:if>
                             </fieldset>
 	                    </g:else>
+	                    <g:if test="${!coordRouteInstance.route.IsObservationSignUsed()}">
+                            <g:if test="${coordRouteInstance.type.IsTurnpointSignCoord()}">
+                                <g:if test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.AssignPhoto}">
+                                    <fieldset>
+                                        <p>
+                                            <label>${message(code:'fc.observation.turnpoint.assignedphoto')}*:</label>
+                                            <br/>
+                                            <g:select from="${TurnpointSign.GetTurnpointSigns(false)}" optionValue="${it}" value="${coordRouteInstance.assignedSign}" name="assignedSign" tabIndex="${ti[0]++}"/>
+                                        </p>
+                                    </fieldset>
+                                </g:if>
+                                <g:elseif test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.AssignCanvas}">
+                                    <fieldset>
+                                        <p>
+                                            <label>${message(code:'fc.observation.turnpoint.assignedcanvas')}*:</label>
+                                            <br/>
+                                            <g:select from="${TurnpointSign.GetTurnpointSigns(true)}" optionValue="${it}" value="${coordRouteInstance.assignedSign}" name="assignedSign" tabIndex="${ti[0]++}"/>
+                                        </p>
+                                    </fieldset>
+                                </g:elseif>
+                                <g:elseif test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto}">
+                                    <fieldset>
+                                     <div>
+                                         <label>${message(code:'fc.observation.turnpoint.photo')}*:</label>
+                                         <br/>
+                                         <g:each var="v" in="${TurnpointCorrect.values()}">
+                                             <g:if test="${v != TurnpointCorrect.Unassigned}">
+                                                 <g:if test="${coordRouteInstance.correctSign == v}">
+                                                     <label><input type="radio" name="correctSign" value="${v}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:v.code)}</label>
+                                                 </g:if>
+                                                 <g:else>
+                                                     <label><input type="radio" name="correctSign" value="${v}" tabIndex="${ti[0]++}"/>${message(code:v.code)}</label>
+                                                 </g:else>
+                                             </g:if>
+                                         </g:each>
+                                         <br/>
+                                     </div>
+                                    </fieldset>
+                                </g:elseif>
+                            </g:if>
+                        </g:if>
                         <input type="hidden" name="id" value="${coordRouteInstance?.id}" />
                         <input type="hidden" name="version" value="${coordRouteInstance?.version}" />
                         <g:if test="${!coordRouteInstance.route.Used()}">
 	                       	<g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="101"/>
-	                            <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="102"/>
+                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
+	                            <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="${ti[0]++}"/>
 	                        </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="103"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                             </g:else>
-	                        <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="104"/>
-	                        <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="105"/>
-	                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="106"/>
+	                        <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="${ti[0]++}"/>
+                            <g:if test="${coordRouteInstance.IsRouteMeasure()}">
+	                            <g:actionSubmit action="reset" value="${message(code:'fc.measure.fromlasttp.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+	                        </g:if>
+	                        <g:if test="${!params.next || coordRouteInstance.type.IsDeleteAllowedCoord()}">
+	                           <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+	                        </g:if>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="107"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                             </g:if>
 	                    </g:if>
 	                    <g:else>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="121"/>
+                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="122"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                             </g:else>
-                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="123"/>
+                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="${ti[0]++}"/>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="124"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                             </g:if>
 	                    </g:else>
                     </g:form>

@@ -32,7 +32,7 @@
                                     <td/>
                                 </g:else>
 	                            <g:if test="${taskInstance.flighttest}">
-	                                <td><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/> (${taskInstance.flighttest.flighttestwinds?.size()} ${message(code:'fc.flighttestwind.list')})</td>
+	                                <td><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/> (${taskInstance.flighttest.flighttestwinds?.size()} ${message(code:'fc.flighttestwind.list')}<g:if test="${taskInstance.flighttest.IsObservationSignUsed()}">, ${message(code:'fc.observation')}</g:if>)</td>
 	                            </g:if> <g:else>
 	                                <td><g:link controller="flightTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
 	                            </g:else>
@@ -196,8 +196,12 @@
                                 <g:else>
                                 	<td colspan="2"><g:actionSubmit action="resetsequence" value="${message(code:'fc.test.sequence.toreset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
 								</g:else>
-								<td colspan="2"></td>
-                                <td></td>
+								<g:if test="${taskInstance.flighttest?.IsObservationSignUsed()}">
+								    <td colspan="3"><g:actionSubmit action="printobservation" value="${message(code:'fc.observation.print')}"/></td>
+								</g:if>
+								<g:else>
+								    <td colspan="3"></td>
+								</g:else>
                                 <td colspan="3"><g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" /> <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" /></td>
                                 <td colspan="2"><g:actionSubmit action="exporttimetable" value="${message(code:'fc.test.timetable.export')}" /></td>
                             </tr>

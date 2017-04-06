@@ -13,20 +13,58 @@ class FcMath
 	
     //--------------------------------------------------------------------------
 	static BigDecimal RoundDistance(BigDecimal distanceValue)
+    // NM
 	{
 		return distanceValue.setScale(2, RoundingMode.HALF_EVEN)
 	}
 	
     //--------------------------------------------------------------------------
+    static BigDecimal RoundMeasureDistance(BigDecimal measureValue)
+    // mm
+    {
+        return measureValue.setScale(1, RoundingMode.HALF_EVEN)
+    }
+    
+    //--------------------------------------------------------------------------
 	static String DistanceStr(BigDecimal distanceValue)
 	{
-		if (distanceValue >= 0) {
+		if (distanceValue != null) {
 			DecimalFormat df = new DecimalFormat("#0.00")
 			return df.format(distanceValue)
 		}
 		return ""
 	}
 
+    //--------------------------------------------------------------------------
+    static String DistanceStr2(BigDecimal distanceValue)
+    {
+        if (distanceValue != null) {
+            DecimalFormat df = new DecimalFormat("#0.00")
+            return df.format(distanceValue).replaceAll(',','.')
+        }
+        return ""
+    }
+
+    //--------------------------------------------------------------------------
+    static String DistanceMeasureStr(BigDecimal distanceValue)
+    {
+        if (distanceValue != null) {
+            DecimalFormat df = new DecimalFormat("0.0#")
+            return df.format(distanceValue)
+        }
+        return ""
+    }
+
+    //--------------------------------------------------------------------------
+    static String DistanceMeasureStr2(BigDecimal distanceValue)
+    {
+        if (distanceValue != null) {
+            DecimalFormat df = new DecimalFormat("0.0#")
+            return df.format(distanceValue).replaceAll(',','.')
+        }
+        return ""
+    }
+    
     //--------------------------------------------------------------------------
     static BigDecimal GradDiff(BigDecimal gradValue1, BigDecimal gradValue2)
     {
@@ -105,9 +143,27 @@ class FcMath
     }
     
     //--------------------------------------------------------------------------
+    static String RouteGradStr2(BigDecimal gradValue)
+    {
+        if (gradValue >= 0) {
+            DecimalFormat df = new DecimalFormat("000.00")
+            return df.format(gradValue).replaceAll(',','.')
+        }
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
     static int RoundAltitude(BigDecimal altitudeValue)
     {
         return altitudeValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()
+    }
+    
+    //--------------------------------------------------------------------------
+    static String RoundAltitudem(BigDecimal altitudeValue)
+    // altitudeValue in m
+    {
+        DecimalFormat df = new DecimalFormat("0.00")
+        return df.format(altitudeValue).replace(',','.')
     }
     
     //--------------------------------------------------------------------------
@@ -241,16 +297,6 @@ class FcMath
     }
     
     //--------------------------------------------------------------------------
-    static String DistanceMeasureStr(BigDecimal distanceValue)
-    {
-        if (distanceValue >= 0) {
-            DecimalFormat df = new DecimalFormat("0.0#")
-            return df.format(distanceValue)
-        }
-        return ""
-    }
-
-    //--------------------------------------------------------------------------
     static String RatioStr(BigDecimal ratioValue)
     {
         if (ratioValue >= 0) {
@@ -266,6 +312,16 @@ class FcMath
         if (gateWidthValue) {
             DecimalFormat df = new DecimalFormat("0.#")
             return df.format(gateWidthValue)
+        }
+        return "0"
+    }
+
+    //--------------------------------------------------------------------------
+    static String EnrouteValueStr(Float enrouteValue)
+    {
+        if (enrouteValue) {
+            DecimalFormat df = new DecimalFormat("0.#")
+            return df.format(enrouteValue)
         }
         return "0"
     }
@@ -314,5 +370,16 @@ class FcMath
     {
         stringValue = stringValue.replace(',','.')
         return stringValue.toBigDecimal()
+    }
+    
+    //--------------------------------------------------------------------------
+    static String GetSortPhotoName(String photoName)
+    {
+        if (photoName.isInteger() && (photoName.toInteger() >= 0)) {
+            while (photoName.size() < 4) {
+                photoName = "0${photoName}"
+            }
+        }
+        return photoName
     }
 }

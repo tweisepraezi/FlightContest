@@ -1,119 +1,114 @@
 // gra_canvas
-// Version vom 1. 9. 2014
+// Version vom 3. 10. 2016
 // Jürgen Berkemeier
 // www.j-berkemeier.de
 
 "use strict";
 
-if(typeof(JB)=="undefined") JB = {};
-JB.gra = function(gradiv) {
- this.canvas = true;
- if(typeof gradiv == "string") gradiv = document.getElementById(gradiv);
- var getCurrentStyle = function(element,cssPropertyName) {
-  if (window.getComputedStyle)
-   return window.getComputedStyle(element,'').getPropertyValue(cssPropertyName.replace(/([A-Z])/g,"-$1").toLowerCase());
-  else if (element.currentStyle) return element.currentStyle[cssPropertyName];
-  else return "";
- }
- this.w = parseInt(getCurrentStyle(gradiv,"width"));  //gradiv.offsetWidth;
- this.h = parseInt(getCurrentStyle(gradiv,"height")); //gradiv.offsetHeight;
- var cv = document.createElement("canvas");
- cv.width = this.w;
- cv.height = this.h;
- cv.style.position = "absolute";
- gradiv.appendChild(cv);
- this.context = cv.getContext("2d"); 
- this.w = this.context.canvas.width;
- this.h = this.context.canvas.height;
- this.linewidth = 1;
- this.context.lineWidth = 1;
- var xoff=0,yoff=0;
- this.context.globalAlpha = 1.0;
- this.setwidth=function(w) {
-  this.linewidth = w;
-  this.context.lineWidth = w;
-  xoff = (w-1)/2;
-  yoff = (w-1)/2;
- }
- this.setbuf=function(siz) {
- }
- this.flush=function() {
- }
- this.punkt=function(x,y,c) {
-  this.context.fillStyle = c;
-  this.context.fillRect(x-xoff,this.h-y+yoff,this.linewidth,this.linewidth);
- } // punkt
- this.ver_linie=function(x,y1,y2,c) {
-  this.linie(x,y1,x,y2,c);
- } // ver_linie
- this.hor_linie=function(x1,x2,y,c) {
-  this.linie(x1,y,x2,y,c);
- } // hor_linie
- this.linie=function(xs,ys,xe,ye,c) {
-  xs=Math.round(xs); xe=Math.round(xe);
-  ys=Math.round(ys); ye=Math.round(ye);
-  this.context.strokeStyle = c;
-  this.context.beginPath();
-	this.context.moveTo(xs,this.h-ys);
-	this.context.lineTo(xe,this.h-ye);
-  this.context.stroke();
- } // linie
- this.polyline=function(arr,c) { 
-  this.context.strokeStyle = c;
-  this.context.beginPath();
-  this.context.moveTo(Math.round(arr[0].x),this.h-Math.round(arr[0].y));
-  for(var i=1,l=arr.length;i<l;i++) {
- 	 this.context.lineTo(Math.round(arr[i].x),this.h-Math.round(arr[i].y));
-  }
-  this.context.stroke();
- } // polyline
- this.polyfill=function(arr,c,a) { 
-  this.context.fillStyle = c;
-	this.context.globalAlpha = a;
-  this.context.beginPath();
-  this.context.moveTo(Math.round(arr[0].x),this.h-Math.round(arr[0].y));
-  for(var i=1,l=arr.length;i<l;i++) {
- 	 this.context.lineTo(Math.round(arr[i].x),this.h-Math.round(arr[i].y));
-  }
-  this.context.fill();
-	this.context.globalAlpha = 1;
- } // polyfill
- this.text=function(x,y,size,color,text,align) {
-  var align_h = "m";
-  var align_v = "m";
-  if(align && align.length) {
-   align_h = align.substr(0,1);
-   if(align.length>1) align_v = align.substr(1,1);
-  }
-  this.context.save();
-  this.context.translate(x,this.h-y);
-  if(text.indexOf("<br />")!=-1 || text.indexOf("<br>")!=-1) {
-    this.context.rotate(1.5*Math.PI);
-    text = " "+text.replace(/<br \/>/g,"").replace(/<br>/g,"").replace(/\&nbsp;/g," ").replace(/  /g," ")+" ";
-  }
-  switch(align_h) {
-   case "l": this.context.textAlign = "start"; break;
-   case "m": this.context.textAlign = "center"; break;
-   case "r": this.context.textAlign = "end"; break;
-   default:  this.context.textAlign = "start"; break;
-  }
-  switch(align_v) {
-   case "o": this.context.textBaseline = "top" ; break;
-   case "m": this.context.textBaseline = "middle" ; break;
-   case "u": this.context.textBaseline = "bottom" ; break;
-   default:  this.context.textBaseline = "bottom" ; break;
-  }
-  this.context.font = size+" sans-serif";
-  this.context.fillStyle = color;
-  this.context.fillText(text,0,0);
-  this.context.restore();
- } // text
- this.getTextWidth = function(text,size) {
-  this.context.font = size+" sans-serif";
-  return this.context.measureText(text).width;
- } // getTextWidth
- this.del=function() {
-  this.context.clearRect(0, 0, this.w, this.h);
- } // del
-} // gra
+var JB = window.JB || {};
 
+// Das Grafikobjekt
+JB.grafik = function(grafikelement) {
+	this.method = "canvas";
+	// Canvas in Größe des "grafikelement" anlegen
+	if(typeof grafikelement == "string") grafikelement = document.getElementById(grafikelement);
+	this.w = grafikelement.offsetWidth;
+	this.h = grafikelement.offsetHeight;
+	var cv = document.createElement("canvas");
+	cv.width = this.w;
+	cv.height = this.h;
+	cv.style.position = "absolute";
+	grafikelement.appendChild(cv);
+	var context = cv.getContext("2d"); 
+	context.lineWidth = 1;
+	context.globalAlpha = 1.0;
+	
+	// Linienstärke setzen
+	this.setwidth = function(width) {
+		context.lineWidth = width;
+	} // setwidth
+	
+	// Punkt bei x,y, in Farbe c
+	this.punkt = function(x,y,c) {
+		context.fillStyle = c;
+		context.fillRect(x-(context.lineWidth-1)/2,this.h-y+(context.lineWidth-1)/2,context.lineWidth,context.lineWidth);
+	} // punkt
+
+	// Linie von (xs,ys) nach (xe,ye) in Farbe color zeichnen
+	this.line = function(xs,ys,xe,ye,color) {
+		context.strokeStyle = color;
+		context.beginPath();
+		context.moveTo(Math.round(xs),Math.round(this.h-ys));
+		context.lineTo(Math.round(xe),Math.round(this.h-ye));
+		context.stroke();
+	} // line
+
+	// Polylinie mit den Werten in points in Farbe color zeichnen
+	this.polyline = function(points,color) { 
+		context.strokeStyle = color;
+		context.beginPath();
+		context.moveTo(Math.round(points[0].x),this.h-Math.round(points[0].y));
+		for(var i=1,l=points.length;i<l;i++) 
+			context.lineTo(Math.round(points[i].x),this.h-Math.round(points[i].y));
+		context.stroke();
+	} // polyline
+
+	// Polylinie mit den Werten in points zeichnen
+	// Die von der Polylinie umschlossene Fläche wird in Farbe color mit Alphawert alpha eingefärbt
+	this.polyfill = function(points,color,alpha) { 
+		context.fillStyle = color;
+		context.globalAlpha = alpha;
+		context.beginPath();
+		context.moveTo(Math.round(points[0].x),this.h-Math.round(points[0].y));
+		for(var i=1,l=points.length;i<l;i++) 
+			context.lineTo(Math.round(points[i].x),this.h-Math.round(points[i].y));
+		context.fill();
+		context.globalAlpha = 1.0;
+	} // polyfill
+	
+	// Text an (x,y) ausgeben
+	// size: Schriftgröße
+	// text: Text
+	// align: Bezug für (x,y), zwei Buchstaben, z.B. lu für links unten, s. case
+	// diretion: Textrichtung: v für vertikal, sonst horizontal
+	this.text = function(x,y,size,color,text,align,direction) {
+		var align_h = "m";
+		var align_v = "m";
+		if(align && align.length) {
+			align_h = align.substr(0,1);
+			if(align.length>1) align_v = align.substr(1,1);
+		}
+		context.save();
+		context.translate(x,this.h-y);
+		if(direction && direction=="v") 
+			context.rotate(1.5*Math.PI);
+		switch(align_h) {
+			case "l": context.textAlign = "start"; break;
+			case "m": context.textAlign = "center"; break;
+			case "r": context.textAlign = "end"; break;
+			default:  context.textAlign = "center"; break;
+		}
+		switch(align_v) {
+			case "o": context.textBaseline = "top" ; break;
+			case "m": context.textBaseline = "middle" ; break;
+			case "u": context.textBaseline = "bottom" ; break;
+			default:  context.textBaseline = "middle" ; break;
+		}
+		context.font = size + " sans-serif";
+		context.fillStyle = color;
+		context.fillText(text,0,0);
+		context.restore();
+	} // text
+
+	// Canvas löschen
+	this.del = function() {
+		context.clearRect(0, 0, this.w, this.h);
+	} // del
+	
+	// Textbreite ermiteln
+	this.getTextWidth = function(text,size) {
+		context.font = size+" sans-serif";
+		return context.measureText(text).width;
+	} // getTextWidth
+
+} // grafik

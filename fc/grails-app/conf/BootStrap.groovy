@@ -1,4 +1,5 @@
 import java.util.List;
+
 import org.springframework.web.context.request.RequestContextHolder
 
 class BootStrap {
@@ -321,26 +322,26 @@ class BootStrap {
 								routeleg_instance.save()
 							}
 							Test.findAll().each { Test test_instance ->
-								int leg_no = 0
+								int tp_num = 0
 								int leg_num = TestLegPlanning.countByTest(test_instance)
 								for (TestLegPlanning testlegplanning_instance in TestLegPlanning.findAllByTest(test_instance,[sort:"id"])) {
-									leg_no++
-									if (leg_no == leg_num) {
-										testlegplanning_instance.coordTitle = new CoordTitle(CoordType.FP,0)
+									tp_num++
+									if (tp_num == leg_num) {
+										testlegplanning_instance.coordTitle = new CoordTitle(CoordType.FP,1)
 									} else {
-										testlegplanning_instance.coordTitle = new CoordTitle(CoordType.TP,leg_no)
+										testlegplanning_instance.coordTitle = new CoordTitle(CoordType.TP,tp_num)
 									}
 									testlegplanning_instance.coordTitle.save()
 									testlegplanning_instance.save()
 								}
-								leg_no = 0
+								tp_num = 0
 								leg_num = TestLegFlight.countByTest(test_instance)
 								for (TestLegFlight testlegflight_instance in TestLegFlight.findAllByTest(test_instance,[sort:"id"])) {
-									leg_no++
-									if (leg_no == leg_num) {
-										testlegflight_instance.coordTitle = new CoordTitle(CoordType.FP,0)
+									tp_num++
+									if (tp_num == leg_num) {
+										testlegflight_instance.coordTitle = new CoordTitle(CoordType.FP,1)
 									} else {
-										testlegflight_instance.coordTitle = new CoordTitle(CoordType.TP,leg_no)
+										testlegflight_instance.coordTitle = new CoordTitle(CoordType.TP,tp_num)
 									}
 									testlegflight_instance.coordTitle.save()
 									testlegflight_instance.save()
@@ -613,6 +614,129 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 13) { // DB-2.13 compatibility
+                            print "    2.13 modifications"
+                            CoordTitle.findAll().each { CoordTitle coordtitle_instance ->
+                                switch (coordtitle_instance.type) {
+                                    case CoordType.UNKNOWN:
+                                    case CoordType.TP:
+                                    case CoordType.SECRET:
+                                        break
+                                    default:
+                                        if (coordtitle_instance.number == 0) {
+                                            coordtitle_instance.number = 1
+                                            coordtitle_instance.save()
+                                        }
+                                        break
+                                }
+                            }
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.planningTestForbiddenCalculatorsPoints = contest_instance.contestRule.ruleValues.planningTestForbiddenCalculatorsPoints
+                                contest_instance.flightTestForbiddenEquipmentPoints = contest_instance.contestRule.ruleValues.flightTestForbiddenEquipmentPoints
+                                contest_instance.observationTestEnrouteValueUnit = contest_instance.contestRule.ruleValues.observationTestEnrouteValueUnit
+                                contest_instance.observationTestEnrouteCorrectValue = contest_instance.contestRule.ruleValues.observationTestEnrouteCorrectValue
+                                contest_instance.observationTestEnrouteInexactValue = contest_instance.contestRule.ruleValues.observationTestEnrouteInexactValue
+                                contest_instance.observationTestEnrouteInexactPoints = contest_instance.contestRule.ruleValues.observationTestEnrouteInexactPoints
+                                contest_instance.observationTestEnrouteNotFoundPoints = contest_instance.contestRule.ruleValues.observationTestEnrouteNotFoundPoints
+                                contest_instance.observationTestEnrouteFalsePoints = contest_instance.contestRule.ruleValues.observationTestEnrouteFalsePoints
+                                contest_instance.observationTestTurnpointNotFoundPoints = contest_instance.contestRule.ruleValues.observationTestTurnpointNotFoundPoints
+                                contest_instance.observationTestTurnpointFalsePoints = contest_instance.contestRule.ruleValues.observationTestTurnpointFalsePoints
+                                contest_instance.increaseFactor = contest_instance.contestRule.ruleValues.increaseFactor
+                                contest_instance.minRouteLegs = contest_instance.contestRule.ruleValues.minRouteLegs
+                                contest_instance.maxRouteLegs = contest_instance.contestRule.ruleValues.maxRouteLegs
+                                contest_instance.scGateWidth = contest_instance.contestRule.ruleValues.scGateWidth
+                                contest_instance.unsuitableStartNum = contest_instance.contestRule.ruleValues.unsuitableStartNum
+                                contest_instance.turnpointRule = contest_instance.contestRule.ruleValues.turnpointRule
+                                contest_instance.turnpointMapMeasurement = contest_instance.contestRule.ruleValues.turnpointMapMeasurement
+                                contest_instance.enroutePhotoRule = contest_instance.contestRule.ruleValues.enroutePhotoRule
+                                contest_instance.enrouteCanvasRule = contest_instance.contestRule.ruleValues.enrouteCanvasRule
+                                contest_instance.enrouteCanvasMultiple = contest_instance.contestRule.ruleValues.enrouteCanvasMultiple
+                                contest_instance.minEnroutePhotos = contest_instance.contestRule.ruleValues.minEnroutePhotos
+                                contest_instance.maxEnroutePhotos = contest_instance.contestRule.ruleValues.maxEnroutePhotos
+                                contest_instance.minEnrouteCanvas = contest_instance.contestRule.ruleValues.minEnrouteCanvas
+                                contest_instance.maxEnrouteCanvas = contest_instance.contestRule.ruleValues.maxEnrouteCanvas
+                                contest_instance.minEnrouteTargets = contest_instance.contestRule.ruleValues.minEnrouteTargets
+                                contest_instance.maxEnrouteTargets = contest_instance.contestRule.ruleValues.maxEnrouteTargets
+                                contest_instance.printPointsGeneral = contest_instance.contestRule.ruleValues.printPointsGeneral
+                                contest_instance.printPointsObservationTest = contest_instance.contestRule.ruleValues.printPointsObservationTest
+                                contest_instance.contestPrintObservationDetails = contest_instance.contestRule.ruleValues.contestPrintObservationDetails
+                                contest_instance.printPointsLandingField = contest_instance.contestRule.ruleValues.printPointsLandingField
+                                contest_instance.landingFieldImageName = contest_instance.contestRule.ruleValues.landingFieldImageName
+                                contest_instance.printPointsTurnpointSign = contest_instance.contestRule.ruleValues.printPointsTurnpointSign
+                                contest_instance.printPointsEnrouteCanvas = contest_instance.contestRule.ruleValues.printPointsEnrouteCanvas
+                                contest_instance.save()
+                            }
+                            ResultClass.findAll().each { ResultClass resultclass_instance ->
+                                resultclass_instance.planningTestForbiddenCalculatorsPoints = resultclass_instance.contestRule.ruleValues.planningTestForbiddenCalculatorsPoints
+                                resultclass_instance.flightTestForbiddenEquipmentPoints = resultclass_instance.contestRule.ruleValues.flightTestForbiddenEquipmentPoints
+                                resultclass_instance.observationTestEnrouteValueUnit = resultclass_instance.contestRule.ruleValues.observationTestEnrouteValueUnit
+                                resultclass_instance.observationTestEnrouteCorrectValue = resultclass_instance.contestRule.ruleValues.observationTestEnrouteCorrectValue
+                                resultclass_instance.observationTestEnrouteInexactValue = resultclass_instance.contestRule.ruleValues.observationTestEnrouteInexactValue
+                                resultclass_instance.observationTestEnrouteInexactPoints = resultclass_instance.contestRule.ruleValues.observationTestEnrouteInexactPoints
+                                resultclass_instance.observationTestEnrouteNotFoundPoints = resultclass_instance.contestRule.ruleValues.observationTestEnrouteNotFoundPoints
+                                resultclass_instance.observationTestEnrouteFalsePoints = resultclass_instance.contestRule.ruleValues.observationTestEnrouteFalsePoints
+                                resultclass_instance.observationTestTurnpointNotFoundPoints = resultclass_instance.contestRule.ruleValues.observationTestTurnpointNotFoundPoints
+                                resultclass_instance.observationTestTurnpointFalsePoints = resultclass_instance.contestRule.ruleValues.observationTestTurnpointFalsePoints
+                                resultclass_instance.increaseFactor = resultclass_instance.contestRule.ruleValues.increaseFactor
+                                resultclass_instance.printPointsGeneral = resultclass_instance.contestRule.ruleValues.printPointsGeneral
+                                resultclass_instance.printPointsObservationTest = resultclass_instance.contestRule.ruleValues.printPointsObservationTest
+                                resultclass_instance.contestPrintObservationDetails = resultclass_instance.contestRule.ruleValues.contestPrintObservationDetails
+                                resultclass_instance.printPointsLandingField = resultclass_instance.contestRule.ruleValues.printPointsLandingField
+                                resultclass_instance.landingFieldImageName = resultclass_instance.contestRule.ruleValues.landingFieldImageName
+                                resultclass_instance.printPointsTurnpointSign = resultclass_instance.contestRule.ruleValues.printPointsTurnpointSign
+                                resultclass_instance.printPointsEnrouteCanvas = resultclass_instance.contestRule.ruleValues.printPointsEnrouteCanvas
+                                resultclass_instance.save()
+                            }
+                            Crew.findAll().each { Crew crew_instance ->
+                                crew_instance.increaseEnabled = false
+                                crew_instance.save()
+                            }
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.turnpointRoute = TurnpointRoute.None
+                                route_instance.turnpointMapMeasurement = false
+                                route_instance.enroutePhotoRoute = EnrouteRoute.None
+                                route_instance.enrouteCanvasRoute = EnrouteRoute.None
+                                route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
+                                route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
+                                route_instance.save()
+                            }
+                            Coord.findAll().each { Coord coord_instance ->
+                                coord_instance.assignedSign = TurnpointSign.None
+                                coord_instance.correctSign = TurnpointCorrect.Unassigned
+                                coord_instance.enroutePhotoName = ""
+                                coord_instance.enrouteCanvasSign = EnrouteCanvasSign.None
+                                coord_instance.enrouteViewPos = 0
+                                coord_instance.enrouteDistance = null
+                                coord_instance.enrouteDistanceOk = true
+                                coord_instance.enrouteOrthogonalDistance = 0
+                                coord_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.increaseEnabled = true
+                                task_instance.disabledCheckPointsTurnpointObs = ""
+                                task_instance.disabledEnroutePhotoObs = ""
+                                task_instance.disabledEnrouteCanvasObs = ""
+                                task_instance.observationTestTurnpointRun = true
+                                task_instance.observationTestEnroutePhotoRun = true
+                                task_instance.observationTestEnrouteCanvasRun = true
+                                task_instance.save()
+                            }
+                            TaskClass.findAll().each { TaskClass taskclass_instance ->
+                                taskclass_instance.observationTestTurnpointRun = true
+                                taskclass_instance.observationTestEnroutePhotoRun = true
+                                taskclass_instance.observationTestEnrouteCanvasRun = true
+                                taskclass_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.planningTestForbiddenCalculators = false
+                                test_instance.flightTestForbiddenEquipment = false
+                                test_instance.observationTestEnroutePhotoValueUnit = null
+                                test_instance.observationTestEnrouteCanvasValueUnit = null
+                                test_instance.observationTestOtherPenalties = 0
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }
@@ -679,14 +803,22 @@ class BootStrap {
         
 		// add method getMsg to all domain classes
 		grailsApplication.domainClasses.each { domain_class ->
-			domain_class.metaClass.getMsg = {
+			domain_class.metaClass.getMsg = { code ->
                 def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
-	            return messageSource.getMessage(it, null, new Locale(session_obj.showLanguage))
+	            return messageSource.getMessage(code, null, new Locale(session_obj.showLanguage))
 			}
-			domain_class.metaClass.getPrintMsg = {
+            domain_class.metaClass.getMsgArgs = { code, args ->
                 def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
-	            return messageSource.getMessage(it, null, new Locale(session_obj.printLanguage))
+                return messageSource.getMessage(code, args.toArray(), new Locale(session_obj.showLanguage))
+            }
+			domain_class.metaClass.getPrintMsg = { code ->
+                def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+	            return messageSource.getMessage(code, null, new Locale(session_obj.printLanguage))
 			}
+            domain_class.metaClass.getPrintMsgArgs = { code, args ->
+                def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+                return messageSource.getMessage(code, args.toArray(), new Locale(session_obj.printLanguage))
+            }
 		}
         
         if (!global.IsLogPossible()) {

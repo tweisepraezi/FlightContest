@@ -38,6 +38,37 @@ table.crewresultsummary td {
     border-style: none;
 }
 
+table.crewneutral, table.crewneutral td {
+    border-style: none;
+    vertical-align: top;
+}
+
+table.crewneutral td.title {
+	width: 1%;
+}
+
+table.crewneutral td.col {
+    width: 3%;
+    color: white;
+}
+
+table.crewneutral td.num {
+    width: 8%;
+	border-bottom: solid black 1px;
+    color: white;
+}
+
+table.crewneutral td.aircraft {
+    width: 20%;
+	border-bottom: solid black 1px;
+    color: white;
+}
+
+table.crewneutral td.crew {
+    border-bottom: solid black 1px;
+    color: white;
+}
+
 table.info, table.info th, table.info td {
     border-style: none;
 }
@@ -78,6 +109,19 @@ table.routecoords td.tpname, table.routecoords td.aflosname {
 table.routelegs td.from2tp {
     width: 20%;
 }
+
+table.enroutephotos td {
+    vertical-align: top;
+}
+
+table.enroutecanvas td {
+    vertical-align: top;
+}
+
+table.enroutecanvas td.canvassign img {
+    height: 30px;
+}
+
 
 /* -------------------------------------------------------------------------------------------------------------------- */
 table.timetableoverviewlist,  table.timetableoverviewlist th, table.timetableoverviewlist td {
@@ -134,17 +178,130 @@ table.planningtasklist tr#FP td.legtime, table.planningtasklist tr#FP td.truehea
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
-table.planningpoints td.name, table.flightpoints td.name, table.landingpoints td.name {
+table.observationturnpointlist {
+    float: left;
+	width: 48%;
+}
+
+table.observationturnpointlist th, table.observationturnpointlist td {
+    font-size: 105%;
+    text-align: center;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.observationenroutephotolist {
+    width: 48%;
+}
+
+table.observationenroutephotolist th, table.observationenroutephotolist td {
+    font-size: 105%;
+    text-align: center;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.observationenroutecanvaslist {
+    clear: left;
+	width: 48%;
+}
+
+table.observationenroutecanvaslist tr.hide th {
+    border-color: white; 
+    color: white;
+}
+
+table.observationenroutecanvaslist th, table.observationenroutecanvaslist td {
+	font-size: 105%;
+    text-align: center;
+}
+
+table.observationenroutecanvaslist td.sign img {
+    height: 14px;
+}
+
+table.observationenroutecanvaslist tr.data td.sign {
+	color: white;
+    font-size: 105%;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.observationenroutecanvasresultlist td.imagename img {
+    height: 14px;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.observationenroutecrewjudgesign {
+    float: right;
+	width: 48%;
+}
+
+table.observationenroutecrewjudgesign tr.hide th, table.observationenroutecrewjudgesign tr.hide td {
+    border-style: hidden;
+	color: white;
+}
+
+table.observationenroutecrewjudgesign tr.hide2 th, table.observationenroutecrewjudgesign tr.hide2 td {
+    color: white;
+}
+
+table.observationenroutecrewjudgesign td {
+	border-left-style: hidden;
+    border-right-style: hidden;
+    border-bottom-style: hidden;
+}
+
+table.observationenroutecrewjudgesign td.name {
+	white-space: nowrap;
+    width: 20%;
+}
+
+table.observationenroutecrewjudgesign tr.title td.line {
+    border-bottom: solid black 1px;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.generalpoints td.name, table.planningpoints td.name, table.flightpoints td.name, table.observationpoints td.name, table.landingpoints td.name {
     width: 80%;
 }
 
-table.planningpoints td.modify, table.flightpoints td.modify, table.landingpoints td.modify {
+table.generalpoints td.modify, table.planningpoints td.modify, table.flightpoints td.modify, table.observationpoints td.modify, table.landingpoints td.modify {
     width: 1%;
     border-left-style: none;
 }
 
-table.planningpoints .value, table.flightpoints .value, table.landingpoints .value {
+table.generalpoints .value, table.planningpoints .value, table.flightpoints .value, table.observationpoints .value, table.landingpoints .value {
     border-right-style: none;
+}
+
+table.observationpoints tr.group td {
+	font-style: italic;
+}
+
+img.landingfield {
+	width: 95%;
+}
+
+table.turnpointsignpoints {
+    width: 48%;
+}
+
+table.turnpointsignpoints td.name {
+    width: 1%;
+}
+
+table.turnpointsignpoints img {
+    height: 48px;
+}
+
+table.enroutecanvaspoints {
+    width: 48%;
+}
+
+table.enroutecanvaspoints td.name {
+	width: 1%;
+}
+
+table.enroutecanvaspoints img {
+	height: 48px;
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -155,3 +312,13 @@ table.freetext, table.freetext th, table.freetext td {
 table.freetext td {
     text-align: center;
 }
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+img.scannedobservationtest {
+	width:90%;
+}
+
+img.scannedplanningtest {
+	width:90%;
+}
+

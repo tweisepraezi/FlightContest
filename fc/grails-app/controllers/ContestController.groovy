@@ -6,6 +6,7 @@ import org.junit.After;
 class ContestController {
     
     def printService
+    def imageService
     def fcService
     def evaluationService
 	def demoContestService
@@ -130,6 +131,20 @@ class ContestController {
         }
     }
 
+    def editdefaults = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            // assign return action
+            if (session.contestReturnAction) {
+                return [contestInstance:session.lastContest,contestReturnAction:session.contestReturnAction,contestReturnController:session.contestReturnController,contestReturnID:session.contestReturnID]
+            }
+            return [contestInstance:session.lastContest]
+        } else {
+            flash.message = contest.message
+            redirect(action:start)
+        }
+    }
+
     def update = {
         def contest = fcService.updateContest(params)
         if (contest.saved) {
@@ -176,10 +191,22 @@ class ContestController {
         if (contest.saved) {
             flash.message = contest.message
             session.lastContest = contest.instance
-               redirect(action:editpoints,id:contest.instance.id)
+            redirect(action:editpoints,id:contest.instance.id)
         } else {
             flash.message = contest.message
             redirect(action:editpoints,id:params.id)
+        }
+    }
+
+    def savedefaults = {
+        def contest = fcService.updateContest(params)
+        if (contest.saved) {
+            flash.message = contest.message
+            session.lastContest = contest.instance
+            redirect(action:editdefaults,id:contest.instance.id)
+        } else {
+            flash.message = contest.message
+            redirect(action:editdefaults,id:params.id)
         }
     }
 
@@ -388,34 +415,15 @@ class ContestController {
     }
 	
 	def loadimage = {
-		load_image(params) 
+        session.lastContest.refresh()
+        def file = request.getFile('imagefile')
+        Map img = imageService.LoadImage(ImageService.JPG_EXTENSION, file, session.lastContest, params.imageField, Contest.IMAGEMAXSIZE)
+        if (!img.found) {
+            img = imageService.LoadImage("", file, session.lastContest, params.imageField, Contest.IMAGEMAXSIZE)
+        }
+        flash.error = img.error
+        flash.message = img.message
 		redirect(action:edit)
-	}
-	
-	void load_image(Map params) 
-	{
-		session.lastContest.refresh()
-		def file = request.getFile('imagefile')
-		if (file && !file.empty) {
-			String file_name = file.getOriginalFilename()
-			fcService.printstart "Upload '$file_name' to '$params.imageField'"
-			if (file.size <= Contest.IMAGEMAXSIZE) {
-				fcService.println file.getContentType() // "image/jpeg"
-				if (file_name.toLowerCase().endsWith('.jpg')) {
-					session.lastContest.(params.imageField) = file.bytes
-					session.lastContest.save()
-					fcService.printdone ""
-				} else {
-					flash.error = true
-					flash.message = message(code:'fc.notimported.image',args:[file_name])
-					fcService.printerror flash.message
-				}
-			} else {
-				flash.error = true
-				flash.message = message(code:'fc.notimported.image.size',args:[file_name,file.size,Contest.IMAGEMAXSIZE])
-				fcService.printerror flash.message
-			}
-		}
 	}
 	
 	def deleteimage_imageleft = {
@@ -936,6 +944,18 @@ class ContestController {
         } else {
             flash.message = contest.message
             redirect(action:editpoints,id:params.id)
+        }
+    }
+
+    def standarddefaults = {
+        def contest = fcService.standarddefaultsContest(params)
+        if (contest.saved) {
+            flash.message = contest.message
+            session.lastContest = contest.instance
+               redirect(action:editdefaults,id:contest.instance.id)
+        } else {
+            flash.message = contest.message
+            redirect(action:editdefaults,id:params.id)
         }
     }
 

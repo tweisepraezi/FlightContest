@@ -916,6 +916,140 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
+    Map printobservationTask(Map params, boolean a3, boolean landscape, printparams)
+    {
+        printstart "printobservationTask"
+        
+        Map task = domainService.GetTask(params) 
+        if (!task.instance) {
+            printerror ""
+            return task
+        }
+
+        // FlightTest exists?
+        if (!task.instance.flighttest) {
+            task.message = getMsg('fc.flighttest.notfound')
+            task.error = true
+            printerror task.message
+            return task
+        }
+        
+        List test_instance_ids = [""]
+        int assign_num = 0
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
+            if (params["selectedTestID${test_instance.id}"] == "on") {
+                test_instance_ids += test_instance.id.toString()
+                assign_num++
+            }
+        }
+        task.testinstanceids = test_instance_ids
+        if (!assign_num) {
+            task.message = getMsg('fc.observation.print.someonemustselected')
+            task.error = true
+            printerror task.message
+            return task
+        }
+        
+        // Print observations
+        try {
+            ITextRenderer renderer = new ITextRenderer();
+            ByteArrayOutputStream content = new ByteArrayOutputStream()
+            boolean first_pdf = true
+            Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+                if (params["selectedTestID${test_instance.id}"] == "on") {
+                    if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                        String url = "${printparams.baseuri}/test/observationprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+                        println "Print: $url"
+                        renderer.setDocument(url)
+                        renderer.layout()
+                        if (first_pdf) {
+                            renderer.createPDF(content,false)
+                            first_pdf = false
+                        } else {
+                            renderer.writeNextDocument(1)
+                        }
+                    }
+                }
+            }
+            renderer.finishPDF()
+            task.content = content.toByteArray()
+            content.close()
+        }
+        catch (Throwable e) {
+            task.message = getMsg('fc.observation.print.error',["$e"])
+            task.error = true
+        }
+        
+        printdone ""
+        return task
+        
+    }
+    
+    //--------------------------------------------------------------------------
+    Map printneutralobservationFlightTest(boolean printResults, Map params, boolean a3, boolean landscape, printparams)
+    {
+        printstart "printneutralobservationFlightTest results=${printResults}"
+        
+        FlightTest flighttest_instance = FlightTest.get(params.id)
+        
+        if (flighttest_instance) {
+            Map flighttest = ['instance':flighttest_instance]
+            List result_class_ids = flighttest_instance.task.GetObservationResultClassIDs(printResults)
+            if (result_class_ids) {
+                // Print neutral or result observation formular for each resultclass
+                try {
+                    ITextRenderer renderer = new ITextRenderer();
+                    ByteArrayOutputStream content = new ByteArrayOutputStream()
+                    boolean first_pdf = true
+                    for (long result_class_id in result_class_ids) {
+                        String url = "${printparams.baseuri}/task/observationprintable/${flighttest_instance.task.id}?print=1&results=${printResults}&resultclassid=${result_class_id}&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+                        println "Print: $url"
+                        renderer.setDocument(url)
+                        renderer.layout()
+                        if (first_pdf) {
+                            renderer.createPDF(content,false)
+                            first_pdf = false
+                        } else {
+                            renderer.writeNextDocument(1)
+                        }
+                    }
+                    renderer.finishPDF()
+                    flighttest.content = content.toByteArray()
+                    content.close()
+                }
+                catch (Throwable e) {
+                    flighttest.message = getMsg('fc.observation.print.error',["$e"])
+                    flighttest.error = true
+                }
+            } else {
+                // Print neutral or result observation formular
+                try {
+                    ITextRenderer renderer = new ITextRenderer();
+                    ByteArrayOutputStream content = new ByteArrayOutputStream()
+                    String url = "${printparams.baseuri}/task/observationprintable/${flighttest_instance.task.id}?print=1&results=${printResults}&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+                    println "Print: $url"
+                    renderer.setDocument(url)
+                    renderer.layout()
+                    renderer.createPDF(content,false)
+                    renderer.finishPDF()
+                    flighttest.content = content.toByteArray()
+                    content.close()
+                }
+                catch (Throwable e) {
+                    flighttest.message = getMsg('fc.observation.print.error',["$e"])
+                    flighttest.error = true
+                }
+            }
+            printdone flighttest
+            return flighttest
+        } else {
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]
+            printerror ret.message
+            return ret
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     Map printresultclassresultsTask(Map params, boolean a3, boolean landscape, printparams)
     {
         printstart "printresultclassresultsTask"
@@ -979,9 +1113,11 @@ class PrintService
         }
 
         task.instance.printPlanningResults = params.printPlanningResults == "on"
+        task.instance.printPlanningResultsScan = params.printPlanningResultsScan == "on"
         task.instance.printFlightResults = params.printFlightResults == "on"
         task.instance.printFlightMap = params.printFlightMap == "on"
         task.instance.printObservationResults = params.printObservationResults == "on"
+        task.instance.printObservationResultsScan = params.printObservationResultsScan == "on"
         task.instance.printLandingResults = params.printLandingResults == "on"
         task.instance.printSpecialResults = params.printSpecialResults == "on"
         task.instance.printProvisionalResults = params.printProvisionalResults == "on"
@@ -995,7 +1131,7 @@ class PrintService
                 if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                     if (isprintcrewresult(params,test_instance)) {
                         printstart "Print $test_instance.crew.name"
-                        String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${task.instance.printPlanningResults}&printFlightResults=${task.instance.printFlightResults}&printFlightMap=${task.instance.printFlightMap}&printObservationResults=${task.instance.printObservationResults}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
+                        String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${task.instance.printPlanningResults}&printPlanningResultsScan=${task.instance.printPlanningResultsScan}&printFlightResults=${task.instance.printFlightResults}&printFlightMap=${task.instance.printFlightMap}&printObservationResults=${task.instance.printObservationResults}&printObservationResultsScan=${task.instance.printObservationResultsScan}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
                         if (!task.instance.GetDetailNum()) {
                             url += "&disabletitle=yes"
                         }
@@ -1221,9 +1357,11 @@ class PrintService
         }
         
         test.instance.printPlanningResults = params.printPlanningResults == "on"
+        test.instance.printPlanningResultsScan = params.printPlanningResultsScan == "on"
         test.instance.printFlightResults = params.printFlightResults == "on"
         test.instance.printFlightMap = params.printFlightMap == "on"
         test.instance.printObservationResults = params.printObservationResults == "on"
+        test.instance.printObservationResultsScan = params.printObservationResultsScan == "on"
         test.instance.printLandingResults = params.printLandingResults == "on"
         test.instance.printSpecialResults = params.printSpecialResults == "on"
         test.instance.printProvisionalResults = params.printProvisionalResults == "on"
@@ -1232,7 +1370,7 @@ class PrintService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/crewresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${test.instance.printPlanningResults}&printFlightResults=${test.instance.printFlightResults}&printFlightMap=${test.instance.printFlightMap}&printObservationResults=${test.instance.printObservationResults}&printLandingResults=${test.instance.printLandingResults}&printSpecialResults=${test.instance.printSpecialResults}&printProvisionalResults=${test.instance.printProvisionalResults}"
+            String url = "${printparams.baseuri}/test/crewresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${test.instance.printPlanningResults}&printPlanningResultsScan=${test.instance.printPlanningResultsScan}&printFlightResults=${test.instance.printFlightResults}&printFlightMap=${test.instance.printFlightMap}&printObservationResults=${test.instance.printObservationResults}&printObservationResultsScan=${test.instance.printObservationResultsScan}&printLandingResults=${test.instance.printLandingResults}&printSpecialResults=${test.instance.printSpecialResults}&printProvisionalResults=${test.instance.printProvisionalResults}"
             if (!test.instance.GetDetailNum()) {
                 url += "&disabletitle=yes"
             }

@@ -62,7 +62,7 @@
 	                                        	<g:set var="test_instance" value="${Test.findByCrewAndTask(crew_instance,task_instance)}"/>
 	                                        	<g:if test="${test_instance}">
                                                     <g:if test="${!test_instance.disabledCrew}">
-	                                        	        <td>${test_instance.GetResultPenalties(resultclassInstance.GetClassResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsTestClassResultsProvisional(resultclassInstance.GetClassResultSettings(),resultclassInstance)}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
+	                                        	        <td>${test_instance.GetResultPenalties(resultclassInstance.GetClassResultSettings())} ${message(code:'fc.points')}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_instance.IsTestClassResultsProvisional(resultclassInstance.GetClassResultSettings(),resultclassInstance)}"> [${message(code:'fc.provisional')}]<g:set var="test_provisional" value="${true}"/></g:if> <a href="${createLink(controller:'test',action:'crewresults')}/${test_instance.id}">${message(code:'fc.test.results.here')}</a></td>
                                                     </g:if>
                                                     <g:else>
                                                         <g:set var="test_disabled" value="${true}"/>

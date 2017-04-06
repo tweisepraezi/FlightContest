@@ -1,6 +1,6 @@
 
-Flight Contest 3.0.0
-Copyright 2009-2016 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 3.1.RC
+Copyright 2009-2017 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://flightcontest.de
 
@@ -62,6 +62,11 @@ GPX Viewer
 Jürgen Berkemeier
 
 http://www.j-berkemeier.de/GPXViewer
+
+============================================================================
+
+Herzlichen Dank an Renate Heege für die Unterstützung 
+bei der Erstellung der englischen Bedienungsanleitung.
 
 ============================================================================
  

@@ -17,6 +17,7 @@ Inhalt
 - Druck-Stil beeinflussen
 - Installations-abhängige Konfiguration
 - Live-Ergebnisanzeige
+- Automatische Aktionen
 - Datensicherung eines laufenden Wettbewerbes
 
 
@@ -80,15 +81,21 @@ B. Wettbewerbs-Beginn
 4. Wettbewerb anlegen
    -> Wettbewerb -> Neuer Wettbewerb 
    - Wettbewerbsname eintragen.
-   - Ggf. Klassen-Verwaltung aktivieren.
-   - Wettbewerbsordnung, Kartenmaßstab und Zeitzone einstellen.
+   - Druckpräfix eintragen (= die wichtigsten Buchtaben des Wettbewerbsnames).
+   - Ggf. Klassen-Verwaltung deaktivieren.
+   - Ggf. eigene Wettbewerbsordnung für jede Klasse aktivieren.
+   - Wettbewerbsordnung, Kartenmaßstab, Koordinatendarstellung und Zeitzone einstellen.
    - Anzahl der zu wertenden Teams bei Team-Auswertung einstellen.
-   - Ggf. Drucksprache umstellen (-> Extras -> Einstellungen).
+   - Ggf. Anzahl der Aufgaben, von denen das beste Ergebnis auszuwerten ist, einstellen.
    - Auswertungs-Einstellungen des Wettbewerbs anpassen
      (-> 'Wettbewerb -> Punkte' oder 'Klassen -> <Name> -> Punkte'):
      * Ggf. Punkte für nicht geflogene Wendescheifen mit 0 einstellen
      * Ggf. Punkte für Kursabweichungen > 90 Grad mit 0 einstellen
      * Ggf. Punkte für Unterschreitung der Mindestflughöhe mit 0 einstellen
+   - Vorgaben des Wettbewerbs anpassen (-> 'Wettbewerb -> Vorgaben')
+     * Ggf. Torbreite von UZK-Koordinaten anpassen
+     * Ggf. ungeeignete Startnummern anpassen
+   - Ggf. Drucksprache umstellen (-> Extras -> Einstellungen).
 5. Strecken importieren 
    -> Strecken -> Import FC-Strecke
    - Vorbereitete Strecke(n) im 'Flight Contest'-GPX-Format importieren.
@@ -406,9 +413,11 @@ Tabellenblätter nach folgenden Regeln eingefügt werden:
   Importiert werden nur Daten aus dem Tabellenblatt 'Crews'.
 
 Besatzungslisten werden mit 'Besatzungen -> Import Excel-Besatzungsliste' in die
-'Flight Contest'-Datenbank aufgenommen. Bei angegebener Option 
-"Start-Nr. 13 weglassen" wird die Nummer 13 nicht verwendet bzw. bei Angabe durch
-eine andere Startnummer ersetzt.
+'Flight Contest'-Datenbank aufgenommen. 
+Bei angegebener Option "Start-Nr. weglassen" werden die angegebenen Nummern 
+nicht verwendet bzw. bei Angabe durch eine andere Startnummer ersetzt.
+Die angegebenen Nummern können unter 'Wettbewerb -> Vorgaben' konfiguriert
+werden (Standard: '13').
 
 Importiert werden nur Besatzungsnamen (Pilot + Copilot), die noch nicht in der 
 'Flight Contest'-Datenbank vorhanden sind. Korrekturen bereits importierter
@@ -573,11 +582,15 @@ Mit 'Strecken -> Import Strecke' können Strecken folgender Formate auch importi
   Darf nur genau eine Strecke (<rte>...</ret>) beinhalten.
   Muss Höhenangaben beinhalten 
   (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
+- KML- oder KMZ-Datei, die von einem Fremd-Programm erzeugt wurde.
 - REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.
 - TXT-Datei, die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
-  Latitude,Logitude,Altitude (in Meter)
-  z.B. '48.830855,10.210301,624.84'
-  Werte mit Komma getrennt (Leerzeichen vor/nach Zahlen werden ignoriert)
+    Latitude, Longitude, Altitude
+  Bespiele für verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):
+    Lat 52.20167°, Lon 16.76500°, Alt 1243ft
+    Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+    Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft
+  Werte mit Komma getrennt (Leerzeichen vor Präfix und nach Einheit werden ignoriert)
   Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 
 Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
@@ -592,8 +605,35 @@ Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' z
 an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
 in sein 'Flight Contest' zur Nutzung importieren kann.
 
+Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon 
+auch mit Textdateien möglich. In einer leeren Strecke können alle Check-Punkte mit 
+"Koordinaten importieren" aus einer Text-Datei hinzugefügt werden (einschl. Eigenschaften).
+  Beispiel (Check-Punkt (engl.), Latitude, Longitude, Altitude, Gate-Richtung und -Breite, u.a.):
+    TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 1.0NM
+    SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+    TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+    SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+    TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+    iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+    iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
+    iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+    TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+    TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+    FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+    LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 1.0NM
+  Zulässige Koordinaten-Darstellungen entspr. Wettbewerbseinstellung.
+Import von Beobachtungen aus Text-Dateien:
+  siehe 'Programme -> Flight Contest -> Anleitung Beobachtungen' 
+  -> Kapitel "Beobachtungsauswertung konfigurieren"
+Der Strecken-Ausdruck (Strecke -> Druck) enthält die Text-Darstellungen aller Check-Punkte
+und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet werden können:
+  Strecken-Koordinaten (Export)
+  Wendepunkt-Zeichen (Export)
+  Strecken-Fotos (Export)
+  Strecken-Bodenzeichen (Export)
+
 Alternativ ist die Eingabe und Weitergabe von Strecken mit AFLOS-Datenbanken möglich
-(siehe 'help_aflos.txt -> Streckenplanung mit AFLOS'). 
+(siehe 'Programme -> Flight Contest -> AFLOS Help -> Streckenplanung mit AFLOS'). 
 Dazu muss 'AFLOS 2.15' installiert sein.
 
 
@@ -742,41 +782,34 @@ Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
     Alle Landungen
       {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
-  Wettbewerbsordnung Präzisionsflug Deutschland - Ausgabe 2005:
-    Landung 1 und 4
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
-    Landung 2 und 3
-      {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 100;case 'D':return 50;case 'E':return 60;case 'F':return 70;case 'G':return 80;case 'H':return 90;default:return null;}}}
-    Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.
-
-  FAI Air Rally Flying - Edition 2016:
+  FAI Air Rally Flying - Edition 2017:
     Alle Landungen
       {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
-  FAI Precision Flying - Edition 2016:
+  FAI Precision Flying - Edition 2017:
     Landung 1 und 4
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
     Landung 2 und 3
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
     Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.
 
-  Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2014:
+  Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017:
     Landung 1 und 4
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
     Landung 2 und 3
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
     Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.
 
-  Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2016:
+  Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2017:
     Alle Landungen
       {x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}
-  Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2016:
+  Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017:
     Alle Landungen
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}
-  Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2016:
+  Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017:
     Alle Landungen
       {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}
-  Navigationsflug-Reglement Österreich - Ausgabe 2016:
+  Navigationsflug-Reglement Österreich - Ausgabe 2017:
     Alle Landungen
       {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
@@ -981,14 +1014,25 @@ CSS-Einstellungen für Tabellen:
       Textabstand zum Rahmen oben:  padding-top:2cm;
   Default-Werte:
       http://localhost:8080/fc/css/fcprint.css
+      
   Tabellen-Namen [Geltungsbereich] / (Zeilen-Namen [ID]) Spalten-Namen:
+      generalpoints / (title value) name value modify
       planningpoints / (title value) name value modify 
       flightpoints / (title value) name value modify
+      observationpoints / (title group value) name value modify
       landingpoints / (title value penaltycalculator) name value modify
+      turnpointsignpoints / (title value) name value
+      enroutecanvaspoints / (title value) name value
       
-      routecoords / tpname aflosname coords altitude gatewidth
-      routetpcoords / tpname coords
+      routecoords / (title value) tpname aflosname coords altitude gatewidth sign
       routelegs / (name value coursechange summary) from2tp trackdistance
+      enroutephotos / (name title value) photoname coords distfromtp tpname
+      enroutecanvas / (name title value) canvassign coords distfromtp tpname
+      routecoordexport / (title value)
+      turnpointsignexport / (title value)
+      enroutephotoexport / (title value)
+      enroutecanvasexport / (title value)
+      routetpcoords / (title value) tpname coords
       
       crewlist / (value [#num]) num crew email team resultclass shortresultclass aircraft aircrafttype aircraftcolor tas id empty1 empty2 empty3 empty4
       teamlist / (value [#crew.num]) team crew aircraft tas
@@ -1004,9 +1048,14 @@ CSS-Einstellungen für Tabellen:
       timetableoverviewlist2 / (head) (times [#tas]) tas to2sp ifp2ildg ildg2isp fp2ldg
       
       crewtest / title crew team resultclass aircraft aircrafttype tas
+      crewneutral / title num crew aircraft col
       info / (wind planning endcurved landinglatest planninginfo planningignore planningevaluation) title separator value
       planningtasklist / (valuename unit value [#tpname]) tpname distance truetrack trueheading groundspeed legtime
       flightplanlist / (value [#tpname] procedureturn summary) num distance truetrack trueheading groundspeed legtime tpname tptime
+      observationturnpointlist / (title subtitle data) tpname turnpointphoto turnpointcanvas turnpointtrue turnpointfalse
+      observationenroutephotolist / (title subtitle data) name correct inexact false nmfromtp mmfromtp fromlasttp
+      observationenroutecanvaslist / (title subtitle data) sign correct inexact false nmfromtp mmfromtp fromlasttp
+      observationenroutecrewjudgesign / (title) name line
       
       planningtaskresultlist / (name1 name2 value [#tpname] summary) tpname plantrueheading trueheading penaltytrueheading
                                planlegtime legtime penaltylegtime 
@@ -1017,11 +1066,15 @@ CSS-Einstellungen für Tabellen:
                           safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened
                           frequencynotmonitored otherpenalties penalties) 
       flightmeasurementlist / (name1 name2 value [#tpname]) tpname aflosname plancptime cptime procedureturn badcoursenum altitude
-      summary [observationresults] / (turnpointphotopenalties routephotopenalties groundtargetpenalties penalties)
+      observationturnpointresultlist / (name1 name2 value [#tpname] summary) tpname evaluation plan result penalties
+      observationenroutephotoresultlist / (name1 name2 value [#photoName] summary) photoname evaluation plan result penalties
+      observationenroutecanvasresultlist / (name1 name2 value [#imageName] summary) imagename evaluation plan result penalties
+      
+      summary [observationresults] / (turnpointphotopenalties routephotopenalties groundtargetpenalties otherpenalties penalties)
       landingresultlist / (name [#1...4] values [#1...4] summary [#1...4])
       summary [landingresults] / (otherpenalties penalties)
       summary [specialresults] / (penalties)
-      crewresultsummary / planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties
+      crewresultsummary / planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties increasepenalties
                           penalties
       
       resultlist / ([#pos]) pos crew aircraft team resultclass shortresultclass planningpenalties flightpenalties observationpenalties 
@@ -1037,6 +1090,12 @@ CSS-Einstellungen für Tabellen:
       table.timetablejurylist tr.value td { font-size: 90%; }
     Ergebnis-Liste: Zeilen verkleinern
       table.resultlist td { font-size: 90%; }
+    Punkte-Druck Landefeld:
+      img.landingfield {width:200%;}
+    Gescannte Beobachtungsformulare:
+      img.scannedobservationtest {width:80%;}
+    Gescannte Planungsaufgabenformulare
+      img.scannedplanningtest {width:80%;}
 
 
 Installations-abhängige Konfiguration
@@ -1099,7 +1158,7 @@ flightcontest {
 }
 
 Im Root-Verzeichnis des FTP-Servers müssen 2 Verzeichnisse existieren:
-  GM_Utils-5.13 - GPX-Viewer-JavaScript-Bibliothek
+  GM_Utils-5.18.1a - GPX-Viewer-JavaScript-Bibliothek
   Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis
     (obiges Beispiel: "demo")
 
@@ -1107,10 +1166,13 @@ Die genannte Version des GPX-Views kann folgendem Verzeichnis entnommen werden:
     C:\Program Files (x86)\Flight Contest\tomcat\webapps\fc\GM_Utils
 
 Im Root-Verzeichnis des FTP-Server muss für GPX-Dateien ein eigener
-MIME-Typ konfiguriert werden. Dazu in Datei '.htaccess' folgende Zeile
-hinzufügen:
+MIME-Typ konfiguriert werden. Weiterhin sollte für diesen MIME-Typ die 
+Browser-Komprimierung aktiviert werden
+(https://betterexplained.com/articles/how-to-optimize-your-site-with-gzip-compression).
+Dazu in Datei '.htaccess' folgende Zeilen hinzufügen:
     AddType application/gpx .gpx
-    
+	AddOutputFilterByType DEFLATE application/gpx
+
 Der FTP-Login-Name muss Schreibrechte auf das Wettbewerbs-Verzeichnis erhalten,
 nicht jedoch auf das Root-Verzeichnis des FTP-Servers.
 
@@ -1218,6 +1280,56 @@ Live-Anzeige im laufenden Wettbewerb
         Der letzte Stand der Live-Ergebnis-Datei wird eingefroren.
 
 
+Automatische Aktionen
+=====================
+Automatische Aktionen werden durch dauerhaft laufende Scripte erledigt
+und funktionieren nur mit dem Firefox-Browser.
+1. Aufruf des Scriptes schaltet automatische Aktion ein.
+Erneuter Aufruf des Scriptes schaltet automatische Aktion nach Rückfrage aus.
+-> 'Programme -> Flight Contest -> Scripts'
+
+FCAutoOpenPDF
+-------------
+Automatisches Öffnen von PDF im Acrobat Reader.
+
+Notwendige Firefox-Einstellungen:
+  * Allgemein -> Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
+  * Anwendungen -> Adobe Acrobat Document: Datei speichern
+
+FCAutoLoadScanPlanningTask
+--------------------------
+Automatisches Laden gescannter Planungstest-Formulare.
+
+Notwendige Scanner-Einstellungen:
+  * JPG-Dateien in das Verzeichnis "C:\FCSave\.scan" speichern
+  
+Notwendige Vorbereitung:
+  * Firefox muss laufen
+  * 'Wettbewerb -> Ergebnisse' mit der aktuellen Aufgabe muss aktiv sein
+
+FCAutoLoadScanObservation
+-------------------------
+Automatisches Laden gescannter Beobachtungstest-Formulare.
+
+Notwendige Scanner-Einstellungen:
+  * JPG-Dateien in das Verzeichnis "C:\FCSave\.scan" speichern
+  
+Notwendige Vorbereitung:
+  * Firefox muss laufen
+  * 'Wettbewerb -> Ergebnisse' mit der aktuellen Aufgabe muss aktiv sein
+
+FCAutoLoadLogger
+----------------
+Automatisches Laden eingelesener Logger-Daten.
+
+Notwendige Logger-Software-Einstellungen:
+  * GAC-, GPX- oder IGC-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern
+  
+Notwendige Vorbereitung:
+  * Firefox muss laufen
+  * 'Wettbewerb -> Ergebnisse' mit der aktuellen Aufgabe muss aktiv sein
+
+
 Datensicherung eines laufenden Wettbewerbes
 ===========================================
 Während eines laufenden Wettbewerbes sollten Sie folgende Daten sichern:
@@ -1244,7 +1356,6 @@ Sicherung der 'Flight Contest'-Datenbank:
 
 Sicherung der 'Flight Contest'-Ausdrucke (Firefox):
   Empfohlene Firefox-Einstellungen:
-    Allgemein -> Den Download-Manager anzeigen, wenn ein Download startet: ein
     Allgemein -> Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
     Anwendungen -> Adobe Acrobat Document: Datei speichern
   Diese Einstellungen stellen sicher, dass alle Ausdrucke im Sicherungsverzeichnis 

@@ -84,7 +84,7 @@ class LoggerFileTools
                             BigDecimal latitude_grad_math = latitude_grad.toBigDecimal()
                             String latidude_minute = line.substring(9,11) + '.' + line.substring(11,14)
                             BigDecimal latidude_minute_math = latidude_minute.toBigDecimal()
-                            boolean latitude_north = line.substring(14,15) == 'N'
+                            boolean latitude_north = line.substring(14,15) == CoordPresentation.NORTH
                             BigDecimal latitude = latitude_grad_math + (latidude_minute_math / 60)
                             if (!latitude_north) {
                                 latitude *= -1
@@ -95,7 +95,7 @@ class LoggerFileTools
                             BigDecimal longitude_grad_math = longitude_grad.toBigDecimal()
                             String longitude_minute = line.substring(18,20) + '.' + line.substring(20,23)
                             BigDecimal longitude_minute_math = longitude_minute.toBigDecimal()
-                            boolean longitude_east = line.substring(23,24) == 'E'
+                            boolean longitude_east = line.substring(23,24) == CoordPresentation.EAST
                             BigDecimal longitude = longitude_grad_math + (longitude_minute_math / 60)
                             if (!longitude_east) {
                                 longitude *= -1
@@ -319,7 +319,7 @@ class LoggerFileTools
                             BigDecimal latitude_grad_math = latitude_grad.toBigDecimal()
                             String latidude_minute = line.substring(9,11) + '.' + line.substring(11,14)
                             BigDecimal latidude_minute_math = latidude_minute.toBigDecimal()
-                            boolean latitude_north = line.substring(14,15) == 'N'
+                            boolean latitude_north = line.substring(14,15) == CoordPresentation.NORTH
                             BigDecimal latitude = latitude_grad_math + (latidude_minute_math / 60)
                             if (!latitude_north) {
                                 latitude *= -1
@@ -330,7 +330,7 @@ class LoggerFileTools
                             BigDecimal longitude_grad_math = longitude_grad.toBigDecimal()
                             String longitude_minute = line.substring(18,20) + '.' + line.substring(20,23)
                             BigDecimal longitude_minute_math = longitude_minute.toBigDecimal()
-                            boolean longitude_east = line.substring(23,24) == 'E'
+                            boolean longitude_east = line.substring(23,24) == CoordPresentation.EAST
                             BigDecimal longitude = longitude_grad_math + (longitude_minute_math / 60)
                             if (!longitude_east) {
                                 longitude *= -1

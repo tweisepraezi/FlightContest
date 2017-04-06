@@ -1,24 +1,29 @@
 ﻿Flight Contest
 
-Programm zur Planung und Auswertung von Navigationsflug-Wettbewerben
-Program for planning and evaluating of General Aviation championships
+Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes
+der General Aviation und wertet Ergebnisse für Planungstests, Navigationstests, 
+Beobachtungen und/oder Landungen aus.
+
+Flight Contest is a Tool to schedule general aviation power flying competitions 
+and to evaluate planning, navigation, observation and/or landing test results.
 
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-21.10.2016
+06.04.2017
 
 Downloads und Dokumentationen:
 http://flightcontest.de
 
 Diese Hinweise finden Sie nach der Installation im Startmenü unter
-'Programme -> Flight Contest -> Readme'.
+'Programme -> Flight Contest -> Readme' (deutsch)
 
 Die Bedienungsanleitung finden Sie im Startmenü unter
-'Programme -> Flight Contest -> Manual'.
+'Programme -> Flight Contest -> Bedienungsanleitung' (deutsch)
+'All Programs -> Flight Contest -> Manual' (english)
 
 Weitere Hilfe finden Sie im Startmenü unter
-'Programme -> Flight Contest -> Help'
+'Programme -> Flight Contest -> Help' (deutsch)
 
 Flight Contest ist eine moderne, auf Java-Techniken basierende, mehrsprachige
 und netzwerkfähige Open-Source-Datenbank-Anwendung:
@@ -30,7 +35,9 @@ und netzwerkfähige Open-Source-Datenbank-Anwendung:
 Flight Contest hat gegenüber bisherigen Programmen ein flexibles
 Wettbewerbsmanagement. Dazu zählen die Unterstützung
 * unterschiedlicher Wettbewerbsordnungen 
-  (FAI, Deutschland, Schweiz, erweiterbar),
+  (FAI Precision and Air Rally Flying, Deutschland Navigationsflug, 
+   Schweiz Präzisionsflug, Österreich Präzisions- und Navigationsflug, 
+   erweiterbar),
 * von Wettbewerbsklassen 
   (unterschiedliche Auswertung von Teilnehmergruppen in einem Wettbewerb),
 * paralleler Wettbewerbe 
@@ -48,12 +55,62 @@ Weitere nützliche Funktionen von Flight Contest:
   (Goggle Maps und Open Street Map)
 * Offline-Anzeige für Strecken und Navigationsflüge.
 * E-Mail-Versand der Navigationsflug-Karten an Teilnehmer.
-* Live-Ergebnis-Anzeige (Live Ranking) zur Anzeige der vorläufigen
+* Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
 
-Erweiterungen in dieser Version (3.0):
+Erweiterungen in dieser Version (3.1):
 --------------------------------------
+- Neue Beobachtungs-Auswertung
+    * Unterstützt Auswerteformular für Besatzungen und 
+      Karten-Debriefing durch Schiedsrichter
+    * Unterstützt Fotos und Bodenzeichen an Wendenpunkten und auf der Strecke
+    * Unterstützt manuelle Eingabe der Beobachtungs-Objekte und Import 
+      aus Text-Dateien
+    * Beobachtungs-Objekte können einzeln von der Auswertung ausgeschlossen werden
+      (-> 'Ergebnisse -> Check-Punkte deaktivieren')
+    * Unterstützt die Erfassung gescannter Auswerteformulare
+    -> 'Programme -> Flight Contest -> Anleitung Beobachtungen'
+- Regelwerk-abhängige Wettbewerbs-Vorgaben hinzugefügt
+    * Min. und max. Anzahl von Streckenabschnitten
+    * Tor-Breite von UZK-Koordinaten
+    * Typ der Wendepunkt-Beobachtungen
+    * Typ der Strecken-Foto-Beobachtungen
+    * Typ der Strecken-Bodenzeichen-Beobachtungen
+    * Min. und max. Anzahl von Strecken-Fotos
+    * Min. und max. Anzahl von Strecken-Bodenzeichen
+    * Min. und max. Anzahl von Strecken-Fotos und -Bodenzeichen
+    * Ungeeignete Start-Nummern
+    -> 'Wettbewerb -> Vorgaben'
+- Strecken-Import ('Strecken -> Import Strecke') erweitert
+    * Import von KML- und KMZ-Dateien
+    * TXT-Datei-Import untertützt nun verschiedene Koordinaten-Darstellungen
+      (entsprechend der Wettbewerbseinstellung)
+    -> 'Programme -> Flight Contest -> Help' -> 'Streckenplanung'
+- Regelwerk-Wettbewerbspunkte erweitert
+    * Allgemein -> Steigerungsfaktor für Besatzungen
+    * Planungstest -> Verwendung elektronischer Rechenhilfen
+    * Navigationstest -> Mitführen von verbotenem elektronischen Equipment
+    -> 'Wettbewerb -> Punkte'
+- Unterstützung für automatischer Aktionen hinzugefügt
+   * Automatisches Öffnen von PDF im Acrobat Reader
+   * Automatisches Laden gescannter Planungstest-Formulare
+   * Automatisches Laden gescannter Beobachtungstest-Formulare
+   * Automatisches Laden eingelesener Logger-Daten
+   -> 'Programme -> Flight Contest -> Help' -> 'Automatische Aktionen'
+- Aktualisierung folgender Regelwerke
+    FAI Precision Flying - Edition 2017
+    FAI Air Rally Flying - Edition 2017
+    Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017
+    Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2017
+    Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017
+    Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017
+    Navigationsflug-Reglement Österreich - Ausgabe 2017
+- Englische Bediensanleitung Version 3.0 hinzugefügt
+    -> 'Programme -> Flight Contest -> Manual'
+
+Erweiterungen in Version 3.0:
+-----------------------------
 - Navigationsflug-Logger-Auswertung erweitert:
     * Mit 'Import Logger-Daten' werden Logger-Daten direkt aus einer
       ausgewählten GAC-, GPX- oder IGC-Datei geladen und daraus sofort
@@ -116,11 +173,7 @@ Erweiterungen in dieser Version (3.0):
       Muss Höhenangaben beinhalten 
       (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
     * REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde. 
-    * TXT-Datei, die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
-        Latitude,Logitude,Altitude (in Meter)
-        z.B. '48.830855,10.210301,624.84'
-        Werte mit Komma getrennt (Leerzeichen vor/nach Zahlen werden ignoriert)
-        Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
+    * TXT-Datei, die pro Zeile eine Koordinate mit Höhenangabe enthält.
 - Ausdrucke müssen beim Drucken nicht mehr eingepasst werden.
 - Unbekannte Zeitkontrollen werden in Englisch mit 'SC' abgekürzt (vorher 'Secret').
 - Aktualisierung folgender Regelwerke
@@ -296,7 +349,6 @@ Erweiterungen in Version 2.3.0:
     FAI Air Rally Flying - Advanced - Edition 2015
 - Aktualisierung des deutschen Regelwerkes
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2015
-    Änderungen gegenüber 2014 sind am rechten Rand mit einem Strich markiert.
 
 Fehlerbehebungen in 2.2.6:
 --------------------------
@@ -958,7 +1010,7 @@ zum letzten funktionstüchtigen 'Flight Contest' zurückgekehrt werden:
   4. <Installationsverzeichnis>\fc-backup-<Datum> in
      <Installationsverzeichnis>\fc umbenennen
   5. Letztes funktionstüchtiges 'Flight Contest' installieren
-  
+
 
 Cookies:
 --------

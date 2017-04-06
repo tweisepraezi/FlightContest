@@ -2,6 +2,7 @@ class DemoContestService
 {
 	def fcService
 	def demoContestStandardService
+    def demoContestObservationService
 	def demoContestOtherService
 	def demoContestRoutesService
 	def demoContestIntermediateService
@@ -12,10 +13,11 @@ class DemoContestService
 	{
 		Map ret = [:]
 		switch (demoContest) {
-			case '98':
+			case '98': // Alle
                 ret = create_test( "2",ret,true,aflosDB,showLanguage)
                 long contest_id = ret.contestid
 				ret = create_test( "1",ret,true,aflosDB,showLanguage)
+                ret = create_test( "4",ret,true,aflosDB,showLanguage)
 				ret = create_test( "3",ret,true,aflosDB,showLanguage)
 				ret = create_test("11",ret,true,aflosDB,showLanguage)
 				ret = create_test("12",ret,true,aflosDB,showLanguage)
@@ -27,10 +29,11 @@ class DemoContestService
 				ret = create_test("24",ret,true,aflosDB,showLanguage)
                 ret.contestid = contest_id
 				break
-			case '99':
+			case '99': // Alle mit Tests
                 ret = create_test( "2",ret,true,aflosDB,showLanguage)
                 long contest_id = ret.contestid
 				ret = create_test( "1",ret,true,aflosDB,showLanguage)
+                ret = create_test( "4",ret,true,aflosDB,showLanguage)
 				ret = create_test("21",ret,true,aflosDB,showLanguage)
 				ret = create_test("22",ret,true,aflosDB,showLanguage)
 				ret = create_test("23",ret,true,aflosDB,showLanguage)
@@ -78,6 +81,10 @@ class DemoContestService
 			case '3':
 				contest_id = demoContestStandardService.CreateTest3("Demo Wettbewerb (kombinierter Wettbewerb)", "demo3", false, aflosDB)
 				break
+            case '4':
+                contest_id = demoContestObservationService.CreateTest("Demo Wettbewerb (Beobachtungen)", "demo4", true, aflosDB)
+                // ret = run_test(contest_id, runTest, aflosDB)
+                break
 			case '11':
 				contest_id = demoContestOtherService.CreateTest11("Demo Wettbewerb Auswertung ohne Klassen", "demo11", false, aflosDB)
 				break
@@ -139,6 +146,9 @@ class DemoContestService
 				case "Demo Wettbewerb (kombinierter Wettbewerb)":
 					ret_test = demoContestStandardService.RunTest3(lastContest, lastContest.title, aflosDB)
 					break
+                case "Demo Wettbewerb (Beobachtungen)":
+                    ret_test = demoContestObservationService.RunTest(lastContest, lastContest.title, aflosDB)
+                    break
 				case "Demo Wettbewerb (Strecken)":
 					ret_test = demoContestRoutesService.RunTest(lastContest, lastContest.title, aflosDB)
 					break

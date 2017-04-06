@@ -583,8 +583,8 @@ class AflosTools
         minute = minute.replaceFirst(',','.')
         
         switch (a[2]) {
-            case "S":
-            case "W":
+            case CoordPresentation.SOUTH:
+            case CoordPresentation.WEST:
                 return -(grad.toBigDecimal() + (minute.toBigDecimal() / 60))
         }
         return grad.toBigDecimal() + (minute.toBigDecimal() / 60)
@@ -658,7 +658,7 @@ class AflosTools
                 if (mark) {
                     mark += ' '
                 }
-                mark += '$dist:' + DistanceMeasureStr(coordroute_instance.measureDistance) + 'mm'
+                mark += "\$dist:${FcMath.DistanceMeasureStr2(coordroute_instance.measureDistance)}${RouteFileTools.UNIT_mm}"
             }
             if (coordroute_instance.measureTrueTrack) {
                 if (mark) {
@@ -758,16 +758,6 @@ class AflosTools
             coordValue.setScale(13)
             DecimalFormat df = new DecimalFormat("0.#############")
             return df.format(coordValue).replaceAll(',','.')
-        }
-        return ""
-    }
-    
-    //--------------------------------------------------------------------------
-    private static String DistanceMeasureStr(BigDecimal distanceValue)
-    {
-        if (distanceValue >= 0) {
-            DecimalFormat df = new DecimalFormat("0.0#")
-            return df.format(distanceValue).replaceAll(',','.')
         }
         return ""
     }

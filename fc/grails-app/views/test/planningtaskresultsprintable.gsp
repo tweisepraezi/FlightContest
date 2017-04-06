@@ -30,7 +30,7 @@
                     content: "${message(code:'fc.planningresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}"
                 }
                 @top-right {
-                    content: "${testInstance.GetViewPos()}"
+                    content: "${testInstance.GetViewPos()}-" counter(page)
                 }
                 @bottom-left {
                     content: "${contestInstance.printOrganizer}"
@@ -55,9 +55,12 @@
         </g:else>
         <div>
             <g:form>
-                <g:crewTestPrintable t="${testInstance}"/>
-                <br/>
-                <g:planningtaskTestPrintable t="${testInstance}"/>
+                <div style="page-break-inside:avoid">
+	                <g:crewTestPrintable t="${testInstance}"/>
+	                <br/>
+	                <g:planningtaskTestPrintable t="${testInstance}"/>
+	            </div>
+	            <g:planningtaskTestScannedPrintable t="${testInstance}"/>
             </g:form>
         </div>
     </body>

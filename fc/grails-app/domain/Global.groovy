@@ -4,9 +4,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.12
+	// Actual database version: DB-2.13
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 12
+	static int DB_MINOR = 13
 	
     static final int LIVE_UPLOADSECONDS = 60
     static final String LIVE_STYLESHEET = "fclive.css"

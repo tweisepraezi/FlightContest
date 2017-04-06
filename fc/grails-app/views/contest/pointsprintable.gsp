@@ -52,7 +52,7 @@
     <body>
         <h3>${print_subtitle}</h3>
         <g:form>
-            <g:pointsPrintable i="${contestInstance}"/>
+            <g:pointsPrintable i="${contestInstance}" lang="${session.printLanguage}"/>
         </g:form>
     </body>
 </html>

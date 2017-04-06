@@ -15,12 +15,14 @@
                     	<div>
     						<input type="file" size="80" accept=".xls" name="loadfile" tabIndex="1"/>
                     	</div>
-                        <p>
-                            <div>
-                                <g:checkBox name="noStartnum13" value="${noStartnum13}" />
-                                <label>${message(code:'fc.crew.import.nostartnum13')}</label>
-                            </div>
-                        </p>
+                    	<g:if test="${contestInstance.unsuitableStartNum}">
+	                        <p>
+	                            <div>
+	                                <g:checkBox name="noUnsuitableStartNum" value="${noUnsuitableStartNum}" />
+	                                <label>${message(code:'fc.crew.import.nostartnum',args:[contestInstance.unsuitableStartNum])}</label>
+	                            </div>
+	                        </p>
+	                    </g:if>
                     	<div>
 	    					<input type="submit" value="${message(code:'fc.import')}" tabIndex="2"/>
 		                    <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" tabIndex="3"/>

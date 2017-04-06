@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.text.DecimalFormat
 import java.util.List;
 
@@ -14,8 +15,15 @@ enum CoordPresentation
     }
 
     //--------------------------------------------------------------------------
-    static final String LAT = "Lat"
-    static final String LON = "Lon"
+    final static String LAT = "Lat"
+    final static String LON = "Lon"
+    final static String GRAD = (char)176
+    final static String GRADMIN = "'"
+    final static String GRADSEC = '"'
+    final static String NORTH = 'N'
+    final static String SOUTH = 'S'
+    final static String EAST = 'E'
+    final static String WEST = 'W'
     
     //--------------------------------------------------------------------------
     final String code
@@ -100,14 +108,14 @@ enum CoordPresentation
         BigDecimal minute_value = 60 * (decimalGrad - grad_value)
         String direction_value = ''
         if (isLatitude) {
-            direction_value = 'N'
+            direction_value = NORTH
             if (grad_value < 0) {
-                direction_value = 'S'
+                direction_value = SOUTH
             }
         } else {
-            direction_value = 'E'
+            direction_value = EAST
             if (grad_value < 0) {
-                direction_value = 'W'
+                direction_value = WEST
             }
         }
         if (grad_value < 0) {
@@ -116,6 +124,141 @@ enum CoordPresentation
         if (minute_value < 0) {
             minute_value *= -1
         }
-        return [direction:direction_value, grad:grad_value, minute:minute_value]
+        return [invalid:false, direction:direction_value, grad:grad_value, minute:minute_value]
     }
+    
+    //--------------------------------------------------------------------------
+    static BigDecimal GetDecimalGrad(Map gradDecimalMinute)
+    {
+        BigDecimal ret = gradDecimalMinute.grad + gradDecimalMinute.minute/60
+        if (gradDecimalMinute.direction == NORTH) {
+            return ret
+        } else {
+            return -ret
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map GetDirectionGradDecimalMinute(String coordStr, boolean isPraefix, boolean isLatitude)
+    {
+        Map ret = [invalid:true, direction:NORTH, grad:0, minute:0]
+        
+        String praefix = LAT
+        String direction1 = NORTH
+        String direction2 = SOUTH
+        if (!isLatitude) {
+            praefix = LON
+            direction1 = EAST
+            direction2 = WEST
+        }
+        
+        switch (this) {
+            case CoordPresentation.DEGREEMINUTE:
+                if (coordStr.endsWith(direction1) || coordStr.endsWith(direction2)) {
+                    if (!isPraefix || coordStr.startsWith(praefix + ' ')) {
+                        String s = coordStr
+                        if (isPraefix) {
+                            s = s.substring(praefix.size()).trim()
+                        }
+                        while (s.contains('  ')) {
+                            s = s.replaceAll('  ', ' ')
+                        }
+                        def coord_values = s.split(' ')
+                        if (coord_values.size() == 3) {
+                            if (coord_values[0].endsWith(GRAD) && coord_values[1].endsWith(GRADMIN)) {
+                                String grad_str = coord_values[0].trim()
+                                grad_str = grad_str.substring(0,grad_str.size()-GRAD.size())
+                                String min_str = coord_values[1].trim()
+                                min_str = min_str.substring(0,min_str.size()-GRADMIN.size())
+                                if (grad_str.isInteger() && min_str.isBigDecimal()) {
+                                    ret.grad = grad_str.toInteger()
+                                    ret.minute = min_str.toBigDecimal()
+                                    ret.direction = coord_values[2].trim()
+                                    ret.invalid = false
+                                }
+                            }
+                        }
+                    }
+                }
+                break
+            case CoordPresentation.DEGREEMINUTESECOND:
+                if (coordStr.endsWith(direction1) || coordStr.endsWith(direction2)) {
+                    if (!isPraefix || coordStr.startsWith(praefix + ' ')) {
+                        String s = coordStr
+                        if (isPraefix) {
+                            s = s.substring(praefix.size()).trim()
+                        }
+                        while (s.contains('  ')) {
+                            s = s.replaceAll('  ', ' ')
+                        }
+                        def coord_values = s.split(' ')
+                        if (coord_values.size() == 4) {
+                            if (coord_values[0].endsWith(GRAD) && coord_values[1].endsWith(GRADMIN) && coord_values[2].endsWith(GRADSEC)) {
+                                String grad_str = coord_values[0].trim()
+                                grad_str = grad_str.substring(0,grad_str.size()-GRAD.size())
+                                String min_str = coord_values[1].trim()
+                                min_str = min_str.substring(0,min_str.size()-GRADMIN.size())
+                                String sec_str = coord_values[2].trim()
+                                sec_str = sec_str.substring(0,sec_str.size()-GRADSEC.size())
+                                if (grad_str.isInteger() && min_str.isInteger() && sec_str.isBigDecimal()) {
+                                    ret.grad = grad_str.toInteger()
+                                    ret.minute = min_str.toBigDecimal() + sec_str.toBigDecimal() / 60
+                                    ret.direction = coord_values[3].trim()
+                                    ret.invalid = false
+                                }
+                            }
+                        }
+                    }
+                }
+                break
+            case CoordPresentation.DEGREE:
+                if (coordStr.endsWith(GRAD)) {
+                    if (!isPraefix || coordStr.startsWith(praefix + ' ')) {
+                        String s = coordStr
+                        if (isPraefix) {
+                            s = s.substring(praefix.size()).trim()
+                        }
+                        s = s.substring(0,s.size()-GRAD.size())
+                        if (s.isBigDecimal()) {
+                            return CoordPresentation.GetDirectionGradDecimalMinute(s.toBigDecimal(), isLatitude)
+                        }
+                    }
+                }
+                break
+        }
+        
+        return ret
+    }
+
+    //--------------------------------------------------------------------------
+    String GetCoordName(Coord coordInstance, boolean isLatitude)
+    {
+        String praefix = LAT
+        if (!isLatitude) {
+            praefix = LON
+        }
+        
+        if (isLatitude) {
+            switch (this) {
+                case CoordPresentation.DEGREEMINUTE:
+                    return "${praefix} ${IntegerGradStr(coordInstance.latGrad,isLatitude)}${GRAD} ${DecimalMinuteStr(coordInstance.latMinute)}${GRADMIN} ${coordInstance.latDirection}"
+                case CoordPresentation.DEGREEMINUTESECOND:
+                    return "${praefix} ${IntegerGradStr(coordInstance.latGrad,isLatitude)}${GRAD} ${IntegerMinuteStr(coordInstance.latMinute)}${GRADMIN} ${DecimalSecondStr(coordInstance.latMinute)}${GRADSEC} ${coordInstance.latDirection}"
+                case CoordPresentation.DEGREE:
+                    return "${praefix} ${DecimalGradStr(coordInstance.latMath())}${GRAD}"
+            }
+        } else {
+            switch (this) {
+                case CoordPresentation.DEGREEMINUTE:
+                    return "${praefix} ${IntegerGradStr(coordInstance.lonGrad,isLatitude)}${GRAD} ${DecimalMinuteStr(coordInstance.lonMinute)}${GRADMIN} ${coordInstance.lonDirection}"
+                case CoordPresentation.DEGREEMINUTESECOND:
+                    return "${praefix} ${IntegerGradStr(coordInstance.lonGrad,isLatitude)}${GRAD} ${IntegerMinuteStr(coordInstance.lonMinute)}${GRADMIN} ${DecimalSecondStr(coordInstance.lonMinute)}${GRADSEC} ${coordInstance.lonDirection}"
+                case CoordPresentation.DEGREE:
+                    return "${praefix} ${DecimalGradStr(coordInstance.lonMath())}${GRAD}"
+            }
+        }
+        
+        return ""
+    }
+
 }

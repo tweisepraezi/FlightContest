@@ -149,6 +149,10 @@
                                     </div>
                                 </g:each>
                                 <div>
+                                    <g:checkBox name="contestPrintObservationDetails" value="${resultclassInstance.contestPrintObservationDetails}" />
+                                    <label>${message(code:'fc.printobservationdetails')}</label>
+                                </div>
+                                <div>
                                     <g:checkBox name="contestPrintLandingDetails" value="${resultclassInstance.contestPrintLandingDetails}" />
                                     <label>${message(code:'fc.printlandingdetails')}</label>
                                 </div>

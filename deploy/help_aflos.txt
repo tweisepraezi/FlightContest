@@ -61,7 +61,7 @@ die AFLOS-Kalkulation aktiviert werden:
      Flight Contest -> Strecken -> Benutzte Strecke -> AFLOS-Referenzstrecken-Export
   4. REF-Datei importieren
      AFLOS -> Reference - Data -> Angelegte Strecke -> Load From File
-Nun können Überflugzeiten und Fehlerstellen mit der angelegten Referenze-Strecke kalkuliert
+Nun können Überflugzeiten und Fehlerstellen mit der angelegten Referenz-Strecke kalkuliert
 und dessen Ergebnisse im Flight Contest-Navigationsflug importiert werden.
 
 

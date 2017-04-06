@@ -26,7 +26,7 @@
                             <p>
                                 <label>${message(code:'fc.route')}*:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="${{it.name()}}" from="${Route.findAllByContest(flightTestInstance.task.contest,[sort:"id"])}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
+                                <g:select from="${Route.GetOkRoutes(flightTestInstance.task.contest)}" optionKey="id" optionValue="${{it.name()}}" name="route.id" value="${flightTestInstance?.route?.id}" ></g:select>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${flightTestInstance?.id}" />

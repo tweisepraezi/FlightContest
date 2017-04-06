@@ -126,6 +126,11 @@ p.warning {
     background: yellow;
 }
 
+p.group {
+    font-weight:bold;
+    font-size:1.1em;
+}
+
 p.errors {
     font-weight:bold;
 	margin:0 5px 0 5px;

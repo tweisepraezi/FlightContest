@@ -31,6 +31,10 @@
 	                                    <g:checkBox name="printPlanningResults" value="${taskInstance.printPlanningResults}" />
 	                                    <label>${message(code:'fc.planningresults')}</label>
 	                                </div>
+                                    <div>
+                                        <g:checkBox name="printPlanningResultsScan" value="${taskInstance.printPlanningResultsScan}" />
+                                        <label>${message(code:'fc.planningtesttask.scannedforms')}</label>
+                                    </div>
         	                    </g:if>
     	                       	<g:if test="${taskInstance.IsFlightTestRun()}">
 	                                <div>
@@ -47,6 +51,10 @@
 	                                    <g:checkBox name="printObservationResults" value="${taskInstance.printObservationResults}" />
 	                                    <label>${message(code:'fc.observationresults')}</label>
 	                                </div>
+                                    <div>
+                                        <g:checkBox name="printObservationResultsScan" value="${taskInstance.printObservationResultsScan}" />
+                                        <label>${message(code:'fc.observation.scannedforms')}</label>
+                                    </div>
 	                            </g:if>
     	                       	<g:if test="${taskInstance.IsLandingTestRun()}">
 	                                <div>

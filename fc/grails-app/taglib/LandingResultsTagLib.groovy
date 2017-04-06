@@ -613,7 +613,7 @@ class LandingResultsTagLib
 		outln"""<table class="summary">"""
 		outln"""	<tfoot>"""
 		if (attrs.t.IsLandingTestAnyRun()) {
-			if (attrs.t.landingTestOtherPenalties > 0) {
+			if (attrs.t.landingTestOtherPenalties != 0) {
 				outln"""<tr class="otherpenalties">"""
 				outln"""	<td>${message(code:'fc.landingtest.otherpenalties')}: ${attrs.t.landingTestOtherPenalties} ${message(code:'fc.points')}</td>"""
 				outln"""</tr>"""

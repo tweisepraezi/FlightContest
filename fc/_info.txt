@@ -32,12 +32,37 @@
     
     HTML: Button mit Rückfrage
     --------------------------
-        onclick="return confirm('${message(code:'fc.areyousure')}'); 
+        onclick="return confirm('${message(code:'fc.areyousure')}');
+        
+    HTML: Tab-Index
+    ---------------
+        demo.gsp
+            <g:form> 
+                <g:set var="ti" value="${[]+1}"/>
+                ...
+                <g:demoInput ... ti="${ti}"/>
+                ...
+                <g:actionSubmit ... tabIndex="${ti[0]++}"/>
+                ...
+        DemoTagLib 
+            def demoInput = { attrs, body ->
+                ...
+                <input ... tabIndex="${attrs.ti[0]++}"/>
+                ...
+            private checkBox(..., attrs)
+                ...
+                <input ... tabIndex="${attrs.ti[0]++}"/>
+                ...
     
     Session
     -------
         import org.springframework.web.context.request.RequestContextHolder
         def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+
+
+Konfiguration
+=============
+    Alle Grails-Konfigurationsänderungen sind mit FC: markiert.
 
 
 Plugins
@@ -169,6 +194,9 @@ Interessante Test-Daten
     2.3.4_2015_SWDR
         Enthält Aufgabe für Allgäuflug mit eingeschränkten Teilnehmern
 
+    2.3.4_2015_RzdM
+        Enthält Links auf versendete Strecken 
+        
     2.3.6_2015_NIR
         3  - WP3 verpasst (FC-Calc: BC vor WP3), 2 BC vor WP6 (-> Korrektur auf 1 BC)
         

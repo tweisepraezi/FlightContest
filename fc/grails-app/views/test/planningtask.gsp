@@ -102,7 +102,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>${new CoordTitle(CoordType.SP,0).titleCode()}</td>
+                                            <td>${new CoordTitle(CoordType.SP,1).titleCode()}</td>
 	                                        <td>-</td>
 	                                        <td>-</td>
 	                                        <td>-</td>

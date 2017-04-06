@@ -3,52 +3,99 @@
 "use strict";
 
 window.JB = window.JB || {};
+window.JB.GPX2GM = window.JB.GPX2GM || {};
+
+// Google Maps API Key
+// JB.GPX2GM.GM_Api_key = ""; // Hier den Key eintragen und die "//" am Anfang entfernen
+
+// Definition der Icons, bei eigenen Icons nur Kleinbuchstaben verwenden.
 JB.Icons = function(baseurl) {
-  this.DefShadow  = { shadow: { anchor: {x:10,y:35}, url: baseurl+"Icons/shadow50.png" } };
-  this.Bild       = { icon:   { anchor: {x: 6,y:31}, url: baseurl+"Icons/scenic.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.MoveMarker = { icon:   { anchor: {x: 6,y: 6}, url: baseurl+"Icons/marker.gif" } };
-  this.Cluster    = { icon:   { anchor: {x:16,y:16}, url: baseurl+"Icons/cluster.png" } };
-  this.lodging    = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/hotel2.png" },
-	//this.lodging    = { icon:   { anchor: {x:15,y:31}, url: baseurl+"Icons/hotel.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.museum     = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/museum.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.residence  = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/villa.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.library    = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/library.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.park       = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/park.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.castle     = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/castle.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.airport    = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/airport.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.church     = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/church2.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.bridge     = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/bridge.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.bar        = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/bar.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.restaurant = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/restaurant.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.start      = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/start.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.finish     = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/finish.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this.flag       = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/flag.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this["shopping center"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/shoppingmall.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this["ground transportation"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/subway.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this["scenic area"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/photo.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  this["boat ramp"]   = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/boat.png" },
-                      shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  //this.myicon       = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/myicon.png" },
-  //                    shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-  // Most Icons from http://code.google.com/p/google-maps-icons/wiki/IconDescriptions
+	this.DefShadow	= { shadow: { anchor: {x:10,y:35}, url: baseurl+"Icons/shadow50.png" } };
+	this.Bild				= { icon:   { anchor: {x: 6,y:31}, url: baseurl+"Icons/scenic.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.MoveMarker	= { icon:   { anchor: {x: 6,y: 6}, url: baseurl+"Icons/marker.gif" } };
+	this.Cluster		= { icon:   { anchor: {x:16,y:16}, url: baseurl+"Icons/cluster.png" } };
+	this.lodging		= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/hotel2.png" },
+	//this.lodging		= { icon:   { anchor: {x:15,y:31}, url: baseurl+"Icons/hotel.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.museum			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/museum.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.residence	= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/villa.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.library		= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/library.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.park				= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/park.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.castle			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/castle.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.airport		= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/airport.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.church			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/church2.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.bridge			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/bridge.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.bar				= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/bar.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.restaurant	= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/restaurant.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.start			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/start.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.finish			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/finish.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.flag				= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/flag.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.harbor			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/harbor.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.anchor			= this.harbor;
+	this.campground	= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/tent.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.summit     = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/peak.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this["shopping center"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/shoppingmall.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this["ground transportation"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/subway.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this["scenic area"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/photo.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this["boat ramp"]   = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/boat.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+											
+	this.fcphoto        = { icon:   { anchor: {x:18,y:20}, url: baseurl+"Icons/s01.png" },
+                                            shadow: { anchor: {x:13,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s01            = { icon:   { anchor: {x:14,y:20}, url: baseurl+"Icons/s01.png" },
+	                                        shadow: { anchor: {x:9,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s02            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s02.png" },
+	                                        shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s03            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s03.png" },
+	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s04            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s04.png" },
+	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s05            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s05.png" },
+	                                        shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s06            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s06.png" },
+	                                        shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s07            = { icon:   { anchor: {x:9,y:20}, url: baseurl+"Icons/s07.png" },
+	                                        shadow: { anchor: {x:4,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s08            = { icon:   { anchor: {x:7,y:20}, url: baseurl+"Icons/s08.png" },
+	                                        shadow: { anchor: {x:2,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s09            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s09.png" },
+	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s10            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s10.png" },
+	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s11            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s11.png" },
+	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s12            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s12.png" },
+	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s13            = { icon:   { anchor: {x:11,y:20}, url: baseurl+"Icons/s13.png" },
+	                                        shadow: { anchor: {x:6,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s14            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s14.png" },
+	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s15            = { icon:   { anchor: {x:9,y:20}, url: baseurl+"Icons/s15.png" },
+	                                        shadow: { anchor: {x:4,y:15}, url: baseurl+"Icons/shadow.png" } };
+											
+	//this.myicon       = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/myicon.png" },
+	//                    shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	// Most Icons from https://mapicons.mapsmarker.com/
 } ;   
 
 JB.GPX2GM.units = {};
@@ -81,6 +128,7 @@ JB.GPX2GM.strings = {};
 JB.GPX2GM.strings.de = {
 	lenght: "L\u00e4nge",
 	way: "Strecke",
+	duration: "Dauer",
 	tstart: "Startzeit",
 	time: "Zeit",
 	time_unit: "Stunden",
@@ -99,15 +147,20 @@ JB.GPX2GM.strings.de = {
 	cad_unit: "UpM",
 	wpt: "Wegpunkt",
 	wpts: "Wegpunkte",
+	pwpt: "Bildwegpunkt",
 	trk: "Track",
 	trks: "Tracks",
 	rte: "Route",
 	rtes: "Routen",
-	inmo: "in Bewegung"
+	inmo: "in Bewegung",
+	wait: "Bitte warten.<br />Daten werden geladen.",
+	clkz: "Zum Zoomen klicken",
+	zb: "Zurück zoomen"
 }
 JB.GPX2GM.strings.en = {
 	lenght: "Length",
 	way: "Way",
+	duration: "Duration",
 	tstart: "Start time",
 	time: "Time",
 	time_unit: "hours",
@@ -127,11 +180,15 @@ JB.GPX2GM.strings.en = {
 	cad_unit: "rpm",
 	wpt: "Waypoint",
 	wpts: "Waypoints",
+	pwpt: "Picture Waypoint",
 	trk: "Track",
 	trks: "Tracks",
 	rte: "Route",
 	rtes: "Routes",
-	inmo: "in motion"
+	inmo: "in motion",
+	wait: "Please wait.<br />Loading data.",
+	clkz: "Click to zoom",
+	zb: "Zoom back"
 }
 
 /* // Prototyp für Callbackfunktion
@@ -155,6 +212,9 @@ JB.GPX2GM.callback = function(pars) {
 		case "Routen_n":
 			break;
 		case "Tracks_v":
+			alert(pars.gpxdaten.tracks.laenge);
+			for(var i=0;i<pars.gpxdaten.tracks.track.length;i++)
+				alert(pars.gpxdaten.tracks.track[i].laenge)
 			break;
 		case "Tracks_n":
 			break;
@@ -174,7 +234,8 @@ JB.GPX2GM.callback = function(pars) {
 	return true;
 } // JB.GPX2GM.callback */
 
-/*JB.Scaling = {   // nur paarweise verwenden
+/* // Autoscale in den Profilen abschalten
+JB.Scaling = {   // nur paarweise verwenden
 	hmin:0,hmax:1000,  // Höhenplot
 	smin:-30,smax:30,  // Steigungsplot
 	vmin:0,vmax:100,   // Geschwindigkeitsplot

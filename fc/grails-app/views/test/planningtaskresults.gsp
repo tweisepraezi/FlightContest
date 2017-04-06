@@ -91,6 +91,12 @@
 											<label>${message(code:'fc.planningtest.exitroomtolate')}</label>
 			    	                    </div>
 			    	                </g:if>
+                                    <g:if test="${testInstance.GetPlanningTestForbiddenCalculatorsPoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="planningTestForbiddenCalculators" value="${testInstance.planningTestForbiddenCalculators}"/>
+                                            <label>${message(code:'fc.planningtest.forbiddencalculators')}</label>
+                                        </div>
+                                    </g:if>
 		                        </p>
 		                        <p>
 	                                <label>${message(code:'fc.planningtest.otherpenalties')}* [${message(code:'fc.points')}]:</label>
@@ -117,7 +123,13 @@
                                         <td>${testInstance.GetPlanningTestExitRoomTooLatePoints()} ${message(code:'fc.points')}</td>
 		                            </tr>
                                 </g:if>
-                                <g:if test="${testInstance.planningTestOtherPenalties > 0}">
+                                <g:if test="${testInstance.planningTestForbiddenCalculators}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.planningtest.forbiddencalculators')}:</td>
+                                        <td>${testInstance.GetPlanningTestForbiddenCalculatorsPoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.planningTestOtherPenalties != 0}">
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.planningtest.otherpenalties')}:</td>
                                         <td>${testInstance.planningTestOtherPenalties} ${message(code:'fc.points')}</td>
@@ -149,6 +161,12 @@
                                                 <g:actionSubmit action="planningtaskresultsready" value="${message(code:'fc.results.ready')}" tabIndex="14"/>
 					                        	<g:actionSubmit action="planningtaskresultssave" value="${message(code:'fc.save')}" tabIndex="15"/>
                                             </g:if>
+				                            <g:if test="${!testInstance.scannedPlanningTest}">
+				                                <g:actionSubmit action="planningtaskformimportcrew" value="${message(code:'fc.planningtesttask.importform')}" onclick="this.form.target='_self';return true;" tabIndex="106"/>
+				                            </g:if>
+				                            <g:else>
+				                                <g:actionSubmit action="planningtaskformdeleteimagefile" value="${message(code:'fc.planningtesttask.deleteform')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="107"/>
+				                            </g:else>
                                             <g:actionSubmit action="printplanningtaskresults" value="${message(code:'fc.print')}" tabIndex="16"/>
                                             <g:if test="${params.next}">
                                                 <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>

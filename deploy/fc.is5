@@ -2,18 +2,18 @@
 
 [Code]
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
-const DBVersion = '2.12.0';   // DB-2.12
+const DBVersion = '2.13.0';   // DB-2.13
 const FCCompatibelDigits = 0; // Number of digits for application compatibility
-const FCVersion = '3.0.0';    // no milestone
+const FCVersion = '3.1.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.0.0
-AppVersion=3.0.0
-; no milestone
-VersionInfoVersion=3.0.0
+AppVerName=Flight Contest 3.1.RC
+AppVersion=3.1.RC
+; no milestone below
+VersionInfoVersion=3.1.0
 
-AppCopyright=(C) 2009-2016 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+AppCopyright=(C) 2009-2017 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://flightcontest.de
 ;AppUpdatesURL=http://flightcontest.de
@@ -58,6 +58,8 @@ Source: "..\readme.txt";                              DestDir: "{app}";         
 Source: ".\help.txt";                                 DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\help_aflos.txt";                           DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\FC-Manual.pdf";                            DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
+Source: ".\FC-Manual_en.pdf";                         DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
+Source: ".\FC-Manual-Observations.pdf";               DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\AFLOS-Kurzanleitung.pdf";                  DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\install-service.bat";                      DestDir: "{app}";
 Source: ".\odbc.vbs";                                 DestDir: "{app}";
@@ -68,22 +70,27 @@ Source: ".\save_fcdb.bat";                            DestDir: "{app}\scripts"; 
 Source: ".\save_fcsave.bat";                          DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\start_fc.bat";                             DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\stop_fc.bat";                              DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\FCAutoOpenPDF.vbs";                        DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\FCAutoLoadScan_PlanningTask.vbs";          DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\FCAutoLoadScan_Observation.vbs";           DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\FCAutoLoad_Logger.vbs";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-CrewList-Sample.xls";                   DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-CrewList-Test.xls";                     DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
-Source: ".\FC-ObservationLog-Sample.xls";             DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\FC-TakoffLandingCalculation-Sample.xlsx";  DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\AFLOS-DemoContest.mdb";                    DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\AFLOS-DemoContest.mdb";                    DestDir: "C:\AFLOS\AFLOS_System";                    Flags: onlyifdoesntexist; DestName: "AFLOS.mdb";
-Source: ".\rules\FAI_precision_flying_rules_2016.pdf";DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
-Source: ".\rules\FAI_rally_flying_rules_2016.pdf";    DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
-Source: ".\rules\DE_Praezisionsflug_2005.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\FAI_precision_flying_rules_2017.pdf";DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\FAI_rally_flying_rules_2017.pdf";    DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Navigationsflug_2016.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: ".\rules\DE_Navigationsflug_2016_en.pdf";     DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
-Source: ".\rules\CH_Praezisionsflug_2014.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
-Source: ".\rules\AT_Motorflug_2016.pdf";              DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\CH_Praezisionsflug_2017.pdf";        DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
+Source: ".\rules\AT_Motorflug_2017.pdf";              DestDir: "{app}\rules";           Attribs: readonly; Flags: overwritereadonly;
 Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly; AfterInstall: MyAfterInstall;
 
 [Dirs]
-Name: "C:\FCSave";    Flags: uninsneveruninstall;     Permissions: everyone-modify;
+Name: "C:\FCSave";         Flags: uninsneveruninstall; Permissions: everyone-modify;
+Name: "C:\FCSave\.scan";   Flags: uninsneveruninstall; Permissions: everyone-modify;
+Name: "C:\FCSave\.logger"; Flags: uninsneveruninstall; Permissions: everyone-modify;
 
 [Registry]
 Root: HKLM32; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat7w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC32();
@@ -123,7 +130,9 @@ Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080
 Name: "{group}\flightcontest.de";               Filename: "http://flightcontest.de";                                                             WorkingDir: "{commondesktop}";
 Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{commondesktop}";
 Name: "{group}\Help";                           Filename: "{app}\help.txt";                                                                      WorkingDir: "{commondesktop}";
-Name: "{group}\Manual";                         Filename: "{app}\FC-Manual.pdf";                                                                 WorkingDir: "{commondesktop}";
+Name: "{group}\Bedienungsanleitung";            Filename: "{app}\FC-Manual.pdf";                                                                 WorkingDir: "{commondesktop}";
+Name: "{group}\Manual";                         Filename: "{app}\FC-Manual_en.pdf";                                                              WorkingDir: "{commondesktop}";
+Name: "{group}\Anleitung Beobachtungen";        Filename: "{app}\FC-Manual-Observations.pdf";                                                    WorkingDir: "{commondesktop}";
 Name: "{group}\AFLOS Help";                     Filename: "{app}\help_aflos.txt";                                                                WorkingDir: "{commondesktop}";
 Name: "{group}\AFLOS Kurzanleitung";            Filename: "{app}\AFLOS-Kurzanleitung.pdf";                                                       WorkingDir: "{commondesktop}";
 Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{commondesktop}";
@@ -134,15 +143,18 @@ Name: "{group}\Scripts\Save contest database";                                  
 Name: "{group}\Scripts\Save saved files";                                            Filename: "{app}\scripts\save_fcsave.bat";                  WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\Start Flight Contest";                                        Filename: "{app}\scripts\start_fc.bat";                     WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\Stop Flight Contest";                                         Filename: "{app}\scripts\stop_fc.bat";                      WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\FCAutoOpenPDF";                                               Filename: "{app}\scripts\FCAutoOpenPDF.vbs";                WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\FCAutoLoadScanPlanningTask";                                  Filename: "{app}\scripts\FCAutoLoadScan_PlanningTask.vbs";  WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\FCAutoLoadScanObservation";                                   Filename: "{app}\scripts\FCAutoLoadScan_Observation.vbs";   WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\FCAutoLoadLogger";                                            Filename: "{app}\scripts\FCAutoLoad_Logger.vbs";            WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-CrewList-Sample.xls";                                      Filename: "{app}\samples\FC-CrewList-Sample.xls";           WorkingDir: "{commondesktop}";
-Name: "{group}\Samples\FC-ObservationLog-Sample.xls";                                Filename: "{app}\samples\FC-ObservationLog-Sample.xls";     WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2016";               Filename: "{app}\rules\FAI_precision_flying_rules_2016.pdf";WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2016";               Filename: "{app}\rules\\FAI_rally_flying_rules_2016.pdf";   WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\Wettbewerbsregeln Präzisionsflug Deutschland 2005";             Filename: "{app}\rules\\DE_Praezisionsflug_2005.pdf";       WorkingDir: "{commondesktop}";
+Name: "{group}\Samples\FC-TakoffLandingCalculation-Sample.xlsx";                     Filename: "{app}\samples\FC-TakoffLandingCalculation-Sample.xlsx"; WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2017";               Filename: "{app}\rules\FAI_precision_flying_rules_2017.pdf";WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2017";               Filename: "{app}\rules\\FAI_rally_flying_rules_2017.pdf";   WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2016";           Filename: "{app}\rules\\DE_Navigationsflug_2016.pdf";       WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Germany National Rules and Regulations Navigation Flying 2016"; Filename: "{app}\rules\\DE_Navigationsflug_2016_en.pdf";    WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2014"; Filename: "{app}\rules\\CH_Praezisionsflug_2014.pdf";       WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\Motorflug-Wettbewerbsordnung Österreich 2016";                  Filename: "{app}\rules\\AT_Motorflug_2016.pdf";             WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2017"; Filename: "{app}\rules\\CH_Praezisionsflug_2017.pdf";       WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Motorflug-Wettbewerbsordnung Österreich 2017";                  Filename: "{app}\rules\\AT_Motorflug_2017.pdf";             WorkingDir: "{commondesktop}";
 
 [Code]
 //---------------------------------------------------------------------------------------------------------

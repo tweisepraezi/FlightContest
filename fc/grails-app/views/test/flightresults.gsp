@@ -154,6 +154,12 @@
                                             <label>${message(code:'fc.flighttest.frequencynotmonitored')}</label>
                                         </div>
                                     </g:if>
+                                    <g:if test="${testInstance.GetFlightTestForbiddenEquipmentPoints() > 0}">
+                                        <div>
+                                            <g:checkBox name="flightTestForbiddenEquipment" value="${testInstance.flightTestForbiddenEquipment}"/>
+                                            <label>${message(code:'fc.flighttest.forbiddenequipment')}</label>
+                                        </div>
+                                    </g:if>
 		                        </p>
                                 <p>
                                     <label>${message(code:'fc.flighttest.otherpenalties')}* [${message(code:'fc.points')}]:</label>
@@ -222,7 +228,13 @@
                                         <td>${testInstance.GetFlightTestFrequencyNotMonitoredPoints()} ${message(code:'fc.points')}</td>
                                     </tr>
                                 </g:if>
-                                <g:if test="${testInstance.flightTestOtherPenalties > 0}">
+                                <g:if test="${testInstance.flightTestForbiddenEquipment}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.flighttest.forbiddenequipment')}:</td>
+                                        <td>${testInstance.GetFlightTestForbiddenEquipmentPoints()} ${message(code:'fc.points')}</td>
+                                    </tr>
+                                </g:if>
+                                <g:if test="${testInstance.flightTestOtherPenalties != 0}">
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.flighttest.otherpenalties')}:</td>
                                         <td>${testInstance.flightTestOtherPenalties} ${message(code:'fc.points')}</td>

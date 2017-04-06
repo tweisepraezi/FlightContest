@@ -405,6 +405,7 @@ class GpxTagLib
         outln"""    var Overviewmapcontrol = true;"""
         outln"""    var Shwpshadow = false;"""
         outln"""    var Legende_rr = false;"""
+        outln"""    var Arrowtrack = true;"""
         outln"""    """
         outln"""    resize_map();"""
         outln"""</script>"""
@@ -420,7 +421,6 @@ class GpxTagLib
     // --------------------------------------------------------------------------------------------------------------------
     private void wrbuttons( String skaliereFunc, attrs )
     {
-        int tab_index = 1
         outln"""<script>"""
         outln"""    var showPos = 0;"""
         outln"""    """
@@ -436,8 +436,7 @@ class GpxTagLib
         outln""""""
         outln"""<div class="text" id="point">${attrs.infoText}</div>"""
         outln""""""
-        outln"""<button type="button" id="0" onmousedown="showPos=0;wr_pos(0);return true;" class="${skaliereFunc}" tabIndex="${tab_index}">${message(code:'fc.gpx.overview')}</button>"""
-        tab_index++
+        outln"""<button type="button" id="0" onmousedown="showPos=0;wr_pos(0);return true;" class="${skaliereFunc}" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.overview')}</button>"""
         if (attrs.gpxShowPoints) {
             int i = 1
             for(Map p in attrs.gpxShowPoints) {
@@ -448,37 +447,31 @@ class GpxTagLib
                 } else if (p.warning) {
                     button_class = "warning"
                 }
-                outln"""<button type="button" id="${i}" onmousedown="showPos=${i};wr_pos(${i});return true;" class="${button_class} ${skaliereFunc}:${p.latcenter},${p.loncenter},${p.radius}" tabIndex="${tab_index}">${button_text}</button>"""
-                tab_index++
+                if (p.enroutephoto) {
+                    button_text = """<img src="${attrs.gpxViewerSrc}/Icons/fcphoto.png" style="height:12px;"/> ${p.name}"""
+                } else if (p.enroutecanvas) {
+                    button_text = """<img src="${attrs.gpxViewerSrc}/Icons/${p.name.toLowerCase()}.png" style="height:12px;"/>"""
+                }
+                outln"""<button type="button" id="${i}" onmousedown="showPos=${i};wr_pos(${i});return true;" class="${button_class} ${skaliereFunc}:${p.latcenter},${p.loncenter},${p.radius}" tabIndex="${attrs.ti[0]++}">${button_text}</button>"""
                 i++
             }
             outln"""<script>var maxPos = ${i-1};</script>"""
-            outln"""<button type="button" onclick="if(showPos>0)showPos--;document.getElementById(showPos).click();wr_pos(showPos);return true;" tabIndex="${tab_index}">${message(code:'fc.gpx.beforepoint')}</button>"""
-            tab_index++
-            outln"""<button type="button" onclick="if(showPos<maxPos)showPos++;document.getElementById(showPos).click();wr_pos(showPos);return true;" tabIndex="${tab_index}">${message(code:'fc.gpx.nextpoint')}</button>"""
-            tab_index++
+            outln"""<button type="button" onclick="if(showPos>0)showPos--;document.getElementById(showPos).click();wr_pos(showPos);return true;" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.beforepoint')}</button>"""
+            outln"""<button type="button" onclick="if(showPos<maxPos)showPos++;document.getElementById(showPos).click();wr_pos(showPos);return true;" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.nextpoint')}</button>"""
         }
         if (attrs.showZoom == "yes") {
-            outln"""<button type="button" class="zoomout" tabIndex="${tab_index}">${message(code:'fc.gpx.zoomout')}</button>"""
-            tab_index++
-            outln"""<button type="button" class="zoomin" tabIndex="${tab_index}">${message(code:'fc.gpx.zoomin')}</button>"""
-            tab_index++
-            outln"""<button type="button" class="moveleft" tabIndex="${tab_index}">${message(code:'fc.gpx.moveleft')}</button>"""
-            tab_index++
-            outln"""<button type="button" class="moveright" tabIndex="${tab_index}">${message(code:'fc.gpx.moveright')}</button>"""
-            tab_index++
-            outln"""<button type="button" class="moveup" tabIndex="${tab_index}">${message(code:'fc.gpx.moveup')}</button>"""
-            tab_index++
-            outln"""<button type="button" class="movedown" tabIndex="${tab_index}">${message(code:'fc.gpx.movedown')}</button>"""
-            tab_index++
+            outln"""<button type="button" class="zoomout" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.zoomout')}</button>"""
+            outln"""<button type="button" class="zoomin" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.zoomin')}</button>"""
+            outln"""<button type="button" class="moveleft" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.moveleft')}</button>"""
+            outln"""<button type="button" class="moveright" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.moveright')}</button>"""
+            outln"""<button type="button" class="moveup" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.moveup')}</button>"""
+            outln"""<button type="button" class="movedown" tabIndex="${attrs.ti[0]++}">${message(code:'fc.gpx.movedown')}</button>"""
         }
         if (attrs.showPoints == "yes") {
             outln"""<input type="checkbox" class="showpoints">${message(code:'fc.gpx.points')}</input>"""
-            tab_index++
         }
         if (attrs.showCancel == "yes") {
-            outln"""<button type="submit" name="_action_cancel" tabIndex="${tab_index}">${message(code:'fc.cancel')}</button>"""
-            tab_index++
+            outln"""<button type="submit" name="_action_cancel" tabIndex="${attrs.ti[0]++}">${message(code:'fc.cancel')}</button>"""
         }
     }
     

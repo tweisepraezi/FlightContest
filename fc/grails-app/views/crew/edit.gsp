@@ -75,6 +75,16 @@
                                 </div>
                             </p>
                         </fieldset>
+                        <g:if test="${crewInstance.GetIncreaseFactor() > 0}">
+                            <fieldset>
+                                <p>
+                                    <div>
+                                        <g:checkBox name="increaseEnabled" value="${crewInstance.increaseEnabled}" />
+                                        <label>${message(code:'fc.crew.increaseenabled',args:[crewInstance.GetIncreaseFactor()])}</label>
+                                    </div>
+                                </p>
+                            </fieldset>
+                        </g:if>
                         <fieldset>
                             ${message(code:'fc.crew.uuid')}: ${fieldValue(bean:crewInstance, field:'uuid')}
                         </fieldset>

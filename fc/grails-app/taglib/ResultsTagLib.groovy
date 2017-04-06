@@ -44,6 +44,19 @@ class ResultsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    def crewNeutralPrintable = { attrs, body ->
+        outln"""<table class="crewneutral">"""
+        outln"""    <tbody>"""
+        outln"""        <tr>"""
+        outln"""            <td class="title">${message(code:'fc.crew.startnum.short')}:</td><td class="num">.</td><td class="col">.</td>"""
+        outln"""            <td class="title">${message(code:'fc.aircraft.registration')}:</td><td class="aircraft">.</td><td class="col">.</td>"""
+        outln"""            <td class="title">${message(code:'fc.crew')}:</td><td class="crew">.</td>"""
+        outln"""        </tr>"""
+        outln"""    </tbody>"""
+        outln"""</table>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     private void outln(str)
     {
         out << """$str

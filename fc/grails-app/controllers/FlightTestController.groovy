@@ -1,9 +1,12 @@
+import java.util.Map;
+
 
 
 class FlightTestController {
     
 	def fcService
-	
+    def printService
+    
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
 
@@ -116,4 +119,65 @@ class FlightTestController {
         def flighttest = fcService.getFlightTest(params) 
         redirect(controller:'flightTestWind',action:'create',params:['flightTest.id':flighttest.instance.id,'flighttestid':flighttest.instance.id])
 	}
+    
+    def addobservations = {
+        def flighttest = fcService.addobservationsFlightTest(params)
+        if (flighttest.instance) {
+            flash.message = flighttest.message
+            redirect(action:show,id:params.id)
+        } else {
+            flash.message = flighttest.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+    
+    def removeobservations = {
+        def flighttest = fcService.removeobservationsFlightTest(params)
+        if (flighttest.instance) {
+            flash.message = flighttest.message
+            redirect(action:show,id:params.id)
+        } else {
+            flash.message = flighttest.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+    
+    def printneutralobservation = {
+        def flighttest = printService.printneutralobservationFlightTest(false,params,false,false,GetPrintParams())
+        if (!flighttest.instance) {
+            flash.message = flighttest.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (flighttest.error) {
+            flash.message = flighttest.message
+            flash.error = true
+            redirect(action:show,id:flighttest.instance.id)
+        } else if (flighttest.content) {
+            printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"observation-task${flighttest.instance.task.idTitle}",true,false,false)
+        } else {
+            redirect(action:listplanning,id:flighttest.instance.id)
+        }
+    }
+    
+    def printobservationresults = {
+        def flighttest = printService.printneutralobservationFlightTest(true,params,false,false,GetPrintParams())
+        if (!flighttest.instance) {
+            flash.message = flighttest.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (flighttest.error) {
+            flash.message = flighttest.message
+            flash.error = true
+            redirect(action:show,id:flighttest.instance.id)
+        } else if (flighttest.content) {
+            printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"observation-task${flighttest.instance.task.idTitle}",true,false,false)
+        } else {
+            redirect(action:listplanning,id:flighttest.instance.id)
+        }
+    }
+
+    Map GetPrintParams() {
+        return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
+                contest:session.lastContest,
+                lang:session.printLanguage
+               ]
+    }
 }

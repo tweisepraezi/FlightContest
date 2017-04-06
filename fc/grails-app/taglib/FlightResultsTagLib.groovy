@@ -747,7 +747,13 @@ class FlightResultsTagLib
             outln"""        <td>${attrs.t.GetFlightTestFrequencyNotMonitoredPoints()} ${message(code:'fc.points')}</td>"""
             outln"""    </tr>"""
         }
-        if (attrs.t.flightTestOtherPenalties > 0) {
+        if (attrs.t.flightTestForbiddenEquipment) {
+            outln"""    <tr>"""
+            outln"""        <td class="detailtitle">${message(code:'fc.flighttest.forbiddenequipment')}:</td>"""
+            outln"""        <td>${attrs.t.GetFlightTestForbiddenEquipmentPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
+        if (attrs.t.flightTestOtherPenalties != 0) {
             outln"""    <tr>"""
             outln"""        <td class="detailtitle">${message(code:'fc.flighttest.otherpenalties')}:</td>"""
             outln"""        <td>${attrs.t.flightTestOtherPenalties} ${message(code:'fc.points')}</td>"""
@@ -773,7 +779,7 @@ class FlightResultsTagLib
 			outln"""<table class="flightresultlist">"""
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
-			outln"""			<th>${message(code:'fc.title')}</th>"""
+			outln"""			<th>${message(code:'fc.tpname')}</th>"""
             if (attrs.t.showAflosMark) {
                 outln"""    	<th>${message(code:'fc.aflos.checkpoint')}</th>"""
             }
@@ -987,12 +993,11 @@ class FlightResultsTagLib
 			outln"""	</tbody>"""
 			outln"""	<tfoot>"""
 			outln"""		<tr class="summary">"""
-			outln"""			<td class="tpname"/>"""
             if (attrs.t.showAflosMark) {
-                outln"""		<td class="aflosname"/>"""
+                outln"""        <td class="tpname" colspan="4">${message(code:'fc.test.results.summary')}</td>"""
+            } else {
+			    outln"""	    <td class="tpname" colspan="3">${message(code:'fc.test.results.summary')}</td>"""
             }
-			outln"""			<td class="plancptime"/>"""
-			outln"""			<td class="cptime"/>"""
 			outln"""			<td class="penaltycp">${penalty_coord_summary}</td>"""
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
 				outln"""		<td class="penaltyprocedureturn">${penalty_procedureturn_summary}</td>"""
@@ -1058,7 +1063,12 @@ class FlightResultsTagLib
             outln"""	    <td>${message(code:'fc.flighttest.frequencynotmonitored')}: ${attrs.t.GetFlightTestFrequencyNotMonitoredPoints()} ${message(code:'fc.points')}</td>"""
             outln"""	</tr>"""
         }
-        if (attrs.t.flightTestOtherPenalties > 0) {
+        if (attrs.t.flightTestForbiddenEquipment) {
+            outln"""    <tr class="frequencynotmonitored">"""
+            outln"""        <td>${message(code:'fc.flighttest.forbiddenequipment')}: ${attrs.t.GetFlightTestForbiddenEquipmentPoints()} ${message(code:'fc.points')}</td>"""
+            outln"""    </tr>"""
+        }
+        if (attrs.t.flightTestOtherPenalties != 0) {
             outln"""	<tr class="otherpenalties">"""
             outln"""	    <td>${message(code:'fc.flighttest.otherpenalties')}: ${attrs.t.flightTestOtherPenalties} ${message(code:'fc.points')}</td>"""
             outln"""	</tr>"""
@@ -1082,7 +1092,7 @@ class FlightResultsTagLib
 			outln"""<table class="flightmeasurementlist">"""
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
-			outln"""			<th>${message(code:'fc.title')}</th>"""
+			outln"""			<th>${message(code:'fc.tpname')}</th>"""
             if (attrs.t.showAflosMark) {
                 outln"""		<th>${message(code:'fc.aflos.checkpoint')}</th>"""
             }

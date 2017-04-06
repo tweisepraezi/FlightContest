@@ -39,6 +39,7 @@ class LiveResultsTagLib
         if (attrs.contest.contestPrintTaskDetails || attrs.contest.contestPrintTaskTestDetails) {
             for (Task task_instance in attrs.contest.GetResultTasks(attrs.contest.contestTaskResults)) {
                 int detail_num = 0
+                boolean taskpenalties_written = false
                 Test test_instance = Test.findByCrewAndTask(attrs.crew,task_instance)
                 if (test_instance) {
                     if (task_instance in attrs.contest.GetTestDetailsTasks(attrs.contest.contestPrintTaskTestDetails)) {
@@ -49,7 +50,19 @@ class LiveResultsTagLib
                             detail_num++
                         }
                         if (attrs.contest.contestObservationResults && task_instance.IsObservationTestRun()) {
-                            detail_num++
+                            if (attrs.contest.contestPrintObservationDetails) {
+                                if (task_instance.IsObservationTestTurnpointRun()) {
+                                    detail_num++
+                                }
+                                if (task_instance.IsObservationTestEnroutePhotoRun()) {
+                                    detail_num++
+                                }
+                                if (task_instance.IsObservationTestEnrouteCanvasRun()) {
+                                    detail_num++
+                                }
+                            } else {
+                                detail_num++
+                            }
                         }
                         if (attrs.contest.contestLandingResults && task_instance.IsLandingTestRun()) {
                             if (attrs.contest.contestPrintLandingDetails) {
@@ -70,6 +83,9 @@ class LiveResultsTagLib
                             }
                         }
                         if (attrs.contest.contestSpecialResults && task_instance.IsSpecialTestRun()) {
+                            detail_num++
+                        }
+                        if ((detail_num == 1) && task_instance.IsIncreaseEnabled()) {
                             detail_num++
                         }
                     } else {
@@ -105,20 +121,71 @@ class LiveResultsTagLib
                             outln"""<td>${s}</td>"""
                         }
                         if (attrs.contest.contestObservationResults && task_instance.IsObservationTestRun()) {
-                            String s = ""
-                            if (test_instance.IsObservationTestRun()) {
-                                s += "${test_instance.observationTestPenalties}"
-                            } else {
-                                s += "-"
-                            }
-                            if (detail_num == 1) {
-                                if (attrs.task != task_instance) {
-                                    s += " (${test_instance.taskPosition})"
+                            boolean observation_detail_written = false
+                            if (attrs.contest.contestPrintObservationDetails) {
+                                if (task_instance.IsObservationTestTurnpointRun()) {
+                                    String s = ""
+                                    if (test_instance.IsObservationTestRun() && test_instance.IsObservationTestTurnpointRun()) {
+                                        s += "${test_instance.observationTestTurnPointPhotoPenalties}"
+                                    } else {
+                                        s += "-"
+                                    }
+                                    if (detail_num == 1) {
+                                        if (attrs.task != task_instance) {
+                                            s += " (${test_instance.taskPosition})"
+                                        }
+                                    }
+                                    outln"""<td>${s}</td>"""
+                                    observation_detail_written = true
+                                }
+                                if (task_instance.IsObservationTestEnroutePhotoRun()) {
+                                    String s = ""
+                                    if (test_instance.IsObservationTestRun() && test_instance.IsObservationTestEnroutePhotoRun()) {
+                                        s += "${test_instance.observationTestRoutePhotoPenalties}"
+                                    } else {
+                                        s += "-"
+                                    }
+                                    if (detail_num == 1) {
+                                        if (attrs.task != task_instance) {
+                                            s += " (${test_instance.taskPosition})"
+                                        }
+                                    }
+                                    outln"""<td>${s}</td>"""
+                                    observation_detail_written = true
+                                }
+                                if (task_instance.IsObservationTestEnrouteCanvasRun()) {
+                                    String s = ""
+                                    if (test_instance.IsObservationTestRun() && test_instance.IsObservationTestEnrouteCanvasRun()) {
+                                        s += "${test_instance.observationTestGroundTargetPenalties}"
+                                    } else {
+                                        s += "-"
+                                    }
+                                    if (detail_num == 1) {
+                                        if (attrs.task != task_instance) {
+                                            s += " (${test_instance.taskPosition})"
+                                        }
+                                    }
+                                    outln"""<td>${s}</td>"""
+                                    observation_detail_written = true
                                 }
                             }
-                            outln"""<td>${s}</td>"""
+                            if (!observation_detail_written) {
+                                String s = ""
+                                if (test_instance.IsObservationTestRun()) {
+                                    s += "${test_instance.observationTestPenalties}"
+                                } else {
+                                    s += "-"
+                                }
+                                if (detail_num == 1) {
+                                    if (attrs.task != task_instance) {
+                                        s += " (${test_instance.taskPosition})"
+                                    }
+                                }
+                                outln"""<td>${s}</td>"""
+                            }
                         }
                         if (attrs.contest.contestLandingResults && task_instance.IsLandingTestRun()) {
+                            boolean landing_detail_written = false
                             if (attrs.contest.contestPrintLandingDetails) {
                                 if (task_instance.IsLandingTest1Run()) {
                                     String s = ""
@@ -133,6 +200,7 @@ class LiveResultsTagLib
                                         }
                                     }
                                     outln"""<td>${s}</td>"""
+                                    landing_detail_written = true
                                 }
                                 if (task_instance.IsLandingTest2Run()) {
                                     String s = ""
@@ -147,6 +215,7 @@ class LiveResultsTagLib
                                         }
                                     }
                                     outln"""<td>${s}</td>"""
+                                    landing_detail_written = true
                                 }
                                 if (task_instance.IsLandingTest3Run()) {
                                     String s = ""
@@ -161,6 +230,7 @@ class LiveResultsTagLib
                                         }
                                     }
                                     outln"""<td>${s}</td>"""
+                                    landing_detail_written = true
                                 }
                                 if (task_instance.IsLandingTest4Run()) {
                                     String s = ""
@@ -175,8 +245,10 @@ class LiveResultsTagLib
                                         }
                                     }
                                     outln"""<td>${s}</td>"""
+                                    landing_detail_written = true
                                 }
-                            } else {
+                            }
+                            if (!landing_detail_written) {
                                 String s = ""
                                 if (test_instance.IsLandingTestRun()) {
                                     s += "${test_instance.landingTestPenalties}"
@@ -206,18 +278,25 @@ class LiveResultsTagLib
                             outln"""<td>${s}</td>"""
                         }
                     } else {
-                        if (attrs.task != task_instance) {
-                            outln"""<td>${test_instance.GetResultPenalties(attrs.contest.GetResultSettings())} (${test_instance.taskPosition})</td>"""
-                        } else {
-                            outln"""<td>${test_instance.GetResultPenalties(attrs.contest.GetResultSettings())}</td>"""
+                        String s = test_instance.GetResultPenalties(attrs.contest.GetResultSettings())
+                        if (test_instance.IsIncreaseEnabled()) {
+                            s += """ ${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])}"""
                         }
+                        if (attrs.task != task_instance) {
+                            s += """ (${test_instance.taskPosition})"""
+                        }
+                        outln"""<td>${s}</td>"""
+                        taskpenalties_written = true
                     }
-                    if (attrs.contest.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1))) {
-                        if (attrs.task != task_instance) {
-                            outln"""<td>${test_instance.GetResultPenalties(attrs.contest.GetResultSettings())} (${test_instance.taskPosition})</td>"""
-                        } else {
-                            outln"""<td>${test_instance.GetResultPenalties(attrs.contest.GetResultSettings())}</td>"""
+                    if (attrs.contest.contestPrintTaskDetails && !taskpenalties_written&& ((detail_num==0) || (detail_num>1) || task_instance.IsIncreaseEnabled())) {
+                        String s = test_instance.GetResultPenalties(attrs.contest.GetResultSettings())
+                        if (test_instance.IsIncreaseEnabled()) {
+                            s += """ ${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])}"""
                         }
+                        if (attrs.task != task_instance) {
+                            s += """ (${test_instance.taskPosition})"""
+                        }
+                        outln"""<td>${s}</td>"""
                     }
                 }
             }

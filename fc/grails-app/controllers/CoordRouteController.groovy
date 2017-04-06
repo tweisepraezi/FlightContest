@@ -1,3 +1,5 @@
+import java.util.Map;
+
 class CoordRouteController {
     
 	def fcService
@@ -46,33 +48,11 @@ class CoordRouteController {
         def coordroute = fcService.updateCoordRoute(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
-			
-			// search next id
-			boolean set_next = false
-			CoordRoute coordroute_nextinstance = null
-			CoordRoute coordroute_nextinstance2 = null
-			int leg_no = 0
-			for ( CoordRoute coordroute_instance in CoordRoute.findAllByRoute(coordroute.instance.route,[sort:"id"]) ) {
-				if (!coordroute_nextinstance) {
-					leg_no++
-				}
-				if (set_next) {
-					if (!coordroute_nextinstance) {
-						coordroute_nextinstance = coordroute_instance
-					} else if (!coordroute_nextinstance2) {
-						coordroute_nextinstance2 = coordroute_instance
-						break
-					}
-				}
-				if (coordroute_instance == coordroute.instance) {
-					set_next = true
-				}
-			}
-
-			if (coordroute_nextinstance2) {
-				redirect(action:'edit',id:coordroute_nextinstance.id,params:[name:leg_no,next:coordroute_nextinstance2.id])
-			} else if (coordroute_nextinstance) {
-				redirect(action:'edit',id:coordroute_nextinstance.id,params:[name:leg_no])
+            Map n = search_next_id(coordroute.instance)
+			if (n.i2) {
+				redirect(action:'edit',id:n.i1.id,params:[name:n.no,next:n.i2.id])
+			} else if (n.i1) {
+				redirect(action:'edit',id:n.i1.id,params:[name:n.no])
 			} else {
 				redirect(controller:"route",action:show,id:coordroute.instance.route.id)
 			}
@@ -91,33 +71,11 @@ class CoordRouteController {
 	def gotonext = {
         def coordroute = fcService.getCoordRoute(params)
 		if (coordroute.instance) {
-			
-			// search next id
-			boolean set_next = false
-			CoordRoute coordroute_nextinstance = null
-			CoordRoute coordroute_nextinstance2 = null
-			int leg_no = 0
-			for ( CoordRoute coordroute_instance in CoordRoute.findAllByRoute(coordroute.instance.route,[sort:"id"]) ) {
-				if (!coordroute_nextinstance) {
-					leg_no++
-				}
-				if (set_next) {
-					if (!coordroute_nextinstance) {
-						coordroute_nextinstance = coordroute_instance
-					} else if (!coordroute_nextinstance2) {
-						coordroute_nextinstance2 = coordroute_instance
-						break
-					}
-				}
-				if (coordroute_instance == coordroute.instance) {
-					set_next = true
-				}
-			}
-
-			if (coordroute_nextinstance2) {
-				redirect(action:'edit',id:coordroute_nextinstance.id,params:[name:leg_no,next:coordroute_nextinstance2.id])
-			} else if (coordroute_nextinstance) {
-				redirect(action:'edit',id:coordroute_nextinstance.id,params:[name:leg_no])
+            Map n = search_next_id(coordroute.instance)
+			if (n.i2) {
+				redirect(action:'edit',id:n.i1.id,params:[name:n.no,next:n.i2.id])
+			} else if (n.i1) {
+				redirect(action:'edit',id:n.i1.id,params:[name:n.no])
 			} else {
 				redirect(controller:"route",action:show,id:coordroute.instance.route.id)
 			}
@@ -170,8 +128,13 @@ class CoordRouteController {
     def reset = {
 		def coordroute = fcService.resetmeasureCoordRoute(params)
 		if (coordroute.saved) {
+            Map n = search_next_id(coordroute.instance)
 			flash.message = coordroute.message
-			redirect(action:edit,id:params.id)
+            if (n.i1) {
+                redirect(action:edit, id:params.id, params:[name:n.no,next:n.i1.id])
+            } else {
+			    redirect(action:edit, id:params.id)
+            }
         } else if (coordroute.error) {
 			flash.error = coordroute.error
 			flash.message = coordroute.message
@@ -192,4 +155,29 @@ class CoordRouteController {
             redirect(controller:"route",action:show,id:params.routeid)
         }
 	}
+    
+    private Map search_next_id(CoordRoute coordRouteInstance)
+    {
+        boolean set_next = false
+        CoordRoute coordroute_nextinstance = null
+        CoordRoute coordroute_nextinstance2 = null
+        int leg_no = 0
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(coordRouteInstance.route,[sort:"id"]) ) {
+            if (!coordroute_nextinstance) {
+                leg_no++
+            }
+            if (set_next) {
+                if (!coordroute_nextinstance) {
+                    coordroute_nextinstance = coordroute_instance
+                } else if (!coordroute_nextinstance2) {
+                    coordroute_nextinstance2 = coordroute_instance
+                    break
+                }
+            }
+            if (coordroute_instance == coordRouteInstance) {
+                set_next = true
+            }
+        }
+        return [i1:coordroute_nextinstance, i2:coordroute_nextinstance2, no:leg_no]
+    }
 }

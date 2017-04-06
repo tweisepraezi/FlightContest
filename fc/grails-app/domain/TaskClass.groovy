@@ -3,22 +3,25 @@ class TaskClass
 {
 	ResultClass resultclass
 	
-	boolean planningTestRun              = true
-	boolean flightTestRun                = true
-	boolean observationTestRun           = true
-	boolean landingTestRun               = true
-	boolean landingTest1Run              = false
-	boolean landingTest2Run              = false
-	boolean landingTest3Run              = false
-	boolean landingTest4Run              = false
-	boolean specialTestRun               = false
+	boolean planningTestRun                  = true
+	boolean flightTestRun                    = true
+	boolean observationTestRun               = true
+    Boolean observationTestTurnpointRun      = true  // DB-2.13
+    Boolean observationTestEnroutePhotoRun   = true  // DB-2.13
+    Boolean observationTestEnrouteCanvasRun  = false // DB-2.13
+	boolean landingTestRun                   = true
+	boolean landingTest1Run                  = false
+	boolean landingTest2Run                  = false
+	boolean landingTest3Run                  = false
+	boolean landingTest4Run                  = false
+	boolean specialTestRun                   = false
 
-	boolean planningTestDistanceMeasure  = false
-	boolean planningTestDirectionMeasure = true
-	Boolean flightTestCheckSecretPoints  = true    // DB-2.3
-	Boolean flightTestCheckTakeOff       = true    // DB-2.3
-	Boolean flightTestCheckLanding       = true    // DB-2.3
-	String specialTestTitle              = ""      // DB-2.3
+	boolean planningTestDistanceMeasure      = false
+	boolean planningTestDirectionMeasure     = true
+	Boolean flightTestCheckSecretPoints      = true  // DB-2.3
+	Boolean flightTestCheckTakeOff           = true  // DB-2.3
+	Boolean flightTestCheckLanding           = true  // DB-2.3
+	String specialTestTitle                  = ""    // DB-2.3
 	
 	static belongsTo = [task:Task]
 
@@ -31,6 +34,11 @@ class TaskClass
 		flightTestCheckTakeOff(nullable:true)
 		flightTestCheckLanding(nullable:true)
 		specialTestTitle(nullable:true)
+        
+        // DB-2.13 compatibility
+        observationTestTurnpointRun(nullable:true)
+        observationTestEnroutePhotoRun(nullable:true)
+        observationTestEnrouteCanvasRun(nullable:true)
 	}
 
 	int GetResultColumns()
@@ -43,7 +51,12 @@ class TaskClass
 			result_columns++
 		}
 		if (observationTestRun) {
-			result_columns++
+            int observation_result_any_columns = GetObservationResultAnyColumns()
+            if (observation_result_any_columns > 0) {
+                result_columns += observation_result_any_columns
+            } else {
+                result_columns++
+            }
 		}
 		if (landingTestRun) {
 			int landing_result_any_columns = GetLandingResultAnyColumns()
@@ -59,6 +72,23 @@ class TaskClass
 		return result_columns
 	}
 	
+    int GetObservationResultAnyColumns()
+    {
+        int result_columns = 0
+        if (observationTestRun) {
+            if (observationTestTurnpointRun) {
+                result_columns++
+            }
+            if (observationTestEnroutePhotoRun) {
+                result_columns++
+            }
+            if (observationTestEnrouteCanvasRun) {
+                result_columns++
+            }
+        }
+        return result_columns
+    }
+    
 	int GetLandingResultAnyColumns()
 	{
 		int result_columns = 0
@@ -78,12 +108,15 @@ class TaskClass
 		}
 		return result_columns
 	}
-	
+    
 	void CopyValues(TaskClass taskClassInstance)
 	{
 		planningTestRun = taskClassInstance.planningTestRun
 		flightTestRun = taskClassInstance.flightTestRun
 		observationTestRun = taskClassInstance.observationTestRun
+        observationTestTurnpointRun = taskClassInstance.observationTestTurnpointRun
+        observationTestEnroutePhotoRun = taskClassInstance.observationTestEnroutePhotoRun
+        observationTestEnrouteCanvasRun = taskClassInstance.observationTestEnrouteCanvasRun
 		landingTestRun = taskClassInstance.landingTestRun
 		landingTest1Run = taskClassInstance.landingTest1Run
 		landingTest2Run = taskClassInstance.landingTest2Run

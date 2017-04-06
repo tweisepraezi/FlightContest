@@ -8,7 +8,7 @@ class Coord
 	String mark
 	
 	// Latitude (Geographische Breite)
-    String latDirection = 'N'
+    String latDirection = CoordPresentation.NORTH
 	int latGrad
 	BigDecimal latMinute = 0.0
     BigDecimal latGradDecimal = 0.0
@@ -16,7 +16,7 @@ class Coord
     BigDecimal latSecondDecimal = 0.0
 
     // Longitude (Geographische Laenge)
-    String lonDirection = 'E'
+    String lonDirection = CoordPresentation.EAST
     int lonGrad
     BigDecimal lonMinute = 0.0
     BigDecimal lonGradDecimal = 0.0
@@ -24,7 +24,7 @@ class Coord
     BigDecimal lonSecondDecimal = 0.0
 
     int altitude = 500                   // Altitude (Höhe) in ft 
-    int gatewidth = 1                    // UNUSED: gatewidth, migriert nach gatewidth2 (Float), DB-2.3
+    int gatewidth = 1                    // UNUSED: Coord.gatewidth, migriert nach gatewidth2 (Float), DB-2.3
 	Float gatewidth2 = 1.0f              // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM), DB-2.3
 	Integer legDuration                  // duration of leg [min], DB-2.3
     Boolean endCurved = false            // End of curved, DB-2.8
@@ -34,16 +34,30 @@ class Coord
     BigDecimal gateDirection = 270.0     // Richtung der Startbahn (T/O,LDG,iT/O,iLDG), Grad, DB-2.12
     
     // Speicher für Eingabe der Landkarten-Messung
-	boolean measureEntered = false
-	BigDecimal coordTrueTrack = 0        // Grad
-	BigDecimal coordMeasureDistance = 0  // mm, Entfernung bis zum letzten TP/SP
-    BigDecimal measureTrueTrack          // Grad
-	BigDecimal measureDistance           // mm, Entfernung bis zum letzten TP/SP
-    BigDecimal legMeasureDistance        // mm
-    BigDecimal legDistance               // NM
+	boolean measureEntered = false       // UNUSED: Coord.measureEntered, ersetzt durch Is...Measure(), DB-2.13
+	BigDecimal coordTrueTrack = 0        // Richting in Grad (aus Koordinaten berechnet)
+	BigDecimal coordMeasureDistance = 0  // Entfernung vom letzten TP in mm (aus Koordinaten berechnet)
+    BigDecimal measureTrueTrack          // Gemessene Richting in Grad
+	BigDecimal measureDistance           // Gemessene Entfernung vom letzten TP in mm
+    BigDecimal legMeasureDistance        // Entfernung vom letzten Punkt in mm (aus measureDistance berechnet) 
+    BigDecimal legDistance               // Entfernung vom letzten Punkt in NM (aus measureDistance berechnet)
     
     // Relative Position eines Secret-Points im Leg 
     BigDecimal secretLegRatio = 0
+    
+    // TurnPoint signs
+    TurnpointSign assignedSign = TurnpointSign.None            // DB-2.13
+    TurnpointCorrect correctSign = TurnpointCorrect.Unassigned // DB-2.13
+    
+    // Enroute objects
+    Integer enrouteViewPos = 0                // Photo-Position, DB-2.13 
+    String enroutePhotoName = ""              // Photo-Name, DB-2.13
+    EnrouteCanvasSign enrouteCanvasSign = EnrouteCanvasSign.None // DB-2.13
+    BigDecimal enrouteDistance                // Gemessene Entfernung vom letzten TP in NM, DB-2.13
+    Boolean enrouteDistanceOk = true          // Gemessene Entfernung im Leg, DB-2.13
+    Integer enrouteOrthogonalDistance = 0     // Senkrechte Entfernung von der Strecke in m, < 0 links, > 0 rechts vom Kurs, berechnet, DB-2.13
+    CoordTitle enrouteCoordTitle              // transienter Wert zur Auswahl
+    String enrouteLastPhotoName = ""          // transienter Wert zur Eingabe eines Zaheln-Bereiches
     
     // plan, results, penalties
     Date planCpTime                     = Date.parse("HH:mm","00:00")
@@ -61,14 +75,14 @@ class Coord
     int resultBadCourseNum              = 0
     int penaltyCoord                    = 0           // Points
 	
-    static transients = ['resultCpTimeInput','latGradDecimal','lonGradDecimal','latMin','lonMin','latSecondDecimal','lonSecondDecimal']
+    static transients = ['resultCpTimeInput','latGradDecimal','lonGradDecimal','latMin','lonMin','latSecondDecimal','lonSecondDecimal','enrouteCoordTitle','enrouteLastPhotoName']
     
     static constraints = {
 		type()
         titleNumber(range:1..<100)
 		mark(nullable:true)
         
-        latDirection(inList:['N','S'])
+        latDirection(inList:[CoordPresentation.NORTH,CoordPresentation.SOUTH])
         latGrad(range:0..90)
         latGradDecimal(range:-90..90, scale:5)
         latMinute(range:0..<60, scale:10, validator:{val,obj->
@@ -79,9 +93,9 @@ class Coord
         latMin(range:0..<60)
         latSecondDecimal(range:0..<60, scale:4)
         
-        lonDirection(inList:['E','W'])
+        lonDirection(inList:[CoordPresentation.EAST,CoordPresentation.WEST])
         lonGrad(range:0..180, validator:{val,obj->
-            if (val == 180 && obj.lonDirection == 'W') {
+            if (val == 180 && obj.lonDirection == CoordPresentation.WEST) {
                 return false
             }
         })
@@ -97,6 +111,8 @@ class Coord
         })
         lonMin(range:0..<60)
         lonSecondDecimal(range:0..<60, scale:4)
+        enrouteCoordTitle(nullable:true)
+        enrouteLastPhotoName(nullable:true)
         
         altitude(range:0..100000)
         gatewidth()
@@ -172,6 +188,16 @@ class Coord
         
         // DB-2.12 compatibility
         gateDirection(nullable:true,range:0..<360,scale:0)
+        
+        // DB-2.13 compatibility
+        assignedSign(nullable:true)
+        correctSign(nullable:true)
+        enrouteViewPos(nullable:true)
+        enroutePhotoName(nullable:true,size:0..5)
+        enrouteCanvasSign(nullable:true)
+        enrouteDistance(nullable:true,scale:10,min:0.0)
+        enrouteDistanceOk(nullable:true)
+        enrouteOrthogonalDistance(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -211,11 +237,16 @@ class Coord
 	    lonDirection = coordInstance.lonDirection
 	    altitude = coordInstance.altitude 
 	    gatewidth2 = coordInstance.gatewidth2
-		measureEntered = coordInstance.measureEntered
 		coordTrueTrack = coordInstance.coordTrueTrack
 		coordMeasureDistance = coordInstance.coordMeasureDistance
 	    measureTrueTrack = coordInstance.measureTrueTrack
 		measureDistance = coordInstance.measureDistance
+        enrouteViewPos = coordInstance.enrouteViewPos
+        enroutePhotoName = coordInstance.enroutePhotoName
+        enrouteCanvasSign = coordInstance.enrouteCanvasSign
+        enrouteDistance = coordInstance.enrouteDistance
+        enrouteDistanceOk = coordInstance.enrouteDistanceOk
+        enrouteOrthogonalDistance = coordInstance.enrouteOrthogonalDistance
 	    legMeasureDistance = coordInstance.legMeasureDistance
 	    legDistance = coordInstance.legDistance
 		legDuration = coordInstance.legDuration
@@ -225,6 +256,8 @@ class Coord
 		noPlanningTest = coordInstance.noPlanningTest
 	    secretLegRatio = coordInstance.secretLegRatio
         gateDirection = coordInstance.gateDirection
+        assignedSign = coordInstance.assignedSign
+        correctSign = coordInstance.correctSign
 	    // planCpTime = coordInstance.planCpTime
 	    // planProcedureTurn = coordInstance.planProcedureTurn
 	    // resultLatitude = coordInstance.resultLatitude
@@ -322,10 +355,21 @@ class Coord
 		return title
 	}
 	
+    String titleExport()
+    {
+        switch (type) {
+            case CoordType.TP:
+            case CoordType.SECRET:
+                return "${type.export}${titleNumber}"
+            default:
+                return type.export
+        }
+    }
+    
 	BigDecimal latMath()
 	{
 		BigDecimal ret = latGrad + latMinute/60
-		if (latDirection == 'N') {
+		if (latDirection == CoordPresentation.NORTH) {
 			return ret
 		} else {
 			return -ret
@@ -339,13 +383,7 @@ class Coord
     
     String latName(CoordPresentation coordPresentation)
     {
-        switch (coordPresentation) {
-            case CoordPresentation.DEGREEMINUTE:
-                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(latMinute)}${getMsg('fc.min')} ${latDirection}"
-            case CoordPresentation.DEGREEMINUTESECOND:
-                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(latMinute)}${getMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(latMinute)}${getMsg('fc.sec')} ${latDirection}"
-        }
-        return "${CoordPresentation.LAT} ${CoordPresentation.DecimalGradStr(latMath())}${getMsg('fc.grad')}" // CoordPresentation.DEGREE
+        return coordPresentation.GetCoordName(this, true)
     }
 
     String latPrintName()
@@ -355,19 +393,18 @@ class Coord
 
     String latPrintName(CoordPresentation coordPresentation)
     {
-        switch (coordPresentation) {
-            case CoordPresentation.DEGREEMINUTE:
-                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getPrintMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(latMinute)}${getPrintMsg('fc.min')} ${latDirection}"
-            case CoordPresentation.DEGREEMINUTESECOND:
-                return "${CoordPresentation.LAT} ${CoordPresentation.IntegerGradStr(latGrad,true)}${getPrintMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(latMinute)}${getPrintMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(latMinute)}${getPrintMsg('fc.sec')} ${latDirection}"
-        }
-        return "${CoordPresentation.LAT} ${CoordPresentation.DecimalGradStr(latMath())}${getPrintMsg('fc.grad')}" // CoordPresentation.DEGREE
+        return coordPresentation.GetCoordName(this, true)
+    }
+
+    String latExportName()
+    {
+        return latPrintName(route.contest.coordPresentation).replaceAll(',','.')
     }
 
 	BigDecimal lonMath()
 	{
 		BigDecimal ret = lonGrad + lonMinute/60
-		if (lonDirection == 'E') {
+		if (lonDirection == CoordPresentation.EAST) {
 			return ret
 		} else {
 			return -ret
@@ -381,13 +418,7 @@ class Coord
     
     String lonName(CoordPresentation coordPresentation)
     {
-        switch (coordPresentation) {
-            case CoordPresentation.DEGREEMINUTE:
-                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(lonMinute)}${getMsg('fc.min')} ${lonDirection}"
-            case CoordPresentation.DEGREEMINUTESECOND:
-                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(lonMinute)}${getMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(lonMinute)}${getMsg('fc.sec')} ${lonDirection}"
-        }
-        return "${CoordPresentation.LON} ${CoordPresentation.DecimalGradStr(lonMath())}${getMsg('fc.grad')}" // CoordPresentation.DEGREE
+        return coordPresentation.GetCoordName(this, false)
     }
 
     String lonPrintName()
@@ -397,15 +428,14 @@ class Coord
     
     String lonPrintName(CoordPresentation coordPresentation)
     {
-        switch (coordPresentation) {
-            case CoordPresentation.DEGREEMINUTE:
-                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getPrintMsg('fc.grad')} ${CoordPresentation.DecimalMinuteStr(lonMinute)}${getPrintMsg('fc.min')} ${lonDirection}"
-            case CoordPresentation.DEGREEMINUTESECOND:
-                return "${CoordPresentation.LON} ${CoordPresentation.IntegerGradStr(lonGrad,false)}${getPrintMsg('fc.grad')} ${CoordPresentation.IntegerMinuteStr(lonMinute)}${getPrintMsg('fc.min')} ${CoordPresentation.DecimalSecondStr(lonMinute)}${getPrintMsg('fc.sec')} ${lonDirection}"
-        }
-        return "${CoordPresentation.LON} ${CoordPresentation.DecimalGradStr(lonMath())}${getPrintMsg('fc.grad')}" // CoordPresentation.DEGREE
+        return coordPresentation.GetCoordName(this, false)
     }
 
+    String lonExportName()
+    {
+        return lonPrintName(route.contest.coordPresentation).replaceAll(',','.')
+    }
+    
 	String name()
 	{
 		return "${latName()} ${lonName()}"
@@ -556,5 +586,408 @@ class Coord
     String GetResultLocalTime()
     {
         return FcMath.TimeStr(resultCpTime)
+    }
+    
+    boolean IsRouteMeasure()
+    {
+        if (measureTrueTrack || measureDistance) {
+            return true
+        }
+        return false
+    }
+
+    String GetTurnpointSign()
+    {
+        if (!type.IsTurnpointSignCoord()) {
+            return "-"
+        }
+        switch (route.turnpointRoute) {
+            case TurnpointRoute.AssignPhoto:
+                return assignedSign
+            case TurnpointRoute.AssignCanvas:
+                if (assignedSign.canvas) {
+                    return assignedSign
+                }
+                return "${assignedSign} !"
+            case TurnpointRoute.TrueFalsePhoto:
+                return getMsg(correctSign.code)
+        }
+        return ""
+    }
+    
+    String GetPrintTurnpointSign()
+    {
+        if (!type.IsTurnpointSignCoord()) {
+            return "-"
+        }
+        switch (route.turnpointRoute) {
+            case TurnpointRoute.AssignPhoto:
+                return assignedSign
+            case TurnpointRoute.AssignCanvas:
+                if (assignedSign.canvas) {
+                    return assignedSign
+                }
+                return "${assignedSign} !"
+            case TurnpointRoute.TrueFalsePhoto:
+                return getPrintMsg(correctSign.code)
+        }
+        return ""
+    }
+    
+    boolean IsTurnpointSign()
+    {
+        if (type.IsTurnpointSignCoord()) {
+            switch (route.turnpointRoute) {
+                case TurnpointRoute.AssignPhoto:
+                    return assignedSign != TurnpointSign.None
+                case TurnpointRoute.AssignCanvas:
+                    if (assignedSign.canvas) {
+                        return assignedSign != TurnpointSign.None
+                    }
+                    return false
+                case TurnpointRoute.TrueFalsePhoto:
+                    return correctSign != TurnpointCorrect.Unassigned
+            }
+        }
+        return false
+    }
+    
+    boolean IsEnroutePhotoMeasure()
+    {
+        if (route.enroutePhotoRoute == EnrouteRoute.InputCoordmm) {
+            if (measureDistance) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsEnrouteCanvasMeasure()
+    {
+        if (route.enrouteCanvasRoute == EnrouteRoute.InputCoordmm) {
+            if (measureDistance) {
+                return true
+            }
+        }
+        return false
+    }
+    
+    BigDecimal GetMeasureDistance()
+    {
+        if (measureDistance) {
+            return measureDistance
+        }
+        return coordMeasureDistance
+    }
+    
+    String GetEnrouteOrthogonalDistance()
+    {
+        String s = "${enrouteOrthogonalDistance.abs()}${getMsg('fc.m')}"
+        if (enrouteOrthogonalDistance > 0) {
+            s += " ${getMsg('fc.right')}"   
+        } else if (enrouteOrthogonalDistance < 0) {
+            s += " ${getMsg('fc.left')}"
+        }
+        return s
+    }
+    
+    String GetPrintEnrouteOrthogonalDistance()
+    {
+        String s = "${enrouteOrthogonalDistance.abs()}${getPrintMsg('fc.m')}"
+        if (enrouteOrthogonalDistance > 0) {
+            s += " ${getPrintMsg('fc.right')}"   
+        } else if (enrouteOrthogonalDistance < 0) {
+            s += " ${getPrintMsg('fc.left')}"
+        }
+        return s
+    }
+    
+    String GetExportRouteCoord()
+    {
+        String s = "${titleExport()}, ${latExportName()}, ${lonExportName()}, ${RouteFileTools.ALT} ${altitude}${RouteFileTools.UNIT_ft}"
+        if (type.IsRunwayCoord()) {
+            s += ", ${RouteFileTools.GATE} ${gateDirection}${RouteFileTools.UNIT_GRAD} ${gatewidth2}${RouteFileTools.UNIT_NM}"
+        } else {
+            s += ", ${RouteFileTools.GATE} ${gatewidth2}${RouteFileTools.UNIT_NM}"
+        }
+        if (measureDistance) {
+            s += ", ${RouteFileTools.DIST} ${FcMath.DistanceMeasureStr2(measureDistance)}${RouteFileTools.UNIT_mm}"
+        }
+        if (measureTrueTrack) {
+            s += ", ${RouteFileTools.TRACK} ${FcMath.RouteGradStr2(measureTrueTrack)}${RouteFileTools.UNIT_GRAD}"
+        }
+        if (legDuration) {
+            s += ", ${RouteFileTools.DURATION} ${legDuration}${RouteFileTools.UNIT_min}"
+        }
+        if (noTimeCheck) {
+            s += ", ${RouteFileTools.UNIT_TPnotimecheck}"
+        }
+        if (noGateCheck) {
+            s += ", ${RouteFileTools.UNIT_TPnogatecheck}"
+        }
+        if (noPlanningTest) {
+            s += ", ${RouteFileTools.UNIT_TPnoplanningtest}"
+        }
+        if (endCurved) {
+            s += ", ${RouteFileTools.UNIT_TPendcurved}"
+        }
+        return s
+    }
+    
+    String GetExportTurnpointSign()
+    {
+        String no_sign = "${titleExport()}, -"
+        if (!type.IsTurnpointSignCoord()) {
+            return no_sign
+        }
+        switch (route.turnpointRoute) {
+            case TurnpointRoute.AssignPhoto:
+                if (assignedSign == TurnpointSign.None) {
+                    return no_sign
+                }
+                return "${titleExport()}, ${assignedSign}"
+            case TurnpointRoute.AssignCanvas:
+                if (assignedSign == TurnpointSign.None) {
+                    return no_sign
+                }
+                if (assignedSign.canvas) {
+                    return "${titleExport()}, ${assignedSign}"
+                }
+                return no_sign
+            case TurnpointRoute.TrueFalsePhoto:
+                switch (correctSign) {
+                    case TurnpointCorrect.Unassigned:
+                        return no_sign
+                    case TurnpointCorrect.True:
+                        return "${titleExport()}, ${RouteFileTools.UNIT_TPcorrect}"
+                    case TurnpointCorrect.False:
+                        return "${titleExport()}, ${RouteFileTools.UNIT_TPincorrect}"
+                }
+                return no_sign
+        }
+        return no_sign
+    }
+    
+    String GetExportEnroute(boolean enroutePhoto)
+    {
+        if (enroutePhoto) {
+            switch (route.enroutePhotoRoute) {
+                case EnrouteRoute.InputName:
+                    return enroutePhotoName
+                case EnrouteRoute.InputCoord:
+                    return "${enroutePhotoName}, ${latExportName()}, ${lonExportName()}"
+                case EnrouteRoute.InputNMFromTP:
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                case EnrouteRoute.InputmmFromTP:
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                case EnrouteRoute.InputCoordmm:
+                    return "${enroutePhotoName}, ${latExportName()}, ${lonExportName()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+            }
+        } else {
+            switch (route.enrouteCanvasRoute) {
+                case EnrouteRoute.InputName:
+                    return enrouteCanvasSign.canvasName
+                case EnrouteRoute.InputCoord:
+                    return "${enrouteCanvasSign.canvasName}, ${latExportName()}, ${lonExportName()}"
+                case EnrouteRoute.InputNMFromTP:
+                    return "${enrouteCanvasSign.canvasName}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                case EnrouteRoute.InputmmFromTP:
+                    return "${enrouteCanvasSign.canvasName}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                case EnrouteRoute.InputCoordmm:
+                    return "${enrouteCanvasSign.canvasName}, ${latExportName()}, ${lonExportName()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+            }
+        }
+    }
+
+    void calculateCoordEnrouteValues(EnrouteRoute enrouteRoute)
+    {
+        switch (enrouteRoute) {
+            case EnrouteRoute.InputCoord:
+                measureDistance = null
+                calculateCoordEnrouteFromTP()
+                enrouteDistance = route.contest.Convert_mm2NM(coordMeasureDistance)
+                calculateCoordEnrouteOrthogonalDistance()
+                break
+            case EnrouteRoute.InputCoordmm:
+                calculateCoordEnrouteFromTP()
+                enrouteDistance = route.contest.Convert_mm2NM(GetMeasureDistance())
+                calculateCoordEnrouteOrthogonalDistance()
+                break
+            case EnrouteRoute.InputNMFromTP:
+                coordMeasureDistance = route.contest.Convert_NM2mm(enrouteDistance)
+                measureDistance = null
+                calculateCoordEnrouteCoordinate()
+                enrouteOrthogonalDistance = 0
+                break
+            case EnrouteRoute.InputmmFromTP:
+                coordMeasureDistance = measureDistance
+                enrouteDistance = route.contest.Convert_mm2NM(coordMeasureDistance)
+                calculateCoordEnrouteCoordinate()
+                enrouteOrthogonalDistance = 0
+                break
+        }
+    }
+    
+    private void calculateCoordEnrouteCoordinate()
+    // FromTP (type & titleNumber), enrouteDistance (NM) -> Koordinate
+    {
+        BigDecimal true_track = null
+        BigDecimal leg_distance = null
+        BigDecimal secret_legs_distance = 0
+        boolean enroute_leg_found = false 
+        CoordType from_type = type
+        int from_titlenumber = titleNumber
+        for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
+            if (enroute_leg_found) {
+                if (routeleg_instance.startTitle.type == CoordType.SECRET) {
+                    if (enrouteDistance < secret_legs_distance + leg_distance) {
+                        break
+                    }
+                    secret_legs_distance += leg_distance
+                    from_type = routeleg_instance.startTitle.type
+                    from_titlenumber = routeleg_instance.startTitle.number
+                    true_track = routeleg_instance.coordTrueTrack
+                    leg_distance = routeleg_instance.testDistance2()
+                } else {
+                    break
+                }
+            }
+            if ((routeleg_instance.startTitle.type == type) && (routeleg_instance.startTitle.number == titleNumber)) {
+                enroute_leg_found = true
+                from_type = routeleg_instance.startTitle.type
+                from_titlenumber = routeleg_instance.startTitle.number
+                true_track = routeleg_instance.coordTrueTrack
+                leg_distance = routeleg_instance.testDistance2()
+            }
+        }
+        if (true_track != null) {
+            BigDecimal fromtp_lat = null
+            BigDecimal fromtp_lon = null 
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route,[sort:'id'])) {
+                if ((coordroute_instance.type == from_type) && (coordroute_instance.titleNumber == from_titlenumber)) {
+                    fromtp_lat = coordroute_instance.latMath()
+                    fromtp_lon = coordroute_instance.lonMath()
+                    break
+                }
+            }
+            if ((fromtp_lat != null) && (fromtp_lon != null)) {
+                if (enrouteDistance != null) {
+                    Map enroute_coord = AviationMath.getCoordinate(fromtp_lat, fromtp_lon, true_track, enrouteDistance - secret_legs_distance)
+                    Map lat = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lat, true)
+                    Map lon = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lon, false)
+                    latDirection = lat.direction
+                    latGrad = lat.grad
+                    latMinute = lat.minute
+                    lonDirection = lon.direction
+                    lonGrad = lon.grad
+                    lonMinute = lon.minute
+                    if (enrouteDistance >= leg_distance + secret_legs_distance) {
+                        enrouteDistanceOk = false
+                    } else {
+                        enrouteDistanceOk = true
+                    }
+                } else {
+                    enrouteDistanceOk = false
+                }
+            }
+        }
+    }
+    
+    private void calculateCoordEnrouteFromTP()
+    // Koordinate -> FromTP (type & titleNumber), coordMeasureDistance (mm)
+    {
+        CoordType from_type = CoordType.UNKNOWN
+        int from_titlenumber = 1
+        BigDecimal from_distance = null
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route,[sort:'id'])) {
+            if (coordroute_instance.type.IsEnrouteCalculateSignCoord()) {
+                if (coordroute_instance.type.IsEnrouteSignCoord()) {
+                    from_type = coordroute_instance.type
+                    from_titlenumber = coordroute_instance.titleNumber
+                    from_distance = 0
+                }
+                Map enroute = AviationMath.calculateLeg(latMath(),lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
+                BigDecimal leg_distance = null
+                BigDecimal true_track = null
+                for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
+                    if ((routeleg_instance.startTitle.type == coordroute_instance.type) && (routeleg_instance.startTitle.number == coordroute_instance.titleNumber)) {
+                        leg_distance = routeleg_instance.testDistance2()
+                        true_track = routeleg_instance.coordTrueTrack
+                        break
+                    }
+                }
+                if (true_track != null) {
+                    BigDecimal track_diff = AviationMath.courseChange(true_track,enroute.dir).abs()
+                    if ((enroute.dis == 0) || ((track_diff < Defs.ENROUTE_COURSE_DIFF) && (enroute.dis < leg_distance))) {
+                        type = from_type
+                        titleNumber = from_titlenumber
+                        coordMeasureDistance = route.contest.Convert_NM2mm(from_distance + enroute.dis)
+                        enrouteDistanceOk = true
+                        return
+                    }
+                    from_distance += leg_distance
+                }
+            }
+        }
+        type = CoordType.UNKNOWN
+        titleNumber = 1
+        coordMeasureDistance = 0
+    }
+    
+    private void calculateCoordEnrouteOrthogonalDistance()
+    // Koordinate, FromTP (type & titleNumber), enrouteDistance (NM) -> enrouteOrthogonalDistance (m)
+    {
+        enrouteOrthogonalDistance = 0
+        BigDecimal enroute_distance = route.contest.Convert_mm2NM(coordMeasureDistance)
+        BigDecimal true_track = null
+        BigDecimal leg_distance = null
+        BigDecimal secret_legs_distance = 0
+        boolean enroute_leg_found = false 
+        CoordType from_type = type
+        int from_titlenumber = titleNumber
+        for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
+            if (enroute_leg_found) {
+                if (routeleg_instance.startTitle.type == CoordType.SECRET) {
+                    if (enroute_distance < secret_legs_distance + leg_distance) {
+                        break
+                    }
+                    secret_legs_distance += leg_distance
+                    from_type = routeleg_instance.startTitle.type
+                    from_titlenumber = routeleg_instance.startTitle.number
+                    true_track = routeleg_instance.coordTrueTrack
+                    leg_distance = routeleg_instance.testDistance2()
+                } else {
+                    break
+                }
+            }
+            if ((routeleg_instance.startTitle.type == type) && (routeleg_instance.startTitle.number == titleNumber)) {
+                enroute_leg_found = true
+                from_type = routeleg_instance.startTitle.type
+                from_titlenumber = routeleg_instance.startTitle.number
+                true_track = routeleg_instance.coordTrueTrack
+                leg_distance = routeleg_instance.testDistance2()
+            }
+        }
+        if (true_track != null) {
+            BigDecimal fromtp_lat = null
+            BigDecimal fromtp_lon = null
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route,[sort:'id'])) {
+                if ((coordroute_instance.type == from_type) && (coordroute_instance.titleNumber == from_titlenumber)) {
+                    fromtp_lat = coordroute_instance.latMath()
+                    fromtp_lon = coordroute_instance.lonMath()
+                    break
+                }
+            }
+            if ((fromtp_lat != null) && (fromtp_lon != null)) {
+                Map enroute_coord = AviationMath.getCoordinate(fromtp_lat, fromtp_lon, true_track, enroute_distance - secret_legs_distance)
+                Map orthogonal = AviationMath.calculateLeg(latMath(),lonMath(),enroute_coord.lat,enroute_coord.lon)
+                BigDecimal orthogonal_track = AviationMath.getOrthogonalTrackRight(true_track)
+                if ((orthogonal.dir - orthogonal_track).abs() < Defs.ENROUTE_COURSE_DIFF) {
+                    enrouteOrthogonalDistance = Contest.Convert_NM2m(orthogonal.dis)
+                } else {
+                    enrouteOrthogonalDistance = -Contest.Convert_NM2m(orthogonal.dis)
+                }
+            }
+        }
     }
 }

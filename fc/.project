@@ -29,6 +29,11 @@
 			<location>K:/Projects/GIT/FlightContest/fc/target/work/plugins</location>
 		</link>
 		<link>
+			<name>concepts</name>
+			<type>2</type>
+			<location>K:/Projects/GIT/FlightContest/concepts</location>
+		</link>
+		<link>
 			<name>deploy</name>
 			<type>2</type>
 			<location>K:/Projects/GIT/FlightContest/deploy</location>

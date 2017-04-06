@@ -20,14 +20,18 @@ class Contest
     
     static final int LIVE_REFRESHSECONDS = 10           // DB-2.8
 	
+    static int mmPerNM = 1852000
+    static int mmPerkm = 1000000
+    
 	String title = ""
 	int mapScale = 200000
     CoordPresentation coordPresentation = CoordPresentation.DEGREEMINUTE // DB-2.12 
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
 	boolean resultClasses = true          	            // Klassen, DB-2.0
-	ContestRules contestRule                            // Wettbewerbsordnung, DB-2.0
+	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung, DB-2.0
     Boolean contestRuleForEachClass = false             // Eigene Wettbewerbsordnung für jede Klasse, DB-2.8 
 	Boolean precisionFlying = false                     // DB-2.3
+    Integer increaseFactor = 0                          // DB-2.13
 	boolean testExists = false                          // Integrierter Test vorhanden, DB-2.0
 	boolean aflosTest = false                           // Nutzung der AFLOS-Test-Datenbank, DB-2.0
 	boolean aflosUpload = false                         // Nutzung einer geuploadeten AFLOS-Datenbank, DB-2.0 
@@ -51,6 +55,7 @@ class Contest
 	Boolean contestPrintLandscape = true                // Ausdruck quer, DB-2.1
 	Boolean contestPrintTaskDetails = false             // Ausdruck der Aufgabensummen in Liste, DB-2.1
     String contestPrintTaskTestDetails = ""             // Ausdruck der Aufgabendetails in Liste, DB-2.8
+    Boolean contestPrintObservationDetails = false      // Ausdruck der Beobachtungsdetails in Liste, DB-2.13
     Boolean contestPrintLandingDetails = false          // Ausdruck der Landedetails in Liste, DB-2.8
 	Boolean contestPrintTaskNamesInTitle = false        // Ausdruck der Aufgabennamen im Title, DB-2.1
 	Boolean contestPrintAircraft = true                 // Ausdruck des Flugzeuges in Liste, DB-2.8
@@ -92,6 +97,7 @@ class Contest
 	int planningTestMaxPoints = 350
 	int planningTestPlanTooLatePoints = 50
 	int planningTestExitRoomTooLatePoints = 100
+    Integer planningTestForbiddenCalculatorsPoints = 0  // DB-2.13
 
 	// FlightTest
 	int flightTestTakeoffMissedPoints = 200
@@ -114,7 +120,18 @@ class Contest
 	Integer flightTestFalseEnvelopeOpenedPoints = 0     // DB-2.3
 	Integer flightTestSafetyEnvelopeOpenedPoints = 0    // DB-2.3
 	Integer flightTestFrequencyNotMonitoredPoints = 0   // DB-2.3
-	
+    Integer flightTestForbiddenEquipmentPoints = 0      // DB-2.13
+    
+    // ObservationTest
+    EnrouteValueUnit observationTestEnrouteValueUnit = EnrouteValueUnit.mm // DB-2.13
+    Float observationTestEnrouteCorrectValue = 5.0f     // DB-2.13
+    Float observationTestEnrouteInexactValue = 10.0f    // DB-2.13
+    Integer observationTestEnrouteInexactPoints = 10    // DB-2.13
+    Integer observationTestEnrouteNotFoundPoints = 20   // DB-2.13
+    Integer observationTestEnrouteFalsePoints = 40      // DB-2.13
+    Integer observationTestTurnpointNotFoundPoints = 40 // DB-2.13
+    Integer observationTestTurnpointFalsePoints = 80    // DB-2.13
+            
 	// LandingTest
 	int landingTest1MaxPoints = 300                     // DB-2.0
 	int landingTest1NoLandingPoints = 300               // DB-2.0
@@ -164,6 +181,23 @@ class Contest
 	int landingTest4TouchingObstaclePoints = 400        // DB-2.0
 	String landingTest4PenaltyCalculator = "{f -> switch(f.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;case 'OUT':return 200;default:return 200;}}" // DB-2.0
 	
+    // Defaults
+    Integer minRouteLegs = 0                            // DB-2.13
+    Integer maxRouteLegs = 8                            // DB-2.13
+    Float scGateWidth = 2.0f                            // DB-2.13
+    String unsuitableStartNum = "13"                    // DB-2.13
+    TurnpointRule turnpointRule = TurnpointRule.None    // DB-2.13
+    Boolean turnpointMapMeasurement = false             // DB-2.13
+    EnrouteRule enroutePhotoRule = EnrouteRule.None     // DB-2.13
+    EnrouteRule enrouteCanvasRule = EnrouteRule.None    // DB-2.13
+    Boolean enrouteCanvasMultiple = false               // DB-2.13
+    Integer minEnroutePhotos = 0                        // DB-2.13
+    Integer maxEnroutePhotos = 0                        // DB-2.13
+    Integer minEnrouteCanvas = 0                        // DB-2.13
+    Integer maxEnrouteCanvas = 0                        // DB-2.13
+    Integer minEnrouteTargets = 0                       // DB-2.13
+    Integer maxEnrouteTargets = 0                       // DB-2.13
+    
 	// Crew print settings
 	String printCrewPrintTitle = ""                     // DB-2.3
 	Boolean printCrewNumber = true                      // DB-2.3
@@ -191,12 +225,18 @@ class Contest
     
 	// Points print settings
 	String printPointsPrintTitle = ""                   // DB-2.3
+    Boolean printPointsGeneral = true                   // DB-2.13
 	Boolean printPointsPlanningTest = true              // DB-2.3
 	Boolean printPointsFlightTest = true                // DB-2.3
+    Boolean printPointsObservationTest = true           // DB-2.13
 	Boolean printPointsLandingTest1 = true              // DB-2.3
 	Boolean printPointsLandingTest2 = true              // DB-2.3
 	Boolean printPointsLandingTest3 = true              // DB-2.3
 	Boolean printPointsLandingTest4 = true              // DB-2.3
+    Boolean printPointsLandingField = true              // DB-2.13
+    String landingFieldImageName = ""                   // DB-2.13
+    Boolean printPointsTurnpointSign = false            // DB-2.13
+    Boolean printPointsEnrouteCanvas = false            // DB-2.13
     String printLandingCalculatorValues = ""            // DB-2.8
 	Boolean printPointsZero = false                     // DB-2.3
 	Boolean printPointsLandscape = false                // DB-2.3
@@ -453,6 +493,41 @@ class Contest
         // DB-2.12 compatibility
         coordPresentation(nullable:true)
         reserve(nullable:true)
+        
+        // DB-2.13 compatibility
+        planningTestForbiddenCalculatorsPoints(nullable:true, min:0)
+        flightTestForbiddenEquipmentPoints(nullable:true, min:0)
+        observationTestEnrouteValueUnit(nullable:true)
+        observationTestEnrouteCorrectValue(nullable:true, min:0.0f)
+        observationTestEnrouteInexactValue(nullable:true, min:0.0f)
+        observationTestEnrouteInexactPoints(nullable:true, min:0)
+        observationTestEnrouteNotFoundPoints(nullable:true, min:0)
+        observationTestEnrouteFalsePoints(nullable:true, min:0)
+        observationTestTurnpointNotFoundPoints(nullable:true, min:0)
+        observationTestTurnpointFalsePoints(nullable:true, min:0)
+        increaseFactor(nullable:true, min:0, max:1000)
+        minRouteLegs(nullable:true, min:0, max:100)
+        maxRouteLegs(nullable:true, min:0, max:100)
+        scGateWidth(nullable:true, min:0.0f, max:100.0f)
+        unsuitableStartNum(nullable:true)
+        turnpointRule(nullable:true)
+        turnpointMapMeasurement(nullable:true)
+        enroutePhotoRule(nullable:true)
+        enrouteCanvasRule(nullable:true)
+        enrouteCanvasMultiple(nullable:true)
+        minEnroutePhotos(nullable:true, min:0, max:100)
+        maxEnroutePhotos(nullable:true, min:0, max:100)
+        minEnrouteCanvas(nullable:true, min:0, max:100)
+        maxEnrouteCanvas(nullable:true, min:0, max:100)
+        minEnrouteTargets(nullable:true, min:0, max:100)
+        maxEnrouteTargets(nullable:true, min:0, max:100)
+        printPointsGeneral(nullable:true)
+        printPointsObservationTest(nullable:true)
+        contestPrintObservationDetails(nullable:true)
+        printPointsLandingField(nullable:true)
+        landingFieldImageName(nullable:true)
+        printPointsTurnpointSign(nullable:true)
+        printPointsEnrouteCanvas(nullable:true)
 	}
 
     static mapping = {
@@ -471,12 +546,16 @@ class Contest
 				mapScale = contestInstance.mapScale
 				timeZone = contestInstance.timeZone
 				resultClasses = contestInstance.resultClasses
-				contestRule = contestInstance.contestRule
+                teamCrewNum = contestInstance.teamCrewNum
+                bestOfAnalysisTaskNum = contestInstance.bestOfAnalysisTaskNum
+
+                contestRule = contestInstance.contestRule
                 contestRuleForEachClass = contestInstance.contestRuleForEachClass
+                
 				precisionFlying = contestInstance.precisionFlying
+                increaseFactor = contestInstance.increaseFactor
+                landingFieldImageName = contestInstance.landingFieldImageName
                 printLandingCalculatorValues = contestInstance.printLandingCalculatorValues
-				teamCrewNum = contestInstance.teamCrewNum
-				bestOfAnalysisTaskNum = contestInstance.bestOfAnalysisTaskNum
 				
 				planningTestDirectionCorrectGrad = contestInstance.planningTestDirectionCorrectGrad 
 				planningTestDirectionPointsPerGrad = contestInstance.planningTestDirectionPointsPerGrad
@@ -485,7 +564,8 @@ class Contest
 				planningTestMaxPoints = contestInstance.planningTestMaxPoints
 				planningTestPlanTooLatePoints = contestInstance.planningTestPlanTooLatePoints
 				planningTestExitRoomTooLatePoints = contestInstance.planningTestExitRoomTooLatePoints
-				
+                planningTestForbiddenCalculatorsPoints = contestInstance.planningTestForbiddenCalculatorsPoints
+                
 				flightTestTakeoffMissedPoints = contestInstance.flightTestTakeoffMissedPoints
 				flightTestTakeoffCorrectSecond = contestInstance.flightTestTakeoffCorrectSecond
 				flightTestTakeoffCheckSeconds = contestInstance.flightTestTakeoffCheckSeconds
@@ -506,6 +586,16 @@ class Contest
 				flightTestFalseEnvelopeOpenedPoints = contestInstance.flightTestFalseEnvelopeOpenedPoints
 				flightTestSafetyEnvelopeOpenedPoints = contestInstance.flightTestSafetyEnvelopeOpenedPoints
 				flightTestFrequencyNotMonitoredPoints = contestInstance.flightTestFrequencyNotMonitoredPoints
+                flightTestForbiddenEquipmentPoints = contestInstance.flightTestForbiddenEquipmentPoints
+                
+                observationTestEnrouteValueUnit = contestInstance.observationTestEnrouteValueUnit
+                observationTestEnrouteCorrectValue = contestInstance.observationTestEnrouteCorrectValue
+                observationTestEnrouteInexactValue = contestInstance.observationTestEnrouteInexactValue
+                observationTestEnrouteInexactPoints = contestInstance.observationTestEnrouteInexactPoints
+                observationTestEnrouteNotFoundPoints = contestInstance.observationTestEnrouteNotFoundPoints
+                observationTestEnrouteFalsePoints = contestInstance.observationTestEnrouteFalsePoints
+                observationTestTurnpointNotFoundPoints = contestInstance.observationTestTurnpointNotFoundPoints
+                observationTestTurnpointFalsePoints = contestInstance.observationTestTurnpointFalsePoints
 				
 				landingTest1MaxPoints = contestInstance.landingTest1MaxPoints
 				landingTest1NoLandingPoints = contestInstance.landingTest1NoLandingPoints
@@ -555,9 +645,6 @@ class Contest
 				landingTest4NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints
 				landingTest4TouchingObstaclePoints = contestInstance.landingTest4TouchingObstaclePoints
 				landingTest4PenaltyCalculator = contestInstance.landingTest4PenaltyCalculator
-			} else {
-				contestRule = ContestRules.R1
-				precisionFlying = ContestRules.R1.ruleValues.precisionFlying
 			} 
 			
 			if (!this.save()) {
@@ -618,6 +705,46 @@ class Contest
 		}
 	}
 	
+    BigDecimal Convert_mm2NM(BigDecimal measureValue)
+    {
+        if (measureValue == null) {
+            return null
+        }
+        return mapScale * measureValue / mmPerNM
+    }
+
+    BigDecimal Convert_NM2mm(BigDecimal distanceValue)
+    {
+        if (distanceValue == null) {
+            return null
+        }
+        return distanceValue * mmPerNM / mapScale 
+    }
+
+    static BigDecimal Convert_NM2m(BigDecimal distanceValue)
+    {
+        if (distanceValue == null) {
+            return null
+        }
+        return distanceValue * mmPerNM / 1000 
+    }
+
+    BigDecimal Convert_mm2km(BigDecimal measureValue)
+    {
+        if (measureValue == null) {
+            return null
+        }
+        return mapScale * measureValue / mmPerkm
+    }
+
+    BigDecimal Convert_km2mm(Contest contestInstance, BigDecimal distanceValue)
+    {
+        if (distanceValue == null) {
+            return null
+        }
+        return distanceValue * mmPerkm / mapScale 
+    }
+
 	String idName()
 	{
 		return "${getMsg('fc.contest')}-${id}"
@@ -1092,6 +1219,38 @@ class Contest
     {
         if (BootStrap.global.IsAFLOSPossible()) {
             return true
+        }
+        return false
+    }
+    
+    String GetIncreaseValues()
+    {
+        if (resultClasses && contestRuleForEachClass) {
+            String increase_values = ""
+            for (ResultClass resultclass_instance in ResultClass.findAllByContest(this,[sort:"id"])) {
+                if (resultclass_instance.increaseFactor > 0) {
+                    if (increase_values) {
+                        increase_values += ","
+                    }
+                    increase_values += resultclass_instance.increaseFactor.toString() + "%"
+                }
+            }
+            return increase_values
+        }
+        if (increaseFactor > 0) {
+            return increaseFactor.toString() + "%"
+        }
+        return ""
+    }
+    
+    boolean IsUnsuitableStartNum(int crewNum)
+    {
+        if (unsuitableStartNum) {
+            for (String s in unsuitableStartNum.split(',')) {
+                if (s == crewNum.toString()) {
+                    return true
+                }
+            }
         }
         return false
     }

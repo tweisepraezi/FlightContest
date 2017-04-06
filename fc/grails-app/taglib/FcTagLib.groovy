@@ -85,7 +85,7 @@ class FcTagLib
     // <g:coordroutenum var="${coordRouteInstance}" num="${i}" next="${next}" link="${createLink(controller:'coordRoute',action:'show')}"/>
    def coordroutenum = { p ->
     	String t = p.num.toString()
-        if (p.var.measureEntered) {
+        if (p.var.IsRouteMeasure()) {
 			t += """ <img src="/fc/images/skin/ok.png"/>"""
 		} else {
 			t += " ..."

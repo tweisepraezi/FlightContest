@@ -112,10 +112,11 @@ class MainTagLib
 				}
 				if (p.controller == "contest" && session.lastContest && !p.contesttasks) {
 					if (!session.lastContest.resultClasses || !session.lastContest.contestRuleForEachClass) {
-						outln """    <li> <a href="${p.link}/../../contest/editpoints">${message(code:'fc.contestrule.points')}</a> </li>"""
+						outln """<li> <a href="${p.link}/../../contest/editpoints">${message(code:'fc.contestrule.points')}</a> </li>"""
 					}
+                     outln """   <li> <a href="${p.link}/../../contest/editdefaults">${message(code:'fc.contestrule.defaults')}</a> </li>"""
 	                if (Contest.count() > 1) {
-	                    outln """    <li> <a href="${p.link}/../../contest/change">${message(code:'fc.contest.change')}</a> </li>"""
+	                    outln """<li> <a href="${p.link}/../../contest/change">${message(code:'fc.contest.change')}</a> </li>"""
 					}
 					outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
                     if (BootStrap.global.liveContestID != session.lastContest.id) {
@@ -125,7 +126,7 @@ class MainTagLib
 					outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
                     outln """    <li> <a href="${p.link}/../../contest/editfreetext">${message(code:'fc.contest.printfreetext')}</a> </li>"""
 					if (session.lastContest.testExists) {
-						outln """    <li> <a href="${p.link}/../../contest/runtest">${message(code:'fc.contest.runtest')}</a> </li>"""
+						outln """<li> <a href="${p.link}/../../contest/runtest">${message(code:'fc.contest.runtest')}</a> </li>"""
 					}
 	            }
 	            outln """  </ul>"""

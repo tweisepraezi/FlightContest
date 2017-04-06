@@ -16,7 +16,7 @@ class RouteLeg
 	BigDecimal legDistance             // NM
 	
 	Integer legDuration                // min, DB-2.3
-	Boolean noTimeCheck = false        // UNUSED: noTimeCheck, DB-2.3
+	Boolean noTimeCheck = false        // UNUSED: RouteLeg.noTimeCheck, DB-2.3
 	Boolean noPlanningTest = false     // DB-2.6
     Boolean endCurved = false          // DB-2.8
 	
@@ -125,6 +125,15 @@ class RouteLeg
             return FcMath.RoundDistance(legDistance)
         } else {
             return FcMath.RoundDistance(coordDistance)
+        }
+    }
+    
+    BigDecimal testDistance2()
+    {
+        if (legDistance != null) {
+            return legDistance
+        } else {
+            return coordDistance
         }
     }
     

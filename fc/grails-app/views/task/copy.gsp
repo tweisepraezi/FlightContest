@@ -101,65 +101,79 @@
 		                            <legend>${resultclass_instance.name}</legend>
 		                            <p>
 		                                <div>
-			                               	<g:checkBox name="taskclass_${resultclass_instance.id}_planningTestRun" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_planningTestRun')}" />
+			                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_PlanningTestRun)}" />
 		    	                            <label>${message(code:'fc.planningtest')}</label>
 		                                </div>
                                         <div style="margin-left:20px">
 	                                        <div>
-	                                            <g:checkBox name="taskclass_${resultclass_instance.id}_planningTestDistanceMeasure" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_planningTestDistanceMeasure')}" />
+	                                            <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestDistanceMeasure}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_PlanningTestDistanceMeasure)}" />
 	                                            <label>${message(code:'fc.task.planningtestdistancemeasure')}</label>
 	                                        </div>
 	                                        <div>
-	                                            <g:checkBox name="taskclass_${resultclass_instance.id}_planningTestDirectionMeasure" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_planningTestDirectionMeasure')}" />
+	                                            <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestDirectionMeasure}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_PlanningTestDirectionMeasure)}" />
 	                                            <label>${message(code:'fc.task.planningtestdirectionmeasure')}</label>
 	                                        </div>
                                         </div>
 		                                <div>
-			                               	<g:checkBox name="taskclass_${resultclass_instance.id}_flightTestRun" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_flightTestRun')}" />
+			                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_FlightTestRun)}" />
 		    	                            <label>${message(code:'fc.flighttest')}</label>
 		                                </div>
                                         <div style="margin-left:20px">
                                             <div>
-                                                <g:checkBox name="taskclass_${resultclass_instance.id}_flightTestCheckSecretPoints" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_flightTestCheckSecretPoints')}" />
+                                                <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestCheckSecretPoints}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_FlightTestCheckSecretPoints)}" />
                                                 <label>${message(code:'fc.task.flighttestchecksecretpoints')}</label>
                                             </div>
                                             <div>
-                                                <g:checkBox name="taskclass_${resultclass_instance.id}_flightTestCheckTakeOff" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_flightTestCheckTakeOff')}" />
+                                                <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestCheckTakeOff}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_FlightTestCheckTakeOff)}" />
                                                 <label>${message(code:'fc.task.flighttestchecktakeoff')}</label>
                                             </div>
                                             <div>
-                                                <g:checkBox name="taskclass_${resultclass_instance.id}_flightTestCheckLanding" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_flightTestCheckLanding')}" />
+                                                <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestCheckLanding}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_FlightTestCheckLanding)}" />
                                                 <label>${message(code:'fc.task.flighttestchecklanding')}</label>
                                             </div>
                                         </div>
 		                                <div>
-			                               	<g:checkBox name="taskclass_${resultclass_instance.id}_observationTestRun" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_observationTestRun')}" />
+			                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_ObservationTestRun)}" />
 		    	                            <label>${message(code:'fc.observationtest')}</label>
 		                                </div>
+                                        <div style="margin-left:20px">
+	                                        <div>
+	                                            <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestTurnpointRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_ObservationTestTurnpointRun)}" />
+	                                            <label>${message(code:'fc.observationtest.turnpoints')}</label>
+	                                        </div>
+	                                        <div>
+	                                            <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestEnroutePhotoRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_ObservationTestEnroutePhotoRun)}" />
+	                                            <label>${message(code:'fc.observationtest.enroutephotos')}</label>
+	                                        </div>
+	                                        <div>
+	                                            <g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestEnrouteCanvasRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_ObservationTestEnrouteCanvasRun)}" />
+	                                            <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
+	                                        </div>
+                                        </div>
 		                                <div>
-			                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTestRun" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_landingTestRun')}" />
+			                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTestRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_LandingTestRun)}" />
 		    	                            <label>${message(code:'fc.landingtest')}</label>
 		                                </div>
 				                        <div style="margin-left:20px">
 			                                <div>
-				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest1Run" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_landingTest1Run')}" />
+				                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest1Run}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_LandingTest1Run)}" />
 			    	                            <label>${message(code:'fc.landingtest.landing1')}</label>
 			                                </div>
 			                                <div>
-				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest2Run" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_landingTest2Run')}" />
+				                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest2Run}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_LandingTest2Run)}" />
 			    	                            <label>${message(code:'fc.landingtest.landing2')}</label>
 			                                </div>
 			                                <div>
-				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest3Run" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_landingTest3Run')}" />
+				                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest3Run}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_LandingTest3Run)}" />
 			    	                            <label>${message(code:'fc.landingtest.landing3')}</label>
 			                                </div>
 			                                <div>
-				                               	<g:checkBox name="taskclass_${resultclass_instance.id}_landingTest4Run" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_landingTest4Run')}" />
+				                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest4Run}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_LandingTest4Run)}" />
 			    	                            <label>${message(code:'fc.landingtest.landing4')}</label>
 			                                </div>
 	                                	</div>
 		                                <div>
-			                               	<g:checkBox name="taskclass_${resultclass_instance.id}_specialTestRun" value="${taskClassSettings.('taskclass_'+resultclass_instance.id+'_specialTestRun')}" />
+			                               	<g:checkBox name="${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_SpecialTestRun}" value="${taskClassSettings.(Defs.TaskClassID+resultclass_instance.id+Defs.TaskClassSubID_SpecialTestRun)}" />
 		    	                            <label>${message(code:'fc.specialtest')}</label>
 		                                </div>
 		                            </p>
@@ -205,6 +219,20 @@
 		                               	<g:checkBox name="observationTestRun" value="${taskInstance.observationTestRun}" />
 	    	                            <label>${message(code:'fc.observationtest')}</label>
 	                                </div>
+                                    <div style="margin-left:20px">
+	                                    <div>
+	                                        <g:checkBox name="observationTestTurnpointRun" value="${taskInstance.observationTestTurnpointRun}" />
+	                                        <label>${message(code:'fc.observationtest.turnpoints')}</label>
+	                                    </div>
+	                                    <div>
+	                                        <g:checkBox name="observationTestEnroutePhotoRun" value="${taskInstance.observationTestEnroutePhotoRun}" />
+	                                        <label>${message(code:'fc.observationtest.enroutephotos')}</label>
+	                                    </div>
+	                                    <div>
+	                                        <g:checkBox name="observationTestEnrouteCanvasRun" value="${taskInstance.observationTestEnrouteCanvasRun}" />
+	                                        <label>${message(code:'fc.observationtest.enroutecanvas')}</label>
+	                                    </div>
+                                    </div>
 	                                <div>
 		                               	<g:checkBox name="landingTestRun" value="${taskInstance.landingTestRun}" />
 	    	                            <label>${message(code:'fc.landingtest')}</label>
@@ -253,6 +281,12 @@
                                     <g:checkBox name="bestOfAnalysis" value="${taskInstance.bestOfAnalysis}" />
                                     <label>${message(code:'fc.task.bestofanalysis')}</label>
                                 </div>
+                                <g:if test="${taskInstance.GetIncreaseValues() != ""}">
+                                    <div>
+                                        <g:checkBox name="increaseEnabled" value="${taskInstance.increaseEnabled}" />
+                                        <label>${message(code:'fc.task.increaseenabled',args:[taskInstance.GetIncreaseValues()])}</label>
+                                    </div>
+                                </g:if>
                             </p>
                         </fieldset>
                         <fieldset>

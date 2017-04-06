@@ -18,15 +18,17 @@
                 <div class="block" id="forms" >
                     <g:set var="newparams" value="['contestid':params.contestid]"/>
                     <g:form method="post" params="${newparams}" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.title')}:</label>
                                 <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:routeInstance,field:'title')}"/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:routeInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
+                            <g:editRouteObservations route="${routeInstance}" ti="${ti}"/>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" />
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" />
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

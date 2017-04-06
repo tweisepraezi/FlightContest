@@ -6,7 +6,8 @@
 	    </head>
 	    <body>
 	        <g:form method="post" params="${['filename':fileName,'testid':testID,'gpxviewerReturnAction':gpxviewerReturnAction,'gpxviewerReturnController':gpxviewerReturnController,'gpxviewerReturnID':gpxviewerReturnID]}">
-	            <g:gpxViewerForm showCancel="${showCancel}" showProfiles="${showProfiles}" gpxFileName="/fc/${fileName}" infoText="${originalFilename}" showLanguage="${showLanguage}" gpxShowPoints="${gpxShowPoints}" />
+	            <g:set var="ti" value="${[]+1}"/>
+	            <g:gpxViewerForm showCancel="${showCancel}" showProfiles="${showProfiles}" gpxFileName="/fc/${fileName}" infoText="${originalFilename}" gpxViewerSrc="/fc/GM_Utils" showLanguage="${showLanguage}" gpxShowPoints="${gpxShowPoints}" ti="${ti}"/>
 		        <script type="text/javascript" src="/fc/GM_Utils/GPX2GM.js"></script>
 		        <script>
 		            function removeGpxFile() {

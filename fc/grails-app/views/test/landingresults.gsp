@@ -396,7 +396,7 @@
                         <table>
                             <tbody>
                                 <g:if test="${testInstance.IsLandingTestAnyRun()}">
-	                                <g:if test="${testInstance.landingTestOtherPenalties > 0}">
+	                                <g:if test="${testInstance.landingTestOtherPenalties != 0}">
 	                                    <tr>
 	                                        <td class="detailtitle">${message(code:'fc.landingtest.otherpenalties')}:</td>
 	                                        <td>${testInstance.landingTestOtherPenalties} ${message(code:'fc.points')}</td>

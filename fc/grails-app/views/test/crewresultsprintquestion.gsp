@@ -59,6 +59,10 @@
 	                                    <g:checkBox name="printPlanningResults" value="${testInstance.printPlanningResults}" />
 	                                    <label>${message(code:'fc.planningresults')} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})<g:if test="${!testInstance.planningTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
 	                                </div>
+                                    <div>
+                                        <g:checkBox name="printPlanningResultsScan" value="${testInstance.printPlanningResultsScan}" />
+                                        <label>${message(code:'fc.planningtesttask.scannedforms')} (${message(code:'fc.version')} ${testInstance.GetPlanningTestVersion()})<g:if test="${!testInstance.planningTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
+                                    </div>
         	                    </g:if>
     	                       	<g:if test="${testInstance.IsFlightTestRun()}">
 	                                <div>
@@ -75,6 +79,10 @@
 	                                    <g:checkBox name="printObservationResults" value="${testInstance.printObservationResults}" />
 	                                    <label>${message(code:'fc.observationresults')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})<g:if test="${!testInstance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
 	                                </div>
+                                    <div>
+                                        <g:checkBox name="printObservationResultsScan" value="${testInstance.printObservationResultsScan}" />
+                                        <label>${message(code:'fc.observation.scannedforms')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})<g:if test="${!testInstance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
+                                    </div>
 	                            </g:if>
     	                       	<g:if test="${testInstance.IsLandingTestRun()}">
 	                                <div>

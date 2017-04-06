@@ -12,6 +12,7 @@
                 <h2>${testInstance.GetTitle(ResultType.Observation)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
+                        <g:set var="ti" value="${[]+1}" />
                         <table>
                             <tbody>
                                 <tr>
@@ -76,88 +77,55 @@
                             </tbody>
                         </table>
                         <g:if test="${!testInstance.observationTestComplete}">
-	                        <fieldset>
-	                            <p>
-	                                <label>${message(code:'fc.observationresults.turnpointphotopenalties')}* [${message(code:'fc.points')}]:</label>
-	                                <br/>
-	                                <input type="text" id="observationTestTurnPointPhotoPenalties" name="observationTestTurnPointPhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestTurnPointPhotoPenalties')}" tabIndex="1"/>
-	                            </p>
-	                            <p>
-	                                <label>${message(code:'fc.observationresults.routephotopenalties')}* [${message(code:'fc.points')}]:</label>
-	                                <br/>
-	                                <input type="text" id="observationTestRoutePhotoPenalties" name="observationTestRoutePhotoPenalties" value="${fieldValue(bean:testInstance,field:'observationTestRoutePhotoPenalties')}" tabIndex="2"/>
-	                            </p>
-	                            <p>
-	                                <label>${message(code:'fc.observationresults.groundtargetpenalties')}* [${message(code:'fc.points')}]:</label>
-	                                <br/>
-	                                <input type="text" id="observationTestGroundTargetPenalties" name="observationTestGroundTargetPenalties" value="${fieldValue(bean:testInstance,field:'observationTestGroundTargetPenalties')}" tabIndex="3"/>
-	                            </p>
-	                        </fieldset>
-                               <table>
-                                   <tbody>
-	                                <tr>
-	                                    <td class="detailtitle">${message(code:'fc.penalties.total')}:</td>
-                                        <g:set var="points_class" value="points"/>
-                                        <g:if test="${!testInstance.observationTestPenalties}">
-                                            <g:set var="points_class" value="zeropoints"/>
-                                        </g:if>
-	                                    <td class="${points_class}">${testInstance.observationTestPenalties} ${message(code:'fc.points')}</td>
-	                                </tr>
-                                   </tbody>
-                               </table>
+                            <g:observationTestInput t="${testInstance}" ti="${ti}" />
                         </g:if>
    	                    <g:else>
-                               <table>
-                                   <tbody>
-                                       <tr>
-                                           <td class="detailtitle">${message(code:'fc.observationresults.turnpointphotopenalties')}:</td>
-                                           <td>${testInstance.observationTestTurnPointPhotoPenalties} ${message(code:'fc.points')}</td>
-                                       </tr>
-                                       <tr>
-                                           <td class="detailtitle">${message(code:'fc.observationresults.routephotopenalties')}:</td>
-                                           <td>${testInstance.observationTestRoutePhotoPenalties} ${message(code:'fc.points')}</td>
-                                       </tr>
-                                       <tr>
-                                           <td class="detailtitle">${message(code:'fc.observationresults.groundtargetpenalties')}:</td>
-                                           <td>${testInstance.observationTestGroundTargetPenalties} ${message(code:'fc.points')}</td>
-                                       </tr>
-	                                <tr>
-	                                    <td class="detailtitle">${message(code:'fc.penalties.total')}:</td>
-                                        <g:set var="points_class" value="points"/>
-                                        <g:if test="${!testInstance.observationTestPenalties}">
-                                            <g:set var="points_class" value="zeropoints"/>
-                                        </g:if>
-	                                    <td class="${points_class}">${testInstance.observationTestPenalties} ${message(code:'fc.points')}</td>
-	                                </tr>
-                                   </tbody>
-                               </table>
+   	                        <g:observationTestComplete t="${testInstance}" crewResults="${false}"/>
                         </g:else>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.penalties.total')}:</td>
+                                    <g:set var="points_class" value="points"/>
+                                    <g:if test="${!testInstance.observationTestPenalties}">
+                                        <g:set var="points_class" value="zeropoints"/>
+                                    </g:if>
+                                    <td class="${points_class}">${testInstance.observationTestPenalties} ${message(code:'fc.points')}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <g:if test="${!testInstance.observationTestComplete}">
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="observationresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="11"/>
-                                <g:actionSubmit action="observationresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="12"/>
+                                <g:actionSubmit action="observationresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="observationresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="13"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                             </g:else>
-                        	<g:actionSubmit action="observationresultsready" value="${message(code:'fc.results.ready')}" tabIndex="14"/>
-                        	<g:actionSubmit action="observationresultssave" value="${message(code:'fc.save')}" tabIndex="15"/>
-                            <g:actionSubmit action="printobservationresults" value="${message(code:'fc.print')}" tabIndex="16"/>
+                        	<g:actionSubmit action="observationresultsready" value="${message(code:'fc.results.ready')}" tabIndex="${ti[0]++}"/>
+                        	<g:actionSubmit action="observationresultssave" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+                            <g:if test="${!testInstance.scannedObservationTest}">
+                                <g:actionSubmit action="observationformimportcrew" value="${message(code:'fc.observation.importform')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                            </g:if>
+                            <g:else>
+                                <g:actionSubmit action="observationformdeleteimagefile" value="${message(code:'fc.observation.deleteform')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+                            </g:else>
+                            <g:actionSubmit action="printobservationresults" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                             </g:if>
                         </g:if>
                         <g:else>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="observationresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="41"/>
+                                <g:actionSubmit action="observationresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="42"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                             </g:else>
-                        	<g:actionSubmit action="observationresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="43"/>
-                            <g:actionSubmit action="printobservationresults" value="${message(code:'fc.print')}" tabIndex="44"/>
+                        	<g:actionSubmit action="observationresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="printobservationresults" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="45"/>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                             </g:if>
                         </g:else>
                     </g:form>

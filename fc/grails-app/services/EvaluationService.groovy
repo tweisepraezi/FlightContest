@@ -819,6 +819,9 @@ class EvaluationService
                                                 task_penalties += test_instance.specialTestPenalties
                                             }
                                         }
+                                        if (test_instance.IsIncreaseEnabled()) {
+                                            task_penalties += crew_instance.GetIncreaseFactor() * task_penalties / 100
+                                        }
                                     } else {
                                         disable_contest_penalties = true
                                     }
@@ -874,6 +877,9 @@ class EvaluationService
                                                 if (resultSettings["Special"]) {
                                                     task_penalties += test_instance.specialTestPenalties
                                                 }
+                                            }
+                                            if (test_instance.IsIncreaseEnabled()) {
+                                                task_penalties += crew_instance.GetIncreaseFactor() * task_penalties / 100
                                             }
                                         } else {
                                             disable_team_penalties = true

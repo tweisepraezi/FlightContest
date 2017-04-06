@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Map;
 
 class Task 
@@ -11,6 +12,9 @@ class Task
 	boolean planningTestRun                  = true
 	boolean flightTestRun                    = true
 	boolean observationTestRun               = true
+    Boolean observationTestTurnpointRun      = true  // DB-2.13
+    Boolean observationTestEnroutePhotoRun   = true  // DB-2.13
+    Boolean observationTestEnrouteCanvasRun  = false // DB-2.13
 	boolean landingTestRun                   = true
 	boolean landingTest1Run                  = false // DB-2.0
 	boolean landingTest2Run                  = false // DB-2.0
@@ -58,9 +62,13 @@ class Task
     String disabledCheckPointsMinAltitude    = ""    // list of check point without min altitude check, DB-2.8
     String disabledCheckPointsProcedureTurn  = ""    // list of check point without procedure turn check, DB-2.8
     String disabledCheckPointsBadCourse      = ""    // list of check point without bad course check, DB-2.8
+    String disabledCheckPointsTurnpointObs   = ""    // list of check point without turnpoint observation check, DB-2.13
+    String disabledEnroutePhotoObs           = ""    // list of enroute photos without enroute observation check, DB-2.13
+    String disabledEnrouteCanvasObs          = ""    // list of enroute canvas without enroute observation check, DB-2.13
     
 	Boolean bestOfAnalysis                   = false // DB-2.3
-	
+    Boolean increaseEnabled                  = true  // DB-2.13
+    
 	String printTimetableJuryPrintTitle      = ""    // DB-2.3
 	Boolean printTimetableJuryNumber         = true  // DB-2.3
 	Boolean printTimetableJuryCrew           = true  // DB-2.3
@@ -117,12 +125,16 @@ class Task
     String reserve                           = ""    // DB-2.12
 	
 	// transient values 
-	static transients = ['printPlanningResults','printFlightResults','printFlightMap','printObservationResults','printLandingResults','printSpecialResults',
-		                 'printAircraft','printTeam','printClass','printShortClass','printProvisionalResults']
+	static transients = ['printPlanningResults','printPlanningResultsScan',
+                         'printFlightResults','printFlightMap',
+                         'printObservationResults','printObservationResultsScan',
+                         'printLandingResults','printSpecialResults','printAircraft','printTeam','printClass','printShortClass','printProvisionalResults']
 	boolean printPlanningResults = true
+    boolean printPlanningResultsScan = true
 	boolean printFlightResults = true
     boolean printFlightMap = true
 	boolean printObservationResults = true
+    boolean printObservationResultsScan = true
 	boolean printLandingResults = true
 	boolean printSpecialResults = true
 	boolean printAircraft = true
@@ -257,6 +269,15 @@ class Task
         
         // DB-2.12 compatibility
         reserve(nullable:true)
+        
+        // DB-2.13 compatibility
+        increaseEnabled(nullable:true)
+        disabledCheckPointsTurnpointObs(nullable:true)
+        disabledEnroutePhotoObs(nullable:true)
+        disabledEnrouteCanvasObs(nullable:true)
+        observationTestTurnpointRun(nullable:true)
+        observationTestEnroutePhotoRun(nullable:true)
+        observationTestEnrouteCanvasRun(nullable:true)
 	}
 
     static mapping = {
@@ -351,6 +372,9 @@ class Task
 		planningTestRun = taskInstance.planningTestRun
 		flightTestRun = taskInstance.flightTestRun
 		observationTestRun = taskInstance.observationTestRun
+        observationTestTurnpointRun = taskInstance.observationTestTurnpointRun
+        observationTestEnroutePhotoRun = taskInstance.observationTestEnroutePhotoRun
+        observationTestEnrouteCanvasRun = taskInstance.observationTestEnrouteCanvasRun
 		landingTestRun = taskInstance.landingTestRun
 		landingTest1Run = taskInstance.landingTest1Run
 		landingTest2Run = taskInstance.landingTest2Run
@@ -379,6 +403,7 @@ class Task
 		flightTestCheckTakeOff = taskInstance.flightTestCheckTakeOff
 		flightTestCheckLanding = taskInstance.flightTestCheckLanding
 		bestOfAnalysis = taskInstance.bestOfAnalysis
+        increaseEnabled = taskInstance.increaseEnabled
 
 		if (!this.save()) {
 			throw new Exception("Task.CopyValues could not save")
@@ -417,6 +442,9 @@ class Task
 		planningTestRun = taskInstance.planningTestRun
 		flightTestRun = taskInstance.flightTestRun
 		observationTestRun = taskInstance.observationTestRun
+        observationTestTurnpointRun = taskInstance.observationTestTurnpointRun
+        observationTestEnroutePhotoRun = taskInstance.observationTestEnroutePhotoRun
+        observationTestEnrouteCanvasRun = taskInstance.observationTestEnrouteCanvasRun
 		landingTestRun = taskInstance.landingTestRun
 		landingTest1Run = taskInstance.landingTest1Run
 		landingTest2Run = taskInstance.landingTest2Run
@@ -445,25 +473,29 @@ class Task
 		flightTestCheckTakeOff = taskInstance.flightTestCheckTakeOff
 		flightTestCheckLanding = taskInstance.flightTestCheckLanding
 		bestOfAnalysis = taskInstance.bestOfAnalysis
+        increaseEnabled = taskInstance.increaseEnabled
 
 		if (taskInstance.contest.resultClasses) {
 			for (ResultClass resultclass_instance in ResultClass.findAllByContest(taskInstance.contest,[sort:"id"])) {
 				TaskClass.findAllByTask(taskInstance,[sort:"id"]).each { TaskClass taskclass_instance ->
 					if (taskclass_instance.resultclass == resultclass_instance) {
-						taskclass_settings["taskclass_${resultclass_instance.id}_planningTestRun"] = taskclass_instance.planningTestRun
-						taskclass_settings["taskclass_${resultclass_instance.id}_flightTestRun"] = taskclass_instance.flightTestRun
-						taskclass_settings["taskclass_${resultclass_instance.id}_observationTestRun"] = taskclass_instance.observationTestRun
-						taskclass_settings["taskclass_${resultclass_instance.id}_landingTestRun"] = taskclass_instance.landingTestRun
-						taskclass_settings["taskclass_${resultclass_instance.id}_landingTest1Run"] = taskclass_instance.landingTest1Run
-						taskclass_settings["taskclass_${resultclass_instance.id}_landingTest2Run"] = taskclass_instance.landingTest2Run
-						taskclass_settings["taskclass_${resultclass_instance.id}_landingTest3Run"] = taskclass_instance.landingTest3Run
-						taskclass_settings["taskclass_${resultclass_instance.id}_landingTest4Run"] = taskclass_instance.landingTest4Run
-						taskclass_settings["taskclass_${resultclass_instance.id}_specialTestRun"] = taskclass_instance.specialTestRun
-						taskclass_settings["taskclass_${resultclass_instance.id}_planningTestDistanceMeasure"] = taskclass_instance.planningTestDistanceMeasure
-						taskclass_settings["taskclass_${resultclass_instance.id}_planningTestDirectionMeasure"] = taskclass_instance.planningTestDirectionMeasure
-						taskclass_settings["taskclass_${resultclass_instance.id}_flightTestCheckSecretPoints"] = taskclass_instance.flightTestCheckSecretPoints
-						taskclass_settings["taskclass_${resultclass_instance.id}_flightTestCheckTakeOff"] = taskclass_instance.flightTestCheckTakeOff
-						taskclass_settings["taskclass_${resultclass_instance.id}_flightTestCheckLanding"] = taskclass_instance.flightTestCheckLanding
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestRun}"] = taskclass_instance.planningTestRun
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestRun}"] = taskclass_instance.flightTestRun
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestRun}"] = taskclass_instance.observationTestRun
+                        taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestTurnpointRun}"] = taskclass_instance.observationTestTurnpointRun
+                        taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestEnroutePhotoRun}"] = taskclass_instance.observationTestEnroutePhotoRun
+                        taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestEnrouteCanvasRun}"] = taskclass_instance.observationTestEnrouteCanvasRun
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTestRun}"] = taskclass_instance.landingTestRun
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest1Run}"] = taskclass_instance.landingTest1Run
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest2Run}"] = taskclass_instance.landingTest2Run
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest3Run}"] = taskclass_instance.landingTest3Run
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_LandingTest4Run}"] = taskclass_instance.landingTest4Run
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_SpecialTestRun}"] = taskclass_instance.specialTestRun
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestDistanceMeasure}"] = taskclass_instance.planningTestDistanceMeasure
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestDirectionMeasure}"] = taskclass_instance.planningTestDirectionMeasure
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestCheckSecretPoints}"] = taskclass_instance.flightTestCheckSecretPoints
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestCheckTakeOff}"] = taskclass_instance.flightTestCheckTakeOff
+						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestCheckLanding}"] = taskclass_instance.flightTestCheckLanding
 					}
 				}
 			}
@@ -528,316 +560,169 @@ class Task
 	boolean IsPlanningTestRun()
 	{
 		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.planningTestRun) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.planningTestRun) {
+                    return true
+                }
+            }
 		}
 		return planningTestRun
 	}
 	
 	boolean IsFlightTestRun()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.flightTestRun) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.flightTestRun) {
+                    return true
+                }
+            }
+        }
 		return flightTestRun
 	}
 	
 	boolean IsObservationTestRun()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.observationTestRun) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.observationTestRun) {
+                    return true
+                }
+            }
+        }
 		return observationTestRun
 	}
 	
+    boolean IsObservationTestAnyRun()
+    {
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.observationTestTurnpointRun || taskclass_instance.observationTestEnroutePhotoRun || taskclass_instance.observationTestEnrouteCanvasRun) {
+                    return true
+                }
+            }
+        }
+        return observationTestTurnpointRun || observationTestEnroutePhotoRun || observationTestEnrouteCanvasRun
+    }
+    
+    boolean IsObservationTestTurnpointRun()
+    {
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.observationTestTurnpointRun) {
+                    return true
+                }
+            }
+        }
+        return observationTestTurnpointRun
+    }
+    
+    boolean IsObservationTestEnroutePhotoRun()
+    {
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.observationTestEnroutePhotoRun) {
+                    return true
+                }
+            }
+        }
+        return observationTestEnroutePhotoRun
+    }
+    
+    boolean IsObservationTestEnrouteCanvasRun()
+    {
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.observationTestEnrouteCanvasRun) {
+                    return true
+                }
+            }
+        }
+        return observationTestEnrouteCanvasRun
+    }
+    
 	boolean IsLandingTestRun()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.landingTestRun) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.landingTestRun) {
+                    return true
+                }
+            }
+        }
 		return landingTestRun
 	}
 	
 	boolean IsLandingTestAnyRun()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.landingTest1Run || taskclass_instance.landingTest2Run || taskclass_instance.landingTest3Run || taskclass_instance.landingTest4Run) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.landingTest1Run || taskclass_instance.landingTest2Run || taskclass_instance.landingTest3Run || taskclass_instance.landingTest4Run) {
+                    return true
+                }
+            }
+        }
 		return landingTest1Run || landingTest2Run || landingTest3Run || landingTest4Run
 	}
 	
 	boolean IsLandingTest1Run()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.landingTest1Run) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.landingTest1Run) {
+                    return true
+                }
+            }
+        }
 		return landingTest1Run
 	}
 	
 	boolean IsLandingTest2Run()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.landingTest2Run) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.landingTest2Run) {
+                    return true
+                }
+            }
+        }
 		return landingTest2Run
 	}
 	
 	boolean IsLandingTest3Run()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.landingTest3Run) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.landingTest3Run) {
+                    return true
+                }
+            }
+        }
 		return landingTest3Run
 	}
 	
 	boolean IsLandingTest4Run()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.landingTest4Run) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.landingTest4Run) {
+                    return true
+                }
+            }
+        }
 		return landingTest4Run
 	}
 	
 	boolean IsSpecialTestRun()
 	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.specialTestRun) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
+        if (contest.resultClasses) {
+            for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
+                if (taskclass_instance.specialTestRun) {
+                    return true
+                }
+            }
+        }
 		return specialTestRun
-	}
-	
-	boolean IsPlanningTestDistanceMeasure()
-	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.planningTestDistanceMeasure) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
-		return planningTestDistanceMeasure
-	}
-	
-	boolean IsPlanningTestDirectionMeasure()
-	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.planningTestDirectionMeasure) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
-		return planningTestDirectionMeasure
-	}
-	
-	boolean IsFlightTestCheckSecretPoints()
-	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.flightTestCheckSecretPoints) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
-		return flightTestCheckSecretPoints
-	}
-	
-	boolean IsFlightTestCheckTakeOff()
-	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.flightTestCheckTakeOff) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
-		return flightTestCheckTakeOff
-	}
-	
-	boolean IsFlightTestCheckLanding()
-	{
-		if (contest.resultClasses) {
-			for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-				if (test_instance.crew.resultclass) {
-					for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-						
-						if (test_instance.crew.resultclass == taskclass_instance.resultclass)
-						{
-							if (taskclass_instance.flightTestCheckLanding) {
-								return true
-							}
-						}
-					}
-				}
-			}
-			return false
-		}
-		return flightTestCheckLanding
 	}
 	
     int GetDetailNum()
@@ -846,6 +731,7 @@ class Task
         if (printPlanningResults) {
             detail_num++
         }
+        // printPlanningResultsScan not relevant
         if (printFlightResults) {
             detail_num++
         }
@@ -853,6 +739,7 @@ class Task
         if (printObservationResults) {
             detail_num++
         }
+        // printObservationResultsScan not relevant
         if (printLandingResults) {
             detail_num++
         }
@@ -947,7 +834,12 @@ class Task
 			result_columns++
 		}
 		if (IsObservationTestRun()) {
-			result_columns++
+            int observation_result_any_columns = GetObservationResultAnyColumns()
+            if (observation_result_any_columns > 0) {
+                result_columns += observation_result_any_columns
+            } else {
+                result_columns++
+            }
 		}
 		if (IsLandingTestRun()) {
 			int landing_result_any_columns = GetLandingResultAnyColumns()
@@ -963,6 +855,23 @@ class Task
 		return result_columns
 	}
 	
+    int GetObservationResultAnyColumns()
+    {
+        int result_columns = 0
+        if (observationTestRun) {
+            if (observationTestTurnpointRun) {
+                result_columns++
+            }
+            if (observationTestEnroutePhotoRun) {
+                result_columns++
+            }
+            if (observationTestEnrouteCanvasRun) {
+                result_columns++
+            }
+        }
+        return result_columns
+    }
+    
 	int GetLandingResultAnyColumns()
 	{
 		int result_columns = 0
@@ -1054,4 +963,91 @@ class Task
         }
         return false
     }
+    
+    String GetIncreaseValues()
+    {
+        return contest.GetIncreaseValues()
+    }
+    
+    boolean IsIncreaseEnabled()
+    {
+        if (GetIncreaseValues()) {
+            return increaseEnabled
+        }
+        return false
+    }
+    
+    List GetObservationResultClassIDs(boolean checkPenalties)
+    {
+        boolean taskclasses_different = false
+        List result_class_ids = []
+        if (contest.resultClasses) {
+            TaskClass first_taskclass_instance = null
+            ResultClass first_resultclass_instance = null
+            for (ResultClass resultclass_instance in ResultClass.findAllByContest(contest,[sort:"id"])) {
+                TaskClass taskclass_instance = TaskClass.findByTaskAndResultclassAndObservationTestRun(this,resultclass_instance,true,[sort:"id"])
+                if (taskclass_instance) {
+                    if (first_taskclass_instance) {
+                        if ((first_taskclass_instance.observationTestTurnpointRun != taskclass_instance.observationTestTurnpointRun) ||
+                            (first_taskclass_instance.observationTestEnroutePhotoRun != taskclass_instance.observationTestEnroutePhotoRun) ||
+                            (first_taskclass_instance.observationTestEnrouteCanvasRun != taskclass_instance.observationTestEnrouteCanvasRun))
+                        {
+                            taskclasses_different = true
+                            result_class_ids += resultclass_instance.id
+                        } else if (contest.contestRuleForEachClass && checkPenalties) {
+                            if ((first_resultclass_instance.observationTestEnrouteValueUnit != resultclass_instance.observationTestEnrouteValueUnit) ||
+                                (first_resultclass_instance.observationTestEnrouteCorrectValue != resultclass_instance.observationTestEnrouteCorrectValue) ||
+                                (first_resultclass_instance.observationTestEnrouteInexactValue != resultclass_instance.observationTestEnrouteInexactValue))
+                            {
+                                taskclasses_different = true
+                                result_class_ids += resultclass_instance.id
+                            }
+                        } 
+                    } else {
+                        first_taskclass_instance = taskclass_instance
+                        first_resultclass_instance = resultclass_instance
+                        result_class_ids += resultclass_instance.id
+                    }
+                }
+            }
+        }
+        if (taskclasses_different) {
+            return result_class_ids
+        }
+        return []
+    }
+    
+    List GetPlanningTests()
+    {
+        List test_instances = []
+        for (Test test_instance in Test.findAllByTaskAndScannedPlanningTestAndPlanningTestCompleteAndPlanningtesttaskIsNotNull(this,null,false,[sort:"id"])) {
+            if (test_instance.IsPlanningTestRun()) {
+                test_instances += test_instance
+            }
+        }
+        return test_instances
+    }
+    
+    List GetFlightTests()
+    {
+        List test_instances = []
+        for (Test test_instance in Test.findAllByTaskAndFlightTestComplete(this,false,[sort:"id"])) {
+            if (test_instance.IsFlightTestRun()) {
+                test_instances += test_instance
+            }
+        }
+        return test_instances
+    }
+
+    List GetObservationTests()
+    {
+        List test_instances = []
+        for (Test test_instance in Test.findAllByTaskAndScannedObservationTestAndObservationTestComplete(this,null,false,[sort:"id"])) {
+            if (test_instance.IsObservationTestRun()) {
+                test_instances += test_instance
+            }
+        }
+        return test_instances
+    }
+
 }

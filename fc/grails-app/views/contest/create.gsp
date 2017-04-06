@@ -46,7 +46,7 @@
                             <p>
                                 <label>${message(code:'fc.contestrule')}*:</label>
                                 <br/>
-                                <g:select from="${ContestRules.values()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" tabIndex="4"/>
+                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" tabIndex="4"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.scale')}*:</label>
