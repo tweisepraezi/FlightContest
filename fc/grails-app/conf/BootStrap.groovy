@@ -49,6 +49,11 @@ class BootStrap {
 			println "  DB ${global.versionMajor}.${global.versionMinor} created."
 		}
 		
+        mk_root_dir(servletContext, Defs.ROOT_FOLDER_GPXUPLOAD)
+        mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS)
+        mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS_DONE)
+        mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS_ERROR)
+        
 		switch (global.dbCompatibility) {
 			case "upgrade":
 				println "  Upgrade database..."
@@ -829,5 +834,15 @@ class BootStrap {
     }
     
     def destroy = {
+    }
+    
+    private void mk_root_dir(def actServletContext, String dirName)
+    {
+        String webroot_dir =  actServletContext.getRealPath("/")
+        File root_dir = new File("${webroot_dir}${dirName}")
+        if (!root_dir.exists()) {
+            println "'${root_dir}' created."
+            root_dir.mkdir()
+        }
     }
 } 

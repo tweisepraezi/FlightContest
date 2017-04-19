@@ -210,6 +210,9 @@
 	                </g:if>
 				</g:if>
 				<g:else>
+                    <g:if test="${Global.IsCloudFoundryEnvironment()}">
+                        <h1 id="brandingcf">${message(code:'fc.program.cftitle')}</h1>
+                    </g:if>                 
 	                <h1 id="branding">
 	                    <g:if test="${session?.contestTitle}">
 	                    	${HTMLFilter.EncodeAsHTML(session.contestTitle)}

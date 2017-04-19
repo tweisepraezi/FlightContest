@@ -117,14 +117,16 @@ class GlobalController {
             config_dir.mkdir()
         }
 
-        CheckAndCreateDir("C:/FCSave")
-        CheckAndCreateDir("C:/FCSave/.fc")
-        String config_file_name = "C:/FCSave/.fc/config.groovy"
-        fcService.println "Save $config_file_name"
-        File config_file = new File(config_file_name)
-        BufferedWriter config_file_writer = config_file.newWriter()
-        config_file_writer.write(session.configText)
-        config_file_writer.close()
+        if (!Global.IsCloudFoundryEnvironment()) {
+            CheckAndCreateDir("C:/FCSave")
+            CheckAndCreateDir("C:/FCSave/.fc")
+            String config_file_name = "C:/FCSave/.fc/config.groovy"
+            fcService.println "Save $config_file_name"
+            File config_file = new File(config_file_name)
+            BufferedWriter config_file_writer = config_file.newWriter()
+            config_file_writer.write(session.configText)
+            config_file_writer.close()
+        }
         
         fcService.printdone ""
         redirect(action:info,params:[lang:params.showLanguage])

@@ -61,7 +61,7 @@
                     </tbody>
                 </table>
             </g:if>
-            <p>${message(code:'fc.program.foot')}</p>
+            <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>
         </div>
     </body>
 </html>

@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-06.04.2017
+19.04.2017
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -106,8 +106,9 @@ Erweiterungen in dieser Version (3.1):
     Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017
     Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017
     Navigationsflug-Reglement Österreich - Ausgabe 2017
-- Englische Bediensanleitung Version 3.0 hinzugefügt
+- Englische Bedienungsanleitung Version 3.0 hinzugefügt
     -> 'Programme -> Flight Contest -> Manual'
+- Cloud-Demo
 
 Erweiterungen in Version 3.0:
 -----------------------------

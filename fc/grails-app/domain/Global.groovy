@@ -59,6 +59,14 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    static boolean IsCloudFoundryEnvironment() 
+    {
+        if (grails.util.GrailsUtil.getEnvironment().equals("cloudfoundry")) {
+            return true
+        }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     boolean IsEMailPossible()
     {
         if (grailsApplication.config.grails.mail.host 
@@ -205,6 +213,9 @@ class Global
             {
                 return false
             }
+            return true
+        }
+        if (IsCloudFoundryEnvironment()) {
             return true
         }
         if (   grailsApplication.config.flightcontest.wrlog

@@ -351,7 +351,7 @@ class PlanningtaskResultsTagLib
     {
         String t = name
         if (testLegPlanningInstance.resultEntered) {
-            t += """ <img src="/fc/images/skin/ok.png"/>"""
+            t += """ <img src="${createLinkTo(dir:'',file:'images/skin/ok.png')}"/>"""
         } else {
             t += " ..."
         }

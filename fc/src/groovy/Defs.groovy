@@ -1,6 +1,11 @@
 class Defs
 {
     static final String GPX_VIEWER_VERSION                             = "GM_Utils-5.18.1a"
+ 
+    static final String ROOT_FOLDER_GPXUPLOAD                          = "gpxupload"
+    static final String ROOT_FOLDER_JOBS                               = "jobs"
+    static final String ROOT_FOLDER_JOBS_DONE                          = "jobs/done"
+    static final String ROOT_FOLDER_JOBS_ERROR                         = "jobs/error"
     
     static final String TurnpointID_TimeCheck                          = "timecheck_"
     static final String TurnpointID_NotFound                           = "notfound_"

@@ -120,7 +120,7 @@ class RouteTagLib
         for (EnrouteCanvasSign v in EnrouteCanvasSign.values()) {
             if (attrs.create && (attrs.coordEnroute.route.enrouteCanvasRoute == EnrouteRoute.InputName)) {
                 if (v != EnrouteCanvasSign.None && (attrs.coordEnroute.route.contest.enrouteCanvasMultiple ||!attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v))) {
-                    checkBoxImg("enrouteCanvasSign_${v.canvasName}", v.canvasName, v.imageName, attrs)
+                    checkBoxImg("enrouteCanvasSign_${v.canvasName}", v.canvasName, createLinkTo(dir:'',file:v.imageName), attrs)
                 }
             } else {
                 if (v == EnrouteCanvasSign.None) {
@@ -133,9 +133,9 @@ class RouteTagLib
                     }
                 } else {
                     if (attrs.coordEnroute.enrouteCanvasSign == v) {
-                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/><img src="${v.imageName}" style="height:16px;"/> ${v.canvasName}</label>"""
+                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
                     } else if (attrs.coordEnroute.route.contest.enrouteCanvasMultiple || !attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v)) {
-                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]++}"/><img src="${v.imageName}" style="height:16px;"/> ${v.canvasName}</label>"""
+                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]++}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
                     }
                 }
             }
@@ -771,7 +771,7 @@ class RouteTagLib
                 }
                 s += """        </td>"""
                 outln s
-                outln"""        <td style="white-space: nowrap;"><img src="${coordenroutecanvas_instance.enrouteCanvasSign.imageName}" style="height:16px;"/> ${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>"""
+                outln"""        <td style="white-space: nowrap;"><img src="${createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName)}" style="height:16px;"/> ${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>"""
                 
                 if (attrs.route.enrouteCanvasRoute != EnrouteRoute.InputName) {
                     outln"""        <td style="white-space: nowrap;">${coordenroutecanvas_instance.latName()}</td>"""
@@ -827,7 +827,7 @@ class RouteTagLib
     private String coordroutenum(Coord coordInstance, int num, long nextId, String link, boolean showMeasure) {
         String t = num.toString()
         if (showMeasure && coordInstance.IsRouteMeasure()) {
-            t += """ <img src="/fc/images/skin/ok.png"/>"""
+            t += """ <img src="${createLinkTo(dir:'',file:'images/skin/ok.png')}"/>"""
         } else {
             t += " ..."
         }

@@ -15,4 +15,9 @@ environments {
     }
     production {
     }
+    cloudfoundry {
+        quartz {
+            autoStartup = false
+        }
+    }
 }

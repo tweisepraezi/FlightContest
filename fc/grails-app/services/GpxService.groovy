@@ -54,7 +54,6 @@ class GpxService
     final static String COLOR_WARNING = "blue"
     
     final static String GPXDATA = "GPXDATA"
-    final static String GPXUPLOAD = "gpxupload"
 	
 	//--------------------------------------------------------------------------
 	boolean RepairGAC(String gacOriginalFileName, String gacRepairFileName, boolean repairTracks, boolean repairIdenticalTimes)
@@ -666,7 +665,7 @@ class GpxService
             gpx_reader = new BufferedReader(gpx_data)
         } else {
             String gpx_file_name = gpxFileName
-            if (gpxFileName.startsWith(GPXUPLOAD)) {
+            if (gpxFileName.startsWith(Defs.ROOT_FOLDER_GPXUPLOAD)) {
                 gpx_file_name = servletContext.getRealPath("/") + gpxFileName
             }
             File gpx_file = new File(gpx_file_name)
@@ -1194,7 +1193,7 @@ class GpxService
             gpx_reader = new BufferedReader(gpx_data)
         } else {
             String gpx_file_name = gpxFileName
-            if (gpxFileName.startsWith(GPXUPLOAD)) {
+            if (gpxFileName.startsWith(Defs.ROOT_FOLDER_GPXUPLOAD)) {
                 gpx_file_name = servletContext.getRealPath("/") + gpxFileName
             }
             File gpx_file = new File(gpx_file_name)
@@ -2264,7 +2263,7 @@ class GpxService
                 
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir =  servletContext.getRealPath("/")
-                String live_html_file_name = "${webroot_dir}gpxupload/LIVE-${uuid}.htm"
+                String live_html_file_name = "${webroot_dir}${Defs.ROOT_FOLDER_GPXUPLOAD}/LIVE-${uuid}.htm"
                 
                 String live_url
                 if (uploadNoLiveResults) {
@@ -2402,7 +2401,7 @@ class GpxService
     {
         boolean found = false
         String webroot_dir = servletContext.getRealPath("/")
-        String analyze_dir = webroot_dir + "jobs"
+        String analyze_dir = webroot_dir + Defs.ROOT_FOLDER_JOBS
         File analyze_dir1 = new File(analyze_dir)
         analyze_dir1.eachFile() { File file ->
             if (file.isFile()) {
@@ -2544,11 +2543,11 @@ class GpxService
                     printdone ""
                 } else if (!ret.error) {
                     DeleteFile(remove_file)
-                    String new_file_name = webroot_dir + "jobs\\done\\" + file.name
+                    String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_DONE}/" + file.name
                     file.renameTo(new File(new_file_name))
                     printdone new_file_name
                 } else {
-                    String new_file_name = webroot_dir + "jobs\\error\\" + file.name
+                    String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_ERROR}/" + file.name
                     file.renameTo(new File(new_file_name))
                     printerror new_file_name
                 }
@@ -2571,7 +2570,7 @@ class GpxService
             }
         } else {
             String file_name = fileName
-            if (fileName.startsWith(GPXUPLOAD)) {
+            if (fileName.startsWith(Defs.ROOT_FOLDER_GPXUPLOAD)) {
                 file_name = servletContext.getRealPath("/") + fileName
             }
             File file = new File(file_name)

@@ -86,7 +86,7 @@ class DisableCheckPointsTagLib
             outln"""            <td>"""
             for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
                 String check_title = "${coordenroutecanvas_instance.enrouteCanvasSign.canvasName},"
-                checkBox2("${Defs.EnrouteID_CanvasObs}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}", attrs.t.disabledEnrouteCanvasObs.contains(check_title),coordenroutecanvas_instance.enrouteCanvasSign.canvasName,coordenroutecanvas_instance.enrouteCanvasSign.imageName)
+                checkBox2("${Defs.EnrouteID_CanvasObs}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}", attrs.t.disabledEnrouteCanvasObs.contains(check_title),coordenroutecanvas_instance.enrouteCanvasSign.canvasName,createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName))
             }
             outln"""            </td>"""
             outln"""        </tr>"""
@@ -150,7 +150,7 @@ class DisableCheckPointsTagLib
                     outln"""<td>"""
                     for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRouteAndTypeAndTitleNumber(routeInstance,coordrouteInstance.type,coordrouteInstance.titleNumber,[sort:"enrouteViewPos"])) {
                         String check_title2 = "${coordenroutecanvas_instance.enrouteCanvasSign.canvasName},"
-                        checkBox2("${Defs.EnrouteID_CanvasObs}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}", taskInstance.disabledEnrouteCanvasObs.contains(check_title2),coordenroutecanvas_instance.enrouteCanvasSign.canvasName,coordenroutecanvas_instance.enrouteCanvasSign.imageName)
+                        checkBox2("${Defs.EnrouteID_CanvasObs}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}", taskInstance.disabledEnrouteCanvasObs.contains(check_title2),coordenroutecanvas_instance.enrouteCanvasSign.canvasName,createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName))
                     }
                     outln"""</td>"""
                 }

@@ -260,8 +260,9 @@ class ObservationFormsTagLib
             outln"""    <tbody>"""
             for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                 if (enroutecanvas_measurement == EnrouteMeasurement.Map) {
+                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
                     outln"""<tr class="data">"""
-                    outln"""    <td class="sign"><img src="${enroutecanvasdata_instance.canvasSign.imageName}"/></td>"""
+                    outln"""    <td class="sign"><img src="${image_name}"/></td>"""
                     outln"""    <td class="correct" />"""
                     if (show_inexact_pos) {
                         outln"""<td class="inexact" />"""
@@ -269,9 +270,10 @@ class ObservationFormsTagLib
                     outln"""    <td class="false" />"""
                     outln"""</tr>"""
                 } else if (enroutecanvas_measurement == EnrouteMeasurement.NMFromTP) {
+                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
                     outln"""<tr class="data">"""
                     if (attrs.printResults) {
-                        outln"""<td class="sign"><img src="${enroutecanvasdata_instance.canvasSign.imageName}"/></td>"""
+                        outln"""<td class="sign"><img src="${image_name}"/></td>"""
                         outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
                         outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)}</td>"""
                     } else {
@@ -281,9 +283,10 @@ class ObservationFormsTagLib
                     }
                     outln"""</tr>"""
                 } else if (enroutecanvas_measurement == EnrouteMeasurement.mmFromTP) {
+                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
                     outln"""<tr class="data">"""
                     if (attrs.printResults) {
-                        outln"""<td class="sign"><img src="${enroutecanvasdata_instance.canvasSign.imageName}"/></td>"""
+                        outln"""<td class="sign"><img src="${image_name}"/></td>"""
                         outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
                         outln"""<td class="mmfromtp">${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)}</td>"""
                     } else {

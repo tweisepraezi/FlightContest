@@ -1239,13 +1239,13 @@ class FlightResultsTagLib
         String t = name
         if (procedureTurn) {
             if (coordResultInstance.resultProcedureTurnEntered) {
-              t += """ <img src="/fc/images/skin/ok.png"/>"""
+              t += """ <img src="${createLinkTo(dir:'',file:'images/skin/ok.png')}"/>"""
             } else {
                 t += " ..."
             }
         } else {
             if (coordResultInstance.resultEntered) {
-              t += """ <img src="/fc/images/skin/ok.png"/>"""
+              t += """ <img src="${createLinkTo(dir:'',file:'images/skin/ok.png')}"/>"""
             } else {
                 t += " ..."
             }

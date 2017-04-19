@@ -82,22 +82,6 @@ class FcTagLib
     }
     
     // ====================================================================================================================
-    // <g:coordroutenum var="${coordRouteInstance}" num="${i}" next="${next}" link="${createLink(controller:'coordRoute',action:'show')}"/>
-   def coordroutenum = { p ->
-    	String t = p.num.toString()
-        if (p.var.IsRouteMeasure()) {
-			t += """ <img src="/fc/images/skin/ok.png"/>"""
-		} else {
-			t += " ..."
-		}
-		if (p.next) {
-			out << """<a href="${p.link}/${p.var.id}?next=${p.next}">${t}</a>""" // .encodeAsHTML()
-		} else {
-			out << """<a href="${p.link}/${p.var.id}">${t}</a>""" // .encodeAsHTML()
-		}
-    }
-    
-    // ====================================================================================================================
     // <g:contest var="${contestInstance}" link="${createLink(controller:'contest',action:'show')}"/>
     def contest = { p ->
         out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
@@ -106,17 +90,17 @@ class FcTagLib
     // ====================================================================================================================
     // <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>
     def task = { p ->
-        if (p.link == "/fc/task/listplanning") {
+        if (p.link == "${createLinkTo(dir:'',file:'task/listplanning')}") {
        		out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.planning')})</a>"""
-        } else if (p.link == "/fc/task/listresults") {
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/listresults')}") {
             out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.results')})</a>"""
-        } else if (p.link == "/fc/task/disabledcheckpoints") {
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/disabledcheckpoints')}") {
             out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
-        } else if (p.link == "/fc/task/timetable") {
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/timetable')}") {
 			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetable')}</a>"""
-        } else if (p.link == "/fc/task/timetablejury") {
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/timetablejury')}") {
 			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetablejury')}</a>"""
-        } else if (p.link == "/fc/task/timetableoverview") {
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/timetableoverview')}") {
             out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetableoverview')}</a>"""
         } else {
         	out << """<a href="${p.link}/${p.var.id}">${p.var.bestOfName().encodeAsHTML()} (${message(code:'fc.task.settings')})</a>"""

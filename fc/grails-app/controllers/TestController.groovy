@@ -1474,7 +1474,7 @@ class TestController
             gpxService.printstart "Show map of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
             Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, true, true) // false - no Print, true - Points, true - wrEnrouteSign
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
@@ -1503,7 +1503,7 @@ class TestController
             gpxService.printstart "Export logger data of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
             Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, false, true) // false - no Print, false - no Points, true - wrEnrouteSign
             if (converter.ok && converter.track) {
                 String logger_file_name = (test.instance.GetTitle(ResultType.Flight) + '.gpx').replace(' ',"_")
@@ -1547,12 +1547,12 @@ class TestController
             long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-EMAIL.gpx"
+            String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-EMAIL.gpx"
             Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, true, true, true) // true - Print, true - Points, true - wrEnrouteSign
             if (converter.ok && converter.track) {
                 
                 Map email = test.instance.GetEMailBody()
-                String job_file_name = "jobs/JOB-${uuid}.job"
+                String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
                 try {
                     // create email job
                     File job_file = new File(webroot_dir + job_file_name)

@@ -24,8 +24,8 @@ class GpxController
 			gpxService.println file.getContentType() // "text/xml" 
 			String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-			String upload_filename = "gpxupload/LOGGERDATA-${uuid}-UPLOAD${file_extension}"
-            String gpx_filename = "gpxupload/LOGGERDATA-${uuid}-UPLOAD.gpx"
+			String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/LOGGERDATA-${uuid}-UPLOAD${file_extension}"
+            String gpx_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/LOGGERDATA-${uuid}-UPLOAD.gpx"
             
             gpxService.printstart "Upload $original_filename -> $upload_filename"
             file.transferTo(new File(webroot_dir,upload_filename))
@@ -105,7 +105,7 @@ class GpxController
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String upload_file_name = "GAC-${uuid}-UPLOAD.gac"
-                String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+                String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
                 
                 gpxService.printstart "Upload $original_filename -> $upload_file_name"
                 file.transferTo(new File(upload_file_name))

@@ -194,7 +194,7 @@
                         <tbody>
                             <g:each var="coordenroutecanvas_instance" in="${CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])}">
                                 <tr class="value">
-                                    <td class="canvassign"><img src="${coordenroutecanvas_instance.enrouteCanvasSign.imageName}" /><br/>${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>
+                                    <td class="canvassign"><img src="${createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName)}" /><br/>${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>
                                     <td class="coords">${coordenroutecanvas_instance.namePrintable(false,true)}</td>
                                     <td class="distfromtp">${FcMath.DistanceStr(coordenroutecanvas_instance.enrouteDistance)}${message(code:'fc.mile')}<br/>${FcMath.DistanceMeasureStr(coordenroutecanvas_instance.GetMeasureDistance())}${message(code:'fc.mm')}<br/>${coordenroutecanvas_instance.GetPrintEnrouteOrthogonalDistance()}</td>
                                     <td class="tpname">${coordenroutecanvas_instance.titlePrintCode()}</td>

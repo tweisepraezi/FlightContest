@@ -24,12 +24,16 @@ class ContestController {
         boolean restart = false
         
         // check ShowLanguage
-        String show_language = fcService.GetCookie("ShowLanguage",Languages.de.toString())
-        if (show_language) {
-            if (session?.showLanguage != show_language) {
-                restart = true
+        String show_language = ""
+        if (!session?.showLanguage) {
+            show_language = fcService.GetCookie("ShowLanguage",Languages.de.toString())
+            if (show_language) {
+                if (session?.showLanguage != show_language) {
+                    restart = true
+                }
+                fcService.println "Set showLanguage to '$show_language'"
+                session.showLanguage = show_language
             }
-            session.showLanguage = show_language
         }
 
         if (restart) {
@@ -37,15 +41,21 @@ class ContestController {
 			redirect(controller:'contest',action:'start',params:[lang:show_language])
         } else {
             // PrintLanguage
-            String print_language = fcService.GetCookie("PrintLanguage",Languages.de.toString())
-            if (print_language) {
-                session.printLanguage = print_language
+            if (!session?.printLanguage) {
+                String print_language = fcService.GetCookie("PrintLanguage",Languages.de.toString())
+                if (print_language) {
+                    fcService.println "Set printLanguage to '$print_language'"
+                    session.printLanguage = print_language
+                }
             }
             
             // ShowLimitCrewNum
-            String showLimitCrewNum = fcService.GetCookie("ShowLimitCrewNum","10")
-            if (showLimitCrewNum) {
-                session.showLimitCrewNum = showLimitCrewNum.toInteger() 
+            if (!session?.showLimitCrewNum) {
+                String showLimitCrewNum = fcService.GetCookie("ShowLimitCrewNum","10")
+                if (showLimitCrewNum) {
+                    fcService.println "Set showLimitCrewNum to '$showLimitCrewNum'"
+                    session.showLimitCrewNum = showLimitCrewNum.toInteger() 
+                }
             }
             
             if (BootStrap.global.IsDBOlder()) {
@@ -56,11 +66,14 @@ class ContestController {
                 redirect(controller:'contest',action:'nostart',params:[reason:"newer"])
             } else {
                 // LastContestID
-                String lastContestID = fcService.GetCookie("LastContestID","")
-                if (lastContestID) {
-                    Contest last_contest = Contest.findById(lastContestID.toInteger())
-                    if (last_contest) {
-                        session.lastContest = last_contest
+                if (!session?.lastContest) {
+                    String lastContestID = fcService.GetCookie("LastContestID","")
+                    if (lastContestID) {
+                        Contest last_contest = Contest.findById(lastContestID.toInteger())
+                        if (last_contest) {
+                            fcService.println "Set lastContest to '$lastContestID'"
+                            session.lastContest = last_contest
+                        }
                     }
                 }
                 if (session?.lastContest) {

@@ -240,8 +240,9 @@ class ObservationResultsTagLib
                 }
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                     boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
+                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
                     outln"""    <tr>"""
-                    outln"""        <td><img src="${enroutecanvasdata_instance.canvasSign.imageName}" style="height:14px;"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+                    outln"""        <td><img src="${image_name}" style="height:14px;"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
                     switch (attrs.t.GetEnrouteCanvasMeasurement()) {
                         case EnrouteMeasurement.Map:
                             String s = ""
@@ -716,8 +717,9 @@ class ObservationResultsTagLib
                 outln"""    <tbody>"""
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                     boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
+                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
                     outln"""    <tr>"""
-                    outln"""        <td><img src="${enroutecanvasdata_instance.canvasSign.imageName}" style="height:16px;"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+                    outln"""        <td><img src="${image_name}" style="height:16px;"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
                     switch (attrs.t.GetEnrouteCanvasMeasurement()) {
                         case EnrouteMeasurement.Map:
                             outln"""<td>"""
@@ -1076,8 +1078,9 @@ class ObservationResultsTagLib
                 outln"""    <tbody>"""
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                     boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
-                    outln"""    <tr class="value" id="${enroutecanvasdata_instance.canvasSign.imageName}">"""
-                    outln"""        <td class="imagename"><img src="${enroutecanvasdata_instance.canvasSign.imageName}" /> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+                    outln"""    <tr class="value" id="${image_name}">"""
+                    outln"""        <td class="imagename"><img src="${image_name}" /> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
                     switch (attrs.t.GetEnrouteCanvasMeasurement()) {
                         case EnrouteMeasurement.Map:
                             String s = ""

@@ -22,7 +22,7 @@
                             <p>${message(code:'fc.route.fileimport.coords.info1')}<br/>${message(code:'fc.route.fileimport.coords.info2')}</p>
                         </div>
                         <div>
-                            <p>${message(code:'fc.route.fileimport.info.txt')}<br/>${params.lineContent}</p>
+                            <p>${message(code:'fc.route.fileimport.info.txt')}<br/>${HTMLFilter.FilterParam(params.lineContent)}</p>
                         </div>
                         <p>
                             <div>

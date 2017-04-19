@@ -15,7 +15,7 @@
                         <g:if test="${url}">
                             <p>${message(code:'fc.uploaded.link',args:["${url}"])}</p>
                         </g:if>
-                        <p>${message(code:'fc.program.foot')}</p>
+                        <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>
                     </g:form>
                 </div>
             </div>

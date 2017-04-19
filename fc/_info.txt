@@ -21,6 +21,12 @@
     -------------------------
         grailsApplication.config.grails.mail.host = ...
     
+    Zugriff auf interne Ressourcen
+    ------------------------------
+        createLinkTo(dir:'',file:'images/fc.ico')
+        geht in GSP und TagLib
+        ${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}
+
     Drucken
     -------
         printService.WritePDF(response,contest.content,session.lastContest.GetPrintPrefix(),"freetext",true,session.lastContest.printFreeTextA3,session.lastContest.printFreeTextLandscape)
@@ -58,6 +64,20 @@
     -------
         import org.springframework.web.context.request.RequestContextHolder
         def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+        
+    Sort list of maps
+    -----------------
+    List l = []
+    Map new_entry = [name:'a']
+    l += new_entry
+    
+    // Groovy 2.4
+    l = l.asImmutable().toSorted { a, b -> a.name <=> b.name }
+    
+    // Grails
+    l.sort { p1, p2 ->
+        p1.name.compareTo(p2.name)
+    }
 
 
 Konfiguration
@@ -114,8 +134,15 @@ Development
             showmenu = true
           }
         }
-    
-    
+
+
+CloudFoundry
+============
+    Build
+    -----
+        -Dgrails.env=cloudfoundry war
+
+
 Caused by: java.lang.OutOfMemoryError: PermGen space
 ====================================================
     http://javarevisited.blogspot.com/2011/09/javalangoutofmemoryerror-permgen-space.html

@@ -1137,7 +1137,7 @@ class PrintService
                         }
                         String uuid = UUID.randomUUID().toString()
                         String flight_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-                        String flight_map_file_name = "${webRootDir}gpxupload/PNG-${uuid}-FLIGHT.png"
+                        String flight_map_file_name = "${webRootDir}${Defs.ROOT_FOLDER_GPXUPLOAD}/PNG-${uuid}-FLIGHT.png"
                         boolean is_flight = false
                         if (task.instance.printFlightMap && test_instance.IsFlightTestRun() && test_instance.IsShowMapPossible()) {
                             Map converter = gpxService.ConvertTest2PrintMap(test_instance, flight_gpx_file_name, flight_map_file_name)
@@ -1279,7 +1279,7 @@ class PrintService
             String url = "${printparams.baseuri}/test/flightresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             String uuid = UUID.randomUUID().toString()
             String flight_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            String flight_map_file_name = "${webRootDir}gpxupload/PNG-${uuid}-FLIGHT.png"
+            String flight_map_file_name = "${webRootDir}${Defs.ROOT_FOLDER_GPXUPLOAD}/PNG-${uuid}-FLIGHT.png"
             if (test.instance.IsShowMapPossible()) {
                 Map converter = gpxService.ConvertTest2PrintMap(test.instance, flight_gpx_file_name, flight_map_file_name)
                 if (converter.ok && converter.track) {
@@ -1321,7 +1321,7 @@ class PrintService
             String url = "${printparams.baseuri}/test/flightresultsmeasureprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             String uuid = UUID.randomUUID().toString()
             String flight_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            String flight_map_file_name = "${webRootDir}gpxupload/PNG-${uuid}-FLIGHT.png"
+            String flight_map_file_name = "${webRootDir}${Defs.ROOT_FOLDER_GPXUPLOAD}/PNG-${uuid}-FLIGHT.png"
             if (test.instance.IsShowMapPossible()) {
                 Map converter = gpxService.ConvertTest2PrintMap(test.instance, flight_gpx_file_name, flight_map_file_name)
                 if (converter.ok && converter.track) {
@@ -1376,7 +1376,7 @@ class PrintService
             }
             String uuid = UUID.randomUUID().toString()
             String flight_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            String flight_map_file_name = "${webRootDir}gpxupload/PNG-${uuid}-FLIGHT.png"
+            String flight_map_file_name = "${webRootDir}${Defs.ROOT_FOLDER_GPXUPLOAD}/PNG-${uuid}-FLIGHT.png"
             if (test.instance.printFlightMap && test.instance.IsShowMapPossible()) {
                 Map converter = gpxService.ConvertTest2PrintMap(test.instance, flight_gpx_file_name, flight_map_file_name)
                 if (converter.ok && converter.track) {

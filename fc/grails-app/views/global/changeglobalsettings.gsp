@@ -30,13 +30,15 @@
                                 <input type="text" id="showLimitCrewNum" name="showLimitCrewNum" value="${fieldValue(bean:session,field:'showLimitCrewNum')}" tabIndex="3"/>
                             </p>
                         </fieldset>
-                        <fieldset>
-	                        <p>
-	                            <label>${message(code:'fc.config')}:</label>
-	                            <br/>
-	                            <g:textArea name="configText" value="${session.configText}" rows="20" cols="110" tabIndex="4"/>
-	                        </p>
-                        </fieldset>
+                        <g:if test="${!Global.IsCloudFoundryEnvironment()}">
+	                        <fieldset>
+		                        <p>
+		                            <label>${message(code:'fc.config')}:</label>
+		                            <br/>
+		                            <g:textArea name="configText" value="${session.configText}" rows="20" cols="110" tabIndex="4"/>
+		                        </p>
+	                        </fieldset>
+	                    </g:if>
                         <input type="hidden" name="lastShowLimitCrewNum" value="${lastShowLimitCrewNum}"/>
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="101"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="102"/>

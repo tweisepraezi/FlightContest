@@ -853,7 +853,7 @@ class TaskController {
     def exporttimetable = {
         String uuid = UUID.randomUUID().toString()
         String webroot_dir = servletContext.getRealPath("/")
-        String upload_file_name = "gpxupload/TXT-${uuid}-UPLOAD.txt"
+        String upload_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/TXT-${uuid}-UPLOAD.txt"
         def task = fcService.exporttimetableTask(params, webroot_dir + upload_file_name)
         if (task.instance) {
             if (!task.error) {

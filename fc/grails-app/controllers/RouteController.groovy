@@ -439,7 +439,7 @@ class RouteController {
             gpxService.printstart "Show map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
             Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, true, true) // false - no Print, true - Points, true - wrEnrouteSign
             if (converter.ok) {
                 gpxService.printdone ""
@@ -467,7 +467,7 @@ class RouteController {
             gpxService.printstart "Export '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-            String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+            String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
             Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, false, true) // false - no Print, false - no Points, true - wrEnrouteSign
             if (converter.ok) {
                 String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
@@ -495,7 +495,7 @@ class RouteController {
             gpxService.printstart "Export '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-            String upload_ref_file_name = "gpxupload/REF-${uuid}-UPLOAD.ref"
+            String upload_ref_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/REF-${uuid}-UPLOAD.ref"
             Map converter = AflosTools.ConvertRoute2REF(route.instance, webroot_dir + upload_ref_file_name)
             if (converter.ok) {
                 String route_file_name = (route.instance.mark + '.ref').replace(' ',"_")
@@ -534,12 +534,12 @@ class RouteController {
                 gpxService.printstart "Send mail of '${route.instance.name()}' to '${email_to}'"
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
-                String upload_gpx_file_name = "gpxupload/GPX-${uuid}-UPLOAD.gpx"
+                String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true, true) // true - Print, true - Points, true - wrEnrouteSign
                 if (converter.ok) {
                     Map email = GetEMailBody(session.lastContest, route.instance)
                     
-                    String job_file_name = "jobs/JOB-${uuid}.job"
+                    String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
                     BufferedWriter job_writer = null
                     try {
                         // create email job

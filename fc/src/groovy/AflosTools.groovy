@@ -13,20 +13,24 @@ class AflosTools
     //--------------------------------------------------------------------------
     static boolean ExistAnyAflosRoute(Contest contestInstance)
     {
-        if (contestInstance.aflosTest) {
-            if (AflosRouteNames.aflostest.count() < 2) {
-                return false
+        try {
+            if (contestInstance.aflosTest) {
+                if (AflosRouteNames.aflostest.count() < 2) {
+                    return false
+                }
+            } else if (contestInstance.aflosUpload) {
+                if (AflosRouteNames.aflosupload.count() < 2) {
+                    return false
+                }
+            } else {
+                if (AflosRouteNames.aflos.count() < 2) {
+                    return false
+                }
             }
-        } else if (contestInstance.aflosUpload) {
-            if (AflosRouteNames.aflosupload.count() < 2) {
-                return false
-            }
-        } else {
-            if (AflosRouteNames.aflos.count() < 2) {
-                return false
-            }
+            return true
+        } catch (Exception e) {
         }
-        return true
+        return false
     }
     
     //--------------------------------------------------------------------------
@@ -96,18 +100,21 @@ class AflosTools
     //--------------------------------------------------------------------------
     static boolean ExistAnyAflosCrew(Contest contestInstance)
     {
-        if (contestInstance.aflosTest) {
-            if (AflosCrewNames.aflostest.countByPointsNotEqual(0) > 0) {
-                return true
+        try {
+            if (contestInstance.aflosTest) {
+                if (AflosCrewNames.aflostest.countByPointsNotEqual(0) > 0) {
+                    return true
+                }
+            } else if (contestInstance.aflosUpload) {
+                if (AflosCrewNames.aflosupload.countByPointsNotEqual(0) > 0) {
+                    return true
+                }
+            } else {
+                if (AflosCrewNames.aflos.countByPointsNotEqual(0) > 0) {
+                    return true
+                }
             }
-        } else if (contestInstance.aflosUpload) {
-            if (AflosCrewNames.aflosupload.countByPointsNotEqual(0) > 0) {
-                return true
-            }
-        } else {
-            if (AflosCrewNames.aflos.countByPointsNotEqual(0) > 0) {
-                return true
-            }
+        } catch (Exception e) {
         }
         return false
     }
@@ -115,19 +122,22 @@ class AflosTools
     //--------------------------------------------------------------------------
     static boolean ExistAnyAflosCheckPoints(Contest contestInstance, String aflosRouteName)
     {
-        AflosRouteNames aflos_route_name = GetAflosRouteName(contestInstance, aflosRouteName)
-        if (contestInstance.aflosTest) {
-            if (AflosCheckPoints.aflostest.findByRoutename(aflos_route_name)) {
-                return true
+        try {
+            AflosRouteNames aflos_route_name = GetAflosRouteName(contestInstance, aflosRouteName)
+            if (contestInstance.aflosTest) {
+                if (AflosCheckPoints.aflostest.findByRoutename(aflos_route_name)) {
+                    return true
+                }
+            } else if (contestInstance.aflosUpload) {
+                if (AflosCheckPoints.aflosupload.findByRoutename(aflos_route_name)) {
+                    return true
+                }
+            } else {
+                if (AflosCheckPoints.aflos.findByRoutename(aflos_route_name)) {
+                    return true
+                }
             }
-        } else if (contestInstance.aflosUpload) {
-            if (AflosCheckPoints.aflosupload.findByRoutename(aflos_route_name)) {
-                return true
-            }
-        } else {
-            if (AflosCheckPoints.aflos.findByRoutename(aflos_route_name)) {
-                return true
-            }
+        } catch (Exception e) {
         }
         return false
 

@@ -1833,7 +1833,7 @@ class PointsTagLib
                 if (landingfield_imagename.contains('*')) {
                     landingfield_imagename = landingfield_imagename.replace('*', "_${attrs.lang}")
                 }
-                outln"""<img class="landingfield" src="${landingfield_imagename}" />"""
+                outln"""<img class="landingfield" src="${createLinkTo(dir:'',file:landingfield_imagename)}" />"""
             }
         }
         if (attrs.i.printPointsTurnpointSign || attrs.i.printPointsEnrouteCanvas) {
@@ -1852,7 +1852,7 @@ class PointsTagLib
                     if (sign != TurnpointSign.None) {
                         outln"""                <tr class="value">"""
                         outln"""                    <td class="name">${sign.title}</td>"""
-                        outln"""                    <td class="value"><img src="${sign.imageName}"/></td>"""
+                        outln"""                    <td class="value"><img src="${createLinkTo(dir:'',file:sign.imageName)}"/></td>"""
                         outln"""                </tr>"""
                     }
                 }
@@ -1869,7 +1869,7 @@ class PointsTagLib
                     if (sign != EnrouteCanvasSign.None) {
                         outln"""                <tr class="value">"""
                         outln"""                    <td class="name">${sign.canvasName}</td>"""
-                        outln"""                    <td class="value"><img src="${sign.imageName}"/></td>"""
+                        outln"""                    <td class="value"><img src="${createLinkTo(dir:'',file:sign.imageName)}"/></td>"""
                         outln"""                </tr>"""
                     }
                 }

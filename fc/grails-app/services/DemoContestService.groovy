@@ -33,7 +33,7 @@ class DemoContestService
                 ret = create_test( "2",ret,true,aflosDB,showLanguage)
                 long contest_id = ret.contestid
 				ret = create_test( "1",ret,true,aflosDB,showLanguage)
-                ret = create_test( "4",ret,true,aflosDB,showLanguage)
+                //ret = create_test( "4",ret,true,aflosDB,showLanguage)
 				ret = create_test("21",ret,true,aflosDB,showLanguage)
 				ret = create_test("22",ret,true,aflosDB,showLanguage)
 				ret = create_test("23",ret,true,aflosDB,showLanguage)
@@ -82,7 +82,7 @@ class DemoContestService
 				contest_id = demoContestStandardService.CreateTest3("Demo Wettbewerb (kombinierter Wettbewerb)", "demo3", false, aflosDB)
 				break
             case '4':
-                contest_id = demoContestObservationService.CreateTest("Demo Wettbewerb (Beobachtungen)", "demo4", true, aflosDB)
+                contest_id = demoContestObservationService.CreateTest("Demo Wettbewerb (Beobachtungen)", "demo4", false, aflosDB)
                 // ret = run_test(contest_id, runTest, aflosDB)
                 break
 			case '11':

@@ -28,4 +28,10 @@ class HTMLFilter {
         s = s.replace('&','&amp;')
         return s
     }
+    
+    static String FilterParam(String paramStr)
+    // repair params problem with GRAD
+    {
+        return paramStr.replaceAll("\u00c2", "") // Zeichen vor Grad entfernen
+    }
 }

@@ -4831,7 +4831,7 @@ class FcService
                 // upload file
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
-                String upload_filename = "gpxupload/ROUTE-${uuid}-UPLOAD${fileExtension}"
+                String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}-UPLOAD${fileExtension}"
                 printstart "Upload $original_filename -> $upload_filename"
                 file.transferTo(new File(webroot_dir, upload_filename))
                 printdone ""
@@ -4910,7 +4910,7 @@ class FcService
                 // upload file
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
-                String upload_filename = "gpxupload/ROUTE-${uuid}-UPLOAD${fileExtension}"
+                String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}-UPLOAD${fileExtension}"
                 printstart "Upload $original_filename -> $upload_filename"
                 file.transferTo(new File(webroot_dir, upload_filename))
                 printdone ""
@@ -4989,7 +4989,7 @@ class FcService
                 // upload file
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
-                String upload_filename = "gpxupload/ENROUTE-${uuid}-UPLOAD${fileExtension}"
+                String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ENROUTE-${uuid}-UPLOAD${fileExtension}"
                 printstart "Upload $original_filename -> $upload_filename"
                 file.transferTo(new File(webroot_dir, upload_filename))
                 printdone ""
@@ -5110,7 +5110,7 @@ class FcService
                 // upload file
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
-                String upload_filename = "gpxupload/LOGGER-${uuid}-UPLOAD${fileExtension}"
+                String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/LOGGER-${uuid}-UPLOAD${fileExtension}"
                 printstart "Upload $original_filename -> $upload_filename"
                 file.transferTo(new File(webroot_dir, upload_filename))
                 printdone ""
@@ -8552,12 +8552,12 @@ class FcService
                         long nexttest_id = test_instance.GetNextTestID(ResultType.Flight)
                         String uuid = UUID.randomUUID().toString()
                         String webroot_dir = servletContext.getRealPath("/")
-                        String upload_gpx_file_name = "gpxupload/GPX-${uuid}-EMAIL.gpx"
+                        String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-EMAIL.gpx"
                         Map converter = gpxService.ConvertTest2GPX(test_instance, webroot_dir + upload_gpx_file_name, true, true, true) // true - Print, true - Points, true - wrEnrouteSign
                         if (converter.ok && converter.track) {
                             
                             Map email = test_instance.GetEMailBody()
-                            String job_file_name = "jobs/JOB-${uuid}.job"
+                            String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
                             try {
                                 // create email job
                                 File job_file = new File(webroot_dir + job_file_name)
@@ -13602,7 +13602,8 @@ class FcService
     //--------------------------------------------------------------------------
     private static String latlon_format(String expectedValue, String actualValue)
     {
-        return actualValue.substring(0,actualValue.size()-3) + expectedValue.substring(expectedValue.size()-3)
+        String actual_value = actualValue.replaceAll(",", ".")
+        return actual_value.substring(0,actual_value.size()-3) + expectedValue.substring(expectedValue.size()-3)
     }
     
     //--------------------------------------------------------------------------

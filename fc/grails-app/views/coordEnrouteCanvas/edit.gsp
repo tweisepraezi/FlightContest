@@ -35,7 +35,7 @@
                                 <tbody>
                                    <tr>
                                        <td class="detailtitle">${message(code:'fc.observation.enroute.canvas.sign')}:</td>
-                                       <td><img src="${coordEnrouteCanvasInstance.enrouteCanvasSign.imageName}" style="height:16px;"/> ${coordEnrouteCanvasInstance.enrouteCanvasSign.canvasName}</td>
+                                       <td><img src="${createLinkTo(dir:'',file:coordEnrouteCanvasInstance.enrouteCanvasSign.imageName)}" style="height:16px;"/> ${coordEnrouteCanvasInstance.enrouteCanvasSign.canvasName}</td>
                                    </tr>
                                    <g:if test="${coordEnrouteCanvasInstance.route.enrouteCanvasRoute != EnrouteRoute.InputName}" >
 	                                   <tr>

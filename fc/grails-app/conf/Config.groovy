@@ -73,6 +73,9 @@ environments {
 	lastdb {
         grails.serverURL = "" // must be empty, for use from external pc, old was: http://localhost:8080/${appName}
 	}
+    cloudfoundry {
+        grails.serverURL = "" // must be empty, for use from external pc, old was: http://localhost:8080/${appName}
+    }
 }
 
 // log4j configuration
