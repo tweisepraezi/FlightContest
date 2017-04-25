@@ -37,12 +37,15 @@ class AflosTools
     static AflosRouteNames GetAflosRouteName(Contest contestInstance, String aflosRouteName)
     {
         AflosRouteNames aflosroutenames_instance = null
-        if (contestInstance.aflosTest) {
-            aflosroutenames_instance = AflosRouteNames.aflostest.findByName(aflosRouteName)
-        } else if (contestInstance.aflosUpload) {
-            aflosroutenames_instance = AflosRouteNames.aflosupload.findByName(aflosRouteName)
-        } else {
-            aflosroutenames_instance = AflosRouteNames.aflos.findByName(aflosRouteName)
+        try {
+            if (contestInstance.aflosTest) {
+                aflosroutenames_instance = AflosRouteNames.aflostest.findByName(aflosRouteName)
+            } else if (contestInstance.aflosUpload) {
+                aflosroutenames_instance = AflosRouteNames.aflosupload.findByName(aflosRouteName)
+            } else {
+                aflosroutenames_instance = AflosRouteNames.aflos.findByName(aflosRouteName)
+            }
+        } catch (Exception e) {
         }
         return aflosroutenames_instance
     }
@@ -51,12 +54,15 @@ class AflosTools
     static AflosRouteNames GetAflosRouteName(Contest contestInstance, long aflosRouteId)
     {
         AflosRouteNames aflosroutenames_instance = null
-        if (contestInstance.aflosTest) {
-            aflosroutenames_instance = AflosRouteNames.aflostest.get(aflosRouteId)
-        } else if (contestInstance.aflosUpload) {
-            aflosroutenames_instance = AflosRouteNames.aflosupload.get(aflosRouteId)
-        } else {
-            aflosroutenames_instance = AflosRouteNames.aflos.get(aflosRouteId)
+        try {
+            if (contestInstance.aflosTest) {
+                aflosroutenames_instance = AflosRouteNames.aflostest.get(aflosRouteId)
+            } else if (contestInstance.aflosUpload) {
+                aflosroutenames_instance = AflosRouteNames.aflosupload.get(aflosRouteId)
+            } else {
+                aflosroutenames_instance = AflosRouteNames.aflos.get(aflosRouteId)
+            }
+        } catch (Exception e) {
         }
         return aflosroutenames_instance
     }

@@ -442,11 +442,12 @@ class ObservationResultsTagLib
                             outln"""    <div>"""
                             for (def v in EvaluationValue.GetEvaluationValues(false)) {
                                 if (turnpointdata_instance.evaluationValue == v) {
-                                    outln"""<label><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
+                                    outln"""<label><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
                                 } else {
-                                    outln"""<label><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
+                                    outln"""<label><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
                                 }
                             }
+                            attrs.ti[0]++
                             outln"""        <br/>"""
                             outln"""    </div>"""
                             outln"""</td>"""
@@ -498,11 +499,12 @@ class ObservationResultsTagLib
                     outln"""<div>"""
                     for (def v in EnrouteValueUnit.values()) {
                         if (attrs.t.GetObservationTestEnroutePhotoValueUnit() == v) {
-                            outln"""<label><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                            outln"""<label><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         } else {
-                            outln"""<label><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                            outln"""<label><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         }
                     }
+                    attrs.ti[0]++
                     outln"""<br/>"""
                     outln"""</div>"""
                 }
@@ -573,11 +575,12 @@ class ObservationResultsTagLib
                                         break
                                 }
                                 if (enroutephotodata_instance.evaluationValue == v) {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 } else {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 }
                             }
+                            attrs.ti[0]++
                             outln"""        <br/>"""
                             outln"""    </div>"""
                             outln"""</td>"""
@@ -659,11 +662,12 @@ class ObservationResultsTagLib
                     outln"""<div>"""
                     for (def v in EnrouteValueUnit.values()) {
                         if (attrs.t.GetObservationTestEnrouteCanvasValueUnit() == v) {
-                            outln"""<label><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                            outln"""<label><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         } else {
-                            outln"""<label><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                            outln"""<label><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         }
                     }
+                    attrs.ti[0]++
                     outln"""<br/>"""
                     outln"""</div>"""
                 }
@@ -735,11 +739,12 @@ class ObservationResultsTagLib
                                         break
                                 }
                                 if (enroutecanvasdata_instance.evaluationValue == v) {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 } else {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 }
                             }
+                            attrs.ti[0]++
                             outln"""        <br/>"""
                             outln"""    </div>"""
                             outln"""</td>"""

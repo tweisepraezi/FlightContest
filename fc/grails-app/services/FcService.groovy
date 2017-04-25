@@ -3391,10 +3391,14 @@ class FcService
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
                 if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                     if (params["selectedTestID${test_instance.id}"] == "on") {
+                        String result_class = ""
+                        if (test_instance.crew.resultclass) {
+                            result_class = test_instance.crew.resultclass.name
+                        }
                         Map new_value = [startnum:    test_instance.crew.startNum,
                                          crew:        test_instance.crew.name,
                                          aircraft:    test_instance.crew.aircraft.registration,
-                                         resultclass: test_instance.crew.resultclass.name,
+                                         resultclass: result_class,
                                          tas:         FcMath.SpeedStr_TAS(test_instance.crew.tas),
                                          testtime:    FcMath.TimeStrShort(test_instance.testingTime),
                                          takeofftime: FcMath.TimeStrShort(test_instance.takeoffTime),

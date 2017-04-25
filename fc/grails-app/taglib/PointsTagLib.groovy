@@ -348,6 +348,7 @@ class PointsTagLib
         for (def v in EnrouteValueUnit.values()) {
             radioEntry("observationTestEnrouteValueUnit", v, attrs.i.observationTestEnrouteValueUnit == v, message(code:v.code), attrs)
         }
+        attrs.ti[0]++
         if (attrs.i.observationTestEnrouteValueUnit != attrs.i.contestRule.ruleValues.observationTestEnrouteValueUnit) {
             outln"""    !"""
             attrs.ret.modifynum++
@@ -1896,9 +1897,9 @@ class PointsTagLib
     {
         //outln"""<div>"""
         if (checked) {
-            outln"""<label><input type="radio" name="${name}" value="${value}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${label}</label>"""
+            outln"""<label><input type="radio" name="${name}" value="${value}" checked="checked" tabIndex="${attrs.ti[0]}"/>${label}</label>"""
         } else {
-            outln"""<label><input type="radio" name="${name}" value="${value}" tabIndex="${attrs.ti[0]++}"/>${label}</label>"""
+            outln"""<label><input type="radio" name="${name}" value="${value}" tabIndex="${attrs.ti[0]}"/>${label}</label>"""
         }
         //outln"""</div>"""
     }

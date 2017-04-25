@@ -1021,8 +1021,10 @@ class Task
     {
         List test_instances = []
         for (Test test_instance in Test.findAllByTaskAndScannedPlanningTestAndPlanningTestCompleteAndPlanningtesttaskIsNotNull(this,null,false,[sort:"id"])) {
-            if (test_instance.IsPlanningTestRun()) {
-                test_instances += test_instance
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (test_instance.IsPlanningTestRun()) {
+                    test_instances += test_instance
+                }
             }
         }
         return test_instances
@@ -1032,8 +1034,10 @@ class Task
     {
         List test_instances = []
         for (Test test_instance in Test.findAllByTaskAndFlightTestComplete(this,false,[sort:"id"])) {
-            if (test_instance.IsFlightTestRun()) {
-                test_instances += test_instance
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (test_instance.IsFlightTestRun()) {
+                    test_instances += test_instance
+                }
             }
         }
         return test_instances
@@ -1043,8 +1047,10 @@ class Task
     {
         List test_instances = []
         for (Test test_instance in Test.findAllByTaskAndScannedObservationTestAndObservationTestComplete(this,null,false,[sort:"id"])) {
-            if (test_instance.IsObservationTestRun()) {
-                test_instances += test_instance
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (test_instance.IsObservationTestRun()) {
+                    test_instances += test_instance
+                }
             }
         }
         return test_instances

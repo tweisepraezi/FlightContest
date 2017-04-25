@@ -117,6 +117,7 @@ class RouteTagLib
         outln"""    <div>"""
         outln"""        <label>${message(code:'fc.observation.enroute.canvas.sign')}*:</label>"""
         outln"""        <br/>"""
+        boolean add_tabindex = false
         for (EnrouteCanvasSign v in EnrouteCanvasSign.values()) {
             if (attrs.create && (attrs.coordEnroute.route.enrouteCanvasRoute == EnrouteRoute.InputName)) {
                 if (v != EnrouteCanvasSign.None && (attrs.coordEnroute.route.contest.enrouteCanvasMultiple ||!attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v))) {
@@ -126,19 +127,25 @@ class RouteTagLib
                 if (v == EnrouteCanvasSign.None) {
                     if (attrs.create) {
                         if (attrs.coordEnroute.enrouteCanvasSign == v) {
-                            outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${v}</label>"""
+                            outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${v}</label>"""
                         } else {
-                            outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]++}"/>${v}</label>"""
+                            outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]}"/>${v}</label>"""
                         }
+                        add_tabindex = true
                     }
                 } else {
                     if (attrs.coordEnroute.enrouteCanvasSign == v) {
-                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+                        add_tabindex = true
                     } else if (attrs.coordEnroute.route.contest.enrouteCanvasMultiple || !attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v)) {
-                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]++}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+                        add_tabindex = true
                     }
                 }
             }
+        }
+        if (add_tabindex) {
+            attrs.ti[0]++
         }
         outln"""    </div>"""
         outln"""</fieldset>"""
@@ -315,12 +322,13 @@ class RouteTagLib
         for (TurnpointRoute v in TurnpointRoute.values()) {
             if (v != TurnpointRoute.Unassigned) {
                 if (attrs.route.turnpointRoute == v) {
-                    outln"""<label><input type="radio" name="turnpointRoute" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="turnpointRoute" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 } else {
-                    outln"""<label><input type="radio" name="turnpointRoute" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="turnpointRoute" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 }
             }
         }
+        attrs.ti[0]++
         outln"""    </div>"""
         outln"""    <div>"""
         outln"""        <br/>"""
@@ -337,12 +345,13 @@ class RouteTagLib
         for (EnrouteRoute v in EnrouteRoute.values()) {
             if (v != EnrouteRoute.Unassigned) {
                 if (attrs.route.enroutePhotoRoute == v) {
-                    outln"""<label><input type="radio" name="enroutePhotoRoute" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enroutePhotoRoute" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 } else {
-                    outln"""<label><input type="radio" name="enroutePhotoRoute" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enroutePhotoRoute" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 }
             }
         }
+        attrs.ti[0]++
         outln"""    </div>"""
         outln"""    <div>"""
         outln"""        <br/>"""
@@ -351,12 +360,13 @@ class RouteTagLib
         for (EnrouteMeasurement v in EnrouteMeasurement.values()) {
             if (v != EnrouteMeasurement.Unassigned) {
                 if (attrs.route.enroutePhotoMeasurement == v) {
-                    outln"""<label><input type="radio" name="enroutePhotoMeasurement" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enroutePhotoMeasurement" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 } else {
-                    outln"""<label><input type="radio" name="enroutePhotoMeasurement" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enroutePhotoMeasurement" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 }
             }
         }
+        attrs.ti[0]++
         outln"""    </div>"""
         outln"""</fieldset>"""
         outln"""<fieldset>"""
@@ -367,12 +377,13 @@ class RouteTagLib
         for (EnrouteRoute v in EnrouteRoute.values()) {
             if (v != EnrouteRoute.Unassigned) {
                 if (attrs.route.enrouteCanvasRoute == v) {
-                    outln"""<label><input type="radio" name="enrouteCanvasRoute" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enrouteCanvasRoute" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 } else {
-                    outln"""<label><input type="radio" name="enrouteCanvasRoute" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enrouteCanvasRoute" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 }
             }
         }
+        attrs.ti[0]++
         outln"""    </div>"""
         outln"""    <div>"""
         outln"""        <br/>"""
@@ -381,12 +392,13 @@ class RouteTagLib
         for (EnrouteMeasurement v in EnrouteMeasurement.values()) {
             if (v != EnrouteMeasurement.Unassigned) {
                 if (attrs.route.enrouteCanvasMeasurement == v) {
-                    outln"""<label><input type="radio" name="enrouteCanvasMeasurement" value="${v}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enrouteCanvasMeasurement" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 } else {
-                    outln"""<label><input type="radio" name="enrouteCanvasMeasurement" value="${v}" tabIndex="${attrs.ti[0]++}"/>${message(code:v.code)}</label>"""
+                    outln"""<label><input type="radio" name="enrouteCanvasMeasurement" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 }
             }
         }
+        attrs.ti[0]++
         outln"""    </div>"""
         outln"""</fieldset>"""
     }
