@@ -2,7 +2,7 @@ import java.util.List;
 
 enum ContestRules 
 {
-	R1 ('fc.contestrule.de.nav.2016',
+	R1 ('fc.contestrule.de.nav.2017',
 		[
 			// General
 			precisionFlying:false,
@@ -130,7 +130,7 @@ enum ContestRules
             minEnrouteTargets:0,
             maxEnrouteTargets:35
 		]
-	), // fc.contestrule.de.nav.2016
+	), // fc.contestrule.de.nav.2017
 
 	R2 ('fc.contestrule.de.precision.2005',
 		[
@@ -1314,7 +1314,7 @@ enum ContestRules
     static List GetContestRules()
     {
         List ret = []
-        ret += R1  // fc.contestrule.de.nav.2016
+        ret += R1  // fc.contestrule.de.nav.2017
         ret += R4  // fc.contestrule.fai.precision.2017
         ret += R6  // fc.contestrule.fai.rally.2017
         ret += R5  // fc.contestrule.ch.precision.2017

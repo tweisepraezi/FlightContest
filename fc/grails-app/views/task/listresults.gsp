@@ -35,7 +35,7 @@
                         </tbody>
                     </table>
                     <table>
-                        <g:set var="results_columns" value="${new Integer(3)}"></g:set>
+                        <g:set var="results_columns" value="${new Integer(4)}"></g:set>
                         <g:if test="${taskInstance.IsPlanningTestRun()}">
                         	<g:set var="results_columns" value="${results_columns+1}"></g:set>
                         </g:if>
@@ -87,6 +87,7 @@
                                 <th>${message(code:'fc.crewresults.all')}</th>
                                 <th>${message(code:'fc.test.results.summary')}</th>
                                 <th>${message(code:'fc.test.results.position')}</th>
+                                <th/>
                             </tr>
                         </thead>
                         <tbody>
@@ -104,6 +105,7 @@
                             		<g:set var="showline" value="${true}"></g:set>
                             	</g:else>
                             	<g:if test="${showline}">
+                            	    <g:set var="test_provisional" value="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"/>
 	                                <tr class="${(i % 2) == 0 ? 'odd' : ''}">
 	    
                                         <!-- search next ids -->
@@ -165,10 +167,10 @@
 	                                    </g:if>
 	                                    
 										<g:if test="${testInstance.crew.disabled}">
-											<td colspan="8">${message(code:'fc.disabled')}</td>
+											<td colspan="9">${message(code:'fc.disabled')}</td>
 										</g:if>
                                         <g:elseif test="${testInstance.disabledCrew}">
-                                            <td colspan="8">${message(code:'fc.test.crewdisabled')}</td>
+                                            <td colspan="9">${message(code:'fc.test.crewdisabled')}</td>
                                         </g:elseif>
 										<g:else>
 			                                <g:if test="${taskInstance.IsPlanningTestRun()}">
@@ -226,12 +228,18 @@
 			                                
 		                                    <td><a href="${createLink(controller:'test',action:'crewresults')}/${testInstance.id}${next_crew}">${message(code:'fc.test.results.here')}</a></td>
 		                                    
-		                                    <td>${testInstance.taskPenalties} ${message(code:'fc.points')}<g:if test="${testInstance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[testInstance.crew.GetIncreaseFactor()])})</g:if><g:if test="${testInstance.IsTestResultsProvisional(testInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                    <td>${testInstance.taskPenalties} ${message(code:'fc.points')}<g:if test="${testInstance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[testInstance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_provisional}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                    
 		                                    <g:if test="${testInstance.taskPosition}">
 		                                        <td>${testInstance.taskPosition}</td>
 		                                    </g:if> <g:else>
 		                                        <td>${message(code:'fc.test.results.position.none')}</td>
+		                                    </g:else>
+		                                    <g:if test="${!test_provisional && testInstance.crewResultsModified}">
+		                                        <td><a href="${createLink(controller:'test',action:'printcrewresults',id:testInstance.id,params:testInstance.GetPrintCrewResultsDefaultParams())}"><img src="${createLinkTo(dir:'images',file:'print.png')}"/></a></td>
+		                                    </g:if>
+		                                    <g:else>
+		                                        <td/>
 		                                    </g:else>
 	                                    </g:else>
 	                                </tr>

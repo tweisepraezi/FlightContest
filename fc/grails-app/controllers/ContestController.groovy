@@ -25,13 +25,23 @@ class ContestController {
         
         // check ShowLanguage
         String show_language = ""
+        if (params.lang) {
+            show_language = params.lang
+            if (show_language) {
+                if (session?.showLanguage != show_language) {
+                    restart = true
+                }
+                fcService.println "Set showLanguage to '$show_language' (param)"
+                session.showLanguage = show_language
+            }
+        }
         if (!session?.showLanguage) {
             show_language = fcService.GetCookie("ShowLanguage",Languages.de.toString())
             if (show_language) {
                 if (session?.showLanguage != show_language) {
                     restart = true
                 }
-                fcService.println "Set showLanguage to '$show_language'"
+                fcService.println "Set showLanguage to '$show_language' (cookie)"
                 session.showLanguage = show_language
             }
         }

@@ -1,4 +1,4 @@
-import java.math.BigDecimal;
+import java.math.*
 import java.text.DecimalFormat
 import java.util.List;
 
@@ -17,6 +17,8 @@ class CalcService
     final static int PROCEDURETURN_MAXDIFFGRAD = 60   // Grad; max. Abweichung der Kursänderung beim Procedure Turn
                                                       //   bei Änderung testCalcService_isBadProcedureTurn anpassen
     final static int TO_GATE_SECONDS           = 1800 // Sekunden; Zeit nach dem T/O-Durchflug erwartet wird (30 min)
+    
+    final static int COORDINATE_SCALE          = 10   // Nachkommastellen für Koordinaten
     
     //--------------------------------------------------------------------------
     void CalculateAflos(Test testInstance, int aflosStartNum, String aflosRouteName)
@@ -448,8 +450,12 @@ class CalcService
         } else { // lineValue.y1 > lineValue.y2
             on_gate_y = (lineValue.y2 <= pointValue.y) && (pointValue.y <= lineValue.y1)
         }
-        
-        //println "isPointOnLine $s, x:$on_gate_x, y:$on_gate_y, Point: ${RouteGradStr2(pointValue.x)}, ${RouteGradStr2(pointValue.y)}, Line: ${RouteGradStr2(lineValue.x1)}, ${RouteGradStr2(lineValue.y1)}, ${RouteGradStr2(lineValue.x2)}, ${RouteGradStr2(lineValue.y2)}"
+
+        /*        
+        if (s == "Track") {
+            println "isPointOnLine $s, ${on_gate_x && on_gate_y}, x:$on_gate_x, y:$on_gate_y, Point: ${RouteGradStr2(pointValue.x)}, ${RouteGradStr2(pointValue.y)}, Line: ${RouteGradStr2(lineValue.x1)}, ${RouteGradStr2(lineValue.y1)}, ${RouteGradStr2(lineValue.x2)}, ${RouteGradStr2(lineValue.y2)},   $pointValue.y, $lineValue.y1, $lineValue.y2"
+        }
+        */
         
         return on_gate_x && on_gate_y
     }
@@ -632,7 +638,10 @@ class CalcService
         BigDecimal x = getDeterminate(l1.B, l1.C, l2.B, l2.C) / getDeterminate(l1.A, l1.B, l2.A, l2.B)
         BigDecimal y = getDeterminate(l1.C, l1.A, l2.C, l2.A) / getDeterminate(l1.A, l1.B, l2.A, l2.B)
 
-        return [x:x, y:y]
+        BigDecimal x1 = x.setScale(COORDINATE_SCALE, RoundingMode.HALF_EVEN) 
+        BigDecimal y1 = y.setScale(COORDINATE_SCALE, RoundingMode.HALF_EVEN)
+        
+        return [x:x1, y:y1]
     }
     
     //--------------------------------------------------------------------------

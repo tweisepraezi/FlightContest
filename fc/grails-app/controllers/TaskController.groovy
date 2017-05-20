@@ -1085,6 +1085,8 @@ class TaskController {
 			task.instance.printTeam = params.printTeam == "true"
 			task.instance.printClass = params.printClass == "true"
 			task.instance.printShortClass = params.printShortClass == "true"
+            task.instance.printModifiedResults = params.printModifiedResults == "true"
+            task.instance.printCompletedResults = params.printCompletedResults == "true"
 			task.instance.printProvisionalResults = params.printProvisionalResults == "true"
 	        if (params.contestid) {
 	            session.lastContest = Contest.get(params.contestid)

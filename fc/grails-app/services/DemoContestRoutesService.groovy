@@ -328,7 +328,7 @@ class DemoContestRoutesService
 	  if (strecke == ROUTE_6 || strecke == ROUTE_6M) {
 		  // CP11
 		  l[12].measureTrueTrack = 132
-		  l[12].planProcedureTurn = true
+		  //l[12].planProcedureTurn = true
 		  // CP12
 		  l[13].planProcedureTurn = false
 	  }
@@ -347,6 +347,7 @@ class DemoContestRoutesService
 		  l[12].coordMeasureDistance = 53.3983325977
 		  // CP12...
 		  l[13].mark = "CP9"
+          l[13].planProcedureTurn = false
 		  l[14].mark = "CP10"
 		  l[15].mark = "CP11"
 		  l[16].mark = "CP12"

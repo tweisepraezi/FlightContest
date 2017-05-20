@@ -77,13 +77,13 @@ class ObservationResultsTagLib
                             outln"""<td>${message(code:turnpointdata_instance.tpSignCorrect.code)}</td>"""
                             break
                     }
-                    outln"""         <td>${message(code:turnpointdata_instance.resultValue.turnpointResultCode)}</td>"""
+                    outln"""         <td class="${GetResultValueClass(turnpointdata_instance.resultValue)}">${message(code:turnpointdata_instance.resultValue.turnpointResultCode)}</td>"""
                     if (is_disabled) {
-                        outln"""     <td>${message(code:'fc.disabled')}</td>"""
+                        outln"""     <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                     } else if (turnpointdata_instance.penaltyCoord) {
-                        outln"""     <td>${turnpointdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
+                        outln"""     <td class="points">${turnpointdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
                     } else {
-                        outln"""     <td>${turnpointdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
+                        outln"""     <td class="zeropoints">${turnpointdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
                     }
                     outln"""    </tr>"""
                     if (!is_disabled) {
@@ -96,9 +96,9 @@ class ObservationResultsTagLib
                     outln"""        <tr>"""
                     outln"""            <td colspan="4">${message(code:'fc.test.results.summary')}</td>"""
                     if (penalty_sum) {
-                        outln"""        <td class="subpoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
+                        outln"""        <td class="points">${penalty_sum} ${message(code:'fc.points')}</td>"""
                     } else {
-                        outln"""        <td class="subpoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
+                        outln"""        <td class="zeropoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
                     }
                     outln"""        </tr>"""
                     outln"""    </tfoot>"""
@@ -176,13 +176,13 @@ class ObservationResultsTagLib
                             outln"""<td>${enroutephotodata_instance.tpName()} ${attrs.t.GetEnrouteDistanceResultsmm(enroutephotodata_instance.distancemm)} ${message(code:'fc.mm')}</td>"""
                             break
                     }
-                    outln"""         <td>${message(code:enroutephotodata_instance.resultValue.enrouteResultCode)}</td>"""
+                    outln"""         <td class="${GetResultValueClass(enroutephotodata_instance.resultValue)}">${message(code:enroutephotodata_instance.resultValue.enrouteResultCode)}</td>"""
                     if (is_disabled) {
-                        outln"""     <td>${message(code:'fc.disabled')}</td>"""
+                        outln"""     <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                     } else if (enroutephotodata_instance.penaltyCoord) {
-                        outln"""     <td>${enroutephotodata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
+                        outln"""     <td class="points">${enroutephotodata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
                     } else {
-                        outln"""     <td>${enroutephotodata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
+                        outln"""     <td class="zeropoints">${enroutephotodata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
                     }
                     outln"""    </tr>"""
                     if (!is_disabled) {
@@ -199,9 +199,9 @@ class ObservationResultsTagLib
                         outln"""        <td colspan="4">${message(code:'fc.test.results.summary')}</td>"""
                     }
                     if (penalty_sum) {
-                        outln"""        <td class="subpoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
+                        outln"""        <td class="points">${penalty_sum} ${message(code:'fc.points')}</td>"""
                     } else {
-                        outln"""        <td class="subpoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
+                        outln"""        <td class="zeropoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
                     }
                     outln"""        </tr>"""
                     outln"""    </tfoot>"""
@@ -280,13 +280,13 @@ class ObservationResultsTagLib
                             outln"""<td>${enroutecanvasdata_instance.tpName()} ${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)} ${message(code:'fc.mm')}</td>"""
                             break
                     }
-                    outln"""         <td>${message(code:enroutecanvasdata_instance.resultValue.enrouteResultCode)}</td>"""
+                    outln"""         <td class="${GetResultValueClass(enroutecanvasdata_instance.resultValue)}">${message(code:enroutecanvasdata_instance.resultValue.enrouteResultCode)}</td>"""
                     if (is_disabled) {
-                        outln"""     <td>${message(code:'fc.disabled')}</td>"""
+                        outln"""     <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                     } else if (enroutecanvasdata_instance.penaltyCoord) {
-                        outln"""     <td>${enroutecanvasdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
+                        outln"""     <td class="points">${enroutecanvasdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
                     } else {
-                        outln"""     <td>${enroutecanvasdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
+                        outln"""     <td class="zeropoints">${enroutecanvasdata_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
                     }
                     outln"""    </tr>"""
                     if (!is_disabled) {
@@ -303,9 +303,9 @@ class ObservationResultsTagLib
                         outln"""        <td colspan="4">${message(code:'fc.test.results.summary')}</td>"""
                     }
                     if (penalty_sum) {
-                        outln"""        <td class="subpoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
+                        outln"""        <td class="points">${penalty_sum} ${message(code:'fc.points')}</td>"""
                     } else {
-                        outln"""        <td class="subpoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
+                        outln"""        <td class="zeropoints">${penalty_sum} ${message(code:'fc.points')}</td>"""
                     }
                     outln"""        </tr>"""
                     outln"""    </tfoot>"""
@@ -457,7 +457,7 @@ class ObservationResultsTagLib
                             break
                     }
                     if (complete) {
-                        outln"""    <td>${message(code:turnpointdata_instance.resultValue.turnpointResultCode)}</td>"""
+                        outln"""    <td class="${GetResultValueClass(turnpointdata_instance.resultValue)}">${message(code:turnpointdata_instance.resultValue.turnpointResultCode)}</td>"""
                         if (is_disabled) {
                             outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                         } else if (turnpointdata_instance.penaltyCoord) {
@@ -611,7 +611,7 @@ class ObservationResultsTagLib
                             break
                     }
                     if (complete) {
-                        outln"""    <td>${message(code:enroutephotodata_instance.resultValue.enrouteResultCode)}</td>"""
+                        outln"""    <td class="${GetResultValueClass(enroutephotodata_instance.resultValue)}">${message(code:enroutephotodata_instance.resultValue.enrouteResultCode)}</td>"""
                         if (is_disabled) {
                             outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                         } else if (enroutephotodata_instance.penaltyCoord) {
@@ -775,7 +775,7 @@ class ObservationResultsTagLib
                             break
                     }
                     if (complete) {
-                        outln"""    <td>${message(code:enroutecanvasdata_instance.resultValue.enrouteResultCode)}</td>"""
+                        outln"""    <td class="${GetResultValueClass(enroutecanvasdata_instance.resultValue)}">${message(code:enroutecanvasdata_instance.resultValue.enrouteResultCode)}</td>"""
                         if (is_disabled) {
                             outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                         } else if (enroutecanvasdata_instance.penaltyCoord) {
@@ -1193,6 +1193,20 @@ class ObservationResultsTagLib
             outln"""<img class="scannedobservationtest" src="${createLink(controller:'test',action:'observationformimage',params:[testid:attrs.t.id])}" />"""
         }
     } // def observationTestScannedPrintable
+    
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    private String GetResultValueClass(EvaluationValue evaluationValue)
+    {
+        String result_value_class = ""
+        switch (evaluationValue) {
+            case EvaluationValue.False:
+            case EvaluationValue.NotFound:
+                result_value_class = "errors"
+                break
+        }
+        return result_value_class
+    }
     
 	// --------------------------------------------------------------------------------------------------------------------
 	private void outln(str)

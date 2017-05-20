@@ -73,6 +73,18 @@
                         <fieldset>
                             <p>
                                 <div>
+                                    <g:checkBox name="printModifiedResults" value="${taskInstance.printModifiedResults}" />
+                                    <label>${message(code:'fc.printmodified')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="printCompletedResults" value="${taskInstance.printCompletedResults}" />
+                                    <label>${message(code:'fc.printcompleted')}</label>
+                                </div>
+                            </p>
+                        </fieldset>
+                        <fieldset>
+                            <p>
+                                <div>
                                     <g:checkBox name="printProvisionalResults" value="${taskInstance.printProvisionalResults}" />
                                     <label>${message(code:'fc.printprovisional')}</label>
                                 </div>

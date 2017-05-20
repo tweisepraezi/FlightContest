@@ -69,7 +69,7 @@
 	                <tfoot>
 	                    <tr class="">
 	                        <td><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" tabIndex="1"/></td>
-	                        <td><g:actionSubmit action="calculatesequence" value="${message(code:'fc.test.sequence.calculate')}" tabIndex="2"/></td>
+	                        <td><g:actionSubmit action="calculatesequence" value="${message(code:'fc.test.sequence.calculate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="2"/></td>
 	                    	<g:if test="${resultClasses}">
 		                        <td colspan="5">
 		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="3"/>

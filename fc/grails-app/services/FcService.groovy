@@ -568,6 +568,7 @@ class FcService
 		Task.findAllByContest(contestInstance,[sort:"id"]).each { Task task_instance ->
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 				calculateTestPenalties(test_instance,true)
+                test_instance.crewResultsModified = true
 				test_instance.save()
 			}
 		}
@@ -1445,6 +1446,7 @@ class FcService
 				println "Calculate penalties"
 		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 					calculateTestPenalties(test_instance,recalculate_penalties)
+                    test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
 			}
@@ -2354,26 +2356,46 @@ class FcService
                                                 (last_disabledenroute_canvasobs != task_instance.disabledEnrouteCanvasObs)
 			if (modify_flighttest_results) {
 		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
+                    boolean coordresult_modified = false
+                    boolean observationresult_modified = false
 					CoordResult.findAllByTest(test_instance,[sort:"id"]).each { CoordResult coordresult_instance ->
 						calculateCoordResultInstancePenaltyCoord(coordresult_instance)
+                        if (coordresult_instance.isDirty()) {
+                            coordresult_modified = true
+                        }
 						coordresult_instance.save()
 					}
                     for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(test_instance,[sort:"id"])) {
                         calculatePenaltyTurnpointDataInstance(turnpointdata_instance, test_instance)
+                        if (turnpointdata_instance.isDirty()) {
+                            observationresult_modified = true
+                        }
                         turnpointdata_instance.save()
                     }
                     for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(test_instance,[sort:"id"])) {
-                        calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, test_instance)
+                        calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, test_instance, true)
+                        if (enroutephotodata_instance.isDirty()) {
+                            observationresult_modified = true
+                        }
                         enroutephotodata_instance.save()
                     }
                     for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(test_instance,[sort:"id"])) {
-                        calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, test_instance)
+                        calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, test_instance, false)
+                        if (enroutecanvasdata_instance.isDirty()) {
+                            observationresult_modified = true
+                        }
                         enroutecanvasdata_instance.save()
                     }
 					calculateTestPenalties(test_instance,false)
-					test_instance.flightTestModified = true
-                    test_instance.flightTestLink = ""
-					test_instance.crewResultsModified = true
+                    if (coordresult_modified) {
+                        test_instance.flightTestModified = true
+                        test_instance.flightTestLink = ""
+                        test_instance.crewResultsModified = true
+                    }
+                    if (observationresult_modified) {
+                        test_instance.observationTestModified = true
+                        test_instance.crewResultsModified = true
+                    }
 		            test_instance.save()
 		        }
 			}	
@@ -2436,26 +2458,46 @@ class FcService
                                                 (last_disabledenroute_canvasobs != task_instance.disabledEnrouteCanvasObs)
 			if (modify_flighttest_results) {
 		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
+                    boolean coordresult_modified = false
+                    boolean observationresult_modified = false
 					CoordResult.findAllByTest(test_instance,[sort:"id"]).each { CoordResult coordresult_instance ->
 						calculateCoordResultInstancePenaltyCoord(coordresult_instance)
+                        if (coordresult_instance.isDirty()) {
+                            coordresult_modified = true
+                        }
 						coordresult_instance.save()
 					}
                     for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(test_instance,[sort:"id"])) {
                         calculatePenaltyTurnpointDataInstance(turnpointdata_instance, test_instance)
+                        if (turnpointdata_instance.isDirty()) {
+                            observationresult_modified = true
+                        }
                         turnpointdata_instance.save()
                     }
                     for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(test_instance,[sort:"id"])) {
-                        calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, test_instance)
+                        calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, test_instance, true)
+                        if (enroutephotodata_instance.isDirty()) {
+                            observationresult_modified = true
+                        }
                         enroutephotodata_instance.save()
                     }
                     for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(test_instance,[sort:"id"])) {
-                        calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, test_instance)
+                        calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, test_instance, false)
+                        if (enroutecanvasdata_instance.isDirty()) {
+                            observationresult_modified = true
+                        }
                         enroutecanvasdata_instance.save()
                     }
 					calculateTestPenalties(test_instance,false)
-					test_instance.flightTestModified = true
-                    test_instance.flightTestLink = ""
-					test_instance.crewResultsModified = true
+                    if (coordresult_modified) {
+                        test_instance.flightTestModified = true
+                        test_instance.flightTestLink = ""
+                        test_instance.crewResultsModified = true
+                    }
+                    if (observationresult_modified) {
+                        test_instance.observationTestModified = true
+                        test_instance.crewResultsModified = true
+                    }
 		            test_instance.save()
 		        }
 			}	
@@ -2618,6 +2660,7 @@ class FcService
 	                calulateTestLegPlannings(test_instance)
 					test_instance.ResetPlanningTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.crewResultsModified = true
 	                test_instance.save()
                     assign_num++
 				}
@@ -2650,6 +2693,7 @@ class FcService
 	                    calulateTestLegPlannings(test_instance)
 						test_instance.ResetPlanningTestResults()
 						test_instance.CalculateTestPenalties()
+                        test_instance.crewResultsModified = true
 	                    test_instance.save()
 					}
                 }
@@ -2798,6 +2842,7 @@ class FcService
 		        test_instance.timeCalculated = false
 				test_instance.ResetFlightTestResults()
 				test_instance.CalculateTestPenalties()
+                test_instance.crewResultsModified = true
 		        test_instance.save()
 			}
 		}
@@ -2874,6 +2919,7 @@ class FcService
             test_instance.timeCalculated = false
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
+            test_instance.crewResultsModified = true
             test_instance.save()
         }
         
@@ -2907,6 +2953,7 @@ class FcService
             test_instance.timeCalculated = false
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
+            test_instance.crewResultsModified = true
             test_instance.save()
         }
 
@@ -3939,6 +3986,7 @@ class FcService
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 				if (test_instance.crew.resultclass == resultclassInstance) {
 					calculateTestPenalties(test_instance,true)
+                    test_instance.crewResultsModified = true
 					test_instance.save()
 				}
 			}
@@ -7281,6 +7329,7 @@ class FcService
                         println "Increase modified."
                         Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                             test_instance.CalculateTestPenalties()
+                            test_instance.crewResultsModified = true
                             test_instance.save()
                         }
                     }
@@ -7298,6 +7347,7 @@ class FcService
 			                	test_instance.timeCalculated = false
 								test_instance.ResetFlightTestResults()
 								test_instance.CalculateTestPenalties()
+                                test_instance.crewResultsModified = true
 			                    test_instance.save()
 							}
 		                }
@@ -7679,6 +7729,7 @@ class FcService
                     crew_instance.save()
                     Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                         test_instance.CalculateTestPenalties()
+                        test_instance.crewResultsModified = true
                         test_instance.save()
                     }
                     disable_num++
@@ -7707,6 +7758,7 @@ class FcService
                     crew_instance.save()
                     Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                         test_instance.CalculateTestPenalties()
+                        test_instance.crewResultsModified = true
                         test_instance.save()
                     }
                     enable_num++
@@ -8809,12 +8861,13 @@ class FcService
             }
         }
 
-        if (!save_observation_data(params, test.instance)) {
+        Map observation_data = save_observation_data(params, test.instance)
+        if (!observation_data.ok) {
             return ['instance':test.instance,'error':true,'message':getMsg('fc.observation.evaluationvalue.incomplete')]
         }
         
         test.instance.properties = params
-		if (test.instance.isDirty()) {
+		if (observation_data.modified || test.instance.isDirty()) {
 			test.instance.observationTestModified = true
 			test.instance.crewResultsModified = true
 		}
@@ -8872,12 +8925,13 @@ class FcService
             }
         }
 
-        if (!save_observation_data(params, test.instance)) {
+        Map observation_data = save_observation_data(params, test.instance)
+        if (!observation_data.ok) {
             return ['instance':test.instance,'error':true,'message':getMsg('fc.observation.evaluationvalue.incomplete')]
         }
         
         test.instance.properties = params
-		if (test.instance.isDirty()) {
+		if (observation_data.modified || test.instance.isDirty()) {
 			test.instance.observationTestModified = true
 			test.instance.crewResultsModified = true
 		}
@@ -8893,9 +8947,10 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private boolean save_observation_data(Map params, Test testInstance)
+    private Map save_observation_data(Map params, Test testInstance)
     {
         boolean ok = true
+        boolean modified = false
         
         if (params.observationTestEnroutePhotoValueUnit) {
             testInstance.observationTestEnroutePhotoValueUnit = (EnrouteValueUnit)params.observationTestEnroutePhotoValueUnit
@@ -8926,6 +8981,9 @@ class FcService
                                 turnpointdata_instance.resultValue = EvaluationValue.False
                             }
                             calculatePenaltyTurnpointDataInstance(turnpointdata_instance, testInstance)
+                            if (turnpointdata_instance.isDirty()) {
+                                modified = true
+                            }
                             turnpointdata_instance.save()
                             if (turnpointdata_instance.evaluationSign == TurnpointSign.Unevaluated) {
                                 ok = false
@@ -8968,6 +9026,9 @@ class FcService
                                     break
                             }
                             calculatePenaltyTurnpointDataInstance(turnpointdata_instance, testInstance)
+                            if (turnpointdata_instance.isDirty()) {
+                                modified = true
+                            }
                             turnpointdata_instance.save()
                         } else {
                             ok = false
@@ -8985,7 +9046,10 @@ class FcService
                         if (params["${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}"]) {
                             enroutephotodata_instance.evaluationValue = EvaluationValue.(params["${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}"])
                             enroutephotodata_instance.resultValue = enroutephotodata_instance.evaluationValue
-                            calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, testInstance)
+                            calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, testInstance, true)
+                            if (enroutephotodata_instance.isDirty()) {
+                                modified = true
+                            }
                             enroutephotodata_instance.save()
                         } else {
                             ok = false
@@ -8994,8 +9058,12 @@ class FcService
                     break
                 case EnrouteMeasurement.NMFromTP:
                 case EnrouteMeasurement.mmFromTP:
-                    if (!save_enroute_data(params, testInstance, true)) { // true - enroutePhoto photo
+                    Map enroute_data = save_enroute_data(params, testInstance, true)
+                    if (!enroute_data.ret) { // true - enroutePhoto photo
                         ok = false
+                    }
+                    if (enroute_data.modified) {
+                        modified = true
                     }
                     break
             }
@@ -9009,7 +9077,10 @@ class FcService
                         if (params["${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}"]) {
                             enroutecanvasdata_instance.evaluationValue = EvaluationValue.(params["${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}"])
                             enroutecanvasdata_instance.resultValue = enroutecanvasdata_instance.evaluationValue
-                            calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, testInstance)
+                            calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, testInstance, false)
+                            if (enroutecanvasdata_instance.isDirty()) {
+                                modified = true
+                            }
                             enroutecanvasdata_instance.save()
                         } else {
                             ok = false
@@ -9018,20 +9089,26 @@ class FcService
                     break
                 case EnrouteMeasurement.NMFromTP:
                 case EnrouteMeasurement.mmFromTP:
-                    if (!save_enroute_data(params, testInstance, false)) { // false - enroutePhoto canvas
+                    Map enroute_data = save_enroute_data(params, testInstance, false)
+                    if (!enroute_data.ret) { // false - enroutePhoto canvas
                         ok = false
+                    }
+                    if (enroute_data.modified) {
+                        modified = true
                     }
                     break
             }
         }
 
-        return ok
+        return [ok: ok, modified: modified]
     }
     
     //--------------------------------------------------------------------------
-    private boolean save_enroute_data(Map params, Test testInstance, boolean enroutePhoto)
+    private Map save_enroute_data(Map params, Test testInstance, boolean enroutePhoto)
     {
         boolean ret = true
+        boolean modified = false
+        
         List enroute_data = []
         EnrouteMeasurement enroute_measurement = EnrouteMeasurement.None
         String coordtitle_id = ""
@@ -9082,53 +9159,74 @@ class FcService
                 } else {
                     enroutedata_instance.resultValue = EvaluationValue.False
                 }
-                calculatePenaltyEnrouteDataInstance(enroutedata_instance, testInstance)
+                calculatePenaltyEnrouteDataInstance(enroutedata_instance, testInstance, enroutePhoto)
+                if (enroutedata_instance.isDirty()) {
+                    modified = true
+                }
                 enroutedata_instance.save()
             } else {
                 ret = false
             }
         }
-        return ret
+        return [ret: ret, modified: modified]
     }
     
     //--------------------------------------------------------------------------
     private void calculatePenaltyTurnpointDataInstance(TurnpointData turnpointDataInstance, Test testInstance)
     {
-        switch (turnpointDataInstance.resultValue) {
-            case EvaluationValue.Correct:
-                turnpointDataInstance.penaltyCoord = 0
-                break
-            case EvaluationValue.NotFound:
-                turnpointDataInstance.penaltyCoord = testInstance.GetObservationTestTurnpointNotFoundPoints()
-                break
-            case EvaluationValue.False:
-                turnpointDataInstance.penaltyCoord = testInstance.GetObservationTestTurnpointFalsePoints()
-                break
-            default:
-                turnpointDataInstance.penaltyCoord = 0
-                break
+        if (testInstance.task.disabledCheckPointsTurnpointObs.contains("${turnpointDataInstance.tpTitle()},")) {
+            turnpointDataInstance.penaltyCoord = 0
+        } else {
+            switch (turnpointDataInstance.resultValue) {
+                case EvaluationValue.Correct:
+                    turnpointDataInstance.penaltyCoord = 0
+                    break
+                case EvaluationValue.NotFound:
+                    turnpointDataInstance.penaltyCoord = testInstance.GetObservationTestTurnpointNotFoundPoints()
+                    break
+                case EvaluationValue.False:
+                    turnpointDataInstance.penaltyCoord = testInstance.GetObservationTestTurnpointFalsePoints()
+                    break
+                default:
+                    turnpointDataInstance.penaltyCoord = 0
+                    break
+            }
         }
     }
     
     //--------------------------------------------------------------------------
-    private void calculatePenaltyEnrouteDataInstance(EnrouteData enrouteDataInstance, Test testInstance)
+    private void calculatePenaltyEnrouteDataInstance(EnrouteData enrouteDataInstance, Test testInstance, boolean enroutePhoto)
     {
-        switch (enrouteDataInstance.resultValue) {
-            case EvaluationValue.Correct:
-                enrouteDataInstance.penaltyCoord = 0
-                break
-            case EvaluationValue.Inexact:
-                enrouteDataInstance.penaltyCoord = testInstance.GetObservationTestEnrouteInexactPoints()
-                break
-            case EvaluationValue.NotFound:
-                enrouteDataInstance.penaltyCoord = testInstance.GetObservationTestEnrouteNotFoundPoints()
-                break
-            case EvaluationValue.False:
-                enrouteDataInstance.penaltyCoord = testInstance.GetObservationTestEnrouteFalsePoints()
-                break
-            default:
-                enrouteDataInstance.penaltyCoord = 0
-                break
+        boolean is_disabled = false
+        if (enroutePhoto) {
+            if (testInstance.task.disabledEnroutePhotoObs.contains("${enrouteDataInstance.photoName},")) {
+                is_disabled = true
+            }
+        } else {
+            if (testInstance.task.disabledEnrouteCanvasObs.contains("${enrouteDataInstance.canvasSign.canvasName},")) {
+                is_disabled = true
+            }
+        }
+        if (is_disabled) {
+            enrouteDataInstance.penaltyCoord = 0
+        } else {
+            switch (enrouteDataInstance.resultValue) {
+                case EvaluationValue.Correct:
+                    enrouteDataInstance.penaltyCoord = 0
+                    break
+                case EvaluationValue.Inexact:
+                    enrouteDataInstance.penaltyCoord = testInstance.GetObservationTestEnrouteInexactPoints()
+                    break
+                case EvaluationValue.NotFound:
+                    enrouteDataInstance.penaltyCoord = testInstance.GetObservationTestEnrouteNotFoundPoints()
+                    break
+                case EvaluationValue.False:
+                    enrouteDataInstance.penaltyCoord = testInstance.GetObservationTestEnrouteFalsePoints()
+                    break
+                default:
+                    enrouteDataInstance.penaltyCoord = 0
+                    break
+            }
         }
     }
     
@@ -9549,13 +9647,13 @@ class FcService
             
             // recalculate EnroutePhotoData
             for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(testInstance,[sort:"id"])) {
-                calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, testInstance)
+                calculatePenaltyEnrouteDataInstance(enroutephotodata_instance, testInstance, true)
                 enroutephotodata_instance.save()
             }
 
             // recalculate EnrouteCanvasData
             for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(testInstance,[sort:"id"])) {
-                calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, testInstance)
+                calculatePenaltyEnrouteDataInstance(enroutecanvasdata_instance, testInstance, false)
                 enroutecanvasdata_instance.save()
             }
 		}
@@ -10168,6 +10266,7 @@ class FcService
 		        	test_instance.timeCalculated = false
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
 				println "Calculated times have been reset."
@@ -10716,6 +10815,7 @@ class FcService
                         test_instance.timeCalculated = false
                         test_instance.ResetFlightTestResults()
                         test_instance.CalculateTestPenalties()
+                        test_instance.crewResultsModified = true
                         test_instance.save()
                         calulate_reset_num++
                     }
@@ -11066,6 +11166,7 @@ class FcService
 	                calulateTestLegPlannings(test_instance)
 					test_instance.ResetPlanningTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.crewResultsModified = true
 	                test_instance.save()
 	            }
 				println "TestLegPlannings have been recalculated." 
@@ -11987,13 +12088,15 @@ class FcService
 					legdir = leg_data.dir
 				}
 				if (last_legdir != null) {
-					BigDecimal rounded_legdir = FcMath.RoundGrad(legdir)
-					BigDecimal rounded_last_legdir = FcMath.RoundGrad(last_legdir)
-					if (IsCourseChangeGreaterEqual90(rounded_legdir,rounded_last_legdir)) {
-						println "Set planProcedureTurn (CoordRoute, $rounded_last_legdir -> $rounded_legdir)"
-						coordroute_instance.planProcedureTurn = true
-						coordroute_instance.save()
-					}
+                    if (last_coordroute_instance.type.IsProcedureTurnCoord()) {
+    					BigDecimal rounded_legdir = FcMath.RoundGrad(legdir)
+    					BigDecimal rounded_last_legdir = FcMath.RoundGrad(last_legdir)
+    					if (IsCourseChangeGreaterEqual90(rounded_legdir,rounded_last_legdir)) {
+    						println "Set planProcedureTurn (CoordRoute, $last_coordroute_instance.type, $rounded_last_legdir -> $rounded_legdir)"
+    						coordroute_instance.planProcedureTurn = true
+    						coordroute_instance.save()
+    					}
+                    }
 				}
 				last_legdir = legdir
 			}
@@ -12037,6 +12140,7 @@ class FcService
             calculate_times(time, taskInstance, testInstance)
 			testInstance.ResetFlightTestResults()
 			testInstance.CalculateTestPenalties()
+            testInstance.crewResultsModified = true
             testInstance.save()
             
             calculate_coordresult(testInstance)
@@ -12063,6 +12167,7 @@ class FcService
             calculate_times(time, taskInstance, testInstance)
 			testInstance.ResetFlightTestResults()
 			testInstance.CalculateTestPenalties()
+            testInstance.crewResultsModified = true
             testInstance.save()
             
             calculate_coordresult(testInstance)
@@ -12268,6 +12373,7 @@ class FcService
 			println "Times calculated."
 		}
 		testInstance.CalculateTestPenalties()
+        testInstance.crewResultsModified = true
 		testInstance.save()
 		
 		printdone ""
@@ -13405,6 +13511,7 @@ class FcService
 					test_instance.timeCalculated = false
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.crewResultsModified = true
 					test_instance.save()
 					view_pos++
 				}

@@ -52,6 +52,7 @@ class MainTagLib
         }
         
         outln """        <li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
+        outln """        <li class="secondary"> <a href="${p.link}/../../docs/help.html" target="_blank">${message(code:'fc.help')}</a></li>"""
         outln """        <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
 		if (BootStrap.global.IsAFLOSPossible()) {
 			outln """    <li class="secondary"> <a class="${if (isAflos(p.controller)) "active"}" href="${p.link}/../../aflos/start">${message(code:'fc.aflos')}</a> </li>"""

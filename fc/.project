@@ -39,6 +39,11 @@
 			<location>K:/Projects/GIT/FlightContest/deploy</location>
 		</link>
 		<link>
+			<name>docs</name>
+			<type>2</type>
+			<location>K:/Projects/GIT/FlightContest/docs</location>
+		</link>
+		<link>
 			<name>readme.txt</name>
 			<type>1</type>
 			<location>K:/Projects/GIT/FlightContest/readme.txt</location>

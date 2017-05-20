@@ -1120,6 +1120,8 @@ class PrintService
         task.instance.printObservationResultsScan = params.printObservationResultsScan == "on"
         task.instance.printLandingResults = params.printLandingResults == "on"
         task.instance.printSpecialResults = params.printSpecialResults == "on"
+        task.instance.printModifiedResults = params.printModifiedResults == "on"
+        task.instance.printCompletedResults = params.printCompletedResults == "on"
         task.instance.printProvisionalResults = params.printProvisionalResults == "on"
         
         // Print all crewresults
@@ -1130,37 +1132,46 @@ class PrintService
             for ( Test test_instance in Test.findAllByTask(task.instance,[sort:"viewpos"])) {
                 if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                     if (isprintcrewresult(params,test_instance)) {
-                        printstart "Print $test_instance.crew.name"
-                        String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${task.instance.printPlanningResults}&printPlanningResultsScan=${task.instance.printPlanningResultsScan}&printFlightResults=${task.instance.printFlightResults}&printFlightMap=${task.instance.printFlightMap}&printObservationResults=${task.instance.printObservationResults}&printObservationResultsScan=${task.instance.printObservationResultsScan}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
-                        if (!task.instance.GetDetailNum()) {
-                            url += "&disabletitle=yes"
+                        boolean print_crew_results = true
+                        if (task.instance.printModifiedResults && !test_instance.crewResultsModified) {
+                            print_crew_results = false
                         }
-                        String uuid = UUID.randomUUID().toString()
-                        String flight_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-                        String flight_map_file_name = "${webRootDir}${Defs.ROOT_FOLDER_GPXUPLOAD}/PNG-${uuid}-FLIGHT.png"
-                        boolean is_flight = false
-                        if (task.instance.printFlightMap && test_instance.IsFlightTestRun() && test_instance.IsShowMapPossible()) {
-                            Map converter = gpxService.ConvertTest2PrintMap(test_instance, flight_gpx_file_name, flight_map_file_name)
-                            if (converter.ok && converter.track) {
-                                String flight_map_file_name2 = ("file:///" + HTMLFilter.GetStr(flight_map_file_name)).replaceAll('\\\\','/')
-                                url += "&flightMapFileName=${flight_map_file_name2}"
+                        if (task.instance.printCompletedResults && test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())) {
+                            print_crew_results = false
+                        }
+                        if (print_crew_results) {
+                            printstart "Print $test_instance.crew.name"
+                            String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${task.instance.printPlanningResults}&printPlanningResultsScan=${task.instance.printPlanningResultsScan}&printFlightResults=${task.instance.printFlightResults}&printFlightMap=${task.instance.printFlightMap}&printObservationResults=${task.instance.printObservationResults}&printObservationResultsScan=${task.instance.printObservationResultsScan}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
+                            if (!task.instance.GetDetailNum()) {
+                                url += "&disabletitle=yes"
                             }
-                            is_flight = true
+                            String uuid = UUID.randomUUID().toString()
+                            String flight_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
+                            String flight_map_file_name = "${webRootDir}${Defs.ROOT_FOLDER_GPXUPLOAD}/PNG-${uuid}-FLIGHT.png"
+                            boolean is_flight = false
+                            if (task.instance.printFlightMap && test_instance.IsFlightTestRun() && test_instance.IsShowMapPossible()) {
+                                Map converter = gpxService.ConvertTest2PrintMap(test_instance, flight_gpx_file_name, flight_map_file_name)
+                                if (converter.ok && converter.track) {
+                                    String flight_map_file_name2 = ("file:///" + HTMLFilter.GetStr(flight_map_file_name)).replaceAll('\\\\','/')
+                                    url += "&flightMapFileName=${flight_map_file_name2}"
+                                }
+                                is_flight = true
+                            }
+                            println "Print: $url"
+                            renderer.setDocument(url)
+                            renderer.layout()
+                            if (first_pdf) {
+                                renderer.createPDF(content,false)
+                                first_pdf = false
+                            } else {
+                                renderer.writeNextDocument(1)
+                            }
+                            if (is_flight) {
+                                gpxService.DeleteFile(flight_gpx_file_name)
+                                gpxService.DeleteFile(flight_map_file_name)
+                            }
+                            printdone ""
                         }
-                        println "Print: $url"
-                        renderer.setDocument(url)
-                        renderer.layout()
-                        if (first_pdf) {
-                            renderer.createPDF(content,false)
-                            first_pdf = false
-                        } else {
-                            renderer.writeNextDocument(1)
-                        }
-                        if (is_flight) {
-                            gpxService.DeleteFile(flight_gpx_file_name)
-                            gpxService.DeleteFile(flight_map_file_name)
-                        }
-                        printdone ""
                     }
                 }
             }

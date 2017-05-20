@@ -81,7 +81,7 @@
 	                                </div>
                                     <div>
                                         <g:checkBox name="printObservationResultsScan" value="${testInstance.printObservationResultsScan}" />
-                                        <label>${message(code:'fc.observation.scannedforms')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})<g:if test="${!testInstance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
+                                        <label>${message(code:'fc.observation.scannedforms')}</label>
                                     </div>
 	                            </g:if>
     	                       	<g:if test="${testInstance.IsLandingTestRun()}">

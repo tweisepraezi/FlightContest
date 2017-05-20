@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-25.04.2017
+20.05.2017
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -93,12 +93,26 @@ Erweiterungen in dieser Version (3.1):
     * Navigationstest -> Mitführen von verbotenem elektronischen Equipment
     -> 'Wettbewerb -> Punkte'
 - Unterstützung für automatischer Aktionen hinzugefügt
-   * Automatisches Öffnen von PDF im Acrobat Reader
-   * Automatisches Laden gescannter Planungstest-Formulare
-   * Automatisches Laden gescannter Beobachtungstest-Formulare
-   * Automatisches Laden eingelesener Logger-Daten
-   -> 'Programme -> Flight Contest -> Help' -> 'Automatische Aktionen'
+    * Automatisches Öffnen von PDF im Acrobat Reader
+    * Automatisches Laden gescannter Planungstest-Formulare
+    * Automatisches Laden gescannter Beobachtungstest-Formulare
+    * Automatisches Laden eingelesener Logger-Daten
+    -> 'Programme -> Flight Contest -> Help' -> 'Automatische Aktionen'
+- Besatzungsergebnis-Druck erweitert
+    * Druck vollständiger und geänderter Ergebnisse aus der Ergebnisliste heraus
+        Sind alle Aufgabendetails einer Besatzung vollständig eingegeben,
+        wird ein Direkt-Druck in der Liste angeboten (Drucker-Symbol in der 
+        letzten Spalte). Das Drucker-Symbol wird nach dem Druck gelöscht.
+    * Druck aller Besatzungsergebnisse wird standardmässig auf
+      geänderte und vollständige Besatzungsergebnisse beschränkt.
+    * Option "Nur geänderte Besatzungsergebnisse drucken"
+        Kann deaktiviert werden, um auch unveränderte Besatzungsergebnisse
+        zu drucken.
+    * Option "Nur vollständige Besatzungsergebnisse drucken"
+        Kann deaktiviert werden, um auch unvollständige Besatzungsergebnisse
+        zu drucken.
 - Aktualisierung folgender Regelwerke
+    Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
     FAI Precision Flying - Edition 2017
     FAI Air Rally Flying - Edition 2017
     Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017
@@ -108,6 +122,8 @@ Erweiterungen in dieser Version (3.1):
     Navigationsflug-Reglement Österreich - Ausgabe 2017
 - Englische Bedienungsanleitung Version 3.0 hinzugefügt
     -> 'Programme -> Flight Contest -> Manual'
+- Integrierte HTML-Hilfe
+    -> 'Hilfe'
 - Cloud-Demo
 
 Erweiterungen in Version 3.0:

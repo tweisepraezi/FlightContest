@@ -45,6 +45,7 @@
                             </p>
                             <p>
                                 <label>${message(code:'fc.contestrule')}*:</label>
+                                <a href="../../docs/help.html#supported-rules" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
                                 <g:select from="${ContestRules.GetContestRules()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" value="${contestInstance.contestRule}" tabIndex="4"/>
                             </p>
@@ -95,6 +96,7 @@
                                     <td colspan="5">
                                         <p>
                                             <label>${message(code:'fc.contest.paper.style')}:</label>
+                                            <a href="../../docs/help.html#print-styles" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                             <br/>
                                             <g:textArea name="printStyle" value="${contestInstance.printStyle}" rows="5" cols="110" tabIndex="10"/>
                                         </p>

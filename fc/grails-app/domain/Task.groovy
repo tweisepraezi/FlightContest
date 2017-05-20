@@ -128,7 +128,8 @@ class Task
 	static transients = ['printPlanningResults','printPlanningResultsScan',
                          'printFlightResults','printFlightMap',
                          'printObservationResults','printObservationResultsScan',
-                         'printLandingResults','printSpecialResults','printAircraft','printTeam','printClass','printShortClass','printProvisionalResults']
+                         'printLandingResults','printSpecialResults','printAircraft','printTeam','printClass','printShortClass',
+                         'printModifiedResults','printCompletedResults','printProvisionalResults']
 	boolean printPlanningResults = true
     boolean printPlanningResultsScan = true
 	boolean printFlightResults = true
@@ -141,6 +142,8 @@ class Task
 	boolean printTeam = false
 	boolean printClass = false
 	boolean printShortClass = false
+    boolean printModifiedResults = true
+    boolean printCompletedResults = true
 	boolean printProvisionalResults = false
 	
     static belongsTo = [contest:Contest]

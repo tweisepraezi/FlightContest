@@ -388,7 +388,7 @@ class Test
             crew.team.contestEqualPosition = false
             crew.team.contestAddPosition = 0
 		}
-		crewResultsModified = true
+		// crewResultsModified = true
 	}
 	
 	boolean IsPlanningTestRun()
@@ -1935,7 +1935,7 @@ class Test
 				break
 			case ResultType.Crew:
 				result_version = GetCrewResultsVersion()
-                // TODO: provisional = !
+                provisional = IsTestResultsProvisional(GetResultSettings())
 				break
 		}
 		String result_type = ""
@@ -2507,5 +2507,26 @@ class Test
             }
         }
         return Test.findByTask(taskInstance)
+    }
+    
+    Map GetPrintCrewResultsDefaultParams()
+    {
+        Map ret = [:]
+        if (IsPlanningTestRun()) {
+            ret += [printFlightResults:'on', printPlanningResultsScan:'on']
+        }
+        if (IsFlightTestRun()) {
+            ret += [printFlightResults:'on', printFlightMap:'on']
+        }
+        if (IsObservationTestRun()) {
+            ret += [printObservationResults:'on', printObservationResultsScan:'on']
+        }
+        if (IsLandingTestRun()) {
+            ret += [printLandingResults:'on']
+        }
+        if (IsSpecialTestRun()) {
+            ret += [printSpecialResults:'on']
+        }
+        return ret
     }
 }
