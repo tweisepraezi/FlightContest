@@ -158,10 +158,11 @@ class Test
     byte[] scannedObservationTest                          // DB-2.13
 
 	// transient values 
-	static transients = ['printPlanningResults','printPlanningResultsScan',
+	static transients = ['printSummaryResults','printPlanningResults','printPlanningResultsScan',
                          'printFlightResults','printFlightMap',
                          'printObservationResults','printObservationResultsScan',
                          'printLandingResults','printSpecialResults','printProvisionalResults',]
+    boolean printSummaryResults = true
 	boolean printPlanningResults = true
     boolean printPlanningResultsScan = true
 	boolean printFlightResults = true
@@ -2511,9 +2512,9 @@ class Test
     
     Map GetPrintCrewResultsDefaultParams()
     {
-        Map ret = [:]
+        Map ret = [printSummaryResults:'on']
         if (IsPlanningTestRun()) {
-            ret += [printFlightResults:'on', printPlanningResultsScan:'on']
+            ret += [printPlanningResults:'on', printPlanningResultsScan:'on']
         }
         if (IsFlightTestRun()) {
             ret += [printFlightResults:'on', printFlightMap:'on']

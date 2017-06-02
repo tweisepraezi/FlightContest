@@ -125,11 +125,12 @@ class Task
     String reserve                           = ""    // DB-2.12
 	
 	// transient values 
-	static transients = ['printPlanningResults','printPlanningResultsScan',
+	static transients = ['printSummaryResults','printPlanningResults','printPlanningResultsScan',
                          'printFlightResults','printFlightMap',
                          'printObservationResults','printObservationResultsScan',
                          'printLandingResults','printSpecialResults','printAircraft','printTeam','printClass','printShortClass',
                          'printModifiedResults','printCompletedResults','printProvisionalResults']
+    boolean printSummaryResults = true
 	boolean printPlanningResults = true
     boolean printPlanningResultsScan = true
 	boolean printFlightResults = true
@@ -1023,7 +1024,7 @@ class Task
     List GetPlanningTests()
     {
         List test_instances = []
-        for (Test test_instance in Test.findAllByTaskAndScannedPlanningTestAndPlanningTestCompleteAndPlanningtesttaskIsNotNull(this,null,false,[sort:"id"])) {
+        for (Test test_instance in Test.findAllByTaskAndScannedPlanningTestAndPlanningTestCompleteAndPlanningtesttaskIsNotNull(this,null,false,[sort:"viewpos"])) {
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                 if (test_instance.IsPlanningTestRun()) {
                     test_instances += test_instance
@@ -1036,7 +1037,7 @@ class Task
     List GetFlightTests()
     {
         List test_instances = []
-        for (Test test_instance in Test.findAllByTaskAndFlightTestComplete(this,false,[sort:"id"])) {
+        for (Test test_instance in Test.findAllByTaskAndFlightTestComplete(this,false,[sort:"viewpos"])) {
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                 if (test_instance.IsFlightTestRun()) {
                     test_instances += test_instance
@@ -1049,7 +1050,7 @@ class Task
     List GetObservationTests()
     {
         List test_instances = []
-        for (Test test_instance in Test.findAllByTaskAndScannedObservationTestAndObservationTestComplete(this,null,false,[sort:"id"])) {
+        for (Test test_instance in Test.findAllByTaskAndScannedObservationTestAndObservationTestComplete(this,null,false,[sort:"viewpos"])) {
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                 if (test_instance.IsObservationTestRun()) {
                     test_instances += test_instance

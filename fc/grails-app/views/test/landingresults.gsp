@@ -12,10 +12,13 @@
                 <h2>${testInstance.GetTitle(ResultType.Landing)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
+                        <g:set var="ti" value="${[]+1}"/>
+                        <a name="start"/>
                         <table>
                             <tbody>
                                 <tr>
                                     <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
+                                    <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -83,7 +86,7 @@
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
 			                                <br/>
-			                                <input type="text" id="landingTest1Measure" name="landingTest1Measure" value="${fieldValue(bean:testInstance,field:'landingTest1Measure')}" tabIndex="1"/>
+			                                <input type="text" id="landingTest1Measure" name="landingTest1Measure" value="${fieldValue(bean:testInstance,field:'landingTest1Measure')}" tabIndex="${ti[0]++}"/>
 			                            </p>
 	                                    <p>
 	                                        <div>
@@ -157,7 +160,7 @@
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
 			                                <br/>
-			                                <input type="text" id="landingTest2Measure" name="landingTest2Measure" value="${fieldValue(bean:testInstance,field:'landingTest2Measure')}" tabIndex="2"/>
+			                                <input type="text" id="landingTest2Measure" name="landingTest2Measure" value="${fieldValue(bean:testInstance,field:'landingTest2Measure')}" tabIndex="${ti[0]++}"/>
 			                            </p>
 				                        <p>
 					                        <div>
@@ -231,7 +234,7 @@
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
 			                                <br/>
-			                                <input type="text" id="landingTest3Measure" name="landingTest3Measure" value="${fieldValue(bean:testInstance,field:'landingTest3Measure')}" tabIndex="3"/>
+			                                <input type="text" id="landingTest3Measure" name="landingTest3Measure" value="${fieldValue(bean:testInstance,field:'landingTest3Measure')}" tabIndex="${ti[0]++}"/>
 			                            </p>
 				                        <p>
 					                        <div>
@@ -305,7 +308,7 @@
 			                            <p>
 			                                <label>${message(code:'fc.landingresults.measure')}*:</label>
 			                                <br/>
-			                                <input type="text" id="landingTest4Measure" name="landingTest4Measure" value="${fieldValue(bean:testInstance,field:'landingTest4Measure')}" tabIndex="4"/>
+			                                <input type="text" id="landingTest4Measure" name="landingTest4Measure" value="${fieldValue(bean:testInstance,field:'landingTest4Measure')}" tabIndex="${ti[0]++}"/>
 			                            </p>
 				                        <p>
 					                        <div>
@@ -377,7 +380,7 @@
 	                                <p>
 	                                    <label>${message(code:'fc.landingtest.otherpenalties')}* [${message(code:'fc.points')}]:</label>
 	                                    <br/>
-	                                    <input type="text" id="landingTestOtherPenalties" name="landingTestOtherPenalties" value="${fieldValue(bean:testInstance,field:'landingTestOtherPenalties')}" tabIndex="5"/>
+	                                    <input type="text" id="landingTestOtherPenalties" name="landingTestOtherPenalties" value="${fieldValue(bean:testInstance,field:'landingTestOtherPenalties')}" tabIndex="${ti[0]++}"/>
 	                                </p>
                                 </fieldset>
                             </g:if>
@@ -388,7 +391,7 @@
 		                            <p>
 		                                <label>${message(code:'fc.penalties.total')}* [${message(code:'fc.points')}]:</label>
 		                                <br/>
-		                                <input type="text" id="landingTestPenalties" name="landingTestPenalties" value="${fieldValue(bean:testInstance,field:'landingTestPenalties')}" tabIndex="6"/>
+		                                <input type="text" id="landingTestPenalties" name="landingTestPenalties" value="${fieldValue(bean:testInstance,field:'landingTestPenalties')}" tabIndex="${ti[0]++}"/>
 		                            </p>
 		                        </fieldset>
 		                	</g:if>
@@ -413,34 +416,44 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <g:if test="${!testInstance.landingTestComplete}">
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="11"/>
-                                <g:actionSubmit action="landingresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="12"/>
-                            </g:if>
-                            <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="13"/>
-                            </g:else>
-                        	<g:actionSubmit action="landingresultsready" value="${message(code:'fc.results.ready')}" tabIndex="14"/>
-                        	<g:actionSubmit action="landingresultssave" value="${message(code:'fc.save')}" tabIndex="15"/>
-                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="16"/>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
-                            </g:if>
-                        </g:if>
-                        <g:else>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="41"/>
-                            </g:if>
-                            <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="42"/>
-                            </g:else>
-                        	<g:actionSubmit action="landingresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="43"/>
-                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="44"/>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="45"/>
-                            </g:if>
-                        </g:else>
+                        <table>
+                            <tfoot>
+                                <tr>
+                                    <td>
+				                        <g:if test="${!testInstance.landingTestComplete}">
+				                            <g:if test="${params.next}">
+				                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
+				                                <g:actionSubmit action="landingresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="${ti[0]++}"/>
+				                            </g:if>
+				                            <g:else>
+				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+				                            </g:else>
+				                        	<g:actionSubmit action="landingresultsready" value="${message(code:'fc.results.ready')}" tabIndex="${ti[0]++}"/>
+				                        	<g:actionSubmit action="landingresultssave" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+				                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+				                            <g:if test="${params.next}">
+				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+				                            </g:if>
+				                        </g:if>
+				                        <g:else>
+				                            <g:if test="${params.next}">
+				                                <g:actionSubmit action="landingresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
+				                            </g:if>
+				                            <g:else>
+				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+				                            </g:else>
+				                        	<g:actionSubmit action="landingresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="${ti[0]++}"/>
+				                            <g:actionSubmit action="printlandingresults" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+				                            <g:if test="${params.next}">
+				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+				                            </g:if>
+				                        </g:else>
+                                    </td>
+                                    <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <a name="end"/>
                     </g:form>
                 </div>
             </div>

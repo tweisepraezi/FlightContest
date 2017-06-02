@@ -1,8 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1
-:revdate:   19.5.2017
-:revremark: Ausgabe 1
+:revnumber: 3.1, Ausgabe 2
+:revdate:   2.6.2017
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -477,7 +476,7 @@ Muss Höhenangaben beinhalten (<rtept lat="49.118333" lon="9.784000"><ele>400.00
 
 * REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.
 
-* TXT-Datei, die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
+* TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
 +
 Latitude, Longitude, Altitude
 +
@@ -506,10 +505,10 @@ in sein 'Flight Contest' zur Nutzung importieren kann.
 
 <<<
 Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon 
-auch mit Textdateien möglich. In einer leeren Strecke können alle Check-Punkte mit 
+auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Check-Punkte mit 
 "Koordinaten importieren" aus einer Text-Datei hinzugefügt werden (einschl. Eigenschaften):
   
- TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 1.0NM
+ TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
  SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
  TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
  SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
@@ -520,7 +519,7 @@ auch mit Textdateien möglich. In einer leeren Strecke können alle Check-Punkte
  TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
  TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
  FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
- LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 1.0NM
+ LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
 
 Check-Punkt (engl.), Latitude, Longitude, Altitude, Gate-Richtung und -Breite, u.a.
 
@@ -926,36 +925,35 @@ im AFLOS-Namen übereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.
 Ermöglicht Einfluß auf das Aussehen des Druckes +
 -> Wettbewerb -> Einstellungen -> Druck-Stil
 
-* CSS-Einstellungen für Titel
+[[print-styles-title]]
+=== CSS-Einstellungen für Titel
   
  h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
 
-+
 font-size: Größe des 1. Titels festlegen. Nur nutzbar, wenn die Titelgröße leer ist und keine Grafiken verwendet werden. +
 margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 1. Titels nach oben und unten festlegen
     
  h2 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
  
-+
 font-size: Größe des 2. Titels festlegen +
 margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 2. Titels nach oben und unten festlegen
     
  h3 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
 
-+
 font-size: Größe des 3. Titels festlegen +
 margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 3. Titels nach oben und unten festlegen
-      
-* CSS-Einstellungen für Unterschrift
+
+[[print-styles-foot]]      
+=== CSS-Einstellungen für Unterschrift
   
   h2#signature { margin-top:100px; }
 
-+
 margin-top: Abstand zur Tabelle oder zum Unterschriften-Bild vergrößern
 
-* CSS-Einstellungen für Tabellen
+<<<
+[[print-styles-tables]]
+=== CSS-Einstellungen für Tabellen
 
-+
 Anwendung:
 
  table.Tabellenname tr.Zeilenname td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
@@ -964,7 +962,6 @@ Anwendung:
  td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
  .Spaltenname { Eigenschaft1; Eigenschaft2; ... }
 
-+
 [%autowidth]
 |===
 |Eigenschaft|CSS-Ausdruck
@@ -979,14 +976,11 @@ Anwendung:
 |Textabstand zum Rahmen oben|padding-top:2cm;
 |===
 
-+
 CSS-Ausdrücke: http://www.w3schools.com/cssref +
 Default-Werte: http://localhost:8080/fc/css/fcprint.css
 
-+
 Tabellen-Klassen:
 
-+  
 [cols="3", options="header"]
 |===
 |Tabellen-Namen [Geltungsbereich]|Zeilen-Namen [#ID]|Spalten-Namen
@@ -1052,9 +1046,8 @@ Tabellen-Klassen:
 |testlist||testcol1 testcol2 testcol3 testcol4 testcol5
 |===
 
-+ 
-<<<
-Beispiele:
+[[print-styles-samples]]
+=== Beispiele
 
 ** Besatzungs-Liste - Zeilen verkleinern
 

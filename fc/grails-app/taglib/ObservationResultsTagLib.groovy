@@ -879,9 +879,9 @@ class ObservationResultsTagLib
                 }
             } else {
                 if ((coord_title.type == enrouteDataInstance.evaluationType) && (coord_title.number == enrouteDataInstance.evaluationNumber)) {
-                    outln"""<option value="${coord_title}" selected="selected">${coord_title.titleCode()}</option>"""
+                    outln"""<option value="${coord_title}" selected="selected">${coord_title.titleEnrouteInput()}</option>"""
                 } else {
-                    outln"""<option value="${coord_title}">${coord_title.titleCode()}</option>"""
+                    outln"""<option value="${coord_title}">${coord_title.titleEnrouteInput()}</option>"""
                 }
             }
         }

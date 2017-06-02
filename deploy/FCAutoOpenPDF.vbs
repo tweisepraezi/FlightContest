@@ -1,8 +1,8 @@
 ' --------------------------------------------------------------------------------
 '   FCAutoOpenPDF.vbs
 '   Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-'   23.02.2017
-'   Version 1.0.0
+'   01.06.2017
+'   Version 1.0.1
 ' --------------------------------------------------------------------------------
 
 ' Neu gesichterte Dateien automatisch öffnen
@@ -39,18 +39,18 @@ Sub Run()
 		LastFiles = GetFiles(SEARCH_FOLDER)
 
 		Do While True
-			WScript.Sleep CHECK_TIME
 			act_files = GetFiles(SEARCH_FOLDER)
 			If act_files <> LastFiles Then
 				added_files = GetAddedFiles(LastFiles, act_files)
 				If added_files <> "" Then
-					WScript.Sleep OPEN_TIME
 					If CanOpenFiles(added_files) Then
+						WScript.Sleep OPEN_TIME
 						OpenFiles added_files
 						LastFiles = act_files
 					End If
 				End If
 			End If
+			WScript.Sleep CHECK_TIME
 		Loop
 
 	End If

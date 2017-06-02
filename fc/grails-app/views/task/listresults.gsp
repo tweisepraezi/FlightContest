@@ -11,6 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.task.listresults')} - ${taskInstance.name()}<g:if test="${taskInstance.IsTaskResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <g:form id="${taskInstance.id}" method="post" >
+                    <a name="start"/>
                     <br/>
                     <table>
                         <tbody>
@@ -22,6 +23,7 @@
 	                            <g:else>
 	                            	<td/>
 	                            </g:else>
+                                <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                             </tr>
                             <tr>
                                 <g:if test="${!taskInstance.hidePlanning}">
@@ -30,6 +32,7 @@
                                 <g:else>
                                     <td/>
                                 </g:else>
+                                <td/>
                                 <td/>
                             </tr>
                         </tbody>
@@ -246,29 +249,23 @@
                                 </g:if>
                             </g:each>
                         </tbody>
+                    </table>
+                    <table>
                         <tfoot>
-                            <tr class="">
-                                <g:if test="${taskInstance.contest.resultClasses}">
-	                                <td colspan="5"></td>
-	                            </g:if>
-	                            <g:else>
-	                                <td colspan="4"></td>
-	                            </g:else>
-                                <td colspan="${results_columns}"><g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.crewresults.all.print')}" tabIndex="1"/> <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="2"/> <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="3"/></td>
+                            <tr>
+                                <td>
+                                    <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.crewresults.all.print')}" tabIndex="1"/>
+                                    <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="2"/> 
+                                    <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="3"/>
+                                    <g:if test="${taskInstance.IsEMailPossible()}">
+                                        <g:actionSubmit action="emailnavigationresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="4"/>
+                                    </g:if>
+                                </td>
+                                <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                             </tr>
-                           <g:if test="${taskInstance.IsEMailPossible()}">
-	                            <tr class="">
-	                                <g:if test="${taskInstance.contest.resultClasses}">
-	                                    <td colspan="5"></td>
-	                                </g:if>
-	                                <g:else>
-	                                    <td colspan="4"></td>
-	                                </g:else>
-	                                <td colspan="${results_columns}"><g:actionSubmit action="emailnavigationresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="4"/></td>
-	                            </tr>
-	                       </g:if>
                         </tfoot>
                     </table>
+                    <a name="end"/>
                 </g:form>
             </div>
             <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>

@@ -12,10 +12,19 @@
                 <h2>${testInstance.GetTitle(ResultType.Planningtask)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post">
+                        <a name="start"/>
                         <table>
                             <tbody>
                                 <tr>
                                     <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
+                                    <g:if test="${testInstance.scannedPlanningTest}"> 
+                                        <td style="width:1%;">
+                                            <a href="${createLink(controller:'test',action:'planningtaskformimage',params:[testid:testInstance.id])}" target="_blank"><img src="${createLinkTo(dir:'images',file:'scanned.png')}"/></a>
+                                        </td>
+                                    </g:if>
+                                    <td style="width:1%;">
+                                        <a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -144,9 +153,11 @@
                                     <td class="${points_class}">${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                             </tbody>
+                        </table>
+                        <table>
                             <tfoot>
                                 <tr>
-                                    <td colspan="2">
+                                    <td>
                                         <g:if test="${!testInstance.planningTestComplete}">
                                             <g:if test="${params.next}">
                                                 <g:actionSubmit action="planningtaskresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="11"/>
@@ -186,9 +197,11 @@
                                             </g:if>
                                         </g:else>
                                     </td>
+                                    <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                                 </tr>
                             </tfoot>
                         </table>
+                        <a name="end"/>
                     </g:form>
                 </div>
             </div>

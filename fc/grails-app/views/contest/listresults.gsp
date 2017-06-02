@@ -12,10 +12,12 @@
                 <h2>${contestInstance.GetListTitle(ResultFilter.Contest,'fc.contest.printresults')}<g:if test="${contestInstance.IsContestResultsProvisional(contestInstance.GetResultSettings(),contestInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
                     <g:form params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
+                        <a name="start"/>
                         <table>
                             <tbody>
                             	<tr>
 				                	<td>${contestInstance.GetResultTitle(contestInstance.GetResultSettings(),false)}</td>
+                                    <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
 				                </tr>
 				            </tbody>
 				        </table>
@@ -90,10 +92,20 @@
                                 </g:each>
                             </tbody>
                         </table>
-                        <g:actionSubmit action="editresultsettings" value="${message(code:'fc.contest.resultsettings')}" onclick="this.form.target='_self';return true;" tabIndex="1"/>
-                        <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
-                        <g:actionSubmit action="printresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
-                        <g:actionSubmit action="liveview" value="${message(code:'fc.liveview')}" onclick="this.form.target='_blank';return true;" tabIndex="4"/>
+                        <table>
+                            <tfoot>
+                                <tr>
+                                    <td>
+				                        <g:actionSubmit action="editresultsettings" value="${message(code:'fc.contest.resultsettings')}" onclick="this.form.target='_self';return true;" tabIndex="1"/>
+				                        <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
+				                        <g:actionSubmit action="printresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
+				                        <g:actionSubmit action="liveview" value="${message(code:'fc.liveview')}" onclick="this.form.target='_blank';return true;" tabIndex="4"/>
+				                    </td>
+				                    <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
+				                </tr>
+				            </tfoot>
+                        </table>
+                        <a name="end"/>
                     </g:form>
                 </div>
             </div>

@@ -24,50 +24,6 @@
 	    	                    </p>
 	                        </fieldset>
                         </g:if>
-                        <g:if test="${false}">
-	                        <fieldset>
-	                            <p> TODO
-	                                <g:if test="${taskInstance.IsPlanningTestRun()}">
-	                                    <div>
-	                                        <g:checkBox name="printPlanningResults" value="${taskInstance.printPlanningResults}" />
-	                                        <label>${message(code:'fc.planningresults')}</label>
-	                                    </div>
-                                        <div>
-                                            <g:checkBox name="printPlanningResultsScan" value="${taskInstance.printPlanningResultsScan}" />
-                                            <label>${message(code:'fc.planningtesttask.scannedforms')}</label>
-                                        </div>
-	                                </g:if>
-	                                <g:if test="${taskInstance.IsFlightTestRun()}">
-	                                    <div>
-	                                        <g:checkBox name="printFlightResults" value="${taskInstance.printFlightResults}" />
-	                                        <label>${message(code:'fc.flightresults')}</label>
-	                                    </div>
-	                                </g:if>
-	                                <g:if test="${taskInstance.IsObservationTestRun()}">
-	                                    <div>
-	                                        <g:checkBox name="printObservationResults" value="${taskInstance.printObservationResults}" />
-	                                        <label>${message(code:'fc.observationresults')}</label>
-	                                    </div>
-	                                    <div>
-	                                        <g:checkBox name="printObservationResultsScan" value="${taskInstance.printObservationResultsScan}" />
-	                                        <label>${message(code:'fc.observation.scannedforms')}</label>
-	                                    </div>
-	                                </g:if>
-	                                <g:if test="${taskInstance.IsLandingTestRun()}">
-	                                    <div>
-	                                        <g:checkBox name="printLandingResults" value="${taskInstance.printLandingResults}" />
-	                                        <label>${message(code:'fc.landingresults')}</label>
-	                                    </div>
-	                                </g:if>
-	                                <g:if test="${taskInstance.IsSpecialTestRun()}">
-	                                    <div>
-	                                        <g:checkBox name="printSpecialResults" value="${taskInstance.printSpecialResults}" />
-	                                        <label>${message(code:'fc.specialresults')}</label>
-	                                    </div>
-	                                </g:if>
-	                            </p>
-	                        </fieldset>
-	                    </g:if>
                         <fieldset>
                             <p>
                                 <div>

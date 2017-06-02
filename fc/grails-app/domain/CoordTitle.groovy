@@ -70,6 +70,18 @@ class CoordTitle // DB-2.5
 		}
 	}
     
+    String titleEnrouteInput()
+    {
+        switch (type) {
+            case CoordType.SP:
+                return getMsg(type.code).substring(0,1)
+            case CoordType.TP:
+                return "${number}"
+            default:
+                return "?"
+        }
+    }
+    
     String titleExport()
     {
         switch (type) {

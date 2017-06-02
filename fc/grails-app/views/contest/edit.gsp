@@ -96,7 +96,7 @@
                                     <td colspan="5">
                                         <p>
                                             <label>${message(code:'fc.contest.paper.style')}:</label>
-                                            <a href="../../docs/help.html#print-styles" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                            <a href="../../docs/help.html#print-styles-samples" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                             <br/>
                                             <g:textArea name="printStyle" value="${contestInstance.printStyle}" rows="5" cols="110" tabIndex="10"/>
                                         </p>

@@ -60,6 +60,15 @@
                 <input ... tabIndex="${attrs.ti[0]++}"/>
                 ...
     
+    HTML: Navigation zum Seitenanfang und -ende
+    -------------------------------------------
+        Seitenanfang:
+            <a name="start"/>
+            <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
+        Seiteende:
+            <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
+            <a name="end"/>
+     
     Session
     -------
         import org.springframework.web.context.request.RequestContextHolder

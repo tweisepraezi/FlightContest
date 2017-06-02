@@ -11,6 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.task.listplanning')} - ${taskInstance.name()}</h2>
                 <g:form id="${taskInstance.id}" method="post" >
+                    <a name="start"/>
                     <br/>
                     <table>
                         <tbody>
@@ -23,6 +24,7 @@
 	                            </g:else>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetableoverview')}"/></td>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetablejury')}"/></td>
+                                <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                             </tr>
                             <tr>
                                 <g:if test="${!taskInstance.hideResults}">
@@ -37,6 +39,7 @@
 	                                <td><g:link controller="flightTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
 	                            </g:else>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetable')}"/></td>
+                                <td/>
                                 <td/>
                             </tr>
                         </tbody>
@@ -161,6 +164,8 @@
                                 </g:if>
                             </g:each>
                         </tbody>
+                    </table>
+                    <table>
                         <tfoot>
                             <tr>
                                 <td colspan="2"><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}"/></td>
@@ -174,6 +179,7 @@
                                 <td><g:actionSubmit action="assignflighttestwind" value="${message(code:'fc.flighttestwind.assign')}"/></td>
                                 <td colspan="3"><g:actionSubmit action="calculatetimetable" value="${message(code:'fc.test.timetable.calculate')}"/></td>
                                 <td colspan="2"><g:actionSubmit action="disablecrew" value="${message(code:'fc.test.disablecrew')}"/></td>
+                                <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                             </tr>
                             <tr class="join">
                             	<td colspan="2"><g:actionSubmit action="selectend" value="${message(code:'fc.selectend')}"/></td>
@@ -187,6 +193,7 @@
                             	<td></td>
                             	<td colspan="3"><g:actionSubmit action="printflightplans" value="${message(code:'fc.test.flightplan.print')}" /></td>
                                 <td colspan="2"><g:actionSubmit action="enablecrew" value="${message(code:'fc.test.enablecrew')}"/></td>
+                                <td/>
                             </tr>
                             <tr class="join">
                                 <td colspan="2"><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}"/></td>
@@ -204,9 +211,11 @@
 								</g:else>
                                 <td colspan="3"><g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" /> <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" /></td>
                                 <td colspan="2"><g:actionSubmit action="exporttimetable" value="${message(code:'fc.test.timetable.export')}" /></td>
+                                <td/>
                             </tr>
                         </tfoot>
                     </table>
+                    <a name="end"/>
                 </g:form>
             </div>
             <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>

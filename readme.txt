@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-20.05.2017
+02.06.2017
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -111,6 +111,7 @@ Erweiterungen in dieser Version (3.1):
     * Option "Nur vollständige Besatzungsergebnisse drucken"
         Kann deaktiviert werden, um auch unvollständige Besatzungsergebnisse
         zu drucken.
+- Ein-Klick-Navigation zum Formularanfang und -ende hinzugefügt
 - Aktualisierung folgender Regelwerke
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
     FAI Precision Flying - Edition 2017

@@ -1027,7 +1027,10 @@ class TestController
     def observationformimage = {
         if (params.testid) {
             Test test = Test.get(params.testid)
-            response.outputStream << test.scannedObservationTest
+            try {
+                response.outputStream << test.scannedObservationTest
+            } catch (Exception e) {
+            }
         }
     }
     
@@ -1424,6 +1427,7 @@ class TestController
         }
         def test = fcService.getresultsprintableTest(params) 
         if (test.instance) {
+            test.instance.printSummaryResults = params.printSummaryResults == "true"
 			test.instance.printPlanningResults = params.printPlanningResults == "true"
             test.instance.printPlanningResultsScan = params.printPlanningResultsScan == "true"
 			test.instance.printFlightResults = params.printFlightResults == "true"

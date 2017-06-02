@@ -26,6 +26,10 @@
                         </g:if>
                         <fieldset>
                             <p>
+                                <div>
+                                    <g:checkBox name="printSummaryResults" value="${taskInstance.printSummaryResults}" />
+                                    <label>${message(code:'fc.summary')}</label>
+                                </div>
 	                           	<g:if test="${taskInstance.IsPlanningTestRun()}">
 	                                <div>
 	                                    <g:checkBox name="printPlanningResults" value="${taskInstance.printPlanningResults}" />

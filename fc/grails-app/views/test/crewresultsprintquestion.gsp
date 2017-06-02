@@ -54,6 +54,10 @@
                         </table>
                         <fieldset>
                             <p>
+                                <div>
+                                    <g:checkBox name="printSummaryResults" value="${testInstance.printSummaryResults}" />
+                                    <label>${message(code:'fc.summary')}</label>
+                                </div>
 	                           	<g:if test="${testInstance.IsPlanningTestRun()}">
 	                                <div>
 	                                    <g:checkBox name="printPlanningResults" value="${testInstance.printPlanningResults}" />

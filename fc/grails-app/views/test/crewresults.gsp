@@ -12,10 +12,12 @@
                 <h2>${testInstance.GetTitle(ResultType.Crew)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" params="${['crewresultsReturnAction':crewresultsReturnAction,'crewresultsReturnController':crewresultsReturnController,'crewresultsReturnID':crewresultsReturnID]}">
+                        <a name="start"/>
                         <table>
                             <tbody>
                                 <tr>
                                     <td><g:task var="${testInstance.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
+                                    <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -168,16 +170,26 @@
 	                    <g:if test="${testInstance.IsSpecialTestRun()}">
                             <g:specialTestCrewResults t="${testInstance}"/>
 	                    </g:if>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="crewresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="1"/>
-                        </g:if>
-                        <g:else>
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="2"/>
-                        </g:else>
-                        <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.print')}" tabIndex="3"/>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="4"/>
-                        </g:if>
+                        <table>
+                            <tfoot>
+                                <tr>
+                                    <td>
+				                        <g:if test="${params.next}">
+				                            <g:actionSubmit action="crewresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="1"/>
+				                        </g:if>
+				                        <g:else>
+				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="2"/>
+				                        </g:else>
+				                        <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.print')}" tabIndex="3"/>
+				                        <g:if test="${params.next}">
+				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="4"/>
+				                        </g:if>
+			                        </td>
+                                    <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <a name="end"/>
                     </g:form>
                 </div>
             </div>

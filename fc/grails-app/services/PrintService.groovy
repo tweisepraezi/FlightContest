@@ -1112,6 +1112,7 @@ class PrintService
             return task
         }
 
+        task.instance.printSummaryResults = params.printSummaryResults == "on"
         task.instance.printPlanningResults = params.printPlanningResults == "on"
         task.instance.printPlanningResultsScan = params.printPlanningResultsScan == "on"
         task.instance.printFlightResults = params.printFlightResults == "on"
@@ -1141,7 +1142,7 @@ class PrintService
                         }
                         if (print_crew_results) {
                             printstart "Print $test_instance.crew.name"
-                            String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${task.instance.printPlanningResults}&printPlanningResultsScan=${task.instance.printPlanningResultsScan}&printFlightResults=${task.instance.printFlightResults}&printFlightMap=${task.instance.printFlightMap}&printObservationResults=${task.instance.printObservationResults}&printObservationResultsScan=${task.instance.printObservationResultsScan}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
+                            String url = "${printparams.baseuri}/test/crewresultsprintable/${test_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printSummaryResults=${task.instance.printSummaryResults}&printPlanningResults=${task.instance.printPlanningResults}&printPlanningResultsScan=${task.instance.printPlanningResultsScan}&printFlightResults=${task.instance.printFlightResults}&printFlightMap=${task.instance.printFlightMap}&printObservationResults=${task.instance.printObservationResults}&printObservationResultsScan=${task.instance.printObservationResultsScan}&printLandingResults=${task.instance.printLandingResults}&printSpecialResults=${task.instance.printSpecialResults}&printProvisionalResults=${task.instance.printProvisionalResults}"
                             if (!task.instance.GetDetailNum()) {
                                 url += "&disabletitle=yes"
                             }
@@ -1178,13 +1179,13 @@ class PrintService
             renderer.finishPDF()
             task.content = content.toByteArray()
             content.close()
+            printdone ""
         }
         catch (Throwable e) {
             task.message = getMsg('fc.crewresults.printerror',["$e"])
             task.error = true
             printerror task.message 
         }
-        printdone ""
         return task
     }
     
@@ -1362,11 +1363,14 @@ class PrintService
     //--------------------------------------------------------------------------
     Map printcrewresultsTest(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
     {
+        printstart "printcrewresultsTest"
         Map test = domainService.GetTest(params)
         if (!test.instance) {
+            printerror "No test."
             return test
         }
         
+        test.instance.printSummaryResults = params.printSummaryResults == "on"
         test.instance.printPlanningResults = params.printPlanningResults == "on"
         test.instance.printPlanningResultsScan = params.printPlanningResultsScan == "on"
         test.instance.printFlightResults = params.printFlightResults == "on"
@@ -1381,8 +1385,8 @@ class PrintService
         try {
             ITextRenderer renderer = new ITextRenderer();
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/crewresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printPlanningResults=${test.instance.printPlanningResults}&printPlanningResultsScan=${test.instance.printPlanningResultsScan}&printFlightResults=${test.instance.printFlightResults}&printFlightMap=${test.instance.printFlightMap}&printObservationResults=${test.instance.printObservationResults}&printObservationResultsScan=${test.instance.printObservationResultsScan}&printLandingResults=${test.instance.printLandingResults}&printSpecialResults=${test.instance.printSpecialResults}&printProvisionalResults=${test.instance.printProvisionalResults}"
-            if (!test.instance.GetDetailNum()) {
+            String url = "${printparams.baseuri}/test/crewresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printSummaryResults=${test.instance.printSummaryResults}&printPlanningResults=${test.instance.printPlanningResults}&printPlanningResultsScan=${test.instance.printPlanningResultsScan}&printFlightResults=${test.instance.printFlightResults}&printFlightMap=${test.instance.printFlightMap}&printObservationResults=${test.instance.printObservationResults}&printObservationResultsScan=${test.instance.printObservationResultsScan}&printLandingResults=${test.instance.printLandingResults}&printSpecialResults=${test.instance.printSpecialResults}&printProvisionalResults=${test.instance.printProvisionalResults}"
+            if (!(test.instance.GetDetailNum() || test.instance.printSummaryResults)) {
                 url += "&disabletitle=yes"
             }
             String uuid = UUID.randomUUID().toString()
@@ -1406,10 +1410,12 @@ class PrintService
                 gpxService.DeleteFile(flight_gpx_file_name)
                 gpxService.DeleteFile(flight_map_file_name)
             }
+            printdone ""
         }
         catch (Throwable e) {
             test.message = getMsg('fc.crewresults.printerror',["$e"])
             test.error = true
+            printerror test.message 
         }
         return test
     }
@@ -1604,11 +1610,15 @@ class PrintService
         }
         String file_name = "fc-${prefix}${suffix}${size_str}.pdf"
         printstart "WritePDF '$file_name'"
-        response.setContentType("application/pdf")
-        response.setHeader("Content-disposition", "attachment; filename=$file_name")
-        response.setContentLength(contentByteArray.length)
-        response.getOutputStream().write(contentByteArray)
-        printdone ""
+        try {
+            response.setContentType("application/pdf")
+            response.setHeader("Content-disposition", "attachment; filename=$file_name")
+            response.setContentLength(contentByteArray.length)
+            response.getOutputStream().write(contentByteArray)
+            printdone ""
+        } catch (Throwable e) {
+            printerror e
+        }
     }
     
     //--------------------------------------------------------------------------

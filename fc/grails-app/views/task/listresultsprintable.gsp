@@ -212,7 +212,20 @@
 	                                		<td class="flightpenalties">${test_instance.flightTestPenalties}<g:if test="${!test_instance.flightTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                </g:if>
 		                                <g:if test="${test_instance.IsObservationTestRun()}">
-		                                	<td class="observationpenalties">${test_instance.observationTestPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                        <g:if test="${observation_result_any_columns > 0}">
+	                                            <g:if test="${taskclass_instance.observationTestTurnpointRun}">
+	                                                <td class="observationpenalties">${test_instance.observationTestTurnPointPhotoPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                            </g:if>
+	                                            <g:if test="${taskclass_instance.observationTestEnroutePhotoRun}">
+	                                                <td class="observationpenalties">${test_instance.observationTestRoutePhotoPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                            </g:if>
+	                                            <g:if test="${taskclass_instance.observationTestEnrouteCanvasRun}">
+	                                                <td class="observationpenalties">${test_instance.observationTestGroundTargetPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                            </g:if>
+	                                        </g:if>
+	                                        <g:else>
+    		                                	<td class="observationpenalties">${test_instance.observationTestPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+    		                            </g:else>
 		                                </g:if>
 		                                <g:if test="${test_instance.IsLandingTestRun() && !test_instance.IsLandingTestAnyRun()}">
 		                                	<td class="landingpenalties">${test_instance.landingTestPenalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
@@ -246,6 +259,7 @@
 	            <table class="tasklistresultsprintable">
 		            <g:set var="results_columns" value="${taskInstance.GetResultColumns()}"></g:set>
 		            <g:set var="landing_result_any_columns" value="${taskInstance.GetLandingResultAnyColumns()}"></g:set>
+                    <g:set var="observation_result_any_columns" value="${taskInstance.GetObservationResultAnyColumns()}"></g:set>
 	                <thead>
 	                    <tr>
 	    	                <th>${message(code:'fc.test.results.position.short')}</th>
@@ -269,7 +283,12 @@
                                	<th>${message(code:'fc.flightresults.flight.short')}</th>
                             </g:if>
                             <g:if test="${taskInstance.IsObservationTestRun()}">
-                                <th>${message(code:'fc.observationresults.observations.short')}</th>
+                                <g:if test="${observation_result_any_columns > 0}">
+                                    <th colspan="${observation_result_any_columns}">${message(code:'fc.observationresults.observations')}</th>
+                                </g:if>
+                                <g:else>
+                                    <th>${message(code:'fc.observationresults.observations.short')}</th>
+                                </g:else>
                             </g:if>
                             <g:if test="${taskInstance.IsLandingTestRun()}">
                                 <g:if test="${landing_result_any_columns > 0}">
@@ -286,7 +305,7 @@
                               	<th>${message(code:'fc.test.results.summary')}</th>
                             </g:if>
                         </tr>
-	                    <g:if test="${landing_result_any_columns > 0}">
+	                    <g:if test="${landing_result_any_columns > 0 || observation_result_any_columns > 0}">
 		                    <tr>
 		                        <th/>
 		                        <th/>
@@ -309,7 +328,20 @@
                                 	<th/>
                                 </g:if>
                                 <g:if test="${taskInstance.IsObservationTestRun()}">
-                                	<th/>
+                                    <g:if test="${observation_result_any_columns > 0}">
+                                        <g:if test="${taskInstance.observationTestTurnpointRun}">
+                                            <th>${message(code:'fc.observationresults.turnpoint.short')}</th>
+                                        </g:if>
+                                        <g:if test="${taskInstance.observationTestEnroutePhotoRun}">
+                                            <th>${message(code:'fc.observationresults.enroutephoto.short')}</th>
+                                        </g:if>
+                                        <g:if test="${taskInstance.observationTestEnrouteCanvasRun}">
+                                            <th>${message(code:'fc.observationresults.enroutecanvas.short')}</th>
+                                        </g:if>
+                                    </g:if>
+                                    <g:else>
+                                    	<th/>
+                                    </g:else>
                                 </g:if>
                                 <g:if test="${taskInstance.IsLandingTest1Run()}">
                                     <th>${message(code:'fc.landingresults.landing1.short')}</th>
@@ -336,55 +368,68 @@
 	                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskPosition'])}">
 	                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 		                        <tr>
-		                             <td class="pos">${test_instance.taskPosition}</td>
-		                             <td class="crew">${test_instance.crew.name}</td>
-                                     <g:if test="${params.printAircraft=='true'}">
-                                         <td class="aircraft"><g:if test="${test_instance.taskAircraft}">${test_instance.taskAircraft.registration}</g:if><g:else>-</g:else></td>
-                                     </g:if>
-                                     <g:if test="${params.printTeam=='true'}">
-				                         <g:if test="${test_instance.crew.team}">
-				                             <td class="team">${test_instance.crew.team.name}</td>
-				                         </g:if>
-		                                 <g:else>
-		                                     <td class="team">-</td>
-		                                 </g:else>
-		                             </g:if>
-                                     <g:if test="${params.printClass=='true'}">
-                                         <td class="resultclass"><g:if test="${test_instance.crew.resultclass}">${test_instance.crew.resultclass.name}</g:if></td>
-                                     </g:if>
-                                     <g:if test="${params.printShortClass=='true'}">
-                                         <td class="shortresultclass"><g:if test="${test_instance.crew.resultclass}">${test_instance.crew.resultclass.shortName}</g:if></td>
-                                     </g:if>
-				                     <g:if test="${test_instance.IsPlanningTestRun()}">
-		                                 <td class="planningpenalties">${test_instance.planningTestPenalties}<g:if test="${!test_instance.planningTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-			                         <g:if test="${test_instance.IsFlightTestRun()}">
-			                             <td class="flightpenalties">${test_instance.flightTestPenalties}<g:if test="${!test_instance.flightTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${test_instance.IsObservationTestRun()}">
-				                         <td class="observationpenalties">${test_instance.observationTestPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${test_instance.IsLandingTestRun() && !test_instance.IsLandingTestAnyRun()}">
-				                         <td class="landingpenalties">${test_instance.landingTestPenalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest1Run()}">
-				                         <td class="landingpenalties">${test_instance.landingTest1Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest2Run()}">
-				                         <td class="landingpenalties">${test_instance.landingTest2Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest3Run()}">
-				                         <td class="landingpenalties">${test_instance.landingTest3Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest4Run()}">
-				                         <td class="landingpenalties">${test_instance.landingTest4Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${test_instance.IsSpecialTestRun()}">
-				                         <td class="specialpenalties">${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-				                     </g:if>
-				                     <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
-		    	                         <td class="taskpenalties">${test_instance.taskPenalties}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
-		    	                     </g:if>
+		                            <td class="pos">${test_instance.taskPosition}</td>
+		                            <td class="crew">${test_instance.crew.name}</td>
+                                    <g:if test="${params.printAircraft=='true'}">
+                                        <td class="aircraft"><g:if test="${test_instance.taskAircraft}">${test_instance.taskAircraft.registration}</g:if><g:else>-</g:else></td>
+                                    </g:if>
+                                    <g:if test="${params.printTeam=='true'}">
+				                        <g:if test="${test_instance.crew.team}">
+				                            <td class="team">${test_instance.crew.team.name}</td>
+				                        </g:if>
+		                                <g:else>
+		                                    <td class="team">-</td>
+		                                </g:else>
+		                            </g:if>
+                                    <g:if test="${params.printClass=='true'}">
+                                        <td class="resultclass"><g:if test="${test_instance.crew.resultclass}">${test_instance.crew.resultclass.name}</g:if></td>
+                                    </g:if>
+                                    <g:if test="${params.printShortClass=='true'}">
+                                        <td class="shortresultclass"><g:if test="${test_instance.crew.resultclass}">${test_instance.crew.resultclass.shortName}</g:if></td>
+                                    </g:if>
+				                    <g:if test="${test_instance.IsPlanningTestRun()}">
+		                                <td class="planningpenalties">${test_instance.planningTestPenalties}<g:if test="${!test_instance.planningTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+			                        <g:if test="${test_instance.IsFlightTestRun()}">
+			                            <td class="flightpenalties">${test_instance.flightTestPenalties}<g:if test="${!test_instance.flightTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+				                    <g:if test="${test_instance.IsObservationTestRun()}">
+	                                    <g:if test="${observation_result_any_columns > 0}">
+	                                        <g:if test="${taskInstance.observationTestTurnpointRun}">
+	                                            <td class="observationpenalties">${test_instance.observationTestTurnPointPhotoPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                        </g:if>
+	                                        <g:if test="${taskInstance.observationTestEnroutePhotoRun}">
+	                                            <td class="observationpenalties">${test_instance.observationTestRoutePhotoPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                        </g:if>
+	                                        <g:if test="${taskInstance.observationTestEnrouteCanvasRun}">
+	                                            <td class="observationpenalties">${test_instance.observationTestGroundTargetPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+	                                        </g:if>
+	                                    </g:if>
+	                                    <g:else>
+				                            <td class="observationpenalties">${test_instance.observationTestPenalties}<g:if test="${!test_instance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                        </g:else>
+				                    </g:if>
+				                    <g:if test="${test_instance.IsLandingTestRun() && !test_instance.IsLandingTestAnyRun()}">
+				                        <td class="landingpenalties">${test_instance.landingTestPenalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest1Run()}">
+				                        <td class="landingpenalties">${test_instance.landingTest1Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest2Run()}">
+				                        <td class="landingpenalties">${test_instance.landingTest2Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest3Run()}">
+				                        <td class="landingpenalties">${test_instance.landingTest3Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest4Run()}">
+				                        <td class="landingpenalties">${test_instance.landingTest4Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+				                    <g:if test="${test_instance.IsSpecialTestRun()}">
+				                        <td class="specialpenalties">${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                    </g:if>
+				                    <g:if test="${(results_columns > 1) || (taskInstance.IsIncreaseEnabled())}">
+		    	                        <td class="taskpenalties">${test_instance.taskPenalties}<g:if test="${test_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[test_instance.crew.GetIncreaseFactor()])})</g:if><g:if test="${test_instance.IsTestResultsProvisional(test_instance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></td>
+		    	                    </g:if>
 		                         </tr>
 		                     </g:if> 
 	                     </g:each>
