@@ -11,7 +11,6 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.task.listplanning')} - ${taskInstance.name()}</h2>
                 <g:form id="${taskInstance.id}" method="post" >
-                    <a name="start"/>
                     <br/>
                     <table>
                         <tbody>

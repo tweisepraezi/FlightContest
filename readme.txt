@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-02.06.2017
+22.06.2017
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -87,6 +87,9 @@ Erweiterungen in dieser Version (3.1):
     * TXT-Datei-Import untertützt nun verschiedene Koordinaten-Darstellungen
       (entsprechend der Wettbewerbseinstellung)
     -> 'Programme -> Flight Contest -> Help' -> 'Streckenplanung'
+- Strecken-Liste erweitert
+    * Anzeige vorhandener Wendeschleifen
+    * Anzeige vorhandener unbekannter Zeitkontrollen
 - Regelwerk-Wettbewerbspunkte erweitert
     * Allgemein -> Steigerungsfaktor für Besatzungen
     * Planungstest -> Verwendung elektronischer Rechenhilfen

@@ -4353,9 +4353,15 @@ class FcService
             if (route_instance.enroutePhotoMeasurement == EnrouteMeasurement.Unassigned) {
                 route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
             }
+            if (route_instance.enroutePhotoRoute == EnrouteRoute.Unassigned) {
+                route_instance.enroutePhotoRoute = EnrouteRoute.None
+            }
             route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
             if (route_instance.enrouteCanvasMeasurement == EnrouteMeasurement.Unassigned) {
                 route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
+            }
+            if (route_instance.enrouteCanvasRoute == EnrouteRoute.Unassigned) {
+                route_instance.enrouteCanvasRoute = EnrouteRoute.None
             }
 
 	        if(!route_instance.hasErrors() && route_instance.save()) {

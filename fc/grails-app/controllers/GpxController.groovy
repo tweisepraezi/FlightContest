@@ -214,8 +214,14 @@ class GpxController
     
     def calculatexy = {
         gpxService.printstart "calculatexy ($params.gpxFileName, $params.maxX, $params.maxY, $params.centerLat, $params.centerLon, $params.radius, $params.moveDir)"
+        String time_zone = "00:00"
+        CoordPresentation coord_presentation = CoordPresentation.DEGREEMINUTE
+        if (session.lastContest) {
+            time_zone = session.lastContest.timeZone
+            coord_presentation = session.lastContest.coordPresentation
+        }
         response.contentType = "text/xml"
-        response.outputStream << gpxService.ConvertGPX2XYXML(params.gpxFileName, params.maxX.toInteger(), params.maxY.toInteger(), params.centerLat, params.centerLon, params.radius, params.moveDir, session.lastContest.timeZone, session.lastContest.coordPresentation)
+        response.outputStream << gpxService.ConvertGPX2XYXML(params.gpxFileName, params.maxX.toInteger(), params.maxY.toInteger(), params.centerLat, params.centerLon, params.radius, params.moveDir, time_zone, coord_presentation)
         gpxService.printdone ""
     }
     

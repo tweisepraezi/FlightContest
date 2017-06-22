@@ -11,7 +11,6 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.task.listresults')} - ${taskInstance.name()}<g:if test="${taskInstance.IsTaskResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <g:form id="${taskInstance.id}" method="post" >
-                    <a name="start"/>
                     <br/>
                     <table>
                         <tbody>

@@ -12,7 +12,6 @@
                 <h2>${message(code:'fc.route.show')}</h2>
                 <div class="block" id="forms" >
                     <g:form params="${['routeReturnAction':routeReturnAction,'routeReturnController':routeReturnController,'routeReturnID':routeReturnID]}">
-                        <a name="start"/>
                         <g:set var="ti" value="${[]+1}"/>
                         <table>
                             <tbody>

@@ -12,7 +12,6 @@
                 <h2>${contestInstance.GetListTitle(ResultFilter.Contest,'fc.contest.printresults')}<g:if test="${contestInstance.IsContestResultsProvisional(contestInstance.GetResultSettings(),contestInstance.contestTaskResults)}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <div class="block" id="forms" >
                     <g:form params="${['positionsReturnAction':positionsReturnAction,'positionsReturnController':positionsReturnController,'positionsReturnID':positionsReturnID]}" >
-                        <a name="start"/>
                         <table>
                             <tbody>
                             	<tr>

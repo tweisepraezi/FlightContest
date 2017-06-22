@@ -8,8 +8,8 @@ const FCVersion = '3.1.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.1.RC5
-AppVersion=3.1.RC5
+AppVerName=Flight Contest 3.1.RC6
+AppVersion=3.1.RC6
 ; no milestone below
 VersionInfoVersion=3.1.0
 

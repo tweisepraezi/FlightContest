@@ -22,6 +22,7 @@
                                 <label>${message(code:'fc.title')} (${taskInstance.idName()}):</label>
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:taskInstance,field:'title')}" tabIndex="1"/>
+                                <a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -317,6 +318,7 @@
                                 <label>${message(code:'fc.task.addtimevalue')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
                                 <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="101"/>
+                                <a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}"/>
@@ -325,6 +327,7 @@
                         <g:actionSubmit action="copy" value="${message(code:'fc.copy')}" tabIndex="103"/>
                         <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="104"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="105"/>
+                        <a name="end"/>
                     </g:form>
                 </div>
             </div>

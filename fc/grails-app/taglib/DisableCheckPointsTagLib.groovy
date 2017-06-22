@@ -45,7 +45,7 @@ class DisableCheckPointsTagLib
         int i = 0
         CoordRoute last_coordroute_instance = null
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
-            i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, true)
+            i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, coordroute_instance.planProcedureTurn)
             last_coordroute_instance = coordroute_instance
         }
         i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, false)
@@ -96,7 +96,7 @@ class DisableCheckPointsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private inputCoord(CoordRoute coordrouteInstance, Route routeInstance, int i, Task taskInstance, boolean procedureTurn)
+    private inputCoord(CoordRoute coordrouteInstance, Route routeInstance, int i, Task taskInstance, boolean planProcedureTurn)
     {
         if (coordrouteInstance) {
             if (coordrouteInstance.type.IsCpCheckCoord()) {
@@ -114,8 +114,8 @@ class DisableCheckPointsTagLib
                     outln"""<td/>"""
                     outln"""<td/>"""
                 }
-                if (procedureTurn) {
-                    if (coordrouteInstance.type.IsProcedureTurnCoord() && coordrouteInstance.planProcedureTurn) {
+                if (planProcedureTurn) {
+                    if (coordrouteInstance.type.IsProcedureTurnCoord()) {
                         checkBox("${Defs.TurnpointID_ProcedureTurn}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsProcedureTurn.contains(check_title))
                     } else {
                         outln"""<td/>"""

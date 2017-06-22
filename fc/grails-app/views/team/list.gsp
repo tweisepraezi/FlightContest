@@ -13,11 +13,12 @@
 	                <thead>
 	                    <tr>
                             <g:if test="${resultClasses}">
-                                <th colspan="6" class="table-head">${message(code:'fc.team.list')} (${teamInstanceList.size()})</th>
+                                <th colspan="4" class="table-head">${message(code:'fc.team.list')} (${teamInstanceList.size()})</th>
                             </g:if>
                             <g:else>
-                                <th colspan="5" class="table-head">${message(code:'fc.team.list')} (${teamInstanceList.size()})</th>
+                                <th colspan="3" class="table-head">${message(code:'fc.team.list')} (${teamInstanceList.size()})</th>
                             </g:else>
+                            <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></th>
 	                    </tr>
 	                    <tr>
 	                       <th>${message(code:'fc.team.name')}</th>
@@ -88,11 +89,12 @@
 	                    <tr class="">
 	                        <td><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" /></td>
                             <g:if test="${resultClasses}">
-    	                        <td colspan="4"><g:actionSubmit action="deleteteams" value="${message(code:'fc.team.deleteteams')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
+    	                        <td colspan="3"><g:actionSubmit action="deleteteams" value="${message(code:'fc.team.deleteteams')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
     	                    </g:if>
     	                    <g:else>
-                                <td colspan="3"><g:actionSubmit action="deleteteams" value="${message(code:'fc.team.deleteteams')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
+                                <td colspan="2"><g:actionSubmit action="deleteteams" value="${message(code:'fc.team.deleteteams')}" onclick="return confirm('${message(code:'fc.areyousure')}');" /></td>
     	                    </g:else>
+    	                    <td><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
 	                    </tr>
 	                    <tr class="join">
 	                        <td><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" /></td>
@@ -105,6 +107,7 @@
 	                    </tr>
 	                </tfoot>
 	            </table>
+	            <a name="end"/>
             </g:form>
             <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>
         </div>

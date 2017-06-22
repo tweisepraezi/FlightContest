@@ -22,6 +22,7 @@
                                 <label>${message(code:'fc.title')}*:</label>
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}" tabIndex="1"/>
+                                <a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>
                             </p>
                             <p>
                                 <label>${message(code:'fc.titleprintprefix')}:</label>
@@ -234,21 +235,21 @@
                                     <td><g:actionSubmit action="printtest_a4_landscape" value="${message(code:'fc.print.test.a4.landscape')}" tabIndex="111"/></td>
                                     <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
                                     <td><input type="text" id="a4LandscapeFactor" name="a4LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a4LandscapeFactor')}" tabIndex="112"/></td>
-                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a4landscapefactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="113"/>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a4landscapefactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="113"/></td>
                                 </tr>
                                 <tr>
                                     <td/>
                                     <td><g:actionSubmit action="printtest_a3_portrait" value="${message(code:'fc.print.test.a3.portrait')}" tabIndex="121"/></td>
                                     <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
                                     <td><input type="text" id="a3PortraitFactor" name="a3PortraitFactor" value="${fieldValue(bean:contestInstance,field:'a3PortraitFactor')}" tabIndex="122"/></td>
-                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a3portraitfactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="123"/>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a3portraitfactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="123"/></td>
                                 </tr>
                                 <tr>
                                     <td/>
                                     <td><g:actionSubmit action="printtest_a3_landscape" value="${message(code:'fc.print.test.a3.landscape')}" tabIndex="131"/></td>
                                     <td style="vertical-align:middle;width:10%">${message(code:'fc.contest.paper.factor')}:</td>
                                     <td><input type="text" id="a3LandscapeFactor" name="a3LandscapeFactor" value="${fieldValue(bean:contestInstance,field:'a3LandscapeFactor')}" tabIndex="132"/></td>
-                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a3landscapefactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="133"/>
+                                    <td style="vertical-align:middle"><g:actionSubmit action="reset_a3landscapefactor" value="${message(code:'fc.contest.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="133"/></td>
                                 </tr>
                                 <tr>
                                     <td/>
@@ -263,6 +264,8 @@
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
                         <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="201"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="202"/>
+                        <a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a>
+                        <a name="end"/>
                     </g:form>
                 </div>
             </div>

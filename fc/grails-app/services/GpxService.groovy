@@ -1053,6 +1053,11 @@ class GpxService
         String utc_or_gate = ""
         if (utcValue) {
             utc_or_gate = FcTime.UTCGetLocalTime(utcValue, timeZone)
+            if (timeZone == "00:00") {
+                utc_or_gate += " UTC"
+            } else {
+                utc_or_gate += " Local"
+            }
         } else if (gateName) {
             utc_or_gate = gateName
         }

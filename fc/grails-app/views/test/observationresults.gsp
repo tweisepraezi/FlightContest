@@ -12,7 +12,6 @@
                 <h2>${testInstance.GetTitle(ResultType.Observation)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
-                        <a name="start"/>
                         <g:set var="ti" value="${[]+1}" />
                         <table>
                             <tbody>

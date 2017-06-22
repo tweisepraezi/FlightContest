@@ -11,7 +11,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="5" class="table-head">${message(code:'fc.aircraft.list')} (${aircraftInstanceList.size()})</th>
+                        <th colspan="4" class="table-head">${message(code:'fc.aircraft.list')} (${aircraftInstanceList.size()})</th>
+                        <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></th>
                     </tr>
                     <tr>
                        <th>${message(code:'fc.aircraft.registration')}</th>
@@ -32,7 +33,14 @@
                         </tr>
                     </g:each>
                 </tbody>
+                <tfoot>
+                    <tr class="">
+                        <td colspan="4"/>
+                        <td><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
+                    </tr>
+                </tfoot>
             </table>
+            <a name="end"/>
             <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>
         </div>
     </body>

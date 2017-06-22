@@ -13,11 +13,12 @@
 	                <thead>
 	                    <tr>
 	                    	<g:if test="${resultClasses}">
-	                        	<th colspan="8" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
+	                        	<th colspan="6" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
 	                        </g:if>
 	                        <g:else>
-	                        	<th colspan="7" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
+	                        	<th colspan="5" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
 	                        </g:else>
+	                        <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></th>
 	                    </tr>
 	                    <tr>
                             <th>${message(code:'fc.crew.startnum')}</th>
@@ -71,17 +72,18 @@
 	                        <td><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" tabIndex="1"/></td>
 	                        <td><g:actionSubmit action="calculatesequence" value="${message(code:'fc.test.sequence.calculate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="2"/></td>
 	                    	<g:if test="${resultClasses}">
-		                        <td colspan="5">
+		                        <td colspan="4">
 		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="3"/>
 		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="4"/>
 		                        </td>
 		                    </g:if>
 		                    <g:else>
-		                        <td colspan="4">
+		                        <td colspan="3">
 		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="3"/>
 		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="4"/>
 		                        </td>
 		                    </g:else>
+		                    <td><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
 	                    </tr>
 	                    <tr class="join">
 	                        <td><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" tabIndex="5"/></td>
@@ -109,6 +111,7 @@
                         </tr>
 	                </tfoot>
 	            </table>
+	            <a name="end"/>
 	        </g:form>
             <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>
         </div>

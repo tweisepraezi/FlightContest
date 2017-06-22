@@ -13,7 +13,6 @@
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
                         <g:set var="ti" value="${[]+1}"/>
-                        <a name="start"/>
                         <table>
                             <tbody>
                                 <tr>

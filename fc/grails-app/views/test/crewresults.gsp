@@ -12,7 +12,6 @@
                 <h2>${testInstance.GetTitle(ResultType.Crew)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" params="${['crewresultsReturnAction':crewresultsReturnAction,'crewresultsReturnController':crewresultsReturnController,'crewresultsReturnID':crewresultsReturnID]}">
-                        <a name="start"/>
                         <table>
                             <tbody>
                                 <tr>
