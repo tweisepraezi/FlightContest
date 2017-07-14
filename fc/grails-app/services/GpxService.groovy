@@ -1361,6 +1361,16 @@ class GpxService
             last_coordroute_instance = coordroute_instance
         }
         
+        // add unknown enroute points
+        if (showEnrouteSign) {
+            enroute_points = GetEnrouteSignShowPoints(routeInstance, CoordType.UNKNOWN, 1) // CoordType.UNKNOWN: 0 - Unevaluated, 1 - NotFound
+            for (Map enroute_point in enroute_points) {
+                Map new_point = enroute_point
+                new_point += [error:true]
+                points += new_point
+            }
+        }
+        
         printdone ""
         return points
     }

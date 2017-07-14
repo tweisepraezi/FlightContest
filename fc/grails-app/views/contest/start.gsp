@@ -13,71 +13,70 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <g:if test="${contestInstance}">
-                <div class="box boxborder" >
-                    <h2>${message(code:'fc.contest.show')}</h2>
-                    <div class="block" id="forms" >
-                        <g:form>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.title')}:</td>
-                                        <td>${fieldValue(bean:contestInstance, field:'title')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.titleprintprefix')}:</td>
-                                        <td>${fieldValue(bean:contestInstance, field:'printPrefix')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.organizer')}:</td>
-                                        <td>${fieldValue(bean:contestInstance, field:'printOrganizer')}</td>
-                                    </tr>
-                                    <tr>
-                                    	<td class="detailtitle">${message(code:'fc.contest.withclasses')}:</td>
-                                    	<td><g:if test="${contestInstance.resultClasses}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.contestrule.foreachclass')}:</td>
-                                        <td><g:if test="${contestInstance.contestRuleForEachClass}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.contestrule')}:</td>
-                                        <td>${message(code:contestInstance.contestRule.titleCode)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.scale')}:</td>
-                                        <td>1:${fieldValue(bean:contestInstance, field:'mapScale')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.coordpresentation')}:</td>
-                                        <td>${message(code:contestInstance.coordPresentation.code)}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.timezone')}:</td>
-                                        <td>${fieldValue(bean:contestInstance, field:'timeZone')}${message(code:'fc.time.h')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.teamcrewnum')}:</td>
-                                        <td>${fieldValue(bean:contestInstance, field:'teamCrewNum')}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.bestofanalysistasknum')}:</td>
-                                        <td>${fieldValue(bean:contestInstance, field:'bestOfAnalysisTaskNum')}</td>
-                                    </tr>
-                                    <g:if test="${!contestInstance.aflosTest && contestInstance.IsAFLOSPossible()}">
-	                                    <tr>
-	                                        <td class="detailtitle">${message(code:'fc.useuploadedaflos')}:</td>
-	                                        <td><g:if test="${contestInstance.aflosUpload}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
-	                                    </tr>
-                                    </g:if>
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.contest.uuid')}:</td>
-                                        <td>${fieldValue(bean:contestInstance, field:'contestUUID')}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </g:form>
-                    </div>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="table-head">${message(code:'fc.contest.show')}</th>
+                            <th class="table-head"><a href="../docs/help.html#default-competition" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.title')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'title')}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.titleprintprefix')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'printPrefix')}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.organizer')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'printOrganizer')}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.contest.withclasses')}:</td>
+                            <td><g:if test="${contestInstance.resultClasses}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.contestrule.foreachclass')}:</td>
+                            <td><g:if test="${contestInstance.contestRuleForEachClass}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.contestrule')}:</td>
+                            <td>${message(code:contestInstance.contestRule.titleCode)}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.scale')}:</td>
+                            <td>1:${fieldValue(bean:contestInstance, field:'mapScale')}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.coordpresentation')}:</td>
+                            <td>${message(code:contestInstance.coordPresentation.code)}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.timezone')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'timeZone')}${message(code:'fc.time.h')}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.teamcrewnum')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'teamCrewNum')}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.bestofanalysistasknum')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'bestOfAnalysisTaskNum')}</td>
+                        </tr>
+                        <g:if test="${!contestInstance.aflosTest && contestInstance.IsAFLOSPossible()}">
+                            <tr>
+                                <td class="detailtitle">${message(code:'fc.useuploadedaflos')}:</td>
+                                <td><g:if test="${contestInstance.aflosUpload}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
+                            </tr>
+                        </g:if>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.contest.uuid')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'contestUUID')}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </g:if>
             <p>${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}</p>
         </div>

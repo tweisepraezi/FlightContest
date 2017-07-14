@@ -18,7 +18,8 @@
 	                        <g:else>
 	                        	<th colspan="5" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
 	                        </g:else>
-	                        <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></th>
+	                        
+	                        <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>&#x00A0;&#x00A0;&#x00A0;<a href="../docs/help.html#create-crew-list" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
 	                    </tr>
 	                    <tr>
                             <th>${message(code:'fc.crew.startnum')}</th>

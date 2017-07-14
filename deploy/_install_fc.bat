@@ -14,6 +14,11 @@ pause
 
 ::-------------------------------------------------------------------
 :fcsetup
+
+echo.
+echo Uninstall Flight Contest...
+"%ProgramFiles(x86)%\Flight Contest\unins000.exe" /silent
+
 echo.
 echo Install Flight Contest...
 %SETUPEXE% /silent

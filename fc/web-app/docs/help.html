@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1, Ausgabe 2,</span>
-<span id="revdate">2.6.2017</span>
+<span id="revnumber">version 3.1, Ausgabe 3,</span>
+<span id="revdate">14.7.2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -463,6 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_dg_200">DG-200</a></li>
 <li><a href="#_powerflarm">PowerFLARM</a></li>
 <li><a href="#_beliebiger_anderer_gpx_logger">Beliebiger anderer GPX-Logger</a></li>
+<li><a href="#_beliebiger_anderer_igc_logger">Beliebiger anderer IGC-Logger</a></li>
 </ul>
 </li>
 <li><a href="#print-styles">Druck-Stil beeinflussen</a>
@@ -959,22 +960,22 @@ diese Fehler ohne Maus-Bedienung einzugeben.</p>
 <dl>
 <dt class="hdlist1">Besatzung nimmt kurzfritig nicht teil</dt>
 <dd>
-<p>Besatzung deaktivieren (Besatzungen)
+<p>Besatzung deaktivieren (Besatzungen)<br>
 Zeitplan bleibt unver&#228;ndert.</p>
 </dd>
 <dt class="hdlist1">Besatzung kann nicht wie geplant starten</dt>
 <dd>
-<p>Besatzung ans Ende der Aufgabe schieben (Planung)
+<p>Besatzung ans Ende der Aufgabe schieben (Planung)<br>
 F&#252;r die betroffene Besatzung wird ein neuer Flugplan berechnet.</p>
 </dd>
 <dt class="hdlist1">Starts verschieben sich zeitlich</dt>
 <dd>
-<p>Anfangszeit betroffener Besatzungen korrigieren (Planung)
+<p>Anfangszeit betroffener Besatzungen korrigieren (Planung)<br>
 F&#252;r die betroffenen Besatzungen wird ein neuer Flugplan berechnet.</p>
 </dd>
 <dt class="hdlist1">Flugwind &#228;ndert sich im Laufe der Starts</dt>
 <dd>
-<p>Verbliebenen Besatzungen anderen Flugwind zuweisen (Planung)
+<p>Verbliebenen Besatzungen anderen Flugwind zuweisen (Planung)<br>
 F&#252;r die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.</p>
 </dd>
 <dt class="hdlist1">Planungstest soll mit einem anderen Wind als dem urspr&#252;nglich vorgegeben Wind bewertet werden</dt>
@@ -985,38 +986,35 @@ und Besatzung diese neue Planungsaufgabe zuweisen (Planung)</p>
 <dt class="hdlist1">TAS einer Besatzung &#228;ndert sich, nachdem bereits Planungstests und Flugpl&#228;ne berechnet wurden</dt>
 <dd>
 <p>Nach &#196;nderung der TAS einer Besatzung die Besatzung
-markieren und einmal nach unten und oben schieben (Planung)
-Ge&#228;nderte TAS wird in die Aufgabe &#252;bernommen.
-Planungstest wird sofort neu berechnet.
-Flugplan wird mit 'Zeitplan berechnen' neu berechnet.
+markieren und einmal nach unten und oben schieben (Planung)<br>
+Ge&#228;nderte TAS wird in die Aufgabe &#252;bernommen.<br>
+Planungstest wird sofort neu berechnet.<br>
+Flugplan wird mit 'Zeitplan berechnen' neu berechnet.<br>
 Hierbei k&#246;nnen Warnungen f&#252;r Folgeflugzeuge entstehen.
 Ggf. Besatzung ans Ende der Aufgabe schieben.</p>
 </dd>
 <dt class="hdlist1">Besatzung mu&#223; wegen Defekt das Flugzeug wechseln</dt>
 <dd>
-<p>Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen
-   (Besatzungen)
-Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet.
+<p>Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen (Besatzungen)<br>
+Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet.<br>
 Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unver&#228;ndert.</p>
 </dd>
 <dt class="hdlist1">Wendepunkt-&#220;berflugzeit einer Aufgabe soll nicht gewertet werden</dt>
 <dd>
-<p>'Zeitauswertung' des Wendepunktes deaktivieren
-   (Ergebnisse &#8594; Check-Punkte deaktivieren)
+<p>'Zeitauswertung' des Wendepunktes deaktivieren (Ergebnisse &#8594; Check-Punkte deaktivieren)<br>
 Bewirkt Neuberechnung des Ergebnisses.</p>
 </dd>
 <dt class="hdlist1">Unbekannte Zeitkontrolle einer Aufgabe soll nicht gewertet werden</dt>
 <dd>
 <p>'Zeitauswertung' und 'Tor verfehlt' der unbekannten Zeitkontrolle
-   deaktivieren (Ergebnisse &#8594; Check-Punkte deaktivieren)
+   deaktivieren (Ergebnisse &#8594; Check-Punkte deaktivieren)<br>
 Bewirkt Neuberechnung des Ergebnisses.</p>
 </dd>
 <dt class="hdlist1">Zeitplan einer Aufgabe neu berechnen</dt>
 <dd>
-<p>'Reihenfolge zur&#252;cksetzen' und 'Zeitplan berechnen'
-    nacheinander ausf&#252;hren
+<p>'Reihenfolge zur&#252;cksetzen' und 'Zeitplan berechnen' nacheinander ausf&#252;hren<br>
 L&#246;scht alle Flugpl&#228;ne und setzt die Reihenfolge der Besatzungen
-auf die Reihenfolge in der Besatzungsliste.
+auf die Reihenfolge in der Besatzungsliste.<br>
 Anfangszeiten aller Besatzungen und Flugpl&#228;ne werden neu berechnet.</p>
 </dd>
 </dl>
@@ -1028,10 +1026,8 @@ Anfangszeiten aller Besatzungen und Flugpl&#228;ne werden neu berechnet.</p>
 <h2 id="create-crew-list">Besatzungsliste erstellen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Besatzungslisten werden mit Excel erstellt.
-Verwenden Sie die Vorlage
-'Programme &#8594; Flight Contest &#8594; Samples &#8594; FC-CrewList-Sample.xls',
-deren Aufbau einen erfolgreichen Import sicherstellt.</p>
+<p>Besatzungslisten werden mit Excel erstellt.<br>
+Verwenden Sie die Vorlage <a href="samples/FC-CrewList-Sample.xls" target="_blank">FC-CrewList-Sample.xls</a>, deren Aufbau einen erfolgreichen Import sicherstellt.</p>
 </div>
 <div class="paragraph">
 <p>Die Liste erfasst folgende Daten:</p>
@@ -1071,7 +1067,7 @@ deren Aufbau einen erfolgreichen Import sicherstellt.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Diese Liste muss am Wettbewerbstag sortiert vorliegen.</p>
+<p>Diese Liste muss am Wettbewerbstag vorliegen (Sortierung nicht notwendig).</p>
 </div>
 <div class="paragraph">
 <p>Start-Nummern nur angegeben, wenn eine besondere Nummerierung ben&#246;tigt wird.
@@ -1195,7 +1191,7 @@ einer Strecke sprachabh&#228;ngig mit folgenden Bezeichnungen anzugeben:</p>
 <li>
 <p>Tor-Breite (in NM)</p>
 <div class="paragraph">
-<p>TO, LDG, iTO, iLDG: 0.05 NM (entspr. Landebahn-Breite)</p>
+<p>TO, LDG, iTO, iLDG: 0.02 NM (entspr. Landebahn-Breite)</p>
 </div>
 <div class="paragraph">
 <p>UZK: 2 NM (f&#252;r Wettbewerb nach dt. Regelwerk, sonst 1 NM)</p>
@@ -1262,7 +1258,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Tor-Breite 0.05 NM (entspr. Landebahn-Breite)</p>
+<p>Tor-Breite 0.02 NM (entspr. Landebahn-Breite)</p>
 </li>
 <li>
 <p>Tor-Richtung (in Grad)</p>
@@ -1293,17 +1289,17 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <pre>  Punkt                       Check-       Gate              in         Auswertung
                               Punkt        Breite  Richtung  Flugplan   Zeit Kurs H&#246;he
 
-  Takeoff                     TO           0.05    250       ja         ja   nein nein
+  Takeoff                     TO           0.02    250       ja         ja   nein nein
   Startpunkt                  SP           1       -         ja         ja   nein ja
   Wendepunkt                  WP1          1       -         ja         ja   ja   ja
   Unbekannte Zeitkontrolle    UZK1         2       -         nein       ja   ja   ja
   Touch&amp;Go-Landung            iFP          1       -         ja         ja   ja   ja
-                              iLDG  (1,2)  0.05    250       ja         nein nein nein
+                              iLDG  (1,2)  0.02    250       ja         nein nein nein
                               iSP   (2)    1       -         ja         ja   nein ja
   Krummer Streckenabschnitt   UZK2  (1,2)  2       -         nein       nein ja   ja
                               WP2   (2,3)  1       -         ja         ja   ja   ja
   Finalpunkt                  FP           1       -         ja         ja   ja   ja
-  Landung                     LDG          0.05    250       ja         ja   nein nein
+  Landung                     LDG          0.02    250       ja         ja   nein nein
 
   (1) Keine Zeitauswertung, Keine Torauswertung
   (2) Kein Flugplanungstest
@@ -1315,53 +1311,53 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <pre>  Strecken-Beispiele          Check-      Gate              in         Auswertung
                               Punkt       Breite  Richtung  Flugplan   Zeit Kurs H&#246;he
 
-  Normal                      TO          0.05    250       ja         ja   nein nein
+  Normal                      TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               WP2         1       -         ja         ja   ja   ja
                               WP3         1       -         ja         ja   ja   ja
                               WP4         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
 
-  Unbekannte Zeitkontrollen   TO          0.05    250       ja         ja   nein nein
+  Unbekannte Zeitkontrollen   TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               UZK1        2       -         nein       ja   ja   ja
                               UZK2        2       -         nein       ja   ja   ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
 
-  Touch&amp;Go-Zwischenlandung    TO          0.05    250       ja         ja   nein nein
+  Touch&amp;Go-Zwischenlandung    TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.05    250       ja         nein nein nein
+                              iLDG (1,2)  0.02    250       ja         nein nein nein
                               iSP  (2)    1       -         ja         ja   nein ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
 
-  Zwischenlandung mit Pause   TO          0.05    250       ja         ja   nein nein
+  Zwischenlandung mit Pause   TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.05    250       ja         nein nein nein
-                              iTO  (1,2)  0.05    250       ja         nein nein nein
+                              iLDG (1,2)  0.02    250       ja         nein nein nein
+                              iTO  (1,2)  0.02    250       ja         nein nein nein
                               iSP  (2)    1       -         ja         ja   nein ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
 
-  Krumme Strecke              TO          0.05    250       ja         ja   nein nein
+  Krumme Strecke              TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               UZK1 (1,2)  2       -         nein       nein ja   ja
                               UZK2 (1,2)  2       -         nein       nein ja   ja
                               WP2  (2,3)  1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein</pre>
+                              LDG         0.02    250       ja         ja   nein nein</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1542,6 +1538,10 @@ die Entfernung zwischen den Punkten zur Berechnung um 3NM verg&#246;&#223;ert wi
 &#220;berflug-Zeit auf ganze Minuten aufgerundet wird.</p>
 </div>
 <div class="paragraph">
+<p>Verwenden Sie die Vorlage <a href="samples/FC-TakoffLandingCalculation-Sample.xlsx" target="_blank">FC-TakoffLandingCalculation-Sample.xlsx</a>,
+um Einstell-Werte f&#252;r l&#228;ngere An- und Abflugentfernungen zu berechnen.</p>
+</div>
+<div class="paragraph">
 <p>F&#252;r jeden genannten Punkt k&#246;nnen folgende Ausdr&#252;cke verwendet werden:</p>
 </div>
 <table class="tableblock frame-all grid-all">
@@ -1624,7 +1624,7 @@ die Entfernung zwischen den Punkten zur Berechnung um 3NM verg&#246;&#223;ert wi
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LegTime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Interne Funktion zur windabh&#228;ngigen Flugzeitberechnung</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interne Funktion zur windabh&#228;ngigen Flugzeit-Berechnung</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tas</p></td>
@@ -1896,7 +1896,7 @@ Wendepunkt-&#220;berflugzeiten, Steuerkurs, Minuten-Striche)</p>
 <p>Dauer des Planungstests: 0 min</p>
 </li>
 <li>
-<p>Dauer der Flugzeugvorbereitung: 30 min (bei langen Strecken ggf. mehr)</p>
+<p>Dauer der Flugzeugvorbereitung: 45 min (bei langen Strecken ggf. mehr)</p>
 </li>
 </ul>
 </div>
@@ -2475,6 +2475,19 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </li>
 </ul>
 </div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_beliebiger_anderer_igc_logger">Beliebiger anderer IGC-Logger</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu kl&#228;ren.</p>
+</li>
+<li>
+<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verf&#252;gung zu stellen.</p>
 </li>
 </ul>
 </div>

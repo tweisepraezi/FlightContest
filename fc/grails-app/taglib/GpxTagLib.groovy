@@ -8,6 +8,7 @@ class GpxTagLib
         outln"""<style type="text/css">"""
         outln"""    .text { font-size:1.5em; margin:0; }"""
         outln"""    .error { color:red; }"""
+        outln"""    .enrouteerror { background-color:yellow; }"""
         outln"""    .warning { color:blue; }"""
         outln"""</style>"""
     }
@@ -354,6 +355,7 @@ class GpxTagLib
         outln"""<style type="text/css">"""
         outln"""    .text { font-size:1.5em; margin:0; }"""
         outln"""    .error { color:red; }"""
+        outln"""    .enrouteerror { background-color:yellow; }"""
         outln"""    .warning { color:blue; }"""
         outln"""    #map_profiles { display:inline; }"""
         // outln"""    #map_hp { height:300px; }"""
@@ -443,7 +445,11 @@ class GpxTagLib
                 String button_text = p.name
                 String button_class = ""
                 if (p.error) {
-                    button_class = "error"
+                    if (p.enroutephoto || p.enroutecanvas) {
+                        button_class = "enrouteerror"
+                    } else {
+                        button_class = "error"
+                    }
                 } else if (p.warning) {
                     button_class = "warning"
                 }

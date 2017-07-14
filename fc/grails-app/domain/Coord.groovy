@@ -833,6 +833,80 @@ class Coord
     {
         BigDecimal true_track = null
         BigDecimal leg_distance = null
+        BigDecimal from_leg_distance = 0
+        boolean enroute_leg_found = false 
+        CoordType from_type = type
+        int from_titlenumber = titleNumber
+        Map from_tp = [:]
+        for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
+            if (enroute_leg_found) {
+                if (routeleg_instance.startTitle.type == CoordType.SECRET) {
+                    Map sc = get_coordinate_from_coord(routeleg_instance.startTitle.type, routeleg_instance.startTitle.number)
+                    leg_distance = AviationMath.calculateLeg(sc.lat, sc.lon, from_tp.lat, from_tp.lon).dis
+                    if (leg_distance > enrouteDistance) {
+                        break
+                    }
+                    from_type = routeleg_instance.startTitle.type
+                    from_titlenumber = routeleg_instance.startTitle.number
+                    true_track = routeleg_instance.coordTrueTrack
+                    from_leg_distance = leg_distance
+                } else {
+                    break
+                }
+            }
+            if ((routeleg_instance.startTitle.type == type) && (routeleg_instance.startTitle.number == titleNumber)) {
+                enroute_leg_found = true
+                from_type = routeleg_instance.startTitle.type
+                from_titlenumber = routeleg_instance.startTitle.number
+                true_track = routeleg_instance.coordTrueTrack
+                leg_distance = routeleg_instance.testDistance2()
+                from_tp = get_coordinate_from_coord(from_type, from_titlenumber)
+            }
+        }
+        if (true_track != null) {
+            Map from_cp = get_coordinate_from_coord(from_type, from_titlenumber)
+            if ((from_cp.lat != null) && (from_cp.lon != null)) {
+                if (enrouteDistance != null) {
+                    Map enroute_coord = AviationMath.getCoordinate(from_cp.lat, from_cp.lon, true_track, enrouteDistance - from_leg_distance)
+                    Map lat = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lat, true)
+                    Map lon = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lon, false)
+                    latDirection = lat.direction
+                    latGrad = lat.grad
+                    latMinute = lat.minute
+                    lonDirection = lon.direction
+                    lonGrad = lon.grad
+                    lonMinute = lon.minute
+                    if (enrouteDistance >= leg_distance) {
+                        enrouteDistanceOk = false
+                    } else {
+                        enrouteDistanceOk = true
+                    }
+                } else {
+                    enrouteDistanceOk = false
+                }
+            }
+        }
+    }
+    
+    private Map get_coordinate_from_coord(CoordType coordType, int titleNumber)
+    {
+        Map ret = [lat:null, lon:null]
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route,[sort:'id'])) {
+            if ((coordroute_instance.type == coordType) && (coordroute_instance.titleNumber == titleNumber)) {
+                ret.lat = coordroute_instance.latMath()
+                ret.lon = coordroute_instance.lonMath()
+                break
+            }
+        }
+        return ret
+    }
+    
+    /* Entferung an der krummen Strecke entlang
+    private void calculateCoordEnrouteCoordinate()
+    // FromTP (type & titleNumber), enrouteDistance (NM) -> Koordinate
+    {
+        BigDecimal true_track = null
+        BigDecimal leg_distance = null
         BigDecimal secret_legs_distance = 0
         boolean enroute_leg_found = false 
         CoordType from_type = type
@@ -892,6 +966,7 @@ class Coord
             }
         }
     }
+    */
     
     private void calculateCoordEnrouteFromTP()
     // Koordinate -> FromTP (type & titleNumber), coordMeasureDistance (mm)
@@ -899,12 +974,14 @@ class Coord
         CoordType from_type = CoordType.UNKNOWN
         int from_titlenumber = 1
         BigDecimal from_distance = null
+        CoordRoute from_coordroute_instance = null
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route,[sort:'id'])) {
             if (coordroute_instance.type.IsEnrouteCalculateSignCoord()) {
                 if (coordroute_instance.type.IsEnrouteSignCoord()) {
                     from_type = coordroute_instance.type
                     from_titlenumber = coordroute_instance.titleNumber
                     from_distance = 0
+                    from_coordroute_instance = coordroute_instance
                 }
                 Map enroute = AviationMath.calculateLeg(latMath(),lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
                 BigDecimal leg_distance = null
@@ -917,11 +994,29 @@ class Coord
                     }
                 }
                 if (true_track != null) {
-                    BigDecimal track_diff = AviationMath.courseChange(true_track,enroute.dir).abs()
-                    if ((enroute.dis == 0) || ((track_diff < Defs.ENROUTE_COURSE_DIFF) && (enroute.dis < leg_distance))) {
+                    boolean fromtp_found = false
+                    if (enroute.dis == 0) {
+                        fromtp_found = true
+                    } else if (enroute.dis < leg_distance) {
+                        BigDecimal track_diff = AviationMath.courseChange(true_track,enroute.dir).abs()
+                        if (enroute.dis < Defs.ENROUTE_SHORT_DISTANCE) {
+                            if (track_diff < Defs.ENROUTE_SHORT_DISTANCE_COURSE_DIFF) {
+                                fromtp_found = true
+                            }
+                        } else { 
+                            if (track_diff < Defs.ENROUTE_LONG_DISTANCE_COURSE_DIFF) {
+                                fromtp_found = true
+                            }
+                        }
+                    }
+                    if (fromtp_found) {
                         type = from_type
                         titleNumber = from_titlenumber
-                        coordMeasureDistance = route.contest.Convert_NM2mm(from_distance + enroute.dis)
+                        // direkte Entfernung bei krummen Strecken
+                        enroute = AviationMath.calculateLeg(latMath(),lonMath(),from_coordroute_instance.latMath(),from_coordroute_instance.lonMath())
+                        coordMeasureDistance = route.contest.Convert_NM2mm(enroute.dis)
+                        // Entferung an der krummen Strecke entlang
+                        // coordMeasureDistance = route.contest.Convert_NM2mm(from_distance + enroute.dis)
                         enrouteDistanceOk = true
                         return
                     }
@@ -982,7 +1077,7 @@ class Coord
                 Map enroute_coord = AviationMath.getCoordinate(fromtp_lat, fromtp_lon, true_track, enroute_distance - secret_legs_distance)
                 Map orthogonal = AviationMath.calculateLeg(latMath(),lonMath(),enroute_coord.lat,enroute_coord.lon)
                 BigDecimal orthogonal_track = AviationMath.getOrthogonalTrackRight(true_track)
-                if ((orthogonal.dir - orthogonal_track).abs() < Defs.ENROUTE_COURSE_DIFF) {
+                if ((orthogonal.dir - orthogonal_track).abs() < Defs.ENROUTE_LONG_DISTANCE_COURSE_DIFF) {
                     enrouteOrthogonalDistance = Contest.Convert_NM2m(orthogonal.dis)
                 } else {
                     enrouteOrthogonalDistance = -Contest.Convert_NM2m(orthogonal.dis)

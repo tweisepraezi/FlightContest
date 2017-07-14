@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1, Ausgabe 2
-:revdate:   2.6.2017
+:revnumber: 3.1, Ausgabe 3
+:revdate:   14.7.2017
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -194,19 +194,19 @@ _Ausrichter des Wettbewerbes_ +
 [[response-to-modifications]]
 == Änderungen bei Wettbewerbs-Durchführung
 Besatzung nimmt kurzfritig nicht teil::
-  Besatzung deaktivieren (Besatzungen)
-  Zeitplan bleibt unverändert.
+Besatzung deaktivieren (Besatzungen) +
+Zeitplan bleibt unverändert.
   
 Besatzung kann nicht wie geplant starten::
-  Besatzung ans Ende der Aufgabe schieben (Planung)
+  Besatzung ans Ende der Aufgabe schieben (Planung) +
   Für die betroffene Besatzung wird ein neuer Flugplan berechnet.
   
 Starts verschieben sich zeitlich::
-  Anfangszeit betroffener Besatzungen korrigieren (Planung)
+  Anfangszeit betroffener Besatzungen korrigieren (Planung) +
   Für die betroffenen Besatzungen wird ein neuer Flugplan berechnet.
   
 Flugwind ändert sich im Laufe der Starts::
-  Verbliebenen Besatzungen anderen Flugwind zuweisen (Planung)
+  Verbliebenen Besatzungen anderen Flugwind zuweisen (Planung) +
   Für die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.
 
 Planungstest soll mit einem anderen Wind als dem ursprünglich vorgegeben Wind bewertet werden::
@@ -215,34 +215,31 @@ Planungstest soll mit einem anderen Wind als dem ursprünglich vorgegeben Wind b
 
 TAS einer Besatzung ändert sich, nachdem bereits Planungstests und Flugpläne berechnet wurden::
   Nach Änderung der TAS einer Besatzung die Besatzung 
-  markieren und einmal nach unten und oben schieben (Planung)
-  Geänderte TAS wird in die Aufgabe übernommen.
-  Planungstest wird sofort neu berechnet.
-  Flugplan wird mit 'Zeitplan berechnen' neu berechnet.
+  markieren und einmal nach unten und oben schieben (Planung) +
+  Geänderte TAS wird in die Aufgabe übernommen. +
+  Planungstest wird sofort neu berechnet. +
+  Flugplan wird mit 'Zeitplan berechnen' neu berechnet. +
   Hierbei können Warnungen für Folgeflugzeuge entstehen.
   Ggf. Besatzung ans Ende der Aufgabe schieben.
 
 Besatzung muß wegen Defekt das Flugzeug wechseln::
-  Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen
-     (Besatzungen)
-  Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet.
+  Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen (Besatzungen) +
+  Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet. +
   Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unverändert.
 
 Wendepunkt-Überflugzeit einer Aufgabe soll nicht gewertet werden::
-  'Zeitauswertung' des Wendepunktes deaktivieren
-     (Ergebnisse -> Check-Punkte deaktivieren)
+  'Zeitauswertung' des Wendepunktes deaktivieren (Ergebnisse -> Check-Punkte deaktivieren) +
   Bewirkt Neuberechnung des Ergebnisses.
   
 Unbekannte Zeitkontrolle einer Aufgabe soll nicht gewertet werden::
   'Zeitauswertung' und 'Tor verfehlt' der unbekannten Zeitkontrolle
-     deaktivieren (Ergebnisse -> Check-Punkte deaktivieren)
+     deaktivieren (Ergebnisse -> Check-Punkte deaktivieren) +
   Bewirkt Neuberechnung des Ergebnisses.
 
 Zeitplan einer Aufgabe neu berechnen::
-  'Reihenfolge zurücksetzen' und 'Zeitplan berechnen' 
-      nacheinander ausführen
+  'Reihenfolge zurücksetzen' und 'Zeitplan berechnen' nacheinander ausführen +
   Löscht alle Flugpläne und setzt die Reihenfolge der Besatzungen
-  auf die Reihenfolge in der Besatzungsliste.
+  auf die Reihenfolge in der Besatzungsliste. +
   Anfangszeiten aller Besatzungen und Flugpläne werden neu berechnet.
 
   
@@ -250,10 +247,8 @@ Zeitplan einer Aufgabe neu berechnen::
 [[create-crew-list]]
 == Besatzungsliste erstellen
 
-Besatzungslisten werden mit Excel erstellt. 
-Verwenden Sie die Vorlage
-'Programme -> Flight Contest -> Samples -> FC-CrewList-Sample.xls',
-deren Aufbau einen erfolgreichen Import sicherstellt.
+Besatzungslisten werden mit Excel erstellt. +
+Verwenden Sie die Vorlage link:samples/FC-CrewList-Sample.xls[FC-CrewList-Sample.xls^], deren Aufbau einen erfolgreichen Import sicherstellt.
 
 Die Liste erfasst folgende Daten:
 
@@ -268,7 +263,7 @@ Die Liste erfasst folgende Daten:
 * Flugzeug-Typ (optional) (vermeiden Sie hier Leerzeichen)
 * Flugzeug-Farbe (optional) (vermeiden Sie hier Leerzeichen)
 
-Diese Liste muss am Wettbewerbstag sortiert vorliegen.
+Diese Liste muss am Wettbewerbstag vorliegen (Sortierung nicht notwendig).
 
 Start-Nummern nur angegeben, wenn eine besondere Nummerierung benötigt wird.
 Nicht angegebene Start-Nummern erhalten beim Import automatisch eine Nummer
@@ -345,7 +340,7 @@ Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig
 TO, LDG, iTO, iLDG: 0 ft
 * Tor-Breite (in NM)
 +
-TO, LDG, iTO, iLDG: 0.05 NM (entspr. Landebahn-Breite)
+TO, LDG, iTO, iLDG: 0.02 NM (entspr. Landebahn-Breite)
 +
 UZK: 2 NM (für Wettbewerb nach dt. Regelwerk, sonst 1 NM)
 +
@@ -376,7 +371,7 @@ Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
 auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke. 
   
 * Für Zwischenlandungen sind für iLDG und iTO folgenden Angaben einzugeben:
-** Tor-Breite 0.05 NM (entspr. Landebahn-Breite)
+** Tor-Breite 0.02 NM (entspr. Landebahn-Breite)
 ** Tor-Richtung (in Grad)
 ** Keine Zeitauswertung
 ** Keine Torauswertung
@@ -389,17 +384,17 @@ Einzugebende Eigenschaften der Check-Punkte einer Strecke:
   Punkt                       Check-       Gate              in         Auswertung   
                               Punkt        Breite  Richtung  Flugplan   Zeit Kurs Höhe
 							  
-  Takeoff                     TO           0.05    250       ja         ja   nein nein
+  Takeoff                     TO           0.02    250       ja         ja   nein nein
   Startpunkt                  SP           1       -         ja         ja   nein ja
   Wendepunkt                  WP1          1       -         ja         ja   ja   ja
   Unbekannte Zeitkontrolle    UZK1         2       -         nein       ja   ja   ja
   Touch&Go-Landung            iFP          1       -         ja         ja   ja   ja
-                              iLDG  (1,2)  0.05    250       ja         nein nein nein
+                              iLDG  (1,2)  0.02    250       ja         nein nein nein
                               iSP   (2)    1       -         ja         ja   nein ja
   Krummer Streckenabschnitt   UZK2  (1,2)  2       -         nein       nein ja   ja
                               WP2   (2,3)  1       -         ja         ja   ja   ja
   Finalpunkt                  FP           1       -         ja         ja   ja   ja
-  Landung                     LDG          0.05    250       ja         ja   nein nein
+  Landung                     LDG          0.02    250       ja         ja   nein nein
 
   (1) Keine Zeitauswertung, Keine Torauswertung
   (2) Kein Flugplanungstest
@@ -410,53 +405,53 @@ Einzugebende Eigenschaften der Check-Punkte einer Strecke:
   Strecken-Beispiele          Check-      Gate              in         Auswertung   
                               Punkt       Breite  Richtung  Flugplan   Zeit Kurs Höhe
 
-  Normal                      TO          0.05    250       ja         ja   nein nein
+  Normal                      TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               WP2         1       -         ja         ja   ja   ja
                               WP3         1       -         ja         ja   ja   ja
                               WP4         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
                                              
-  Unbekannte Zeitkontrollen   TO          0.05    250       ja         ja   nein nein
+  Unbekannte Zeitkontrollen   TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               UZK1        2       -         nein       ja   ja   ja
                               UZK2        2       -         nein       ja   ja   ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
                                              
-  Touch&Go-Zwischenlandung    TO          0.05    250       ja         ja   nein nein
+  Touch&Go-Zwischenlandung    TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.05    250       ja         nein nein nein
+                              iLDG (1,2)  0.02    250       ja         nein nein nein
                               iSP  (2)    1       -         ja         ja   nein ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
   
-  Zwischenlandung mit Pause   TO          0.05    250       ja         ja   nein nein
+  Zwischenlandung mit Pause   TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.05    250       ja         nein nein nein
-                              iTO  (1,2)  0.05    250       ja         nein nein nein
+                              iLDG (1,2)  0.02    250       ja         nein nein nein
+                              iTO  (1,2)  0.02    250       ja         nein nein nein
                               iSP  (2)    1       -         ja         ja   nein ja
                               WP2         1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
   
-  Krumme Strecke              TO          0.05    250       ja         ja   nein nein
+  Krumme Strecke              TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
                               WP1         1       -         ja         ja   ja   ja
                               UZK1 (1,2)  2       -         nein       nein ja   ja
                               UZK2 (1,2)  2       -         nein       nein ja   ja
                               WP2  (2,3)  1       -         ja         ja   ja   ja
                               FP          1       -         ja         ja   ja   ja
-                              LDG         0.05    250       ja         ja   nein nein
+                              LDG         0.02    250       ja         ja   nein nein
 ----
 
 Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur 
@@ -557,6 +552,9 @@ die Entfernung zwischen den Punkten zur Berechnung um 3NM vergößert wird
 (was sich für eine Standard-Platzrunde bewährt hat) und die berechnete 
 Überflug-Zeit auf ganze Minuten aufgerundet wird.
 
+Verwenden Sie die Vorlage link:samples/FC-TakoffLandingCalculation-Sample.xlsx[FC-TakoffLandingCalculation-Sample.xlsx^],
+um Einstell-Werte für längere An- und Abflugentfernungen zu berechnen.
+
 Für jeden genannten Punkt können folgende Ausdrücke verwendet werden:
 
 [%autowidth]
@@ -579,7 +577,7 @@ Für jeden genannten Punkt können folgende Ausdrücke verwendet werden:
 |===
 |Ausdruck|Bedeutung
 
-|LegTime|Interne Funktion zur windabhängigen Flugzeitberechnung
+|LegTime|Interne Funktion zur windabhängigen Flugzeit-Berechnung
 |tas|TAS des Flugzeuges
 |wind|Wind-Richtung und -Geschwindigkeit (null = kein Wind)
 |track|Kurs des Navigationsfluges
@@ -676,7 +674,7 @@ Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
 . Aufgaben-Konfiguration
 
 * Dauer des Planungstests: 0 min
-* Dauer der Flugzeugvorbereitung: 30 min (bei langen Strecken ggf. mehr)
+* Dauer der Flugzeugvorbereitung: 45 min (bei langen Strecken ggf. mehr)
 
 . Navigationstest-Karte
 
@@ -918,6 +916,10 @@ im AFLOS-Namen übereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.
 * Anforderungen an GPX-Datei-Inhalt
 ** darf nur eine Strecken-Aufzeichnung beinhalten (<trk>...</trk>)
 ** wenn nein, nicht gewünschte Strecken-Aufzeichnungen in Datei löschen
+
+=== Beliebiger anderer IGC-Logger
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
 
 <<<
 [[print-styles]]

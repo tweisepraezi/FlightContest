@@ -77,6 +77,8 @@ class CoordTitle // DB-2.5
                 return getMsg(type.code).substring(0,1)
             case CoordType.TP:
                 return "${number}"
+            case CoordType.iSP:
+                return getMsg(type.code).substring(0,2)
             default:
                 return "?"
         }

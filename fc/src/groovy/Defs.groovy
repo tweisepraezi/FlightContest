@@ -44,5 +44,7 @@ class Defs
     static final String TaskClassSubID_SpecialTestRun                  = "_specialTestRun"
     static final String TaskClassSubID_SpecialTestTitle                = "_specialTestTitle"
 
-    static int ENROUTE_COURSE_DIFF = 10
+    static final BigDecimal ENROUTE_SHORT_DISTANCE                     = 3.0f  // NM 
+    static final int ENROUTE_SHORT_DISTANCE_COURSE_DIFF                = 89 // max. Kursabweichung in Grad
+    static final int ENROUTE_LONG_DISTANCE_COURSE_DIFF                 = 10 // max. Kursabweichung in Grad
 }

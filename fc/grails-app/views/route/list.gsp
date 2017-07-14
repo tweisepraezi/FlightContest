@@ -11,7 +11,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="11" class="table-head">${message(code:'fc.route.list')}</th>
+                        <th colspan="10" class="table-head">${message(code:'fc.route.list')}</th>
+                        <th class="table-head"><a href="../docs/help.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
                        <th>${message(code:'fc.title')}</th>
