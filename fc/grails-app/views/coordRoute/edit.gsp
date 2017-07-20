@@ -168,7 +168,7 @@
                                         <p>
                                             <label>${message(code:'fc.observation.turnpoint.assignedphoto')}*:</label>
                                             <br/>
-                                            <g:select from="${TurnpointSign.GetTurnpointSigns(false)}" optionValue="${it}" value="${coordRouteInstance.assignedSign}" name="assignedSign" tabIndex="${ti[0]++}"/>
+                                            <g:select from="${TurnpointSign.GetTurnpointSigns(false)}" optionValue="${{it.title}}" value="${coordRouteInstance.assignedSign}" name="assignedSign" tabIndex="${ti[0]++}"/>
                                         </p>
                                     </fieldset>
                                 </g:if>
@@ -177,7 +177,7 @@
                                         <p>
                                             <label>${message(code:'fc.observation.turnpoint.assignedcanvas')}*:</label>
                                             <br/>
-                                            <g:select from="${TurnpointSign.GetTurnpointSigns(true)}" optionValue="${it}" value="${coordRouteInstance.assignedSign}" name="assignedSign" tabIndex="${ti[0]++}"/>
+                                            <g:select from="${TurnpointSign.GetTurnpointSigns(true)}" optionValue="${{it.title}}" value="${coordRouteInstance.assignedSign}" name="assignedSign" tabIndex="${ti[0]++}"/>
                                         </p>
                                     </fieldset>
                                 </g:elseif>

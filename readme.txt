@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-14.07.2017
+19.07.2017
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -64,7 +64,13 @@ Erweiterungen in dieser Version (3.1):
 - Neue Beobachtungs-Auswertung
     * Unterstützt Auswerteformular für Besatzungen und 
       Karten-Debriefing durch Schiedsrichter
-    * Unterstützt Fotos und Bodenzeichen an Wendenpunkten und auf der Strecke
+    * Unterstützt Fotos und Bodenzeichen an Wendepunkten und auf der Strecke
+        Zulässige Wendepunkt-Fotozeichen: A-Z, 1-20, *
+        Zulässige Wendepunkt-Bodenzeichen: A,C,E,F,G,I,K,L,O,P,R,S,*
+          * = kein Foto oder Bodenzeichen zugeordnet
+        Zulässige Strecken-Foto-Bezeichnungen:
+          Zahlen, Buchstaben oder Kombinationen (max. 5 Stellen)
+        Zulässige Strecken-Bodenzeichen: Definierte Sonderzeichen, siehe Regelwerk
     * Unterstützt manuelle Eingabe der Beobachtungs-Objekte und Import 
       aus Text-Dateien
     * Beobachtungs-Objekte können einzeln von der Auswertung ausgeschlossen werden
@@ -115,6 +121,7 @@ Erweiterungen in dieser Version (3.1):
         Kann deaktiviert werden, um auch unvollständige Besatzungsergebnisse
         zu drucken.
 - Ein-Klick-Navigation zum Formularanfang und -ende hinzugefügt
+- Live-Ergebnis: Anzeige des Internet-Links hinzugefügt
 - Aktualisierung folgender Regelwerke
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
     FAI Precision Flying - Edition 2017

@@ -8975,12 +8975,16 @@ class FcService
                             if (params["turnpointdataevaluation_${turnpointdata_instance.id}"] == TurnpointSign.None.title) {
                                 turnpointdata_instance.evaluationSign = TurnpointSign.None
                             } else {
-                                turnpointdata_instance.evaluationSign = TurnpointSign.(params["turnpointdataevaluation_${turnpointdata_instance.id}"])
+                                turnpointdata_instance.evaluationSign = TurnpointSign.GetTurnpointSign(params["turnpointdataevaluation_${turnpointdata_instance.id}"])
                             }
                             if (turnpointdata_instance.evaluationSign == TurnpointSign.Unevaluated) {
                                 turnpointdata_instance.resultValue = EvaluationValue.Unevaluated
                             } else if (turnpointdata_instance.evaluationSign == TurnpointSign.None) {
-                                turnpointdata_instance.resultValue = EvaluationValue.NotFound
+                                if (turnpointdata_instance.tpSign == TurnpointSign.NoSign) {
+                                    turnpointdata_instance.resultValue = EvaluationValue.Correct
+                                } else {
+                                    turnpointdata_instance.resultValue = EvaluationValue.NotFound
+                                }
                             } else if (turnpointdata_instance.evaluationSign == turnpointdata_instance.tpSign) {
                                 turnpointdata_instance.resultValue = EvaluationValue.Correct
                             } else {

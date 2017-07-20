@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1, Ausgabe 3
-:revdate:   14.7.2017
+:revnumber: 3.1, Ausgabe 4
+:revdate:   18.7.2017
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -51,10 +51,16 @@ Stellt eine Live-Ergebnis-Anzeige (Live Scoring) bereit:
 Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dateien bereit:
 
 * Offline-Kartenanzeige zur Beurteilung des Navigationsfluges
-* Online-Kartenanzeige mit Google Mapsund Open Street Map
+* Online-Kartenanzeige mit Google Maps und Open Street Map
 * Logger-Daten-Anzeige für GAC-, GPX-und IGC-Dateien
 
 <<<
+[[manuals]]
+== Bedienungsanleitungen
+* link:manuals/FC-Manual.pdf[Bedienungsanleitung^]
+* link:manuals/FC-Manual_en.pdf[Bedienungsanleitung (englisch)^]
+* link:manuals/FC-Manual-Observations.pdf[Anleitung Beobachtungen^]
+
 [[supported-rules]]
 == Unterstützte Regelwerke
 

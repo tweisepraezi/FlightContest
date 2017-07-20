@@ -233,7 +233,16 @@
                     </tbody>
                 </table>
             </div>
-            <p class="programinfo">${contestInstance.printOrganizer}</p>
+            <table class="foot">
+                <tbody>
+                    <tr>
+                        <td class="programinfo">${contestInstance.printOrganizer}</td>
+                        <g:if test="${BootStrap.global.IsLiveFTPUploadPossible()}">
+                            <td class="liveurl">${BootStrap.global.GetLiveFTPURL()}</td>
+                        </g:if>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>

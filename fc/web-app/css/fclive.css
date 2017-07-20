@@ -33,10 +33,15 @@ table.details {
 	padding:0;
 }
 
-table.details  td {
+table.details td {
 	padding:0;
 }
 
-p.programinfo {
-	font-size:0.7em;
+td.programinfo {
+	font-size:0.9em;
+}
+
+td.liveurl {
+    font-size:0.9em;
+    text-align:right;
 }

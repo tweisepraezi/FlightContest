@@ -153,6 +153,12 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    String GetLiveFTPURL()
+    {
+        return "${grailsApplication.config.flightcontest.ftp.contesturl}${grailsApplication.config.flightcontest.live.ftpupload.workingdir}${grailsApplication.config.flightcontest.live.ftpupload.name}"
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     boolean IsLiveCopyPossible()
     {
         if (   grailsApplication.config.flightcontest.live

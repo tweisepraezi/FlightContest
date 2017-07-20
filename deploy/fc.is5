@@ -8,8 +8,8 @@ const FCVersion = '3.1.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.1.RC7
-AppVersion=3.1.RC7
+AppVerName=Flight Contest 3.1.RC8
+AppVersion=3.1.RC8
 ; no milestone below
 VersionInfoVersion=3.1.0
 
@@ -55,9 +55,6 @@ Source: ".\fc-service.bat";                           DestDir: "{app}\tomcat\bin
 Source: ".\tomcat-users.xml";                         DestDir: "{app}\tomcat\conf";
 Source: "..\output\fc.war";                           DestDir: "{app}\tomcat\webapps";
 Source: "..\readme.txt";                              DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
-Source: ".\FC-Manual.pdf";                            DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
-Source: ".\FC-Manual_en.pdf";                         DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
-Source: ".\FC-Manual-Observations.pdf";               DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\AFLOS-Kurzanleitung.pdf";                  DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\install-service.bat";                      DestDir: "{app}";
 Source: ".\odbc.vbs";                                 DestDir: "{app}";
@@ -79,6 +76,7 @@ Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";         
 
 [Dirs]
 Name: "C:\FCSave";         Flags: uninsneveruninstall; Permissions: everyone-modify;
+Name: "C:\FCSave\.fc";     Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.scan";   Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.logger"; Flags: uninsneveruninstall; Permissions: everyone-modify;
 
@@ -120,9 +118,9 @@ Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080
 Name: "{group}\flightcontest.de";               Filename: "http://flightcontest.de";                                                             WorkingDir: "{commondesktop}";
 Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{commondesktop}";
 Name: "{group}\Help";                           Filename: "{app}\tomcat\webapps\fc\docs\help.html";                                              WorkingDir: "{commondesktop}";
-Name: "{group}\Bedienungsanleitung";            Filename: "{app}\FC-Manual.pdf";                                                                 WorkingDir: "{commondesktop}";
-Name: "{group}\Manual";                         Filename: "{app}\FC-Manual_en.pdf";                                                              WorkingDir: "{commondesktop}";
-Name: "{group}\Anleitung Beobachtungen";        Filename: "{app}\FC-Manual-Observations.pdf";                                                    WorkingDir: "{commondesktop}";
+Name: "{group}\Bedienungsanleitung";            Filename: "{app}\tomcat\webapps\fc\docs\manuals\FC-Manual.pdf";                                  WorkingDir: "{commondesktop}";
+Name: "{group}\Manual";                         Filename: "{app}\tomcat\webapps\fc\docs\manuals\FC-Manual_en.pdf";                               WorkingDir: "{commondesktop}";
+Name: "{group}\Anleitung Beobachtungen";        Filename: "{app}\tomcat\webapps\fc\docs\manuals\FC-Manual-Observations.pdf";                     WorkingDir: "{commondesktop}";
 Name: "{group}\AFLOS Help";                     Filename: "{app}\tomcat\webapps\fc\docs\help_aflos.html";                                        WorkingDir: "{commondesktop}";
 Name: "{group}\AFLOS Kurzanleitung";            Filename: "{app}\AFLOS-Kurzanleitung.pdf";                                                       WorkingDir: "{commondesktop}";
 Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{commondesktop}";

@@ -347,7 +347,7 @@ class GlobalController {
     {
         List url_list = []
         if (BootStrap.global.IsLiveFTPUploadPossible()) {
-            url_list += "${grailsApplication.config.flightcontest.ftp.contesturl}${grailsApplication.config.flightcontest.live.ftpupload.workingdir}${grailsApplication.config.flightcontest.live.ftpupload.name}"
+            url_list += BootStrap.global.GetLiveFTPURL()
         }
         if (BootStrap.global.IsLiveCopyPossible()) {
             grailsApplication.config.flightcontest.live.copy.each { i, url ->

@@ -252,7 +252,7 @@ class RouteFileTools
                     }
                     
                     def line_values = line.split(';')
-                    if (line_values.size() == 13) {
+                    if (line_values.size() >= 4) {
                         
                         // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                         String latitude_str = line_values[1].trim()
@@ -1260,7 +1260,7 @@ class RouteFileTools
                         switch (importSign) {
                             case ImportSign.TurnpointPhoto:
                             case ImportSign.TurnpointCanvas:
-                                coordroute_instance.assignedSign = TurnpointSign.(import_sign.tpsign)
+                                coordroute_instance.assignedSign = TurnpointSign.GetTurnpointSign(import_sign.tpsign)
                                 break
                             case ImportSign.TurnpointTrueFalse:
                                 switch (import_sign.tpcorrect) {

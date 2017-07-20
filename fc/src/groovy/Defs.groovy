@@ -46,5 +46,5 @@ class Defs
 
     static final BigDecimal ENROUTE_SHORT_DISTANCE                     = 3.0f  // NM 
     static final int ENROUTE_SHORT_DISTANCE_COURSE_DIFF                = 89 // max. Kursabweichung in Grad
-    static final int ENROUTE_LONG_DISTANCE_COURSE_DIFF                 = 10 // max. Kursabweichung in Grad
+    static final int ENROUTE_LONG_DISTANCE_COURSE_DIFF                 = 5 // max. Kursabweichung in Grad
 }

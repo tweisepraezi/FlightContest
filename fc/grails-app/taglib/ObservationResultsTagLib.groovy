@@ -434,7 +434,7 @@ class ObservationResultsTagLib
                             outln"""    </select>"""
                             outln"""</td>"""
                             if (complete) {
-                                outln"""<td>${turnpointdata_instance.tpSign}</td>"""
+                                outln"""<td>${turnpointdata_instance.tpSign.title}</td>"""
                             }
                             break
                         case TurnpointRoute.TrueFalsePhoto:
@@ -930,7 +930,7 @@ class ObservationResultsTagLib
                             } else {
                                 outln"""<td class="evaluation">${turnpointdata_instance.evaluationSign.title}</td>"""
                             }
-                            outln"""<td class="plan">${turnpointdata_instance.tpSign}</td>"""
+                            outln"""<td class="plan">${turnpointdata_instance.tpSign.title}</td>"""
                             break
                         case TurnpointRoute.TrueFalsePhoto:
                             outln"""<td class="evaluation">${message(code:turnpointdata_instance.evaluationValue.turnpointEvaluationCode)}</td>"""

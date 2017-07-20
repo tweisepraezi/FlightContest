@@ -278,11 +278,14 @@ class Route
                         if (coordroute_instance.type.IsTurnpointSignCoord()) {
                             if (coordroute_instance.assignedSign == TurnpointSign.None) {
                                 missingsign_num++
+                            } else if (coordroute_instance.assignedSign == TurnpointSign.NoSign) {
+                                // nothing
                             } else if (coordroute_instance.assignedSign in signs) {
                                 doublesign_num++
                             }
                             signs += coordroute_instance.assignedSign
                         }
+                            
                     }
                     break
                 case TurnpointRoute.AssignCanvas:
@@ -293,6 +296,8 @@ class Route
                                 missingsign_num++
                             } else if (!coordroute_instance.assignedSign.canvas) {
                                 invalidsign_num++
+                            } else if (coordroute_instance.assignedSign == TurnpointSign.NoSign) {
+                                // nothing
                             } else if (coordroute_instance.assignedSign in signs) {
                                 doublesign_num++
                             }

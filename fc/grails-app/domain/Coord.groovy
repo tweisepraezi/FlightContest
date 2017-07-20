@@ -603,12 +603,12 @@ class Coord
         }
         switch (route.turnpointRoute) {
             case TurnpointRoute.AssignPhoto:
-                return assignedSign
+                return assignedSign.title
             case TurnpointRoute.AssignCanvas:
                 if (assignedSign.canvas) {
-                    return assignedSign
+                    return assignedSign.title
                 }
-                return "${assignedSign} !"
+                return "${assignedSign.title} !"
             case TurnpointRoute.TrueFalsePhoto:
                 return getMsg(correctSign.code)
         }
@@ -622,12 +622,12 @@ class Coord
         }
         switch (route.turnpointRoute) {
             case TurnpointRoute.AssignPhoto:
-                return assignedSign
+                return assignedSign.title
             case TurnpointRoute.AssignCanvas:
                 if (assignedSign.canvas) {
-                    return assignedSign
+                    return assignedSign.title
                 }
-                return "${assignedSign} !"
+                return "${assignedSign.title} !"
             case TurnpointRoute.TrueFalsePhoto:
                 return getPrintMsg(correctSign.code)
         }
@@ -745,13 +745,13 @@ class Coord
                 if (assignedSign == TurnpointSign.None) {
                     return no_sign
                 }
-                return "${titleExport()}, ${assignedSign}"
+                return "${titleExport()}, ${assignedSign.title}"
             case TurnpointRoute.AssignCanvas:
                 if (assignedSign == TurnpointSign.None) {
                     return no_sign
                 }
                 if (assignedSign.canvas) {
-                    return "${titleExport()}, ${assignedSign}"
+                    return "${titleExport()}, ${assignedSign.title}"
                 }
                 return no_sign
             case TurnpointRoute.TrueFalsePhoto:

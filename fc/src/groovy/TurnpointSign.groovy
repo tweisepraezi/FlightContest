@@ -27,7 +27,28 @@ enum TurnpointSign // DB-2.13
     W ('W', false,''),
     X ('X', false,''),
     Y ('Y', false,''),
-    Z ('Z', false,'')
+    Z ('Z', false,''),
+    NoSign ('*', true, ''),
+    N1 ('1', false, ''),
+    N2 ('2', false, ''),
+    N3 ('3', false, ''),
+    N4 ('4', false, ''),
+    N5 ('5', false, ''),
+    N6 ('6', false, ''),
+    N7 ('7', false, ''),
+    N8 ('8', false, ''),
+    N9 ('9', false, ''),
+    N10 ('10', false, ''),
+    N11 ('11', false, ''),
+    N12 ('12', false, ''),
+    N13 ('13', false, ''),
+    N14 ('14', false, ''),
+    N15 ('15', false, ''),
+    N16 ('16', false, ''),
+    N17 ('17', false, ''),
+    N18 ('18', false, ''),
+    N19 ('19', false, ''),
+    N20 ('20', false, '')
     
     TurnpointSign(String title, boolean canvas, String imageName)
     {
@@ -61,7 +82,9 @@ enum TurnpointSign // DB-2.13
     {
         List ret = []
         for (def v in values()) {
-            if (v == v.Unevaluated) {
+            if (v == v.NoSign) {
+                // Nothing
+            } else if (v == v.Unevaluated) {
                 ret += v
             } else if (v == v.None) {
                 ret += v
@@ -72,5 +95,15 @@ enum TurnpointSign // DB-2.13
             }
         }
         return ret
+    }
+    
+    static TurnpointSign GetTurnpointSign(String title)
+    {
+        for (def v in values()) {
+            if (v.title == title) {
+                return v
+            }
+        }
+        return TurnpointSign.Unevaluated
     }
 }
