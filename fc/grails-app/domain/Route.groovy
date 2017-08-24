@@ -725,6 +725,14 @@ class Route
         int canavs_num = CoordEnrouteCanvas.countByRoute(this)
         int leg_num = RouteLegTest.countByRoute(this)
         
+        List measure_distance_difference = []
+        for (RouteLegTest routelegtest_instance in RouteLegTest.findAllByRoute(this,[sort:'id'])) {
+            CoordRoute coordroute_instance = CoordRoute.findByRouteAndTypeAndTitleNumber(this,routelegtest_instance.endTitle.type,routelegtest_instance.endTitle.number)
+            if (coordroute_instance.measureDistance != routelegtest_instance.legMeasureDistance) {
+                measure_distance_difference += routelegtest_instance.endTitle.titleCode()
+            }
+        }
+        
         boolean min_target_error = false
         int min_target_num = contest.minEnrouteTargets
         if (IsEnrouteSignInput(true) || IsEnrouteSignInput(false)) {
@@ -754,13 +762,14 @@ class Route
         }
         
         return [min_target_num:min_target_num, max_target_num:max_target_num, min_target_error:min_target_error, max_target_error:max_target_error,
-                min_leg_num:min_leg_num, max_leg_num:max_leg_num, min_leg_error:min_leg_error, max_leg_error:max_leg_error]
+                min_leg_num:min_leg_num, max_leg_num:max_leg_num, min_leg_error:min_leg_error, max_leg_error:max_leg_error,
+                measure_distance_difference:measure_distance_difference]
     }
     
     boolean IsRouteOk()
     {
         Map status = RouteStatus()
-        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error) {
+        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference) {
             return false
         }
         return true
@@ -783,6 +792,13 @@ class Route
                 s += ", "
             }
             s += getMsgArgs('fc.routelegtest.numerror.max',[status.max_leg_num])
+            wr_comma = true
+        }
+        if (status.measure_distance_difference) {
+            if (wr_comma) {
+                s += ", "
+            }
+            s += getMsgArgs('fc.routelegtest.legmeasuredistance.difference',[status.measure_distance_difference])
             wr_comma = true
         }
         if (status.min_target_error) {

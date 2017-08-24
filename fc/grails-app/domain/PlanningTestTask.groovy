@@ -35,6 +35,10 @@ class PlanningTestTask
     
     boolean Used()
     {
+        Test test_instance1 = Test.findByTask(planningtest.task,[sort:"id"])
+        if (!test_instance1.crew.disabled && !test_instance1.disabledCrew && (test_instance1.planningtesttask == this)) {
+            return true
+        }
         for (Test test_instance in Test.findAllByTask(planningtest.task,[sort:"id"])) {
             if (!test_instance.crew.disabled && !test_instance.disabledCrew && (test_instance.planningtesttask == this)) {
                 return true

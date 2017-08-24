@@ -39,7 +39,7 @@ class TaskController {
 		}
 	}
 	
-    def timetablejury = {
+    def timetablejudge = {
         Map task = domainService.GetTask(params)
         if (task.instance) {
             // assign return action
@@ -89,121 +89,121 @@ class TaskController {
         }
     }
 
-    def savetimetablejurysettings = {
+    def savetimetablejudgesettings = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryModified)
 		if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
         } else {
 			flash.message = task.message
 			redirect(action:edit,id:params.id)
         }
     }
 
-	def updatetimetablejurysettingsstandard = {
+	def updatetimetablejudgesettingsstandard = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryStandard) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingsnone = {
+	def updatetimetablejudgesettingsnone = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryNone) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingsall = {
+	def updatetimetablejudgesettingsall = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryAll) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingstower = {
+	def updatetimetablejudgesettingstower = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryTower) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingsintermediatetower = {
+	def updatetimetablejudgesettingsintermediatetower = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryIntermediateTower) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingsplanning = {
+	def updatetimetablejudgesettingsplanning = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryPlanning) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingstakeoff = {
+	def updatetimetablejudgesettingstakeoff = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryTakeoff) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingslanding = {
+	def updatetimetablejudgesettingslanding = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryLanding) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingsintermediatelanding = {
+	def updatetimetablejudgesettingsintermediatelanding = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryIntermediateLanding) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
 		}
 	}
 	
-	def updatetimetablejurysettingsparking = {
+	def updatetimetablejudgesettingsparking = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryParking) 
         if (task.instance) {
 			flash.message = task.message
-			render(view:'timetablejury',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
 		} else {
 			flash.message = task.message
 			redirect(controller:"contest",action:"tasks")
@@ -887,7 +887,7 @@ class TaskController {
         }
     }
 
-	def timetablejuryprintable = {
+	def timetablejudgeprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
@@ -931,7 +931,7 @@ class TaskController {
 	    }
 	}
 	
-	def printtimetablejury = {
+	def printtimetablejudge = {
         Map task = printService.printtimetableTask(params,GetPrintParams(),true) 
         if (!task.instance) {
             flash.message = task.message

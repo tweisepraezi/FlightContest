@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.task.timetablejury')} - ${taskInstance.name()}</title>
+        <title>${message(code:'fc.task.timetablejudge')} - ${taskInstance.name()}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.task.timetablejury')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.GetTimeTableVersion()}<g:if test="${taskInstance.timetableModified}">*</g:if>)</h2>
+                <h2>${message(code:'fc.task.timetablejudge')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.GetTimeTableVersion()}<g:if test="${taskInstance.timetableModified}">*</g:if>)</h2>
                 <div class="block" id="forms">
                     <g:form params="${['taskReturnAction':taskReturnAction,'taskReturnController':taskReturnController,'taskReturnID':taskReturnID]}">
                         <fieldset>
@@ -87,7 +87,7 @@
                                 <g:if test="${test_instance}">
                                     <g:set var="leg_no" value="${new Integer(0)}" />
                                     <g:set var="leg_num" value="${TestLegFlight.countByTest(test_instance)}" />
-                                    <g:set var="print_timetablejury_checkpoints" value=",${taskInstance.printTimetableJuryCheckPoints},"/>
+                                    <g:set var="print_timetablejudge_checkpoints" value=",${taskInstance.printTimetableJuryCheckPoints},"/>
                                     <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(test_instance,[sort:"id"])}">
                                         <g:set var="leg_no" value="${leg_no+1}" />
                                         <g:set var="leg_name" value="${testlegflight_instance.coordTitle.titleCode()}"/>
@@ -96,7 +96,7 @@
                                         <g:else>
                                             <div>
                                                 <g:set var="leg_checkpoint" value=",${leg_no},"/>
-                                                <g:if test="${print_timetablejury_checkpoints.contains(leg_checkpoint)}">
+                                                <g:if test="${print_timetablejudge_checkpoints.contains(leg_checkpoint)}">
                                                     <g:checkBox name="${leg_name}" value="${true}" />
                                                 </g:if>
                                                 <g:else>
@@ -171,25 +171,25 @@
                                     <label>${message(code:'fc.printa3')}</label>
                                 </div>
                             </p>
-                            <g:actionSubmit action="updatetimetablejurysettingsstandard" value="${message(code:'fc.standard')}" tabIndex="14"/>
-                            <g:actionSubmit action="updatetimetablejurysettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="15"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsstandard" value="${message(code:'fc.standard')}" tabIndex="14"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="15"/>
                             <g:if test="${intermediate_tower}">
-                                <g:actionSubmit action="updatetimetablejurysettingsintermediatetower" value="${message(code:'fc.setprintsettings.tower.intermediate')}" tabIndex="16"/>
+                                <g:actionSubmit action="updatetimetablejudgesettingsintermediatetower" value="${message(code:'fc.setprintsettings.tower.intermediate')}" tabIndex="16"/>
                             </g:if>
-                            <g:actionSubmit action="updatetimetablejurysettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="17"/>
-                            <g:actionSubmit action="updatetimetablejurysettingstakeoff" value="${message(code:'fc.flighttest.takeoff.setprintsettings')}" tabIndex="18"/>
-                            <g:actionSubmit action="updatetimetablejurysettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="19"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="17"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingstakeoff" value="${message(code:'fc.flighttest.takeoff.setprintsettings')}" tabIndex="18"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="19"/>
                             <g:if test="${intermediate_landing}">
-                                <g:actionSubmit action="updatetimetablejurysettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="20"/>
+                                <g:actionSubmit action="updatetimetablejudgesettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="20"/>
                             </g:if>
-                            <g:actionSubmit action="updatetimetablejurysettingsparking" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="21"/>
-                            <g:actionSubmit action="updatetimetablejurysettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="22"/>
-                            <g:actionSubmit action="updatetimetablejurysettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="23"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsparking" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="21"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="22"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="23"/>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
-                        <g:actionSubmit action="savetimetablejurysettings" value="${message(code:'fc.save')}" tabIndex="101"/>
-                        <g:actionSubmit action="printtimetablejury" value="${message(code:'fc.print')}"tabIndex="102"/>
+                        <g:actionSubmit action="savetimetablejudgesettings" value="${message(code:'fc.save')}" tabIndex="101"/>
+                        <g:actionSubmit action="printtimetablejudge" value="${message(code:'fc.print')}"tabIndex="102"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="104"/>
                     </g:form>
                 </div>

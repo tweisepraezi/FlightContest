@@ -17,6 +17,7 @@ environments {
             username = 'sa'
             password = ''
 		}
+        /*
         dataSource_aflos {
             pooled = false
             dialect = org.hibernate.dialect.SQLServerDialect    
@@ -46,6 +47,7 @@ environments {
             url = 'jdbc:odbc:FC-AFLOS-UPLOAD'
             readOnly = true
         }
+        */
 	}
 	development {
 		dataSource {
@@ -56,6 +58,7 @@ environments {
             username = 'sa'
             password = ''
 		}
+        /*
         dataSource_aflos {
             pooled = false
             dialect = org.hibernate.dialect.SQLServerDialect    
@@ -85,6 +88,7 @@ environments {
             url = 'jdbc:odbc:FC-AFLOS-UPLOAD'
             readOnly = true
         }
+        */
 	}
 	test {
 		dataSource {
@@ -95,6 +99,7 @@ environments {
             username = 'sa'
             password = ''
 		}
+        /*
         dataSource_aflos {
             pooled = false
             dialect = org.hibernate.dialect.SQLServerDialect    
@@ -124,6 +129,7 @@ environments {
             url = 'jdbc:odbc:FC-AFLOS-UPLOAD'
             readOnly = true
         }
+        */
 	}
 	production {
 		dataSource {

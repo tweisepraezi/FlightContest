@@ -11,6 +11,17 @@ class AflosTools
     final static boolean REMOVE_IDENTICAL_TIMES = true
     
     //--------------------------------------------------------------------------
+    static boolean ExistAflosConnection()
+    {
+        try {
+            int aflos_routes = AflosRouteNames.aflostest.count()
+            return true
+        } catch (Exception e) {
+        }
+        return false
+    }
+    
+    //--------------------------------------------------------------------------
     static boolean ExistAnyAflosRoute(Contest contestInstance)
     {
         try {

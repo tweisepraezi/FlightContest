@@ -1018,7 +1018,7 @@ Tabellen-Klassen:
 
 |timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime takeofftime version
 |legtimelist|value [#tas]|tas legtime
-|timetablejurylist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningendtime takeofftime sptime tptime fptime landingtime arrivaltime empty1 empty2 empty3 empty4
+|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningendtime takeofftime sptime tptime fptime landingtime arrivaltime empty1 empty2 empty3 empty4
 |timetableoverviewlist|briefing planning planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 
@@ -1071,7 +1071,7 @@ Tabellen-Klassen:
   
 ** Schiedsrichter-Zeitplan - Zeilen verkleinern
 
- table.timetablejurylist tr.value td { font-size: 90%; }
+ table.timetablejudgelist tr.value td { font-size: 90%; }
   
 ** Flugplan - Entfernung und Kurse nicht drucken
 

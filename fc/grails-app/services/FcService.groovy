@@ -1522,7 +1522,7 @@ class FcService
                     }
                     break
 				case PrintSettings.TimetableJuryModified:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 		            task_instance.properties = params
 					if (params["printTimetableJuryNumber"]) {
 						task_instance.printTimetableJuryNumber = params.printTimetableJuryNumber == "on"
@@ -1652,7 +1652,7 @@ class FcService
 					}
 					break
 				case PrintSettings.TimetableJuryStandard:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.standard')
 					task_instance.printTimetableJuryPrintTitle = ""
 					task_instance.printTimetableJuryNumber = true
@@ -1684,7 +1684,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryNone:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.setprintsettings.none')
 					task_instance.printTimetableJuryPrintTitle = ""
 					task_instance.printTimetableJuryNumber = false
@@ -1716,7 +1716,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryAll:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.setprintsettings.all')
 					task_instance.printTimetableJuryPrintTitle = ""
 					task_instance.printTimetableJuryNumber = true
@@ -1762,7 +1762,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryTower:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.setprintsettings.tower')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.tower')
 					task_instance.printTimetableJuryNumber = true
@@ -1794,7 +1794,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryIntermediateTower:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.setprintsettings.tower.intermediate')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.tower.intermediate')
 					task_instance.printTimetableJuryNumber = true
@@ -1845,7 +1845,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryPlanning:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.planningtest.setprintsettings')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.planningtest')
 					task_instance.printTimetableJuryNumber = true
@@ -1877,7 +1877,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryTakeoff:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.flighttest.takeoff.setprintsettings')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.takeoff')
 					task_instance.printTimetableJuryNumber = true
@@ -1909,7 +1909,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryLanding:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.landingtest.setprintsettings')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.landing')
 					task_instance.printTimetableJuryNumber = true
@@ -1941,7 +1941,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryIntermediateLanding:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.landingtest.setprintsettings.intermediate')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.landing.intermediate')
 					task_instance.printTimetableJuryNumber = true
@@ -1989,7 +1989,7 @@ class FcService
 					task_instance.printTimetableJuryA3 = false
 					break
 				case PrintSettings.TimetableJuryParking:
-					settings_name = getMsg('fc.task.timetablejury')
+					settings_name = getMsg('fc.task.timetablejudge')
 					detail_name = getMsg('fc.flighttest.parking.setprintsettings')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.arrival')
 					task_instance.printTimetableJuryNumber = true
@@ -3517,7 +3517,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-	Map timetablejuryprintquestionTask(Map params)
+	Map timetablejudgeprintquestionTask(Map params)
 	{
 		Map task = domainService.GetTask(params)
 		if (!task.instance) {
@@ -6105,6 +6105,10 @@ class FcService
 				}
 			}
 			coordRouteInstance.legDistance = route_instance.contest.Convert_mm2NM(coordRouteInstance.legMeasureDistance)
+		} else {
+            println "calculateCoordMapDistance (remove)"
+            coordRouteInstance.legMeasureDistance = null
+            coordRouteInstance.legDistance = null
 		}
 	}
 	
@@ -10252,7 +10256,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map updateFlightTest(Map params)
+    Map updateFlightTest(String showLanguage, Map params)
     {
 		printstart "updateFlightTest"
 		
@@ -10269,6 +10273,7 @@ class FcService
             }
 
 			Route old_route = flighttest_instance.route
+            params = calculateFlightTestWind(showLanguage, params)
             flighttest_instance.properties = params
 
 			if (old_route != flighttest_instance.route) {
@@ -10300,6 +10305,39 @@ class FcService
 			printerror ret.message
 			return ret
         }
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map calculateFlightTestWind(String showLanguage, Map params) 
+    {
+        if (params.TODirection) {
+            params.TODirection = Languages.GetLanguageDecimal(showLanguage, params.TODirection)
+        }
+        if (params.TOOffset) {
+            params.TOOffset = Languages.GetLanguageDecimal(showLanguage, params.TOOffset)
+        }
+        if (params.TOOrthogonalOffset) {
+            params.TOOrthogonalOffset = Languages.GetLanguageDecimal(showLanguage, params.TOOrthogonalOffset)
+        }
+        if (params.LDGDirection) {
+            params.LDGDirection = Languages.GetLanguageDecimal(showLanguage, params.LDGDirection)
+        }
+        if (params.LDGOffset) {
+            params.LDGOffset = Languages.GetLanguageDecimal(showLanguage, params.LDGOffset)
+        }
+        if (params.LDGOrthogonalOffset) {
+            params.LDGOrthogonalOffset = Languages.GetLanguageDecimal(showLanguage, params.LDGOrthogonalOffset)
+        }
+        if (params.iTOiLDGDirection) {
+            params.iTOiLDGDirection = Languages.GetLanguageDecimal(showLanguage, params.iTOiLDGDirection)
+        }
+        if (params.iTOiLDGOffset) {
+            params.iTOiLDGOffset = Languages.GetLanguageDecimal(showLanguage, params.iTOiLDGOffset)
+        }
+        if (params.iTOiLDGOrthogonalOffset) {
+            params.iTOiLDGOrthogonalOffset = Languages.GetLanguageDecimal(showLanguage, params.iTOiLDGOrthogonalOffset)
+        }
+        return params
     }
     
     //--------------------------------------------------------------------------
@@ -12123,7 +12161,7 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    private BigDecimal addMapDistance(lastMapMeasureDistance, addmeasuredistance)
+    private BigDecimal addMapDistance(BigDecimal lastMapMeasureDistance, BigDecimal addmeasuredistance)
     {
 	    if (addmeasuredistance != null) {
 	    	if (lastMapMeasureDistance != null) {
@@ -12132,6 +12170,7 @@ class FcService
 	    		lastMapMeasureDistance = addmeasuredistance
 	    	}
 	    }
+        return lastMapMeasureDistance
     }
     
     //--------------------------------------------------------------------------

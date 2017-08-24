@@ -22,7 +22,7 @@
 	                                <td><g:link controller="planningTest" params="${['task.id':taskInstance?.id,'taskid':taskInstance?.id,'fromlistplanning':true]}" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
 	                            </g:else>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetableoverview')}"/></td>
-                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetablejury')}"/></td>
+                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'timetablejudge')}"/></td>
                                 <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                             </tr>
                             <tr>

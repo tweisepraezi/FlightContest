@@ -49,6 +49,10 @@ class FlightTestWind
     
     boolean Used()
     {
+        Test test_instance1 = Test.findByTask(flighttest.task,[sort:"id"])
+        if (!test_instance1.crew.disabled && !test_instance1.disabledCrew && (test_instance1.flighttestwind == this) && test_instance1.timeCalculated) {
+            return true
+        }
         for (Test test_instance in Test.findAllByTask(flighttest.task,[sort:"id"])) {
             if (!test_instance.crew.disabled && !test_instance.disabledCrew && (test_instance.flighttestwind == this) && test_instance.timeCalculated) {
                 return true

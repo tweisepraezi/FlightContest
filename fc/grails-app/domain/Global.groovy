@@ -182,14 +182,16 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsAFLOSPossible()
     {
-        if (IsDevelopmentEnvironment()) {
-            return true
-        }
-        if (   grailsApplication.config.flightcontest.aflos
-            && grailsApplication.config.flightcontest.aflos.showmenu
-           )
-        {
-            return true
+        if (AflosTools.ExistAflosConnection()) {
+            if (IsDevelopmentEnvironment()) {
+                return true
+            }
+            if (   grailsApplication.config.flightcontest.aflos
+                && grailsApplication.config.flightcontest.aflos.showmenu
+               )
+            {
+                return true
+            }
         }
         return false
     }

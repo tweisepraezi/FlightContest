@@ -42,7 +42,7 @@ class FlightTestController {
     }
 
     def update = {
-        def flighttest = fcService.updateFlightTest(params) 
+        def flighttest = fcService.updateFlightTest(session.showLanguage, params) 
         if (flighttest.saved) {
         	flash.message = flighttest.message
         	redirect(action:show,id:flighttest.instance.id)

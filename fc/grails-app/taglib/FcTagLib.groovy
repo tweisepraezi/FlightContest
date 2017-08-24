@@ -98,8 +98,8 @@ class FcTagLib
             out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetable')}") {
 			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetable')}</a>"""
-        } else if (p.link == "${createLinkTo(dir:'',file:'task/timetablejury')}") {
-			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetablejury')}</a>"""
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/timetablejudge')}") {
+			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetablejudge')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetableoverview')}") {
             out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetableoverview')}</a>"""
         } else {

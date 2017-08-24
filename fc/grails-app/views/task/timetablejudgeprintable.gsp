@@ -27,7 +27,7 @@
                     margin-bottom: 10%;
                 </g:else>
                 @top-left {
-                    content: "${message(code:'fc.test.timetablejury')} - ${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})"
+                    content: "${message(code:'fc.test.timetablejudge')} - ${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})"
                 }
                 @top-right {
                     content: "${message(code:'fc.program.printpage')} " counter(page)
@@ -43,13 +43,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
         <style type="text/css">${contestInstance.printStyle}</style>
-        <title>${message(code:'fc.test.timetablejury')}</title>
+        <title>${message(code:'fc.test.timetablejudge')}</title>
     </head>
     <body>
-	    <h2>${message(code:'fc.test.timetablejury')}<g:if test="${taskInstance.printTimetableJuryPrintTitle}"> - ${taskInstance.printTimetableJuryPrintTitle}</g:if></h2>
+	    <h2>${message(code:'fc.test.timetablejudge')}<g:if test="${taskInstance.printTimetableJuryPrintTitle}"> - ${taskInstance.printTimetableJuryPrintTitle}</g:if></h2>
 	    <h3>${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
         <g:form>
-            <table class="timetablejurylist">
+            <table class="timetablejudgelist">
                 <thead>
                     <tr>
                         <g:if test="${taskInstance.printTimetableJuryNumber}">
@@ -104,7 +104,7 @@
                         <g:if test="${test_instance}">
                             <g:set var="leg_no" value="${new Integer(0)}" />
                             <g:set var="leg_num" value="${TestLegFlight.countByTest(test_instance)}" />
-                            <g:set var="print_timetablejury_checkpoints" value=",${taskInstance.printTimetableJuryCheckPoints},"/>
+                            <g:set var="print_timetablejudge_checkpoints" value=",${taskInstance.printTimetableJuryCheckPoints},"/>
                             <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(test_instance,[sort:"id"])}">
                                 <g:set var="leg_no" value="${leg_no+1}" />
                                 <g:set var="leg_name" value="${testlegflight_instance.coordTitle.titlePrintCode()}"/>
@@ -112,7 +112,7 @@
                                 </g:if>
                                 <g:else>
                                     <g:set var="leg_checkpoint" value=",${leg_no},"/>
-                                    <g:if test="${print_timetablejury_checkpoints.contains(leg_checkpoint)}">
+                                    <g:if test="${print_timetablejudge_checkpoints.contains(leg_checkpoint)}">
                                         <th>${leg_name}</th>
                                     </g:if>
                                 </g:else>
@@ -195,7 +195,7 @@
                                 </g:if>
                                 <g:set var="leg_no" value="${new Integer(0)}" />
                                 <g:set var="leg_num" value="${TestLegFlight.countByTest(test_instance)}" />
-                                <g:set var="print_timetablejury_checkpoints" value=",${taskInstance.printTimetableJuryCheckPoints},"/>
+                                <g:set var="print_timetablejudge_checkpoints" value=",${taskInstance.printTimetableJuryCheckPoints},"/>
                                 <g:set var="tptime" value="${test_instance.startTime}" />
                                 <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(test_instance,[sort:"id"])}">
                                     <g:set var="leg_no" value="${leg_no+1}" />
@@ -205,7 +205,7 @@
                                     </g:if>
                                     <g:else>
                                         <g:set var="leg_checkpoint" value=",${leg_no},"/>
-                                        <g:if test="${print_timetablejury_checkpoints.contains(leg_checkpoint)}">
+                                        <g:if test="${print_timetablejudge_checkpoints.contains(leg_checkpoint)}">
                                             <g:if test="${(testlegflight_instance.coordTitle.type == CoordType.iLDG) && taskInstance.IsFullMinute(taskInstance.iLandingDurationFormula)}">
                                                 <td class="tptime">${FcMath.TimeStrShort(tptime)}</td>
                                             </g:if>

@@ -143,6 +143,11 @@ Development
           }
         }
 
+    BuildConfig.groovy
+    ------------------
+       grails.project.fork (http://docs.grails.org/2.3.6/guide/commandLine.html -> 5.2 Forked Execution)
+            run: [maxMemory: 4096, minMemory: 1024, debug: false, maxPerm: 256, forkReserve:false]
+
 
 CloudFoundry
 ============

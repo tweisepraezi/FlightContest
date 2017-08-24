@@ -259,7 +259,7 @@ class Coord
         assignedSign = coordInstance.assignedSign
         correctSign = coordInstance.correctSign
 	    // planCpTime = coordInstance.planCpTime
-	    // planProcedureTurn = coordInstance.planProcedureTurn
+	    planProcedureTurn = coordInstance.planProcedureTurn
 	    // resultLatitude = coordInstance.resultLatitude
 	    // resultLongitude = coordInstance.resultLongitude
 	    // resultAltitude = coordInstance.resultAltitude
@@ -859,7 +859,7 @@ class Coord
                 from_type = routeleg_instance.startTitle.type
                 from_titlenumber = routeleg_instance.startTitle.number
                 true_track = routeleg_instance.coordTrueTrack
-                leg_distance = routeleg_instance.testDistance2()
+                leg_distance = routeleg_instance.coordDistance
                 from_tp = get_coordinate_from_coord(from_type, from_titlenumber)
             }
         }
@@ -921,7 +921,7 @@ class Coord
                     from_type = routeleg_instance.startTitle.type
                     from_titlenumber = routeleg_instance.startTitle.number
                     true_track = routeleg_instance.coordTrueTrack
-                    leg_distance = routeleg_instance.testDistance2()
+                    leg_distance = routeleg_instance.coordDistance
                 } else {
                     break
                 }
@@ -931,7 +931,7 @@ class Coord
                 from_type = routeleg_instance.startTitle.type
                 from_titlenumber = routeleg_instance.startTitle.number
                 true_track = routeleg_instance.coordTrueTrack
-                leg_distance = routeleg_instance.testDistance2()
+                leg_distance = routeleg_instance.coordDistance
             }
         }
         if (true_track != null) {
@@ -975,6 +975,7 @@ class Coord
         int from_titlenumber = 1
         BigDecimal from_distance = null
         CoordRoute from_coordroute_instance = null
+        enrouteDistanceOk = false
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route,[sort:'id'])) {
             if (coordroute_instance.type.IsEnrouteCalculateSignCoord()) {
                 if (coordroute_instance.type.IsEnrouteSignCoord()) {
@@ -988,7 +989,7 @@ class Coord
                 BigDecimal true_track = null
                 for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
                     if ((routeleg_instance.startTitle.type == coordroute_instance.type) && (routeleg_instance.startTitle.number == coordroute_instance.titleNumber)) {
-                        leg_distance = routeleg_instance.testDistance2()
+                        leg_distance = routeleg_instance.coordDistance
                         true_track = routeleg_instance.coordTrueTrack
                         break
                     }
@@ -1050,7 +1051,7 @@ class Coord
                     from_type = routeleg_instance.startTitle.type
                     from_titlenumber = routeleg_instance.startTitle.number
                     true_track = routeleg_instance.coordTrueTrack
-                    leg_distance = routeleg_instance.testDistance2()
+                    leg_distance = routeleg_instance.coordDistance
                 } else {
                     break
                 }
@@ -1060,7 +1061,7 @@ class Coord
                 from_type = routeleg_instance.startTitle.type
                 from_titlenumber = routeleg_instance.startTitle.number
                 true_track = routeleg_instance.coordTrueTrack
-                leg_distance = routeleg_instance.testDistance2()
+                leg_distance = routeleg_instance.coordDistance
             }
         }
         if (true_track != null) {
