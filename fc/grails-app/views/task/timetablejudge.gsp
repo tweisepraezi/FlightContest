@@ -12,13 +12,14 @@
                 <h2>${message(code:'fc.task.timetablejudge')} - ${taskInstance.name()} (${message(code:'fc.version')} ${taskInstance.GetTimeTableVersion()}<g:if test="${taskInstance.timetableModified}">*</g:if>)</h2>
                 <div class="block" id="forms">
                     <g:form params="${['taskReturnAction':taskReturnAction,'taskReturnController':taskReturnController,'taskReturnID':taskReturnID]}">
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <g:set var="intermediate_tower" value="${false}" />
                             <g:set var="intermediate_landing" value="${false}" />
                             <p>
                                 <label>${message(code:'fc.printsubtitle')}:</label>
                                 <br/>
-                                <input type="text" id="printTimetableJuryPrintTitle" name="printTimetableJuryPrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryPrintTitle')}" tabIndex="1"/>
+                                <input type="text" id="printTimetableJuryPrintTitle" name="printTimetableJuryPrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryPrintTitle')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <div>
@@ -131,7 +132,7 @@
                                     <label>${message(code:'fc.test.emptycolumn')} 1</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle1" name="printTimetableJuryEmptyTitle1" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle1')}" tabIndex="10"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle1" name="printTimetableJuryEmptyTitle1" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle1')}" tabIndex="${ti[0]++}"/>
                                 </p>
                             </p>
                             <p>
@@ -140,7 +141,7 @@
                                     <label>${message(code:'fc.test.emptycolumn')} 2</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle2" name="printTimetableJuryEmptyTitle2" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle2')}" tabIndex="11"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle2" name="printTimetableJuryEmptyTitle2" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle2')}" tabIndex="${ti[0]++}"/>
                                 </p>
                             </p>
                             <p>
@@ -149,7 +150,7 @@
                                     <label>${message(code:'fc.test.emptycolumn')} 3</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle3" name="printTimetableJuryEmptyTitle3" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle3')}" tabIndex="12"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle3" name="printTimetableJuryEmptyTitle3" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle3')}" tabIndex="${ti[0]++}"/>
                                 </p>
                             </p>
                             <p>
@@ -158,7 +159,7 @@
                                     <label>${message(code:'fc.test.emptycolumn')} 4</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle4" name="printTimetableJuryEmptyTitle4" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle4')}" tabIndex="13"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle4" name="printTimetableJuryEmptyTitle4" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle4')}" tabIndex="${ti[0]++}"/>
                                 </p>
                             </p>
                             <p>
@@ -171,26 +172,26 @@
                                     <label>${message(code:'fc.printa3')}</label>
                                 </div>
                             </p>
-                            <g:actionSubmit action="updatetimetablejudgesettingsstandard" value="${message(code:'fc.standard')}" tabIndex="14"/>
-                            <g:actionSubmit action="updatetimetablejudgesettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="15"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsstandard" value="${message(code:'fc.standard')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="${ti[0]++}"/>
                             <g:if test="${intermediate_tower}">
-                                <g:actionSubmit action="updatetimetablejudgesettingsintermediatetower" value="${message(code:'fc.setprintsettings.tower.intermediate')}" tabIndex="16"/>
+                                <g:actionSubmit action="updatetimetablejudgesettingsintermediatetower" value="${message(code:'fc.setprintsettings.tower.intermediate')}" tabIndex="${ti[0]++}"/>
                             </g:if>
-                            <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="17"/>
-                            <g:actionSubmit action="updatetimetablejudgesettingstakeoff" value="${message(code:'fc.flighttest.takeoff.setprintsettings')}" tabIndex="18"/>
-                            <g:actionSubmit action="updatetimetablejudgesettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="19"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
                             <g:if test="${intermediate_landing}">
-                                <g:actionSubmit action="updatetimetablejudgesettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="20"/>
+                                <g:actionSubmit action="updatetimetablejudgesettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="${ti[0]++}"/>
                             </g:if>
-                            <g:actionSubmit action="updatetimetablejudgesettingsparking" value="${message(code:'fc.flighttest.parking.setprintsettings')}" tabIndex="21"/>
-                            <g:actionSubmit action="updatetimetablejudgesettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="22"/>
-                            <g:actionSubmit action="updatetimetablejudgesettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="23"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsarrival" value="${message(code:'fc.flighttest.arrival.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsdebriefing" value="${message(code:'fc.flighttest.debriefing.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsnone" value="${message(code:'fc.setprintsettings.none')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatetimetablejudgesettingsall" value="${message(code:'fc.setprintsettings.all')}" tabIndex="${ti[0]++}"/>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
-                        <g:actionSubmit action="savetimetablejudgesettings" value="${message(code:'fc.save')}" tabIndex="101"/>
-                        <g:actionSubmit action="printtimetablejudge" value="${message(code:'fc.print')}"tabIndex="102"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="104"/>
+                        <g:actionSubmit action="savetimetablejudgesettings" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="printtimetablejudge" value="${message(code:'fc.print')}"tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

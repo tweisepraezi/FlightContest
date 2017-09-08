@@ -1,5 +1,5 @@
 
-Flight Contest 3.1.RC9
+Flight Contest 3.1.0.GA
 Copyright 2009-2017 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://flightcontest.de
@@ -36,6 +36,15 @@ http://www.itextpdf.com
 http://sourceforge.net/projects/itext
 
 GNU AFFERO GENERAL PUBLIC LICENSE, Version 3
+
+============================================================================
+
+Google Noto Fonts
+
+http://www.google.com/get/noto/
+
+SIL OPEN FONT LICENSE, Version 1.1
+http://scripts.sil.org/OFL
 
 ============================================================================
 

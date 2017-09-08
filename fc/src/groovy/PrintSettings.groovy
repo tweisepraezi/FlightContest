@@ -17,7 +17,8 @@ enum PrintSettings
 	TimetableJuryTakeoff,
 	TimetableJuryLanding, 
 	TimetableJuryIntermediateLanding, 
-	TimetableJuryParking,
+	TimetableJuryArrival,
+    TimetableJuryDebriefing,
 	
 	TimetableModified,
 	TimetableStandard,

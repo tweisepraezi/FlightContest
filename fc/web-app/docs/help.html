@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1, Ausgabe 4,</span>
-<span id="revdate">18.7.2017</span>
+<span id="revnumber">version 3.1, Ausgabe 6,</span>
+<span id="revdate">6.9.2017</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -436,7 +436,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#hints">Bedien-Tipps</a></li>
 <li><a href="#response-to-modifications">&#196;nderungen bei Wettbewerbs-Durchf&#252;hrung</a></li>
 <li><a href="#create-crew-list">Besatzungsliste erstellen</a></li>
-<li><a href="#route-planning">Streckenplanung</a></li>
+<li><a href="#route-planning">Streckenplanung</a>
+<ul class="sectlevel2">
+<li><a href="#route-planning-definitions">Definitionen</a></li>
+<li><a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r ein Wettbewerbsstrecke</a></li>
+<li><a href="#route-planning-imput">Eingabe von Wettbewerbsstrecken</a></li>
+<li><a href="#route-planning-import">Import von Wettbewerbsstrecken</a></li>
+<li><a href="#route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</a></li>
+<li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a></li>
+<li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
+</ul>
+</li>
 <li><a href="#flight-time-calculation">Flugzeit-Berechnung f&#252;r Starts und Landungen</a></li>
 <li><a href="#planning-test-and-flight-preparation">Planungstest und Flugzeugvorbereitung</a>
 <ul class="sectlevel2">
@@ -459,7 +469,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_aflos_direkt">AFLOS (direkt)</a></li>
 <li><a href="#_aflos_mit_reader">AFLOS (mit Reader)</a></li>
-<li><a href="#_airopserver_basierte_logger">AirOpserver basierte Logger</a></li>
+<li><a href="#_airobserver_basierte_logger">AirObserver basierte Logger</a></li>
 <li><a href="#_dg_100">DG-100</a></li>
 <li><a href="#_dg_200">DG-200</a></li>
 <li><a href="#_powerflarm">PowerFLARM</a></li>
@@ -1134,6 +1144,8 @@ einem Import nur noch in 'Flight Contest'.</p>
 <div class="sect1">
 <h2 id="route-planning">Streckenplanung</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="route-planning-definitions">Definitionen</h3>
 <div class="paragraph">
 <p>Startpunkt (SP), Check-Punkte (CP) und Endpunkt (FP = Finish point)
 sind Logger-Messpunkte einer Strecke, wo &#220;berflugzeit und Flugh&#246;he gemessen
@@ -1163,6 +1175,9 @@ Intermediate-Landung (iLDG) und Intermediate-Takeoff (iTO) dienen nur
 zur Anzeige im Flugplan einer Besatzung.
 Bei einer Touch&amp;Go-Zwischenlandung ist auf iTO zu verzichten.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-mandatory-details">Erforderliche Angaben f&#252;r ein Wettbewerbsstrecke</h3>
 <div class="paragraph">
 <p>In einer Wettbewerbs-Karte sind Startpunkt, Wendepunkte und Endpunkt
 einer Strecke sprachabh&#228;ngig mit folgenden Bezeichnungen anzugeben:</p>
@@ -1379,95 +1394,15 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
                               LDG         0.02    250       ja         ja   nein nein</pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-imput">Eingabe von Wettbewerbsstrecken</h3>
 <div class="paragraph">
 <p>Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur
 nacheinander eingeben werden k&#246;nnen und das Einf&#252;gen von Check-Punkten nicht m&#246;glich ist.
 Alle Eigenschaften bis auf den Check-Punkt-Typ sind bis zur ersten Nutzung &#228;nderbar.
 Flug-H&#246;he und Tor-Breite sind auch nach der ersten Nutzung &#228;nderbar.</p>
 </div>
-<div class="paragraph">
-<p>Mit 'Strecken &#8594; Import Strecke' k&#246;nnen Strecken folgender Formate auch importiert werden:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>GPX-Datei, die von einem Fremd-Programm (z.B. 'Flight Planner') erzeugt wurde.</p>
-<div class="paragraph">
-<p>Darf nur genau eine Strecke (&lt;rte&gt;&#8230;&#8203;&lt;/ret&gt;) beinhalten.</p>
-</div>
-<div class="paragraph">
-<p>Muss H&#246;henangaben beinhalten (&lt;rtept lat="49.118333" lon="9.784000"&gt;&lt;ele&gt;400.00&lt;/ele&gt;&lt;/rtept&gt;).</p>
-</div>
-</li>
-<li>
-<p>KML- oder KMZ-Datei, die von einem Fremd-Programm erzeugt wurde.</p>
-</li>
-<li>
-<p>REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.</p>
-</li>
-<li>
-<p>TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enth&#228;lt:</p>
-<div class="paragraph">
-<p>Latitude, Longitude, Altitude</p>
-</div>
-<div class="paragraph">
-<p>Beispiele f&#252;r verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Lat 52.20167&#176;, Lon 16.76500&#176;, Alt 1243ft
-Lat 52&#176; 12.10000' N, Lon 016&#176; 45.90000' E, Alt 1243ft
-Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Werte mit Komma getrennt (Leerzeichen vor Pr&#228;fix und nach Einheit werden ignoriert)</p>
-</div>
-<div class="paragraph">
-<p>Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert</p>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Pr&#252;fen Sie Ihre eingegebene Strecke in 'Streckendetails' folgenderma&#223;en:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Google/OSM-Karte:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Check-Punkte an den korrekten Stellen?</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Auswerte-Etappen:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Entfernungen plausibel?</p>
-</li>
-<li>
-<p>Gesamt-Entfernung plausibel?</p>
-</li>
-<li>
-<p>Wendeschleifen (Kurs&#228;nderungen &gt; 90 Grad) korrekt?</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' zur Weitergabe
-an den Auswerte-Schiedsrichter, der diese mit 'Strecken &#8594; Import FC-Strecke'
-in sein 'Flight Contest' zur Nutzung importieren kann.</p>
-</div>
-<div style="page-break-after: always;"></div>
 <div class="paragraph">
 <p>Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon
 auch mit Textdateien (UTF-8) m&#246;glich. In einer leeren Strecke k&#246;nnen alle Check-Punkte mit
@@ -1524,7 +1459,160 @@ und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet 
 (siehe <a href="help_aflos.html#aflos_route_planning" target="_blank">Streckenplanung mit AFLOS</a>).
 Dazu muss 'AFLOS 2.15' installiert sein.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-import">Import von Wettbewerbsstrecken</h3>
+<div class="paragraph">
+<p>Mit 'Strecken &#8594; Import Strecke' k&#246;nnen Strecken folgender Formate auch importiert werden:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>GPX-Datei, die von einem Fremd-Programm (z.B. 'Flight Planner') erzeugt wurde.</p>
+<div class="paragraph">
+<p>Darf nur genau eine Strecke (&lt;rte&gt;&#8230;&#8203;&lt;/ret&gt;) beinhalten.</p>
+</div>
+<div class="paragraph">
+<p>Muss H&#246;henangaben beinhalten (&lt;rtept lat="49.118333" lon="9.784000"&gt;&lt;ele&gt;400.00&lt;/ele&gt;&lt;/rtept&gt;).</p>
+</div>
+</li>
+<li>
+<p>KML- oder KMZ-Datei, die von einem Fremd-Programm erzeugt wurde.</p>
+</li>
+<li>
+<p>REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.</p>
+</li>
+<li>
+<p>TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enth&#228;lt:</p>
+<div class="paragraph">
+<p>Latitude, Longitude, Altitude</p>
+</div>
+<div class="paragraph">
+<p>Beispiele f&#252;r verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Lat 52.20167&#176;, Lon 16.76500&#176;, Alt 1243ft
+Lat 52&#176; 12.10000' N, Lon 016&#176; 45.90000' E, Alt 1243ft
+Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Werte mit Komma getrennt (Leerzeichen vor Pr&#228;fix und nach Einheit werden ignoriert)</p>
+</div>
+<div class="paragraph">
+<p>Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</h3>
+<div class="paragraph">
+<p>Pr&#252;fen Sie Ihre eingegebene Strecke in 'Streckendetails' folgenderma&#223;en:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Google/OSM-Karte:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Check-Punkte an den korrekten Stellen?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Auswerte-Etappen:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Entfernungen plausibel?</p>
+</li>
+<li>
+<p>Gesamt-Entfernung plausibel?</p>
+</li>
+<li>
+<p>Wendeschleifen (Kurs&#228;nderungen &gt; 90 Grad) korrekt?</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</h3>
+<div class="paragraph">
+<p>Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' zur Weitergabe
+an den Auswerte-Schiedsrichter, der diese mit 'Strecken &#8594; Import FC-Strecke'
+in sein 'Flight Contest' zur Nutzung importieren kann.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-errors">Fehlermeldungen in Streckendetails</h3>
+<div class="paragraph">
+<p>Sind Strecken unvollst&#228;ndig oder abweichend vom gew&#228;hlten Regelwerk konfiguriert,
+erscheinen in der Streckenliste vor dem Strecken-Titel ein !
+und in den Streckendetails rot markierte Fehlerausschriften.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Unbekannte letzte Wendepunkte</dt>
+<dd>
+<p>Einige letzte Wendepunkte von Strecken-Fotos oder -Bodenzeichen konnten nicht berechnet werden.<br>
+Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
+</dd>
+<dt class="hdlist1">Etappen-Anzahl zu klein</dt>
+<dd>
+<p>'Min. Streckenabschnitte' verkleinern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Etappen-Anzahl zu gro&#223;</dt>
+<dd>
+<p>'Max. Streckenabschnitte' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Foto-Anzahl zu klein</dt>
+<dd>
+<p>'Strecken-Foto-Beobachtungen &#8594; Definition' mit 'Keine' einstellen (Bearbeiten) oder<br>
+'Min. Strecken-Fotos' verkleinern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Bodenzeichen-Anzahl zu klein</dt>
+<dd>
+<p>'Strecken-Bodenzeichen-Beobachtungen &#8594; Definition' mit 'Keine' einstellen (Bearbeiten) oder<br>
+'Min. Strecken-Bodenzeichen' verkleinern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Foto+Bodenzeichen-Anzahl zu klein</dt>
+<dd>
+<p>'Min. Strecken-Fotos+Bodenzeichen' verkleinern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Foto-Anzahl zu gro&#223;</dt>
+<dd>
+<p>'Max. Strecken-Fotos' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Bodenzeichen-Anzahl zu gro&#223;</dt>
+<dd>
+<p>'Max. Strecken-Bodenzeichen' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Foto+Bodenzeichen-Anzahl zu gro&#223;</dt>
+<dd>
+<p>'Max. Strecken-Fotos+Bodenzeichen' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+</dd>
+<dt class="hdlist1">Kartenentfernungen abweichend</dt>
+<dd>
+<p>Interner Datenfehler<br>
+'Etappen neu berechnen' ausf&#252;hren</p>
+</dd>
+<dt class="hdlist1">Koordinaten-Wendeschleifen abweichend</dt>
+<dd>
+<p>Interner Datenfehler<br>
+'Etappen neu berechnen' ausf&#252;hren</p>
+</dd>
+</dl>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1819,6 +1907,19 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 </li>
 </ul>
 </div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Anweisungen f&#252;r Schiedsrichter (zum Ausdrucken)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="info/FC-PlanningTest-Info.docx" target="_blank">Zeitlicher Ablauf des Planungstests</a><br></p>
+</li>
+<li>
+<p><a href="info/FC-PlanningTest-Info_en.docx" target="_blank">Time schedule of Planning Test</a></p>
 </li>
 </ul>
 </div>
@@ -2343,27 +2444,30 @@ im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_airopserver_basierte_logger">AirOpserver basierte Logger</h3>
+<h3 id="_airobserver_basierte_logger">AirObserver basierte Logger</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Logger-Auslese-Software: 'Air Observer 1.8'</p>
+<p>Logger-Auslese-Software: 'AirObserver 2.5.1'</p>
 </li>
 <li>
-<p>Logger-Einstellung: 'Air Observer &#8594; Logger &#8594; Configure'</p>
+<p>Logger-Einstellung: 'AirObserver &#8594; Logger &#8594; Configure'</p>
 </li>
 <li>
-<p>Logger-Aufzeichnung auslesen: 'Air Observer &#8594; Logger &#8594; Download' (Auslesen sehr langsam)</p>
+<p>Logger-Aufzeichnung auslesen: 'AirObserver &#8594; Logger &#8594; Download' (Auslesen sehr langsam)</p>
 </li>
 <li>
-<p>GAC-Datei erzeugen: 'Air Observer &#8594; File &#8594; Export &#8594; GAC'</p>
+<p>Logger-Aufzeichnung (*.G00) &#246;ffnen: 'AirObserver &#8594; File &#8594; Load Flight Log'</p>
+</li>
+<li>
+<p>GAC-Datei erzeugen: 'AirObserver &#8594; File &#8594; Export &#8594; GAC'</p>
 </li>
 <li>
 <p>Logger-Daten-Import: 'Flight Contest &#8594; Ergebnisse &#8594; Aufgaben-Titel &#8594; Navigationsflug
 &#8594; &#8230;&#8203; &#8594; Import Logger-Daten &#8594; GAC-Datei ausw&#228;hlen &#8594; Import'</p>
 </li>
 <li>
-<p>Logger-Aufzeichnung l&#246;schen: 'Air Observer &#8594; Logger &#8594; Clear'</p>
+<p>Logger-Aufzeichnung l&#246;schen: 'AirObserver &#8594; Logger &#8594; Clear'</p>
 </li>
 </ul>
 </div>

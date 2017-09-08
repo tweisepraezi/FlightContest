@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1, Ausgabe 4
-:revdate:   18.7.2017
+:revnumber: 3.1, Ausgabe 6
+:revdate:   6.9.2017
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -301,6 +301,10 @@ einem Import nur noch in 'Flight Contest'.
 <<<
 [[route-planning]]
 == Streckenplanung
+
+[[route-planning-definitions]]
+=== Definitionen
+
 Startpunkt (SP), Check-Punkte (CP) und Endpunkt (FP = Finish point)
 sind Logger-Messpunkte einer Strecke, wo Überflugzeit und Flughöhe gemessen
 sowie vorangegangene Kursänderungen >= 90 Grad festgestellt werden.
@@ -323,6 +327,9 @@ Beim Intermediate-Endpunkt (iFP) und Intermediate-Startpunkt (iSP) werden
 Intermediate-Landung (iLDG) und Intermediate-Takeoff (iTO) dienen nur
 zur Anzeige im Flugplan einer Besatzung.
 Bei einer Touch&Go-Zwischenlandung ist auf iTO zu verzichten.
+
+[[route-planning-mandatory-details]]
+=== Erforderliche Angaben für ein Wettbewerbsstrecke
 
 In einer Wettbewerbs-Karte sind Startpunkt, Wendepunkte und Endpunkt 
 einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:
@@ -460,51 +467,14 @@ Einzugebende Eigenschaften der Check-Punkte einer Strecke:
                               LDG         0.02    250       ja         ja   nein nein
 ----
 
+[[route-planning-imput]]
+=== Eingabe von Wettbewerbsstrecken
+
 Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur 
 nacheinander eingeben werden können und das Einfügen von Check-Punkten nicht möglich ist. 
 Alle Eigenschaften bis auf den Check-Punkt-Typ sind bis zur ersten Nutzung änderbar.
 Flug-Höhe und Tor-Breite sind auch nach der ersten Nutzung änderbar.
 
-Mit 'Strecken -> Import Strecke' können Strecken folgender Formate auch importiert werden:
-
-* GPX-Datei, die von einem Fremd-Programm (z.B. 'Flight Planner') erzeugt wurde.
-+
-Darf nur genau eine Strecke (<rte>...</ret>) beinhalten.
-+
-Muss Höhenangaben beinhalten (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
-
-* KML- oder KMZ-Datei, die von einem Fremd-Programm erzeugt wurde.
-
-* REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.
-
-* TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
-+
-Latitude, Longitude, Altitude
-+
-Beispiele für verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):
-
- Lat 52.20167°, Lon 16.76500°, Alt 1243ft
- Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
- Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft
-+ 
-Werte mit Komma getrennt (Leerzeichen vor Präfix und nach Einheit werden ignoriert)
-+
-Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
-
-Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
-
-* Google/OSM-Karte: 
-** Check-Punkte an den korrekten Stellen?
-* Auswerte-Etappen:
-** Entfernungen plausibel?
-** Gesamt-Entfernung plausibel?
-** Wendeschleifen (Kursänderungen > 90 Grad) korrekt?
-
-Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' zur Weitergabe
-an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
-in sein 'Flight Contest' zur Nutzung importieren kann.
-
-<<<
 Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon 
 auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Check-Punkte mit 
 "Koordinaten importieren" aus einer Text-Datei hinzugefügt werden (einschl. Eigenschaften):
@@ -540,6 +510,99 @@ und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet 
 Alternativ ist die Eingabe und Weitergabe von Strecken mit AFLOS-Datenbanken möglich
 (siehe link:help_aflos.html#aflos_route_planning[Streckenplanung mit AFLOS^]).
 Dazu muss 'AFLOS 2.15' installiert sein.
+
+[[route-planning-import]]
+=== Import von Wettbewerbsstrecken
+
+Mit 'Strecken -> Import Strecke' können Strecken folgender Formate auch importiert werden:
+
+* GPX-Datei, die von einem Fremd-Programm (z.B. 'Flight Planner') erzeugt wurde.
++
+Darf nur genau eine Strecke (<rte>...</ret>) beinhalten.
++
+Muss Höhenangaben beinhalten (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
+
+* KML- oder KMZ-Datei, die von einem Fremd-Programm erzeugt wurde.
+
+* REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.
+
+* TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
++
+Latitude, Longitude, Altitude
++
+Beispiele für verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):
+
+ Lat 52.20167°, Lon 16.76500°, Alt 1243ft
+ Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft
++ 
+Werte mit Komma getrennt (Leerzeichen vor Präfix und nach Einheit werden ignoriert)
++
+Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
+
+[[route-planning-verify]]
+=== Prüfen der Wettbewerbsstrecke
+
+Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
+
+* Google/OSM-Karte: 
+** Check-Punkte an den korrekten Stellen?
+* Auswerte-Etappen:
+** Entfernungen plausibel?
+** Gesamt-Entfernung plausibel?
+** Wendeschleifen (Kursänderungen > 90 Grad) korrekt?
+
+[[route-planning-deliver]]
+=== Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter
+
+Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' zur Weitergabe
+an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
+in sein 'Flight Contest' zur Nutzung importieren kann.
+
+[[route-planning-errors]]
+=== Fehlermeldungen in Streckendetails
+
+Sind Strecken unvollständig oder abweichend vom gewählten Regelwerk konfiguriert,
+erscheinen in der Streckenliste vor dem Strecken-Titel ein ! 
+und in den Streckendetails rot markierte Fehlerausschriften.
+
+Unbekannte letzte Wendepunkte::
+Einige letzte Wendepunkte von Strecken-Fotos oder -Bodenzeichen konnten nicht berechnet werden. +
+Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.
+
+Etappen-Anzahl zu klein::
+'Min. Streckenabschnitte' verkleinern (Wettbewerb -> Vorgaben)
+
+Etappen-Anzahl zu groß::
+'Max. Streckenabschnitte' vergrößern (Wettbewerb -> Vorgaben)
+
+Foto-Anzahl zu klein::
+'Strecken-Foto-Beobachtungen -> Definition' mit 'Keine' einstellen (Bearbeiten) oder +
+'Min. Strecken-Fotos' verkleinern (Wettbewerb -> Vorgaben)
+
+Bodenzeichen-Anzahl zu klein::
+'Strecken-Bodenzeichen-Beobachtungen -> Definition' mit 'Keine' einstellen (Bearbeiten) oder +
+'Min. Strecken-Bodenzeichen' verkleinern (Wettbewerb -> Vorgaben)
+
+Foto+Bodenzeichen-Anzahl zu klein::
+'Min. Strecken-Fotos+Bodenzeichen' verkleinern (Wettbewerb -> Vorgaben)
+
+Foto-Anzahl zu groß::
+'Max. Strecken-Fotos' vergrößern (Wettbewerb -> Vorgaben)
+
+Bodenzeichen-Anzahl zu groß::
+'Max. Strecken-Bodenzeichen' vergrößern (Wettbewerb -> Vorgaben)
+
+Foto+Bodenzeichen-Anzahl zu groß::
+'Max. Strecken-Fotos+Bodenzeichen' vergrößern (Wettbewerb -> Vorgaben)
+
+Kartenentfernungen abweichend::
+Interner Datenfehler +
+'Etappen neu berechnen' ausführen
+
+Koordinaten-Wendeschleifen abweichend::
+Interner Datenfehler +
+'Etappen neu berechnen' ausführen
 
 <<<
 [[flight-time-calculation]]
@@ -646,6 +709,11 @@ Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
 ** Abgabe des Planungstest-Aufgabenblattes
 * Besatzung erhält Navigationstest-Karte und Flugplan
 ** Navigationstest-Karte vorbereiten (Wendeschleifen, Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)
+
+. Anweisungen für Schiedsrichter (zum Ausdrucken)
+
+* link:info/FC-PlanningTest-Info.docx[Zeitlicher Ablauf des Planungstests^] +
+* link:info/FC-PlanningTest-Info_en.docx[Time schedule of Planning Test^]
 
 [[planning-test-with-flight-construction]]
 === Planungstest mit Streckenkonstruktion
@@ -874,14 +942,15 @@ im AFLOS-Namen übereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.
                         -> ... -> Import Logger-Daten -> GAC-Datei auswählen -> Import'
 * Logger-Aufzeichnung löschen: direkt am AFLOS-Logger
 
-=== AirOpserver basierte Logger
-* Logger-Auslese-Software: 'Air Observer 1.8'
-* Logger-Einstellung: 'Air Observer -> Logger -> Configure'
-* Logger-Aufzeichnung auslesen: 'Air Observer -> Logger -> Download' (Auslesen sehr langsam)
-* GAC-Datei erzeugen: 'Air Observer -> File -> Export -> GAC'
+=== AirObserver basierte Logger
+* Logger-Auslese-Software: 'AirObserver 2.5.1'
+* Logger-Einstellung: 'AirObserver -> Logger -> Configure'
+* Logger-Aufzeichnung auslesen: 'AirObserver -> Logger -> Download' (Auslesen sehr langsam)
+* Logger-Aufzeichnung (*.G00) öffnen: 'AirObserver -> File -> Load Flight Log'
+* GAC-Datei erzeugen: 'AirObserver -> File -> Export -> GAC'
 * Logger-Daten-Import: 'Flight Contest -> Ergebnisse -> Aufgaben-Titel -> Navigationsflug
                         -> ... -> Import Logger-Daten -> GAC-Datei auswählen -> Import'
-* Logger-Aufzeichnung löschen: 'Air Observer -> Logger -> Clear'
+* Logger-Aufzeichnung löschen: 'AirObserver -> Logger -> Clear'
 
 === DG-100
 * Logger-Einstellungs-Software: 'Data Logger Utility S-OPC-0L-110631'

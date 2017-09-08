@@ -1866,9 +1866,9 @@ class FcService
 					task_instance.printTimetableJuryLanding = false
 					task_instance.printTimetableJuryArrival = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
-					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.planning.end.real')
+					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.planning.answergiven')
 					task_instance.printTimetableJuryEmptyColumn2 = true
-					task_instance.printTimetableJuryEmptyTitle2 = ""
+					task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.planning.exitroom')
 					task_instance.printTimetableJuryEmptyColumn3 = false
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
@@ -1988,9 +1988,9 @@ class FcService
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
-				case PrintSettings.TimetableJuryParking:
+				case PrintSettings.TimetableJuryArrival:
 					settings_name = getMsg('fc.task.timetablejudge')
-					detail_name = getMsg('fc.flighttest.parking.setprintsettings')
+					detail_name = getMsg('fc.flighttest.arrival.setprintsettings')
 					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.arrival')
 					task_instance.printTimetableJuryNumber = true
 					task_instance.printTimetableJuryCrew = false
@@ -2008,18 +2008,50 @@ class FcService
 					task_instance.printTimetableJuryCheckPoints = ""
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = true
-					task_instance.printTimetableJuryArrival = true
+					task_instance.printTimetableJuryArrival = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
-					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.arrival.real')
+					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.arrival.stoptime')
 					task_instance.printTimetableJuryEmptyColumn2 = true
-					task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.arrival.abgabe.real')
-					task_instance.printTimetableJuryEmptyColumn3 = false
+					task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.arrival.givingtime')
+					task_instance.printTimetableJuryEmptyColumn3 = true
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
+                case PrintSettings.TimetableJuryDebriefing:
+                    settings_name = getMsg('fc.task.timetablejudge')
+                    detail_name = getMsg('fc.flighttest.debriefing.setprintsettings')
+                    task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.test.debriefing')
+                    task_instance.printTimetableJuryNumber = true
+                    task_instance.printTimetableJuryCrew = true
+                    task_instance.printTimetableJuryAircraft = true
+                    task_instance.printTimetableJuryAircraftType = false
+                    task_instance.printTimetableJuryAircraftColour = false
+                    task_instance.printTimetableJuryTAS = false
+                    task_instance.printTimetableJuryTeam = false
+                    task_instance.printTimetableJuryClass = false
+                    task_instance.printTimetableJuryShortClass = false
+                    task_instance.printTimetableJuryPlanning = false
+                    task_instance.printTimetableJuryPlanningEnd = false
+                    task_instance.printTimetableJuryTakeoff = false
+                    task_instance.printTimetableJuryStartPoint = false
+                    task_instance.printTimetableJuryCheckPoints = ""
+                    task_instance.printTimetableJuryFinishPoint = false
+                    task_instance.printTimetableJuryLanding = true
+                    task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJuryEmptyColumn1 = true
+                    task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.debriefing.exittime')
+                    task_instance.printTimetableJuryEmptyColumn2 = true
+                    task_instance.printTimetableJuryEmptyTitle2 = ""
+                    task_instance.printTimetableJuryEmptyColumn3 = true
+                    task_instance.printTimetableJuryEmptyTitle3 = ""
+                    task_instance.printTimetableJuryEmptyColumn4 = false
+                    task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandscape = false
+                    task_instance.printTimetableJuryA3 = false
+                    break
 				case PrintSettings.TimetableStandard:
 					settings_name = getMsg('fc.task.timetable')
 					detail_name = getMsg('fc.standard')
@@ -4280,7 +4312,7 @@ class FcService
 			}
             printstart "caculateroutelegsRoute"
             renumberCoordRoute(route_instance)
-			calculateAllCoordMapDistances(route_instance)
+			calculateAllLegMeasureDistances(route_instance)
             calculateSecretLegRatio(route_instance)
         	calculateRouteLegs(route_instance)
             calculateEnrouteValues(route_instance)
@@ -4374,6 +4406,7 @@ class FcService
                 int sc_num = 1
 				String cp_errors = ""
 				BigDecimal last_mapmeasure_distance = null
+                BigDecimal last_map_distance = null
 				int last_legduration = 0
 				BigDecimal last_coord_distance = 0
 				BigDecimal first_coord_truetrack = null
@@ -4592,7 +4625,7 @@ class FcService
 											println "Error: $v"
 										}
 										if (dist_found) {
-											calculateCoordMapDistance(coordroute_instance, true)
+											calculateLegMeasureDistance(coordroute_instance, true)
 										}
 									}
 									read_value_ok = true
@@ -4700,7 +4733,8 @@ class FcService
 						coordroute_instance.save()
 						
 						calculateSecretLegRatio(route_instance)
-						last_mapmeasure_distance = addMapDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+						last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+                        last_map_distance = addMapDistance(last_map_distance,route_instance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
 						if (coordroute_instance.legDuration) {
 							last_legduration += coordroute_instance.legDuration
 						}
@@ -4713,6 +4747,7 @@ class FcService
 							last_coordroute_instance,
 							last_coordroute_test_instance,
 							last_mapmeasure_distance,
+                            last_map_distance,
 							last_legduration,
 							last_coord_distance,
 							first_coord_truetrack,
@@ -4728,6 +4763,7 @@ class FcService
 						if (coordroute_instance.type != CoordType.SECRET) {
 							last_coordroute_test_instance = coordroute_instance
 							last_mapmeasure_distance = null
+                            last_map_distance = null
 							last_legduration = 0
 							last_coord_distance = 0
 							first_coord_truetrack = null
@@ -4931,7 +4967,7 @@ class FcService
         if (reader.valid && !reader.errors && reader.route) {
             printstart "Calculate legs"
             try {
-                calculateAllCoordMapDistances(reader.route)
+                calculateAllLegMeasureDistances(reader.route)
                 calculateSecretLegRatio(reader.route)
                 calculateRouteLegs(reader.route)
                 calculateEnrouteValues(reader.route)
@@ -5010,7 +5046,7 @@ class FcService
         if (reader.valid && !reader.errors && reader.route) {
             printstart "Calculate legs"
             try {
-                calculateAllCoordMapDistances(reader.route)
+                calculateAllLegMeasureDistances(reader.route)
                 calculateSecretLegRatio(reader.route)
                 calculateRouteLegs(reader.route)
                 calculateEnrouteValues(reader.route)
@@ -5093,7 +5129,7 @@ class FcService
             if (reader.valid && !reader.errors) {
                 printstart "Calculate legs"
                 try {
-                    calculateAllCoordMapDistances(routeInstance)
+                    calculateAllLegMeasureDistances(routeInstance)
                     calculateSecretLegRatio(routeInstance)
                     calculateRouteLegs(routeInstance)
                     //calculateEnrouteValues(routeInstance)
@@ -5787,9 +5823,10 @@ class FcService
                 if (!params.measureDistance) {
                     coordroute_instance.measureDistance = null
                 }
-    			calculateCoordMapDistance(coordroute_instance, false)
+    			//calculateLegMeasureDistance(coordroute_instance, false)
     
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
+                    calculateAllLegMeasureDistances(coordroute_instance.route)
                     calculateSecretLegRatio(coordroute_instance.route)
                     calculateRouteLegs(coordroute_instance.route)
                     calculateEnrouteValues(coordroute_instance.route)
@@ -5928,6 +5965,7 @@ class FcService
 		
 		// Summe der Distanzen vorangegangener Secrets-Points berechnen  
 		BigDecimal last_mapmeasure_distance = null
+        BigDecimal last_map_distance = null
 		int last_legduration = 0
 		BigDecimal last_coord_distance = 0
 		CoordType last_coordtype = CoordType.UNKNOWN
@@ -5940,7 +5978,8 @@ class FcService
     	CoordRoute.findAllByRoute(route_instance,[sort:"id", order:"desc"]).each { CoordRoute coordroute_instance -> // rückwärts
 			if (!last_coordroute_test_instance) {
 				if (coordroute_instance.type == CoordType.SECRET) {
-	        		last_mapmeasure_distance = addMapDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+	        		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+                    last_map_distance = addMapDistance(last_map_distance,route_instance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
 					if (coordroute_instance.legDuration) {
 						last_legduration += coordroute_instance.legDuration
 					}
@@ -5992,7 +6031,7 @@ class FcService
             coordroute_instance.correctSign = TurnpointCorrect.(params.correctSign)
         }
         coordroute_instance.route = route_instance
-		calculateCoordMapDistance(coordroute_instance, true)
+		calculateLegMeasureDistance(coordroute_instance, true)
 		
 		// calculate coordTrueTrack/coordMeasureDistance
 		if (last_coordroute_instance) {
@@ -6032,7 +6071,8 @@ class FcService
 		// save CoordRoute
         if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
             calculateSecretLegRatio(coordroute_instance.route)
-       		last_mapmeasure_distance = addMapDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+       		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+            last_map_distance = addMapDistance(last_map_distance,route_instance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
 			BigDecimal last_measure_truetrack
 			if (last_coordtype != CoordType.SECRET) {
 				last_measure_truetrack = coordroute_instance.measureTrueTrack
@@ -6048,7 +6088,8 @@ class FcService
 				coordroute_instance, 
 				last_coordroute_instance, 
 				last_coordroute_test_instance, 
-				last_mapmeasure_distance, 
+				last_mapmeasure_distance,
+                last_map_distance,
 				last_legduration,
 				last_coord_distance,
 				first_coord_truetrack,
@@ -6079,10 +6120,10 @@ class FcService
     }
         
     //--------------------------------------------------------------------------
-	private void calculateCoordMapDistance(CoordRoute coordRouteInstance, boolean isNew)
+	private void calculateLegMeasureDistance(CoordRoute coordRouteInstance, boolean isNew)
 	{
 		if (coordRouteInstance.measureDistance) {
-			println "calculateCoordMapDistance"
+			println "calculateLegMeasureDistance"
 			Route route_instance = coordRouteInstance.route
 			coordRouteInstance.legMeasureDistance = coordRouteInstance.measureDistance
 			boolean exit = false
@@ -6106,16 +6147,16 @@ class FcService
 			}
 			coordRouteInstance.legDistance = route_instance.contest.Convert_mm2NM(coordRouteInstance.legMeasureDistance)
 		} else {
-            println "calculateCoordMapDistance (remove)"
+            println "calculateLegMeasureDistance (remove)"
             coordRouteInstance.legMeasureDistance = null
             coordRouteInstance.legDistance = null
 		}
 	}
 	
     //--------------------------------------------------------------------------
-	private void calculateAllCoordMapDistances(Route routeInstance)
+	private void calculateAllLegMeasureDistances(Route routeInstance)
 	{
-    	printstart "calculateAllCoordMapDistances '${routeInstance.name()}'"
+    	printstart "calculateAllLegMeasureDistances '${routeInstance.name()}'"
 		
         CoordRoute last_coordroute_instance = null
         CoordRoute last_coordroute_test_instance = null
@@ -6188,7 +6229,7 @@ class FcService
                 removeAllRouteLegs(route_instance)
                 coordroute_instance.delete()
                 renumberCoordRoute(route_instance)
-				calculateAllCoordMapDistances(route_instance)
+				calculateAllLegMeasureDistances(route_instance)
 				calculateSecretLegRatio(route_instance)
                 calculateRouteLegs(route_instance)
                 calculateEnrouteValues(route_instance)
@@ -6293,7 +6334,7 @@ class FcService
         BigDecimal lastMapMeasureTrueTrack = null
         int testlegpos = 0
         CoordRoute.findAllByRoute(routeLegCoordInstance.route,[sort:"id"]).each { CoordRoute coordroute_instance ->
-       		last_mapmeasure_distance = addMapDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+       		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
             lastMapMeasureTrueTrack = coordroute_instance.measureTrueTrack
             if (last_coordroute_instance && last_coordroute_test_instance) {
                 if ( (last_coordroute_test_instance.type == CoordType.SP && coordroute_instance.type == CoordType.TP)    ||
@@ -11844,7 +11885,7 @@ class FcService
     //--------------------------------------------------------------------------
     private Map newLeg(Route route, CoordRoute newCoordRouteInstance, 
 		               CoordRoute lastCoordRouteInstance, CoordRoute lastCoordRouteTestInstance, 
-					   BigDecimal lastMapMeasureDistance, int lastLegDuration, 
+					   BigDecimal lastMapMeasureDistance, BigDecimal lastMapDistance, int lastLegDuration, 
 					   BigDecimal lastCoordDistance, BigDecimal firstCoordTrueTrack, 
 					   BigDecimal turnTrueTrack, BigDecimal testTurnTrueTrack,
 					   BigDecimal measureTrueTrack) 
@@ -11926,7 +11967,7 @@ class FcService
                 routelegtest_instance.endCurved = newCoordRouteInstance.endCurved
                 routelegtest_instance.measureDistance = newCoordRouteInstance.measureDistance
                 routelegtest_instance.legMeasureDistance = lastMapMeasureDistance
-                routelegtest_instance.legDistance = route.contest.Convert_mm2NM(lastMapMeasureDistance)
+                routelegtest_instance.legDistance = lastMapDistance
                 routelegtest_instance.measureTrueTrack = measureTrueTrack
                 routelegtest_instance.legDuration = lastLegDuration
                 routelegtest_instance.noPlanningTest = newCoordRouteInstance.noPlanningTest
@@ -11968,6 +12009,7 @@ class FcService
         CoordRoute last_coordroute_instance
         CoordRoute last_coordroute_test_instance
         BigDecimal last_mapmeasure_distance = null
+        BigDecimal last_map_distance = null
 		int last_legduration = 0
 		BigDecimal last_coord_distance = 0
 		BigDecimal first_coord_truetrack = null
@@ -11976,7 +12018,8 @@ class FcService
 		CoordType last_coordtype = CoordType.UNKNOWN
 		BigDecimal last_measure_truetrack
         CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
-      		last_mapmeasure_distance = addMapDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+      		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+            last_map_distance = addMapDistance(last_map_distance,routeInstance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
 			if (coordroute_instance.legDuration) {
 				last_legduration += coordroute_instance.legDuration
 			}
@@ -11988,7 +12031,8 @@ class FcService
 				coordroute_instance, 
 				last_coordroute_instance, 
 				last_coordroute_test_instance, 
-				last_mapmeasure_distance, 
+				last_mapmeasure_distance,
+                last_map_distance,
 				last_legduration,
 				last_coord_distance,
 				first_coord_truetrack,
@@ -12011,6 +12055,7 @@ class FcService
 	            case CoordType.iSP:
 	            	last_coordroute_test_instance = coordroute_instance
 	            	last_mapmeasure_distance = null
+                    last_map_distance = null
 					last_legduration = 0
 					last_coord_distance = 0
 					first_coord_truetrack = null
@@ -12161,16 +12206,29 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    private BigDecimal addMapDistance(BigDecimal lastMapMeasureDistance, BigDecimal addmeasuredistance)
+    private BigDecimal addMapMeasureDistance(BigDecimal lastMapMeasureDistance, BigDecimal addMeasureDistance)
     {
-	    if (addmeasuredistance != null) {
+	    if (addMeasureDistance != null) {
 	    	if (lastMapMeasureDistance != null) {
-	    		lastMapMeasureDistance += addmeasuredistance
+	    		lastMapMeasureDistance += addMeasureDistance
 	    	} else {
-	    		lastMapMeasureDistance = addmeasuredistance
+	    		lastMapMeasureDistance = addMeasureDistance
 	    	}
 	    }
         return lastMapMeasureDistance
+    }
+    
+    //--------------------------------------------------------------------------
+    private BigDecimal addMapDistance(BigDecimal lastMapDistance, BigDecimal addDistance)
+    {
+        if (addDistance != null) {
+            if (lastMapDistance != null) {
+                lastMapDistance += FcMath.RoundDistance(addDistance)
+            } else {
+                lastMapDistance = FcMath.RoundDistance(addDistance)
+            }
+        }
+        return lastMapDistance
     }
     
     //--------------------------------------------------------------------------

@@ -199,8 +199,8 @@ class TaskController {
 		}
 	}
 	
-	def updatetimetablejudgesettingsparking = {
-        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryParking) 
+	def updatetimetablejudgesettingsarrival = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryArrival) 
         if (task.instance) {
 			flash.message = task.message
 			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
@@ -210,6 +210,17 @@ class TaskController {
 		}
 	}
 	
+    def updatetimetablejudgesettingsdebriefing = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryDebriefing) 
+        if (task.instance) {
+            flash.message = task.message
+            render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
     def savetimetableoverviewsettings = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableOverviewModified)
         if (task.instance) {

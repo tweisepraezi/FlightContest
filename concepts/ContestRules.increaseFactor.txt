@@ -1,0 +1,19 @@
+// DB-2.13
+
+ContestRules
+	Field increaseFactor
+		Integer increaseFactor = 0
+		in Prozent
+		Steigerungsfaktor für Besatzungen
+		increase factor for crews
+	
+Crew
+	Field increaseEnabled
+		Boolean increaseEnabled = false
+		Anzeige, wenn ContestRules.increaseFactor > 0
+	
+Task
+	Field increaseEnabled
+		Boolean increaseEnabled = true
+		Anzeige, wenn ContestRules.increaseFactor > 0
+	

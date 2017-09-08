@@ -27,16 +27,20 @@
                     margin-bottom: 10%;
                 </g:else>
 				@top-left {
+                    font-family: Noto Sans;
 				    content: "${message(code:'fc.crew.list')}"
 				}
                 @top-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
                 @bottom-left {
+                    font-family: Noto Sans;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
-                    content: "${message(code:'fc.program.printfoot.right')}"
+                    font-family: Noto Sans;
+                    content: "${message(code:'fc.program.printfoot.right')}";
                 }
             }
         </style>

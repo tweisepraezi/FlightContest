@@ -881,12 +881,12 @@ class DemoContestStandardService
     }
 	
     List test1RouteLegTest() {
-      [[coordTrueTrack:88.8048175589, coordDistance:16.2,         measureDistance:150.0, legMeasureDistance:150.0, legDistance:16.1987041037,measureTrueTrack:89.0, turnTrueTrack:null],
-       [coordTrueTrack:219.3292360731,coordDistance:17.44,        measureDistance:161.5, legMeasureDistance:161.5, legDistance:17.4406047516,measureTrueTrack:219.0,turnTrueTrack:89],
-       [coordTrueTrack:160.8781319787,coordDistance:13.62,        measureDistance:125.0, legMeasureDistance:125.0, legDistance:13.4989200864,measureTrueTrack:161.0,turnTrueTrack:219],
-       [coordTrueTrack:86.3563657892, coordDistance:11.52,        measureDistance:106.45,legMeasureDistance:106.45,legDistance:11.4956803456,measureTrueTrack:86.0, turnTrueTrack:161],
-       [coordTrueTrack:237.2378249684,coordDistance:11.32,        measureDistance:105.2, legMeasureDistance:105.2, legDistance:11.3606911447,measureTrueTrack:237.0,turnTrueTrack:86],
-       [coordTrueTrack:242.9619395538,coordDistance:6.7,          measureDistance:62.4,  legMeasureDistance:62.4,  legDistance:6.7386609071, measureTrueTrack:244.0,turnTrueTrack:237],
+      [[coordTrueTrack:88.8048175589, coordDistance:16.2,         measureDistance:150.0, legMeasureDistance:150.0, legDistance:16.2, measureTrueTrack:89.0, turnTrueTrack:null],
+       [coordTrueTrack:219.3292360731,coordDistance:17.44,        measureDistance:161.5, legMeasureDistance:161.5, legDistance:17.44,measureTrueTrack:219.0,turnTrueTrack:89],
+       [coordTrueTrack:160.8781319787,coordDistance:13.62,        measureDistance:125.0, legMeasureDistance:125.0, legDistance:13.5, measureTrueTrack:161.0,turnTrueTrack:219],
+       [coordTrueTrack:86.3563657892, coordDistance:11.52,        measureDistance:106.45,legMeasureDistance:106.45,legDistance:11.5, measureTrueTrack:86.0, turnTrueTrack:161],
+       [coordTrueTrack:237.2378249684,coordDistance:11.32,        measureDistance:105.2, legMeasureDistance:105.2, legDistance:11.36,measureTrueTrack:237.0,turnTrueTrack:86],
+       [coordTrueTrack:242.9619395538,coordDistance:6.7,          measureDistance:62.4,  legMeasureDistance:62.4,  legDistance: 6.74,measureTrueTrack:244.0,turnTrueTrack:237],
       ]
     }
 	

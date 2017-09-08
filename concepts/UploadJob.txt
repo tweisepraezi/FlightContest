@@ -1,0 +1,19 @@
+
+File-Aufbau
+	1  ftp1-basedir
+	2  ftp1-sourceurl
+	3  ftp1-destfilename
+	4  ftp2-basedir
+	5  ftp2-sourceurl
+	6  ftp2-destfilename
+	7  email-to
+	8  email-subject
+	9  email-body
+	10 savelink
+	11 test_instance.id
+	12 removefile
+
+Verzeichnis
+	jobs
+	jobs\error
+	jobs\done

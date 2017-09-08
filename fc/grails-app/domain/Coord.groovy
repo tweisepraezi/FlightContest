@@ -832,6 +832,7 @@ class Coord
     // FromTP (type & titleNumber), enrouteDistance (NM) -> Koordinate
     {
         BigDecimal true_track = null
+        BigDecimal from_true_track = null
         BigDecimal leg_distance = null
         BigDecimal from_leg_distance = 0
         boolean enroute_leg_found = false 
@@ -840,9 +841,11 @@ class Coord
         Map from_tp = [:]
         for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
             if (enroute_leg_found) {
+                Map sc = get_coordinate_from_coord(routeleg_instance.startTitle.type, routeleg_instance.startTitle.number)
+                Map leg = AviationMath.calculateLeg(sc.lat, sc.lon, from_tp.lat, from_tp.lon)
+                leg_distance = leg.dis
                 if (routeleg_instance.startTitle.type == CoordType.SECRET) {
-                    Map sc = get_coordinate_from_coord(routeleg_instance.startTitle.type, routeleg_instance.startTitle.number)
-                    leg_distance = AviationMath.calculateLeg(sc.lat, sc.lon, from_tp.lat, from_tp.lon).dis
+                    from_true_track = leg.dir
                     if (leg_distance > enrouteDistance) {
                         break
                     }
@@ -867,7 +870,8 @@ class Coord
             Map from_cp = get_coordinate_from_coord(from_type, from_titlenumber)
             if ((from_cp.lat != null) && (from_cp.lon != null)) {
                 if (enrouteDistance != null) {
-                    Map enroute_coord = AviationMath.getCoordinate(from_cp.lat, from_cp.lon, true_track, enrouteDistance - from_leg_distance)
+                    BigDecimal from_cp_distance = get_cp_distance(from_leg_distance, from_true_track, enrouteDistance, true_track)
+                    Map enroute_coord = AviationMath.getCoordinate(from_cp.lat, from_cp.lon, true_track, from_cp_distance)
                     Map lat = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lat, true)
                     Map lon = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lon, false)
                     latDirection = lat.direction
@@ -886,6 +890,19 @@ class Coord
                 }
             }
         }
+    }
+    
+    private BigDecimal get_cp_distance(BigDecimal fromLegDistance, BigDecimal fromTrueTrack, BigDecimal enrouteDistance, BigDecimal trueTrack)
+    {
+        BigDecimal course_change = AviationMath.courseChange(fromTrueTrack, trueTrack)
+        if (course_change.abs() < Defs.ENROUTE_CURVED_COURSE_DIFF) {
+            return enrouteDistance - fromLegDistance
+        }
+        BigDecimal epsilon = 180 - course_change
+        BigDecimal beta = Math.toDegrees(Math.asin(fromLegDistance/enrouteDistance*Math.sin(Math.toRadians(epsilon))))
+        BigDecimal alpha = 180 - beta - epsilon
+        BigDecimal from_cp_distance = enrouteDistance * Math.sin(Math.toRadians(alpha)) / Math.sin(Math.toRadians(epsilon))
+        return from_cp_distance
     }
     
     private Map get_coordinate_from_coord(CoordType coordType, int titleNumber)

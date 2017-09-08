@@ -8,6 +8,7 @@ class PrintService
 {
     def logService
     def domainService
+    def servletContext
     def gpxService
     def messageSource
     
@@ -19,7 +20,7 @@ class PrintService
         // Print aircrafts
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/aircraft/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -46,7 +47,7 @@ class PrintService
         // Print test
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/contest/listtestprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -107,7 +108,7 @@ class PrintService
         // Print positions
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/contest/listresultsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -166,7 +167,7 @@ class PrintService
         // Print positions
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/contest/listteamresultsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -193,7 +194,7 @@ class PrintService
         // Print points
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/contest/pointsprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -220,7 +221,7 @@ class PrintService
         // Print points
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/contest/freetextprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -250,7 +251,7 @@ class PrintService
         // Print coordinates of route
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/route/showcoord${detail}printable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -277,7 +278,7 @@ class PrintService
         // Print crews
         try {
             ITextRenderer renderer = new ITextRenderer()
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/crew/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -304,7 +305,7 @@ class PrintService
         // Print resultclasses
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/resultClass/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -367,7 +368,7 @@ class PrintService
         // Print positions
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/resultClass/listresultsprintable/${resultclassInstance.id}?print=1&lang=${printparams.lang}&resultclassid=${resultclassInstance.id}&a3=${a3}&landscape=${landscape}"
@@ -396,7 +397,7 @@ class PrintService
         // Print points
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/resultClass/pointsprintable/${resultclassInstance.id}?print=1&lang=${printparams.lang}&resultclassid=${resultclassInstance.id}&a3=${a3}&landscape=${landscape}"
@@ -426,7 +427,7 @@ class PrintService
         // Print route
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/route/showprintable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -453,7 +454,7 @@ class PrintService
         // Print routes
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             Route.findAllByContest(printparams.contest,[sort:"id"]).each { Route route_instance ->
@@ -575,7 +576,7 @@ class PrintService
         // Print timetable
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = ""
@@ -688,7 +689,7 @@ class PrintService
         // Print overview timetable
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = ""
@@ -816,7 +817,7 @@ class PrintService
         // Print flightplans
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
@@ -904,7 +905,7 @@ class PrintService
         // Print PlanningTasks
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
@@ -972,7 +973,7 @@ class PrintService
         // Print observations
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
@@ -1019,7 +1020,7 @@ class PrintService
                 // Print neutral or result observation formular for each resultclass
                 try {
                     ITextRenderer renderer = new ITextRenderer();
-                    addArialUnicodeFont(renderer)
+                    addFonts(renderer)
                     ByteArrayOutputStream content = new ByteArrayOutputStream()
                     boolean first_pdf = true
                     for (long result_class_id in result_class_ids) {
@@ -1046,7 +1047,7 @@ class PrintService
                 // Print neutral or result observation formular
                 try {
                     ITextRenderer renderer = new ITextRenderer();
-                    addArialUnicodeFont(renderer)
+                    addFonts(renderer)
                     ByteArrayOutputStream content = new ByteArrayOutputStream()
                     String url = "${printparams.baseuri}/task/observationprintable/${flighttest_instance.task.id}?print=1&results=${printResults}&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
                     println "Print: $url"
@@ -1091,7 +1092,7 @@ class PrintService
         // Print task results of selected result classes
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             for (ResultClass resultclass_instance in ResultClass.findAllByContest(task.instance.contest,[sort:"id"])) {
@@ -1151,7 +1152,7 @@ class PrintService
         // Print all crewresults
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             for ( Test test_instance in Test.findAllByTask(task.instance,[sort:"viewpos"])) {
@@ -1251,7 +1252,7 @@ class PrintService
         // Print task results
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/task/listresultsprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printAircraft=${task.instance.printAircraft}&printTeam=${task.instance.printTeam}&printClass=${task.instance.printClass}&printShortClass=${task.instance.printShortClass}&printProvisionalResults=${task.instance.printProvisionalResults}"
@@ -1283,7 +1284,7 @@ class PrintService
         // Print teams
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
             String url = "${printparams.baseuri}/team/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
@@ -1313,7 +1314,7 @@ class PrintService
         // Print flight test results
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/flightresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             String uuid = UUID.randomUUID().toString()
@@ -1356,7 +1357,7 @@ class PrintService
         // Print flight test results
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/flightresultsmeasureprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             String uuid = UUID.randomUUID().toString()
@@ -1412,7 +1413,7 @@ class PrintService
         // Print crewresults
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/crewresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}&printSummaryResults=${test.instance.printSummaryResults}&printPlanningResults=${test.instance.printPlanningResults}&printPlanningResultsScan=${test.instance.printPlanningResultsScan}&printFlightResults=${test.instance.printFlightResults}&printFlightMap=${test.instance.printFlightMap}&printObservationResults=${test.instance.printObservationResults}&printObservationResultsScan=${test.instance.printObservationResultsScan}&printLandingResults=${test.instance.printLandingResults}&printSpecialResults=${test.instance.printSpecialResults}&printProvisionalResults=${test.instance.printProvisionalResults}"
             if (!(test.instance.GetDetailNum() || test.instance.printSummaryResults)) {
@@ -1460,7 +1461,7 @@ class PrintService
         // Print flightplan
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/flightplanprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
@@ -1489,7 +1490,7 @@ class PrintService
         // Print planningtask
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = ""
             if (withResults) {
@@ -1523,7 +1524,7 @@ class PrintService
         // Print planning test results
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/planningtaskresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
@@ -1552,7 +1553,7 @@ class PrintService
         // Print observation test results
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/observationresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
@@ -1581,7 +1582,7 @@ class PrintService
         // Print landing test results
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/landingresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
@@ -1610,7 +1611,7 @@ class PrintService
         // Print special test results
         try {
             ITextRenderer renderer = new ITextRenderer();
-            addArialUnicodeFont(renderer)
+            addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             String url = "${printparams.baseuri}/test/specialresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
@@ -1657,11 +1658,15 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
-    private void addArialUnicodeFont(ITextRenderer renderer)
+    private void addFonts(ITextRenderer renderer)
     {
+        String webroot_dir = servletContext.getRealPath("/")
+        String font_path = "${webroot_dir}/${Defs.ROOT_FOLDER_FONTS}"
         FontResolver resolver = renderer.getFontResolver()
-        String font_path = "${System.getenv("windir")}\\fonts\\ARIALUNI.TTF"
-        resolver.addFont(font_path, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED)
+        resolver.addFont("${font_path}/${Defs.FONT_NOTOSANS_REGULAR}", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED)
+        resolver.addFont("${font_path}/${Defs.FONT_NOTOSANS_BOLD}", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED)
+        resolver.addFont("${font_path}/${Defs.FONT_NOTOSANS_ITALIC}", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED)
+        resolver.addFont("${font_path}/${Defs.FONT_NOTOSANS_BOLDITALIC}", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED)
     }
     
     //--------------------------------------------------------------------------

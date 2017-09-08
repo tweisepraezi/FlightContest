@@ -6,6 +6,7 @@ class Defs
     static final String ROOT_FOLDER_JOBS                               = "jobs"
     static final String ROOT_FOLDER_JOBS_DONE                          = "jobs/done"
     static final String ROOT_FOLDER_JOBS_ERROR                         = "jobs/error"
+    static final String ROOT_FOLDER_FONTS                              = "fonts"
     
     static final String TurnpointID_TimeCheck                          = "timecheck_"
     static final String TurnpointID_NotFound                           = "notfound_"
@@ -47,4 +48,10 @@ class Defs
     static final BigDecimal ENROUTE_SHORT_DISTANCE                     = 3.0f  // NM 
     static final int ENROUTE_SHORT_DISTANCE_COURSE_DIFF                = 89 // max. Kursabweichung in Grad
     static final int ENROUTE_LONG_DISTANCE_COURSE_DIFF                 = 5 // max. Kursabweichung in Grad
+    static final int ENROUTE_CURVED_COURSE_DIFF                        = 1 // Kursabweichung in Grad, ab der krumme Strecke identifiziert wird
+    
+    static final String FONT_NOTOSANS_REGULAR                          = "NotoSans-Regular.ttf"
+    static final String FONT_NOTOSANS_BOLD                             = "NotoSans-Bold.ttf"
+    static final String FONT_NOTOSANS_ITALIC                           = "NotoSans-Italic.ttf"
+    static final String FONT_NOTOSANS_BOLDITALIC                       = "NotoSans-BoldItalic.ttf"
 }

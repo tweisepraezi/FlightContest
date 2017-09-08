@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-24.08.2017
+08.09.2017
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -122,7 +122,7 @@ Erweiterungen in dieser Version (3.1):
         zu drucken.
 - Ein-Klick-Navigation zum Formularanfang und -ende hinzugefügt
 - Live-Ergebnis: Anzeige des Internet-Links hinzugefügt
-- Ausdrucke erfolgen mit Zeichensatz "Arial Unicode MS" 
+- Ausdrucke erfolgen mit Zeichensatz "Noto Sans" 
     * erlaubt Besatzungsnamen in beliebigen länderspezifischen Schreibweisen
 - Aktualisierung folgender Regelwerke
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017

@@ -27,15 +27,19 @@
                     margin-bottom: 10%;
                 </g:else>
                 @top-left {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.landingresults')} ${testInstance.GetStartNum()} - ${testInstance?.task.printName()}"
                 }
                 @top-right {
+                    font-family: Noto Sans;
                     content: "${testInstance.GetViewPos()}"
                 }
                 @bottom-left {
+                    font-family: Noto Sans;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }

@@ -27,6 +27,7 @@
                     margin-bottom: 10%;
                 </g:else>
                 @top-left {
+                    font-family: Noto Sans;
                     <g:if test="${resultclassInstance}">
                         content: "${resultclassInstance.GetPrintTitle2('fc.test.results')}"
                     </g:if>
@@ -35,12 +36,15 @@
                     </g:else>
                 }
                 @top-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
                 @bottom-left {
+                    font-family: Noto Sans;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printfoot.right')}"
                 }
 			}

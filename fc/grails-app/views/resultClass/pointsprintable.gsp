@@ -31,15 +31,19 @@
                     margin-bottom: 10%;
                 </g:else>
                 @top-left {
+                    font-family: Noto Sans;
                     content: "${print_subtitle}"
                 }
                 @top-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
                 @bottom-left {
+                    font-family: Noto Sans;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }

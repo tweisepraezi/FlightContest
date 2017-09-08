@@ -27,15 +27,19 @@
                     margin-bottom: 10%;
                 </g:else>
                 @top-left {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.test.timetablejudge')} - ${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})"
                 }
                 @top-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
                 @bottom-left {
+                    font-family: Noto Sans;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
+                    font-family: Noto Sans;
                     content: "${message(code:'fc.program.printfoot.right')}"
                 }
 			}

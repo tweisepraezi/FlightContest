@@ -977,8 +977,10 @@ class RouteFileTools
                 }
                 line_pos++
                 if (line && line.trim() && !line.startsWith('#')) {
+                    line = change_comma2point(line)
                     valid_format = true
                     Map import_sign = importSign.GetLineValues(line)
+                    import_sign.tpname = change_wp2tp(import_sign.tpname)
                     if (!import_sign.value_num_ok) {
                         invalid_line_num++
                         if (read_errors) {
@@ -1135,7 +1137,7 @@ class RouteFileTools
                                 }
                             } else {
                                 invalid_line = true
-                            }
+                                }
                         }
                         if (import_sign.tpcorrect) {
                             if ((import_sign.tpcorrect == UNIT_TPcorrect) || (import_sign.tpcorrect == UNIT_TPincorrect)) {
@@ -1163,6 +1165,40 @@ class RouteFileTools
         txt_reader.close()
         
         return [import_signs: import_signs, valid: valid_format, invalidlinenum: invalid_line_num, errors: read_errors]
+    }
+    
+    //--------------------------------------------------------------------------
+    private static String change_comma2point(String lineValue)
+    {
+        String ret = ""
+        char last_ch = ' '
+        char last_ch2 = ' '
+        for (char ch in lineValue.getChars()) {
+            if (last_ch == ',') {
+                if (last_ch2.isDigit() && ch.isDigit()) {
+                    ret += '.'
+                } else {
+                    ret += last_ch
+                }
+            }
+            if (ch != ',') {
+                ret += ch
+            }
+            last_ch2 = last_ch
+            last_ch = ch
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private static String change_wp2tp(String tpName)
+    {
+        if (tpName.startsWith('WP')) {
+            return tpName.replaceFirst('WP', CoordType.TP.export)
+        } else if (tpName.startsWith('UZK')) {
+            return tpName.replaceFirst('UZK', CoordType.SECRET.export)
+        }
+        return tpName
     }
     
     //--------------------------------------------------------------------------

@@ -733,6 +733,21 @@ class Route
             }
         }
         
+        List procedureturn_difference = []
+        RouteLegCoord last_routelegcoord_instance = null
+        for (RouteLegCoord routelegcoord_instance in RouteLegCoord.findAllByRoute(this,[sort:'id'])) {
+            if (routelegcoord_instance.IsProcedureTurn()) {
+                BigDecimal course_change = AviationMath.courseChange(routelegcoord_instance.turnTrueTrack,routelegcoord_instance.testTrueTrack())
+                if (course_change.abs() >= 90) {
+                    CoordRoute coordroute_instance = CoordRoute.findByRouteAndTypeAndTitleNumber(this,routelegcoord_instance.endTitle.type,routelegcoord_instance.endTitle.number)
+                    if (!coordroute_instance.planProcedureTurn) {
+                        procedureturn_difference += last_routelegcoord_instance.endTitle.titleCode()
+                    }
+                }
+            }
+            last_routelegcoord_instance = routelegcoord_instance
+        }
+        
         boolean min_target_error = false
         int min_target_num = contest.minEnrouteTargets
         if (IsEnrouteSignInput(true) || IsEnrouteSignInput(false)) {
@@ -763,13 +778,13 @@ class Route
         
         return [min_target_num:min_target_num, max_target_num:max_target_num, min_target_error:min_target_error, max_target_error:max_target_error,
                 min_leg_num:min_leg_num, max_leg_num:max_leg_num, min_leg_error:min_leg_error, max_leg_error:max_leg_error,
-                measure_distance_difference:measure_distance_difference]
+                measure_distance_difference:measure_distance_difference, procedureturn_difference:procedureturn_difference]
     }
     
     boolean IsRouteOk()
     {
         Map status = RouteStatus()
-        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference) {
+        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference || status.procedureturn_difference) {
             return false
         }
         return true
@@ -799,6 +814,13 @@ class Route
                 s += ", "
             }
             s += getMsgArgs('fc.routelegtest.legmeasuredistance.difference',[status.measure_distance_difference])
+            wr_comma = true
+        }
+        if (status.procedureturn_difference) {
+            if (wr_comma) {
+                s += ", "
+            }
+            s += getMsgArgs('fc.routelegtest.procedureturn.difference',[status.procedureturn_difference])
             wr_comma = true
         }
         if (status.min_target_error) {

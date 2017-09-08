@@ -8,8 +8,8 @@ const FCVersion = '3.1.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.1.RC9
-AppVersion=3.1.RC9
+AppVerName=Flight Contest 3.1.0.GA
+AppVersion=3.1.0.GA
 ; no milestone below
 VersionInfoVersion=3.1.0
 
@@ -123,6 +123,8 @@ Name: "{group}\Manual";                         Filename: "{app}\tomcat\webapps\
 Name: "{group}\Anleitung Beobachtungen";        Filename: "{app}\tomcat\webapps\fc\docs\manuals\FC-Manual-Observations.pdf";                     WorkingDir: "{commondesktop}";
 Name: "{group}\AFLOS Help";                     Filename: "{app}\tomcat\webapps\fc\docs\help_aflos.html";                                        WorkingDir: "{commondesktop}";
 Name: "{group}\AFLOS Kurzanleitung";            Filename: "{app}\AFLOS-Kurzanleitung.pdf";                                                       WorkingDir: "{commondesktop}";
+Name: "{group}\Planungstest-Ablauf";            Filename: "{app}\tomcat\webapps\fc\docs\info\FC-PlanningTest-Info.docx";                         WorkingDir: "{commondesktop}";
+Name: "{group}\Planning Test schedule";         Filename: "{app}\tomcat\webapps\fc\docs\info\FC-PlanningTest-Info_en.docx";                      WorkingDir: "{commondesktop}";
 Name: "{group}\Lizenz";                         Filename: "{app}\GPL_License.txt";                                                               WorkingDir: "{commondesktop}";
 Name: "{group}\Install AFLOS connection";       Filename: "wscript.exe";                            Parameters: """{app}\odbc.vbs"" ""{app}""";  WorkingDir: "{app}";
 Name: "{group}\Uninstall Flight Contest";                                            Filename: "{uninstallexe}";
