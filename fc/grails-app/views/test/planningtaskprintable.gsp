@@ -28,18 +28,22 @@
                 </g:else>
                 @top-left {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "<g:if test="${params.results=='yes'}">${message(code:'fc.test.planningtask.withresults')}</g:if><g:else>${message(code:'fc.test.planningtask')}</g:else> ${testInstance.GetStartNum()}"
                 }
                 @top-right {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${testInstance.GetViewPos()}"
                 }
                 @bottom-left {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }

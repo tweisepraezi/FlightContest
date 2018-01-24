@@ -12798,7 +12798,8 @@ class FcService
             coordresult_instance.lonDirection = coordroute_instance.lonDirection
             coordresult_instance.altitude = coordroute_instance.altitude
             coordresult_instance.gatewidth2 = coordroute_instance.gatewidth2
-			
+            coordresult_instance.endCurved = coordroute_instance.endCurved
+            
 			// calculate planProcedureTurn (CoordResult)
 			if (last_coordtype.IsProcedureTurnCoord()) {
 				coordresult_instance.planProcedureTurn = coordroute_instance.planProcedureTurn

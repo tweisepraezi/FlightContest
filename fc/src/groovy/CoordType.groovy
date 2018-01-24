@@ -325,4 +325,19 @@ enum CoordType
         }
         return false
     }
+    
+    boolean IsContestMapCoord()
+    {
+        switch(this) {
+            case CoordType.SP:
+            case CoordType.iSP:
+            case CoordType.TP:
+            case CoordType.FP:
+            case CoordType.iFP:
+                return true
+        }
+        return false
+
+    }
+    
 }

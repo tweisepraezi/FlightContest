@@ -1,4 +1,5 @@
-import java.math.BigDecimal;
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.List;
 
@@ -20,6 +21,7 @@ enum CoordPresentation
     final static String GRAD = (char)176
     final static String GRADMIN = "'"
     final static String GRADSEC = '"'
+    final static String GRADSEC2 = (char)698
     final static String NORTH = 'N'
     final static String SOUTH = 'S'
     final static String EAST = 'E'
@@ -78,12 +80,31 @@ enum CoordPresentation
     }
 
     //--------------------------------------------------------------------------
+    static String IntegerMinuteStr2(BigDecimal decimalMin)
+    // 12.9134 -> 13
+    {
+        decimalMin = decimalMin.setScale(0, RoundingMode.HALF_EVEN)
+        int min_value = decimalMin.toInteger()
+        DecimalFormat df = new DecimalFormat("00")
+        return df.format(min_value)
+    }
+
+    //--------------------------------------------------------------------------
     static String DecimalMinuteStr(BigDecimal decimalMin)
     {
         DecimalFormat df = new DecimalFormat("00.00000")
         return df.format(decimalMin)
     }
     
+    //--------------------------------------------------------------------------
+    static String IntegerSecondStr(BigDecimal decimalMin)
+    // 12.9134 -> 12
+    {
+        int second_value = GetSecond(decimalMin).toInteger()
+        DecimalFormat df = new DecimalFormat("00")
+        return df.format(second_value)
+    }
+
     //--------------------------------------------------------------------------
     static String DecimalSecondStr(BigDecimal decimalMin)
     // 12.25 -> 15
@@ -258,6 +279,26 @@ enum CoordPresentation
             }
         }
         
+        return ""
+    }
+
+    //--------------------------------------------------------------------------
+    String GetMapName(BigDecimal decimalGrad, boolean isLatitude)
+    {
+        Map v = GetDirectionGradDecimalMinute(decimalGrad, isLatitude)
+        switch (this) {
+            case CoordPresentation.DEGREEMINUTE:
+                String min_str = IntegerMinuteStr2(v.minute)
+                if (min_str == "60") {
+                    v.grad++
+                    min_str = "00"
+                }
+                return "${v.grad}${GRAD} ${min_str}${GRADMIN} ${v.direction}"
+            case CoordPresentation.DEGREEMINUTESECOND:
+                return "${v.grad}${GRAD} ${IntegerMinuteStr(v.minute)}${GRADMIN} ${IntegerSecondStr(v.minute)}${GRADSEC2} ${v.direction}"
+            case CoordPresentation.DEGREE:
+                return "${DecimalGradStr(decimalGrad)}${GRAD}"
+        }
         return ""
     }
 

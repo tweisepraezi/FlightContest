@@ -1,3 +1,5 @@
+import java.util.Map;
+
 import org.quartz.JobKey
 
 class GlobalController {
@@ -5,6 +7,7 @@ class GlobalController {
 	def fcService
     def mailService
     def gpxService
+    def geoDataService
     def quartzScheduler
     
     def index = { 
@@ -82,7 +85,7 @@ class GlobalController {
 		if (!session.showLimitCrewNum) {
 			session.showLimitCrewNum = 10
 		}
-        String config_file_name = "C:/FCSave/.fc/config.groovy"
+        String config_file_name = Defs.FCSAVE_FILE_CONFIG
         fcService.println "Read $config_file_name"
         File config_file = new File(config_file_name)
         if (config_file.exists()) {
@@ -118,9 +121,9 @@ class GlobalController {
         }
 
         if (!Global.IsCloudFoundryEnvironment()) {
-            CheckAndCreateDir("C:/FCSave")
-            CheckAndCreateDir("C:/FCSave/.fc")
-            String config_file_name = "C:/FCSave/.fc/config.groovy"
+            CheckAndCreateDir(Defs.FCSAVE_FOLDER)
+            CheckAndCreateDir(Defs.FCSAVE_FOLDER_FC)
+            String config_file_name = Defs.FCSAVE_FILE_CONFIG
             fcService.println "Save $config_file_name"
             File config_file = new File(config_file_name)
             BufferedWriter config_file_writer = config_file.newWriter()
@@ -339,6 +342,47 @@ class GlobalController {
         return [:]
     }
 
+    def selectgeodatafilename = {
+        [:]
+    }
+    
+    def loadgeodata = {
+        if (!Global.IsCloudFoundryEnvironment()) {
+            CheckAndCreateDir(Defs.FCSAVE_FOLDER)
+            CheckAndCreateDir(Defs.FCSAVE_FOLDER_GEODATA)
+        }
+        def file = request.getFile('loadgeofile')
+        if (file && !file.empty) {
+            String original_filename = file.getOriginalFilename()
+            String file_extension = original_filename.substring(original_filename.lastIndexOf('.')).toLowerCase()
+            geoDataService.printstart "Import geo data of '$original_filename'"
+            geoDataService.println file.getContentType() // "text/xml" 
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GEODATA-${uuid}-UPLOAD${file_extension}"
+            
+            geoDataService.printstart "Upload $original_filename -> $upload_filename"
+            file.transferTo(new File(webroot_dir,upload_filename))
+            geoDataService.printdone ""
+
+            Map ret = geoDataService.LoadGeoDataFile(file_extension, original_filename, webroot_dir + upload_filename)
+            gpxService.DeleteFile(webroot_dir + upload_filename)
+            if (ret.ok) {
+                geoDataService.printdone ""
+                flash.message = ret.msg
+                redirect(controller:'global',action:'info')
+            } else {
+                flash.error = true
+                flash.message = ret.msg
+                geoDataService.printerror flash.message
+                redirect(controller:'global',action:'info')
+            }
+        } else {
+            redirect(controller:'global',action:'info')
+        }
+    }
+    
+    
     def cancel = {
         redirect(action:info)
     }

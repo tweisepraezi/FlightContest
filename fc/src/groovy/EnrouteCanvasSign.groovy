@@ -1,21 +1,21 @@
 enum EnrouteCanvasSign // DB-2.13
 {
     None ('',''),
-    S01 ('S01','images/enroute/s01.jpg'),
-    S02 ('S02','images/enroute/s02.jpg'),
-    S03 ('S03','images/enroute/s03.jpg'),
-    S04 ('S04','images/enroute/s04.jpg'),
-    S05 ('S05','images/enroute/s05.jpg'),
-    S06 ('S06','images/enroute/s06.jpg'),
-    S07 ('S07','images/enroute/s07.jpg'),
-    S08 ('S08','images/enroute/s08.jpg'),
-    S09 ('S09','images/enroute/s09.jpg'),
-    S10 ('S10','images/enroute/s10.jpg'),
-    S11 ('S11','images/enroute/s11.jpg'),
-    S12 ('S12','images/enroute/s12.jpg'),
-    S13 ('S13','images/enroute/s13.jpg'),
-    S14 ('S14','images/enroute/s14.jpg'),
-    S15 ('S15','images/enroute/s15.jpg')
+    S01 ('S01','GM_Utils/Icons/s01.png'),
+    S02 ('S02','GM_Utils/Icons/s02.png'),
+    S03 ('S03','GM_Utils/Icons/s03.png'),
+    S04 ('S04','GM_Utils/Icons/s04.png'),
+    S05 ('S05','GM_Utils/Icons/s05.png'),
+    S06 ('S06','GM_Utils/Icons/s06.png'),
+    S07 ('S07','GM_Utils/Icons/s07.png'),
+    S08 ('S08','GM_Utils/Icons/s08.png'),
+    S09 ('S09','GM_Utils/Icons/s09.png'),
+    S10 ('S10','GM_Utils/Icons/s10.png'),
+    S11 ('S11','GM_Utils/Icons/s11.png'),
+    S12 ('S12','GM_Utils/Icons/s12.png'),
+    S13 ('S13','GM_Utils/Icons/s13.png'),
+    S14 ('S14','GM_Utils/Icons/s14.png'),
+    S15 ('S15','GM_Utils/Icons/s15.png')
     
     EnrouteCanvasSign(String canvasName, String imageName)
     {

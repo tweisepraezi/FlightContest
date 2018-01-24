@@ -35,6 +35,7 @@
     ------------------------------------
         Button, der Seite in neuem Tab aufruft: onclick="this.form.target='_blank';return true;"
         Alle anderen Buttons:                   onclick="this.form.target='_self';return true;" 
+        Cancel-Button:                          onclick="this.form.target='';return true;"
     
     HTML: Button mit Rückfrage
     --------------------------

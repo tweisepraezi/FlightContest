@@ -22,6 +22,8 @@ class Global
     Integer liveUploadSeconds = LIVE_UPLOADSECONDS     // Live-Anzeige: Upload-Zeit in Sekunden, DB-2.11
     String liveLanguage = "de"                         // Live-Anzeige: Sprache, DB-2.11
     
+    final static String PRINTSERVER_API = "http://printmaps-osm.de:8181/api/beta/maps"
+    
     static constraints = {
         // DB-2.11 compatibility
         liveContestID(nullable:true)
@@ -233,6 +235,33 @@ class Global
             return true
         }
         return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsContestMapWriteOptions()
+    {
+        if (IsDevelopmentEnvironment()) {
+            return true
+        }
+        if (   grailsApplication.config.flightcontest.contestmap
+            && grailsApplication.config.flightcontest.contestmap.showoptions
+           )
+        {
+            return true
+        }
+        return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetPrintServerAPI()
+    {
+        if (   grailsApplication.config.flightcontest.contestmap
+            && grailsApplication.config.flightcontest.contestmap.printserverapi
+           )
+        {
+            return grailsApplication.config.flightcontest.contestmap.printserverapi
+        }
+        return PRINTSERVER_API
     }
     
 }

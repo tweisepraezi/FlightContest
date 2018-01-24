@@ -28,18 +28,22 @@
                 </g:else>
                 @top-left {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale}"
                 }
                 @top-right {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
                 @bottom-left {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }
@@ -285,6 +289,70 @@
                                 <td>
                                     <g:each var="coordenroutecanvas_instance" in="${CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])}">
                                         ${coordenroutecanvas_instance.GetExportEnroute(false)} <br/>
+                                    </g:each>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </g:if>
+            <br/>
+            <div style="page-break-inside:avoid">
+                <table class="routecoordgeodata">
+                    <thead>
+                        <tr class="title">
+                            <th>${message(code:'fc.coordroute.geodata.coords')}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="value">
+                            <td>
+                                id|point|name|wkt<br/>
+                                <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}" status="i">
+                                    ${i+1}|${coordroute_instance.GetGeoDataRouteCoord()}<br/>
+                                </g:each>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <g:if test="${routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()}">
+                <br/>
+                <div style="page-break-inside:avoid">
+                    <table class="enroutephotogeodata">
+                        <thead>
+                            <tr class="title">
+                                <th>${message(code:'fc.coordroute.geodata.photo')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="value">
+                                <td>
+                                    id|point|name|wkt<br/>
+                                    <g:each var="coordenroutephoto_instance" in="${CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])}" status="i">
+                                        ${i+1}|${coordenroutephoto_instance.GetGeoDataEnroute(true)} <br/>
+                                    </g:each>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </g:if>
+            <g:if test="${routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()}">
+                <br/>
+                <div style="page-break-inside:avoid">
+                    <table class="enroutecanvasgeodata">
+                        <thead>
+                            <tr class="title">
+                                <th>${message(code:'fc.coordroute.geodata.canvas')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="value">
+                                <td>
+                                    id|point|name|wkt<br/>
+                                    <g:each var="coordenroutecanvas_instance" in="${CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])}" status="i">
+                                        ${i+1}|${coordenroutecanvas_instance.GetGeoDataEnroute(false)} <br/>
                                     </g:each>
                                 </td>
                             </tr>

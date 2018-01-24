@@ -482,6 +482,34 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
+    Map printmapRoute(boolean a3, boolean landscape, String mapFileName, printparams)
+    {
+        Map ret = [:]
+        
+        // Print contest map
+        try {
+            ITextRenderer renderer = new ITextRenderer();
+            addFonts(renderer)
+            ByteArrayOutputStream content = new ByteArrayOutputStream()
+            String url = "${printparams.baseuri}/route/mapprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+            String map_file_name = ("file:///" + HTMLFilter.GetStr(mapFileName)).replaceAll('\\\\','/')
+            url += "&mapFileName=${map_file_name}"
+            println "Print: $url"
+            renderer.setDocument(url)
+            renderer.layout()
+            renderer.createPDF(content,false)
+            renderer.finishPDF()
+            ret.content = content.toByteArray()
+            content.close()
+        }
+        catch (Throwable e) {
+            ret.message = getMsg('fc.contestmap.printerror',["$e"])
+            ret.error = true
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
     Map printtimetableTask(Map params, printparams, boolean isJury)
     {
         Map task = domainService.GetTask(params) 
@@ -1653,7 +1681,9 @@ class PrintService
             response.getOutputStream().write(contentByteArray)
             printdone ""
         } catch (Throwable e) {
-            printerror e
+            printerror "Throwable ${e}"
+        } catch (Exception e) {
+            printerror "Exception ${e}"
         }
     }
     

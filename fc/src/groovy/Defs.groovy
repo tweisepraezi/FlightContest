@@ -2,6 +2,22 @@ class Defs
 {
     static final String GPX_VIEWER_VERSION                             = "GM_Utils-5.18.1a"
  
+    static final String FCSAVE_FOLDER                                  = "C:/FCSave"
+    static final String FCSAVE_FOLDER_FC                               = "${FCSAVE_FOLDER}/.fc"
+    static final String FCSAVE_FOLDER_GEODATA                          = "${FCSAVE_FOLDER}/.geodata"
+    
+    static final String FCSAVE_FILE_CONFIG                             = "${Defs.FCSAVE_FOLDER_FC}/config.groovy"
+    static final String FCSAVE_FILE_GEODATA_DATE                       = "${FCSAVE_FOLDER_GEODATA}/date.txt"
+    static final String FCSAVE_FILE_GEODATA_AIRFIELDS                  = "${FCSAVE_FOLDER_GEODATA}/airfields.csv"
+    static final String FCSAVE_FILE_GEODATA_CHURCHES                   = "${FCSAVE_FOLDER_GEODATA}/churches.csv"
+    static final String FCSAVE_FILE_GEODATA_CASTLES                    = "${FCSAVE_FOLDER_GEODATA}/castles.csv"
+    static final String FCSAVE_FILE_GEODATA_CHATEAUS                   = "${FCSAVE_FOLDER_GEODATA}/chateaus.csv"
+    static final String FCSAVE_FILE_GEODATA_WINDPOWERSTATIONS          = "${FCSAVE_FOLDER_GEODATA}/windpowerstations.csv"
+    static final String FCSAVE_FILE_GEODATA_PEAKS                      = "${FCSAVE_FOLDER_GEODATA}/peaks.csv"
+    static final String FCSAVE_FILE_GEODATA_ADDITIONALS                = "${FCSAVE_FOLDER_GEODATA}/additionals.csv"
+    static final String FCSAVE_FILE_GEODATA_SPECIALS                   = "${FCSAVE_FOLDER_GEODATA}/specials.csv"
+    static final String FCSAVE_FILE_GEODATA_AIRSPACES                  = "${FCSAVE_FOLDER_GEODATA}/airspaces.kmz"
+    
     static final String ROOT_FOLDER_GPXUPLOAD                          = "gpxupload"
     static final String ROOT_FOLDER_JOBS                               = "jobs"
     static final String ROOT_FOLDER_JOBS_DONE                          = "jobs/done"
@@ -14,6 +30,8 @@ class Defs
     static final String TurnpointID_BadCourse                          = "badcourse_"
     static final String TurnpointID_MinAltitude                        = "minaltitude_"
     static final String TurnpointID_TurnpointObs                       = "turnpointobs_"
+    static final String TurnpointID_ContestMapCenterPoints             = "contestmapcenterpoints_"
+    static final String TurnpointID_ContestMapPrintPoints              = "contestmapprintpoints_"
     
     static final String EnrouteID_PhotoObs                             = "photoobs_"
     static final String EnrouteID_CanvasObs                            = "canvasobs_"
@@ -54,4 +72,9 @@ class Defs
     static final String FONT_NOTOSANS_BOLD                             = "NotoSans-Bold.ttf"
     static final String FONT_NOTOSANS_ITALIC                           = "NotoSans-Italic.ttf"
     static final String FONT_NOTOSANS_BOLDITALIC                       = "NotoSans-BoldItalic.ttf"
+    
+    static final String CONTESTMAPOUTPUT_EXPORTPDFMAP                  = "contestMapOutput_exportPDFMap"
+    static final String CONTESTMAPOUTPUT_EXPORTPNGMAP                  = "contestMapOutput_exportPNGMap"
+    static final String CONTESTMAPOUTPUT_SHOWONLINEMAP                 = "contestMapOutput_showOnlineMap"
+    static final String CONTESTMAPOUTPUT_EXPORTGPX                     = "contestMapOutput_exportGPX"
 }

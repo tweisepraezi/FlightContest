@@ -13,6 +13,41 @@ class Route
     EnrouteMeasurement enroutePhotoMeasurement = EnrouteMeasurement.Unassigned   // DB-2.13
     EnrouteMeasurement enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned  // DB-2.13
     
+    // transient values 
+    static transients = ['contestMapOutput','contestMapCircle','contestMapProcedureTurn','contestMapLeg','contestMapCurvedLeg','contestMapTpName',
+                         'contestMapEnroutePhotos','contestMapEnrouteCanvas','contestMapGraticule','contestMapContourLines',
+                         'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapWindpowerstations',
+                         'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
+                         'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintA3',
+                         'contestMapScaleBar','contestMapNoColorChange']
+            
+    String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPDFMAP
+    boolean contestMapCircle = true
+    boolean contestMapProcedureTurn = true
+    boolean contestMapLeg = true
+    boolean contestMapCurvedLeg = true
+    boolean contestMapTpName = true
+    boolean contestMapEnroutePhotos = false
+    boolean contestMapEnrouteCanvas = false
+    boolean contestMapGraticule = true
+    boolean contestMapContourLines = true
+    boolean contestMapAirfields = true
+    boolean contestMapChurches = true
+    boolean contestMapCastles = true
+    boolean contestMapChateaus = true
+    boolean contestMapWindpowerstations = true
+    boolean contestMapPeaks = true
+    boolean contestMapAdditionals = true
+    boolean contestMapSpecials = false
+    boolean contestMapAirspaces = false
+    String contestMapAirspacesLayer = ""
+    String contestMapCenterPoints = ""                                           // list of turn points arranged in map center
+    String contestMapPrintPoints = ""                                            // list of turn points for printing
+    boolean contestMapPrintLandscape = true
+    boolean contestMapPrintA3 = true
+    boolean contestMapScaleBar = false
+    boolean contestMapNoColorChange = false
+    
 	static belongsTo = [contest:Contest]
 
 	static hasMany = [coords:CoordRoute,routelegs:RouteLegCoord,testlegs:RouteLegTest,enroutephotos:CoordEnroutePhoto,enroutecanvas:CoordEnrouteCanvas]
@@ -903,6 +938,22 @@ class Route
                 }
             }
         }
+    }
+    
+    Coord GetNextEnrouteSignCoord(Coord coordInstance)
+    {
+        boolean found = false
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id"])) {
+            if (found) {
+                if (coordroute_instance.type.IsEnrouteSignCoord() || coordroute_instance.type.IsEnrouteFinishCoord()) {
+                    return coordroute_instance
+                }
+            }
+            if (coordroute_instance.title() == coordInstance.title()) {
+                found = true
+            }
+        }
+        return null
     }
     
 }

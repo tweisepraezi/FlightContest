@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-08.09.2017
+24.01.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -59,8 +59,26 @@ Weitere nützliche Funktionen von Flight Contest:
   Rangliste während eines laufenden Debriefings.
 
 
-Erweiterungen in dieser Version (3.1):
---------------------------------------
+Erweiterungen in dieser Version (3.1.1):
+----------------------------------------
+- OSM-Wettbewerbs-Karte
+    Erzeugt PDF-Wettbewerbs-Karte im Maßstab 1:200000 im A3- oder A4-Format.
+      -> Streckendetails -> OSM-Wettbewerbs-Karte
+      -> Hilfe -> OSM-Wettbewerbs-Karte
+- Beobachtungs-Auswerteformular erweitert
+    * Feld zum Notieren der Abgabezeit hinzugefügt
+    * Besatzungs- und Schiedsrichter-Unterschriftenfelder hinzugefügt
+- Flugplan: Konfiguration zur Formatierung für Rallyeflug hinzugefügt
+    -> Hilfe -> Besondere CSS-Eigenschaften
+    -> Wettbewerb -> Einstellungen -> Druckstil
+- Navigationsflug-Ergebnis:
+    * UZKs der krummen Strecke werden nur im Fehlerfall gedruckt
+    * Konfiguration zur Anzeige aller UZKs der krummen Strecke hinzugefügt
+        -> Hilfe -> Besondere CSS-Eigenschaften
+        -> Wettbewerb -> Einstellungen -> Druckstil
+
+Erweiterungen in Version 3.1:
+-----------------------------
 - Neue Beobachtungs-Auswertung
     * Unterstützt Auswerteformular für Besatzungen und 
       Karten-Debriefing durch Schiedsrichter

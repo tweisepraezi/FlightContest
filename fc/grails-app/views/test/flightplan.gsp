@@ -12,6 +12,10 @@
                 <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.timetableModified}">*</g:if><g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['flightplanReturnAction':flightplanReturnAction,'flightplanReturnController':flightplanReturnController,'flightplanReturnID':flightplanReturnID]}">
+			            <g:set var="show_submission_time" value="${false}" />
+			            <g:if test="${testInstance.task.contest.printStyle.contains('--submission')}">
+			                <g:set var="show_submission_time" value="${true}" />
+			            </g:if>
                         <table>
                             <tbody>
                                 <tr>
@@ -91,10 +95,22 @@
                                         <g:else>
                                             <td>${testInstance.testingTime?.format('HH:mm')}</td>
                                         </g:else>
-                                    </g:if> <g:else>
+                                    </g:if>
+                                    <g:else>
                                         <td>${message(code:'fc.nocalculated')}</td>
                                     </g:else>
                                 </tr>
+			                    <g:if test="${show_submission_time}">
+			                        <tr>
+			                            <td class="detailtitle">${message(code:'fc.test.submission.latest')}:</td>
+	                                    <g:if test="${testInstance.timeCalculated}">
+                                            <td>${testInstance.GetMaxSubmissionTime().format('HH:mm:ss')}</td>
+	                                    </g:if>
+	                                    <g:else>
+	                                        <td>${message(code:'fc.nocalculated')}</td>
+	                                    </g:else>
+			                        </tr>
+			                    </g:if>
                             </tbody>
                         </table>
                         <g:if test="${TestLegFlight.countByTest(testInstance)}" >
@@ -130,7 +146,8 @@
                                                 </g:if> <g:else>
                                                     <td>${FcMath.TimeStr(testInstance.takeoffTime)}</td>
                                                 </g:else> 
-                                            </g:if> <g:else>
+                                            </g:if>
+                                            <g:else>
                                                 <td>${message(code:'fc.nocalculated')}</td>
                                             </g:else>
                                         </tr>
@@ -144,7 +161,8 @@
                                             <td>${message(code:CoordType.SP.code)}</td>
                                             <g:if test="${testInstance.timeCalculated}">
                                                 <td>${FcMath.TimeStr(testInstance.startTime)}</td>
-                                            </g:if> <g:else>
+                                            </g:if>
+                                            <g:else>
                                                 <td>${message(code:'fc.nocalculated')}</td>
                                             </g:else>
                                         </tr>

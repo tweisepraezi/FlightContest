@@ -799,6 +799,20 @@ class Coord
         }
     }
 
+    String GetGeoDataRouteCoord()
+    {
+        return """"${route.printName()} - ${titleExport()}"|"${titlePrintCode()}"|POINT (${CoordPresentation.DecimalGradStr(lonMath()).replaceAll(',','.')} ${CoordPresentation.DecimalGradStr(latMath()).replaceAll(',','.')})"""
+    }
+    
+    String GetGeoDataEnroute(boolean enroutePhoto)
+    {
+        if (enroutePhoto) {
+            return """"${route.printName()} - ${enroutePhotoName}"|"${enroutePhotoName}"|POINT (${CoordPresentation.DecimalGradStr(lonMath()).replaceAll(',','.')} ${CoordPresentation.DecimalGradStr(latMath()).replaceAll(',','.')})"""
+        } else {
+            return """"${route.printName()} - ${enrouteCanvasSign.canvasName}"|"${enrouteCanvasSign.canvasName}"|POINT (${CoordPresentation.DecimalGradStr(lonMath()).replaceAll(',','.')} ${CoordPresentation.DecimalGradStr(latMath()).replaceAll(',','.')})"""
+        }
+    }
+
     void calculateCoordEnrouteValues(EnrouteRoute enrouteRoute)
     {
         switch (enrouteRoute) {

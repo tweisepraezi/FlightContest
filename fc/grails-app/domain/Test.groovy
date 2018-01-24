@@ -2530,4 +2530,49 @@ class Test
         }
         return ret
     }
+    
+    Date GetMaxSubmissionTime()
+    {
+        int add_minutes = 0
+        task.contest.printStyle.eachLine {
+            if (it.contains("--submission")) {
+                String s = it.substring(it.indexOf("--submission")+12).trim()
+                if (s.startsWith(":")) {
+                    s = s.substring(1).trim()
+                }
+                if (s.endsWith("}")) {
+                    s = s.substring(0,s.size()-1).trim()
+                }
+                if (s.endsWith(";")) {
+                    s = s.substring(0,s.size()-1).trim()
+                }
+                if (s.isInteger()) {
+                    add_minutes = s.toInteger()
+                }
+            }
+        }
+        GregorianCalendar time = new GregorianCalendar()
+        time.setTime(finishTime) 
+        time.add(Calendar.MINUTE, add_minutes)
+        // FcMath.SetFullMinute(time)
+        return time.getTime()
+    }
+    
+    List GetCurvedPointIds()
+    {
+        List curved_point_ids = []
+        boolean curved_point = false
+        for (CoordResult coordresult_instance in CoordResult.findAllByTest(this,[sort:"id",order:"desc"])) {
+            if (curved_point) {
+                if (coordresult_instance.type != CoordType.SECRET) {
+                    curved_point = false
+                } else {
+                    curved_point_ids += coordresult_instance.id
+                }
+            } else if (coordresult_instance.endCurved) {
+                curved_point = true
+            }
+        }
+        return curved_point_ids
+    }
 }

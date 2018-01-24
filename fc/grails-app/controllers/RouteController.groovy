@@ -6,7 +6,8 @@ class RouteController {
     def printService
 	def fcService
     def gpxService
-	
+    def osmPrintMapService
+    
     def index = { redirect(action:list,params:params) }
 
     // the delete, save and update actions only accept POST requests
@@ -106,7 +107,9 @@ class RouteController {
 	
 	def cancel = {
         // process return action
-        if (session.routeReturnAction) {
+        if (params.mapexportquestionReturnAction) {
+            redirect(action:params.mapexportquestionReturnAction,controller:params.mapexportquestionReturnController,id:params.mapexportquestionReturnID)
+        } else if (session.routeReturnAction) {
             redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID)
         } else {
        	    redirect(action:list)
@@ -525,6 +528,216 @@ class RouteController {
         }
     }
 
+    def mapexportquestion = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            // set all route points
+            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route.instance,[sort:"id"])) {
+                if (route.instance.contestMapCenterPoints) {
+                    route.instance.contestMapCenterPoints += ",${coordroute_instance.title()}"
+                } else {
+                    route.instance.contestMapCenterPoints = coordroute_instance.title() 
+                }
+                if (route.instance.contestMapPrintPoints) {
+                    route.instance.contestMapPrintPoints += ",${coordroute_instance.title()}"
+                } else {
+                    route.instance.contestMapPrintPoints = coordroute_instance.title() 
+                }
+            }
+            // set return action
+            return [routeInstance:route.instance,mapexportquestionReturnAction:"show",mapexportquestionReturnController:controllerName,mapexportquestionReturnID:params.id]
+        } else {
+            flash.message = task.message
+            redirect(action:'show',id:params.id)
+        }
+    }
+    
+    def mapgenerate = {
+        if (session?.lastContest) {
+            Map route = domainService.GetRoute(params) 
+            if (route.instance) {
+                route.instance.contestMapOutput = params.contestMapOutput
+                route.instance.contestMapCircle = params.contestMapCircle == "on"
+                route.instance.contestMapProcedureTurn = params.contestMapProcedureTurn == "on"
+                route.instance.contestMapLeg = params.contestMapLeg == "on"
+                route.instance.contestMapCurvedLeg = params.contestMapCurvedLeg == "on"
+                route.instance.contestMapTpName = params.contestMapTpName == "on"
+                route.instance.contestMapEnroutePhotos = params.contestMapEnroutePhotos == "on"
+                route.instance.contestMapEnrouteCanvas = params.contestMapEnrouteCanvas == "on"
+                route.instance.contestMapGraticule = params.contestMapGraticule == "on"
+                route.instance.contestMapContourLines = params.contestMapContourLines == "on"
+                route.instance.contestMapAirfields = params.contestMapAirfields == "on"
+                route.instance.contestMapChurches = params.contestMapChurches == "on"
+                route.instance.contestMapCastles = params.contestMapCastles == "on"
+                route.instance.contestMapChateaus = params.contestMapChateaus == "on"
+                route.instance.contestMapWindpowerstations = params.contestMapWindpowerstations == "on"
+                route.instance.contestMapPeaks = params.contestMapPeaks == "on"
+                route.instance.contestMapAdditionals = params.contestMapAdditionals == "on"
+                route.instance.contestMapSpecials = params.contestMapSpecials == "on"
+                route.instance.contestMapAirspaces = params.contestMapAirspaces == "on"
+                route.instance.contestMapScaleBar = params.contestMapScaleBar == "on"
+                route.instance.contestMapNoColorChange = params.contestMapNoColorChange == "on"
+                String contestmap_airspaceslayer = params.contestMapAirspacesLayer
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route.instance,[sort:"id"])) {
+                    if (params.("${Defs.TurnpointID_ContestMapCenterPoints}${coordroute_instance.title()}") == "on") {
+                        if (route.instance.contestMapCenterPoints) {
+                            route.instance.contestMapCenterPoints += ",${coordroute_instance.title()}"
+                        } else {
+                            route.instance.contestMapCenterPoints = coordroute_instance.title()
+                        }
+                    }
+                    if (params.("${Defs.TurnpointID_ContestMapPrintPoints}${coordroute_instance.title()}") == "on") {
+                        if (route.instance.contestMapPrintPoints) {
+                            route.instance.contestMapPrintPoints += ",${coordroute_instance.title()}"
+                        } else {
+                            route.instance.contestMapPrintPoints = coordroute_instance.title()
+                        }
+                    }
+                }
+                if (route.instance.contestMapCenterPoints) {
+                    route.instance.contestMapCenterPoints += ","
+                }
+                if (route.instance.contestMapPrintPoints) {
+                    route.instance.contestMapPrintPoints += ","
+                }
+                route.instance.contestMapPrintLandscape = params.contestMapPrintLandscape == "on"
+                route.instance.contestMapPrintA3 = params.contestMapPrintA3 == "on"
+                gpxService.printstart "Export map '${route.instance.name()}'"
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
+                Map converter = gpxService.ConvertRoute2GPX(
+                    route.instance, webroot_dir + route_gpx_file_name, false, true, false, 
+                    [contestMapCircle:route.instance.contestMapCircle,
+                     contestMapProcedureTurn:route.instance.contestMapProcedureTurn,
+                     contestMapLeg:route.instance.contestMapLeg,
+                     contestMapCurvedLeg:route.instance.contestMapCurvedLeg,
+                     contestMapTpName:route.instance.contestMapTpName,
+                     contestMapEnroutePhotos:route.instance.contestMapEnroutePhotos,
+                     contestMapEnrouteCanvas:route.instance.contestMapEnrouteCanvas,
+                     contestMapGraticule:route.instance.contestMapGraticule,
+                     contestMapContourLines:route.instance.contestMapContourLines,
+                     contestMapAirfields:route.instance.contestMapAirfields,
+                     contestMapChurches:route.instance.contestMapChurches,
+                     contestMapCastles:route.instance.contestMapCastles,
+                     contestMapChateaus:route.instance.contestMapChateaus,
+                     contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
+                     contestMapPeaks:route.instance.contestMapPeaks,
+                     contestMapAdditionals:route.instance.contestMapAdditionals,
+                     contestMapSpecials:route.instance.contestMapSpecials,
+                     contestMapAirspaces:route.instance.contestMapAirspaces,
+                     contestMapCenterPoints:route.instance.contestMapCenterPoints,
+                     contestMapPrintPoints:route.instance.contestMapPrintPoints,
+                     contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
+                     contestMapPrintA3:route.instance.contestMapPrintA3,
+                     contestMapScaleBar:route.instance.contestMapScaleBar,
+                     contestMapNoColorChange:route.instance.contestMapNoColorChange
+                    ]
+                ) // false - no Print, false - no Points, false - no wrEnrouteSign
+                if (converter.ok) {
+                    if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP) {
+                        gpxService.printdone ""
+                        session.gpxviewerReturnAction = 'show'
+                        session.gpxviewerReturnController = controllerName
+                        session.gpxviewerReturnID = params.id
+                        session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
+                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no"])
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTGPX) {
+                        String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
+                        response.setContentType("application/octet-stream")
+                        response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                        gpxService.Download(webroot_dir + route_gpx_file_name, route_file_name, response.outputStream)
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.printdone ""
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPNGMAP) {
+                        String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                        String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                        Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                             routeTitle: route.instance.name(),
+                                                             webRootDir: webroot_dir,
+                                                             gpxFileName: webroot_dir + route_gpx_file_name,
+                                                             pngFileName: webroot_dir + map_png_file_name,
+                                                             graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                             contestMapAirspacesLayer: contestmap_airspaceslayer
+                                                            ])
+                        if (r.ok) {
+                            String map_file_name = (route.instance.name() + '.png').replace(' ',"_")
+                            response.setContentType("application/octet-stream")
+                            response.setHeader("Content-Disposition", "Attachment;Filename=${map_file_name}")
+                            gpxService.Download(webroot_dir + map_png_file_name, map_file_name, response.outputStream)
+                        } else {
+                            if (r.message) {
+                                flash.message = r.message
+                            } else {
+                                flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                            }
+                            flash.error = true
+                            redirect(action:'show',id:params.id)
+                        }
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.DeleteFile(map_png_file_name)
+                        gpxService.DeleteFile(map_graticule_file_name)
+                        gpxService.printdone ""
+                    } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPDFMAP) {
+                        String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                        String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
+                        Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
+                                                             routeTitle: route.instance.name(),
+                                                             webRootDir: webroot_dir,
+                                                             gpxFileName: webroot_dir + route_gpx_file_name,
+                                                             pngFileName: webroot_dir + map_png_file_name,
+                                                             graticuleFileName: webroot_dir + map_graticule_file_name,
+                                                             contestMapAirspacesLayer: contestmap_airspaceslayer
+                                                            ])
+                        if (r.ok) {
+                            gpxService.printstart "Generate PDF"
+                            Map ret = printService.printmapRoute(route.instance.contestMapPrintA3, route.instance.contestMapPrintLandscape, webroot_dir + map_png_file_name, GetPrintParams())
+                            gpxService.printdone ""
+                            if (ret.error) {
+                                flash.message = ret.message
+                                flash.error = true
+                                redirect(action:'show',id:params.id)
+                            } else if (ret.content) {
+                                printService.WritePDF(response,ret.content,session.lastContest.GetPrintPrefix(),"map-${route.instance.idTitle}",true,route.instance.contestMapPrintA3,route.instance.contestMapPrintLandscape)
+                            } else {
+                                redirect(action:'show',id:params.id)
+                            }
+                        } else {
+                            if (r.message) {
+                                flash.message = r.message
+                            } else {
+                                flash.message = message(code:'fc.contestmap.connectionerror',args:[BootStrap.global.GetPrintServerAPI()])
+                            }
+                            flash.error = true
+                            redirect(action:'show',id:params.id)
+                        }
+                        gpxService.DeleteFile(route_gpx_file_name)
+                        gpxService.DeleteFile(map_png_file_name)
+                        gpxService.DeleteFile(map_graticule_file_name)
+                        gpxService.printdone ""
+                    }
+                } else {
+                    flash.error = true
+                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
+                    gpxService.DeleteFile(route_gpx_file_name)
+                    gpxService.printerror flash.message
+                    redirect(action:'show',id:params.id)
+                }
+            } else {
+                flash.message = route.message
+                redirect(action:list)
+            }
+        }
+    }
+
+    def mapprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        return [contestInstance:session.lastContest, mapFileName:params.mapFileName]
+    }
+    
     def sendmail = {
         if (session?.lastContest) {
             session.lastContest.refresh()

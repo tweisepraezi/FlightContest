@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1, Ausgabe 6,</span>
-<span id="revdate">6.9.2017</span>
+<span id="revnumber">version 3.1.1, Ausgabe 1,</span>
+<span id="revdate">24.01.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -447,6 +447,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
 </ul>
 </li>
+<li><a href="#osm-contest-map">OSM-Wettbewerbs-Karte</a></li>
 <li><a href="#flight-time-calculation">Flugzeit-Berechnung f&#252;r Starts und Landungen</a></li>
 <li><a href="#planning-test-and-flight-preparation">Planungstest und Flugzeugvorbereitung</a>
 <ul class="sectlevel2">
@@ -482,6 +483,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#print-styles-title">CSS-Einstellungen f&#252;r Titel</a></li>
 <li><a href="#print-styles-foot">CSS-Einstellungen f&#252;r Unterschrift</a></li>
 <li><a href="#print-styles-tables">CSS-Einstellungen f&#252;r Tabellen</a></li>
+<li><a href="#print-styles-special">Besondere CSS-Eigenschaften</a></li>
 <li><a href="#print-styles-samples">Beispiele</a></li>
 </ul>
 </li>
@@ -491,6 +493,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_e_mail_abruf_konfigurieren">E-Mail-Abruf konfigurieren</a></li>
 <li><a href="#_ftp_versand_konfigurieren">FTP-Versand konfigurieren</a></li>
 <li><a href="#_live_anzeige_konfigurieren">Live-Anzeige konfigurieren</a></li>
+<li><a href="#_osm_druck_server_konfigurieren">OSM-Druck-Server konfigurieren</a></li>
 <li><a href="#_test_anzeigen_konfigurieren">Test-Anzeigen konfigurieren</a></li>
 </ul>
 </li>
@@ -1613,6 +1616,185 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="osm-contest-map">OSM-Wettbewerbs-Karte</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Mit 'Strecken &#8594; Strecke &#8594; OSM-Wettbewerbs-Karte' kann eine PDF-Wettbewerbskarte
+im Ma&#223;stab 1:200000 mit Hilfe des Web-Dienstes <a href="http://printmaps-osm.de:8080" class="bare">http://printmaps-osm.de:8080</a> erzeugt werden.</p>
+</div>
+<div class="paragraph">
+<p>Kartendaten sind f&#252;r Europa aus folgenden Datenquellen verf&#252;gbar:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Open Street Map (<a href="http://www.openstreetmap.org" class="bare">http://www.openstreetmap.org</a>)</p>
+</li>
+<li>
+<p>U.S. Geological Survey (<a href="http://dds.cr.usgs.gov/srtm/version2_1/SRTM3" class="bare">http://dds.cr.usgs.gov/srtm/version2_1/SRTM3</a>)</p>
+</li>
+<li>
+<p>J. de Ferranti (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
+</li>
+<li>
+<p>Bundesamt f&#252;r Kartographie und Geod&#228;sie (BKG, <a href="http://www.geodatenzentrum.de/geodaten" class="bare">http://www.geodatenzentrum.de/geodaten</a>)</p>
+</li>
+<li>
+<p>DAeC (<a href="https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten" class="bare">https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten</a>)</p>
+</li>
+<li>
+<p>Skyfool.de (<a href="http://www.skyfool.de/luftraeume" class="bare">http://www.skyfool.de/luftraeume</a>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Folgende Streckendetails k&#246;nnen in die Karte gezeichnet werden:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Wendepunkt-Kreise (Durchmesser 1 NM)</p>
+</li>
+<li>
+<p>Wendeschleifen</p>
+</li>
+<li>
+<p>Etappen-Linien</p>
+</li>
+<li>
+<p>Verlauf krummer Etappen</p>
+</li>
+<li>
+<p>Wendepunkt-Namen (in der jeweiligen Drucksprache, dt. WP, engl. TP)</p>
+</li>
+<li>
+<p>Positionen von Strecken-Fotos</p>
+</li>
+<li>
+<p>Positionen von Strecken-Bodenzeichen</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Folgende Objekte k&#246;nnen in die Karte gezeichnet werden (Urheber):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>H&#246;henlinen (U.S. Geological Survey, J. de Ferranti)</p>
+</li>
+<li>
+<p>Gradnetz</p>
+</li>
+<li>
+<p>Fluppl&#228;tze (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+</li>
+<li>
+<p>Kirchen, Burgen und Schl&#246;sser (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+</li>
+<li>
+<p>Windkraftanlagen (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+</li>
+<li>
+<p>H&#246;henpunkte (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+</li>
+<li>
+<p>Manuell hinzugef&#252;gte Objekte</p>
+</li>
+<li>
+<p>Luftr&#228;ume (DAeC &amp; Skyfool.de)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Objekte und Luftr&#228;ume m&#252;ssen vor der ersten Nutzung manuell installiert werden.
+Dazu alle Dateien von <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> in den Ordner <strong>C:\FCSave\.geodata</strong> kopieren.</p>
+</div>
+<div class="paragraph">
+<p>Alle genannten Streckendetails und Objekte k&#246;nnen abgew&#228;hlt werden.</p>
+</div>
+<div class="paragraph">
+<p>Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
+Strecken, die das w&#228;hlbare Druck-Format A3 oder A4 sprengen, k&#246;nnen mittels
+Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.</p>
+</div>
+<div class="paragraph">
+<p>Einzelne Wendepunkte k&#246;nnen vom Druck ausgenommen werden.
+Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.</p>
+</div>
+<div class="paragraph">
+<p>Der Ausdruck kann im Quer- oder Hochformat in A3 oder A4 erfolgen.</p>
+</div>
+<div class="paragraph">
+<p>In den Daten vom Bundesamt f&#252;r Kartographie und Geod&#228;sie fehlende
+Fluppl&#228;tze, Kirchen, Burgen, Schl&#246;sser, Windkraftanlagen und H&#246;henpunkte
+k&#246;nnen in der Datei <strong>C:\FCSave\.geodata\additionals.csv</strong> zum Druck hinzugef&#252;gt werden:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>1|church.png|""|POINT (9.46600 49.50288)
+2|airfield.png|"Flugplatz"|POINT (9.54128 49.51144)</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Laufende Nummer</p>
+</li>
+<li>
+<p>Anzuzeigendes Symbol:<br>
+airfield.png, church.png, castle.png, chateau.png, windpowerstation.png, peak.png</p>
+</li>
+<li>
+<p>Name des Objektes (in Anf&#252;hrungszeichen) ("": kein Name drucken)</p>
+</li>
+<li>
+<p>Anzeigeposition in Geo-Koordinaten</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Besondere Objekte k&#246;nnen in der Datei <strong>C:\FCSave\.geodata\specials.csv</strong>
+zum Druck hinzugef&#252;gt werden:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>1|"Strecke 1 - WP3"|"Ferienhof K&#246;nig"|POINT (9.9166569218 48.9058522143)|10|0</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Laufende Nummer</p>
+</li>
+<li>
+<p>Beschreibung (in Anf&#252;hrungszeichen, wird nicht gedruckt)</p>
+</li>
+<li>
+<p>Name des Objektes (in Anf&#252;hrungszeichen) ("": kein Name drucken)</p>
+</li>
+<li>
+<p>Anzeigeposition in Geo-Koordinaten</p>
+</li>
+<li>
+<p>Horizontale Verschiebung des zu druckenden Objekt-Namens (in Pixel)</p>
+</li>
+<li>
+<p>Vertikale Verschiebung des zu druckenden Objekt-Namens (in Pixel)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Geo-Koordinaten von Wendepunkten werden beim Strecken-Druck mit ausgegeben (CSV-GeoDaten).</p>
+</div>
+<div class="paragraph">
+<p>Die Namen von Luftr&#228;umen entnehme man der Datei <strong>C:\FCSave\.geodata\airspaces.kmz</strong>.
+Fehlerhafte Namen verhindern die Kartenerzeugung.</p>
+</div>
+<div style="page-break-after: always;"></div>
 </div>
 </div>
 <div class="sect1">
@@ -2824,6 +3006,11 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">routecoordgeodata</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">routetpcoords</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tpname coords</p></td>
@@ -2885,7 +3072,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">info</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">wind planning endcurved landinglatest planninginfo planningignore planningevaluation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind planning submission endcurved landinglatest planninginfo planningignore planningevaluation</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title separator value</p></td>
 </tr>
 <tr>
@@ -3005,6 +3192,60 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 </tr>
 </tbody>
 </table>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="print-styles-special">Besondere CSS-Eigenschaften</h3>
+<div class="paragraph">
+<p>Anwendung:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>body {Eigenschaft: Wert1 Wert2 ...;}</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Eigenschaft</th>
+<th class="tableblock halign-left valign-top">Wert</th>
+<th class="tableblock halign-left valign-top">Wirkung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--flightplan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hide-distance
+</p><p class="tableblock">hide-truetrack
+</p><p class="tableblock">hide-trueheading
+</p><p class="tableblock">hide-groundspeed
+</p><p class="tableblock">disable-local-time
+</p><p class="tableblock">show-elapsed-time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan Spalte "Entfernung" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Rechtweisender Kurs" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Rechtweisender Steuerkurs" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Geschwindigkeit &#252;ber Grund" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Ortszeit" weglassen
+</p><p class="tableblock">im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--submission</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan die sp&#228;teste Abgabezeit des L&#246;sungsbogens anzeigen<br>
+(der Wert definiert die Minuten nach dem FP)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="print-styles-samples">Beispiele</h3>
@@ -3015,14 +3256,6 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <div class="literalblock">
 <div class="content">
 <pre>table.crewlist tr.value td { font-size: 90%; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Punkte-Druck Landefeld - Gr&#246;&#223;e ver&#228;ndern</p>
-<div class="literalblock">
-<div class="content">
-<pre>img.landingfield {width:200%;}</pre>
 </div>
 </div>
 </li>
@@ -3043,12 +3276,11 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 </div>
 </li>
 <li>
-<p>Flugplan - Entfernung und Kurse nicht drucken</p>
+<p>Flugplan - Formatierung f&#252;r Rallyeflug (Entfernung, Kurse und Ortszeit nicht drucken; Zeitverlauf drucken; Sp&#228;teste Abgabezeit anzeigen)</p>
 <div class="literalblock">
 <div class="content">
-<pre>table.flightplanlist td.distance {color: white;}
-table.flightplanlist td.truetrack {color: white;}
-table.flightplanlist td.trueheading {color: white;}</pre>
+<pre>body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }
+body {--submission: 20; }</pre>
 </div>
 </div>
 </li>
@@ -3065,6 +3297,14 @@ table.flightplanlist td.trueheading {color: white;}</pre>
 <div class="literalblock">
 <div class="content">
 <pre>img.scannedplanningtest {width:80%;}</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Navigationsflug-Ergebnis - UZKs der krummen Strecke anzeigen</p>
+<div class="literalblock">
+<div class="content">
+<pre>body {--flightresults: show-curved-points;}</pre>
 </div>
 </div>
 </li>
@@ -3098,6 +3338,14 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 <div class="literalblock">
 <div class="content">
 <pre>table.teamresultlist td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Punkte-Druck Landefeld - Gr&#246;&#223;e ver&#228;ndern</p>
+<div class="literalblock">
+<div class="content">
+<pre>img.landingfield {width:200%;}</pre>
 </div>
 </div>
 </li>
@@ -3286,6 +3534,30 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
+<h3 id="_osm_druck_server_konfigurieren">OSM-Druck-Server konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  contestmap {
+    printserverapi = "http://printmaps-osm.de:8181/api/beta/maps"
+  }
+}</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.printserverapi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adresse des Druck-Servers f&#252;r die Erzeugung der OSM-Wettbewerbs-Karte</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="_test_anzeigen_konfigurieren">Test-Anzeigen konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
@@ -3298,6 +3570,9 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
   }
   aflos {
     showmenu = true
+  }
+  contestmap {
+    showoptions = true
   }
 }</pre>
 </div>
@@ -3319,6 +3594,10 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">aflos.showmenu</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Blendet AFLOS-Men&#252; zur Anzeige des AFLOS-Datenbank-Inhaltes ein</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.showoptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog Test-Optionen ein</p></td>
 </tr>
 </tbody>
 </table>

@@ -1,5 +1,6 @@
 body {
     font-family: Noto Sans, sans-serif;
+    font-size: 90%;
     margin: 0 0 0 0;
 }
 
@@ -72,6 +73,7 @@ table.crewneutral td.crew {
 
 table.info, table.info th, table.info td {
     border-style: none;
+    white-space: nowrap;
 }
 
 table.info td.title {

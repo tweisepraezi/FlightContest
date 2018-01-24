@@ -28,18 +28,22 @@
                 </g:else>
                 @top-left {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${message(code:'fc.aircraft.list')}"
                 }
                 @top-right {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${message(code:'fc.program.printpage')} " counter(page)
                 }
                 @bottom-left {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${contestInstance.printOrganizer}"
                 }
                 @bottom-right {
                     font-family: Noto Sans;
+                    font-size: 90%;
                     content: "${message(code:'fc.program.printfoot.right')}"
                 }
             }

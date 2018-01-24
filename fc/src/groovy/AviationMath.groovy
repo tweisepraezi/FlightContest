@@ -1,5 +1,6 @@
-import java.math.BigDecimal;
-import java.util.Map;
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.Map
 
 class AviationMath 
 {
@@ -156,6 +157,7 @@ class AviationMath
         }
         
         BigDecimal latitude_diff = latitude_dist / 60
+        latitude_diff = latitude_diff.setScale(10, RoundingMode.HALF_EVEN)
         BigDecimal latitude
         if ((valueTrack >= 0) && (valueTrack < 90)) {
             latitude = startLatitude + latitude_diff
@@ -168,6 +170,7 @@ class AviationMath
         }
 
         BigDecimal longitude_diff = longitude_dist / (60 * Math.cos( Math.toRadians((startLatitude + latitude)/2) ))
+        longitude_diff = longitude_diff.setScale(10, RoundingMode.HALF_EVEN)
         BigDecimal longitude
         if ((valueTrack >= 0) && (valueTrack < 90)) {
             longitude = startLongitude + longitude_diff
@@ -337,5 +340,210 @@ class AviationMath
         Map top_coord = getCoordinate(maxLatitude, lon_average, 0, marginDistance)
         Map bottom_coord = getCoordinate(minLatitude, lon_average, 180, marginDistance)
         return [latmin:bottom_coord.lat,latmax:top_coord.lat,lonmin:left_coord.lon,lonmax:right_coord.lon]
-    } 
+    }
+
+    //--------------------------------------------------------------------------
+    static List getCircle(BigDecimal showLatitude, BigDecimal showLongitude, BigDecimal radiusValue)
+    // Berechnet Kreis um eine Koordinate
+    //   showLatitude: Geographische Breite (-90 ... +90 Grad)
+    //   showLongitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   radiusValue: Radius des Kreises in NM
+    // Rückgabe: Liste von Koordinaten (lat, lon)
+    {
+        List circle_coords = []
+        BigDecimal value_track = 0
+        while (value_track < 360) {
+            circle_coords += getCoordinate(showLatitude, showLongitude, value_track, radiusValue)
+            value_track += 2
+        }
+        circle_coords += getCoordinate(showLatitude, showLongitude, 0, radiusValue)
+        return circle_coords
+    }
+    
+    //--------------------------------------------------------------------------
+    static Map getTrack2Circle(BigDecimal srcLatitude, BigDecimal srcLongitude,
+                               BigDecimal destLatitude, BigDecimal destLongitude,
+                               BigDecimal radiusValue)
+    // Berechnet Koordinaten eines  Tracks zum Kreis um Koordinaten
+    // aus einer Etappe von der Koordinate scr... zur Koordinate dest...
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   radiusValue: Radius des Kreises in NM
+    // Rückgabe: srcLat, srcLon, destLat, destLon
+    {
+        BigDecimal track_value = calculateLeg(destLatitude, destLongitude, srcLatitude, srcLongitude).dir
+
+        Map src_coord = getCoordinate(srcLatitude, srcLongitude, track_value, radiusValue)
+        Map dest_coord = getCoordinate(destLatitude, destLongitude, getDiametricalTrack(track_value), radiusValue)
+        
+        // return Map
+        return [srcLat:src_coord.lat, srcLon:src_coord.lon, destLat:dest_coord.lat, destLon:dest_coord.lon]
+    }
+
+    //--------------------------------------------------------------------------
+    static List getProcedureTurnCircle(BigDecimal srcLatitude, BigDecimal srcLongitude,
+                                       BigDecimal ptLatitude, BigDecimal ptLongitude,
+                                       BigDecimal destLatitude, BigDecimal destLongitude,
+                                       BigDecimal tpRadiusValue,
+                                       BigDecimal procedureTurnDistance)
+    // Berechnet ProcedureTurn-Halbkreis um eine Koordinate
+    // eingehende Etappe von der Koordinate scr... zur Koordinate pt...
+    // ausgehende Etappe von der Koordinate pt... zur Koordinate dest...
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   tpRadiusValue: Radius des Kreises um Wendepunkt in NM
+    //   procedureTurnDistance: Entfernung des ProcedurTurn-Kreises vom Wendepunkt in NM
+    // Rückgabe: Liste von Koordinaten (lat, lon)
+    {
+        List circle_coords = []
+        
+        BigDecimal in_track = calculateLeg(ptLatitude, ptLongitude, srcLatitude, srcLongitude).dir
+        BigDecimal out_track = calculateLeg(destLatitude, destLongitude, ptLatitude, ptLongitude).dir
+        BigDecimal course_change = courseChange(in_track, out_track)
+        
+        BigDecimal track_change
+        BigDecimal circle_in_track
+        BigDecimal circle_out_track
+        BigDecimal circle_out_track2
+        BigDecimal circle_add_track
+        BigDecimal procedureturn_track
+        if (course_change < 0) {
+            track_change = 180 + course_change
+            circle_in_track = getOrthogonalTrackLeft(in_track)
+            circle_out_track = getOrthogonalTrackLeft(out_track)
+            circle_out_track2 = circle_out_track
+            if (circle_out_track < circle_in_track) {
+                circle_out_track2 += 360
+            }
+            circle_add_track = 2
+            procedureturn_track = checkTrack(in_track + track_change/2)
+        } else {
+            track_change = 180 - course_change
+            circle_in_track = getOrthogonalTrackRight(in_track)
+            circle_out_track = getOrthogonalTrackRight(out_track)
+            circle_out_track2 = circle_out_track
+            if (circle_out_track > circle_in_track) {
+                circle_out_track2 -= 360
+            }
+            circle_add_track = -2
+            procedureturn_track = checkTrack(in_track - track_change/2)
+        }
+        
+        BigDecimal r = procedureTurnDistance * Math.sin(Math.toRadians(track_change/2))
+        BigDecimal d = Math.sqrt(procedureTurnDistance*procedureTurnDistance - r*r)
+        
+        // in        
+        Map in_coord = getCoordinate(ptLatitude, ptLongitude, in_track, tpRadiusValue)
+        circle_coords += in_coord
+        circle_coords += getCoordinate(in_coord.lat, in_coord.lon, in_track, d - tpRadiusValue)
+        
+        // circle
+        Map pt_circle_coord = getCoordinate(ptLatitude, ptLongitude, procedureturn_track, procedureTurnDistance)
+        BigDecimal value_track = circle_in_track
+        BigDecimal value_track2 = circle_in_track
+        // println "XX1 in_track=${circle_in_track} circle_out_track=${circle_out_track} circle_out_track2=${circle_out_track2} circle_add_track=${circle_add_track}"
+        if (course_change < 0) {
+            while (value_track2 < circle_out_track2) {
+                circle_coords += getCoordinate(pt_circle_coord.lat, pt_circle_coord.lon, value_track, r)
+                value_track = checkTrack(value_track + circle_add_track)
+                value_track2 += circle_add_track
+                // println "XX21 value_track2=${value_track2}"
+            }
+        } else {
+            while (value_track2 > circle_out_track2) {
+                circle_coords += getCoordinate(pt_circle_coord.lat, pt_circle_coord.lon, value_track, r)
+                value_track = checkTrack(value_track + circle_add_track)
+                value_track2 += circle_add_track
+                // println "XX22 value_track2=${value_track2}"
+            }
+        }
+        
+        // out
+        Map out_coord = getCoordinate(ptLatitude, ptLongitude, getDiametricalTrack(out_track), d)
+        circle_coords += out_coord
+        circle_coords += getCoordinate(out_coord.lat, out_coord.lon, out_track, d - tpRadiusValue)
+
+        return circle_coords
+    }
+    
+    //--------------------------------------------------------------------------
+    static BigDecimal checkTrack(BigDecimal valueTrack)
+    {
+        if (valueTrack < 0) {
+            return valueTrack + 360
+        } else if (valueTrack >= 360 ) {
+            return valueTrack - 360
+        }
+        return valueTrack
+    }
+    
+    //--------------------------------------------------------------------------
+    static Map getTitlePoint(BigDecimal srcLatitude, BigDecimal srcLongitude,
+                             BigDecimal tpLatitude, BigDecimal tpLongitude,
+                             BigDecimal destLatitude, BigDecimal destLongitude,
+                             BigDecimal distanceValue, BigDecimal distanceValueProcedureTurn)
+    // Berechnet Koordinate in Entfernung von der Koordinate tp... an der abgewandten Seite
+    // eingehende Etappe von der Koordinate scr... zur Koordinate tp...
+    // ausgehende Etappe von der Koordinate tp... zur Koordinate dest...
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   distanceValue, distanceValueProcedureTurn: Entfernung in NM
+    // Rückgabe: lat, lon
+    {
+        BigDecimal in_track = calculateLeg(tpLatitude, tpLongitude, srcLatitude, srcLongitude).dir
+        BigDecimal out_track = calculateLeg(destLatitude, destLongitude, tpLatitude, tpLongitude).dir
+        
+        BigDecimal course_change = courseChange(in_track, out_track)
+        
+        BigDecimal point_track
+        if (course_change < 0) {
+            BigDecimal track_change = 180 + course_change
+            point_track = checkTrack(in_track + track_change/2)
+        } else {
+            BigDecimal track_change = 180 - course_change
+            point_track = checkTrack(in_track - track_change/2)
+        }
+        
+        if (course_change.abs() > 90) {
+            distanceValue = distanceValueProcedureTurn
+        }
+
+        return getCoordinate(tpLatitude, tpLongitude, point_track, distanceValue)
+    }
+    
+    //--------------------------------------------------------------------------
+    static Map getOrthogonalTitlePoint(BigDecimal srcLatitude, BigDecimal srcLongitude,
+                                       BigDecimal tpLatitude, BigDecimal tpLongitude,
+                                       BigDecimal centerLatitude, BigDecimal centerLongitude,
+                                       BigDecimal distanceValue)
+    // Berechnet Koordinate in Entfernung von der Koordinate tp... an der zur Kartenmitte abgewandten Seite
+    // eingehende Etappe von der Koordinate scr... zur Koordinate tp...
+    // Kartenmitte ist Koordinate center...
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    //   distanceValue: Entfernung in NM
+    // Rückgabe: lat, lon
+    {
+        Map gate = AviationMath.getGate(
+            srcLatitude, srcLongitude,
+            tpLatitude, tpLongitude,
+            distanceValue
+        )
+        Map center_left = AviationMath.calculateLeg(gate.coordLeft.lat, gate.coordLeft.lon, centerLatitude, centerLongitude)
+        Map center_right = AviationMath.calculateLeg(gate.coordRight.lat, gate.coordRight.lon, centerLatitude, centerLongitude)
+        if (center_left.dis > center_right.dis) {
+            return AviationMath.getTitlePoint(
+                gate.coordRight.lat, gate.coordRight.lon,
+                tpLatitude, tpLongitude,
+                gate.coordRight.lat, gate.coordRight.lon,
+                distanceValue, distanceValue
+            )
+        }
+        return AviationMath.getTitlePoint(
+            gate.coordLeft.lat, gate.coordLeft.lon,
+            tpLatitude, tpLongitude,
+            gate.coordLeft.lat, gate.coordLeft.lon,
+            distanceValue, distanceValue
+        )
+    }
 }

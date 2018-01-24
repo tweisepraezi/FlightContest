@@ -241,6 +241,9 @@ class MainTagLib
             outln """    <li> <a href="${p.link}/../../gpx/selectloggerfilename">${message(code:'fc.loggerdata.show')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
+            if (!Global.IsCloudFoundryEnvironment()) {
+                outln """    <li> <a href="${p.link}/../../global/selectgeodatafilename">${message(code:'fc.contestmap.importgeodata')}</a> </li>"""
+            }
 			if (Global.IsDevelopmentEnvironment()) {
                 outln """    <li> <a href="${p.link}/../../global/list" >${message(code:'fc.internal')}</a> </li>"""
 				outln """    <li> <a href="${p.link}/../../classDiagram" target="_blank">${message(code:'fc.classdiagram')}</a> </li>"""

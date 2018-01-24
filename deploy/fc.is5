@@ -8,10 +8,10 @@ const FCVersion = '3.1.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.1.0.GA
-AppVersion=3.1.0.GA
+AppVerName=Flight Contest 3.1.1.RC1
+AppVersion=3.1.1.RC1
 ; no milestone below
-VersionInfoVersion=3.1.0
+VersionInfoVersion=3.1.1
 
 AppCopyright=(C) 2009-2017 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -79,6 +79,7 @@ Name: "C:\FCSave";         Flags: uninsneveruninstall; Permissions: everyone-mod
 Name: "C:\FCSave\.fc";     Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.scan";   Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.logger"; Flags: uninsneveruninstall; Permissions: everyone-modify;
+Name: "C:\FCSave\.geodata";Flags: uninsneveruninstall; Permissions: everyone-modify;
 
 [Registry]
 Root: HKLM32; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat7w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC32();
