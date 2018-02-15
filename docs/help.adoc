@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 1
-:revdate:   24.01.2018
+:revnumber: 3.1.1, Ausgabe 2
+:revdate:   14.02.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -64,7 +64,8 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 [[supported-rules]]
 == Unterstützte Regelwerke
 
-* link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland^]
+* link:rules/DE_Navigationsflug_2018.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2018^]
+* link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
 * link:rules/FAI_rally_flying_rules_2017.pdf[FAI Air Rally Flying^]
 * link:rules/FAI_precision_flying_rules_2017.pdf[FAI Precision Flying^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft^]
@@ -862,6 +863,10 @@ anklickbare Check-Boxen eingegeben.
 
 Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
 
+* link:rules/DE_Navigationsflug_2018.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018^] (alle Landungen)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+
 * link:rules/DE_Navigationsflug_2017.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017^] (alle Landungen)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
@@ -1249,6 +1254,9 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 |--flightresults
 |show-curved-points
 |im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen
+|--route
+|show-curved-points
+|in Strecken-Anzeigen UZKs der krummen Strecke anzeigen
 |===
 
 [[print-styles-samples]]
@@ -1258,6 +1266,10 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 
  table.crewlist tr.value td { font-size: 90%; }
 
+** Strecken-Anzeigen - UZKs der krummen Strecke anzeigen
+
+ body {--route: show-curved-points;}
+ 
 ** Besatzungs-Zeitplan - Zeilen verkleinern
 
  table.timetablelist tr.value td { font-size: 90%; }

@@ -11,6 +11,7 @@
             <div class="box boxborder" >
                 <h2>${message(code:'fc.task.listresults')} - ${taskInstance.name()}<g:if test="${taskInstance.IsTaskResultsProvisional(taskInstance.GetResultSettings())}"> [${message(code:'fc.provisional')}]</g:if></h2>
                 <g:form id="${taskInstance.id}" method="post" >
+                    <g:set var="ti" value="${[]+1}"/>
                     <br/>
                     <table>
                         <tbody>
@@ -253,11 +254,14 @@
                         <tfoot>
                             <tr>
                                 <td>
-                                    <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.crewresults.all.print')}" tabIndex="1"/>
-                                    <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="2"/> 
-                                    <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="3"/>
+                                    <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.crewresults.all.print')}" tabIndex="${ti[0]++}"/>
+                                    <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="${ti[0]++}"/> 
+                                    <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="${ti[0]++}"/>
+                                    <g:if test="${taskInstance.IsFlightTestRun()}">
+                                        <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                    </g:if>
                                     <g:if test="${taskInstance.IsEMailPossible()}">
-                                        <g:actionSubmit action="emailnavigationresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="4"/>
+                                        <g:actionSubmit action="emailnavigationresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                     </g:if>
                                 </td>
                                 <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>

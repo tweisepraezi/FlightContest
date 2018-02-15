@@ -10,7 +10,7 @@ class DemoContestObservationService
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,false,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,false,testExists)
         contest.instance.maxRouteLegs = 15
         contest.instance.save()
 

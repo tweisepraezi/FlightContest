@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-24.01.2018
+15.02.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -65,6 +65,11 @@ Erweiterungen in dieser Version (3.1.1):
     Erzeugt PDF-Wettbewerbs-Karte im Maßstab 1:200000 im A3- oder A4-Format.
       -> Streckendetails -> OSM-Wettbewerbs-Karte
       -> Hilfe -> OSM-Wettbewerbs-Karte
+- KMZ-Export
+    Exportiert KMZ-Datei für Google-Earth-Anzeige.
+      * für eine einzelne Strecke (-> Streckendetails)
+      * für alle Navigationsflüge (-> Ergebnisse)
+      * für einen einzelnen Navigationsflug (-> Ergebnisse -> Navigationsflug)
 - Beobachtungs-Auswerteformular erweitert
     * Feld zum Notieren der Abgabezeit hinzugefügt
     * Besatzungs- und Schiedsrichter-Unterschriftenfelder hinzugefügt
@@ -76,6 +81,8 @@ Erweiterungen in dieser Version (3.1.1):
     * Konfiguration zur Anzeige aller UZKs der krummen Strecke hinzugefügt
         -> Hilfe -> Besondere CSS-Eigenschaften
         -> Wettbewerb -> Einstellungen -> Druckstil
+- Aktualisierung folgender Regelwerke
+    Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018
 
 Erweiterungen in Version 3.1:
 -----------------------------

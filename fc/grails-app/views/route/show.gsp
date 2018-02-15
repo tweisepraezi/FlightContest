@@ -114,7 +114,8 @@
 				                        </g:if>
 				                        <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
 				                        <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
-				                        <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpxexport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+				                        <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 				                        <g:if test="${BootStrap.global.GetPrintServerAPI()}">
                                             <g:actionSubmit action="mapexportquestion" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         </g:if>

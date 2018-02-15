@@ -6,6 +6,7 @@ class RouteController {
     def printService
 	def fcService
     def gpxService
+    def kmlService
     def osmPrintMapService
     
     def index = { redirect(action:list,params:params) }
@@ -484,6 +485,34 @@ class RouteController {
                 flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
                 gpxService.DeleteFile(upload_gpx_file_name)
                 gpxService.printerror flash.message
+                redirect(action:'show',id:params.id)
+            }
+        } else {
+            flash.message = route.message
+            redirect(action:list)
+        }
+    }
+
+    def kmzexport = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            kmlService.printstart "Export '${route.instance.name()}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.gpx"
+            Map converter = kmlService.ConvertRoute2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, true) // false - no Print, true - wrEnrouteSign
+            if (converter.ok) {
+                String route_file_name = (route.instance.name() + '.kmz').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                kmlService.Download(webroot_dir + upload_kmz_file_name, route_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.kmz.notexported',args:[route.instance.name()])
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printerror flash.message
                 redirect(action:'show',id:params.id)
             }
         } else {

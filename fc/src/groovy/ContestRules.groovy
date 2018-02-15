@@ -2,13 +2,14 @@ import java.util.List;
 
 enum ContestRules 
 {
-	R1 ('fc.contestrule.de.nav.2017',
+	R1 ('fc.contestrule.de.nav.2018',
 		[
 			// General
 			precisionFlying:false,
             increaseFactor:0,
+            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
             printPointsGeneral:false,
-			printPointsPlanningTest:true,
+			printPointsPlanningTest:false,
 			printPointsFlightTest:true,
             printPointsObservationTest:true,
 			printPointsLandingTest1:true,
@@ -16,127 +17,128 @@ enum ContestRules
 			printPointsLandingTest3:false,
 			printPointsLandingTest4:false,
             printPointsLandingField:true,
-            landingFieldImageName:'images/landingfield/de_nav*.jpg',
+            landingFieldImageName:'images/landingfield/de_nav.jpg',
             printPointsTurnpointSign:false,
             printPointsEnrouteCanvas:false,
-            printLandingCalculatorValues:"F,E,A,B,C,D",
+            printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
             
 			// PlanningTest
-			planningTestDirectionCorrectGrad:2,                  // 4.1.1
-			planningTestDirectionPointsPerGrad:2,                // 4.1.1
-			planningTestTimeCorrectSecond:5,                     // 4.1.1
-			planningTestTimePointsPerSecond:1,                   // 4.1.1
-			planningTestMaxPoints:200,                           // 4.1.1
-			planningTestPlanTooLatePoints:50,                    // 4.1.1
-			planningTestExitRoomTooLatePoints:100,               // 4.1.1
+			planningTestDirectionCorrectGrad:2,
+			planningTestDirectionPointsPerGrad:2,
+			planningTestTimeCorrectSecond:2,
+			planningTestTimePointsPerSecond:3,
+			planningTestMaxPoints:100,
+			planningTestPlanTooLatePoints:50,
+			planningTestExitRoomTooLatePoints:100,
             planningTestForbiddenCalculatorsPoints:0,
 		
 			// FlightTest
-			flightTestTakeoffCorrectSecond:60,                   // 4.1.2
-			flightTestTakeoffCheckSeconds:false,
-			flightTestTakeoffPointsPerSecond:0,
-            flightTestTakeoffMissedPoints:200,                   // 4.1.2
-			flightTestCptimeCorrectSecond:2,                     // 4.1.3
-			flightTestCptimePointsPerSecond:1,                   // 4.1.3
-			flightTestCptimeMaxPoints:200,                       // 4.1.3
-			flightTestCpNotFoundPoints:200,                      // 4.1.3
-			flightTestProcedureTurnNotFlownPoints:200,           // 4.1.4
-			flightTestMinAltitudeMissedPoints:500,               // 4.1.5
-			flightTestBadCourseCorrectSecond:5,                  // 3.2.9
-			flightTestBadCoursePoints:200,                       // 4.1.6
-			flightTestBadCourseStartLandingPoints:500,           // 4.1.6
-			flightTestLandingToLatePoints:200,                   // 4.1.6
-			flightTestGivenToLatePoints:100,                     // 4.1.6
+			flightTestTakeoffCorrectSecond:60,                   // 4
+			flightTestTakeoffCheckSeconds:true,
+			flightTestTakeoffPointsPerSecond:3,                  // 4
+            flightTestTakeoffMissedPoints:100,                   // 4
+			flightTestCptimeCorrectSecond:2,                     // 4
+			flightTestCptimePointsPerSecond:3,                   // 4
+			flightTestCptimeMaxPoints:100,                       // 4
+			flightTestCpNotFoundPoints:100,                      // 4
+			flightTestProcedureTurnNotFlownPoints:0,
+			flightTestMinAltitudeMissedPoints:200,               // 4
+			flightTestBadCourseCorrectSecond:5,                  // 3.3.6
+			flightTestBadCoursePoints:100,                       // 4
+			flightTestBadCourseStartLandingPoints:200,           // 4
+			flightTestLandingToLatePoints:200,                   // 4
+			flightTestGivenToLatePoints:300,                     // 4
 			flightTestSafetyAndRulesInfringementPoints:0,
 			flightTestInstructionsNotFollowedPoints:0,
 			flightTestFalseEnvelopeOpenedPoints:0,
-			flightTestSafetyEnvelopeOpenedPoints:0,
+			flightTestSafetyEnvelopeOpenedPoints:400,            // 4
 			flightTestFrequencyNotMonitoredPoints:0,
             flightTestForbiddenEquipmentPoints:0,
 		
             // ObservationTest
-            observationTestTurnpointNotFoundPoints:40,           // 4.2
-            observationTestTurnpointFalsePoints:80,              // 4.2
-            observationTestEnrouteValueUnit:EnrouteValueUnit.mm, // 4.2
-            observationTestEnrouteCorrectValue:5.0f,             // 4.2
-            observationTestEnrouteInexactValue:10.0f,            // 4.2
-            observationTestEnrouteInexactPoints:10,              // 4.2
-            observationTestEnrouteNotFoundPoints:20,             // 4.2
-            observationTestEnrouteFalsePoints:40,                // 4.2
+            observationTestTurnpointNotFoundPoints:50,           // 4
+            observationTestTurnpointFalsePoints:100,             // 4
+            observationTestEnrouteValueUnit:EnrouteValueUnit.NM, // 4
+            observationTestEnrouteCorrectValue:0.5f,             // 4
+            observationTestEnrouteInexactValue:1.0f,             // 4
+            observationTestEnrouteInexactPoints:15,              // 4
+            observationTestEnrouteNotFoundPoints:30,             // 4
+            observationTestEnrouteFalsePoints:50,                // 4
             
 			// LandingTest
-			landingTest1MaxPoints:300,                           // 4.3
-			landingTest1NoLandingPoints:300,                     // 4.3
-			landingTest1OutsideLandingPoints:200,                // 4.3
-			landingTest1RollingOutsidePoints:200,                // 4.3
-			landingTest1PowerInBoxPoints:100,                    // 4.3
-			landingTest1GoAroundWithoutTouchingPoints:200,       // 4.3
-			landingTest1GoAroundInsteadStopPoints:200,           // 4.3
-			landingTest1AbnormalLandingPoints:200,               // 4.3
+			landingTest1MaxPoints:300,                           // 4
+			landingTest1NoLandingPoints:300,                     // 4
+			landingTest1OutsideLandingPoints:200,                // 4
+			landingTest1RollingOutsidePoints:200,                // 4
+			landingTest1PowerInBoxPoints:50,                     // 4
+			landingTest1GoAroundWithoutTouchingPoints:200,       // 4
+			landingTest1GoAroundInsteadStopPoints:200,           // 4
+			landingTest1AbnormalLandingPoints:150,               // 4
 			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+			landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
 		
-			landingTest2MaxPoints:300,                           // 4.3
-			landingTest2NoLandingPoints:300,                     // 4.3
-			landingTest2OutsideLandingPoints:200,                // 4.3
-			landingTest2RollingOutsidePoints:200,                // 4.3
-			landingTest2PowerInBoxPoints:100,                    // 4.3
-			landingTest2GoAroundWithoutTouchingPoints:200,       // 4.3
-			landingTest2GoAroundInsteadStopPoints:200,           // 4.3
-			landingTest2AbnormalLandingPoints:200,               // 4.3
+			landingTest2MaxPoints:300,                           // 4
+			landingTest2NoLandingPoints:300,                     // 4
+			landingTest2OutsideLandingPoints:200,                // 4
+			landingTest2RollingOutsidePoints:200,                // 4
+			landingTest2PowerInBoxPoints:50,                     // 4
+			landingTest2GoAroundWithoutTouchingPoints:200,       // 4
+			landingTest2GoAroundInsteadStopPoints:200,           // 4
+			landingTest2AbnormalLandingPoints:150,               // 4
 			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest2PowerInAirPoints:0,
-			landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+			landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
 			
-			landingTest3MaxPoints:300,                           // 4.3
-			landingTest3NoLandingPoints:300,                     // 4.3
-			landingTest3OutsideLandingPoints:200,                // 4.3
-			landingTest3RollingOutsidePoints:200,                // 4.3
-			landingTest3PowerInBoxPoints:100,                    // 4.3
-			landingTest3GoAroundWithoutTouchingPoints:200,       // 4.3
-			landingTest3GoAroundInsteadStopPoints:200,           // 4.3
-			landingTest3AbnormalLandingPoints:200,               // 4.3
+			landingTest3MaxPoints:300,                           // 4
+			landingTest3NoLandingPoints:300,                     // 4
+			landingTest3OutsideLandingPoints:200,                // 4
+			landingTest3RollingOutsidePoints:200,                // 4
+			landingTest3PowerInBoxPoints:50,                     // 4
+			landingTest3GoAroundWithoutTouchingPoints:200,       // 4
+			landingTest3GoAroundInsteadStopPoints:200,           // 4
+			landingTest3AbnormalLandingPoints:150,               // 4
 			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest3PowerInAirPoints:0,
 			landingTest3FlapsInAirPoints:0,
-			landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+			landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
 			
-			landingTest4MaxPoints:300,                           // 4.3
-			landingTest4NoLandingPoints:300,                     // 4.3
-			landingTest4OutsideLandingPoints:200,                // 4.3
-			landingTest4RollingOutsidePoints:200,                // 4.3
-			landingTest4PowerInBoxPoints:100,                    // 4.3
-			landingTest4GoAroundWithoutTouchingPoints:200,       // 4.3
-			landingTest4GoAroundInsteadStopPoints:200,           // 4.3
-			landingTest4AbnormalLandingPoints:200,               // 4.3
+			landingTest4MaxPoints:300,                           // 4
+			landingTest4NoLandingPoints:300,                     // 4
+			landingTest4OutsideLandingPoints:200,                // 4
+			landingTest4RollingOutsidePoints:200,                // 4
+			landingTest4PowerInBoxPoints:50,                     // 4
+			landingTest4GoAroundWithoutTouchingPoints:200,       // 4
+			landingTest4GoAroundInsteadStopPoints:200,           // 4
+			landingTest4AbnormalLandingPoints:150,               // 4
 			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
 			landingTest4TouchingObstaclePoints:0,
-			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
             
             // Defaults
-            scGateWidth:2.0f,
+            scGateWidth:1.0f,
             unsuitableStartNum:"13",
-            turnpointRule:TurnpointRule.AssignTrueFalse,
+            turnpointRule:TurnpointRule.TrueFalsePhoto,          // 3.4.6
             turnpointMapMeasurement:false,
-            enroutePhotoRule:EnrouteRule.MapOrMeasurement,
-            enrouteCanvasRule:EnrouteRule.None,
+            enroutePhotoRule:EnrouteRule.NMFromTP,               // 3.4.8
+            enrouteCanvasRule:EnrouteRule.NMFromTP,              // 3.4.8
             enrouteCanvasMultiple:false,
-            minRouteLegs:0,
-            maxRouteLegs:8,                                      // 3.2.3
-            minEnroutePhotos:0,
-            maxEnroutePhotos:20,
-            minEnrouteCanvas:0,
-            maxEnrouteCanvas:15,
-            minEnrouteTargets:0,
-            maxEnrouteTargets:35
+            minRouteLegs:10,                                     // 3.1
+            maxRouteLegs:16,                                     // 3.1
+            minEnroutePhotos:15,                                 // 3.4.1
+            maxEnroutePhotos:20,                                 // 3.4.1
+            minEnrouteCanvas:0,                                  // 3.4.1
+            maxEnrouteCanvas:5,                                  // 3.4.1
+            minEnrouteTargets:10,                                // (3.4.1)
+            maxEnrouteTargets:25                                 // (3.4.1)
 		]
-	), // fc.contestrule.de.nav.2017
+	), // fc.contestrule.de.nav.2018
 
 	R2 ('fc.contestrule.de.precision.2005',
 		[
 			// General
 			precisionFlying:true,
             increaseFactor:0,
+            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:true,
 			printPointsFlightTest:true,
@@ -267,6 +269,7 @@ enum ContestRules
 			// General
 			precisionFlying:false,
             increaseFactor:0,
+            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:false,
 			printPointsFlightTest:true,
@@ -397,6 +400,7 @@ enum ContestRules
 			// General
 			precisionFlying:true,
             increaseFactor:0,
+            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:true,
 			printPointsFlightTest:true,
@@ -527,6 +531,7 @@ enum ContestRules
 			// General
 			precisionFlying:true,
             increaseFactor:0,
+            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:true,
 			printPointsFlightTest:true,
@@ -657,6 +662,7 @@ enum ContestRules
             // General
             precisionFlying:false,
             increaseFactor:0,
+            printStyle:"",
             printPointsGeneral:false,
             printPointsPlanningTest:false,
             printPointsFlightTest:true,
@@ -787,6 +793,7 @@ enum ContestRules
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
+            printStyle:"",
             printPointsGeneral:true,
             printPointsPlanningTest:true,
             printPointsFlightTest:true,
@@ -917,6 +924,7 @@ enum ContestRules
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
+            printStyle:"",
             printPointsGeneral:true,
             printPointsPlanningTest:true,
             printPointsFlightTest:true,
@@ -1047,6 +1055,7 @@ enum ContestRules
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
+            printStyle:"",
             printPointsGeneral:true,
             printPointsPlanningTest:true,
             printPointsFlightTest:true,
@@ -1177,6 +1186,7 @@ enum ContestRules
             // General
             precisionFlying:false,
             increaseFactor:0,
+            printStyle:"",
             printPointsGeneral:false,
             printPointsPlanningTest:false,
             printPointsFlightTest:true,
@@ -1300,7 +1310,139 @@ enum ContestRules
             minEnrouteTargets:12,                                // 5.2.5d
             maxEnrouteTargets:20                                 // 5.2.5d
         ]
-    ) // fc.contestrule.at.nav.2017
+    ), // fc.contestrule.at.nav.2017
+
+    R11 ('fc.contestrule.de.nav.2017',
+        [
+            // General
+            precisionFlying:false,
+            increaseFactor:0,
+            printStyle:"",
+            printPointsGeneral:false,
+            printPointsPlanningTest:true,
+            printPointsFlightTest:true,
+            printPointsObservationTest:true,
+            printPointsLandingTest1:true,
+            printPointsLandingTest2:false,
+            printPointsLandingTest3:false,
+            printPointsLandingTest4:false,
+            printPointsLandingField:true,
+            landingFieldImageName:'images/landingfield/de_nav2017*.jpg',
+            printPointsTurnpointSign:false,
+            printPointsEnrouteCanvas:false,
+            printLandingCalculatorValues:"F,E,A,B,C,D",
+            
+            // PlanningTest
+            planningTestDirectionCorrectGrad:2,                  // 4.1.1
+            planningTestDirectionPointsPerGrad:2,                // 4.1.1
+            planningTestTimeCorrectSecond:5,                     // 4.1.1
+            planningTestTimePointsPerSecond:1,                   // 4.1.1
+            planningTestMaxPoints:200,                           // 4.1.1
+            planningTestPlanTooLatePoints:50,                    // 4.1.1
+            planningTestExitRoomTooLatePoints:100,               // 4.1.1
+            planningTestForbiddenCalculatorsPoints:0,
+        
+            // FlightTest
+            flightTestTakeoffCorrectSecond:60,                   // 4.1.2
+            flightTestTakeoffCheckSeconds:false,
+            flightTestTakeoffPointsPerSecond:0,
+            flightTestTakeoffMissedPoints:200,                   // 4.1.2
+            flightTestCptimeCorrectSecond:2,                     // 4.1.3
+            flightTestCptimePointsPerSecond:1,                   // 4.1.3
+            flightTestCptimeMaxPoints:200,                       // 4.1.3
+            flightTestCpNotFoundPoints:200,                      // 4.1.3
+            flightTestProcedureTurnNotFlownPoints:200,           // 4.1.4
+            flightTestMinAltitudeMissedPoints:500,               // 4.1.5
+            flightTestBadCourseCorrectSecond:5,                  // 3.2.9
+            flightTestBadCoursePoints:200,                       // 4.1.6
+            flightTestBadCourseStartLandingPoints:500,           // 4.1.6
+            flightTestLandingToLatePoints:200,                   // 4.1.6
+            flightTestGivenToLatePoints:100,                     // 4.1.6
+            flightTestSafetyAndRulesInfringementPoints:0,
+            flightTestInstructionsNotFollowedPoints:0,
+            flightTestFalseEnvelopeOpenedPoints:0,
+            flightTestSafetyEnvelopeOpenedPoints:0,
+            flightTestFrequencyNotMonitoredPoints:0,
+            flightTestForbiddenEquipmentPoints:0,
+        
+            // ObservationTest
+            observationTestTurnpointNotFoundPoints:40,           // 4.2
+            observationTestTurnpointFalsePoints:80,              // 4.2
+            observationTestEnrouteValueUnit:EnrouteValueUnit.mm, // 4.2
+            observationTestEnrouteCorrectValue:5.0f,             // 4.2
+            observationTestEnrouteInexactValue:10.0f,            // 4.2
+            observationTestEnrouteInexactPoints:10,              // 4.2
+            observationTestEnrouteNotFoundPoints:20,             // 4.2
+            observationTestEnrouteFalsePoints:40,                // 4.2
+            
+            // LandingTest
+            landingTest1MaxPoints:300,                           // 4.3
+            landingTest1NoLandingPoints:300,                     // 4.3
+            landingTest1OutsideLandingPoints:200,                // 4.3
+            landingTest1RollingOutsidePoints:200,                // 4.3
+            landingTest1PowerInBoxPoints:100,                    // 4.3
+            landingTest1GoAroundWithoutTouchingPoints:200,       // 4.3
+            landingTest1GoAroundInsteadStopPoints:200,           // 4.3
+            landingTest1AbnormalLandingPoints:200,               // 4.3
+            landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
+            landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+        
+            landingTest2MaxPoints:300,                           // 4.3
+            landingTest2NoLandingPoints:300,                     // 4.3
+            landingTest2OutsideLandingPoints:200,                // 4.3
+            landingTest2RollingOutsidePoints:200,                // 4.3
+            landingTest2PowerInBoxPoints:100,                    // 4.3
+            landingTest2GoAroundWithoutTouchingPoints:200,       // 4.3
+            landingTest2GoAroundInsteadStopPoints:200,           // 4.3
+            landingTest2AbnormalLandingPoints:200,               // 4.3
+            landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
+            landingTest2PowerInAirPoints:0,
+            landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+            
+            landingTest3MaxPoints:300,                           // 4.3
+            landingTest3NoLandingPoints:300,                     // 4.3
+            landingTest3OutsideLandingPoints:200,                // 4.3
+            landingTest3RollingOutsidePoints:200,                // 4.3
+            landingTest3PowerInBoxPoints:100,                    // 4.3
+            landingTest3GoAroundWithoutTouchingPoints:200,       // 4.3
+            landingTest3GoAroundInsteadStopPoints:200,           // 4.3
+            landingTest3AbnormalLandingPoints:200,               // 4.3
+            landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
+            landingTest3PowerInAirPoints:0,
+            landingTest3FlapsInAirPoints:0,
+            landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+            
+            landingTest4MaxPoints:300,                           // 4.3
+            landingTest4NoLandingPoints:300,                     // 4.3
+            landingTest4OutsideLandingPoints:200,                // 4.3
+            landingTest4RollingOutsidePoints:200,                // 4.3
+            landingTest4PowerInBoxPoints:100,                    // 4.3
+            landingTest4GoAroundWithoutTouchingPoints:200,       // 4.3
+            landingTest4GoAroundInsteadStopPoints:200,           // 4.3
+            landingTest4AbnormalLandingPoints:200,               // 4.3
+            landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
+            landingTest4TouchingObstaclePoints:0,
+            landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
+            
+            // Defaults
+            scGateWidth:2.0f,
+            unsuitableStartNum:"13",
+            turnpointRule:TurnpointRule.AssignTrueFalse,
+            turnpointMapMeasurement:false,
+            enroutePhotoRule:EnrouteRule.MapOrMeasurement,
+            enrouteCanvasRule:EnrouteRule.None,
+            enrouteCanvasMultiple:false,
+            minRouteLegs:0,
+            maxRouteLegs:8,                                      // 3.2.3
+            minEnroutePhotos:0,
+            maxEnroutePhotos:20,
+            minEnrouteCanvas:0,
+            maxEnrouteCanvas:15,
+            minEnrouteTargets:0,
+            maxEnrouteTargets:35
+        ]
+    ) // fc.contestrule.de.nav.2017
+
 
 	ContestRules(String titleCode, Map ruleValues) 
 	{
@@ -1314,7 +1456,8 @@ enum ContestRules
     static List GetContestRules()
     {
         List ret = []
-        ret += R1  // fc.contestrule.de.nav.2017
+        ret += R1  // fc.contestrule.de.nav.2018
+        ret += R11 // fc.contestrule.de.nav.2017
         ret += R4  // fc.contestrule.fai.precision.2017
         ret += R6  // fc.contestrule.fai.rally.2017
         ret += R5  // fc.contestrule.ch.precision.2017

@@ -288,8 +288,11 @@ class Coord
 		}
 	}
 	
-    String titleCode()
+    String titleCode(boolean isPrint = false)
 	{
+        if (isPrint) {
+            return titlePrintCode()
+        }
 		switch (type) {
 			case CoordType.TP:
             case CoordType.SECRET:

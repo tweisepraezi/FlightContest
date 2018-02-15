@@ -1874,7 +1874,7 @@ class PointsTagLib
                     if (sign != EnrouteCanvasSign.None) {
                         outln"""                <tr class="value">"""
                         outln"""                    <td class="name">${sign.canvasName}</td>"""
-                        outln"""                    <td class="value"><img src="${createLinkTo(dir:'',file:sign.imageName)}"/></td>"""
+                        outln"""                    <td class="value"><img src="${createLinkTo(dir:'',file:sign.imageJpgName)}"/></td>"""
                         outln"""                </tr>"""
                     }
                 }

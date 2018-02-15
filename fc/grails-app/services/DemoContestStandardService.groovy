@@ -10,7 +10,7 @@ class DemoContestStandardService
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,aflosDB,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R11,aflosDB,testExists)
 
 		// Teams
 		Map team1 = fcService.putTeam(contest,"Deutschland")
@@ -277,7 +277,7 @@ class DemoContestStandardService
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,aflosDB,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R11,aflosDB,testExists)
 
 		// Classes with properties
 		Map resultclass1 = fcService.putResultClass(contest,"Pr\u00E4zi","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -552,7 +552,7 @@ class DemoContestStandardService
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,true,0,ContestRules.R1,aflosDB,testExists) // 0 - keine Team-Auswertung
+        Map contest = fcService.putContest(testName,printPrefix,200000,true,0,ContestRules.R11,aflosDB,testExists) // 0 - keine Team-Auswertung
 		
 		// Route 1
         Map route1 = [:]

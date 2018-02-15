@@ -66,10 +66,6 @@
                         <g:set var="geodata_airspace" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRSPACES).exists()}"/>
                         <fieldset>
                             <div>
-                                <g:checkBox name="contestMapContourLines" value="${routeInstance.contestMapContourLines}" tabIndex="${ti[0]++}" />
-                                <label>${message(code:'fc.contestmap.contestmapcontourlines')}</label>
-                            </div>
-                            <div>
                                 <g:checkBox name="contestMapGraticule" value="${routeInstance.contestMapGraticule}" tabIndex="${ti[0]++}" />
                                 <label>${message(code:'fc.contestmap.contestmapgraticule')}</label>
                             </div>
@@ -115,6 +111,10 @@
                                        <img src="${createLinkTo(dir:'images/map',file:'peak.png')}"/>
                                    </div>
                                </g:if>
+                                <div>
+                                    <g:checkBox name="contestMapContourLines" value="${routeInstance.contestMapContourLines}" tabIndex="${ti[0]++}" />
+                                    <label>${message(code:'fc.contestmap.contestmapcontourlines')}</label>
+                                </div>
                                <g:if test="${geodata_additionals}">
                                    <div>
                                        <g:checkBox name="contestMapAdditionals" value="${routeInstance.contestMapAdditionals}" tabIndex="${ti[0]++}" />

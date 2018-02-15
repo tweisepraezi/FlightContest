@@ -154,7 +154,7 @@ class FcService
             }
 			
 			boolean calculate_points = false
-            Map old_contestrulepoints_values = GetContestRulePointsValues(contest_instance)
+            Map old_contestrulepoints_values = GetContestRulePointsValues(contest_instance, true)
 			
 			boolean result_classes = contest_instance.resultClasses
 			ContestRules contest_rule = contest_instance.contestRule
@@ -299,7 +299,7 @@ class FcService
             
 			if (modify_contest_rule) {
 				println "Contest rule modfified."
-				setContestRulePoints(contest_instance, contest_instance.contestRule)
+				setContestRulePoints(contest_instance, contest_instance.contestRule, true)
                 setContestRuleDefaults(contest_instance, contest_instance.contestRule)
                 calculate_points = true
 			}
@@ -624,7 +624,7 @@ class FcService
     {
         Contest contest_instance = new Contest(params)
         
-		setContestRulePoints(contest_instance, contest_instance.contestRule)
+		setContestRulePoints(contest_instance, contest_instance.contestRule, true)
         setContestRuleDefaults(contest_instance, contest_instance.contestRule)
 		
 		contest_instance.imageBottomLeftText = getPrintMsg('fc.contest.image.bottomleft.text')
@@ -645,9 +645,9 @@ class FcService
     Map standardpointsContest(Map params)
     {
         Contest contest_instance = Contest.get(params.id)
-        Map old_contestrulepoints_values = GetContestRulePointsValues(contest_instance)
+        Map old_contestrulepoints_values = GetContestRulePointsValues(contest_instance, true)
         
-        setContestRulePoints(contest_instance, contest_instance.contestRule)
+        setContestRulePoints(contest_instance, contest_instance.contestRule, true)
         if (IsContestRulePointsValueModified(contest_instance,old_contestrulepoints_values)) {
             calculate_points_contest(contest_instance)
         }
@@ -678,13 +678,16 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-	private void setContestRulePoints(toInstance, ContestRules contestRule)
+	private void setContestRulePoints(toInstance, ContestRules contestRule, boolean isContest)
 	{
 		println "setContestRulePoints '${getMsg(contestRule.titleCode)}'"
 		
 		// General
 		toInstance.precisionFlying = contestRule.ruleValues.precisionFlying
         toInstance.increaseFactor = contestRule.ruleValues.increaseFactor
+        if (isContest) {
+            toInstance.printStyle = contestRule.ruleValues.printStyle
+        }
         toInstance.printLandingCalculatorValues = contestRule.ruleValues.printLandingCalculatorValues
         toInstance.printPointsGeneral = contestRule.ruleValues.printPointsGeneral
 		toInstance.printPointsPlanningTest = contestRule.ruleValues.printPointsPlanningTest
@@ -815,13 +818,16 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map GetContestRulePointsValues(fromInstance)
+    Map GetContestRulePointsValues(fromInstance, boolean isContest)
     {
         Map values = [:]
         
         // General
         values += [precisionFlying:fromInstance.precisionFlying]
         values += [increaseFactor:fromInstance.increaseFactor]
+        if (isContest) {
+            values += [printStyle:fromInstance.printStyle]
+        }
         values += [printLandingCalculatorValues:fromInstance.printLandingCalculatorValues]
         values += [printPointsGeneral:fromInstance.printPointsGeneral]
         values += [printPointsPlanningTest:fromInstance.printPointsPlanningTest]
@@ -962,6 +968,7 @@ class FcService
         if (fromInstance.increaseFactor != oldContestRuleValues.increaseFactor) {return true;}
         /*
         if (fromInstance.precisionFlying != oldContestRuleValues.precisionFlying) {return true;}
+        if (fromInstance.printStyle != oldContestRuleValues.printStyle) {return true;}
         if (fromInstance.printLandingCalculatorValues != oldContestRuleValues.printLandingCalculatorValues) {return true;}
         if (fromInstance.printPointsGeneral != oldContestRuleValues.printPointsGeneral) {return true;}
         if (fromInstance.printPointsPlanningTest != oldContestRuleValues.printPointsPlanningTest) {return true;}
@@ -3892,7 +3899,7 @@ class FcService
             }
             
 			ContestRules contest_rule = resultclass_instance.contestRule
-            Map old_contestrulepoints_values = GetContestRulePointsValues(resultclass_instance)
+            Map old_contestrulepoints_values = GetContestRulePointsValues(resultclass_instance, false)
             
 			boolean contest_planning_results = resultclass_instance.contestPlanningResults
 			boolean contest_flight_results = resultclass_instance.contestFlightResults
@@ -3961,7 +3968,7 @@ class FcService
 											 
 			if (modify_contest_rule) {
 				println "Contest rule modfified."
-				setContestRulePoints(resultclass_instance, resultclass_instance.contestRule)
+				setContestRulePoints(resultclass_instance, resultclass_instance.contestRule, false)
 			}
 			
 			if (modify_contest_results) {
@@ -4051,7 +4058,7 @@ class FcService
 		if (!params.shortName) {
 			resultclass_instance.shortName = resultclass_instance.GetDefaultShortName()
 		}
-		setContestRulePoints(resultclass_instance, resultclass_instance.contestRule)
+		setContestRulePoints(resultclass_instance, resultclass_instance.contestRule, false)
 		
         if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
 			// create TaskClasses
@@ -4073,9 +4080,9 @@ class FcService
     Map standardpointsResultClass(Map params)
     {
         ResultClass resultclass_instance = ResultClass.get(params.id)
-        Map old_contestrulepoints_values = GetContestRulePointsValues(resultclass_instance)
+        Map old_contestrulepoints_values = GetContestRulePointsValues(resultclass_instance, false)
         
-        setContestRulePoints(resultclass_instance, resultclass_instance.contestRule)
+        setContestRulePoints(resultclass_instance, resultclass_instance.contestRule, false)
         if (IsContestRulePointsValueModified(resultclass_instance,old_contestrulepoints_values)) {
             calculate_points_resultclass(resultclass_instance)
         }
@@ -7516,7 +7523,7 @@ class FcService
                     resultclass_instance = new ResultClass(name:params.resultclassname)
                     resultclass_instance.contest = crew_instance.contest
 					resultclass_instance.contestRule = crew_instance.contest.contestRule
-					setContestRulePoints(resultclass_instance, resultclass_instance.contestRule)
+					setContestRulePoints(resultclass_instance, resultclass_instance.contestRule, false)
 					resultclass_instance.shortName = resultclass_instance.GetDefaultShortName()
 					resultclass_instance.save()
 					println "saveCrew (new class): $resultclass_instance.name saved."
@@ -13041,7 +13048,7 @@ class FcService
 			resultclass_instance.name = name
 			resultclass_instance.contestTitle = contestTitle
 			resultclass_instance.contestRule = contestRule
-			setContestRulePoints(resultclass_instance, resultclass_instance.contestRule)
+			setContestRulePoints(resultclass_instance, resultclass_instance.contestRule, false)
 			if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
 				Map ret = ['instance':resultclass_instance,'saved':true,'message':getMsg('fc.created',["${resultclass_instance.name}"])]
 				printdone "$ret (modified)"

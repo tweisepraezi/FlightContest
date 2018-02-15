@@ -29,12 +29,6 @@ class GpxService
 	final static BigDecimal ftPerMeter = 3.2808 // 1 meter = 3,2808 feet
     final static BigDecimal kmPerNM = 1.852f    // 1 NM = 1.852 km
     
-    final static Float GPXSHOWPPOINT_RADIUS_CHECKPOINT = 2.0f   // Anzeigeradius um Checkpunkt in NM
-    final static Float GPXSHOWPPOINT_RADIUS_ERRORPOINT = 2.0f   // Anzeigeradius um Fehlerpunkt in NM
-    final static Float GPXSHOWPPOINT_RADIUS_AIRFIELD = 0.5f   // Anzeigeradius um Flugplatz in NM
-    final static Float GPXSHOWPPOINT_RADIUS_ENROUTESIGN = 0.5f   // Anzeigeradius um Strecken-Objekt in NM
-    final static int GPXSHOWPPOINT_SCALE = 4                     // Nachkommastellen für Koordinaten
-    
     final static int MAP_WIDTH = 2000           // Karten-Breite in Pixel
     final static int MAP_HEIGHT = 2600          // Karten-Höhe in Pixel, > MAP_WIDTH
     final static String MAP_FONT_NAME = "Arial" // Schriftart zum Schreiben auf Karte
@@ -333,7 +327,8 @@ class GpxService
             printerror err_msg
         }
         if (routeInstance) {
-            ret += [gpxShowPoints:GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
+            println "Generate points for buttons (GetShowPointsRoute)"
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -465,7 +460,8 @@ class GpxService
             printerror err_msg
         }
         if (routeInstance) {
-            ret += [gpxShowPoints:GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
+            println "Generate points for buttons (GetShowPointsRoute)"
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -508,9 +504,8 @@ class GpxService
 
         List show_points = []
         if (showPoints) {
-            printstart "Generate points for buttons"
-            show_points = GetShowPointsRoute(routeInstance, null, wrEnrouteSign, contestMap)
-            printdone ""
+            println "Generate points for buttons (GetShowPointsRoute)"
+            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, wrEnrouteSign, contestMap)
         }
         
         printdone ""
@@ -566,7 +561,8 @@ class GpxService
         } else {
             printerror err_msg
         }
-        ret += [gpxShowPoints:GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
+        println "Generate points for buttons (GetShowPointsRoute)"
+        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
         ret += [ok:converted]
         return ret
     }
@@ -1185,13 +1181,13 @@ class GpxService
         
         List show_points = []
         if (showPoints) {
-            printstart "Generate points for buttons"
             if (testInstance.IsLoggerResultWithoutRunwayMissed()) {
+                println "Generate points for buttons (GetShowPoints)"
                 show_points = GetShowPoints(gpxFileName, wrEnrouteSign)
             } else {
-                show_points = GetShowPointsRoute(route_instance, testInstance, wrEnrouteSign)
+                println "Generate points for buttons (GetShowPointsRoute)"
+                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, wrEnrouteSign)
             }
-            printdone ""
         }
         
         printdone ""
@@ -1222,7 +1218,7 @@ class GpxService
                 if (p.extensions.flightcontest.badcourse && p.extensions.flightcontest.badcourse.'@duration'[0]) {
                     String duration = p.extensions.flightcontest.badcourse.'@duration'[0]
                     Map new_point = [name:getMsg("fc.offlinemap.badcourse.seconds", [duration], false)] // false - no Print
-                    new_point += [latcenter:p.'@lat', loncenter:p.'@lon', radius:GPXSHOWPPOINT_RADIUS_ERRORPOINT]
+                    new_point += [latcenter:p.'@lat', loncenter:p.'@lon', radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_ERRORPOINT]
                     if (p.extensions.flightcontest.badcourse.text() == "yes") {
                         new_point += [error:true]
                     } else {
@@ -1232,7 +1228,7 @@ class GpxService
                 }
                 if (p.extensions.flightcontest.badturn) {
                     Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false)] // false - no Print
-                    new_point += [latcenter:p.'@lat', loncenter:p.'@lon', radius:GPXSHOWPPOINT_RADIUS_ERRORPOINT]
+                    new_point += [latcenter:p.'@lat', loncenter:p.'@lon', radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_ERRORPOINT]
                     if (p.extensions.flightcontest.badturn.text() == "yes") {
                         new_point += [error:true]
                     } else {
@@ -1244,9 +1240,9 @@ class GpxService
                     Map new_point = [name:p.extensions.flightcontest.gate.'@name'[0]]
                     new_point += [latcenter:p.'@lat', loncenter:p.'@lon']
                     if (p.extensions.flightcontest.gate.'@runway'[0] == "yes") {
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_AIRFIELD]
                     } else {
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_CHECKPOINT]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_CHECKPOINT]
                     }
                     points += new_point
                 } 
@@ -1254,9 +1250,9 @@ class GpxService
                     Map new_point = [name:p.extensions.flightcontest.badgate.'@name'[0]]
                     new_point += [latcenter:p.'@lat', loncenter:p.'@lon']
                     if (p.extensions.flightcontest.badgate.'@runway'[0] == "yes") {
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_AIRFIELD]
                     } else {
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_CHECKPOINT]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_CHECKPOINT]
                     }
                     if (p.extensions.flightcontest.badgate.text() == "yes") {
                         new_point += [error:true]
@@ -1269,9 +1265,9 @@ class GpxService
                     Map new_point = [name:p.extensions.flightcontest.gatenotfound.'@name'[0]]
                     new_point += [latcenter:p.extensions.flightcontest.gatenotfound.'@lat'[0], loncenter:p.extensions.flightcontest.gatenotfound.'@lon'[0]]
                     if (p.extensions.flightcontest.gatenotfound.'@runway'[0] == "yes") {
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_AIRFIELD]
                     } else {
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_CHECKPOINT]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_CHECKPOINT]
                     }
                     if (p.extensions.flightcontest.gatenotfound.text() == "yes") {
                         new_point += [error:true]
@@ -1284,13 +1280,13 @@ class GpxService
                     if (p.extensions.flightcontest.enroutephoto) {
                         Map new_point = [name:p.extensions.flightcontest.enroutephoto.'@name'[0], enroutephoto:true]
                         new_point += [latcenter:p.extensions.flightcontest.enroutephoto.'@lat'[0], loncenter:p.extensions.flightcontest.enroutephoto.'@lon'[0]]
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_ENROUTESIGN]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_ENROUTESIGN]
                         points += new_point
                     }
                     if (p.extensions.flightcontest.enroutecanvas) {
                         Map new_point = [name:p.extensions.flightcontest.enroutecanvas.'@name'[0], enroutecanvas:true]
                         new_point += [latcenter:p.extensions.flightcontest.enroutecanvas.'@lat'[0], loncenter:p.extensions.flightcontest.enroutecanvas.'@lon'[0]]
-                        new_point += [radius:GPXSHOWPPOINT_RADIUS_ENROUTESIGN]
+                        new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_ENROUTESIGN]
                         points += new_point
                     }
                 }
@@ -1305,10 +1301,10 @@ class GpxService
                         case "LDG":
                         case "iTO":
                         case "iLDG":
-                            new_point += [radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
+                            new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_AIRFIELD]
                             break
                         default:
-                            new_point += [radius:GPXSHOWPPOINT_RADIUS_CHECKPOINT]
+                            new_point += [radius:RoutePointsTools.GPXSHOWPPOINT_RADIUS_CHECKPOINT]
                             break
                     }
                     points += new_point
@@ -1320,303 +1316,6 @@ class GpxService
         printdone ""
         return points
     }
-    
-    //--------------------------------------------------------------------------
-    private List GetShowPointsRoute(Route routeInstance, Test testInstance, boolean showEnrouteSign, Map contestMap = [:])
-    {
-        printstart "GetShowPointsRoute showEnrouteSign:$showEnrouteSign contestMap=$contestMap" 
-        List points = []
-        
-        CoordRoute last_coordroute_instance = null
-        CoordRoute lasttp_coordroute_instance = null
-        List enroute_points = []
-        int enroute_point_pos = 0
-        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-            // add enroute points
-            if (showEnrouteSign && (enroute_point_pos < enroute_points.size())) {
-                Map from_tp_leg = AviationMath.calculateLeg(coordroute_instance.latMath(), coordroute_instance.lonMath(), lasttp_coordroute_instance.latMath(), lasttp_coordroute_instance.lonMath())
-                while ((enroute_point_pos < enroute_points.size()) && (enroute_points[enroute_point_pos].dist < from_tp_leg.dis)) {
-                    points += enroute_points[enroute_point_pos]
-                    enroute_point_pos++
-                }
-            }
-            
-            // add additional error points
-            if (testInstance) {
-                if (testInstance.IsLoggerResult()) {
-                    points += GetErrorPoints(testInstance, coordroute_instance, last_coordroute_instance)
-                } else {
-                    points += GetErrorPointsOld(testInstance, coordroute_instance, last_coordroute_instance)
-                }
-            }
-            
-            // add regular point
-            if (!contestMap || coordroute_instance.type.IsContestMapCoord()) {
-                Map new_point = [name:coordroute_instance.titleCode()]
-                new_point += GetPointCoords(coordroute_instance)
-                if (testInstance) {
-                    new_point += GetPointGateMissed(testInstance, coordroute_instance)
-                }
-                points += new_point
-            }
-            
-            // cache enroute points
-            if (showEnrouteSign) {
-                if (coordroute_instance.type.IsEnrouteSignCoord()) {
-                    enroute_points = GetEnrouteSignShowPoints(routeInstance,coordroute_instance.type,coordroute_instance.titleNumber)
-                    enroute_point_pos = 0
-                    lasttp_coordroute_instance = coordroute_instance
-                } else if (coordroute_instance.type != CoordType.SECRET) {
-                    enroute_points = []
-                    enroute_point_pos = 0
-                }
-            }
-            
-            last_coordroute_instance = coordroute_instance
-        }
-        
-        // add unknown enroute points
-        if (showEnrouteSign) {
-            enroute_points = GetEnrouteSignShowPoints(routeInstance, CoordType.UNKNOWN, 1) // CoordType.UNKNOWN: 0 - Unevaluated, 1 - NotFound
-            for (Map enroute_point in enroute_points) {
-                Map new_point = enroute_point
-                new_point += [error:true]
-                points += new_point
-            }
-        }
-        
-        printdone ""
-        return points
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map GetPointCoords(CoordRoute coordrouteInstance)
-    {
-        Map ret = [:]
-        if (coordrouteInstance.type == CoordType.SECRET) {
-            ret += [latcenter:coordrouteInstance.latMath(),loncenter:coordrouteInstance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_CHECKPOINT]
-        } else if (coordrouteInstance.type.IsCpCheckCoord()) {
-            ret += [latcenter:coordrouteInstance.latMath(),loncenter:coordrouteInstance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_CHECKPOINT]
-        } else {
-            ret += [latcenter:coordrouteInstance.latMath(),loncenter:coordrouteInstance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_AIRFIELD]
-        }
-        ret.latcenter = ret.latcenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-        ret.loncenter = ret.loncenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-        return ret
-    }
-    
-    //--------------------------------------------------------------------------
-    private List GetEnrouteSignShowPoints(Route routeInstance, CoordType coordType, int titleNumber)
-    {
-        List enroute_points = []
-        
-        // CoordEnroutePhoto
-        if (routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
-            for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRouteAndTypeAndTitleNumber(routeInstance,coordType,titleNumber,[sort:"enrouteViewPos"])) {
-                Map new_point = [name:coordenroutephoto_instance.enroutePhotoName, dist:coordenroutephoto_instance.enrouteDistance, enroutePhoto:true, , enroutephoto:true]
-                new_point += GetPointEnrouteCoords(coordenroutephoto_instance)
-                enroute_points += new_point
-            }
-        }
-        
-        // CoordEnrouteCanvas
-        if (routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
-            for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRouteAndTypeAndTitleNumber(routeInstance,coordType,titleNumber,[sort:"enrouteViewPos"])) {
-                Map new_point = [name:coordenroutecanvas_instance.enrouteCanvasSign.canvasName, dist:coordenroutecanvas_instance.enrouteDistance, enroutePhoto:false, enroutecanvas:true]
-                new_point += GetPointEnrouteCoords(coordenroutecanvas_instance)
-                enroute_points += new_point
-            }
-        }
-        
-        // sort enroute points
-        enroute_points.sort { p1, p2 ->
-            p1.dist.compareTo(p2.dist)
-        }
-
-        return enroute_points
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map GetPointEnrouteCoords(Coord coordInstance)
-    {
-        Map ret = [:]
-        ret += [latcenter:coordInstance.latMath(),loncenter:coordInstance.lonMath(),radius:GPXSHOWPPOINT_RADIUS_ENROUTESIGN]
-        ret.latcenter = ret.latcenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-        ret.loncenter = ret.loncenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-        return ret
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map GetPointGateMissed(Test testInstance, CoordRoute coordrouteInstance)
-    {
-        Map error_point = [:]
-        for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
-            if (coordrouteInstance.title() == coordresult_instance.title()) {
-                if (coordresult_instance.resultEntered) {
-                    if (coordresult_instance.resultCpNotFound) {
-                        if ((coordresult_instance.type == CoordType.SECRET) && (!testInstance.IsFlightTestCheckSecretPoints())) {
-                            error_point += [warning:true]
-                        } else if (testInstance.task.disabledCheckPointsNotFound.contains(coordresult_instance.title()+',')) {
-                            error_point += [warning:true]
-                        } else if (testInstance.GetFlightTestCpNotFoundPoints() == 0) {
-                            error_point += [warning:true]
-                        } else {
-                            switch(coordresult_instance.type) {
-                                case CoordType.TO:
-                                    if (testInstance.IsFlightTestCheckTakeOff() || testInstance.GetFlightTestTakeoffCheckSeconds()) {
-                                        error_point += [error:true]
-                                    }
-                                    break
-                                case CoordType.LDG:
-                                    if (testInstance.IsFlightTestCheckLanding()) {
-                                        error_point += [error:true]
-                                    }
-                                    break
-                                default:
-                                    error_point += [error:true]
-                                    break
-                            }
-                        }
-                    }
-                }
-                break
-            }
-        }
-        return error_point
-    }
-    
-    //--------------------------------------------------------------------------
-    private List GetErrorPoints(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance)
-    {
-        List error_points = []
-        if (coordrouteInstance && lastCoordrouteInstance) {
-            
-            CoordResult coordresult_instance = GetCoordResult(testInstance, coordrouteInstance)
-            CoordResult last_coordresult_instance = GetCoordResult(testInstance, lastCoordrouteInstance)
-            String utc = ""
-            String last_utc = ""
-            for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
-                if (calcresult_instance.IsCoordTitleEqual(coordrouteInstance.type,coordrouteInstance.titleNumber)) {
-                    utc = calcresult_instance.utc
-                }
-                if (calcresult_instance.IsCoordTitleEqual(lastCoordrouteInstance.type,lastCoordrouteInstance.titleNumber)) {
-                    last_utc = calcresult_instance.utc
-                }
-                if (utc && last_utc) {
-                    break
-                }
-            }
-            
-            if (utc && last_utc) {
-                for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
-                    if ((last_utc < calcresult_instance.utc) && (calcresult_instance.utc < utc)) {
-                        if (calcresult_instance.badTurn && !calcresult_instance.judgeDisabled) {
-                            if (testInstance.task.procedureTurnDuration > 0) {
-                                if (coordresult_instance.resultProcedureTurnEntered && coordresult_instance.planProcedureTurn) {
-                                    if (coordresult_instance.resultProcedureTurnNotFlown) {
-                                        Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false)] // false - no Print
-                                        new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
-                                        if (testInstance.task.disabledCheckPointsProcedureTurn.contains(last_coordresult_instance.title()+',')) {
-                                            new_point += [warning:true] // noBadTurn
-                                        } else if (testInstance.GetFlightTestProcedureTurnNotFlownPoints() == 0) {
-                                            new_point += [warning:true] // noBadTurn
-                                        } else {
-                                            new_point += [error:true] // no noBadTurn
-                                        }
-                                        error_points += new_point
-                                    }
-                                }
-                            }
-                        }
-                        if (calcresult_instance.badCourse && calcresult_instance.badCourseSeconds && !calcresult_instance.judgeDisabled) {
-                           if (coordresult_instance.resultEntered && coordresult_instance.type.IsBadCourseCheckCoord()) {
-                                Map new_point = [name:getMsg("fc.offlinemap.badcourse.seconds", [calcresult_instance.badCourseSeconds], false)] // false - no Print
-                                new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
-                                if (testInstance.task.disabledCheckPointsBadCourse.contains(coordresult_instance.title()+',')) {
-                                    new_point += [warning:true] // noBadCourse
-                                } else if (testInstance.GetFlightTestBadCoursePoints() == 0) {
-                                    new_point += [warning:true] // noBadCourse
-                                } else if (calcresult_instance.badCourseSeconds <= testInstance.GetFlightTestBadCourseCorrectSecond()) {
-                                    new_point += [warning:true] // noBadCourse
-                                } else {
-                                    new_point += [error:true] // no noBadCourse
-                                }
-                                error_points += new_point
-                            }
-                        }
-                    }
-                }
-            }
-            
-        }
-        return error_points
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map GetPointCoords2(BigDecimal latValue, BigDecimal lonValue)
-    {
-        Map ret = [latcenter:latValue,loncenter:lonValue,radius:GPXSHOWPPOINT_RADIUS_ERRORPOINT] 
-        ret.latcenter = ret.latcenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-        ret.loncenter = ret.loncenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
-        return ret
-    }
-    
-    //--------------------------------------------------------------------------
-    private List GetErrorPointsOld(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance)
-    {
-        List error_points = []
-        CoordResult coordresult_instance = GetCoordResult(testInstance, coordrouteInstance)
-        CoordResult last_coordresult_instance = GetCoordResult(testInstance, lastCoordrouteInstance)
-        if (coordresult_instance) {
-            
-            // procedure turn not flown
-            if ((testInstance.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (testInstance.task.procedureTurnDuration > 0)) {
-                if (coordresult_instance.resultProcedureTurnEntered && coordresult_instance.planProcedureTurn) {
-                    if (coordresult_instance.resultProcedureTurnNotFlown) {
-                        Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false)] // false - no Print
-                        new_point += GetPointCoords(lastCoordrouteInstance)
-                        if (!testInstance.task.disabledCheckPointsProcedureTurn.contains(last_coordresult_instance.title()+',')) {
-                            new_point += [error:true]
-                        } else {
-                            new_point += [warning:true]
-                        }
-                        error_points += new_point
-                    }
-                }
-            }
-            
-            // bad course
-            if (testInstance.GetFlightTestBadCoursePoints() > 0) {
-                if (coordresult_instance.resultEntered && coordresult_instance.type.IsBadCourseCheckCoord()) {
-                    if (coordresult_instance.resultBadCourseNum > 0) {
-                        Map new_point = [name:getMsg("fc.offlinemap.badcourse.number", [coordresult_instance.resultBadCourseNum], false)] // false - no Print
-                        
-                        new_point += GetPointCoords(coordrouteInstance)
-                        if (!testInstance.task.disabledCheckPointsBadCourse.contains(coordresult_instance.title()+',')) {
-                            new_point += [error:true]
-                        } else {
-                            new_point += [warning:true]
-                        }
-                        error_points += new_point
-                    }
-                }
-            }
-        }
-        return error_points
-    }
-    
-    //--------------------------------------------------------------------------
-    private CoordResult GetCoordResult(Test testInstance, CoordRoute coordrouteInstance)
-    {
-        if (coordrouteInstance) {
-            for (CoordResult coordresult_instance in CoordResult.findAllByTest(testInstance,[sort:"id"])) {
-                if (coordrouteInstance.title() == coordresult_instance.title()) {
-                    return coordresult_instance
-                }
-            }
-        }
-        return null
-    } 
     
     //--------------------------------------------------------------------------
     private void GPXRoute(Route routeInstance, FlightTestWind flighttestwindInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml, Map contestMap = [:])
@@ -2434,7 +2133,7 @@ class GpxService
                             for (Map calc_result in calc_results) {
                                 if (calc_result.utc == p.utc) {
                                     if (observationsign_used && !calc_result.badCourse && !calc_result.badTurn && !calc_result.gateMissed && !calc_result.gateNotFound && calc_result.coordType.IsEnrouteSignCoord()) { // cache enroute photo / canvas data
-                                        enroute_points = GetEnrouteSignShowPoints(route_instance,calc_result.coordType,calc_result.titleNumber)
+                                        enroute_points = RoutePointsTools.GetEnrouteSignShowPoints(route_instance,calc_result.coordType,calc_result.titleNumber)
                                         enroute_point_pos = 0
                                         from_tp = [titleCode:calc_result.titleCode, latitude:calc_result.latitude, longitude:calc_result.longitude]
                                     }

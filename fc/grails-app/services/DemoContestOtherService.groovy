@@ -9,7 +9,7 @@ class DemoContestOtherService
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R1,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R11,aflosDB,testExists)
         
         // Crews with Teams, ResultClasses and Aircrafts
         Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","crew1.1.fc@localhost","Deutschland","","D-EAAA","","",85)
@@ -93,7 +93,7 @@ class DemoContestOtherService
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R1,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R11,aflosDB,testExists)
         
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"Class-1","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -192,7 +192,7 @@ class DemoContestOtherService
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
     
         // Crews and Aircrafts
         (1..100).each {
@@ -211,7 +211,7 @@ class DemoContestOtherService
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R1,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
         // Crews and Aircrafts
         (1..20).each {
             fcService.putCrew(contest,it,"Name-${it.toString()}","crew-${it.toString()}.fc@localhost","Deutschland","","D-${it.toString()}","C172","rot",110)

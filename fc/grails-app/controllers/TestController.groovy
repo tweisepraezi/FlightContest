@@ -7,6 +7,7 @@ class TestController
     def imageService
 	def fcService
     def gpxService
+    def kmlService
     def calcService
     def mailService
 
@@ -1525,6 +1526,39 @@ class TestController
                 }
                 gpxService.DeleteFile(upload_gpx_file_name)
                 gpxService.printerror flash.message
+                redirect(action:'flightresults',id:params.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+
+    }
+     
+    def kmzexport = {
+        Map test = domainService.GetTest(params)
+        if (test.instance) {
+            kmlService.printstart "Export logger data of '${test.instance.crew.name}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.kmz"
+            Map converter = kmlService.ConvertTest2KMZ(test.instance, webroot_dir, upload_kmz_file_name, false, true) // false - no Print, true - wrEnrouteSign
+            if (converter.ok && converter.track) {
+                String logger_file_name = (test.instance.GetTitle(ResultType.Flight) + '.kmz').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${logger_file_name}")
+                kmlService.Download(webroot_dir + upload_kmz_file_name, logger_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                if (converter.ok && !converter.track) {
+                    flash.message = message(code:'fc.kmz.noflight',args:[test.instance.crew.name])
+                } else {
+                    flash.message = message(code:'fc.kmz.notexported',args:[test.instance.crew.name])
+                }
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printerror flash.message
                 redirect(action:'flightresults',id:params.id)
             }
         } else {

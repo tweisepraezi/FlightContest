@@ -1,3 +1,5 @@
+import java.util.List;
+
 class Route 
 {
     def grailsApplication
@@ -30,7 +32,7 @@ class Route
     boolean contestMapEnroutePhotos = false
     boolean contestMapEnrouteCanvas = false
     boolean contestMapGraticule = true
-    boolean contestMapContourLines = true
+    boolean contestMapContourLines = false
     boolean contestMapAirfields = true
     boolean contestMapChurches = true
     boolean contestMapCastles = true
@@ -245,6 +247,17 @@ class Route
             switch (coordroute_instance.type) {
                 case CoordType.iLDG:
                 case CoordType.iTO:
+                    return true
+            }
+        }
+        return false
+    }
+    
+    boolean IsIntermediateSP()
+    {
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,,[sort:"id"])) {
+            switch (coordroute_instance.type) {
+                case CoordType.iSP:
                     return true
             }
         }
@@ -956,4 +969,21 @@ class Route
         return null
     }
     
+    List GetCurvedPointIds()
+    {
+        List curved_point_ids = []
+        boolean curved_point = false
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id",order:"desc"])) {
+            if (curved_point) {
+                if (coordroute_instance.type != CoordType.SECRET) {
+                    curved_point = false
+                } else {
+                    curved_point_ids += coordroute_instance.id
+                }
+            } else if (coordroute_instance.endCurved) {
+                curved_point = true
+            }
+        }
+        return curved_point_ids
+    }
 }

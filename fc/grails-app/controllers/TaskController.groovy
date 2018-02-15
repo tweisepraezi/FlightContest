@@ -4,6 +4,7 @@ class TaskController {
 
     def domainService
     def imageService
+    def kmlService
     def printService
 	def fcService
     def evaluationService
@@ -1140,6 +1141,38 @@ class TaskController {
 	    }
 	}
     
+    def kmzexport = {
+        Map task = domainService.GetTask(params)
+        if (task.instance) {
+            kmlService.printstart "Export '${task.instance.name()}'"
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.gpx"
+            Map converter = kmlService.ConvertTask2KMZ(task.instance, webroot_dir, upload_kmz_file_name, false, true) // false - no Print, true - wrEnrouteSign
+            if (converter.ok && converter.track) {
+                String task_kmz_file_name = (task.instance.name() + '.kmz').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${task_kmz_file_name}")
+                kmlService.Download(webroot_dir + upload_kmz_file_name, task_kmz_file_name, response.outputStream)
+                kmlService.DeleteFile(task_kmz_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                if (converter.ok && !converter.track) {
+                    flash.message = message(code:'fc.kmz.noflight',args:[task.instance.name()])
+                } else {
+                    flash.message = message(code:'fc.kmz.notexported',args:[task.instance.name()])
+                }
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printerror flash.message
+                redirect(action:'listresults',id:params.id)
+            }
+        } else {
+            flash.message = task.message
+            redirect(action:listresults)
+        }
+    }
+
     def emailnavigationresults = {
         def task = fcService.emailnavigationresultsTask(params,session.printLanguage)
         if (!task.instance) {

@@ -569,6 +569,7 @@ class Task
                     return true
                 }
             }
+            return false
 		}
 		return planningTestRun
 	}
@@ -581,6 +582,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return flightTestRun
 	}
@@ -593,6 +595,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return observationTestRun
 	}
@@ -605,6 +608,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
         return observationTestTurnpointRun || observationTestEnroutePhotoRun || observationTestEnrouteCanvasRun
     }
@@ -617,6 +621,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
         return observationTestTurnpointRun
     }
@@ -629,6 +634,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
         return observationTestEnroutePhotoRun
     }
@@ -641,6 +647,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
         return observationTestEnrouteCanvasRun
     }
@@ -653,6 +660,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return landingTestRun
 	}
@@ -665,6 +673,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return landingTest1Run || landingTest2Run || landingTest3Run || landingTest4Run
 	}
@@ -677,6 +686,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return landingTest1Run
 	}
@@ -689,6 +699,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return landingTest2Run
 	}
@@ -701,6 +712,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return landingTest3Run
 	}
@@ -713,6 +725,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return landingTest4Run
 	}
@@ -725,6 +738,7 @@ class Task
                     return true
                 }
             }
+            return false
         }
 		return specialTestRun
 	}

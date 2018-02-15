@@ -249,6 +249,8 @@ Interessante Test-Daten
     3.0.RC6_2016_SWDR
         Dateien für Strecken-Import
         2  - 3.7. - Logger-Aufzeichnung vor TO mit identischen Punkten
+    2017_07_3.1.RC6_SWDR
+        Bilder und Bodenzeichen im Halbkreis (Koordinaten fehlerhaft)
         
     BC = Bad Course
     BT = Bad Turn

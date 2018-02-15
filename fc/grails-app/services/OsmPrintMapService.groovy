@@ -118,6 +118,10 @@ class OsmPrintMapService
                                        [OldRGBs:[0xdbf1c6], NewRGB:0xffffff], // Wiesen (grün -> weiß)
                                        [OldRGBs:[0xf2efe9], NewRGB:0xffffff], // Felder (grau -> weiß)
                                        [OldRGBs:[0xffffff], NewRGB:0xbbbbbb], // Straße (weiß -> grau)
+                                       [OldRGBs:[0xe892a2], NewRGB:0xf85858], // Straße (rot -> rot)
+                                       [OldRGBs:[0xfcd6a4], NewRGB:0xf85858], // Straße (orange -> rot)
+                                       [OldRGBs:[0xf9b29c], NewRGB:0xf85858], // Straße (orange -> rot)
+                                       [OldRGBs:[0xf7fabf], NewRGB:0xf8f858], // Straße (gelb -> gelb)
                                       ]
     
     // CSV files
