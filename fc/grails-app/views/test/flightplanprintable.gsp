@@ -92,7 +92,7 @@
             <table class="info">
                 <tbody>
                     <tr class="wind">
-                        <td class="title">${message(code:'fc.wind')}:</td>
+                        <td class="title">${message(code:'fc.wind.directionvelocity')}:</td>
                         <td class="value">
                          <g:if test="${testInstance.flighttestwind}">
                              <g:windtextprintable var="${testInstance.flighttestwind.wind}" />
@@ -104,19 +104,19 @@
                     <tr class="planning">
                         <td class="title">
                             <g:if test="${testInstance.task.planningTestDuration == 0}">
-                                ${message(code:'fc.test.planning.publish')}:
+                                ${message(code:'fc.test.planning.publish.localtime')}:
                             </g:if>
                             <g:else>
-                                ${message(code:'fc.test.planning')}:
+                                ${message(code:'fc.test.planning.localtime')}:
                             </g:else>
                         </td>
                         <td class="value">
                             <g:if test="${testInstance.timeCalculated}">
                                 <g:if test="${testInstance.task.planningTestDuration > 0}">
-                                    ${testInstance.testingTime?.format('HH:mm')} - ${testInstance.endTestingTime?.format('HH:mm')}
+                                    ${testInstance.testingTime?.format('HH:mm:ss')} - ${testInstance.endTestingTime?.format('HH:mm:ss')}
                                 </g:if>
                                 <g:else>
-                                    ${testInstance.testingTime?.format('HH:mm')}
+                                    ${testInstance.testingTime?.format('HH:mm:ss')}
                                 </g:else>
                             </g:if>
                             <g:else>
@@ -126,10 +126,10 @@
                     </tr>
                     <g:if test="${show_elapsed_time && !show_local_time}">
 	                    <tr class="takeoff">
-	                        <td class="title">${message(code:'fc.test.takeoff')}:</td>
+	                        <td class="title">${message(code:'fc.test.takeoff.localtime')}:</td>
 	                        <td class="value">
 		                        <g:if test="${testInstance.timeCalculated}">
-		                            ${testInstance.takeoffTime.format('HH:mm')}<g:if test="${testInstance.takeoffTimeWarning}"> !</g:if>
+		                            ${testInstance.takeoffTime.format('HH:mm:ss')}<g:if test="${testInstance.takeoffTimeWarning}"> !</g:if>
 		                        </g:if>
 		                        <g:else>
 	                                ${message(code:'fc.nocalculated')}
@@ -163,10 +163,10 @@
                             <th>${message(code:'fc.truetrack')}</th>
                             <th>${message(code:'fc.trueheading')}</th>
                             <th>${message(code:'fc.groundspeed')}</th>
-                            <th>${message(code:'fc.legtime')}</th>
+                            <th>${message(code:'fc.legtime')}<br/>${message(code:'fc.time.values')}</th>
                             <th>${message(code:'fc.tpname')}</th>
                             <g:if test="${show_local_time}">
-                                <th>${message(code:'fc.time.local')}</th>
+                                <th>${message(code:'fc.time.local')}<br/>${message(code:'fc.time.values')}</th>
                             </g:if>
                         </tr>
                     </thead>
@@ -178,7 +178,7 @@
                             <td class="trueheading"/>
                             <td class="groundspeed"/>
                             <g:if test="${show_elapsed_time}">
-                                <td class="legtime">${FcMath.TimeStr(Date.parse("HH:mm","00:00"))}${message(code:'fc.time.h')}</td>
+                                <td class="legtime">${FcMath.TimeStr(Date.parse("HH:mm","00:00"))}</td>
                             </g:if>
                             <g:else>
                                 <td class="legtime"/>
@@ -200,10 +200,10 @@
                             <td class="trueheading"/>
                             <td class="groundspeed"/>
                             <g:if test="${show_elapsed_time}">
-                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime))}${message(code:'fc.time.h')}</td>
+                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime))}</td>
                             </g:if>
                             <g:else>
-                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime))}${message(code:'fc.time.h')}</td>
+                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime))}</td>
                             </g:else>
                             <td class="tpname">${message(code:CoordType.SP.code)}</td>
                             <g:if test="${show_local_time}">
@@ -271,10 +271,10 @@
                                         <td class="groundspeed"/>
                                     </g:else>
                                     <g:if test="${show_elapsed_time}">
-                                        <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,leg_time))}${message(code:'fc.time.h')}</td>
+                                        <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,leg_time))}</td>
                                     </g:if>
                                     <g:else>
-                                        <td class="legtime">${FcMath.TimeStr(leg_duration)}${message(code:'fc.time.h')}</td>
+                                        <td class="legtime">${FcMath.TimeStr(leg_duration)}</td>
                                     </g:else>
                                     <td class="tpname">${testlegflight_instance.coordTitle.titlePrintCode()}</td>
                                     <g:if test="${show_local_time}">
@@ -299,10 +299,10 @@
                             <td class="trueheading"/> 
                             <td class="groundspeed"/>
                             <g:if test="${show_elapsed_time}">
-                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))}${message(code:'fc.time.h')}</td>
+                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))}</td>
                             </g:if>
                             <g:else>
-                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(leg_time,testInstance.maxLandingTime))}${message(code:'fc.time.h')}</td>
+                                <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(leg_time,testInstance.maxLandingTime))}</td>
                             </g:else>
                             <td class="tpname">${message(code:CoordType.LDG.code)}</td>
                             <g:if test="${show_local_time}"> 
@@ -314,7 +314,7 @@
                         <tr class="summary">
                             <td/>
                             <td class="distance" colspan="4">${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')} ${message(code:'fc.distance.sp2fp')}</td>
-                            <td class="legtime" colspan="3"><g:if test="${!show_elapsed_time}">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))}${message(code:'fc.time.h')} ${message(code:'fc.legtime.total')}</g:if></td>
+                            <td class="legtime" colspan="3"><g:if test="${!show_elapsed_time}">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))} ${message(code:'fc.legtime.total')}</g:if></td>
                         </tr>
                     </tfoot>
                 </table>

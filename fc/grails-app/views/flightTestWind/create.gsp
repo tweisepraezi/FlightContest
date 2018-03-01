@@ -30,7 +30,7 @@
                                 <input type="text" id="direction" name="direction" value="${fieldValue(bean:flightTestWindInstance,field:'direction')}" tabIndex="1"/>
                             </p>
                             <p>
-                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
+                                <label>${message(code:'fc.wind.velocity')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
                                 <input type="text" id="speed" name="speed" value="${fieldValue(bean:flightTestWindInstance,field:'speed')}" tabIndex="2"/>
                             </p>

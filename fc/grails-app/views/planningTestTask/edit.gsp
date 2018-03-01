@@ -57,7 +57,7 @@
 	                                <input type="text" id="direction" name="direction" value="${fieldValue(bean:planningTestTaskInstance,field:'direction')}"/>
 	                            </p>
 	                            <p>
-	                                <label>${message(code:'fc.wind.speed')}* [${message(code:'fc.knot')}]:</label>
+	                                <label>${message(code:'fc.wind.velocity')}* [${message(code:'fc.knot')}]:</label>
 	                                <br/>
 	                                <input type="text" id="speed" name="speed" value="${fieldValue(bean:planningTestTaskInstance,field:'speed')}"/>
 	                            </p>

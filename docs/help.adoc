@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 2
-:revdate:   14.02.2018
+:revnumber: 3.1.1, Ausgabe 3
+:revdate:   17.02.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -66,8 +66,8 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 
 * link:rules/DE_Navigationsflug_2018.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2018^]
 * link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
-* link:rules/FAI_rally_flying_rules_2017.pdf[FAI Air Rally Flying^]
-* link:rules/FAI_precision_flying_rules_2017.pdf[FAI Precision Flying^]
+* link:rules/FAI_rally_flying_rules_2018.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_precision_flying_rules_2018.pdf[FAI Precision Flying^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft^]
 * link:rules/AT_Motorflug_2017.pdf#page=17[Präzisionsflug-Reglement Österreich^]
 * link:rules/AT_Motorflug_2017.pdf#page=30[Navigationsflug-Reglement Österreich^]
@@ -871,11 +871,11 @@ Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
-* link:rules/FAI_rally_flying_rules_2017.pdf#page=17[FAI Air Rally Flying - Edition 2017^] ((alle Landungen)
+* link:rules/FAI_rally_flying_rules_2018.pdf#page=17[FAI Air Rally Flying - Edition 2018^] ((alle Landungen)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
-* link:rules/FAI_precision_flying_rules_2017.pdf#page=20[FAI Precision Flying - Edition 2017^]
+* link:rules/FAI_precision_flying_rules_2018.pdf#page=20[FAI Precision Flying - Edition 2018^]
 ** Landung 1 und 4
 
   {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}

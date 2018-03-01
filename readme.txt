@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-15.02.2018
+01.03.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -81,8 +81,11 @@ Erweiterungen in dieser Version (3.1.1):
     * Konfiguration zur Anzeige aller UZKs der krummen Strecke hinzugefügt
         -> Hilfe -> Besondere CSS-Eigenschaften
         -> Wettbewerb -> Einstellungen -> Druckstil
+- Anwendung 'Print Label' um Team-Druck erweitert.
 - Aktualisierung folgender Regelwerke
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018
+    FAI Precision Flying - Edition 2018
+    FAI Air Rally Flying - Edition 2018
 
 Erweiterungen in Version 3.1:
 -----------------------------

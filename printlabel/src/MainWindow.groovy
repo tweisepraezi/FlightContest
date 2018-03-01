@@ -27,6 +27,12 @@ class MainWindow
     static final int SIZE_X = 650
     static final int SIZE_Y = 180
     
+    static final String LAYOUT_STANDARD = "Standard-Layout"
+    static final String LAYOUT_TEAM1 = "Team-Layout 1"
+    static final String LAYOUT_TEAM2 = "Team-Layout 2"
+    
+    def LAYOUTS = [LAYOUT_STANDARD, LAYOUT_TEAM1, LAYOUT_TEAM2]
+    
     //--------------------------------------------------------------------------
     public static void main(String[] args)
     {
@@ -42,7 +48,7 @@ class MainWindow
         } else { // from jar
             image_icon = swing.imageIcon('/printlabel.png').image
         }
-        frame = swing.frame(title: 'Flight Contest Print Label 1.0.2',
+        frame = swing.frame(title: 'Flight Contest Print Label 1.1',
                             size: [SIZE_X,SIZE_Y],
                             minimumSize: [SIZE_X,SIZE_Y],
                             locationRelativeTo: null,
@@ -56,6 +62,9 @@ class MainWindow
                 info_text = label(text:'<html><br/><br/><br/></html>')
             }
             panel(constraints: BorderLayout.CENTER) {
+                comboBox id: 'team', items: LAYOUTS, actionPerformed: {
+                    
+                }
                 print_button = button text: 'Print label...', actionPerformed: {
                     def file_dlg = fileChooser(dialogTitle: 'Choose a TXT file',
                                                id: 'openTxtDialog',
@@ -71,11 +80,23 @@ class MainWindow
                     selected_file = file_dlg.selectedFile.getAbsolutePath()
                     current_directory = selected_file.substring(0, selected_file.lastIndexOf('\\'))
                     
+                    // get layout
+                    String layout_name = "FCLabelStandard.lbx"
+                    switch (variables.team.selectedItem) {
+                        case LAYOUT_STANDARD:
+                            break
+                        case LAYOUT_TEAM1:
+                            layout_name = "FCLabelTeam1.lbx"
+                            break
+                        case LAYOUT_TEAM2:
+                            layout_name = "FCLabelTeam2.lbx"
+                            break
+                    }
+                    
                     // print
                     info_text.text = "<html>Printing '${selected_file}'...</html>"
                     info_text.foreground = java.awt.Color.BLUE
                     print_button.visible = false
-                    
                     
                     doOutside {
                         Map print_ret = [printed:true, errmsg:'']
@@ -83,10 +104,10 @@ class MainWindow
                         try {
                             def printer_obj = new ActiveXObject("bpac.Document")
                             if (printer_obj) {
-                                String label_template = "src/FCLabel.lbx"
+                                String label_template = "src/${layout_name}"
                                 if (!(new File(label_template).exists())) { // from jar
                                     String current_dir = args[0]
-                                    label_template = "$current_dir/FCLabel.lbx"
+                                    label_template = "$current_dir/${layout_name}"
                                 }
                                 if (new File(label_template).exists()) {
                                     boolean printer_open = printer_obj.invokeMethod("Open",label_template)
@@ -99,6 +120,7 @@ class MainWindow
                                         String start_num = ''
                                         String crew = ''
                                         String aircraft = ''
+                                        String team = ''
                                         String result_class = ''
                                         String tas = ''
                                         String planning_time = ''
@@ -127,6 +149,9 @@ class MainWindow
                                                 if (line.startsWith('AIRCRAFT:')) {
                                                     aircraft = line.substring(9)
                                                 }
+                                                if (line.startsWith('TEAM:')) {
+                                                    team = line.substring(5)
+                                                }
                                                 if (line.startsWith('CLASS:')) {
                                                     result_class = line.substring(6)
                                                 }
@@ -148,6 +173,7 @@ class MainWindow
                                                 SetPrinterData(printer_obj, "start_num", start_num)
                                                 SetPrinterData(printer_obj, "crew", crew)
                                                 SetPrinterData(printer_obj, "aircraft", aircraft)
+                                                SetPrinterData(printer_obj, "team", team)
                                                 SetPrinterData(printer_obj, "class", result_class)
                                                 SetPrinterData(printer_obj, "tas", tas)
                                                 SetPrinterData(printer_obj, "planning_time", planning_time)
@@ -197,7 +223,7 @@ class MainWindow
                 }
             }
             panel(constraints: BorderLayout.SOUTH) {
-                label(text:'(c) 2016 Thomas Weise, License: GPL v3, flightcontest.de')
+                label(text:'(c) 2018 Thomas Weise, License: GPL v3, flightcontest.de')
             }
         }
     }

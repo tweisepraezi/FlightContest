@@ -84,6 +84,10 @@ table.info td.separator {
     width: 2%;
 }
 
+table.info tr.takeoff td.value {
+    font-weight: bold;
+}
+
 table.summary th, table.summary td {
     border-style: none;
 }

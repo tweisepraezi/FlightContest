@@ -70,7 +70,7 @@
                                     </g:else>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.wind')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.wind.directionvelocity')}:</td>
                                     <g:if test="${testInstance.flighttestwind}">
                                         <td><g:windtext var="${testInstance.flighttestwind.wind}" /></td>
                                     </g:if> <g:else>
@@ -83,10 +83,10 @@
                             <tbody>
                                 <tr>
                                     <g:if test="${testInstance.task.planningTestDuration == 0}">
-                                        <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</th>
+                                        <td class="detailtitle">${message(code:'fc.test.planning.publish.localtime')}:</th>
                                     </g:if>
                                     <g:else>
-                                        <td class="detailtitle">${message(code:'fc.test.planning')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.test.planning.localtime')}:</td>
                                     </g:else>
                                     <g:if test="${testInstance.timeCalculated}">
                                         <g:if test="${testInstance.task.planningTestDuration > 0}">

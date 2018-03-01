@@ -7,7 +7,6 @@ enum ContestRules
 			// General
 			precisionFlying:false,
             increaseFactor:0,
-            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
             printPointsGeneral:false,
 			printPointsPlanningTest:false,
 			printPointsFlightTest:true,
@@ -45,6 +44,7 @@ enum ContestRules
 			flightTestMinAltitudeMissedPoints:200,               // 4
 			flightTestBadCourseCorrectSecond:5,                  // 3.3.6
 			flightTestBadCoursePoints:100,                       // 4
+            flightTestBadCourseMaxPoints:1000,                   // 4
 			flightTestBadCourseStartLandingPoints:200,           // 4
 			flightTestLandingToLatePoints:200,                   // 4
 			flightTestGivenToLatePoints:300,                     // 4
@@ -115,6 +115,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
             
             // Defaults
+            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.TrueFalsePhoto,          // 3.4.6
@@ -138,7 +139,6 @@ enum ContestRules
 			// General
 			precisionFlying:true,
             increaseFactor:0,
-            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:true,
 			printPointsFlightTest:true,
@@ -176,6 +176,7 @@ enum ContestRules
 			flightTestMinAltitudeMissedPoints:500,
 			flightTestBadCourseCorrectSecond:5,
 			flightTestBadCoursePoints:200,
+            flightTestBadCourseMaxPoints:0,
 			flightTestBadCourseStartLandingPoints:200,
 			flightTestLandingToLatePoints:200,
 			flightTestGivenToLatePoints:100,
@@ -246,6 +247,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(7*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 175;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}",
             
             // Defaults
+            printStyle:"",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.AssignCanvas,
@@ -269,7 +271,6 @@ enum ContestRules
 			// General
 			precisionFlying:false,
             increaseFactor:0,
-            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:false,
 			printPointsFlightTest:true,
@@ -307,6 +308,7 @@ enum ContestRules
 			flightTestMinAltitudeMissedPoints:200,
 			flightTestBadCourseCorrectSecond:5,
 			flightTestBadCoursePoints:200,
+            flightTestBadCourseMaxPoints:0,
 			flightTestBadCourseStartLandingPoints:0,
 			flightTestLandingToLatePoints:0,
 			flightTestGivenToLatePoints:300,
@@ -377,6 +379,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}",
 
             // Defaults
+            printStyle:"",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.TrueFalsePhoto,
@@ -395,12 +398,11 @@ enum ContestRules
 		]
 	), // fc.contestrule.fai.rally.2016.unlimited
 
-	R4 ('fc.contestrule.fai.precision.2017',
+	R4 ('fc.contestrule.fai.precision.2018',
 		[
 			// General
 			precisionFlying:true,
             increaseFactor:0,
-            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:true,
 			printPointsFlightTest:true,
@@ -438,6 +440,7 @@ enum ContestRules
 			flightTestMinAltitudeMissedPoints:500,                // A10.1.5
 			flightTestBadCourseCorrectSecond:5,                   // A2.2.13
 			flightTestBadCoursePoints:200,                        // A10.1.6
+            flightTestBadCourseMaxPoints:0,
 			flightTestBadCourseStartLandingPoints:200,            // A10.1.6
 			flightTestLandingToLatePoints:200,                    // A10.1.6
 			flightTestGivenToLatePoints:100,                      // A10.1.7
@@ -508,6 +511,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // A10.3
 
             // Defaults
+            printStyle:"",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.AssignCanvas,
@@ -524,14 +528,13 @@ enum ContestRules
             minEnrouteTargets:16,                                 // A3.2
             maxEnrouteTargets:25                                  // A3.2
 		]
-	), // fc.contestrule.fai.precision.2017
+	), // fc.contestrule.fai.precision.2018
 
 	R5 ('fc.contestrule.ch.precision.2017',
 		[
 			// General
 			precisionFlying:true,
             increaseFactor:0,
-            printStyle:"",
             printPointsGeneral:false,
 			printPointsPlanningTest:true,
 			printPointsFlightTest:true,
@@ -569,6 +572,7 @@ enum ContestRules
 			flightTestMinAltitudeMissedPoints:500,                  // Anhang 5.2
 			flightTestBadCourseCorrectSecond:5,                     // 4.7.15
 			flightTestBadCoursePoints:200,                          // Anhang 5.2
+            flightTestBadCourseMaxPoints:0,
 			flightTestBadCourseStartLandingPoints:200,              // Anhang 5.2
 			flightTestLandingToLatePoints:200,                      // Anhang 5.2
 			flightTestGivenToLatePoints:100,                        // Anhang 5.2
@@ -639,6 +643,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Anhang 2
 
             // Defaults
+            printStyle:"",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.AssignCanvas,
@@ -657,12 +662,11 @@ enum ContestRules
 		]
 	), // fc.contestrule.ch.precision.2017
 
-    R6 ('fc.contestrule.fai.rally.2017',
+    R6 ('fc.contestrule.fai.rally.2018',
         [
             // General
             precisionFlying:false,
             increaseFactor:0,
-            printStyle:"",
             printPointsGeneral:false,
             printPointsPlanningTest:false,
             printPointsFlightTest:true,
@@ -680,8 +684,8 @@ enum ContestRules
             // PlanningTest
             planningTestDirectionCorrectGrad:2,
             planningTestDirectionPointsPerGrad:2,
-            planningTestTimeCorrectSecond:5,
-            planningTestTimePointsPerSecond:1,
+            planningTestTimeCorrectSecond:2,
+            planningTestTimePointsPerSecond:3,
             planningTestMaxPoints:350,
             planningTestPlanTooLatePoints:50,
             planningTestExitRoomTooLatePoints:100,
@@ -691,85 +695,87 @@ enum ContestRules
             flightTestTakeoffCorrectSecond:60,                   // A4.1
             flightTestTakeoffCheckSeconds:true,                  // A4.1
             flightTestTakeoffPointsPerSecond:3,                  // A4.1
-            flightTestTakeoffMissedPoints:100,                   // A4.1, A4.5
-            flightTestCptimeCorrectSecond:5,                     // A4.2
+            flightTestTakeoffMissedPoints:100,                   // A4.1
+            flightTestCptimeCorrectSecond:2,                     // A4.2
             flightTestCptimePointsPerSecond:3,                   // A4.2
             flightTestCptimeMaxPoints:100,                       // A4.2
-            flightTestCpNotFoundPoints:100,                      // A4.2
+            flightTestCpNotFoundPoints:100,                      // A4.4
             flightTestProcedureTurnNotFlownPoints:0,
-            flightTestMinAltitudeMissedPoints:200,               // A4.5
-            flightTestBadCourseCorrectSecond:5,                  // A4.6
-            flightTestBadCoursePoints:200,                       // A4.6
+            flightTestMinAltitudeMissedPoints:200,               // A4.4
+            flightTestBadCourseCorrectSecond:5,                  // A4.5
+            flightTestBadCoursePoints:100,                       // A4.5
+            flightTestBadCourseMaxPoints:1000,                   // A4.5
             flightTestBadCourseStartLandingPoints:0,
             flightTestLandingToLatePoints:0,
-            flightTestGivenToLatePoints:300,                     // A4.8
-            flightTestSafetyAndRulesInfringementPoints:600,      // A4.5
-            flightTestInstructionsNotFollowedPoints:200,         // A4.5
-            flightTestFalseEnvelopeOpenedPoints:100,             // A4.5
-            flightTestSafetyEnvelopeOpenedPoints:300,            // A4.5
-            flightTestFrequencyNotMonitoredPoints:200,           // A4.9
+            flightTestGivenToLatePoints:300,                     // A4.6
+            flightTestSafetyAndRulesInfringementPoints:600,      // A4.4
+            flightTestInstructionsNotFollowedPoints:200,         // A4.4
+            flightTestFalseEnvelopeOpenedPoints:0,
+            flightTestSafetyEnvelopeOpenedPoints:400,            // A4.4
+            flightTestFrequencyNotMonitoredPoints:200,           // A4.7
             flightTestForbiddenEquipmentPoints:0,
 
             // ObservationTest
-            observationTestTurnpointNotFoundPoints:0,
-            observationTestTurnpointFalsePoints:0,
-            observationTestEnrouteValueUnit:EnrouteValueUnit.NM, // A4.4
-            observationTestEnrouteCorrectValue:0.5f,             // A4.4
-            observationTestEnrouteInexactValue:1.0f,             // A4.4
-            observationTestEnrouteInexactPoints:15,              // A4.4
-            observationTestEnrouteNotFoundPoints:30,             // A4.4
-            observationTestEnrouteFalsePoints:50,                // A4.4
+            observationTestTurnpointNotFoundPoints:50,           // A4.3
+            observationTestTurnpointFalsePoints:100,             // A4.3
+            observationTestEnrouteValueUnit:EnrouteValueUnit.NM, // A4.3
+            observationTestEnrouteCorrectValue:0.5f,             // A4.3
+            observationTestEnrouteInexactValue:1.0f,             // A4.3
+            observationTestEnrouteInexactPoints:15,              // A4.3
+            observationTestEnrouteNotFoundPoints:30,             // A4.3
+            observationTestEnrouteFalsePoints:50,                // A4.3
             
             // LandingTest
-            landingTest1MaxPoints:300,                           // A4.7
-            landingTest1NoLandingPoints:300,                     // A4.7
-            landingTest1OutsideLandingPoints:200,                // A4.7
-            landingTest1RollingOutsidePoints:200,                // A4.7
-            landingTest1PowerInBoxPoints:50,                     // A4.7
-            landingTest1GoAroundWithoutTouchingPoints:200,       // A4.7
-            landingTest1GoAroundInsteadStopPoints:200,           // A4.7
-            landingTest1AbnormalLandingPoints:150,               // A4.7
+            landingTest1MaxPoints:300,                           // A4.6
+            landingTest1NoLandingPoints:300,                     // A4.6
+            landingTest1OutsideLandingPoints:200,                // A4.6
+            landingTest1RollingOutsidePoints:200,                // A4.6
+            landingTest1PowerInBoxPoints:50,                     // A4.6
+            landingTest1GoAroundWithoutTouchingPoints:200,       // A4.6
+            landingTest1GoAroundInsteadStopPoints:200,           // A4.6
+            landingTest1AbnormalLandingPoints:150,               // A4.6
             landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
             landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
         
-            landingTest2MaxPoints:300,                           // A4.7
-            landingTest2NoLandingPoints:300,                     // A4.7
-            landingTest2OutsideLandingPoints:200,                // A4.7
-            landingTest2RollingOutsidePoints:200,                // A4.7
-            landingTest2PowerInBoxPoints:50,                     // A4.7
-            landingTest2GoAroundWithoutTouchingPoints:200,       // A4.7
-            landingTest2GoAroundInsteadStopPoints:200,           // A4.7
-            landingTest2AbnormalLandingPoints:150,               // A4.7
+            landingTest2MaxPoints:300,                           // A4.6
+            landingTest2NoLandingPoints:300,                     // A4.6
+            landingTest2OutsideLandingPoints:200,                // A4.6
+            landingTest2RollingOutsidePoints:200,                // A4.6
+            landingTest2PowerInBoxPoints:50,                     // A4.6
+            landingTest2GoAroundWithoutTouchingPoints:200,       // A4.6
+            landingTest2GoAroundInsteadStopPoints:200,           // A4.6
+            landingTest2AbnormalLandingPoints:150,               // A4.6
             landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
             landingTest2PowerInAirPoints:0,
             landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
             
-            landingTest3MaxPoints:300,                           // A4.7
-            landingTest3NoLandingPoints:300,                     // A4.7
-            landingTest3OutsideLandingPoints:200,                // A4.7
-            landingTest3RollingOutsidePoints:200,                // A4.7
-            landingTest3PowerInBoxPoints:50,                     // A4.7
-            landingTest3GoAroundWithoutTouchingPoints:200,       // A4.7
-            landingTest3GoAroundInsteadStopPoints:200,           // A4.7
-            landingTest3AbnormalLandingPoints:150,               // A4.7
+            landingTest3MaxPoints:300,                           // A4.6
+            landingTest3NoLandingPoints:300,                     // A4.6
+            landingTest3OutsideLandingPoints:200,                // A4.6
+            landingTest3RollingOutsidePoints:200,                // A4.6
+            landingTest3PowerInBoxPoints:50,                     // A4.6
+            landingTest3GoAroundWithoutTouchingPoints:200,       // A4.6
+            landingTest3GoAroundInsteadStopPoints:200,           // A4.6
+            landingTest3AbnormalLandingPoints:150,               // A4.6
             landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
             landingTest3PowerInAirPoints:0,
             landingTest3FlapsInAirPoints:0,
             landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
             
-            landingTest4MaxPoints:300,                           // A4.7
-            landingTest4NoLandingPoints:300,                     // A4.7
-            landingTest4OutsideLandingPoints:200,                // A4.7
-            landingTest4RollingOutsidePoints:200,                // A4.7
-            landingTest4PowerInBoxPoints:50,                     // A4.7
-            landingTest4GoAroundWithoutTouchingPoints:200,       // A4.7
-            landingTest4GoAroundInsteadStopPoints:200,           // A4.7
-            landingTest4AbnormalLandingPoints:150,               // A4.7
+            landingTest4MaxPoints:300,                           // A4.6
+            landingTest4NoLandingPoints:300,                     // A4.6
+            landingTest4OutsideLandingPoints:200,                // A4.6
+            landingTest4RollingOutsidePoints:200,                // A4.6
+            landingTest4PowerInBoxPoints:50,                     // A4.6
+            landingTest4GoAroundWithoutTouchingPoints:200,       // A4.6
+            landingTest4GoAroundInsteadStopPoints:200,           // A4.6
+            landingTest4AbnormalLandingPoints:150,               // A4.6
             landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
             landingTest4TouchingObstaclePoints:0,
             landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
 
             // Defaults
+            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.None,
@@ -780,20 +786,19 @@ enum ContestRules
             minRouteLegs:10,                                     // A3.1.1
             maxRouteLegs:16,                                     // A3.1.1
             minEnroutePhotos:15,                                 // A3.4.3
-            maxEnroutePhotos:20,                                 // A3.4.3, A3.4.6
+            maxEnroutePhotos:20,                                 // A3.4.3
             minEnrouteCanvas:0,
-            maxEnrouteCanvas:5,                                  // A3.4.8
+            maxEnrouteCanvas:5,                                  // A3.4.6
             minEnrouteTargets:15,
-            maxEnrouteTargets:20                                 // A3.4.9
+            maxEnrouteTargets:25
         ]
-    ), // fc.contestrule.fai.rally.2017
+    ), // fc.contestrule.fai.rally.2018
 
     R7 ('fc.contestrule.at.precision.2017.landing1',
         [
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
-            printStyle:"",
             printPointsGeneral:true,
             printPointsPlanningTest:true,
             printPointsFlightTest:true,
@@ -831,6 +836,7 @@ enum ContestRules
             flightTestMinAltitudeMissedPoints:500,               // 4.5
             flightTestBadCourseCorrectSecond:5,                  // 4.5
             flightTestBadCoursePoints:200,                       // 4.5
+            flightTestBadCourseMaxPoints:0,
             flightTestBadCourseStartLandingPoints:200,           // 4.5
             flightTestLandingToLatePoints:200,                   // 4.5
             flightTestGivenToLatePoints:100,                     // 4.5
@@ -901,6 +907,7 @@ enum ContestRules
             landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}", // 4.5
 
             // Defaults
+            printStyle:"",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.AssignCanvas,
@@ -924,7 +931,6 @@ enum ContestRules
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
-            printStyle:"",
             printPointsGeneral:true,
             printPointsPlanningTest:true,
             printPointsFlightTest:true,
@@ -962,6 +968,7 @@ enum ContestRules
             flightTestMinAltitudeMissedPoints:500,               // 4.5
             flightTestBadCourseCorrectSecond:5,                  // 4.5
             flightTestBadCoursePoints:200,                       // 4.5
+            flightTestBadCourseMaxPoints:0,
             flightTestBadCourseStartLandingPoints:200,           // 4.5
             flightTestLandingToLatePoints:200,                   // 4.5
             flightTestGivenToLatePoints:100,                     // 4.5
@@ -1032,6 +1039,7 @@ enum ContestRules
             landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}", // 4.5
 
             // Defaults
+            printStyle:"",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.AssignCanvas,
@@ -1055,7 +1063,6 @@ enum ContestRules
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
-            printStyle:"",
             printPointsGeneral:true,
             printPointsPlanningTest:true,
             printPointsFlightTest:true,
@@ -1093,6 +1100,7 @@ enum ContestRules
             flightTestMinAltitudeMissedPoints:500,               // 4.5
             flightTestBadCourseCorrectSecond:5,                  // 4.5
             flightTestBadCoursePoints:200,                       // 4.5
+            flightTestBadCourseMaxPoints:0,
             flightTestBadCourseStartLandingPoints:200,           // 4.5
             flightTestLandingToLatePoints:200,                   // 4.5
             flightTestGivenToLatePoints:100,                     // 4.5
@@ -1163,6 +1171,7 @@ enum ContestRules
             landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}", // 4.5
 
             // Defaults
+            printStyle:"",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.AssignCanvas,
@@ -1186,7 +1195,6 @@ enum ContestRules
             // General
             precisionFlying:false,
             increaseFactor:0,
-            printStyle:"",
             printPointsGeneral:false,
             printPointsPlanningTest:false,
             printPointsFlightTest:true,
@@ -1224,6 +1232,7 @@ enum ContestRules
             flightTestMinAltitudeMissedPoints:200,               // 5.3d
             flightTestBadCourseCorrectSecond:5,                  // 5.3d
             flightTestBadCoursePoints:200,                       // 5.3d
+            flightTestBadCourseMaxPoints:0,
             flightTestBadCourseStartLandingPoints:0,
             flightTestLandingToLatePoints:300,                   // 5.3h
             flightTestGivenToLatePoints:300,                     // 5.3f
@@ -1294,6 +1303,7 @@ enum ContestRules
             landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 5.3e
 
             // Defaults
+            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.None,
@@ -1317,7 +1327,6 @@ enum ContestRules
             // General
             precisionFlying:false,
             increaseFactor:0,
-            printStyle:"",
             printPointsGeneral:false,
             printPointsPlanningTest:true,
             printPointsFlightTest:true,
@@ -1355,6 +1364,7 @@ enum ContestRules
             flightTestMinAltitudeMissedPoints:500,               // 4.1.5
             flightTestBadCourseCorrectSecond:5,                  // 3.2.9
             flightTestBadCoursePoints:200,                       // 4.1.6
+            flightTestBadCourseMaxPoints:0,
             flightTestBadCourseStartLandingPoints:500,           // 4.1.6
             flightTestLandingToLatePoints:200,                   // 4.1.6
             flightTestGivenToLatePoints:100,                     // 4.1.6
@@ -1425,6 +1435,7 @@ enum ContestRules
             landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}", // 4.3
             
             // Defaults
+            printStyle:"",
             scGateWidth:2.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.AssignTrueFalse,
@@ -1458,8 +1469,8 @@ enum ContestRules
         List ret = []
         ret += R1  // fc.contestrule.de.nav.2018
         ret += R11 // fc.contestrule.de.nav.2017
-        ret += R4  // fc.contestrule.fai.precision.2017
-        ret += R6  // fc.contestrule.fai.rally.2017
+        ret += R4  // fc.contestrule.fai.precision.2018
+        ret += R6  // fc.contestrule.fai.rally.2018
         ret += R5  // fc.contestrule.ch.precision.2017
         ret += R7  // fc.contestrule.at.precision.2017.landing1
         ret += R8  // fc.contestrule.at.precision.2017.landing2

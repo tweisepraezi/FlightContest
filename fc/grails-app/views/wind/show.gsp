@@ -19,7 +19,7 @@
                                     <td>${fieldValue(bean:windInstance, field:'direction')}${message(code:'fc.grad')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.wind.speed')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.wind.velocity')}:</td>
                                     <td>${fieldValue(bean:windInstance, field:'speed')}${message(code:'fc.knot')}</td>
                                 </tr>
                                 <tr>
