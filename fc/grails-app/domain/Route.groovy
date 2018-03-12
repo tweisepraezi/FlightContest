@@ -986,4 +986,22 @@ class Route
         }
         return curved_point_ids
     }
+    
+    List GetCurvedPointTitleCodes(boolean isPrint)
+    {
+        List curved_point_titlecodes = []
+        boolean curved_point = false
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id",order:"desc"])) {
+            if (curved_point) {
+                if (coordroute_instance.type != CoordType.SECRET) {
+                    curved_point = false
+                } else {
+                    curved_point_titlecodes += coordroute_instance.titleCode(isPrint)
+                }
+            } else if (coordroute_instance.endCurved) {
+                curved_point = true
+            }
+        }
+        return curved_point_titlecodes
+    }
 }

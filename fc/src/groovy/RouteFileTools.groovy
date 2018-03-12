@@ -167,38 +167,31 @@ class RouteFileTools
                 }
                 
                 String coordinates = kml.Document.Placemark.LineString.coordinates.text()
-                BigDecimal last_latitude = null
-                BigDecimal last_longitude = null
-                def last_track = null
-                for (coordinate in coordinates.split(' ')) {
+                gates += ReadKMLCoordinates(coordinates)
+                if (gates.size()) {
                     valid_format = true
-                    
-                    List coord = coordinate.split(',')
-                    BigDecimal latitude = coord[1].toBigDecimal()
-                    BigDecimal longitude = coord[0].toBigDecimal()
-                    
-                    Map lat = CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)
-                    Map lon = CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)
-                    Integer alt = (coord[2].toBigDecimal() * GpxService.ftPerMeter).toInteger()
-                    
-                    def track = null
-                    if (last_latitude != null && last_longitude != null) {
-                        if ((latitude == last_latitude) && (longitude == last_longitude)) {
-                            track = last_track
-                        } else {
-                            Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
-                            track = leg.dir // FcMath.RoundGrad(leg.dir)
-                        }
-                    }
-                    
-                    Map gate = [lat:lat, lon:lon, alt:alt, track:track, next_track:null]
-                    gates += gate
-                    
-                    last_latitude = latitude
-                    last_longitude = longitude
-                    last_track = track
                 }
                 
+            } else if (kml.Document.Folder.name && kml.Document.Folder.Placemark) {
+            
+                route_name = kml.Document.Folder.name.text()
+                if (route_name) {
+                    int num = 0
+                    while (Route.findByContestAndTitle(contestInstance, route_name)) {
+                        num++
+                        route_name = "${kml.Document.Folder.name.text()} ($num)"
+                    }
+                }
+                
+                for (def pm in kml.Document.Folder.Placemark) {
+                    if (pm.Point.coordinates) {
+                        String coordinates = pm.Point.coordinates.text()
+                        gates += ReadKMLCoordinates(coordinates)
+                    }
+                }
+                if (gates.size()) {
+                    valid_format = true
+                }
             }
         } catch (Exception e) {
             read_errors += e.getMessage()
@@ -210,6 +203,46 @@ class RouteFileTools
         return [gates: gates, routename: route_name, valid: valid_format, errors: read_errors]
     }
     
+    //--------------------------------------------------------------------------
+    private static List ReadKMLCoordinates(String coordinateValues)
+    // Return: List of gates
+    {
+        List gates = []
+        
+        BigDecimal last_latitude = null
+        BigDecimal last_longitude = null
+        def last_track = null
+        for (coordinate in coordinateValues.split(' ')) {
+            
+            List coord = coordinate.split(',')
+            BigDecimal latitude = coord[1].toBigDecimal()
+            BigDecimal longitude = coord[0].toBigDecimal()
+            
+            Map lat = CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)
+            Map lon = CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)
+            Integer alt = (coord[2].toBigDecimal() * GpxService.ftPerMeter).toInteger()
+            
+            def track = null
+            if (last_latitude != null && last_longitude != null) {
+                if ((latitude == last_latitude) && (longitude == last_longitude)) {
+                    track = last_track
+                } else {
+                    Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
+                    track = leg.dir // FcMath.RoundGrad(leg.dir)
+                }
+            }
+            
+            Map gate = [lat:lat, lon:lon, alt:alt, track:track, next_track:null]
+            gates += gate
+            
+            last_latitude = latitude
+            last_longitude = longitude
+            last_track = track
+        }
+
+        return gates
+    }
+
     //--------------------------------------------------------------------------
     private static Map ReadREFFile(Contest contestInstance, String refFileName, String originalFileName)
     // Return: gates     - List of gates (lat, lon, alt)

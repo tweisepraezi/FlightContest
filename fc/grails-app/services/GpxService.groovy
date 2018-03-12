@@ -328,7 +328,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -461,7 +461,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -505,7 +505,7 @@ class GpxService
         List show_points = []
         if (showPoints) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, wrEnrouteSign, contestMap)
+            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, wrEnrouteSign, messageSource, contestMap)
         }
         
         printdone ""
@@ -562,7 +562,7 @@ class GpxService
             printerror err_msg
         }
         println "Generate points for buttons (GetShowPointsRoute)"
-        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance,null,false)] // false - no showEnrouteSign
+        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
         ret += [ok:converted]
         return ret
     }
@@ -1186,7 +1186,7 @@ class GpxService
                 show_points = GetShowPoints(gpxFileName, wrEnrouteSign)
             } else {
                 println "Generate points for buttons (GetShowPointsRoute)"
-                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, wrEnrouteSign)
+                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, wrEnrouteSign, messageSource)
             }
         }
         
@@ -1901,20 +1901,29 @@ class GpxService
                     if ((coordroute_instance.type == CoordType.iSP) && (last_coordroute_instance.type == CoordType.iFP)) {
                         // no standard gate
                     } else {
-                        Map gate = AviationMath.getGate(
-                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                            coordroute_instance.gatewidth2
-                        )
-                        xml.rte {
-                            wrGate(coordroute_instance, xml)
-                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                            xml.name coordroute_instance.titleShortMap(isPrint)
-                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
-                                // xml.ele altitude_meter
-                            }
-                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
-                                // xml.ele altitude_meter
+                        // standard gate
+                        boolean wr_gate = false
+                        boolean show_curved_point = routeInstance.contest.printStyle.contains('--route') && routeInstance.contest.printStyle.contains('show-curved-points')
+                        List curved_point_ids = routeInstance.GetCurvedPointIds()
+                        if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
+                            wr_gate = true
+                        }
+                        if (wr_gate) {
+                            Map gate = AviationMath.getGate(
+                                last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                                coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                coordroute_instance.gatewidth2
+                            )
+                            xml.rte {
+                                wrGate(coordroute_instance, xml)
+                                // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                    // xml.ele altitude_meter
+                                }
+                                xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                    // xml.ele altitude_meter
+                                }
                             }
                         }
                     }
@@ -2073,6 +2082,8 @@ class GpxService
             println "Write track points"
             Route route_instance = testInstance.task.flighttest.route
             boolean observationsign_used = testInstance.task.flighttest.IsObservationSignUsed()
+            boolean show_curved_point = route_instance.contest.printStyle.contains('--route') && route_instance.contest.printStyle.contains('show-curved-points')
+            List curved_point_titlecodes = route_instance.GetCurvedPointTitleCodes(isPrint)
             // cache calc results
             List calc_results = []
             if (testInstance.IsLoggerResult()) {
@@ -2176,7 +2187,9 @@ class GpxService
                                                     xml.gatenotfound(name:calc_result.titleCode, lat:calc_result.latitude, lon:calc_result.longitude, runway:getYesNo(calc_result.runway), v)
                                                 }
                                             } else {
-                                                xml.gate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway))
+                                                if (show_curved_point || !(calc_result.titleCode in curved_point_titlecodes)) {
+                                                    xml.gate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway))
+                                                }
                                             }
                                         } 
                                     }

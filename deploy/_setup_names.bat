@@ -1,4 +1,4 @@
 @echo off
 
-set FCSETUP_NAME=FCSetup-3.1.1.RC3.exe
+set FCSETUP_NAME=FCSetup-3.1.1.RC4.exe
 

@@ -555,7 +555,7 @@ class KmlService
             // points
             xml.Folder {
                 xml.name getMsg('fc.kmz.points',isPrint)
-                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, true) // true - showEnrouteSign
+                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, true, messageSource) // true - showEnrouteSign
                 int route_point_pos = 0
                 CoordRoute last_coordroute_instance = null
                 boolean first = true

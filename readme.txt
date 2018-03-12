@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-01.03.2018
+12.03.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -86,6 +86,8 @@ Erweiterungen in dieser Version (3.1.1):
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018
     FAI Precision Flying - Edition 2018
     FAI Air Rally Flying - Edition 2018
+- KML/KMZ-Strecken-Import:
+    Unterstützung norwegischer Streckenplanung
 
 Erweiterungen in Version 3.1:
 -----------------------------

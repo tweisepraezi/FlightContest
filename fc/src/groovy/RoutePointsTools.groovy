@@ -1,4 +1,7 @@
 import java.math.*
+import java.util.List;
+
+import org.springframework.web.context.request.RequestContextHolder
 
 class RoutePointsTools
 {
@@ -9,7 +12,7 @@ class RoutePointsTools
     final static int GPXSHOWPPOINT_SCALE = 4                     // Nachkommastellen für Koordinaten
     
     //--------------------------------------------------------------------------
-    static List GetShowPointsRoute(Route routeInstance, Test testInstance, boolean showEnrouteSign, Map contestMap = [:])
+    static List GetShowPointsRoute(Route routeInstance, Test testInstance, boolean showEnrouteSign, def messageSource, Map contestMap = [:])
     {
         List points = []
         
@@ -17,6 +20,8 @@ class RoutePointsTools
         CoordRoute lasttp_coordroute_instance = null
         List enroute_points = []
         int enroute_point_pos = 0
+        boolean show_curved_point = routeInstance.contest.printStyle.contains('--route') && routeInstance.contest.printStyle.contains('show-curved-points')
+        List curved_point_ids = routeInstance.GetCurvedPointIds()
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
             // add enroute points
             if (showEnrouteSign && (enroute_point_pos < enroute_points.size())) {
@@ -30,20 +35,22 @@ class RoutePointsTools
             // add additional error points
             if (testInstance) {
                 if (testInstance.IsLoggerResult()) {
-                    points += GetErrorPoints(testInstance, coordroute_instance, last_coordroute_instance)
+                    points += GetErrorPoints(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
                 } else {
-                    points += GetErrorPointsOld(testInstance, coordroute_instance, last_coordroute_instance)
+                    points += GetErrorPointsOld(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
                 }
             }
             
             // add regular point
             if (!contestMap || coordroute_instance.type.IsContestMapCoord()) {
-                Map new_point = [name:coordroute_instance.titleCode()]
-                new_point += GetPointCoords(coordroute_instance)
-                if (testInstance) {
-                    new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
+                    Map new_point = [name:coordroute_instance.titleCode()]
+                    new_point += GetPointCoords(coordroute_instance)
+                    if (testInstance) {
+                        new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                    }
+                    points += new_point
                 }
-                points += new_point
             }
             
             // cache enroute points
@@ -161,7 +168,7 @@ class RoutePointsTools
     }
     
     //--------------------------------------------------------------------------
-    private static List GetErrorPoints(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance)
+    private static List GetErrorPoints(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance, def messageSource)
     {
         List error_points = []
         if (coordrouteInstance && lastCoordrouteInstance) {
@@ -189,7 +196,7 @@ class RoutePointsTools
                             if (testInstance.task.procedureTurnDuration > 0) {
                                 if (coordresult_instance.resultProcedureTurnEntered && coordresult_instance.planProcedureTurn) {
                                     if (coordresult_instance.resultProcedureTurnNotFlown) {
-                                        Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false)] // false - no Print
+                                        Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false,messageSource)] // false - no Print
                                         new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
                                         if (testInstance.task.disabledCheckPointsProcedureTurn.contains(last_coordresult_instance.title()+',')) {
                                             new_point += [warning:true] // noBadTurn
@@ -205,7 +212,7 @@ class RoutePointsTools
                         }
                         if (calcresult_instance.badCourse && calcresult_instance.badCourseSeconds && !calcresult_instance.judgeDisabled) {
                            if (coordresult_instance.resultEntered && coordresult_instance.type.IsBadCourseCheckCoord()) {
-                                Map new_point = [name:getMsg("fc.offlinemap.badcourse.seconds", [calcresult_instance.badCourseSeconds], false)] // false - no Print
+                                Map new_point = [name:getMsg("fc.offlinemap.badcourse.seconds", [calcresult_instance.badCourseSeconds], false, messageSource)] // false - no Print
                                 new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
                                 if (testInstance.task.disabledCheckPointsBadCourse.contains(coordresult_instance.title()+',')) {
                                     new_point += [warning:true] // noBadCourse
@@ -228,7 +235,7 @@ class RoutePointsTools
     }
     
     //--------------------------------------------------------------------------
-    private static List GetErrorPointsOld(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance)
+    private static List GetErrorPointsOld(Test testInstance, CoordRoute coordrouteInstance, CoordRoute lastCoordrouteInstance, def messageSource)
     {
         List error_points = []
         CoordResult coordresult_instance = GetCoordResult(testInstance, coordrouteInstance)
@@ -239,7 +246,7 @@ class RoutePointsTools
             if ((testInstance.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (testInstance.task.procedureTurnDuration > 0)) {
                 if (coordresult_instance.resultProcedureTurnEntered && coordresult_instance.planProcedureTurn) {
                     if (coordresult_instance.resultProcedureTurnNotFlown) {
-                        Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false)] // false - no Print
+                        Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false, messageSource)] // false - no Print
                         new_point += GetPointCoords(lastCoordrouteInstance)
                         if (!testInstance.task.disabledCheckPointsProcedureTurn.contains(last_coordresult_instance.title()+',')) {
                             new_point += [error:true]
@@ -255,7 +262,7 @@ class RoutePointsTools
             if (testInstance.GetFlightTestBadCoursePoints() > 0) {
                 if (coordresult_instance.resultEntered && coordresult_instance.type.IsBadCourseCheckCoord()) {
                     if (coordresult_instance.resultBadCourseNum > 0) {
-                        Map new_point = [name:getMsg("fc.offlinemap.badcourse.number", [coordresult_instance.resultBadCourseNum], false)] // false - no Print
+                        Map new_point = [name:getMsg("fc.offlinemap.badcourse.number", [coordresult_instance.resultBadCourseNum], false, messageSource)] // false - no Print
                         
                         new_point += GetPointCoords(coordrouteInstance)
                         if (!testInstance.task.disabledCheckPointsBadCourse.contains(coordresult_instance.title()+',')) {
@@ -303,4 +310,29 @@ class RoutePointsTools
         return null
     } 
     
+    //--------------------------------------------------------------------------
+    private static String getMsg(String code, List args, boolean isPrint, def messageSource)
+    {
+        def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+        String lang = session_obj.showLanguage
+        if (isPrint) {
+            lang = session_obj.printLanguage
+        }
+        if (args) {
+            return messageSource.getMessage(code, args.toArray(), new Locale(lang))
+        } else {
+            return messageSource.getMessage(code, null, new Locale(lang))
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    private static String getMsg(String code, boolean isPrint, def messageSource)
+    {
+        def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
+        String lang = session_obj.showLanguage
+        if (isPrint) {
+            lang = session_obj.printLanguage
+        }
+        return messageSource.getMessage(code, null, new Locale(lang))
+    }
 }
