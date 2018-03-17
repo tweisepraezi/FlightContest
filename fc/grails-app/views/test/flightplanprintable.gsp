@@ -113,10 +113,10 @@
                         <td class="value">
                             <g:if test="${testInstance.timeCalculated}">
                                 <g:if test="${testInstance.task.planningTestDuration > 0}">
-                                    ${testInstance.testingTime?.format('HH:mm:ss')} - ${testInstance.endTestingTime?.format('HH:mm:ss')}
+                                    ${testInstance.GetTestingTime().format('HH:mm:ss')} - ${testInstance.endTestingTime?.format('HH:mm:ss')}
                                 </g:if>
                                 <g:else>
-                                    ${testInstance.testingTime?.format('HH:mm:ss')}
+                                    ${testInstance.GetTestingTime().format('HH:mm:ss')}
                                 </g:else>
                             </g:if>
                             <g:else>

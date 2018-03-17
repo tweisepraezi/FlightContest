@@ -157,6 +157,11 @@ table.timetableoverviewlist td.col3 {
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
+table.timetablelist td.planningtimebefore, table.timetablejudgelist td.planningtimebefore {
+	font-weight: bold;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
 table.legtimelist {
     width: 0%;
 }

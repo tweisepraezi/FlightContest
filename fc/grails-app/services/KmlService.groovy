@@ -141,7 +141,7 @@ class KmlService
         xml.kml(xmlns:NAMESPACE_XMLNS,'xmlns:gx':NAMESPACE_XMLNS_GX,'xmlns:kml':NAMESPACE_XMLNS_KML,'xmlns:atom':NAMESPACE_XMLNS_ATOM) {
             xml.Document {
                 KMZStyles(xml)
-                KMZRoute(route_instance, testInstance.flighttestwind, isPrint, wrEnrouteSign, xml)
+                KMZRoute(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
                 xml.Folder {
                     xml.name getMsg('fc.kmz.flights',isPrint)
                     found_track = KMZTrack(testInstance, testInstance.aflosStartNum, isPrint, xml)
@@ -384,16 +384,9 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private void KMZRoute(Route routeInstance, FlightTestWind flighttestwindInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml)
+    private void KMZRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml)
     {
         printstart "KMZRoute Print:$isPrint wrEnrouteSign:$wrEnrouteSign"
-        
-        /*
-        boolean wr_enroutesign = wrEnrouteSign
-        if (wrEnrouteSign && flighttestwindInstance) {
-            wr_enroutesign = flighttestwindInstance.flighttest.IsObservationSignUsed()
-        }
-        */
         
         Map contest_map_rect = [:]
         BigDecimal center_latitude = null
@@ -571,12 +564,12 @@ class KmlService
                     BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                     switch (coordroute_instance.type) {
                         case CoordType.TO:
-                            if (flighttestwindInstance) {
+                            if (testInstance) {
                                 Map gate = AviationMath.getGate(
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    flighttestwindInstance.TODirection, 
-                                    flighttestwindInstance.TOOffset,
-                                    flighttestwindInstance.TOOrthogonalOffset,
+                                    testInstance.flighttestwind.TODirection, 
+                                    testInstance.flighttestwind.TOOffset,
+                                    testInstance.flighttestwind.TOOrthogonalOffset,
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.Placemark {
@@ -586,7 +579,7 @@ class KmlService
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
                                         xml.altitude "0"
-                                        xml.heading "${flighttestwindInstance.TODirection}"
+                                        xml.heading "${testInstance.flighttestwind.TODirection}"
                                         xml.tilt TILT_TO
                                         xml.range RANGE_TO
                                     } 
@@ -632,12 +625,12 @@ class KmlService
                             }
                             break
                         case CoordType.LDG:
-                            if (flighttestwindInstance) {
+                            if (testInstance) {
                                 Map gate = AviationMath.getGate(
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    flighttestwindInstance.LDGDirection, 
-                                    flighttestwindInstance.LDGOffset,
-                                    flighttestwindInstance.LDGOrthogonalOffset,
+                                    testInstance.flighttestwind.LDGDirection, 
+                                    testInstance.flighttestwind.LDGOffset,
+                                    testInstance.flighttestwind.LDGOrthogonalOffset,
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.Placemark {
@@ -647,7 +640,7 @@ class KmlService
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
                                         xml.altitude "0"
-                                        xml.heading "${flighttestwindInstance.LDGDirection}"
+                                        xml.heading "${testInstance.flighttestwind.LDGDirection}"
                                         xml.tilt TILT_LDG
                                         xml.range RANGE_LDG
                                     } 
@@ -694,12 +687,12 @@ class KmlService
                             break
                         case CoordType.iTO:
                         case CoordType.iLDG:
-                            if (flighttestwindInstance) {
+                            if (testInstance) {
                                 Map gate = AviationMath.getGate(
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    flighttestwindInstance.iTOiLDGDirection, 
-                                    flighttestwindInstance.iTOiLDGOffset,
-                                    flighttestwindInstance.iTOiLDGOrthogonalOffset,
+                                    testInstance.flighttestwind.iTOiLDGDirection, 
+                                    testInstance.flighttestwind.iTOiLDGOffset,
+                                    testInstance.flighttestwind.iTOiLDGOrthogonalOffset,
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.Placemark {
@@ -709,7 +702,7 @@ class KmlService
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
                                         xml.altitude "0"
-                                        xml.heading "${flighttestwindInstance.iTOiLDGDirection}"
+                                        xml.heading "${testInstance.flighttestwind.iTOiLDGDirection}"
                                         xml.tilt TILT_LDG
                                         xml.range RANGE_LDG
                                     } 
@@ -844,10 +837,17 @@ class KmlService
                                 wr_gate = true
                             }
                             if (wr_gate) {
+                                Float gate_width = null
+                                if (testInstance && coordroute_instance.type == CoordType.SECRET) {
+                                    gate_width = testInstance.GetSecretGateWidth()
+                                }
+                                if (!gate_width) {
+                                    gate_width = coordroute_instance.gatewidth2
+                                }
                                 Map gate = AviationMath.getGate(
                                     last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                     coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                    coordroute_instance.gatewidth2
+                                    gate_width
                                 )
                                 xml.Placemark {
                                     BigDecimal altitude_meter2 = coordroute_instance.altitude.toLong() / ftPerMeter

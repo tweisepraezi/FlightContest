@@ -127,7 +127,13 @@
                                     </g:if>
                                 </g:if>
                                 <g:if test="${taskInstance.printTimetablePlanning}">
-                                    <td class="planningtime">${test_instance.testingTime?.format('HH:mm')}</td>
+                                    <g:set var="minutes_before" value="${test_instance.GetMinutesBeforeStartTime()}"/>
+                                    <g:if test="${minutes_before}">
+                                        <td class="planningtimebefore">${test_instance.GetTestingTime().format('HH:mm')}</td>
+                                    </g:if>
+                                    <g:else>
+                                        <td class="planningtime">${test_instance.testingTime.format('HH:mm')}</td>
+                                    </g:else>
                                 </g:if>
                                 <g:if test="${taskInstance.printTimetableTakeoff}">
                                     <td class="takeofftime">${test_instance.takeoffTime?.format('HH:mm')}</td>

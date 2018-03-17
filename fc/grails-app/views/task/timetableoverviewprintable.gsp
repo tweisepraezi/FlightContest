@@ -57,7 +57,10 @@
         <h2>${message(code:'fc.task.timetableoverview')}<g:if test="${taskInstance.printTimetablePrintTitle}"> - ${taskInstance.printTimetablePrintTitle}</g:if></h2>
         <h3>${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
         <g:form>
-            <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+            <g:set var="first_test" value="${taskInstance.GetFirstTestBefore()}"/>
+            <g:if test="${!first_test}">
+                <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+            </g:if>
             <g:set var="last_test" value="${taskInstance.GetLastTest()}"/>
             <g:if test="${first_test && last_test}">
                 <g:set var="first_landing_time" value="${first_test.GetIntermediateLandingTime(true)}"/>
@@ -73,14 +76,14 @@
                             <g:if test="${taskInstance.planningTestDuration == 0}">
                                 <tr class="planning">
                                     <td class="col1">${message(code:'fc.test.planning.publish')}:</td>
-                                    <td class="col2">${first_test.testingTime.format('HH:mm')}</td>
+                                    <td class="col2">${first_test.GetTestingTime().format('HH:mm')}</td>
                                     <td class="col3">- ${last_test.endTestingTime.format('HH:mm')}</td>
                                 </tr>
                             </g:if>
                             <g:else>
                                 <tr class="planning">
                                     <td class="col1">${message(code:'fc.planningtest')}:</td>
-                                    <td class="col2">${first_test.testingTime.format('HH:mm')}</td>
+                                    <td class="col2">${first_test.GetTestingTime().format('HH:mm')}</td>
                                     <td class="col3">- ${last_test.endTestingTime.format('HH:mm')}</td>
                                 </tr>
                             </g:else>

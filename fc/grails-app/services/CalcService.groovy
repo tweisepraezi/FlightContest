@@ -905,10 +905,17 @@ class CalcService
                     // no standard gate
                 } else {
                     // standard gate
+                    Float gate_width = null
+                    if (testInstance && coordroute_instance.type == CoordType.SECRET) {
+                        gate_width = testInstance.GetSecretGateWidth()
+                    }
+                    if (!gate_width) {
+                        gate_width = coordroute_instance.gatewidth2
+                    }
                     Map gate = AviationMath.getGate(
                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                        coordroute_instance.gatewidth2
+                        gate_width
                     )
                     Map advanced_gate = AviationMath.getGate(
                         last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
@@ -926,7 +933,7 @@ class CalcService
                                     advancedCoordLeft:advanced_gate.coordLeft,
                                     advancedCoordRight:advanced_gate.coordRight,
                                     gateTrack:FcMath.RoundGrad(gate.gateTrack),
-                                    gateWidth:coordroute_instance.gatewidth2,
+                                    gateWidth:gate_width,
                                     gateLatitude:coordroute_instance.latMath(),
                                     gateLongitude:coordroute_instance.lonMath(),
                                     gateAltitude:coordroute_instance.altitude,

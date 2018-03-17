@@ -1168,7 +1168,7 @@ class GpxService
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
         xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
-            GPXRoute(route_instance, testInstance.flighttestwind, isPrint, wrEnrouteSign, xml)
+            GPXRoute(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
             found_track = GPXTrack(testInstance, testInstance.aflosStartNum, isPrint, xml)
         }
         gpx_writer.close()
@@ -1318,13 +1318,13 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void GPXRoute(Route routeInstance, FlightTestWind flighttestwindInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml, Map contestMap = [:])
+    private void GPXRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml, Map contestMap = [:])
     {
         printstart "GPXRoute Print:$isPrint wrEnrouteSign:$wrEnrouteSign contestMap:$contestMap"
         
         boolean wr_enroutesign = wrEnrouteSign
-        if (wrEnrouteSign && flighttestwindInstance) {
-            wr_enroutesign = flighttestwindInstance.flighttest.IsObservationSignUsed()
+        if (wrEnrouteSign && testInstance) {
+            wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
         }
         
         // observation settings & enroute signs without position
@@ -1577,7 +1577,6 @@ class GpxService
                         if (contestMap.contestMapPrintPoints.contains(coordroute_instance.title()+',')) {
                             List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_CIRCLE_RADIUS)
                             xml.rte {
-                                // wrGate(coordroute_instance, xml)
                                 // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.name "Circle ${coordroute_instance.titleShortMap(isPrint)}"
                                 for (Map circle_coord in circle_coords) {
@@ -1608,7 +1607,6 @@ class GpxService
                                 CONTESTMAP_PROCEDURETURN_DISTANCE
                             )
                             xml.rte {
-                                // wrGate(coordroute_instance, xml)
                                 // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.name "Procedure turn ${last_coordroute_instance.titleShortMap(isPrint)}"
                                 for (Map circle_coord in circle_coords) {
@@ -1756,16 +1754,16 @@ class GpxService
                 boolean show_wpt = false
                 switch (coordroute_instance.type) {
                     case CoordType.TO:
-                        if (flighttestwindInstance) {
+                        if (testInstance) {
                             Map gate = AviationMath.getGate(
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                flighttestwindInstance.TODirection, 
-                                flighttestwindInstance.TOOffset,
-                                flighttestwindInstance.TOOrthogonalOffset,
+                                testInstance.flighttestwind.TODirection, 
+                                testInstance.flighttestwind.TOOffset,
+                                testInstance.flighttestwind.TOOrthogonalOffset,
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, xml, gate.coord.lat, gate.coord.lon)
+                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml, gate.coord.lat, gate.coord.lon)
                                 xml.name coordroute_instance.titleShortMap(isPrint)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
@@ -1783,7 +1781,7 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, xml)
+                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml)
                                 xml.name coordroute_instance.titleShortMap(isPrint)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
@@ -1795,16 +1793,16 @@ class GpxService
                         }
                         break
                     case CoordType.LDG:
-                        if (flighttestwindInstance) {
+                        if (testInstance) {
                             Map gate = AviationMath.getGate(
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                flighttestwindInstance.LDGDirection, 
-                                flighttestwindInstance.LDGOffset,
-                                flighttestwindInstance.LDGOrthogonalOffset,
+                                testInstance.flighttestwind.LDGDirection, 
+                                testInstance.flighttestwind.LDGOffset,
+                                testInstance.flighttestwind.LDGOrthogonalOffset,
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, xml, gate.coord.lat, gate.coord.lon)
+                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml, gate.coord.lat, gate.coord.lon)
                                 xml.name coordroute_instance.titleShortMap(isPrint)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
@@ -1822,7 +1820,7 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, xml)
+                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml)
                                 xml.name coordroute_instance.titleShortMap(isPrint)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
@@ -1835,16 +1833,16 @@ class GpxService
                         break
                     case CoordType.iTO:
                     case CoordType.iLDG:
-                        if (flighttestwindInstance) {
+                        if (testInstance) {
                             Map gate = AviationMath.getGate(
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                flighttestwindInstance.iTOiLDGDirection, 
-                                flighttestwindInstance.iTOiLDGOffset,
-                                flighttestwindInstance.iTOiLDGOrthogonalOffset,
+                                testInstance.flighttestwind.iTOiLDGDirection, 
+                                testInstance.flighttestwind.iTOiLDGOffset,
+                                testInstance.flighttestwind.iTOiLDGOrthogonalOffset,
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, xml, gate.coord.lat, gate.coord.lon)
+                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml, gate.coord.lat, gate.coord.lon)
                                 xml.name coordroute_instance.titleShortMap(isPrint)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
@@ -1862,7 +1860,7 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, xml)
+                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml)
                                 xml.name coordroute_instance.titleShortMap(isPrint)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
@@ -1887,7 +1885,7 @@ class GpxService
                             last_coordroute_instance.gatewidth2
                         )
                         xml.rte {
-                            wrGate(last_coordroute_instance, xml)
+                            wrGate(last_coordroute_instance, last_coordroute_instance.gatewidth2, xml)
                             //BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name last_coordroute_instance.titleShortMap(isPrint)
                             xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
@@ -1909,13 +1907,20 @@ class GpxService
                             wr_gate = true
                         }
                         if (wr_gate) {
+                            Float gate_width = null
+                            if (testInstance && coordroute_instance.type == CoordType.SECRET) {
+                                gate_width = testInstance.GetSecretGateWidth()
+                            }
+                            if (!gate_width) {
+                                gate_width = coordroute_instance.gatewidth2
+                            }
                             Map gate = AviationMath.getGate(
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                 coordroute_instance.latMath(),coordroute_instance.lonMath(),
-                                coordroute_instance.gatewidth2
+                                gate_width
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, xml)
+                                wrGate(coordroute_instance, gate_width, xml)
                                 // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.name coordroute_instance.titleShortMap(isPrint)
                                 xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2016,7 +2021,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void wrGate(CoordRoute coordrouteInstance, MarkupBuilder xml, BigDecimal latValue = null, BigDecimal lonValue = null)
+    private void wrGate(CoordRoute coordrouteInstance, Float gateWidth, MarkupBuilder xml, BigDecimal latValue = null, BigDecimal lonValue = null)
     {
         BigDecimal altitude_meter = coordrouteInstance.altitude.toLong() / ftPerMeter
         String dir = ""
@@ -2036,9 +2041,8 @@ class GpxService
                     number:         coordrouteInstance.titleNumber,
                     lat:            latValue,
                     lon:            lonValue,
-                    //ele:            altitude_meter,
                     alt:            coordrouteInstance.altitude,
-                    width:          coordrouteInstance.gatewidth2,
+                    width:          gateWidth,
                     dir:            dir,
                     notimecheck:    getYesNo(coordrouteInstance.noTimeCheck),
                     nogatecheck:    getYesNo(coordrouteInstance.noGateCheck),

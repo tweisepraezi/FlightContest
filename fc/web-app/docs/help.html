@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.1, Ausgabe 3,</span>
-<span id="revdate">17.02.2018</span>
+<span id="revnumber">version 3.1.1, Ausgabe 4,</span>
+<span id="revdate">16.03.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -3049,7 +3049,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetablelist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft tas team resultclass shortresultclass planningtime takeofftime version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime version</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">legtimelist</p></td>
@@ -3059,11 +3059,11 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetablejudgelist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningendtime takeofftime sptime tptime fptime landingtime arrivaltime empty1 empty2 empty3 empty4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime empty1 empty2 empty3 empty4</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">briefing planning planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">briefing planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">col1 col2 col3</p></td>
 </tr>
 <tr>
@@ -3251,6 +3251,27 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 (der Wert definiert die Minuten nach dem FP)</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--add-submission</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
+10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flupplan f&#252;r Besatzungen dieser Klasse die sp&#228;teste Abgabezeit des L&#246;sungsbogens verl&#228;ngern (der Zahlen-Wert definiert die Minuten nach der regul&#228;ren Abgabezeit)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--secret-gatewidth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
+2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bei Zeitauswertung f&#252;r Besatzungen dieser Klasse eine andere Gate-Breite f&#252;r UZKs verwenden (Gate-Breite in NM)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--before-starttime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
+30</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Zeitplan f&#252;r Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regul&#228;ren Planungszeit)</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen</p></td>
@@ -3279,7 +3300,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <p>Strecken-Anzeigen - UZKs der krummen Strecke anzeigen</p>
 <div class="literalblock">
 <div class="content">
-<pre>body {--route: show-curved-points;}</pre>
+<pre>body { --route: show-curved-points; }</pre>
 </div>
 </div>
 </li>
@@ -3288,6 +3309,14 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <div class="literalblock">
 <div class="content">
 <pre>table.timetablelist tr.value td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Besatzungs-Zeitplan - f&#252;r Einsteiger-Klasse Anfangs-Zeit der Planung um 30 Minuten vorverlegen</p>
+<div class="literalblock">
+<div class="content">
+<pre>body { --class: Einsteiger; --before-starttime: 30; }</pre>
 </div>
 </div>
 </li>
@@ -3303,8 +3332,16 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <p>Flugplan - Formatierung f&#252;r Rallyeflug (Entfernung, Kurse und Ortszeit nicht drucken; Zeitverlauf drucken; Sp&#228;teste Abgabezeit anzeigen)</p>
 <div class="literalblock">
 <div class="content">
-<pre>body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }
-body {--submission: 20; }</pre>
+<pre>body { --flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }
+body { --submission: 20; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Flugplan - f&#252;r Einsteiger-Klasse sp&#228;teste Abgabezeit des L&#246;sungsbogens um 10 Minuten verl&#228;ngern</p>
+<div class="literalblock">
+<div class="content">
+<pre>body { --class: Einsteiger; --add-submission: 10; }</pre>
 </div>
 </div>
 </li>
@@ -3312,7 +3349,7 @@ body {--submission: 20; }</pre>
 <p>Gescannte Beobachtungsformulare - Gr&#246;&#223;e ver&#228;ndern</p>
 <div class="literalblock">
 <div class="content">
-<pre>img.scannedobservationtest {width:80%;}</pre>
+<pre>img.scannedobservationtest { width:80%; }</pre>
 </div>
 </div>
 </li>
@@ -3320,7 +3357,7 @@ body {--submission: 20; }</pre>
 <p>Gescannte Planungsaufgabenformulare - Gr&#246;&#223;e ver&#228;ndern</p>
 <div class="literalblock">
 <div class="content">
-<pre>img.scannedplanningtest {width:80%;}</pre>
+<pre>img.scannedplanningtest { width:80%; }</pre>
 </div>
 </div>
 </li>
@@ -3328,7 +3365,15 @@ body {--submission: 20; }</pre>
 <p>Navigationsflug-Ergebnis - UZKs der krummen Strecke anzeigen</p>
 <div class="literalblock">
 <div class="content">
-<pre>body {--flightresults: show-curved-points;}</pre>
+<pre>body { --flightresults: show-curved-points; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Navigationsflug-Ergebnis - f&#252;r Einsteiger-Klasse Gate-Breite 2NM f&#252;r UZKs verwenden</p>
+<div class="literalblock">
+<div class="content">
+<pre>body { --class: Einsteiger; --secret-gatewidth: 2; }</pre>
 </div>
 </div>
 </li>
@@ -3369,7 +3414,7 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 <p>Punkte-Druck Landefeld - Gr&#246;&#223;e ver&#228;ndern</p>
 <div class="literalblock">
 <div class="content">
-<pre>img.landingfield {width:200%;}</pre>
+<pre>img.landingfield { width:200%; }</pre>
 </div>
 </div>
 </li>

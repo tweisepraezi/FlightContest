@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-12.03.2018
+17.03.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -87,7 +87,13 @@ Erweiterungen in dieser Version (3.1.1):
     FAI Precision Flying - Edition 2018
     FAI Air Rally Flying - Edition 2018
 - KML/KMZ-Strecken-Import:
-    Unterstützung norwegischer Streckenplanung
+    Unterstützung norwegischer Streckenplanung (in einem <Folder> 
+    mehrere <Placemark> mit <Point> und einer Koordinate in <coordinates>)
+- Klassenabhängige Konfigurationen hinzugefügt
+    * Auswertung einer abweichenden Gate-Breite bei UZKs
+    * Vorverlegung der Anfangs-Zeit der Planung
+    * Späteste Abgabezeit des Lösungsbogens verlängern 
+    -> Hilfe -> Besondere CSS-Eigenschaften
 
 Erweiterungen in Version 3.1:
 -----------------------------
@@ -120,6 +126,7 @@ Erweiterungen in Version 3.1:
     -> 'Wettbewerb -> Vorgaben'
 - Strecken-Import ('Strecken -> Import Strecke') erweitert
     * Import von KML- und KMZ-Dateien
+      (ein <Placemark> mit <LineString> und vielen Koordinaten in <coordinates>)
     * TXT-Datei-Import untertützt nun verschiedene Koordinaten-Darstellungen
       (entsprechend der Wettbewerbseinstellung)
     -> 'Programme -> Flight Contest -> Help' -> 'Streckenplanung'

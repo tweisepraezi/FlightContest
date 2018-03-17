@@ -167,7 +167,8 @@ class RouteFileTools
                 }
                 
                 String coordinates = kml.Document.Placemark.LineString.coordinates.text()
-                gates += ReadKMLCoordinates(coordinates)
+                Map kml_coords = ReadKMLCoordinates(coordinates, null, null)
+                gates += kml_coords.gates
                 if (gates.size()) {
                     valid_format = true
                 }
@@ -183,10 +184,15 @@ class RouteFileTools
                     }
                 }
                 
+                BigDecimal last_latitude = null
+                BigDecimal last_longitude = null
                 for (def pm in kml.Document.Folder.Placemark) {
                     if (pm.Point.coordinates) {
                         String coordinates = pm.Point.coordinates.text()
-                        gates += ReadKMLCoordinates(coordinates)
+                        Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
+                        gates += kml_coords.gates
+                        last_latitude = kml_coords.lastlatitude
+                        last_longitude = kml_coords.lastlongitude
                     }
                 }
                 if (gates.size()) {
@@ -204,13 +210,14 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static List ReadKMLCoordinates(String coordinateValues)
-    // Return: List of gates
+    private static Map ReadKMLCoordinates(String coordinateValues, BigDecimal lastLatitude, BigDecimal lastLongitude)
+    // Return: gates                       - List of gates (lat, lon, alt)
+    //         lastlatitude, lastlongitude - last coordinate
     {
         List gates = []
         
-        BigDecimal last_latitude = null
-        BigDecimal last_longitude = null
+        BigDecimal last_latitude = lastLatitude
+        BigDecimal last_longitude = lastLongitude
         def last_track = null
         for (coordinate in coordinateValues.split(' ')) {
             
@@ -240,7 +247,7 @@ class RouteFileTools
             last_track = track
         }
 
-        return gates
+        return [gates: gates, lastlatitude: last_latitude, lastlongitude: last_longitude]
     }
 
     //--------------------------------------------------------------------------

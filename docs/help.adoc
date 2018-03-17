@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 3
-:revdate:   17.02.2018
+:revnumber: 3.1.1, Ausgabe 4
+:revdate:   16.03.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -1172,10 +1172,10 @@ Tabellen-Klassen:
 |resultclasslist|value [#crew.num]|resultclass shortresultclass crew aircraft tas
 |aircraftlist|value [#aircraft]|aircraft aircrafttype aircraftcolor crew1 crew2
 
-|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime takeofftime version
+|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime version
 |legtimelist|value [#tas]|tas legtime
-|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningendtime takeofftime sptime tptime fptime landingtime arrivaltime empty1 empty2 empty3 empty4
-|timetableoverviewlist|briefing planning planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]|col1 col2 col3
+|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime empty1 empty2 empty3 empty4
+|timetableoverviewlist|briefing planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
 
 |crewtest||title crew team resultclass aircraft aircrafttype tas
@@ -1251,6 +1251,21 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 |20
 |im Flugplan die späteste Abgabezeit des Lösungsbogens anzeigen +
 (der Wert definiert die Minuten nach dem FP)
+|--class +
+--add-submission
+|Einsteiger +
+10
+|im Flupplan für Besatzungen dieser Klasse die späteste Abgabezeit des Lösungsbogens verlängern (der Zahlen-Wert definiert die Minuten nach der regulären Abgabezeit)
+|--class +
+--secret-gatewidth
+|Einsteiger +
+2
+|bei Zeitauswertung für Besatzungen dieser Klasse eine andere Gate-Breite für UZKs verwenden (Gate-Breite in NM)
+|--class +
+--before-starttime
+|Einsteiger +
+30
+|im Zeitplan für Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regulären Planungszeit)
 |--flightresults
 |show-curved-points
 |im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen
@@ -1268,11 +1283,15 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 
 ** Strecken-Anzeigen - UZKs der krummen Strecke anzeigen
 
- body {--route: show-curved-points;}
+ body { --route: show-curved-points; }
  
 ** Besatzungs-Zeitplan - Zeilen verkleinern
 
  table.timetablelist tr.value td { font-size: 90%; }
+  
+** Besatzungs-Zeitplan - für Einsteiger-Klasse Anfangs-Zeit der Planung um 30 Minuten vorverlegen
+
+ body { --class: Einsteiger; --before-starttime: 30; }
   
 ** Schiedsrichter-Zeitplan - Zeilen verkleinern
 
@@ -1280,20 +1299,28 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
   
 ** Flugplan - Formatierung für Rallyeflug (Entfernung, Kurse und Ortszeit nicht drucken; Zeitverlauf drucken; Späteste Abgabezeit anzeigen)
 
- body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }
- body {--submission: 20; }
+ body { --flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }
+ body { --submission: 20; }
 
+** Flugplan - für Einsteiger-Klasse späteste Abgabezeit des Lösungsbogens um 10 Minuten verlängern
+
+ body { --class: Einsteiger; --add-submission: 10; }
+ 
 ** Gescannte Beobachtungsformulare - Größe verändern
 
- img.scannedobservationtest {width:80%;}
+ img.scannedobservationtest { width:80%; }
  
 ** Gescannte Planungsaufgabenformulare - Größe verändern
   
- img.scannedplanningtest {width:80%;}
+ img.scannedplanningtest { width:80%; }
  
 ** Navigationsflug-Ergebnis - UZKs der krummen Strecke anzeigen
 
- body {--flightresults: show-curved-points;}
+ body { --flightresults: show-curved-points; }
+ 
+** Navigationsflug-Ergebnis - für Einsteiger-Klasse Gate-Breite 2NM für UZKs verwenden
+
+ body { --class: Einsteiger; --secret-gatewidth: 2; }
  
 ** Besatzungs-Ergebnis - Zeilen verkleinern
  
@@ -1318,7 +1345,7 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 
 ** Punkte-Druck Landefeld - Größe verändern
 
- img.landingfield {width:200%;}
+ img.landingfield { width:200%; }
  
  
 <<<

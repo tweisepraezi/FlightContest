@@ -23,7 +23,10 @@
                                 <br/>
                                 <input type="text" id="briefingTime" name="briefingTime" value="${fieldValue(bean:taskInstance,field:'briefingTime')}" tabIndex="1"/>
                             </p>
-                            <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+                            <g:set var="first_test" value="${taskInstance.GetFirstTestBefore()}"/>
+                            <g:if test="${!first_test}">
+                                <g:set var="first_test" value="${taskInstance.GetFirstTest()}"/>
+                            </g:if>
                             <g:set var="last_test" value="${taskInstance.GetLastTest()}"/>
                             <g:if test="${first_test && last_test}">
                                 <g:set var="first_landing_time" value="${first_test.GetIntermediateLandingTime(true)}"/>
@@ -33,7 +36,7 @@
                                             <g:if test="${taskInstance.planningTestDuration == 0}">
                                                 <tr>
                                                     <td class="detailtitle">${message(code:'fc.test.planning.publish')}:</td>
-                                                    <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
+                                                    <td>${first_test.GetTestingTime().format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
                                                     <td/>
                                                     <g:if test="${first_landing_time}">
                                                         <td/>
@@ -45,7 +48,7 @@
                                             <g:else>
                                                 <tr>
                                                     <td class="detailtitle">${message(code:'fc.planningtest')}:</td>
-                                                    <td>${first_test.testingTime.format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
+                                                    <td>${first_test.GetTestingTime().format('HH:mm')} - ${last_test.endTestingTime.format('HH:mm')}</td>
                                                     <td/>
                                                     <g:if test="${first_landing_time}">
                                                         <td/>

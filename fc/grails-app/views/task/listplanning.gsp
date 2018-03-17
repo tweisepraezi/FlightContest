@@ -142,7 +142,13 @@
 		                                    </g:else>
 		                                    
 											<g:if test="${testInstance.timeCalculated}">
-		                                        <td>${testInstance.testingTime?.format('HH:mm')}</td>
+											    <g:set var="minutes_before" value="${testInstance.GetMinutesBeforeStartTime()}"/>
+											    <g:if test="${minutes_before}">
+                                                    <td>${testInstance.testingTime.format('HH:mm')} (${testInstance.GetTestingTime().format('HH:mm')})</td>
+											    </g:if>
+											    <g:else>
+											        <td>${testInstance.testingTime.format('HH:mm')}</td>
+											    </g:else>
 		                                        <g:if test="${testInstance.takeoffTimeWarning}">
 		                                            <td class="errors">${testInstance.takeoffTime?.format('HH:mm')} !</td>
 		                                        </g:if> <g:else>

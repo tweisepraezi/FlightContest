@@ -2551,9 +2551,15 @@ class Test
                 }
             }
         }
+        
+        Integer add_minutes2 = GetMinutesAddSubmission()
+        
         GregorianCalendar time = new GregorianCalendar()
         time.setTime(finishTime) 
         time.add(Calendar.MINUTE, add_minutes)
+        if (add_minutes2) {
+            time.add(Calendar.MINUTE, add_minutes2)
+        }
         // FcMath.SetFullMinute(time)
         return time.getTime()
     }
@@ -2575,4 +2581,117 @@ class Test
         }
         return curved_point_ids
     }
+
+    Float GetSecretGateWidth()
+    {
+        Float ret = null
+        if (crew.resultclass) {
+            task.contest.printStyle.eachLine {
+                if (it.contains("--class") && it.contains("--secret-gatewidth")) {
+                    String s = it.substring(it.indexOf("--class")+7).trim()
+                    if (s.startsWith(":")) {
+                        s = s.substring(1).trim()
+                        int i = s.indexOf(";")
+                        if (i) {
+                            s = s.substring(0,i).trim()
+                            if (s == crew.resultclass.name) {
+                                s = it.substring(it.indexOf("--secret-gatewidth")+18).trim()
+                                if (s.startsWith(":")) {
+                                    s = s.substring(1).trim()
+                                    i = s.indexOf(";")
+                                    if (i) {
+                                        s = s.substring(0,i).trim()
+                                        if (s.isNumber()) {
+                                            ret = s.toFloat()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ret
+    }
+    
+    Integer GetMinutesBeforeStartTime()
+    {
+        Integer ret = null
+        if (crew.resultclass) {
+            task.contest.printStyle.eachLine {
+                if (it.contains("--class") && it.contains("--before-starttime")) {
+                    String s = it.substring(it.indexOf("--class")+7).trim()
+                    if (s.startsWith(":")) {
+                        s = s.substring(1).trim()
+                        int i = s.indexOf(";")
+                        if (i) {
+                            s = s.substring(0,i).trim()
+                            if (s == crew.resultclass.name) {
+                                s = it.substring(it.indexOf("--before-starttime")+18).trim()
+                                if (s.startsWith(":")) {
+                                    s = s.substring(1).trim()
+                                    i = s.indexOf(";")
+                                    if (i) {
+                                        s = s.substring(0,i).trim()
+                                        if (s.isInteger()) {
+                                            ret = s.toInteger()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ret
+    }
+    
+    Integer GetMinutesAddSubmission()
+    {
+        Integer ret = null
+        if (crew.resultclass) {
+            task.contest.printStyle.eachLine {
+                if (it.contains("--class") && it.contains("--add-submission")) {
+                    String s = it.substring(it.indexOf("--class")+7).trim()
+                    if (s.startsWith(":")) {
+                        s = s.substring(1).trim()
+                        int i = s.indexOf(";")
+                        if (i) {
+                            s = s.substring(0,i).trim()
+                            if (s == crew.resultclass.name) {
+                                s = it.substring(it.indexOf("--add-submission")+16).trim()
+                                if (s.startsWith(":")) {
+                                    s = s.substring(1).trim()
+                                    i = s.indexOf(";")
+                                    if (i) {
+                                        s = s.substring(0,i).trim()
+                                        if (s.isInteger()) {
+                                            ret = s.toInteger()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return ret
+    }
+    
+    Date GetTestingTime()
+    {
+        Integer sub_minutes = GetMinutesBeforeStartTime()
+        
+        GregorianCalendar time = new GregorianCalendar()
+        time.setTime(testingTime) 
+        if (sub_minutes) {
+            time.add(Calendar.MINUTE, -sub_minutes)
+        }
+        
+        return time.getTime()
+    }
+    
 }

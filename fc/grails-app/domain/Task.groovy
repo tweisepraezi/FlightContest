@@ -937,6 +937,18 @@ class Task
         return null
     }
 
+    Test GetFirstTestBefore()
+    {
+        for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"asc"])) {
+            if (test_instance.timeCalculated && !test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (test_instance.GetMinutesBeforeStartTime()) {
+                    return test_instance
+                }
+            }
+        }
+        return null
+    }
+
     Test GetLastTest()
     {
         for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos",order:"desc"])) {
