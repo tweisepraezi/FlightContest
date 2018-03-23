@@ -1,0 +1,29 @@
+
+Layouts
+=======
+
+Standard
+--------
+Contest
+Startnum Aircraft
+Crew
+
+Team 1
+------
+Contest
+Startnum Aircraft
+Crew
+Team
+
+Team 2
+------
+Contest
+Startnum Aircraft
+Crew Team
+
+Task
+----
+Contest
+Task
+Crew
+Team

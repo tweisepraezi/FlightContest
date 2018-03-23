@@ -14,9 +14,9 @@ class Task
 	boolean observationTestRun               = true
     Boolean observationTestTurnpointRun      = true  // DB-2.13
     Boolean observationTestEnroutePhotoRun   = true  // DB-2.13
-    Boolean observationTestEnrouteCanvasRun  = false // DB-2.13
+    Boolean observationTestEnrouteCanvasRun  = true  // DB-2.13
 	boolean landingTestRun                   = true
-	boolean landingTest1Run                  = false // DB-2.0
+	boolean landingTest1Run                  = true  // DB-2.0
 	boolean landingTest2Run                  = false // DB-2.0
 	boolean landingTest3Run                  = false // DB-2.0
 	boolean landingTest4Run                  = false // DB-2.0

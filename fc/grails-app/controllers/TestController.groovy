@@ -733,6 +733,9 @@ class TestController
                 calc = fcService.calculateLoggerResultTest(LoggerFileTools.IGC_EXTENSION, test.instance, file, false)
             }
             if (!calc.found) {
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.NMEA_EXTENSION, test.instance, file, false)
+            }
+            if (!calc.found) {
                 calc = fcService.calculateLoggerResultTest("", test.instance, file, false)
             }
             flash.error = calc.error

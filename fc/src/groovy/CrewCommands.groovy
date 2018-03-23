@@ -1,14 +1,19 @@
 enum CrewCommands 
 {
-    SELECTCOMMAND           ('fc.crew.selectcommand'),
-    DISABLECONTESTCREWS     ('fc.crew.disablecontestcrews'),
-    ENABLECONTESTCREWS      ('fc.crew.enablecontestcrews'),
-    DISABLETEAMCREWS        ('fc.crew.disableteamcrews'),
-    ENABLETEAMCREWS         ('fc.crew.enableteamcrews'),
-    DISABLEINCREASECREWS    ('fc.crew.disableincreasecrews'),
-    ENABLEINCREASECREWS     ('fc.crew.enableincreasecrews'),
-    DISABLECREWS            ('fc.crew.disablecrews'),
-    ENABLECREWS             ('fc.crew.enablecrews')
+    SELECTCOMMAND             ('fc.crew.selectcommand'),
+    DISABLECONTESTCREWS       ('fc.crew.disablecontestcrews'),
+    ENABLECONTESTCREWS        ('fc.crew.enablecontestcrews'),
+    DISABLETEAMCREWS          ('fc.crew.disableteamcrews'),
+    ENABLETEAMCREWS           ('fc.crew.enableteamcrews'),
+    DISABLEINCREASECREWS      ('fc.crew.disableincreasecrews'),
+    ENABLEINCREASECREWS       ('fc.crew.enableincreasecrews'),
+    DISABLECREWS              ('fc.crew.disablecrews'),
+    ENABLECREWS               ('fc.crew.enablecrews'),
+    EXPORTCREWS               ('fc.crew.exportcrews'),
+    EXPORTPILOTSCOMMA         ('fc.crew.exportpilots.comma'),
+    EXPORTNAVIGATORSCOMMA     ('fc.crew.exportnavigators.comma'),
+    EXPORTPILOTSSEMICOLON     ('fc.crew.exportpilots.semicolon'),
+    EXPORTNAVIGATORSSEMICOLON ('fc.crew.exportnavigators.semicolon')
     
 	CrewCommands(String titleCode)
 	{

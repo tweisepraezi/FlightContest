@@ -48,7 +48,9 @@ class GpxService
     final static String GPXVERSION = "1.1"
     final static String GPXCREATOR = "Flight Contest - flightcontest.de - Version 3"
     final static String GPXCREATOR_CONTESTMAP = "Flight Contest - flightcontest.de - Contest Map - Version 1"
-    final static String GPXGACTRACKNAME = "GAC track"
+    final static String GAC_TRACKNAME = "GAC track"
+    final static String IGC_TRACKNAME = "IGC track"
+    final static String NMEA_TRACKNAME = "NMEA track"
     
     final static String COLOR_ERROR = "red"
     final static String COLOR_WARNING = "blue"
@@ -221,7 +223,7 @@ class GpxService
         gpx_writer.writeLine(XMLHEADER)
         xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
             xml.trk {
-                xml.name GPXGACTRACKNAME
+                xml.name GAC_TRACKNAME
                 xml.trkseg {
                     try {
                         boolean first = true
@@ -355,7 +357,7 @@ class GpxService
         gpx_writer.writeLine(XMLHEADER)
         xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
             xml.trk {
-                xml.name GPXGACTRACKNAME
+                xml.name IGC_TRACKNAME
                 xml.trkseg {
                     try {
                         boolean first = true
@@ -439,7 +441,7 @@ class GpxService
                         }
                         if (!valid_gac_format) {
                             converted = false
-                            err_msg = "No supported gac format."
+                            err_msg = "No supported igc format."
                         }
                     } catch (Exception e) {
                         converted = false
@@ -452,6 +454,144 @@ class GpxService
             }
         }
         igc_reader.close()
+        gpx_writer.close()
+
+        if (converted) {
+            printdone ""
+        } else {
+            printerror err_msg
+        }
+        if (routeInstance) {
+            println "Generate points for buttons (GetShowPointsRoute)"
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
+        }
+        ret += [ok:converted]
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map ConvertNMEA2GPX(String nmeaFileName, String gpxFileName, Route routeInstance)
+    {
+        Map ret = [:]
+        boolean converted = true
+        String err_msg = ""
+        
+        printstart "ConvertNMEA2GPX $nmeaFileName -> $gpxFileName"
+        
+        File nmea_file = new File(nmeaFileName)
+        File gpx_file = new File(gpxFileName)
+        
+        boolean repairIdenticalTimes = false
+        String line = ""
+        
+        LineNumberReader nmea_reader = nmea_file.newReader()
+        BufferedWriter gpx_writer = gpx_file.newWriter()
+        MarkupBuilder xml = new MarkupBuilder(gpx_writer)
+        gpx_writer.writeLine(XMLHEADER)
+        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+            xml.trk {
+                xml.name NMEA_TRACKNAME
+                xml.trkseg {
+                    try {
+                        boolean first = true
+                        String last_time_utc = null
+                        BigDecimal latitude = null
+                        BigDecimal longitude = null
+                        boolean valid_nmea_format = false
+                        String last_utc = FcTime.UTC_GPX_DATE
+                        while (true) {
+                            line = nmea_reader.readLine()
+                            if (line == null) {
+                                break
+                            }
+                            if (line) {
+                                if (line.startsWith('$GPGGA')) {
+                                    valid_nmea_format = true
+                                }   
+                                boolean ignore_line = false 
+                                if (line.startsWith('$GPGGA')) {
+                                    if (valid_nmea_format) {
+                                        
+                                        // Repair DropOuts
+                                        String time_utc = line.substring(1,7)
+                                        if (!first) {
+                                            if (repairIdenticalTimes) {
+                                                if (last_time_utc == time_utc) { // Zeile mit doppelter Zeit entfernen
+                                                    ignore_line = true
+                                                    if (WRLOG) {
+                                                        println "Ignore '$line'"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                        String[] line_values = line.split(",")
+                                         
+                                        // UTC
+                                        String utc_h = line_values[1].substring(0,2)
+                                        String utc_min = line_values[1].substring(2,4)
+                                        String utc_s = line_values[1].substring(4,6)
+                                        String utc = FcTime.UTCGetNextDateTime(last_utc, "${utc_h}:${utc_min}:${utc_s}")
+                                        
+                                        // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
+                                        String latitude_grad = line_values[2].substring(0,2)
+                                        BigDecimal latitude_grad_math = latitude_grad.toBigDecimal()
+                                        String latidude_minute = line_values[2].substring(2)
+                                        BigDecimal latidude_minute_math = latidude_minute.toBigDecimal()
+                                        boolean latitude_north = line_values[3] == CoordPresentation.NORTH
+                                        latitude = latitude_grad_math + (latidude_minute_math / 60)
+                                        if (!latitude_north) {
+                                            latitude *= -1
+                                        }
+                                        
+                                        // Longitude (Geographische Laenge: -179.999 (W) ... +180 Grad (E))
+                                        String longitude_grad = line_values[4].substring(0,3)
+                                        BigDecimal longitude_grad_math = longitude_grad.toBigDecimal()
+                                        String longitude_minute = line_values[4].substring(4)
+                                        BigDecimal longitude_minute_math = longitude_minute.toBigDecimal()
+                                        boolean longitude_east = line_values[5] == CoordPresentation.EAST
+                                        longitude = longitude_grad_math + (longitude_minute_math / 60)
+                                        if (!longitude_east) {
+                                            longitude *= -1
+                                        }
+                                        
+                                        // Altitude (Höhe)
+                                        String altitude_meter = "0.0"
+                                        if (line_values[10] == 'M') {
+                                            altitude_meter = line_values[9]
+                                        }
+                                        
+                                        // write gpx tag
+                                        if (!ignore_line) {
+                                            // println "UTC: $utc, Latitude: $latitude, Longitude: $longitude, Altitude: ${altitude_meter}m"
+                                            xml.trkpt(lat:latitude,lon:longitude) {
+                                                xml.ele altitude_meter
+                                                xml.time utc
+                                            }
+                                        }
+                                        
+                                        first = false
+                                        last_time_utc = time_utc
+                                        last_utc = utc
+                                    }
+                                }
+                            }
+                        }
+                        if (!valid_nmea_format) {
+                            converted = false
+                            err_msg = "No supported nmea format."
+                        }
+                    } catch (Exception e) {
+                        converted = false
+                        err_msg = e.getMessage()
+                    }
+                }
+            }
+            if (routeInstance) {
+                GPXRoute(routeInstance, null, false, false, xml) // false - no Print, false - no wrEnrouteSign
+            }
+        }
+        nmea_reader.close()
         gpx_writer.close()
 
         if (converted) {

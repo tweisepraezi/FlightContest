@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-17.03.2018
+23.03.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -47,7 +47,7 @@ Wettbewerbsmanagement. Dazu zählen die Unterstützung
  
 Weitere nützliche Funktionen von Flight Contest:
 * Direkte Strafpunkt-Berechnung beim Laden einer Logger-Datendatei
-  (GAC, GPX und IGC).
+  (GAC, GPX, IGC und NMEA 0183).
 * Sehr schnelle Logger-Daten-Nutzung des FAI-zertifizierten Loggers AFLOS 
   (ohne Umweg über Datei-Export und -Import).
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
@@ -94,6 +94,10 @@ Erweiterungen in dieser Version (3.1.1):
     * Vorverlegung der Anfangs-Zeit der Planung
     * Späteste Abgabezeit des Lösungsbogens verlängern 
     -> Hilfe -> Besondere CSS-Eigenschaften
+- Besatzungs-Liste: Export-Kommandos für Label-Drucker
+    Dateien für Besatzung, Pilot und Navigator exportierbar
+- NMEA-Unterstützung (NMEA 0183) für
+  Navigationsflug-Logger-Auswertung und Logger-Daten-Anzeige
 
 Erweiterungen in Version 3.1:
 -----------------------------

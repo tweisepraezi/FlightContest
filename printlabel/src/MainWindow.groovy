@@ -21,8 +21,8 @@ class MainWindow
     def frame
     def info_text
     def print_button
-    String selected_file = ''
-    String current_directory = '.'
+    def selected_file = ''
+    def current_directory = '.'
     
     static final int SIZE_X = 650
     static final int SIZE_Y = 180
@@ -30,8 +30,9 @@ class MainWindow
     static final String LAYOUT_STANDARD = "Standard-Layout"
     static final String LAYOUT_TEAM1 = "Team-Layout 1"
     static final String LAYOUT_TEAM2 = "Team-Layout 2"
+    static final String LAYOUT_TASK = "Task-Layout"
     
-    def LAYOUTS = [LAYOUT_STANDARD, LAYOUT_TEAM1, LAYOUT_TEAM2]
+    def LAYOUTS = [LAYOUT_STANDARD, LAYOUT_TEAM1, LAYOUT_TEAM2, LAYOUT_TASK]
     
     //--------------------------------------------------------------------------
     public static void main(String[] args)
@@ -48,7 +49,7 @@ class MainWindow
         } else { // from jar
             image_icon = swing.imageIcon('/printlabel.png').image
         }
-        frame = swing.frame(title: 'Flight Contest Print Label 1.1',
+        frame = swing.frame(title: 'Flight Contest Print Label 1.2',
                             size: [SIZE_X,SIZE_Y],
                             minimumSize: [SIZE_X,SIZE_Y],
                             locationRelativeTo: null,
@@ -91,6 +92,9 @@ class MainWindow
                         case LAYOUT_TEAM2:
                             layout_name = "FCLabelTeam2.lbx"
                             break
+                        case LAYOUT_TASK:
+                            layout_name = "FCLabelTask.lbx"
+                            break
                     }
                     
                     // print
@@ -104,9 +108,9 @@ class MainWindow
                         try {
                             def printer_obj = new ActiveXObject("bpac.Document")
                             if (printer_obj) {
-                                String label_template = "src/${layout_name}"
+                                def label_template = "src/${layout_name}"
                                 if (!(new File(label_template).exists())) { // from jar
-                                    String current_dir = args[0]
+                                    def current_dir = args[0]
                                     label_template = "$current_dir/${layout_name}"
                                 }
                                 if (new File(label_template).exists()) {
@@ -115,18 +119,18 @@ class MainWindow
                                         
                                         File read_file = new File(selected_file)
                                         BufferedReader file_reader = read_file.newReader("UTF-8")
-                                        String contest = ""
-                                        String task = ""
-                                        String start_num = ''
-                                        String crew = ''
-                                        String aircraft = ''
-                                        String team = ''
-                                        String result_class = ''
-                                        String tas = ''
-                                        String planning_time = ''
-                                        String takeoff_time = ''
+                                        def contest = ""
+                                        def task = ""
+                                        def start_num = ''
+                                        def crew = ''
+                                        def aircraft = ''
+                                        def team = ''
+                                        def result_class = ''
+                                        def tas = ''
+                                        def planning_time = ''
+                                        def takeoff_time = ''
                                         while (true) {
-                                            String line = file_reader.readLine()
+                                            def line = file_reader.readLine()
                                             if (line) {
                                                 if (line.startsWith('CONTEST:')) {
                                                     contest = line.substring(8)

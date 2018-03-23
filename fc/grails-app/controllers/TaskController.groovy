@@ -1269,6 +1269,9 @@ class TaskController {
                 calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile)
             }
             if (!calc.found) {
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile)
+            }
+            if (!calc.found) {
                 calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, false)
             }
             flash.error = calc.error

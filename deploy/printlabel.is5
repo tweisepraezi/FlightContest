@@ -3,10 +3,10 @@
 [Setup]
 AppName=Flight Contest Print Label
 
-AppVerName=Flight Contest Print Label 1.1
-AppVersion=1.1
+AppVerName=Flight Contest Print Label 1.2
+AppVersion=1.2
 ; no milestone
-VersionInfoVersion=1.1
+VersionInfoVersion=1.2
 
 AppCopyright=(C) 2018 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -41,6 +41,7 @@ Source: "..\printlabel\src\printlabel.png";                      DestDir: "{app}
 Source: "..\printlabel\src\FCLabelStandard.lbx";                 DestDir: "{app}";
 Source: "..\printlabel\src\FCLabelTeam1.lbx";                    DestDir: "{app}";
 Source: "..\printlabel\src\FCLabelTeam2.lbx";                    DestDir: "{app}";
+Source: "..\printlabel\src\FCLabelTask.lbx";                     DestDir: "{app}";
 Source: "printlabel.ico";                                        DestDir: "{app}";
 
 [InstallDelete]

@@ -3496,15 +3496,16 @@ class FcService
             if (export_values.size() > 0) {
                 File upload_file = new File(uploadFileName)
                 BufferedWriter upload_writer =  upload_file.newWriter("UTF-8")
+                upload_writer.writeLine "LAYOUT:Standard-Layout,Team-Layout 1,Team-Layout 2"
                 upload_writer.writeLine "CONTEST:${task.instance.contest.title}"
                 upload_writer.writeLine "TASK:${task.instance.printName()}"
                 for (Map export_value in export_values) {
                     upload_writer.writeLine ""
                     upload_writer.writeLine "STARTNUM:${export_value.startnum}"
-                    upload_writer.writeLine "CREW:${export_value.crew}"
                     upload_writer.writeLine "AIRCRAFT:${export_value.aircraft}"
-                    upload_writer.writeLine "TEAM:${export_value.team}"
+                    upload_writer.writeLine "CREW:${export_value.crew}"
                     upload_writer.writeLine "CLASS:${export_value.resultclass}"
+                    upload_writer.writeLine "TEAM:${export_value.team}"
                     upload_writer.writeLine "TAS:${export_value.tas}"
                     upload_writer.writeLine "PLANNINGTIME:${export_value.testtime}"
                     upload_writer.writeLine "TAKEOFFTIME:${export_value.takeofftime}"
@@ -8449,6 +8450,118 @@ class FcService
         return ret
     }
 
+    //--------------------------------------------------------------------------
+    Map exportCrews(Contest contestInstance, Map params, String uploadFileName)
+    {
+        String crew_command = params.crewcommand.toString()
+        printstart "exportCrews $crew_command"
+        
+        Map ret = ['message':'','error':false]
+        try {
+            String layout = ""
+            switch (crew_command) {
+                case CrewCommands.EXPORTCREWS.toString():
+                    layout = "Standard-Layout,Team-Layout 1,Team-Layout 2"
+                    break
+                case CrewCommands.EXPORTPILOTSCOMMA.toString():
+                case CrewCommands.EXPORTPILOTSSEMICOLON.toString():
+                    layout = "Team-Layout 1"
+                    break
+                case CrewCommands.EXPORTNAVIGATORSCOMMA.toString():
+                case CrewCommands.EXPORTNAVIGATORSSEMICOLON.toString():
+                    layout = "Team-Layout 1"
+                    break
+            }
+            
+            List export_values = []
+            Crew.findAllByContest(contestInstance,[sort:"viewpos"]).each { Crew crew_instance ->
+                if (!crew_instance.disabled) {
+                    if (params["selectedCrewID${crew_instance.id}"] == "on") {
+                        String result_class = ""
+                        if (crew_instance.resultclass) {
+                            result_class = crew_instance.resultclass.name
+                        }
+                        String team = ""
+                        if (crew_instance.team) {
+                            team = crew_instance.team.name
+                        }
+                        String crew = crew_instance.name
+                        switch (crew_command) {
+                            case CrewCommands.EXPORTPILOTSCOMMA.toString():
+                                if (crew.contains(',')) {
+                                    crew = crew.split(',')[0].trim()
+                                }
+                                team = getMsg('fc.crew.exportpilots.text')
+                                break
+                            case CrewCommands.EXPORTPILOTSSEMICOLON.toString():
+                                if (crew.contains(';')) {
+                                    crew = crew.split(';')[0].trim()
+                                }
+                                team = getMsg('fc.crew.exportpilots.text')
+                                break
+                            case CrewCommands.EXPORTNAVIGATORSCOMMA.toString():
+                                if (crew.contains(',')) {
+                                    crew = crew.split(',')[1].trim()
+                                } else {
+                                    crew = ""
+                                }
+                                team = getMsg('fc.crew.exportnavigators.text')
+                                break
+                            case CrewCommands.EXPORTNAVIGATORSSEMICOLON.toString():
+                                if (crew.contains(';')) {
+                                    crew = crew.split(';')[1].trim()
+                                } else {
+                                    crew = ""
+                                }
+                                team = getMsg('fc.crew.exportnavigators.text')
+                                break
+                        }
+                        if (crew) {
+                            Map new_value = [startnum:    crew_instance.startNum,
+                                             crew:        crew,
+                                             aircraft:    crew_instance.aircraft.registration,
+                                             team:        team,
+                                             resultclass: result_class,
+                                             tas:         FcMath.SpeedStr_TAS(crew_instance.tas),
+                                             testtime:    '',
+                                             takeofftime: '',
+                                            ]
+                            export_values += new_value
+                        }
+                    }
+                }
+            }
+            if (export_values.size() > 0) {
+                File upload_file = new File(uploadFileName)
+                BufferedWriter upload_writer =  upload_file.newWriter("UTF-8")
+                upload_writer.writeLine "LAYOUT:${layout}"
+                upload_writer.writeLine "CONTEST:${contestInstance.title}"
+                for (Map export_value in export_values) {
+                    upload_writer.writeLine ""
+                    upload_writer.writeLine "STARTNUM:${export_value.startnum}"
+                    upload_writer.writeLine "AIRCRAFT:${export_value.aircraft}"
+                    upload_writer.writeLine "CREW:${export_value.crew}"
+                    upload_writer.writeLine "CLASS:${export_value.resultclass}"
+                    upload_writer.writeLine "TEAM:${export_value.team}"
+                    upload_writer.writeLine "TAS:${export_value.tas}"
+                }
+                upload_writer.close()
+                ret.message = getMsg('fc.crew.exported',["${export_values.size()}"])
+            } else {
+                ret.message = getMsg('fc.crew.export.someonemustselected')
+                ret.error = true
+                printerror ret.message
+                return ret
+            }
+            printdone ""
+        } catch (Exception e) {
+            ret.message = e.getMessage()
+            ret.error = true
+            printerror e.getMessage()
+        }
+        return ret
+    }
+    
     //--------------------------------------------------------------------------
     Map getresultsprintableTest(Map params)
     {

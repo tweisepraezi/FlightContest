@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 4
-:revdate:   16.03.2018
+:revnumber: 3.1.1, Ausgabe 5
+:revdate:   23.03.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -30,7 +30,7 @@ Ist eine moderne, auf Java-Techniken basierende, mehrsprachige und netzwerkfähi
 * Absturzsicher.
 * Hohe Sicherheit gegen Fehlbedienung.
 
-Unterstützt die Logger-Datenformate GAC, GPX und IGC (erweiterbar).
+Unterstützt die Logger-Datenformate GAC, GPX, IGC und NMEA 0183 (erweiterbar).
 
 Erzeugt PDF für Druck und Internet-Veröffentlichung.
 
@@ -52,7 +52,7 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 
 * Offline-Kartenanzeige zur Beurteilung des Navigationsfluges
 * Online-Kartenanzeige mit Google Maps und Open Street Map
-* Logger-Daten-Anzeige für GAC-, GPX-und IGC-Dateien
+* Logger-Daten-Anzeige für GAC-, GPX-, IGC- und NMEA-Dateien
 
 <<<
 [[manuals]]
@@ -1082,6 +1082,11 @@ im AFLOS-Namen übereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.
 * Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
 * Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
 
+=== Beliebiger anderer NMEA-Logger
+* Der Logger mus den Standard 'NMEA 0183' unterstützen.
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
+
 <<<
 [[print-styles]]
 == Druck-Stil beeinflussen
@@ -1603,7 +1608,7 @@ Automatisches Laden eingelesener Logger-Daten.
 
 Notwendige Logger-Software-Einstellungen:
 
-* GAC-, GPX- oder IGC-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern
+* GAC-, GPX-, IGC- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern
   
 Notwendige Vorbereitung:
 

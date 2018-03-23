@@ -60,6 +60,13 @@ class GpxController
                     }
                     notconverted_message = message(code:'fc.gpx.gacnotconverted',args:[original_filename])
                     break
+                case LoggerFileTools.NMEA_EXTENSION:
+                    converter = gpxService.ConvertNMEA2GPX(webroot_dir + upload_filename, webroot_dir + gpx_filename, route_instance)
+                    if (converter.ok) {
+                        gpxService.DeleteFile(upload_filename)
+                    }
+                    notconverted_message = message(code:'fc.gpx.gacnotconverted',args:[original_filename])
+                    break
                 default:
                     notconverted_message = message(code:'fc.loggerdata.loggerfileerror',args:[original_filename])
                     break

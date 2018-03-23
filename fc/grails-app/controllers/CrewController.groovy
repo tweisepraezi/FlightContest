@@ -355,6 +355,28 @@ class CrewController {
                 def ret = fcService.enableIncreaseCrews(session.lastContest,params,session)
                 flash.message = ret.message
                 break
+            case CrewCommands.EXPORTCREWS.toString():
+            case CrewCommands.EXPORTPILOTSCOMMA.toString():
+            case CrewCommands.EXPORTPILOTSSEMICOLON.toString():
+            case CrewCommands.EXPORTNAVIGATORSCOMMA.toString():
+            case CrewCommands.EXPORTNAVIGATORSSEMICOLON.toString():
+                //def ret = export_crews(session.lastContest, params)
+                fcService.printstart "export_crews"
+                
+                String uuid = UUID.randomUUID().toString()
+                String webroot_dir = servletContext.getRealPath("/")
+                String upload_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/TXT-${uuid}-UPLOAD.txt"
+                def ret = fcService.exportCrews(session.lastContest, params, webroot_dir + upload_file_name)
+                String export_file_name = ('crews.txt').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${export_file_name}")
+                fcService.Download(webroot_dir + upload_file_name, export_file_name, response.outputStream)
+                fcService.DeleteFile(webroot_dir + upload_file_name)
+        
+                fcService.printdone ret.message
+                flash.message = ret.message
+                flash.error = ret.error
+                break
         }
         redirect(action:list)
     }

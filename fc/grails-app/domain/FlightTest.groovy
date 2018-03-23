@@ -49,12 +49,14 @@ class FlightTest
     boolean IsObservationSignUsed()
     {
         Test test_instance1 = Test.findByTask(task)
-        if (test_instance1.IsObservationSignUsed()) {
-            return true
-        }
-        for (Test test_instance in Test.findAllByTask(task)) {
-            if (test_instance.IsObservationSignUsed()) {
+        if (test_instance1) {
+            if (test_instance1.IsObservationSignUsed()) {
                 return true
+            }
+            for (Test test_instance in Test.findAllByTask(task)) {
+                if (test_instance.IsObservationSignUsed()) {
+                    return true
+                }
             }
         }
         return false
