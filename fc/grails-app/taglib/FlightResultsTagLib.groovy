@@ -776,6 +776,7 @@ class FlightResultsTagLib
     // --------------------------------------------------------------------------------------------------------------------
 	def flightTestPrintable = { attrs, body ->
 		if (CoordResult.countByTest(attrs.t)) {
+            Route route_instance = attrs.t.flighttestwind.flighttest.route
 			outln"""<table class="flightresultlist">"""
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
@@ -784,7 +785,7 @@ class FlightResultsTagLib
                 outln"""    	<th>${message(code:'fc.aflos.checkpoint')}</th>"""
             }
 			outln"""			<th colspan="3">${message(code:'fc.cptime')}</th>"""
-			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
+			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
 				outln"""		<th>${message(code:'fc.procedureturn')}</th>"""
 			}
 			if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
@@ -802,7 +803,7 @@ class FlightResultsTagLib
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
 			outln"""			<th>${message(code:'fc.points')}</th>"""
-			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
+			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
                 outln"""		<th/>"""
 			}
 			if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
@@ -856,7 +857,7 @@ class FlightResultsTagLib
         						outln"""<td class="penaltycp">-</td>"""
         					}
                         }
-    					if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
+    					if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
     						if (coordresult_instance.planProcedureTurn) {
     							if (coordresult_instance.resultProcedureTurnEntered) {
     								if (attrs.t.task.disabledCheckPointsProcedureTurn.contains("${last_coordresult_instance.title()},")) {
@@ -952,7 +953,7 @@ class FlightResultsTagLib
         					outln"""<td class="penaltycp">-</td>"""
         				}
                     }
-    				if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
+    				if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
     					outln"""	<td class="penaltyprocedureturn"/>"""
     				}
     				if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
@@ -1005,7 +1006,7 @@ class FlightResultsTagLib
 			    outln"""	    <td class="tpname" colspan="3">${message(code:'fc.test.results.summary')}</td>"""
             }
 			outln"""			<td class="penaltycp">${penalty_coord_summary}</td>"""
-			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
+			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
 				outln"""		<td class="penaltyprocedureturn">${penalty_procedureturn_summary}</td>"""
 			}
 			if (attrs.t.GetFlightTestBadCoursePoints() > 0) {

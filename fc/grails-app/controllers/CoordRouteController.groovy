@@ -31,7 +31,12 @@ class CoordRouteController {
         def coordroute = fcService.updateCoordRoute(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
-            redirect(controller:"route",action:show,id:coordroute.instance.route.id)
+            long next_routeid = coordroute.instance.route.GetNextID()
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordroute.instance.route.id,params:[next:next_routeid])
+            } else {
+                redirect(controller:"route",action:show,id:coordroute.instance.route.id)
+            }
         } else if (coordroute.error) {
 			flash.error = coordroute.error
 			flash.message = coordroute.message
@@ -108,10 +113,16 @@ class CoordRouteController {
     }
 
     def delete = {
+        CoordRoute coordroute_instance = CoordRoute.get(params.id)
+        long next_routeid = coordroute_instance.route.GetNextID()
         def coordroute = fcService.deleteCoordRoute(params)
         if (coordroute.deleted) {
         	flash.message = coordroute.message
-        	redirect(controller:"route",action:show,id:coordroute.routeid)
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordroute.routeid,params:[next:next_routeid])
+            } else {
+                redirect(controller:"route",action:show,id:coordroute.routeid)
+            }   
         } else if (coordroute.notdeleted) {
         	flash.message = coordroute.message
             redirect(action:show,id:params.id)
@@ -150,7 +161,12 @@ class CoordRouteController {
 	def cancel = {
         def coordroute = fcService.getCoordRoute(params) 
         if (coordroute.instance) {
-        	redirect(controller:"route",action:show,id:coordroute.instance.route.id)
+            long next_routeid = coordroute.instance.route.GetNextID()
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordroute.instance.route.id,params:[next:next_routeid])
+            } else {
+        	    redirect(controller:"route",action:show,id:coordroute.instance.route.id)
+            }
         } else {
             redirect(controller:"route",action:show,id:params.routeid)
         }

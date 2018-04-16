@@ -386,6 +386,26 @@ class TaskController {
 		}
 	}
 
+    def gotonext = {
+        Map task = domainService.GetTask(params)
+        if (task.instance) {
+            long next_id = task.instance.GetNextID()
+            long next_id2 = Task.GetNextID2(next_id)
+            if (next_id) {
+                if (next_id2) {
+                    redirect(action:edit,id:next_id,params:[next:next_id2])
+                } else {
+                    redirect(action:edit,id:next_id)
+                }
+            } else {
+                redirect(controller:"task",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"list")
+        }
+    }
+    
 	def createplanningtest = {
         Map task = domainService.GetTask(params)
         redirect(controller:'planningTest',action:'create',params:['task.id':task.instance.id,'taskid':task.instance.id,'fromtask':true])
@@ -1263,10 +1283,16 @@ class TaskController {
             Test test_instance = Test.get(params.testid)
             Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile)
             if (!calc.found) {
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile)
+            }
+            if (!calc.found) {
                 calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KML_EXTENSION, test_instance, params.loggerfile)
+            }
+            if (!calc.found) {
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KMZ_EXTENSION, test_instance, params.loggerfile)
             }
             if (!calc.found) {
                 calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile)

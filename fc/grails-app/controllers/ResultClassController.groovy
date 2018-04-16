@@ -62,7 +62,12 @@ class ResultClassController {
 			flash.message = resultclass.message
 			// process return action
 			if (params.editpointsReturnAction) {
-				redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID)
+                long next_resultclassid = resultclass.instance.GetNextID()
+                if (next_resultclassid) {
+                    redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID,params:[next:next_resultclassid])
+                } else {
+				    redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID)
+                }
 			} else if (params.resultclassReturnAction) {
 				redirect(action:params.resultclassReturnAction,controller:params.resultclassReturnController,id:params.resultclassReturnID)
 			} else if (params.editresultsettingsReturnAction) {
@@ -82,11 +87,47 @@ class ResultClassController {
 		}
 	}
 
+    def updatenext = {
+        def resultclass = fcService.updateResultClass(params)
+        if (resultclass.instance) {
+            long next_id = resultclass.instance.GetNextID()
+            long next_id2 = ResultClass.GetNextID2(next_id)
+            if (resultclass.saved) {
+                flash.message = resultclass.message
+                if (next_id) {
+                    if (next_id2) {
+                        redirect(action:edit,id:next_id,params:[next:next_id2])
+                    } else {
+                        redirect(action:edit,id:next_id)
+                    }
+                } else {
+                    redirect(controller:"resultclass",action:"list")
+                }
+            } else {
+                if (next_id && next_id2) {
+                    render(view:'edit',model:[crewInstance:resultclass.instance,params:[next:next_id2]])
+                } else if (next_id) {
+                    render(view:'edit',model:[crewInstance:resultclass.instance,params:[next:next_id]])
+                } else {
+                    render(view:'edit',model:[crewInstance:resultclass.instance])
+                }
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"resultclass",action:"list")
+        }
+    }
+    
 	def savesettings = {
 		def resultclass = fcService.updateResultClass(params)
 		if (resultclass.saved) {
 			flash.message = resultclass.message
-			redirect(action:edit,id:params.id)
+            long next_resultclassid = resultclass.instance.GetNextID()
+            if (next_resultclassid) {
+                redirect(action:edit,id:params.id,params:[next:next_resultclassid])
+            } else {
+			    redirect(action:edit,id:params.id)
+            }
 		} else if (resultclass.error) {
 			flash.message = resultclass.message
 			flash.error = true
@@ -103,7 +144,7 @@ class ResultClassController {
 		def resultclass = fcService.updateResultClass(params)
 		if (resultclass.saved) {
 			flash.message = resultclass.message
-			redirect(action:editpoints,id:params.id)
+            redirect(action:editpoints,id:params.id)
 		} else if (resultclass.error) {
 			flash.message = resultclass.message
 			flash.error = true
@@ -162,7 +203,13 @@ class ResultClassController {
 
 	def cancel = {
 		if (params.editpointsReturnAction) {
-			redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID)
+            def resultclass = fcService.getResultClass(params)
+            long next_resultclassid = resultclass.instance.GetNextID()
+            if (next_resultclassid) {
+                redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID,params:[next:next_resultclassid])
+            } else {
+			    redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID)
+            }
 		} else if (params.positionsReturnAction) {
 			redirect(action:params.positionsReturnAction,controller:params.positionsReturnController,id:params.positionsReturnID)
 		} else if (params.resultclassReturnAction) {
@@ -174,6 +221,26 @@ class ResultClassController {
 		}
 	}
 
+    def gotonext = {
+        def resultclass = fcService.getResultClass(params)
+        if (resultclass.instance) {
+            long next_id = resultclass.instance.GetNextID()
+            long next_id2 = ResultClass.GetNextID2(next_id)
+            if (next_id) {
+                if (next_id2) {
+                    redirect(action:edit,id:next_id,params:[next:next_id2])
+                } else {
+                    redirect(action:edit,id:next_id)
+                }
+            } else {
+                redirect(controller:"resultclass",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"resultclass",action:"list")
+        }
+    }
+    
 	def listprintable = {
 		if (params.contestid) {
 			session.lastContest = Contest.get(params.contestid)

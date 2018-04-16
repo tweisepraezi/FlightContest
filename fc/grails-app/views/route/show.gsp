@@ -82,6 +82,12 @@
                             <tfoot>
                                 <tr>
                                     <td>
+                                        <g:if test="${params.next}">
+                                            <g:actionSubmit action="gotonext" value="${message(code:'fc.route.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:else>
 				                        <g:actionSubmit action="edit" value="${message(code:'fc.edit')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 				                        <g:if test="${!routeInstance.Used()}">
 				                            <g:actionSubmit action="createcoordroutes" value="${message(code:'fc.coordroute.add1')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
@@ -126,7 +132,9 @@
 				                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
 				                        </g:if>
 				                        <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-				                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                                        <g:if test="${params.next}">
+    				                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+    				                    </g:if>
 				                    </td>
                                     <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                                 </tr>

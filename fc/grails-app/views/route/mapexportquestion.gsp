@@ -26,10 +26,12 @@
                                 <g:checkBox name="contestMapCircle" value="${routeInstance.contestMapCircle}" tabIndex="${ti[0]++}" />
                                 <label>${message(code:'fc.contestmap.contestmapcircle')}</label>
                             </div>
-                            <div>
-                                <g:checkBox name="contestMapProcedureTurn" value="${routeInstance.contestMapProcedureTurn}" tabIndex="${ti[0]++}" />
-                                <label>${message(code:'fc.contestmap.contestmapprocedureturn')}</label>
-                            </div>
+                            <g:if test="${routeInstance.UseProcedureTurn()}">
+	                            <div>
+	                                <g:checkBox name="contestMapProcedureTurn" value="${routeInstance.contestMapProcedureTurn}" tabIndex="${ti[0]++}" />
+	                                <label>${message(code:'fc.contestmap.contestmapprocedureturn')}</label>
+	                            </div>
+	                        </g:if>
                             <div>
                                 <g:checkBox name="contestMapLeg" value="${routeInstance.contestMapLeg}" tabIndex="${ti[0]++}" />
                                 <label>${message(code:'fc.contestmap.contestmapleg')}</label>

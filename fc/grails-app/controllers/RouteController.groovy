@@ -65,7 +65,12 @@ class RouteController {
         def route = fcService.updateRoute(params) 
         if (route.saved) {
         	flash.message = route.message
-        	redirect(action:show,id:route.instance.id)
+            long next_routeid = route.instance.GetNextID()
+            if (next_routeid) {
+                redirect(action:show,id:route.instance.id,params:[next:next_routeid])
+            } else {
+        	    redirect(action:show,id:route.instance.id)
+            }
         } else if (route.instance) {
         	render(view:'edit',model:[routeInstance:route.instance])
         } else {
@@ -111,12 +116,42 @@ class RouteController {
         if (params.mapexportquestionReturnAction) {
             redirect(action:params.mapexportquestionReturnAction,controller:params.mapexportquestionReturnController,id:params.mapexportquestionReturnID)
         } else if (session.routeReturnAction) {
-            redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID)
+            Map route = domainService.GetRoute(params) 
+            if (route.instance) {
+                long next_routeid = route.instance.GetNextID()
+                if (next_routeid) {
+                    redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID,params:[next:next_routeid])
+                } else {
+                    redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID)
+                }
+            } else {
+                redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID)
+            }
         } else {
        	    redirect(action:list)
         }
 	}
 	
+    def gotonext = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            long next_id = route.instance.GetNextID()
+            long next_id2 = Route.GetNextID2(next_id)
+            if (next_id) {
+                if (next_id2) {
+                    redirect(action:show,id:next_id,params:[next:next_id2])
+                } else {
+                    redirect(action:show,id:next_id)
+                }
+            } else {
+                redirect(controller:"route",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"route",action:"list")
+        }
+    }
+    
 	def createcoordroutes = {
         Map route = domainService.GetRoute(params) 
         redirect(controller:'coordRoute',action:'create',params:['route.id':route.instance.id,'routeid':route.instance.id])

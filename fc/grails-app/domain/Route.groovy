@@ -1004,4 +1004,74 @@ class Route
         }
         return curved_point_titlecodes
     }
+    
+    long GetNextID()
+    {
+        long next_id = 0
+        boolean set_next = false
+        for (Route route_instance in Route.findAllByContest(this.contest,[sort:'id'])) {
+            if (set_next) {
+                next_id = route_instance.id
+                set_next = false
+            }
+            if (route_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+                set_next = true
+            }
+        }
+        return next_id
+    }
+    
+    static long GetNextID2(long routeID)
+    {
+        long next_id = 0
+        if (routeID) {
+            Route route_instance = Route.get(routeID)
+            if (route_instance) {
+                next_id = route_instance.GetNextID()
+            }
+        }
+        return next_id
+    }
+    
+    boolean UseProcedureTurn()
+    {
+        boolean use_pt = true
+        contest.printStyle.eachLine {
+            if (it.contains("--route") && it.contains("--disable-procedureturn")) {
+                String s = it.substring(it.indexOf("--route")+7).trim()
+                if (s.startsWith(":")) {
+                    s = s.substring(1).trim()
+                    int i = s.indexOf(";")
+                    if (i) {
+                        s = s.substring(0,i).trim()
+                        if (s == name()) {
+                            use_pt = false
+                        }
+                    }
+                }
+            }
+        }
+        return use_pt
+    }
+    
+    boolean ShowCurvedPoints()
+    {
+        boolean show_curved_points = false
+        contest.printStyle.eachLine {
+            if (it.contains("--route") && it.contains("--show-curved-points")) {
+                String s = it.substring(it.indexOf("--route")+7).trim()
+                if (s.startsWith(":")) {
+                    s = s.substring(1).trim()
+                    int i = s.indexOf(";")
+                    if (i) {
+                        s = s.substring(0,i).trim()
+                        if (s == name()) {
+                            show_curved_points = true
+                        }
+                    }
+                }
+            }
+        }
+        return show_curved_points
+    }
 }

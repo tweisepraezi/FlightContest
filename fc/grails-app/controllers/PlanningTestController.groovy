@@ -64,9 +64,9 @@ class PlanningTestController {
     }
 
     def save = {
-        def planningtest = fcService.savePlanningTest(params) 
+        def planningtest = fcService.savePlanningTest(params,true) 
+        flash.message = planningtest.message
         if (planningtest.saved) {
-        	flash.message = planningtest.message
             if (planningtest.fromlistplanning) {
             	redirect(controller:"task",action:"listplanning",id:planningtest.taskid)
             } else if (planningtest.fromtask) {
@@ -75,6 +75,7 @@ class PlanningTestController {
             	redirect(controller:"contest",action:"tasks")
             }
         } else {
+            flash.error = true
             render(view:'create',model:[planningTestInstance:planningtest.instance])
         }
     }

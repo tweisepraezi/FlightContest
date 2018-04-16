@@ -50,6 +50,7 @@ class GpxService
     final static String GPXCREATOR_CONTESTMAP = "Flight Contest - flightcontest.de - Contest Map - Version 1"
     final static String GAC_TRACKNAME = "GAC track"
     final static String IGC_TRACKNAME = "IGC track"
+    final static String KML_TRACKNAME = "KML track"
     final static String NMEA_TRACKNAME = "NMEA track"
     
     final static String COLOR_ERROR = "red"
@@ -202,6 +203,140 @@ class GpxService
 		return calendar_utc.getTime().format("HHmmss")
 	}
 	
+    //--------------------------------------------------------------------------
+    Map ConvertKML2GPX(String kmFileName, String gpxFileName, Route routeInstance, boolean kmzFile)
+    {
+        Map ret = [:]
+        boolean converted = true
+        String err_msg = ""
+        
+        printstart "ConvertKML2GPX $kmFileName -> $gpxFileName"
+        
+        File km_file = new File(kmFileName)
+        def kmz_file = null
+        def km_reader = null
+        if (kmzFile) {
+            kmz_file = new java.util.zip.ZipFile(km_file)
+            kmz_file.entries().findAll { !it.directory }.each {
+                if (!km_reader) {
+                    km_reader = kmz_file.getInputStream(it)
+                }
+            }
+        } else {
+            km_reader = new FileReader(km_file)
+        }
+
+        File gpx_file = new File(gpxFileName)
+        
+        boolean repairIdenticalTimes = false
+        String line = ""
+        
+        BufferedWriter gpx_writer = gpx_file.newWriter()
+        MarkupBuilder xml = new MarkupBuilder(gpx_writer)
+        gpx_writer.writeLine(XMLHEADER)
+        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+            xml.trk {
+                xml.name KML_TRACKNAME
+                xml.trkseg {
+                    try {
+                        boolean valid_kml_format = false
+                        
+                        def kml = new XmlParser().parse(km_reader)
+                        def track = kml.Document.Placemark.'gx:Track'
+                        
+                        if (track && track.when && track.'gx:coord' && track.when.size() == track.'gx:coord'.size()) {
+                            
+                            boolean first = true
+                            String last_time_utc = null
+                            BigDecimal latitude = null
+                            BigDecimal longitude = null
+                            String last_utc = FcTime.UTC_GPX_DATE
+                            
+                            int i = 0
+                            while (i < track.when.size()) {
+                                valid_kml_format = true
+                                
+                                String time_utc = track.when[i].text()
+                                String coord = track.'gx:coord'[i].text()
+                                def coord_values = coord.split(' ')
+                                
+                                // Repair DropOuts
+                                boolean ignore_value = false 
+                                if (!first) {
+                                    if (repairIdenticalTimes) {
+                                        if (last_time_utc == time_utc) { // Zeile mit doppelter Zeit entfernen
+                                            ignore_value = true
+                                            if (WRLOG) {
+                                                println "Ignore '$time_utc' '$coord'"
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // UTC
+                                String utc = FcTime.UTCGetNextDateTime(last_utc, "${time_utc.substring(11,19)}")
+                                
+                                // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
+                                latitude = coord_values[1].toBigDecimal() 
+                                
+                                // Longitude (Geographische Laenge: -179.999 (W) ... +180 Grad (E))
+                                longitude = coord_values[0].toBigDecimal()
+                                
+                                // Altitude (Höhe)
+                                BigDecimal altitude_meter = coord_values[2].toBigDecimal()
+                                
+                                // write gpx tag
+                                if (!ignore_value) {
+                                    // println "UTC: $utc, Latitude: $latitude, Longitude: $longitude, Altitude: ${altitude_meter}m"
+                                    xml.trkpt(lat:latitude,lon:longitude) {
+                                        xml.ele altitude_meter
+                                        xml.time utc
+                                    }
+                                }
+                                
+                                first = false
+                                last_time_utc = time_utc
+                                last_utc = utc
+                                
+                                i++
+                            }
+                        }
+                            
+                        if (!valid_kml_format) {
+                            converted = false
+                            err_msg = "No supported kml format."
+                        }
+                    } catch (Exception e) {
+                        converted = false
+                        err_msg = e.getMessage()
+                    }
+                }
+            }
+            if (routeInstance) {
+                GPXRoute(routeInstance, null, false, false, xml) // false - no Print, false - no wrEnrouteSign
+            }
+        }
+        gpx_writer.close()
+        if (km_reader) {
+            km_reader.close()
+        }
+        if (kmz_file) {
+            kmz_file.close()
+        }
+
+        if (converted) {
+            printdone ""
+        } else {
+            printerror err_msg
+        }
+        if (routeInstance) {
+            println "Generate points for buttons (GetShowPointsRoute)"
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
+        }
+        ret += [ok:converted]
+        return ret
+    }
+    
     //--------------------------------------------------------------------------
     Map ConvertGAC2GPX(String gacFileName, String gpxFileName, Route routeInstance)
     {
@@ -1733,7 +1868,7 @@ class GpxService
             }
             
             // procedure turns
-            if (contestMap.contestMapProcedureTurn) {
+            if (contestMap.contestMapProcedureTurn && routeInstance.UseProcedureTurn()) {
                 CoordRoute last_coordroute_instance = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
@@ -2041,7 +2176,7 @@ class GpxService
                     } else {
                         // standard gate
                         boolean wr_gate = false
-                        boolean show_curved_point = routeInstance.contest.printStyle.contains('--route') && routeInstance.contest.printStyle.contains('show-curved-points')
+                        boolean show_curved_point = routeInstance.ShowCurvedPoints()
                         List curved_point_ids = routeInstance.GetCurvedPointIds()
                         if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                             wr_gate = true
@@ -2078,6 +2213,34 @@ class GpxService
                     first = true
                 }
                 last_coordroute_instance = coordroute_instance
+            }
+            
+            // procedure turns
+            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.UseProcedureTurn()) {
+                last_coordroute_instance = null
+                CoordRoute last_last_coordroute_instance = null
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                        List circle_coords = AviationMath.getProcedureTurnCircle(
+                            last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
+                            last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
+                            coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                            0,
+                            CONTESTMAP_PROCEDURETURN_DISTANCE
+                        )
+                        xml.rte {
+                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.name "Procedure turn ${last_coordroute_instance.titleShortMap(isPrint)}"
+                            for (Map circle_coord in circle_coords) {
+                                xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
+                                    // xml.ele altitude_meter
+                                }
+                            }
+                        }
+                    }
+                    last_last_coordroute_instance = last_coordroute_instance 
+                    last_coordroute_instance = coordroute_instance
+                }
             }
         }
         
@@ -2226,7 +2389,7 @@ class GpxService
             println "Write track points"
             Route route_instance = testInstance.task.flighttest.route
             boolean observationsign_used = testInstance.task.flighttest.IsObservationSignUsed()
-            boolean show_curved_point = route_instance.contest.printStyle.contains('--route') && route_instance.contest.printStyle.contains('show-curved-points')
+            boolean show_curved_point = route_instance.ShowCurvedPoints()
             List curved_point_titlecodes = route_instance.GetCurvedPointTitleCodes(isPrint)
             // cache calc results
             List calc_results = []

@@ -17,32 +17,33 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['crewReturnAction':crewReturnAction,'crewReturnController':crewReturnController,'crewReturnID':crewReturnID]}" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.crew.startnum')}*:</label>
                                 <br/>
-                                <input type="text" id="startNum" name="startNum" value="${fieldValue(bean:crewInstance,field:'startNum')}" tabIndex="1"/>
+                                <input type="text" id="startNum" name="startNum" value="${fieldValue(bean:crewInstance,field:'startNum')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.crew.name')}*:</label>
                                 <br/>
-                                <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}" tabIndex="2"/>
+                                <input type="text" id="name" name="name" value="${fieldValue(bean:crewInstance,field:'name')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.crew.email')} (${message(code:'fc.email.more')}):</label>
                                 <br/>
-                                <input type="text" id="email" name="email" value="${fieldValue(bean:crewInstance,field:'email')}" tabIndex="3"/>
+                                <input type="text" id="email" name="email" value="${fieldValue(bean:crewInstance,field:'email')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.team')}:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="name" from="${Team.findAllByContest(crewInstance.contest,[sort:'name'])}" name="team.id" value="${crewInstance?.team?.id}" noSelection="['null':'']" tabIndex="5"></g:select>
+                                <g:select optionKey="id" optionValue="name" from="${Team.findAllByContest(crewInstance.contest,[sort:'name'])}" name="team.id" value="${crewInstance?.team?.id}" noSelection="['null':'']" tabIndex="${ti[0]++}"></g:select>
                             </p>
                             <g:if test="${crewInstance.contest.resultClasses}">
 	                            <p>
 	                                <label>${message(code:'fc.resultclass')}:</label>
 	                                <br/>
-	                                <g:select optionKey="id" optionValue="name" from="${ResultClass.findAllByContest(crewInstance.contest,[sort:'name'])}" name="resultclass.id" value="${crewInstance?.resultclass?.id}" noSelection="['null':'']" tabIndex="6"></g:select>
+	                                <g:select optionKey="id" optionValue="name" from="${ResultClass.findAllByContest(crewInstance.contest,[sort:'name'])}" name="resultclass.id" value="${crewInstance?.resultclass?.id}" noSelection="['null':'']" tabIndex="${ti[0]++}"></g:select>
 	                            </p>
 	                        </g:if>
                         </fieldset>
@@ -51,12 +52,12 @@
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}:</label>
                                 <br/>
-                                <g:select optionKey="id" optionValue="registration" from="${Aircraft.findAllByContest(crewInstance.contest,[sort:'registration'])}" name="aircraft.id" value="${crewInstance?.aircraft?.id}" noSelection="['null':'']" tabIndex="7"></g:select>
+                                <g:select optionKey="id" optionValue="registration" from="${Aircraft.findAllByContest(crewInstance.contest,[sort:'registration'])}" name="aircraft.id" value="${crewInstance?.aircraft?.id}" noSelection="['null':'']" tabIndex="${ti[0]++}"></g:select>
                             </p>
                             <p>
                                 <label>${message(code:'fc.tas')}* [${message(code:'fc.knot')}]:</label>
                                 <br/>
-                                <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" tabIndex="8"/>
+                                <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -90,9 +91,18 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${crewInstance?.id}"/>
                         <input type="hidden" name="version" value="${crewInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="101"/>
-                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="102"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="103"/>
+                        <g:if test="${params.next}">
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.crew.gotonext')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.crew.updatenext')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:else>
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        </g:else>
+                        <g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                        <g:if test="${params.next}">
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
                     </g:form>
                 </div>
             </div>

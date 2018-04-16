@@ -11,24 +11,19 @@ class AircraftController {
     def list = {
 		fcService.printstart "List aircrafts"
         if (session?.lastContest) {
-			try {
-				session.lastContest.refresh()
-				// save return action
-				session.crewReturnAction = actionName 
-				session.crewReturnController = controllerName
-				session.crewReturnID = params.id
-				session.aircraftReturnAction = actionName
-				session.aircraftReturnController = controllerName
-				session.aircraftReturnID = params.id
-	            def aircraftList = Aircraft.findAllByContest(session.lastContest, [sort:'registration'])
-				fcService.printdone "last contest"
-	            return [aircraftInstanceList:aircraftList]
-			} catch (Exception e) {
-				fcService.printerror e.getMessage() // BUG: Exception nach Löschen eines Flugzeuges
-			}
-        } else {
-			fcService.printdone ""
+            session.lastContest.refresh()
+			// save return action
+			session.crewReturnAction = actionName 
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+			session.aircraftReturnAction = actionName
+			session.aircraftReturnController = controllerName
+			session.aircraftReturnID = params.id
+            def aircraft_list = Aircraft.findAllByContest(session.lastContest, [sort:'registration'])
+			fcService.printdone "last contest"
+            return [aircraftInstanceList:aircraft_list]
         }
+        fcService.printdone ""
         redirect(controller:'contest',action:'start')
     }
 
@@ -68,6 +63,37 @@ class AircraftController {
         }
     }
 
+    def updatenext = {
+        def aircraft = fcService.updateAircraft(params)
+        if (aircraft.instance) {
+            long next_id = aircraft.instance.GetNextID()
+            long next_id2 = Aircraft.GetNextID2(next_id)
+            if (aircraft.saved) {
+                flash.message = aircraft.message
+                if (next_id) {
+                    if (next_id2) {
+                        redirect(action:edit,id:next_id,params:[next:next_id2])
+                    } else {
+                        redirect(action:edit,id:next_id)
+                    }
+                } else {
+                    redirect(controller:"aircraft",action:"list")
+                }
+            } else {
+                if (next_id && next_id2) {
+                    render(view:'edit',model:[crewInstance:aircraft.instance,params:[next:next_id2]])
+                } else if (next_id) {
+                    render(view:'edit',model:[crewInstance:aircraft.instance,params:[next:next_id]])
+                } else {
+                    render(view:'edit',model:[crewInstance:aircraft.instance])
+                }
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"aircraft",action:"list")
+        }
+    }
+    
     def create = {
 		def aircraft = fcService.createAircraft(params)
         return [aircraftInstance:aircraft.instance]
@@ -90,6 +116,7 @@ class AircraftController {
 	def delete = {
         def aircraft = fcService.deleteAircraft(params)
         if (aircraft.deleted) {
+            session.invalidate() // BUG: Löschen einer Aircraft beschädigt Session, Workaround: Session zurücksetzten
         	flash.message = aircraft.message
         	redirect(action:list)
         } else if (aircraft.notdeleted) {
@@ -109,6 +136,26 @@ class AircraftController {
 		}
 	}
 
+    def gotonext = {
+        def aircraft = fcService.getAircraft(params)
+        if (aircraft.instance) {
+            long next_id = aircraft.instance.GetNextID()
+            long next_id2 = Aircraft.GetNextID2(next_id)
+            if (next_id) {
+                if (next_id2) {
+                    redirect(action:edit,id:next_id,params:[next:next_id2])
+                } else {
+                    redirect(action:edit,id:next_id)
+                }
+            } else {
+                redirect(controller:"aircraft",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"aircraft",action:"list")
+        }
+    }
+    
 	def listprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
@@ -116,8 +163,8 @@ class AircraftController {
         }
         if (session?.lastContest) {
 			session.lastContest.refresh()
-            def aircraftList = Aircraft.findAllByContest(session.lastContest,[sort:"registration"])
-            return [contestInstance:session.lastContest,aircraftInstanceList:aircraftList]
+            def aircraft_list = Aircraft.findAllByContest(session.lastContest,[sort:"registration"])
+            return [contestInstance:session.lastContest, aircraftInstanceList:aircraft_list]
         }
         return [:]
     }

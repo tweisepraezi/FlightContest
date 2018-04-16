@@ -727,10 +727,16 @@ class TestController
             def file = request.getFile('loggerfile')
             Map calc = fcService.calculateLoggerResultTest(LoggerFileTools.GAC_EXTENSION, test.instance, file, false)
             if (!calc.found) {
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.IGC_EXTENSION, test.instance, file, false)
+            }
+            if (!calc.found) {
                 calc = fcService.calculateLoggerResultTest(LoggerFileTools.GPX_EXTENSION, test.instance, file, false)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.IGC_EXTENSION, test.instance, file, false)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KML_EXTENSION, test.instance, file, false)
+            }
+            if (!calc.found) {
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KMZ_EXTENSION, test.instance, file, false)
             }
             if (!calc.found) {
                 calc = fcService.calculateLoggerResultTest(LoggerFileTools.NMEA_EXTENSION, test.instance, file, false)

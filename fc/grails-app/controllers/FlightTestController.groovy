@@ -73,8 +73,8 @@ class FlightTestController {
 
     def save = {
         def flighttest = fcService.saveFlightTest(session.showLanguage, params)
+        flash.message = flighttest.message
         if (flighttest.saved) {
-        	flash.message = flighttest.message
             if (flighttest.fromlistplanning) {
             	redirect(controller:"task",action:"listplanning",id:flighttest.taskid)
             } else if (flighttest.fromtask) {
@@ -83,6 +83,7 @@ class FlightTestController {
             	redirect(controller:"contest",action:"tasks")
             }
         } else {
+            flash.error = true
             render(view:'create',model:[flightTestInstance:flighttest.instance])
         }
     }

@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.1, Ausgabe 5,</span>
-<span id="revdate">23.03.2018</span>
+<span id="revnumber">version 3.1.1, Ausgabe 7,</span>
+<span id="revdate">12.04.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -474,8 +474,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_dg_100">DG-100</a></li>
 <li><a href="#_dg_200">DG-200</a></li>
 <li><a href="#_powerflarm">PowerFLARM</a></li>
-<li><a href="#_beliebiger_anderer_gpx_logger">Beliebiger anderer GPX-Logger</a></li>
 <li><a href="#_beliebiger_anderer_igc_logger">Beliebiger anderer IGC-Logger</a></li>
+<li><a href="#_beliebiger_anderer_gpx_logger">Beliebiger anderer GPX-Logger</a></li>
+<li><a href="#_beliebiger_anderer_kml_logger">Beliebiger anderer KML-Logger</a></li>
 <li><a href="#_beliebiger_anderer_nmea_logger">Beliebiger anderer NMEA-Logger</a></li>
 </ul>
 </li>
@@ -571,7 +572,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </ul>
 </div>
 <div class="paragraph">
-<p>Unterst&#252;tzt die Logger-Datenformate GAC, GPX, IGC und NMEA 0183 (erweiterbar).</p>
+<p>Unterst&#252;tzt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).</p>
 </div>
 <div class="paragraph">
 <p>Erzeugt PDF f&#252;r Druck und Internet-Ver&#246;ffentlichung.</p>
@@ -620,7 +621,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p>Online-Kartenanzeige mit Google Maps und Open Street Map</p>
 </li>
 <li>
-<p>Logger-Daten-Anzeige f&#252;r GAC-, GPX-, IGC- und NMEA-Dateien</p>
+<p>Logger-Daten-Anzeige f&#252;r GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien</p>
 </li>
 </ul>
 </div>
@@ -2758,6 +2759,19 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_beliebiger_anderer_igc_logger">Beliebiger anderer IGC-Logger</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu kl&#228;ren.</p>
+</li>
+<li>
+<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verf&#252;gung zu stellen.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_beliebiger_anderer_gpx_logger">Beliebiger anderer GPX-Logger</h3>
 <div class="ulist">
 <ul>
@@ -2797,7 +2811,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_beliebiger_anderer_igc_logger">Beliebiger anderer IGC-Logger</h3>
+<h3 id="_beliebiger_anderer_kml_logger">Beliebiger anderer KML-Logger</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2805,6 +2819,35 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </li>
 <li>
 <p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verf&#252;gung zu stellen.</p>
+</li>
+<li>
+<p>Notwendige Logger-Einstellungen:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Aufzeichnungs-Intervall: 1 Sekunde</p>
+</li>
+<li>
+<p>Aufzeichnung mit H&#246;hen-Angaben</p>
+</li>
+<li>
+<p>Aufzeichnung mit Zeit-Angaben</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Anforderungen an KML/KMZ-Datei-Inhalt</p>
+<div class="ulist">
+<ul>
+<li>
+<p>darf nur eine Strecken-Aufzeichnung beinhalten (&lt;gx:Track&gt;&#8230;&#8203;&lt;/gx:Track&gt;)</p>
+</li>
+<li>
+<p>wenn nein, nicht gew&#252;nschte Strecken-Aufzeichnungen in Datei l&#246;schen</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -3289,14 +3332,21 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">im Zeitplan f&#252;r Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regul&#228;ren Planungszeit)</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--disable-procedureturn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wendeschleifen f&#252;r diese Strecke deaktivieren</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--show-curved-points</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in Strecken-Anzeigen dieser Strecke UZKs der krummen Strecke anzeigen</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">in Strecken-Anzeigen UZKs der krummen Strecke anzeigen</p></td>
 </tr>
 </tbody>
 </table>
@@ -3314,10 +3364,18 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 </div>
 </li>
 <li>
+<p>Strecken - Wendeschleifen deaktivieren</p>
+<div class="literalblock">
+<div class="content">
+<pre>body { --route: Strecke-1; --disable-procedureturn; }</pre>
+</div>
+</div>
+</li>
+<li>
 <p>Strecken-Anzeigen - UZKs der krummen Strecke anzeigen</p>
 <div class="literalblock">
 <div class="content">
-<pre>body { --route: show-curved-points; }</pre>
+<pre>body { --route: Strecke-1; --show-curved-points; }</pre>
 </div>
 </div>
 </li>
@@ -3895,7 +3953,7 @@ Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage au
 <div class="ulist">
 <ul>
 <li>
-<p>GAC-, GPX-, IGC- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern</p>
+<p>GAC-, IGC-, GPX-, KML-, KMZ- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern</p>
 </li>
 </ul>
 </div>

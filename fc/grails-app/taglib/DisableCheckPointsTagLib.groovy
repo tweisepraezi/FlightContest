@@ -7,6 +7,7 @@ class DisableCheckPointsTagLib
     def disableCheckpointsInput = { attrs, body ->
         // CoordRoute
         Route route_instance = attrs.t.flighttest.route
+        boolean use_procedureturn = route_instance.UseProcedureTurn()
         int col_span = 7
         if (route_instance.showAflosMark) {
             col_span++
@@ -29,7 +30,9 @@ class DisableCheckPointsTagLib
         }
         outln"""            <th>${message(code:'fc.task.disabledcheckpoints.timecheck')}</th>"""
         outln"""            <th>${message(code:'fc.task.disabledcheckpoints.notfound')}</th>"""
-        outln"""            <th>${message(code:'fc.task.disabledcheckpoints.procedureturn')}</th>"""
+        if (use_procedureturn) {
+            outln"""        <th>${message(code:'fc.task.disabledcheckpoints.procedureturn')}</th>"""
+        }
         outln"""            <th>${message(code:'fc.task.disabledcheckpoints.badcourse')}</th>"""
         outln"""            <th>${message(code:'fc.task.disabledcheckpoints.minaltitude')}</th>"""
         outln"""            <th>${message(code:'fc.task.disabledcheckpoints.turnpointops')}</th>"""
@@ -45,10 +48,10 @@ class DisableCheckPointsTagLib
         int i = 0
         CoordRoute last_coordroute_instance = null
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
-            i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, coordroute_instance.planProcedureTurn)
+            i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, use_procedureturn, coordroute_instance.planProcedureTurn)
             last_coordroute_instance = coordroute_instance
         }
-        i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, false)
+        i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, use_procedureturn, false)
         outln"""    </tbody>"""
         outln"""</table>"""
         
@@ -96,7 +99,7 @@ class DisableCheckPointsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private inputCoord(CoordRoute coordrouteInstance, Route routeInstance, int i, Task taskInstance, boolean planProcedureTurn)
+    private inputCoord(CoordRoute coordrouteInstance, Route routeInstance, int i, Task taskInstance, boolean useProcedureTurn, boolean planProcedureTurn)
     {
         if (coordrouteInstance) {
             if (coordrouteInstance.type.IsCpCheckCoord()) {
@@ -114,14 +117,16 @@ class DisableCheckPointsTagLib
                     outln"""<td/>"""
                     outln"""<td/>"""
                 }
-                if (planProcedureTurn) {
-                    if (coordrouteInstance.type.IsProcedureTurnCoord()) {
-                        checkBox("${Defs.TurnpointID_ProcedureTurn}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsProcedureTurn.contains(check_title))
+                if (useProcedureTurn) {
+                    if (planProcedureTurn) {
+                        if (coordrouteInstance.type.IsProcedureTurnCoord()) {
+                            checkBox("${Defs.TurnpointID_ProcedureTurn}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsProcedureTurn.contains(check_title))
+                        } else {
+                            outln"""<td/>"""
+                        }
                     } else {
                         outln"""<td/>"""
                     }
-                } else {
-                    outln"""<td/>"""
                 }
                 if (coordrouteInstance.type.IsBadCourseCheckCoord()) {
                     checkBox("${Defs.TurnpointID_BadCourse}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsBadCourse.contains(check_title))

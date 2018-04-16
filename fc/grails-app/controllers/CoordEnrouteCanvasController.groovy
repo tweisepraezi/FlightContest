@@ -73,7 +73,12 @@ class CoordEnrouteCanvasController {
         def coordenroutecanvas = fcService.updateCoordEnrouteCanvas(session.showLanguage, params)
         if (coordenroutecanvas.saved) {
             flash.message = coordenroutecanvas.message
-            redirect(controller:"route",action:show,id:coordenroutecanvas.instance.route.id)
+            long next_routeid = coordenroutecanvas.instance.route.GetNextID()
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordenroutecanvas.instance.route.id,params:[next:next_routeid])
+            } else {
+                redirect(controller:"route",action:show,id:coordenroutecanvas.instance.route.id)
+            }
         } else if (coordenroutecanvas.error) {
             flash.message = coordenroutecanvas.message
             flash.error = true
@@ -138,10 +143,16 @@ class CoordEnrouteCanvasController {
 	}
     
     def delete = {
+        CoordEnrouteCanvas coordenroutecanvas_instance = CoordEnrouteCanvas.get(params.id)
+        long next_routeid = coordenroutecanvas_instance.route.GetNextID()
         def coordenroutecanvas = fcService.deleteCoordEnrouteCanvas(params)
         if (coordenroutecanvas.deleted) {
         	flash.message = coordenroutecanvas.message
-        	redirect(controller:"route",action:show,id:coordenroutecanvas.routeid)
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordenroutecanvas.routeid,params:[next:next_routeid])
+            } else {
+        	    redirect(controller:"route",action:show,id:coordenroutecanvas.routeid)
+            }
         } else if (coordenroutecanvas.notdeleted) {
         	flash.message = coordenroutecanvas.message
             redirect(action:show,id:params.id)
@@ -201,7 +212,12 @@ class CoordEnrouteCanvasController {
 	def cancel = {
         def coordenroutecanvas = fcService.getCoordEnrouteCanvas(params) 
         if (coordenroutecanvas.instance) {
-        	redirect(controller:"route",action:show,id:coordenroutecanvas.instance.route.id)
+            long next_routeid = coordenroutecanvas.instance.route.GetNextID()
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordenroutecanvas.instance.route.id,params:[next:next_routeid])
+            } else {
+        	    redirect(controller:"route",action:show,id:coordenroutecanvas.instance.route.id)
+            }
         } else {
             redirect(controller:"route",action:show,id:params.routeid)
         }

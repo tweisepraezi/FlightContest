@@ -40,11 +40,27 @@ class GpxController
             Map converter = [:]
             switch (file_extension) {
                 case LoggerFileTools.GPX_EXTENSION:
+                    LoggerFileTools.RemoveExistingBOM(webroot_dir + gpx_filename)
                     if (route_instance) {
                         converter = gpxService.AddRoute2GPX(route_instance, webroot_dir + gpx_filename)
                     } else {
                         converter = [ok:true]
                     }
+                    break
+                case LoggerFileTools.KML_EXTENSION:
+                    LoggerFileTools.RemoveExistingBOM(webroot_dir + upload_filename)
+                    converter = gpxService.ConvertKML2GPX(webroot_dir + upload_filename, webroot_dir + gpx_filename, route_instance, false)
+                    if (converter.ok) {
+                        gpxService.DeleteFile(upload_filename)
+                    }
+                    notconverted_message = message(code:'fc.gpx.gacnotconverted',args:[original_filename])
+                    break
+                case LoggerFileTools.KMZ_EXTENSION:
+                    converter = gpxService.ConvertKML2GPX(webroot_dir + upload_filename, webroot_dir + gpx_filename, route_instance, true)
+                    if (converter.ok) {
+                        gpxService.DeleteFile(upload_filename)
+                    }
+                    notconverted_message = message(code:'fc.gpx.gacnotconverted',args:[original_filename])
                     break
                 case LoggerFileTools.GAC_EXTENSION:
                     converter = gpxService.ConvertGAC2GPX(webroot_dir + upload_filename, webroot_dir + gpx_filename, route_instance)

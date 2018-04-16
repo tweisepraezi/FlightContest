@@ -141,9 +141,10 @@ class RouteFileTools
         String read_errors = ""
         
         File km_file = new File(kmFileName)
+        def kmz_file = null
         def km_reader = null
         if (kmzFile) {
-            def kmz_file = new java.util.zip.ZipFile(km_file)
+            kmz_file = new java.util.zip.ZipFile(km_file)
             kmz_file.entries().findAll { !it.directory }.each {
                 if (!km_reader) {
                     km_reader = kmz_file.getInputStream(it)
@@ -202,10 +203,13 @@ class RouteFileTools
         } catch (Exception e) {
             read_errors += e.getMessage()
         }
-        if (!km_reader) {
+        if (km_reader) {
             km_reader.close()
         }
-        
+        if (kmz_file) {
+            kmz_file.close()
+        }
+
         return [gates: gates, routename: route_name, valid: valid_format, errors: read_errors]
     }
     

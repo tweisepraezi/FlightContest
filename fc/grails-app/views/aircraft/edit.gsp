@@ -17,21 +17,22 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['aircraftReturnAction':aircraftReturnAction,'aircraftReturnController':aircraftReturnController,'aircraftReturnID':aircraftReturnID]}" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}*:</label>
                                 <br/>
-                                <input type="text" id="registration" name="registration" value="${fieldValue(bean:aircraftInstance,field:'registration')}" tabIndex="1"/>
+                                <input type="text" id="registration" name="registration" value="${fieldValue(bean:aircraftInstance,field:'registration')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.aircraft.type')}:</label>
                                 <br/>
-                                <input type="text" id="type" name="type" value="${fieldValue(bean:aircraftInstance,field:'type')}" tabIndex="2"/>
+                                <input type="text" id="type" name="type" value="${fieldValue(bean:aircraftInstance,field:'type')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.aircraft.colour')}:</label>
                                 <br/>
-                                <input type="text" id="colour" name="colour" value="${fieldValue(bean:aircraftInstance,field:'colour')}" tabIndex="3"/>
+                                <input type="text" id="colour" name="colour" value="${fieldValue(bean:aircraftInstance,field:'colour')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <g:if test="${aircraftInstance.user1 || aircraftInstance.user2}">
@@ -61,11 +62,20 @@
                         </g:if>
                         <input type="hidden" name="id" value="${aircraftInstance?.id}"/>
                         <input type="hidden" name="version" value="${aircraftInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="4"/>
-                        <g:if test="${!Test.findByTaskAircraft(aircraftInstance)}">
-                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="5"/>
+                        <g:if test="${params.next}">
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.aircraft.gotonext')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.aircraft.updatenext')}" tabIndex="${ti[0]++}"/>
                         </g:if>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="6"/>
+                        <g:else>
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        </g:else>
+                        <g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${!Test.findByTaskAircraft(aircraftInstance)}">
+                            <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:if test="${params.next}">
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
                     </g:form>
                 </div>
             </div>

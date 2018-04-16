@@ -34,8 +34,14 @@
 	                    </tr>
 	                </thead>
 	                <tbody>
-	                    <g:each in="${crewList}" var="crew_instance" status="i">
+	                    <g:each var="crew_instance" in="${crewList}" status="i">
 	                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
+	                            <g:set var="next_crew" value=""/>
+	                            <g:set var="next_crew_id" value="${crew_instance.GetNextID()}" />
+	                            <g:if test="${next_crew_id}">
+	                                <g:set var="next_crew" value="?next=${next_crew_id}"/>
+	                            </g:if>
+	                            
 	                            <g:set var="crew_id" value="selectedCrewID${crew_instance.id.toString()}"></g:set>
 	                            <g:if test="${flash.selectedCrewIDs && (flash.selectedCrewIDs[crew_id] == 'on')}">
 	                                <td><g:checkBox name="${crew_id}" value="${true}" /> ${crew_instance.startNum}</td>
@@ -43,7 +49,7 @@
 	                            <g:else>
 	                                <td><g:checkBox name="${crew_id}" value="${false}" /> ${crew_instance.startNum}</td>
 	                            </g:else>
-                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:if test="${crew_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[crew_instance.GetIncreaseFactor()])})</g:if></td>
+                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}" next="${next_crew}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:if test="${crew_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[crew_instance.GetIncreaseFactor()])})</g:if></td>
                                 <td>${fieldValue(bean:crew_instance, field:'email')}</td>
                                 <g:if test="${crew_instance.team}">                          
                                     <td>

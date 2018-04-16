@@ -27,30 +27,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <g:each in="${contestTasks}" status="i" var="taskInstance">
+                        <g:each var="task_instance" in="${contestTasks}" status="i">
                             <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                                <td colspan=1><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
+	                            <g:set var="next_task" value=""/>
+	                            <g:set var="next_task_id" value="${task_instance.GetNextID()}" />
+	                            <g:if test="${next_task_id}">
+	                                <g:set var="next_task" value="?next=${next_task_id}"/>
+	                            </g:if>
+	                            
+                                <td colspan=1><g:task var="${task_instance}" link="${createLink(controller:'task',action:'edit')}" next="${next_task}"/></td>
 
-                                <g:if test="${taskInstance.planningtest}">
-                                    <td colspan=1><g:planningtest var="${taskInstance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
+                                <g:if test="${task_instance.planningtest}">
+                                    <td colspan=1><g:planningtest var="${task_instance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                 </g:if> <g:else>
-                                    <td class="add" colspan=1><g:link controller="planningTest" params="['task.id':taskInstance?.id,'taskid':taskInstance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
+                                    <td class="add" colspan=1><g:link controller="planningTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
                                 </g:else>
 
-                                <g:if test="${taskInstance.flighttest}">
-                                    <td colspan=1><g:flighttest var="${taskInstance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
+                                <g:if test="${task_instance.flighttest}">
+                                    <td colspan=1><g:flighttest var="${task_instance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
                                 </g:if> <g:else>
-                                    <td class="add" colspan=1><g:link controller="flightTest" params="['task.id':taskInstance?.id,'taskid':taskInstance?.id]" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
+                                    <td class="add" colspan=1><g:link controller="flightTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
                                 </g:else>
                                 
-                                <g:if test="${taskInstance.hidePlanning}">
+                                <g:if test="${task_instance.hidePlanning}">
                                     <td>${message(code:'fc.hided')}</td>
                                 </g:if>
                                 <g:else>
                                     <td/>
                                 </g:else>
                                 
-                                <g:if test="${taskInstance.hideResults}">
+                                <g:if test="${task_instance.hideResults}">
                                     <td>${message(code:'fc.hided')}</td>
                                 </g:if>
                                 <g:else>

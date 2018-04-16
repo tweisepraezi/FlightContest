@@ -27,4 +27,32 @@ class Aircraft
 			throw new Exception("Aircraft.CopyValues could not save")
 		}
 	}
+
+    long GetNextID()
+    {
+        long next_id = 0
+        boolean set_next = false
+        for (Aircraft aircraft_instance in Aircraft.findAllByContest(this.contest,[sort:'registration'])) {
+            if (set_next) {
+                next_id = aircraft_instance.id
+                set_next = false
+            }
+            if (aircraft_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+                set_next = true
+            }
+        }
+        return next_id
+    }
+    
+    static long GetNextID2(long aircraftID)
+    {
+        long next_id = 0
+        if (aircraftID) {
+            Aircraft aircraft_instance = Aircraft.get(aircraftID)
+            if (aircraft_instance) {
+                next_id = aircraft_instance.GetNextID()
+            }
+        }
+        return next_id
+    }
 }

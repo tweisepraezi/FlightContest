@@ -697,5 +697,33 @@ class ResultClass
 	String GetDefaultShortName()
 	{
 		return name.substring(0,1)
-	}	
+	}
+
+    long GetNextID()
+    {
+        long next_id = 0
+        boolean set_next = false
+        for (ResultClass resultclass_instance in ResultClass.findAllByContest(this.contest,[sort:'name'])) {
+            if (set_next) {
+                next_id = resultclass_instance.id
+                set_next = false
+            }
+            if (resultclass_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+                set_next = true
+            }
+        }
+        return next_id
+    }
+    
+    static long GetNextID2(long resultClassID)
+    {
+        long next_id = 0
+        if (resultClassID) {
+            ResultClass resultclass_instance = ResultClass.get(resultClassID)
+            if (resultclass_instance) {
+                next_id = resultclass_instance.GetNextID()
+            }
+        }
+        return next_id
+    }
 }

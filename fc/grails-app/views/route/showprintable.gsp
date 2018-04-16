@@ -111,7 +111,7 @@
                             <g:set var="course_change" value="${AviationMath.courseChange(routelegcoord_instance.turnTrueTrack,routelegcoord_instance.testTrueTrack())}"/>
                             <g:if test="${course_change.abs() >= 90}">
                                 <tr class="coursechange">
-                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegcoord_instance.IsProcedureTurn()}"> (${message(code:'fc.procedureturn')})</g:if></td>
+                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegcoord_instance.IsProcedureTurn()}"> (<g:if test="${routeInstance.UseProcedureTurn()}">${message(code:'fc.procedureturn')}</g:if><g:else>${message(code:'fc.procedureturn.disabled')}</g:else>)</g:if></td>
                                 </tr>
                             </g:if>
                             <tr class="value">
@@ -142,7 +142,7 @@
                             <g:set var="course_change" value="${AviationMath.courseChange(routelegtest_instance.turnTrueTrack,routelegtest_instance.testTrueTrack())}"/>
                             <g:if test="${course_change.abs() >= 90}">
                                 <tr class="coursechange">
-                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegtest_instance.IsProcedureTurn()}"> (${message(code:'fc.procedureturn')})</g:if></td>
+                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegtest_instance.IsProcedureTurn()}"> (<g:if test="${routeInstance.UseProcedureTurn()}">${message(code:'fc.procedureturn')}</g:if><g:else>${message(code:'fc.procedureturn.disabled')}</g:else>)</g:if></td>
                                 </tr>
                             </g:if>
                             <tr class="value">

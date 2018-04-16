@@ -29,17 +29,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <g:each in="${routeInstanceList}" status="i" var="routeInstance">
+                    <g:each var="route_instance" in="${routeInstanceList}" status="i">
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                            <td><g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/><g:if test="${!routeInstance.IsRouteOk()}"> !</g:if></td>
-                            <td>${message(code:routeInstance.turnpointRoute.code)}<g:if test="${!routeInstance.IsTurnpointSignOk()}"> !</g:if><br/><g:if test="${routeInstance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
-                            <td>${message(code:routeInstance.enroutePhotoRoute.code)}<g:if test="${!routeInstance.IsEnrouteSignOk(true)}"> !</g:if><br/>${message(code:routeInstance.enroutePhotoMeasurement.code)}<g:if test="${!routeInstance.IsEnrouteMeasurementOk(true)}"> !</g:if></td>
-                            <td>${message(code:routeInstance.enrouteCanvasRoute.code)}<g:if test="${!routeInstance.IsEnrouteSignOk(false)}"> !</g:if><br/>${message(code:routeInstance.enrouteCanvasMeasurement.code)}<g:if test="${!routeInstance.IsEnrouteMeasurementOk(false)}"> !</g:if></td>
+                            <g:set var="next_route" value=""/>
+                            <g:set var="next_route_id" value="${route_instance.GetNextID()}" />
+                            <g:if test="${next_route_id}">
+                                <g:set var="next_route" value="?next=${next_route_id}"/>
+                            </g:if>
+                            
+                            <td><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" next="${next_route}"/><g:if test="${!route_instance.IsRouteOk()}"> !</g:if></td>
+                            <td>${message(code:route_instance.turnpointRoute.code)}<g:if test="${!route_instance.IsTurnpointSignOk()}"> !</g:if><br/><g:if test="${route_instance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
+                            <td>${message(code:route_instance.enroutePhotoRoute.code)}<g:if test="${!route_instance.IsEnrouteSignOk(true)}"> !</g:if><br/>${message(code:route_instance.enroutePhotoMeasurement.code)}<g:if test="${!route_instance.IsEnrouteMeasurementOk(true)}"> !</g:if></td>
+                            <td>${message(code:route_instance.enrouteCanvasRoute.code)}<g:if test="${!route_instance.IsEnrouteSignOk(false)}"> !</g:if><br/>${message(code:route_instance.enrouteCanvasMeasurement.code)}<g:if test="${!route_instance.IsEnrouteMeasurementOk(false)}"> !</g:if></td>
 
                             <g:set var="distance_to2ldg" value="${new BigDecimal(0)}" />
                             <g:set var="procedureturn_num" value="${0}"/>
                             <g:set var="secret_num" value="${0}"/>
-                            <g:each var="routeleg_instance" in="${RouteLegCoord.findAllByRoute(routeInstance,[sort:'id'])}">
+                            <g:each var="routeleg_instance" in="${RouteLegCoord.findAllByRoute(route_instance,[sort:'id'])}">
                                 <g:set var="distance_to2ldg" value="${FcMath.AddDistance(distance_to2ldg,routeleg_instance.testDistance())}" />
                                 <g:if test="${routeleg_instance.IsProcedureTurn()}">
                                     <g:set var="course_change" value="${AviationMath.courseChange(routeleg_instance.turnTrueTrack,routeleg_instance.testTrueTrack())}"/>
@@ -52,7 +58,7 @@
                                 </g:if>
                             </g:each>
                             <g:if test="${procedureturn_num}">
-                                <td style="white-space: nowrap;">${message(code:'fc.yes')} (${procedureturn_num})</td>
+                                <td style="white-space: nowrap;"><g:if test="${route_instance.UseProcedureTurn()}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${procedureturn_num})</td>
                             </g:if>
                             <g:else>
                                 <td style="white-space: nowrap;">${message(code:'fc.no')}</td>
@@ -66,27 +72,27 @@
                             <td>${FcMath.DistanceStr(distance_to2ldg)}${message(code:'fc.mile')}</td>
                             
                             <g:set var="distance_sp2fp" value="${new BigDecimal(0)}" />
-                            <g:each var="routeleg_instance" in="${RouteLegTest.findAllByRoute(routeInstance,[sort:'id'])}">
+                            <g:each var="routeleg_instance" in="${RouteLegTest.findAllByRoute(route_instance,[sort:'id'])}">
                                 <g:set var="distance_sp2fp" value="${FcMath.AddDistance(distance_sp2fp,routeleg_instance.testDistance())}" />
                             </g:each>
                             <td>${FcMath.DistanceStr(distance_sp2fp)}${message(code:'fc.mile')}</td>
                             
                             <td>
-                                <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance,[sort:"id"])}">
+                                <g:each var="c" in="${PlanningTestTask.findAllByRoute(route_instance,[sort:"id"])}">
                                     <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
                                     <br/>                                     
                                 </g:each>
                             </td>
 
                             <td>
-                                <g:each var="c" in="${FlightTest.findAllByRoute(routeInstance,[sort:"id"])}">
+                                <g:each var="c" in="${FlightTest.findAllByRoute(route_instance,[sort:"id"])}">
                                     <g:flighttest var="${c}" link="${createLink(controller:'flightTest',action:'show')}"/>
                                     <br/>                                     
                                 </g:each>
                             </td>
                             
                             <td>
-                                <g:each var="flighttest_instance" in="${FlightTest.findAllByRoute(routeInstance,[sort:"id"])}">
+                                <g:each var="flighttest_instance" in="${FlightTest.findAllByRoute(route_instance,[sort:"id"])}">
                                     <g:if test="${flighttest_instance.IsObservationSignUsed()}">
                                         ${message(code:'fc.yes')}
                                     </g:if>

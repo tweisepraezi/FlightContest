@@ -10536,7 +10536,11 @@ class FcService
         	flighttest_instance.speed = 0
         }
         
-        if(!flighttest_instance.hasErrors() && flighttest_instance.save()) {
+        if (!flighttest_instance.route) {
+            Map ret = ['instance':flighttest_instance,error:true,'message':getMsg('fc.flighttest.noroute')]
+            printerror ret.message
+            return ret
+        } else if (!flighttest_instance.hasErrors() && flighttest_instance.save()) {
 
             Task task_instance = Task.get( params.taskid )
             task_instance.flighttest = flighttest_instance
@@ -11244,7 +11248,7 @@ class FcService
 
     
     //--------------------------------------------------------------------------
-    Map savePlanningTest(Map params)
+    Map savePlanningTest(Map params, boolean checkRoute)
     {
         PlanningTest planningtest_instance = new PlanningTest(params)
 		planningtest_instance.direction = params.direction.toBigDecimal()
@@ -11259,7 +11263,11 @@ class FcService
             planningtest_instance.speed = 0
         }
         
-        if(!planningtest_instance.hasErrors() && planningtest_instance.save()) {
+        if (checkRoute && !params.route) {
+            Map ret = ['instance':planningtest_instance, error:true, 'message':getMsg('fc.planningtest.noroute')]
+            printerror ret.message
+            return ret
+        } else if(!planningtest_instance.hasErrors() && planningtest_instance.save()) {
 
             if (params.route) {
                 Wind windInstance = new Wind(direction:planningtest_instance.direction,speed:planningtest_instance.speed)
@@ -12293,7 +12301,7 @@ class FcService
         	}
 
         	// calculate planProcedureTurn (CoordRoute)
-			if (last_coordroute_instance) {
+			if (last_coordroute_instance && routeInstance.UseProcedureTurn()) {
 				BigDecimal legdir
 				if (coordroute_instance.measureTrueTrack) {
 					legdir = coordroute_instance.measureTrueTrack
@@ -12905,8 +12913,9 @@ class FcService
         // create coordResultInstances
 		printstart "Create and calculate CoordResult instances"
         int coord_index = 0
+        Route route_instance = testInstance.flighttestwind.flighttest.route
 		CoordType last_coordtype = CoordType.UNKNOWN
-        CoordRoute.findAllByRoute(testInstance?.flighttestwind?.flighttest?.route,[sort:"id"]).each { CoordRoute coordroute_instance ->
+        CoordRoute.findAllByRoute(route_instance,[sort:"id"]).each { CoordRoute coordroute_instance ->
             CoordResult coordresult_instance = new CoordResult()
             coordresult_instance.type = coordroute_instance.type
             coordresult_instance.titleNumber = coordroute_instance.titleNumber
@@ -12922,8 +12931,11 @@ class FcService
             coordresult_instance.endCurved = coordroute_instance.endCurved
             
 			// calculate planProcedureTurn (CoordResult)
-			if (last_coordtype.IsProcedureTurnCoord()) {
+			if (last_coordtype.IsProcedureTurnCoord() && route_instance.UseProcedureTurn()) {
 				coordresult_instance.planProcedureTurn = coordroute_instance.planProcedureTurn
+                if (coordroute_instance.planProcedureTurn) {
+                    println "Set planProcedureTurn (calculate_coordresult CoordRoute)"
+                }
 			}
 			
 			// planCpTime
@@ -13059,7 +13071,7 @@ class FcService
         // calculate planProcedureTurn (TestLeg)
         testLegInstance.planProcedureTurn = false
         testLegInstance.planProcedureTurnDuration = 0
-        if (procedureTurnDuration > 0 && lastTrueTrack != null) {
+        if ((procedureTurnDuration > 0) && (lastTrueTrack != null) && routeInstance.UseProcedureTurn()) {
 			if (routeLegInstance.startTitle.type.IsProcedureTurnCoord()) {
 	            if (IsCourseChangeGreaterEqual90(testLegInstance.planTrueTrack,lastTrueTrack)) {
 					println "Set planProcedureTurn (TestLeg: $lastTrueTrack -> $testLegInstance.planTrueTrack)"
@@ -13359,7 +13371,7 @@ class FcService
         p.title = title
         p.direction = "0"
         p.speed = "0"
-        Map ret = savePlanningTest(p)
+        Map ret = savePlanningTest(p,false)
 		printdone ret
 		return ret
     }
@@ -13375,7 +13387,7 @@ class FcService
         p.route = route.instance
         p.direction = direction.toString()
         p.speed = speed.toString()
-        Map ret = savePlanningTest(p)
+        Map ret = savePlanningTest(p,false)
 		printdone ret
 		return ret
     }

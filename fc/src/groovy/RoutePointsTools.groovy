@@ -20,7 +20,7 @@ class RoutePointsTools
         CoordRoute lasttp_coordroute_instance = null
         List enroute_points = []
         int enroute_point_pos = 0
-        boolean show_curved_point = routeInstance.contest.printStyle.contains('--route') && routeInstance.contest.printStyle.contains('show-curved-points')
+        boolean show_curved_point = routeInstance.ShowCurvedPoints()
         List curved_point_ids = routeInstance.GetCurvedPointIds()
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
             // add enroute points

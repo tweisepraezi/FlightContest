@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 5
-:revdate:   23.03.2018
+:revnumber: 3.1.1, Ausgabe 7
+:revdate:   12.04.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -30,7 +30,7 @@ Ist eine moderne, auf Java-Techniken basierende, mehrsprachige und netzwerkfähi
 * Absturzsicher.
 * Hohe Sicherheit gegen Fehlbedienung.
 
-Unterstützt die Logger-Datenformate GAC, GPX, IGC und NMEA 0183 (erweiterbar).
+Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).
 
 Erzeugt PDF für Druck und Internet-Veröffentlichung.
 
@@ -52,7 +52,7 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 
 * Offline-Kartenanzeige zur Beurteilung des Navigationsfluges
 * Online-Kartenanzeige mit Google Maps und Open Street Map
-* Logger-Daten-Anzeige für GAC-, GPX-, IGC- und NMEA-Dateien
+* Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien
 
 <<<
 [[manuals]]
@@ -1068,6 +1068,10 @@ im AFLOS-Namen übereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.
 * Logger-Daten-Import: 'Flight Contest -> Ergebnisse -> Aufgaben-Titel -> Navigationsflug
                         -> ... -> Import Logger-Daten -> IGC-Datei auswählen -> Import'
 
+=== Beliebiger anderer IGC-Logger
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
+
 === Beliebiger anderer GPX-Logger
 * Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
 * Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
@@ -1078,9 +1082,16 @@ im AFLOS-Namen übereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.
 ** darf nur eine Strecken-Aufzeichnung beinhalten (<trk>...</trk>)
 ** wenn nein, nicht gewünschte Strecken-Aufzeichnungen in Datei löschen
 
-=== Beliebiger anderer IGC-Logger
+=== Beliebiger anderer KML-Logger
 * Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
 * Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
+* Notwendige Logger-Einstellungen:
+** Aufzeichnungs-Intervall: 1 Sekunde
+** Aufzeichnung mit Höhen-Angaben
+** Aufzeichnung mit Zeit-Angaben
+* Anforderungen an KML/KMZ-Datei-Inhalt
+** darf nur eine Strecken-Aufzeichnung beinhalten (<gx:Track>...</gx:Track>)
+** wenn nein, nicht gewünschte Strecken-Aufzeichnungen in Datei löschen
 
 === Beliebiger anderer NMEA-Logger
 * Der Logger mus den Standard 'NMEA 0183' unterstützen.
@@ -1271,12 +1282,17 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 |Einsteiger +
 30
 |im Zeitplan für Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regulären Planungszeit)
+|--route +
+--disable-procedureturn
+|Strecke-1
+|Wendeschleifen für diese Strecke deaktivieren
+|--route +
+--show-curved-points
+|Strecke-1
+|in Strecken-Anzeigen dieser Strecke UZKs der krummen Strecke anzeigen
 |--flightresults
 |show-curved-points
 |im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen
-|--route
-|show-curved-points
-|in Strecken-Anzeigen UZKs der krummen Strecke anzeigen
 |===
 
 [[print-styles-samples]]
@@ -1286,9 +1302,13 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 
  table.crewlist tr.value td { font-size: 90%; }
 
+** Strecken - Wendeschleifen deaktivieren
+
+ body { --route: Strecke-1; --disable-procedureturn; }
+ 
 ** Strecken-Anzeigen - UZKs der krummen Strecke anzeigen
 
- body { --route: show-curved-points; }
+ body { --route: Strecke-1; --show-curved-points; }
  
 ** Besatzungs-Zeitplan - Zeilen verkleinern
 
@@ -1608,7 +1628,7 @@ Automatisches Laden eingelesener Logger-Daten.
 
 Notwendige Logger-Software-Einstellungen:
 
-* GAC-, GPX-, IGC- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern
+* GAC-, IGC-, GPX-, KML-, KMZ- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern
   
 Notwendige Vorbereitung:
 

@@ -17,11 +17,12 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['teamReturnAction':teamReturnAction,'teamReturnController':teamReturnController,'teamReturnID':teamReturnID]}" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.team.name')}*:</label>
                                 <br/>
-                                <input type="text" id="name" name="name" value="${fieldValue(bean:teamInstance,field:'name')}" tabIndex="1"/>
+                                <input type="text" id="name" name="name" value="${fieldValue(bean:teamInstance,field:'name')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -46,9 +47,18 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${teamInstance?.id}"/>
                         <input type="hidden" name="version" value="${teamInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="2"/>
-                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="3"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="4"/>
+                        <g:if test="${params.next}">
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.team.gotonext')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.team.updatenext')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:else>
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        </g:else>    
+                        <g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                        <g:if test="${params.next}">
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
                     </g:form>
                 </div>
             </div>

@@ -1086,4 +1086,31 @@ class Task
         return test_instances
     }
 
+    long GetNextID()
+    {
+        long next_id = 0
+        boolean set_next = false
+        for (Task task_instance in Task.findAllByContest(this.contest,[sort:'id'])) {
+            if (set_next) {
+                next_id = task_instance.id
+                set_next = false
+            }
+            if (task_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+                set_next = true
+            }
+        }
+        return next_id
+    }
+    
+    static long GetNextID2(long taskID)
+    {
+        long next_id = 0
+        if (taskID) {
+            Task task_instance = Task.get(taskID)
+            if (task_instance) {
+                next_id = task_instance.GetNextID()
+            }
+        }
+        return next_id
+    }
 }

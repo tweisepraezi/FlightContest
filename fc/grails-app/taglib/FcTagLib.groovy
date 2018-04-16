@@ -55,7 +55,11 @@ class FcTagLib
     // <g:aircraft var="${aircraftInstance}" link="${createLink(controller:'aircraft',action:'edit')}"/>
     def aircraft = { p ->
         if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.registration.encodeAsHTML()}</a>"""
+            if (p.next) {
+                out << """<a href="${p.link}/${p.var.id}${p.next}">${p.var.registration.encodeAsHTML()}</a>"""
+            } else {
+                out << """<a href="${p.link}/${p.var.id}">${p.var.registration.encodeAsHTML()}</a>"""
+            }
         }
     }
     
@@ -63,7 +67,11 @@ class FcTagLib
     // <g:team var="${teamInstance}" link="${createLink(controller:'team',action:'edit')}"/>
     def team = { p ->
         if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+            if (p.next) {
+                out << """<a href="${p.link}/${p.var.id}${p.next}">${p.var.name.encodeAsHTML()}</a>"""
+            } else {
+                out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+            }
         }
     }
     
@@ -71,7 +79,11 @@ class FcTagLib
     // <g:resultclass var="${resultclassInstance}" link="${createLink(controller:'resultClass',action:'edit')}"/>
     def resultclass = { p ->
         if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+            if (p.next) {
+                out << """<a href="${p.link}/${p.var.id}${p.next}">${p.var.name.encodeAsHTML()}</a>"""
+            } else {
+                out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+            }
         }
     }
     
@@ -90,20 +102,24 @@ class FcTagLib
     // ====================================================================================================================
     // <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>
     def task = { p ->
+        String next_str = ""
+        if (p.next) {
+            next_str = p.next
+        }
         if (p.link == "${createLinkTo(dir:'',file:'task/listplanning')}") {
-       		out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.planning')})</a>"""
+       		out << """<a href="${p.link}/${p.var.id}${next_str}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.planning')})</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/listresults')}") {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.results')})</a>"""
+            out << """<a href="${p.link}/${p.var.id}${next_str}">${p.var.name().encodeAsHTML()} (${message(code:'fc.task.results')})</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/disabledcheckpoints')}") {
-            out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
+            out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetable')}") {
-			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetable')}</a>"""
+			out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.timetable')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetablejudge')}") {
-			out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetablejudge')}</a>"""
+			out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.timetablejudge')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetableoverview')}") {
-            out << """<a href="${p.link}/${p.var.id}">${message(code:'fc.task.timetableoverview')}</a>"""
+            out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.timetableoverview')}</a>"""
         } else {
-        	out << """<a href="${p.link}/${p.var.id}">${p.var.bestOfName().encodeAsHTML()} (${message(code:'fc.task.settings')})</a>"""
+        	out << """<a href="${p.link}/${p.var.id}${next_str}">${p.var.bestOfName().encodeAsHTML()} (${message(code:'fc.task.settings')})</a>"""
         }
     }
 
@@ -111,7 +127,11 @@ class FcTagLib
     // <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'edit')}"/>
     def crew = { p ->
         if (p.var) {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+            if (p.next) {
+                out << """<a href="${p.link}/${p.var.id}${p.next}">${p.var.name.encodeAsHTML()}</a>"""
+            } else {
+                out << """<a href="${p.link}/${p.var.id}">${p.var.name.encodeAsHTML()}</a>"""
+            }
         }
     }
     
@@ -142,7 +162,11 @@ class FcTagLib
     // ====================================================================================================================
     // <g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/>
     def route = { p ->
-        out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+        if (p.next) {
+            out << """<a href="${p.link}/${p.var.id}${p.next}">${p.var.name().encodeAsHTML()}</a>"""
+        } else {
+            out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+        }
     }
 
     // ====================================================================================================================

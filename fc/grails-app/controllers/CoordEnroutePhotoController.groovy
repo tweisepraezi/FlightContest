@@ -67,7 +67,12 @@ class CoordEnroutePhotoController {
         def coordenroutephoto = fcService.updateCoordEnroutePhoto(session.showLanguage, params) 
         if (coordenroutephoto.saved) {
         	flash.message = coordenroutephoto.message
-            redirect(controller:"route",action:show,id:coordenroutephoto.instance.route.id)
+            long next_routeid = coordenroutephoto.instance.route.GetNextID()
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordenroutephoto.instance.route.id,params:[next:next_routeid])
+            } else {
+                redirect(controller:"route",action:show,id:coordenroutephoto.instance.route.id)
+            }
         } else if (coordenroutephoto.error) {
             flash.message = coordenroutephoto.message
             flash.error = true
@@ -132,10 +137,16 @@ class CoordEnroutePhotoController {
 	}
     
     def delete = {
+        CoordEnroutePhoto coordenroutephoto_instance = CoordEnroutePhoto.get(params.id)
+        long next_routeid = coordenroutephoto_instance.route.GetNextID()
         def coordenroutephoto = fcService.deleteCoordEnroutePhoto(params)
         if (coordenroutephoto.deleted) {
         	flash.message = coordenroutephoto.message
-        	redirect(controller:"route",action:show,id:coordenroutephoto.routeid)
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordenroutephoto.routeid,params:[next:next_routeid])
+            } else {
+        	    redirect(controller:"route",action:show,id:coordenroutephoto.routeid)
+            }
         } else if (coordenroutephoto.notdeleted) {
         	flash.message = coordenroutephoto.message
             redirect(action:show,id:params.id)
@@ -194,7 +205,12 @@ class CoordEnroutePhotoController {
 	def cancel = {
         def coordenroutephoto = fcService.getCoordEnroutePhoto(params) 
         if (coordenroutephoto.instance) {
-        	redirect(controller:"route",action:show,id:coordenroutephoto.instance.route.id)
+            long next_routeid = coordenroutephoto.instance.route.GetNextID()
+            if (next_routeid) {
+                redirect(controller:"route",action:show,id:coordenroutephoto.instance.route.id,params:[next:next_routeid])
+            } else {
+        	    redirect(controller:"route",action:show,id:coordenroutephoto.instance.route.id)
+            }
         } else {
             redirect(controller:"route",action:show,id:params.routeid)
         }

@@ -217,4 +217,31 @@ class Crew
         return increaseEnabled && (GetIncreaseFactor() > 0)
     }
     
+    long GetNextID()
+    {
+        long next_id = 0
+        boolean set_next = false
+        for (Crew crew_instance in Crew.findAllByContest(this.contest,[sort:'viewpos'])) {
+            if (set_next) {
+                next_id = crew_instance.id
+                set_next = false
+            }
+            if (crew_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+                set_next = true
+            }
+        }
+        return next_id
+    }
+    
+    static long GetNextID2(long crewID)
+    {
+        long next_id = 0
+        if (crewID) {
+            Crew crew_instance = Crew.get(crewID)
+            if (crew_instance) {
+                next_id = crew_instance.GetNextID()
+            }
+        }
+        return next_id
+    }
 }

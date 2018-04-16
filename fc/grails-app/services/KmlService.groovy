@@ -489,11 +489,13 @@ class KmlService
             
             // procedure turns
             int procedureturn_num = 0
-            for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(routeInstance,[sort:'id'])) {
-                if (routeleg_instance.IsProcedureTurn()) {
-                    BigDecimal course_change = AviationMath.courseChange(routeleg_instance.turnTrueTrack,routeleg_instance.testTrueTrack())
-                    if (course_change.abs() >= 90) {
-                        procedureturn_num++
+            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.UseProcedureTurn()) {
+                for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (routeleg_instance.IsProcedureTurn()) {
+                        BigDecimal course_change = AviationMath.courseChange(routeleg_instance.turnTrueTrack,routeleg_instance.testTrueTrack())
+                        if (course_change.abs() >= 90) {
+                            procedureturn_num++
+                        }
                     }
                 }
             }
@@ -831,7 +833,7 @@ class KmlService
                         } else {
                             // standard gate
                             boolean wr_gate = false
-                            boolean show_curved_point = routeInstance.contest.printStyle.contains('--route') && routeInstance.contest.printStyle.contains('show-curved-points')
+                            boolean show_curved_point = routeInstance.ShowCurvedPoints()
                             List curved_point_ids = routeInstance.GetCurvedPointIds()
                             if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                                 wr_gate = true

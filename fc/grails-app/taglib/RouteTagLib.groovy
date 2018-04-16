@@ -558,7 +558,11 @@ class RouteTagLib
                 outln"""<tr class="${(i % 2) == 0 ? 'odd' : ''}">"""
                 String s = """<td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}"""
                 if (routeleg_instance.IsProcedureTurn()) {
-                    s += """ (${message(code:'fc.procedureturn')})"""
+                    if (attrs.route.UseProcedureTurn()) {
+                        s += """ (${message(code:'fc.procedureturn')})"""
+                    } else {
+                        s += """ (${message(code:'fc.procedureturn.disabled')})"""
+                    }
                 }
                 s += """      </td>"""
                 outln s
@@ -615,7 +619,11 @@ class RouteTagLib
                 outln"""<tr class="${(i % 2) == 0 ? 'odd' : ''}">"""
                 String s = """<td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}"""
                 if (routeleg_instance.IsProcedureTurn()) {
-                    s += """ (${message(code:'fc.procedureturn')})"""
+                    if (attrs.route.UseProcedureTurn()) {
+                        s += """ (${message(code:'fc.procedureturn')})"""
+                    } else {
+                        s += """ (${message(code:'fc.procedureturn.disabled')})"""
+                    }
                 }
                 s += """      </td>"""
                 outln s

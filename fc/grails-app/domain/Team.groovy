@@ -60,4 +60,32 @@ class Team
 		}
 		return false	
 	}
+
+    long GetNextID()
+    {
+        long next_id = 0
+        boolean set_next = false
+        for (Team team_instance in Team.findAllByContest(this.contest,[sort:'name'])) {
+            if (set_next) {
+                next_id = team_instance.id
+                set_next = false
+            }
+            if (team_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+                set_next = true
+            }
+        }
+        return next_id
+    }
+    
+    static long GetNextID2(long teamID)
+    {
+        long next_id = 0
+        if (teamID) {
+            Team team_instance = Team.get(teamID)
+            if (team_instance) {
+                next_id = team_instance.GetNextID()
+            }
+        }
+        return next_id
+    }
 }

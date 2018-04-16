@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-23.03.2018
+16.04.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -47,7 +47,7 @@ Wettbewerbsmanagement. Dazu zählen die Unterstützung
  
 Weitere nützliche Funktionen von Flight Contest:
 * Direkte Strafpunkt-Berechnung beim Laden einer Logger-Datendatei
-  (GAC, GPX, IGC und NMEA 0183).
+  (GAC, IGC, GPX, KML, KMZ und NMEA 0183).
 * Sehr schnelle Logger-Daten-Nutzung des FAI-zertifizierten Loggers AFLOS 
   (ohne Umweg über Datei-Export und -Import).
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
@@ -96,8 +96,15 @@ Erweiterungen in dieser Version (3.1.1):
     -> Hilfe -> Besondere CSS-Eigenschaften
 - Besatzungs-Liste: Export-Kommandos für Label-Drucker
     Dateien für Besatzung, Pilot und Navigator exportierbar
-- NMEA-Unterstützung (NMEA 0183) für
-  Navigationsflug-Logger-Auswertung und Logger-Daten-Anzeige
+- Navigationsflug-Logger-Auswertung und Logger-Daten-Anzeige um folgende 
+  Logger-Formate erweitert: 
+    * NMEA 0183
+    * KML und KMZ
+    * GPX mit UTF-8-BOMs
+    * KML und KMZ mit UTF-8-BOMs
+- Wendeschleifen einzelner Strecken deaktivierbar
+    -> Hilfe -> Besondere CSS-Eigenschaften
+    -> Wettbewerb -> Einstellungen -> Druckstil
 
 Erweiterungen in Version 3.1:
 -----------------------------
@@ -184,7 +191,7 @@ Erweiterungen in Version 3.0:
 -----------------------------
 - Navigationsflug-Logger-Auswertung erweitert:
     * Mit 'Import Logger-Daten' werden Logger-Daten direkt aus einer
-      ausgewählten GAC-, GPX- oder IGC-Datei geladen und daraus sofort
+      ausgewählten GAC-, IGC- oder GPX-Datei geladen und daraus sofort
       Fehlerpunkte berechnet.
     * Mit 'Import AFLOS-Daten -> Kalkuliere AFLOS-Daten' werden 
       Logger-Daten direkt aus einer AFLOS-Datenbank gelesen

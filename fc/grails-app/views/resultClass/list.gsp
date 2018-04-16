@@ -24,11 +24,18 @@
                 </thead>
                 <tbody>
                     <g:each var="resultclass_instance" in="${resultclassInstanceList}" status="i" >
+                        <g:set var="next_resultclass" value=""/>
+                        <g:set var="next_resultclass_id" value="${resultclass_instance.GetNextID()}" />
+                        <g:if test="${next_resultclass_id}">
+                            <g:set var="next_resultclass" value="?next=${next_resultclass_id}"/>
+                        </g:if>
+                        
                     	<g:if test="${Crew.findByResultclass(resultclass_instance)}">
 							<g:each var="crew_instance" in="${Crew.findAllByResultclass(resultclass_instance,[sort:'name'])}" status="j" >
 		                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
+		                            
 	                               	<g:if test="${j==0}">
-			                            <td><g:resultclass var="${resultclass_instance}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
+			                            <td><g:resultclass var="${resultclass_instance}" link="${createLink(controller:'resultClass',action:'edit')}" next="${next_resultclass}"/></td>
                                         <td>${resultclass_instance.shortName}</td>
 			                            <td>${resultclass_instance.contestTitle}</td>
 	                                </g:if>
@@ -52,7 +59,7 @@
 	                	</g:if>
 	                	<g:else>
 	                		<tr class="${(i % 2) == 0 ? 'odd' : ''}">
-	                			<td><g:resultclass var="${resultclass_instance}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
+	                			<td><g:resultclass var="${resultclass_instance}" link="${createLink(controller:'resultClass',action:'edit')}" next="${next_resultclass}"/></td>
                                 <td>${resultclass_instance.shortName}</td>
 	                			<td>${resultclass_instance.contestTitle}</td>
 	                			<td/>
