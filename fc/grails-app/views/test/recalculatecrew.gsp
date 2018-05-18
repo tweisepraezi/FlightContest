@@ -60,10 +60,18 @@
                         </table>
                         <table>
                             <tbody>
+                                   <g:set var="track_points" value="${testInstance.GetTrackPoints("", "")}" />
+                                   <g:set var="last_startutc" value="${testInstance.loggerDataStartUtc}" />
+                                   <g:if test="${!last_startutc}">
+                                       <g:set var="last_startutc" value="${track_points.startUtc}" />
+                                   </g:if>
+                                   <g:set var="last_endutc" value="${testInstance.loggerDataEndUtc}" />
+                                   <g:if test="${!last_endutc}">
+                                       <g:set var="last_endutc" value="${track_points.endUtc}" />
+                                   </g:if>
                                    <tr>
-                                       <g:set var="last_startutc" value="${testInstance.loggerDataStartUtc}" />
                                        <td class="detailtitle"><label>${message(code:'fc.flightresults.recalculate.startlocaltime')}:</label></td>
-                                       <td><g:select from="${testInstance.GetTrackPoints("", "")}" name="loggerdata_startutc" value="${last_startutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
+                                       <td><g:select from="${track_points.trackPoints}" name="loggerdata_startutc" value="${last_startutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
                                    </tr>
                                    <tr>
                                        <td>${message(code:CoordType.TO.code)}:</td>
@@ -74,9 +82,8 @@
                                        <td>${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
                                    </tr>
                                    <tr>
-                                       <g:set var="last_endutc" value="${testInstance.loggerDataEndUtc}" />
                                        <td class="detailtitle"><label>${message(code:'fc.flightresults.recalculate.endlocaltime')}:</label></td>
-                                       <td><g:select from="${testInstance.GetTrackPoints("", "")}" name="loggerdata_endutc" value="${last_endutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
+                                       <td><g:select from="${track_points.trackPoints}" name="loggerdata_endutc" value="${last_endutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
                                    </tr>
                                 <tr>
                                     <td class="detailtitle"><label>${message(code:'fc.aflos.noremove.existingdata')}:</label></td>

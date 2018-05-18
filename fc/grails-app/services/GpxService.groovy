@@ -313,7 +313,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, xml) // false - no Print, false - no wrEnrouteSign
+                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
             }
         }
         gpx_writer.close()
@@ -452,7 +452,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, xml) // false - no Print, false - no wrEnrouteSign
+                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
             }
         }
         gac_reader.close()
@@ -585,7 +585,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, xml) // false - no Print, false - no wrEnrouteSign
+                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
             }
         }
         igc_reader.close()
@@ -682,7 +682,7 @@ class GpxService
                                         // Longitude (Geographische Laenge: -179.999 (W) ... +180 Grad (E))
                                         String longitude_grad = line_values[4].substring(0,3)
                                         BigDecimal longitude_grad_math = longitude_grad.toBigDecimal()
-                                        String longitude_minute = line_values[4].substring(4)
+                                        String longitude_minute = line_values[4].substring(3)
                                         BigDecimal longitude_minute_math = longitude_minute.toBigDecimal()
                                         boolean longitude_east = line_values[5] == CoordPresentation.EAST
                                         longitude = longitude_grad_math + (longitude_minute_math / 60)
@@ -723,7 +723,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, xml) // false - no Print, false - no wrEnrouteSign
+                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
             }
         }
         nmea_reader.close()
@@ -743,7 +743,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    Map ConvertRoute2GPX(Route routeInstance, String gpxFileName, boolean isPrint, boolean showPoints, boolean wrEnrouteSign, Map contestMap = [:])
+    Map ConvertRoute2GPX(Route routeInstance, String gpxFileName, boolean isPrint, boolean showPoints, boolean wrEnrouteSign, boolean gpxExport, Map contestMap = [:])
     {
         printstart "ConvertRoute2GPX ${routeInstance.name()} -> ${gpxFileName}"
         
@@ -762,11 +762,11 @@ class GpxService
         gpx_writer.writeLine(XMLHEADER)
         if (contestMap) {
             xml.gpx(version:GPXVERSION, creator:GPXCREATOR_CONTESTMAP) {
-                GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, xml, contestMap)
+                GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, gpxExport, xml, contestMap)
             }
         } else {
             xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
-                GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, xml, [:])
+                GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, gpxExport, xml, [:])
             }
         }
         gpx_writer.close()
@@ -824,7 +824,7 @@ class GpxService
             }
             gpx_reader.close()
             
-            GPXRoute(routeInstance, null, false, false, xml) // false - no Print, false - no wrEnrouteSign
+            GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
         }
         gpx_writer.close()
         
@@ -846,7 +846,7 @@ class GpxService
     Map ConvertTest2PrintMap(Test testInstance, String gpxFileName, String pngFileName) 
     {
         printstart "ConvertTest2PrintMap"
-        Map ret = ConvertTest2GPX(testInstance,gpxFileName, true, false, false) // true - Print, false - no Points, false - no wrEnrouteSign
+        Map ret = ConvertTest2GPX(testInstance,gpxFileName, true, false, false, false) // true - Print, false - no Points, false - no wrEnrouteSign, false - no gpxExport
         if (ret.ok && ret.track) {
             printstart "Generate ${pngFileName} from ${gpxFileName}"
             
@@ -1421,7 +1421,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    Map ConvertTest2GPX(Test testInstance, String gpxFileName, boolean isPrint, boolean showPoints, boolean wrEnrouteSign)
+    Map ConvertTest2GPX(Test testInstance, String gpxFileName, boolean isPrint, boolean showPoints, boolean wrEnrouteSign, boolean gpxExport)
     {
         boolean found_track = false
         
@@ -1443,7 +1443,7 @@ class GpxService
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
         xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
-            GPXRoute(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
+            GPXRoute(route_instance, testInstance, isPrint, wrEnrouteSign, gpxExport, xml)
             found_track = GPXTrack(testInstance, testInstance.aflosStartNum, isPrint, xml)
         }
         gpx_writer.close()
@@ -1593,7 +1593,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void GPXRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml, Map contestMap = [:])
+    private void GPXRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, boolean gpxExport, MarkupBuilder xml, Map contestMap = [:])
     {
         printstart "GPXRoute Print:$isPrint wrEnrouteSign:$wrEnrouteSign contestMap:$contestMap"
         
@@ -2176,7 +2176,7 @@ class GpxService
                     } else {
                         // standard gate
                         boolean wr_gate = false
-                        boolean show_curved_point = routeInstance.ShowCurvedPoints()
+                        boolean show_curved_point = gpxExport || routeInstance.ShowCurvedPoints()
                         List curved_point_ids = routeInstance.GetCurvedPointIds()
                         if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                             wr_gate = true
@@ -2380,7 +2380,7 @@ class GpxService
         List track_points = []
         if (testInstance.IsLoggerData()) {
             println "Get track points from '${testInstance.loggerDataStartUtc}' to '${testInstance.loggerDataEndUtc}'"
-            track_points = testInstance.GetTrackPoints(testInstance.loggerDataStartUtc, testInstance.loggerDataEndUtc) 
+            track_points = testInstance.GetTrackPoints(testInstance.loggerDataStartUtc, testInstance.loggerDataEndUtc).trackPoints 
         } else {
             println "Get track points from AFLOS startnum $startNum"
             track_points = AflosTools.GetAflosCrewNamesTrackPoints(testInstance, startNum)

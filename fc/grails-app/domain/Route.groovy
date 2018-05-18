@@ -980,7 +980,8 @@ class Route
                 } else {
                     curved_point_ids += coordroute_instance.id
                 }
-            } else if (coordroute_instance.endCurved) {
+            } 
+            if (coordroute_instance.endCurved) {
                 curved_point = true
             }
         }
@@ -1073,5 +1074,39 @@ class Route
             }
         }
         return show_curved_points
+    }
+    
+    Map GetRouteData()
+    {
+        BigDecimal distance_to2ldg = 0.0
+        BigDecimal distance_sp2fp = 0.0
+        int procedureturn_num = 0
+        int secret_num = 0
+        int curved_num = 0
+        int secret_num_curved = 0
+        for (RouteLegCoord routelegcoord_instance in RouteLegCoord.findAllByRoute(this,[sort:'id'])) {
+            distance_to2ldg = FcMath.AddDistance(distance_to2ldg, routelegcoord_instance.testDistance())
+            if (routelegcoord_instance.IsProcedureTurn()) {
+                BigDecimal course_change = AviationMath.courseChange(routelegcoord_instance.turnTrueTrack, routelegcoord_instance.testTrueTrack())
+                if (course_change.abs() >= 90) {
+                    procedureturn_num++
+                }
+            }
+            if (routelegcoord_instance.startTitle.type == CoordType.SECRET) {
+                secret_num++
+                secret_num_curved++
+            } else {
+                secret_num_curved = 0
+            }
+            if (routelegcoord_instance.endCurved) {
+                curved_num++
+                secret_num -=  secret_num_curved
+                secret_num_curved = 0
+            }
+        }
+        for (RouteLegTest routelegtest_instance in RouteLegTest.findAllByRoute(this,[sort:'id'])) {
+            distance_sp2fp = FcMath.AddDistance(distance_sp2fp, routelegtest_instance.testDistance())
+        }
+        return [distance_to2ldg:distance_to2ldg, distance_sp2fp:distance_sp2fp, procedureturn_num:procedureturn_num, secret_num:secret_num, curved_num:curved_num]
     }
 }

@@ -2210,9 +2210,12 @@ class Test
         return false
     }
     
-    List GetTrackPoints(String loggerDataStartUtc, String loggerDataEndUtc)
+    Map GetTrackPoints(String loggerDataStartUtc, String loggerDataEndUtc)
     {
+        Map ret = [trackPoints:[], startUtc:"", endUtc:""]
         List track_points = []
+        String start_utc = loggerDataStartUtc
+        String end_utc = loggerDataEndUtc
         if (IsLoggerData()) {
             TrackPoint.findAllByLoggerdata(loggerData,[sort:"id"]).each { TrackPoint trackpoint_instance ->
                 boolean add_trackpoint = true
@@ -2227,6 +2230,12 @@ class Test
                     }
                 }
                 if (add_trackpoint) {
+                    if (!start_utc) {
+                        start_utc = trackpoint_instance.utc
+                    }
+                    if (!loggerDataEndUtc) {
+                        end_utc = trackpoint_instance.utc
+                    }
                     Map new_point = [utc:       trackpoint_instance.utc,
                                      latitude:  trackpoint_instance.latitude,
                                      longitude: trackpoint_instance.longitude,
@@ -2237,7 +2246,7 @@ class Test
                 }
             }
         }
-        return track_points
+        return [trackPoints:track_points, startUtc:start_utc, endUtc:end_utc]
     }
     
     String GetLoggerDataFirstUtc()

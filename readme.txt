@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-16.04.2018
+18.05.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -105,6 +105,14 @@ Erweiterungen in dieser Version (3.1.1):
 - Wendeschleifen einzelner Strecken deaktivierbar
     -> Hilfe -> Besondere CSS-Eigenschaften
     -> Wettbewerb -> Einstellungen -> Druckstil
+- Strecken-Import erweitert:
+    Ermöglicht gleichzeitigen Import von bis zu 3 krummen Etappen.
+    Die Streckenliste zeigt die Anzahl vorhandener krummer Etappen an.
+- Strecken-Bilder und -Bodenezeichen-Import erweitert:
+    * Import aus kml/kmz-Wegpunkten möglich
+    * Namenspräfix zum Filtern des Importes angebbar
+- Streckendetail-Dialog verändert:
+    Aktions-Schalter werden jetzt oben angezeigt 
 
 Erweiterungen in Version 3.1:
 -----------------------------

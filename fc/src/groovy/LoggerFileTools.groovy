@@ -592,7 +592,7 @@ class LoggerFileTools
                             // Longitude (Geographische Laenge: -179.999 (W) ... +180 Grad (E))
                             String longitude_grad = line_values[4].substring(0,3)
                             BigDecimal longitude_grad_math = longitude_grad.toBigDecimal()
-                            String longitude_minute = line_values[4].substring(4)
+                            String longitude_minute = line_values[4].substring(3)
                             BigDecimal longitude_minute_math = longitude_minute.toBigDecimal()
                             boolean longitude_east = line_values[5] == CoordPresentation.EAST
                             BigDecimal longitude = longitude_grad_math + (longitude_minute_math / 60)

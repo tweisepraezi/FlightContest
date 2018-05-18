@@ -35,10 +35,22 @@
                             </div>
                             <br/>
                             <div>
-                                <g:checkBox name="curved" value="${curved}" checked= "${false}" tabIndex="${ti[0]++}"/>
-                                <label>${message(code:'fc.route.fileimport.curved')}*:</label>
-                                <input type="text" id="curvedstartpos" name="curvedstartpos" value="5" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
-                                <input type="text" id="curvedendpos" name="curvedendpos" value="8" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
+                                <g:checkBox name="curved1" value="${curved1}" checked= "${false}" tabIndex="${ti[0]++}"/>
+                                <label>${message(code:'fc.route.fileimport.curved1')}*:</label>
+                                <input type="text" id="curvedstartpos1" name="curvedstartpos1" value="5" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
+                                <input type="text" id="curvedendpos1" name="curvedendpos1" value="8" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
+                            </div>
+                            <div>
+                                <g:checkBox name="curved2" value="${curved2}" checked= "${false}" tabIndex="${ti[0]++}"/>
+                                <label>${message(code:'fc.route.fileimport.curved2')}*:</label>
+                                <input type="text" id="curvedstartpos2" name="curvedstartpos2" value="8" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
+                                <input type="text" id="curvedendpos2" name="curvedendpos2" value="12" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
+                            </div>
+                            <div>
+                                <g:checkBox name="curved3" value="${curved3}" checked= "${false}" tabIndex="${ti[0]++}"/>
+                                <label>${message(code:'fc.route.fileimport.curved3')}*:</label>
+                                <input type="text" id="curvedstartpos3" name="curvedstartpos3" value="15" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
+                                <input type="text" id="curvedendpos3" name="curvedendpos3" value="18" maxlength="3" size="1" tabIndex="${ti[0]++}"/>
                             </div>
                             <br/>
                             <div>

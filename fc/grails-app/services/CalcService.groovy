@@ -12,7 +12,7 @@ class CalcService
     final static Float ADVANCED_GATE_WIDTH     = 4.0  // NM
     final static BigDecimal NEXTGATE_DISTANCE  = 1.0  // NM
     final static int NEXTGATE_SECONDS          = 30   // Sekunden; Zeit vor dem Hilfsgate, wo neuer Kurs nicht als Kursabweichung bestraft wird (bei Kurswechsel vor Gate)
-    final static int LASTGATE_SECONDS          = 30   // Sekunden; Zeit nach dem Gate-Durchflug, wo alter Kurs nicht als Kursabweichung bestraft wird
+    final static int LASTGATE_SECONDS          = 45   // Sekunden; Zeit nach dem Gate-Durchflug, wo alter Kurs nicht als Kursabweichung bestraft wird
     final static int PROCEDURETURN_SECONDS     = 180  // Sekunden; Zeit nach dem Gate-Durchflug, wo ein Procedure Turn erwartet wird
     final static int PROCEDURETURN_MAXDIFFGRAD = 60   // Grad; max. Abweichung der Kursänderung beim Procedure Turn
                                                       //   bei Änderung testCalcService_isBadProcedureTurn anpassen
@@ -67,7 +67,7 @@ class CalcService
             }
         }
         
-        List track_points = testInstance.GetTrackPoints(loggerDataStartUtc, loggerDataEndUtc)
+        List track_points = testInstance.GetTrackPoints(loggerDataStartUtc, loggerDataEndUtc).trackPoints
         if (!track_points) {
             printdone "No track points."
             return
@@ -923,8 +923,12 @@ class CalcService
                         ADVANCED_GATE_WIDTH
                     )
                     boolean procedure_turn = coordroute_instance.planProcedureTurn
-                    if (testInstance.task.procedureTurnDuration == 0) {
-                        procedure_turn = false
+                    if (procedure_turn) {
+                        if (testInstance.task.procedureTurnDuration == 0) {
+                            procedure_turn = false
+                        } else if (!route_instance.UseProcedureTurn()) {
+                            procedure_turn = false
+                        }
                     }
                     Map new_gate = [coordType:coordroute_instance.type, 
                                     coordTypeNumber:coordroute_instance.titleNumber,

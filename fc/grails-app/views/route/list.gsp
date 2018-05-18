@@ -11,7 +11,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="10" class="table-head">${message(code:'fc.route.list')}</th>
+                        <th colspan="11" class="table-head">${message(code:'fc.route.list')}</th>
                         <th class="table-head"><a href="../docs/help.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
@@ -20,6 +20,7 @@
                        <th>${message(code:'fc.observation.enroute.photo')}</th>
                        <th>${message(code:'fc.observation.enroute.canvas')}</th>
                        <th>${message(code:'fc.procedureturns')}</th>
+                       <th>${message(code:'fc.curvedlegs')}</th>
                        <th>${message(code:'fc.secretpoints')}</th>
                        <th>${message(code:'fc.distance.to2ldg')}</th>
                        <th>${message(code:'fc.distance.sp2fp')}</th>
@@ -42,40 +43,27 @@
                             <td>${message(code:route_instance.enroutePhotoRoute.code)}<g:if test="${!route_instance.IsEnrouteSignOk(true)}"> !</g:if><br/>${message(code:route_instance.enroutePhotoMeasurement.code)}<g:if test="${!route_instance.IsEnrouteMeasurementOk(true)}"> !</g:if></td>
                             <td>${message(code:route_instance.enrouteCanvasRoute.code)}<g:if test="${!route_instance.IsEnrouteSignOk(false)}"> !</g:if><br/>${message(code:route_instance.enrouteCanvasMeasurement.code)}<g:if test="${!route_instance.IsEnrouteMeasurementOk(false)}"> !</g:if></td>
 
-                            <g:set var="distance_to2ldg" value="${new BigDecimal(0)}" />
-                            <g:set var="procedureturn_num" value="${0}"/>
-                            <g:set var="secret_num" value="${0}"/>
-                            <g:each var="routeleg_instance" in="${RouteLegCoord.findAllByRoute(route_instance,[sort:'id'])}">
-                                <g:set var="distance_to2ldg" value="${FcMath.AddDistance(distance_to2ldg,routeleg_instance.testDistance())}" />
-                                <g:if test="${routeleg_instance.IsProcedureTurn()}">
-                                    <g:set var="course_change" value="${AviationMath.courseChange(routeleg_instance.turnTrueTrack,routeleg_instance.testTrueTrack())}"/>
-                                    <g:if test="${course_change.abs() >= 90}">
-                                        <g:set var="procedureturn_num" value="${procedureturn_num+1}"/>
-                                    </g:if>
-                                </g:if>
-                                <g:if test="${routeleg_instance.startTitle.type == CoordType.SECRET}">
-                                    <g:set var="secret_num" value="${secret_num+1}"/>
-                                </g:if>
-                            </g:each>
-                            <g:if test="${procedureturn_num}">
-                                <td style="white-space: nowrap;"><g:if test="${route_instance.UseProcedureTurn()}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${procedureturn_num})</td>
+                            <g:set var="route_data" value="${route_instance.GetRouteData()}" />
+                            <g:if test="${route_data.procedureturn_num}">
+                                <td style="white-space: nowrap;"><g:if test="${route_instance.UseProcedureTurn()}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</td>
                             </g:if>
                             <g:else>
                                 <td style="white-space: nowrap;">${message(code:'fc.no')}</td>
                             </g:else>
-                            <g:if test="${secret_num}">
-                                <td style="white-space: nowrap;">${message(code:'fc.yes')} (${secret_num})</td>
+                            <g:if test="${route_data.curved_num}">
+                                <td style="white-space: nowrap;">${message(code:'fc.yes')} (${route_data.curved_num})</td>
                             </g:if>
                             <g:else>
                                 <td style="white-space: nowrap;">${message(code:'fc.no')}</td>
                             </g:else>
-                            <td>${FcMath.DistanceStr(distance_to2ldg)}${message(code:'fc.mile')}</td>
-                            
-                            <g:set var="distance_sp2fp" value="${new BigDecimal(0)}" />
-                            <g:each var="routeleg_instance" in="${RouteLegTest.findAllByRoute(route_instance,[sort:'id'])}">
-                                <g:set var="distance_sp2fp" value="${FcMath.AddDistance(distance_sp2fp,routeleg_instance.testDistance())}" />
-                            </g:each>
-                            <td>${FcMath.DistanceStr(distance_sp2fp)}${message(code:'fc.mile')}</td>
+                            <g:if test="${route_data.secret_num}">
+                                <td style="white-space: nowrap;">${message(code:'fc.yes')} (${route_data.secret_num})</td>
+                            </g:if>
+                            <g:else>
+                                <td style="white-space: nowrap;">${message(code:'fc.no')}</td>
+                            </g:else>
+                            <td>${FcMath.DistanceStr(route_data.distance_to2ldg)}${message(code:'fc.mile')}</td>
+                            <td>${FcMath.DistanceStr(route_data.distance_sp2fp)}${message(code:'fc.mile')}</td>
                             
                             <td>
                                 <g:each var="c" in="${PlanningTestTask.findAllByRoute(route_instance,[sort:"id"])}">

@@ -63,7 +63,7 @@ class ObservationResultsTagLib
                     outln"""    <tbody>"""
                 }
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
-                    boolean is_disabled = attrs.t.task.disabledCheckPointsTurnpointObs.contains("${turnpointdata_instance.tpTitle()},")
+                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")
                     outln"""    <tr>"""
                     outln"""        <td>${turnpointdata_instance.tpName()}</td>"""
                     switch (attrs.t.GetTurnpointRoute()) {
@@ -414,7 +414,7 @@ class ObservationResultsTagLib
                 outln"""    </thead>"""
                 outln"""    <tbody>"""
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
-                    boolean is_disabled = attrs.t.task.disabledCheckPointsTurnpointObs.contains("${turnpointdata_instance.tpTitle()},")
+                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")
                     outln"""    <tr>"""
                     outln"""        <td>${turnpointdata_instance.tpName()}</td>"""
                     switch (attrs.t.GetTurnpointRoute()) {
@@ -919,7 +919,7 @@ class ObservationResultsTagLib
                 outln"""</thead>"""
                 outln"""<tbody>"""
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
-                    boolean is_disabled = attrs.t.task.disabledCheckPointsTurnpointObs.contains("${turnpointdata_instance.tpTitle()},")
+                    boolean is_disabled = DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")
                     outln"""<tr class="value" id="${turnpointdata_instance.tpTitle()}">"""
                     outln"""        <td class="tpname">${turnpointdata_instance.tpPrintName()}</td>"""
                     switch (attrs.t.GetTurnpointRoute()) {

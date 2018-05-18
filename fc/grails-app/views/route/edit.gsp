@@ -2,14 +2,14 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.route.edit')}</title>
+        <title>${message(code:'fc.route.settings')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="route" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.route.edit')}</h2>
+                <h2>${message(code:'fc.route.settings')}</h2>
                 <g:hasErrors bean="${routeInstance}">
                     <div class="errors">
                         <g:renderErrors bean="${routeInstance}" />

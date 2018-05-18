@@ -5005,7 +5005,7 @@ class FcService
             ret.error = true
             ret.message = getMsg('fc.route.fileimport.nofile')
         } else {
-            printstart "importFcRoute '$original_filename'"
+            printstart "importFileRoute '$original_filename'"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 
                 ret.found = true
@@ -5071,20 +5071,24 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importSignFile(String fileExtension, Route routeInstance, def file, ImportSign importSign)
+    Map importSignFile(String fileExtension, Route routeInstance, def file, ImportSign importSign, String namePrefix)
     {
         Map ret = [found: false, error: false, message: ""]
         
         String original_filename = file.getOriginalFilename()
         if (!fileExtension) {
             ret.error = true
-            ret.message = getMsg('fc.route.fileimport.noroutefile',[original_filename, RouteFileTools.TXT_EXTENSIONS])
+            if (importSign.IsEnroutePhoto() || importSign.IsEnrouteCanvas()) {
+                ret.message = getMsg('fc.route.signfileimport.nosignfile',[original_filename, RouteFileTools.ENROUTE_SIGN_EXTENSIONS])
+            } else {
+                ret.message = getMsg('fc.route.signfileimport.nosignfile',[original_filename, RouteFileTools.TURNPOINT_EXTENSIONS])
+            }
         } else if (!original_filename) {
             ret.found = true
             ret.error = true
-            ret.message = getMsg('fc.route.fileimport.nofile')
+            ret.message = getMsg('fc.route.signfileimport.nofile')
         } else {
-            printstart "importSignFile '$original_filename'"
+            printstart "importSignFile '$original_filename' Prefix='$namePrefix'"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 
                 ret.found = true
@@ -5098,7 +5102,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_sign_file(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, importSign)
+                Map reader = import_sign_file(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, importSign, namePrefix)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -5126,12 +5130,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_sign_file(String fileExtension, Route routeInstance, String loadFileName, String originalFileName, ImportSign importSign)
+    private Map import_sign_file(String fileExtension, Route routeInstance, String loadFileName, String originalFileName, ImportSign importSign, String namePrefix)
     {
-        printstart "import_sign_file '$loadFileName'"
+        printstart "import_sign_file '$loadFileName' Prefix='$namePrefix'"
         
         // read file
-        Map reader = RouteFileTools.ReadImportSignFile(fileExtension, routeInstance, loadFileName, originalFileName, importSign)
+        Map reader = RouteFileTools.ReadImportSignFile(fileExtension, routeInstance, loadFileName, originalFileName, importSign, namePrefix)
         
         // calculate legs
         if (importSign == ImportSign.RouteCoord) {
@@ -8781,7 +8785,7 @@ class FcService
                         String uuid = UUID.randomUUID().toString()
                         String webroot_dir = servletContext.getRealPath("/")
                         String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-EMAIL.gpx"
-                        Map converter = gpxService.ConvertTest2GPX(test_instance, webroot_dir + upload_gpx_file_name, true, true, true) // true - Print, true - Points, true - wrEnrouteSign
+                        Map converter = gpxService.ConvertTest2GPX(test_instance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
                         if (converter.ok && converter.track) {
                             
                             Map email = test_instance.GetEMailBody()
@@ -9350,7 +9354,7 @@ class FcService
     //--------------------------------------------------------------------------
     private void calculatePenaltyTurnpointDataInstance(TurnpointData turnpointDataInstance, Test testInstance)
     {
-        if (testInstance.task.disabledCheckPointsTurnpointObs.contains("${turnpointDataInstance.tpTitle()},")) {
+        if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs).contains("${turnpointDataInstance.tpTitle()},")) {
             turnpointDataInstance.penaltyCoord = 0
         } else {
             switch (turnpointDataInstance.resultValue) {
@@ -9879,7 +9883,7 @@ class FcService
     		if (coordresult_instance.resultEntered) {
 				if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
 					testInstance.flightTestCheckPointPenalties += coordresult_instance.penaltyCoord
-                    if (testInstance.task.disabledCheckPointsNotFound.contains("${coordresult_instance.title()},")) {
+                    if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsNotFound).contains("${coordresult_instance.title()},")) {
                         set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
                     } else if (testInstance.GetFlightTestCpNotFoundPoints() == 0) {
                         set_calcresult_nogatemissed(testInstance, coordresult_instance, true)
@@ -9927,7 +9931,7 @@ class FcService
     		if (coordresult_instance.planProcedureTurn) {
 	    		if (coordresult_instance.resultProcedureTurnEntered) {
 		    		if (coordresult_instance.resultProcedureTurnNotFlown) {
-						if (last_coordresult_instance && testInstance.task.disabledCheckPointsProcedureTurn.contains("${last_coordresult_instance.title()},")) {
+						if (last_coordresult_instance && DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn).contains("${last_coordresult_instance.title()},")) {
 						    // no penalties
                             set_calcresult_nobadturn(testInstance, last_coordresult_instance, true, false) // noBadTurn, no hide
                         } else if (testInstance.GetFlightTestProcedureTurnNotFlownPoints() == 0) {
@@ -9946,12 +9950,12 @@ class FcService
 	    		}
     		}
     		if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
-                if (!testInstance.task.disabledCheckPointsMinAltitude.contains("${coordresult_instance.title()},")) {
+                if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsMinAltitude).contains("${coordresult_instance.title()},")) {
 				    testInstance.flightTestCheckPointPenalties += testInstance.GetFlightTestMinAltitudeMissedPoints()
                 }
     		}
     		if (coordresult_instance.resultBadCourseNum) {
-                if (testInstance.task.disabledCheckPointsBadCourse.contains("${coordresult_instance.title()},")) {
+                if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse).contains("${coordresult_instance.title()},")) {
                     // no penalties
                     set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
                 } else if (testInstance.GetFlightTestBadCoursePoints() == 0) {
@@ -10007,7 +10011,7 @@ class FcService
         if (testInstance.IsObservationTestTurnpointRun()) {
             if (testInstance.GetTurnpointRoute().IsTurnpointSign()) {
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(testInstance,[sort:"id"])) {
-                    if (!testInstance.task.disabledCheckPointsTurnpointObs.contains("${turnpointdata_instance.tpTitle()},")) {
+                    if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsTurnpointObs).contains("${turnpointdata_instance.tpTitle()},")) {
                         testInstance.observationTestTurnPointPhotoPenalties += turnpointdata_instance.penaltyCoord
                     }
                 }
@@ -10668,8 +10672,20 @@ class FcService
             disabled_checkpoints_notfound += ","
             println "disabledCheckPointsNotFound has been set with route settings: $disabled_checkpoints_notfound"
         }
-        taskInstance.disabledCheckPoints = disabled_checkpoints_timecheck
-        taskInstance.disabledCheckPointsNotFound = disabled_checkpoints_notfound
+        /*
+        println "XX1 '$disabled_checkpoints_timecheck'"
+        String c = DisabledCheckPointsTools.Compress(disabled_checkpoints_timecheck, routeInstance)
+        println "XX2 '$c'"
+        String u = DisabledCheckPointsTools.Uncompress(c)
+        println "XX3 '$u'"
+        if (disabled_checkpoints_timecheck == u) {
+            println "XX4 Ok"
+        } else {
+            println "XX4 Error"
+        }
+        */
+        taskInstance.disabledCheckPoints = DisabledCheckPointsTools.Compress(disabled_checkpoints_timecheck, routeInstance)
+        taskInstance.disabledCheckPointsNotFound = DisabledCheckPointsTools.Compress(disabled_checkpoints_notfound, routeInstance)
         taskInstance.save()
     }
     
@@ -10778,12 +10794,12 @@ class FcService
         println "disabledCheckPointsTurnpointObs: '$disabled_checkpoints_turnpointobs'"
         println "disabledEnroutePhotoObs: '$disabled_enroute_photoobs'"
         println "disabledEnrouteCanvasObs: '$disabled_enroute_canvasobs'"
-        taskInstance.disabledCheckPoints = disabled_checkpoints_timecheck
-        taskInstance.disabledCheckPointsNotFound = disabled_checkpoints_notfound
-        taskInstance.disabledCheckPointsProcedureTurn = disabled_checkpoints_procedureturn
-        taskInstance.disabledCheckPointsBadCourse = disabled_checkpoints_badcourse
-        taskInstance.disabledCheckPointsMinAltitude = disabled_checkpoints_minaltitude
-        taskInstance.disabledCheckPointsTurnpointObs = disabled_checkpoints_turnpointobs
+        taskInstance.disabledCheckPoints = DisabledCheckPointsTools.Compress(disabled_checkpoints_timecheck, routeInstance)
+        taskInstance.disabledCheckPointsNotFound = DisabledCheckPointsTools.Compress(disabled_checkpoints_notfound, routeInstance)
+        taskInstance.disabledCheckPointsProcedureTurn = DisabledCheckPointsTools.Compress(disabled_checkpoints_procedureturn, routeInstance)
+        taskInstance.disabledCheckPointsBadCourse = DisabledCheckPointsTools.Compress(disabled_checkpoints_badcourse, routeInstance)
+        taskInstance.disabledCheckPointsMinAltitude = DisabledCheckPointsTools.Compress(disabled_checkpoints_minaltitude, routeInstance)
+        taskInstance.disabledCheckPointsTurnpointObs = DisabledCheckPointsTools.Compress(disabled_checkpoints_turnpointobs, routeInstance)
         taskInstance.disabledEnroutePhotoObs = disabled_enroute_photoobs
         taskInstance.disabledEnrouteCanvasObs = disabled_enroute_canvasobs
     }
@@ -11716,13 +11732,13 @@ class FcService
             if(!coordresult_instance.hasErrors() && coordresult_instance.save()) {
 				String altitude_points = "0"
 				if (coordresult_instance.resultAltitude && coordresult_instance.resultMinAltitudeMissed) {
-                    if (!coordresult_instance.test.task.disabledCheckPointsMinAltitude.contains("${coordresult_instance.title()},")) {
+                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsMinAltitude).contains("${coordresult_instance.title()},")) {
                         altitude_points = coordresult_instance.test.GetFlightTestMinAltitudeMissedPoints().toString()
                     }
 				}
                 String badcourse_points = "0"
                 if (coordresult_instance.resultBadCourseNum) {
-                    if (!coordresult_instance.test.task.disabledCheckPointsBadCourse.contains("${coordresult_instance.title()},")) {
+                    if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsBadCourse).contains("${coordresult_instance.title()},")) {
                         badcourse_points = (coordresult_instance.resultBadCourseNum*coordresult_instance.test.GetFlightTestBadCoursePoints()).toString()
                     }
                 }
@@ -11956,13 +11972,13 @@ class FcService
 	        Test test_instance = coordResultInstance.test
 			
 	        if (coordResultInstance.resultCpNotFound) {
-				if (test_instance.task.disabledCheckPointsNotFound.contains("${coordResultInstance.title()},")) { // no not found check
+				if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPointsNotFound).contains("${coordResultInstance.title()},")) { // no not found check
 					coordResultInstance.penaltyCoord = 0
 				} else {
 					coordResultInstance.penaltyCoord = test_instance.GetFlightTestCpNotFoundPoints()
 				}
 	        } else {
-                if (test_instance.task.disabledCheckPoints.contains("${coordResultInstance.title()},")) { // no time check
+                if (DisabledCheckPointsTools.Uncompress(test_instance.task.disabledCheckPoints).contains("${coordResultInstance.title()},")) { // no time check
     				coordResultInstance.penaltyCoord = 0
     	        } else {
     		        int plancptime_seconds = FcMath.Seconds(coordResultInstance.planCpTime)

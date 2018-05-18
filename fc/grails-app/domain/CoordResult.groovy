@@ -22,7 +22,7 @@ class CoordResult extends Coord
         }
         if (test.GetFlightTestBadCoursePoints() > 0) {
             if (resultEntered) {
-                if (!test.task.disabledCheckPointsBadCourse.contains(title()+',')) {
+                if (!DisabledCheckPointsTools.Uncompress(test.task.disabledCheckPointsBadCourse).contains(title()+',')) {
                     if (resultBadCourseNum > 0) {
                         return false
                     }
@@ -30,7 +30,7 @@ class CoordResult extends Coord
             }
         }
         if (test.GetFlightTestMinAltitudeMissedPoints() > 0) {
-            if (!test.task.disabledCheckPointsMinAltitude.contains("${title()},")) {
+            if (!DisabledCheckPointsTools.Uncompress(test.task.disabledCheckPointsMinAltitude).contains("${title()},")) {
                 if (resultAltitude && resultMinAltitudeMissed) {
                     return false
                 }

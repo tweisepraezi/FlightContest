@@ -245,9 +245,15 @@ class RouteController {
         def file = request.getFile('routefile')
         Map import_params = [firstcoordto:params?.firstcoordto == 'on',
                              todirection:params?.todirection.isBigDecimal()?params?.todirection.toBigDecimal():0.0,
-                             curved:params?.curved == 'on',
-                             curvedstartpos:params?.curvedstartpos.isInteger()?params?.curvedstartpos.toInteger():null,
-                             curvedendpos:params?.curvedendpos.isInteger()?params?.curvedendpos.toInteger():null,
+                             curved1:params?.curved1 == 'on',
+                             curvedstartpos1:params?.curvedstartpos1.isInteger()?params?.curvedstartpos1.toInteger():null,
+                             curvedendpos1:params?.curvedendpos1.isInteger()?params?.curvedendpos1.toInteger():null,
+                             curved2:params?.curved2 == 'on',
+                             curvedstartpos2:params?.curvedstartpos2.isInteger()?params?.curvedstartpos2.toInteger():null,
+                             curvedendpos2:params?.curvedendpos2.isInteger()?params?.curvedendpos2.toInteger():null,
+                             curved3:params?.curved3 == 'on',
+                             curvedstartpos3:params?.curvedstartpos3.isInteger()?params?.curvedstartpos3.toInteger():null,
+                             curvedendpos3:params?.curvedendpos3.isInteger()?params?.curvedendpos3.toInteger():null,
                              ildg:params?.ildg == 'on', 
                              ildgpos:params?.ildgpos.isInteger()?params?.ildgpos.toInteger():null, 
                              ildgdirection:params?.ildgdirection.isBigDecimal()?params?.ildgdirection.toBigDecimal():0.0,
@@ -286,7 +292,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map turnpoint_sign_data = ImportSign.GetRouteCoordData(route_instance)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import',routeid:params.id,importSign:turnpoint_sign_data.importsign,lineContent:turnpoint_sign_data.linecontent])
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import', routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: false])
     }
     
     def importturnpointsign = {
@@ -295,7 +301,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map turnpoint_sign_data = ImportSign.GetTurnpointSignData(route_instance)
-        redirect(action:selectimporttxt, params:[titlecode:turnpoint_sign_data.titlecode,routeid:params.id,importSign:turnpoint_sign_data.importsign,lineContent:turnpoint_sign_data.linecontent])
+        redirect(action:selectimporttxt, params:[titlecode:turnpoint_sign_data.titlecode, routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: false])
     }
     
     def importenroutephoto = {
@@ -304,7 +310,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, true)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.photo.import',routeid:params.id,importSign:enroute_sign_data.importsign,lineContent:enroute_sign_data.linecontent])
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.photo.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true])
     }
     
     def importenroutecanvas = {
@@ -313,13 +319,22 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map enroute_sign_data = ImportSign.GetEnrouteSignData(route_instance, false)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.canvas.import',routeid:params.id,importSign:enroute_sign_data.importsign,lineContent:enroute_sign_data.linecontent])
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.canvas.import', routeid:params.id, importSign:enroute_sign_data.importsign, lineContent:enroute_sign_data.linecontent, importEnrouteData: true])
     }
     
     def importenroutesign = {
         Route route_instance = Route.get(params.routeid)
         def file = request.getFile('txtfile')
-        Map import_txt = fcService.importSignFile(RouteFileTools.TXT_EXTENSION, route_instance, file, ImportSign.(params.importSign))
+        Map import_txt = fcService.importSignFile(RouteFileTools.TXT_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.namepraefix)
+        if (!import_txt.found) {
+            import_txt = fcService.importSignFile(RouteFileTools.KML_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.namepraefix)
+        }
+        if (!import_txt.found) {
+            import_txt = fcService.importSignFile(RouteFileTools.KMZ_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.namepraefix)
+        }
+        if (!import_txt.found) {
+            import_txt = fcService.importSignFile("", route_instance, file, ImportSign.(params.importSign), "")
+        }
         flash.error = import_txt.error
         flash.message = import_txt.message
         redirect(action:"show",controller:"route",id:route_instance.id)
@@ -451,7 +466,7 @@ class RouteController {
             gpxService.printstart "Show offline map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, upload_gpx_file_name, false, true, false) // false - no Print, true - Points, false - no wrEnrouteSign
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, upload_gpx_file_name, false, true, false, false) // false - no Print, true - Points, false - no wrEnrouteSign, false - no gpxExport
             if (converter.ok) {
                 gpxService.printdone ""
                 session.gpxviewerReturnAction = 'show'
@@ -479,7 +494,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, true, true) // false - no Print, true - Points, true - wrEnrouteSign
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, true, true, false) // false - no Print, true - Points, true - wrEnrouteSign, false - no gpxExport
             if (converter.ok) {
                 gpxService.printdone ""
                 session.gpxviewerReturnAction = 'show'
@@ -507,7 +522,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, false, true) // false - no Print, false - no Points, true - wrEnrouteSign
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, false, false, true, true) // false - no Print, false - no Points, true - wrEnrouteSign, true - gpxExport
             if (converter.ok) {
                 String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -671,7 +686,7 @@ class RouteController {
                 String webroot_dir = servletContext.getRealPath("/")
                 String route_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-${uuid}.gpx"
                 Map converter = gpxService.ConvertRoute2GPX(
-                    route.instance, webroot_dir + route_gpx_file_name, false, true, false, 
+                    route.instance, webroot_dir + route_gpx_file_name, false, true, false, false,
                     [contestMapCircle:route.instance.contestMapCircle,
                      contestMapProcedureTurn:route.instance.contestMapProcedureTurn,
                      contestMapLeg:route.instance.contestMapLeg,
@@ -812,7 +827,7 @@ class RouteController {
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
                 String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
-                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true, true) // true - Print, true - Points, true - wrEnrouteSign
+                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
                 if (converter.ok) {
                     Map email = GetEMailBody(session.lastContest, route.instance)
                     

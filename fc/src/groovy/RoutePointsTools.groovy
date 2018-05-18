@@ -122,7 +122,7 @@ class RoutePointsTools
                     if (coordresult_instance.resultCpNotFound) {
                         if ((coordresult_instance.type == CoordType.SECRET) && (!testInstance.IsFlightTestCheckSecretPoints())) {
                             error_point += [warning:true]
-                        } else if (testInstance.task.disabledCheckPointsNotFound.contains(coordresult_instance.title()+',')) {
+                        } else if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsNotFound).contains(coordresult_instance.title()+',')) {
                             error_point += [warning:true]
                         } else if (testInstance.GetFlightTestCpNotFoundPoints() == 0) {
                             error_point += [warning:true]
@@ -198,7 +198,7 @@ class RoutePointsTools
                                     if (coordresult_instance.resultProcedureTurnNotFlown) {
                                         Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false,messageSource)] // false - no Print
                                         new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
-                                        if (testInstance.task.disabledCheckPointsProcedureTurn.contains(last_coordresult_instance.title()+',')) {
+                                        if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
                                             new_point += [warning:true] // noBadTurn
                                         } else if (testInstance.GetFlightTestProcedureTurnNotFlownPoints() == 0) {
                                             new_point += [warning:true] // noBadTurn
@@ -214,7 +214,7 @@ class RoutePointsTools
                            if (coordresult_instance.resultEntered && coordresult_instance.type.IsBadCourseCheckCoord()) {
                                 Map new_point = [name:getMsg("fc.offlinemap.badcourse.seconds", [calcresult_instance.badCourseSeconds], false, messageSource)] // false - no Print
                                 new_point += GetPointCoords2(calcresult_instance.latitude, calcresult_instance.longitude)
-                                if (testInstance.task.disabledCheckPointsBadCourse.contains(coordresult_instance.title()+',')) {
+                                if (DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
                                     new_point += [warning:true] // noBadCourse
                                 } else if (testInstance.GetFlightTestBadCoursePoints() == 0) {
                                     new_point += [warning:true] // noBadCourse
@@ -248,7 +248,7 @@ class RoutePointsTools
                     if (coordresult_instance.resultProcedureTurnNotFlown) {
                         Map new_point = [name:getMsg("fc.offlinemap.badprocedureturn",false, messageSource)] // false - no Print
                         new_point += GetPointCoords(lastCoordrouteInstance)
-                        if (!testInstance.task.disabledCheckPointsProcedureTurn.contains(last_coordresult_instance.title()+',')) {
+                        if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
                             new_point += [error:true]
                         } else {
                             new_point += [warning:true]
@@ -265,7 +265,7 @@ class RoutePointsTools
                         Map new_point = [name:getMsg("fc.offlinemap.badcourse.number", [coordresult_instance.resultBadCourseNum], false, messageSource)] // false - no Print
                         
                         new_point += GetPointCoords(coordrouteInstance)
-                        if (!testInstance.task.disabledCheckPointsBadCourse.contains(coordresult_instance.title()+',')) {
+                        if (!DisabledCheckPointsTools.Uncompress(testInstance.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
                             new_point += [error:true]
                         } else {
                             new_point += [warning:true]

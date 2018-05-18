@@ -14,9 +14,23 @@
                     <g:uploadForm method="post">
                         <g:set var="ti" value="${[]+1}"/>
                         <div>
-                            <p>${message(code:'fc.route.signfileimport.info1',args:[RouteFileTools.TXT_EXTENSIONS])}</p>
-                            <input type="file" size="80" accept="${RouteFileTools.TXT_EXTENSIONS}" name="txtfile" tabIndex="${ti[0]++}"/>
+                            <g:if test="${params.importEnrouteData=="true"}" >
+                                <p>${message(code:'fc.route.signfileimport.info1',args:[RouteFileTools.ENROUTE_SIGN_EXTENSIONS])}</p>
+                                <input type="file" size="80" accept="${RouteFileTools.ENROUTE_SIGN_EXTENSIONS}" name="txtfile" tabIndex="${ti[0]++}"/>
+                            </g:if>
+                            <g:else>
+                                <p>${message(code:'fc.route.signfileimport.info1',args:[RouteFileTools.TURNPOINT_EXTENSIONS])}</p>
+                                <input type="file" size="80" accept="${RouteFileTools.TURNPOINT_EXTENSIONS}" name="txtfile" tabIndex="${ti[0]++}"/>
+                            </g:else>
                         </div>
+                        <g:if test="${params.importEnrouteData=="true"}" >
+                            <div>
+                                <br/>
+                                <label>${message(code:'fc.route.signfileimport.namepraefix')}:</label>
+                                <br/>
+                                <input type="text" id="namepraefix" name="namepraefix" value="" tabIndex="${ti[0]++}"/>
+                            </div>
+                        </g:if>
                         <div>
                             <br/>
                             <p>${message(code:'fc.route.signfileimport.info2')}<br/>${HTMLFilter.FilterParam(params.lineContent)}</p>

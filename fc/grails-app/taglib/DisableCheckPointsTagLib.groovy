@@ -111,8 +111,8 @@ class DisableCheckPointsTagLib
                     outln"""<td>${coordrouteInstance.mark}</td>"""
                 }
                 if (coordrouteInstance.type.IsCpTimeCheckCoord()) {
-                    checkBox("${Defs.TurnpointID_TimeCheck}${coordrouteInstance.title()}", taskInstance.disabledCheckPoints.contains(check_title))
-                    checkBox("${Defs.TurnpointID_NotFound}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsNotFound.contains(check_title))
+                    checkBox("${Defs.TurnpointID_TimeCheck}${coordrouteInstance.title()}", DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPoints).contains(check_title))
+                    checkBox("${Defs.TurnpointID_NotFound}${coordrouteInstance.title()}", DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsNotFound).contains(check_title))
                 } else {
                     outln"""<td/>"""
                     outln"""<td/>"""
@@ -120,7 +120,7 @@ class DisableCheckPointsTagLib
                 if (useProcedureTurn) {
                     if (planProcedureTurn) {
                         if (coordrouteInstance.type.IsProcedureTurnCoord()) {
-                            checkBox("${Defs.TurnpointID_ProcedureTurn}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsProcedureTurn.contains(check_title))
+                            checkBox("${Defs.TurnpointID_ProcedureTurn}${coordrouteInstance.title()}", DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsProcedureTurn).contains(check_title))
                         } else {
                             outln"""<td/>"""
                         }
@@ -129,17 +129,17 @@ class DisableCheckPointsTagLib
                     }
                 }
                 if (coordrouteInstance.type.IsBadCourseCheckCoord()) {
-                    checkBox("${Defs.TurnpointID_BadCourse}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsBadCourse.contains(check_title))
+                    checkBox("${Defs.TurnpointID_BadCourse}${coordrouteInstance.title()}", DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsBadCourse).contains(check_title))
                 } else {
                     outln"""<td/>"""
                 }
                 if (coordrouteInstance.type.IsAltitudeCheckCoord()) {
-                    checkBox("${Defs.TurnpointID_MinAltitude}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsMinAltitude.contains(check_title))
+                    checkBox("${Defs.TurnpointID_MinAltitude}${coordrouteInstance.title()}", DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsMinAltitude).contains(check_title))
                 } else {
                     outln"""<td/>"""
                 }
                 if (coordrouteInstance.IsTurnpointSign()) {
-                    checkBox("${Defs.TurnpointID_TurnpointObs}${coordrouteInstance.title()}", taskInstance.disabledCheckPointsTurnpointObs.contains(check_title))
+                    checkBox("${Defs.TurnpointID_TurnpointObs}${coordrouteInstance.title()}", DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsTurnpointObs).contains(check_title))
                 } else {
                     outln"""<td/>"""
                 }

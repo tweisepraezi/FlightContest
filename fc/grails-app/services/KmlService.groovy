@@ -956,7 +956,7 @@ class KmlService
         List track_points = []
         if (testInstance.IsLoggerData()) {
             println "Get track points from '${testInstance.loggerDataStartUtc}' to '${testInstance.loggerDataEndUtc}'"
-            track_points = testInstance.GetTrackPoints(testInstance.loggerDataStartUtc, testInstance.loggerDataEndUtc) 
+            track_points = testInstance.GetTrackPoints(testInstance.loggerDataStartUtc, testInstance.loggerDataEndUtc).trackPoints 
         } else {
             println "Get track points from AFLOS startnum $startNum"
             track_points = AflosTools.GetAflosCrewNamesTrackPoints(testInstance, startNum)
