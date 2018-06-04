@@ -1034,14 +1034,9 @@ class Coord
                         fromtp_found = true
                     } else if (enroute.dis < leg_distance) {
                         BigDecimal track_diff = AviationMath.courseChange(true_track,enroute.dir).abs()
-                        if (enroute.dis < Defs.ENROUTE_SHORT_DISTANCE) {
-                            if (track_diff < Defs.ENROUTE_SHORT_DISTANCE_COURSE_DIFF) {
-                                fromtp_found = true
-                            }
-                        } else { 
-                            if (track_diff < Defs.ENROUTE_LONG_DISTANCE_COURSE_DIFF) {
-                                fromtp_found = true
-                            }
+                        BigDecimal max_angle = Math.toDegrees(Math.asin(Defs.ENROUTE_MAX_DISTANCE / enroute.dis))
+                        if (track_diff < max_angle) {
+                            fromtp_found = true
                         }
                     }
                     if (fromtp_found) {
@@ -1112,7 +1107,7 @@ class Coord
                 Map enroute_coord = AviationMath.getCoordinate(fromtp_lat, fromtp_lon, true_track, enroute_distance - secret_legs_distance)
                 Map orthogonal = AviationMath.calculateLeg(latMath(),lonMath(),enroute_coord.lat,enroute_coord.lon)
                 BigDecimal orthogonal_track = AviationMath.getOrthogonalTrackRight(true_track)
-                if ((orthogonal.dir - orthogonal_track).abs() < Defs.ENROUTE_LONG_DISTANCE_COURSE_DIFF) {
+                if ((orthogonal.dir - orthogonal_track).abs() < Defs.ENROUTE_MAX_COURSE_DIFF) {
                     enrouteOrthogonalDistance = Contest.Convert_NM2m(orthogonal.dis)
                 } else {
                     enrouteOrthogonalDistance = -Contest.Convert_NM2m(orthogonal.dis)

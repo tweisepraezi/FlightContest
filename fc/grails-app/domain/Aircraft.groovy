@@ -37,7 +37,7 @@ class Aircraft
                 next_id = aircraft_instance.id
                 set_next = false
             }
-            if (aircraft_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+            if (aircraft_instance.id == this.id) {
                 set_next = true
             }
         }

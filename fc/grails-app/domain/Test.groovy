@@ -360,7 +360,7 @@ class Test
 			taskPenalties += observationTestPenalties
 		}
 		if (IsLandingTestRun()) {
-        	taskPenalties += landingTestPenalties
+        	taskPenalties += FcMath.GetLandingPenalties(task.contest.GetLandingResultsFactor(), landingTestPenalties)
 		}
 		if (IsSpecialTestRun()) {
 			taskPenalties += specialTestPenalties
@@ -724,7 +724,7 @@ class Test
 		}
 		if (resultSettings["Landing"]) {
 			if (IsLandingTestRun()) {
-				penalties += landingTestPenalties
+				penalties += FcMath.GetLandingPenalties(task.contest.GetLandingResultsFactor(), landingTestPenalties)
 			}
 		}
 		if (resultSettings["Special"]) {
@@ -808,7 +808,7 @@ class Test
     
 	boolean IsTestClassResultsProvisional(Map resultSettings, ResultClass resultclassInstance)
 	{
-		if (crew.resultclass == resultclassInstance) {
+		if (crew.resultclass.id == resultclassInstance.id) {
 			if (IsTestResultsProvisional(resultSettings)) {
 				return true
 			}
@@ -2056,7 +2056,7 @@ class Test
 					}
 				}
 			}
-            if (test_instance2.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Test-Instance bereits woanders geändert
+            if (test_instance2.id == this.id) {
 				set_next = true
             }
 		}
@@ -2511,7 +2511,7 @@ class Test
     {
         if (resultclassInstance) {
             for (Test test_instance in Test.findAllByTask(taskInstance)) {
-                if (test_instance.crew.resultclass == resultclassInstance) {
+                if (test_instance.crew.resultclass.id == resultclassInstance.id) {
                     return test_instance
                 }
             }
@@ -2548,15 +2548,13 @@ class Test
                 String s = it.substring(it.indexOf("--submission")+12).trim()
                 if (s.startsWith(":")) {
                     s = s.substring(1).trim()
-                }
-                if (s.endsWith("}")) {
-                    s = s.substring(0,s.size()-1).trim()
-                }
-                if (s.endsWith(";")) {
-                    s = s.substring(0,s.size()-1).trim()
-                }
-                if (s.isInteger()) {
-                    add_minutes = s.toInteger()
+                    int i = s.indexOf(";")
+                    if (i) {
+                        s = s.substring(0,i).trim()
+                        if (s.isInteger()) {
+                            add_minutes = s.toInteger()
+                        }
+                    }
                 }
             }
         }

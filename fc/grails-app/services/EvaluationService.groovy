@@ -1,4 +1,6 @@
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.web.context.request.RequestContextHolder
 
 class EvaluationService
@@ -155,18 +157,235 @@ class EvaluationService
         
         List result_classes = contestInstance.GetResultClasses(contestInstance.contestClassResults)
         List result_tasks = contestInstance.GetResultTasks(contestInstance.contestTaskResults)
-        for( Task result_task in result_tasks) {
-            calculatepositions_task(result_task, result_classes, contestInstance.GetResultSettings(), true) // true - ignoreProvisional
+        List result_task_ids = contestInstance.GetResultTaskIDs(contestInstance.contestTaskResults)
+        List team_settings = contestInstance.GetResultTeamIDs(contestInstance.contestTeamResults)
+        
+        Map result_settings = contestInstance.GetResultSettings()
+
+        Map live_contest = [contestPrintAircraft:contestInstance.contestPrintAircraft,
+                            contestPrintTeam:contestInstance.contestPrintTeam,
+                            contestPrintClass:contestInstance.contestPrintClass,
+                            contestPrintShortClass:contestInstance.contestPrintShortClass,
+                            contestPrintTaskDetails:contestInstance.contestPrintTaskDetails,
+                            contestPrintTaskTestDetails:contestInstance.contestPrintTaskTestDetails,
+                            contestPrintObservationDetails:contestInstance.contestPrintObservationDetails,
+                            contestPrintLandingDetails:contestInstance.contestPrintLandingDetails,
+                            contestPrintSubtitle:contestInstance.contestPrintSubtitle,
+                            
+                            contestPlanningResults:contestInstance.contestPlanningResults,
+                            contestFlightResults:contestInstance.contestFlightResults,
+                            contestObservationResults:contestInstance.contestObservationResults,
+                            contestLandingResults:contestInstance.contestLandingResults,
+                            contestSpecialResults:contestInstance.contestSpecialResults,
+                            
+                            getTestDetailsTasksIDs:contestInstance.GetTestDetailsTasksIDs(contestInstance.contestPrintTaskTestDetails),
+                            getResultSettings:result_settings,
+                            getResultTitle:contestInstance.GetResultTitle(result_settings,false),
+                            getLandingResultsFactor:contestInstance.GetLandingResultsFactor(),
+                            bestOfAnalysisTaskNum:contestInstance.bestOfAnalysisTaskNum,
+                            
+                            liveShowSummary:contestInstance.liveShowSummary,
+                            liveRefreshSeconds:contestInstance.liveRefreshSeconds,
+                            liveStylesheet:contestInstance.liveStylesheet,
+                            livePositionCalculation:contestInstance.livePositionCalculation,
+                            
+                            printOrganizer:contestInstance.printOrganizer
+                           ]
+        
+        List live_crews = []
+        Map last_crew = [:]
+        for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
+            
+            String aircraft_registration = ""
+            if (crew_instance.aircraft) {
+                aircraft_registration = crew_instance.aircraft.registration
+            }
+            
+            String crew_class_name = ""
+            String crew_class_shortname = ""
+            if (crew_instance.resultclass) {
+                crew_class_name = crew_instance.resultclass.name
+                crew_class_shortname = crew_instance.resultclass.shortName
+            }
+            
+            String team_name = ""
+            Long team_id = null
+            if (crew_instance.team) {
+                team_name = crew_instance.team.name
+                team_id = crew_instance.team.id
+            }
+            
+            boolean active_class_crew = crew_instance.IsActiveCrew(ResultFilter.Contest)
+                
+            if (!crew_instance.disabled && !crew_instance.IsProvisionalCrew(result_settings) && active_class_crew && (!team_settings || (team_id in team_settings))) {
+                List crew_tasks = []
+                for (Task task_instance in result_tasks) {
+                    Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
+                    Map new_task = [id: GetTaskValues(task_instance, last_crew).id,
+                                    isTaskPlanningTest:GetTaskValues(task_instance, last_crew).isTaskPlanningTest,
+                                    isTaskFlightTest:GetTaskValues(task_instance, last_crew).isTaskFlightTest,
+                                    isTaskObservationTest:GetTaskValues(task_instance, last_crew).isTaskObservationTest, 
+                                    isTaskObservationTurnpointTest:GetTaskValues(task_instance, last_crew).isTaskObservationTurnpointTest,
+                                    isTaskObservationEnroutePhotoTest:GetTaskValues(task_instance, last_crew).isTaskObservationEnroutePhotoTest, 
+                                    isTaskObservationEnrouteCanvasTest:GetTaskValues(task_instance, last_crew).isTaskObservationEnrouteCanvasTest,
+                                    isTaskLandingTest:GetTaskValues(task_instance, last_crew).isTaskLandingTest, 
+                                    isTaskLanding1Test:GetTaskValues(task_instance, last_crew).isTaskLanding1Test,
+                                    isTaskLanding2Test:GetTaskValues(task_instance, last_crew).isTaskLanding2Test, 
+                                    isTaskLanding3Test:GetTaskValues(task_instance, last_crew).isTaskLanding3Test,
+                                    isTaskLanding4Test:GetTaskValues(task_instance, last_crew).isTaskLanding4Test,
+                                    isTaskSpecialTest:GetTaskValues(task_instance, last_crew).isTaskSpecialTest,
+                                    isTaskIncreaseEnabled:GetTaskValues(task_instance, last_crew).isTaskIncreaseEnabled, 
+                                    bestOfAnalysis:GetTaskValues(task_instance, last_crew).bestOfAnalysis,
+                                    bestOfName:GetTaskValues(task_instance, last_crew).bestOfName,
+                                    disabledCrew:test_instance.disabledCrew,
+                                    isPlanningTest:GetTestValues(test_instance, last_crew).isPlanningTest,
+                                    isFlightTest:GetTestValues(test_instance, last_crew).isFlightTest,
+                                    isObservationTest:GetTestValues(test_instance, last_crew).isObservationTest,
+                                    isObservationTurnpointTest:GetTestValues(test_instance, last_crew).isObservationTurnpointTest,
+                                    isObservationEnroutePhotoTest:GetTestValues(test_instance, last_crew).isObservationEnroutePhotoTest,
+                                    isObservationEnrouteCanvasTest:GetTestValues(test_instance, last_crew).isObservationEnrouteCanvasTest,
+                                    isLandingTest:GetTestValues(test_instance, last_crew).isLandingTest,
+                                    isLanding1Test:GetTestValues(test_instance, last_crew).isLanding1Test,
+                                    isLanding2Test:GetTestValues(test_instance, last_crew).isLanding2Test,
+                                    isLanding3Test:GetTestValues(test_instance, last_crew).isLanding3Test,
+                                    isLanding4Test:GetTestValues(test_instance, last_crew).isLanding4Test,
+                                    isSpecialTest:GetTestValues(test_instance, last_crew).isSpecialTest,
+                                    isIncreaseEnabled:GetTestValues(test_instance, last_crew).isIncreaseEnabled,                            
+                                    planningTestPenalties:test_instance.planningTestPenalties,
+                                    flightTestPenalties:test_instance.flightTestPenalties,
+                                    observationTestTurnPointPhotoPenalties:test_instance.observationTestTurnPointPhotoPenalties,
+                                    observationTestRoutePhotoPenalties:test_instance.observationTestRoutePhotoPenalties,
+                                    observationTestGroundTargetPenalties:test_instance.observationTestGroundTargetPenalties,
+                                    observationTestPenalties:test_instance.observationTestPenalties,
+                                    landingTest1Penalties:test_instance.landingTest1Penalties,
+                                    landingTest2Penalties:test_instance.landingTest2Penalties,
+                                    landingTest3Penalties:test_instance.landingTest3Penalties,
+                                    landingTest4Penalties:test_instance.landingTest4Penalties, 
+                                    landingTestPenalties:test_instance.landingTestPenalties,
+                                    specialTestPenalties:test_instance.specialTestPenalties,
+                                    taskPenalties:test_instance.taskPenalties,
+                                    taskPosition:0]
+                    crew_tasks += new_task
+                }
+                Map new_crew = [startNum:crew_instance.startNum, name:crew_instance.name, registration:aircraft_registration, teamName:team_name, teamID:team_id, className:crew_class_name, classShortName:crew_class_shortname,
+                                increaseFactor:crew_instance.GetIncreaseFactor(),
+                                planningPenalties:0, flightPenalties:0, observationPenalties:0, landingPenalties:0, specialPenalties:0, contestPenalties:0, contestPosition:0, noContestPosition:false, contestEqualPosition:false, contestAddPosition:0, tasks: crew_tasks]
+                live_crews += new_crew
+                last_crew = new_crew
+            }
         }
         
-        calculate_crew_penalties(contestInstance,null,result_tasks,contestInstance.GetResultTeams(contestInstance.contestTeamResults),contestInstance.GetResultSettings(),ResultFilter.Contest)
+        for( Task result_task in result_tasks) {
+            calculatelivepositions_task(result_task, result_settings, live_contest, live_crews)
+        }
         
-        // calculate positions
-        calculatepositions_contest(contestInstance, null, contestInstance.GetResultTeams(contestInstance.contestTeamResults), contestInstance.GetResultSettings(), true) // true - ignoreProvisional
+        calculatelive_crew_penalties(result_settings, result_task_ids, live_contest, live_crews)
         
+        calculatelivepositions_contest(live_crews)
+        
+        contest.livecontest = live_contest
+        contest.livecrews = live_crews
         contest.message = getMsg('fc.results.positionscalculated')
         printdone contest.message      
         return contest
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map GetTaskValues(Task taskInstance, Map lastCrew)
+    {
+        if (lastCrew) {
+            Map live_task = null
+            for (Map task in lastCrew.tasks) {
+                if (task.id == taskInstance.id) {
+                    live_task = task
+                    break
+                }
+            }
+            if (live_task) {
+                Map new_task = [id: live_task.id,
+                                isTaskPlanningTest:live_task.isTaskPlanningTest,
+                                isTaskFlightTest:live_task.isTaskFlightTest,
+                                isTaskObservationTest:live_task.isTaskObservationTest,
+                                isTaskObservationTurnpointTest:live_task.isTaskObservationTurnpointTest,
+                                isTaskObservationEnroutePhotoTest:live_task.isTaskObservationEnroutePhotoTest,
+                                isTaskObservationEnrouteCanvasTest:live_task.isTaskObservationEnrouteCanvasTest,
+                                isTaskLandingTest:live_task.isTaskLandingTest,
+                                isTaskLanding1Test:live_task.isTaskLanding1Test,
+                                isTaskLanding2Test:live_task.isTaskLanding2Test,
+                                isTaskLanding3Test:live_task.isTaskLanding3Test,
+                                isTaskLanding4Test:live_task.isTaskLanding4Test,
+                                isTaskSpecialTest:live_task.isTaskSpecialTest,
+                                isTaskIncreaseEnabled:live_task.isTaskIncreaseEnabled,
+                                bestOfAnalysis:live_task.bestOfAnalysis,
+                                bestOfName:live_task.bestOfName
+                               ]
+                return new_task
+            }
+        }
+        Map new_task = [id: taskInstance.id,
+                        isTaskPlanningTest:taskInstance.IsPlanningTestRun(),
+                        isTaskFlightTest:taskInstance.IsFlightTestRun(),
+                        isTaskObservationTest:taskInstance.IsObservationTestRun(),
+                        isTaskObservationTurnpointTest:taskInstance.IsObservationTestTurnpointRun(),
+                        isTaskObservationEnroutePhotoTest:taskInstance.IsObservationTestEnroutePhotoRun(),
+                        isTaskObservationEnrouteCanvasTest:taskInstance.IsObservationTestEnrouteCanvasRun(),
+                        isTaskLandingTest:taskInstance.IsLandingTestRun(),
+                        isTaskLanding1Test:taskInstance.IsLandingTest1Run(),
+                        isTaskLanding2Test:taskInstance.IsLandingTest2Run(),
+                        isTaskLanding3Test:taskInstance.IsLandingTest3Run(),
+                        isTaskLanding4Test:taskInstance.IsLandingTest4Run(),
+                        isTaskSpecialTest:taskInstance.IsSpecialTestRun(),
+                        isTaskIncreaseEnabled:taskInstance.IsIncreaseEnabled(),
+                        bestOfAnalysis:taskInstance.bestOfAnalysis,
+                        bestOfName:taskInstance.bestOfName()
+                       ]
+        return new_task
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map GetTestValues(Test testInstance, Map lastCrew)
+    {
+        if (lastCrew) {
+            Map live_task = null
+            for (Map task in lastCrew.tasks) {
+                if (task.id == testInstance.task.id) {
+                    live_task = task
+                    break
+                }
+            }
+            if (live_task) {
+                Map new_task = [isPlanningTest:live_task.isPlanningTest,
+                                isFlightTest:live_task.isFlightTest,
+                                isObservationTest:live_task.isObservationTest,
+                                isObservationTurnpointTest:live_task.isObservationTurnpointTest,
+                                isObservationEnroutePhotoTest:live_task.isObservationEnroutePhotoTest,
+                                isObservationEnrouteCanvasTest:live_task.isObservationEnrouteCanvasTest,
+                                isLandingTest:live_task.isLandingTest,
+                                isLanding1Test:live_task.isLanding1Test,
+                                isLanding2Test:live_task.isLanding2Test,
+                                isLanding3Test:live_task.isLanding3Test,
+                                isLanding4Test:live_task.isLanding4Test,
+                                isSpecialTest:live_task.isSpecialTest,
+                                isIncreaseEnabled:live_task.isIncreaseEnabled
+                               ]
+                return new_task
+            }
+        }
+        Map new_task = [isPlanningTest:testInstance.IsPlanningTestRun(),
+                        isFlightTest:testInstance.IsFlightTestRun(),
+                        isObservationTest:testInstance.IsObservationTestRun(),
+                        isObservationTurnpointTest:testInstance.IsObservationTestTurnpointRun(),
+                        isObservationEnroutePhotoTest:testInstance.IsObservationTestEnroutePhotoRun(),
+                        isObservationEnrouteCanvasTest:testInstance.IsObservationTestEnrouteCanvasRun(),
+                        isLandingTest:testInstance.IsLandingTestRun(),
+                        isLanding1Test:testInstance.IsLandingTest1Run(),
+                        isLanding2Test:testInstance.IsLandingTest2Run(),
+                        isLanding3Test:testInstance.IsLandingTest3Run(),
+                        isLanding4Test:testInstance.IsLandingTest4Run(),
+                        isSpecialTest:testInstance.IsSpecialTestRun(),
+                        isIncreaseEnabled:testInstance.IsIncreaseEnabled()
+                       ]
+        return new_task
     }
     
     //--------------------------------------------------------------------------
@@ -564,6 +783,111 @@ class EvaluationService
     }
     
     //--------------------------------------------------------------------------
+    private void calculatelivepositions_task(Task taskInstance, Map resultSettings, Map liveContest, List liveCrews)
+    {
+        printstart "calculatelivepositions_task '${taskInstance.name()}' '${resultSettings}'"
+        
+        int act_penalty = -1
+        int max_position = liveCrews.size()
+        for (int act_position = 1; act_position <= max_position; act_position++) {
+            
+            // search lowest penalty
+            int min_penalty = 100000
+            for (Map live_crew in liveCrews) {
+                Map live_task = null
+                for (Map task in live_crew.tasks) {
+                    if (task.id == taskInstance.id) {
+                        live_task = task
+                        break
+                    }
+                }
+                if (live_task) {
+                    if (!live_task.disabledCrew) {
+                        int task_penalties = live_task.taskPenalties
+                        if (resultSettings) {
+                            task_penalties = EvaluationService.GetResultPenalties(resultSettings, live_crew, live_task, liveContest.getLandingResultsFactor)
+                        }
+                        if (task_penalties > act_penalty) {
+                            if (task_penalties < min_penalty) {
+                                min_penalty = task_penalties 
+                            }
+                        }
+                    }
+                }
+            }
+            act_penalty = min_penalty 
+            
+            // set position
+            int set_position = -1
+            for (Map live_crew in liveCrews) {
+                Map live_task = null
+                for (Map task in live_crew.tasks) {
+                    if (task.id == taskInstance.id) {
+                        live_task = task
+                        break
+                    }
+                }
+                if (live_task) {
+                    if (live_task.disabledCrew) {
+                        live_task.taskPosition = 0
+                    } else {
+                        int task_penalties = live_task.taskPenalties
+                        if (resultSettings) {
+                            task_penalties = EvaluationService.GetResultPenalties(resultSettings, live_crew, live_task, liveContest.getLandingResultsFactor)
+                        }
+                        if (task_penalties == act_penalty) {
+                            live_task.taskPosition = act_position
+                            println "$live_crew.name: Live taskPosition $live_task.taskPosition"
+                            set_position++
+                        }
+                    }
+                }
+            }
+            
+            if (set_position > 0) {
+                act_position += set_position
+            }
+        }
+        
+        printdone ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    static int GetResultPenalties(Map resultSettings, Map crew, Map task, BigDecimal landingResultsFactor)
+    {
+        int penalties = 0
+        if (resultSettings["Planning"]) {
+            if (task.isPlanningTest) {
+                penalties += task.planningTestPenalties
+            }
+        }
+        if (resultSettings["Flight"]) {
+            if (task.isFlightTest) {
+                penalties += task.flightTestPenalties
+            }
+        }
+        if (resultSettings["Observation"]) {
+            if (task.isObservationTest) {
+                penalties += task.observationTestPenalties
+            }
+        }
+        if (resultSettings["Landing"]) {
+            if (task.isLandingTest) {
+                penalties += FcMath.GetLandingPenalties(landingResultsFactor, task.landingTestPenalties)
+            }
+        }
+        if (resultSettings["Special"]) {
+            if (task.isSpecialTest) {
+                penalties += task.specialTestPenalties
+            }
+        }
+        if (task.isIncreaseEnabled) {
+            penalties += crew.increaseFactor * penalties / 100
+        }
+        return penalties
+    }
+    
+    //--------------------------------------------------------------------------
     private void calculatepositions_contest(Contest contestInstance, ResultClass resultclassInstance, List teamSettings, Map resultSettings, boolean ignoreProvisional)
     {
         printstart "calculatepositions_contest [Class:${resultclassInstance?.name}, Teams:${teamSettings}]"
@@ -580,7 +904,7 @@ class EvaluationService
                         if (!ignoreProvisional || !crew_instance.IsProvisionalCrew(resultSettings)) {
                             if (resultclassInstance) {
                                 if (crew_instance.resultclass) {
-                                    if (resultclassInstance.id == crew_instance.resultclass.id) { // BUG: direkter Klassen-Vergleich geht nicht
+                                    if (resultclassInstance.id == crew_instance.resultclass.id) {
                                         if (crew_instance.contestPenalties > act_penalty) {
                                             if (crew_instance.contestPenalties < min_penalty) {
                                                 min_penalty = crew_instance.contestPenalties 
@@ -675,7 +999,7 @@ class EvaluationService
                     crew_instance.contestEqualPosition = false
                     crew_instance.contestAddPosition = 0
                     crew_instance.save()
-                } else if (!resultclassInstance || (resultclassInstance.id == crew_instance.resultclass.id)) { // BUG: direkter Klassen-Vergleich geht nicht
+                } else if (!resultclassInstance || (resultclassInstance.id == crew_instance.resultclass.id)) {
                     if (crew_instance.contestPenalties == act_penalty) {
                         if (resultclassInstance) {
                             crew_instance.classPosition = act_position
@@ -713,6 +1037,60 @@ class EvaluationService
         } else {
             set_contest_equalposition(contestInstance)
         }
+        
+        printdone ""
+    }
+
+    //--------------------------------------------------------------------------
+    private void calculatelivepositions_contest(List liveCrews)
+    {
+        
+        printstart "calculatelivepositions_contest"
+        
+        int act_penalty = -1
+        int max_position = liveCrews.size()
+        for (int act_position = 1; act_position <= max_position; act_position++) {
+            
+            // search lowest penalty
+            int min_penalty = 100000
+            for (Map live_crew in liveCrews) {
+                if (live_crew.contestPenalties != -1) {
+                    if (live_crew.contestPenalties > act_penalty) {
+                        if (live_crew.contestPenalties < min_penalty) {
+                            min_penalty = live_crew.contestPenalties
+                        }
+                    }
+                }
+            }
+            act_penalty = min_penalty 
+
+            // set position
+            int set_position = -1
+            for (Map live_crew in liveCrews) {
+                if (live_crew.contestPenalties == -1) {
+                    live_crew.contestPosition = 0
+                    live_crew.noContestPosition = true
+                    live_crew.contestEqualPosition = false
+                    live_crew.contestAddPosition = 0
+                } else {
+                    if (live_crew.contestPenalties == act_penalty) {
+                        live_crew.contestPosition = act_position
+                        live_crew.noContestPosition = false
+                        live_crew.contestEqualPosition = false
+                        live_crew.contestAddPosition = 0
+                        println "$live_crew.name: Live contestPosition = $act_position ($live_crew.contestPenalties Punkte)"
+                        set_position++
+                    }
+                }
+            }
+            
+            if (set_position > 0) {
+                act_position += set_position
+            }
+        }
+        
+        // set contestEqualPosition/classEqualPosition
+        sort_contestposition_set_contest_equalposition(liveCrews)
         
         printdone ""
     }
@@ -768,11 +1146,65 @@ class EvaluationService
     }
     
     //--------------------------------------------------------------------------
+    private void sort_contestposition_set_contest_equalposition(List liveCrews)
+    {
+        // sort contest position
+        liveCrews.sort { p1, p2 ->
+            p1.contestPosition.compareTo(p2.contestPosition)
+        }
+        
+        // set contest equalposition
+        Map last_live_crew = null
+        for (Map live_crew in liveCrews) {
+            if (live_crew.contestPosition != 0) {
+                if (last_live_crew) {
+                    if (last_live_crew.contestPosition == live_crew.contestPosition) {
+                        last_live_crew.contestEqualPosition = true
+                        live_crew.contestEqualPosition = true
+                        println "Set Live contestEqualPosition for position $live_crew.contestPosition: $last_live_crew.name / $live_crew.name"
+                    } else {
+                        live_crew.contestEqualPosition = false
+                    }
+                } else {
+                    live_crew.contestEqualPosition = false
+                }
+                last_live_crew = live_crew
+            }
+        }
+
+    }
+    
+    //--------------------------------------------------------------------------
+    static List GetLiveCrewSort(List liveCrews, int liveTaskID)
+    {
+        if (liveTaskID) {
+            boolean found_id = false
+            for (Map live_crew in liveCrews) {
+                for (Map live_task in live_crew.tasks) {
+                    if (live_task.id == liveTaskID) {
+                        live_crew.taskPosition = live_task.taskPosition
+                        found_id = true
+                    }
+                }
+            }
+            
+            // sort contest position
+            if (found_id) {
+                liveCrews.sort { p1, p2 ->
+                    p1.taskPosition.compareTo(p2.taskPosition)
+                }
+            }
+        }
+        return liveCrews
+    }
+    
+    //--------------------------------------------------------------------------
     private void calculate_crew_penalties(Contest contestInstance, ResultClass resultclassInstance, List tastSettings, List teamSettings, Map resultSettings, ResultFilter resultFilter)
     {
         printstart "calculate_crew_penalties $resultFilter"
+        BigDecimal landing_results_factor = contestInstance.GetLandingResultsFactor()
         for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
-            if (!resultclassInstance || (crew_instance.resultclass == resultclassInstance)) {
+            if (!resultclassInstance || (crew_instance.resultclass.id == resultclassInstance.id)) {
                 if (!teamSettings || (crew_instance.team in teamSettings)) {
                     crew_instance.planningPenalties = 0
                     crew_instance.flightPenalties = 0
@@ -808,9 +1240,10 @@ class EvaluationService
                                             }
                                         }
                                         if (test_instance.IsLandingTestRun()) {
-                                            crew_instance.landingPenalties += test_instance.landingTestPenalties
+                                            int landing_test_penalties = FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTestPenalties)
+                                            crew_instance.landingPenalties += landing_test_penalties
                                             if (resultSettings["Landing"]) {
-                                                task_penalties += test_instance.landingTestPenalties
+                                                task_penalties += landing_test_penalties
                                             }
                                         }
                                         if (test_instance.IsSpecialTestRun()) {
@@ -832,7 +1265,7 @@ class EvaluationService
                                     }
                                 }
                             }
-                            crew_instance.contestPenalties += get_bestofanalysis_task_penalties(contestInstance, bestofanalysis_task_penalties)
+                            crew_instance.contestPenalties += get_bestofanalysis_task_penalties(contestInstance.bestOfAnalysisTaskNum, bestofanalysis_task_penalties)
                             if (disable_contest_penalties) {
                                 crew_instance.contestPenalties = -1
                             }
@@ -867,9 +1300,10 @@ class EvaluationService
                                                 }
                                             }
                                             if (test_instance.IsLandingTestRun()) {
-                                                crew_instance.landingPenalties += test_instance.landingTestPenalties
+                                                int landing_test_penalties = FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTestPenalties)
+                                                crew_instance.landingPenalties += landing_test_penalties
                                                 if (resultSettings["Landing"]) {
-                                                    task_penalties += test_instance.landingTestPenalties
+                                                    task_penalties += landing_test_penalties
                                                 }
                                             }
                                             if (test_instance.IsSpecialTestRun()) {
@@ -891,7 +1325,7 @@ class EvaluationService
                                         }
                                     }
                                 }
-                                crew_instance.teamPenalties += get_bestofanalysis_task_penalties(contestInstance, bestofanalysis_task_penalties)
+                                crew_instance.teamPenalties += get_bestofanalysis_task_penalties(contestInstance.bestOfAnalysisTaskNum, bestofanalysis_task_penalties)
                             } else {
                                 crew_instance.teamPenalties = 100000
                             }
@@ -909,7 +1343,79 @@ class EvaluationService
     }
     
     //--------------------------------------------------------------------------
-    private int get_bestofanalysis_task_penalties(Contest contestInstance, List bestOfAnalysisTaskPenalties)
+    private void calculatelive_crew_penalties(Map resultSettings, List tastSettings, Map liveContest, List liveCrews)
+    {
+        printstart "calculatelive_crew_penalties"
+        
+        for (Map live_crew in liveCrews) {
+            live_crew.planningPenalties = 0
+            live_crew.flightPenalties = 0
+            live_crew.observationPenalties = 0
+            live_crew.landingPenalties = 0
+            live_crew.specialPenalties = 0
+            live_crew.contestPenalties = 0
+            List bestofanalysis_task_penalties = []
+            boolean disable_contest_penalties = false
+            for (Map live_task in live_crew.tasks) {
+                if (live_task.id in tastSettings) {
+                    Test test_instance
+                    int task_penalties = 0
+                    if (!live_task.disabledCrew) {
+                        if (live_task.isPlanningTest) {
+                            live_crew.planningPenalties += live_task.planningTestPenalties
+                            if (resultSettings["Planning"]) {
+                                task_penalties += live_task.planningTestPenalties
+                            }
+                        }
+                        if (live_task.isFlightTest) {
+                            live_crew.flightPenalties += live_task.flightTestPenalties
+                            if (resultSettings["Flight"]) {
+                                task_penalties += live_task.flightTestPenalties
+                            }
+                        }
+                        if (live_task.isObservationTest) {
+                            live_crew.observationPenalties += live_task.observationTestPenalties
+                            if (resultSettings["Observation"]) {
+                                task_penalties += live_task.observationTestPenalties
+                            }
+                        }
+                        if (live_task.isLandingTest) {
+                            int landing_test_penalties = FcMath.GetLandingPenalties(liveContest.getLandingResultsFactor, live_task.landingTestPenalties)
+                            live_crew.landingPenalties += landing_test_penalties
+                            if (resultSettings["Landing"]) {
+                                task_penalties += landing_test_penalties
+                            }
+                        }
+                        if (live_task.isSpecialTest) {
+                            live_crew.specialPenalties += live_task.specialTestPenalties
+                            if (resultSettings["Special"]) {
+                                task_penalties += live_task.specialTestPenalties
+                            }
+                        }
+                        if (live_task.isIncreaseEnabled) {
+                            task_penalties += live_crew.increaseFactor * task_penalties / 100
+                        }
+                    } else {
+                        disable_contest_penalties = true
+                    }
+                    if ((liveContest.bestOfAnalysisTaskNum > 0) && live_task.bestOfAnalysis) {
+                        bestofanalysis_task_penalties += task_penalties
+                    } else {
+                        live_crew.contestPenalties += task_penalties
+                    }
+                }
+            }
+            live_crew.contestPenalties += get_bestofanalysis_task_penalties(liveContest.bestOfAnalysisTaskNum, bestofanalysis_task_penalties)
+            if (disable_contest_penalties) {
+                live_crew.contestPenalties = -1
+            }
+            println "$live_crew.name: Live contestPenalties = $live_crew.contestPenalties"
+        }
+        printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private int get_bestofanalysis_task_penalties(int bestOfAnalysisTaskNum, List bestOfAnalysisTaskPenalties)
     {
         if (bestOfAnalysisTaskPenalties.size() == 0) {
             return 0
@@ -917,7 +1423,7 @@ class EvaluationService
         
         int ret_penalties = 0
         List sorted_values = bestOfAnalysisTaskPenalties.sort()
-        for (int i = 0; i < contestInstance.bestOfAnalysisTaskNum; i++) {
+        for (int i = 0; i < bestOfAnalysisTaskNum; i++) {
             if (i < sorted_values.size()) {
                 ret_penalties += sorted_values[i]
             }

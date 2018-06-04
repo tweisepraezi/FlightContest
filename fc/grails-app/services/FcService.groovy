@@ -3976,7 +3976,7 @@ class FcService
 			if (modify_contest_results) {
 				println "Contest results modfified."
 				for (Crew crew_instance in Crew.findAllByContest(resultclass_instance.contest,[sort:"id"])) {
-					if (crew_instance.resultclass == resultclass_instance) {
+					if (crew_instance.resultclass.id == resultclass_instance.id) {
 						crew_instance.contestPenalties = 0
 						crew_instance.classPosition = 0
 						crew_instance.noClassPosition = false
@@ -4025,7 +4025,7 @@ class FcService
 		printstart "calculate_points_resultclass: $resultclassInstance.name"
 		Task.findAllByContest(resultclassInstance.contest,[sort:"id"]).each { Task task_instance ->
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
-				if (test_instance.crew.resultclass == resultclassInstance) {
+				if (test_instance.crew.resultclass.id == resultclassInstance.id) {
 					calculateTestPenalties(test_instance,true)
                     test_instance.crewResultsModified = true
 					test_instance.save()
@@ -13224,7 +13224,7 @@ class FcService
 		
 		Task task_instance = task.instance
 		for (TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-			if (taskclass_instance.resultclass == resultClass.instance) {
+			if (taskclass_instance.resultclass.id == resultClass.instance.id) {
 				taskclass_instance.planningTestRun = planningTestRun
 				taskclass_instance.flightTestRun = flightTestRun
 				taskclass_instance.observationTestRun = observationTestRun

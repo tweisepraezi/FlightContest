@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-18.05.2018
+04.06.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -112,7 +112,14 @@ Erweiterungen in dieser Version (3.1.1):
     * Import aus kml/kmz-Wegpunkten möglich
     * Namenspräfix zum Filtern des Importes angebbar
 - Streckendetail-Dialog verändert:
-    Aktions-Schalter werden jetzt oben angezeigt 
+    Aktions-Schalter werden jetzt oben angezeigt
+- Lande-Ergebnis in Gesamtwertung um angebbaren Faktor reduzierbar
+    -> Hilfe -> Besondere CSS-Eigenschaften
+    -> Wettbewerb -> Einstellungen -> Druckstil
+- Live-Ergebnis-Anzeige (Live Scoring) verbessert
+    Verbesserung des Laufzeitverhaltens und Vermeidung von Datenbank-Locks
+    Die automatische periodische Live-Ergebnis-Berechnung kann nun 
+    verwendet werden. 
 
 Erweiterungen in Version 3.1:
 -----------------------------

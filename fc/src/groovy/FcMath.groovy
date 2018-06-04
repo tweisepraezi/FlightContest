@@ -382,4 +382,13 @@ class FcMath
         }
         return photoName
     }
+    
+    //--------------------------------------------------------------------------
+    static int GetLandingPenalties(BigDecimal landingResultsFactor, int landingPenalties)
+    {
+        if (landingResultsFactor) {
+            return (landingResultsFactor*landingPenalties).toInteger()
+        }
+        return landingPenalties
+    }
 }

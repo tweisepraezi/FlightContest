@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 7
-:revdate:   12.04.2018
+:revnumber: 3.1.1, Ausgabe 8
+:revdate:   29.05.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -1293,6 +1293,9 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 |--flightresults
 |show-curved-points
 |im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen
+|--landingresults
+|0.5
+|Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren
 |===
 
 [[print-styles-samples]]
@@ -1346,6 +1349,10 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 ** Navigationsflug-Ergebnis - für Einsteiger-Klasse Gate-Breite 2NM für UZKs verwenden
 
  body { --class: Einsteiger; --secret-gatewidth: 2; }
+
+** Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren
+
+ body { --landingresults: 0.5; }
  
 ** Besatzungs-Ergebnis - Zeilen verkleinern
  

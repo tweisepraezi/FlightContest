@@ -240,7 +240,7 @@
                 </thead>
                 <tbody>
                     <g:each var="crew_instance" in="${Crew.findAllByContestAndDisabledAndNoClassPositionAndContestPenaltiesNotEqual(resultclassInstance.contest,false,false,-1,[sort:'classPosition'])}">
-                        <g:if test="${crew_instance.resultclass == resultclassInstance}">
+                        <g:if test="${crew_instance.resultclass.id == resultclassInstance.id}">
                             <tr id="${crew_instance.classPosition}">
                                 <td class="pos">${crew_instance.classPosition}</td>
                                 <td class="crew">${crew_instance.name}</td>

@@ -34,7 +34,7 @@
                             </thead>
                             <tbody>
                                 <g:each var="crew_instance" in="${Crew.findAllByContest(resultclassInstance.contest,[sort:'classPosition'])}" status="i">
-                                	<g:if test="${crew_instance.resultclass == resultclassInstance}">
+                                	<g:if test="${crew_instance.resultclass.id == resultclassInstance.id}">
 	                                    <tr class="${(i % 2) == 0 ? 'odd' : ''}">
 	                                    	<g:if test="${crew_instance.disabled || crew_instance.noClassPosition}">
 	                                    		<td class="position">${message(code:'fc.disabled')}</td>

@@ -338,7 +338,7 @@ class PrintService
                 if (crew_instance.classPosition) {
                     no_position_error = true
                 }
-            } else if (crew_instance.resultclass == resultclassInstance) {
+            } else if (crew_instance.resultclass.id == resultclassInstance.id) {
                 if (!crew_instance.classPosition) {
                     no_position_error = true
                 }
@@ -1249,7 +1249,7 @@ class PrintService
             for (ResultClass resultclass_instance in ResultClass.findAllByContest(testInstance.task.contest,[sort:"id"])) {
                 if (params["resultclass_${resultclass_instance.id}"] == "on") {
                     if (testInstance.crew.resultclass) {
-                        if (testInstance.crew.resultclass.id == resultclass_instance.id) {  // BUG: direkter Klassen-Vergleich geht nicht
+                        if (testInstance.crew.resultclass.id == resultclass_instance.id) {
                             return true
                         }
                     }

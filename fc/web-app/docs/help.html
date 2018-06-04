@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.1, Ausgabe 7,</span>
-<span id="revdate">12.04.2018</span>
+<span id="revnumber">version 3.1.1, Ausgabe 8,</span>
+<span id="revdate">29.05.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -3348,6 +3348,11 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--landingresults</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -3449,6 +3454,14 @@ body { --submission: 20; }</pre>
 <div class="literalblock">
 <div class="content">
 <pre>body { --class: Einsteiger; --secret-gatewidth: 2; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren</p>
+<div class="literalblock">
+<div class="content">
+<pre>body { --landingresults: 0.5; }</pre>
 </div>
 </div>
 </li>

@@ -668,12 +668,16 @@ class ContestController {
             evaluationService.println "Set showLanguage to '${params.lang}'"
             session.showLanguage = params.lang
         }
+        boolean show_intern = false
+        if (params.showIntern == 'yes') {
+            show_intern = true
+        }
 		if (session?.lastContest) {
 			session.lastContest.refresh()
 			def contest = evaluationService.calculatelivepositionsContest(session.lastContest)
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
             evaluationService.printdone "Show live html."
-			return [contestInstance:session.lastContest,liveTest:false,params:null]
+			return [contestInstance:session.lastContest, liveTest:false, params:null, liveContest:contest.livecontest, liveCrews:contest.livecrews, showIntern:show_intern]
         } else {
             evaluationService.printdone "Start."
             redirect(action:start)
@@ -704,7 +708,7 @@ class ContestController {
     
 	def liveview = {
 		if (session?.lastContest) {
-			redirect(action:listresultslive)
+			redirect(action:listresultslive,params:[showIntern:'yes'])
         } else {
             redirect(action:start)
 		}

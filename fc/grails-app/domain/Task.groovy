@@ -482,7 +482,7 @@ class Task
 		if (taskInstance.contest.resultClasses) {
 			for (ResultClass resultclass_instance in ResultClass.findAllByContest(taskInstance.contest,[sort:"id"])) {
 				TaskClass.findAllByTask(taskInstance,[sort:"id"]).each { TaskClass taskclass_instance ->
-					if (taskclass_instance.resultclass == resultclass_instance) {
+					if (taskclass_instance.resultclass.id == resultclass_instance.id) {
 						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_PlanningTestRun}"] = taskclass_instance.planningTestRun
 						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_FlightTestRun}"] = taskclass_instance.flightTestRun
 						taskclass_settings["${Defs.TaskClassID}${resultclass_instance.id}${Defs.TaskClassSubID_ObservationTestRun}"] = taskclass_instance.observationTestRun
@@ -786,7 +786,7 @@ class Task
 			return true
 		}
 		for (Test test_instance in Test.findAllByTask(this,[sort:"id"])) {
-			if (test_instance.crew.resultclass == resultclassInstance) {
+			if (test_instance.crew.resultclass.id == resultclassInstance.id) {
 				if (test_instance.IsTestClassResultsProvisional(resultSettings,resultclassInstance)) {
 					return true
 				}
@@ -820,7 +820,7 @@ class Task
 	{
 		Map ret = [:]
 		for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-			if (taskclass_instance.resultclass == resultclassInstance) {
+			if (taskclass_instance.resultclass.id == resultclassInstance.id) {
 				if (taskclass_instance.planningTestRun) {
 					ret += [Planning:true]
 				}
@@ -914,7 +914,7 @@ class Task
 	{
 		for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
 			
-			if (resultClass == taskclass_instance.resultclass)
+			if (resultClass.id == taskclass_instance.resultclass.id)
 			{
 				return taskclass_instance
 			}
@@ -1095,7 +1095,7 @@ class Task
                 next_id = task_instance.id
                 set_next = false
             }
-            if (task_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+            if (task_instance.id == this.id) {
                 set_next = true
             }
         }

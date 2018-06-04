@@ -1,0 +1,131 @@
+
+calculatelivepositionsContest
+
+	calculatepositions_task(result_task, result_classes, contestInstance.GetResultSettings(), true)
+		je Task
+		Input:
+			Test (of all crews, of task)
+		Read output:
+			int planningTestPenalties
+			int flightTestPenalties
+			int observationTestTurnPointPhotoPenalties
+			int observationTestRoutePhotoPenalties
+			int observationTestGroundTargetPenalties
+			int observationTestPenalties
+			int landingTest1Penalties
+			int landingTest2Penalties
+			int landingTest3Penalties
+			int landingTest4Penalties
+			int landingTestPenalties
+			int specialTestPenalties
+		Calculated output:
+			int taskPosition (0, wenn test_instance.disabledCrew || test_instance.crew.disabled || Provisional)
+			
+	
+	calculate_crew_penalties(contestInstance,null,result_tasks,contestInstance.GetResultTeams(contestInstance.contestTeamResults),contestInstance.GetResultSettings(),ResultFilter.Contest)
+		je Crew
+		Input:
+			Test (of all crews, of selected tasks)
+		Calculated output:
+			int planningPenalties
+			int flightPenalties
+			int observationPenalties
+			int landingPenalties
+			int specialPenalties
+			int contestPenalties (-1, wenn test_instance.disabledCrew of any task)
+
+			
+	calculatepositions_contest(contestInstance, null, contestInstance.GetResultTeams(contestInstance.contestTeamResults), contestInstance.GetResultSettings(), true)
+		je Crew (wenn nicht crew_instance.disabledContest || crew_instance.disabled || crew_instance.contestPenalties == -1)
+		Input:
+			Crew.contestPenalties
+		Output:
+			int contestPosition
+			boolean noContestPosition
+			boolean contestEqualPosition
+			int contestAddPosition
+
+	set_contest_equalposition(contestInstance)
+		je Crew
+		Input:
+		Output:
+			boolean contestEqualPosition
+
+live_crews[]
+	int startNum = crew_instance.startNum
+	String name = crew_instance.name
+	String registration = crew_instance.aircraft.registration
+	String teamName = crew_instance.team.name
+	long teamID = crew_instance.team.id
+	String className = crew_instance.resultclass.name
+	String classShortName = crew_instance.resultclass.shortName
+	
+	boolean disabled = crew_instance.disabled
+	boolean activeClass = crew_instance.IsActiveCrew(ResultFilter.Contest)
+	int increaseFactor = increaseFactor:crew_instance.GetIncreaseFactor()
+	
+	int planningPenalties
+	int flightPenalties
+	int observationPenalties
+	int landingPenalties
+	int specialPenalties
+	
+	int contestPenalties
+	
+	int contestPosition
+	boolean noContestPosition
+	boolean contestEqualPosition
+	int contestAddPosition
+	
+	tasks[]
+		long id = task_instance.id
+		
+		boolean isTaskPlanningTest = task_instance.IsPlanningTestRun()
+		boolean isTaskFlightTest = task_instance.IsFlightTestRun()
+		boolean isTaskObservationTest = task_instance.IsObservationTestRun()
+		boolean isTaskObservationTurnpointTest = task_instance.IsObservationTestTurnpointRun()
+		boolean isTaskObservationEnroutePhotoTest = task_instance.IsObservationTestEnroutePhotoRun()
+		boolean isTaskObservationEnrouteCanvasTest = task_instance.IsObservationTestEnrouteCanvasRun()
+		boolean isTaskLandingTest = task_instance.IsLandingTestRun()
+		boolean isTaskLanding1Test = task_instance.IsLandingTest1Run()
+		boolean isTaskLanding2Test = task_instance.IsLandingTest2Run()
+		boolean isTaskLanding3Test = task_instance.IsLandingTest3Run()
+		boolean isTaskLanding4Test = task_instance.IsLandingTest4Run()
+		boolean isTaskSpecialTest = task_instance.IsSpecialTestRun()
+		boolean isTaskIncreaseEnabled = task_instance.IsIncreaseEnabled()
+		boolean bestOfAnalysis = task_instance.bestOfAnalysis
+		String bestOfName = task_instance.bestOfName()
+		
+		boolean disabledCrew = test_instance.disabledCrew
+		
+		boolean isPlanningTest = test_instance.IsPlanningTestRun()
+		boolean isFlightTest = test_instance.IsFlightTestRun()
+		boolean isObservationTest = test_instance.IsObservationTestRun()
+		boolean isObservationTurnpointTest = test_instance.IsObservationTestTurnpointRun()
+		boolean isObservationEnroutePhotoTest = test_instance.IsObservationTestEnroutePhotoRun()
+		boolean isObservationEnrouteCanvasTest = test_instance.IsObservationTestEnrouteCanvasRun()
+		boolean isLandingTest = test_instance.IsLandingTestRun()
+		boolean isLanding1Test = test_instance.IsLandingTest1Run()
+		boolean isLanding2Test = test_instance.IsLandingTest2Run()
+		boolean isLanding3Test = test_instance.IsLandingTest3Run()
+		boolean isLanding4Test = test_instance.IsLandingTest4Run()
+		boolean isSpecialTest = test_instance.IsSpecialTestRun()
+		boolean isIncreaseEnabled = test_instance.IsIncreaseEnabled()
+		
+		int planningTestPenalties = test_instance.planningTestPenalties
+		int flightTestPenalties = test_instance.flightTestPenalties
+		int observationTestTurnPointPhotoPenalties = test_instance.observationTestTurnPointPhotoPenalties
+		int observationTestRoutePhotoPenalties = test_instance.observationTestRoutePhotoPenalties
+		int observationTestGroundTargetPenalties = test_instance.observationTestGroundTargetPenalties
+		int observationTestPenalties = test_instance.observationTestPenalties
+		int landingTest1Penalties = test_instance.landingTest1Penalties
+		int landingTest2Penalties = test_instance.landingTest2Penalties
+		int landingTest3Penalties = test_instance.landingTest3Penalties
+		int landingTest4Penalties = test_instance.landingTest4Penalties
+		int landingTestPenalties = test_instance.landingTestPenalties
+		int specialTestPenalties = test_instance.specialTestPenalties
+		int taskPenalties = test_instance.taskPenalties
+		
+		int taskPosition
+
+	

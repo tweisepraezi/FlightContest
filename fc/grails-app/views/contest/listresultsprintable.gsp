@@ -58,6 +58,7 @@
         <h3>${contestInstance.GetResultTitle(contestInstance.GetResultSettings(),true)}</h3>
         <g:form>
             <table class="resultlist">
+                <g:set var="landing_results_factor" value="${contestInstance.GetLandingResultsFactor()}"/>
                 <thead>
                     <tr>
                         <th>${message(code:'fc.test.results.position.short')}</th>
@@ -122,6 +123,9 @@
                                             <g:if test="${task_instance.IsLandingTest4Run()}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
                                                 <g:set var="landing_detail_written" value="${true}"/>
+                                            </g:if>
+                                            <g:if test="${landing_results_factor}">
+                                                <g:set var="detail_num" value="${detail_num+1}"/>
                                             </g:if>
                                         </g:if>
                                         <g:if test="${!landing_detail_written}">
@@ -216,9 +220,14 @@
                                                     <g:set var="landing_detail_written" value="${true}"/>
 	                                            </g:if>
 	                                        </g:if>
-                                            <g:if test="${!landing_detail_written}">
+                                            <g:if test="${!landing_detail_written || landing_results_factor}">
 	                                            <g:set var="detail_num" value="${detail_num+1}"/>
-	                                            <th>${message(code:'fc.landingresults.landing.short')}</th>
+                                                <g:if test="${landing_results_factor}">
+                                                    <th>${message(code:'fc.landingresults.landing.short')} (${landing_results_factor})</th>
+                                                </g:if>
+                                                <g:else>
+    	                                            <th>${message(code:'fc.landingresults.landing.short')}</th>
+    	                                        </g:else>
 	                                        </g:if>
 	                                    </g:if>
 	                                    <g:if test="${contestInstance.contestSpecialResults && task_instance.IsSpecialTestRun()}">
@@ -374,10 +383,10 @@
                                                         <g:set var="landing_detail_written" value="${true}"/>
                                                     </g:if>
                                                 </g:if>
-                                                <g:if test="${!landing_detail_written}">
+                                                <g:if test="${!landing_detail_written || landing_results_factor}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:if test="${test_instance.IsLandingTestRun()}">
-                                                        <td class="landingpenalties">${test_instance.landingTestPenalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
+                                                        <td class="landingpenalties">${FcMath.GetLandingPenalties(contestInstance.GetLandingResultsFactor(), test_instance.landingTestPenalties)}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional.short')}]<g:set var="test_provisional" value="${true}"/></g:if></td>
                                                     </g:if>
                                                     <g:else>
                                                         <td class="landingpenalties">-</td>

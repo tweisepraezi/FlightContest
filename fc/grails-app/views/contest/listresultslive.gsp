@@ -2,70 +2,82 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <g:if test="${contestInstance.liveRefreshSeconds}">
-            <meta http-equiv="refresh" content="${contestInstance.liveRefreshSeconds}">
-        </g:if>
+        <g:if test="${!showIntern}">
+	        <g:if test="${liveContest.liveRefreshSeconds}">
+	            <meta http-equiv="refresh" content="${liveContest.liveRefreshSeconds}">
+	        </g:if>
+	    </g:if>
         
         <title>${message(code:'fc.contest.liveresults')} [${message(code:'fc.provisional')}]</title>
         
         <link rel="shortcut icon" href="fc.ico" type="image/x-icon" />
 
-        <g:if test="${contestInstance.liveStylesheet}">
-            <link rel="stylesheet" type="text/css" href="${contestInstance.liveStylesheet}" media="screen" />
+        <g:if test="${liveContest.liveStylesheet}">
+            <g:if test="${showIntern}">
+                <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'',file:'css')}/${liveContest.liveStylesheet}" media="screen" />
+            </g:if>
+            <g:else>        
+                <link rel="stylesheet" type="text/css" href="${liveContest.liveStylesheet}" media="screen" />
+            </g:else>
         </g:if>
     </head>
     <body>
         <div class="box boxborder" >
-            <h2><g:if test="${contestInstance.contestPrintSubtitle}">${contestInstance.contestPrintSubtitle}</g:if><g:else>${message(code:'fc.contest.liveresults')}</g:else> [${message(code:'fc.provisional')}]</h2>
+            <h2><g:if test="${liveContest.contestPrintSubtitle}">${liveContest.contestPrintSubtitle}</g:if><g:else>${message(code:'fc.contest.liveresults')}</g:else> [${message(code:'fc.provisional')}]</h2>
             <div class="block" id="forms" >
-                <g:if test="${!contestInstance.contestPrintTaskTestDetails}">
+                <g:if test="${!liveContest.contestPrintTaskTestDetails}">
 	                <table class="details">
 	                    <tbody>
 	                        <tr>
-	                            <td>${contestInstance.GetResultTitle(contestInstance.GetResultSettings(),false)}</td>
+	                            <td>${liveContest.getResultTitle}</td>
 	                        </tr>
 	                    </tbody>
 	                </table>
 	            </g:if>
                 <table class="data">
+                    <g:each var="live_crew" in="${liveCrews}">
+                        <g:if test="${!live_tasks}">
+                            <g:set var="live_tasks" value="${live_crew.tasks}"/>
+                        </g:if>
+                    </g:each>
                     <thead>
                         <tr>
                             <th>${message(code:'fc.test.results.position')}</th>
                             <th>${message(code:'fc.crew')}</th>
-                            <g:if test="${contestInstance.contestPrintAircraft}">
+                            <g:if test="${liveContest.contestPrintAircraft}">
                                 <th>${message(code:'fc.aircraft')}</th>
                             </g:if>
-                            <g:if test="${contestInstance.contestPrintTeam}">
+                            <g:if test="${liveContest.contestPrintTeam}">
                                 <th>${message(code:'fc.team')}</th>
                             </g:if>
-                            <g:if test="${contestInstance.contestPrintClass}">
+                            <g:if test="${liveContest.contestPrintClass}">
                                 <th>${message(code:'fc.resultclass')}</th>
                             </g:if>
-                            <g:if test="${contestInstance.contestPrintShortClass}">
+                            <g:if test="${liveContest.contestPrintShortClass}">
                                 <th>${message(code:'fc.resultclass.short.short')}</th>
                             </g:if>
-                            <g:if test="${contestInstance.contestPrintTaskDetails || contestInstance.contestPrintTaskTestDetails}">
-	                            <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
+                            <g:if test="${liveContest.contestPrintTaskDetails || liveContest.contestPrintTaskTestDetails}">
+	                            <g:each var="live_task" in="${live_tasks}">
 				                    <g:set var="detail_num" value="${new Integer(0)}"/>
-				                    <g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">
-				                        <g:if test="${contestInstance.contestPlanningResults && task_instance.IsPlanningTestRun()}">
+				                    <g:if test="${live_task.id in liveContest.getTestDetailsTasksIDs}">
+				                        <g:if test="${liveContest.contestPlanningResults && live_task.isTaskPlanningTest}">
 				                            <g:set var="detail_num" value="${detail_num+1}"/>
 				                        </g:if>
-				                        <g:if test="${contestInstance.contestFlightResults && task_instance.IsFlightTestRun()}">
+				                        <g:if test="${liveContest.contestFlightResults && live_task.isTaskFlightTest}">
 				                            <g:set var="detail_num" value="${detail_num+1}"/>
 				                        </g:if>
-				                        <g:if test="${contestInstance.contestObservationResults && task_instance.IsObservationTestRun()}">
+				                        <g:if test="${liveContest.contestObservationResults && live_task.isTaskObservationTest}">
                                             <g:set var="observation_detail_written" value="${false}"/>
-                                            <g:if test="${contestInstance.contestPrintObservationDetails}">
-                                                <g:if test="${task_instance.IsObservationTestTurnpointRun()}">
+                                            <g:if test="${liveContest.contestPrintObservationDetails}">
+                                                <g:if test="${live_task.isTaskObservationTurnpointTest}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:set var="observation_detail_written" value="${true}"/>
                                                 </g:if>
-                                                <g:if test="${task_instance.IsObservationTestEnroutePhotoRun()}">
+                                                <g:if test="${live_task.isTaskObservationEnroutePhotoTest}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:set var="observation_detail_written" value="${true}"/>
                                                 </g:if>
-                                                <g:if test="${task_instance.IsObservationTestEnrouteCanvasRun()}">
+                                                <g:if test="${live_task.isTaskObservationEnrouteCanvasTest}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:set var="observation_detail_written" value="${true}"/>
                                                 </g:if>
@@ -74,86 +86,89 @@
 				                                <g:set var="detail_num" value="${detail_num+1}"/>
 				                            </g:if>
 				                        </g:if>
-				                        <g:if test="${contestInstance.contestLandingResults && task_instance.IsLandingTestRun()}">
+				                        <g:if test="${liveContest.contestLandingResults && live_task.isTaskLandingTest}">
                                             <g:set var="landing_detail_written" value="${false}"/>
-				                            <g:if test="${contestInstance.contestPrintLandingDetails}">
-				                                <g:if test="${task_instance.IsLandingTest1Run()}">
+				                            <g:if test="${liveContest.contestPrintLandingDetails}">
+				                                <g:if test="${live_task.isTaskLanding1Test}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:set var="landing_detail_written" value="${true}"/>
 				                                </g:if>
-                                                <g:if test="${task_instance.IsLandingTest2Run()}">
+                                                <g:if test="${live_task.isTaskLanding2Test}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:set var="landing_detail_written" value="${true}"/>
                                                 </g:if>
-                                                <g:if test="${task_instance.IsLandingTest3Run()}">
+                                                <g:if test="${live_task.isTaskLanding3Test}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:set var="landing_detail_written" value="${true}"/>
                                                 </g:if>
-                                                <g:if test="${task_instance.IsLandingTest4Run()}">
+                                                <g:if test="${live_task.isTaskLanding4Test}">
                                                     <g:set var="detail_num" value="${detail_num+1}"/>
                                                     <g:set var="landing_detail_written" value="${true}"/>
+                                                </g:if>
+                                                <g:if test="${liveContest.getLandingResultsFactor}">
+                                                    <g:set var="detail_num" value="${detail_num+1}"/>
                                                 </g:if>
 				                            </g:if>
 				                            <g:if test="${!landing_detail_written}">
 				                                <g:set var="detail_num" value="${detail_num+1}"/>
 				                            </g:if>
 				                        </g:if>
-				                        <g:if test="${contestInstance.contestSpecialResults && task_instance.IsSpecialTestRun()}">
+				                        <g:if test="${liveContest.contestSpecialResults && live_task.isTaskSpecialTest}">
 				                            <g:set var="detail_num" value="${detail_num+1}"/>
 				                        </g:if>
 				                    </g:if>
-				                    <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">
+				                    <g:if test="${liveContest.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (live_task.isTaskIncreaseEnabled))}">
 				                        <g:set var="detail_num" value="${detail_num+1}"/>
 				                    </g:if>
-	                                <th colspan="${detail_num}">${task_instance.bestOfName()}</th>
+	                                <th colspan="${detail_num}">${live_task.bestOfName}</th>
 	                            </g:each>
 	                        </g:if>
-	                        <g:if test="${contestInstance.liveShowSummary}">
+	                        <g:if test="${liveContest.liveShowSummary}">
 	                            <th>${message(code:'fc.test.results.summary')}</th>
 	                        </g:if>
             	        </tr>
-                        <g:if test="${contestInstance.contestPrintTaskTestDetails != ""}">
+                        <g:if test="${liveContest.contestPrintTaskTestDetails != ""}">
                             <tr>
                                 <th/>
                                 <th/>
-	                            <g:if test="${contestInstance.contestPrintAircraft}">
+	                            <g:if test="${liveContest.contestPrintAircraft}">
                                     <th/>
 	                            </g:if>
-	                            <g:if test="${contestInstance.contestPrintTeam}">
+	                            <g:if test="${liveContest.contestPrintTeam}">
                                     <th/>
 	                            </g:if>
-	                            <g:if test="${contestInstance.contestPrintClass}">
+	                            <g:if test="${liveContest.contestPrintClass}">
                                     <th/>
 	                            </g:if>
-	                            <g:if test="${contestInstance.contestPrintShortClass}">
+	                            <g:if test="${liveContest.contestPrintShortClass}">
                                     <th/>
 	                            </g:if>
-                                <g:if test="${contestInstance.contestPrintTaskDetails || contestInstance.contestPrintTaskTestDetails}">
-	                                <g:each var="task_instance" in="${contestInstance.GetResultTasks(contestInstance.contestTaskResults)}">
+                                <g:if test="${liveContest.contestPrintTaskDetails || liveContest.contestPrintTaskTestDetails}">
+	                                <g:each var="live_task" in="${live_tasks}">
                                         <g:set var="detail_num" value="${new Integer(0)}"/>
-	                                    <g:if test="${task_instance in contestInstance.GetTestDetailsTasks(contestInstance.contestPrintTaskTestDetails)}">
-			                                <g:if test="${contestInstance.contestPlanningResults && task_instance.IsPlanningTestRun()}">
+	                                    <g:if test="${live_task.id in liveContest.getTestDetailsTasksIDs}">
+			                                <g:if test="${liveContest.contestPlanningResults && live_task.isTaskPlanningTest}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
 			                                    <th>${message(code:'fc.planningresults.planning.short')}</th>
 			                                </g:if>
-			                                <g:if test="${contestInstance.contestFlightResults && task_instance.IsFlightTestRun()}">
+			                                <g:if test="${liveContest.contestFlightResults && live_task.isTaskFlightTest}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
 			                                    <th>${message(code:'fc.flightresults.flight.short')}</th>
 			                                </g:if>
-			                                <g:if test="${contestInstance.contestObservationResults && task_instance.IsObservationTestRun()}">
+			                                <g:if test="${liveContest.contestObservationResults && live_task.isTaskObservationTest}">
                                                 <g:set var="observation_detail_written" value="${false}"/>
-                                                <g:if test="${contestInstance.contestPrintObservationDetails}">
-                                                    <g:if test="${task_instance.IsObservationTestTurnpointRun()}">
+                                                <g:if test="${liveContest.contestPrintObservationDetails}">
+                                                    <g:if test="${live_task.isTaskObservationTurnpointTest}">
                                                         <g:set var="detail_num" value="${detail_num+1}"/>
                                                         <th>${message(code:'fc.observationresults.turnpoint.short')}</th>
                                                         <g:set var="observation_detail_written" value="${true}"/>
                                                     </g:if>
-                                                    <g:if test="${task_instance.IsObservationTestEnroutePhotoRun()}">
+                                                    <g:if test="${live_task.isTaskObservationEnroutePhotoTest}">
                                                         <g:set var="detail_num" value="${detail_num+1}"/>
                                                         <th>${message(code:'fc.observationresults.enroutephoto.short')}</th>
                                                         <g:set var="observation_detail_written" value="${true}"/>
                                                     </g:if>
-                                                    <g:if test="${task_instance.IsObservationTestEnrouteCanvasRun()}">
+                                                    <g:if test="${live_task.isTaskObservationEnrouteCanvasTest}">
                                                         <g:set var="detail_num" value="${detail_num+1}"/>
                                                         <th>${message(code:'fc.observationresults.enroutecanvas.short')}</th>
                                                         <g:set var="observation_detail_written" value="${true}"/>
@@ -164,71 +179,75 @@
 		                                            <th>${message(code:'fc.observationresults.observations.short')}</th>
 		                                        </g:if>
 			                                </g:if>
-			                                <g:if test="${contestInstance.contestLandingResults && task_instance.IsLandingTestRun()}">
+			                                <g:if test="${liveContest.contestLandingResults && live_task.isTaskLandingTest}">
 			                                    <g:set var="landing_detail_written" value="${false}"/>
-                                                <g:if test="${contestInstance.contestPrintLandingDetails}">
-	                                                <g:if test="${task_instance.IsLandingTest1Run()}">
+                                                <g:if test="${liveContest.contestPrintLandingDetails}">
+	                                                <g:if test="${live_task.isTaskLanding1Test}">
 	                                                    <g:set var="detail_num" value="${detail_num+1}"/>
                                                         <th>${message(code:'fc.landingresults.landing1')}</th>
                                                         <g:set var="landing_detail_written" value="${true}"/>
 	                                                </g:if>
-	                                                <g:if test="${task_instance.IsLandingTest2Run()}">
+	                                                <g:if test="${live_task.isTaskLanding2Test}">
 	                                                    <g:set var="detail_num" value="${detail_num+1}"/>
                                                         <th>${message(code:'fc.landingresults.landing2')}</th>
                                                         <g:set var="landing_detail_written" value="${true}"/>
 	                                                </g:if>
-	                                                <g:if test="${task_instance.IsLandingTest3Run()}">
+	                                                <g:if test="${live_task.isTaskLanding3Test}">
 	                                                    <g:set var="detail_num" value="${detail_num+1}"/>
                                                         <th>${message(code:'fc.landingresults.landing3')}</th>
                                                         <g:set var="landing_detail_written" value="${true}"/>
 	                                                </g:if>
-	                                                <g:if test="${task_instance.IsLandingTest4Run()}">
+	                                                <g:if test="${live_task.isTaskLanding4Test}">
 	                                                    <g:set var="detail_num" value="${detail_num+1}"/>
                                                         <th>${message(code:'fc.landingresults.landing4')}</th>
                                                         <g:set var="landing_detail_written" value="${true}"/>
 	                                                </g:if>
                                                 </g:if>
-                                                <g:if test="${!landing_detail_written}">
+                                                <g:if test="${!landing_detail_written || liveContest.getLandingResultsFactor}">
 	                                                <g:set var="detail_num" value="${detail_num+1}"/>
-				                                    <th>${message(code:'fc.landingresults.landing.short')}</th>
+                                                    <g:if test="${liveContest.getLandingResultsFactor}">
+                                                        <th>${message(code:'fc.landingresults.landing.short')} (${liveContest.getLandingResultsFactor})</th>
+                                                    </g:if>
+                                                    <g:else>
+				                                        <th>${message(code:'fc.landingresults.landing.short')}</th>
+				                                    </g:else>
 				                                </g:if>
 			                                </g:if>
-			                                <g:if test="${contestInstance.contestSpecialResults && task_instance.IsSpecialTestRun()}">
+			                                <g:if test="${liveContest.contestSpecialResults && live_task.isTaskSpecialTest}">
                                                 <g:set var="detail_num" value="${detail_num+1}"/>
 			                                    <th>${message(code:'fc.specialresults.other.short')}</th>
 			                                </g:if>
 			                            </g:if>
-                                        <g:if test="${contestInstance.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (task_instance.IsIncreaseEnabled()))}">
+                                        <g:if test="${liveContest.contestPrintTaskDetails && ((detail_num==0) || (detail_num>1) || (live_task.isTaskIncreaseEnabled))}">
 		                                    <th>${message(code:'fc.test.results.summary.short')}</th>
 		                                </g:if>
-	                                    <g:elseif test="${contestInstance.contestPrintTaskTestDetails && (detail_num==0)}">
+	                                    <g:elseif test="${liveContest.contestPrintTaskTestDetails && (detail_num==0)}">
 	                                        <th>${message(code:'fc.test.results.summary.short')}</th>
 	                                    </g:elseif>
 	                                </g:each>
 	                            </g:if>
-	                            <g:if test="${contestInstance.liveShowSummary}">
+	                            <g:if test="${liveContest.liveShowSummary}">
                                     <th/>
                                 </g:if>
                             </tr>
                         </g:if>
                     </thead>
                     <tbody>
-                        <g:if test="${contestInstance.livePositionCalculation == 0}">
-	                        <g:each var="crew_instance" in="${Crew.findAllByContestAndDisabledAndNoContestPositionAndContestPositionNotEqual(contestInstance,false,false,0,[sort:'contestPosition'])}">
-	                            <g:if test="${!crew_instance.IsProvisionalCrew(contestInstance.GetResultSettings())}">
-	                                <g:liveResultLine pos="${crew_instance.contestPosition}" crew="${crew_instance}" contest="${contestInstance}" />
-		                        </g:if>
-	                        </g:each>
+                        <g:if test="${liveContest.livePositionCalculation == 0}">
+                            <g:each var="live_crew" in="${liveCrews}">
+                                <g:if test="${!live_crew.noContestPosition && (live_crew.contestPosition != 0)}">
+                                    <g:liveResultLine pos="${live_crew.contestPosition}" crew="${live_crew}" livecontest="${liveContest}" />
+                                </g:if>
+                            </g:each>
 	                    </g:if>
 	                    <g:else>
-	                        <g:set var="task_instance" value="${Task.get(contestInstance.livePositionCalculation)}"/>
-	                        <g:if test="${task_instance}">
-	                            <g:each var="test_instance" in="${Test.findAllByTask(task_instance,[sort:'taskPosition'])}">
-	                                <g:if test="${!test_instance.crew.IsProvisionalCrew(contestInstance.GetResultSettings())}">
-	                                    <g:liveResultLine pos="${test_instance.taskPosition}" crew="${test_instance.crew}" contest="${contestInstance}" task="${task_instance}" />
-	                                </g:if>
-	                            </g:each>
-	                        </g:if>
+                            <g:each var="live_crew" in="${EvaluationService.GetLiveCrewSort(liveCrews,liveContest.livePositionCalculation)}">
+		                        <g:each var="live_task" in="${live_crew.tasks}">
+		                            <g:if test="${live_task.id == liveContest.livePositionCalculation}">
+		                                <g:liveResultLine pos="${live_task.taskPosition}" crew="${live_crew}" livecontest="${liveContest}" task="${liveContest.livePositionCalculation}" />
+		                            </g:if>
+		                        </g:each>
+		                    </g:each>
 	                    </g:else>
                     </tbody>
                 </table>
@@ -236,7 +255,7 @@
             <table class="foot">
                 <tbody>
                     <tr>
-                        <td class="programinfo">${contestInstance.printOrganizer}</td>
+                        <td class="programinfo">${liveContest.printOrganizer}</td>
                         <g:if test="${BootStrap.global.IsLiveFTPUploadPossible()}">
                             <td class="liveurl">${BootStrap.global.GetLiveFTPURL()}</td>
                         </g:if>

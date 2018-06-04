@@ -1015,7 +1015,7 @@ class Route
                 next_id = route_instance.id
                 set_next = false
             }
-            if (route_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+            if (route_instance.id == this.id) {
                 set_next = true
             }
         }

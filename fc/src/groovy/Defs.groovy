@@ -63,9 +63,8 @@ class Defs
     static final String TaskClassSubID_SpecialTestRun                  = "_specialTestRun"
     static final String TaskClassSubID_SpecialTestTitle                = "_specialTestTitle"
 
-    static final BigDecimal ENROUTE_SHORT_DISTANCE                     = 3.0f  // NM 
-    static final int ENROUTE_SHORT_DISTANCE_COURSE_DIFF                = 89 // max. Kursabweichung in Grad
-    static final int ENROUTE_LONG_DISTANCE_COURSE_DIFF                 = 10 // max. Kursabweichung in Grad
+    static final BigDecimal ENROUTE_MAX_DISTANCE                       = 0.5f  // NM, max. Entfernung eines Strecken-Objektes
+    static final int ENROUTE_MAX_COURSE_DIFF                           = 1 // max. Kursabweichung in Grad
     static final int ENROUTE_CURVED_COURSE_DIFF                        = 1 // Kursabweichung in Grad, ab der krumme Strecke identifiziert wird
     
     static final String FONT_NOTOSANS_REGULAR                          = "NotoSans-Regular.ttf"

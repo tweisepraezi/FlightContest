@@ -513,7 +513,7 @@ class ResultClass
 		Map ret = [:]
 		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
 			for(TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
-				if (taskclass_instance.resultclass == this) {
+				if (taskclass_instance.resultclass.id == this.id) {
 					if (taskclass_instance.planningTestRun) {
 						ret += [Planning:true]
 					}
@@ -647,7 +647,7 @@ class ResultClass
 			return true
 		}
 	    for (Crew crew_instance in Crew.findAllByContestAndDisabled(contest,false,[sort:'classPosition'])) {
-	    	if (crew_instance.resultclass == this) {
+	    	if (crew_instance.resultclass.id == this.id) {
                 for (Task task_instance in contest.GetResultTasks(resultTaskIDs)) {
                 	Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
 					if (test_instance && !test_instance.disabledCrew) {
@@ -708,7 +708,7 @@ class ResultClass
                 next_id = resultclass_instance.id
                 set_next = false
             }
-            if (resultclass_instance.id == this.id) { // BUG: direkter Klassen-Vergleich geht nicht, wenn Route-Instance bereits woanders geändert
+            if (resultclass_instance.id == this.id) {
                 set_next = true
             }
         }

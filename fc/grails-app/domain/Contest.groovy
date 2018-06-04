@@ -1086,6 +1086,18 @@ class Contest
 		return ret
 	}
 	
+    List GetResultTaskIDs(String resultTaskIDs)
+    {
+        List ret = []
+        String task_ids = "$resultTaskIDs,"
+        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+            if (task_ids.contains("task_${task_instance.id},")) {
+                ret += task_instance.id
+            }
+        }
+        return ret
+    }
+    
     List GetTestDetailsTasks(String testDetailsTaskIDs)
     {
         List ret = []
@@ -1093,6 +1105,18 @@ class Contest
         for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
             if (task_ids.contains("tasktestdetails_${task_instance.id},")) {
                 ret += task_instance
+            }
+        }
+        return ret
+    }
+    
+    List GetTestDetailsTasksIDs(String testDetailsTaskIDs)
+    {
+        List ret = []
+        String task_ids = "$testDetailsTaskIDs,"
+        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+            if (task_ids.contains("tasktestdetails_${task_instance.id},")) {
+                ret += task_instance.id
             }
         }
         return ret
@@ -1119,6 +1143,27 @@ class Contest
 		return ret
 	}
 	
+    List GetResultTeamIDs(String resultTeamIDs)
+    {
+        List ret = []
+        String team_ids = "$resultTeamIDs,"
+        if (team_ids.contains("team_all_teams,")) {
+            for (Team team_instance in Team.findAllByContest(this,[sort:"id"])) {
+                ret += team_instance.id
+            }
+        } else {
+            for (Team team_instance in Team.findAllByContest(this,[sort:"id"])) {
+                if (team_ids.contains("team_${team_instance.id},")) {
+                    ret += team_instance.id
+                }
+            }
+        }
+        if (team_ids.contains("team_no_team_crew,")) {
+            ret += null
+        }
+        return ret
+    }
+    
     String GetResultClassNames(String resultClassIDs)
     {
         String s = ""
@@ -1253,5 +1298,29 @@ class Contest
             }
         }
         return false
+    }
+    
+    BigDecimal GetLandingResultsFactor()
+    {
+        BigDecimal landingresults_factor = null
+        printStyle.eachLine {
+            if (it.contains("--landingresults")) {
+                String s = it.substring(it.indexOf("--landingresults")+16).trim()
+                if (s.startsWith(":")) {
+                    s = s.substring(1).trim()
+                    int i = s.indexOf(";")
+                    if (i) {
+                        s = s.substring(0,i).trim()
+                        if (s.isBigDecimal()) {
+                            BigDecimal f = s.toBigDecimal()
+                            if ((f >= 0.0f) && (f <= 1.0f)) {
+                                landingresults_factor = f
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return landingresults_factor
     }
 }
