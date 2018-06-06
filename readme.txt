@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-04.06.2018
+06.06.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de

@@ -149,10 +149,15 @@ enum CoordPresentation
     }
     
     //--------------------------------------------------------------------------
-    static BigDecimal GetDecimalGrad(Map gradDecimalMinute)
+    static BigDecimal GetDecimalGrad(Map gradDecimalMinute, boolean isLatitude)
     {
+        String direction = NORTH
+        if (!isLatitude) {
+            direction = EAST
+        }
+        
         BigDecimal ret = gradDecimalMinute.grad + gradDecimalMinute.minute/60
-        if (gradDecimalMinute.direction == NORTH) {
+        if (gradDecimalMinute.direction == direction) {
             return ret
         } else {
             return -ret

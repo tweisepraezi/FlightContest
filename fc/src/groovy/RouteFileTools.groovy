@@ -424,8 +424,8 @@ class RouteFileTools
                         }
 
                         if (!invalid) {
-                            BigDecimal latitude = CoordPresentation.GetDecimalGrad(lat)
-                            BigDecimal longitude = CoordPresentation.GetDecimalGrad(lon)
+                            BigDecimal latitude = CoordPresentation.GetDecimalGrad(lat,true)
+                            BigDecimal longitude = CoordPresentation.GetDecimalGrad(lon,false)
                             
                             def track = null
                             if (last_latitude != null && last_longitude != null) {
@@ -1090,13 +1090,13 @@ class RouteFileTools
         switch (fileExtension) {
             case TXT_EXTENSION:
                 Map sign_data = ReadImportSignTXTFile(routeInstance, routeFileName, importSign, namePrefix)
-                return add_sign_data(routeInstance, importSign, sign_data)
+                return add_sign_data(routeInstance, importSign, sign_data, true)
             case KML_EXTENSION:
                 Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, namePrefix, false)
-                return add_sign_data(routeInstance, importSign, sign_data)
+                return add_sign_data(routeInstance, importSign, sign_data, false)
             case KMZ_EXTENSION:
                 Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, namePrefix, true)
-                return add_sign_data(routeInstance, importSign, sign_data)
+                return add_sign_data(routeInstance, importSign, sign_data, false)
         }
         return [importedsignnum: 0, filesignnum: 0, valid: false, errors: ""]
     }
@@ -1444,7 +1444,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map add_sign_data(Route routeInstance, ImportSign importSign, Map signData)
+    private static Map add_sign_data(Route routeInstance, ImportSign importSign, Map signData, boolean txtFile)
     {
         if (!signData.valid || signData.invalidlinenum || signData.errors) {
             return [importedsignnum: 0, filesignnum: 0, valid: signData.valid, invalidlinenum: signData.invalidlinenum, errors: signData.errors]
@@ -1482,7 +1482,11 @@ class RouteFileTools
                     if (import_sign.mm) {
                         coordenroutephoto_instance.measureDistance = import_sign.mm_value
                     }
-                    coordenroutephoto_instance.calculateCoordEnrouteValues(routeInstance.enroutePhotoRoute)
+                    if (txtFile) {
+                        coordenroutephoto_instance.calculateCoordEnrouteValues(routeInstance.enroutePhotoRoute)
+                    } else {
+                        coordenroutephoto_instance.calculateCoordEnrouteValues(EnrouteRoute.InputCoord)
+                    }
                     if (coordenroutephoto_instance.save()) {
                         routeInstance.calculateEnroutPhotoViewPos()
                         imported_sign_num++
@@ -1520,7 +1524,11 @@ class RouteFileTools
                     if (import_sign.mm) {
                         coordenroutecanvas_instance.measureDistance = import_sign.mm_value
                     }
-                    coordenroutecanvas_instance.calculateCoordEnrouteValues(routeInstance.enrouteCanvasRoute)
+                    if (txtFile) {
+                        coordenroutecanvas_instance.calculateCoordEnrouteValues(routeInstance.enrouteCanvasRoute)
+                    } else {
+                        coordenroutecanvas_instance.calculateCoordEnrouteValues(EnrouteRoute.InputCoord)
+                    }
                     if (coordenroutecanvas_instance.save()) {
                         routeInstance.calculateEnroutCanvasViewPos()
                         imported_sign_num++
