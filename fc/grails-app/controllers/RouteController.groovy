@@ -549,7 +549,7 @@ class RouteController {
             kmlService.printstart "Export '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
-            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.gpx"
+            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.kmz"
             Map converter = kmlService.ConvertRoute2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false, true) // false - no Print, true - wrEnrouteSign
             if (converter.ok) {
                 String route_file_name = (route.instance.name() + '.kmz').replace(' ',"_")
@@ -826,29 +826,45 @@ class RouteController {
                 gpxService.printstart "Send mail of '${route.instance.name()}' to '${email_to}'"
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
-                String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
+                String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.gpx"
+                String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.kmz"
                 Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
-                if (converter.ok) {
-                    Map email = GetEMailBody(session.lastContest, route.instance)
+                Map kmz_converter = kmlService.ConvertRoute2KMZ(route.instance, webroot_dir, upload_kmz_file_name, true, true) // true - Print, true - wrEnrouteSign
+                if (converter.ok && kmz_converter.ok) {
+                    String route_name = route.instance.printName()
+                    Map email = GetEMailBody(session.lastContest, route_name)
                     
                     String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
                     BufferedWriter job_writer = null
                     try {
+                        String ftp_uploads = ""
+                        ftp_uploads += "file:${webroot_dir+upload_gpx_file_name}"
+                        ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+                        ftp_uploads += "${route_name}.gpx"
+                        ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                        ftp_uploads += "file:${webroot_dir+upload_kmz_file_name}"
+                        ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+                        ftp_uploads += "${route_name}.kmz"
+                        ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                        ftp_uploads += "http://localhost:8080/fc/gpx/startroutegpxviewer?id=${route.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}"
+                        ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+                        ftp_uploads += "${route_name}.htm"
+                        
+                        String remove_files = ""
+                        remove_files += webroot_dir + upload_gpx_file_name
+                        remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                        remove_files += webroot_dir + upload_kmz_file_name
+                        
                         // create email job
                         File job_file = new File(webroot_dir + job_file_name)
                         job_writer = job_file.newWriter()
-                        gpxService.WriteLine(job_writer,session.lastContest.contestUUID) // 1
-                        gpxService.WriteLine(job_writer,"file:${webroot_dir + upload_gpx_file_name}") // 2
-                        gpxService.WriteLine(job_writer,"${route.instance.GetFileName()}.gpx") // 3
+                        gpxService.WriteLine(job_writer,email_to) // 1
+                        gpxService.WriteLine(job_writer,route.instance.GetEMailTitle()) // 2
+                        gpxService.WriteLine(job_writer,email.body) // 3
                         gpxService.WriteLine(job_writer,session.lastContest.contestUUID) // 4
-                        gpxService.WriteLine(job_writer,"http://localhost:8080/fc/gpx/startroutegpxviewer?id=${route.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}") // 5
-                        gpxService.WriteLine(job_writer,"${route.instance.GetFileName()}.htm") // 6
-                        gpxService.WriteLine(job_writer,email_to) // 7
-                        gpxService.WriteLine(job_writer,route.instance.GetEMailTitle()) // 8
-                        gpxService.WriteLine(job_writer,email.body) // 9
-                        gpxService.WriteLine(job_writer,email.link) // 10
-                        gpxService.WriteLine(job_writer,"0") // 11
-                        gpxService.WriteLine(job_writer,webroot_dir + upload_gpx_file_name) // 12
+                        gpxService.WriteLine(job_writer,ftp_uploads) // 5
+                        gpxService.WriteLine(job_writer,remove_files) // 6
+                        gpxService.WriteLine(job_writer,"Route${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${route.instance.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
                         job_writer.close()
                         job_writer = null
                         
@@ -883,18 +899,18 @@ class RouteController {
         }
     }
     
-    private Map GetEMailBody(Contest contestInstance, Route routeInstance)
+    private Map GetEMailBody(Contest contestInstance, String routeName)
     {
         Map ret = [:]
         String s = ""
         
         String contest_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${contestInstance.contestUUID}"
         
-        String view_url = "${contest_dir}/${routeInstance.GetFileName()}.htm"
-        s += """<p>Strecke (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
+        String kmz_url = "${contest_dir}/${routeName}.kmz"
+        s += """<p>Strecke (Google Earth): <a href="${kmz_url}">${kmz_url}</a></p>"""
         
-        String gpx_url = "${contest_dir}/${routeInstance.GetFileName()}.gpx"
-        s += """<p>Strecke (GPX Viewer): <a href="${gpx_url}">${gpx_url}</a></p>"""
+        String view_url = "${contest_dir}/${routeName}.htm"
+        s += """<p>Strecke (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
         
         ret += [body:s,link:view_url]
         

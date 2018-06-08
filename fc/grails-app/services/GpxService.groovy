@@ -2570,6 +2570,7 @@ class GpxService
                 if (login(configFlightContest.ftp.username, configFlightContest.ftp.password)) {
                     if (changeWorkingDirectory(baseDir) || makeDirectory(baseDir)) {
                         if (destFileName && sourceURL) {
+                            setFileType(BINARY_FILE_TYPE)
                             def file = new URL(sourceURL).openStream()
                             if (storeFile(dest_file_name, file)) {
                                 ret.message = getMsg('fc.net.ftp.filecopyok',[sourceURL,dest_file_name],false)
@@ -2612,6 +2613,7 @@ class GpxService
                 if (login(configFlightContest.ftp.username, configFlightContest.ftp.password)) {
                     if (changeWorkingDirectory(baseDir) || makeDirectory(baseDir)) {
                         if (destFileName && sourceURL) {
+                            setFileType(BINARY_FILE_TYPE)
                             def file = new URL(sourceURL).openStream()
                             if (storeFile(dest_file_name, file)) {
                                 ret.message = "getMsg('fc.net.ftp.filecopyok',[sourceURL,dest_file_name])"
@@ -2796,155 +2798,144 @@ class GpxService
     {
         boolean found = false
         String webroot_dir = servletContext.getRealPath("/")
-        String analyze_dir = webroot_dir + Defs.ROOT_FOLDER_JOBS
-        File analyze_dir1 = new File(analyze_dir)
-        analyze_dir1.eachFile() { File file ->
-            if (file.isFile()) {
-                if (!found) {
-                    printstart "BackgroundUpload ${new Date()}"
-                    found = true
-                }
-                
-                printstart "Process '${file}'"
-                
-                LineNumberReader job_file_reader = file.newReader()
-                String line = ""
-                String ftp1_basedir
-                String ftp1_sourceurl
-                String ftp1_destfilename
-                String ftp2_basedir
-                String ftp2_sourceurl
-                String ftp2_destfilename
-                String email_to
-                String email_subject
-                String email_body
-                String save_link
-                String test_id
-                String remove_file
-                while (true) {
-                    line = job_file_reader.readLine()
-                    if (line == null) {
-                        break
+        File lock_file = new File(webroot_dir + Defs.ROOT_FOLDER_JOBS_LOCK)
+        if (!lock_file.exists()) {
+            File analyze_dir1 = new File(webroot_dir + Defs.ROOT_FOLDER_JOBS)
+            analyze_dir1.eachFile() { File file ->
+                if (file.isFile()) {
+                    if (!found) {
+                        printstart "BackgroundUpload ${new Date()}"
+                        found = true
                     }
-                    if (!ftp1_basedir) {
-                        ftp1_basedir = line
-                    } else if (!ftp1_sourceurl) {
-                        ftp1_sourceurl = line
-                    } else if (!ftp1_destfilename) {
-                        ftp1_destfilename = line
-                    } else if (!ftp2_basedir) {
-                        ftp2_basedir = line
-                    } else if (!ftp2_sourceurl) {
-                        ftp2_sourceurl = line
-                    } else if (!ftp2_destfilename) {
-                        ftp2_destfilename = line
-                    } else if (!email_to) {
-                        email_to = line
-                    } else if (!email_subject) {
-                        email_subject = line
-                    } else if (!email_body) {
-                        email_body = line
-                    } else if (!save_link) {
-                        save_link = line
-                    } else if (!test_id) {
-                        test_id = line 
-                    } else if (!remove_file) {
-                        remove_file = line
-                    }
-                }
-                job_file_reader.close()
-                
-                Map ret = [:]
-                boolean test_instance_locked = false
-                
-                if (   ftp1_basedir && ftp1_sourceurl && ftp1_destfilename
-                    && ftp2_basedir && ftp2_sourceurl && ftp2_destfilename
-                    && email_to && email_subject && email_body && save_link && remove_file
-                   ) 
-                {
-                    try {
-                        Test test_instance = null
-                        if (test_id && test_id.toLong()) {
-                            test_instance = Test.get(test_id.toLong())
-                            if (test_instance.isDirty()) {
-                                println "Test instance locked: dirty"
-                                test_instance_locked = true
-                            }
+                    
+                    printstart "Process '${file}'"
+                    
+                    LineNumberReader job_file_reader = file.newReader()
+                    String line = ""
+                    int line_nr = 0
+                    
+                    String email_to // 1
+                    String email_subject // 2
+                    String email_body // 3
+                    String ftp_basedir // 4
+                    String ftp_uploads // 5
+                    String remove_files // 6
+                    String save_links // 7
+                    
+                    while (true) {
+                        line = job_file_reader.readLine()
+                        if (line == null) {
+                            break
                         }
-                        if (!test_instance_locked) {
-                        
-                            // FTP upload gpx
-                            ret = SendFTP2(
-                                grailsApplication.config.flightcontest,ftp1_basedir,ftp1_sourceurl,ftp1_destfilename
-                            )
-            
-                            // FTP upload html
+                        line_nr++
+                        switch (line_nr) {
+                            case 1: 
+                                email_to = line
+                                break
+                            case 2: 
+                                email_subject = line
+                                break
+                            case 3:
+                                email_body = line
+                                break
+                            case 4:
+                                ftp_basedir = line
+                                break
+                            case 5:
+                                ftp_uploads = line
+                                break
+                            case 6:
+                                remove_files = line
+                                break
+                            case 7:
+                                save_links = line
+                                break 
+                        }
+                    }
+                    job_file_reader.close()
+                    
+                    Map ret = [:]
+                    
+                    // FTP uploads
+                    if (ftp_basedir && ftp_uploads) {
+                        for (String ftp_upload in ftp_uploads.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
+                            String[] f = ftp_upload.split(Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR)
                             if (!ret.error) {
                                 ret = SendFTP2(
-                                    grailsApplication.config.flightcontest,ftp2_basedir,ftp2_sourceurl,ftp2_destfilename
-                                    
+                                    grailsApplication.config.flightcontest, ftp_basedir, f[0], f[1]
                                 )
                             }
-                            
-                            if (!ret.error) {
-                                try {
-                                    // Send email
-                                    mailService.sendMail {
-                                        from grailsApplication.config.flightcontest.mail.from
-                                        to NetTools.EMailList(email_to).toArray()
-                                        if (grailsApplication.config.flightcontest.mail.cc) {
-                                            List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,email_to)
-                                            if (cc_list) {
-                                                cc cc_list.toArray()
-                                            }
+                        }
+                    }
+                    
+                    // Send email
+                    if (email_to && email_subject && email_body) {
+                        if (!ret.error) {
+                            try {
+                                mailService.sendMail {
+                                    from grailsApplication.config.flightcontest.mail.from
+                                    to NetTools.EMailList(email_to).toArray()
+                                    if (grailsApplication.config.flightcontest.mail.cc) {
+                                        List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,email_to)
+                                        if (cc_list) {
+                                            cc cc_list.toArray()
                                         }
-                                        subject email_subject
-                                        html email_body
-                                        // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
                                     }
-                                    
-                                    // Save link
-                                    if (test_instance) {
-                                        println "Save link '$save_link'"
-                                        test_instance.flightTestLink = save_link
-                                        test_instance.save()
-                                    }
-                                    
-                                    println "E-Mail send."
-                                } catch (Exception e) {
-                                    println "Error: ${e.getMessage()}" 
-                                    ret.error = true
+                                    subject email_subject
+                                    html email_body
+                                    // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
                                 }
+                                println "E-Mail to '$email_to' send."
+                            } catch (Exception e) {
+                                println "Error: ${e.getMessage()}" 
+                                ret.error = true
                             }
-                            
-                            if (ret.error) {
-                                // Save link
-                                if (test_instance) {
-                                    println "Save link ''"
-                                    test_instance.flightTestLink = ""
-                                    test_instance.save()
+                        }
+                    }
+                        
+                    // Save links
+                    if (save_links) {
+                        if (!ret.error) {
+                            for (String save_link in save_links.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
+                                String[] l = save_link.split(Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR)
+                                if (l[0] == "Test") {
+                                    try {
+                                        Test test_instance = Test.get(l[1])
+                                        if (test_instance.isDirty()) {
+                                            println "Test instance locked: dirty"
+                                            test_instance = null
+                                        }
+                                        if (test_instance) {
+                                            println "Save link '${l[2]}'"
+                                            test_instance.flightTestLink = l[2]
+                                            test_instance.save()
+                                        }
+                                    } catch (Exception e) {
+                                        println "Test instance ${l[1]} locked: ${e.getMessage()}" 
+                                    }
                                 }
                             }
                         }
-                    } catch (Exception e) {
-                        println "Test instance locked: ${e.getMessage()}" 
-                        test_instance_locked = true
                     }
-                } else {
-                    println "No data."
-                    ret.error = true
-                }
-                if (test_instance_locked) {
-                    printdone ""
-                } else if (!ret.error) {
-                    DeleteFile(remove_file)
-                    String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_DONE}/" + file.name
-                    file.renameTo(new File(new_file_name))
-                    printdone new_file_name
-                } else {
-                    String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_ERROR}/" + file.name
-                    file.renameTo(new File(new_file_name))
-                    printerror new_file_name
+                        
+                    // Remove files
+                    if (remove_files) {
+                        if (!ret.error) {
+                            for (String remove_file in remove_files.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
+                                DeleteFile(remove_file)
+                            }
+                        }
+                    }
+                    
+                    if (!ret.error) {
+                        String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_DONE}/" + file.name
+                        file.renameTo(new File(new_file_name))
+                        printdone new_file_name
+                    } else {
+                        String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_ERROR}/" + file.name
+                        file.renameTo(new File(new_file_name))
+                        printerror new_file_name
+                    }
                 }
             }
         }

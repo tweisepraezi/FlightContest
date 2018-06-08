@@ -205,7 +205,7 @@ class GpxController
         Route route_instance = Route.get(params.id)
         if (route_instance) {
             session.printLanguage = params.printLanguage
-            String file_name = "${route_instance.GetFileName()}.gpx"
+            String file_name = "${route_instance.printName()}.gpx"
             String original_filename = route_instance.GetEMailTitle().encodeAsHTML()
             render(view:"ftpgpxviewer",model:[fileName:file_name,originalFilename:original_filename,printLanguage:params.printLanguage,lang:params.printLanguage,showProfiles:params.showProfiles,gpxShowPoints:HTMLFilter.GetList(params.gpxShowPoints)])
         }

@@ -2170,14 +2170,14 @@ class Test
         
         String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${crew.uuid}"
         
-        String view_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.htm"
-        s += """<p>Dein Flug (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
-        
-        String gpx_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.gpx"
-        s += """<p>Dein Flug (GPX Viewer): <a href="${gpx_url}">${gpx_url}</a></p>"""
-        
         String results_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.pdf"
         // TODO: s += """<p>Deine Ergebnisse (PDF Viewer): <a href="${results_url}">${results_url}</a></p>"""
+        
+        String kmz_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.kmz"
+        s += """<p>Dein Flug (Google Earth): <a href="${kmz_url}">${kmz_url}</a></p>"""
+        
+        String view_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.htm"
+        s += """<p>Dein Flug (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
         
         s += """<p>${task.contest.printOrganizer}</p>"""
         

@@ -1195,17 +1195,15 @@ class TaskController {
 
     def emailnavigationresults = {
         def task = fcService.emailnavigationresultsTask(params,session.printLanguage)
-        if (!task.instance) {
-            flash.message = task.message
-            redirect(controller:"contest",action:"tasks")
-        } else if (task.error) {
-            flash.message = task.message
+        flash.message = task.message
+        if (task.error) {
             flash.error = true
-            redirect(action:listresults,id:task.instance.id)
+        }
+        if (!task.instance) {
+            redirect(controller:"contest",action:"tasks")
         } else {
             redirect(action:listresults,id:task.instance.id)
         }
-
     }
 
     def planningtaskformimportextern = {

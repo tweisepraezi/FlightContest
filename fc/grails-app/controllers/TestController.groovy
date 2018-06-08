@@ -1580,57 +1580,11 @@ class TestController
     def sendmail = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            String email_to = test.instance.EMailAddress()
-            gpxService.printstart "Send mail of '${test.instance.crew.name}' to '${email_to}'"
-            
-            // Calculate flight test version
-            if (test.instance.flightTestModified) {
-                test.instance.flightTestVersion++
-                test.instance.flightTestModified = false
-                test.instance.save()
-                gpxService.println "flightTestVersion $test.instance.flightTestVersion of '$test.instance.crew.name' saved."
-            }
-            
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
-            String uuid = UUID.randomUUID().toString()
-            String webroot_dir = servletContext.getRealPath("/")
-            String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-EMAIL.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
-            if (converter.ok && converter.track) {
-                
-                Map email = test.instance.GetEMailBody()
-                String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
-                try {
-                    // create email job
-                    File job_file = new File(webroot_dir + job_file_name)
-                    BufferedWriter job_writer = job_file.newWriter()
-                    gpxService.WriteLine(job_writer,test.instance.crew.uuid) // 1
-                    gpxService.WriteLine(job_writer,"file:${webroot_dir + upload_gpx_file_name}") // 2
-                    gpxService.WriteLine(job_writer,"${test.instance.GetFileName(ResultType.Flight)}.gpx") // 3
-                    gpxService.WriteLine(job_writer,test.instance.crew.uuid) // 4
-                    gpxService.WriteLine(job_writer,"http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}") // 5
-                    gpxService.WriteLine(job_writer,"${test.instance.GetFileName(ResultType.Flight)}.htm") // 6
-                    gpxService.WriteLine(job_writer,email_to) // 7
-                    gpxService.WriteLine(job_writer,test.instance.GetEMailTitle(ResultType.Flight)) // 8
-                    gpxService.WriteLine(job_writer,email.body) // 9
-                    gpxService.WriteLine(job_writer,email.link) // 10
-                    gpxService.WriteLine(job_writer,test.instance.id.toString()) // 11
-                    gpxService.WriteLine(job_writer,webroot_dir + upload_gpx_file_name) // 12
-                    job_writer.close()
-                    
-                    // set sending link
-                    test.instance.flightTestLink = Global.EMAIL_SENDING
-                    test.instance.save()
-                    
-                    flash.message = message(code:'fc.net.mail.prepared',args:[email_to])
-                    gpxService.println "Job '${job_file_name}' created." 
-                } catch (Exception e) {
-                    gpxService.println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')" 
-                }
-                                
-                gpxService.printdone ""
+            Map ret = fcService.SendEmailTest(test.instance, session.printLanguage)
+            flash.message = ret.message
+            if (ret.ok) {
                 if (test.instance.flightTestComplete) {
-                    redirect(controller:"task",action:"startresults",params:[message:flash.message])
+                    redirect(controller:"task",action:"startresults",params:[message:ret.message])
                 } else {
                     if (nexttest_id) {
                         redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])
@@ -1640,13 +1594,7 @@ class TestController
                 }
             } else {
                 flash.error = true
-                if (converter.ok && !converter.track) {
-                    flash.message = message(code:'fc.gpx.noflight',args:[test.instance.crew.name])
-                } else {
-                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[test.instance.crew.name])
-                }
-                gpxService.DeleteFile(upload_gpx_file_name)
-                gpxService.printerror flash.message
+                long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
                 if (nexttest_id) {
                     redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])
                 } else {

@@ -22,6 +22,7 @@ class Defs
     static final String ROOT_FOLDER_JOBS                               = "jobs"
     static final String ROOT_FOLDER_JOBS_DONE                          = "jobs/done"
     static final String ROOT_FOLDER_JOBS_ERROR                         = "jobs/error"
+    static final String ROOT_FOLDER_JOBS_LOCK                          = "jobs/.lock"
     static final String ROOT_FOLDER_FONTS                              = "fonts"
     
     static final String TurnpointID_TimeCheck                          = "timecheck_"
@@ -76,4 +77,8 @@ class Defs
     static final String CONTESTMAPOUTPUT_EXPORTPNGMAP                  = "contestMapOutput_exportPNGMap"
     static final String CONTESTMAPOUTPUT_SHOWONLINEMAP                 = "contestMapOutput_showOnlineMap"
     static final String CONTESTMAPOUTPUT_EXPORTGPX                     = "contestMapOutput_exportGPX"
+    
+    static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
+    static final String BACKGROUNDUPLOAD_SRCDEST_SEPARATOR             = "!"
+    static final String BACKGROUNDUPLOAD_IDLINK_SEPARATOR              = "§"
 }

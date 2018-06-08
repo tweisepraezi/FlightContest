@@ -18,6 +18,7 @@ class FcService
 	def fcExcelImportService
     def servletContext
     def gpxService
+    def kmlService
     def calcService
     
 	static int maxCookieAge = 31536000 // seconds (1 Jahr)
@@ -8756,7 +8757,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map emailnavigationresultsTask(Map params,String printLanguage)
+    Map emailnavigationresultsTask(Map params, String printLanguage)
     {
         printstart "emailnavigationresultsTask"
         Map task = domainService.GetTask(params) 
@@ -8765,76 +8766,121 @@ class FcService
             return task
         }
 
+        String webroot_dir = servletContext.getRealPath("/")
+        String lock_file_name = webroot_dir + Defs.ROOT_FOLDER_JOBS_LOCK
+        File lock_file = new File(lock_file_name)
+        BufferedWriter lock_writer = lock_file.newWriter()
+        lock_writer.close()
+        
         // Send email of all navigationresults
+        int email_num = 0
+        int error_num = 0
         for ( Test test_instance in Test.findAllByTask(task.instance,[sort:"viewpos"])) {
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                 if (test_instance.IsFlightTestRun()) {
                     if (test_instance.IsEMailPossible()) {
-                        String email_to = test_instance.EMailAddress()
-                        printstart "Send mail of '${test_instance.crew.name}' to '${email_to}'"
-                        
-                        // Calculate flight test version
-                        if (test_instance.flightTestModified) {
-                            test_instance.flightTestVersion++
-                            test_instance.flightTestModified = false
-                            test_instance.save()
-                            println "flightTestVersion $test_instance.flightTestVersion of '$test_instance.crew.name' saved."
-                        }
-                        
-                        long nexttest_id = test_instance.GetNextTestID(ResultType.Flight)
-                        String uuid = UUID.randomUUID().toString()
-                        String webroot_dir = servletContext.getRealPath("/")
-                        String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-EMAIL.gpx"
-                        Map converter = gpxService.ConvertTest2GPX(test_instance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
-                        if (converter.ok && converter.track) {
-                            
-                            Map email = test_instance.GetEMailBody()
-                            String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
-                            try {
-                                // create email job
-                                File job_file = new File(webroot_dir + job_file_name)
-                                BufferedWriter job_writer = job_file.newWriter()
-                                gpxService.WriteLine(job_writer,test_instance.crew.uuid) // 1
-                                gpxService.WriteLine(job_writer,"file:${webroot_dir + upload_gpx_file_name}") // 2
-                                gpxService.WriteLine(job_writer,"${test_instance.GetFileName(ResultType.Flight)}.gpx") // 3
-                                gpxService.WriteLine(job_writer,test_instance.crew.uuid) // 4
-                                gpxService.WriteLine(job_writer,"http://localhost:8080/fc/gpx/startftpgpxviewer?id=${test_instance.id}&printLanguage=${printLanguage}&lang=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}") // 5
-                                gpxService.WriteLine(job_writer,"${test_instance.GetFileName(ResultType.Flight)}.htm") // 6
-                                gpxService.WriteLine(job_writer,email_to) // 7
-                                gpxService.WriteLine(job_writer,test_instance.GetEMailTitle(ResultType.Flight)) // 8
-                                gpxService.WriteLine(job_writer,email.body) // 9
-                                gpxService.WriteLine(job_writer,email.link) // 10
-                                gpxService.WriteLine(job_writer,test_instance.id.toString()) // 11
-                                gpxService.WriteLine(job_writer,webroot_dir + upload_gpx_file_name) // 12
-                                job_writer.close()
-                                
-                                // set sending link
-                                test_instance.flightTestLink = Global.EMAIL_SENDING
-                                test_instance.save()
-                                
-                                println "Job '${job_file_name}' created." 
-                            } catch (Exception e) {
-                                println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')" 
-                            }
-                                            
-                            printdone ""
-                        } else {
-                            String error_message = ""
-                            if (converter.ok && !converter.track) {
-                                error_message = message(code:'fc.gpx.noflight',args:[test_instance.crew.name])
-                            } else {
-                                error_message = message(code:'fc.gpx.gacnotconverted',args:[test_instance.crew.name])
-                            }
-                            gpxService.DeleteFile(upload_gpx_file_name)
-                            printerror error_message
+                        email_num++
+                        Map ret = SendEmailTest(test_instance, printLanguage)
+                        if (!ret.ok) {
+                            error_num++
                         }
                     }
                 }
             }
         }
         
+        gpxService.DeleteFile(lock_file_name)
+        
+        if (error_num) {
+            task.message = getMsg('fc.net.mail.prepared.num.error',[email_num,error_num])
+            task.error = true
+        } else {
+            task.message = getMsg('fc.net.mail.prepared.num',[email_num])
+        }
+        
         printdone ""
         return task
+    }
+    
+    //--------------------------------------------------------------------------
+    Map SendEmailTest(Test testInstance, String printLanguage) 
+    {
+        String email_to = testInstance.EMailAddress()
+        printstart "Send mail of '${testInstance.crew.name}' to '${email_to}'"
+        
+        // Calculate flight test version
+        if (testInstance.flightTestModified) {
+            testInstance.flightTestVersion++
+            testInstance.flightTestModified = false
+            testInstance.save()
+            println "flightTestVersion $testInstance.flightTestVersion of '$testInstance.crew.name' saved."
+        }
+        
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/FLIGHT-EMAIL-${uuid}.gpx"
+        String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/FLIGHT-EMAIL-${uuid}.kmz"
+        Map converter = gpxService.ConvertTest2GPX(testInstance, webroot_dir + upload_gpx_file_name, false, true, true, false) // false - no Print, true - Points, true - wrEnrouteSign, false - no gpxExport
+        Map kmz_converter = kmlService.ConvertTest2KMZ(testInstance, webroot_dir, upload_kmz_file_name, false, true) // false - no Print, true - wrEnrouteSign
+        if (converter.ok && converter.track && kmz_converter.ok && kmz_converter.track) {
+            
+            Map email = testInstance.GetEMailBody()
+            String ret_message = ""
+            String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
+            try {
+                String ftp_uploads = ""
+                ftp_uploads += "file:${webroot_dir+upload_gpx_file_name}"
+                ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+                ftp_uploads += "${testInstance.GetFileName(ResultType.Flight)}.gpx"
+                ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                ftp_uploads += "file:${webroot_dir+upload_kmz_file_name}"
+                ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+                ftp_uploads += "${testInstance.GetFileName(ResultType.Flight)}.kmz"
+                ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?id=${testInstance.id}&printLanguage=${printLanguage}&lang=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}"
+                ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+                ftp_uploads += "${testInstance.GetFileName(ResultType.Flight)}.htm"
+                
+                String remove_files = ""
+                remove_files += webroot_dir + upload_gpx_file_name
+                remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                remove_files += webroot_dir + upload_kmz_file_name
+
+                // create email job
+                File job_file = new File(webroot_dir + job_file_name)
+                BufferedWriter job_writer = job_file.newWriter()
+                gpxService.WriteLine(job_writer,email_to) // 1
+                gpxService.WriteLine(job_writer,testInstance.GetEMailTitle(ResultType.Flight)) // 2
+                gpxService.WriteLine(job_writer,email.body) // 3
+                gpxService.WriteLine(job_writer,testInstance.crew.uuid) // 4
+                gpxService.WriteLine(job_writer,ftp_uploads) // 5
+                gpxService.WriteLine(job_writer,remove_files) // 6
+                gpxService.WriteLine(job_writer,"Test${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${testInstance.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
+                job_writer.close()
+                
+                // set sending link
+                testInstance.flightTestLink = Global.EMAIL_SENDING // email.link
+                testInstance.save()
+                
+                ret_message = getMsg('fc.net.mail.prepared',[email_to])
+                println "Job '${job_file_name}' created."
+            } catch (Exception e) {
+                println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')"
+            }
+                            
+            printdone ""
+            return [ok:true, message:ret_message]
+        } else {
+            String error_message = ""
+            if (converter.ok && !converter.track) {
+                error_message = getMsg('fc.gpx.noflight',[testInstance.crew.name])
+            } else {
+                error_message = getMsg('fc.gpx.gacnotconverted',[testInstance.crew.name])
+            }
+            gpxService.DeleteFile(upload_gpx_file_name)
+            printerror error_message
+            return [ok:false, message:error_message]
+        }
     }
     
     //--------------------------------------------------------------------------

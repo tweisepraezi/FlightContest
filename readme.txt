@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-06.06.2018
+08.06.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -70,6 +70,7 @@ Erweiterungen in dieser Version (3.1.1):
       * für eine einzelne Strecke (-> Streckendetails)
       * für alle Navigationsflüge (-> Ergebnisse)
       * für einen einzelnen Navigationsflug (-> Ergebnisse -> Navigationsflug)
+    Der E-Mail-Versand enthält auch die KMZ-Datei. 
 - Beobachtungs-Auswerteformular erweitert
     * Feld zum Notieren der Abgabezeit hinzugefügt
     * Besatzungs- und Schiedsrichter-Unterschriftenfelder hinzugefügt
