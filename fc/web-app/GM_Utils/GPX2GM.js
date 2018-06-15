@@ -1,15 +1,15 @@
 // GPX2GM.js
 // Darstellung von GPS-Daten aus einer GPX-Datei in Google Maps
-// Version 5.18
-// 15. 10. 2016 Jürgen Berkemeier
+// Version 5.21
+// 16. 5. 2018 Jürgen Berkemeier
 // www.j-berkemeier.de
 
 "use strict";
 
 window.JB = window.JB || {};
 window.JB.GPX2GM = window.JB.GPX2GM || {};
-JB.GPX2GM.ver = "5.18";
-JB.GPX2GM.dat = "15. 10. 2016";
+JB.GPX2GM.ver = "5.21";
+JB.GPX2GM.dat = "16. 5. 2018";
 JB.GPX2GM.fname = "GPX2GM.js";
 
 if(typeof(GPXVIEW_Debuginfo)=="undefined") 
@@ -17,7 +17,7 @@ if(typeof(GPXVIEW_Debuginfo)=="undefined")
 							&& (location.search.toLowerCase().search("debuginfo=false")==-1) ;    
 else
 	JB.debuginfo = GPXVIEW_Debuginfo;
-if(JB.debuginfo) JB.gpxview_Start = (new Date()).getTime();
+if(JB.debuginfo) JB.gpxview_Start = Date.now();
 
 (function() {
 	JB.GPX2GM.Path = "";
@@ -36,7 +36,7 @@ if(JB.debuginfo) JB.gpxview_Start = (new Date()).getTime();
 
 window.requestAnimationFrame = window.requestAnimationFrame || function(callback) { window.setTimeout(callback,1) };
 
-JB.Scripte = { GPX2GM_Defs:0, googlemaps:0, gra:0, plot:0 };
+JB.Scripte = { GPX2GM_Defs:0, googlemaps:0, gra:0, plot:0, gmutils:0 };
 
 JB.setgc = function() {  
 	JB.gc = {};
@@ -47,23 +47,31 @@ JB.setgc = function() {
 	JB.gc.showmaptypecontroll = (typeof(Showmaptypecontroll)!="undefined") ? Showmaptypecontroll : true;
 	JB.gc.scrollwheelzoom = (typeof(Scrollwheelzoom)!="undefined") ? Scrollwheelzoom : true;
 	JB.gc.fullscreenbutton = (typeof(Fullscreenbutton)!="undefined") ? Fullscreenbutton : false;
+	JB.gc.currentlocationbutton = (typeof(Currentlocationbutton)!="undefined") ? Currentlocationbutton : false;
+	JB.gc.trafficbutton = (typeof(Trafficbutton)!="undefined") ? Trafficbutton : false;
+	JB.gc.trafficonload = (typeof(Trafficonload)!="undefined") ? Trafficonload : true;
 	JB.gc.legende = (typeof(Legende)!="undefined") ? Legende : true;
 	JB.gc.legende_fnm = (typeof(Legende_fnm)!="undefined") ? Legende_fnm  : true;
 	JB.gc.legende_rr = (typeof(Legende_rr)!="undefined") ? Legende_rr  : true;
 	JB.gc.legende_trk = (typeof(Legende_trk)!="undefined") ? Legende_trk : true;
 	JB.gc.legende_rte = (typeof(Legende_rte)!="undefined") ? Legende_rte : true;
 	JB.gc.legende_wpt = (typeof(Legende_wpt)!="undefined") ? Legende_wpt : true;
+	JB.gc.gpxtracks = (typeof(Gpxtracks)!="undefined") ? Gpxtracks : true; 
+	JB.gc.gpxrouten = (typeof(Gpxrouten)!="undefined") ? Gpxrouten : true; 
+	JB.gc.gpxwegpunkte = (typeof(Gpxwegpunkte)!="undefined") ? Gpxwegpunkte : true;
 	JB.gc.tracks_verbinden = (typeof(Tracks_verbinden)!="undefined") ? Tracks_verbinden : false;    
 	JB.gc.tracks_dateiuebergreifend_verbinden = (typeof(Tracks_dateiuebergreifend_verbinden)!="undefined") ? Tracks_dateiuebergreifend_verbinden : false;
 	if(JB.gc.tracks_dateiuebergreifend_verbinden) JB.gc.tracks_verbinden = true;
+	JB.gc.tracksort = (typeof(Tracksort)!="undefined") ? Tracksort : true;
 	JB.gc.dateitrenner = (typeof(Dateitrenner)!="undefined") ? Dateitrenner : ",";
 	JB.gc.readspeed = (typeof(Readspeed)!="undefined") ? Readspeed : true;
-	JB.gc.speedfaktor = (typeof(Speedfaktor)!="undefined") ? Speedfaktor : 1; // 3.6 bei m/s, 1,609344 bei mph
+	JB.gc.speedfaktor = (typeof(Speedfaktor)!="undefined") ? Speedfaktor : 3.6; // 3.6 bei m/s, 1,609344 bei mph, 1 bei km/h
 	JB.gc.hfaktor = (typeof(Hfaktor)!="undefined") ? Hfaktor : 1;
 	JB.gc.sfaktor = (typeof(Sfaktor)!="undefined") ? Sfaktor : 1;
 	JB.gc.vfaktor = (typeof(Vfaktor)!="undefined") ? Vfaktor : 1;
 	JB.gc.wfaktor = (typeof(Wfaktor)!="undefined") ? Wfaktor : 1;
 	JB.gc.trackover = (typeof(Trackover)!="undefined") ? Trackover : true;
+	JB.gc.trackclick = (typeof(Trackclick)!="undefined") ? Trackclick : true;
 	JB.gc.shwpname = (typeof(Shwpname)!="undefined") ? Shwpname : true;
 	JB.gc.shwpcmt = (typeof(Shwpcmt)!="undefined") ? Shwpcmt : true;
 	JB.gc.shwpdesc = (typeof(Shwpdesc)!="undefined") ? Shwpdesc : false;
@@ -71,6 +79,7 @@ JB.setgc = function() {
 	JB.gc.shwpshadow = (typeof(Shwpshadow)!="undefined") ? Shwpshadow : true;
 	JB.gc.wpcluster = (typeof(Wpcluster)!="undefined") ? Wpcluster : false;
 	JB.gc.bildpfad = (typeof(Bildpfad)!="undefined") ? Bildpfad : "";
+	JB.gc.gpxpfad = (typeof(Gpxpfad)!="undefined") ? Gpxpfad : ""; 
 	JB.gc.bildwegpunkticon = (typeof(Bildwegpunkticon)!="undefined") ? Bildwegpunkticon : "Bild"; // Bei "" Icon aus sym-Tag
 	JB.gc.shtrcmt = (typeof(Shtrcmt)!="undefined") ? Shtrcmt : false;
 	JB.gc.shtrdesc = (typeof(Shtrdesc)!="undefined") ? Shtrdesc : false;
@@ -89,7 +98,9 @@ JB.setgc = function() {
 	JB.gc.shtrvmittwob = (typeof(Shtrvmittwob)!="undefined") ? Shtrvmittwob : false;
 	JB.gc.shtrvmittpace = (typeof(Shtrvmittpace)!="undefined") ? Shtrvmittpace : false;
 	JB.gc.shtrvmittpacewob = (typeof(Shtrvmittpacewob)!="undefined") ? Shtrvmittpacewob : false;
+	JB.gc.movevmin = (typeof(Movevmin)!="undefined") ? Movevmin : 1;
 	JB.gc.arrowtrack = (typeof(Arrowtrack)!="undefined") ? Arrowtrack : false;
+	JB.gc.arrowtrackcol = (typeof(Arrowtrackcol)!="undefined") ? Arrowtrackcol : "";
 	JB.gc.shrtcmt = (typeof(Shrtcmt)!="undefined") ? Shrtcmt : false;
 	JB.gc.shrtdesc = (typeof(Shrtdesc)!="undefined") ? Shrtdesc : false;
 	JB.gc.shtrstart = (typeof(Shtrstart)!="undefined") ? Shtrstart : false;
@@ -97,6 +108,7 @@ JB.setgc = function() {
 	JB.gc.shrtstart = (typeof(Shrtstart)!="undefined") ? Shrtstart : false;
 	JB.gc.shrtziel = (typeof(Shrtziel)!="undefined") ? Shrtziel : false;
 	JB.gc.arrowroute = (typeof(Arrowroute)!="undefined") ? Arrowroute : false
+	JB.gc.arrowroutecol = (typeof(Arrowroutecol)!="undefined") ? Arrowroutecol : "";
 	JB.gc.groesseminibild	= (typeof(Groesseminibild)!="undefined") ? Groesseminibild : 60; // in Pixel, max. 149
 	JB.gc.displaycolor = (typeof(Displaycolor)!="undefined") ? Displaycolor : false;
 	JB.gc.laengen3d = (typeof(Laengen3d)!="undefined") ? Laengen3d : false;
@@ -114,15 +126,15 @@ JB.setgc = function() {
 	JB.gc.plotmarkercol = (typeof(Plotmarkercol)!="undefined") ? Plotmarkercol : "black";
 	JB.gc.profilfillopac = (typeof(Profilfillopac)!="undefined") ? Profilfillopac : 0; //   0 ... 1, 0:aus
 	JB.gc.trcolmod = (typeof(Trcolmod)!="undefined") ? Trcolmod : ""; // h s v hr cad
-	JB.gc.tcols = ["#ff0000","#00ff00","#0000ff","#eeee00","#ff00ff","#00ffff","#000000"]; // Trackfarben in #rrggbb für rot grün blau
-	JB.gc.rcols = ["#800000","#008000","#000080","#808000","#800080","#008080","#808080"]; // Routenfarben
-	JB.gc.ocol = "#000000";   // Track- und Routenfarbe bei Mouseover
+	JB.gc.tcols = (typeof(Tcols)!="undefined") ? Tcols : ["#ff0000","#00ff00","#0000ff","#eeee00","#ff00ff","#00ffff","#000000"]; // Trackfarben in #rrggbb für rot grün blau
+	JB.gc.rcols = (typeof(Rcols)!="undefined") ? Rcols : ["#800000","#008000","#000080","#808000","#800080","#008080","#808080"]; // Routenfarben
+	JB.gc.ocol = (typeof(Ocol)!="undefined") ? Ocol : "#000000";   // Track- und Routenfarbe bei Mouseover
 	JB.gc.owidth = (typeof(Owidth)!="undefined") ? Owidth : 3.0;  // Linienstärke Track und Route bei Mouseover
 	JB.gc.twidth = (typeof(Twidth)!="undefined") ? Twidth : 2.0;  // Linienstärke Track
 	JB.gc.rwidth = (typeof(Rwidth)!="undefined") ? Rwidth : 2.0;  // Linienstärke Route
 	JB.gc.topac = (typeof(Topac)!="undefined") ? Topac : 0.8;   // Transparenz Trackfarbe
 	JB.gc.ropac = (typeof(Ropac)!="undefined") ? Ropac : 0.8;   // Transparenz Routenfarbe
-	JB.gc.popup_Pars = "width=900,height=790,screenX=970,screenY=0,status=yes,scrollbars=yes";
+	JB.gc.popup_Pars = (typeof(Popup_Pars)!="undefined") ? Popup_Pars : "width=900,height=790,screenX=970,screenY=0,status=yes,scrollbars=yes";
 
 	if(JB.debuginfo) {
 		var t = "";
@@ -210,20 +222,21 @@ JB.makeMap = function (ID) {
 	JB.gc.profilflag = false;
 	var profil = {
 		hp:{x:"x",y:"h"},hpt:{x:"t",y:"h"},
-		wp:{x:"t",y:"x"},
+		wpt:{x:"t",y:"x"},
 		sp:{x:"x",y:"s"},spt:{x:"t",y:"s"},
 		vp:{x:"x",y:"v"},vpt:{x:"t",y:"v"},
 		hrp:{x:"x",y:"hr"},hrpt:{x:"t",y:"hr"},
 		cadp:{x:"x",y:"cad"},cadpt:{x:"t",y:"cad"}
 	};
+	if(JB.gc.shtrtabs) profil.hpt.x = profil.spt.x = profil.vpt.x = profil.hrpt.x = profil.cadpt.x = "tabs";
 	profil.hpt.ytext = profil.hp.ytext = strings.alt+" in "+units.alt;
 	profil.spt.ytext = profil.sp.ytext = strings.grade+" in "+strings.grade_unit;
-	profil.vpt.ytext = profil.vp.ytext = strings.speed+"in "+units.speed;
+	profil.vpt.ytext = profil.vp.ytext = strings.speed+" in "+units.speed;
 	profil.hrpt.ytext = profil.hrp.ytext = strings.hr+" in "+strings.hr_unit;
 	profil.cadpt.ytext = profil.cadp.ytext = strings.cad+" in "+strings.cad_unit;
-	profil.wp.ytext = strings.way+" in "+units.way;
+	profil.wpt.ytext = strings.way+" in "+units.way;
 	profil.hp.xtext = profil.vp.xtext = profil.sp.xtext = profil.hrp.xtext = profil.cadp.xtext = strings.way+" in "+units.way;
-	profil.hpt.xtext = profil.vpt.xtext = profil.spt.xtext = profil.hrpt.xtext = profil.cadpt.xtext = profil.wp.xtext = strings.time+" in "+strings.time_unit; 
+	profil.hpt.xtext = profil.vpt.xtext = profil.spt.xtext = profil.hrpt.xtext = profil.cadpt.xtext = profil.wpt.xtext = strings.time; //+" in "+strings.time_unit; 
 	profil.hpt.scale = profil.hp.scale = hscale;
 	profil.spt.scale = profil.sp.scale = sscale;
 	profil.vpt.scale = profil.vp.scale = vscale;
@@ -238,7 +251,7 @@ JB.makeMap = function (ID) {
 			profil.hrpt.pflag &= tr.tflag;
 			profil.cadpt.pflag = profil.cadp.pflag = tr.cadflag;
 			profil.cadpt.pflag &= tr.tflag;
-			profil.wp.pflag = tr.tflag;
+			profil.wpt.pflag = tr.tflag;
 		}
 		else {
 			profil.hp.pflag = profil.sp.pflag = ct==1?tr.hflag:tr.hflagall;
@@ -248,7 +261,7 @@ JB.makeMap = function (ID) {
 			profil.hrpt.pflag &= ct==1?tr.tflag:tr.tflagall;
 			profil.cadpt.pflag = profil.cadp.pflag = ct==1?tr.cadflag:tr.cadflagall;
 			profil.cadpt.pflag &= ct==1?tr.tflag:tr.tflagall;
-			profil.wp.pflag = ct==1?tr.tflag:tr.tflagall;
+			profil.wpt.pflag = ct==1?tr.tflag:tr.tflagall;
 		}
 	}
 
@@ -266,6 +279,7 @@ JB.makeMap = function (ID) {
 		if(JB.Scripte.gra==0) {
 			JB.Scripte.gra = 1;
 			JB.LoadScript(JB.GPX2GM.Path+'gra_canvas.js', function(){ JB.Scripte.gra = 2; });
+//			JB.LoadScript(JB.GPX2GM.Path+'gra_svg.js', function(){ JB.Scripte.gra = 2; });
 			JB.Scripte.plot = 1;
 			JB.LoadScript(JB.GPX2GM.Path+"plot.js", function(){ JB.Scripte.plot = 2; }); 
 			JB.Debug_Info(ID,"Grafikscripte werden geladen",false);
@@ -276,8 +290,8 @@ JB.makeMap = function (ID) {
 		var filenames = [];
 		file = []; 
 		for(var i=0;i<fn.length;i++) {
-			if(typeof fn[i] === "string") file[i] = { name:fn[i] , fileobject:null };
-			else if(typeof fn[i] === "object") file[i] = { name:fn[i].name , fileobject:fn[i] };
+			if(typeof fn[i] === "string") file[i] = { name:JB.gc.gpxpfad+fn[i] , fileobject:null };
+			else if(typeof fn[i] === "object") file[i] = { name:JB.gc.gpxpfad+fn[i].name , fileobject:fn[i] };
 			filenames[i] = file[i].name;
 		}
 		maptype = mpt;
@@ -285,17 +299,17 @@ JB.makeMap = function (ID) {
 
 		var infodiv = document.createElement("div");
 		JB.addClass("JBinfodiv",infodiv);
-		infodiv.innerHTML = strings.wait + "<br>";
+		infodiv.innerHTML = strings.wait.length > 0 ? strings.wait : "<br><img src='" + JB.GPX2GM.Path + "Icons/Loading_icon.gif'>";
 		div.appendChild(infodiv);
 		JB.Debug_Info(id,"Info da",false);
-
 		JB.Debug_Info(id,"Lade "+filenames.join(","),false);
 		JB.lpgpx(file,id,function(daten) {
 			newfile = true;
 			gpxdaten = daten;
 			if(JB.gc.tkorr) getTimezone(gpxdaten);
 			gpxdaten = pict2WP(gpxdaten);
-			gpxdaten = sort_tracks(gpxdaten);
+			gpxdaten = div2WP(gpxdaten);
+			if(JB.gc.tracksort) gpxdaten = sort_tracks(gpxdaten);
 			gpxdaten = wp_dist(gpxdaten);
 			setMapHead();
 			show();
@@ -334,6 +348,7 @@ JB.makeMap = function (ID) {
 		trackpolylines = [];
 		for(i=0;i<routepolylines.length;i++) JB.RemoveElement(routepolylines[i]);
 		routepolylines = [];
+
 	} // Clear
 
 	function wp_dist(daten) { 
@@ -393,35 +408,57 @@ JB.makeMap = function (ID) {
 	function pict2WP(daten) {
 		var pict = document.getElementById(ID+"_img");
 		if(pict) {
+			var geodata = pict.getAttribute("data-geo");
+			if(geodata) {
+				var bounds = {},t,e=false;
+				geodata = geodata.split(",");
+				if(geodata.length==3) {
+					for(var i=0;i<3;i++) {
+						t = geodata[i].split(":");
+						if(t.length == 2) bounds[t[0]] = parseFloat(t[1]);
+						else e = true;
+					}
+				}
+				if(!e) {
+					JB.Debug_Info(id,"Im Bilderbereich Bounds gefunden.",false);
+					var bounds = JB.bounds(bounds.centerlat,bounds.centerlon,bounds.radius);
+					if(bounds.latmin<daten.latmin) daten.latmin=bounds.latmin; if(bounds.latmax>daten.latmax) daten.latmax=bounds.latmax;
+					if(bounds.lonmin<daten.lonmin) daten.lonmin=bounds.lonmin; if(bounds.lonmax>daten.lonmax) daten.lonmax=bounds.lonmax;
+				}
+				else
+					JB.Debug_Info(id,"Fehler bei Bounds in Pict-Div",false);
+			}
 			var im = pict.querySelectorAll("img, a");
 			JB.Debug_Info(id,im.length +" Bilder zum Geotaggen gefunden",false);
 			for(var i=0;i<im.length;i++) {
 				var geodata = im[i].getAttribute("data-geo");
-				geodata = geodata.split(",");
-				if(geodata.length==2) {
-					var wp = {};
-					for(var j=0;j<2;j++) {
-						var par = geodata[j].split(":");
-						if(par.length==2) {
-							wp[par[0]] = parseFloat(par[1]);
+				if(geodata) {
+					geodata = geodata.split(",");
+					if(geodata.length==2) {
+						var wp = {};
+						for(var j=0;j<2;j++) {
+							var par = geodata[j].split(":");
+							if(par.length==2) {
+								wp[par[0]] = parseFloat(par[1]);
+							}
 						}
-					}
-					if(wp.lat && wp.lon) {
-						if(!JB.gc.usegpxbounds) {
-							if(wp.lat<daten.latmin) daten.latmin=wp.lat; if(wp.lat>daten.latmax) daten.latmax=wp.lat;
-							if(wp.lon<daten.lonmin) daten.lonmin=wp.lon; if(wp.lon>daten.lonmax) daten.lonmax=wp.lon;
+						if(wp.lat && wp.lon) {
+							if(!JB.gc.usegpxbounds) {
+								if(wp.lat<daten.latmin) daten.latmin=wp.lat; if(wp.lat>daten.latmax) daten.latmax=wp.lat;
+								if(wp.lon<daten.lonmin) daten.lonmin=wp.lon; if(wp.lon>daten.lonmax) daten.lonmax=wp.lon;
+							}
+							if(im[i].alt) wp.cmt = im[i].alt; 
+							else if (im[i].innerHTML) wp.cmt = im[i].innerHTML;
+							else wp.cmt = "";
+							wp.desc = wp.cmt;
+							wp.link ="";
+							wp.sym = "default";
+							wp.time = 0;
+							if(im[i].src)	wp.name = im[i].src;
+							else if(im[i].href) wp.name = im[i].href;
+							else wp.name = "";
+							daten.wegpunkte.wegpunkt.push(wp);
 						}
-						if(im[i].alt) wp.cmt = im[i].alt; 
-						else if (im[i].innerHTML) wp.cmt = im[i].innerHTML;
-						else wp.cmt = "";
-						wp.desc = wp.cmt;
-						wp.link ="";
-						wp.sym = "default";
-						wp.time = 0;
-						if(im[i].src)	wp.name = im[i].src;
-						else if(im[i].href) wp.name = im[i].href;
-						else wp.name = "";
-						daten.wegpunkte.wegpunkt.push(wp);
 					}
 				}
 			}
@@ -429,6 +466,64 @@ JB.makeMap = function (ID) {
 		}
 		return daten;
 	} // pict2WP
+
+	function div2WP(daten) { 
+		var divs = document.getElementById(ID+"_wp");
+		if(divs) {
+			var geodata = divs.getAttribute("data-geo");
+			if(geodata) {
+				var bounds = {},t,e=false;
+				geodata = geodata.split(",");
+				if(geodata.length==3) {
+					for(var i=0;i<3;i++) {
+						t = geodata[i].split(":");
+						if(t.length == 2) bounds[t[0]] = parseFloat(t[1]);
+						else e = true;
+					}
+				}
+				if(!e) {
+					JB.Debug_Info(id,"Im Wegpunktbereich Bounds gefunden.",false);
+					var bounds = JB.bounds(bounds.centerlat,bounds.centerlon,bounds.radius);
+					if(bounds.latmin<daten.latmin) daten.latmin=bounds.latmin; if(bounds.latmax>daten.latmax) daten.latmax=bounds.latmax;
+					if(bounds.lonmin<daten.lonmin) daten.lonmin=bounds.lonmin; if(bounds.lonmax>daten.lonmax) daten.lonmax=bounds.lonmax;
+				}
+				else
+					JB.Debug_Info(id,"Fehler bei Bounds in WP-Div",false);
+			}
+			var dv = divs.querySelectorAll("div");
+			JB.Debug_Info(id,dv.length +" Divs zum Geotaggen gefunden",false);
+			for(var i=0;i<dv.length;i++) {
+				var geodata = dv[i].getAttribute("data-geo");
+				if(geodata) {
+					geodata = geodata.split(",");
+					if(geodata.length==2) {
+						var wp = {};
+						for(var j=0;j<2;j++) {
+							var par = geodata[j].split(":");
+							if(par.length==2) {
+								wp[par[0]] = parseFloat(par[1]);
+							}
+						}
+						if(wp.lat && wp.lon) {
+							if(!JB.gc.usegpxbounds) {
+								if(wp.lat<daten.latmin) daten.latmin=wp.lat; if(wp.lat>daten.latmax) daten.latmax=wp.lat;
+								if(wp.lon<daten.lonmin) daten.lonmin=wp.lon; if(wp.lon>daten.lonmax) daten.lonmax=wp.lon;
+							}
+							wp.cmt = dv[i].innerHTML?dv[i].innerHTML:"";
+							wp.desc = wp.cmt;
+							wp.link ="";
+							wp.sym = dv[i].getAttribute("data-icon")?dv[i].getAttribute("data-icon"):"default" ;
+							wp.time = 0;
+							wp.name = dv[i].getAttribute("data-name")?dv[i].getAttribute("data-name"):"";
+							daten.wegpunkte.wegpunkt.push(wp);
+						}
+					}
+				}
+			}
+			daten.wegpunkte.anzahl = daten.wegpunkte.wegpunkt.length;
+		}
+		return daten;
+	} // div2WP
 
 	var chkwpt,chktrk,chkrt;
 	function setMapHead() {
@@ -538,7 +633,7 @@ JB.makeMap = function (ID) {
 				}
 			}); 
 		}
-		JB.Wait(id,["googlemaps"],function() {
+		JB.Wait(id,["googlemaps","gmutils"],function() {
 			if(!Map) {
 				if(typeof(JB.GPX2GM.callback)=="function") 
 					JB.GPX2GM.callback({id:id,type:"Map_v",gpxdaten:gpxdaten,profil:profil,Map:Map});
@@ -718,7 +813,8 @@ JB.makeMap = function (ID) {
 				col: routei.farbe,
 				ocol: JB.gc.ocol,
 				opac: JB.gc.ropac,
-				width: JB.gc.rwidth
+				width: JB.gc.rwidth,
+				owidth: JB.gc.owidth
 			}
 			var rts = Map.Polyline(routei,controls,"Route");
 			for(var r=0;r<rts.length;r++) routepolylines.push(rts[r]);
@@ -836,7 +932,8 @@ JB.makeMap = function (ID) {
 				col: tracki.farbe,
 				ocol: JB.gc.ocol,
 				opac: JB.gc.topac,
-				width: JB.gc.twidth
+				width: JB.gc.twidth,
+				owidth: JB.gc.owidth
 			};
 			var trs;
 			if(colmodflag) {
@@ -866,6 +963,7 @@ JB.makeMap = function (ID) {
 	
 	function getTimezone(gpxdaten) {
 		var t,lat,lon,track=gpxdaten.tracks.track,wp=gpxdaten.wegpunkte.wegpunkt,daten,tzurl;
+		var count = gpxdaten.tracks.anzahl;
 		for(var i=0;i<gpxdaten.tracks.anzahl;i++) {
 			( function(tnr) { 
 				tzurl ="https://maps.googleapis.com/maps/api/timezone/json?location=";
@@ -884,6 +982,8 @@ JB.makeMap = function (ID) {
 							for(var j=0;j<gpxdaten.tracks.track[tnr].daten.length;j++) 
 								gpxdaten.tracks.track[tnr].daten[j].tabs += ( tz.dstOffset + tz.rawOffset ) / 3600;
 						}
+						count --;
+						if(!count && JB.gc.shtrtabs) show();
 					}
 				})},tnr*110);
 			} )(i);
@@ -983,7 +1083,10 @@ JB.makeMap = function (ID) {
 				profil[p].diag.labelcol = JB.gc.plotlabelcol;
 				profil[p].diag.markercol = JB.gc.plotmarkercol;
 				profil[p].diag.fillopac = JB.gc.profilfillopac;
-				if(p.search("pt")>-1) profil[p].diag.xscale60 = true;
+				if(p.search("pt")>-1) {
+					if(JB.gc.shtrtabs) profil[p].diag.xscaletime = "absolute";
+					else               profil[p].diag.xscaletime = "relative";
+				}
 			}
 		}
 		for(var p in profil) {
@@ -1006,8 +1109,9 @@ JB.makeMap = function (ID) {
 							pr.diag.scale(pr.scale);
 							if(!JB.Scaling.hardscaling) pr.diag.scale(daten); 
 						}
-						else
-							pr.diag.scale(daten);                  
+						else {
+							pr.diag.scale(daten);
+						}							
 					}
 				}
 			}
@@ -1025,7 +1129,9 @@ JB.makeMap = function (ID) {
 				profil.setflags(tracki,-1);
 				for(var p in profil) {
 					var pr = profil[p];
-					if(pr.ele && pr.pflag) pr.diag.plot(tracki.daten,tracki.farbe);   
+					if(pr.ele && pr.pflag) {
+						pr.diag.plot(tracki.daten,tracki.farbe);
+					}						
 				}
 			}
 		}
@@ -1180,10 +1286,9 @@ JB.CheckBoxGroup = function(id,Texte,Label,Farbe,def_stat,clickFunc,clickFunc2) 
 } // JB.CheckBoxGroup
 
 JB.sec2string = function(sec,off) {
-	var d = new Date(sec*1000 + off*1000);
-	return d.getUTCDate()+".&nbsp;"+(d.getUTCMonth()+1)+".&nbsp;"+d.getUTCFullYear()+",&nbsp;"+d.getUTCHours()+":"+(d.getUTCMinutes()<10?"0":"")+d.getUTCMinutes()+(JB.gc.tkorr ? "" : " UTC");
-//	return (new Date(sec*1000 + off*1000)).toLocaleString('X-X',{timeZone:'UTC'});
-} // sec2string
+	if(JB.gc.doclang=="de") return (new Date(sec*1000 + off*1000)).toLocaleString('de-de',{timeZone:'UTC'});
+	else return (new Date(sec*1000 + off*1000)).toLocaleString('en-en',{timeZone:'UTC'});
+} // JB.sec2string
 
 JB.Zeitstring = function(sekunden) {
 	var h=0,m=0,s=Math.floor(sekunden);
@@ -1194,17 +1299,34 @@ JB.Zeitstring = function(sekunden) {
 	return h+":"+m+":"+s+"h"; 
 } // JB.Zeitstring
 
+JB.bounds = function(center_lat,center_lon,radius) {
+// https://de.wikipedia.org/wiki/Wegpunkt-Projektion
+	var d = radius/6378.137;
+	var fak = Math.PI/180;
+	var lat = center_lat * fak;
+	var lon = center_lon * fak;
+	var sind = Math.sin(d);
+	var cosd = Math.cos(d);
+	var sinlat = Math.sin(lat);
+	var coslat = Math.cos(lat);
+	var latmin = (Math.asin(sinlat*cosd - coslat*sind))/fak;
+	var latmax = (Math.asin(sinlat*cosd + coslat*sind))/fak;
+	var lonmin = (lon - Math.asin(sind/coslat))/fak;
+	var lonmax = (lon + Math.asin(sind/coslat))/fak;
+	return {latmin:latmin,latmax:latmax,lonmin:lonmin,lonmax:lonmax};
+} // JB.bounds
+
 JB.Debug_Info = function(id,Infotext,errorflag) {
 	if(JB.debuginfo) {
-		var dt = ((new Date()).getTime()-JB.gpxview_Start).toString(10);
+		var dt = (Date.now()-JB.gpxview_Start).toString(10);
 		while(dt.length<6) dt = "0"+dt;
 		if(typeof(console) != "undefined" && typeof(console.log) == "function") 
 			console.log(dt+" Map "+id+": "+Infotext.replace(/<br>/g,"\n").replace(/&nbsp;/g,"  "));
 	}
 	if(errorflag) {
 		if(typeof(console) != "undefined" && typeof(console.error) == "function")
-			console.error(Infotext);
-		else	
+			console.error(id+": "+Infotext);
+		// else	
 			alert(Infotext);
 	}
 } // Debug_Info
@@ -1224,862 +1346,58 @@ JB.Wait = function(id,scripte,callback,ct) {
 	else JB.Debug_Info(id+" Wait",Text+" nicht geladen.",false);
 } // Wait
 
-// gmutils.js
-// Version 1.18
-// 12. 9. 2016
-// www.j-berkemeier.de
-JB.Map = function(mapcanvas,id) {
-	var dieses = this;
-	dieses.id = id;
-	dieses.mapcanvas = mapcanvas;
-	this.cluster_zoomhistory = [];
-	// Optionen für die Map
-	var large = mapcanvas.offsetHeight>190 && mapcanvas.offsetWidth>200;
-	var myOptions = {
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		panControl: large,
-		zoomControl: large,
-		zoomControlOptions: {
-			style: google.maps.ZoomControlStyle[JB.gc.largemapcontrol?"LARGE":"SMALL"]
-		},
-		mapTypeControl: large & JB.gc.showmaptypecontroll,
-		mapTypeControlOptions: {
-			style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-			position: google.maps.ControlPosition.TOP_RIGHT,
-			mapTypeIds: [google.maps.MapTypeId.ROADMAP, google.maps.MapTypeId.SATELLITE, google.maps.MapTypeId.HYBRID, google.maps.MapTypeId.TERRAIN, 'osm','osmde','cycle','landscape','nomap']
-		},
-		scaleControl: large,
-		streetViewControl: large,
-		overviewMapControl: JB.gc.overviewmapcontrol,
-		overviewMapControlOptions: { opened: true  },
-		scrollwheel: JB.gc.scrollwheelzoom
-	};
-	// Map anlegen und ausrichten
-	this.map = new google.maps.Map(mapcanvas,myOptions);
-	// OSM-Karten
-	var osmmap = new google.maps.ImageMapType({
-		getTileUrl: function(ll, z) {
-			var X = ll.x % (1 << z); if(X<0) X += (1 << z);
-			return "http://tile.openstreetmap.org/" + z + "/" + X + "/" + ll.y + ".png";
-		},
-		tileSize: new google.maps.Size(256, 256),
-		isPng: true,
-		maxZoom: 19,
-		name: "OSM",
-		alt: "Open Streetmap"
-	});
-	var osmmapde = new google.maps.ImageMapType({
-		getTileUrl: function(ll, z) {
-			var X = ll.x % (1 << z); if(X<0) X += (1 << z);
-			return "http://c.tile.openstreetmap.de/tiles/osmde/" + z + "/" + X + "/" + ll.y + ".png";
-		},
-		tileSize: new google.maps.Size(256, 256),
-		isPng: true,
-		maxZoom: 19,
-		name: "OSM DE",
-		alt: "Open Streetmap German Style"
-	});
-	var osmcycle = new google.maps.ImageMapType({
-		getTileUrl: function(ll, z) {
-			var X = ll.x % (1 << z); if(X<0) X += (1 << z);
-			return "http://c.tile.opencyclemap.org/cycle/" + z + "/" + X + "/" + ll.y + ".png";
-		},
-		tileSize: new google.maps.Size(256, 256),
-		isPng: true,
-		maxZoom: 19,
-		name: "OSM Cycle",
-		alt: "Open Streetmap Cycle"
-	});
-  var osmlandscape = new google.maps.ImageMapType({
-    getTileUrl: function(ll, z) {
-      var X = ll.x % (1 << z); if(X<0) X += (1 << z);
-      return "http://c.tile3.opencyclemap.org/landscape/" + z + "/" + X + "/" + ll.y + ".png";
-    },
-    tileSize: new google.maps.Size(256, 256),
-    isPng: true,
-    maxZoom: 19,
-    name: "OSM\u00A0Landscape",
-    alt: "Open Streetmap Landscape"
-  });
-  var grau = new google.maps.ImageMapType({
-    getTileUrl: function(ll, z) {
-      return JB.GPX2GM.Path+"Icons/Grau256x256.png";
-    },
-    tileSize: new google.maps.Size(256, 256),
-    isPng: true,
-    maxZoom: 19,
-    name: "Keine Karte",
-    alt: "Keine Karte"
-  });
-	if(JB.gc.doclang!="de") grau.alt = grau.name = "No Map";
-	this.maptypes = {
-		Karte: google.maps.MapTypeId.ROADMAP,
-		Satellit: google.maps.MapTypeId.SATELLITE,
-		Hybrid: google.maps.MapTypeId.HYBRID,
-		Oberflaeche: google.maps.MapTypeId.TERRAIN,
-		OSM: "osm",
-		OSMDE: "osmde",
-		OSM_Cycle: "cycle",
-		OSM_Landscape: "landscape",
-		Keine_Karte: "nomap"
-	};
-	// OSM-Karten hinzufügen
-	this.map.mapTypes.set('osm', osmmap);
-	this.map.mapTypes.set('osmde', osmmapde);
-	this.map.mapTypes.set('cycle', osmcycle);
-	this.map.mapTypes.set('landscape', osmlandscape);
-	this.map.mapTypes.set('nomap', grau);
-	// Copyright für OSM
-	var osmcopyright = document.createElement('div');
-	osmcopyright.id = 'copyright-control';
-	osmcopyright.style.fontSize = '10px';
-	osmcopyright.style.fontFamily = 'Arial, sans-serif';
-	osmcopyright.style.whiteSpace = 'nowrap';
-	osmcopyright.index = 1; 
-	osmcopyright.style.color = "black";
-//	try { osmcopyright.style.backgroundColor = "rgba(255,255,255,0.5)"; } catch(e) { }; // wegen IE 8 
-	osmcopyright.style.backgroundColor = "rgba(255,255,255,0.5)";
-	this.map.controls[google.maps.ControlPosition.BOTTOM_RIGHT].push(osmcopyright);
-	dieses.maxzoom = 19;
-	google.maps.event.addListener(this.map, "maptypeid_changed", function() {
-		var maptype = dieses.map.getMapTypeId();
-		if (dieses.map.getMapTypeId() == 'osm') {
-			osmcopyright.innerHTML = 'Map data &copy; <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>';
-			dieses.maxzoom = 19;
-		} 
-		else if (dieses.map.getMapTypeId() == 'osmde') {
-			osmcopyright.innerHTML = 'Map data &copy; <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> and contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>';
-			dieses.maxzoom = 19;
-		} 
-		else if (dieses.map.getMapTypeId() == 'cycle') {
-			osmcopyright.innerHTML = 'Map data &copy; <a href="http://www.opencyclemap.org/" target="_blank">OpenCycleMap</a> and contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>';
-			dieses.maxzoom = 18;
-		} 
-		else if (dieses.map.getMapTypeId() == 'landscape') {
-			osmcopyright.innerHTML = 'Map data &copy; <a href="http://www.opencyclemap.org/" target="_blank">OpenLandscapeMap</a> and contributors <a href="http://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>';
-			dieses.maxzoom = 18;
-		} 
-		else if(maptype == 'satellite' || maptype == "hybrid") {
-			dieses.maxzoom = 19;
-			var pos = new google.maps.LatLng(0.0,0.0);
-			if(dieses.map.getCenter()) pos = dieses.map.getCenter();
-			var mzs = new google.maps.MaxZoomService();
-			mzs.getMaxZoomAtLatLng(pos, function(MZR) { if(MZR.status=="OK") dieses.maxzoom = MZR.zoom; });
-		}
-		else {
-			osmcopyright.innerHTML = '';
-			dieses.maxzoom = 21;
-		}
-	});
-	var jbcp = document.createElement('a');
-	jbcp.href='http://www.j-berkemeier.de/GPXViewer';
-	jbcp.innerHTML = "JB";
-	jbcp.style.color = "white";
-	jbcp.style.textDecoration = "none"; 
-	jbcp.style.margin = " 0 0 0 8px";
-	jbcp.style.fontSize = '10px';
-	jbcp.style.fontFamily = 'Arial, sans-serif';
-	jbcp.title = "GPX Viewer " + JB.GPX2GM.ver;
-	this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(jbcp);
-	// Button für Full Screen / normale Größe
-	if(JB.gc.fullscreenbutton) {
-		var fsbdiv = document.createElement("div");
-		fsbdiv.style.padding = "7px 7px 7px 0";
-		fsbdiv.style.cursor = 'pointer';
-		var fsbim = document.createElement("img");
-		fsbim.src = JB.GPX2GM.Path+"Icons/lupe+.png";
-		fsbim.title = "Full Screen";
-		fsbim.large = false;
-		var ele = mapcanvas.parentNode;
-		fsbdiv.onclick = fsbdiv.ontouchstart = function() {
-			if(fsbim.large) {
-				document.body.style.overflow = "";
-				fsbim.src = JB.GPX2GM.Path+"Icons/lupe+.png";
-				fsbdiv.title = fsbim.title = fsbim.alt = "Full Screen";
-				ele.style.left = ele.oleft + "px";
-				ele.style.top = ele.otop + "px";
-				ele.style.width = ele.owidth + "px";
-				ele.style.height = ele.oheight + "px";
-        ele.style.margin = ele.omargin;
-        ele.style.padding = ele.opadding;
-				window.setTimeout(function() {
-					JB.removeClass("JBfull",ele);
-					ele.style.position = ele.sposition; 
-					ele.style.left = ele.sleft;
-					ele.style.top = ele.stop;
-					ele.style.width = ele.swidth;
-					ele.style.height = ele.sheight;
-					ele.style.zIndex = ele.szindex;
-				},1000);
-			}
-			else {
-				document.body.style.overflow = "hidden";
-				fsbim.src = JB.GPX2GM.Path+"Icons/lupe-.png";
-				if(JB.gc.doclang=="de") fsbdiv.title = fsbim.title = fsbim.alt = "Normale Gr\u00F6\u00dfe";
-				else                    fsbdiv.title = fsbim.title = fsbim.alt = "Normal Size";
-				var scrollY = 0;
-				if(document.documentElement.scrollTop && document.documentElement.scrollTop!=0)  scrollY = document.documentElement.scrollTop;
-				else if(document.body.scrollTop && document.body.scrollTop!=0)  scrollY = document.body.scrollTop;
-				else if(window.scrollY) scrollY = window.scrollY;
-				else if(window.pageYOffset) scrollY = window.pageYOffset;
-				var rect = JB.getRect(ele);
-			  ele.oleft = rect.left;
-				ele.otop =  rect.top - scrollY;
-				ele.owidth = rect.width;
-				ele.oheight = rect.height;
-				ele.szindex = ele.style.zIndex;
-				ele.sposition = ele.style.position;
-        ele.omargin = ele.style.margin;
-        ele.opadding = ele.style.padding;
-				ele.sleft = ele.style.left;
-				ele.stop = ele.style.top;
-				ele.swidth = ele.style.width;
-				ele.sheight = ele.style.height;
-				ele.style.position = "fixed";
-				ele.style.left = ele.oleft+"px";
-				ele.style.top = ele.otop+"px";
-				ele.style.width = ele.owidth+"px";
-				ele.style.height = ele.oheight+"px";
-				ele.style.zIndex = "1001";
-				window.setTimeout(function() {
-					JB.addClass("JBfull",ele);
-					ele.style.width = "100%";
-					ele.style.height = "100%";
-					ele.style.left = "0px";
-					ele.style.top = "0px";
-          ele.style.margin = "0px";
-          ele.style.padding = "0px";
-				},100);
-			}
-			fsbim.large = !fsbim.large;
-		};
-		fsbdiv.appendChild(fsbim);
-		fsbdiv.index = 0;
-		this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(fsbdiv);
-	}
-	// Scalieren nach MAP-Resize
-	dieses.zoomstatus = {};
-	dieses.zoomstatus.iszoomed = false;
-	dieses.zoomstatus.zoom_changed = function() {
-		dieses.zoomstatus.iszoomed = true; 
-		dieses.zoomstatus.level = dieses.map.getZoom();
-		dieses.zoomstatus.w = mapcanvas.offsetWidth;
-		dieses.zoomstatus.h = mapcanvas.offsetHeight;
-	}
-	// var tlev ... -> rescale
-	google.maps.event.addListener(this.map, "dragend", function() {
-		dieses.mapcenter = dieses.map.getCenter();
-	});
-	JB.onresize(mapcanvas,function(w,h) {
-		if(w*h==0) return;
-		google.maps.event.trigger(dieses.map, 'resize');
-		dieses.map.setCenter(dieses.mapcenter);
-		large = h>190 && w>200;
-		myOptions = {
-			panControl: large,
-			zoomControl: large,
-			mapTypeControl: large,
-			scaleControl: large,
-			streetViewControl: large,
-		};
-		dieses.map.setOptions(myOptions);
-		google.maps.event.removeListener(dieses.zoomstatus.zcev);
-		if(dieses.zoomstatus.iszoomed) { 
-			var dz = Math.round(Math.min(Math.log(w/dieses.zoomstatus.w)/Math.LN2,Math.log(h/dieses.zoomstatus.h)/Math.LN2));
-			dieses.map.setZoom(dieses.zoomstatus.level+dz);
-		}
-		else {
-			if(dieses.bounds){
-				dieses.map.fitBounds(dieses.bounds);
-				dieses.map.setCenter(dieses.mapcenter);
-				dieses.zoomstatus.level = dieses.map.getZoom();
-				dieses.zoomstatus.w = w;
-				dieses.zoomstatus.h = h;
-			}
-		}
-		dieses.zoomstatus.zcev = google.maps.event.addListener(dieses.map, "zoom_changed", dieses.zoomstatus.zoom_changed);
-	});
-} // JB.Map
-
-JB.Map.prototype.addMapEvent = function(event,fkt) {	
-	return google.maps.event.addListener(this.map,event,fkt );
-} // addMapEvent
-
-JB.Map.prototype.addMapEventOnce = function(event,fkt) {	
-	return google.maps.event.addListenerOnce(this.map,event,fkt );
-} // addMapEventOnce
-
-JB.Map.prototype.removeEvent = function(eventid) {	
-	google.maps.event.removeListener(eventid);
-} // removeMapEvent
-
-JB.Map.prototype.getZoom = function() {
-	return {zoom:this.map.getZoom(),maxzoom:this.maxzoom};
-}
-
-JB.Map.prototype.change = function(maptype) {
-	var mt = this.maptypes[maptype]?this.maptypes[maptype]:google.maps.MapTypeId.SATELLITE;
-	this.map.setMapTypeId(mt);
-} // change
-
-JB.Map.prototype.getPixelPerKM = function(gpxdaten) {
-	var bounds = this.map.getBounds();
-	if(bounds) {
-		var latlon1 = new google.maps.LatLng(bounds.getNorthEast().lat(),bounds.getNorthEast().lng());
-		var latlon2 = new google.maps.LatLng(bounds.getSouthWest().lat(),bounds.getSouthWest().lng());
-		var korrfak = 1;
-	}
-	else {
-		JB.Debug_Info(" getPixelPerKM","Bounds konnten nicht gelesen werden, nehme Min/Max-Werte aus GPX-Daten",false);
-		var latlon1 = new google.maps.LatLng(gpxdaten.latmax,gpxdaten.lonmax);
-		var latlon2 = new google.maps.LatLng(gpxdaten.latmin,gpxdaten.lonmin);
-		var korrfak = 0.7;
-	}
-	JB.entf.init(latlon1.lat(),latlon1.lng(),0);
-	var dist = JB.entf.rechne(latlon2.lat(),latlon2.lng(),0);
-	JB.entf.init(latlon1.lat(),latlon1.lng(),0);
-	var xdist = JB.entf.rechne(latlon1.lat(),latlon2.lng(),0);
-	JB.entf.init(latlon1.lat(),latlon1.lng(),0);
-	var ydist = JB.entf.rechne(latlon2.lat(),latlon1.lng(),0);
-	var w = this.mapcanvas.offsetWidth;
-	var h = this.mapcanvas.offsetHeight;
-	var wh = Math.sqrt(w*w+h*h);
-	var ppk = Math.min(w/xdist,h/ydist);
-	ppk = Math.min(ppk,wh/dist);
-	ppk *= korrfak;
-	return ppk;
-} // getPixelPerKM
-
-JB.Map.prototype.rescale = function(gpxdaten) {
-  var dieses = this;
-	var sw = new google.maps.LatLng(gpxdaten.latmin,gpxdaten.lonmin);
-	var ne = new google.maps.LatLng(gpxdaten.latmax,gpxdaten.lonmax);
-	this.bounds = new google.maps.LatLngBounds(sw,ne);
-	this.map.fitBounds(this.bounds);
-	google.maps.event.removeListener(dieses.zoomstatus.zcev);
-	dieses.zoomstatus.iszoomed = false;	
-	var tlev = google.maps.event.addListener(this.map, "tilesloaded", function() { // für Scalierung nach MAP-Resize
-		dieses.mapcenter = dieses.map.getCenter();
-		dieses.zoomstatus.level = dieses.map.getZoom();
-		dieses.zoomstatus.w = dieses.mapcanvas.offsetWidth;
-		dieses.zoomstatus.h = dieses.mapcanvas.offsetHeight;
-		google.maps.event.removeListener(tlev);
-		dieses.zoomstatus.zcev = google.maps.event.addListener(dieses.map, "zoom_changed", dieses.zoomstatus.zoom_changed);
-	});
-} // rescale
-
-JB.Map.prototype.gminfowindow = function(infotext,coord) {
-	var infowindow = new google.maps.InfoWindow({ });
-	//infowindow.setOptions({maxWidth:Math.round(this.mapcanvas.offsetWidth)*0.7});
-	infowindow.setContent(infotext);
-	infowindow.setPosition(new google.maps.LatLng(coord.lat,coord.lon));
-	infowindow.open(this.map);
-}
-
-JB.Map.prototype.simpleLine = function(slat,slon,elat,elon) {
-	var options = {
-		path: [new google.maps.LatLng(slat,slon),new google.maps.LatLng(elat,elon)],
-		strokeColor: "#000",
-		strokeOpacity: 1,
-		strokeWeight: 1
-	}
-	var line = new google.maps.Polyline(options);
-	line.setMap(this.map);
-	return line;
-} // simpleLine
-
-JB.Map.prototype.Polyline = function(daten,controls,route_oder_track,cols) {
-	var dieses = this;
-	var coords = daten.daten;
-	var npt = coords.length, latlng = [], infofenster, line=[];
-	var cbtype;
-	if(route_oder_track == "Track") cbtype = "click_Track";
-	else if(route_oder_track == "Route") cbtype = "click_Route";
-	else cbtype = "?";
-	var infotext = daten.info;
-	for(var i=0;i<npt;i++) latlng.push(new google.maps.LatLng(coords[i].lat,coords[i].lon));
-	var options = {
-		strokeOpacity: controls.opac,
-		strokeWeight: controls.width
-	}
-	var line_i;
-	if(cols && cols.length) {
-		for(var i=0;i<npt-1;i++) {
-			options.strokeColor = cols[i];
-			options.path = [new google.maps.LatLng(coords[i].lat,coords[i].lon),new google.maps.LatLng(coords[i+1].lat,coords[i+1].lon)];
-			line_i = new google.maps.Polyline(options);
-			line_i.setMap(this.map);
-			line.push(line_i);
-		}
-	}
-	else {
-		options.path = latlng;
-		options.strokeColor = controls.col;
-		line[0] = new google.maps.Polyline(options);
-		line[0].setMap(this.map);
-	}
-	if( (JB.gc.arrowtrack && route_oder_track == "Track") || (JB.gc.arrowroute && route_oder_track == "Route") ) {
-		var range = Math.min(10,Math.ceil(npt/100)),lat,lon,ct,latlng_s=[];
-		latlng_s.push(new google.maps.LatLng(coords[0].lat,coords[0].lon));
-		for(var i=1;i<npt-1;i++) { 
-			lat = lon = ct = 0;
-			for(var j=Math.max(0,i-range);j<Math.min(npt,i+range);j++) { 
-				lat += coords[j].lat;
-				lon += coords[j].lon;
-				ct ++;
-			}
-			latlng_s.push(new google.maps.LatLng(lat/ct,lon/ct));
-		}
-		latlng_s.push(new google.maps.LatLng(coords[npt-1].lat,coords[npt-1].lon));
-		var lineSymbol = {
-			path: google.maps.SymbolPath.FORWARD_OPEN_ARROW,
-			scale: 3,
-			strokeColor: controls.col,
-			strokeOpacity: controls.opac
-		};
-		options.icons = [{
-			icon: lineSymbol,
-			offset: '100px', // '5%',
-			repeat: '200px' //'10%'
-		}];
-		options.path = latlng_s;
-		options.strokeColor = "black";
-		options.strokeOpacity = 0.01;
-		line_i = new google.maps.Polyline(options);
-		line_i.setMap(this.map);
-		line.push(line_i);
-	} // if arrow
-	var eventline = line.length;
-	options.path = latlng;
-	options.icons = null;
-	options.strokeColor = "black"; //controls.col;
-	options.strokeOpacity = 0.01;
-	options.strokeWeight = controls.width*5;
-	options.zIndex = 10;
-	line[eventline] = new google.maps.Polyline(options);
-	line[eventline].setMap(this.map);
-	var mapcenter,clk_ev;
-	var infowindow = new google.maps.InfoWindow({ });
-	google.maps.event.addListener(infowindow,"closeclick", function() { dieses.map.panTo(mapcenter); google.maps.event.removeListener(clk_ev) });
-	google.maps.event.addListener(line[eventline], 'click', function(o) {
-		var retval = true;
-		if(typeof(JB.GPX2GM.callback)=="function") 
-			retval = JB.GPX2GM.callback({type:cbtype,infotext:infotext,id:dieses.id});
-		if(retval) {
-			if(daten.link) {
-				if(daten.link.search("~")==0) window.location.href = daten.link.substr(1);
-				else window.open(daten.link,"",JB.gc.popup_Pars);
-			}
-			else {
-				mapcenter = dieses.map.getCenter();
-				clk_ev = google.maps.event.addListener(dieses.map,'click',function() { infowindow.close(); dieses.map.panTo(mapcenter); google.maps.event.removeListener(clk_ev) });
-				infowindow.setOptions({maxWidth:Math.round(dieses.mapcanvas.offsetWidth)*0.7});
-				if(route_oder_track == "Track") infotext = daten.info;
-				infowindow.setContent(infotext);
-				infowindow.setPosition(o.latLng);
-				infowindow.open(dieses.map);
-			}
-		}
-	});
-	if(JB.gc.trackover) {
-		var oline;
-		infofenster = JB.Infofenster(this.map);
-		google.maps.event.addListener(line[eventline], 'mouseover', function(o) {
-			options.strokeColor = controls.ocol;
-			options.strokeOpacity = 1.0;
-			options.strokeWeight = controls.owidth;
-			options.zIndex = 2;
-			oline = new google.maps.Polyline(options);
-			oline.setMap(this.map);
-			if(route_oder_track == "Track") infotext = daten.info;
-			infofenster.content(infotext);
-			infofenster.show();
-		});
-		google.maps.event.addListener(line[eventline], 'mouseout', function(o) {
-			oline.setMap(null);
-			infofenster.hide();
-		});
-	}
-	return line;
-} // Polyline
-  
-JB.Map.prototype.Marker = function(coord,icon) { 
-	var marker = [];
-	var options = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, clickable: false, zIndex: 190 };
-	var option = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, clickable: false, zIndex: 200 };
-	if (icon) {
-		if (icon.icon) option.icon = icon.icon; 
-	}
-	marker.push(new google.maps.Marker(option));
-	if(JB.gc.shwpshadow) {
-		if (icon) {
-			if (icon.shadow) {
-				options.icon = icon.shadow;
-				marker.push(new google.maps.Marker(options));
-			}
-		}
-		else {
-			options.icon = JB.icons.DefShadow.shadow;
-			marker.push(new google.maps.Marker(options));
-		}
-	}
-	return marker;
-} // Marker
-
-JB.Map.prototype.Marker_Link = function(coord,icon,titel,url,popup_Pars) { 
-	var marker = [];
-	var option = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, title: titel, zIndex: 200 };
-	if (icon) {
-		if (icon.icon) option.icon = icon.icon; 
-	}
-	marker.push(new google.maps.Marker(option));
-	if(JB.gc.shwpshadow) {
-		var options = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, clickable: false, zIndex: 190 };
-		if (icon) {
-			if (icon.shadow) {
-				options.icon = icon.shadow;
-				marker.push(new google.maps.Marker(options));
-			}
-		}
-		else {
-			options.icon = JB.icons.DefShadow.shadow;
-			marker.push(new google.maps.Marker(options));
-		}
-	}
-	google.maps.event.addListener(marker[0], 'click', function() {
-		if(url.search("~")==0) window.location.href = url.substr(1);
-		else window.open(url,"",popup_Pars);
-	});
-	return marker;
-} // Marker_Link
-
-JB.Map.prototype.Marker_Text = function(coord,icon,titel) {
-	var dieses = this;
-	var mapcenter,clk_ev;
-	var marker = [];
-	var option = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, title: titel, zIndex: 200 };
-	if (icon) {
-		if (icon.icon) option.icon = icon.icon; 
-	}
-	marker.push(new google.maps.Marker(option));
-	if(JB.gc.shwpshadow) {
-		var options = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, clickable: false, zIndex: 190 };
-		if (icon) {
-			if (icon.shadow) {
-				options.icon = icon.shadow;
-				marker.push(new google.maps.Marker(options));
-			}
-		}
-		else {
-			options.icon = JB.icons.DefShadow.shadow;
-			marker.push(new google.maps.Marker(options));
-		}
-	}
-	var infowindow = new google.maps.InfoWindow({  } );
-	google.maps.event.addListener(infowindow,"closeclick", function() { 
-		dieses.map.panTo(mapcenter); 
-		google.maps.event.removeListener(clk_ev); 
-	});
-	google.maps.event.addListener(marker[0], 'click', function() {
-		mapcenter = dieses.map.getCenter();
-		clk_ev = google.maps.event.addListener(dieses.map,'click',function() { 
-			infowindow.close(); 
-			dieses.map.panTo(mapcenter); 
-			google.maps.event.removeListener(clk_ev) 
-		});
-		var retval = true;
-		var text = coord.info;
-		if(typeof(JB.GPX2GM.callback)=="function") 
-			retval = JB.GPX2GM.callback({type:"click_Marker_Text",coord:coord,titel:titel,text:text,id:dieses.id});
-		if(retval) {
-			infowindow.setOptions({maxWidth:Math.round(dieses.mapcanvas.offsetWidth*0.7)});
-			infowindow.setContent("<div class='JBinfofenster_gm'>"+text+"</div>");
-			infowindow.open(dieses.map,marker[0]);			
-		}
-	});
-	return marker;
-} // Marker_Text
-
-JB.Map.prototype.Marker_Bild = function(coord,icon,bild) {
-	var dieses = this;
-	var mapcenter,clk_ev;
-	var marker = [];
-	marker[0] = new google.maps.Marker({
-		position: new google.maps.LatLng(coord.lat,coord.lon), 
-		map: this.map,
-		zIndex: 200,
-		icon: icon.icon
-	});
-	if(JB.gc.shwpshadow) {
-		marker[1] = new google.maps.Marker({
-			position: new google.maps.LatLng(coord.lat,coord.lon), 
-			map: this.map,
-			zIndex: 190,
-			clickable: false,
-			icon: icon.shadow
-		});
-	}
-	var infowindow = new google.maps.InfoWindow({  });
-	google.maps.event.addListener(infowindow,"closeclick", function() { dieses.map.panTo(mapcenter); google.maps.event.removeListener(clk_ev) });
-	google.maps.event.addListener(marker[0], 'click', function() {
-		var text = coord.info;
-		var retval = true;
-		if(typeof(JB.GPX2GM.callback)=="function") 
-			retval = JB.GPX2GM.callback({type:"click_Marker_Bild",coord:coord,src:bild,text:text,id:dieses.id});
-		if(retval) {
-			mapcenter = dieses.map.getCenter();
-			var img = new Image();
-			clk_ev = google.maps.event.addListener(dieses.map,'click',function() { 
-				infowindow.close(); 
-				dieses.map.panTo(mapcenter); 
-				google.maps.event.removeListener(clk_ev) 
-			});
-			img.onload = function() { 
-				var w = img.width, h = img.height;
-				var mapdiv = dieses.map.getDiv();
-				var mw = mapdiv.offsetWidth-200, mh = mapdiv.offsetHeight-200;
-				if(mw<50 || mh<50) return;
-				if(w>mw) { h = Math.round(h*mw/w); w = mw; }; 
-				if(h>mh) { w = Math.round(w*mh/h); h = mh; }
-				var container = document.createElement("div");
-				container.style.padding = "10px";
-				container.style.maxWidth = (w) + "px";
-				container.style.maxHeight = (mh+50) + "px";
-				container.style.backgroundColor = "white";
-				container.style.overflow = "auto";
-				container.innerHTML = "<img src='"+bild+"' width="+w+" height="+h+"><br>"+text;
-				infowindow.setContent(container);
-				infowindow.open(dieses.map,marker[0]);
-				if(container.clientHeight<container.scrollHeight) container.style.maxWidth = (w+20) + "px";
-			}
-      img.onerror = function() {
-        JB.Debug_Info(this.src,"konnte nicht geladen werden!",false);
-      }
-			img.src = bild;
-		}
-	});
-	google.maps.event.addListener(marker[0], 'mouseover', function() {
-		var img = new Image();
-		img.onload = function() { 
-			var w = img.width, h = img.height, mw, mh;
-			if(w>h) { mw = JB.gc.groesseminibild; mh = Math.round(h*mw/w); }
-			else    { mh = JB.gc.groesseminibild; mw = Math.round(w*mh/h); }
-			var minibild = new google.maps.Marker({
-				position: new google.maps.LatLng(coord.lat,coord.lon), 
-				map: dieses.map,
-				zIndex: 200,
-				icon: { 
-					url: bild,
-					anchor: {x:23,y:0},
-					scaledSize: {width:mw,height:mh}
-				}
-			});
-			var ev_mouseout1 = google.maps.event.addListener(marker[0], 'mouseout', function() { 
-				google.maps.event.removeListener(ev_mouseout1);
-				google.maps.event.removeListener(ev_mouseout2);
-				minibild.setMap(null); 
-			});
-		}
-    img.onerror = function() {
-      JB.Debug_Info(this.src,"konnte nicht geladen werden!",false);
-    }
-		var ev_mouseout2 = google.maps.event.addListener(marker[0], 'mouseout', function() { 
-			google.maps.event.removeListener(ev_mouseout2);
-			img.onload = null; 
-		});
-		img.src = bild;
-	});
-	return marker;
-} // Marker_Bild 
- 
-JB.Map.prototype.Marker_Cluster = function(cluster,wpts,strings) { 
-	var dieses = this;
-	var marker,latmin,latmax,lonmin,lonmax,title;
-	var zbb;
-	var option = { position: new google.maps.LatLng(cluster.lat,cluster.lon), map: this.map, zIndex: 200 };
-	option.icon = JB.icons.Cluster.icon; 
-	option.title = cluster.members.length+" "+strings.wpts+":"; // " Wegpunkte:";
-	for(var i=0;i<cluster.members.length;i++) {
-		title = wpts[cluster.members[i]].name;
-		if (title.indexOf("data:image")!=-1) title = strings.pwpt; // "Bildwegpunkt";
-		else if (JB.checkImageName(title)) title = title.substring(title.lastIndexOf("/")+1,title.lastIndexOf("."));
-//		option.title += "\n- " + (JB.checkImageName(wpts[cluster.members[i]].name)?"Bildwegpunkt":wpts[cluster.members[i]].name);
-		option.title += "\n- " + title;
-	}
-	option.title += "\n"+strings.clkz; // "\nZum Zoomen klicken";
-	marker = new google.maps.Marker(option);
-	google.maps.event.addListener(marker, 'click', function() {
-		if(dieses.cluster_zoomhistory.length==0) {
-			var zbbe = document.createElement("div");
-			zbbe.innerHTML = "&#x21b5";
-			zbbe.style.color = "#444";
-			zbbe.style.backgroundColor = "white";
-			zbbe.style.fontWeight ="bold";
-			zbbe.style.fontSize = "	14px";
-			zbbe.style.margin = "0 10px 0 0";
-			zbbe.style.padding = "0 10px 1px 10px";
-			// zbbe.style.border = "1px solid #bbb";
-			zbbe.title = strings.zb; // "Zurück zoomen";
-			zbbe.style.cursor = 'pointer';
-			zbb = dieses.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(zbbe);
-			zbbe.onclick = function() {
-				var zc = dieses.cluster_zoomhistory.pop();
-				dieses.map.setZoom(zc.z);
-				dieses.map.setCenter(zc.c);
-				if(dieses.cluster_zoomhistory.length==0) dieses.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].removeAt(zbb-1);			
-			};
-		}
-		dieses.cluster_zoomhistory.push({z:dieses.map.getZoom(),c:dieses.map.getCenter()});
-		latmin = lonmin = 1000;
-		latmax = lonmax = -1000;
-		for(var i=0;i<cluster.members.length;i++) {
-			var wp = wpts[cluster.members[i]];
-			if(wp.lat<latmin) latmin = wp.lat;
-			if(wp.lon<lonmin) lonmin = wp.lon;
-			if(wp.lat>latmax) latmax = wp.lat;
-			if(wp.lon>lonmax) lonmax = wp.lon;
-		}
-		dieses.rescale({latmin:latmin,lonmin:lonmin,latmax:latmax,lonmax:lonmax});
-	});
-	return [marker];
-} // Marker_Cluster
-
-JB.RemoveElement = function(element) {
-	element.setMap(null);
-} // JB.RemoveElement    
- 
-JB.MoveMarker = (function() {
-	var MoveMarker_O = function() {
-		var marker, infofenster, Map;
-		this.init = function(mp,icon) {
-			if(mp) {
-				Map = mp;
-				marker = Map.Marker({lat:0,lon:0},icon)[0]; 
-				infofenster = JB.Infofenster(Map.map);
-				infofenster.show();
-			}
-		}
-		this.pos = function(coord,infotext,maxzoomemove) { 
-			if(Map) {
-				marker.setPosition(new google.maps.LatLng(coord.lat,coord.lon));
-				infofenster.content(infotext);
-				if(Map.map.getZoom() >= maxzoomemove) Map.map.setCenter(new google.maps.LatLng(coord.lat,coord.lon));
-				else infofenster.pos(coord);  
-			}      
-		}
-		this.remove = function() { 
-			if(Map) {
-				marker.setMap(null); 
-				infofenster.remove();
-			}
-		}
-	} // MoveMarker_O
-	return new MoveMarker_O();
-})(); // JB.MoveMarker
-
-JB.Infofenster = function(map) {
-	var Infofenster_O = function() {
-		var div = document.createElement("div");
-		JB.addClass("JBinfofenster",div);
-		this.div_ = div;
-		this.cnr = map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.div_);
-		this.map = map;
-		this.setMap(map);
-		this.set('visible', false);
-	}
-	Infofenster_O.prototype = new google.maps.OverlayView();
-	Infofenster_O.prototype.draw = function() {}
-	Infofenster_O.prototype.content = function(content) { 
-		if(typeof(content)=="string") this.div_.innerHTML = content;
-		else                          this.div_.appendChild(content);
-	}
-	Infofenster_O.prototype.hide = function() { this.set('visible', false); this.visible = false; }
-	Infofenster_O.prototype.show = function() { this.set('visible', true); this.visible = true; }
-	Infofenster_O.prototype.remove = function() { 
-		this.map.controls[google.maps.ControlPosition.TOP_LEFT].removeAt(this.cnr-1);
-		this.visible = false;
-	}
-	Infofenster_O.prototype.visible_changed = function() { 
-		this.div_.style.display = this.get('visible') ? '' : 'none';
-	}
-	Infofenster_O.prototype.pos = function(coord) { 
-		var projection = this.getProjection();
-		if (projection) {
-			var point = projection.fromLatLngToContainerPixel(new google.maps.LatLng(coord.lat,coord.lon));
-			this.div_.style.left = Math.round(point.x) + 5 + "px";
-			this.div_.style.top  = Math.round(point.y) - 15 - this.div_.offsetHeight + "px"; 
-		} 
-	} 
-	return new Infofenster_O();
-}// JB.Infofenster
-
-JB.bounds = function(center_lat,center_lon,radius) {
-// http://de.wikipedia.org/wiki/Wegpunkt-Projektion
-	var d = radius/6378.137;
-	var fak = Math.PI/180;
-	var lat = center_lat * fak;
-	var lon = center_lon * fak;
-	var sind = Math.sin(d);
-	var cosd = Math.cos(d);
-	var sinlat = Math.sin(lat);
-	var coslat = Math.cos(lat);
-	var latmin = (Math.asin(sinlat*cosd - coslat*sind))/fak;
-	var latmax = (Math.asin(sinlat*cosd + coslat*sind))/fak;
-	var lonmin = (lon - Math.asin(sind/coslat))/fak;
-	var lonmax = (lon + Math.asin(sind/coslat))/fak;
-	return {latmin:latmin,latmax:latmax,lonmin:lonmin,lonmax:lonmax};
-} // bounds
-
-// Ende gmutils.js
-
 // lpgpx.js
-// Version 2.13
-// 26. 9. 2016
+// Version 2.14
+// 26. 2. 2017
 // www.j-berkemeier.eu
 JB.loadFile = function(file, format, callback) {
-	var id = "loadfile";
 	if(!file.fileobject) { // ajax
-		var request,url=file.name;
-		if(url.length==0) {
-			JB.Debug_Info(id,"Kein Dateiname",false);
-			callback({asciidata:"<gpx></gpx>"}, 0);
-			return;
-		}
-		request = new XMLHttpRequest();
-		if(request) {
-			request.addEventListener('load', function(event) {
-				if ((request.status >= 200 && request.status < 300) || request.status == 0) {
-					var result={};
-					if(format=="b") result.binarydata = new Uint8Array(request.response);
-					else { result.asciidata = request.responseText }
-					JB.Debug_Info(id,"Datei konnte geladen werden, Status: "+request.status+", Datei: "+url,false);
-					callback(result, request.status);
-				} 
-				else {
-					JB.Debug_Info(id,"Datei konnte nicht geladen werden, Status: "+request.status+", Datei: "+url,true);
-					callback({},request.status);
-				}
-			});
-			request.addEventListener('error', function(event) {
-				JB.Debug_Info(id,"Datei konnte nicht geladen werden, Status: "+request.status+", Datei: "+url,true);
-				callback({},request.status);
-			});
-	 		request.open("GET",url);
-			if(format=="b") request.responseType = "arraybuffer";
-			request.send();
-		}
-		else {
-			JB.Debug_Info(id,"HTTP-Request konnte nicht erstellt werden, Datei: "+url,true)
-			callback({},-1);
-		} 		
-	} // ajax
+		JB.loadFile_xml(file, format, callback);
+	}
 	else { //File API
 		JB.LoadFile_local(file, format, callback);
-	} //File API
+	}
 } // loadFile
 
+JB.loadFile_xml = function(file, format, callback) {
+	var id = "loadFile_xml";
+	var request,url=file.name;
+	var result={asciidata:"<gpx></gpx>"};
+	if(url.length==0) {
+		JB.Debug_Info(id,"Kein Dateiname",false);
+		callback(result, 0);
+		return;
+	}
+	request = new XMLHttpRequest();
+	if(request) {
+		request.addEventListener('load', function(event) {
+			if ((request.status >= 200 && request.status < 300) || request.status == 0) {
+				if(format=="b") result.binarydata = new Uint8Array(request.response);
+				else { result.asciidata = request.responseText }
+				JB.Debug_Info(id,"Datei konnte geladen werden, Status: "+request.status+", Datei: "+url,false);
+				callback(result, request.status);
+			} 
+			else {
+				JB.Debug_Info(id,"Datei konnte nicht geladen werden, Status: "+request.status+", Datei: "+url,true);
+				callback(result,request.status);
+			}
+		});
+		request.addEventListener('error', function(event) {
+			JB.Debug_Info(id,"Datei konnte nicht geladen werden, Status: "+request.status+", Datei: "+url,true);
+			callback(result,request.status);
+		});
+		request.open("GET",url);
+		if(format=="b") request.responseType = "arraybuffer";
+		request.send();
+	}
+	else {
+		JB.Debug_Info(id,"HTTP-Request konnte nicht erstellt werden, Datei: "+url,true)
+		callback(result,-1);
+	} 		
+} // loadFile_xml
+
 JB.LoadFile_local = function(file, format, callback) {
-	var id = "loadfile_local";
+	var id = "loadFile_local";
 	if(typeof(FileReader)=="function" || typeof(FileReader)=="object") {
 		var reader = new FileReader();
 		var result={};
@@ -2111,7 +1429,7 @@ JB.LoadFile_local = function(file, format, callback) {
 
 JB.entf = (function() {
 	var fak = Math.PI/180,ls,le,hs,he,be,sinbs,sinbe,cosbs,cosbe,dh,arg,e;
-	var si = Math.sin, co = Math.cos, ac = Math.acos, ro = Math.round, sq = Math.sqrt;
+	var si = Math.sin, co = Math.cos, ac = Math.acos, sq = Math.sqrt;
 	function entf_o() {
 		this.init = function(b,l,h) {
 			le = l*fak;
@@ -2132,7 +1450,8 @@ JB.entf = (function() {
 			sinbe = si(be);
 			cosbe = co(be);
 			arg = sinbs*sinbe + cosbs*cosbe*co(ls-le);
-			arg = ro(arg*100000000000000)/100000000000000;
+			if(arg>1) arg = 1; // arg kann durch die letzte Stelle schon mal >1 oder <-1 sein
+			else if(arg<-1) arg = -1;
 			e = ac ( arg ) * 6378.137;
 			if(dh!=0) e = sq(e*e+dh*dh);
 			return e;
@@ -2145,20 +1464,22 @@ JB.lpgpx = function(fns,id,callback) {
 
 	function xmlParse(str) {
 		JB.Debug_Info(id,"xmlParse -",false);
-		str = str.replace(/>\s+</g,"><");
-		str = str.replace(/gpxtpx:/g,"");
-		str = str.replace(/gpxx:/g,"");
-		str = str.replace(/cadence>/g,"cad>");
-		str = str.replace(/heartrate>/g,"hr>");
-		if (typeof ActiveXObject != 'undefined' && typeof GetObject != 'undefined') {
-			var doc = new ActiveXObject('Microsoft.XMLDOM');
-			doc.loadXML(str);
-			JB.Debug_Info(id,"- ActiveX",false);
-			return doc;
-		}
-		if (typeof DOMParser != 'undefined') {
-			JB.Debug_Info(id,"- DOMParser",false);
-			return (new DOMParser()).parseFromString(str, 'text/xml');
+		if(str) {
+			str = str.replace(/>\s+</g,"><");
+			str = str.replace(/gpxtpx:/g,"");
+			str = str.replace(/gpxx:/g,"");
+			str = str.replace(/cadence>/g,"cad>");
+			str = str.replace(/heartrate>/g,"hr>");
+			if (typeof ActiveXObject != 'undefined' && typeof GetObject != 'undefined') {
+				var doc = new ActiveXObject('Microsoft.XMLDOM');
+				doc.loadXML(str);
+				JB.Debug_Info(id,"- ActiveX",false);
+				return doc;
+			}
+			if (typeof DOMParser != 'undefined') {
+				JB.Debug_Info(id,"- DOMParser",false);
+				return (new DOMParser()).parseFromString(str, 'text/xml');
+			}
 		}
 		JB.Debug_Info(id,"xml konnte nicht geparsed werde!",false);
 		return document.createElement("div");
@@ -2166,8 +1487,7 @@ JB.lpgpx = function(fns,id,callback) {
 	
 	function rauf_runter(t) {
 		var l=t.length;
-		if(l<2) return { rauf:0, runter:0 } ;   
-		t = smooth(t,"x","hs","hs",JB.gc.hglattlaen);
+		if(l<2) return { rauf:0, runter:0 } ; 
 		var rauf = 0;
 		var runter = 0;
 		var h = t[0].hs;
@@ -2200,7 +1520,7 @@ JB.lpgpx = function(fns,id,callback) {
 		if(child) tag = ele.querySelector(':scope > link');
 		else tag = ele.querySelector("link");
 		if( tag ) {
-				if( tag.href ) { val = tag.href; }
+				if( tag.hasAttribute("href") ) { val = tag.getAttribute("href"); }
 				else if( tag.firstChild ) { val = tag.firstChild.data; }
 		} 
 		return val;
@@ -2221,7 +1541,7 @@ JB.lpgpx = function(fns,id,callback) {
 		if( tag && tag.length ) {
 			tag0 = tag[0];
 			if( (child?(tag0.parentNode==ele):true) ) {
-				if( tag0.href ) { val = tag0.href; }
+				if( tag0.hasAttribute("href") ) { val = tag0.getAttribute("href"); }
 				else if( tag0.firstChild ) { val = tag0.firstChild.data; }
 			}
 		} 
@@ -2249,13 +1569,7 @@ JB.lpgpx = function(fns,id,callback) {
 	})();
 	
 	function utc2sec(utcdate) {
-		var jahr = utcdate.substr(0,4);
-		var monat = utcdate.substr(5,2)*1-1;
-		var tag = utcdate.substr(8,2);
-		var stunde = utcdate.substr(11,2);
-		var minute = utcdate.substr(14,2);
-		var sekunde = utcdate.substr(17,2);
-		return Date.UTC(jahr,monat,tag,stunde,minute,sekunde)/1000;
+		return Date.parse(utcdate)/1000;
 	} // utc2sec
 
 	function smooth(a,x,y,ys,range) {
@@ -2273,19 +1587,22 @@ JB.lpgpx = function(fns,id,callback) {
 		var xl = a[l-1][x];
 		range /= 2000;
 		if(range>(xl-x0)/4 || range==0) return t;
+		var glattpar = 1.3;
 		for(i=0;i<l;i++) {
 			ai = a[i];
 			xi = ai[x];
 			xmin = xi - range;
 			xmax = xi + range;
-			sum = ai[y] * range;
-			faksum = range;
+			sum = ai[y];
+			faksum = 1;
 			j = i - 1;
 			if(j>=0) {
 				aj = a[j];
 				xj = aj[x];
+				var dx;
 				while(xj>xmin) {
-					fak = range - xi + xj;
+					dx = (xj - xi)/range;
+					fak = 1 - glattpar*dx*dx;
 					sum += aj[y]*fak;
 					faksum += fak;
 					j--;
@@ -2299,7 +1616,8 @@ JB.lpgpx = function(fns,id,callback) {
 				aj = a[j];
 				xj = aj[x];
 				while(xj<xmax) {
-					fak = range + xi - xj;
+					dx = (xj - xi)/range;
+					fak = 1 - glattpar*dx*dx;
 					sum += aj[y]*fak;
 					faksum += fak;
 					j++;
@@ -2380,7 +1698,7 @@ JB.lpgpx = function(fns,id,callback) {
 	var gpxdaten = {tracks:{},routen:{},wegpunkte:{}};
 	var tnr, rnr, fnr, latmin, latmax, lonmin ,lonmax;
 
-	function parseGPX(xml,gpxdaten,id,fnr) {
+	function parseGPX(xml,gpxdaten,id,fnr) {	
 		JB.Debug_Info(id,"parseGPX",false);
 		var usegpxbounds=false;
 		if(JB.gc.usegpxbounds) {
@@ -2423,8 +1741,8 @@ JB.lpgpx = function(fns,id,callback) {
 		
 		// Tracks 
 		var trk = xml.documentElement.getElementsByTagName("trk"); 
-		JB.Debug_Info(id,trk.length +"Tracks gefunden",false);   
-		for(var k=0;k<trk.length;k++) { 
+		JB.Debug_Info(id,trk.length +" Tracks gefunden",false);   
+		if(JB.gc.gpxtracks) for(var k=0;k<trk.length;k++) { 
 			var trkk = trk[k];
 			var trkpts = trkk.getElementsByTagName("trkpt"); // Trackpunkte
 			var trkptslen = trkpts.length;
@@ -2440,7 +1758,10 @@ JB.lpgpx = function(fns,id,callback) {
 				tracki.lonmin=1000;tracki.lonmax=-1000;
 				if(JB.gc.displaycolor) {
 					var ext = trkk.getElementsByTagName("extensions");
-					if(ext.length) tracki.farbe = getTag(ext[0],"DisplayColor",JB.gc.tcols[tnr%JB.gc.tcols.length],false)
+					if(ext.length) {
+						tracki.farbe = getTag(ext[0],"DisplayColor",JB.gc.tcols[tnr%JB.gc.tcols.length],false);
+						if(tracki.farbe.toLowerCase()=="darkyellow") tracki.farbe = "#8b8b00";
+					}
 				}
 				var daten = [];
 				var hflag=true,tflag=true,vflag=JB.gc.readspeed,hrflag=true,cadflag=true,h,t,v,hr,cad,tabs,tmp,cadfound=false;
@@ -2515,6 +1836,15 @@ JB.lpgpx = function(fns,id,callback) {
 				if(hflag) {
 					daten = smooth(daten,"x","h","hs",JB.gc.hglattlaen);
 					if(JB.gc.hglatt) for(var i=0;i<trkptslen;i++) daten[i].h = daten[i].hs;
+					daten = diff(daten,"x","hs","s",0.1*JB.gc.sfaktor);
+					daten = smooth(daten,"x","s","s",JB.gc.hglattlaen);
+					//daten = smooth(daten,"x","hs","hs",JB.gc.hglattlaen);
+					var rr = rauf_runter(daten);
+					JB.Debug_Info(id,"Rauf: "+rr.rauf+"   Runter: "+rr.runter,false);
+					tracki.rauf = rr.rauf;
+					tracki.runter = rr.runter;
+					gpxdaten.tracks.rauf += rr.rauf;      
+					gpxdaten.tracks.runter += rr.runter;     
 				}
 				if(hflag && JB.gc.laengen3d) {
 					tracklen = 0;
@@ -2527,16 +1857,6 @@ JB.lpgpx = function(fns,id,callback) {
 						daten[i].x = tracklen;
 						daten[i].dx = dx;
 					}
-				}
-				if(hflag) {
-					daten = diff(daten,"x","hs","s",0.1*JB.gc.sfaktor);
-					daten = smooth(daten,"x","s","s",JB.gc.hglattlaen);
-					var rr = rauf_runter(daten);
-					JB.Debug_Info(id,"Rauf: "+rr.rauf+"   Runter: "+rr.runter,false);
-					tracki.rauf = rr.rauf;
-					tracki.runter = rr.runter;
-					gpxdaten.tracks.rauf += rr.rauf;      
-					gpxdaten.tracks.runter += rr.runter;     
 				}
 				if(tflag && !vflag) {
 					if(JB.gc.vglatt) {
@@ -2563,7 +1883,7 @@ JB.lpgpx = function(fns,id,callback) {
 						var tpause = 0;
 						daten[0].twob = daten[0].t;
 						for(var i=0;i<daten.length-1;i++) {
-							if(daten[i].v < 1) tpause += daten[i+1].t-daten[i].t ;
+							if(daten[i].v < JB.gc.movevmin) tpause += daten[i+1].t-daten[i].t ;
 							daten[i+1].twob = daten[i+1].t - tpause;
 						}
 						tracki.vmittwob = tracklen/(daten[daten.length-1].t-daten[0].t-tpause)
@@ -2598,7 +1918,7 @@ JB.lpgpx = function(fns,id,callback) {
 		// Routen
 		var rte = xml.documentElement.getElementsByTagName("rte"); 
 		JB.Debug_Info(id,rte.length +" Routen gefunden",false);
-		for(var j=0;j<rte.length;j++) {
+		if(JB.gc.gpxrouten) for(var j=0;j<rte.length;j++) {
 			rnr++;
 			var rtej = rte[j];
 			var rtepts = rtej.getElementsByTagName("rtept");
@@ -2649,7 +1969,7 @@ JB.lpgpx = function(fns,id,callback) {
 		// Waypoints
 		var wpts = xml.documentElement.getElementsByTagName("wpt"); 
 		JB.Debug_Info(id,wpts.length +" Wegpunkte gefunden",false);
-		for(var i=0;i<wpts.length;i++) { // Wegpunktdaten
+		if(JB.gc.gpxwegpunkte) for(var i=0;i<wpts.length;i++) { // Wegpunktdaten
 			var wpt = wpts[i];
 			var lat = parseFloat(wpt.getAttribute("lat"));
 			var lon = parseFloat(wpt.getAttribute("lon"));
@@ -2840,15 +2160,15 @@ JB.GPX2GM.start = function() {
 		console.log("GPXViewer "+JB.GPX2GM.ver+" vom "+JB.GPX2GM.dat);
 	JB.LoadCSS(JB.GPX2GM.Path+"GPX2GM.css");
 	JB.LoadScript(JB.GPX2GM.Path+"GPX2GM_Defs.js", function() { 
-		var gmurl = "http";
-		var protocol = location.protocol;
-		if(protocol=="https:") gmurl += "s";
-		gmurl += "://maps.google.com/maps/api/js?libraries=geometry&callback=JB.gmcb";
-		if(JB.GPX2GM.GM_Api_key && (protocol=="https:" || protocol=="http:")) gmurl += "&key="+JB.GPX2GM.GM_Api_key;
+		JB.setgc();
+		if(!JB.GPX2GM.GM_usage_ok()) return;
+		var gmurl = "https://maps.google.com/maps/api/js?libraries=geometry&callback=JB.gmcb";
+		if(JB.GPX2GM.GM_Api_key && (location.protocol=="https:" || location.protocol=="http:")) gmurl += "&key="+JB.GPX2GM.GM_Api_key;
 		if(document.documentElement.hasAttribute("lang") && document.documentElement.getAttribute("lang")!="de") gmurl += "&language=en";
 		JB.LoadScript(gmurl, function() {});
-		JB.setgc();
 		JB.Scripte.GPX2GM_Defs = 2;
+		JB.Scripte.gmutils = 1;
+		JB.LoadScript(JB.GPX2GM.Path+"gmutils.js", function() { JB.Scripte.gmutils = 2; } );
 		JB.icons = new JB.Icons(JB.GPX2GM.Path);
 		JB.Debug_Info("Start","Icons vorbereitet",false);
 		var Map_Nr=0;
@@ -2864,7 +2184,7 @@ JB.GPX2GM.start = function() {
 				var Id = "map"+(Map_Nr++);
 				div.id = Id;
 			}
-			var GPX = Klasse.substring(CN).split()[0];
+			var GPX = decodeURI(Klasse.substring(CN+1).split(" ")[0]);
 			if(GPX.search(";")>=0 && JB.gc.dateitrenner != ";") GPX = GPX.split(";");    
 			else GPX = GPX.split(":");                     
 			if(GPX.length==3) {
@@ -2877,8 +2197,8 @@ JB.GPX2GM.start = function() {
 		for(var i=0;i<buttons.length;i++) {
 			var button = buttons[i];
 			var Klasse = button.className;
-			var CN = Klasse.search(/gpxview:/i);
-			var cmd = Klasse.substring(CN).split(" ")[0];
+			var CN = Klasse.search(/gpxview:/i); 
+			var cmd = decodeURI(Klasse.substring(CN).split(" ")[0]);
 			if(cmd.search(";")>=0 && JB.gc.dateitrenner != ";") cmd = cmd.split(";") ;
 			else cmd = cmd.split(":") ;
 			if(cmd.length>2) {
@@ -2916,7 +2236,7 @@ JB.GPX2GM.start = function() {
 		for(var i=0;i<selects.length;i++) {
 			var select = selects[i];
 			select.onchange = function() {
-				var cmd = this.options[this.options.selectedIndex].value.split(":");
+				var cmd = decodeURI(this.options[this.options.selectedIndex].value).split(":");
 				if(cmd.length<2) return;
 				if(cmd.length<3) cmd[2] = ""; //undefined;
 				maps["Karte_"+cmd[0]].ShowGPX(cmd[1].split(JB.gc.dateitrenner),cmd[2]);
@@ -2925,9 +2245,45 @@ JB.GPX2GM.start = function() {
 	}); // JB.LoadScript("GPX2GM_Defs.js")
 } // JB.GPX2GM.start
 
+
+JB.GPX2GM.GM_usage_ok = function() {
+	if(typeof(Bestaetigung)=="undefined" || Bestaetigung) {
+		var doc_lang = JB.gc.doclang.toLowerCase();
+		if(doc_lang == "auto" && document.documentElement.hasAttribute("lang")) doc_lang = document.documentElement.getAttribute("lang");
+		if(doc_lang in JB.GPX2GM.strings) JB.gc.doclang = doc_lang;
+		else                              JB.gc.doclang = doc_lang = "de";
+		console.log("Bestaetigung");
+		if(localStorage) {
+			var ls = localStorage.getItem("GM_OK");
+			if(ls && ls.length) {
+				console.log("Zustimmung für GM wurde schon erteilt");
+				return true;
+			}
+			else {
+				if(confirm(JB.GPX2GM.strings[doc_lang].frage_datenschutz)) {
+					localStorage.setItem("GM_OK","Zustimmung, Google Maps zu nutzen, wurde erteilt.");
+					console.log("Zustimmung für GM wurde erstmalig erteilt");
+					return true;
+				}
+				else {
+					console.log("Zustimmung für GM nicht erteilt");
+					var mapdivs = document.querySelectorAll("div[class*='gpxview:'],figure[class*='gpxview:']");
+					for(var i=0;i<mapdivs.length;i++)
+						mapdivs[i].innerHTML = "<p style='padding:2em;text-align:center;'>"+JB.GPX2GM.strings[doc_lang].antwort_datenschutz+"</p>";
+					return false;
+				}
+			}
+		}
+	}
+	else {
+		console.log("Keine Zustimung erwünscht.")
+		return true;
+	}
+} // JB.GPX2GM.GM_usage_ok
+
 if(JB.GPX2GM.autoload) {
 	if(window.addEventListener) {
-		window.addEventListener("DOMContentLoaded",JB.GPX2GM.start,false);
+			window.addEventListener("DOMContentLoaded",JB.GPX2GM.start,false);
 	}
 	else {
 		window.onload = function() { 

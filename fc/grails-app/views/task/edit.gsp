@@ -105,7 +105,9 @@
                             </p>
                         </fieldset>
                     	<g:if test="${taskInstance.contest.resultClasses}">
+                    	    <g:set var="no_class" value="${true}"/>
                     		<g:each var="taskclass_instance" in="${TaskClass.findAllByTask(taskInstance,[sort:"id"])}" status="i">
+                                <g:set var="no_class" value="${false}"/>
 		                        <fieldset>
 		                            <legend>${taskclass_instance.resultclass.name}</legend>
 		                            <p>
@@ -191,6 +193,9 @@
 		                            </p>
 		                    	</fieldset>
                     		</g:each>
+                    		<g:if test="${no_class}">
+                                <p class="error">${message(code:'fc.task.error.noclass')}</p>
+                    		</g:if>
                     	</g:if>
                     	<g:else>
 	                        <fieldset>

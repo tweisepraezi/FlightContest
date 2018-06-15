@@ -16,6 +16,7 @@
 
 .JBinfodiv { border:3px solid black; background-color:white; padding:30px; font-size:1.2em; line-height:3em; text-align:center;
 						position:relative; z-index:1000; left:20%; top:-80%; width:60%; height:60%} 
+.JBinfodiv img { position:absolute; top:50%; left:50%; transform: translateX(-50%) translateY(-50%); }
           
 .JBmapdiv_map, .JBmapdiv_map_mit_legende { width:100%; height:100%; color: black }
 .JBmapdiv_map img, .JBmapdiv_map_mit_legende img { max-width: none }
@@ -23,6 +24,7 @@
 .JBmapdiv { font-size:16px }
 
 .JBfull { background-color:#eee; -webkit-transition: left 1s, top 1s, height 1s, width 1s; 
-                                        transition: left 1s, top 1s, height 1s, width 1s }
+                                        transition: left 1s, top 1s, height 1s, width 1s;
+          z-index: 2001}
 
 .JBprofildiv  {  }

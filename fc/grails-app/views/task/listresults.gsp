@@ -38,7 +38,7 @@
                         </tbody>
                     </table>
                     <table>
-                        <g:set var="results_columns" value="${new Integer(4)}"></g:set>
+                        <g:set var="results_columns" value="${new Integer(5)}"></g:set>
                         <g:if test="${taskInstance.IsPlanningTestRun()}">
                         	<g:set var="results_columns" value="${results_columns+1}"></g:set>
                         </g:if>
@@ -90,6 +90,7 @@
                                 <th>${message(code:'fc.crewresults.all')}</th>
                                 <th>${message(code:'fc.test.results.summary')}</th>
                                 <th>${message(code:'fc.test.results.position')}</th>
+                                <th/>
                                 <th/>
                             </tr>
                         </thead>
@@ -192,7 +193,7 @@
 											<g:if test="${taskInstance.IsFlightTestRun()}">
 												<g:if test="${testInstance.IsFlightTestRun()}">
 													<g:if test="${testInstance.timeCalculated}">
-				                                    	<td>${testInstance.flightTestPenalties} <g:if test="${testInstance.flightTestLink == Global.EMAIL_SENDING}"> <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/></g:if><g:elseif test="${testInstance.flightTestLink}"> <a href="${testInstance.flightTestLink}" target="_blank"><img src="${createLinkTo(dir:'images',file:'map.png')}"/></a></g:elseif> <g:if test="${!testInstance.flightTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'flightresults')}/${testInstance.id}${next_flight}">${message(code:'fc.test.results.here')}</a></td>
+				                                    	<td>${testInstance.flightTestPenalties} <g:if test="${!testInstance.flightTestComplete}">[${message(code:'fc.provisional')}] </g:if><a href="${createLink(controller:'test',action:'flightresults')}/${testInstance.id}${next_flight}">${message(code:'fc.test.results.here')}</a></td>
 													</g:if> <g:else>
 														<td>${message(code:'fc.nocalculated')}</td>
 													</g:else>
@@ -244,6 +245,18 @@
 		                                    <g:else>
 		                                        <td/>
 		                                    </g:else>
+		                                    <td>
+		                                       <g:if test="${testInstance.flightTestLink == Defs.EMAIL_SENDING}"> 
+		                                           <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
+		                                       </g:if>
+                                               <g:elseif test="${testInstance.flightTestLink == Defs.EMAIL_ERROR}"> 
+                                                   <img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
+                                               </g:elseif>
+		                                       <g:elseif test="${testInstance.flightTestLink}"> 
+                                                   <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.flightTestLink)}" />
+		                                           <a href="${email_links.pdf}" target="_blank"><img src="${createLinkTo(dir:'images',file:'pdf.png')}"/></a>
+		                                       </g:elseif>
+		                                    </td>
 	                                    </g:else>
 	                                </tr>
                                 </g:if>
@@ -255,14 +268,15 @@
                             <tr>
                                 <td>
                                     <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.crewresults.all.print')}" tabIndex="${ti[0]++}"/>
-                                    <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="${ti[0]++}"/> 
-                                    <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="${ti[0]++}"/>
+                                    <g:if test="${taskInstance.IsEMailPossible()}">
+                                        <g:actionSubmit action="emailnewcrewresults" value="${message(code:'fc.crewresults.new.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                        <g:actionSubmit action="emailallcrewresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                    </g:if>
                                     <g:if test="${taskInstance.IsFlightTestRun()}">
                                         <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                     </g:if>
-                                    <g:if test="${taskInstance.IsEMailPossible()}">
-                                        <g:actionSubmit action="emailnavigationresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                                    </g:if>
+                                    <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="${ti[0]++}"/> 
+                                    <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="${ti[0]++}"/>
                                 </td>
                                 <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                             </tr>

@@ -569,6 +569,7 @@ class FcService
 		Task.findAllByContest(contestInstance,[sort:"id"]).each { Task task_instance ->
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 				calculateTestPenalties(test_instance,true)
+                test_instance.flightTestLink = ""
                 test_instance.crewResultsModified = true
 				test_instance.save()
 			}
@@ -1449,6 +1450,7 @@ class FcService
 				println "Calculate penalties"
 		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 					calculateTestPenalties(test_instance,recalculate_penalties)
+                    test_instance.flightTestLink = ""
                     test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
@@ -2429,6 +2431,7 @@ class FcService
                     }
                     if (observationresult_modified) {
                         test_instance.observationTestModified = true
+                        test_instance.flightTestLink = ""
                         test_instance.crewResultsModified = true
                     }
 		            test_instance.save()
@@ -2531,6 +2534,7 @@ class FcService
                     }
                     if (observationresult_modified) {
                         test_instance.observationTestModified = true
+                        test_instance.flightTestLink = ""
                         test_instance.crewResultsModified = true
                     }
 		            test_instance.save()
@@ -2695,6 +2699,7 @@ class FcService
 	                calulateTestLegPlannings(test_instance)
 					test_instance.ResetPlanningTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.flightTestLink = ""
                     test_instance.crewResultsModified = true
 	                test_instance.save()
                     assign_num++
@@ -2728,6 +2733,7 @@ class FcService
 	                    calulateTestLegPlannings(test_instance)
 						test_instance.ResetPlanningTestResults()
 						test_instance.CalculateTestPenalties()
+                        test_instance.flightTestLink = ""
                         test_instance.crewResultsModified = true
 	                    test_instance.save()
 					}
@@ -2877,6 +2883,7 @@ class FcService
 		        test_instance.timeCalculated = false
 				test_instance.ResetFlightTestResults()
 				test_instance.CalculateTestPenalties()
+                test_instance.flightTestLink = ""
                 test_instance.crewResultsModified = true
 		        test_instance.save()
 			}
@@ -2954,6 +2961,7 @@ class FcService
             test_instance.timeCalculated = false
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
+            test_instance.flightTestLink = ""
             test_instance.crewResultsModified = true
             test_instance.save()
         }
@@ -2988,6 +2996,7 @@ class FcService
             test_instance.timeCalculated = false
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
+            test_instance.flightTestLink = ""
             test_instance.crewResultsModified = true
             test_instance.save()
         }
@@ -4028,6 +4037,7 @@ class FcService
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 				if (test_instance.crew.resultclass.id == resultclassInstance.id) {
 					calculateTestPenalties(test_instance,true)
+                    test_instance.flightTestLink = ""
                     test_instance.crewResultsModified = true
 					test_instance.save()
 				}
@@ -7394,6 +7404,7 @@ class FcService
                         println "Increase modified."
                         Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                             test_instance.CalculateTestPenalties()
+                            test_instance.flightTestLink = ""
                             test_instance.crewResultsModified = true
                             test_instance.save()
                         }
@@ -7412,6 +7423,7 @@ class FcService
 			                	test_instance.timeCalculated = false
 								test_instance.ResetFlightTestResults()
 								test_instance.CalculateTestPenalties()
+                                test_instance.flightTestLink = ""
                                 test_instance.crewResultsModified = true
 			                    test_instance.save()
 							}
@@ -7794,6 +7806,7 @@ class FcService
                     crew_instance.save()
                     Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                         test_instance.CalculateTestPenalties()
+                        test_instance.flightTestLink = ""
                         test_instance.crewResultsModified = true
                         test_instance.save()
                     }
@@ -7823,6 +7836,7 @@ class FcService
                     crew_instance.save()
                     Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                         test_instance.CalculateTestPenalties()
+                        test_instance.flightTestLink = ""
                         test_instance.crewResultsModified = true
                         test_instance.save()
                     }
@@ -8757,133 +8771,6 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map emailnavigationresultsTask(Map params, String printLanguage)
-    {
-        printstart "emailnavigationresultsTask"
-        Map task = domainService.GetTask(params) 
-        if (!task.instance) {
-            printerror "No task."
-            return task
-        }
-
-        String webroot_dir = servletContext.getRealPath("/")
-        String lock_file_name = webroot_dir + Defs.ROOT_FOLDER_JOBS_LOCK
-        File lock_file = new File(lock_file_name)
-        BufferedWriter lock_writer = lock_file.newWriter()
-        lock_writer.close()
-        
-        // Send email of all navigationresults
-        int email_num = 0
-        int error_num = 0
-        for ( Test test_instance in Test.findAllByTask(task.instance,[sort:"viewpos"])) {
-            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                if (test_instance.IsFlightTestRun()) {
-                    if (test_instance.IsEMailPossible()) {
-                        email_num++
-                        Map ret = SendEmailTest(test_instance, printLanguage)
-                        if (!ret.ok) {
-                            error_num++
-                        }
-                    }
-                }
-            }
-        }
-        
-        gpxService.DeleteFile(lock_file_name)
-        
-        if (error_num) {
-            task.message = getMsg('fc.net.mail.prepared.num.error',[email_num,error_num])
-            task.error = true
-        } else {
-            task.message = getMsg('fc.net.mail.prepared.num',[email_num])
-        }
-        
-        printdone ""
-        return task
-    }
-    
-    //--------------------------------------------------------------------------
-    Map SendEmailTest(Test testInstance, String printLanguage) 
-    {
-        String email_to = testInstance.EMailAddress()
-        printstart "Send mail of '${testInstance.crew.name}' to '${email_to}'"
-        
-        // Calculate flight test version
-        if (testInstance.flightTestModified) {
-            testInstance.flightTestVersion++
-            testInstance.flightTestModified = false
-            testInstance.save()
-            println "flightTestVersion $testInstance.flightTestVersion of '$testInstance.crew.name' saved."
-        }
-        
-        String uuid = UUID.randomUUID().toString()
-        String webroot_dir = servletContext.getRealPath("/")
-        String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/FLIGHT-EMAIL-${uuid}.gpx"
-        String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/FLIGHT-EMAIL-${uuid}.kmz"
-        Map converter = gpxService.ConvertTest2GPX(testInstance, webroot_dir + upload_gpx_file_name, false, true, true, false) // false - no Print, true - Points, true - wrEnrouteSign, false - no gpxExport
-        Map kmz_converter = kmlService.ConvertTest2KMZ(testInstance, webroot_dir, upload_kmz_file_name, false, true) // false - no Print, true - wrEnrouteSign
-        if (converter.ok && converter.track && kmz_converter.ok && kmz_converter.track) {
-            
-            Map email = testInstance.GetEMailBody()
-            String ret_message = ""
-            String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
-            try {
-                String ftp_uploads = ""
-                ftp_uploads += "file:${webroot_dir+upload_gpx_file_name}"
-                ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                ftp_uploads += "${testInstance.GetFileName(ResultType.Flight)}.gpx"
-                ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                ftp_uploads += "file:${webroot_dir+upload_kmz_file_name}"
-                ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                ftp_uploads += "${testInstance.GetFileName(ResultType.Flight)}.kmz"
-                ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?id=${testInstance.id}&printLanguage=${printLanguage}&lang=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}"
-                ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                ftp_uploads += "${testInstance.GetFileName(ResultType.Flight)}.htm"
-                
-                String remove_files = ""
-                remove_files += webroot_dir + upload_gpx_file_name
-                remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                remove_files += webroot_dir + upload_kmz_file_name
-
-                // create email job
-                File job_file = new File(webroot_dir + job_file_name)
-                BufferedWriter job_writer = job_file.newWriter()
-                gpxService.WriteLine(job_writer,email_to) // 1
-                gpxService.WriteLine(job_writer,testInstance.GetEMailTitle(ResultType.Flight)) // 2
-                gpxService.WriteLine(job_writer,email.body) // 3
-                gpxService.WriteLine(job_writer,testInstance.crew.uuid) // 4
-                gpxService.WriteLine(job_writer,ftp_uploads) // 5
-                gpxService.WriteLine(job_writer,remove_files) // 6
-                gpxService.WriteLine(job_writer,"Test${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${testInstance.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
-                job_writer.close()
-                
-                // set sending link
-                testInstance.flightTestLink = Global.EMAIL_SENDING // email.link
-                testInstance.save()
-                
-                ret_message = getMsg('fc.net.mail.prepared',[email_to])
-                println "Job '${job_file_name}' created."
-            } catch (Exception e) {
-                println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')"
-            }
-                            
-            printdone ""
-            return [ok:true, message:ret_message]
-        } else {
-            String error_message = ""
-            if (converter.ok && !converter.track) {
-                error_message = getMsg('fc.gpx.noflight',[testInstance.crew.name])
-            } else {
-                error_message = getMsg('fc.gpx.gacnotconverted',[testInstance.crew.name])
-            }
-            gpxService.DeleteFile(upload_gpx_file_name)
-            printerror error_message
-            return [ok:false, message:error_message]
-        }
-    }
-    
-    //--------------------------------------------------------------------------
     Map readyplanningtaskresultsTest(Map params)
     {
         Map test = domainService.GetTest(params)
@@ -8902,6 +8789,7 @@ class FcService
 		test.instance.properties = params
 		if (test.instance.isDirty()) {
 			test.instance.planningTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 
@@ -8935,6 +8823,7 @@ class FcService
 		test.instance.properties = params
 		if (test.instance.isDirty()) {
 			test.instance.planningTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 
@@ -9091,6 +8980,7 @@ class FcService
         test.instance.properties = params
 		if (observation_data.modified || test.instance.isDirty()) {
 			test.instance.observationTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 
@@ -9155,6 +9045,7 @@ class FcService
         test.instance.properties = params
 		if (observation_data.modified || test.instance.isDirty()) {
 			test.instance.observationTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 
@@ -9479,6 +9370,7 @@ class FcService
 		test.instance.landingTest4Measure = test.instance.landingTest4Measure.toUpperCase() 
 		if (test.instance.isDirty()) {
 			test.instance.landingTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 
@@ -9558,6 +9450,7 @@ class FcService
 		test.instance.landingTest4Measure = test.instance.landingTest4Measure.toUpperCase() 
 		if (test.instance.isDirty()) {
 			test.instance.landingTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 		
@@ -9760,6 +9653,7 @@ class FcService
         test.instance.properties = params
 		if (test.instance.isDirty()) {
 			test.instance.specialTestModified = true
+            test.instance.flightTestLink = ""
 			test.instance.crewResultsModified = true
 		}
 
@@ -9820,6 +9714,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.specialTestModified = true
 			test.instance.crewResultsModified = true
+            test.instance.flightTestLink = ""
 		}
 
         calculateTestPenalties(test.instance,false)
@@ -10493,6 +10388,7 @@ class FcService
 		        	test_instance.timeCalculated = false
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.flightTestLink = ""
                     test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
@@ -11091,6 +10987,7 @@ class FcService
                         test_instance.timeCalculated = false
                         test_instance.ResetFlightTestResults()
                         test_instance.CalculateTestPenalties()
+                        test_instance.flightTestLink = ""
                         test_instance.crewResultsModified = true
                         test_instance.save()
                         calulate_reset_num++
@@ -11446,6 +11343,7 @@ class FcService
 	                calulateTestLegPlannings(test_instance)
 					test_instance.ResetPlanningTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.flightTestLink = ""
                     test_instance.crewResultsModified = true
 	                test_instance.save()
 	            }
@@ -11609,6 +11507,7 @@ class FcService
             
             if (testlegplanning_instance.isDirty()) {
                 testlegplanning_instance.test.planningTestModified = true
+                testlegplanning_instance.test.flightTestLink = ""
                 testlegplanning_instance.test.crewResultsModified = true
             }
             
@@ -12438,6 +12337,7 @@ class FcService
             calculate_times(time, taskInstance, testInstance)
 			testInstance.ResetFlightTestResults()
 			testInstance.CalculateTestPenalties()
+            testInstance.flightTestLink = ""
             testInstance.crewResultsModified = true
             testInstance.save()
             
@@ -12465,6 +12365,7 @@ class FcService
             calculate_times(time, taskInstance, testInstance)
 			testInstance.ResetFlightTestResults()
 			testInstance.CalculateTestPenalties()
+            testInstance.flightTestLink = ""
             testInstance.crewResultsModified = true
             testInstance.save()
             
@@ -12671,6 +12572,7 @@ class FcService
 			println "Times calculated."
 		}
 		testInstance.CalculateTestPenalties()
+        testInstance.flightTestLink = ""
         testInstance.crewResultsModified = true
 		testInstance.save()
 		
@@ -13814,6 +13716,7 @@ class FcService
 					test_instance.timeCalculated = false
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
+                    test_instance.flightTestLink = ""
                     test_instance.crewResultsModified = true
 					test_instance.save()
 					view_pos++

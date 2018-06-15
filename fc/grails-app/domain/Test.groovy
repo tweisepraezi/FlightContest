@@ -1986,7 +1986,7 @@ class Test
     
     String GetEMailTitle(ResultType resultType)
     {
-        return "${task.contest.title}: ${GetTitle(ResultType.Flight,true)}" // true - print 
+        return "${task.contest.title}: ${GetTitle(resultType,true)}" // true - print 
     }
     
     String GetFileName(ResultType resultType)
@@ -2105,23 +2105,12 @@ class Test
     
     boolean IsEMailPossible()
     {
-        if (   NetTools.EMailList(crew.email)
-            && BootStrap.global.IsEMailPossible()
-            && BootStrap.global.IsFTPPossible()
-           )
-        {
-            if (IsLoggerData()) {
-                return true
-            } else if (   aflosStartNum 
-                       && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
-                       && AflosTools.GetAflosCrewName(task.contest, aflosStartNum)
-                       //&& AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, aflosStartNum)
-                      ) 
-            {
-                return true
-            }
-        }
-        return false
+        return NetTools.EMailList(crew.email) && BootStrap.global.IsEMailPossible() && BootStrap.global.IsFTPPossible()
+    }
+    
+    boolean IsSendEMailPossible()
+    {
+        return IsEMailPossible() && (flightTestLink != Defs.EMAIL_SENDING) && !crewResultsModified && !IsTestResultsProvisional(GetResultSettings())
     }
     
     boolean IsShowMapPossible()
@@ -2163,29 +2152,6 @@ class Test
         return false
     }
     
-    Map GetEMailBody()
-    {
-        Map ret = [:]
-        String s = "<p>Lieber Sportfreund,</p>"
-        
-        String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${crew.uuid}"
-        
-        String results_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.pdf"
-        // TODO: s += """<p>Deine Ergebnisse (PDF Viewer): <a href="${results_url}">${results_url}</a></p>"""
-        
-        String kmz_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.kmz"
-        s += """<p>Dein Flug (Google Earth): <a href="${kmz_url}">${kmz_url}</a></p>"""
-        
-        String view_url = "${crew_dir}/${GetFileName(ResultType.Flight)}.htm"
-        s += """<p>Dein Flug (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
-        
-        s += """<p>${task.contest.printOrganizer}</p>"""
-        
-        ret += [body:s,link:view_url]
-        
-        return ret
-    }
-
     boolean IsLoggerData()
     {
         return TrackPoint.countByLoggerdata(loggerData) > 0

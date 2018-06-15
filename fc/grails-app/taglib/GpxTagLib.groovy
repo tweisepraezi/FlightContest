@@ -365,6 +365,10 @@ class GpxTagLib
     
     // --------------------------------------------------------------------------------------------------------------------
     def gpxViewerForm = { attrs, body ->
+        outln"""<script>"""
+        outln"""    var gmApiKey = "${attrs.gmApiKey}";"""
+        outln"""</script>"""
+        
         wrbuttons("gpxview:map:skaliere", attrs)
         
         outln"""<script>"""

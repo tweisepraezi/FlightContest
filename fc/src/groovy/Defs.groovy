@@ -1,6 +1,6 @@
 class Defs
 {
-    static final String GPX_VIEWER_VERSION                             = "GM_Utils-5.18.1a"
+    static final String GPX_VIEWER_VERSION                             = "GM_Utils-5.21"
  
     static final String FCSAVE_FOLDER                                  = "C:/FCSave"
     static final String FCSAVE_FOLDER_FC                               = "${FCSAVE_FOLDER}/.fc"
@@ -24,6 +24,9 @@ class Defs
     static final String ROOT_FOLDER_JOBS_ERROR                         = "jobs/error"
     static final String ROOT_FOLDER_JOBS_LOCK                          = "jobs/.lock"
     static final String ROOT_FOLDER_FONTS                              = "fonts"
+    
+    static final String EMAIL_SENDING                                  = "_email_sending"
+    static final String EMAIL_ERROR                                    = "_email_error"
     
     static final String TurnpointID_TimeCheck                          = "timecheck_"
     static final String TurnpointID_NotFound                           = "notfound_"

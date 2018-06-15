@@ -42,4 +42,10 @@ class NetTools
         }
         return email_list
     }
+    
+    static Map EMailLinks(String fileName)
+    {
+        String file_name = fileName.substring(0,fileName.lastIndexOf('.'))
+        return [map:"${file_name}.htm", pdf:"${file_name}.pdf", kmz:"${file_name}.kmz"]
+    }
 }

@@ -1125,6 +1125,7 @@ class RouteFileTools
                 line_pos++
                 if (line && line.trim() && !line.startsWith('#')) {
                     line = change_comma2point(line)
+                    line = change_tab2space(line)
                     valid_format = true
                     Map import_sign = importSign.GetLineValues(line)
                     import_sign.tpname = change_wp2tp(import_sign.tpname)
@@ -1432,6 +1433,12 @@ class RouteFileTools
         return ret
     }
     
+    //--------------------------------------------------------------------------
+    private static String change_tab2space(String lineValue)
+    {
+        return lineValue.replaceAll('\t', ' ')
+    }
+
     //--------------------------------------------------------------------------
     private static String change_wp2tp(String tpName)
     {

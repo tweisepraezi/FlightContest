@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 8
-:revdate:   29.05.2018
+:revnumber: 3.1.1, Ausgabe 9
+:revdate:   15.06.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -1439,13 +1439,18 @@ zu machen oder diese Datei zu löschen.
 
 Im Root-Verzeichnis des FTP-Servers müssen 2 Verzeichnisse existieren:
 
-* GM_Utils-5.18.1a - GPX-Viewer-JavaScript-Bibliothek
+* GM_Utils-5.21 - GPX-Viewer-JavaScript-Bibliothek
 * Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis (obiges Beispiel: "demo")
 
 Die genannte Version des GPX-Views kann folgendem Verzeichnis entnommen werden:
 
  C:\Program Files (x86)\Flight Contest\tomcat\webapps\fc\GM_Utils
 
+Passen Sie in GPX2GM_Defs.js die Variable JB.GPX2GM.GM_Api_key an und setzen Sie 
+einen Goggle Maps API-Key:
+
+ JB.GPX2GM.GM_Api_key = "API Key"
+ 
 Im Root-Verzeichnis des FTP-Server muss für GPX-Dateien ein eigener
 MIME-Typ konfiguriert werden. Weiterhin sollte für diesen MIME-Typ die 
 Browser-Komprimierung aktiviert werden
@@ -1459,6 +1464,13 @@ Der FTP-Login-Name muss Schreibrechte auf das Wettbewerbs-Verzeichnis erhalten,
 nicht jedoch auf das Root-Verzeichnis des FTP-Servers.
 
 <<<
+=== Google-Maps-Anzeige konfigurieren
+ flightcontest {
+   maps {
+     gm_api_key = "..." // Goggle Maps API-Key
+   }
+ }
+
 === Live-Anzeige konfigurieren
  flightcontest {
    live {

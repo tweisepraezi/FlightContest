@@ -331,7 +331,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -465,7 +465,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -598,7 +598,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -736,7 +736,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
         }
         ret += [ok:converted]
         return ret
@@ -780,7 +780,7 @@ class GpxService
         List show_points = []
         if (showPoints) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, wrEnrouteSign, messageSource, contestMap)
+            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, isPrint, wrEnrouteSign, messageSource, contestMap)
         }
         
         printdone ""
@@ -837,7 +837,7 @@ class GpxService
             printerror err_msg
         }
         println "Generate points for buttons (GetShowPointsRoute)"
-        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, messageSource)] // false - no showEnrouteSign
+        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
         ret += [ok:converted]
         return ret
     }
@@ -1461,7 +1461,7 @@ class GpxService
                 show_points = GetShowPoints(gpxFileName, wrEnrouteSign)
             } else {
                 println "Generate points for buttons (GetShowPointsRoute)"
-                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, wrEnrouteSign, messageSource)
+                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, isPrint, wrEnrouteSign, messageSource)
             }
         }
         
@@ -2800,6 +2800,7 @@ class GpxService
         String webroot_dir = servletContext.getRealPath("/")
         File lock_file = new File(webroot_dir + Defs.ROOT_FOLDER_JOBS_LOCK)
         if (!lock_file.exists()) {
+            List set_links = []
             File analyze_dir1 = new File(webroot_dir + Defs.ROOT_FOLDER_JOBS)
             analyze_dir1.eachFile() { File file ->
                 if (file.isFile()) {
@@ -2854,80 +2855,60 @@ class GpxService
                     }
                     job_file_reader.close()
                     
-                    Map ret = [:]
+                    boolean error = false
                     
                     // FTP uploads
                     if (ftp_basedir && ftp_uploads) {
                         for (String ftp_upload in ftp_uploads.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
                             String[] f = ftp_upload.split(Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR)
-                            if (!ret.error) {
-                                ret = SendFTP2(
-                                    grailsApplication.config.flightcontest, ftp_basedir, f[0], f[1]
-                                )
+                            Map ret = SendFTP2(
+                                grailsApplication.config.flightcontest, ftp_basedir, f[0], f[1]
+                            )
+                            if (ret.error) {
+                                error = true
+                                break
                             }
                         }
                     }
                     
                     // Send email
-                    if (email_to && email_subject && email_body) {
-                        if (!ret.error) {
-                            try {
-                                mailService.sendMail {
-                                    from grailsApplication.config.flightcontest.mail.from
-                                    to NetTools.EMailList(email_to).toArray()
-                                    if (grailsApplication.config.flightcontest.mail.cc) {
-                                        List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,email_to)
-                                        if (cc_list) {
-                                            cc cc_list.toArray()
-                                        }
+                    if (email_to && email_subject && email_body && !error) {
+                        try {
+                            mailService.sendMail {
+                                from grailsApplication.config.flightcontest.mail.from
+                                to NetTools.EMailList(email_to).toArray()
+                                if (grailsApplication.config.flightcontest.mail.cc) {
+                                    List cc_list = NetTools.EMailReducedList(grailsApplication.config.flightcontest.mail.cc,email_to)
+                                    if (cc_list) {
+                                        cc cc_list.toArray()
                                     }
-                                    subject email_subject
-                                    html email_body
-                                    // TODO: body( view:"http://localhost:8080/fc/gpx/ftpgpxviewer", model:[fileName:GetEMailGpxURL(test.instance)])
                                 }
-                                println "E-Mail to '$email_to' send."
-                            } catch (Exception e) {
-                                println "Error: ${e.getMessage()}" 
-                                ret.error = true
+                                subject email_subject
+                                html email_body
                             }
+                            println "E-Mail to '$email_to' send."
+                        } catch (Exception e) {
+                            println "Error: ${e.getMessage()}" 
+                            error = true
                         }
                     }
                         
                     // Save links
                     if (save_links) {
-                        if (!ret.error) {
-                            for (String save_link in save_links.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
-                                String[] l = save_link.split(Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR)
-                                if (l[0] == "Test") {
-                                    try {
-                                        Test test_instance = Test.get(l[1])
-                                        if (test_instance.isDirty()) {
-                                            println "Test instance locked: dirty"
-                                            test_instance = null
-                                        }
-                                        if (test_instance) {
-                                            println "Save link '${l[2]}'"
-                                            test_instance.flightTestLink = l[2]
-                                            test_instance.save()
-                                        }
-                                    } catch (Exception e) {
-                                        println "Test instance ${l[1]} locked: ${e.getMessage()}" 
-                                    }
-                                }
-                            }
+                        for (String save_link in save_links.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
+                            Map set_link = [save_link:save_link, error:error]
+                            set_links += set_link
                         }
                     }
                         
                     // Remove files
                     if (remove_files) {
-                        if (!ret.error) {
-                            for (String remove_file in remove_files.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
-                                DeleteFile(remove_file)
-                            }
+                        for (String remove_file in remove_files.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
+                            DeleteFile(remove_file)
                         }
                     }
                     
-                    if (!ret.error) {
+                    if (!error) {
                         String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_DONE}/" + file.name
                         file.renameTo(new File(new_file_name))
                         printdone new_file_name
@@ -2937,6 +2918,35 @@ class GpxService
                         printerror new_file_name
                     }
                 }
+            }
+            
+            if (set_links) {
+                printstart "Process links"
+                for (Map set_link in set_links) {
+                    String[] l = set_link.save_link.split(Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR)
+                    if (l[0] == "Test") {
+                        try {
+                            Test test_instance = Test.get(l[1])
+                            if (test_instance.isDirty()) {
+                                println "Test ${test_instance.name()} locked: dirty"
+                                test_instance = null
+                            }
+                            if (test_instance) {
+                                if (set_link.error) {
+                                    println "Test ${test_instance.name()}: Set E-Mail-Error"
+                                    test_instance.flightTestLink = Defs.EMAIL_ERROR
+                                } else {
+                                    println "Test ${test_instance.name()}: Save link '${l[2]}'"
+                                    test_instance.flightTestLink = l[2]
+                                }
+                                test_instance.save()
+                            }
+                        } catch (Exception e) {
+                            println "Test ${test_instance.name()} locked: ${e.getMessage()}"
+                        }
+                    }
+                }
+                printdone ""
             }
         }
         if (found) {

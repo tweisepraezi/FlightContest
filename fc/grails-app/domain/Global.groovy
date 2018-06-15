@@ -10,7 +10,6 @@ class Global
 	
     static final int LIVE_UPLOADSECONDS = 60
     static final String LIVE_STYLESHEET = "fclive.css"
-    static final String EMAIL_SENDING   = "_email_sending"
     
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -264,4 +263,14 @@ class Global
         return PRINTSERVER_API
     }
     
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetGMApiKey()
+    {
+        if (   grailsApplication.config.flightcontest.maps
+            && grailsApplication.config.flightcontest.maps.gm_api_key
+           )
+        {
+            return grailsApplication.config.flightcontest.maps.gm_api_key
+        }   
+    }
 }

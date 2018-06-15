@@ -447,6 +447,23 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
+    Map ConvertRoute2PDF(Route routeInstance, String pdfFileName, boolean a3, boolean landscape, printparams)
+    {
+        printstart "ConvertRoute2PDF ${routeInstance.name()} -> ${pdfFileName}"
+        Map route = printRoute([id:routeInstance.id], a3, landscape, printparams)
+        if (route.error) {
+            printerror ""
+            return [ok:false]
+        }
+        File pdf_file = new File(pdfFileName)
+        DataOutputStream pdf_writer = pdf_file.newDataOutputStream()
+        pdf_writer.write(route.content)
+        pdf_writer.close()
+        printdone ""
+        return [ok:true]
+    }
+    
+    //--------------------------------------------------------------------------
     Map printRoutes(Map params, boolean a3, boolean landscape, printparams)
     {
         Map routes = [:]
@@ -1427,16 +1444,28 @@ class PrintService
             return test
         }
         
-        test.instance.printSummaryResults = params.printSummaryResults == "on"
-        test.instance.printPlanningResults = params.printPlanningResults == "on"
-        test.instance.printPlanningResultsScan = params.printPlanningResultsScan == "on"
-        test.instance.printFlightResults = params.printFlightResults == "on"
-        test.instance.printFlightMap = params.printFlightMap == "on"
-        test.instance.printObservationResults = params.printObservationResults == "on"
-        test.instance.printObservationResultsScan = params.printObservationResultsScan == "on"
-        test.instance.printLandingResults = params.printLandingResults == "on"
-        test.instance.printSpecialResults = params.printSpecialResults == "on"
-        test.instance.printProvisionalResults = params.printProvisionalResults == "on"
+        if (params.allResults) {
+            test.instance.printSummaryResults = true
+            test.instance.printPlanningResults = test.instance.IsPlanningTestRun()
+            test.instance.printPlanningResultsScan = test.instance.printPlanningResults
+            test.instance.printFlightResults = test.instance.IsFlightTestRun()
+            test.instance.printFlightMap = test.instance.printFlightResults
+            test.instance.printObservationResults = test.instance.IsObservationTestRun()
+            test.instance.printObservationResultsScan = test.instance.printObservationResults
+            test.instance.printLandingResults = test.instance.IsLandingTestRun()
+            test.instance.printSpecialResults = test.instance.IsSpecialTestRun()
+        } else {
+            test.instance.printSummaryResults = params.printSummaryResults == "on"
+            test.instance.printPlanningResults = params.printPlanningResults == "on"
+            test.instance.printPlanningResultsScan = params.printPlanningResultsScan == "on"
+            test.instance.printFlightResults = params.printFlightResults == "on"
+            test.instance.printFlightMap = params.printFlightMap == "on"
+            test.instance.printObservationResults = params.printObservationResults == "on"
+            test.instance.printObservationResultsScan = params.printObservationResultsScan == "on"
+            test.instance.printLandingResults = params.printLandingResults == "on"
+            test.instance.printSpecialResults = params.printSpecialResults == "on"
+            test.instance.printProvisionalResults = params.printProvisionalResults == "on"
+        }
         
         // Print crewresults
         try {
@@ -1476,6 +1505,23 @@ class PrintService
             printerror test.message 
         }
         return test
+    }
+    
+    //--------------------------------------------------------------------------
+    Map ConvertTest2PDF(Test testInstance, String webRootDir, String pdfFileName, boolean a3, boolean landscape, printparams)
+    {
+        printstart "ConvertTest2PDF ${testInstance.name()} -> ${pdfFileName}"
+        Map test = printcrewresultsTest([id:testInstance.id, allResults:true], a3, landscape, webRootDir, printparams)
+        if (test.error) {
+            printerror ""
+            return [ok:false]
+        }
+        File pdf_file = new File(webRootDir + pdfFileName)
+        DataOutputStream pdf_writer = pdf_file.newDataOutputStream()
+        pdf_writer.write(test.content)
+        pdf_writer.close()
+        printdone ""
+        return [ok:true]
     }
     
     //--------------------------------------------------------------------------

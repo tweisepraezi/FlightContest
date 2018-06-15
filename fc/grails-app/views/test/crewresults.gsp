@@ -12,10 +12,35 @@
                 <h2>${testInstance.GetTitle(ResultType.Crew)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" params="${['crewresultsReturnAction':crewresultsReturnAction,'crewresultsReturnController':crewresultsReturnController,'crewresultsReturnID':crewresultsReturnID]}">
+                        <g:set var="ti" value="${[]+1}"/>
                         <table>
                             <tbody>
                                 <tr>
                                     <td><g:task var="${testInstance.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
+                                    <g:if test="${testInstance.flightTestLink == Defs.EMAIL_SENDING}"> 
+                                        <td style="width:1%;"> 
+                                            <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
+                                        </td>
+                                    </g:if>
+                                    <g:elseif test="${testInstance.flightTestLink == Defs.EMAIL_ERROR}"> 
+                                        <td style="width:1%;"> 
+                                            <img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
+                                        </td>
+                                    </g:elseif>
+                                    <g:elseif test="${testInstance.flightTestLink}">
+                                        <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.flightTestLink)}" />
+                                        <g:if test="${testInstance.IsFlightTestRun()}">
+	                                        <td style="width:1%;"> 
+	                                            <a href="${email_links.map}" target="_blank"><img src="${createLinkTo(dir:'images',file:'map.png')}"/></a>
+	                                        </td>
+	                                        <td style="width:1%;"> 
+	                                            <a href="${email_links.kmz}" target="_blank"><img src="${createLinkTo(dir:'images',file:'kmz.png')}"/></a>
+	                                        </td>
+	                                    </g:if>
+                                        <td style="width:1%;"> 
+                                            <a href="${email_links.pdf}" target="_blank"><img src="${createLinkTo(dir:'images',file:'pdf.png')}"/></a>
+                                        </td>
+                                    </g:elseif>
                                     <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
                             </tbody>
@@ -174,14 +199,17 @@
                                 <tr>
                                     <td>
 				                        <g:if test="${params.next}">
-				                            <g:actionSubmit action="crewresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="1"/>
+				                            <g:actionSubmit action="crewresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
 				                        </g:if>
 				                        <g:else>
-				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="2"/>
+				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
 				                        </g:else>
-				                        <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.print')}" tabIndex="3"/>
+				                        <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+                                        <g:if test="${testInstance.IsSendEMailPossible()}">
+                                            <g:actionSubmit action="sendmail" value="${message(code:'fc.crewresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
+                                        </g:if>
 				                        <g:if test="${params.next}">
-				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="4"/>
+				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
 				                        </g:if>
 			                        </td>
                                     <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>

@@ -38,10 +38,32 @@
                                 <g:set var="next_route" value="?next=${next_route_id}"/>
                             </g:if>
                             
-                            <td><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" next="${next_route}"/><g:if test="${!route_instance.IsRouteOk()}"> !</g:if></td>
-                            <td>${message(code:route_instance.turnpointRoute.code)}<g:if test="${!route_instance.IsTurnpointSignOk()}"> !</g:if><br/><g:if test="${route_instance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
-                            <td>${message(code:route_instance.enroutePhotoRoute.code)}<g:if test="${!route_instance.IsEnrouteSignOk(true)}"> !</g:if><br/>${message(code:route_instance.enroutePhotoMeasurement.code)}<g:if test="${!route_instance.IsEnrouteMeasurementOk(true)}"> !</g:if></td>
-                            <td>${message(code:route_instance.enrouteCanvasRoute.code)}<g:if test="${!route_instance.IsEnrouteSignOk(false)}"> !</g:if><br/>${message(code:route_instance.enrouteCanvasMeasurement.code)}<g:if test="${!route_instance.IsEnrouteMeasurementOk(false)}"> !</g:if></td>
+                            <g:if test="${route_instance.IsRouteOk()}">
+                                <td><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" next="${next_route}"/></td>
+                            </g:if>
+                            <g:else>
+                                <td class="errors"><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" next="${next_route}" error="${true}"/> !</td>
+                            </g:else>
+                            <g:set var="is_turnpoint_sign_ok" value="${route_instance.IsTurnpointSignOk()}"/>
+                            <g:set var="turnpoint_sign_class" value=""/>
+                            <g:if test="${!is_turnpoint_sign_ok}">
+                                <g:set var="turnpoint_sign_class" value="errors"/>
+                            </g:if>
+                            <g:set var="is_enroute_photo_ok" value="${route_instance.IsEnrouteSignOk(true)}"/>
+                            <g:set var="is_enroute_photo_measurement_ok" value="${route_instance.IsEnrouteMeasurementOk(true)}"/>
+                            <g:set var="enroute_photo_class" value=""/>
+                            <g:if test="${!is_enroute_photo_ok || !is_enroute_photo_measurement_ok}">
+                                <g:set var="enroute_photo_class" value="errors"/>
+                            </g:if>
+                            <g:set var="is_enroute_canvas_ok" value="${route_instance.IsEnrouteSignOk(false)}"/>
+                            <g:set var="is_enroute_canvas_measurement_ok" value="${route_instance.IsEnrouteMeasurementOk(false)}"/>
+                            <g:set var="enroute_canvas_class" value=""/>
+                            <g:if test="${!is_enroute_canvas_ok || !is_enroute_canvas_measurement_ok}">
+                                <g:set var="enroute_canvas_class" value="errors"/>
+                            </g:if>
+                            <td class="${turnpoint_sign_class}">${message(code:route_instance.turnpointRoute.code)}<g:if test="${!is_turnpoint_sign_ok}"> !</g:if><br/><g:if test="${route_instance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
+                            <td class="${enroute_photo_class}">${message(code:route_instance.enroutePhotoRoute.code)}<g:if test="${!is_enroute_photo_ok}"> !</g:if><br/>${message(code:route_instance.enroutePhotoMeasurement.code)}<g:if test="${!is_enroute_photo_measurement_ok}"> !</g:if></td>
+                            <td class="${enroute_canvas_class}">${message(code:route_instance.enrouteCanvasRoute.code)}<g:if test="${!is_enroute_canvas_ok}"> !</g:if><br/>${message(code:route_instance.enrouteCanvasMeasurement.code)}<g:if test="${!is_enroute_canvas_measurement_ok}"> !</g:if></td>
 
                             <g:set var="route_data" value="${route_instance.GetRouteData()}" />
                             <g:if test="${route_data.procedureturn_num}">

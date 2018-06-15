@@ -17,14 +17,23 @@
                             <tbody>
                                 <tr>
                                     <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
-                                    <g:if test="${testInstance.flightTestLink == Global.EMAIL_SENDING}"> 
+                                    <g:if test="${testInstance.flightTestLink == Defs.EMAIL_SENDING}"> 
                                         <td style="width:1%;"> 
                                             <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
                                         </td>
                                     </g:if>
-                                    <g:elseif test="${testInstance.flightTestLink && testInstance.flightTestLink != Global.EMAIL_SENDING}">
+                                    <g:elseif test="${testInstance.flightTestLink == Defs.EMAIL_ERROR}"> 
                                         <td style="width:1%;"> 
-                                            <a href="${testInstance.flightTestLink}" target="_blank"><img src="${createLinkTo(dir:'images',file:'map.png')}"/></a>
+                                            <img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
+                                        </td>
+                                    </g:elseif>
+                                    <g:elseif test="${testInstance.flightTestLink}">
+                                        <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.flightTestLink)}" />
+                                        <td style="width:1%;"> 
+                                            <a href="${email_links.map}" target="_blank"><img src="${createLinkTo(dir:'images',file:'map.png')}"/></a>
+                                        </td>
+                                        <td style="width:1%;"> 
+                                            <a href="${email_links.kmz}" target="_blank"><img src="${createLinkTo(dir:'images',file:'kmz.png')}"/></a>
                                         </td>
                                     </g:elseif>
                                     <td style="width:1%;">
@@ -300,9 +309,6 @@
                                             </g:if>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:if test="${testInstance.IsEMailPossible()}">
-                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
-                                            </g:if>
                                             <g:if test="${params.next}">
                                                 <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
@@ -323,9 +329,6 @@
                                             </g:if>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:if test="${testInstance.IsEMailPossible()}">
-                                                <g:actionSubmit action="sendmail" value="${message(code:'fc.flightresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
-                                            </g:if>
 	                                        <g:if test="${params.next}">
 	                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 	                                        </g:if>

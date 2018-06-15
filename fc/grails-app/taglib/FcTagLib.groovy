@@ -162,10 +162,14 @@ class FcTagLib
     // ====================================================================================================================
     // <g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/>
     def route = { p ->
+        String c = ""
+        if (p.error) {
+            c = "error"
+        }
         if (p.next) {
-            out << """<a href="${p.link}/${p.var.id}${p.next}">${p.var.name().encodeAsHTML()}</a>"""
+            out << """<a class="$c" href="${p.link}/${p.var.id}${p.next}">${p.var.name().encodeAsHTML()}</a>"""
         } else {
-            out << """<a href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
+            out << """<a class="$c" href="${p.link}/${p.var.id}">${p.var.name().encodeAsHTML()}</a>"""
         }
     }
 

@@ -71,6 +71,11 @@ td.positionpenalties {
     white-space:nowrap;
 }
 
+td.error {
+	font-weight:bold;
+    color: red;
+}
+
 td.errors {
     color: red;
 }
@@ -132,6 +137,11 @@ p.warning {
     background: yellow;
 }
 
+p.error {
+	font-weight:bold;
+    color: red;
+}
+
 p.group {
     font-weight:bold;
     font-size:1.1em;
@@ -142,3 +152,7 @@ p.errors {
 	margin:0 5px 0 5px;
 }
 
+a.error {
+    font-weight:bold;
+    color: red;
+}

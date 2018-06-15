@@ -27,7 +27,7 @@ class Contest
 	int mapScale = 200000
     CoordPresentation coordPresentation = CoordPresentation.DEGREEMINUTE // DB-2.12 
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
-	boolean resultClasses = true          	            // Klassen, DB-2.0
+	boolean resultClasses = false          	            // Klassen, DB-2.0
 	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung, DB-2.0
     Boolean contestRuleForEachClass = false             // Eigene Wettbewerbsordnung für jede Klasse, DB-2.8 
 	Boolean precisionFlying = false                     // DB-2.3

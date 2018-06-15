@@ -8,6 +8,7 @@ class TaskController {
     def printService
 	def fcService
     def evaluationService
+    def emailService
     
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
@@ -1193,8 +1194,21 @@ class TaskController {
         }
     }
 
-    def emailnavigationresults = {
-        def task = fcService.emailnavigationresultsTask(params,session.printLanguage)
+    def emailallcrewresults = {
+        def task = emailService.emailcrewresultsTask(params,session.printLanguage, grailsAttributes, request, true)
+        flash.message = task.message
+        if (task.error) {
+            flash.error = true
+        }
+        if (!task.instance) {
+            redirect(controller:"contest",action:"tasks")
+        } else {
+            redirect(action:listresults,id:task.instance.id)
+        }
+    }
+
+    def emailnewcrewresults = {
+        def task = emailService.emailcrewresultsTask(params,session.printLanguage, grailsAttributes, request, false)
         flash.message = task.message
         if (task.error) {
             flash.error = true

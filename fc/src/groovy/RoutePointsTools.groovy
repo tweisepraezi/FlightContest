@@ -12,7 +12,7 @@ class RoutePointsTools
     final static int GPXSHOWPPOINT_SCALE = 4                     // Nachkommastellen für Koordinaten
     
     //--------------------------------------------------------------------------
-    static List GetShowPointsRoute(Route routeInstance, Test testInstance, boolean showEnrouteSign, def messageSource, Map contestMap = [:])
+    static List GetShowPointsRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean showEnrouteSign, def messageSource, Map contestMap = [:])
     {
         List points = []
         
@@ -44,7 +44,7 @@ class RoutePointsTools
             // add regular point
             if (!contestMap || coordroute_instance.type.IsContestMapCoord()) {
                 if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
-                    Map new_point = [name:coordroute_instance.titleCode()]
+                    Map new_point = [name:coordroute_instance.titleCode(isPrint)]
                     new_point += GetPointCoords(coordroute_instance)
                     if (testInstance) {
                         new_point += GetPointGateMissed(testInstance, coordroute_instance)

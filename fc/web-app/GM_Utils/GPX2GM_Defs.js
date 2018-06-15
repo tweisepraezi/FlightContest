@@ -1,4 +1,5 @@
 // Platz für weitere Definitionen
+// 15. 5. 2018
 
 "use strict";
 
@@ -6,15 +7,29 @@ window.JB = window.JB || {};
 window.JB.GPX2GM = window.JB.GPX2GM || {};
 
 // Google Maps API Key
-// JB.GPX2GM.GM_Api_key = ""; // Hier den Key eintragen und die "//" am Anfang entfernen
+JB.GPX2GM.GM_Api_key = gmApiKey;
+// Key für OSM Cycle
+// JB.GPX2GM.OSM_Cycle_Api_Key = "OSM_Key";
+// Key für OSM Landscape
+// JB.GPX2GM.OSM_Landscape_Api_Key = "OSM_Key";
 
 // Definition der Icons, bei eigenen Icons nur Kleinbuchstaben verwenden.
 JB.Icons = function(baseurl) {
 	this.DefShadow	= { shadow: { anchor: {x:10,y:35}, url: baseurl+"Icons/shadow50.png" } };
 	this.Bild				= { icon:   { anchor: {x: 6,y:31}, url: baseurl+"Icons/scenic.png" },
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-	this.MoveMarker	= { icon:   { anchor: {x: 6,y: 6}, url: baseurl+"Icons/marker.gif" } };
-	this.Cluster		= { icon:   { anchor: {x:16,y:16}, url: baseurl+"Icons/cluster.png" } };
+	//this.MoveMarker	= { icon:   { anchor: {x: 6,y: 6}, url: baseurl+"Icons/marker.gif" } };
+	this.MoveMarker	= { icon:   { anchor: {x: 6,y: 6}, url: baseurl+"Icons/marker.svg", 
+											scaledSize: { width: 11, height: 11, widthUnit: "px", heightUnit: "px" },
+											size: { width: 11, height: 11, widthUnit: "px", heightUnit: "px" } } };
+	//this.Cluster		= { icon:   { anchor: {x:16,y:16}, url: baseurl+"Icons/cluster.png" } };
+	this.Cluster 		= { icon:   { anchor: {x:16,y:16}, url: baseurl+"Icons/cluster.svg", 
+											scaledSize: { width: 31, height: 31, widthUnit: "px", heightUnit: "px" },
+											size: { width: 31, height: 31, widthUnit: "px", heightUnit: "px" } } };
+	this.Kreis			= { icon:   { anchor: {x:38,y:38}, url: baseurl+"Icons/kreis.png" } };
+	this.CL   			= { icon:   { anchor: {x:16,y:16}, url: baseurl+"Icons/current_location.svg", 
+											scaledSize: { width: 31, height: 31, widthUnit: "px", heightUnit: "px" },
+											size: { width: 31, height: 31, widthUnit: "px", heightUnit: "px" } } };
 	this.lodging		= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/hotel2.png" },
 	//this.lodging		= { icon:   { anchor: {x:15,y:31}, url: baseurl+"Icons/hotel.png" },
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
@@ -42,6 +57,10 @@ JB.Icons = function(baseurl) {
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	this.finish			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/finish.png" },
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.cycling		= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/cycling.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.hiking			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/hiking.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	this.flag				= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/flag.png" },
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	this.harbor			= { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/harbor.png" },
@@ -51,6 +70,8 @@ JB.Icons = function(baseurl) {
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	this.summit     = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/peak.png" },
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.railway    = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/train.png" },
+											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	this["shopping center"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/shoppingmall.png" },
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	this["ground transportation"] = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/subway.png" },
@@ -59,7 +80,19 @@ JB.Icons = function(baseurl) {
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	this["boat ramp"]   = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/boat.png" },
 											shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
-											
+	this.circle_red 		= { icon:   { anchor: {x:8,y:6}, url: baseurl+"Icons/circle_red.svg", 
+											scaledSize: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" },
+											size: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" } } };
+	this.circle_green		= { icon:   { anchor: {x:8,y:8}, url: baseurl+"Icons/circle_green.svg", 
+											scaledSize: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" },
+											size: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" } } };
+	this.square_red 		= { icon:   { anchor: {x:8,y:8}, url: baseurl+"Icons/square_red.svg", 
+											scaledSize: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" },
+											size: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" } } };
+	this.square_green		= { icon:   { anchor: {x:8,y:8}, url: baseurl+"Icons/square_green.svg", 
+											scaledSize: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" },
+											size: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" } } };
+
 	this.fcphoto        = { icon:   { anchor: {x:18,y:20}, url: baseurl+"Icons/s01.png" },
                                             shadow: { anchor: {x:13,y:15}, url: baseurl+"Icons/shadow.png" } };
 	this.s01            = { icon:   { anchor: {x:14,y:20}, url: baseurl+"Icons/s01.png" },
@@ -92,7 +125,6 @@ JB.Icons = function(baseurl) {
 	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
 	this.s15            = { icon:   { anchor: {x:9,y:20}, url: baseurl+"Icons/s15.png" },
 	                                        shadow: { anchor: {x:4,y:15}, url: baseurl+"Icons/shadow.png" } };
-											
 	//this.myicon       = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/myicon.png" },
 	//                    shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	// Most Icons from https://mapicons.mapsmarker.com/
@@ -153,9 +185,12 @@ JB.GPX2GM.strings.de = {
 	rte: "Route",
 	rtes: "Routen",
 	inmo: "in Bewegung",
-	wait: "Bitte warten.<br />Daten werden geladen.",
+	// wait: "Bitte warten.<br />Daten werden geladen.",
+	wait: "",  // Wartebild nehmen
 	clkz: "Zum Zoomen klicken",
-	zb: "Zurück zoomen"
+	zb: "Zurück zoomen",
+	frage_datenschutz: "Diese Seite verwendet Karten und ein Api von Google sowie möglicherweise auch OSM-Karten. Dadurch werden Besucherdaten an den jeweiligen Dienstanbieter übertragen. Mehr dazu im Impressum. Ist das OK?",
+	antwort_datenschutz: "Die Zustimmung zur Nutzung des Google Maps API wurde verweigert. Beim erneuten Laden der Seite können Sie ihre Meinung ändern."
 }
 JB.GPX2GM.strings.en = {
 	lenght: "Length",
@@ -186,9 +221,12 @@ JB.GPX2GM.strings.en = {
 	rte: "Route",
 	rtes: "Routes",
 	inmo: "in motion",
-	wait: "Please wait.<br />Loading data.",
+	// wait: "Please wait.<br />Loading data.",
+	wait: "",  // Wartebild nehmen
 	clkz: "Click to zoom",
-	zb: "Zoom back"
+	zb: "Zoom back",
+	frage_datenschutz: "This page uses maps and an api from Google and possibly also OSM maps. This transfers visitor data to the respective service provider. Read more about this in the impressum. Is that all OK?",
+	antwort_datenschutz: "Permission to use the Google Maps API has been denied. You can change your mind when you reload the page."	
 }
 
 /* // Prototyp für Callbackfunktion
@@ -214,7 +252,7 @@ JB.GPX2GM.callback = function(pars) {
 		case "Tracks_v":
 			alert(pars.gpxdaten.tracks.laenge);
 			for(var i=0;i<pars.gpxdaten.tracks.track.length;i++)
-				alert(pars.gpxdaten.tracks.track[i].laenge)
+				alert(pars.gpxdaten.tracks.track[i].laenge); 
 			break;
 		case "Tracks_n":
 			break;
@@ -229,6 +267,7 @@ JB.GPX2GM.callback = function(pars) {
 		case "click_Route":
 			break;
 		case "click_Track":
+			console.info(pars);
 			break;
 	}
 	return true;

@@ -8,6 +8,7 @@ class RouteController {
     def gpxService
     def kmlService
     def osmPrintMapService
+    def emailService
     
     def index = { redirect(action:list,params:params) }
 
@@ -501,7 +502,7 @@ class RouteController {
                 session.gpxviewerReturnController = controllerName
                 session.gpxviewerReturnID = params.id
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
-                redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no"])
+                redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",gmApiKey:BootStrap.global.GetGMApiKey()])
             } else {
                 flash.error = true
                 flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
@@ -720,7 +721,7 @@ class RouteController {
                         session.gpxviewerReturnController = controllerName
                         session.gpxviewerReturnID = params.id
                         session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
-                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no"])
+                        redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:route_gpx_file_name,originalFilename:route.instance.name(),showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"no",gmApiKey:BootStrap.global.GetGMApiKey()])
                     } else if (route.instance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTGPX) {
                         String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
                         response.setContentType("application/octet-stream")
@@ -822,74 +823,12 @@ class RouteController {
             session.lastContest.refresh()
             Map route = domainService.GetRoute(params)
             if (route.instance) {
-                String email_to = route.instance.EMailAddress()
-                gpxService.printstart "Send mail of '${route.instance.name()}' to '${email_to}'"
-                String uuid = UUID.randomUUID().toString()
-                String webroot_dir = servletContext.getRealPath("/")
-                String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.gpx"
-                String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.kmz"
-                Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
-                Map kmz_converter = kmlService.ConvertRoute2KMZ(route.instance, webroot_dir, upload_kmz_file_name, true, true) // true - Print, true - wrEnrouteSign
-                if (converter.ok && kmz_converter.ok) {
-                    String route_name = route.instance.printName()
-                    Map email = GetEMailBody(session.lastContest, route_name)
-                    
-                    String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
-                    BufferedWriter job_writer = null
-                    try {
-                        String ftp_uploads = ""
-                        ftp_uploads += "file:${webroot_dir+upload_gpx_file_name}"
-                        ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                        ftp_uploads += "${route_name}.gpx"
-                        ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                        ftp_uploads += "file:${webroot_dir+upload_kmz_file_name}"
-                        ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                        ftp_uploads += "${route_name}.kmz"
-                        ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                        ftp_uploads += "http://localhost:8080/fc/gpx/startroutegpxviewer?id=${route.instance.id}&printLanguage=${session.printLanguage}&lang=${session.printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(converter.gpxShowPoints)}"
-                        ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                        ftp_uploads += "${route_name}.htm"
-                        
-                        String remove_files = ""
-                        remove_files += webroot_dir + upload_gpx_file_name
-                        remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                        remove_files += webroot_dir + upload_kmz_file_name
-                        
-                        // create email job
-                        File job_file = new File(webroot_dir + job_file_name)
-                        job_writer = job_file.newWriter()
-                        gpxService.WriteLine(job_writer,email_to) // 1
-                        gpxService.WriteLine(job_writer,route.instance.GetEMailTitle()) // 2
-                        gpxService.WriteLine(job_writer,email.body) // 3
-                        gpxService.WriteLine(job_writer,session.lastContest.contestUUID) // 4
-                        gpxService.WriteLine(job_writer,ftp_uploads) // 5
-                        gpxService.WriteLine(job_writer,remove_files) // 6
-                        gpxService.WriteLine(job_writer,"Route${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${route.instance.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
-                        job_writer.close()
-                        job_writer = null
-                        
-                        // set sending link
-                        //session.lastContest.routeLink = Global.EMAIL_SENDING
-                        //session.lastContest.save()
-                        
-                        flash.message = message(code:'fc.net.mail.prepared',args:[email_to])
-                        gpxService.println "Job '${job_file_name}' created." 
-                    } catch (Exception e) {
-                        gpxService.println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')"
-                        if (job_writer) {
-                            job_writer.close()
-                        } 
-                    }
-                    gpxService.printdone ""
-                    redirect(action:'show',id:params.id)
-                } else {
+                Map ret = emailService.emailRoute(route.instance, session.printLanguage, grailsAttributes, request)
+                flash.message = ret.message
+                if (!ret.ok) {
                     flash.error = true
-                    flash.message = message(code:'fc.gpx.gacnotconverted',args:[route.instance.name()])
-                    gpxService.DeleteFile(upload_gpx_file_name)
-                    gpxService.printerror flash.message
-                    redirect(action:'show',id:params.id)
                 }
-
+                redirect(action:'show',id:params.id)
             } else {
                 flash.message = route.message
                 redirect(action:list)
@@ -899,24 +838,6 @@ class RouteController {
         }
     }
     
-    private Map GetEMailBody(Contest contestInstance, String routeName)
-    {
-        Map ret = [:]
-        String s = ""
-        
-        String contest_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${contestInstance.contestUUID}"
-        
-        String kmz_url = "${contest_dir}/${routeName}.kmz"
-        s += """<p>Strecke (Google Earth): <a href="${kmz_url}">${kmz_url}</a></p>"""
-        
-        String view_url = "${contest_dir}/${routeName}.htm"
-        s += """<p>Strecke (Web-Browser): <a href="${view_url}">${view_url}</a></p>"""
-        
-        ret += [body:s,link:view_url]
-        
-        return ret
-    }
-
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,

@@ -66,7 +66,7 @@
                                         <td><g:resultclass var="${crew_instance.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
 	                                </g:if>
 	                                <g:else>
-	                                    <td>-</td>
+	                                    <td class="errors">${message(code:'fc.crew.noclass')}</td>
 	                                </g:else>
                                 </g:if>
 	                            <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/><g:if test="${crew_instance.aircraft?.user1 && crew_instance.aircraft?.user2}"> *</g:if></td>

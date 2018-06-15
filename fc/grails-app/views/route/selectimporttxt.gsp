@@ -33,7 +33,7 @@
                         </g:if>
                         <div>
                             <br/>
-                            <p>${message(code:'fc.route.signfileimport.info2')}<br/>${HTMLFilter.FilterParam(params.lineContent)}</p>
+                            <p>${message(code:'fc.route.fileimport.info.txt')}<br/>${HTMLFilter.FilterParam(params.lineContent)}</p>
                         </div>
                         <br/>
                         <input type="hidden" name="routeid" value="${params.routeid}"/>

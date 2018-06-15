@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.1, Ausgabe 8,</span>
-<span id="revdate">29.05.2018</span>
+<span id="revnumber">version 3.1.1, Ausgabe 9,</span>
+<span id="revdate">15.06.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -494,6 +494,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_e_mail_versand_konfigurieren">E-Mail-Versand konfigurieren</a></li>
 <li><a href="#_e_mail_abruf_konfigurieren">E-Mail-Abruf konfigurieren</a></li>
 <li><a href="#_ftp_versand_konfigurieren">FTP-Versand konfigurieren</a></li>
+<li><a href="#_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</a></li>
 <li><a href="#_live_anzeige_konfigurieren">Live-Anzeige konfigurieren</a></li>
 <li><a href="#_osm_druck_server_konfigurieren">OSM-Druck-Server konfigurieren</a></li>
 <li><a href="#_test_anzeigen_konfigurieren">Test-Anzeigen konfigurieren</a></li>
@@ -3592,7 +3593,7 @@ flightcontest {
 <div class="ulist">
 <ul>
 <li>
-<p>GM_Utils-5.18.1a - GPX-Viewer-JavaScript-Bibliothek</p>
+<p>GM_Utils-5.21 - GPX-Viewer-JavaScript-Bibliothek</p>
 </li>
 <li>
 <p>Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis (obiges Beispiel: "demo")</p>
@@ -3605,6 +3606,15 @@ flightcontest {
 <div class="literalblock">
 <div class="content">
 <pre>C:\Program Files (x86)\Flight Contest\tomcat\webapps\fc\GM_Utils</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Passen Sie in GPX2GM_Defs.js die Variable JB.GPX2GM.GM_Api_key an und setzen Sie
+einen Goggle Maps API-Key:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>JB.GPX2GM.GM_Api_key = "API Key"</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3625,6 +3635,18 @@ AddOutputFilterByType DEFLATE application/gpx</pre>
 nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    gm_api_key = "..." // Goggle Maps API-Key
+  }
+}</pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_live_anzeige_konfigurieren">Live-Anzeige konfigurieren</h3>

@@ -9,7 +9,7 @@ class TestController
     def gpxService
     def kmlService
     def calcService
-    def mailService
+    def emailService
 
     def show = {
         Map test = domainService.GetTest(params) 
@@ -1493,7 +1493,7 @@ class TestController
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
-                redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes"])
+                redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
             } else {
                 flash.error = true
                 if (converter.ok && !converter.track) {
@@ -1580,38 +1580,19 @@ class TestController
     def sendmail = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            Map ret = fcService.SendEmailTest(test.instance, session.printLanguage)
+            Map ret = emailService.SendEmailTest(test.instance, session.printLanguage, grailsAttributes, request)
             flash.message = ret.message
             if (ret.ok) {
-                if (test.instance.flightTestComplete) {
-                    redirect(controller:"task",action:"startresults",params:[message:ret.message])
-                } else {
-                    if (nexttest_id) {
-                        redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])
-                    } else {
-                        redirect(action:'flightresults',id:params.id)
-                    }
-                }
+                test.instance.flightTestLink = Defs.EMAIL_SENDING
+                test.instance.save()
             } else {
                 flash.error = true
-                long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
-                if (nexttest_id) {
-                    redirect(action:'flightresults',id:params.id,params:[next:nexttest_id])
-                } else {
-                    redirect(action:'flightresults',id:params.id)
-                }
             }
+            redirect(controller:"task",action:"startresults",params:[message:ret.message])
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
         }
-    }
-    
-    private String GetEMailGpxURL(Test testInstance)
-    {
-        String crew_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${testInstance.crew.uuid}"
-        String gpx_url = "${crew_dir}/${testInstance.GetFileName(ResultType.Flight)}.gpx"
-        return gpx_url
     }
     
     def cancel = {

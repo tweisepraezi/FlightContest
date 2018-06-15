@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-08.06.2018
+15.06.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -54,7 +54,7 @@ Weitere nützliche Funktionen von Flight Contest:
 * Online-Kartenanzeige für Strecken und Navigationsflüge.
   (Goggle Maps und Open Street Map)
 * Offline-Anzeige für Strecken und Navigationsflüge.
-* E-Mail-Versand der Navigationsflug-Karten an Teilnehmer.
+* E-Mail-Versand des Besatzungsergebnisses an Teilnehmer.
 * Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
@@ -70,7 +70,6 @@ Erweiterungen in dieser Version (3.1.1):
       * für eine einzelne Strecke (-> Streckendetails)
       * für alle Navigationsflüge (-> Ergebnisse)
       * für einen einzelnen Navigationsflug (-> Ergebnisse -> Navigationsflug)
-    Der E-Mail-Versand enthält auch die KMZ-Datei. 
 - Beobachtungs-Auswerteformular erweitert
     * Feld zum Notieren der Abgabezeit hinzugefügt
     * Besatzungs- und Schiedsrichter-Unterschriftenfelder hinzugefügt
@@ -120,7 +119,13 @@ Erweiterungen in dieser Version (3.1.1):
 - Live-Ergebnis-Anzeige (Live Scoring) verbessert
     Verbesserung des Laufzeitverhaltens und Vermeidung von Datenbank-Locks
     Die automatische periodische Live-Ergebnis-Berechnung kann nun 
-    verwendet werden. 
+    verwendet werden.
+- E-Mail-Versand des Besatzungsergebnisses (PDF, KMZ und Google Maps)
+- Die integrierte Google-Maps-Anzeige benötigt einen Google Maps API Key, den sie 
+  konfigurieren müssen: 
+    -> Hilfe -> Installationsabhängige Konfiguration -> Google-Maps-Anzeige
+       konfigurieren
+    https://www.j-berkemeier.de/GPXViewer/#Apikey
 
 Erweiterungen in Version 3.1:
 -----------------------------

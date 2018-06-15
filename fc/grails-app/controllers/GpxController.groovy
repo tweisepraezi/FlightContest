@@ -99,7 +99,7 @@ class GpxController
                 if (params.offlinemap) {
                     redirect(action:'startofflineviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
                 } else {
-                    redirect(action:'startgpxviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
+                    redirect(action:'startgpxviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
                 }
             } else {
                 flash.error = true
@@ -152,7 +152,7 @@ class GpxController
                     if (params.offlinemap) {
                         redirect(action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
                     } else {
-                        redirect(action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes"])
+                        redirect(action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
                     }
                 } else {
                     flash.error = true
@@ -188,11 +188,11 @@ class GpxController
     }
     
     def startgpxviewer = {
-        gpxService.printstart "startgpxviewer ($params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints)"
+        gpxService.printstart "startgpxviewer ($params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints, gmApiKey:$params.gmApiKey)"
         if (session.gpxShowPoints) {
-            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
+            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gmApiKey:params.gmApiKey,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
         } else {
-            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints])
+            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gmApiKey:params.gmApiKey])
         }
         gpxService.printdone ""
     }
@@ -201,29 +201,14 @@ class GpxController
         return [:]
     }
     
-    def startroutegpxviewer = {
-        Route route_instance = Route.get(params.id)
-        if (route_instance) {
-            session.printLanguage = params.printLanguage
-            String file_name = "${route_instance.printName()}.gpx"
-            String original_filename = route_instance.GetEMailTitle().encodeAsHTML()
-            render(view:"ftpgpxviewer",model:[fileName:file_name,originalFilename:original_filename,printLanguage:params.printLanguage,lang:params.printLanguage,showProfiles:params.showProfiles,gpxShowPoints:HTMLFilter.GetList(params.gpxShowPoints)])
-        }
-        return [:]
-    }
-
     def ftpgpxviewer = {
         return [:]
     }
 
     def startftpgpxviewer = {
-        Test test_instance = Test.get(params.id)
-        if (test_instance) {
-            session.printLanguage = params.printLanguage
-            String file_name = "${test_instance.GetFileName(ResultType.Flight)}.gpx"
-            String original_filename = test_instance.GetEMailTitle(ResultType.Flight).encodeAsHTML()
-            render(view:"ftpgpxviewer",model:[fileName:file_name,originalFilename:original_filename,printLanguage:params.printLanguage,lang:params.printLanguage,showProfiles:params.showProfiles,gpxShowPoints:HTMLFilter.GetList(params.gpxShowPoints)])
-        }
+        session.printLanguage = params.printLanguage
+        String original_filename= params.originalFilename.encodeAsHTML()
+        render(view:"ftpgpxviewer",model:[fileName:params.fileName,originalFilename:original_filename,printLanguage:params.printLanguage,lang:params.printLanguage,showProfiles:params.showProfiles,gpxShowPoints:HTMLFilter.GetList(params.gpxShowPoints)])
         return [:]
     }
 

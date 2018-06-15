@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 enum ImportSign
 {
     None,
@@ -19,7 +21,22 @@ enum ImportSign
     static Map GetRouteCoordData(Route routeInstance)
     {
         ImportSign import_sign = ImportSign.RouteCoord
-        String line_content = "TO, ${GetImportTxtLineContent(routeInstance.contest)}, [Gate 240${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM},] [Dist 93.0${RouteFileTools.UNIT_mm},] [Track 001.00${RouteFileTools.UNIT_GRAD},] [Duration 2${RouteFileTools.UNIT_min},] [notime,] [nogate,] [noplan,] [endcurved]"
+        // TO, Lat 54° 25.53333' N, Lon 009° 32.43333' E, Alt 52ft, Gate 270° 0.02NM
+        String line_content = "TO, ${GetImportTxtLineContent2(routeInstance.contest, 54, 25.53333, CoordPresentation.NORTH, 9, 32.43333, CoordPresentation.EAST, 0)}, Gate 270${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM}"
+        // SP, Lat 54° 31.06823' N, Lon 009° 28.83724' E, Alt 203ft
+        line_content += "<br/>SP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 31.06823, CoordPresentation.NORTH, 9, 28.83724, CoordPresentation.EAST, 800)}"
+        // TP1, Lat 54° 32.08438' N, Lon 009° 42.47305' E, Alt 1899ft
+        line_content += "<br/>TP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 32.08438, CoordPresentation.NORTH, 9, 42.47305, CoordPresentation.EAST, 800)}"
+        // TP2, Lat 54° 24.25312' N, Lon 009° 45.85638' E, Alt 2001ft
+        line_content += "<br/>SC, ${GetImportTxtLineContent2(routeInstance.contest, 54, 24.25312, CoordPresentation.NORTH, 9, 45.85638, CoordPresentation.EAST, 800)}"
+        // TP3, Lat 54° 23.66979' N, Lon 009° 11.25000' E, Alt 2001ft
+        line_content += "<br/>TP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 23.66979, CoordPresentation.NORTH, 9, 11.25000, CoordPresentation.EAST, 800)}"
+        // FP, Lat 54° 30.96719' N, Lon 009° 22.08333' E, Alt 2001ft
+        line_content += "<br/>FP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 30.96719, CoordPresentation.NORTH, 9, 22.08333, CoordPresentation.EAST, 800)}"
+        // LDG, Lat 54° 25.52474' N, Lon 009° 32.19382' E, Alt 800ft, Gate 270° 0.02NM
+        line_content += "<br/>LDG, ${GetImportTxtLineContent2(routeInstance.contest, 54, 25.52474, CoordPresentation.NORTH, 9, 32.19382, CoordPresentation.EAST, 0)}, Gate 270${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM}"
+        // Common
+        line_content += "<br/><br/>TO, ${GetImportTxtLineContent(routeInstance.contest)}, [Gate 240${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM},] [Dist 93.0${RouteFileTools.UNIT_mm},] [Track 001.00${RouteFileTools.UNIT_GRAD},] [Duration 2${RouteFileTools.UNIT_min},] [notime,] [nogate,] [noplan,] [endcurved]"
         return [importsign:import_sign, linecontent:line_content]
     }
     
@@ -44,15 +61,15 @@ enum ImportSign
         
         switch (import_sign) {
             case ImportSign.TurnpointPhoto:
-                line_content = "TP1, B"
+                line_content = "SP, C<br/>TP1, A<br/>TP2, D<br/>TP3, B<br/>FP, E"
                 title_code = "fc.coordroute.turnpointphoto.import"
                 break
             case ImportSign.TurnpointCanvas:
-                line_content = "TP1, A"
+                line_content = "SP, C<br/>TP1, A<br/>TP2, D<br/>TP3, B<br/>FP, E"
                 title_code = "fc.coordroute.turnpointcanvas.import"
                 break
             case ImportSign.TurnpointTrueFalse:
-                line_content = "TP1, yes"
+                line_content = "SP, no<br/>TP1, yes<br/>TP2, yes<br/>TP3, yes<br/>FP, no"
                 title_code = "fc.coordroute.turnpointtruefalse.import"
                 break
         }
@@ -103,6 +120,20 @@ enum ImportSign
         String coord_demo_lat = contestInstance.coordPresentation.GetCoordName(coord_demo, true).replaceAll(',', '.')
         String coord_demo_lon = contestInstance.coordPresentation.GetCoordName(coord_demo, false).replaceAll(',', '.')
         return "${coord_demo_lat}, ${coord_demo_lon}, ${RouteFileTools.ALT} 1243${RouteFileTools.UNIT_ft}"
+    }
+    
+    static String GetImportTxtLineContent2(Contest contestInstance, int latGrad, BigDecimal latMinute, String latDirection, int lonGrad, BigDecimal lonMinute, String lonDirection, int altitudeValue)
+    {
+        Coord coord_demo = new Coord()
+        coord_demo.latGrad = latGrad
+        coord_demo.latMinute = latMinute
+        coord_demo.latDirection = latDirection
+        coord_demo.lonGrad = lonGrad
+        coord_demo.lonMinute = lonMinute
+        coord_demo.lonDirection = lonDirection
+        String coord_demo_lat = contestInstance.coordPresentation.GetCoordName(coord_demo, true).replaceAll(',', '.')
+        String coord_demo_lon = contestInstance.coordPresentation.GetCoordName(coord_demo, false).replaceAll(',', '.')
+        return "${coord_demo_lat}, ${coord_demo_lon}, ${RouteFileTools.ALT} ${altitudeValue}${RouteFileTools.UNIT_ft}"
     }
     
     static Map GetEnrouteSignData(Route routeInstance, boolean enroutePhoto)
