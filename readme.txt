@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-15.06.2018
+21.06.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -110,6 +110,7 @@ Erweiterungen in dieser Version (3.1.1):
     Die Streckenliste zeigt die Anzahl vorhandener krummer Etappen an.
 - Strecken-Bilder und -Bodenezeichen-Import erweitert:
     * Import aus kml/kmz-Wegpunkten möglich
+    * In kml/kmz-Dateien zu durchsuchendes Verzeichnis angebbar
     * Namenspräfix zum Filtern des Importes angebbar
 - Streckendetail-Dialog verändert:
     Aktions-Schalter werden jetzt oben angezeigt

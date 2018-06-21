@@ -427,7 +427,7 @@ class BootStrap {
                                 contest_instance.contestPrintTaskTestDetails = ""
                                 contest_instance.contestPrintLandingDetails = false
                                 contest_instance.liveRefreshSeconds = Contest.LIVE_REFRESHSECONDS
-                                contest_instance.liveStylesheet = Global.LIVE_STYLESHEET
+                                contest_instance.liveStylesheet = Defs.LIVE_STYLESHEET
                                 contest_instance.livePositionCalculation = 0
                                 contest_instance.liveShowSummary = true
                                 contest_instance.contestPrintEqualPositions = false
@@ -558,7 +558,7 @@ class BootStrap {
                         if (global.versionMinor < 11) { // DB-2.11 compatibility (in FC 2.3 wurde auf < 10 getestet)
                             print "    2.11 modifications"
                             global.liveContestID = 0
-                            global.liveUploadSeconds = Global.LIVE_UPLOADSECONDS
+                            global.liveUploadSeconds = Defs.LIVE_UPLOADSECONDS
                             global.liveLanguage = "de"
                             println " done."
                         }

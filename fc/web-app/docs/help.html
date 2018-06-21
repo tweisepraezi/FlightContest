@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.1, Ausgabe 9,</span>
-<span id="revdate">15.06.2018</span>
+<span id="revnumber">version 3.1.1, Ausgabe 10,</span>
+<span id="revdate">19.06.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -494,8 +494,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_e_mail_versand_konfigurieren">E-Mail-Versand konfigurieren</a></li>
 <li><a href="#_e_mail_abruf_konfigurieren">E-Mail-Abruf konfigurieren</a></li>
 <li><a href="#_ftp_versand_konfigurieren">FTP-Versand konfigurieren</a></li>
-<li><a href="#_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</a></li>
 <li><a href="#_live_anzeige_konfigurieren">Live-Anzeige konfigurieren</a></li>
+<li><a href="#_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</a></li>
 <li><a href="#_osm_druck_server_konfigurieren">OSM-Druck-Server konfigurieren</a></li>
 <li><a href="#_test_anzeigen_konfigurieren">Test-Anzeigen konfigurieren</a></li>
 </ul>
@@ -3637,18 +3637,6 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</h3>
-<div class="literalblock">
-<div class="content">
-<pre>flightcontest {
-  maps {
-    gm_api_key = "..." // Goggle Maps API-Key
-  }
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
 <h3 id="_live_anzeige_konfigurieren">Live-Anzeige konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
@@ -3710,7 +3698,33 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Bei konfigurierten Kopien und/oder FTP-Upload wird auch immer ein Live-Ergebnis
+in die eigene Server-Instanz kopiert.<br>
+Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwenden:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  live {
+    show = true
+  }
+}</pre>
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    gm_api_key = "..." // Goggle Maps API-Key
+  }
+}</pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_osm_druck_server_konfigurieren">OSM-Druck-Server konfigurieren</h3>

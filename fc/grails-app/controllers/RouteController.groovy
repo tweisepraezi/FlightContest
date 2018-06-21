@@ -326,15 +326,15 @@ class RouteController {
     def importenroutesign = {
         Route route_instance = Route.get(params.routeid)
         def file = request.getFile('txtfile')
-        Map import_txt = fcService.importSignFile(RouteFileTools.TXT_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.namepraefix)
+        Map import_txt = fcService.importSignFile(RouteFileTools.TXT_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix)
         if (!import_txt.found) {
-            import_txt = fcService.importSignFile(RouteFileTools.KML_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.namepraefix)
+            import_txt = fcService.importSignFile(RouteFileTools.KML_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix)
         }
         if (!import_txt.found) {
-            import_txt = fcService.importSignFile(RouteFileTools.KMZ_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.namepraefix)
+            import_txt = fcService.importSignFile(RouteFileTools.KMZ_EXTENSION, route_instance, file, ImportSign.(params.importSign), params.foldername, params.namepraefix)
         }
         if (!import_txt.found) {
-            import_txt = fcService.importSignFile("", route_instance, file, ImportSign.(params.importSign), "")
+            import_txt = fcService.importSignFile("", route_instance, file, ImportSign.(params.importSign), "", "")
         }
         flash.error = import_txt.error
         flash.message = import_txt.message

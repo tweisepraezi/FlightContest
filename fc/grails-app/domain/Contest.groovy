@@ -85,7 +85,7 @@ class Contest
 	
     // Live-Auswertung
     Integer liveRefreshSeconds = LIVE_REFRESHSECONDS    // Live-Anzeige-Refresh-Zeit in Sekunden, DB-2.8
-    String liveStylesheet = Global.LIVE_STYLESHEET      // Live-Anzeige-Stylesheet, DB-2.8
+    String liveStylesheet = Defs.LIVE_STYLESHEET        // Live-Anzeige-Stylesheet, DB-2.8
     Integer livePositionCalculation = 0                 // Live-Positions-Berechnung (0 = Contest, sonst Task), DB-2.8
     Boolean liveShowSummary = true                      // Live-Summary-Anzeige, DB-2.8
     

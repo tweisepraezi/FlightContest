@@ -5082,7 +5082,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map importSignFile(String fileExtension, Route routeInstance, def file, ImportSign importSign, String namePrefix)
+    Map importSignFile(String fileExtension, Route routeInstance, def file, ImportSign importSign, String folderName, String namePrefix)
     {
         Map ret = [found: false, error: false, message: ""]
         
@@ -5113,7 +5113,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_sign_file(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, importSign, namePrefix)
+                Map reader = import_sign_file(fileExtension, routeInstance, webroot_dir + upload_filename, original_filename, importSign, folderName, namePrefix)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -5141,12 +5141,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_sign_file(String fileExtension, Route routeInstance, String loadFileName, String originalFileName, ImportSign importSign, String namePrefix)
+    private Map import_sign_file(String fileExtension, Route routeInstance, String loadFileName, String originalFileName, ImportSign importSign, String folderName, String namePrefix)
     {
-        printstart "import_sign_file '$loadFileName' Prefix='$namePrefix'"
+        printstart "import_sign_file '$loadFileName' Folder='$folderName' Prefix='$namePrefix'"
         
         // read file
-        Map reader = RouteFileTools.ReadImportSignFile(fileExtension, routeInstance, loadFileName, originalFileName, importSign, namePrefix)
+        Map reader = RouteFileTools.ReadImportSignFile(fileExtension, routeInstance, loadFileName, originalFileName, importSign, folderName, namePrefix)
         
         // calculate legs
         if (importSign == ImportSign.RouteCoord) {

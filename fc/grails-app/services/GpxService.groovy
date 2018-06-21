@@ -2679,6 +2679,21 @@ class GpxService
                 live_html_file.close()
                 printdone ""
                 
+                String live_file_name ="${webroot_dir}${Defs.ROOT_FOLDER_LIVE}/${Defs.LIVE_FILENAME}"
+                printstart "Copy to '$live_file_name'"
+                def live_src_file = new File(live_html_file_name).newInputStream()
+                try {
+                    def dest_file = new File(live_file_name).newOutputStream()  
+                    dest_file << live_src_file
+                    dest_file.close()
+                } catch (Exception e) {
+                    ret.error = true
+                    ret.failedDestinations += live_file_name
+                    println "Error: ${e.getMessage()}"
+                }
+                live_src_file.close()
+                printdone ""
+                    
                 if (BootStrap.global.IsLiveFTPUploadPossible()) {
                     printstart "FTP-Upload"
                     String working_dir = grailsApplication.config.flightcontest.live.ftpupload.workingdir
@@ -2741,6 +2756,22 @@ class GpxService
             printstart "UploadStylesheet ${new Date()}"
             String webroot_dir =  servletContext.getRealPath("/")
             String stylesheet_file_name = "${webroot_dir}css/${stylesheetName}"
+            
+            String live_file_name ="${webroot_dir}${Defs.ROOT_FOLDER_LIVE}/${Defs.LIVE_FILENAME}"
+            live_file_name = "${live_file_name.substring(0,live_file_name.lastIndexOf('/')+1)}${stylesheetName}"
+            printstart "Copy to '$live_file_name'"
+            def live_src_file = new File(stylesheet_file_name).newInputStream()
+            try {
+                def dest_file = new File(live_file_name).newOutputStream()  
+                dest_file << live_src_file
+                dest_file.close()
+            } catch (Exception e) {
+                ret.error = true
+                ret.failedDestinations += live_file_name
+                println "Error: ${e.getMessage()}"
+            }
+            live_src_file.close()
+            printdone ""
             
             if (BootStrap.global.IsLiveFTPUploadPossible()) {
                 printstart "FTP-Upload"

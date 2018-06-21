@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 9
-:revdate:   15.06.2018
+:revnumber: 3.1.1, Ausgabe 10
+:revdate:   19.06.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -1464,13 +1464,6 @@ Der FTP-Login-Name muss Schreibrechte auf das Wettbewerbs-Verzeichnis erhalten,
 nicht jedoch auf das Root-Verzeichnis des FTP-Servers.
 
 <<<
-=== Google-Maps-Anzeige konfigurieren
- flightcontest {
-   maps {
-     gm_api_key = "..." // Goggle Maps API-Key
-   }
- }
-
 === Live-Anzeige konfigurieren
  flightcontest {
    live {
@@ -1504,7 +1497,24 @@ Lokale und Share-Kopien können nicht direkt im Firefox geöffnet werden.
 . In der Adresszeile dem Link "file://///" voranstellen
          -> file://///Server/Share/fclive.htm
 
+Bei konfigurierten Kopien und/oder FTP-Upload wird auch immer ein Live-Ergebnis 
+in die eigene Server-Instanz kopiert. +
+Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwenden:
+
+ flightcontest {
+   live {
+     show = true
+   }
+ }
+ 
 <<<
+=== Google-Maps-Anzeige konfigurieren
+ flightcontest {
+   maps {
+     gm_api_key = "..." // Goggle Maps API-Key
+   }
+ }
+
 === OSM-Druck-Server konfigurieren
  flightcontest {
    contestmap {

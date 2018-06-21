@@ -26,6 +26,12 @@
                         <g:if test="${params.importEnrouteData=="true"}" >
                             <div>
                                 <br/>
+                                <label>${message(code:'fc.route.signfileimport.foldername')}:</label>
+                                <br/>
+                                <input type="text" id="foldername" name="foldername" value="" tabIndex="${ti[0]++}"/>
+                            </div>
+                            <div>
+                                <br/>
                                 <label>${message(code:'fc.route.signfileimport.namepraefix')}:</label>
                                 <br/>
                                 <input type="text" id="namepraefix" name="namepraefix" value="" tabIndex="${ti[0]++}"/>

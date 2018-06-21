@@ -24,10 +24,15 @@ class Defs
     static final String ROOT_FOLDER_JOBS_ERROR                         = "jobs/error"
     static final String ROOT_FOLDER_JOBS_LOCK                          = "jobs/.lock"
     static final String ROOT_FOLDER_FONTS                              = "fonts"
+    static final String ROOT_FOLDER_LIVE                               = "live"
     
     static final String EMAIL_SENDING                                  = "_email_sending"
     static final String EMAIL_ERROR                                    = "_email_error"
     
+    static final String LIVE_STYLESHEET                                = "fclive.css"
+    static final String LIVE_FILENAME                                  = "fclive.htm"
+    static final int LIVE_UPLOADSECONDS                                = 60
+
     static final String TurnpointID_TimeCheck                          = "timecheck_"
     static final String TurnpointID_NotFound                           = "notfound_"
     static final String TurnpointID_ProcedureTurn                      = "procedureturn_"

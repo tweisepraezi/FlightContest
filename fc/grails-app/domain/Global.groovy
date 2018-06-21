@@ -8,18 +8,15 @@ class Global
 	static int DB_MAJOR = 2
 	static int DB_MINOR = 13
 	
-    static final int LIVE_UPLOADSECONDS = 60
-    static final String LIVE_STYLESHEET = "fclive.css"
-    
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
-	String showLanguage = "de"                         // UNUSED: Global.showLanguage, DB-2.10
-	String printLanguage = "de"                        // Print language, DB-2.0, UNUSED: Global.printLanguage, DB-2.10
-	String dbCompatibility = ""                        // DB-2.0
+	String showLanguage = "de"                           // UNUSED: Global.showLanguage, DB-2.10
+	String printLanguage = "de"                          // Print language, DB-2.0, UNUSED: Global.printLanguage, DB-2.10
+	String dbCompatibility = ""                          // DB-2.0
     
-    Long liveContestID = 0                             // Live-Anzeige: Gewählter Contest, DB-2.11
-    Integer liveUploadSeconds = LIVE_UPLOADSECONDS     // Live-Anzeige: Upload-Zeit in Sekunden, DB-2.11
-    String liveLanguage = "de"                         // Live-Anzeige: Sprache, DB-2.11
+    Long liveContestID = 0                               // Live-Anzeige: Gewählter Contest, DB-2.11
+    Integer liveUploadSeconds = Defs.LIVE_UPLOADSECONDS  // Live-Anzeige: Upload-Zeit in Sekunden, DB-2.11
+    String liveLanguage = "de"                           // Live-Anzeige: Sprache, DB-2.11
     
     final static String PRINTSERVER_API = "http://printmaps-osm.de:8181/api/beta/maps"
     
@@ -174,7 +171,8 @@ class Global
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsLivePossible()
     {
-        if (IsLiveFTPUploadPossible() || IsLiveCopyPossible()) {
+        //if (IsLiveFTPUploadPossible() || IsLiveCopyPossible()) {
+        if (grailsApplication.config.flightcontest.live) {
             return true
         }
         return false

@@ -26,6 +26,12 @@
         createLinkTo(dir:'',file:'images/fc.ico')
         geht in GSP und TagLib
         ${message(code:'fc.program.foot',args:[createLinkTo(dir:'',file:'licenses/GPL_license.txt'),createLinkTo(dir:'',file:'licenses/README.txt')])}
+        
+        im Controller
+        request.getRequestURL():  http://localhost:8080/fc/grails/global/livesettings.dispatch
+        request.getRequestURI():  /fc/grails/global/livesettings.dispatch
+        request.getContextPath(): /fc
+        request.getServletPath(): /grails/global/livesettings.dispatch
 
     Drucken
     -------

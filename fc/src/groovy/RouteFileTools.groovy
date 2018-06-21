@@ -1081,7 +1081,7 @@ class RouteFileTools
     }       
      
     //--------------------------------------------------------------------------
-    static Map ReadImportSignFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, ImportSign importSign, String namePrefix)
+    static Map ReadImportSignFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, ImportSign importSign, String folderName, String namePrefix)
     // Return: importedsignnum - Number of imported signs 
     //         filesignnum     - Number of signs in file 
     //         valid           - true, if valid route file format
@@ -1092,10 +1092,10 @@ class RouteFileTools
                 Map sign_data = ReadImportSignTXTFile(routeInstance, routeFileName, importSign, namePrefix)
                 return add_sign_data(routeInstance, importSign, sign_data, true)
             case KML_EXTENSION:
-                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, namePrefix, false)
+                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, false)
                 return add_sign_data(routeInstance, importSign, sign_data, false)
             case KMZ_EXTENSION:
-                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, namePrefix, true)
+                Map sign_data = ReadImportSignKMLFile(routeInstance, routeFileName, importSign, folderName, namePrefix, true)
                 return add_sign_data(routeInstance, importSign, sign_data, false)
         }
         return [importedsignnum: 0, filesignnum: 0, valid: false, errors: ""]
@@ -1125,7 +1125,7 @@ class RouteFileTools
                 line_pos++
                 if (line && line.trim() && !line.startsWith('#')) {
                     line = change_comma2point(line)
-                    line = change_tab2space(line)
+                    line = change_problemchars(line)
                     valid_format = true
                     Map import_sign = importSign.GetLineValues(line)
                     import_sign.tpname = change_wp2tp(import_sign.tpname)
@@ -1326,7 +1326,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadImportSignKMLFile(Route routeInstance, String kmFileName, ImportSign importSign, String namePrefix, boolean kmzFile)
+    private static Map ReadImportSignKMLFile(Route routeInstance, String kmFileName, ImportSign importSign, String folderName, String namePrefix, boolean kmzFile)
     // Return: import_signs - List of enroute signs
     //         valid        - true, if valid sign file format
     //         errors       - <> ""
@@ -1352,8 +1352,14 @@ class RouteFileTools
 
         try {
             def kml = new XmlParser().parse(km_reader)
-            if (kml.Document.Folder.name && kml.Document.Folder.Placemark) {
-                for (def pm in kml.Document.Folder.Placemark) {
+            def folder = null
+            if (folderName) {
+                folder = search_folder_by_name(kml.Document, folderName)
+            } else {
+                folder = kml.Document.Folder // first folder
+            }
+            if (folder && folder.name && folder.Placemark) {
+                for (def pm in folder.Placemark) {
                     if (pm.Point.coordinates) {
                         String sign_name = pm.name.text()
                         
@@ -1366,21 +1372,30 @@ class RouteFileTools
                             found = true
                         }
                         
+                        // check canvas name
                         if (found) {
-                            if (importSign.IsEnrouteCanvas()) {
-                                // check canvas name
-                                boolean valid_name = false
+                            if (importSign.IsEnrouteCanvas() || importSign.IsEnroutePhoto()) {
+                                boolean canvas_name = false
                                 for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
                                     if (sign.canvasName == sign_name) {
-                                        valid_name = true
+                                        canvas_name = true
                                         break
                                     }
                                 }
-                                if (!valid_name) {
-                                    sign_name = EnrouteCanvasSign.S01.canvasName
+                                if (importSign.IsEnrouteCanvas()) {
+                                    if (!canvas_name) {
+                                        found = false
+                                    }
+                                } else if (importSign.IsEnroutePhoto()) {
+                                    if (canvas_name) {
+                                        found = false
+                                    }
                                 }
                             }
-                        
+                        }
+
+                        // add to import_signs
+                        if (found) {
                             String coordinates = pm.Point.coordinates.text()
                             List coord = coordinates.split(',')
                             BigDecimal latitude = coord[1].toBigDecimal()
@@ -1411,6 +1426,24 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
+    private static def search_folder_by_name(def startNode, String searchName)
+    {
+        def search_folder = startNode.Folder
+        for (def f in search_folder) {
+            // compare name
+            if (f.name[0].text() == searchName) {
+                return f
+            }
+            // search subfolder
+            def ret = search_folder_by_name(f, searchName)
+            if (ret) {
+                return ret
+            }
+        }
+        return null
+    }
+
+    //--------------------------------------------------------------------------
     private static String change_comma2point(String lineValue)
     {
         String ret = ""
@@ -1434,9 +1467,13 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static String change_tab2space(String lineValue)
+    private static String change_problemchars(String lineValue)
     {
-        return lineValue.replaceAll('\t', ' ')
+        String s = lineValue.replaceAll('\t', ' ')
+        s = s.replaceAll(CoordPresentation.GRAD, "${CoordPresentation.GRAD} ")
+        s = s.replaceAll(CoordPresentation.GRADMIN, "${CoordPresentation.GRADMIN} ")
+        s = s.replaceAll(CoordPresentation.GRADSEC, "${CoordPresentation.GRADSEC} ")
+        return s
     }
 
     //--------------------------------------------------------------------------

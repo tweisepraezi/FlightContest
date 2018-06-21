@@ -139,9 +139,9 @@ class GlobalController {
         gpxService.println "Live settings"
         if (session?.lastContest) {
             session.lastContest.refresh()
-            return [globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest]
+            return [globalInstance:BootStrap.global,urlList:GetLiveUrlList(request),contestInstance:session.lastContest]
         } else {
-            return [globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null]
+            return [globalInstance:BootStrap.global,urlList:GetLiveUrlList(request),contestInstance:null]
         }
     }
 
@@ -164,7 +164,7 @@ class GlobalController {
                         if (BootStrap.global.liveUploadSeconds > 0) {
                             LiveJob.schedule(1000*BootStrap.global.liveUploadSeconds)
                         } else {
-                            LiveJob.schedule(1000*Global.LIVE_UPLOADSECONDS)
+                            LiveJob.schedule(1000*Defs.LIVE_UPLOADSECONDS)
                         }
                         println "Live enabled."
                     } else {  
@@ -174,13 +174,6 @@ class GlobalController {
                 }
             }
         }
-        /*
-        if (session?.lastContest) {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
-        } else {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
-        }
-        */
         redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
@@ -189,13 +182,6 @@ class GlobalController {
         BootStrap.global.liveContestID = 0
         BootStrap.global.save()
         gpxService.println "Live disabled."
-        /*
-        if (session?.lastContest) {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
-        } else {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
-        }
-        */
         redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
@@ -207,17 +193,10 @@ class GlobalController {
             if (BootStrap.global.liveUploadSeconds > 0) {
                 LiveJob.schedule(1000*BootStrap.global.liveUploadSeconds)
             } else {
-                LiveJob.schedule(1000*Global.LIVE_UPLOADSECONDS)
+                LiveJob.schedule(1000*Defs.LIVE_UPLOADSECONDS)
             }
             gpxService.println "Live enabled."
         }
-        /*
-        if (session?.lastContest) {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
-        } else {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
-        }
-        */
         redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
@@ -227,18 +206,11 @@ class GlobalController {
             LiveJob.triggerNow([ContestID:session.lastContest.id])
             gpxService.println "Live run once."
         }
-        /*
-        if (session?.lastContest) {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
-        } else {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
-        }
-        */
         redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
     def uploadlivestylesheet = {
-        String stylesheet_name = Global.LIVE_STYLESHEET
+        String stylesheet_name = Defs.LIVE_STYLESHEET
         gpxService.printstart "Upload live stylesheet ${stylesheet_name}"
         Map ret = gpxService.UploadStylesheet(stylesheet_name)
         if (!ret.error) {
@@ -249,13 +221,6 @@ class GlobalController {
             flash.error = true
         }
         gpxService.printdone flash.message
-        /*
-        if (session?.lastContest) {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
-        } else {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
-        }
-        */
         redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
@@ -276,13 +241,6 @@ class GlobalController {
             flash.error = true
         }
         gpxService.printdone flash.message
-        /*
-        if (session?.lastContest) {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:session.lastContest])
-        } else {
-            render(view:'livesettings',model:[globalInstance:BootStrap.global,urlList:GetLiveUrlList(),contestInstance:null])
-        }
-        */
         redirect(action:livesettings,params:['newwindow':params.newwindow])
     }
     
@@ -387,9 +345,10 @@ class GlobalController {
         redirect(action:info)
     }
 
-    private List GetLiveUrlList()
+    private List GetLiveUrlList(def request)
     {
         List url_list = []
+        url_list += "${ControllerTools.GetFcUrl(request)}/${Defs.ROOT_FOLDER_LIVE}/${Defs.LIVE_FILENAME}" 
         if (BootStrap.global.IsLiveFTPUploadPossible()) {
             url_list += BootStrap.global.GetLiveFTPURL()
         }
