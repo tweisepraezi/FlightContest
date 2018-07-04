@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 import java.util.Map
 import java.nio.charset.StandardCharsets
 
@@ -17,32 +19,32 @@ class LoggerFileTools
     final static String IGCFORMAT_DEF = "I033638FXA3940SIU4143ENL"
     
     //--------------------------------------------------------------------------
-    static Map ReadLoggerFile(String fileExtension, Test testInstance, String loggerFileName)
+    static Map ReadLoggerFile(String fileExtension, Test testInstance, String loggerFileName, boolean interpolateMissingData)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid logger format
     //         errors        - <> ""
     {
         switch (fileExtension) {
             case GAC_EXTENSION:
-                return ReadGACFile(testInstance, loggerFileName)
+                return ReadGACFile(testInstance, loggerFileName, interpolateMissingData)
             case IGC_EXTENSION:
-                return ReadIGCFile(testInstance, loggerFileName)
+                return ReadIGCFile(testInstance, loggerFileName, interpolateMissingData)
             case GPX_EXTENSION:
                 RemoveExistingBOM(loggerFileName)
-                return ReadGPXFile(testInstance, loggerFileName)
+                return ReadGPXFile(testInstance, loggerFileName, interpolateMissingData)
             case KML_EXTENSION:
                 RemoveExistingBOM(loggerFileName)
-                return ReadKMLFile(testInstance, loggerFileName, false)
+                return ReadKMLFile(testInstance, loggerFileName, false, interpolateMissingData)
             case KMZ_EXTENSION:
-                return ReadKMLFile(testInstance, loggerFileName, true)
+                return ReadKMLFile(testInstance, loggerFileName, true, interpolateMissingData)
             case NMEA_EXTENSION:
-                return ReadNMEAFile(testInstance, loggerFileName)
+                return ReadNMEAFile(testInstance, loggerFileName, interpolateMissingData)
         }
         return [trackpointnum: 0, valid: false, errors: ""]
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadGACFile(Test testInstance, String gacFileName)
+    private static Map ReadGACFile(Test testInstance, String gacFileName, boolean interpolateMissingData)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid gac format
     //         errors        - <> ""
@@ -57,6 +59,7 @@ class LoggerFileTools
             boolean first = true
             BigDecimal last_latitude = null
             BigDecimal last_longitude = null
+            def last_altitude = null
             def last_track = null
             String last_utc = FcTime.UTC_GPX_DATE
             while (true) {
@@ -138,6 +141,10 @@ class LoggerFileTools
                             
                             // save track point
                             if (!ignore_line) {
+                                if (interpolateMissingData) {
+                                    track_point_num += InterpolateMissingTrackpoints(last_utc, last_latitude, last_longitude, last_altitude, utc, latitude, longitude, altitude, track, testInstance.loggerData)
+                                }
+                                
                                 TrackPoint trackpoint_instance = new TrackPoint()
                                 trackpoint_instance.loggerdata = testInstance.loggerData
                                 trackpoint_instance.utc = utc
@@ -152,6 +159,7 @@ class LoggerFileTools
                                 last_utc = utc
                                 last_latitude = latitude
                                 last_longitude = longitude
+                                last_altitude = altitude
                                 last_track = track
                             }
                             
@@ -169,7 +177,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadIGCFile(Test testInstance, String igcFileName)
+    private static Map ReadIGCFile(Test testInstance, String igcFileName, boolean interpolateMissingData)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid igc format
     //         errors        - <> ""
@@ -184,6 +192,7 @@ class LoggerFileTools
             boolean first = true
             BigDecimal last_latitude = null
             BigDecimal last_longitude = null
+            def last_altitude = null
             def last_track = null
             String last_utc = FcTime.UTC_GPX_DATE
             while (true) {
@@ -265,6 +274,10 @@ class LoggerFileTools
                             
                             // save track point
                             if (!ignore_line) {
+                                if (interpolateMissingData) {
+                                    track_point_num += InterpolateMissingTrackpoints(last_utc, last_latitude, last_longitude, last_altitude, utc, latitude, longitude, altitude, track, testInstance.loggerData)
+                                }
+                                
                                 TrackPoint trackpoint_instance = new TrackPoint()
                                 trackpoint_instance.loggerdata = testInstance.loggerData
                                 trackpoint_instance.utc = utc
@@ -279,6 +292,7 @@ class LoggerFileTools
                                 last_utc = utc
                                 last_latitude = latitude
                                 last_longitude = longitude
+                                last_altitude = altitude
                                 last_track = track
                             }
                             
@@ -296,7 +310,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadGPXFile(Test testInstance, String gpxFileName)
+    private static Map ReadGPXFile(Test testInstance, String gpxFileName, boolean interpolateMissingData)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid gpx format
     //         errors        - <> ""
@@ -320,6 +334,7 @@ class LoggerFileTools
                 boolean first = true
                 BigDecimal last_latitude = null
                 BigDecimal last_longitude = null
+                int last_altitude = null
                 def last_track = null
                 String last_utc = FcTime.UTC_GPX_DATE
                 track_points.each {
@@ -374,6 +389,10 @@ class LoggerFileTools
                     
                     // save track point
                     if (!ignore_line) {
+                        if (interpolateMissingData) {
+                            track_point_num += InterpolateMissingTrackpoints(last_utc, last_latitude, last_longitude, last_altitude, utc, latitude, longitude, altitude, track, testInstance.loggerData)
+                        }
+                        
                         TrackPoint trackpoint_instance = new TrackPoint()
                         trackpoint_instance.loggerdata = testInstance.loggerData
                         trackpoint_instance.utc = utc
@@ -388,6 +407,7 @@ class LoggerFileTools
                         last_utc = utc
                         last_latitude = latitude
                         last_longitude = longitude
+                        last_altitude = altitude
                         last_track = track
                     }
                     
@@ -404,7 +424,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadKMLFile(Test testInstance, String kmFileName, boolean kmzFile)
+    private static Map ReadKMLFile(Test testInstance, String kmFileName, boolean kmzFile, boolean interpolateMissingData)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid gpx format
     //         errors        - <> ""
@@ -437,6 +457,7 @@ class LoggerFileTools
                 boolean first = true
                 BigDecimal last_latitude = null
                 BigDecimal last_longitude = null
+                def last_altitude = null
                 def last_track = null
                 String last_utc = FcTime.UTC_GPX_DATE
                 
@@ -489,6 +510,10 @@ class LoggerFileTools
                     
                     // save track point
                     if (!ignore_line) {
+                        if (interpolateMissingData) {
+                            track_point_num += InterpolateMissingTrackpoints(last_utc, last_latitude, last_longitude, last_altitude, utc, latitude, longitude, altitude, track, testInstance.loggerData)
+                        }
+                        
                         TrackPoint trackpoint_instance = new TrackPoint()
                         trackpoint_instance.loggerdata = testInstance.loggerData
                         trackpoint_instance.utc = utc
@@ -503,6 +528,7 @@ class LoggerFileTools
                         last_utc = utc
                         last_latitude = latitude
                         last_longitude = longitude
+                        last_altitude = altitude
                         last_track = track
                     }
                     
@@ -525,7 +551,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadNMEAFile(Test testInstance, String nmeaFileName)
+    private static Map ReadNMEAFile(Test testInstance, String nmeaFileName, boolean interpolateMissingData)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid nmea format
     //         errors        - <> ""
@@ -540,6 +566,7 @@ class LoggerFileTools
             boolean first = true
             BigDecimal last_latitude = null
             BigDecimal last_longitude = null
+            def last_altitude = null
             def last_track = null
             String last_utc = FcTime.UTC_GPX_DATE
             while (true) {
@@ -627,6 +654,10 @@ class LoggerFileTools
                             
                             // save track point
                             if (!ignore_line) {
+                                if (interpolateMissingData) {
+                                    track_point_num += InterpolateMissingTrackpoints(last_utc, last_latitude, last_longitude, last_altitude, utc, latitude, longitude, altitude, track, testInstance.loggerData)
+                                }
+                                
                                 TrackPoint trackpoint_instance = new TrackPoint()
                                 trackpoint_instance.loggerdata = testInstance.loggerData
                                 trackpoint_instance.utc = utc
@@ -641,6 +672,7 @@ class LoggerFileTools
                                 last_utc = utc
                                 last_latitude = latitude
                                 last_longitude = longitude
+                                last_altitude = altitude
                                 last_track = track
                             }
                             
@@ -682,4 +714,46 @@ class LoggerFileTools
         new_file.renameTo(new File(fileName))
     }
     
+    //--------------------------------------------------------------------------
+    private static int InterpolateMissingTrackpoints(String utcLastDateTime, BigDecimal lastLatitude, BigDecimal lastLongitude, Integer lastAltitude, String utcDateTime, BigDecimal actLatitude, BigDecimal actLongitude, Integer actAltitude, def actTrack, LoggerDataTest loggerData)
+    // Return: Number of added trackpoints
+    {
+        int added_track_point_num = 0
+        if (lastLatitude != null && lastLongitude != null) {
+            int diff_seconds = FcTime.UTCTimeDiffSeconds(utcLastDateTime, utcDateTime)
+            if (diff_seconds > 1) {
+                Map leg = AviationMath.calculateLeg(actLatitude, actLongitude, lastLatitude, lastLongitude)
+                BigDecimal add_distance = leg.dis / diff_seconds
+                if (3600 * add_distance > Defs.TRACKPOINT_INTERPOLATED_SPEED ) {
+                    int add_altitude = ((actAltitude - lastAltitude) / diff_seconds).toInteger()
+                    String next_utc = utcLastDateTime
+                    BigDecimal last_latitude = lastLatitude
+                    BigDecimal last_longitude = lastLongitude
+                    int next_altitude = lastAltitude
+                    while (diff_seconds > 1) {
+                        next_utc = FcTime.UTCAddSeconds(next_utc, 1)
+                        Map next_coord = AviationMath.getCoordinate(last_latitude,last_longitude,actTrack,add_distance)
+                        next_altitude += add_altitude
+                        
+                        TrackPoint trackpoint_instance = new TrackPoint()
+                        trackpoint_instance.loggerdata = loggerData
+                        trackpoint_instance.utc = next_utc
+                        trackpoint_instance.latitude = next_coord.lat
+                        trackpoint_instance.longitude = next_coord.lon
+                        trackpoint_instance.altitude = next_altitude
+                        trackpoint_instance.track = actTrack
+                        trackpoint_instance.save()
+                        
+                        last_latitude = next_coord.lat
+                        last_longitude = next_coord.lon
+                        
+                        added_track_point_num++
+                        diff_seconds--
+                    }
+                }
+            }
+        }
+        return added_track_point_num
+    }
+
 }

@@ -532,6 +532,25 @@ class TestController
         }
     }
 
+    def printloggerdata = {
+        String webroot_dir = servletContext.getRealPath("/")
+        Map test = printService.printloggerdataTest(params,false,false,webroot_dir,GetPrintParams()) 
+        if (test.instance) {
+            if (test.error) {
+                flash.message = test.message
+                flash.error = true
+                redirect(action:show,id:test.instance.id)
+            } else if (test.content) {
+                printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"loggerdata-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetFlightTestVersion()}",true,false,false)
+            } else {
+                redirect(action:show,id:test.instance.id)
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+
     def flightresultsprintable = {
         if (params.contestid) {
             session.lastContest = Contest.get(params.contestid)
@@ -560,6 +579,20 @@ class TestController
         }
 	}
 	
+    def loggerdataprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        def test = fcService.getflightresultsprintableTest(params)
+        if (test.instance) {
+            return [contestInstance:session.lastContest,testInstance:test.instance,flightMapFileName:params.flightMapFileName]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
     def setnoflightresults = {
         def test = fcService.setnoflightresultsTest(params) 
         if (test.error) {
@@ -725,24 +758,25 @@ class TestController
         Map test = domainService.GetTest(params) 
         if (test.instance) {
             def file = request.getFile('loggerfile')
-            Map calc = fcService.calculateLoggerResultTest(LoggerFileTools.GAC_EXTENSION, test.instance, file, false)
+            boolean interpolate_missing_data = params?.interpolate_missing_data == "on"
+            Map calc = fcService.calculateLoggerResultTest(LoggerFileTools.GAC_EXTENSION, test.instance, file, false, interpolate_missing_data)
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.IGC_EXTENSION, test.instance, file, false)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.IGC_EXTENSION, test.instance, file, false, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.GPX_EXTENSION, test.instance, file, false)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.GPX_EXTENSION, test.instance, file, false, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KML_EXTENSION, test.instance, file, false)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KML_EXTENSION, test.instance, file, false, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KMZ_EXTENSION, test.instance, file, false)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KMZ_EXTENSION, test.instance, file, false, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.NMEA_EXTENSION, test.instance, file, false)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.NMEA_EXTENSION, test.instance, file, false, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest("", test.instance, file, false)
+                calc = fcService.calculateLoggerResultTest("", test.instance, file, false, interpolate_missing_data)
             }
             flash.error = calc.error
             flash.message = calc.message

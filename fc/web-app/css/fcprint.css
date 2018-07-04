@@ -334,3 +334,20 @@ img.scannedplanningtest {
 	width:90%;
 }
 
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.loggerdatalist th, table.loggerdatalist td {
+    white-space: nowrap;
+    font-size: 80%;
+}
+
+table.loggerdatalist td.badcourseinfo {
+	color: red;
+}
+
+table.loggerdatalist td.nobadcourseinfo {
+    color: blue;
+}
+
+table.loggerdatalist tr.tpvalue td {
+     font-weight: bold;
+}

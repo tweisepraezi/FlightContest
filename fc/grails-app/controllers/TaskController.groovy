@@ -1293,24 +1293,25 @@ class TaskController {
     def loggerformimportsave = {
         if (params.testid) {
             Test test_instance = Test.get(params.testid)
-            Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile)
+            boolean interpolate_missing_data = params?.interpolate_missing_data == "on"
+            Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KML_EXTENSION, test_instance, params.loggerfile)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KML_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KMZ_EXTENSION, test_instance, params.loggerfile)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KMZ_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, false)
+                calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, false, interpolate_missing_data)
             }
             flash.error = calc.error
             flash.message = calc.message

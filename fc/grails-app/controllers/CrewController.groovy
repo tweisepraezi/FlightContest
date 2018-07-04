@@ -361,9 +361,20 @@ class CrewController {
         [noUnsuitableStartNum:false,contestInstance:session.lastContest]
     }
     
+    def sortstartnumgaps = {
+        [noUnsuitableStartNum:false,contestInstance:session.lastContest]
+    }
+    
     def sortstartnumrun = {
         boolean no_unsuitable_startnum = params?.noUnsuitableStartNum == 'on'
-        def ret = fcService.sortStartNumCrews(session.lastContest,params,session,no_unsuitable_startnum)
+        def ret = fcService.sortStartNumCrews(session.lastContest,params,session,no_unsuitable_startnum,false)
+        flash.message = ret.message
+        redirect(action:list)
+    }
+    
+    def sortstartnumgapsrun = {
+        boolean no_unsuitable_startnum = params?.noUnsuitableStartNum == 'on'
+        def ret = fcService.sortStartNumCrews(session.lastContest,params,session,no_unsuitable_startnum,true)
         flash.message = ret.message
         redirect(action:list)
     }

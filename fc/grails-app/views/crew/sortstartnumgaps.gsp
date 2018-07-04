@@ -2,16 +2,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.crew.sortstartnum')}</title>
+        <title>${message(code:'fc.crew.sortstartnum.gaps')}</title>
     </head>
     <body>
         <g:mainnav link="${createLink(controller:'contest')}" controller="crew" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
-                <h2>${message(code:'fc.crew.sortstartnum')}</h2>
+                <h2>${message(code:'fc.crew.sortstartnum.gaps')}</h2>
                 <div class="block" id="forms" >
-                	<g:form action="sortstartnumrun">
+                	<g:form action="sortstartnumgapsrun">
                 	    <g:set var="ti" value="${[]+1}"/>
                 	    <g:if test="${contestInstance.unsuitableStartNum}">
 	                        <p>

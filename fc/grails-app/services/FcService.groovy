@@ -5179,7 +5179,7 @@ class FcService
         String webroot_dir = servletContext.getRealPath("/")
         
         // read file
-        Map reader = import_test(fileExtension, testInstance, webroot_dir + "testdata/" + originalFileName, false)
+        Map reader = import_test(fileExtension, testInstance, webroot_dir + "testdata/" + originalFileName, false, true)
         
         if (!reader.valid) {
             ret.error = true
@@ -5205,7 +5205,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map calculateLoggerResultTest(String fileExtension, Test testInstance, def file, boolean noRemoveExistingData)
+    Map calculateLoggerResultTest(String fileExtension, Test testInstance, def file, boolean noRemoveExistingData, boolean interpolateMissingData)
     // fileExtension - '.gac', '.gpx'
     // Return        - found = true, wenn zutreffende Logger-Datei  
     {
@@ -5234,7 +5234,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_test(fileExtension, testInstance, webroot_dir + upload_filename, noRemoveExistingData)
+                Map reader = import_test(fileExtension, testInstance, webroot_dir + upload_filename, noRemoveExistingData, interpolateMissingData)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -5260,7 +5260,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map calculateLoggerResultExternTest(String fileExtension, Test testInstance, String fileName)
+    Map calculateLoggerResultExternTest(String fileExtension, Test testInstance, String fileName, boolean interpolateMissingData)
     // fileExtension - '.gac', '.gpx'
     // Return        - found = true, wenn zutreffende Logger-Datei  
     {
@@ -5281,7 +5281,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_test(fileExtension, testInstance, original_filename, false)
+                Map reader = import_test(fileExtension, testInstance, original_filename, false, interpolateMissingData)
                 
                 if (!reader.valid) {
                     ret.error = true
@@ -5304,12 +5304,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_test(String fileExtension, Test testInstance, String loadFileName, boolean noRemoveExistingData)
+    private Map import_test(String fileExtension, Test testInstance, String loadFileName, boolean noRemoveExistingData, boolean interpolateMissingData)
     {
         printstart "import_test '$loadFileName'"
         
         // read file
-        Map reader = calcService.CalculateLoggerFile(fileExtension, testInstance, loadFileName)
+        Map reader = calcService.CalculateLoggerFile(fileExtension, testInstance, loadFileName, interpolateMissingData)
                 
         boolean no_flightresults = false
         boolean flight_failures = false
@@ -8432,7 +8432,7 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    Map sortStartNumCrews(Contest contestInstance, Map params, session, boolean noUnsuitableStartNum)
+    Map sortStartNumCrews(Contest contestInstance, Map params, session, boolean noUnsuitableStartNum, boolean withGaps)
     {
         printstart "sortStartNumCrews"
         
@@ -8453,6 +8453,7 @@ class FcService
         
         // set new crew num
         int crew_num = 0
+        BigDecimal last_tas = null
         for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"viewpos"])) {
             crew_num++
             if (noUnsuitableStartNum) {
@@ -8460,8 +8461,14 @@ class FcService
                     crew_num++
                 }
             }
+            if (withGaps) {
+                if (last_tas && last_tas != crew_instance.tas) {
+                    crew_num++
+                }
+            }
             crew_instance.startNum = crew_num
             crew_instance.save()
+            last_tas = crew_instance.tas
         }
 
         Map ret = ['message':getMsg('fc.crew.sorted')]

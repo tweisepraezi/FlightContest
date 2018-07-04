@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-21.06.2018
+04.07.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -96,12 +96,17 @@ Erweiterungen in dieser Version (3.1.1):
     -> Hilfe -> Besondere CSS-Eigenschaften
 - Besatzungs-Liste: Export-Kommandos für Label-Drucker
     Dateien für Besatzung, Pilot und Navigator exportierbar
+- Besatzungs-Liste: Kommando 'Start-Nr. aufsteigend nummerieren (mit Lücken)'
+    Es wird eine lfd. Start-Nr. weggelassen, wenn ein TAS-Wechsel in der Liste
+    erkannt wird.
 - Navigationsflug-Logger-Auswertung und Logger-Daten-Anzeige um folgende 
   Logger-Formate erweitert: 
     * NMEA 0183
     * KML und KMZ
     * GPX mit UTF-8-BOMs
     * KML und KMZ mit UTF-8-BOMs
+- Logger-Auswertung erweitert:
+    Fehlende Loggermesswerte (Messwertabstand > 1s) werden interpoliert.     
 - Wendeschleifen einzelner Strecken deaktivierbar
     -> Hilfe -> Besondere CSS-Eigenschaften
     -> Wettbewerb -> Einstellungen -> Druckstil
@@ -127,6 +132,9 @@ Erweiterungen in dieser Version (3.1.1):
     -> Hilfe -> Installationsabhängige Konfiguration -> Google-Maps-Anzeige
        konfigurieren
     https://www.j-berkemeier.de/GPXViewer/#Apikey
+- Ausdruck von Logger-Daten in Navigationsflugergebnis-Anzeige hinzugefügt:
+    Druckt Tabelle mit Zeit, Koordinate, Höhe, Rechtweisenden Kurs, Geschwindigkeit
+    über Grund und Informationen über Wendepunkte und Kursabweichungen
 
 Erweiterungen in Version 3.1:
 -----------------------------
@@ -298,7 +306,7 @@ Erweiterungen in Version 3.0:
 - Eigenständige Installation für den GPX-GAC-Konverter
 - Voreinstellwerte für Flugzeit-Berechnung der Starts und Landungen geändert:
     TO -> SP: wind+:3NM, iFP -> iLDG: wind+:2NM, iLDG -> iSP: wind+:3NM
-- Besatzungs-Liste: Kommando 'Startnummern sortieren' eingeführt
+- Besatzungs-Liste: Kommando 'Start-Nr. aufsteigend nummerieren' eingeführt
 - Planung: Kommando 'Zeitplan-Export' eingeführt
 - Anwendung 'Print Label' für Label-Drucker Brother QL-570
     Druckt Label mit Daten des 'Zeitplan-Export'-Kommandos.

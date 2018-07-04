@@ -288,6 +288,38 @@ enum CoordPresentation
     }
 
     //--------------------------------------------------------------------------
+    String GetCoordName(BigDecimal decimalGrad, boolean isLatitude)
+    {
+        Map v = GetDirectionGradDecimalMinute(decimalGrad, isLatitude)
+        String praefix = LAT
+        if (!isLatitude) {
+            praefix = LON
+        }
+        
+        if (isLatitude) {
+            switch (this) {
+                case CoordPresentation.DEGREEMINUTE:
+                    return "${praefix} ${IntegerGradStr(v.grad,isLatitude)}${GRAD} ${DecimalMinuteStr(v.minute)}${GRADMIN} ${v.direction}"
+                case CoordPresentation.DEGREEMINUTESECOND:
+                    return "${praefix} ${IntegerGradStr(v.grad,isLatitude)}${GRAD} ${IntegerMinuteStr(v.minute)}${GRADMIN} ${DecimalSecondStr(v.minute)}${GRADSEC} ${v.direction}"
+                case CoordPresentation.DEGREE:
+                    return "${praefix} ${DecimalGradStr(decimalGrad)}${GRAD}"
+            }
+        } else {
+            switch (this) {
+                case CoordPresentation.DEGREEMINUTE:
+                    return "${praefix} ${IntegerGradStr(v.grad,isLatitude)}${GRAD} ${DecimalMinuteStr(v.minute)}${GRADMIN} ${v.direction}"
+                case CoordPresentation.DEGREEMINUTESECOND:
+                    return "${praefix} ${IntegerGradStr(v.grad,isLatitude)}${GRAD} ${IntegerMinuteStr(v.minute)}${GRADMIN} ${DecimalSecondStr(v.minute)}${GRADSEC} ${v.direction}"
+                case CoordPresentation.DEGREE:
+                    return "${praefix} ${DecimalGradStr(decimalGrad)}${GRAD}"
+            }
+        }
+        
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
     String GetMapName(BigDecimal decimalGrad, boolean isLatitude)
     {
         Map v = GetDirectionGradDecimalMinute(decimalGrad, isLatitude)

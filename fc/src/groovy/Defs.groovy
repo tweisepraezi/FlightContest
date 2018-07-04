@@ -89,4 +89,6 @@ class Defs
     static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
     static final String BACKGROUNDUPLOAD_SRCDEST_SEPARATOR             = "!"
     static final String BACKGROUNDUPLOAD_IDLINK_SEPARATOR              = "§"
+    
+    static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
 }

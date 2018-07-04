@@ -13,6 +13,7 @@
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post">
                         <g:set var="ti" value="${[]+1}"/>
+                        <g:set var="is_loggerdata" value="${testInstance.IsLoggerData()}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -291,7 +292,7 @@
                                                 <g:actionSubmit action="flightresultsready" value="${message(code:'fc.results.ready')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 					                        	<g:actionSubmit action="flightresultssave" value="${message(code:'fc.save')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
-                                            <g:if test="${testInstance.IsLoggerData()}">
+                                            <g:if test="${is_loggerdata}">
                                                 <g:actionSubmit action="recalculatecrew" value="${message(code:'fc.flightresults.recalculate')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
                                             <g:else>
@@ -308,7 +309,10 @@
                                                 <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.flightresults.printmeasurement')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:if test="${is_loggerdata}">
+                                                <g:actionSubmit action="printloggerdata" value="${message(code:'fc.flightresults.printloggerdata')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            </g:if>
                                             <g:if test="${params.next}">
                                                 <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
@@ -328,7 +332,10 @@
                                                 <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
                                             <g:actionSubmit action="printflightresults" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.printmeasure')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="printmeasureflightresults" value="${message(code:'fc.flightresults.printmeasurement')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:if test="${is_loggerdata}">
+                                                <g:actionSubmit action="printloggerdata" value="${message(code:'fc.flightresults.printloggerdata')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            </g:if>
 	                                        <g:if test="${params.next}">
 	                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 	                                        </g:if>

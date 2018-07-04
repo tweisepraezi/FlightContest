@@ -33,6 +33,10 @@
                                 <p>${message(code:'fc.loggerdata.importform.task.complete',args:[taskInstance.name()])}</p>
                             </div>
                         </g:else>
+                        <p>
+                            <g:checkBox name="interpolate_missing_data" value="${true}" tabIndex="${ti[0]++}"/>
+                            ${message(code:'fc.loggerdata.interpolate')}
+                        </p>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />                        
                         <input type="hidden" name="loggerfile" value="${loggerfile}" />
                         <g:if test="${test_instances}">

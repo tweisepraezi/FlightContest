@@ -9,6 +9,7 @@
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <g:form method="post" >
+                <g:set var="ti" value="${[]+1}"/>
 	            <table>
 	                <thead>
 	                    <tr>
@@ -76,25 +77,27 @@
 	                </tbody>
 	                <tfoot>
 	                    <tr class="">
-	                        <td><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" tabIndex="1"/></td>
-	                        <td><g:actionSubmit action="calculatesequence" value="${message(code:'fc.test.sequence.calculate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="2"/></td>
+	                        <td><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" tabIndex="${ti[0]++}"/></td>
+	                        <td><g:actionSubmit action="calculatesequence" value="${message(code:'fc.test.sequence.calculate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/></td>
 	                    	<g:if test="${resultClasses}">
 		                        <td colspan="4">
-		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="3"/>
-		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="4"/>
+		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="${ti[0]++}"/>
+                                    <g:actionSubmit action="sortstartnumgaps" value="${message(code:'fc.crew.sortstartnum.gaps')}" tabIndex="${ti[0]++}"/>
 		                        </td>
 		                    </g:if>
 		                    <g:else>
 		                        <td colspan="3">
-		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="3"/>
-		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="4"/>
+		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="${ti[0]++}"/>
+                                    <g:actionSubmit action="sortstartnumgaps" value="${message(code:'fc.crew.sortstartnum.gaps')}" tabIndex="${ti[0]++}"/>
 		                        </td>
 		                    </g:else>
 		                    <td><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
 	                    </tr>
 	                    <tr class="join">
-	                        <td><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" tabIndex="5"/></td>
-	                        <td><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}" tabIndex="6"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}" tabIndex="7"/></td>
+	                        <td><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" tabIndex="${ti[0]++}"/></td>
+	                        <td><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}" tabIndex="${ti[0]++}"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}" tabIndex="${ti[0]++}"/></td>
 	                    	<g:if test="${resultClasses}">
 		                        <td colspan="5"/>
 		                    </g:if>
@@ -105,14 +108,14 @@
                         <tr>
                             <g:if test="${resultClasses}">
                                 <td colspan="7">
-                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="8"/>
-                                    <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="9" />
+                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="${ti[0]++}"/>
+                                    <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="${ti[0]++}" />
                                 </td>
                             </g:if>
                             <g:else>
                                 <td colspan="6">
-                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="8"/>
-                                    <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="9" />
+                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="${ti[0]++}"/>
+                                    <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="${ti[0]++}" />
                                 </td>
                             </g:else>
                         </tr>

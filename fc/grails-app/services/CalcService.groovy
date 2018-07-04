@@ -38,12 +38,12 @@ class CalcService
     }
     
     //--------------------------------------------------------------------------
-    Map CalculateLoggerFile(String fileExtension, Test testInstance, String loggerFileName)
+    Map CalculateLoggerFile(String fileExtension, Test testInstance, String loggerFileName, boolean interpolateMissingData)
     {
         printstart "CalculateLoggerFile: extension '$fileExtension', crew '$testInstance.crew.name', file '$loggerFileName'"
         
         printstart "Import track points from logger file"
-        Map reader = LoggerFileTools.ReadLoggerFile(fileExtension, testInstance, loggerFileName)
+        Map reader = LoggerFileTools.ReadLoggerFile(fileExtension, testInstance, loggerFileName, interpolateMissingData)
         printdone "${reader.trackpointnum} track points found."
         
         if (!reader.errors && reader.trackpointnum) {

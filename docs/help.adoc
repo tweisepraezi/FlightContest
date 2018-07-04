@@ -1209,6 +1209,7 @@ Tabellen-Klassen:
 |flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyprocedureturn penaltybadcourse penaltyaltitudemissed 
 |summary [flightresults]|checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened frequencynotmonitored otherpenalties penalties|
 |flightmeasurementlist|name1 name2 value [#tpname]|tpname aflosname plancptime cptime procedureturn badcoursenum altitude
+|loggerdatalist|title value tpvalue|time latitude longitude altitude truetrack groundspeed info badcourseinfo nobadcourseinfo
 |observationturnpointresultlist|name1 name2 value [#tpname] summary|tpname evaluation plan result penalties
 |observationenroutephotoresultlist|name1 name2 value [#photoName] summary|photoname evaluation plan result penalties
 |observationenroutecanvasresultlist|name1 name2 value [#imageName] summary|imagename evaluation plan result penalties

@@ -1435,6 +1435,35 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
+    Map printloggerdataTest(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
+    {
+        Map test = domainService.GetTest(params)
+        if (!test.instance) {
+            return test
+        }
+        
+        // Print logger data
+        try {
+            ITextRenderer renderer = new ITextRenderer();
+            addFonts(renderer)
+            ByteArrayOutputStream content = new ByteArrayOutputStream()
+            String url = "${printparams.baseuri}/test/loggerdataprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+            println "Print: $url"
+            renderer.setDocument(url)
+            renderer.layout()
+            renderer.createPDF(content,false)
+            renderer.finishPDF()
+            test.content = content.toByteArray()
+            content.close()
+        }
+        catch (Throwable e) {
+            test.message = getMsg('fc.flightresults.printerror',["$e"])
+            test.error = true
+        }
+        return test
+    }
+    
+    //--------------------------------------------------------------------------
     Map printcrewresultsTest(Map params, boolean a3, boolean landscape, String webRootDir, printparams)
     {
         printstart "printcrewresultsTest"

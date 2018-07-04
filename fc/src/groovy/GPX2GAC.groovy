@@ -27,7 +27,10 @@ class GPX2GAC
         try {
             def gpx = new XmlParser().parse(gpx_reader)
             if (gpx.trk.size() == 1) { // only 1 track allowed
-                def gpx_track_name = gpx.trk.name[0].text()
+                def gpx_track_name = ""
+                if (gpx.trk.name) {
+                    gpx_track_name = gpx.trk.name[0].text()
+                }
                 def track_points = gpx.trk.trkseg.trkpt
                 
                 // write header
