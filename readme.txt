@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-04.07.2018
+21.07.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -86,9 +86,6 @@ Erweiterungen in dieser Version (3.1.1):
     Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018
     FAI Precision Flying - Edition 2018
     FAI Air Rally Flying - Edition 2018
-- KML/KMZ-Strecken-Import:
-    Unterstützung norwegischer Streckenplanung (in einem <Folder> 
-    mehrere <Placemark> mit <Point> und einer Koordinate in <coordinates>)
 - Klassenabhängige Konfigurationen hinzugefügt
     * Auswertung einer abweichenden Gate-Breite bei UZKs
     * Vorverlegung der Anfangs-Zeit der Planung
@@ -111,12 +108,18 @@ Erweiterungen in dieser Version (3.1.1):
     -> Hilfe -> Besondere CSS-Eigenschaften
     -> Wettbewerb -> Einstellungen -> Druckstil
 - Strecken-Import erweitert:
-    Ermöglicht gleichzeitigen Import von bis zu 3 krummen Etappen.
-    Die Streckenliste zeigt die Anzahl vorhandener krummer Etappen an.
-- Strecken-Bilder und -Bodenezeichen-Import erweitert:
-    * Import aus kml/kmz-Wegpunkten möglich
-    * In kml/kmz-Dateien zu durchsuchendes Verzeichnis angebbar
+    * kml/kmz-Import aus Linien (<Placemark> -> <LineString> -> <coordinates>) 
+      oder Punkten (<Placemark> -> <Point> -> <coordinates>)
+    * in kml/kmz-Dateien zu durchsuchendes Verzeichnis angebbar
+    * Ermöglicht gleichzeitigen Import von bis zu 3 krummen Etappen.
+    * Die Streckenliste zeigt die Anzahl vorhandener krummer Etappen an.
+- Strecken-Bilder und -Bodenzeichen-Import erweitert:
+    * Import aus kml/kmz-Punkten (<Placemark> -> <Point> -> <coordinates>) möglich
+    * in kml/kmz-Dateien zu durchsuchendes Verzeichnis angebbar
     * Namenspräfix zum Filtern des Importes angebbar
+- Import FC-Strecke um kml/kmz erweitert
+    Eine mit Flight Contest exportierte kml/kmz-Datei kann als Strecke 
+    ohne weitere Angaben importiert werden.
 - Streckendetail-Dialog verändert:
     Aktions-Schalter werden jetzt oben angezeigt
 - Lande-Ergebnis in Gesamtwertung um angebbaren Faktor reduzierbar
@@ -135,6 +138,8 @@ Erweiterungen in dieser Version (3.1.1):
 - Ausdruck von Logger-Daten in Navigationsflugergebnis-Anzeige hinzugefügt:
     Druckt Tabelle mit Zeit, Koordinate, Höhe, Rechtweisenden Kurs, Geschwindigkeit
     über Grund und Informationen über Wendepunkte und Kursabweichungen
+- Ergebnisse: Anzeige von Abweichungen aller Besatzungen 
+    bei Navigationsflug (Zeitabweichungen) und Beobachtungen (Gefunden)
 
 Erweiterungen in Version 3.1:
 -----------------------------

@@ -26,7 +26,7 @@
                         <g:if test="${params.importEnrouteData=="true"}" >
                             <div>
                                 <br/>
-                                <label>${message(code:'fc.route.signfileimport.foldername')}:</label>
+                                <label>${message(code:'fc.route.fileimport.foldername')}:</label>
                                 <br/>
                                 <input type="text" id="foldername" name="foldername" value="" tabIndex="${ti[0]++}"/>
                             </div>
@@ -39,7 +39,7 @@
                         </g:if>
                         <div>
                             <br/>
-                            <p>${message(code:'fc.route.fileimport.info.txt')}<br/>${HTMLFilter.FilterParam(params.lineContent)}</p>
+                            <p>${message(code:'fc.route.fileimport.info.kmztxt')}<br/>${HTMLFilter.FilterParam(params.lineContent)}</p>
                         </div>
                         <br/>
                         <input type="hidden" name="routeid" value="${params.routeid}"/>

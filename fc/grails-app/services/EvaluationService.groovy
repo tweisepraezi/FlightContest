@@ -220,37 +220,39 @@ class EvaluationService
             if (!crew_instance.disabled && !crew_instance.IsProvisionalCrew(result_settings) && active_class_crew && (!team_settings || (team_id in team_settings))) {
                 List crew_tasks = []
                 for (Task task_instance in result_tasks) {
+                    Map task_values = GetTaskValues(task_instance, last_crew)
                     Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
-                    Map new_task = [id: GetTaskValues(task_instance, last_crew).id,
-                                    isTaskPlanningTest:GetTaskValues(task_instance, last_crew).isTaskPlanningTest,
-                                    isTaskFlightTest:GetTaskValues(task_instance, last_crew).isTaskFlightTest,
-                                    isTaskObservationTest:GetTaskValues(task_instance, last_crew).isTaskObservationTest, 
-                                    isTaskObservationTurnpointTest:GetTaskValues(task_instance, last_crew).isTaskObservationTurnpointTest,
-                                    isTaskObservationEnroutePhotoTest:GetTaskValues(task_instance, last_crew).isTaskObservationEnroutePhotoTest, 
-                                    isTaskObservationEnrouteCanvasTest:GetTaskValues(task_instance, last_crew).isTaskObservationEnrouteCanvasTest,
-                                    isTaskLandingTest:GetTaskValues(task_instance, last_crew).isTaskLandingTest, 
-                                    isTaskLanding1Test:GetTaskValues(task_instance, last_crew).isTaskLanding1Test,
-                                    isTaskLanding2Test:GetTaskValues(task_instance, last_crew).isTaskLanding2Test, 
-                                    isTaskLanding3Test:GetTaskValues(task_instance, last_crew).isTaskLanding3Test,
-                                    isTaskLanding4Test:GetTaskValues(task_instance, last_crew).isTaskLanding4Test,
-                                    isTaskSpecialTest:GetTaskValues(task_instance, last_crew).isTaskSpecialTest,
-                                    isTaskIncreaseEnabled:GetTaskValues(task_instance, last_crew).isTaskIncreaseEnabled, 
-                                    bestOfAnalysis:GetTaskValues(task_instance, last_crew).bestOfAnalysis,
-                                    bestOfName:GetTaskValues(task_instance, last_crew).bestOfName,
+                    Map test_values = GetTestValues(test_instance)
+                    Map new_task = [id: task_values.id,
+                                    isTaskPlanningTest:task_values.isTaskPlanningTest,
+                                    isTaskFlightTest:task_values.isTaskFlightTest,
+                                    isTaskObservationTest:task_values.isTaskObservationTest, 
+                                    isTaskObservationTurnpointTest:task_values.isTaskObservationTurnpointTest,
+                                    isTaskObservationEnroutePhotoTest:task_values.isTaskObservationEnroutePhotoTest, 
+                                    isTaskObservationEnrouteCanvasTest:task_values.isTaskObservationEnrouteCanvasTest,
+                                    isTaskLandingTest:task_values.isTaskLandingTest, 
+                                    isTaskLanding1Test:task_values.isTaskLanding1Test,
+                                    isTaskLanding2Test:task_values.isTaskLanding2Test, 
+                                    isTaskLanding3Test:task_values.isTaskLanding3Test,
+                                    isTaskLanding4Test:task_values.isTaskLanding4Test,
+                                    isTaskSpecialTest:task_values.isTaskSpecialTest,
+                                    isTaskIncreaseEnabled:task_values.isTaskIncreaseEnabled, 
+                                    bestOfAnalysis:task_values.bestOfAnalysis,
+                                    bestOfName:task_values.bestOfName,
                                     disabledCrew:test_instance.disabledCrew,
-                                    isPlanningTest:GetTestValues(test_instance, last_crew).isPlanningTest,
-                                    isFlightTest:GetTestValues(test_instance, last_crew).isFlightTest,
-                                    isObservationTest:GetTestValues(test_instance, last_crew).isObservationTest,
-                                    isObservationTurnpointTest:GetTestValues(test_instance, last_crew).isObservationTurnpointTest,
-                                    isObservationEnroutePhotoTest:GetTestValues(test_instance, last_crew).isObservationEnroutePhotoTest,
-                                    isObservationEnrouteCanvasTest:GetTestValues(test_instance, last_crew).isObservationEnrouteCanvasTest,
-                                    isLandingTest:GetTestValues(test_instance, last_crew).isLandingTest,
-                                    isLanding1Test:GetTestValues(test_instance, last_crew).isLanding1Test,
-                                    isLanding2Test:GetTestValues(test_instance, last_crew).isLanding2Test,
-                                    isLanding3Test:GetTestValues(test_instance, last_crew).isLanding3Test,
-                                    isLanding4Test:GetTestValues(test_instance, last_crew).isLanding4Test,
-                                    isSpecialTest:GetTestValues(test_instance, last_crew).isSpecialTest,
-                                    isIncreaseEnabled:GetTestValues(test_instance, last_crew).isIncreaseEnabled,                            
+                                    isPlanningTest:test_values.isPlanningTest,
+                                    isFlightTest:test_values.isFlightTest,
+                                    isObservationTest:test_values.isObservationTest,
+                                    isObservationTurnpointTest:test_values.isObservationTurnpointTest,
+                                    isObservationEnroutePhotoTest:test_values.isObservationEnroutePhotoTest,
+                                    isObservationEnrouteCanvasTest:test_values.isObservationEnrouteCanvasTest,
+                                    isLandingTest:test_values.isLandingTest,
+                                    isLanding1Test:test_values.isLanding1Test,
+                                    isLanding2Test:test_values.isLanding2Test,
+                                    isLanding3Test:test_values.isLanding3Test,
+                                    isLanding4Test:test_values.isLanding4Test,
+                                    isSpecialTest:test_values.isSpecialTest,
+                                    isIncreaseEnabled:test_values.isIncreaseEnabled,                            
                                     planningTestPenalties:test_instance.planningTestPenalties,
                                     flightTestPenalties:test_instance.flightTestPenalties,
                                     observationTestTurnPointPhotoPenalties:test_instance.observationTestTurnPointPhotoPenalties,
@@ -343,34 +345,8 @@ class EvaluationService
     }
     
     //--------------------------------------------------------------------------
-    private Map GetTestValues(Test testInstance, Map lastCrew)
+    private Map GetTestValues(Test testInstance)
     {
-        if (lastCrew) {
-            Map live_task = null
-            for (Map task in lastCrew.tasks) {
-                if (task.id == testInstance.task.id) {
-                    live_task = task
-                    break
-                }
-            }
-            if (live_task) {
-                Map new_task = [isPlanningTest:live_task.isPlanningTest,
-                                isFlightTest:live_task.isFlightTest,
-                                isObservationTest:live_task.isObservationTest,
-                                isObservationTurnpointTest:live_task.isObservationTurnpointTest,
-                                isObservationEnroutePhotoTest:live_task.isObservationEnroutePhotoTest,
-                                isObservationEnrouteCanvasTest:live_task.isObservationEnrouteCanvasTest,
-                                isLandingTest:live_task.isLandingTest,
-                                isLanding1Test:live_task.isLanding1Test,
-                                isLanding2Test:live_task.isLanding2Test,
-                                isLanding3Test:live_task.isLanding3Test,
-                                isLanding4Test:live_task.isLanding4Test,
-                                isSpecialTest:live_task.isSpecialTest,
-                                isIncreaseEnabled:live_task.isIncreaseEnabled
-                               ]
-                return new_task
-            }
-        }
         Map new_task = [isPlanningTest:testInstance.IsPlanningTestRun(),
                         isFlightTest:testInstance.IsFlightTestRun(),
                         isObservationTest:testInstance.IsObservationTestRun(),

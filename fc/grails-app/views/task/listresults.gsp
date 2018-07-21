@@ -32,7 +32,12 @@
                                 <g:else>
                                     <td/>
                                 </g:else>
-                                <td/>
+                                <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
+                                    <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listdifferences')}"/></td>
+                                </g:if>
+                                <g:else>
+                                    <td/>
+                                </g:else>
                                 <td/>
                             </tr>
                         </tbody>

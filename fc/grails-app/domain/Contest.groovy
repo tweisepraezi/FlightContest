@@ -1323,4 +1323,14 @@ class Contest
         }
         return landingresults_factor
     }
+
+    boolean RouteTitleFound(String newTitle)
+    {
+        for (Route route_instance in Route.findAllByContest(this,[sort:"id"])) {
+           if (route_instance.title == newTitle) {
+               return true
+           }
+        }
+        return false
+    }
 }

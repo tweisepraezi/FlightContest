@@ -4303,22 +4303,11 @@ class FcService
 		
 		String new_title2 = new_title 
 		int found_num = 1
-		while (RouteTitleFound(new_title2, sourceRouteInstance.contest)) {
+		while (sourceRouteInstance.contest.RouteTitleFound(new_title2)) {
 			found_num++
 			new_title2 = "$new_title ($found_num)"
 		}
 		return new_title2
-	}
-	
-    //--------------------------------------------------------------------------
-	private boolean RouteTitleFound(String newTitle, Contest contestInstance)
-	{
-		for(Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
-		   if (route_instance.title == newTitle) {
-			   return true
-		   }
-		}
-		return false
 	}
 	
     //--------------------------------------------------------------------------
@@ -5846,6 +5835,8 @@ class FcService
                 }
                 if (!params.measureDistance) {
                     coordroute_instance.measureDistance = null
+                    coordroute_instance.legMeasureDistance = null
+                    coordroute_instance.legDistance = null
                 }
     			//calculateLegMeasureDistance(coordroute_instance, false)
     
@@ -12268,8 +12259,8 @@ class FcService
 	        		break
         	}
 
-        	// calculate planProcedureTurn (CoordRoute)
-			if (last_coordroute_instance && routeInstance.UseProcedureTurn()) {
+        	// Set planProcedureTurn (CoordRoute)
+			if (last_coordroute_instance) { // && routeInstance.UseProcedureTurn()
 				BigDecimal legdir
 				if (coordroute_instance.measureTrueTrack) {
 					legdir = coordroute_instance.measureTrueTrack
@@ -12282,7 +12273,6 @@ class FcService
     					BigDecimal rounded_legdir = FcMath.RoundGrad(legdir)
     					BigDecimal rounded_last_legdir = FcMath.RoundGrad(last_legdir)
     					if (IsCourseChangeGreaterEqual90(rounded_legdir,rounded_last_legdir)) {
-    						println "Set planProcedureTurn (CoordRoute, $last_coordroute_instance.type, $rounded_last_legdir -> $rounded_legdir)"
     						coordroute_instance.planProcedureTurn = true
     						coordroute_instance.save()
     					}
@@ -12885,6 +12875,7 @@ class FcService
 		printstart "Create and calculate CoordResult instances"
         int coord_index = 0
         Route route_instance = testInstance.flighttestwind.flighttest.route
+        boolean use_procedureturn = route_instance.UseProcedureTurn()
 		CoordType last_coordtype = CoordType.UNKNOWN
         CoordRoute.findAllByRoute(route_instance,[sort:"id"]).each { CoordRoute coordroute_instance ->
             CoordResult coordresult_instance = new CoordResult()
@@ -12901,12 +12892,9 @@ class FcService
             coordresult_instance.gatewidth2 = coordroute_instance.gatewidth2
             coordresult_instance.endCurved = coordroute_instance.endCurved
             
-			// calculate planProcedureTurn (CoordResult)
-			if (last_coordtype.IsProcedureTurnCoord() && route_instance.UseProcedureTurn()) {
-				coordresult_instance.planProcedureTurn = coordroute_instance.planProcedureTurn
-                if (coordroute_instance.planProcedureTurn) {
-                    println "Set planProcedureTurn (calculate_coordresult CoordRoute)"
-                }
+			// Set planProcedureTurn (CoordResult)
+			if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordtype.IsProcedureTurnCoord()) {
+				coordresult_instance.planProcedureTurn = true
 			}
 			
 			// planCpTime
@@ -12954,9 +12942,6 @@ class FcService
 			coordresult_instance.test = testInstance
             coordresult_instance.save()
 
-			if (coordresult_instance.planProcedureTurn) {
-				println "PROCEDURE TURN"
-			}
 			println "${coordresult_instance.title()} ${coordresult_instance.mark} ${FcMath.TimeStr(coordresult_instance.planCpTime)}"
 			
 			last_coordtype = coordroute_instance.type
@@ -13039,13 +13024,12 @@ class FcService
 				break 
 		}
 		
-        // calculate planProcedureTurn (TestLeg)
+        // Set planProcedureTurn (TestLeg)
         testLegInstance.planProcedureTurn = false
         testLegInstance.planProcedureTurnDuration = 0
         if ((procedureTurnDuration > 0) && (lastTrueTrack != null) && routeInstance.UseProcedureTurn()) {
 			if (routeLegInstance.startTitle.type.IsProcedureTurnCoord()) {
 	            if (IsCourseChangeGreaterEqual90(testLegInstance.planTrueTrack,lastTrueTrack)) {
-					println "Set planProcedureTurn (TestLeg: $lastTrueTrack -> $testLegInstance.planTrueTrack)"
 	        	    testLegInstance.planProcedureTurn = true
 	        	    testLegInstance.planProcedureTurnDuration = procedureTurnDuration
 	            }

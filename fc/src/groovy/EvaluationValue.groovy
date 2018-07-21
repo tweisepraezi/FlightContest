@@ -33,4 +33,13 @@ enum EvaluationValue // DB-2.13
         return ret
     }
 
+    boolean Found()
+    {
+        switch (this) {
+            case EvaluationValue.Correct:
+            case EvaluationValue.Inexact:
+                return true
+        }
+        return false
+    }
 }

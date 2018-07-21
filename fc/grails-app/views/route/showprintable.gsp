@@ -224,7 +224,7 @@
                         <tr class="value">
                             <td>
 	                            <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
-	                                ${coordroute_instance.GetExportRouteCoord()}<br/>
+	                                ${coordroute_instance.GetExportRouteCoord(false)}<br/>
 	                            </g:each>
 	                        </td>
                         </tr>

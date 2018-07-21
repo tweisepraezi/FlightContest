@@ -21,7 +21,7 @@ class Route
                          'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapWindpowerstations',
                          'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
                          'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintA3',
-                         'contestMapScaleBar','contestMapNoColorChange']
+                         'contestMapScaleBar','contestMapNoColorChange','useProcedureTurn']
             
     String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPDFMAP
     boolean contestMapCircle = true
@@ -49,6 +49,7 @@ class Route
     boolean contestMapPrintA3 = true
     boolean contestMapScaleBar = false
     boolean contestMapNoColorChange = false
+    Boolean useProcedureTurn = true                                              // TODO: DB-2.14
     
 	static belongsTo = [contest:Contest]
 
@@ -207,6 +208,15 @@ class Route
             return title
         } else {
             return idNamePrintable()
+        }
+    }
+    
+    String GetName(boolean isPrint)
+    {
+        if (isPrint) {
+            return name()
+        } else {
+            return printName()
         }
     }
     
@@ -1053,6 +1063,16 @@ class Route
             }
         }
         return use_pt
+    }
+    
+    void DisableProcedureTurn()
+    {
+        if (useProcedureTurn != UseProcedureTurn()) {
+            if (!useProcedureTurn) {
+                contest.printStyle += "\nbody { --route: ${name()}; --disable-procedureturn; }"
+                contest.save()
+            }
+        }
     }
     
     boolean ShowCurvedPoints()

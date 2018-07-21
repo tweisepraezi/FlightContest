@@ -46,7 +46,6 @@ class GpxService
     final static String XMLHEADER = "<?xml version='1.0' encoding='UTF-8'?>"
     
     final static String GPXVERSION = "1.1"
-    final static String GPXCREATOR = "Flight Contest - flightcontest.de - Version 3"
     final static String GPXCREATOR_CONTESTMAP = "Flight Contest - flightcontest.de - Contest Map - Version 1"
     final static String GAC_TRACKNAME = "GAC track"
     final static String IGC_TRACKNAME = "IGC track"
@@ -234,7 +233,7 @@ class GpxService
         BufferedWriter gpx_writer = gpx_file.newWriter()
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
-        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+        xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
             xml.trk {
                 xml.name KML_TRACKNAME
                 xml.trkseg {
@@ -331,7 +330,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
         }
         ret += [ok:converted]
         return ret
@@ -356,7 +355,7 @@ class GpxService
         BufferedWriter gpx_writer = gpx_file.newWriter()
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
-        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+        xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
             xml.trk {
                 xml.name GAC_TRACKNAME
                 xml.trkseg {
@@ -465,7 +464,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
         }
         ret += [ok:converted]
         return ret
@@ -490,7 +489,7 @@ class GpxService
         BufferedWriter gpx_writer = gpx_file.newWriter()
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
-        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+        xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
             xml.trk {
                 xml.name IGC_TRACKNAME
                 xml.trkseg {
@@ -598,7 +597,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
         }
         ret += [ok:converted]
         return ret
@@ -623,7 +622,7 @@ class GpxService
         BufferedWriter gpx_writer = gpx_file.newWriter()
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
-        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+        xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
             xml.trk {
                 xml.name NMEA_TRACKNAME
                 xml.trkseg {
@@ -736,7 +735,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
         }
         ret += [ok:converted]
         return ret
@@ -745,7 +744,7 @@ class GpxService
     //--------------------------------------------------------------------------
     Map ConvertRoute2GPX(Route routeInstance, String gpxFileName, boolean isPrint, boolean showPoints, boolean wrEnrouteSign, boolean gpxExport, Map contestMap = [:])
     {
-        printstart "ConvertRoute2GPX ${routeInstance.name()} -> ${gpxFileName}"
+        printstart "ConvertRoute2GPX ${routeInstance.GetName(isPrint)} -> ${gpxFileName}"
         
         printstart "Generate GPX"
         BufferedWriter gpx_writer = null
@@ -765,7 +764,7 @@ class GpxService
                 GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, gpxExport, xml, contestMap)
             }
         } else {
-            xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+            xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
                 GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, gpxExport, xml, [:])
             }
         }
@@ -780,7 +779,7 @@ class GpxService
         List show_points = []
         if (showPoints) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, isPrint, wrEnrouteSign, messageSource, contestMap)
+            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, isPrint, wrEnrouteSign, false, messageSource, contestMap) // false - no showCurvedPoints
         }
         
         printdone ""
@@ -804,7 +803,7 @@ class GpxService
         BufferedWriter gpx_writer = new_gpx_file.newWriter()
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
-        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+        xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
 
             FileReader gpx_reader = new FileReader(gpx_file)
             def gpx = new XmlParser().parse(gpx_reader)
@@ -837,7 +836,7 @@ class GpxService
             printerror err_msg
         }
         println "Generate points for buttons (GetShowPointsRoute)"
-        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, messageSource)] // false - no Print, false - no showEnrouteSign
+        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
         ret += [ok:converted]
         return ret
     }
@@ -1442,7 +1441,7 @@ class GpxService
         }
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
-        xml.gpx(version:GPXVERSION, creator:GPXCREATOR) {
+        xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
             GPXRoute(route_instance, testInstance, isPrint, wrEnrouteSign, gpxExport, xml)
             found_track = GPXTrack(testInstance, testInstance.aflosStartNum, isPrint, xml)
         }
@@ -1461,7 +1460,7 @@ class GpxService
                 show_points = GetShowPoints(gpxFileName, wrEnrouteSign)
             } else {
                 println "Generate points for buttons (GetShowPointsRoute)"
-                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, isPrint, wrEnrouteSign, messageSource)
+                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, isPrint, wrEnrouteSign, false, messageSource) // false - no showCurvedPoints
             }
         }
         
@@ -1601,6 +1600,7 @@ class GpxService
         if (wrEnrouteSign && testInstance) {
             wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
         }
+        boolean use_procedureturn = routeInstance.UseProcedureTurn()
         
         // observation settings & enroute signs without position
         Map contest_map_rect = [:]
@@ -1616,7 +1616,8 @@ class GpxService
                             enroutephoto: routeInstance.enroutePhotoRoute,
                             enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
                             enroutecanvas: routeInstance.enrouteCanvasRoute,
-                            enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement
+                            enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
+                            useprocedureturn: getYesNo(routeInstance.UseProcedureTurn())
                         )
                         if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                             xml.enroutephotosigns {
@@ -1796,7 +1797,7 @@ class GpxService
                         xml.route(number:1)
                     }
                 }
-                xml.name routeInstance.name().encodeAsHTML()
+                xml.name routeInstance.title.encodeAsHTML()
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsCpCheckCoord()) {
                         BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
@@ -1818,7 +1819,7 @@ class GpxService
                             xml.route(number:2)
                         }
                     }
-                    xml.name routeInstance.name().encodeAsHTML()
+                    xml.name routeInstance.title.encodeAsHTML()
                     boolean run = false
                     for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                         if (run) {
@@ -1872,7 +1873,7 @@ class GpxService
                 CoordRoute last_coordroute_instance = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                    if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
                         if (contestMap.contestMapPrintPoints.contains(last_coordroute_instance.title()+',')) {
                             List circle_coords = AviationMath.getProcedureTurnCircle(
                                 last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
@@ -2220,7 +2221,7 @@ class GpxService
                 last_coordroute_instance = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                    if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
                         List circle_coords = AviationMath.getProcedureTurnCircle(
                             last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
                             last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),

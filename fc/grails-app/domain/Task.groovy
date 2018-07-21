@@ -129,7 +129,8 @@ class Task
                          'printFlightResults','printFlightMap',
                          'printObservationResults','printObservationResultsScan',
                          'printLandingResults','printSpecialResults','printAircraft','printTeam','printClass','printShortClass',
-                         'printModifiedResults','printCompletedResults','printProvisionalResults']
+                         'printModifiedResults','printCompletedResults','printProvisionalResults',
+                         'showOffset','showTurnPoints','showTurnPointSigns','showEnroutePhotos','showEnrouteCanavas']
     boolean printSummaryResults = true
 	boolean printPlanningResults = true
     boolean printPlanningResultsScan = true
@@ -146,6 +147,11 @@ class Task
     boolean printModifiedResults = true
     boolean printCompletedResults = true
 	boolean printProvisionalResults = false
+    int showOffset = 0
+    boolean showTurnPoints = true
+    boolean showTurnPointSigns = true
+    boolean showEnroutePhotos = true
+    boolean showEnrouteCanavas = true
 	
     static belongsTo = [contest:Contest]
     
@@ -532,6 +538,15 @@ class Task
             return title
         } else {
             return idNamePrintable()
+        }
+    }
+    
+    String GetName(boolean isPrint)
+    {
+        if (isPrint) {
+            return name()
+        } else {
+            return printName()
         }
     }
     

@@ -10,7 +10,7 @@ class RouteFileTools
     final static String TXT_EXTENSION = ".txt"
     
     final static String ROUTE_EXTENSIONS = "${RouteFileTools.GPX_EXTENSION}, ${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}, ${RouteFileTools.REF_EXTENSION}, ${RouteFileTools.TXT_EXTENSION}"
-    final static String FC_ROUTE_EXTENSIONS = "${RouteFileTools.GPX_EXTENSION}"
+    final static String FC_ROUTE_EXTENSIONS = "${RouteFileTools.GPX_EXTENSION}, ${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}"
     final static String ENROUTE_SIGN_EXTENSIONS = "${RouteFileTools.KML_EXTENSION}, ${RouteFileTools.KMZ_EXTENSION}, ${RouteFileTools.TXT_EXTENSION}"
     final static String TURNPOINT_EXTENSIONS = "${RouteFileTools.TXT_EXTENSION}"
     
@@ -22,6 +22,7 @@ class RouteFileTools
     final static String DURATION = "Duration"
     final static String DIST = "Dist"
     final static String TRACK = "Track"
+    final static String SIGN = "Sign"
     final static String UNIT_mm = "mm"
     final static String UNIT_m = "m"
     final static String UNIT_ft = "ft"
@@ -34,6 +35,7 @@ class RouteFileTools
     final static String UNIT_TPnogatecheck = "nogate"
     final static String UNIT_TPnoplanningtest = "noplan"
     final static String UNIT_TPendcurved = "endcurved"
+    final static String UNIT_TPnosign = "-"
     
     //--------------------------------------------------------------------------
     static Map ReadRouteFile(String fileExtension, Contest contestInstance, String routeFileName, String originalFileName, Map importParams)
@@ -46,10 +48,10 @@ class RouteFileTools
                 Map route_data = ReadGPXFile(contestInstance, routeFileName, originalFileName)
                 return create_route(contestInstance, route_data, importParams)
             case KML_EXTENSION:
-                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, false)
+                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, importParams.foldername, false)
                 return create_route(contestInstance, route_data, importParams)
             case KMZ_EXTENSION:
-                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, true)
+                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, importParams.foldername, true)
                 return create_route(contestInstance, route_data, importParams)
             case REF_EXTENSION:
                 Map route_data = ReadREFFile(contestInstance, routeFileName, originalFileName)
@@ -130,7 +132,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadKMLFile(Contest contestInstance, String kmFileName, String originalFileName, boolean kmzFile)
+    private static Map ReadKMLFile(Contest contestInstance, String kmFileName, String originalFileName, String folderName, boolean kmzFile)
     // Return: gates     - List of gates (lat, lon, alt)
     //         routename - Name of route
     //         valid     - true, if valid route file format
@@ -157,6 +159,7 @@ class RouteFileTools
 
         try {
             def kml = new XmlParser().parse(km_reader)
+            
             if (kml.Document.Placemark.LineString.coordinates) {
                 
                 route_name = kml.Document.Placemark.name.text()
@@ -175,30 +178,45 @@ class RouteFileTools
                     valid_format = true
                 }
                 
-            } else if (kml.Document.Folder.name && kml.Document.Folder.Placemark) {
-            
-                route_name = kml.Document.Folder.name.text()
-                if (route_name) {
-                    int num = 0
-                    while (Route.findByContestAndTitle(contestInstance, route_name)) {
-                        num++
-                        route_name = "${kml.Document.Folder.name.text()} ($num)"
-                    }
+            } else {
+                def folder = null
+                if (folderName) {
+                    folder = search_folder_by_name(kml.Document, folderName)
+                } else {
+                    folder = kml.Document.Folder // first folder
                 }
                 
-                BigDecimal last_latitude = null
-                BigDecimal last_longitude = null
-                for (def pm in kml.Document.Folder.Placemark) {
-                    if (pm.Point.coordinates) {
-                        String coordinates = pm.Point.coordinates.text()
-                        Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
-                        gates += kml_coords.gates
-                        last_latitude = kml_coords.lastlatitude
-                        last_longitude = kml_coords.lastlongitude
+                if (folder && folder.name && folder.Placemark) {
+                
+                    route_name = folder.name.text()
+                    if (route_name) {
+                        int num = 0
+                        while (Route.findByContestAndTitle(contestInstance, route_name)) {
+                            num++
+                            route_name = "${folder.name.text()} ($num)"
+                        }
                     }
-                }
-                if (gates.size()) {
-                    valid_format = true
+                    
+                    BigDecimal last_latitude = null
+                    BigDecimal last_longitude = null
+                    for (def pm in folder.Placemark) {
+                        if (pm.Point.coordinates) {
+                            String coordinates = pm.Point.coordinates.text()
+                            Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
+                            gates += kml_coords.gates
+                            last_latitude = kml_coords.lastlatitude
+                            last_longitude = kml_coords.lastlongitude
+                        } else if (pm.LineString.coordinates) {
+                            String coordinates = pm.LineString.coordinates.text()
+                            Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
+                            gates += kml_coords.gates
+                            last_latitude = kml_coords.lastlatitude
+                            last_longitude = kml_coords.lastlongitude
+                        }
+                    }
+                    if (gates.size()) {
+                        valid_format = true
+                    }
                 }
             }
         } catch (Exception e) {
@@ -221,10 +239,12 @@ class RouteFileTools
     {
         List gates = []
         
+        String coordinate_values = coordinateValues.replaceAll("\n"," ").replaceAll("\r"," ").replaceAll("\t"," ")
+        
         BigDecimal last_latitude = lastLatitude
         BigDecimal last_longitude = lastLongitude
         def last_track = null
-        for (coordinate in coordinateValues.split(' ')) {
+        for (coordinate in coordinate_values.split(' ')) {
             
             List coord = coordinate.split(',')
             BigDecimal latitude = coord[1].toBigDecimal()
@@ -814,7 +834,10 @@ class RouteFileTools
         switch (fileExtension) {
             case GPX_EXTENSION:
                 return ReadFCGPXFile(contestInstance, routeFileName)
-                break
+            case KML_EXTENSION:
+                return ReadFCKMLFile(contestInstance, routeFileName, false)
+            case KMZ_EXTENSION:
+                return ReadFCKMLFile(contestInstance, routeFileName, true)
         }
         return [gatenum: 0, valid: false, errors: ""]
     }
@@ -838,14 +861,17 @@ class RouteFileTools
             if (gpx.rte.size() > 0) {
                 
                 boolean first = true
-                String route_name = ""
+                String new_title2 = ""
                 for (rte in gpx.rte) {
-                    if (!route_name && rte.extensions.flightcontest.route) {
-                        route_name = rte.name[0].text()
-                        int num = 0
-                        while (Route.findByContestAndTitle(contestInstance, route_name)) {
-                            num++
-                            route_name = "${rte.name[0].text()} ($num)"
+                    if (!new_title2 && rte.extensions.flightcontest.route) {
+                        String new_title = rte.name[0].text()
+                        new_title2 = new_title
+                        if (new_title2) {
+                            int found_num = 1
+                            while (contestInstance.RouteTitleFound(new_title2)) {
+                                found_num++
+                                new_title2 = "${new_title} (${found_num})"
+                            }
                         }
                     }
                     if (rte.extensions.flightcontest.gate) {
@@ -855,7 +881,7 @@ class RouteFileTools
                             route_instance = new Route()
                             route_instance.contest = contestInstance
                             route_instance.idTitle = Route.countByContest(contestInstance) + 1
-                            route_instance.title = route_name
+                            route_instance.title = new_title2
                             route_instance.turnpointRoute = contestInstance.turnpointRule.GetTurnpointRoute()
                             route_instance.turnpointMapMeasurement = contestInstance.turnpointMapMeasurement
                             if (route_instance.turnpointRoute == TurnpointRoute.Unassigned) {
@@ -973,8 +999,14 @@ class RouteFileTools
                         route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.(enroutecanvasmeasurement.toString())
                         save_route = true
                     }
+                    String useprocedureturn = gpx.extensions.flightcontest.observationsettings.'@useprocedureturn'[0]
+                    if (useprocedureturn) {
+                        route_instance.useProcedureTurn = useprocedureturn == "yes"
+                        save_route = true
+                    }
                     if (save_route) {
                         route_instance.save()
+                        route_instance.DisableProcedureTurn()
                     }
                 }
                 if (gpx.extensions.flightcontest.enroutephotosigns) {
@@ -1080,6 +1112,160 @@ class RouteFileTools
         return [gatenum: gate_num, valid: valid_format, errors: read_errors, route: route_instance]
     }       
      
+    //--------------------------------------------------------------------------
+    private static Map ReadFCKMLFile(Contest contestInstance, String kmFileName, boolean kmzFile)
+    // Return: gatenum - Number of gates 
+    //         valid   - true, if valid FC kml/kmz format
+    //         errors  - <> ""
+    {
+        int gate_num = 0
+        boolean valid_format = false
+        String read_errors = ""
+        Route route_instance = null
+        
+        File km_file = new File(kmFileName)
+        def kmz_file = null
+        def km_reader = null
+        if (kmzFile) {
+            kmz_file = new java.util.zip.ZipFile(km_file)
+            kmz_file.entries().findAll { !it.directory }.each {
+                if (!km_reader) {
+                    km_reader = kmz_file.getInputStream(it)
+                }
+            }
+        } else {
+            km_reader = new FileReader(km_file)
+        }
+        
+        try {
+            def kml = new XmlParser().parse(km_reader)
+            
+            def settings_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_SETTINGS)
+            def turnpoints_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_TURNPOINTS)
+            def photos_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_PHOTOS)
+            def canvas_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_CANVAS)
+            if (settings_folder && turnpoints_folder) {
+                valid_format = true
+                
+                def data = settings_folder.ExtendedData.Data
+                
+                // Create route
+                route_instance = new Route()
+                route_instance.contest = contestInstance
+                route_instance.idTitle = Route.countByContest(contestInstance) + 1
+                route_instance.turnpointRoute = contestInstance.turnpointRule.GetTurnpointRoute()
+                route_instance.turnpointMapMeasurement = contestInstance.turnpointMapMeasurement
+                if (route_instance.turnpointRoute == TurnpointRoute.Unassigned) {
+                    route_instance.turnpointRoute = TurnpointRoute.None
+                    route_instance.turnpointMapMeasurement = false
+                }
+                route_instance.enroutePhotoRoute = EnrouteRoute.None
+                route_instance.enrouteCanvasRoute = EnrouteRoute.None
+                route_instance.enroutePhotoMeasurement = contestInstance.enroutePhotoRule.GetEnrouteMeasurement()
+                if (route_instance.enroutePhotoMeasurement == EnrouteMeasurement.Unassigned) {
+                    route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
+                }
+                route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
+                if (route_instance.enrouteCanvasMeasurement == EnrouteMeasurement.Unassigned) {
+                    route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
+                }
+                for (def d in data) {
+                    switch (d.'@name') {
+                        case "routetitle":
+                            String new_title = d.value.text()
+                            String new_title2 = new_title
+                            if (new_title2) { 
+                                int found_num = 1
+                                while (contestInstance.RouteTitleFound(new_title2)) {
+                                    found_num++
+                                    new_title2 = "${new_title} (${found_num})"
+                                }
+                            }
+                            route_instance.title = new_title2
+                            break
+                        case "turnpoint":
+                            route_instance.turnpointRoute = TurnpointRoute.(d.value.text())
+                            break
+                        case "turnpointmapmeasurement":
+                            route_instance.turnpointMapMeasurement = d.value.text() == "yes"
+                            break
+                        case "enroutephoto":
+                            route_instance.enroutePhotoRoute = EnrouteRoute.(d.value.text())
+                            break
+                        case "enroutephotomeasurement":
+                            route_instance.enroutePhotoMeasurement = EnrouteMeasurement.(d.value.text())
+                            break
+                        case "enroutecanvas":
+                            route_instance.enrouteCanvasRoute = EnrouteRoute.(d.value.text())
+                            break
+                        case "enroutecanvasmeasurement":
+                            route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.(d.value.text())
+                            break
+                        case "useprocedureturn":
+                            route_instance.useProcedureTurn = d.value.text() == "yes"
+                            break
+                    }
+                }
+                route_instance.save()
+                route_instance.DisableProcedureTurn()
+                
+                // Add coordinates
+                Map sign_data = ReadImportSign(ImportSign.RouteCoord, turnpoints_folder, "")
+                Map ret = add_sign_data(route_instance, ImportSign.RouteCoord, sign_data, false)
+                
+                // Add observations
+                if (ret.valid && !ret.errors) {
+                    gate_num = ret.importedsignnum
+                    
+                    if (route_instance.enroutePhotoRoute == EnrouteRoute.InputName) {
+                        for (def d in data) {
+                            if (d.'@name'.startsWith("enroutephotosign:")) {
+                                int view_pos = d.'@name'.substring(17).toInteger()
+                                CoordEnroutePhoto coordenroutephoto_instance = new CoordEnroutePhoto()
+                                coordenroutephoto_instance.route = route_instance
+                                coordenroutephoto_instance.enroutePhotoName = d.value.text()
+                                coordenroutephoto_instance.enrouteViewPos = view_pos
+                                coordenroutephoto_instance.save()
+                            }
+                        }
+                    } else if (photos_folder) {
+                        sign_data = ReadImportSign(ImportSign.EnroutePhotoCoord, photos_folder, "")
+                        add_sign_data(route_instance, ImportSign.EnroutePhotoCoord, sign_data, false)
+                    }
+                    
+                    if (route_instance.enrouteCanvasRoute == EnrouteRoute.InputName) {
+                        for (def d in data) {
+                            if (d.'@name'.startsWith("enroutecanvassign:")) {
+                                int view_pos = d.'@name'.substring(18).toInteger()
+                                CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
+                                coordenroutecanvas_instance.route = route_instance
+                                coordenroutecanvas_instance.enrouteCanvasSign = EnrouteCanvasSign.(d.value.text())
+                                coordenroutecanvas_instance.enrouteViewPos = view_pos
+                                coordenroutecanvas_instance.save()
+                            }
+                        }
+                    } else if (canvas_folder) {
+                        sign_data = ReadImportSign(ImportSign.EnrouteCanvasCoord, canvas_folder, "")
+                        add_sign_data(route_instance, ImportSign.EnrouteCanvasCoord, sign_data, false)
+                    }
+                }
+                
+                valid_format = ret.valid
+                read_errors = ret.errors
+            }
+        } catch (Exception e) {
+            read_errors += e.getMessage()
+        }
+        if (km_reader) {
+            km_reader.close()
+        }
+        if (kmz_file) {
+            kmz_file.close()
+        }
+        
+        return [gatenum: gate_num, valid: valid_format, errors: read_errors, route: route_instance]
+    }
+    
     //--------------------------------------------------------------------------
     static Map ReadImportSignFile(String fileExtension, Route routeInstance, String routeFileName, String originalFileName, ImportSign importSign, String folderName, String namePrefix)
     // Return: importedsignnum - Number of imported signs 
@@ -1331,10 +1517,7 @@ class RouteFileTools
     //         valid        - true, if valid sign file format
     //         errors       - <> ""
     {
-        List import_signs = []
-        boolean valid_format = false
-        int invalid_line_num = 0
-        String read_errors = ""
+        Map ret = [import_signs: [], valid: false, invalidlinenum: 0, errors: ""]
         
         File km_file = new File(kmFileName)
         def kmz_file = null
@@ -1358,68 +1541,94 @@ class RouteFileTools
             } else {
                 folder = kml.Document.Folder // first folder
             }
-            if (folder && folder.name && folder.Placemark) {
-                for (def pm in folder.Placemark) {
-                    if (pm.Point.coordinates) {
-                        String sign_name = pm.name.text()
-                        
-                        boolean found = false
-                        if (namePrefix) {
-                            if (sign_name.toLowerCase().startsWith(namePrefix.toLowerCase())) {
-                                found = true
-                            }
-                        } else {
-                            found = true
-                        }
-                        
-                        // check canvas name
-                        if (found) {
-                            if (importSign.IsEnrouteCanvas() || importSign.IsEnroutePhoto()) {
-                                boolean canvas_name = false
-                                for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
-                                    if (sign.canvasName == sign_name) {
-                                        canvas_name = true
-                                        break
-                                    }
-                                }
-                                if (importSign.IsEnrouteCanvas()) {
-                                    if (!canvas_name) {
-                                        found = false
-                                    }
-                                } else if (importSign.IsEnroutePhoto()) {
-                                    if (canvas_name) {
-                                        found = false
-                                    }
-                                }
-                            }
-                        }
-
-                        // add to import_signs
-                        if (found) {
-                            String coordinates = pm.Point.coordinates.text()
-                            List coord = coordinates.split(',')
-                            BigDecimal latitude = coord[1].toBigDecimal()
-                            BigDecimal longitude = coord[0].toBigDecimal()
-                            Map lat_value = CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)
-                            Map lon_value = CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)
-                
-                            Map import_sign = [value_num_ok:true, name:sign_name, lat_value:lat_value, lon_value:lon_value, tpname:'', tpsign:'', tpcorrect:'', lat:'yes', lon:'yes', alt:'', nm:'', mm:'', other:[]]
-                            import_signs += import_sign
-                        }
-                    }
-                }
-                if (import_signs.size()) {
-                    valid_format = true
-                }
+            if (folder && folder.name) {
+                ret = ReadImportSign(importSign, folder, namePrefix)
             }
         } catch (Exception e) {
-            read_errors += e.getMessage()
+            ret.read_errors += e.getMessage()
         }
         if (km_reader) {
             km_reader.close()
         }
         if (kmz_file) {
             kmz_file.close()
+        }
+        
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private static Map ReadImportSign(ImportSign importSign, def readFolder, String namePrefix)
+    {
+        List import_signs = []
+        boolean valid_format = false
+        int invalid_line_num = 0
+        String read_errors = ""
+        
+        if (readFolder.Placemark) {
+            valid_format = true
+            for (def pm in readFolder.Placemark) {
+                if (pm.Point.coordinates) {
+                    String sign_name = pm.name.text()
+                    
+                    boolean found = false
+                    if (namePrefix) {
+                        if (sign_name.toLowerCase().startsWith(namePrefix.toLowerCase())) {
+                            found = true
+                        }
+                    } else {
+                        found = true
+                    }
+                    
+                    // check canvas name
+                    if (found) {
+                        if (importSign.IsEnrouteCanvas() || importSign.IsEnroutePhoto()) {
+                            boolean canvas_name = false
+                            for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
+                                if (sign.canvasName == sign_name) {
+                                    canvas_name = true
+                                    break
+                                }
+                            }
+                            if (importSign.IsEnrouteCanvas()) {
+                                if (!canvas_name) {
+                                    found = false
+                                }
+                            } else if (importSign.IsEnroutePhoto()) {
+                                if (canvas_name) {
+                                    found = false
+                                }
+                            }
+                        }
+                    }
+
+                    // add to import_signs
+                    if (found) {
+                        Map import_sign = importSign.GetKMLValues(sign_name)
+                        
+                        String coordinates = pm.Point.coordinates.text()
+                        List coord = coordinates.split(',')
+                        BigDecimal latitude = coord[1].toBigDecimal()
+                        BigDecimal longitude = coord[0].toBigDecimal()
+                        Integer altitude = (coord[2].toBigDecimal() * GpxService.ftPerMeter).toInteger()
+                        import_sign += [lat_value:CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)]
+                        import_sign += [lon_value:CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)]
+                        import_sign += [alt_value:[invalid:false, alt:altitude]]
+            
+                        if (importSign == ImportSign.RouteCoord) {
+                            CoordType tp_type = CoordType.UNKNOWN
+                            for (CoordType coord_type in CoordType.values()) {
+                                if (sign_name.startsWith(coord_type.export)) {
+                                    tp_type = coord_type
+                                    break
+                                }
+                            }
+                            import_sign += [tptype:tp_type]
+                        }
+                        import_signs += import_sign
+                    }
+                }
+            }
         }
         
         return [import_signs: import_signs, valid: valid_format, invalidlinenum: invalid_line_num, errors: read_errors]
@@ -1470,6 +1679,14 @@ class RouteFileTools
     private static String change_problemchars(String lineValue)
     {
         String s = lineValue.replaceAll('\t', ' ')
+        s = s.replaceAll("\u2018", CoordPresentation.GRADMIN)
+        s = s.replaceAll("\u2019", CoordPresentation.GRADMIN)
+        s = s.replaceAll("\u201B", CoordPresentation.GRADMIN)
+        s = s.replaceAll("\u2032", CoordPresentation.GRADMIN)
+        s = s.replaceAll("\u201C", CoordPresentation.GRADSEC)
+        s = s.replaceAll("\u201D", CoordPresentation.GRADSEC)
+        s = s.replaceAll("\u201F", CoordPresentation.GRADSEC)
+        s = s.replaceAll("\u2033", CoordPresentation.GRADSEC)
         s = s.replaceAll(CoordPresentation.GRAD, "${CoordPresentation.GRAD} ")
         s = s.replaceAll(CoordPresentation.GRADMIN, "${CoordPresentation.GRADMIN} ")
         s = s.replaceAll(CoordPresentation.GRADSEC, "${CoordPresentation.GRADSEC} ")
@@ -1481,6 +1698,10 @@ class RouteFileTools
     {
         if (tpName.startsWith('WP')) {
             return tpName.replaceFirst('WP', CoordType.TP.export)
+        } else if (tpName.startsWith('CP')) {
+            return tpName.replaceFirst('CP', CoordType.TP.export)
+        } else if (tpName.startsWith('T/O')) {
+            return tpName.replaceFirst('T/O', CoordType.TO.export)
         } else if (tpName.startsWith('UZK')) {
             return tpName.replaceFirst('UZK', CoordType.SECRET.export)
         }
@@ -1615,7 +1836,7 @@ class RouteFileTools
                         break
                     }
                 }
-            } else if (importSign ==ImportSign.RouteCoord) {
+            } else if (importSign == ImportSign.RouteCoord) {
                 CoordRoute coordroute_instance = new CoordRoute()
                 coordroute_instance.route = routeInstance
                 
@@ -1700,6 +1921,25 @@ class RouteFileTools
                         }
                         if (o == RouteFileTools.UNIT_TPendcurved) {
                             coordroute_instance.endCurved = true
+                        }
+                        if (o.startsWith(SIGN)) {
+                            String s = o.substring(SIGN.size()).trim()
+                            switch (routeInstance.turnpointRoute) {
+                                case TurnpointRoute.AssignPhoto:
+                                case TurnpointRoute.AssignCanvas:
+                                    coordroute_instance.assignedSign = TurnpointSign.GetTurnpointSign(s)
+                                    break
+                                case TurnpointRoute.TrueFalsePhoto:
+                                    switch (s) {
+                                        case RouteFileTools.UNIT_TPcorrect:
+                                            coordroute_instance.correctSign = TurnpointCorrect.True
+                                            break
+                                        case RouteFileTools.UNIT_TPincorrect:
+                                            coordroute_instance.correctSign = TurnpointCorrect.False
+                                            break
+                                    }
+                                    break
+                            }
                         }
                     }
                 }

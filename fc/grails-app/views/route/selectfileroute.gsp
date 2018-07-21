@@ -24,6 +24,10 @@
                         <div>
                             <p>${message(code:'fc.route.fileimport.info.txt')}<br/>${HTMLFilter.FilterParam(params.lineContent)}</p>
                         </div>
+                        <div>
+                            <label>${message(code:'fc.route.fileimport.foldername')}:</label>
+                            <input type="text" id="foldername" name="foldername" value="" tabIndex="${ti[0]++}"/>
+                        </div>
                         <p>
                             <div>
                                 <g:checkBox name="firstcoordto" value="${firstcoordto}" checked= "${true}" tabIndex="${ti[0]++}"/>

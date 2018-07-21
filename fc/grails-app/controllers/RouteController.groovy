@@ -224,6 +224,12 @@ class RouteController {
         def file = request.getFile('routefile')
         Map import_route = fcService.importFcRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, file)
         if (!import_route.found) {
+            import_route = fcService.importFcRoute(RouteFileTools.KML_EXTENSION, session.lastContest, file)
+        }
+        if (!import_route.found) {
+            import_route = fcService.importFcRoute(RouteFileTools.KMZ_EXTENSION, session.lastContest, file)
+        }
+        if (!import_route.found) {
             import_route = fcService.importFcRoute("", session.lastContest, file)
         }
         flash.error = import_route.error
@@ -244,7 +250,8 @@ class RouteController {
     
     def importfileroute2 = {
         def file = request.getFile('routefile')
-        Map import_params = [firstcoordto:params?.firstcoordto == 'on',
+        Map import_params = [foldername:params?.foldername,
+                             firstcoordto:params?.firstcoordto == 'on',
                              todirection:params?.todirection.isBigDecimal()?params?.todirection.toBigDecimal():0.0,
                              curved1:params?.curved1 == 'on',
                              curvedstartpos1:params?.curvedstartpos1.isInteger()?params?.curvedstartpos1.toInteger():null,
@@ -293,7 +300,7 @@ class RouteController {
         session.routeReturnID = params.id
         Route route_instance = Route.get(params.id)
         Map turnpoint_sign_data = ImportSign.GetRouteCoordData(route_instance)
-        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import', routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: false])
+        redirect(action:selectimporttxt, params:[titlecode:'fc.coordroute.import', routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: true])
     }
     
     def importturnpointsign = {

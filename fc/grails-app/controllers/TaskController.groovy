@@ -374,6 +374,30 @@ class TaskController {
         redirect(action:disabledcheckpoints,id:params.id)
 	}
 	
+    def listdifferences = {
+        Map task = domainService.GetTask(params) 
+        if (task.instance) {
+            // assign return action
+            if (session.taskReturnAction) {
+                return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+            }
+            return [taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def refresh = {
+        Map task = domainService.GetTask(params)
+        task.instance.showOffset = params.showOffset.toInteger()
+        task.instance.showTurnPoints = params.showTurnPoints == "on"
+        task.instance.showTurnPointSigns = params.showTurnPointSigns == "on"
+        task.instance.showEnroutePhotos = params.showEnroutePhotos == "on"
+        task.instance.showEnrouteCanavas = params.showEnrouteCanavas == "on"
+        render(view:'listdifferences',model:[taskInstance:task.instance])
+    }
+    
 	def cancel = {
 		// process return action
 		if (params.taskReturnAction) {

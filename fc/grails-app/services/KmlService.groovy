@@ -1,9 +1,11 @@
 import java.util.List;
 import java.util.Map;
-
 import java.math.BigDecimal;
+
 import org.springframework.web.context.request.RequestContextHolder
+
 import groovy.xml.*
+
 import java.util.zip.*
 
 // https://support.google.com/earth/answer/7365595?hl=de&ref_topic=7364446
@@ -63,14 +65,14 @@ class KmlService
     final static String STYLE_ENROUTE_PHOTO_SCALE = "1.2"
     final static String STYLE_ENROUTE_CANVAS_SCALE = "0.7"
     final static String TILT_ENROUTE = "60" // Betrachtungswinkel in Grad
-    final static String RANGE_ENROUTE = "1000" // Betrachtungsentfernung in m
+    final static String RANGE_ENROUTE = "500" // Betrachtungsentfernung in m
     
     final static String GPXDATA = "GPXDATA"
 	
     //--------------------------------------------------------------------------
     Map ConvertRoute2KMZ(Route routeInstance, String webRootDir, String kmzFileName, boolean isPrint, boolean wrEnrouteSign)
     {
-        printstart "ConvertRoute2KMZ ${routeInstance.name()} -> ${webRootDir + kmzFileName}"
+        printstart "ConvertRoute2KMZ ${routeInstance.GetName(isPrint)} -> ${webRootDir + kmzFileName}"
         
         String kml_file_name = kmzFileName + ".kml"
         
@@ -172,7 +174,7 @@ class KmlService
         
         Route route_instance = taskInstance.flighttest.route
         
-        printstart "ConvertTask2KMZ '${taskInstance.name()}' -> ${webRootDir + kmzFileName}"
+        printstart "ConvertTask2KMZ '${taskInstance.GetName(isPrint)}' -> ${webRootDir + kmzFileName}"
         
         String kml_file_name = kmzFileName + ".kml"
         
@@ -421,9 +423,12 @@ class KmlService
         max_longitude = contest_map_rect.lonmax
         center_latitude = (max_latitude+min_latitude)/2
         center_longitude = (max_longitude+min_longitude)/2
+        
+        String route_name = routeInstance.GetName(isPrint)
+        boolean use_procedureturn = routeInstance.UseProcedureTurn()
 
         xml.Folder {
-            xml.name "${getMsg('fc.kmz.route',isPrint)} '${routeInstance.name().encodeAsHTML()}'"
+            xml.name "${getMsg('fc.kmz.route',isPrint)} '${route_name.encodeAsHTML()}'"
             
             // legs
             xml.Folder {
@@ -434,7 +439,7 @@ class KmlService
                     if (routeInstance.IsIntermediateSP()) {
                         xml.name "1"
                     } else {
-                        xml.name routeInstance.name().encodeAsHTML()
+                        xml.name route_name.encodeAsHTML()
                     }
                     xml.LineString {
                         SetRouteProperties(xml)
@@ -505,7 +510,7 @@ class KmlService
                     CoordRoute last_coordroute_instance = null
                     CoordRoute last_last_coordroute_instance = null
                     for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                        if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                        if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
                             List circle_coords = AviationMath.getProcedureTurnCircle(
                                 last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -550,7 +555,7 @@ class KmlService
             // points
             xml.Folder {
                 xml.name getMsg('fc.kmz.points',isPrint)
-                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, isPrint, true, messageSource) // true - showEnrouteSign
+                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, isPrint, true, true, messageSource) // true - showEnrouteSign, true - showCurvedPoints
                 int route_point_pos = 0
                 CoordRoute last_coordroute_instance = null
                 boolean first = true
@@ -786,20 +791,24 @@ class KmlService
                         // enroute photos and canvas
                         if (wr_enroute_points) {
                             while (enroute_points[route_point_pos].enroutephoto || enroute_points[route_point_pos].enroutecanvas) {
-                                Map gate = AviationMath.getGate(
-                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
-                                    enroute_points[route_point_pos].latcenter,enroute_points[route_point_pos].loncenter,
-                                    last_coordroute_instance.gatewidth2
+                                Map leg_track = AviationMath.calculateLeg(
+                                    coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath()
                                 )
+                                Map leg_enroute = AviationMath.calculateLeg(
+                                    enroute_points[route_point_pos].latcenter,enroute_points[route_point_pos].loncenter,
+                                    last_coordroute_instance.latMath(),last_coordroute_instance.lonMath()
+                                )
+                                Map coord_on_track = AviationMath.getCoordinate(last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),leg_track.dir,leg_enroute.dis)
                                 if (enroute_points[route_point_pos].enroutephoto) {
                                     xml.Placemark {
                                         xml.name enroute_points[route_point_pos].name
                                         xml.styleUrl "#${STYLE_ENROUTE_PHOTO}"
                                         xml.LookAt {
-                                            xml.longitude enroute_points[route_point_pos].loncenter
-                                            xml.latitude enroute_points[route_point_pos].latcenter
+                                            xml.longitude coord_on_track.lon
+                                            xml.latitude coord_on_track.lat
                                             xml.altitude "0"
-                                            xml.heading "${gate.gateTrack}"
+                                            xml.heading "${leg_track.dir}"
                                             xml.tilt TILT_ENROUTE
                                             xml.range RANGE_ENROUTE
                                         }
@@ -812,10 +821,10 @@ class KmlService
                                         xml.name enroute_points[route_point_pos].name
                                         xml.styleUrl "#${STYLE_ENROUTE_CANVAS}${enroute_points[route_point_pos].name}"
                                         xml.LookAt {
-                                            xml.longitude enroute_points[route_point_pos].loncenter
-                                            xml.latitude enroute_points[route_point_pos].latcenter
+                                            xml.longitude coord_on_track.lon
+                                            xml.latitude coord_on_track.lat
                                             xml.altitude "0"
-                                            xml.heading "${gate.gateTrack}"
+                                            xml.heading "${leg_track.dir}"
                                             xml.tilt TILT_ENROUTE
                                             xml.range RANGE_ENROUTE
                                         } 
@@ -890,60 +899,181 @@ class KmlService
                 }
             }
         
-            // CoordEnroutePhoto
-            /*
-            if (wr_enroutesign && routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
-                xml.Folder {
-                    xml.name getMsg('fc.kmz.enroutephotos',isPrint)
-                    for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                        xml.Placemark {
-                            xml.name coordenroutephoto_instance.enroutePhotoName
-                            xml.styleUrl "#${STYLE_ENROUTE_PHOTO}"
-                            xml.LookAt {
-                                xml.longitude coordenroutephoto_instance.lonMath()
-                                xml.latitude coordenroutephoto_instance.latMath()
-                                xml.altitude "0"
-                                xml.heading "0"
-                                xml.tilt TILT_ENROUTE
-                                xml.range RANGE_ENROUTE
-                            } 
-                            xml.Point {
-                                xml.coordinates "${coordenroutephoto_instance.lonMath()},${coordenroutephoto_instance.latMath()},0"
-                            }
-                            //xml.description "${getMsg('fc.kmz.distance.tp',[coordenroutephoto_instance.titleCode(isPrint)],isPrint)}: ${FcMath.DistanceStr(coordenroutephoto_instance.enrouteDistance)}${getMsg('fc.mile',isPrint)},\n ${getMsg('fc.kmz.distance.route',isPrint)}: ${coordenroutephoto_instance.GetPrintEnrouteOrthogonalDistance()}"
-                        }
-                    }
-                }
+            boolean wr_enroutesign = wrEnrouteSign
+            if (wrEnrouteSign && testInstance) {
+                wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
             }
             
-            // CoordEnrouteCanvas
-            if (wr_enroutesign && routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
-                xml.Folder {
-                    xml.name getMsg('fc.kmz.enroutecanvas',isPrint)
-                    for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                        xml.Placemark {
-                            xml.name coordenroutecanvas_instance.enrouteCanvasSign.canvasName
-                            xml.styleUrl "#${STYLE_ENROUTE_CANVAS}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}"
-                            xml.LookAt {
-                                xml.longitude coordenroutecanvas_instance.lonMath()
-                                xml.latitude coordenroutecanvas_instance.latMath()
-                                xml.altitude "0"
-                                xml.heading "0"
-                                xml.tilt TILT_ENROUTE
-                                xml.range RANGE_ENROUTE
-                            } 
-                            xml.Point {
-                                xml.coordinates "${coordenroutecanvas_instance.lonMath()},${coordenroutecanvas_instance.latMath()},0"
+            // export
+            xml.Folder {
+                xml.name getMsg('fc.coordroute.export',isPrint)
+                xml.visibility "0"
+                
+                if (wr_enroutesign) {
+                    xml.Folder {
+                        xml.name Defs.ROUTEEXPORT_SETTINGS
+                        xml.visibility "0"
+                        xml.ExtendedData {
+                            xml.Data(name:"creator") {
+                                xml.value Defs.ROUTEEXPORT_CREATOR
                             }
-                            //xml.description "${getMsg('fc.kmz.distance.tp',[coordenroutecanvas_instance.titleCode(isPrint)],isPrint)}: ${FcMath.DistanceStr(coordenroutecanvas_instance.enrouteDistance)}${getMsg('fc.mile',isPrint)},\n ${getMsg('fc.kmz.distance.route',isPrint)}: ${coordenroutecanvas_instance.GetPrintEnrouteOrthogonalDistance()}"
+                            xml.Data(name:"routetitle") {
+                                xml.value routeInstance.title
+                            }
+                            xml.Data(name:"turnpoint") {
+                                xml.value routeInstance.turnpointRoute
+                            }
+                            xml.Data(name:"turnpointmapmeasurement") {
+                                xml.value getYesNo(routeInstance.turnpointMapMeasurement)
+                            }
+                            xml.Data(name:"enroutephoto") {
+                                xml.value routeInstance.enroutePhotoRoute
+                            }
+                            xml.Data(name:"enroutephotomeasurement") {
+                                xml.value routeInstance.enroutePhotoMeasurement
+                            }
+                            xml.Data(name:"enroutecanvas") {
+                                xml.value routeInstance.enrouteCanvasRoute
+                            }
+                            xml.Data(name:"enroutecanvasmeasurement") {
+                                xml.value routeInstance.enrouteCanvasMeasurement
+                            }
+                            xml.Data(name:"useprocedureturn") {
+                                xml.value getYesNo(routeInstance.UseProcedureTurn())
+                            }
+                            if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
+                                for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                                    xml.Data(name:"enroutephotosign:${coordenroutephoto_instance.enrouteViewPos}") {
+                                        xml.value coordenroutephoto_instance.enroutePhotoName
+                                    }
+                                }
+                            }
+                            if (routeInstance.enrouteCanvasRoute == EnrouteRoute.InputName) {
+                                for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
+                                    xml.Data(name:"enroutecanvassign:${coordenroutecanvas_instance.enrouteViewPos}") {
+                                        xml.value coordenroutecanvas_instance.enrouteCanvasSign.canvasName
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                xml.Folder {
+                    xml.name Defs.ROUTEEXPORT_TURNPOINTS
+                    xml.visibility "0"
+                    CoordRoute last_coordroute_instance = null
+                    boolean first = true
+                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                        
+                        // gates
+                        BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                        switch (coordroute_instance.type) {
+                            case CoordType.TO:
+                            case CoordType.LDG:
+                            case CoordType.iTO:
+                            case CoordType.iLDG:
+                                xml.Placemark {
+                                    xml.styleUrl "#${STYLE_AIRPORT}"
+                                    xml.name coordroute_instance.GetExportRouteCoord(true)
+                                    xml.visibility "0"
+                                    xml.Point {
+                                        xml.coordinates "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
+                                    }
+                                }
+                                break
+                        }
+                        
+                        if (last_coordroute_instance && last_coordroute_instance.type.IsCpCheckCoord() && coordroute_instance.type.IsCpCheckCoord()) {
+                            if (first) {
+                                // SP, iSP
+                                xml.Placemark {
+                                    BigDecimal altitude_meter2 = last_coordroute_instance.altitude.toLong() / ftPerMeter
+                                    xml.styleUrl "#${STYLE_START}"
+                                    xml.name last_coordroute_instance.GetExportRouteCoord(true)
+                                    xml.visibility "0"
+                                    xml.Point {
+                                        xml.coordinates "${last_coordroute_instance.lonMath()},${last_coordroute_instance.latMath()},${altitude_meter2}"
+                                    }
+                                }
+                            }
+                            
+                            if ((coordroute_instance.type == CoordType.iSP) && (last_coordroute_instance.type == CoordType.iFP)) {
+                                // no standard gate
+                            } else {
+                                // standard gate
+                                xml.Placemark {
+                                    if (coordroute_instance.type.IsEnrouteFinishCoord()) {
+                                        xml.styleUrl "#${STYLE_FINISH}"
+                                    } else {
+                                        xml.styleUrl "#${STYLE_GATE}"
+                                    }
+                                    xml.name coordroute_instance.GetExportRouteCoord(true)
+                                    xml.visibility "0"
+                                    xml.Point {
+                                        xml.coordinates "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
+                                    }
+                                }
+                            }
+                            first = false
+                        }
+                        if (coordroute_instance.type == CoordType.iSP) {
+                            first = true
+                        }
+                        last_coordroute_instance = coordroute_instance
+                    }
+                }
+                if (routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
+                    List coordenroutephoto_instances = CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])
+                    if (coordenroutephoto_instances) {
+                        xml.Folder {
+                            xml.name Defs.ROUTEEXPORT_PHOTOS
+                            xml.visibility "0"
+                            for (CoordEnroutePhoto coordenroutephoto_instance in coordenroutephoto_instances) {
+                                xml.Placemark {
+                                    xml.name coordenroutephoto_instance.enroutePhotoName
+                                    xml.visibility "0"
+                                    xml.styleUrl "#${STYLE_ENROUTE_PHOTO}"
+                                    xml.Point {
+                                        xml.coordinates "${coordenroutephoto_instance.lonMath()},${coordenroutephoto_instance.latMath()},0"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
+                    List coordenroutecanvas_instances = CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])
+                    if (coordenroutecanvas_instances) {
+                        xml.Folder {
+                            xml.name Defs.ROUTEEXPORT_CANVAS
+                            xml.visibility "0"
+                            for (CoordEnrouteCanvas coordenroutecanvas_instance in coordenroutecanvas_instances) {
+                                xml.Placemark {
+                                    xml.name coordenroutecanvas_instance.enrouteCanvasSign.canvasName
+                                    xml.visibility "0"
+                                    xml.styleUrl "#${STYLE_ENROUTE_CANVAS}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}"
+                                    xml.Point {
+                                        xml.coordinates "${coordenroutecanvas_instance.lonMath()},${coordenroutecanvas_instance.latMath()},0"
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-            */
         }
         
         printdone ""
+    }
+    
+    //--------------------------------------------------------------------------
+    private String getYesNo(boolean boolValue)
+    {
+        if (boolValue) {
+            return "yes"
+        }
+        return "no"
     }
     
     //--------------------------------------------------------------------------

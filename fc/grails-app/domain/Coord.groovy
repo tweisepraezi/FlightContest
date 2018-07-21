@@ -707,9 +707,12 @@ class Coord
         return s
     }
     
-    String GetExportRouteCoord()
+    String GetExportRouteCoord(boolean kmzExport)
     {
-        String s = "${titleExport()}, ${latExportName()}, ${lonExportName()}, ${RouteFileTools.ALT} ${altitude}${RouteFileTools.UNIT_ft}"
+        String s = "${titleExport()}"
+        if (!kmzExport) {
+            s += ", ${latExportName()}, ${lonExportName()}, ${RouteFileTools.ALT} ${altitude}${RouteFileTools.UNIT_ft}"
+        }
         if (type.IsRunwayCoord()) {
             s += ", ${RouteFileTools.GATE} ${gateDirection}${RouteFileTools.UNIT_GRAD} ${gatewidth2}${RouteFileTools.UNIT_NM}"
         } else {
@@ -736,41 +739,52 @@ class Coord
         if (endCurved) {
             s += ", ${RouteFileTools.UNIT_TPendcurved}"
         }
+        String tp_sign = GetExportTurnpointSign2()
+        if (tp_sign != RouteFileTools.UNIT_TPnosign) {
+            s += ", ${RouteFileTools.SIGN} ${GetExportTurnpointSign2()}"
+        }
         return s
     }
     
     String GetExportTurnpointSign()
     {
-        String no_sign = "${titleExport()}, -"
-        if (!type.IsTurnpointSignCoord()) {
-            return no_sign
+        String tp_sign = GetExportTurnpointSign2()
+        if (tp_sign != RouteFileTools.UNIT_TPnosign) {
+            return "${titleExport()}, ${tp_sign}"
         }
-        switch (route.turnpointRoute) {
-            case TurnpointRoute.AssignPhoto:
-                if (assignedSign == TurnpointSign.None) {
-                    return no_sign
-                }
-                return "${titleExport()}, ${assignedSign.title}"
-            case TurnpointRoute.AssignCanvas:
-                if (assignedSign == TurnpointSign.None) {
-                    return no_sign
-                }
-                if (assignedSign.canvas) {
-                    return "${titleExport()}, ${assignedSign.title}"
-                }
-                return no_sign
-            case TurnpointRoute.TrueFalsePhoto:
-                switch (correctSign) {
-                    case TurnpointCorrect.Unassigned:
-                        return no_sign
-                    case TurnpointCorrect.True:
-                        return "${titleExport()}, ${RouteFileTools.UNIT_TPcorrect}"
-                    case TurnpointCorrect.False:
-                        return "${titleExport()}, ${RouteFileTools.UNIT_TPincorrect}"
-                }
-                return no_sign
+        return tp_sign
+    }
+    
+    private String GetExportTurnpointSign2()
+    {
+        if (type.IsTurnpointSignCoord()) {
+            switch (route.turnpointRoute) {
+                case TurnpointRoute.AssignPhoto:
+                    if (assignedSign == TurnpointSign.None) {
+                        return RouteFileTools.UNIT_TPnosign
+                    }
+                    return assignedSign.title
+                case TurnpointRoute.AssignCanvas:
+                    if (assignedSign == TurnpointSign.None) {
+                        return RouteFileTools.UNIT_TPnosign
+                    }
+                    if (assignedSign.canvas) {
+                        return assignedSign.title
+                    }
+                    return RouteFileTools.UNIT_TPnosign
+                case TurnpointRoute.TrueFalsePhoto:
+                    switch (correctSign) {
+                        case TurnpointCorrect.Unassigned:
+                            return RouteFileTools.UNIT_TPnosign
+                        case TurnpointCorrect.True:
+                            return RouteFileTools.UNIT_TPcorrect
+                        case TurnpointCorrect.False:
+                            return RouteFileTools.UNIT_TPincorrect
+                    }
+                    return RouteFileTools.UNIT_TPnosign
+            }
         }
-        return no_sign
+        return RouteFileTools.UNIT_TPnosign
     }
     
     String GetExportEnroute(boolean enroutePhoto)

@@ -21,22 +21,40 @@ enum ImportSign
     static Map GetRouteCoordData(Route routeInstance)
     {
         ImportSign import_sign = ImportSign.RouteCoord
+        String sign_content = GetImportTxtLineSignContent(routeInstance,"A","yes")
         // TO, Lat 54° 25.53333' N, Lon 009° 32.43333' E, Alt 52ft, Gate 270° 0.02NM
-        String line_content = "TO, ${GetImportTxtLineContent2(routeInstance.contest, 54, 25.53333, CoordPresentation.NORTH, 9, 32.43333, CoordPresentation.EAST, 0)}, Gate 270${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM}"
+        String line_content = "TO, ${GetImportTxtLineContent2(routeInstance.contest, 54, 25.53333, CoordPresentation.NORTH, 9, 32.43333, CoordPresentation.EAST, 0)}, ${RouteFileTools.GATE} 270${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM}"
         // SP, Lat 54° 31.06823' N, Lon 009° 28.83724' E, Alt 203ft
         line_content += "<br/>SP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 31.06823, CoordPresentation.NORTH, 9, 28.83724, CoordPresentation.EAST, 800)}"
+        if (sign_content) {
+            line_content += ", ${GetImportTxtLineSignContent(routeInstance,'I','yes')}"
+        }
         // TP1, Lat 54° 32.08438' N, Lon 009° 42.47305' E, Alt 1899ft
         line_content += "<br/>TP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 32.08438, CoordPresentation.NORTH, 9, 42.47305, CoordPresentation.EAST, 800)}"
+        if (sign_content) {
+            line_content += ", ${GetImportTxtLineSignContent(routeInstance,'A','yes')}"
+        }
         // TP2, Lat 54° 24.25312' N, Lon 009° 45.85638' E, Alt 2001ft
         line_content += "<br/>SC, ${GetImportTxtLineContent2(routeInstance.contest, 54, 24.25312, CoordPresentation.NORTH, 9, 45.85638, CoordPresentation.EAST, 800)}"
         // TP3, Lat 54° 23.66979' N, Lon 009° 11.25000' E, Alt 2001ft
         line_content += "<br/>TP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 23.66979, CoordPresentation.NORTH, 9, 11.25000, CoordPresentation.EAST, 800)}"
+        if (sign_content) {
+            line_content += ", ${GetImportTxtLineSignContent(routeInstance,'P','no')}"
+        }
         // FP, Lat 54° 30.96719' N, Lon 009° 22.08333' E, Alt 2001ft
         line_content += "<br/>FP, ${GetImportTxtLineContent2(routeInstance.contest, 54, 30.96719, CoordPresentation.NORTH, 9, 22.08333, CoordPresentation.EAST, 800)}"
+        if (sign_content) {
+            line_content += ", ${GetImportTxtLineSignContent(routeInstance,'G','yes')}"
+        }
         // LDG, Lat 54° 25.52474' N, Lon 009° 32.19382' E, Alt 800ft, Gate 270° 0.02NM
-        line_content += "<br/>LDG, ${GetImportTxtLineContent2(routeInstance.contest, 54, 25.52474, CoordPresentation.NORTH, 9, 32.19382, CoordPresentation.EAST, 0)}, Gate 270${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM}"
+        line_content += "<br/>LDG, ${GetImportTxtLineContent2(routeInstance.contest, 54, 25.52474, CoordPresentation.NORTH, 9, 32.19382, CoordPresentation.EAST, 0)}, ${RouteFileTools.GATE} 270${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM}"
         // Common
-        line_content += "<br/><br/>TO, ${GetImportTxtLineContent(routeInstance.contest)}, [Gate 240${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM},] [Dist 93.0${RouteFileTools.UNIT_mm},] [Track 001.00${RouteFileTools.UNIT_GRAD},] [Duration 2${RouteFileTools.UNIT_min},] [notime,] [nogate,] [noplan,] [endcurved]"
+        line_content += "<br/><br/>TO, ${GetImportTxtLineContent(routeInstance.contest)}, [${RouteFileTools.GATE} 240${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM},] [${RouteFileTools.DIST} 93.0${RouteFileTools.UNIT_mm},] [${RouteFileTools.TRACK} 001.00${RouteFileTools.UNIT_GRAD},] [${RouteFileTools.DURATION} 2${RouteFileTools.UNIT_min},] [${RouteFileTools.UNIT_TPnotimecheck},] [${RouteFileTools.UNIT_TPnogatecheck},] [${RouteFileTools.UNIT_TPnoplanningtest},]"
+        if (sign_content) {
+            line_content += " [${RouteFileTools.UNIT_TPendcurved},] [${sign_content}]"
+        } else {
+            line_content += " [${RouteFileTools.UNIT_TPendcurved}]"
+        }
         return [importsign:import_sign, linecontent:line_content]
     }
     
@@ -134,6 +152,18 @@ enum ImportSign
         String coord_demo_lat = contestInstance.coordPresentation.GetCoordName(coord_demo, true).replaceAll(',', '.')
         String coord_demo_lon = contestInstance.coordPresentation.GetCoordName(coord_demo, false).replaceAll(',', '.')
         return "${coord_demo_lat}, ${coord_demo_lon}, ${RouteFileTools.ALT} ${altitudeValue}${RouteFileTools.UNIT_ft}"
+    }
+    
+    static String GetImportTxtLineSignContent(Route routeInstance, String signValue, String trueFalseValue)
+    {
+        switch (routeInstance.turnpointRoute) {
+            case TurnpointRoute.AssignPhoto:
+            case TurnpointRoute.AssignCanvas:
+                return "${RouteFileTools.SIGN} ${signValue}"
+            case TurnpointRoute.TrueFalsePhoto:
+                return "${RouteFileTools.SIGN} ${trueFalseValue}"
+        }
+        return ""
     }
     
     static Map GetEnrouteSignData(Route routeInstance, boolean enroutePhoto)
@@ -317,6 +347,134 @@ enum ImportSign
                     ret.lat = line_values[1].trim()
                     ret.lon = line_values[2].trim()
                     ret.mm = line_values[3].trim()
+                }
+                break
+        }
+        return ret
+    }
+    
+    Map GetKMLValues(String line)
+    {
+        Map ret = [value_num_ok:false, name:'', tpname:'', tpsign:'', tpcorrect:'', lat:'', lon:'', alt:'', nm:'', mm:'', other:[]]
+        def line_values = line.split(',')
+        switch (this) {
+            case ImportSign.RouteCoord:
+                if (line_values.size() >= 1) {
+                    ret.value_num_ok = true
+                    ret.tpname = line_values[0].trim()
+                    ret.lat = 'yes'
+                    ret.lon = 'yes'
+                    ret.alt = 'yes'
+                    int i = 0
+                    for (l in line_values) {
+                        i++
+                        if (i > 1) {
+                            String s = l.trim()
+                            while (s.contains('  ')) {
+                                s = s.replaceAll('  ', ' ')
+                            }
+                            ret.other += s
+                        }
+                    }
+                }
+                break
+            case ImportSign.TurnpointPhoto:
+                if (line_values.size() == 2) {
+                    ret.value_num_ok = true
+                    ret.tpname = line_values[0].trim()
+                    ret.tpsign = line_values[1].trim()
+                } 
+                break
+            case ImportSign.TurnpointCanvas:
+                if (line_values.size() == 2) {
+                    ret.value_num_ok = true
+                    ret.tpname = line_values[0].trim()
+                    ret.tpsign = line_values[1].trim()
+                }
+                break
+            case ImportSign.TurnpointTrueFalse:
+                if (line_values.size() == 2) {
+                    ret.value_num_ok = true
+                    ret.tpname = line_values[0].trim()
+                    ret.tpcorrect = line_values[1].trim()
+                }
+                break
+            case ImportSign.EnroutePhotoName:
+                if (line_values.size() == 1) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                }
+                break
+            case ImportSign.EnroutePhotoCoord:
+                if (line_values.size() == 1) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.lat = 'yes'
+                    ret.lon = 'yes'
+                }
+                break
+            case ImportSign.EnroutePhotoNMFromTP:
+                if (line_values.size() == 3) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.tpname = line_values[1].trim()
+                    ret.nm = line_values[2].trim()
+                }
+                break
+            case ImportSign.EnroutePhotommFromTP:
+                if (line_values.size() == 3) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.tpname = line_values[1].trim()
+                    ret.mm = line_values[2].trim()
+                }
+                break
+            case ImportSign.EnroutePhotoCoordmm:
+                if (line_values.size() == 2) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.lat = 'yes'
+                    ret.lon = 'yes'
+                    ret.mm = line_values[1].trim()
+                }
+                break
+            case ImportSign.EnrouteCanvasName:
+                if (line_values.size() == 1) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                }
+                break
+            case ImportSign.EnrouteCanvasCoord:
+                if (line_values.size() == 1) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.lat = 'yes'
+                    ret.lon = 'yes'
+                }
+                break
+            case ImportSign.EnrouteCanvasNMFromTP:
+                if (line_values.size() == 3) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.tpname = line_values[1].trim()
+                    ret.nm = line_values[2].trim()
+                }
+                break
+            case ImportSign.EnrouteCanvasmmFromTP:
+                if (line_values.size() == 3) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.tpname = line_values[1].trim()
+                    ret.mm = line_values[2].trim()
+                }
+                break
+            case ImportSign.EnrouteCanvasCoordmm:
+                if (line_values.size() == 2) {
+                    ret.value_num_ok = true
+                    ret.name = line_values[0].trim()
+                    ret.lat = 'yes'
+                    ret.lon = 'yes'
+                    ret.mm = line_values[1].trim()
                 }
                 break
         }

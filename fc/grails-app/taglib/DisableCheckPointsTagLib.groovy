@@ -48,7 +48,7 @@ class DisableCheckPointsTagLib
         int i = 0
         CoordRoute last_coordroute_instance = null
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
-            i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, use_procedureturn, coordroute_instance.planProcedureTurn)
+            i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, use_procedureturn, use_procedureturn && coordroute_instance.planProcedureTurn)
             last_coordroute_instance = coordroute_instance
         }
         i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, use_procedureturn, false)

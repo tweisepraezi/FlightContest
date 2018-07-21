@@ -12,7 +12,7 @@ class RoutePointsTools
     final static int GPXSHOWPPOINT_SCALE = 4                     // Nachkommastellen für Koordinaten
     
     //--------------------------------------------------------------------------
-    static List GetShowPointsRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean showEnrouteSign, def messageSource, Map contestMap = [:])
+    static List GetShowPointsRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean showEnrouteSign, boolean showCurvedPoints, def messageSource, Map contestMap = [:])
     {
         List points = []
         
@@ -20,7 +20,7 @@ class RoutePointsTools
         CoordRoute lasttp_coordroute_instance = null
         List enroute_points = []
         int enroute_point_pos = 0
-        boolean show_curved_point = routeInstance.ShowCurvedPoints()
+        boolean show_curved_point = showCurvedPoints || routeInstance.ShowCurvedPoints()
         List curved_point_ids = routeInstance.GetCurvedPointIds()
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
             // add enroute points

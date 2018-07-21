@@ -44,7 +44,11 @@ class CalcService
         
         printstart "Import track points from logger file"
         Map reader = LoggerFileTools.ReadLoggerFile(fileExtension, testInstance, loggerFileName, interpolateMissingData)
-        printdone "${reader.trackpointnum} track points found."
+        if (reader.errors) {
+            printerror reader.errors
+        } else {
+            printdone "${reader.trackpointnum} track points found."
+        }
         
         if (!reader.errors && reader.trackpointnum) {
             Calculate(testInstance, "", "")
@@ -742,6 +746,7 @@ class CalcService
         FlightTestWind flighttestwind_instance = testInstance.flighttestwind
         FlightTest flighttest_instance = flighttestwind_instance.flighttest
         Route route_instance = flighttest_instance.route
+        boolean use_procedureturn = route_instance.UseProcedureTurn()
         
         CoordRoute last_coordroute_instance = null
         boolean add_sp_gate = true
@@ -887,7 +892,7 @@ class CalcService
                         }
                         break
                     case CoordType.TP:
-                        if (coordroute_instance.planProcedureTurn) {
+                        if (use_procedureturn && coordroute_instance.planProcedureTurn) {
                             BigDecimal gate_distance = AviationMath.calculateLeg(
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                 coordroute_instance.latMath(),coordroute_instance.lonMath()
@@ -922,14 +927,7 @@ class CalcService
                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
                         ADVANCED_GATE_WIDTH
                     )
-                    boolean procedure_turn = coordroute_instance.planProcedureTurn
-                    if (procedure_turn) {
-                        if (testInstance.task.procedureTurnDuration == 0) {
-                            procedure_turn = false
-                        } else if (!route_instance.UseProcedureTurn()) {
-                            procedure_turn = false
-                        }
-                    }
+                    boolean procedure_turn = use_procedureturn && coordroute_instance.planProcedureTurn && (testInstance.task.procedureTurnDuration > 0)
                     Map new_gate = [coordType:coordroute_instance.type, 
                                     coordTypeNumber:coordroute_instance.titleNumber,
                                     coordLeft:gate.coordLeft,
