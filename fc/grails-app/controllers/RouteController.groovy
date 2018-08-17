@@ -363,6 +363,13 @@ class RouteController {
         }
 	}
     
+    def disableprocedureturn = {
+        Route route_instance = Route.get(params.id)
+        route_instance.useProcedureTurn = false
+        route_instance.DisableProcedureTurn()
+        redirect(action:"show",controller:"route",id:route_instance.id)
+    }
+    
     def print = {
         Map routes = printService.printRoutes(params,false,false,GetPrintParams()) 
         if (routes.error) {

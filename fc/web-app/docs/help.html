@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.1, Ausgabe 10,</span>
-<span id="revdate">19.06.2018</span>
+<span id="revnumber">version 3.1.1, Ausgabe 11,</span>
+<span id="revdate">17.08.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -440,8 +440,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#route-planning-definitions">Definitionen</a></li>
 <li><a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r ein Wettbewerbsstrecke</a></li>
-<li><a href="#route-planning-imput">Eingabe von Wettbewerbsstrecken</a></li>
+<li><a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-import">Import von Wettbewerbsstrecken</a></li>
+<li><a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a></li>
 <li><a href="#route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a></li>
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
@@ -1153,6 +1154,16 @@ einem Import nur noch in 'Flight Contest'.</p>
 <div class="sect1">
 <h2 id="route-planning">Streckenplanung</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p><a href="#route-planning-definitions">Definitionen</a><br>
+<a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r ein Wettbewerbsstrecke</a><br>
+<a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a><br>
+<a href="#route-planning-import">Import von Wettbewerbsstrecken</a><br>
+<a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a><br>
+<a href="#route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</a><br>
+<a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a><br>
+<a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></p>
+</div>
 <div class="sect2">
 <h3 id="route-planning-definitions">Definitionen</h3>
 <div class="paragraph">
@@ -1405,7 +1416,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-imput">Eingabe von Wettbewerbsstrecken</h3>
+<h3 id="route-planning-input">Eingabe von Wettbewerbsstrecken</h3>
 <div class="paragraph">
 <p>Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur
 nacheinander eingeben werden k&#246;nnen und das Einf&#252;gen von Check-Punkten nicht m&#246;glich ist.
@@ -1517,6 +1528,206 @@ Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Eingabe (Google Earth Pro)</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Speichern Sie <a href="samples/FC-Route-Sample.kmz" target="_blank">FC-Route-Sample.kmz</a> auf Ihren Computer</p>
+</li>
+<li>
+<p>&#214;ffnen Sie 'FC-Route-Sample.kmz' auf Ihrem Computer mit 'Google Earth Pro'</p>
+</li>
+<li>
+<p>&#214;ffnen Sie bei Bedarf Luftraum-Daten (C:\FCSave\.geodata\airspaces.kmz)<br>
+(zur Installation hier zu finden: <a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a>)</p>
+</li>
+<li>
+<p>Klicken Sie den Ordner <strong>Route</strong> an und f&#252;gen Sie einen 'Pfad' hinzu</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Check-Punkte eingeben:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Name entspr. Streckenbezeichnung festlegen</p>
+</li>
+<li>
+<p>Mit Linksklick alle Check-Punkte der Strecke ohne UZKs nacheinander hinzuf&#252;gen (TO, SP, WP1, WP2, &#8230;&#8203;, FP, LDG)</p>
+</li>
+<li>
+<p>'Pfad bearbeiten'-Dialog beenden</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>&#196;ndern der Position eines Check-Punktes:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Zum gew&#252;nschten Check-Punkt navigieren</p>
+</li>
+<li>
+<p>Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen</p>
+</li>
+<li>
+<p>Bei ge&#246;ffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gew&#252;nschten Position ziehen</p>
+</li>
+<li>
+<p>'Pfad bearbeiten'-Dialog beenden</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Hinzuf&#252;gen einer UZK:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Zum Check-Punkt navigieren, nach dessen Folge-Streckenabschnitt ein UZK eingef&#252;gt werden soll</p>
+</li>
+<li>
+<p>Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen</p>
+</li>
+<li>
+<p>Check-Punkt bei h&#246;chster Zoomstufe mit linker Masutaste anklicken (darauf achten, dass er sich nicht verschiebt)</p>
+</li>
+<li>
+<p>Mit Cursourtasten der Strecke folgen und zur gew&#252;nschten Position navigieren</p>
+</li>
+<li>
+<p>Mit der linken Maustaste auf die gew&#252;nschte Position auf der Strecke klicken (f&#252;gt Punkt ein)</p>
+</li>
+<li>
+<p>'Pfad bearbeiten'-Dialog beenden</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>L&#246;schen einer UZK:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Zum gew&#252;nschten UZK navigieren</p>
+</li>
+<li>
+<p>Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen</p>
+</li>
+<li>
+<p>Bei ge&#246;ffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anklicken und dann Del-Taste dr&#252;cken</p>
+</li>
+<li>
+<p>'Pfad bearbeiten'-Dialog beenden</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Klicken Sie den Ordner <strong>Photos</strong> an und f&#252;gen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Name entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen<br>
+(kann nach Import ge&#228;ndert werden)</p>
+</li>
+<li>
+<p>Position der Ortsmarkierung auf das gew&#252;nschte Objekt schieben</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Klicken Sie den Ordner <strong>Canvas</strong> an und f&#252;gen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Name mit 'S01' bis 'S15' festlegen<br>
+(kann nach Import ge&#228;ndert werden)</p>
+</li>
+<li>
+<p>Position der Ortsmarkierung auf die gew&#252;nschte Auslegestelle schieben</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmen&#252; 'Ort speichern unter' mit Ihrer Streckenbezeichung ab</p>
+</li>
+</ol>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A" start="2">
+<li>
+<p>Strecken-Import (Flight Contest)</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="7">
+<li>
+<p>Strecken &#8594; Import Strecke</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Abgespeicherte kmz-Datei ausw&#228;hlen</p>
+</li>
+<li>
+<p>Verzeichnisname in kml/kmz-Datei: <strong>Route</strong> eintragen</p>
+</li>
+<li>
+<p>'Import' anklicken</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Strecken &#8594; Strecke &#8594; Strecken-Fotos importieren</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Abgespeicherte kmz-Datei ausw&#228;hlen</p>
+</li>
+<li>
+<p>Verzeichnisname in kml/kmz-Datei: <strong>Photos</strong> eintragen</p>
+</li>
+<li>
+<p>'Import' anklicken</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Strecken &#8594; Strecke &#8594; Strecken-Bodenzeichen importieren</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Abgespeicherte kmz-Datei ausw&#228;hlen</p>
+</li>
+<li>
+<p>Verzeichnisname in kml/kmz-Datei: <strong>Canvas</strong> eintragen</p>
+</li>
+<li>
+<p>'Import' anklicken</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
 <h3 id="route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</h3>
 <div class="paragraph">
 <p>Pr&#252;fen Sie Ihre eingegebene Strecke in 'Streckendetails' folgenderma&#223;en:</p>
@@ -1555,8 +1766,8 @@ Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
 <div class="sect2">
 <h3 id="route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</h3>
 <div class="paragraph">
-<p>Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' zur Weitergabe
-an den Auswerte-Schiedsrichter, der diese mit 'Strecken &#8594; Import FC-Strecke'
+<p>Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' oder 'KMZ-Export'
+zur Weitergabe an den Auswerte-Schiedsrichter, der diese mit 'Strecken &#8594; Import FC-Strecke'
 in sein 'Flight Contest' zur Nutzung importieren kann.</p>
 </div>
 </div>

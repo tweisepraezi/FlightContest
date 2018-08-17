@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-21.07.2018
+17.08.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -105,8 +105,11 @@ Erweiterungen in dieser Version (3.1.1):
 - Logger-Auswertung erweitert:
     Fehlende Loggermesswerte (Messwertabstand > 1s) werden interpoliert.     
 - Wendeschleifen einzelner Strecken deaktivierbar
-    -> Hilfe -> Besondere CSS-Eigenschaften
-    -> Wettbewerb -> Einstellungen -> Druckstil
+    -> Strecke -> Strecken-Einstellungen -> Wendeschleifen deaktivieren
+    Fügt Druckstil 'body { --route: Strecken-Titel; --disable-procedureturn; }' hinzu.
+      -> Hilfe -> Besondere CSS-Eigenschaften
+      -> Wettbewerb -> Einstellungen -> Druckstil
+    Zum Aktivieren der Wendeschleifen diesen Druckstil löschen.
 - Strecken-Import erweitert:
     * kml/kmz-Import aus Linien (<Placemark> -> <LineString> -> <coordinates>) 
       oder Punkten (<Placemark> -> <Point> -> <coordinates>)
@@ -140,6 +143,7 @@ Erweiterungen in dieser Version (3.1.1):
     über Grund und Informationen über Wendepunkte und Kursabweichungen
 - Ergebnisse: Anzeige von Abweichungen aller Besatzungen 
     bei Navigationsflug (Zeitabweichungen) und Beobachtungen (Gefunden)
+- Hilfe um Kapitel 'Wettbewerbsstrecken mit Google Earth Pro erstellen' erweitert
 
 Erweiterungen in Version 3.1:
 -----------------------------

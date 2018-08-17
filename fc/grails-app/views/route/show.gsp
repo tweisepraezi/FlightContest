@@ -15,6 +15,10 @@
                         <input type="hidden" name="id" value="${routeInstance?.id}"/>
                         <g:set var="ti" value="${[]+1}"/>
                         <g:set var="route_data" value="${routeInstance.GetRouteData()}" />
+                        <g:set var="route_used" value="${routeInstance.Used()}"/>
+                        <g:set var="route_empty" value="${routeInstance.IsRouteEmpty()}"/>
+                        <g:set var="route_canturnpointsignmodify" value="${routeInstance.CanTurnpointSignModify()}"/>
+                        <g:set var="route_useproecdureturn" value="${routeInstance.UseProcedureTurn()}" />
                         <table>
                             <tbody>
                                 <tr>
@@ -59,7 +63,7 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.procedureturns')}:</td>
                                     <td colspan="2" style="white-space: nowrap;">
-                                        <g:if test="${route_data.procedureturn_num}"><g:if test="${routeInstance.UseProcedureTurn()}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
+                                        <g:if test="${route_data.procedureturn_num}"><g:if test="${route_useproecdureturn}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
                                     </td>
                                     <td colspan="2"/>
                                 </tr>
@@ -134,7 +138,10 @@
                                             <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         </g:else>
                                         <g:actionSubmit action="edit" value="${message(code:'fc.route.settings')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:if test="${!routeInstance.Used()}">
+                                        <g:if test="${!route_used}">
+                                            <g:if test="${route_data.procedureturn_num && route_useproecdureturn}">
+                                                <g:actionSubmit action="disableprocedureturn" value="${message(code:'fc.route.disableprocedureturn')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                            </g:if>
                                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
@@ -145,9 +152,6 @@
                                 </tr>
                             </tfoot>
                         </table>
-                        <g:set var="route_used" value="${routeInstance.Used()}"/>
-                        <g:set var="route_empty" value="${routeInstance.IsRouteEmpty()}"/>
-                        <g:set var="route_canturnpointsignmodify" value="${routeInstance.CanTurnpointSignModify()}"/>
                         <g:if test="${!route_used || route_empty || route_canturnpointsignmodify}">
 	                        <table>
 	                            <tfoot>

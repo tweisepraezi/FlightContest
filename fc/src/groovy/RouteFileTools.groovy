@@ -183,17 +183,19 @@ class RouteFileTools
                 if (folderName) {
                     folder = search_folder_by_name(kml.Document, folderName)
                 } else {
-                    folder = kml.Document.Folder // first folder
+                    folder = kml.Document.Folder[0] // first folder
                 }
                 
-                if (folder && folder.name && folder.Placemark) {
+                if (folder && folder.Placemark) {
                 
-                    route_name = folder.name.text()
+                    if (folder.Placemark.name) {
+                        route_name = folder.Placemark.name.text()
+                    }
                     if (route_name) {
                         int num = 0
                         while (Route.findByContestAndTitle(contestInstance, route_name)) {
                             num++
-                            route_name = "${folder.name.text()} ($num)"
+                            route_name = "${folder.Placemark.name.text()} ($num)"
                         }
                     }
                     
@@ -1539,7 +1541,7 @@ class RouteFileTools
             if (folderName) {
                 folder = search_folder_by_name(kml.Document, folderName)
             } else {
-                folder = kml.Document.Folder // first folder
+                folder = kml.Document.Folder[0] // first folder
             }
             if (folder && folder.name) {
                 ret = ReadImportSign(importSign, folder, namePrefix)

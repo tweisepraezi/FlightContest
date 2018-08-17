@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.1, Ausgabe 10
-:revdate:   19.06.2018
+:revnumber: 3.1.1, Ausgabe 11
+:revdate:   17.08.2018
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -303,6 +303,15 @@ einem Import nur noch in 'Flight Contest'.
 [[route-planning]]
 == Streckenplanung
 
+<<help.adoc#route-planning-definitions,Definitionen>> +
+<<help.adoc#route-planning-mandatory-details,Erforderliche Angaben für ein Wettbewerbsstrecke>> +
+<<help.adoc#route-planning-input,Eingabe von Wettbewerbsstrecken>> +
+<<help.adoc#route-planning-import,Import von Wettbewerbsstrecken>> +
+<<help.adoc#route-planning-google-earth,Wettbewerbsstrecken mit Google Earth Pro erstellen>> +
+<<help.adoc#route-planning-verify,Prüfen der Wettbewerbsstrecke>> +
+<<help.adoc#route-planning-deliver,Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter>> +
+<<help.adoc#route-planning-errors,Fehlermeldungen in Streckendetails>>
+
 [[route-planning-definitions]]
 === Definitionen
 
@@ -468,7 +477,7 @@ Einzugebende Eigenschaften der Check-Punkte einer Strecke:
                               LDG         0.02    250       ja         ja   nein nein
 ----
 
-[[route-planning-imput]]
+[[route-planning-input]]
 === Eingabe von Wettbewerbsstrecken
 
 Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur 
@@ -541,6 +550,77 @@ Werte mit Komma getrennt (Leerzeichen vor Präfix und nach Einheit werden ignori
 +
 Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 
+[[route-planning-google-earth]]
+=== Wettbewerbsstrecken mit Google Earth Pro erstellen
+
+[upperalpha]
+. Eingabe (Google Earth Pro)
+
+[arabic]
+.. Speichern Sie link:samples/FC-Route-Sample.kmz[FC-Route-Sample.kmz^] auf Ihren Computer
+
+.. Öffnen Sie 'FC-Route-Sample.kmz' auf Ihrem Computer mit 'Google Earth Pro'
+
+.. Öffnen Sie bei Bedarf Luftraum-Daten (C:\FCSave\.geodata\airspaces.kmz) +
+   (zur Installation hier zu finden: https://my.hidrive.com/share/vobbr89etw#$/Geodata)
+
+.. Klicken Sie den Ordner *Route* an und fügen Sie einen 'Pfad' hinzu
+*** Check-Punkte eingeben:
+- Name entspr. Streckenbezeichnung festlegen
+- Mit Linksklick alle Check-Punkte der Strecke ohne UZKs nacheinander hinzufügen (TO, SP, WP1, WP2, ..., FP, LDG)
+- 'Pfad bearbeiten'-Dialog beenden
+
+*** Ändern der Position eines Check-Punktes:
+- Zum gewünschten Check-Punkt navigieren
+- Kontektmenü 'Eigenschaften' des Pfades aufrufen
+- Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gewünschten Position ziehen
+- 'Pfad bearbeiten'-Dialog beenden
+		  
+*** Hinzufügen einer UZK:
+- Zum Check-Punkt navigieren, nach dessen Folge-Streckenabschnitt ein UZK eingefügt werden soll
+- Kontektmenü 'Eigenschaften' des Pfades aufrufen
+- Check-Punkt bei höchster Zoomstufe mit linker Masutaste anklicken (darauf achten, dass er sich nicht verschiebt)
+- Mit Cursourtasten der Strecke folgen und zur gewünschten Position navigieren
+- Mit der linken Maustaste auf die gewünschte Position auf der Strecke klicken (fügt Punkt ein)
+- 'Pfad bearbeiten'-Dialog beenden
+		  
+*** Löschen einer UZK:
+- Zum gewünschten UZK navigieren
+- Kontektmenü 'Eigenschaften' des Pfades aufrufen
+- Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anklicken und dann Del-Taste drücken
+- 'Pfad bearbeiten'-Dialog beenden
+
+.. Klicken Sie den Ordner *Photos* an und fügen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu
+*** Name entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen +
+	(kann nach Import geändert werden)
+*** Position der Ortsmarkierung auf das gewünschte Objekt schieben
+
+.. Klicken Sie den Ordner *Canvas* an und fügen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu
+*** Name mit 'S01' bis 'S15' festlegen +
+	(kann nach Import geändert werden)
+*** Position der Ortsmarkierung auf die gewünschte Auslegestelle schieben
+
+.. Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmenü 'Ort speichern unter' mit Ihrer Streckenbezeichung ab
+
+[upperalpha, start=2]
+. Strecken-Import (Flight Contest)
+
+[arabic, start=7]
+.. Strecken -> Import Strecke
+*** Abgespeicherte kmz-Datei auswählen
+*** Verzeichnisname in kml/kmz-Datei: *Route* eintragen
+*** 'Import' anklicken
+
+.. Strecken -> Strecke -> Strecken-Fotos importieren
+*** Abgespeicherte kmz-Datei auswählen
+*** Verzeichnisname in kml/kmz-Datei: *Photos* eintragen
+*** 'Import' anklicken
+	
+.. Strecken -> Strecke -> Strecken-Bodenzeichen importieren
+*** Abgespeicherte kmz-Datei auswählen
+*** Verzeichnisname in kml/kmz-Datei: *Canvas* eintragen
+*** 'Import' anklicken
+
 [[route-planning-verify]]
 === Prüfen der Wettbewerbsstrecke
 
@@ -556,8 +636,8 @@ Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
 [[route-planning-deliver]]
 === Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter
 
-Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' zur Weitergabe
-an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
+Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' oder 'KMZ-Export'
+zur Weitergabe an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
 in sein 'Flight Contest' zur Nutzung importieren kann.
 
 [[route-planning-errors]]
