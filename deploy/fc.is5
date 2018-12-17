@@ -8,12 +8,12 @@ const FCVersion = '3.1.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.1.1.GA
-AppVersion=3.1.1.GA
+AppVerName=Flight Contest 3.1.2
+AppVersion=3.1.2
 ; no milestone below
-VersionInfoVersion=3.1.1
+VersionInfoVersion=3.1.2
 
-AppCopyright=(C) 2009-2017 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+AppCopyright=(C) 2009-2018 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://flightcontest.de
 ;AppUpdatesURL=http://flightcontest.de
@@ -71,7 +71,7 @@ Source: ".\FCAutoLoadScan_Observation.vbs";           DestDir: "{app}\scripts"; 
 Source: ".\FCAutoLoad_Logger.vbs";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FC-CrewList-Test.xls";                     DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\AFLOS-DemoContest.mdb";                    DestDir: "{app}\samples";         Attribs: readonly; Flags: overwritereadonly;
-Source: ".\AFLOS-DemoContest.mdb";                    DestDir: "C:\AFLOS\AFLOS_System";                    Flags: onlyifdoesntexist; DestName: "AFLOS.mdb";
+Source: ".\AFLOS-Empty.mdb";                          DestDir: "C:\AFLOS\AFLOS_System";                    Flags: onlyifdoesntexist; DestName: "AFLOS.mdb";
 Source: "..\fc\web-app\licenses\GPL_License.txt";     DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly; AfterInstall: MyAfterInstall;
 
 [Dirs]

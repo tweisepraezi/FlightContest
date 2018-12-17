@@ -1,15 +1,15 @@
 // gmutils.js
-// Version 2.1
-// 29. 12. 2017
+// Version 2.2.3
+// 8. 11. 2018
 // www.j-berkemeier.de
 
 "use strict";
 
 window.JB = window.JB || {};
 
-JB.Debug_Info("","gmutils.js Version 2.1 vom 29. 12. 2017",false);
+JB.Debug_Info("","gmutils.js Version 2.2.3 vom 8. 11. 2018",false);
 if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "function" )
-	console.log("gmutils.js Version 2.1 vom 29. 12. 2017");
+	console.log("gmutils.js Version 2.2.3 vom 8. 11. 2018");
 
 	JB.Map = function(mapcanvas,id) {
 	var dieses = this;
@@ -73,7 +73,7 @@ if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "fu
 	this.map.mapTypes.set('opentopo', osmotp);
 	mapinfo.opentopo = {
 		copyright: 'Kartendaten: © OpenStreetMap-Mitwirkende, SRTM | Kartendarstellung: © OpenTopoMap (CC-BY-SA)',
-		maxzoom: 19
+		maxzoom: 17
 	}
 	
 	if(JB.GPX2GM.OSM_Cycle_Api_Key && JB.GPX2GM.OSM_Cycle_Api_Key.length>0) {
@@ -82,7 +82,7 @@ if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "fu
 		this.map.mapTypes.set('cycle', osmcycle);
 		mapinfo.cycle = {
 			copyright: 'Map data &copy; <a href="https://www.thunderforest.com/" target="_blank">OpenCycleMap</a> and contributors <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>',
-			maxzoom: 18
+			maxzoom: 22
 		}
 	}
 	
@@ -92,7 +92,7 @@ if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "fu
 		this.map.mapTypes.set('landscape', osmlandscape);
 		mapinfo.landscape = {
 			copyright: 'Map data &copy; <a href="https://www.thunderforest.com/" target="_blank">OpenLandscapeMap</a> and contributors <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank">CC-BY-SA</a>',
-			maxzoom: 18
+			maxzoom: 22
 		}
 	}
 	
@@ -102,7 +102,7 @@ if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "fu
     },
     tileSize: new google.maps.Size(256, 256),
     isPng: true,
-    maxZoom: 19,
+    maxZoom: 22,
     name: "Keine Karte",
     alt: "Keine Karte"
   });
@@ -156,7 +156,7 @@ if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "fu
 		fsbdiv.style.border = "none"; 
 		fsbdiv.style.padding = "7px 7px 7px 0";
 		var fsbim = document.createElement("img");
-		fsbim.src = JB.GPX2GM.Path+"Icons/lupe+.png";
+		fsbim.src = JB.GPX2GM.Path+"Icons/lupe_p.png";
 		fsbim.title = "Full Screen";
 		fsbim.large = false;
 		var ele = mapcanvas.parentNode;
@@ -164,7 +164,7 @@ if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "fu
 			this.blur();
 			if(fsbim.large) {
 				document.body.style.overflow = "";
-				fsbim.src = JB.GPX2GM.Path+"Icons/lupe+.png";
+				fsbim.src = JB.GPX2GM.Path+"Icons/lupe_p.png";
 				fsbdiv.title = fsbim.title = fsbim.alt = "Full Screen";
 				ele.style.left = ele.oleft + "px";
 				ele.style.top = ele.otop + "px";
@@ -184,7 +184,7 @@ if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "fu
 			}
 			else {
 				document.body.style.overflow = "hidden";
-				fsbim.src = JB.GPX2GM.Path+"Icons/lupe-.png";
+				fsbim.src = JB.GPX2GM.Path+"Icons/lupe_m.png";
 				if(JB.gc.doclang=="de") fsbdiv.title = fsbim.title = fsbim.alt = "Normale Gr\u00F6\u00dfe";
 				else                    fsbdiv.title = fsbim.title = fsbim.alt = "Normal Size";
 				var scrollY = 0;
@@ -626,7 +626,7 @@ JB.Map.prototype.setMarker = function(option,options,icon) {
 	if (icon) {
 		if (icon.icon) {
 			option.icon = icon.icon; 
-			if( icon.icon.url.length-icon.icon.url.lastIndexOf(".svg") == 4) option.optimized = false;
+			if( icon.icon.url && icon.icon.url.length-icon.icon.url.lastIndexOf(".svg") == 4) option.optimized = false;
 		}
 	}
 	marker.push(new google.maps.Marker(option));
@@ -662,18 +662,16 @@ JB.Map.prototype.Marker_Link = function(coord,icon,titel,url,popup_Pars) {
 	return marker;
 } // Marker_Link
 
-JB.Map.prototype.Marker_Text = function(coord,icon,titel,closefkt) {
+JB.Map.prototype.Marker_Text = function(coord,icon,titel) {
 	var dieses = this;
 	var mapcenter,clk_ev;
 	var option  = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, title: titel, zIndex: 200 };
 	var options = { position: new google.maps.LatLng(coord.lat,coord.lon), map: this.map, clickable: false, zIndex: 190 };
 	var marker = this.setMarker(option,options,icon);
 	var infowindow = new google.maps.InfoWindow({  } );
-	if(closefkt) infowindow.closefkt = closefkt;
 	google.maps.event.addListener(infowindow,"closeclick", function() { 
 		dieses.map.panTo(mapcenter); 
 		google.maps.event.removeListener(clk_ev); 
-		if(closefkt) closefkt();
 	});
 	google.maps.event.addListener(marker[0], 'click', function() {
 		mapcenter = dieses.map.getCenter();
@@ -681,7 +679,6 @@ JB.Map.prototype.Marker_Text = function(coord,icon,titel,closefkt) {
 			infowindow.close(); 
 			dieses.map.panTo(mapcenter); 
 			google.maps.event.removeListener(clk_ev) 
-			if(closefkt) closefkt();
 		});
 		var retval = true;
 		var text = coord.info;

@@ -21,6 +21,8 @@ import javax.imageio.metadata.IIOMetadata
 import javax.imageio.metadata.IIOMetadataNode
 import javax.imageio.stream.ImageOutputStream
 
+import org.quartz.JobKey
+
 // Karten mit printmaps-osm.de erstellen
 //   http://printmaps-osm.de:8080/de/server.html
 //   https://github.com/printmaps/printmaps
@@ -35,18 +37,23 @@ import javax.imageio.stream.ImageOutputStream
 //   https://docs.oracle.com/javase/7/docs/api/java/net/URLConnection.html
 //   https://stackoverflow.com/questions/321736/how-to-set-dpi-information-in-an-image
 //   https://docs.oracle.com/javase/7/docs/api/javax/imageio/metadata/doc-files/standard_metadata.html
+//   https://de.wikipedia.org/wiki/European_Petroleum_Survey_Group_Geodesy   EPSG-Nummern
 
 class OsmPrintMapService
 {
     def logService
     def messageSource
+    def quartzScheduler
+    def gpxService
     
     final static Map HEADER_CONTENTTYPE = [name:"Content-Type", value:"application/vnd.api+json; charset=utf-8"]
     final static Map HEADER_ACCEPT = [name:"Accept", value:"application/vnd.api+json; charset=utf-8"]
     
     final static String STYLE_STANDARD = "osm-carto"
     final static String STYLE_CONTOURLINES = "osm-carto-ele20"
-    final static String STYLE_HIDELAYERS = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-medium,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
+    final static String STYLE_PROJECTION = "3857" // EPSG-Nummer, WGS 84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz 
+    final static String STYLE_HIDELAYERS = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
+    final static String STYLE_HIDELAYERS_MUNICIPALITY = ",placenames-medium"
 
     // Formate
     //   DIN-A3 Hochformat = 297 x 420 mm, DIN-A3 Querformat = 420 x 297 mm
@@ -91,10 +98,6 @@ class OsmPrintMapService
     
     final static int SCALE = 200000/FACTOR
     
-    final static int USERSCALEBAR_LEN = 20000 // m
-    final static String USERSCALEBAR_TITLE = "20 km (10cm)"
-    final static int USERSCALEBAR_TITLE_FONT_SIZE = FACTOR*12
-    
     final static int GRATICULE_TEXT_FONT_SIZE = FACTOR*6
     final static int AIRFIELD_TEXT_FONT_SIZE = FACTOR*6
     final static int PEAKS_TEXT_FONT_SIZE = FACTOR*5
@@ -129,7 +132,6 @@ class OsmPrintMapService
     final static String CSV_LINESEPARATOR = "\r\n"
     
     // Development options
-    private final static boolean CHANGE_COLOR = true             // true
     private final static boolean LOG_RESTAPI_CALLS = true        // true
     private final static boolean LOG_RESTAPI_OUTPUTDATA = false  // false
     private final static boolean LOG_RESTAPI_RETURNS = true      // true
@@ -157,6 +159,7 @@ class OsmPrintMapService
                              printEnroutePhotos: false,
                              printEnrouteCanvas: false,
                              printContourLines: false,
+                             printMunicipalityNames: false,
                              printAirfields: false,
                              printChurches: false,
                              printCastles: false,
@@ -168,8 +171,7 @@ class OsmPrintMapService
                              printAirspaces: false,
                              printLandscape: true,
                              printA3: true,
-                             printScaleBar: false,
-                             printNoColorChange: false
+                             printColorChanges: false
                             ]
         
         File gpx_file = new File(printParams.gpxFileName)
@@ -185,6 +187,7 @@ class OsmPrintMapService
             print_options.printEnroutePhotos = m.'@enroutephotos'[0] == "yes"
             print_options.printEnrouteCanvas = m.'@enroutecanvas'[0] == "yes"
             print_options.printContourLines = m.'@contour_lines'[0] == "yes"
+            print_options.printMunicipalityNames = m.'@municipality_names'[0] == "yes"
             print_options.printAirfields = m.'@airfields'[0] == "yes"
             print_options.printChurches = m.'@churches'[0] == "yes"
             print_options.printCastles = m.'@castles'[0] == "yes"
@@ -196,8 +199,7 @@ class OsmPrintMapService
             print_options.printAirspaces = m.'@airspaces'[0] == "yes"
             print_options.printLandscape = m.'@landscape'[0] == "yes"
             print_options.printA3 = m.'@a3'[0] == "yes"
-            print_options.printScaleBar = m.'@scale_bar'[0] == "yes"
-            print_options.printNoColorChange = m.'@no_color_change'[0] == "yes"
+            print_options.printColorChanges = m.'@colorchanges'[0] == "yes"
             println "Options: ${print_options}"
             ret.ok = true
         } catch (Exception e) {
@@ -223,11 +225,26 @@ class OsmPrintMapService
     {
         Map ret = [ok:false, message:'']
         
+        String printjob_filename = printParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+        String printjobid_filename = printParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + printParams.routeId + ".txt"
+        String printfileid_filename = printParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + printParams.routeId + ".txt"
+        
+        /*
+        if (new File(printjob_filename).exists()) {
+            ret.message = getMsg('fc.contestmap.previousjobrunningerror', false)
+            return ret
+        }
+        */
+        
         String graticule_file_name = printParams.graticuleFileName.replaceAll('\\\\', '/')
 
         String style = STYLE_STANDARD
         if (printOptions.printContourLines) {
             style = STYLE_CONTOURLINES
+        }
+        String style_hide_municipality = STYLE_HIDELAYERS_MUNICIPALITY
+        if (printOptions.printMunicipalityNames) {
+            style_hide_municipality = ""
         }
         
         int print_width = 0 // mm
@@ -258,24 +275,6 @@ class OsmPrintMapService
         print_height -= 2*MARGIN
         print_width *= FACTOR
         print_height *= FACTOR
-        
-        int userscalbar_xpos = print_width/2  - 50*FACTOR         // 5cm von Mitte nach links
-        int userscalbar_ypos = print_height/2  + 52*FACTOR        // 5,2cm von Mitte nach oben
-        int userscalbar_text_ypos = userscalbar_ypos + 5*FACTOR   // 5mm nach oben
-        String userscalebar_line = ""
-        String userscalbar_text = ""
-        if (printOptions.printScaleBar) { 
-            userscalebar_line = ""","UserScalebar": {
-                "Style": "<LineSymbolizer stroke='black' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
-                "NatureLength": ${USERSCALEBAR_LEN},
-                "XPos": ${userscalbar_xpos},
-                "YPos": ${userscalbar_ypos}
-            }"""
-            userscalbar_text = """,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${USERSCALEBAR_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${USERSCALEBAR_TITLE}'</TextSymbolizer>",
-                "WellKnownText": "POINT(${userscalbar_xpos} ${userscalbar_text_ypos})"
-            }"""
-        }
         
         int contest_title_ypos = print_height - CONTEST_TITLE_YPOS_TOP*FACTOR
         int route_title_ypos = contest_title_ypos - ROUTE_TITLE_YPOS_CONTEST_TITLE*FACTOR
@@ -341,7 +340,7 @@ class OsmPrintMapService
 
         String gpx_file_name = printParams.gpxFileName.replaceAll('\\\\', '/')
         String gpx_short_file_name = gpx_file_name.substring(gpx_file_name.lastIndexOf('/')+1)
-        String gpx_lines = """{
+        String gpx_lines = """,{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
             "SRS": "+init=epsg:4326",
             "Type": "ogr",
@@ -574,7 +573,7 @@ class OsmPrintMapService
         Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
         printdone ""
     
-        String id = ""
+        String printjob_id = ""
         boolean job_started = false
         boolean job_successfully = false
         int img_width = 0
@@ -595,8 +594,10 @@ class OsmPrintMapService
                     "Latitude": ${printOptions.centerLatitude},
                     "Longitude": ${printOptions.centerLongitude},
                     "Style": "${style}",
-                    "HideLayers": "${STYLE_HIDELAYERS}",
-                    "UserData": [
+                    "Projection": "${STYLE_PROJECTION}",
+                    "HideLayers": "${STYLE_HIDELAYERS}${style_hide_municipality}",
+                    "UserObjects": [
+                        ${user_text}
                         ${gpx_lines}
                         ${graticule_lines}
                         ${airfields_lines}
@@ -608,126 +609,122 @@ class OsmPrintMapService
                         ${additionals_lines}
                         ${specials_lines}
                         ${airspaces_lines}
-                    ],
-                    "UserItems": [
-                        ${user_text}
-                        ${userscalbar_text}
                     ]
-                    ${userscalebar_line}
                 }
             }
         }""")
+        
         if (status.responseCode) {
-            printdone "responseCode=${status.responseCode}, id=${status.json.Data.ID}"
+            printdone "responseCode=${status.responseCode}, printjob_id=${status.json.Data.ID}"
         } else {
             printerror ""
         }
         if (status.responseCode == 201) {
-            id = status.json.Data.ID
+            printjob_id = status.json.Data.ID
         }
     
         //...........................................................................................
-        if (id) {
+        if (printjob_id) {
             // route
             printstart "Upload gpx"
-            FileUpload("/upload/${id}", gpx_file_name)
+            FileUpload("/upload/${printjob_id}", gpx_file_name)
             printdone ""
             // symbols
             printstart "Upload airfield.png"
-            FileUpload("/upload/${id}", printParams.webRootDir + "images/map/airfield.png")
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/airfield.png")
             printdone ""
             printstart "Upload church.png"
-            FileUpload("/upload/${id}", printParams.webRootDir + "images/map/church.png")
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/church.png")
             printdone ""
             printstart "Upload castle.png"
-            FileUpload("/upload/${id}", printParams.webRootDir + "images/map/castle.png")
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/castle.png")
             printdone ""
             printstart "Upload chateau.png"
-            FileUpload("/upload/${id}", printParams.webRootDir + "images/map/chateau.png")
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/chateau.png")
             printdone ""
             printstart "Upload windpowerstation.png"
-            FileUpload("/upload/${id}", printParams.webRootDir + "images/map/windpowerstation.png")
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/windpowerstation.png")
             printdone ""
             printstart "Upload peak.png"
-            FileUpload("/upload/${id}", printParams.webRootDir + "images/map/peak.png")
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/peak.png")
             printdone ""
             printstart "Upload special.png"
-            FileUpload("/upload/${id}", printParams.webRootDir + "images/map/special.png")
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/special.png")
             printdone ""
             if (printOptions.printEnroutePhotos) {
                 printstart "Upload fcphoto.png"
-                FileUpload("/upload/${id}", printParams.webRootDir + "GM_Utils/Icons/fcphoto.png")
+                FileUpload("/upload/${printjob_id}", printParams.webRootDir + "GM_Utils/Icons/fcphoto.png")
                 printdone ""
             }
             if (printOptions.printEnrouteCanvas) {
                 EnrouteCanvasSign.each { enroute_canvas_sign ->
                     if (enroute_canvas_sign.imageName) {
                         printstart "Upload ${enroute_canvas_sign.imageName}"
-                        FileUpload("/upload/${id}", printParams.webRootDir + enroute_canvas_sign.imageName)
+                        FileUpload("/upload/${printjob_id}", printParams.webRootDir + enroute_canvas_sign.imageName)
                         printdone ""
                     }
                 }
             }
             if (graticule_file_name) {
                 printstart "Upload graticule"
-                FileUpload("/upload/${id}", graticule_file_name)
+                FileUpload("/upload/${printjob_id}", graticule_file_name)
                 printdone ""
             }
             if (airfields_file_name) {
                 printstart "Upload airfields"
-                FileUpload("/upload/${id}", airfields_file_name)
+                FileUpload("/upload/${printjob_id}", airfields_file_name)
                 printdone ""
             }
             if (churches_file_name) {
                 printstart "Upload churches"
-                FileUpload("/upload/${id}", churches_file_name)
+                FileUpload("/upload/${printjob_id}", churches_file_name)
                 printdone ""
             }
             if (castles_file_name) {
                 printstart "Upload castles"
-                FileUpload("/upload/${id}", castles_file_name)
+                FileUpload("/upload/${printjob_id}", castles_file_name)
                 printdone ""
             }
             if (chateaus_file_name) {
                 printstart "Upload chateaus"
-                FileUpload("/upload/${id}", chateaus_file_name)
+                FileUpload("/upload/${printjob_id}", chateaus_file_name)
                 printdone ""
             }
             if (windpowerstations_file_name) {
                 printstart "Upload windpowerstations"
-                FileUpload("/upload/${id}", windpowerstations_file_name)
+                FileUpload("/upload/${printjob_id}", windpowerstations_file_name)
                 printdone ""
             }
             if (peaks_file_name) {
                 printstart "Upload peaks"
-                FileUpload("/upload/${id}", peaks_file_name)
+                FileUpload("/upload/${printjob_id}", peaks_file_name)
                 printdone ""
             }
             if (additionals_file_name) {
                 printstart "Upload additionals"
-                FileUpload("/upload/${id}", additionals_file_name)
+                FileUpload("/upload/${printjob_id}", additionals_file_name)
                 printdone ""
             }
             if (specials_file_name) {
                 printstart "Upload specials"
-                FileUpload("/upload/${id}", specials_file_name)
+                FileUpload("/upload/${printjob_id}", specials_file_name)
                 printdone ""
             }
             if (airspaces_file_name) {
                 printstart "Upload airspaces"
-                FileUpload("/upload/${id}", airspaces_file_name)
+                FileUpload("/upload/${printjob_id}", airspaces_file_name)
                 printdone ""
             }
         }
         
         //...........................................................................................
-        if (id) {
+        if (printjob_id) {
             printstart "Start job"
             status = CallPrintServer("/mapfile", [HEADER_CONTENTTYPE,HEADER_ACCEPT], "POST", DataType.JSON, """
             {
-                "data": {
-                    "type": "maps",
-                    "id": "${id}"
+                "Data": {
+                    "Type": "maps",
+                    "ID": "${printjob_id}"
                 }
             }"""
             )
@@ -739,109 +736,192 @@ class OsmPrintMapService
         
         //...........................................................................................
         if (job_started) {
-            printstart "Check job status"
-            String s = ""
-            while (true) {
-                status = CallPrintServer("/mapstate/${id}", [HEADER_ACCEPT], "GET", DataType.JSON, "")
+            // save printjob
+            /*
+            printstart "Generate ${printjob_filename}"
+            File printjob_file = new File(printjob_filename)
+            BufferedWriter printjob_writer = printjob_file.newWriter()
+            printjob_writer << printParams.routeId
+            printjob_writer.close()
+            printdone ""
+            */
+            
+            // save printjob_id
+            printstart "Generate ${printjobid_filename}"
+            File printjobid_file = new File(printjobid_filename)
+            BufferedWriter printjobid_writer = printjobid_file.newWriter()
+            printjobid_writer << printjob_id
+            printjobid_writer << "\n"
+            printjobid_writer << printParams.pngFileName
+            printjobid_writer << "\n"
+            printjobid_writer << printOptions.printLandscape
+            printjobid_writer << "\n"
+            printjobid_writer << printOptions.printA3
+            printjobid_writer << "\n"
+            printjobid_writer << printOptions.printColorChanges
+            printjobid_writer.close()
+            printdone ""
+            
+            // save print file id
+            printstart "Generate ${printfileid_filename}"
+            File printfileid_file = new File(printfileid_filename)
+            BufferedWriter printfileid_writer = printfileid_file.newWriter()
+            printfileid_writer << printParams.pngFileName
+            printfileid_writer << "\n"
+            printfileid_writer << printOptions.printLandscape
+            printfileid_writer << "\n"
+            printfileid_writer << printOptions.printA3
+            printfileid_writer.close()
+            printdone ""
+            
+            // start job
+            printstart "Start OsmPrintMapJob"
+            OsmPrintMapJob.schedule(
+                1000*Defs.OSMPRINTMAP_RUNSECONDS,
+                -1,
+                [(Defs.OSMPRINTMAP_ACTION):Defs.OSMPRINTMAP_ACTION_CHECKJOB, 
+                 (Defs.OSMPRINTMAP_JOBFILENAME):printjob_filename,
+                 (Defs.OSMPRINTMAP_JOBID):printjob_id,
+                 (Defs.OSMPRINTMAP_JOBIDFILENAME):printjobid_filename, 
+                 (Defs.OSMPRINTMAP_PNGFILENAME):printParams.pngFileName,
+                 (Defs.OSMPRINTMAP_PRINTLANDSCAPE):printOptions.printLandscape,
+                 (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):printOptions.printColorChanges
+                ]
+            )
+            printdone ""
+            
+            ret.ok = true
+        }
+        
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String pngFileName, boolean printLandscape, boolean printColorChanges)
+    {
+        printstart "BackgroundJob ${actionName} ${jobId}"
+        
+        switch (actionName) {
+            case Defs.OSMPRINTMAP_ACTION_CHECKJOB:
+                boolean job_successfully = false
+                int img_width = 0
+                int img_height = 0
+                
+                //...........................................................................................
+                printstart "Check job status"
+                Map status = CallPrintServer("/mapstate/${jobId}", [HEADER_ACCEPT], "GET", DataType.JSON, "")
                 if (status.responseCode == 200) {
                     if (status.json.Data.Attributes.MapBuildSuccessful) {
                         img_width = status.json.Data.Attributes.MapBuildBoxPixel.Width
                         img_height = status.json.Data.Attributes.MapBuildBoxPixel.Height
-                        s = status.json.Data.Attributes.MapBuildMessage
+                        String s = status.json.Data.Attributes.MapBuildMessage
                         println "Successfully. Status='${status.json.Data.Attributes.MapBuildSuccessful}', Width=${img_width}, Height=${img_height}"
                         job_successfully = status.json.Data.Attributes.MapBuildSuccessful == "yes"
-                        if (!job_successfully) {
-                            ret.message = s
-                        }
-                        break
                     } else {
-                        println "Wait '${status.json.Data.Attributes.MapBuildStarted}'"
+                        printdone "Wait '${status.json.Data.Attributes.MapBuildStarted}'"
+                        break
                     }
+                } else {
+                    // printdone "Wait responseCode=${status.responseCode}"
+                    printstart "Stop OsmPrintMapJob"
+                    quartzScheduler.unscheduleJobs(quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
+                    gpxService.DeleteFile(jobFileName)
+                    printdone ""
+                    
+                    printdone ""
+                    break
                 }
-                println ""
-                sleep(2000) // Warte 2s
-            }
-            printdone "${s}"
-        }
-        
-        //...........................................................................................
-        if (id && job_successfully) {
-            printstart "Download map"
-            status = CallPrintServer("/mapfile/${id}", [HEADER_ACCEPT], "GET", DataType.BINARY, null)
-            if (status.responseCode == 200) {
+                printdone ""
+                
+                //...........................................................................................
+                if (job_successfully) {
+                    printstart "Download map"
+                    status = CallPrintServer("/mapfile/${jobId}", [HEADER_ACCEPT], "GET", DataType.BINARY, null)
+                    if (status.responseCode == 200) {
+                    
+                        String download_zip_file_name = "${pngFileName}.zip"
+                        String unpacked_png_file_name = "${pngFileName}.png"
+                        
+                        printstart "Write ${download_zip_file_name}"
+                        FileOutputStream zip_stream = new FileOutputStream(download_zip_file_name)
+                        zip_stream << status.binary
+                        zip_stream.flush()
+                        zip_stream.close()
+                        printdone ""
+                        
+                        def km_reader = null
+                        def kmz_file = new java.util.zip.ZipFile(download_zip_file_name)
+                        kmz_file.entries().findAll { !it.directory }.each {
+                            if (!km_reader) {
+                                km_reader = kmz_file.getInputStream(it)
+                            }
+                        }
+                        if (km_reader) {
+                            printstart "Write ${unpacked_png_file_name}"
+                            FileOutputStream png_stream = new FileOutputStream(unpacked_png_file_name)
+                            png_stream << km_reader
+                            png_stream.flush()
+                            png_stream.close()
+                            printdone ""
+                            km_reader.close()
+                        }
+                        kmz_file.close()
+                        
+                        printstart "Delete ${download_zip_file_name}"
+                        File download_zip_file = new File(download_zip_file_name)
+                        if (download_zip_file.delete()) {
+                            printdone ""
+                        } else {
+                            printerror ""
+                        }
+                        
+                        printstart "Downscale ${unpacked_png_file_name} -> ${pngFileName}"
+                        downscaleImage(unpacked_png_file_name, pngFileName, (img_width/FACTOR2).toInteger(), (img_height/FACTOR2).toInteger(), printLandscape, printColorChanges)
+                        printdone ""
+                        
+                        printstart "Delete ${unpacked_png_file_name}"
+                        File unpacked_png_file = new File(unpacked_png_file_name)
+                        if (unpacked_png_file.delete()) {
+                            printdone ""
+                        } else {
+                            printerror ""
+                        }
+                        
+                        printstart "Delete ${jobIdFileName}"
+                        File printjobid_file = new File(jobIdFileName)
+                        if (printjobid_file.delete()) {
+                            printdone ""
+                        } else {
+                            printerror ""
+                        }
+                    }
+                    printdone "responseCode=${status.responseCode}, ${if(status.binary)'Data available.'else'No data.'}"
+                }
+                
+                //...........................................................................................
+                if (jobId) {
+                    printstart "View job"
+                    status = CallPrintServer("/metadata/${jobId}", [HEADER_CONTENTTYPE], "GET", DataType.JSON, null)
+                    printdone "responseCode=${status.responseCode}"
+                }
+                
+                //...........................................................................................
+                if (jobId) {
+                    printstart "Remove job"
+                    status = CallPrintServer("/${jobId}", [HEADER_ACCEPT], "DELETE", DataType.NONE, null)
+                    printdone "responseCode=${status.responseCode}"
+                }
             
-                String download_zip_file_name = "${printParams.pngFileName}.zip"
-                String unpacked_png_file_name = "${printParams.pngFileName}.png"
-                
-                printstart "Write ${download_zip_file_name}"
-                FileOutputStream zip_stream = new FileOutputStream(download_zip_file_name)
-                zip_stream << status.binary
-                zip_stream.flush()
-                zip_stream.close()
+                //...........................................................................................
+                printstart "Stop OsmPrintMapJob"
+                quartzScheduler.unscheduleJobs(quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
+                gpxService.DeleteFile(jobFileName)
                 printdone ""
                 
-                def km_reader = null
-                def kmz_file = new java.util.zip.ZipFile(download_zip_file_name)
-                kmz_file.entries().findAll { !it.directory }.each {
-                    if (!km_reader) {
-                        km_reader = kmz_file.getInputStream(it)
-                    }
-                }
-                if (km_reader) {
-                    printstart "Write ${unpacked_png_file_name}"
-                    FileOutputStream png_stream = new FileOutputStream(unpacked_png_file_name)
-                    png_stream << km_reader
-                    png_stream.flush()
-                    png_stream.close()
-                    printdone ""
-                    km_reader.close()
-                }
-                kmz_file.close()
-                
-                printstart "Delete ${download_zip_file_name}"
-                File download_zip_file = new File(download_zip_file_name)
-                if (download_zip_file.delete()) {
-                    printdone ""
-                } else {
-                    printerror ""
-                }
-                
-                printstart "Downscale ${unpacked_png_file_name} -> ${printParams.pngFileName}"
-                downscaleImage(unpacked_png_file_name, printParams.pngFileName, (img_width/FACTOR2).toInteger(), (img_height/FACTOR2).toInteger(), printOptions.printLandscape, printOptions)
-                printdone ""
-                
-                printstart "Delete ${unpacked_png_file_name}"
-                File unpacked_png_file = new File(unpacked_png_file_name)
-                if (unpacked_png_file.delete()) {
-                    printdone ""
-                } else {
-                    printerror ""
-                }
-            }
-            printdone "responseCode=${status.responseCode}, ${if(status.binary)'Data available.'else'No data.'}"
+                break
         }
         
-        //...........................................................................................
-        if (id) {
-            printstart "View job"
-            status = CallPrintServer("/metadata/${id}", [HEADER_CONTENTTYPE], "GET", DataType.JSON, null)
-            printdone "responseCode=${status.responseCode}"
-        }
-        
-        //...........................................................................................
-        if (id) {
-            printstart "Remove job"
-            status = CallPrintServer("/${id}", [HEADER_ACCEPT], "DELETE", DataType.NONE, null)
-            printdone "responseCode=${status.responseCode}"
-        }
-    
         printdone ""
-        
-        if (id && job_successfully) {
-            ret.ok = true
-        }
-        return ret
-        
     }
     
     //--------------------------------------------------------------------------
@@ -956,9 +1036,13 @@ class OsmPrintMapService
             }
             switch (dataType) {
                 case DataType.JSON:
-                    String s = connection.content.text
-                    s = new String(s.getBytes("ISO-8859-1"), "UTF-8")
-                    ret.json = new JsonSlurper().parseText(s)
+                    try {
+                        String s = connection.content.text
+                        s = new String(s.getBytes("ISO-8859-1"), "UTF-8")
+                        ret.json = new JsonSlurper().parseText(s)
+                    } catch (Exception e) {
+                        println "Exception (1): ${e.getMessage()} ${e}"
+                    }
                     break
                 case DataType.BINARY:
                     ret.binary = connection.content
@@ -982,7 +1066,7 @@ class OsmPrintMapService
             return ret
         } catch (Exception e) {
             if (LOG_RESTAPI_EXCEPTIONS) {
-                println "Exception: ${e.getMessage()} ${e}"
+                println "Exception (2): ${e.getMessage()} ${e}"
             }
         }
         
@@ -1149,7 +1233,7 @@ class OsmPrintMapService
     }
 
     //--------------------------------------------------------------------------
-    private void downscaleImage(String pngInputFileName, String pngResizedFileName, int imgWidth, int imgHeight, boolean isLandscape, Map printOptions)
+    private void downscaleImage(String pngInputFileName, String pngResizedFileName, int imgWidth, int imgHeight, boolean isLandscape, boolean printColorChanges)
     {
         println "Width=${imgWidth}, Height=${imgHeight}, Landscape=${isLandscape}"
         try {
@@ -1157,7 +1241,7 @@ class OsmPrintMapService
             BufferedImage input_img = ImageIO.read(input_png_file)
             int type = input_img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : input_img.getType()
             
-            BufferedImage resized_image = resizeImage(input_img, type, imgWidth, imgHeight, printOptions)
+            BufferedImage resized_image = resizeImage(input_img, type, imgWidth, imgHeight, printColorChanges)
             
             def dest_file = new File(pngResizedFileName)
             savePNGImage(dest_file, resized_image, isLandscape)
@@ -1168,7 +1252,7 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    private static BufferedImage resizeImage(BufferedImage originalImage, int type, int imgWidth, int imgHeight, Map printOptions)
+    private static BufferedImage resizeImage(BufferedImage originalImage, int type, int imgWidth, int imgHeight, boolean printColorChanges)
     {
         BufferedImage resized_image = new BufferedImage(imgWidth, imgHeight, type)
         
@@ -1176,7 +1260,7 @@ class OsmPrintMapService
         g.drawImage(originalImage, 0, 0, imgWidth, imgHeight, null)
         g.dispose()
     
-        if (CHANGE_COLOR && !printOptions.printNoColorChange) {
+        if (printColorChanges) {
             BufferedImage recolored_image = new BufferedImage(imgWidth, imgHeight, type)
             for (int x = 0; x < imgWidth; x++) {
                 for (int y = 0; y < imgHeight; y++) {

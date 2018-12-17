@@ -1,5 +1,5 @@
 // Platz für weitere Definitionen
-// 15. 5. 2018
+// 4. 9. 2018
 
 "use strict";
 
@@ -7,11 +7,13 @@ window.JB = window.JB || {};
 window.JB.GPX2GM = window.JB.GPX2GM || {};
 
 // Google Maps API Key
-JB.GPX2GM.GM_Api_key = gmApiKey;
+//JB.GPX2GM.GM_Api_key = "Key";
 // Key für OSM Cycle
-// JB.GPX2GM.OSM_Cycle_Api_Key = "OSM_Key";
+//JB.GPX2GM.OSM_Cycle_Api_Key = "Key";
 // Key für OSM Landscape
-// JB.GPX2GM.OSM_Landscape_Api_Key = "OSM_Key";
+//JB.GPX2GM.OSM_Landscape_Api_Key = "Key";
+
+//var Mapapi = "gm";
 
 // Definition der Icons, bei eigenen Icons nur Kleinbuchstaben verwenden.
 JB.Icons = function(baseurl) {
@@ -93,38 +95,6 @@ JB.Icons = function(baseurl) {
 											scaledSize: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" },
 											size: { width: 15, height: 15, widthUnit: "px", heightUnit: "px" } } };
 
-	this.fcphoto        = { icon:   { anchor: {x:18,y:20}, url: baseurl+"Icons/s01.png" },
-                                            shadow: { anchor: {x:13,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s01            = { icon:   { anchor: {x:14,y:20}, url: baseurl+"Icons/s01.png" },
-	                                        shadow: { anchor: {x:9,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s02            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s02.png" },
-	                                        shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s03            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s03.png" },
-	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s04            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s04.png" },
-	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s05            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s05.png" },
-	                                        shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s06            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s06.png" },
-	                                        shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s07            = { icon:   { anchor: {x:9,y:20}, url: baseurl+"Icons/s07.png" },
-	                                        shadow: { anchor: {x:4,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s08            = { icon:   { anchor: {x:7,y:20}, url: baseurl+"Icons/s08.png" },
-	                                        shadow: { anchor: {x:2,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s09            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s09.png" },
-	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s10            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s10.png" },
-	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s11            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s11.png" },
-	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s12            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s12.png" },
-	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s13            = { icon:   { anchor: {x:11,y:20}, url: baseurl+"Icons/s13.png" },
-	                                        shadow: { anchor: {x:6,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s14            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s14.png" },
-	                                        shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
-	this.s15            = { icon:   { anchor: {x:9,y:20}, url: baseurl+"Icons/s15.png" },
-	                                        shadow: { anchor: {x:4,y:15}, url: baseurl+"Icons/shadow.png" } };
 	//this.myicon       = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/myicon.png" },
 	//                    shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
 	// Most Icons from https://mapicons.mapsmarker.com/
@@ -189,8 +159,10 @@ JB.GPX2GM.strings.de = {
 	wait: "",  // Wartebild nehmen
 	clkz: "Zum Zoomen klicken",
 	zb: "Zurück zoomen",
-	frage_datenschutz: "Diese Seite verwendet Karten und ein Api von Google sowie möglicherweise auch OSM-Karten. Dadurch werden Besucherdaten an den jeweiligen Dienstanbieter übertragen. Mehr dazu im Impressum. Ist das OK?",
-	antwort_datenschutz: "Die Zustimmung zur Nutzung des Google Maps API wurde verweigert. Beim erneuten Laden der Seite können Sie ihre Meinung ändern."
+	frage_datenschutz_gm: "Diese Seite verwendet Karten und ein Api von Google sowie möglicherweise auch OSM-Karten. Dadurch werden Besucherdaten an den jeweiligen Dienstanbieter übertragen. Mehr dazu im Impressum. Ist das OK?",
+	antwort_datenschutz_gm: "Die Zustimmung zur Nutzung des Google Maps API wurde verweigert. Beim erneuten Laden der Seite können Sie ihre Meinung ändern.",
+	frage_datenschutz_osm: "Diese Seite verwendet OSM-Karten. Dadurch werden Besucherdaten an den jeweiligen Dienstanbieter übertragen. Mehr dazu im Impressum. Ist das OK?",
+	antwort_datenschutz_osm: "Die Zustimmung zur Nutzung der OSM-Karten wurde verweigert. Beim erneuten Laden der Seite können Sie ihre Meinung ändern."
 }
 JB.GPX2GM.strings.en = {
 	lenght: "Length",
@@ -225,8 +197,10 @@ JB.GPX2GM.strings.en = {
 	wait: "",  // Wartebild nehmen
 	clkz: "Click to zoom",
 	zb: "Zoom back",
-	frage_datenschutz: "This page uses maps and an api from Google and possibly also OSM maps. This transfers visitor data to the respective service provider. Read more about this in the impressum. Is that all OK?",
-	antwort_datenschutz: "Permission to use the Google Maps API has been denied. You can change your mind when you reload the page."	
+	frage_datenschutz_gm: "This page uses maps and an api from Google and possibly also OSM maps. This transfers visitor data to the respective service provider. Read more about this in the imprint. Is that all right?",
+	antwort_datenschutz_gm: "Permission to use the Google Maps API has been denied. You can change your mind when you reload the page.",
+	frage_datenschutz_osm: "This page uses OSM maps. This transfers visitor data to the respective service provider. Read more about this in the imprint. Is that all right?",
+	antwort_datenschutz_osm: "Permission to use the OSM maps has been denied. You can change your mind when you reload the page."
 }
 
 /* // Prototyp für Callbackfunktion

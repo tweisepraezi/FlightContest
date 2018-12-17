@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.1, Ausgabe 11,</span>
-<span id="revdate">17.08.2018</span>
+<span id="revnumber">version 3.1.2, Ausgabe 1,</span>
+<span id="revdate">14.12.2018</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning">Streckenplanung</a>
 <ul class="sectlevel2">
 <li><a href="#route-planning-definitions">Definitionen</a></li>
-<li><a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r ein Wettbewerbsstrecke</a></li>
+<li><a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r eine Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-import">Import von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a></li>
@@ -461,24 +461,24 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#landings">Landungen</a></li>
 <li><a href="#evaluation">Auswertungen</a>
 <ul class="sectlevel2">
-<li><a href="#_wettbewerbs_auswertung">Wettbewerbs-Auswertung</a></li>
-<li><a href="#_klassen_auswertung">Klassen-Auswertung</a></li>
-<li><a href="#_team_auswertung">Team-Auswertung</a></li>
-<li><a href="#_sonder_auswertungen">Sonder-Auswertungen</a></li>
+<li><a href="#evaluation-contest">Wettbewerbs-Auswertung</a></li>
+<li><a href="#evaluation-class">Klassen-Auswertung</a></li>
+<li><a href="#evaluation-team">Team-Auswertung</a></li>
+<li><a href="#evaluation-special">Sonder-Auswertungen</a></li>
 </ul>
 </li>
 <li><a href="#supported-logger">Unterst&#252;tzte Logger</a>
 <ul class="sectlevel2">
-<li><a href="#_aflos_direkt">AFLOS (direkt)</a></li>
-<li><a href="#_aflos_mit_reader">AFLOS (mit Reader)</a></li>
-<li><a href="#_airobserver_basierte_logger">AirObserver basierte Logger</a></li>
-<li><a href="#_dg_100">DG-100</a></li>
-<li><a href="#_dg_200">DG-200</a></li>
-<li><a href="#_powerflarm">PowerFLARM</a></li>
-<li><a href="#_beliebiger_anderer_igc_logger">Beliebiger anderer IGC-Logger</a></li>
-<li><a href="#_beliebiger_anderer_gpx_logger">Beliebiger anderer GPX-Logger</a></li>
-<li><a href="#_beliebiger_anderer_kml_logger">Beliebiger anderer KML-Logger</a></li>
-<li><a href="#_beliebiger_anderer_nmea_logger">Beliebiger anderer NMEA-Logger</a></li>
+<li><a href="#supported-logger-aflos">AFLOS (direkt)</a></li>
+<li><a href="#supported-logger-aflosreader">AFLOS (mit Reader)</a></li>
+<li><a href="#supported-logger-airopserver">AirObserver basierte Logger</a></li>
+<li><a href="#supported-logger-dg100">DG-100</a></li>
+<li><a href="#supported-logger-dg200">DG-200</a></li>
+<li><a href="#supported-logger-powerflarm">PowerFLARM</a></li>
+<li><a href="#supported-logger-igc">Beliebiger anderer IGC-Logger</a></li>
+<li><a href="#supported-logger-gpx">Beliebiger anderer GPX-Logger</a></li>
+<li><a href="#supported-logger-kml">Beliebiger anderer KML-Logger</a></li>
+<li><a href="#supported-logger-nmea">Beliebiger anderer NMEA-Logger</a></li>
 </ul>
 </li>
 <li><a href="#print-styles">Druck-Stil beeinflussen</a>
@@ -492,22 +492,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#configuration">Installationsabh&#228;ngige Konfiguration</a>
 <ul class="sectlevel2">
-<li><a href="#_e_mail_versand_konfigurieren">E-Mail-Versand konfigurieren</a></li>
-<li><a href="#_e_mail_abruf_konfigurieren">E-Mail-Abruf konfigurieren</a></li>
-<li><a href="#_ftp_versand_konfigurieren">FTP-Versand konfigurieren</a></li>
-<li><a href="#_live_anzeige_konfigurieren">Live-Anzeige konfigurieren</a></li>
-<li><a href="#_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</a></li>
-<li><a href="#_osm_druck_server_konfigurieren">OSM-Druck-Server konfigurieren</a></li>
-<li><a href="#_test_anzeigen_konfigurieren">Test-Anzeigen konfigurieren</a></li>
+<li><a href="#configuration-email">E-Mail-Versand konfigurieren</a></li>
+<li><a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a></li>
+<li><a href="#configuration-ftp">FTP-Versand konfigurieren</a></li>
+<li><a href="#configuration-live">Live-Anzeige konfigurieren</a></li>
+<li><a href="#configuration-osmprint">OSM-Druck-Server konfigurieren</a></li>
+<li><a href="#configuration-test">Test-Anzeigen konfigurieren</a></li>
 </ul>
 </li>
 <li><a href="#live-scoring">Live-Ergebnisanzeige</a></li>
 <li><a href="#automatic-actions">Automatische Aktionen</a>
 <ul class="sectlevel2">
-<li><a href="#_fcautoopenpdf">FCAutoOpenPDF</a></li>
-<li><a href="#_fcautoloadscanplanningtask">FCAutoLoadScanPlanningTask</a></li>
-<li><a href="#_fcautoloadscanobservation">FCAutoLoadScanObservation</a></li>
-<li><a href="#_fcautoloadlogger">FCAutoLoadLogger</a></li>
+<li><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a></li>
+<li><a href="#automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</a></li>
+<li><a href="#automatic-actions-loadscanobservation">FCAutoLoadScanObservation</a></li>
+<li><a href="#automatic-actions-loadlogger">FCAutoLoadLogger</a></li>
 </ul>
 </li>
 <li><a href="#save-data">Datensicherung eines laufenden Wettbewerbes</a>
@@ -620,7 +619,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p>Offline-Kartenanzeige zur Beurteilung des Navigationsfluges</p>
 </li>
 <li>
-<p>Online-Kartenanzeige mit Google Maps und Open Street Map</p>
+<p>Online-Kartenanzeige mit Open Street Map</p>
 </li>
 <li>
 <p>Logger-Daten-Anzeige f&#252;r GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien</p>
@@ -1156,7 +1155,7 @@ einem Import nur noch in 'Flight Contest'.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="#route-planning-definitions">Definitionen</a><br>
-<a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r ein Wettbewerbsstrecke</a><br>
+<a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r eine Wettbewerbsstrecke</a><br>
 <a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-import">Import von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a><br>
@@ -1197,7 +1196,7 @@ Bei einer Touch&amp;Go-Zwischenlandung ist auf iTO zu verzichten.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-mandatory-details">Erforderliche Angaben f&#252;r ein Wettbewerbsstrecke</h3>
+<h3 id="route-planning-mandatory-details">Erforderliche Angaben f&#252;r eine Wettbewerbsstrecke</h3>
 <div class="paragraph">
 <p>In einer Wettbewerbs-Karte sind Startpunkt, Wendepunkte und Endpunkt
 einer Strecke sprachabh&#228;ngig mit folgenden Bezeichnungen anzugeben:</p>
@@ -1735,7 +1734,7 @@ Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Google/OSM-Karte:</p>
+<p>OSM-Online-Karte:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1843,19 +1842,32 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 im Ma&#223;stab 1:200000 mit Hilfe des Web-Dienstes <a href="http://printmaps-osm.de:8080" class="bare">http://printmaps-osm.de:8080</a> erzeugt werden.</p>
 </div>
 <div class="paragraph">
-<p>Kartendaten sind f&#252;r Europa aus folgenden Datenquellen verf&#252;gbar:</p>
+<p>Kartendaten sind f&#252;r die gesamte Erdoberfl&#228;che verf&#252;gbar.</p>
+</div>
+<div class="paragraph">
+<p>Nutzung der Karten:<br>
+Die Nutzung des Kartenmaterials erfolgt auf eigene Gefahr. Das Kartenmaterial kann Fehler enthalten oder unzureichend sein.
+Die Ersteller dieser Karten &#252;bernehmen keinerlei Gew&#228;hrleistung oder Haftung f&#252;r Sch&#228;den die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.</p>
+</div>
+<div class="paragraph">
+<p>Lizenzbedingungen des Kartendaten:<br>
+Map data &#169; OpenStreetMap contributors (ODbL).<br>
+Die dargestellten Kartenobjekte basieren auf den Daten des OpenStreetMap-Projektes.
+OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und erm&#246;glicht es, geographische Daten gemeinschaftlich von &#252;berall auf der Welt anzuschauen und zu bearbeiten.<br>
+Link: <a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a><br>
+Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
+</div>
+<div class="paragraph">
+<p>Lizenzbedingungen der H&#246;henlinien:<br>
+Contour data &#169; opensnowmap.org.<br>
+Die verwendeten H&#246;henlinien wurden durch das opensnowmap-Projekt auf Basis von 'ASTER GDEM is a product of METI and NASA',
+'SRTM 1 Arc-second Global' und 'EU-DEM: Produced using Copernicus data and information funded by the European Union' erstellt.</p>
+</div>
+<div class="paragraph">
+<p>Weitere Datenquellen:</p>
 </div>
 <div class="ulist">
 <ul>
-<li>
-<p>Open Street Map (<a href="http://www.openstreetmap.org" class="bare">http://www.openstreetmap.org</a>)</p>
-</li>
-<li>
-<p>U.S. Geological Survey (<a href="http://dds.cr.usgs.gov/srtm/version2_1/SRTM3" class="bare">http://dds.cr.usgs.gov/srtm/version2_1/SRTM3</a>)</p>
-</li>
-<li>
-<p>J. de Ferranti (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
-</li>
 <li>
 <p>Bundesamt f&#252;r Kartographie und Geod&#228;sie (BKG, <a href="http://www.geodatenzentrum.de/geodaten" class="bare">http://www.geodatenzentrum.de/geodaten</a>)</p>
 </li>
@@ -1896,12 +1908,12 @@ im Ma&#223;stab 1:200000 mit Hilfe des Web-Dienstes <a href="http://printmaps-os
 </ul>
 </div>
 <div class="paragraph">
-<p>Folgende Objekte k&#246;nnen in die Karte gezeichnet werden (Urheber):</p>
+<p>Folgende Objekte k&#246;nnen in die Karte gezeichnet werden (Datenquelle):</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>H&#246;henlinen (U.S. Geological Survey, J. de Ferranti)</p>
+<p>H&#246;henlinen (Contour data &#169; opensnowmap.org)</p>
 </li>
 <li>
 <p>Gradnetz</p>
@@ -1917,6 +1929,9 @@ im Ma&#223;stab 1:200000 mit Hilfe des Web-Dienstes <a href="http://printmaps-os
 </li>
 <li>
 <p>H&#246;henpunkte (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+</li>
+<li>
+<p>Ortsnamen (Map data &#169; OpenStreetMap contributors)</p>
 </li>
 <li>
 <p>Manuell hinzugef&#252;gte Objekte</p>
@@ -1944,6 +1959,11 @@ Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.</p>
 </div>
 <div class="paragraph">
 <p>Der Ausdruck kann im Quer- oder Hochformat in A3 oder A4 erfolgen.</p>
+</div>
+<div class="paragraph">
+<p>Mit der Option "Farbkorrekturen zur Ann&#228;herung an die T&#220;K200" kann die OSM-Darstellung
+farblich an die T&#220;K200-Darstellung angen&#228;hert werden.
+Die Erstellungszeit der Karte wird dadurch allerdings erheblich verl&#228;ngert.</p>
 </div>
 <div class="paragraph">
 <p>In den Daten vom Bundesamt f&#252;r Kartographie und Geod&#228;sie fehlende
@@ -2237,6 +2257,12 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <div class="sect1">
 <h2 id="planning-test-and-flight-preparation">Planungstest und Flugzeugvorbereitung</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p><a href="#planning-test-with-map">Planungstest mit Wettbewerbs-Karte (ohne Streckenkonstruktion)</a><br>
+<a href="#planning-test-with-flight-construction">Planungstest mit Streckenkonstruktion</a><br>
+<a href="#no-planning-test">Kein Planungstest</a><br>
+<a href="#planning-test-hints">Hinweis zur Konfiguration des Planungstests</a></p>
+</div>
 <div class="sect2">
 <h3 id="planning-test-with-map">Planungstest mit Wettbewerbs-Karte (ohne Streckenkonstruktion)</h3>
 <div class="olist arabic">
@@ -2632,8 +2658,14 @@ anklickbare Check-Boxen eingegeben.</p>
 <div class="sect1">
 <h2 id="evaluation">Auswertungen</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p><a href="#evaluation-contest">Wettbewerbs-Auswertung</a><br>
+<a href="#evaluation-class">Klassen-Auswertung</a><br>
+<a href="#evaluation-team">Team-Auswertung</a><br>
+<a href="#evaluation-special">Sonder-Auswertungen</a></p>
+</div>
 <div class="sect2">
-<h3 id="_wettbewerbs_auswertung">Wettbewerbs-Auswertung</h3>
+<h3 id="evaluation-contest">Wettbewerbs-Auswertung</h3>
 <div class="paragraph">
 <p>&#8594; Auswertung &#8594; Wettbewerbs-Auswertung</p>
 </div>
@@ -2685,7 +2717,7 @@ berechnet werden.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_klassen_auswertung">Klassen-Auswertung</h3>
+<h3 id="evaluation-class">Klassen-Auswertung</h3>
 <div class="paragraph">
 <p>&#8594; Auswertung &#8594; Klassen-Titel</p>
 </div>
@@ -2734,7 +2766,7 @@ berechnet werden.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_team_auswertung">Team-Auswertung</h3>
+<h3 id="evaluation-team">Team-Auswertung</h3>
 <div class="paragraph">
 <p>&#8594; Auswertung &#8594; Team-Auswertung</p>
 </div>
@@ -2793,7 +2825,7 @@ berechnet werden.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sonder_auswertungen">Sonder-Auswertungen</h3>
+<h3 id="evaluation-special">Sonder-Auswertungen</h3>
 <div class="paragraph">
 <p>Reichen Klassen- und Team-Zuordnungen nicht f&#252;r eine Einschr&#228;nkung der Wettbewerbs-Auswertung aus,
 k&#246;nnen mit der Besatzungs-Option "Keine Wettbewerbs-Auswertung" alle nicht zutreffenden
@@ -2806,8 +2838,20 @@ Besatzungen ausgeschlossen werden.</p>
 <div class="sect1">
 <h2 id="supported-logger">Unterst&#252;tzte Logger</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p><a href="#supported-logger-aflos">AFLOS (direkt)</a><br>
+<a href="#supported-logger-aflosreader">AFLOS (mit Reader)</a><br>
+<a href="#supported-logger-airopserver">AirObserver basierte Logger</a><br>
+<a href="#supported-logger-dg100">DG-100</a><br>
+<a href="#supported-logger-dg200">DG-200</a><br>
+<a href="#supported-logger-powerflarm">PowerFLARM</a><br>
+<a href="#supported-logger-igc">Beliebiger anderer IGC-Logger</a><br>
+<a href="#supported-logger-gpx">Beliebiger anderer GPX-Logger</a><br>
+<a href="#supported-logger-kml">Beliebiger anderer KML-Logger</a><br>
+<a href="#supported-logger-nmea">Beliebiger anderer NMEA-Logger</a></p>
+</div>
 <div class="sect2">
-<h3 id="_aflos_direkt">AFLOS (direkt)</h3>
+<h3 id="supported-logger-aflos">AFLOS (direkt)</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2831,7 +2875,7 @@ im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_aflos_mit_reader">AFLOS (mit Reader)</h3>
+<h3 id="supported-logger-aflosreader">AFLOS (mit Reader)</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2851,7 +2895,7 @@ im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_airobserver_basierte_logger">AirObserver basierte Logger</h3>
+<h3 id="supported-logger-airopserver">AirObserver basierte Logger</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2880,7 +2924,7 @@ im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_dg_100">DG-100</h3>
+<h3 id="supported-logger-dg100">DG-100</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2909,7 +2953,7 @@ Import Logger-Daten &#8594; GAC-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_dg_200">DG-200</h3>
+<h3 id="supported-logger-dg200">DG-200</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2954,7 +2998,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_powerflarm">PowerFLARM</h3>
+<h3 id="supported-logger-powerflarm">PowerFLARM</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2971,7 +3015,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_beliebiger_anderer_igc_logger">Beliebiger anderer IGC-Logger</h3>
+<h3 id="supported-logger-igc">Beliebiger anderer IGC-Logger</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2984,7 +3028,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_beliebiger_anderer_gpx_logger">Beliebiger anderer GPX-Logger</h3>
+<h3 id="supported-logger-gpx">Beliebiger anderer GPX-Logger</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -3023,7 +3067,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_beliebiger_anderer_kml_logger">Beliebiger anderer KML-Logger</h3>
+<h3 id="supported-logger-kml">Beliebiger anderer KML-Logger</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -3065,7 +3109,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_beliebiger_anderer_nmea_logger">Beliebiger anderer NMEA-Logger</h3>
+<h3 id="supported-logger-nmea">Beliebiger anderer NMEA-Logger</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -3089,6 +3133,13 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <div class="paragraph">
 <p>Erm&#246;glicht Einflu&#223; auf das Aussehen des Druckes<br>
 &#8594; Wettbewerb &#8594; Einstellungen &#8594; Druck-Stil</p>
+</div>
+<div class="paragraph">
+<p><a href="#print-styles-title">CSS-Einstellungen f&#252;r Titel</a><br>
+<a href="#print-styles-foot">CSS-Einstellungen f&#252;r Unterschrift</a><br>
+<a href="#print-styles-tables">CSS-Einstellungen f&#252;r Tabellen</a><br>
+<a href="#print-styles-special">Besondere CSS-Eigenschaften</a><br>
+<a href="#print-styles-samples">Beispiele</a></p>
 </div>
 <div class="sect2">
 <h3 id="print-styles-title">CSS-Einstellungen f&#252;r Titel</h3>
@@ -3744,8 +3795,16 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 &#196;nderung in 'C:\FCSave\.fc\config.groovy' r&#252;ckg&#228;ngig
 zu machen oder diese Datei zu l&#246;schen.</p>
 </div>
+<div class="paragraph">
+<p><a href="#configuration-email">E-Mail-Versand konfigurieren</a><br>
+<a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a><br>
+<a href="#configuration-ftp">FTP-Versand konfigurieren</a><br>
+<a href="#configuration-live">Live-Anzeige konfigurieren</a><br>
+<a href="#configuration-osmprint">OSM-Druck-Server konfigurieren</a><br>
+<a href="#configuration-test">Test-Anzeigen konfigurieren</a></p>
+</div>
 <div class="sect2">
-<h3 id="_e_mail_versand_konfigurieren">E-Mail-Versand konfigurieren</h3>
+<h3 id="configuration-email">E-Mail-Versand konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>grails {
@@ -3771,7 +3830,7 @@ flightcontest {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_e_mail_abruf_konfigurieren">E-Mail-Abruf konfigurieren</h3>
+<h3 id="configuration-viewemail">E-Mail-Anzeige konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>grails {
@@ -3787,7 +3846,7 @@ flightcontest {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_ftp_versand_konfigurieren">FTP-Versand konfigurieren</h3>
+<h3 id="configuration-ftp">FTP-Versand konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
@@ -3809,7 +3868,7 @@ flightcontest {
 <div class="ulist">
 <ul>
 <li>
-<p>GM_Utils-5.21 - GPX-Viewer-JavaScript-Bibliothek</p>
+<p>GM_Utils-6.1.3 - GPX-Viewer-JavaScript-Bibliothek</p>
 </li>
 <li>
 <p>Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis (obiges Beispiel: "demo")</p>
@@ -3822,15 +3881,6 @@ flightcontest {
 <div class="literalblock">
 <div class="content">
 <pre>C:\Program Files (x86)\Flight Contest\tomcat\webapps\fc\GM_Utils</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Passen Sie in GPX2GM_Defs.js die Variable JB.GPX2GM.GM_Api_key an und setzen Sie
-einen Goggle Maps API-Key:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>JB.GPX2GM.GM_Api_key = "API Key"</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3853,7 +3903,7 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="_live_anzeige_konfigurieren">Live-Anzeige konfigurieren</h3>
+<h3 id="configuration-live">Live-Anzeige konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
@@ -3931,24 +3981,12 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="_google_maps_anzeige_konfigurieren">Google-Maps-Anzeige konfigurieren</h3>
-<div class="literalblock">
-<div class="content">
-<pre>flightcontest {
-  maps {
-    gm_api_key = "..." // Goggle Maps API-Key
-  }
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_osm_druck_server_konfigurieren">OSM-Druck-Server konfigurieren</h3>
+<h3 id="configuration-osmprint">OSM-Druck-Server konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
   contestmap {
-    printserverapi = "http://printmaps-osm.de:8181/api/beta/maps"
+    printserverapi = "http://printmaps-osm.de:8282/api/beta2/maps"
   }
 }</pre>
 </div>
@@ -3967,7 +4005,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 </table>
 </div>
 <div class="sect2">
-<h3 id="_test_anzeigen_konfigurieren">Test-Anzeigen konfigurieren</h3>
+<h3 id="configuration-test">Test-Anzeigen konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
@@ -3982,6 +4020,9 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
   }
   contestmap {
     showoptions = true
+  }
+  clouddemo {
+    enable = true
   }
 }</pre>
 </div>
@@ -4130,8 +4171,14 @@ Der erste Aufruf des Scriptes schaltet automatische Aktion ein.<br>
 Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage aus.<br>
 &#8594; 'Programme &#8594; Flight Contest &#8594; Scripts'</p>
 </div>
+<div class="paragraph">
+<p><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a><br>
+<a href="#automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</a><br>
+<a href="#automatic-actions-loadscanobservation">FCAutoLoadScanObservation</a><br>
+<a href="#automatic-actions-loadlogger">FCAutoLoadLogger</a></p>
+</div>
 <div class="sect2">
-<h3 id="_fcautoopenpdf">FCAutoOpenPDF</h3>
+<h3 id="automatic-actions-openpdf">FCAutoOpenPDF</h3>
 <div class="paragraph">
 <p>Automatisches &#214;ffnen von PDF im Acrobat Reader.</p>
 </div>
@@ -4150,7 +4197,7 @@ Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage au
 </div>
 </div>
 <div class="sect2">
-<h3 id="_fcautoloadscanplanningtask">FCAutoLoadScanPlanningTask</h3>
+<h3 id="automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</h3>
 <div class="paragraph">
 <p>Automatisches Laden gescannter Planungstest-Formulare.</p>
 </div>
@@ -4179,7 +4226,7 @@ Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage au
 </div>
 </div>
 <div class="sect2">
-<h3 id="_fcautoloadscanobservation">FCAutoLoadScanObservation</h3>
+<h3 id="automatic-actions-loadscanobservation">FCAutoLoadScanObservation</h3>
 <div class="paragraph">
 <p>Automatisches Laden gescannter Beobachtungstest-Formulare.</p>
 </div>
@@ -4208,7 +4255,7 @@ Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage au
 </div>
 </div>
 <div class="sect2">
-<h3 id="_fcautoloadlogger">FCAutoLoadLogger</h3>
+<h3 id="automatic-actions-loadlogger">FCAutoLoadLogger</h3>
 <div class="paragraph">
 <p>Automatisches Laden eingelesener Logger-Daten.</p>
 </div>
@@ -4266,6 +4313,11 @@ Kopieren Sie deshalb das Sicherungsverzeichnis 'C:\FCSave'
 nach Abschluss eines Wettbewerbstages oder nach Erreichen eines besonders
 wichtigen Zeitpunktes Ihres Wettbewerbes auf ein externes Speichermedium,
 nachdem Sie Sicherungen wie unten beschrieben durchgef&#252;hrt haben.</p>
+</div>
+<div class="paragraph">
+<p><a href="#save-fcdb">Sicherung der 'Flight Contest'-Datenbank</a><br>
+<a href="#save-prints">Sicherung der 'Flight Contest'-Ausdrucke (Firefox)</a><br>
+<a href="#restore-fcdb">Datenwiederherstellung der 'Flight Contest'-Datenbank</a></p>
 </div>
 <div class="sect2">
 <h3 id="save-fcdb">Sicherung der 'Flight Contest'-Datenbank</h3>

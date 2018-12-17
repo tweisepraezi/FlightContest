@@ -1,3 +1,5 @@
+import org.quartz.JobKey
+
 class MainTagLib 
 {
     // --------------------------------------------------------------------------------------------------------------------
@@ -10,6 +12,9 @@ class MainTagLib
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="task" taskplanning="true" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="task" taskresults="true" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="task" contestevaluation="true" />
+    
+    def quartzScheduler
+    
 	def mainnav = { p ->
 		def c = ""
 		boolean second_nav = false
@@ -70,6 +75,15 @@ class MainTagLib
                 outln """<li class="secondary"> <a class="${active(p.controller,'flightcontest')}" href="${p.link}/../../global/livesettings?newwindow=true" target="_blank">${message(code:'fc.livesettings.short')}</a> </li>"""
             }
         }
+        //String webroot_dir = servletContext.getRealPath("/")
+        //String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+        //if (new File(printjob_filename).exists()) {
+        def job_key = new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP)
+        if (job_key) {
+            if (quartzScheduler.getTriggersOfJob(job_key)*.key) {
+                outln """<li class="secondary"><a>${message(code:'fc.contestmap.job.running.short')}</a> </li>"""
+            }
+        }
         outln """  </ul>"""
 		outln """</div>"""
 
@@ -122,6 +136,7 @@ class MainTagLib
 					outln """    <li> <a href="${p.link}/../../contest/create">${message(code:'fc.contest.new')}</a> </li>"""
                     if (BootStrap.global.liveContestID != session.lastContest.id) {
                         outln """    <li> <a href="${p.link}/../../contest/deletequestion">${message(code:'fc.contest.delete')}</a> </li>"""
+                        outln """    <li> <a href="${p.link}/../../contest/anonymizequestion">${message(code:'fc.contest.anonymize')}</a> </li>"""
                     }
 					outln """    <li> <a href="${p.link}/../../contest/copyquestion">${message(code:'fc.contest.copy')}</a> </li>"""
 					outln """    <li> <a href="${p.link}/../../contest/createtestquestion">${message(code:'fc.contest.new.test')}</a> </li>"""
@@ -241,7 +256,7 @@ class MainTagLib
             outln """    <li> <a href="${p.link}/../../gpx/selectloggerfilename">${message(code:'fc.loggerdata.show')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgacfilename">${message(code:'fc.gac.repair')}</a> </li>"""
             outln """    <li> <a href="${p.link}/../../gac/selectgpxfilename">${message(code:'fc.gac.convert.gpx')}</a> </li>"""
-            if (!Global.IsCloudFoundryEnvironment()) {
+            if (!Global.IsCloudFoundryEnvironment() && !BootStrap.global.IsCloudDemo()) {
                 outln """    <li> <a href="${p.link}/../../global/selectgeodatafilename">${message(code:'fc.contestmap.importgeodata')}</a> </li>"""
             }
 			if (Global.IsDevelopmentEnvironment()) {

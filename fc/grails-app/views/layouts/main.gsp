@@ -210,7 +210,7 @@
 	                </g:if>
 				</g:if>
 				<g:else>
-                    <g:if test="${Global.IsCloudFoundryEnvironment()}">
+                    <g:if test="${Global.IsCloudFoundryEnvironment() || BootStrap.global.IsCloudDemo()}">
                         <h1 id="brandingcf">${message(code:'fc.program.cftitle')}</h1>
                     </g:if>                 
 	                <h1 id="branding">

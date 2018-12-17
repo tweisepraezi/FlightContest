@@ -16,14 +16,16 @@ class Route
     EnrouteMeasurement enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned  // DB-2.13
     
     // transient values 
-    static transients = ['contestMapOutput','contestMapCircle','contestMapProcedureTurn','contestMapLeg','contestMapCurvedLeg','contestMapTpName',
-                         'contestMapEnroutePhotos','contestMapEnrouteCanvas','contestMapGraticule','contestMapContourLines',
+    static transients = ['contestMapOutput','contestMapPrint',
+                         'contestMapCircle','contestMapProcedureTurn','contestMapLeg','contestMapCurvedLeg','contestMapTpName',
+                         'contestMapEnroutePhotos','contestMapEnrouteCanvas','contestMapGraticule','contestMapContourLines','contestMapMunicipalityNames',
                          'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapWindpowerstations',
                          'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
-                         'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintA3',
-                         'contestMapScaleBar','contestMapNoColorChange','useProcedureTurn']
+                         'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintA3','contestMapColorChanges',
+                         'useProcedureTurn']
             
-    String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPDFMAP
+    String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP
+    String contestMapPrint = Defs.CONTESTMAPPRINT_PDFMAP
     boolean contestMapCircle = true
     boolean contestMapProcedureTurn = true
     boolean contestMapLeg = true
@@ -33,6 +35,7 @@ class Route
     boolean contestMapEnrouteCanvas = false
     boolean contestMapGraticule = true
     boolean contestMapContourLines = false
+    boolean contestMapMunicipalityNames = true
     boolean contestMapAirfields = true
     boolean contestMapChurches = true
     boolean contestMapCastles = true
@@ -47,8 +50,7 @@ class Route
     String contestMapPrintPoints = ""                                            // list of turn points for printing
     boolean contestMapPrintLandscape = true
     boolean contestMapPrintA3 = true
-    boolean contestMapScaleBar = false
-    boolean contestMapNoColorChange = false
+    boolean contestMapColorChanges = false
     Boolean useProcedureTurn = true                                              // TODO: DB-2.14
     
 	static belongsTo = [contest:Contest]
@@ -1073,6 +1075,11 @@ class Route
                 contest.save()
             }
         }
+    }
+    
+    void DisableProcedureTurn2()
+    {
+        contest.printStyle += "\nbody { --route: ${name()}; --disable-procedureturn; }"
     }
     
     boolean ShowCurvedPoints()

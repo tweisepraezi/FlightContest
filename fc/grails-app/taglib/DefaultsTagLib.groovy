@@ -8,7 +8,7 @@ class DefaultsTagLib
         outln"""<table>"""
         outln"""    <tbody>"""
         outln"""        <tr>"""
-        outln"""            <td>${message(code:attrs.i.contestRule.titleCode)}</td>"""
+        outln"""            <td>${attrs.i.contestRule.ruleValues.ruleTitle}</td>"""
         outln"""        </tr>"""
         outln"""    </tbody>"""
         outln"""</table>"""

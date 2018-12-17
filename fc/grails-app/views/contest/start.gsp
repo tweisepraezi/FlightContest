@@ -43,7 +43,7 @@
                         </tr>
                         <tr>
                             <td class="detailtitle">${message(code:'fc.contestrule')}:</td>
-                            <td>${message(code:contestInstance.contestRule.titleCode)}</td>
+                            <td>${contestInstance.contestRule.ruleValues.ruleTitle}</td>
                         </tr>
                         <tr>
                             <td class="detailtitle">${message(code:'fc.scale')}:</td>

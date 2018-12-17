@@ -1686,6 +1686,7 @@ class GpxService
                             center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
                             center_graticule_longitude: GetRoundedDecimalGrad(center_longitude),
                             contour_lines: getYesNo(contestMap.contestMapContourLines),
+                            municipality_names: getYesNo(contestMap.contestMapMunicipalityNames),
                             enroutephotos: getYesNo(contestMap.contestMapEnroutePhotos),
                             enroutecanvas: getYesNo(contestMap.contestMapEnrouteCanvas),
                             airfields: getYesNo(contestMap.contestMapAirfields),
@@ -1699,8 +1700,7 @@ class GpxService
                             airspaces: getYesNo(contestMap.contestMapAirspaces),
                             landscape: getYesNo(contestMap.contestMapPrintLandscape),
                             a3: getYesNo(contestMap.contestMapPrintA3),
-                            scale_bar: getYesNo(contestMap.contestMapScaleBar),
-                            no_color_change: getYesNo(contestMap.contestMapNoColorChange)
+                            colorchanges: getYesNo(contestMap.contestMapColorChanges)
                         )
                     }
                 }
@@ -1770,22 +1770,6 @@ class GpxService
                         last_coordroute_instance = coordroute_instance
                     } else if (!coordroute_instance.type.IsCpCheckCoord()) {
                         last_coordroute_instance = null
-                    }
-                }
-                if (contestMap.contestMapScaleBar) {
-                    Map start_coord = AviationMath.getCoordinate(center_latitude, center_longitude, 0, 10 / kmPerNM) // 5cm von Mitte nach oben
-                    start_coord = AviationMath.getCoordinate(start_coord.lat, start_coord.lon, 270, 10 / kmPerNM)    // 5cm von Mitte nach links
-                    Map end_coord = AviationMath.getCoordinate(start_coord.lat, start_coord.lon, 90, 20 / kmPerNM)   // 10cm von Strat nach rechts
-                    xml.rte {
-                        xml.name "Waag. Balken 10cm"
-                        xml.rtept(lat:start_coord.lat, lon:start_coord.lon)
-                        xml.rtept(lat:start_coord.lat, lon:end_coord.lon)
-                    }
-                    end_coord = AviationMath.getCoordinate(start_coord.lat, start_coord.lon, 180, 20 / kmPerNM)
-                    xml.rte {
-                        xml.name "Senkr. Balken 10 cm"
-                        xml.rtept(lat:start_coord.lat, lon:start_coord.lon)
-                        xml.rtept(lat:end_coord.lat, lon:start_coord.lon)
                     }
                 }
             }

@@ -53,6 +53,7 @@ class BootStrap {
         mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS)
         mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS_DONE)
         mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS_ERROR)
+        mk_root_dir(servletContext, Defs.ROOT_FOLDER_LIVE)
         
 		switch (global.dbCompatibility) {
 			case "upgrade":

@@ -18,7 +18,7 @@ class Global
     Integer liveUploadSeconds = Defs.LIVE_UPLOADSECONDS  // Live-Anzeige: Upload-Zeit in Sekunden, DB-2.11
     String liveLanguage = "de"                           // Live-Anzeige: Sprache, DB-2.11
     
-    final static String PRINTSERVER_API = "http://printmaps-osm.de:8181/api/beta/maps"
+    final static String PRINTSERVER_API = "http://printmaps-osm.de:8282/api/beta2/maps"
     
     static constraints = {
         // DB-2.11 compatibility
@@ -62,6 +62,16 @@ class Global
         if (grails.util.GrailsUtil.getEnvironment().equals("cloudfoundry")) {
             return true
         }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsCloudDemo()
+    {
+        if (grailsApplication.config.flightcontest.clouddemo
+         && grailsApplication.config.flightcontest.clouddemo.enable) {
+            return true
+        }
+        return false
     }
     
     // --------------------------------------------------------------------------------------------------------------------

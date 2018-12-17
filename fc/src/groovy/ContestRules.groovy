@@ -2,8 +2,9 @@ import java.util.List;
 
 enum ContestRules 
 {
-	R1 ('fc.contestrule.de.nav.2018',
-		[
+	R1 ([
+            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018",
+            
 			// General
 			precisionFlying:false,
             increaseFactor:0,
@@ -115,7 +116,7 @@ enum ContestRules
 			landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 4
             
             // Defaults
-            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
+            printStyle:"body { --flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody { --submission: 20; }",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.TrueFalsePhoto,          // 3.4.6
@@ -132,10 +133,11 @@ enum ContestRules
             minEnrouteTargets:10,                                // (3.4.1)
             maxEnrouteTargets:25                                 // (3.4.1)
 		]
-	), // fc.contestrule.de.nav.2018
+	), // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018"
 
-	R2 ('fc.contestrule.de.precision.2005',
-		[
+	R2 ([
+            ruleTitle:"Wettbewerbsordnung Pr\u00E4zisionsflug Deutschland - Ausgabe 2005",
+            
 			// General
 			precisionFlying:true,
             increaseFactor:0,
@@ -264,10 +266,11 @@ enum ContestRules
             minEnrouteTargets:16,
             maxEnrouteTargets:25
 		]
-	), // fc.contestrule.de.precision.2005
+	), // "Wettbewerbsordnung Pr\u00E4zisionsflug Deutschland - Ausgabe 2005"
 
-	R3 ('fc.contestrule.fai.rally.2016.unlimited',
-		[
+	R3 ([
+            ruleTitle:"FAI Air Rally Flying - Unlimited - Edition 2016",
+            
 			// General
 			precisionFlying:false,
             increaseFactor:0,
@@ -396,10 +399,11 @@ enum ContestRules
             minEnrouteTargets:15,
             maxEnrouteTargets:20
 		]
-	), // fc.contestrule.fai.rally.2016.unlimited
+	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
 
-	R4 ('fc.contestrule.fai.precision.2018',
-		[
+	R4 ([
+            ruleTitle:"FAI Precision Flying - Edition 2018",
+            
 			// General
 			precisionFlying:true,
             increaseFactor:0,
@@ -528,10 +532,11 @@ enum ContestRules
             minEnrouteTargets:16,                                 // A3.2
             maxEnrouteTargets:25                                  // A3.2
 		]
-	), // fc.contestrule.fai.precision.2018
+	), // "FAI Precision Flying - Edition 2018"
 
-	R5 ('fc.contestrule.ch.precision.2017',
-		[
+	R5 ([
+            ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017",
+            
 			// General
 			precisionFlying:true,
             increaseFactor:0,
@@ -660,10 +665,11 @@ enum ContestRules
             minEnrouteTargets:16,                                   // 4.8.1
             maxEnrouteTargets:25                                    // 4.8.1
 		]
-	), // fc.contestrule.ch.precision.2017
+	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
 
-    R6 ('fc.contestrule.fai.rally.2018',
-        [
+    R6 ([
+            ruleTitle:"FAI Air Rally Flying - Edition 2018",
+            
             // General
             precisionFlying:false,
             increaseFactor:0,
@@ -775,7 +781,7 @@ enum ContestRules
             landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
 
             // Defaults
-            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
+            printStyle:"body { --flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody { --submission: 20; }",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.None,
@@ -792,10 +798,11 @@ enum ContestRules
             minEnrouteTargets:15,
             maxEnrouteTargets:25
         ]
-    ), // fc.contestrule.fai.rally.2018
+    ), // "FAI Air Rally Flying - Edition 2018"
 
-    R7 ('fc.contestrule.at.precision.2017.landing1',
-        [
+    R7 ([
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017",
+            
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
@@ -924,10 +931,11 @@ enum ContestRules
             minEnrouteTargets:13,                                // 4.3.a
             maxEnrouteTargets:18                                 // 4.3.a
         ]
-    ), // fc.contestrule.at.precision.2017.landing1
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017"
 
-    R8 ('fc.contestrule.at.precision.2017.landing2',
-        [
+    R8 ([
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017",
+            
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
@@ -1056,10 +1064,11 @@ enum ContestRules
             minEnrouteTargets:13,                                // 4.3a
             maxEnrouteTargets:18                                 // 4.3a
         ]
-    ), // fc.contestrule.at.precision.2017.landing2
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017"
 
-    R9 ('fc.contestrule.at.precision.2017.landing3',
-        [
+    R9 ([
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2017",
+            
             // General
             precisionFlying:true,
             increaseFactor:20,                                   // 4.1
@@ -1188,10 +1197,11 @@ enum ContestRules
             minEnrouteTargets:13,                                // 4.3a
             maxEnrouteTargets:18                                 // 4.3a
         ]
-    ), // fc.contestrule.at.precision.2017.landing3
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2017"
 
-    R10 ('fc.contestrule.at.nav.2017',
-        [
+    R10 ([
+            ruleTitle:"Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2017",
+            
             // General
             precisionFlying:false,
             increaseFactor:0,
@@ -1303,7 +1313,7 @@ enum ContestRules
             landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // 5.3e
 
             // Defaults
-            printStyle:"body {--flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody {--submission: 20; }",
+            printStyle:"body { --flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }\nbody { --submission: 20; }",
             scGateWidth:1.0f,
             unsuitableStartNum:"13",
             turnpointRule:TurnpointRule.None,
@@ -1320,10 +1330,11 @@ enum ContestRules
             minEnrouteTargets:12,                                // 5.2.5d
             maxEnrouteTargets:20                                 // 5.2.5d
         ]
-    ), // fc.contestrule.at.nav.2017
+    ), // "Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2017"
 
-    R11 ('fc.contestrule.de.nav.2017',
-        [
+    R11 ([
+            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017",
+            
             // General
             precisionFlying:false,
             increaseFactor:0,
@@ -1452,16 +1463,14 @@ enum ContestRules
             minEnrouteTargets:0,
             maxEnrouteTargets:35
         ]
-    ) // fc.contestrule.de.nav.2017
+    ) // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017"
 
 
-	ContestRules(String titleCode, Map ruleValues) 
+	ContestRules(Map ruleValues) 
 	{
-		this.titleCode = titleCode
 		this.ruleValues = ruleValues
 	}
 	
-	final String titleCode
 	final Map ruleValues
     
     static List GetContestRules()

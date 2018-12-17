@@ -4,7 +4,7 @@
 .JBinfofenster strong { font-size:1.2em }
 
 .JBinfofenster_gm { }
-.JBinfofenster_gm strong{ white-space:nowrap }
+.JBinfofenster_gm strong { white-space:nowrap }
 
 .JBmaphead { margin:0;padding:0;vertical-align:middle;font-size:16px;line-height:24px;white-space:nowrap }
 .JBmaphead * { margin:0;padding:0;vertical-align:middle;  }
@@ -28,3 +28,6 @@
           z-index: 2001}
 
 .JBprofildiv  {  }
+
+div.JBcluster-icon {  }
+div.JBcluster-icon > div { display: flex; align-items: center; justify-content: center; font-weight: bold }

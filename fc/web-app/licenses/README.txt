@@ -1,5 +1,5 @@
 
-Flight Contest 3.1.1.GA
+Flight Contest 3.1.2
 Copyright 2009-2018 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://flightcontest.de

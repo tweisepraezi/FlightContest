@@ -47,7 +47,7 @@
                                 <label>${message(code:'fc.contestrule')}*:</label>
                                 <a href="../docs/help.html#supported-rules" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{message(code:it.titleCode)}}" name="contestRule" tabIndex="4"/>
+                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" tabIndex="4"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.scale')}*:</label>

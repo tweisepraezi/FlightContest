@@ -301,7 +301,7 @@ class FcService
 			if (modify_contest_rule) {
 				println "Contest rule modfified."
 				setContestRulePoints(contest_instance, contest_instance.contestRule)
-                setContestRuleDefaults(contest_instance, contest_instance.contestRule)
+                setContestRuleDefaults(contest_instance, contest_instance.contestRule, false)
                 calculate_points = true
 			}
 			
@@ -627,7 +627,7 @@ class FcService
         Contest contest_instance = new Contest(params)
         
 		setContestRulePoints(contest_instance, contest_instance.contestRule)
-        setContestRuleDefaults(contest_instance, contest_instance.contestRule)
+        setContestRuleDefaults(contest_instance, contest_instance.contestRule, true)
 		
 		contest_instance.imageBottomLeftText = getPrintMsg('fc.contest.image.bottomleft.text')
 		contest_instance.imageBottomRightText = getPrintMsg('fc.contest.image.bottomright.text')
@@ -667,7 +667,7 @@ class FcService
         Contest contest_instance = Contest.get(params.id)
         Map old_contestruledefaults_values = GetContestRuleDefaultsValues(contest_instance)
         
-        setContestRuleDefaults(contest_instance, contest_instance.contestRule)
+        setContestRuleDefaults(contest_instance, contest_instance.contestRule, false)
         if (IsContestRuleDefaultsValueModified(contest_instance,old_contestruledefaults_values)) {
             // Nothing
         }
@@ -682,7 +682,7 @@ class FcService
     //--------------------------------------------------------------------------
 	private void setContestRulePoints(toInstance, ContestRules contestRule)
 	{
-		println "setContestRulePoints '${getMsg(contestRule.titleCode)}'"
+		println "setContestRulePoints '${contestRule.ruleValues.ruleTitle}'"
 		
 		// General
 		toInstance.precisionFlying = contestRule.ruleValues.precisionFlying
@@ -795,26 +795,44 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-    private void setContestRuleDefaults(toInstance, ContestRules contestRule)
+    private void setContestRuleDefaults(Contest contestInstance, ContestRules contestRule, boolean newContest)
     {
-        println "setContestRuleDefaults '${getMsg(contestRule.titleCode)}'"
+        printstart "setContestRuleDefaults '${contestRule.ruleValues.ruleTitle}'"
         
-        toInstance.printStyle = contestRule.ruleValues.printStyle
-        toInstance.minRouteLegs = contestRule.ruleValues.minRouteLegs
-        toInstance.maxRouteLegs = contestRule.ruleValues.maxRouteLegs
-        toInstance.scGateWidth = contestRule.ruleValues.scGateWidth
-        toInstance.unsuitableStartNum = contestRule.ruleValues.unsuitableStartNum
-        toInstance.turnpointRule = contestRule.ruleValues.turnpointRule
-        toInstance.turnpointMapMeasurement = contestRule.ruleValues.turnpointMapMeasurement
-        toInstance.enroutePhotoRule = contestRule.ruleValues.enroutePhotoRule
-        toInstance.enrouteCanvasRule = contestRule.ruleValues.enrouteCanvasRule
-        toInstance.enrouteCanvasMultiple = contestRule.ruleValues.enrouteCanvasMultiple
-        toInstance.minEnroutePhotos = contestRule.ruleValues.minEnroutePhotos
-        toInstance.maxEnroutePhotos = contestRule.ruleValues.maxEnroutePhotos
-        toInstance.minEnrouteCanvas = contestRule.ruleValues.minEnrouteCanvas
-        toInstance.maxEnrouteCanvas = contestRule.ruleValues.maxEnrouteCanvas
-        toInstance.minEnrouteTargets = contestRule.ruleValues.minEnrouteTargets
-        toInstance.maxEnrouteTargets = contestRule.ruleValues.maxEnrouteTargets
+        List routes_with_disabled_procedureturns = []
+        if (!newContest) {
+            for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
+                if (!route_instance.UseProcedureTurn()) {
+                    routes_with_disabled_procedureturns += route_instance.id
+                }
+            }
+        }
+        
+        contestInstance.printStyle = contestRule.ruleValues.printStyle
+        contestInstance.minRouteLegs = contestRule.ruleValues.minRouteLegs
+        contestInstance.maxRouteLegs = contestRule.ruleValues.maxRouteLegs
+        contestInstance.scGateWidth = contestRule.ruleValues.scGateWidth
+        contestInstance.unsuitableStartNum = contestRule.ruleValues.unsuitableStartNum
+        contestInstance.turnpointRule = contestRule.ruleValues.turnpointRule
+        contestInstance.turnpointMapMeasurement = contestRule.ruleValues.turnpointMapMeasurement
+        contestInstance.enroutePhotoRule = contestRule.ruleValues.enroutePhotoRule
+        contestInstance.enrouteCanvasRule = contestRule.ruleValues.enrouteCanvasRule
+        contestInstance.enrouteCanvasMultiple = contestRule.ruleValues.enrouteCanvasMultiple
+        contestInstance.minEnroutePhotos = contestRule.ruleValues.minEnroutePhotos
+        contestInstance.maxEnroutePhotos = contestRule.ruleValues.maxEnroutePhotos
+        contestInstance.minEnrouteCanvas = contestRule.ruleValues.minEnrouteCanvas
+        contestInstance.maxEnrouteCanvas = contestRule.ruleValues.maxEnrouteCanvas
+        contestInstance.minEnrouteTargets = contestRule.ruleValues.minEnrouteTargets
+        contestInstance.maxEnrouteTargets = contestRule.ruleValues.maxEnrouteTargets
+        
+        if (!newContest) {
+            for (long route_id in routes_with_disabled_procedureturns) {
+                Route route_instance = Route.get(route_id)
+                route_instance.DisableProcedureTurn2()
+                println "Disable procedure turn of '${route_instance.name()}'"
+            }
+        }
+        printdone ""
     }
     
     //--------------------------------------------------------------------------
@@ -1156,6 +1174,42 @@ class FcService
                 printerror ""
                 return ['notdeleted':true,'message':getMsg('fc.notdeleted',[getMsg('fc.contest'),params.id])]
             }
+        } else {
+            printerror ""
+            return ['message':getMsg('fc.notfound',[getMsg('fc.contest'),params.id])]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map anonymizeContest(Map params)
+    {
+        printstart "anonymizeContest"
+        Contest contest_instance = Contest.get(params.id)
+        if (contest_instance) {
+            DecimalFormat df = new DecimalFormat("000")
+            int i = 0
+            for (Crew crew_instance in Crew.findAllByContest(contest_instance,[sort:'viewpos'])) {
+                i++
+                crew_instance.name = "Crew-${df.format(i)}"
+                crew_instance.email = ""
+                crew_instance.save()
+            }
+            i = 0
+            for (Aircraft aircraft_instance in Aircraft.findAllByContest(contest_instance,[sort:'registration'])) {
+                i++
+                aircraft_instance.registration = "Aircraft-${df.format(i)}"
+                aircraft_instance.type = ""
+                aircraft_instance.colour = ""
+                aircraft_instance.save()
+            }
+            i = 0
+            for (Team team_instance in Team.findAllByContest(contest_instance,[sort:'name'])) {
+                i++
+                team_instance.name = "Team-${df.format(i)}"
+                team_instance.save()
+            }
+            printdone ""
+            return ['anonymized':true,'message':getMsg('fc.anonymized',["${contest_instance.title}"])]
         } else {
             printerror ""
             return ['message':getMsg('fc.notfound',[getMsg('fc.contest'),params.id])]

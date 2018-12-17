@@ -405,6 +405,21 @@ class ContestController {
             redirect(action:start)
         }
     }
+    
+    def anonymizequestion = {
+        if (session?.lastContest) {
+            return [contestInstance:session.lastContest]
+        } else {
+            flash.message = contest.message
+            redirect(action:start)
+        }
+    }
+
+    def anonymize = {
+        def contest = fcService.anonymizeContest(params)
+        flash.message = contest.message
+        redirect(action:start)
+    }
 
     def change = {
 		println "change"

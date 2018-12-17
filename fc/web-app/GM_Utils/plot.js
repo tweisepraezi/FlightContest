@@ -1,5 +1,5 @@
 // plot
-// Version vom 14. 3. 2018
+// Version vom 10. 9. 2018
 // Jürgen Berkemeier
 // www.j-berkemeier.de
 
@@ -72,10 +72,10 @@ JB.plot = function(feld,xstr,ystr) {
 		// Elemente für ...
 		this.ifeld = JB.makediv(feld,"","","",feld.offsetWidth-1,feld.offsetHeight-1);
 		// ... Copyright
-		var cp = JB.makediv(this.ifeld,"",0,0,10,10);
-		cp.innerHTML = "<a href='http://www.j-berkemeier.de' title='Plot 19. 2. 2018'>X</a>";
-		cp.style.zIndex = "100";
-		cp.style.opacity = "0";
+		this.cp = JB.makediv(this.ifeld,"",0,0,10,10);
+		this.cp.innerHTML = "<a href='http://www.j-berkemeier.de' title='Plot 10. 9. 2018'>JB</a><button></button";
+		this.cp.style.zIndex = "100";
+		this.cp.style.opacity = "0";
 		// ... und Mouseover, Marker, etc.
 		this.mele = JB.makediv(this.ifeld,"",x0,0,gr.w-x0,gr.h-y0); 
 		// Achsenbeschriftungen
@@ -246,7 +246,8 @@ JB.plot = function(feld,xstr,ystr) {
 		var dieses = this;
 		var posx=0,offx;
 		this.mele.onmouseover = this.mele.ontouchstart = function(e) {
-			dieses.mele.click(); 
+			//dieses.mele.click(); 
+			dieses.cp.querySelector("button").focus();
 			if(!e) e = window.event;
 			e.cancelBubble = true;
 			if (e.stopPropagation) e.stopPropagation();

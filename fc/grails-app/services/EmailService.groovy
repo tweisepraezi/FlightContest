@@ -29,7 +29,7 @@ class EmailService
         Map kmz_converter = kmlService.ConvertRoute2KMZ(routeInstance, webroot_dir, upload_kmz_file_name, true, true) // true - Print, true - wrEnrouteSign
         Map pdf_converter = printService.ConvertRoute2PDF(routeInstance, webroot_dir + upload_pdf_file_name, false, false, GetPrintParams(routeInstance.contest, printLanguage, grailsAttributes, request)) 
         if (gpx_converter.ok && kmz_converter.ok && pdf_converter.ok) {
-            String route_name = routeInstance.printName()
+            String route_name = routeInstance.printName().replaceAll(' ','-')
             String file_name = "${route_name}.gpx"
             String route_title = routeInstance.GetEMailTitle()
             
@@ -51,7 +51,7 @@ class EmailService
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.pdf"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(gpx_converter.gpxShowPoints)}"
+                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr(gpx_converter.gpxShowPoints)}"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.htm"
                 

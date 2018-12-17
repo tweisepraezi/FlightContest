@@ -1,5 +1,5 @@
 <html>
-    <g:set var="print_subtitle" value="${message(code:resultclassInstance.contestRule.titleCode)}"/>
+    <g:set var="print_subtitle" value="${resultclassInstance.contestRule.ruleValues.ruleTitle}"/>
     <g:if test="${resultclassInstance.printPointsPrintTitle}">
         <g:set var="print_subtitle" value="${resultclassInstance.printPointsPrintTitle}"/>
     </g:if>

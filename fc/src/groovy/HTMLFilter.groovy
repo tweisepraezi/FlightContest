@@ -8,7 +8,10 @@ class HTMLFilter {
 	
     static String GetStr(String sourceStr)
     {
-        return sourceStr.replace(' ',"%20")
+        String s = sourceStr
+        s = s.replace(' ',"%20")
+        s = s.replace('+',"%2b")
+        return s
     }
     
     static String GetStr(List sourceList)
