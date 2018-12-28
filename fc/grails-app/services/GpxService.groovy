@@ -1700,7 +1700,8 @@ class GpxService
                             airspaces: getYesNo(contestMap.contestMapAirspaces),
                             landscape: getYesNo(contestMap.contestMapPrintLandscape),
                             a3: getYesNo(contestMap.contestMapPrintA3),
-                            colorchanges: getYesNo(contestMap.contestMapColorChanges)
+                            colorchanges: getYesNo(contestMap.contestMapColorChanges),
+                            otm:getYesNo(contestMap.contestMapOTM)
                         )
                     }
                 }

@@ -1,6 +1,10 @@
+import org.quartz.JobKey
+
 class OsmPrintMapJob
 {
+    def gpxService
     def osmPrintMapService
+    def quartzScheduler
     
     def group = Defs.OSMPRINTMAP_GROUP
     def description = "OsmPrintMap Trigger"
@@ -14,6 +18,13 @@ class OsmPrintMapJob
         String png_filename = context.mergedJobDataMap.get(Defs.OSMPRINTMAP_PNGFILENAME)
         boolean print_landscape = context.mergedJobDataMap.get(Defs.OSMPRINTMAP_PRINTLANDSCAPE)
         boolean print_colorchanges = context.mergedJobDataMap.get(Defs.OSMPRINTMAP_PRINTCOLORCHANGES)
-        osmPrintMapService.BackgroundJob(action_name, job_filename, job_id, jobid_filename, png_filename, print_landscape, print_colorchanges)
+        try {
+            osmPrintMapService.BackgroundJob(action_name, job_filename, job_id, jobid_filename, png_filename, print_landscape, print_colorchanges)
+        } catch (Exception e) {
+             quartzScheduler.unscheduleJobs(quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
+             if (job_filename) {
+                 gpxService.DeleteFile(job_filename)
+             }
+        }    
     }
 }

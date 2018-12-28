@@ -6,8 +6,8 @@ set scr_fc1=K:\Projects\EPJ\PJ11\_Projekt\_save\%FCSETUP_NAME%
 set scr_fc2=K:\Projects\GIT\FlightContest\readme.txt
 set scr_fc3=K:\Projects\EPJ\PJ11\_Projekt\_save\%FCWAR_NAME%
 
-if "%COMPUTERNAME%" =="TOM4" set dest_fc=D:\Data\Thomas\HiDrive\FlightContest\Flight Contest Beta
-if "%COMPUTERNAME%" =="TOM4" set dest_war=D:\Data\Thomas\HiDrive\FlightContest\Flight Contest Beta\Tomcat
+if "%COMPUTERNAME%" =="TOM4" set dest_fc=H:\Data\Thomas\HiDrive\FlightContest\Flight Contest Beta
+if "%COMPUTERNAME%" =="TOM4" set dest_war=H:\Data\Thomas\HiDrive\FlightContest\Flight Contest Beta\Tomcat
 
 if "%dest_fc%" == "" echo.
 if "%dest_fc%" == "" echo Computer %COMPUTERNAME% not supported.

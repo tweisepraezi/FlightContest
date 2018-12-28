@@ -1733,8 +1733,9 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
-    public void WritePDF(response, byte[] contentByteArray, String prefix, String suffix, boolean showSize, boolean isA3, boolean isLandscape)
+    public boolean WritePDF(response, byte[] contentByteArray, String prefix, String suffix, boolean showSize, boolean isA3, boolean isLandscape)
     {
+        boolean ok = false
         String size_str = ""
         if (showSize) {
             size_str += "-"
@@ -1750,16 +1751,19 @@ class PrintService
         String file_name = "fc-${prefix}${suffix}${size_str}.pdf"
         printstart "WritePDF '$file_name'"
         try {
+            println "${contentByteArray.length} bytes."
             response.setContentType("application/pdf")
             response.setHeader("Content-disposition", "attachment; filename=$file_name")
-            response.setContentLength(contentByteArray.length)
+            //response.setContentLength(contentByteArray.length)
             response.getOutputStream().write(contentByteArray)
+            ok = true
             printdone ""
         } catch (Throwable e) {
             printerror "Throwable ${e}"
         } catch (Exception e) {
             printerror "Exception ${e}"
         }
+        return ok
     }
     
     //--------------------------------------------------------------------------

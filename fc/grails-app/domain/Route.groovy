@@ -34,7 +34,7 @@ class Route
     boolean contestMapEnroutePhotos = false
     boolean contestMapEnrouteCanvas = false
     boolean contestMapGraticule = true
-    boolean contestMapContourLines = false
+    boolean contestMapContourLines = true
     boolean contestMapMunicipalityNames = true
     boolean contestMapAirfields = true
     boolean contestMapChurches = true

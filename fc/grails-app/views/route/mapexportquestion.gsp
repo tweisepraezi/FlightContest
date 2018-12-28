@@ -58,12 +58,12 @@
 	                                </div>
 	                            </g:if>
 	                        </fieldset>
-	                        <g:set var="geodata_airfields" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRFIELDS).exists()}"/>
-	                        <g:set var="geodata_churches" value="${new File(Defs.FCSAVE_FILE_GEODATA_CHURCHES).exists()}"/>
-	                        <g:set var="geodata_castles" value="${new File(Defs.FCSAVE_FILE_GEODATA_CASTLES).exists()}"/>
-	                        <g:set var="geodata_chateaus" value="${new File(Defs.FCSAVE_FILE_GEODATA_CHATEAUS).exists()}"/>
-	                        <g:set var="geodata_windpowerstations" value="${new File(Defs.FCSAVE_FILE_GEODATA_WINDPOWERSTATIONS).exists()}"/>
-	                        <g:set var="geodata_peaks" value="${new File(Defs.FCSAVE_FILE_GEODATA_PEAKS).exists()}"/>
+	                        <g:set var="geodata_airfields" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_AIRFIELDS).exists()}"/>
+	                        <g:set var="geodata_churches" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_CHURCHES).exists()}"/>
+	                        <g:set var="geodata_castles" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_CASTLES).exists()}"/>
+	                        <g:set var="geodata_chateaus" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_CHATEAUS).exists()}"/>
+	                        <g:set var="geodata_windpowerstations" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_WINDPOWERSTATIONS).exists()}"/>
+	                        <g:set var="geodata_peaks" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_PEAKS).exists()}"/>
 	                        <g:set var="geodata_additionals" value="${new File(Defs.FCSAVE_FILE_GEODATA_ADDITIONALS).exists()}"/>
 	                        <g:set var="geodata_special" value="${new File(Defs.FCSAVE_FILE_GEODATA_SPECIALS).exists()}"/>
 	                        <g:set var="geodata_airspace" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRSPACES).exists()}"/>
@@ -114,10 +114,12 @@
 	                                       <img src="${createLinkTo(dir:'images/map',file:'peak.png')}"/>
 	                                   </div>
 	                               </g:if>
-                                   <div>
-                                       <g:checkBox name="contestMapMunicipalityNames" value="${routeInstance.contestMapMunicipalityNames}" tabIndex="${ti[0]++}" />
-                                       <label>${message(code:'fc.contestmap.contestmapmunicipalitynames')}</label>
-                                   </div>
+	                               <g:if test="${PrintMapsOSM}">
+	                                   <div>
+	                                       <g:checkBox name="contestMapMunicipalityNames" value="${routeInstance.contestMapMunicipalityNames}" tabIndex="${ti[0]++}" />
+	                                       <label>${message(code:'fc.contestmap.contestmapmunicipalitynames')}</label>
+	                                   </div>
+	                               </g:if>
 	                               <div>
 	                                   <g:checkBox name="contestMapContourLines" value="${routeInstance.contestMapContourLines}" tabIndex="${ti[0]++}" />
 	                                   <label>${message(code:'fc.contestmap.contestmapcontourlines')}</label>
@@ -166,10 +168,12 @@
 	                                <g:checkBox name="contestMapPrintA3" value="${routeInstance.contestMapPrintA3}" />
 	                                <label>${message(code:'fc.printa3')}</label>
 	                            </div>
-                                <div>
-                                    <g:checkBox name="contestMapColorChanges" value="${routeInstance.contestMapColorChanges}" />
-                                    <label>${message(code:'fc.contestmap.contestmapcolorchanges')}</label>
-                                </div>
+	                            <g:if test="${PrintMapsOSM}">
+	                                <div>
+	                                    <g:checkBox name="contestMapColorChanges" value="${routeInstance.contestMapColorChanges}" />
+	                                    <label>${message(code:'fc.contestmap.contestmapcolorchanges')}</label>
+	                                </div>
+	                            </g:if>
 	                        </fieldset>
 	                        <g:if test="${BootStrap.global.IsContestMapWriteOptions()}">
 		                        <fieldset>

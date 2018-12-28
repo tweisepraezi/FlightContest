@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-17.12.2018
+28.12.2018
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -59,8 +59,12 @@ Weitere nützliche Funktionen von Flight Contest:
   Rangliste während eines laufenden Debriefings.
 
 
-Erweiterungen in dieser Version (3.1.2):
-----------------------------------------
+Erweiterungen in dieser Version (3.1.2.1):
+------------------------------------------
+- OSM-Wettbewerbs-Karte um OpenTopoMap-Darstellung erweitert
+
+Erweiterungen in Version 3.1.2:
+-------------------------------
 - OSM-Wettbewerbs-Karte
     * PDF-Karten-Erzeugung im Hintergrund, so dass dabei weitergearbeitet werden kann
     * Neue Option "Ortsnamen"

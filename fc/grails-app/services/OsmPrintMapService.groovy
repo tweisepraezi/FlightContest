@@ -200,6 +200,7 @@ class OsmPrintMapService
             print_options.printLandscape = m.'@landscape'[0] == "yes"
             print_options.printA3 = m.'@a3'[0] == "yes"
             print_options.printColorChanges = m.'@colorchanges'[0] == "yes"
+            print_options.printOTM = m.'@otm'[0] == "yes"
             println "Options: ${print_options}"
             ret.ok = true
         } catch (Exception e) {
@@ -286,8 +287,12 @@ class OsmPrintMapService
         
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
         String copyright_date = GeoDataService.ReadTxtFile(Defs.FCSAVE_FILE_GEODATA_DATE)
-        if (printOptions.printAirfields || printOptions.printChurches || printOptions.printCastles || printOptions.printChateaus || printOptions.printWindpowerstations || printOptions.printPeaks || printOptions.printSpecials) {
+        if (printOptions.printAirfields || printOptions.printChurches || printOptions.printCastles || printOptions.printChateaus || printOptions.printWindpowerstations || printOptions.printPeaks) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.bkg',[copyright_date],true)}"
+        }
+        if (printOptions.printOTM) {
+            copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
+            copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
         }
         String user_text = """{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${FRAME_STROKE_WIDTH}' stroke-linecap='butt' />",
