@@ -97,6 +97,38 @@ JB.Icons = function(baseurl) {
 
 	//this.myicon       = { icon:   { anchor: {x:15,y:36}, url: baseurl+"Icons/myicon.png" },
 	//                    shadow: { anchor: {x:10,y:31}, url: baseurl+"Icons/shadow.png" } };
+	this.fcphoto        = { icon:   { anchor: {x:18,y:20}, url: baseurl+"Icons/fcphoto.png" },
+            shadow: { anchor: {x:13,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s01            = { icon:   { anchor: {x:14,y:20}, url: baseurl+"Icons/s01.png" },
+	            shadow: { anchor: {x:9,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s02            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s02.png" },
+	            shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s03            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s03.png" },
+	            shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s04            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s04.png" },
+	            shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s05            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s05.png" },
+	            shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s06            = { icon:   { anchor: {x:8,y:20}, url: baseurl+"Icons/s06.png" },
+	            shadow: { anchor: {x:3,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s07            = { icon:   { anchor: {x:9,y:20}, url: baseurl+"Icons/s07.png" },
+	            shadow: { anchor: {x:4,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s08            = { icon:   { anchor: {x:7,y:20}, url: baseurl+"Icons/s08.png" },
+	            shadow: { anchor: {x:2,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s09            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s09.png" },
+	            shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s10            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s10.png" },
+	            shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s11            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s11.png" },
+	            shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s12            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s12.png" },
+	            shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s13            = { icon:   { anchor: {x:11,y:20}, url: baseurl+"Icons/s13.png" },
+	            shadow: { anchor: {x:6,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s14            = { icon:   { anchor: {x:10,y:20}, url: baseurl+"Icons/s14.png" },
+	            shadow: { anchor: {x:5,y:15}, url: baseurl+"Icons/shadow.png" } };
+	this.s15            = { icon:   { anchor: {x:9,y:20}, url: baseurl+"Icons/s15.png" },
+	            shadow: { anchor: {x:4,y:15}, url: baseurl+"Icons/shadow.png" } };
 	// Most Icons from https://mapicons.mapsmarker.com/
 } ;   
 

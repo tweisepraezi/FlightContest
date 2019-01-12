@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.2, Ausgabe 1,</span>
-<span id="revdate">14.12.2018</span>
+<span id="revnumber">version 3.1.3, Ausgabe 1,</span>
+<span id="revdate">12.01.2019</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -448,7 +448,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
 </ul>
 </li>
-<li><a href="#osm-contest-map">OSM-Wettbewerbs-Karte</a></li>
+<li><a href="#osm-contest-map">OSM-Wettbewerbs-Karte</a>
+<ul class="sectlevel2">
+<li><a href="#osm-contest-map-printmaps">Web-Dienst Printmaps</a></li>
+<li><a href="#osm-contest-map-printserver">Eigener Druckserver</a></li>
+<li><a href="#osm-contest-map-additional-datasources">Weitere Datenquellen</a></li>
+<li><a href="#osm-contest-map-configuration">Konfigurationsdetails</a></li>
+</ul>
+</li>
 <li><a href="#flight-time-calculation">Flugzeit-Berechnung f&#252;r Starts und Landungen</a></li>
 <li><a href="#planning-test-and-flight-preparation">Planungstest und Flugzeugvorbereitung</a>
 <ul class="sectlevel2">
@@ -1839,15 +1846,14 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Mit 'Strecken &#8594; Strecke &#8594; OSM-Wettbewerbs-Karte' kann eine PDF-Wettbewerbskarte
-im Ma&#223;stab 1:200000 mit Hilfe des Web-Dienstes <a href="http://printmaps-osm.de:8080" class="bare">http://printmaps-osm.de:8080</a> erzeugt werden.</p>
-</div>
-<div class="paragraph">
-<p>Kartendaten sind f&#252;r die gesamte Erdoberfl&#228;che verf&#252;gbar.</p>
+im Ma&#223;stab 1:200000 mit Hilfe des Web-Dienstes Printmaps oder einem eigenen Druckserver erzeugt werden.
+Der Web-Dienst Printmaps erzeugt Karten im OSM-Carto-Stil.
+Der eigene Druckserver erzeugt Karten im OpenTopoMap-Stil.</p>
 </div>
 <div class="paragraph">
 <p>Nutzung der Karten:<br>
 Die Nutzung des Kartenmaterials erfolgt auf eigene Gefahr. Das Kartenmaterial kann Fehler enthalten oder unzureichend sein.
-Die Ersteller dieser Karten &#252;bernehmen keinerlei Gew&#228;hrleistung oder Haftung f&#252;r Sch&#228;den die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.</p>
+Die Ersteller dieser Karten &#252;bernehmen keinerlei Gew&#228;hrleistung oder Haftung f&#252;r Sch&#228;den, die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.</p>
 </div>
 <div class="paragraph">
 <p>Lizenzbedingungen des Kartendaten:<br>
@@ -1857,20 +1863,33 @@ OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und erm&#246;g
 Link: <a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a><br>
 Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
 </div>
+<div class="sect2">
+<h3 id="osm-contest-map-printmaps">Web-Dienst Printmaps</h3>
 <div class="paragraph">
-<p>Lizenzbedingungen der H&#246;henlinien:<br>
-Contour data &#169; opensnowmap.org.<br>
-Die verwendeten H&#246;henlinien wurden durch das opensnowmap-Projekt auf Basis von 'ASTER GDEM is a product of METI and NASA',
-'SRTM 1 Arc-second Global' und 'EU-DEM: Produced using Copernicus data and information funded by the European Union' erstellt.</p>
+<p>Homepage des Dienstes:
+<a href="http://printmaps-osm.de:8080" class="bare">http://printmaps-osm.de:8080</a></p>
 </div>
 <div class="paragraph">
-<p>Weitere Datenquellen:</p>
+<p>Kartendaten sind f&#252;r die gesamte Erdoberfl&#228;che verf&#252;gbar.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-printserver">Eigener Druckserver</h3>
+<div class="paragraph">
+<p>Installation:
+<a href="help_fcmaps.html" target="_blank">Flight Contest maps server</a></p>
+</div>
+<div class="paragraph">
+<p>Kartendaten sind nur f&#252;r installierte L&#228;nder verf&#252;gbar.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-additional-datasources">Weitere Datenquellen</h3>
+<div class="paragraph">
+<p>Luftr&#228;ume:</p>
 </div>
 <div class="ulist">
 <ul>
-<li>
-<p>Bundesamt f&#252;r Kartographie und Geod&#228;sie (BKG, <a href="http://www.geodatenzentrum.de/geodaten" class="bare">http://www.geodatenzentrum.de/geodaten</a>)</p>
-</li>
 <li>
 <p>DAeC (<a href="https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten" class="bare">https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten</a>)</p>
 </li>
@@ -1879,6 +1898,42 @@ Die verwendeten H&#246;henlinien wurden durch das opensnowmap-Projekt auf Basis 
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>Fluppl&#228;tze, Kirchen, Burgen, Schl&#246;sser, Windkraftanlagen und H&#246;henpunkte:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Bundesamt f&#252;r Kartographie und Geod&#228;sie (BKG, <a href="http://www.geodatenzentrum.de/geodaten" class="bare">http://www.geodatenzentrum.de/geodaten</a>)</p>
+</li>
+<li>
+<p>Map data &#169; OpenStreetMap contributors</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>H&#246;henlinien bei Printmaps-Nutzung:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Contour data &#169; opensnowmap.org</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>H&#246;henlinien und Oberfl&#228;chenkonturen bei einem eigenen Druckserver:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Viewfinder Panoramas (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-configuration">Konfigurationsdetails</h3>
 <div class="paragraph">
 <p>Folgende Streckendetails k&#246;nnen in die Karte gezeichnet werden:</p>
 </div>
@@ -1908,36 +1963,36 @@ Die verwendeten H&#246;henlinien wurden durch das opensnowmap-Projekt auf Basis 
 </ul>
 </div>
 <div class="paragraph">
-<p>Folgende Objekte k&#246;nnen in die Karte gezeichnet werden (Datenquelle):</p>
+<p>Folgende Objekte k&#246;nnen in die Karte gezeichnet werden:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>H&#246;henlinen (Contour data &#169; opensnowmap.org)</p>
+<p>H&#246;henlinen</p>
 </li>
 <li>
 <p>Gradnetz</p>
 </li>
 <li>
-<p>Fluppl&#228;tze (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+<p>Fluppl&#228;tze</p>
 </li>
 <li>
-<p>Kirchen, Burgen und Schl&#246;sser (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+<p>Kirchen, Burgen und Schl&#246;sser</p>
 </li>
 <li>
-<p>Windkraftanlagen (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+<p>Windkraftanlagen</p>
 </li>
 <li>
-<p>H&#246;henpunkte (Bundesamt f&#252;r Kartographie und Geod&#228;sie)</p>
+<p>H&#246;henpunkte</p>
 </li>
 <li>
-<p>Ortsnamen (Map data &#169; OpenStreetMap contributors)</p>
+<p>Ortsnamen</p>
 </li>
 <li>
 <p>Manuell hinzugef&#252;gte Objekte</p>
 </li>
 <li>
-<p>Luftr&#228;ume (DAeC &amp; Skyfool.de)</p>
+<p>Luftr&#228;ume</p>
 </li>
 </ul>
 </div>
@@ -1946,7 +2001,7 @@ Die verwendeten H&#246;henlinien wurden durch das opensnowmap-Projekt auf Basis 
 Dazu alle Dateien von <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> in den Ordner <strong>C:\FCSave\.geodata</strong> kopieren.</p>
 </div>
 <div class="paragraph">
-<p>Alle genannten Streckendetails und Objekte k&#246;nnen abgew&#228;hlt werden.</p>
+<p>Alle genannten Streckendetails und Objekte k&#246;nnen i.d.R. abgew&#228;hlt werden.</p>
 </div>
 <div class="paragraph">
 <p>Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
@@ -1962,12 +2017,11 @@ Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.</p>
 </div>
 <div class="paragraph">
 <p>Mit der Option "Farbkorrekturen zur Ann&#228;herung an die T&#220;K200" kann die OSM-Darstellung
-farblich an die T&#220;K200-Darstellung angen&#228;hert werden.
+bei Printmaps-Nutzung farblich an die T&#220;K200-Darstellung angen&#228;hert werden.
 Die Erstellungszeit der Karte wird dadurch allerdings erheblich verl&#228;ngert.</p>
 </div>
 <div class="paragraph">
-<p>In den Daten vom Bundesamt f&#252;r Kartographie und Geod&#228;sie fehlende
-Fluppl&#228;tze, Kirchen, Burgen, Schl&#246;sser, Windkraftanlagen und H&#246;henpunkte
+<p>Fehlende Fluppl&#228;tze, Kirchen, Burgen, Schl&#246;sser, Windkraftanlagen und H&#246;henpunkte
 k&#246;nnen in der Datei <strong>C:\FCSave\.geodata\additionals.csv</strong> zum Druck hinzugef&#252;gt werden:</p>
 </div>
 <div class="literalblock">
@@ -2032,6 +2086,7 @@ zum Druck hinzugef&#252;gt werden:</p>
 Fehlerhafte Namen verhindern die Kartenerzeugung.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">

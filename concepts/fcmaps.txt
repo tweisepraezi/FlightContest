@@ -1,0 +1,72 @@
+
+Source
+https://github.com/der-stefan/OpenTopoMap/tree/master/mapnik
+
+fcmaps/otm directory structure 		(source)
+===================================================================
+mapnik/osm2pgsql					(mapnik/osm2pgsql)
+mapnik/symbols-otm					(mapnik/symbols-otm)
+mapnik/tools						(mapnik/tools)
+inc									(mapnik/inc)
+styles-otm							(mapnik/styles-otm)
+mapnik/relief_color_text_file.txt	(mapnik/relief_color_text_file.txt)
+mapnik/opentopomap.xml  			(mapnik/opentopomap.xml)
+mapnik/opentopomap-ele.xml			(mapnik/opentopomap.xml)
+
+modifications
+=============
+
+mapnik/opentopomap.xml
+----------------------
+
+reconfigure Datasource contours to
+ <Datasource>
+	<Parameter name="table">(SELECT way,ele FROM planet_osm_line) AS contours </Parameter>
+	<Parameter name="dbname">contours</Parameter>
+	&postgis-settings;
+ </Datasource>
+
+reconfigure villages and peaks without text:
+ Layer "symbols-peaks": disable style name "text-peaks"
+ Layer "text-cities": disable style name "text-villages" 
+
+show only country borders
+ Layer "borders": add to query: 'AND admin_level IN ('0', '1', '2', '3')'
+
+styles-otm/symbols-1.xml
+------------------------
+show churches & castles for 1:200000
+
+change all maxscales to maxscale_zoom11
+disable all TextSymbolizer
+
+
+inc/fontset-settings.xml.inc
+----------------------------
+
+make Noto Fonts available 
+add lines
+
+<FontSet name="fontset-0">
+  <Font face-name="Noto Sans Regular" />
+  <Font face-name="Unifont Medium" />
+</FontSet>
+<FontSet name="fontset-2">
+  <Font face-name="Noto Sans Bold" />
+  <Font face-name="Unifont Medium" />
+</FontSet>
+
+
+mapnik/tools/update_saddles.sh
+mapnik/tools/update_isolations.sh
+---------------------------------
+
+change 
+	cd ~/OpenTopoMap/ 
+to 
+	cd ~/fcmaps/otm/
+	
+change 
+	demfile='mapnik/dem/dem-srtm.tiff' 
+to 
+	demfile='mapnik/dem/raw.tif'

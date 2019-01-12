@@ -1,0 +1,433 @@
+﻿= Flight Contest maps server
+Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+:revnumber: 3.1.3, Ausgabe 1
+:revdate:   12.01.2019
+:nofooter:
+:toc-title: Table of content
+:toc:
+:lang: en
+
+[[introduction]]
+== Introduction
+
+Setting up a Flight Contest maps server.
+
+Descriptions and tools based on following projects
+
+* OpenTopoMap (https://github.com/der-stefan/OpenTopoMap) 
+* Printmaps (http://printmaps-osm.de:8080, https://github.com/printmaps/printmaps)
+
+[[server-requirements]]
+== Virtual server requirements
+* RAM: 32GB (not dynamic)
+* SSD: 1024GB
+* CPU: 16
+* OS: Ubuntu 18.04 LTS 64bit
+
+such as: Strato V-Server Linux V80
+
+[[software-installation]]
+== Software installation
+
+SSH login with user *root*
+
+ ssh -l root <server-dns-name>
+
+If first login, change password with ```passwd```
+
+
+=== Install Ubuntu updates
+
+ apt update
+ apt upgrade
+ 
+If something has been installed run
+
+ sync;sync;shutdown -r now
+
+=== Install tools, libraries and fonts
+
+ apt-get install nano git-core cmake
+ apt-get install zip unzip tar wget bzip2 
+ apt-get install libboost-all-dev build-essential autoconf libtool
+ apt-get install libosmium2-dev libprotozero-dev rapidjson-dev libboost-program-options-dev 
+ apt-get install zlib1g-dev libexpat1-dev pandoc
+ apt-get install libxml2-dev libgeos-dev libgeos++-dev libpq-dev libbz2-dev libproj-dev
+ apt-get install munin-node munin libprotobuf-c0-dev protobuf-c-compiler libfreetype6-dev
+ apt-get install libtiff5-dev libicu-dev libgdal-dev libcairo-dev libcairomm-1.0-dev libagg-dev
+ apt-get install devscripts libjson-perl libipc-sharelite-perl libgd-perl debhelper
+ apt-get install liblua5.2-dev lua5.1 liblua5.1-dev lua5.3 liblua5.3-dev
+ apt-get install ttf-unifont fonts-noto
+ 
+ === Install *Postgres* database server
+
+ apt-get install postgresql postgresql-contrib postgis
+ 
+ nano /etc/postgresql/10/main/postgresql.conf
+
+In nano you can search with ```Ctrl-w```. +
+Check or edit the following values
+
+ shared_buffers = 128MB
+ work_mem = 256MB			
+ maintenance_work_mem = 256MB
+ autovacuum = off
+
+Save with ```Ctrl-x``` then ```y``` then ```Enter```
+
+ nano /etc/sysctl.conf
+
+At the top, after the other kernel-definitions, insert the following and save it
+
+ kernel.shmmax=268435456
+
+Restart server
+
+ sync;sync;shutdown -r now
+ 
+Check successfully restart
+
+ who -b
+ 
+=== Install *Mapnik* renderer
+
+ apt-get install libmapnik3.0 libmapnik-dev mapnik-utils python-mapnik unifont
+
+=== Compile and install *osm2pgsql*
+
+ mkdir ~/src
+ cd ~/src
+ git clone git://github.com/openstreetmap/osm2pgsql.git
+ 
+ cd osm2pgsql
+ mkdir build && cd build
+ cmake ..
+ make
+ make install
+
+=== Install *Osmium*
+
+ apt-get install osmium-tool
+ 
+=== Configure *Python 3* as default
+
+ nano ~/.bashrc
+
+Insert the following at the bottom and save it
+
+ alias python=python3
+
+Then
+
+ source ~/.bashrc
+
+Check Python version with
+
+ python --version
+
+=== Install *phyghtmap*
+
+ apt-get install python3-setuptools python3-matplotlib python3-bs4 python3-numpy python3-gdal
+ 
+ cd ~/src
+ wget http://katze.tfiu.de/projects/phyghtmap/phyghtmap_2.10.orig.tar.gz
+ tar -xvzf phyghtmap_2.10.orig.tar.gz
+ cd phyghtmap-2.10
+ python3 setup.py install
+
+=== Install *gdal*
+
+ apt-get install gdal-bin python-gdal
+
+=== Configure users and roles
+
+Create user *gis* with group *gis* and directory */home/gis*.
+
+ adduser gis
+
+Add role *gis* to Postgres database server
+
+ sudo -u postgres -i
+ createuser --createdb gis -s
+ exit
+
+[[create-data]]
+== Create data
+
+SSH login with user *gis*
+
+ ssh -l gis <server-dns-name>
+
+=== Create database *gis*
+
+ createdb gis
+ psql -d gis -c 'CREATE EXTENSION postgis;'
+
+=== Create database *contours*
+ 
+ createdb contours
+ psql -d contours -c 'CREATE EXTENSION postgis;'
+
+=== Download Flight Contest maps server
+ 
+ cd ~
+ wget http://download.flightcontest.de/fcmaps.zip
+ unzip fcmaps.zip
+
+=== Download generalized water polygons
+
+ cd ~/fcmaps/otm/mapnik
+ mkdir data && cd data
+ wget http://data.openstreetmapdata.com/water-polygons-generalized-3857.zip
+ wget http://data.openstreetmapdata.com/water-polygons-split-3857.zip
+ unzip water-polygons-generalized-3857.zip
+ unzip water-polygons-split-3857.zip
+
+=== Hillshade and contours
+
+Download all necessary SRTM tiles, see http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm
+
+ mkdir ~/srtm
+ cd ~/srtm
+ nano list.txt
+
+Insert the following (for Germany, Austria, Switzerland)
+
+ http://viewfinderpanoramas.org/dem3/N31.zip
+ http://viewfinderpanoramas.org/dem3/N32.zip
+ http://viewfinderpanoramas.org/dem3/N33.zip
+ http://viewfinderpanoramas.org/dem3/N34.zip
+ http://viewfinderpanoramas.org/dem3/M31.zip
+ http://viewfinderpanoramas.org/dem3/M32.zip
+ http://viewfinderpanoramas.org/dem3/M33.zip
+ http://viewfinderpanoramas.org/dem3/M34.zip
+ http://viewfinderpanoramas.org/dem3/L31.zip
+ http://viewfinderpanoramas.org/dem3/L32.zip
+ http://viewfinderpanoramas.org/dem3/L33.zip
+ http://viewfinderpanoramas.org/dem3/L34.zip
+
+Save it and continue with
+
+ wget -i list.txt
+
+Unpack all zip files
+
+ for zipfile in *.zip;do unzip -j -o "$zipfile" -d unpacked; done
+
+Fill all voids
+
+ cd unpacked
+ for hgtfile in *.hgt;do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
+
+Merge all .tifs into one huge tif. This file is the raw DEM with full resolution and the start for any further steps. Don't delete raw.tif after these steps, you may use it for estimation of saddle directions.
+
+ mkdir ~/data
+ 
+ gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o ../../data/raw.tif *.hgt.tif
+
+Convert the raw file into Mercator projection, interpolate and shrink
+
+ cd ~/data
+ 
+ gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 1000 1000 raw.tif warp-1000.tif
+ 
+ gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 5000 5000 raw.tif warp-5000.tif
+ 
+ gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 500 500 raw.tif warp-500.tif
+ 
+ gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 700 700 raw.tif warp-700.tif
+ 
+ gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 raw.tif warp-90.tif
+
+Create color relief for different zoom level
+
+ cd ~/data
+ 
+ gdaldem color-relief -co COMPRESS=LZW -co PREDICTOR=2 -alpha warp-5000.tif ~/fcmaps/otm/mapnik/relief_color_text_file.txt relief-5000.tif
+ 
+ gdaldem color-relief -co COMPRESS=LZW -co PREDICTOR=2 -alpha warp-500.tif ~/fcmaps/otm/mapnik/relief_color_text_file.txt relief-500.tif
+
+Create hillshade for different zoom levels
+
+ gdaldem hillshade -z 7 -compute_edges -co COMPRESS=JPEG warp-5000.tif hillshade-5000.tif
+ 
+ gdaldem hillshade -z 7 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-1000.tif hillshade-1000.tif
+ 
+ gdaldem hillshade -z 4 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-700.tif hillshade-700.tif
+ 
+ gdaldem hillshade -z 5 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-500.tif hillshade-500.tif
+ 
+ gdaldem hillshade -z 2 -co compress=lzw -co predictor=2 -co bigtiff=yes -compute_edges warp-90.tif hillshade-90.tif && gdal_translate -co compress=JPEG -co bigtiff=yes -co tiled=yes hillshade-90.tif hillshade-90-jpeg.tif
+ 
+ gdaldem hillshade -z 5 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-90.tif hillshade-30m-jpeg.tif
+ 
+Create contour lines (Lon 0°...24° E, Lat 44°...56° N)
+
+ screen
+ phyghtmap --max-nodes-per-tile=0 -s 10 -0 --pbf warp-90.tif
+
+You may close SSH console. After new SSH login continue with
+
+ screen -r
+
+Wait... (4h)
+
+Close ```screen``` with 
+
+ exit
+ 
+Rename generated pdf file
+
+ mv lon-*.osm.pbf contours.pbf
+
+Load contour data into database
+
+ screen 
+ 
+ osm2pgsql --slim -d contours -C 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/contours.style ~/data/contours.pbf
+
+Wait... (80min)
+
+ exit
+ 
+Create symbolic link to data
+
+ mkdir ~/fcmaps/otm/mapnik/dem
+ cd ~/fcmaps/otm/mapnik/dem
+ ln -s ~/data/*.tif .
+
+=== OSM data
+
+Download data for necessary countries (Germany, Austria, Switzerland)
+
+ cd ~/data
+ wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
+ wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
+ wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
+ mkdir ~/data/updates
+ cd ~/data/updates
+ wget http://download.geofabrik.de/europe-updates/state.txt
+
+Merge data to one file
+
+ cd ~/data
+ osmium merge germany-latest.osm.pbf austria-latest.osm.pbf switzerland-latest.osm.pbf -o all.osm.pbf
+ 
+Load into database
+
+ cd ~
+ screen
+ 
+ osm2pgsql --slim -d gis -C 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/all.osm.pbf
+ 
+Wait... (4GB, 12h)
+
+ exit
+
+Compile preprocessing tools (warnings can be ignored)
+
+ cd ~/fcmaps/otm/mapnik/tools/
+ cc -o saddledirection saddledirection.c -lm -lgdal
+ cc -Wall -o isolation isolation.c -lgdal -lm -O2
+ ls -l
+ 
+Preprocessing
+
+ screen
+ cd ~/fcmaps/otm/mapnik/tools/
+ psql gis < arealabel.sql
+ bash update_lowzoom.sh
+ 
+Wait... (1h)
+
+ bash update_saddles.sh
+
+Wait... (10min)
+
+ bash update_isolations.sh
+
+Wait... (5min)
+
+ psql gis < stationdirection.sql
+
+Wait... (5min)
+
+ psql gis < viewpointdirection.sql
+ psql gis < pitchicon.sql
+ exit
+ 
+Find out database size
+
+ psql -d gis -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
+
+gis: 84GB, contours: 54GB, lowzoom: 500MB (Germany, Austria, Switzerland)
+ 
+Display free disk space
+ 
+ df
+ 
+162GB used, 843GB free
+
+SSH login with user *root*
+
+ ssh -l root <server-dns-name>
+
+Restart server
+
+ sync;sync;shutdown -r now
+ 
+Check successfully restart
+
+ who -b
+ 
+[[run-services]]
+== Run services
+
+SSH login with user *gis*
+
+Configure services as executable
+
+ cd ~/fcmaps
+ chmod +x printmaps_buildservice
+ chmod +x printmaps_webservice
+
+Start build service manually
+ 
+ nohup ./printmaps_buildservice 1>./logs/printmaps_buildservice.out 2>&1 &
+
+Start web service manually
+
+ nohup ./printmaps_webservice 1>./logs/printmaps_webservice.out 2>&1 &
+
+Test web service
+
+ http://<server-dns-name>:8181/api/beta2/maps/capabilities/service
+ 
+Search running service processes
+
+ ps -Af | grep "printmaps_"
+ 
+Terminate running service processes
+
+ kill <pid>
+ 
+Show log files
+
+ cat ./logs/printmaps_buildservice.log
+ cat ./logs/printmaps_webservice.log
+
+ 
+[[fc-configuration]]
+== Configure Flight Contest
+
+Add ```printserverapi``` in ```-> Extras -> Settings -> Config```
+
+ flightcontest {
+   contestmap {
+     printserverapi = "http://<server-dns-name>:8181/api/beta2/maps"
+   }
+ }
+
+and restart Flight Contest.
+
+Test map generation with ```-> Routes -> <Route> -> OSM Contest Map```.

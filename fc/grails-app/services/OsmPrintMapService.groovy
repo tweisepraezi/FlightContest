@@ -51,10 +51,16 @@ class OsmPrintMapService
     
     final static String STYLE_STANDARD = "osm-carto"
     final static String STYLE_CONTOURLINES = "osm-carto-ele20"
-    final static String STYLE_PROJECTION = "3857" // EPSG-Nummer, WGS 84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz 
-    final static String STYLE_HIDELAYERS = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
-    final static String STYLE_HIDELAYERS_MUNICIPALITY = ",placenames-medium"
+    final static String STYLE_OTM = "opentopomap-fc"
+    
+    final static String HIDELAYERS_CARTO = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
+    final static String HIDELAYERS_CARTO_MUNICIPALITY = "placenames-medium"
+    
+    final static String HIDELAYERS_OTM = "" // borders
+    final static String HIDELAYERS_OTM_CONTOURS = "contours"
 
+    final static String ATTR_PROJECTION = "3857" // EPSG-Nummer, WGS 84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
+     
     // Formate
     //   DIN-A3 Hochformat = 297 x 420 mm, DIN-A3 Querformat = 420 x 297 mm
     //   DIN-A4 Hochformat = 210 x 297 mm, DIN-A4 Querformat = 297 x 210 mm
@@ -171,7 +177,8 @@ class OsmPrintMapService
                              printAirspaces: false,
                              printLandscape: true,
                              printA3: true,
-                             printColorChanges: false
+                             printColorChanges: false,
+                             printOTM: false
                             ]
         
         File gpx_file = new File(printParams.gpxFileName)
@@ -239,13 +246,24 @@ class OsmPrintMapService
         
         String graticule_file_name = printParams.graticuleFileName.replaceAll('\\\\', '/')
 
-        String style = STYLE_STANDARD
-        if (printOptions.printContourLines) {
-            style = STYLE_CONTOURLINES
-        }
-        String style_hide_municipality = STYLE_HIDELAYERS_MUNICIPALITY
-        if (printOptions.printMunicipalityNames) {
-            style_hide_municipality = ""
+        String style = ""
+        String hide_layers = ""
+        if (!printOptions.printOTM) {
+            if (printOptions.printContourLines) {
+                style = STYLE_CONTOURLINES
+            } else {
+                style = STYLE_STANDARD
+            }
+            hide_layers = HIDELAYERS_CARTO
+            if (!printOptions.printMunicipalityNames) {
+                hide_layers += ",${HIDELAYERS_CARTO_MUNICIPALITY}"
+            }
+        } else {
+            style = STYLE_OTM
+            hide_layers = HIDELAYERS_OTM
+            if (!printOptions.printContourLines) {
+                hide_layers += ",${HIDELAYERS_OTM_CONTOURS}"
+            }
         }
         
         int print_width = 0 // mm
@@ -599,8 +617,8 @@ class OsmPrintMapService
                     "Latitude": ${printOptions.centerLatitude},
                     "Longitude": ${printOptions.centerLongitude},
                     "Style": "${style}",
-                    "Projection": "${STYLE_PROJECTION}",
-                    "HideLayers": "${STYLE_HIDELAYERS}${style_hide_municipality}",
+                    "Projection": "${ATTR_PROJECTION}",
+                    "HideLayers": "${hide_layers}",
                     "UserObjects": [
                         ${user_text}
                         ${gpx_lines}
@@ -620,7 +638,11 @@ class OsmPrintMapService
         }""")
         
         if (status.responseCode) {
-            printdone "responseCode=${status.responseCode}, printjob_id=${status.json.Data.ID}"
+            if (status.json) {
+                printdone "responseCode=${status.responseCode}, printjob_id=${status.json.Data.ID}"
+            } else {
+                printerror "responseCode=${status.responseCode}"
+            }
         } else {
             printerror ""
         }

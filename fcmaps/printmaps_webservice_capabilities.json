@@ -1,0 +1,34 @@
+{
+    "ConfigMapdata": {
+        "Description": "world",
+        "MinLatitude": -90.0,
+        "MaxLatitude": 90.0,
+        "MinLongitude": -180.0,
+        "MaxLongitude": 180.0
+    },
+    "ConfigMapformats": [
+        {
+            "Type": "png",
+            "MinPrintWidth": 5.0,
+            "MaxPrintWidth": 2500.0,
+            "MinPrintHeigth": 5.0,
+            "MaxPrintHeigth": 2500.0
+        }
+    ],
+    "ConfigMapscale": {
+        "MinScale": 100,
+        "MaxScale": 200000
+    },
+    "ConfigStyles": [
+        {
+            "Name": "opentopomap-fc",
+            "ShortDescription": "OpenTopoMap for FlightContest",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
+            "Release": "3.1.3",
+            "Date": "2019/01/08",
+            "Link": "https://flightcontest.de",
+            "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
+            "Layers": ""
+        }
+    ]
+}

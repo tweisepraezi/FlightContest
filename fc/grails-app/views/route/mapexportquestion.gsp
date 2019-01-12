@@ -58,7 +58,7 @@
 	                                </div>
 	                            </g:if>
 	                        </fieldset>
-	                        <g:set var="geodata_airfields" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_AIRFIELDS).exists()}"/>
+	                        <g:set var="geodata_airfields" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRFIELDS).exists()}"/>
 	                        <g:set var="geodata_churches" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_CHURCHES).exists()}"/>
 	                        <g:set var="geodata_castles" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_CASTLES).exists()}"/>
 	                        <g:set var="geodata_chateaus" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_CHATEAUS).exists()}"/>
