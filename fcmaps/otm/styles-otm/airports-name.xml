@@ -1,0 +1,29 @@
+<Style name="airports-name">
+<!-- aeroway names -->
+    <!--
+	<Rule>
+		&maxscale_zoom12;
+		&minscale_zoom13;
+	    <Filter>([feature] = 'aeroway_aerodrome') and ([access] != 'private') and ([icao] != null) and ([iata] != null)</Filter>
+	    <TextSymbolizer size="10" wrap-width="30" line-spacing="-1.5" fill="#5e3b9e" dy="10" fontset-name="fontset-1" halo-radius="1" halo-fill="rgba(255, 255, 255, 0.6)" placement="interior"><![CDATA[[name]]]></TextSymbolizer>
+	</Rule>
+	<Rule>
+		&maxscale_zoom14;
+		&minscale_zoom17;
+        <Filter>([feature] = 'aeroway_aerodrome')</Filter>
+        <TextSymbolizer size="10" wrap-width="30" line-spacing="-1.5" fill="#5e3b9e" dy="10" fontset-name="fontset-1" halo-radius="1" halo-fill="rgba(255, 255, 255, 0.6)" placement="interior"><![CDATA[[name]]]></TextSymbolizer>
+	</Rule>
+	-->
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom17;
+        <Filter>([aeroway] = 'aerodrome' or [aeroway] = 'runway')</Filter>
+        <MarkersSymbolizer file="symbols-otm/aerodrome.12.svg" placement="interior" clip="false" fill="#000000" />
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom17;
+        <Filter>([aeroway] = 'aerodrome' or [aeroway] = 'runway')</Filter>
+        <TextSymbolizer size="10" wrap-width="30" line-spacing="-1.5" fill="#000000" dy="10" fontset-name="fontset-0" halo-radius="1" halo-fill="rgba(255, 255, 255, 0.6)" placement="interior">[name]</TextSymbolizer>
+    </Rule>
+</Style>

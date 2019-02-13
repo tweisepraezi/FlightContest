@@ -22,7 +22,7 @@ class Route
                          'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapWindpowerstations',
                          'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
                          'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintA3','contestMapColorChanges',
-                         'useProcedureTurn']
+                         'contestMapRunwayPoint','contestMapRunwayHorizontalPos','contestMapRunwayVerticalPos','useProcedureTurn']
             
     String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP
     String contestMapPrint = Defs.CONTESTMAPPRINT_PDFMAP
@@ -49,8 +49,11 @@ class Route
     String contestMapCenterPoints = ""                                           // list of turn points arranged in map center
     String contestMapPrintPoints = ""                                            // list of turn points for printing
     boolean contestMapPrintLandscape = true
-    boolean contestMapPrintA3 = true
+    boolean contestMapPrintA3 = false
     boolean contestMapColorChanges = false
+    CoordType contestMapRunwayPoint = CoordType.UNKNOWN
+    HorizontalPos contestMapRunwayHorizontalPos = HorizontalPos.Center
+    VerticalPos contestMapRunwayVerticalPos = VerticalPos.Center
     Boolean useProcedureTurn = true                                              // TODO: DB-2.14
     
 	static belongsTo = [contest:Contest]
@@ -319,6 +322,24 @@ class Route
         return false
     }
 
+    Map GetRunways()
+    {
+        Map ret = [onlyRunways:true, runwayList:[], runwayPoints:""]
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id"])) {
+            if (coordroute_instance.type.IsRunwayCoord()) {
+                ret.runwayList += coordroute_instance.type
+                if (ret.runwayPoints) {
+                    ret.runwayPoints += ",${coordroute_instance.title()}"
+                } else {
+                    ret.runwayPoints = coordroute_instance.title()
+                }
+            } else {
+                ret.onlyRunways = false
+            }
+        }
+        return ret
+    }
+    
     boolean IsTurnpointSign()
     {
         turnpointRoute.IsTurnpointSign()

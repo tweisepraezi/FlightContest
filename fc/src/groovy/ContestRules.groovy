@@ -402,7 +402,7 @@ enum ContestRules
 	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
 
 	R4 ([
-            ruleTitle:"FAI Precision Flying - Edition 2018",
+            ruleTitle:"FAI Precision Flying - Edition 2019",
             
 			// General
 			precisionFlying:true,
@@ -532,7 +532,7 @@ enum ContestRules
             minEnrouteTargets:16,                                 // A3.2
             maxEnrouteTargets:25                                  // A3.2
 		]
-	), // "FAI Precision Flying - Edition 2018"
+	), // "FAI Precision Flying - Edition 2019"
 
 	R5 ([
             ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017",
@@ -668,7 +668,7 @@ enum ContestRules
 	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
 
     R6 ([
-            ruleTitle:"FAI Air Rally Flying - Edition 2018",
+            ruleTitle:"FAI Air Rally Flying - Edition 2019",
             
             // General
             precisionFlying:false,
@@ -789,8 +789,8 @@ enum ContestRules
             enroutePhotoRule:EnrouteRule.NMFromTP,
             enrouteCanvasRule:EnrouteRule.NMFromTP,
             enrouteCanvasMultiple:false,
-            minRouteLegs:10,                                     // A3.1.1
-            maxRouteLegs:16,                                     // A3.1.1
+            minRouteLegs:10,                                     // A3.1.2
+            maxRouteLegs:16,                                     // A3.1.2
             minEnroutePhotos:15,                                 // A3.4.3
             maxEnroutePhotos:20,                                 // A3.4.3
             minEnrouteCanvas:0,
@@ -798,7 +798,7 @@ enum ContestRules
             minEnrouteTargets:15,
             maxEnrouteTargets:25
         ]
-    ), // "FAI Air Rally Flying - Edition 2018"
+    ), // "FAI Air Rally Flying - Edition 2019"
 
     R7 ([
             ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017",
@@ -1476,15 +1476,15 @@ enum ContestRules
     static List GetContestRules()
     {
         List ret = []
-        ret += R1  // fc.contestrule.de.nav.2018
-        ret += R11 // fc.contestrule.de.nav.2017
-        ret += R4  // fc.contestrule.fai.precision.2018
-        ret += R6  // fc.contestrule.fai.rally.2018
-        ret += R5  // fc.contestrule.ch.precision.2017
-        ret += R7  // fc.contestrule.at.precision.2017.landing1
-        ret += R8  // fc.contestrule.at.precision.2017.landing2
-        ret += R9  // fc.contestrule.at.precision.2017.landing3
-        ret += R10 // fc.contestrule.at.nav.2017
+        ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018
+        ret += R11 // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
+        ret += R4  // FAI Precision Flying - Edition 2019
+        ret += R6  // FAI Air Rally Flying - Edition 2019
+        ret += R5  // Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
+        ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017
+        ret += R8  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017
+        ret += R9  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2017
+        ret += R10 // Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2017
         return ret
     }
     

@@ -13,7 +13,7 @@
 	</Datasource>
 </Layer>-->
 
-
+<!--
 <Style name="relief-5000">
 	<Rule>
 		&maxscale_zoom1;
@@ -45,4 +45,4 @@
 		<Parameter name="format">tiff</Parameter>
 	</Datasource>
 </Layer>
-
+ -->

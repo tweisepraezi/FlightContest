@@ -32,6 +32,13 @@
 		<LineSymbolizer stroke="black" stroke-width="1.7" />
 	</Rule>
 
+    <!-- Flight Contest -->
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[highway] = 'unclassified'</Filter>
+        <LineSymbolizer stroke="black" stroke-width="1.2" />
+    </Rule>
 
 <!-- zoom 12 -->
 	<Rule>

@@ -40,6 +40,7 @@ class GpxService
     final static BigDecimal CONTESTMAP_TPNAME_DISTANCE = 1.5 // NM
     final static BigDecimal CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE = 2.5 // NM
     final static BigDecimal CONTESTMAP_MARGIN_DISTANCE = 5 // NM
+    final static BigDecimal CONTESTMAP_RUNWAY_FRAME_DISTANCE = 2 // NM  
     
 	final static boolean WRLOG = false
     
@@ -1606,6 +1607,7 @@ class GpxService
         Map contest_map_rect = [:]
         BigDecimal center_latitude = null
         BigDecimal center_longitude = null
+        boolean show_runway = false
         if (wr_enroutesign || contestMap) {
             xml.extensions {
                 xml.flightcontest {
@@ -1665,6 +1667,29 @@ class GpxService
                                 }
                             }
                         }
+                        if (min_latitude == null) { // get coords from runway
+                            show_runway = true
+                            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                                if (coordroute_instance.type.IsRunwayCoord()) {
+                                    if (routeInstance.contestMapRunwayPoint == CoordType.UNKNOWN || routeInstance.contestMapRunwayPoint == coordroute_instance.type) {
+                                        BigDecimal lat = coordroute_instance.latMath()
+                                        BigDecimal lon = coordroute_instance.lonMath()
+                                        if (min_latitude == null || lat < min_latitude) {
+                                            min_latitude = lat
+                                        }
+                                        if (min_longitude == null || lon < min_longitude) {
+                                            min_longitude = lon
+                                        }
+                                        if (max_latitude == null || lat > max_latitude) {
+                                            max_latitude = lat
+                                        }
+                                        if (max_longitude == null || lon > max_longitude) {
+                                            max_longitude = lon
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         
                         contest_map_rect = AviationMath.getShowRect(min_latitude, max_latitude, min_longitude, max_longitude, CONTESTMAP_MARGIN_DISTANCE)
                         min_latitude = contest_map_rect.latmin
@@ -1701,6 +1726,8 @@ class GpxService
                             landscape: getYesNo(contestMap.contestMapPrintLandscape),
                             a3: getYesNo(contestMap.contestMapPrintA3),
                             colorchanges: getYesNo(contestMap.contestMapColorChanges),
+                            runwayhorizontalpos: routeInstance.contestMapRunwayHorizontalPos,
+                            runwayverticalpos: routeInstance.contestMapRunwayVerticalPos,
                             otm:getYesNo(contestMap.contestMapOTM)
                         )
                     }
@@ -1710,7 +1737,17 @@ class GpxService
         
         // tracks
         if (contestMap) {
-            if (contestMap.contestMapLeg || contestMap.contestMapCurvedLeg) {
+            if (show_runway) {
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type.IsRunwayCoord()) {
+                        xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
+                            xml.name "${coordroute_instance.titleShortMap(isPrint)}"
+                            xml.sym "airport"
+                            xml.type ""
+                        }
+                    }
+                }
+            } else if (contestMap.contestMapLeg || contestMap.contestMapCurvedLeg) {
                 CoordRoute last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsContestMapCoord()) {

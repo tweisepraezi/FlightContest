@@ -23,17 +23,20 @@ import javax.imageio.stream.ImageOutputStream
 
 import org.quartz.JobKey
 
-// Karten mit printmaps-osm.de erstellen
-//   http://printmaps-osm.de:8080/de/server.html
+// OSM-Karten erstellen
 //   https://github.com/printmaps/printmaps
-//     Map generation: https://github.com/printmaps/printmaps/tree/master/Nik4 
-//   http://www.gdal.org/
-//     http://www.gdal.org/ogr_formats.html
+//     Map generation: https://github.com/printmaps/printmaps/tree/master/Nik4
+//     OpenTopoMap-Stil: https://github.com/der-stefan/OpenTopoMap  
+//   https://www.gdal.org/
+//     https://www.gdal.org/ogr_formats.html
+//     https://www.gdal.org/drv_csv.html
+//     https://giswiki.hsr.ch/WKT
 //   https://forum.openstreetmap.org/viewtopic.php?id=57945&p=3
 //   https://github.com/mapnik/mapnik/wiki/TextSymbolizer
 //   https://github.com/mapnik/mapnik/wiki/LineSymbolizer
 //   https://github.com/mapnik/mapnik/wiki/PolygonSymbolizer
 //   https://github.com/mapnik/mapnik/wiki/MarkersSymbolizer
+//   https://github.com/mapnik/mapnik/wiki/PointSymbolizer
 //   https://docs.oracle.com/javase/7/docs/api/java/net/URLConnection.html
 //   https://stackoverflow.com/questions/321736/how-to-set-dpi-information-in-an-image
 //   https://docs.oracle.com/javase/7/docs/api/javax/imageio/metadata/doc-files/standard_metadata.html
@@ -71,7 +74,7 @@ class OsmPrintMapService
     final static int A4_LONG = 297 // mm
     final static int MARGIN = 10 // nicht bedruckbarer Rand [mm]
 
-    final static int FACTOR = 2 // Maﬂstabsverkleinerung (1 = 1:200000, 2 =  1:100000, 4 = 1:50000)
+    final static int FACTOR = 1 // Maﬂstabsverkleinerung (1 = 1:200000, 2 =  1:100000, 4 = 1:50000)
     final static int FACTOR2 = 1 // Druckvergrˆﬂerung (1 = 1:100000, 2 = 1:50000)
     final static int DPI = 600 // Original: 300 DPI
     
@@ -81,7 +84,7 @@ class OsmPrintMapService
     final static int TEXT_XPOS_RIGHT = 5 // Abstand vom rechten Rand [mm]
     
     final static int CONTEST_TITLE_FONT_SIZE = FACTOR*14
-    final static int CONTEST_TITLE_YPOS_TOP = 4
+    final static int CONTEST_TITLE_YPOS_TOP = 6
      
     final static int ROUTE_TITLE_FONT_SIZE = FACTOR*10
     final static int ROUTE_TITLE_YPOS_CONTEST_TITLE = 4
@@ -90,7 +93,7 @@ class OsmPrintMapService
     final static int BOTTOM_TEXT_YPOS = FACTOR*2 // mm
     final static int BOTTOM_TEXT_YPOS2 = FACTOR*5 // mm
     
-    final static int SCALEBAR_YPOS_TOP = 4
+    final static int SCALEBAR_YPOS_TOP = 6
     final static BigDecimal SCALEBAR_X_DIFF = FACTOR*5*GpxService.kmPerNM // 1 NM (9.26mm)
     final static String SCALEBAR_TITLE = "5 NM"
     final static int SCALEBAR_TITLE_FONT_SIZE = FACTOR*8
@@ -99,17 +102,18 @@ class OsmPrintMapService
     
     final static BigDecimal FRAME_STROKE_WIDTH = FACTOR*1
     final static BigDecimal TRACK_STROKE_WIDTH = FACTOR*0.75
-    final static BigDecimal GRATICULE_STROKE_WIDTH = FACTOR*0.25
+    final static BigDecimal GRATICULE_STROKE_WIDTH = FACTOR*0.5
     final static BigDecimal SCALEBAR_STROKE_WIDTH = FACTOR*4
     
     final static int SCALE = 200000/FACTOR
     
-    final static int GRATICULE_TEXT_FONT_SIZE = FACTOR*6
+    final static int GRATICULE_TEXT_FONT_SIZE = FACTOR*8
+    final static BigDecimal GRATICULE_SCALEBAR_LEN = 0.2 // NM
     final static int AIRFIELD_TEXT_FONT_SIZE = FACTOR*6
     final static int PEAKS_TEXT_FONT_SIZE = FACTOR*5
     final static int SPECIALS_TEXT_FONT_SIZE = FACTOR*5
     final static String GEODATA_BUILDING_SCALE = "scale(1.0, 1.0)"
-    final static String GEODATA_SYMBOL_SCALE = "scale(1.0, 1.0)"
+    final static String GEODATA_SYMBOL_SCALE = "scale(0.75, 0.75)"
     final static int SYMBOL_TEXT_FONT_SIZE = FACTOR*10
     
     // 1:50000
@@ -178,6 +182,8 @@ class OsmPrintMapService
                              printLandscape: true,
                              printA3: true,
                              printColorChanges: false,
+                             printRunwayHorizontalPos: HorizontalPos.Center,
+                             printRunwayVerticalPos: VerticalPos.Center,
                              printOTM: false
                             ]
         
@@ -207,6 +213,8 @@ class OsmPrintMapService
             print_options.printLandscape = m.'@landscape'[0] == "yes"
             print_options.printA3 = m.'@a3'[0] == "yes"
             print_options.printColorChanges = m.'@colorchanges'[0] == "yes"
+            print_options.printRunwayHorizontalPos = HorizontalPos.(m.'@runwayhorizontalpos'[0])
+            print_options.printRunwayVerticalPos = VerticalPos.(m.'@runwayverticalpos'[0])
             print_options.printOTM = m.'@otm'[0] == "yes"
             println "Options: ${print_options}"
             ret.ok = true
@@ -295,6 +303,29 @@ class OsmPrintMapService
         print_width *= FACTOR
         print_height *= FACTOR
         
+        if (printOptions.printRunwayHorizontalPos != HorizontalPos.Center || printOptions.printRunwayVerticalPos != VerticalPos.Center) {
+            BigDecimal print_width_nm = SCALE * print_width / Contest.mmPerNM
+            BigDecimal print_height_nm = SCALE * print_height / Contest.mmPerNM
+            Map rect_width = AviationMath.getShowPoint(printOptions.centerLatitude, printOptions.centerLongitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
+            Map rect_height = AviationMath.getShowPoint(printOptions.centerLatitude, printOptions.centerLongitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
+            switch (printOptions.printRunwayHorizontalPos) {
+                case HorizontalPos.Left:
+                    printOptions.centerLongitude = rect_width.lonmax
+                    break
+                case HorizontalPos.Right:
+                    printOptions.centerLongitude = rect_width.lonmin
+                    break
+            }
+            switch (printOptions.printRunwayVerticalPos) {
+                case VerticalPos.Top:
+                    printOptions.centerLatitude = rect_height.latmin
+                    break
+                case VerticalPos.Bottom:
+                    printOptions.centerLatitude = rect_height.latmax
+                    break
+            }
+        }
+        
         int contest_title_ypos = print_height - CONTEST_TITLE_YPOS_TOP*FACTOR
         int route_title_ypos = contest_title_ypos - ROUTE_TITLE_YPOS_CONTEST_TITLE*FACTOR
         int text_xpos_left = TEXT_XPOS_LEFT*FACTOR
@@ -303,6 +334,10 @@ class OsmPrintMapService
         int scalebar_ypos = print_height - SCALEBAR_YPOS_TOP*FACTOR
         int scalbar_text_ypos = scalebar_ypos - 3*FACTOR   // 3mm nach unten
         
+        String generator_text = getMsg('fc.contestmap.generator.printmaps',true)
+        if (printOptions.printOTM) {
+            generator_text = getMsg('fc.contestmap.generator.flightcontest',true)
+        }
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
         String copyright_date = GeoDataService.ReadTxtFile(Defs.FCSAVE_FILE_GEODATA_DATE)
         if (printOptions.printAirfields || printOptions.printChurches || printOptions.printCastles || printOptions.printChateaus || printOptions.printWindpowerstations || printOptions.printPeaks) {
@@ -310,7 +345,7 @@ class OsmPrintMapService
         }
         if (printOptions.printOTM) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
-            copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
+            // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
         }
         String user_text = """{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${FRAME_STROKE_WIDTH}' stroke-linecap='butt' />",
@@ -325,7 +360,7 @@ class OsmPrintMapService
             "WellKnownText": "POINT(${text_xpos_left} ${route_title_ypos})"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.copyright',true)}'</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${generator_text}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_left} ${BOTTOM_TEXT_YPOS2})"
         },
         {
@@ -392,7 +427,7 @@ class OsmPrintMapService
             "Layer": "waypoints"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SYMBOL_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='20' placement='point'>[type]</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SYMBOL_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='10' placement='point'>[type]</TextSymbolizer>",
             "SRS": "+init=epsg:4326",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
@@ -404,6 +439,13 @@ class OsmPrintMapService
             if (create_graticule_csv(graticule_file_name, printOptions.centerGraticuleLatitude, printOptions.centerGraticuleLongitude, printOptions.centerLatitude, printOptions.centerLongitude, print_width, print_height)) {
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
+                    "Style": "<PolygonSymbolizer fill='lightgrey' />",
+                    "SRS": "+init=epsg:4326",
+                    "Type": "csv",
+                    "File": "${graticule_short_file_name}",
+                    "Layer": ""
+                },
+                {
                     "Style": "<LineSymbolizer stroke='black' stroke-width='${GRATICULE_STROKE_WIDTH}' stroke-linecap='round' />",
                     "SRS": "+init=epsg:4326",
                     "Type": "csv",
@@ -411,7 +453,7 @@ class OsmPrintMapService
                     "Layer": ""
                 },
                 {
-                    "Style": "<TextSymbolizer fontset-name='fontset-0' size='${GRATICULE_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' dx='5' dy='10' placement='vertex'>[name]</TextSymbolizer>",
+                    "Style": "<TextSymbolizer fontset-name='fontset-0' size='${GRATICULE_TEXT_FONT_SIZE}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true' horizontal-alignment='right' dx='5' dy='8' placement='vertex'>[name]</TextSymbolizer>",
                     "SRS": "+init=epsg:4326",
                     "Type": "csv",
                     "File": "${graticule_short_file_name}",
@@ -902,9 +944,23 @@ class OsmPrintMapService
                             printerror ""
                         }
                         
-                        printstart "Downscale ${unpacked_png_file_name} -> ${pngFileName}"
-                        downscaleImage(unpacked_png_file_name, pngFileName, (img_width/FACTOR2).toInteger(), (img_height/FACTOR2).toInteger(), printLandscape, printColorChanges)
-                        printdone ""
+                        if (FACTOR > 1) {
+                            printstart "Downscale ${unpacked_png_file_name} -> ${pngFileName}"
+                            downscaleImage(unpacked_png_file_name, pngFileName, (img_width/FACTOR2).toInteger(), (img_height/FACTOR2).toInteger(), printLandscape, printColorChanges)
+                            printdone ""
+                        } else {
+                            printstart "Copy ${unpacked_png_file_name} -> ${pngFileName}"
+                            def src_file = new File(unpacked_png_file_name).newInputStream()
+                            try {
+                                def dest_file = new File(pngFileName).newOutputStream()
+                                dest_file << src_file
+                                dest_file.close()
+                                printdone ""
+                            } catch (Exception e) {
+                                printerror e.getMessage()
+                            }
+                            src_file.close()
+                        }
                         
                         printstart "Delete ${unpacked_png_file_name}"
                         File unpacked_png_file = new File(unpacked_png_file_name)
@@ -964,15 +1020,10 @@ class OsmPrintMapService
         
         BigDecimal print_width_nm = SCALE * printWidth / Contest.mmPerNM
         BigDecimal print_height_nm = SCALE * printHeight / Contest.mmPerNM
-        Map rect_width = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_width_nm / 2)
-        Map rect_height = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_height_nm / 2)
+        Map rect_width = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_width_nm / 2, GRATICULE_SCALEBAR_LEN)
+        Map rect_height = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN)
         println "Width:  ${printWidth} mm, ${print_width_nm} NM, ${rect_width}"
         println "Height: ${printHeight} mm, ${print_height_nm} NM, ${rect_height}"
-        BigDecimal min_lat = rect_height.latmin
-        BigDecimal max_lat = rect_height.latmax
-        BigDecimal min_lon = rect_width.lonmin
-        BigDecimal max_lon = rect_width.lonmax
-        println "min_lat=${min_lat} max_lat=${max_lat} min_lon=${min_lon} max_lon=${max_lon}"
         
         File graticule_file = new File(graticuleFileName)
         Writer graticule_writer = graticule_file.newWriter("UTF-8",false)
@@ -980,38 +1031,66 @@ class OsmPrintMapService
         graticule_writer << "id${CSV_DELIMITER}name${CSV_DELIMITER}wkt"
         
         int line_id = 1
-        int name_id = 1
         CoordPresentation coord_presentation = CoordPresentation.DEGREEMINUTE
         
         // vertical line
         BigDecimal start_lon = centerGraticuleLongitude
-        while (start_lon > min_lon) {
+        while (start_lon > rect_width.lonmin) {
             start_lon -= 10/60 // 10'
         }
         BigDecimal lon = start_lon
-        while (lon < max_lon) {
+        BigDecimal mid_lon = start_lon + (rect_width.lonmax - start_lon) / 2
+        while (lon < rect_width.lonmax) {
+            if ((lon < mid_lon) && (lon + 10/60 > mid_lon)) {
+                BigDecimal lon2 = lon
+                while (lon2 < lon + 8.5/60) {
+                    lon2 += 1/60 // 1'
+                    String wkt = "LINESTRING(${lon2} ${rect_height.latmin2}, ${lon2} ${rect_height.latmax})"
+                    String name = ""
+                    graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
+                    line_id++
+                }
+                lon2 += 1/60 // 1'
+                String wkt = "POLYGON((${lon} ${rect_height.latmax}, ${lon2} ${rect_height.latmax}, ${lon2} ${rect_height.latmin2}, ${lon} ${rect_height.latmin2}, ${lon} ${rect_height.latmax}))"
+                String name = ""
+                graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
+                line_id++
+            }
             lon += 10/60 // 10'
-            String wkt = "LINESTRING(${lon} ${min_lat}, ${lon} ${max_lat})"
+            String wkt = "LINESTRING(${lon} ${rect_height.latmin}, ${lon} ${rect_height.latmax})"
             String name = coord_presentation.GetMapName(lon, false)
             graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
             line_id++
-            name_id++
         }
         
         // horizontal line
         BigDecimal start_lat = centerGraticuleLatitude
-        while (start_lat > min_lat) {
+        while (start_lat > rect_height.latmin) {
             start_lat -= 10/60 // 10'
         }
         BigDecimal lat = start_lat
-        name_id = 1
-        while (lat < max_lat) {
+        BigDecimal mid_lat = start_lat + (rect_height.latmax - start_lat) / 2
+        while (lat < rect_height.latmax) {
+            if ((lat < mid_lat) && (lat + 10/60 > mid_lat)) {
+                BigDecimal lat2 = lat
+                while (lat2 < lat + 8.5/60) {
+                    lat2 += 1/60 // 1'
+                    String wkt = "LINESTRING(${rect_width.lonmin} ${lat2}, ${rect_width.lonmax2} ${lat2})"
+                    String name = ""
+                    graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
+                    line_id++
+                }
+                lat2 += 1/60 // 1'
+                String wkt = "POLYGON((${rect_width.lonmin} ${lat}, ${rect_width.lonmax2} ${lat}, ${rect_width.lonmax2} ${lat2}, ${rect_width.lonmin} ${lat2}, ${rect_width.lonmin} ${lat}))"
+                String name = ""
+                graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
+                line_id++
+            }
             lat += 10/60 // 10'
-            String wkt = "LINESTRING(${min_lon} ${lat}, ${max_lon} ${lat})"
+            String wkt = "LINESTRING(${rect_width.lonmin} ${lat}, ${rect_width.lonmax} ${lat})"
             String name = coord_presentation.GetMapName(lat, true)
             graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
             line_id++
-            name_id++
         }
 
         graticule_writer.close()

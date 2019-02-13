@@ -205,22 +205,24 @@
                             <tfoot>
                                 <tr>
                                     <td>
-                                        <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:if test="${BootStrap.global.GetPrintServerAPI()}">
-                                            <g:actionSubmit action="mapexportquestion" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        </g:if>
-                                        <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:if test="${routeInstance.IsAflosReferenceExportPossible()}">
-                                            <g:actionSubmit action="aflosrefexport" value="${message(code:'fc.aflosrefexport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        </g:if>
-                                        <g:if test="${routeInstance.IsEMailPossible()}">
-                                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
-                                        </g:if>
-                                        <g:actionSubmit action="printroute" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:actionSubmit action="printcoordall" value="${message(code:'fc.printcoord.all')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:actionSubmit action="printcoordtp" value="${message(code:'fc.printcoord.tp')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        <g:if test="${!route_empty}">
+                                            <g:actionSubmit action="showofflinemap" value="${message(code:'fc.offlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="showmap" value="${message(code:'fc.onlinemap')}" onclick="this.form.target='_blank';return true;" tabIndex="${ti[0]++}"/>
+	                                        <g:if test="${BootStrap.global.GetPrintServerAPI()}">
+	                                            <g:actionSubmit action="mapexportquestion2" value="${message(code:'fc.contestmap')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                        </g:if>
+                                            <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                        <g:if test="${routeInstance.IsAflosReferenceExportPossible()}">
+	                                            <g:actionSubmit action="aflosrefexport" value="${message(code:'fc.aflosrefexport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                        </g:if>
+	                                        <g:if test="${routeInstance.IsEMailPossible()}">
+	                                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
+	                                        </g:if>
+	                                        <g:actionSubmit action="printroute" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                        <g:actionSubmit action="printcoordall" value="${message(code:'fc.printcoord.all')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                        <g:actionSubmit action="printcoordtp" value="${message(code:'fc.printcoord.tp')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                    </g:if>
                                     </td>
                                 </tr>
                             </tfoot>

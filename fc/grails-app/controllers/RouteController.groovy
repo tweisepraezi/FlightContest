@@ -673,7 +673,7 @@ class RouteController {
                 print_button = true
                 discard_button = true
             }
-            // quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key) {
+            // quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
             
             // set return action
             return [routeInstance:route.instance, mapexportquestionReturnAction:"show", mapexportquestionReturnController:controllerName, mapexportquestionReturnID:params.id, BreakButton:break_button, FetchButton:fetch_button, PrintButton:print_button, DiscardButton:discard_button, NewOSMMap:new_osm_map, PrintMapsOSM:BootStrap.global.GetPrintServerAPI()==Global.PRINTSERVER_API]
@@ -681,6 +681,10 @@ class RouteController {
             flash.message = task.message
             redirect(action:'show',id:params.id)
         }
+    }
+    
+    def mapexportquestion2 = {
+        redirect(action:'mapexportquestion',id:params.id)
     }
     
     def mapgenerate = {
@@ -730,6 +734,11 @@ class RouteController {
                 if (route.instance.contestMapPrintPoints) {
                     route.instance.contestMapPrintPoints += ","
                 }
+                if (params.contestMapRunwayPoint) {
+                    route.instance.contestMapRunwayPoint = CoordType.(params.contestMapRunwayPoint)
+                }
+                route.instance.contestMapRunwayHorizontalPos = params.contestMapRunwayHorizontalPos
+                route.instance.contestMapRunwayVerticalPos = params.contestMapRunwayVerticalPos
                 route.instance.contestMapPrintLandscape = params.contestMapPrintLandscape == "on"
                 route.instance.contestMapPrintA3 = params.contestMapPrintA3 == "on"
                 route.instance.contestMapColorChanges = params.contestMapColorChanges == "on"
@@ -763,7 +772,7 @@ class RouteController {
                      contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
                      contestMapPrintA3:route.instance.contestMapPrintA3,
                      contestMapColorChanges:route.instance.contestMapColorChanges,
-                     contestMapOTM:BootStrap.global.GetPrintServerAPI()!=Global.PRINTSERVER_API,
+                     contestMapOTM:true,
                     ]
                 ) // false - no Print, false - no Points, false - no wrEnrouteSign
                 if (converter.ok) {

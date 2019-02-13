@@ -1,6 +1,6 @@
 <Style name="powerlines">
 	<Rule>
-		&maxscale_zoom12;
+		&maxscale_zoom11; <!-- Flight Contest -->
 		&minscale_zoom17;
 		<Filter>([power] = 'line')</Filter>
 		<LinePatternSymbolizer file="symbols-otm/powerline.png"/>

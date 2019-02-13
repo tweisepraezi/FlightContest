@@ -32,6 +32,28 @@ reconfigure villages and peaks without text:
 
 show only country borders
  Layer "borders": add to query: 'AND admin_level IN ('0', '1', '2', '3')'
+ 
+set background color to white
+ <Map background-color="#ffffff"
+
+show airports
+-------------
+styles-otm/airports-name.xml added
+mapnik/symbols-otm/aerodrome.12.svg added
+
+added lines in mapnik/opentopomap.xml
+  <!ENTITY airports-name SYSTEM "styles-otm/airports-name.xml">
+  
+  &airports-name;
+   
+  <Layer name="airports-name">
+    <StyleName>airports-name</StyleName>
+    <Datasource>
+        <Parameter name="table">(SELECT way,aeroway,way_area,name FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
+        <Parameter name="dbname">gis</Parameter>
+        &postgis-settings;
+    </Datasource>
+  </Layer>
 
 styles-otm/symbols-1.xml
 ------------------------
@@ -40,6 +62,63 @@ show churches & castles for 1:200000
 change all maxscales to maxscale_zoom11
 disable all TextSymbolizer
 
+styles-otm/symbols-2.xml
+------------------------
+show wind turbines
+
+change maxscales to maxscale_zoom11
+
+styles-otm/powerlines.xml
+-------------------------
+show power lines
+
+change maxscales to maxscale_zoom11
+
+styles-otm/buildings.xml
+------------------------
+show villages and towns in red
+
+<Rule>
+    &maxscale_zoom11;
+    &minscale_zoom17;
+    <LineSymbolizer stroke="#f7b5bd" stroke-width="1.0" />
+    <PolygonSymbolizer fill="#f7b5bd" />
+</Rule>
+
+no relief
+---------
+disable all layer in
+    styles-otm/basemap-relief.xml
+  
+no hillshade
+------------
+mapnik/opentopomap.xml
+    <!--
+    &hillshade;
+    -->
+
+styles-otm/landuse.xml
+----------------------
+modify forest green to b7d8a1
+
+<Rule>
+    &maxscale_zoom11;
+    &minscale_zoom11;
+    <Filter>([natural] = 'wood' or [landuse] = 'wood' or [landuse] = 'forest')</Filter>
+    <PolygonSymbolizer fill="#b7d8a1" />
+</Rule>
+
+styles-otm/text-towns.xml
+-------------------------
+remove points of towns with opacity="0.0"
+
+<PointSymbolizer file="symbols-otm/town.png" opacity="0.0" />
+
+roads
+-----
+add in roads-fill.xml, roads-casing.xml
+
+<Filter>[highway] = 'unclassified'</Filter>
 
 inc/fontset-settings.xml.inc
 ----------------------------

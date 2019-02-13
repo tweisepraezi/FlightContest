@@ -268,7 +268,7 @@ class Global
         {
             return grailsApplication.config.flightcontest.contestmap.printserverapi
         }
-        return PRINTSERVER_API
+        return ""
     }
     
     // --------------------------------------------------------------------------------------------------------------------

@@ -153,7 +153,7 @@
 		<MarkersSymbolizer placement="point" file="symbols-otm/conifer_tree.png" transform="translate(0 -5)"/>
 	</Rule>
 	<Rule>
-		&maxscale_zoom12;
+		&maxscale_zoom11; <!-- Flight Contest -->
 		&minscale_zoom17;
 		<Filter>(([power] = 'generator') and ([generator:source] = 'wind'))</Filter>
 		<MarkersSymbolizer placement="point" file="symbols-otm/wind_turbine.png" transform="translate(1 -8)"/>

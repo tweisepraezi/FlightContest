@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.3, Ausgabe 1
-:revdate:   12.01.2019
+:revnumber: 3.1.4, Ausgabe 1
+:revdate:   11.02.2019
 :nofooter:
 :toc-title: Table of content
 :toc:
@@ -14,8 +14,8 @@ Setting up a Flight Contest maps server.
 
 Descriptions and tools based on following projects
 
-* OpenTopoMap (https://github.com/der-stefan/OpenTopoMap) 
 * Printmaps (http://printmaps-osm.de:8080, https://github.com/printmaps/printmaps)
+* OpenTopoMap (https://github.com/der-stefan/OpenTopoMap) 
 
 [[server-requirements]]
 == Virtual server requirements
@@ -48,7 +48,7 @@ If something has been installed run
 === Install tools, libraries and fonts
 
  apt-get install nano git-core cmake
- apt-get install zip unzip tar wget bzip2 
+ apt-get install zip unzip tar wget bzip2 mc
  apt-get install libboost-all-dev build-essential autoconf libtool
  apt-get install libosmium2-dev libprotozero-dev rapidjson-dev libboost-program-options-dev 
  apt-get install zlib1g-dev libexpat1-dev pandoc
@@ -59,7 +59,7 @@ If something has been installed run
  apt-get install liblua5.2-dev lua5.1 liblua5.1-dev lua5.3 liblua5.3-dev
  apt-get install ttf-unifont fonts-noto
  
- === Install *Postgres* database server
+=== Install *Postgres* database server
 
  apt-get install postgresql postgresql-contrib postgis
  

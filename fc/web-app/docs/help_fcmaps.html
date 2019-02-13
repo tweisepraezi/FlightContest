@@ -5,9 +5,8 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<meta name="author" content="Thomas Weise, Deutscher Präzisionsflug-Verein e.V.">
+<meta name="author" content="Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.">
 <title>Flight Contest maps server</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove comment around @import statement below when using as a custom stylesheet */
@@ -423,9 +422,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Flight Contest maps server</h1>
 <div class="details">
-<span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.3, Ausgabe 1,</span>
-<span id="revdate">12.01.2019</span>
+<span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
+<span id="revnumber">version 3.1.4, Ausgabe 1,</span>
+<span id="revdate">11.02.2019</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -436,6 +435,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_install_ubuntu_updates">Install Ubuntu updates</a></li>
 <li><a href="#_install_tools_libraries_and_fonts">Install tools, libraries and fonts</a></li>
+<li><a href="#_install_strong_postgres_strong_database_server">Install <strong>Postgres</strong> database server</a></li>
 <li><a href="#_install_strong_mapnik_strong_renderer">Install <strong>Mapnik</strong> renderer</a></li>
 <li><a href="#_compile_and_install_strong_osm2pgsql_strong">Compile and install <strong>osm2pgsql</strong></a></li>
 <li><a href="#_install_strong_osmium_strong">Install <strong>Osmium</strong></a></li>
@@ -473,10 +473,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>OpenTopoMap (<a href="https://github.com/der-stefan/OpenTopoMap" class="bare">https://github.com/der-stefan/OpenTopoMap</a>)</p>
+<p>Printmaps (<a href="http://printmaps-osm.de:8080" class="bare">http://printmaps-osm.de:8080</a>, <a href="https://github.com/printmaps/printmaps" class="bare">https://github.com/printmaps/printmaps</a>)</p>
 </li>
 <li>
-<p>Printmaps (<a href="http://printmaps-osm.de:8080" class="bare">http://printmaps-osm.de:8080</a>, <a href="https://github.com/printmaps/printmaps" class="bare">https://github.com/printmaps/printmaps</a>)</p>
+<p>OpenTopoMap (<a href="https://github.com/der-stefan/OpenTopoMap" class="bare">https://github.com/der-stefan/OpenTopoMap</a>)</p>
 </li>
 </ul>
 </div>
@@ -542,7 +542,7 @@ apt upgrade</pre>
 <div class="literalblock">
 <div class="content">
 <pre>apt-get install nano git-core cmake
-apt-get install zip unzip tar wget bzip2
+apt-get install zip unzip tar wget bzip2 mc
 apt-get install libboost-all-dev build-essential autoconf libtool
 apt-get install libosmium2-dev libprotozero-dev rapidjson-dev libboost-program-options-dev
 apt-get install zlib1g-dev libexpat1-dev pandoc
@@ -554,11 +554,9 @@ apt-get install liblua5.2-dev lua5.1 liblua5.1-dev lua5.3 liblua5.3-dev
 apt-get install ttf-unifont fonts-noto</pre>
 </div>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>=== Install *Postgres* database server</pre>
 </div>
-</div>
+<div class="sect2">
+<h3 id="_install_strong_postgres_strong_database_server">Install <strong>Postgres</strong> database server</h3>
 <div class="literalblock">
 <div class="content">
 <pre>apt-get install postgresql postgresql-contrib postgis</pre>
@@ -935,7 +933,7 @@ for hgtfile in *.hgt;do gdal_fillnodata.py $hgtfile $hgtfile.tif; done</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Create contour lines (Lon 0°&#8230;&#8203;24° E, Lat 44°&#8230;&#8203;56° N)</p>
+<p>Create contour lines (Lon 0&#176;&#8230;&#8203;24&#176; E, Lat 44&#176;&#8230;&#8203;56&#176; N)</p>
 </div>
 <div class="literalblock">
 <div class="content">

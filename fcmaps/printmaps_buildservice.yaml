@@ -18,7 +18,7 @@ maxprocs: 2
 graceperiod: 600
 
 # log simple build metrics
-metrics: false
+metrics: true
 
 # run buildservice in test mode
 # purpose: for error analysis only

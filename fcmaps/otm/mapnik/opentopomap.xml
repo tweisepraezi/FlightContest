@@ -40,6 +40,7 @@
 	<!ENTITY airports-casing SYSTEM "styles-otm/airports-casing.xml">
 	<!ENTITY airports-fill SYSTEM "styles-otm/airports-fill.xml">
 	<!ENTITY airports-poly SYSTEM "styles-otm/airports-poly.xml">
+    <!ENTITY airports-name SYSTEM "styles-otm/airports-name.xml">
 	<!ENTITY roads-casing-lowzoom SYSTEM "styles-otm/roads-casing-lowzoom.xml">
 	<!ENTITY roads-fill-lowzoom SYSTEM "styles-otm/roads-fill-lowzoom.xml">
 	<!ENTITY roads-casing SYSTEM "styles-otm/roads-casing.xml">
@@ -88,9 +89,9 @@
 
 <!-- background-color:
 	zoom 0...8: #117803
-	zoom 9+: e0e0e0
+	zoom 9+: ffffff
 -->
-<Map background-color="#e0e0e0" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over" buffer-size="256">
+<Map background-color="#ffffff" srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over" buffer-size="256">
 	<!-- style definitions -->
 	&fontset-settings;
 
@@ -124,6 +125,7 @@
 	&airports-casing;
 	&airports-fill;
 	&airports-poly;
+    &airports-name;
 	&roads-casing-lowzoom;
 	&roads-fill-lowzoom;
 	&roads-casing;
@@ -189,7 +191,9 @@
 		</Datasource>
 	</Layer>
 	
+	<!--
 	&hillshade;
+	-->
 	
 	<Layer name="landuse-over-hillshade">
 		<StyleName>landuse-over-hillshade</StyleName>
@@ -691,6 +695,15 @@
 		</Datasource>
 	</Layer>
 	
+    <Layer name="airports-name">
+        <StyleName>airports-name</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,aeroway,way_area,name FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
 <!--	<Layer name="test">
 		<StyleName>test</StyleName>
 		<Datasource>

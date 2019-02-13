@@ -44,7 +44,14 @@
 		<LineSymbolizer stroke="&color_roads_2;" stroke-width="0.8" />
 	</Rule>
 
-
+    <!-- Flight Contest -->
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[highway] = 'unclassified'</Filter>
+        <LineSymbolizer stroke="white" stroke-width="0.8" />
+    </Rule>
+    
 <!-- zoom 12 -->
 	<Rule>
 		&maxscale_zoom12;

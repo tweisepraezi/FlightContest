@@ -310,18 +310,24 @@ class AviationMath
     }
 
     //--------------------------------------------------------------------------
-    static Map getShowPoint(BigDecimal showLatitude, BigDecimal showLongitude, Float showDistance)
+    static Map getShowPoint(BigDecimal showLatitude, BigDecimal showLongitude, Float showDistance, Float scaleBarLen)
     // Berechnet Anzeige-Bereich um eine Koordinate
     //   showLatitude: Geographische Breite (-90 ... +90 Grad)
     //   showLongitude: Geographische Laenge (-179.999 ... +180 Grad)
     //   showDistance: Entfernung des Anzeige-Bereiches um Koorodinate in NM
-    // Rückgabe: latmin, latmax, lonmin, lonmax
+    //   scaleBarDistance: Länge von Scalebar-Strichen
+    // Rückgabe Anzeige-Bereich latmin, latmax, lonmin, lonmax
+    // Rückgabe Scalbar: latmin2, latmax2, lonmin2, lonmax2
     {
         Map left_coord = getCoordinate(showLatitude, showLongitude, 270, showDistance)
+        Map left_coord2 = getCoordinate(showLatitude, left_coord.lon, 90, scaleBarLen)
         Map right_coord = getCoordinate(showLatitude, showLongitude, 90, showDistance)
+        Map right_coord2 = getCoordinate(showLatitude, right_coord.lon, 270, scaleBarLen)
         Map top_coord = getCoordinate(showLatitude, showLongitude, 0, showDistance)
+        Map top_coord2 = getCoordinate(top_coord.lat, showLongitude, 180, scaleBarLen)
         Map bottom_coord = getCoordinate(showLatitude, showLongitude, 180, showDistance)
-        return [latmin:bottom_coord.lat,latmax:top_coord.lat,lonmin:left_coord.lon,lonmax:right_coord.lon]
+        Map bottom_coord2 = getCoordinate(bottom_coord.lat, showLongitude, 0, scaleBarLen)
+        return [latmin:bottom_coord.lat, latmax:top_coord.lat, lonmin:left_coord.lon, lonmax:right_coord.lon, latmin2:top_coord2.lat, latmax2:bottom_coord2.lat, lonmin2:right_coord2.lon, lonmax2:left_coord2.lon]
     }
     
     //--------------------------------------------------------------------------

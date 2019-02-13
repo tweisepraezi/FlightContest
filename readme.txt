@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-12.01.2019
+13.02.2019
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -25,7 +25,7 @@ Die Bedienungsanleitung finden Sie im Startmenü unter
 Weitere Hilfe finden Sie im Startmenü unter
 'Programme -> Flight Contest -> Help' (deutsch)
 
-Flight Contest ist eine moderne, auf Java-Techniken basierende, mehrsprachige
+Flight Contest ist eine auf Java-Techniken basierende, mehrsprachige
 und netzwerkfähige Open-Source-Datenbank-Anwendung:
 * Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Internet Explorer u.a.). 
 * Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden. 
@@ -48,22 +48,30 @@ Wettbewerbsmanagement. Dazu zählen die Unterstützung
 Weitere nützliche Funktionen von Flight Contest:
 * Direkte Strafpunkt-Berechnung beim Laden einer Logger-Datendatei
   (GAC, IGC, GPX, KML, KMZ und NMEA 0183).
-* Sehr schnelle Logger-Daten-Nutzung des FAI-zertifizierten Loggers AFLOS 
-  (ohne Umweg über Datei-Export und -Import).
 * PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
-* Online-Kartenanzeige für Strecken und Navigationsflüge.
-  (Goggle Maps und Open Street Map)
+* OSM-Online-Karte für Strecken und Navigationsflüge.
+* OSM-Wettbewerbs-Karten-Druck
 * Offline-Anzeige für Strecken und Navigationsflüge.
 * E-Mail-Versand des Besatzungsergebnisses an Teilnehmer.
 * Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
 
-Erweiterungen in dieser Version (3.1.3):
+Erweiterungen in dieser Version (3.1.4):
 ----------------------------------------
+- OSM-Wettbewerbs-Karte 3.0 im TÜK-200-Stil
+- OSM-Wettbewerbs-Karten von Strecken, die nur T/O beinhalten
+    Dabei ist die Position vom T/O auf der Karte auswählbar:
+    Links, Mitte, Rechts sowie Oben, Mitte, Unten.
+- Aktualisierung folgender Regelwerke
+    FAI Precision Flying - Edition 2019
+    FAI Air Rally Flying - Edition 2019
+
+Erweiterungen in Version 3.1.3:
+-------------------------------
 - OSM-Wettbewerbs-Karte 2.0
     * OSM-Linux-Server-Installation für OpenTopoMap-Stil
-    * darauf angepasste Wettbewerbs-karten-Druck-Optionen
+    * darauf angepasste Wettbewerbs-Karten-Druck-Optionen
 
 Erweiterungen in Version 3.1.2:
 -------------------------------
