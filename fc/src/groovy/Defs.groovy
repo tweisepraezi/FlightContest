@@ -1,6 +1,6 @@
 class Defs
 {
-    static final String GPX_VIEWER_VERSION                             = "GM_Utils-6.1.3"
+    static final String GPX_VIEWER_VERSION                             = "GM_Utils-6.2"
  
     static final String FCSAVE_FOLDER                                  = "C:/FCSave"
     static final String FCSAVE_FOLDER_FC                               = "${FCSAVE_FOLDER}/.fc"
@@ -43,9 +43,11 @@ class Defs
     static final String OSMPRINTMAP_JOBFILENAME                        = "JobFileName"
     static final String OSMPRINTMAP_JOBID                              = "JobId"
     static final String OSMPRINTMAP_JOBIDFILENAME                      = "JobIdFileName"
+    static final String OSMPRINTMAP_FILEIDFILENAME                     = "FileIdFileName"
     static final String OSMPRINTMAP_PNGFILENAME                        = "PngFileName"
     static final String OSMPRINTMAP_PRINTLANDSCAPE                     = "PrintLandscape"
     static final String OSMPRINTMAP_PRINTCOLORCHANGES                  = "PrintColorChanges"
+    static final String OSMPRINTMAP_ERR_EXTENSION                      = ".err"
     
     static final String TurnpointID_TimeCheck                          = "timecheck_"
     static final String TurnpointID_NotFound                           = "notfound_"
@@ -100,7 +102,11 @@ class Defs
     static final String CONTESTMAPOUTPUT_EXPORTGPX                     = "contestMapOutput_exportGPX"
     static final String CONTESTMAPPRINT_PDFMAP                         = "contestMapPrint_PDFMap"
     static final String CONTESTMAPPRINT_PNGMAP                         = "contestMapPrint_PNGMap"
-
+    static final String CONTESTMAPPRINT_PNGZIP                         = "contestMapPrint_PNGZip"
+    
+    static final String CONTESTMAPAIRFIELDS_OSM                        = "contestMapAirfields_OSM"
+    static final String CONTESTMAPAIRFIELDS_GEODATA                    = "contestMapAirfields_GEODATA"
+    
     static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
     static final String BACKGROUNDUPLOAD_SRCDEST_SEPARATOR             = "!"
     static final String BACKGROUNDUPLOAD_IDLINK_SEPARATOR              = "§"

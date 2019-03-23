@@ -38,7 +38,8 @@ class GpxService
     final static BigDecimal CONTESTMAP_CIRCLE_RADIUS = 0.5 // NM
     final static BigDecimal CONTESTMAP_PROCEDURETURN_DISTANCE = 1 // NM
     final static BigDecimal CONTESTMAP_TPNAME_DISTANCE = 1.5 // NM
-    final static BigDecimal CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE = 2.5 // NM
+    final static BigDecimal CONTESTMAP_TPNAME_NOPROCEDURETURN_DISTANCE = 2.0 // NM
+    final static BigDecimal CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE = 3.0 // NM
     final static BigDecimal CONTESTMAP_MARGIN_DISTANCE = 5 // NM
     final static BigDecimal CONTESTMAP_RUNWAY_FRAME_DISTANCE = 2 // NM  
     
@@ -1619,7 +1620,7 @@ class GpxService
                             enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
                             enroutecanvas: routeInstance.enrouteCanvasRoute,
                             enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
-                            useprocedureturn: getYesNo(routeInstance.UseProcedureTurn())
+                            useprocedureturn: getYesNo(use_procedureturn)
                         )
                         if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                             xml.enroutephotosigns {
@@ -1714,7 +1715,7 @@ class GpxService
                             municipality_names: getYesNo(contestMap.contestMapMunicipalityNames),
                             enroutephotos: getYesNo(contestMap.contestMapEnroutePhotos),
                             enroutecanvas: getYesNo(contestMap.contestMapEnrouteCanvas),
-                            airfields: getYesNo(contestMap.contestMapAirfields),
+                            airfields: contestMap.contestMapAirfields,
                             churches: getYesNo(contestMap.contestMapChurches),
                             castles: getYesNo(contestMap.contestMapCastles),
                             chateaus: getYesNo(contestMap.contestMapChateaus),
@@ -1891,11 +1892,11 @@ class GpxService
             }
             
             // procedure turns
-            if (contestMap.contestMapProcedureTurn && routeInstance.UseProcedureTurn()) {
+            if (contestMap.contestMapProcedureTurn && use_procedureturn) {
                 CoordRoute last_coordroute_instance = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                    if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
                         if (contestMap.contestMapPrintPoints.contains(last_coordroute_instance.title()+',')) {
                             List circle_coords = AviationMath.getProcedureTurnCircle(
                                 last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
@@ -1947,6 +1948,8 @@ class GpxService
                                         BigDecimal distancevalue_procedureturn = CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE
                                         if (coordroute_instance.endCurved) {
                                             distancevalue_procedureturn = CONTESTMAP_TPNAME_DISTANCE
+                                        } else if (!use_procedureturn) {
+                                            distancevalue_procedureturn = CONTESTMAP_TPNAME_NOPROCEDURETURN_DISTANCE
                                         }
                                         Map tp_coord = AviationMath.getTitlePoint(
                                             last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
@@ -2239,11 +2242,11 @@ class GpxService
             }
             
             // procedure turns
-            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.UseProcedureTurn()) {
+            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && use_procedureturn) {
                 last_coordroute_instance = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                    if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                    if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
                         List circle_coords = AviationMath.getProcedureTurnCircle(
                             last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
                             last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),

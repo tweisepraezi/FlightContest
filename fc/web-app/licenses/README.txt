@@ -1,5 +1,5 @@
 
-Flight Contest 3.1.4
+Flight Contest 3.1.5
 Copyright 2009-2019 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://flightcontest.de
@@ -71,6 +71,19 @@ GPX Viewer
 Jürgen Berkemeier
 
 http://www.j-berkemeier.de/GPXViewer
+
+============================================================================
+
+Printmaps
+Klaus Tockloth
+
+http://printmaps-osm.de:8080
+
+============================================================================
+
+OpenTopoMap
+
+https://github.com/der-stefan/OpenTopoMap
 
 ============================================================================
 

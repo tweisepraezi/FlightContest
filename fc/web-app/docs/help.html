@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.4, Ausgabe 1,</span>
-<span id="revdate">12.02.2019</span>
+<span id="revnumber">version 3.1.5, Ausgabe 1,</span>
+<span id="revdate">23.03.2019</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -503,7 +503,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a></li>
 <li><a href="#configuration-ftp">FTP-Versand konfigurieren</a></li>
 <li><a href="#configuration-live">Live-Anzeige konfigurieren</a></li>
-<li><a href="#configuration-osmprint">OSM-Druck-Server konfigurieren</a></li>
+<li><a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a></li>
 <li><a href="#configuration-test">Test-Anzeigen konfigurieren</a></li>
 </ul>
 </li>
@@ -558,7 +558,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </ul>
 </div>
 <div class="paragraph">
-<p>Ist eine moderne, auf Java-Techniken basierende, mehrsprachige und netzwerkf&#228;hige Open-Source-Datenbank-Anwendung:</p>
+<p>Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkf&#228;hige Open-Source-Datenbank-Anwendung:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -581,6 +581,9 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </div>
 <div class="paragraph">
 <p>Unterst&#252;tzt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).</p>
+</div>
+<div class="paragraph">
+<p>Erzeugt OSM-basierte A3- u. A4-Wettbewerbs-Karten im T&#220;K-200-Stil.</p>
 </div>
 <div class="paragraph">
 <p>Erzeugt PDF f&#252;r Druck und Internet-Ver&#246;ffentlichung.</p>
@@ -3641,6 +3644,17 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">im Flupplan f&#252;r Besatzungen dieser Klasse die sp&#228;teste Abgabezeit des L&#246;sungsbogens verl&#228;ngern (der Zahlen-Wert definiert die Minuten nach der regul&#228;ren Abgabezeit)</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--start-tp<br>
+--add-num</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1<br>
+TP3 [,TP5]<br>
+1 [,2]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan f&#252;r Besatzungen die Wendepunkte-Nummer um den angegebenen Wert
+ab dem angegebenen Wendepunkt erh&#246;hen
+(mehrere Erh&#246;hungen m&#246;glich; f&#252;r abk&#252;rzende Strecken, wo die Wettbewerbskarte einer anderen Strecke mitverwendet wird)</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
 --secret-gatewidth</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
@@ -3745,6 +3759,22 @@ body { --submission: 20; }</pre>
 <div class="literalblock">
 <div class="content">
 <pre>body { --class: Einsteiger; --add-submission: 10; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Flugplan - Wendepunkte-Nummer ab WP3 um 1 erh&#246;hen (druckt WP3 als WP4, WP4 als WP5 usw.)</p>
+<div class="literalblock">
+<div class="content">
+<pre>body { --route: Strecke-1; --start-tp: TP3; --add-num: 1; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Flugplan - Wendepunkte-Nummer ab WP3 um 1 erh&#246;hen, ab WP5 um weitere 2 erh&#246;hen</p>
+<div class="literalblock">
+<div class="content">
+<pre>body { --route: Strecke-1; --start-tp: TP3,TP5; --add-num: 1,2; }</pre>
 </div>
 </div>
 </li>
@@ -3855,7 +3885,7 @@ zu machen oder diese Datei zu l&#246;schen.</p>
 <a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a><br>
 <a href="#configuration-ftp">FTP-Versand konfigurieren</a><br>
 <a href="#configuration-live">Live-Anzeige konfigurieren</a><br>
-<a href="#configuration-osmprint">OSM-Druck-Server konfigurieren</a><br>
+<a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a><br>
 <a href="#configuration-test">Test-Anzeigen konfigurieren</a></p>
 </div>
 <div class="sect2">
@@ -3923,7 +3953,7 @@ flightcontest {
 <div class="ulist">
 <ul>
 <li>
-<p>GM_Utils-6.1.3 - GPX-Viewer-JavaScript-Bibliothek</p>
+<p>GM_Utils-6.2 - GPX-Viewer-JavaScript-Bibliothek</p>
 </li>
 <li>
 <p>Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis (obiges Beispiel: "demo")</p>
@@ -4036,12 +4066,14 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="configuration-osmprint">OSM-Druck-Server konfigurieren</h3>
+<h3 id="configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
   contestmap {
     printserverapi = "TODO"
+    projection = "3857"
+    showoptions = true
   }
 }</pre>
 </div>
@@ -4055,6 +4087,14 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.printserverapi</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Adresse des Druck-Servers f&#252;r die Erzeugung der OSM-Wettbewerbs-Karte</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.projection</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung festlegen (EPSG-Nummer)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.showoptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog zus&#228;tzliche Optionen ein</p></td>
 </tr>
 </tbody>
 </table>
@@ -4072,9 +4112,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
   }
   aflos {
     showmenu = true
-  }
-  contestmap {
-    showoptions = true
   }
   clouddemo {
     enable = true
@@ -4099,10 +4136,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">aflos.showmenu</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Blendet AFLOS-Men&#252; zur Anzeige des AFLOS-Datenbank-Inhaltes ein</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.showoptions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog Test-Optionen ein</p></td>
 </tr>
 </tbody>
 </table>

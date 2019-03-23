@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.4, Ausgabe 1
-:revdate:   12.02.2019
+:revnumber: 3.1.5, Ausgabe 1
+:revdate:   23.03.2019
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -22,7 +22,7 @@ Flight Contest hat ein flexibles Wettbewerbsmanagement. Dazu zählen die Unterst
 * paralleler Wettbewerbe (gleichzeitig stattfindende Wettbewerbe mit unabhängigen Startfeldern)
 * der Auswertung besonderer Besatzungs-Gruppen, die ad hoc festgelegt werden können
 
-Ist eine moderne, auf Java-Techniken basierende, mehrsprachige und netzwerkfähige Open-Source-Datenbank-Anwendung:
+Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkfähige Open-Source-Datenbank-Anwendung:
 
 * Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Internet Explorer u.a.).
 * Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden.
@@ -31,6 +31,8 @@ Ist eine moderne, auf Java-Techniken basierende, mehrsprachige und netzwerkfähi
 * Hohe Sicherheit gegen Fehlbedienung.
 
 Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).
+
+Erzeugt OSM-basierte A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.
 
 Erzeugt PDF für Druck und Internet-Veröffentlichung.
 
@@ -1444,6 +1446,15 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 |Einsteiger +
 10
 |im Flupplan für Besatzungen dieser Klasse die späteste Abgabezeit des Lösungsbogens verlängern (der Zahlen-Wert definiert die Minuten nach der regulären Abgabezeit)
+|--route +
+--start-tp +
+--add-num
+|Strecke-1 +
+TP3 [,TP5] + 
+1 [,2]
+|im Flugplan für Besatzungen die Wendepunkte-Nummer um den angegebenen Wert 
+ab dem angegebenen Wendepunkt erhöhen 
+(mehrere Erhöhungen möglich; für abkürzende Strecken, wo die Wettbewerbskarte einer anderen Strecke mitverwendet wird)
 |--class +
 --secret-gatewidth
 |Einsteiger +
@@ -1506,6 +1517,14 @@ im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
 
  body { --class: Einsteiger; --add-submission: 10; }
  
+** Flugplan - Wendepunkte-Nummer ab WP3 um 1 erhöhen (druckt WP3 als WP4, WP4 als WP5 usw.)
+
+ body { --route: Strecke-1; --start-tp: TP3; --add-num: 1; }
+
+** Flugplan - Wendepunkte-Nummer ab WP3 um 1 erhöhen, ab WP5 um weitere 2 erhöhen
+
+ body { --route: Strecke-1; --start-tp: TP3,TP5; --add-num: 1,2; }
+
 ** Gescannte Beobachtungsformulare - Größe verändern
 
  img.scannedobservationtest { width:80%; }
@@ -1621,7 +1640,7 @@ zu machen oder diese Datei zu löschen.
 
 Im Root-Verzeichnis des FTP-Servers müssen 2 Verzeichnisse existieren:
 
-* GM_Utils-6.1.3 - GPX-Viewer-JavaScript-Bibliothek
+* GM_Utils-6.2 - GPX-Viewer-JavaScript-Bibliothek
 * Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis (obiges Beispiel: "demo")
 
 Die genannte Version des GPX-Views kann folgendem Verzeichnis entnommen werden:
@@ -1687,16 +1706,20 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
  
 <<<
 [[configuration-osmprint]]
-=== OSM-Druck-Server konfigurieren
+=== OSM-Wettbewerbs-Kartendruck konfigurieren
  flightcontest {
    contestmap {
      printserverapi = "TODO"
+     projection = "3857"
+     showoptions = true
    }
  }
 
 [%autowidth]
 |===
 |contestmap.printserverapi|Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte
+|contestmap.projection|Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung festlegen (EPSG-Nummer)
+|contestmap.showoptions|Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Optionen ein
 |===
 
 [[configuration-test]]
@@ -1711,9 +1734,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
    aflos {
      showmenu = true
    }
-   contestmap {
-     showoptions = true
-   }
    clouddemo {
      enable = true
    }
@@ -1724,7 +1744,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 |wrlog.enable|Aktiviert das Schreiben von Logs in <Installationsverzeichnis>\fc\logs
 |dbutil.showmenu|Blendet "Extras -> DB" zur Anzeige von Datenbank-Inhalten ein
 |aflos.showmenu|Blendet AFLOS-Menü zur Anzeige des AFLOS-Datenbank-Inhaltes ein
-|contestmap.showoptions|Blendet beim OSM-Wettbewerbs-Karten-Dialog Test-Optionen ein
 |===
 
 <<<

@@ -18,7 +18,7 @@
         &maxscale_zoom11;
         &minscale_zoom17;
         <Filter>([aeroway] = 'aerodrome' or [aeroway] = 'runway')</Filter>
-        <MarkersSymbolizer file="symbols-otm/aerodrome.12.svg" placement="interior" clip="false" fill="#000000" />
+        <MarkersSymbolizer file="symbols-otm/aerodrome.12.svg" placement="interior" clip="false" fill="#000000" transform="scale(0.75, 0.75)" />
     </Rule>
     <Rule>
         &maxscale_zoom11;

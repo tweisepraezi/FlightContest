@@ -58,7 +58,7 @@
 		&maxscale_zoom11;
 		&minscale_zoom15;
 		<Filter>([man_made] = 'communications_tower' or [communication:radio] = 'yes' or [communication:television] = 'yes') or ([tower:type] = 'communication' and [height] &gt; 100)</Filter>
-		<MarkersSymbolizer placement="point" file="symbols-otm/communications_tower_z13.png" transform="translate(0 -5)"/>
+		<MarkersSymbolizer placement="point" file="symbols-otm/communications_tower_z13.png" transform="translate(0 -5) scale(0.75, 0.75)"/>
 	</Rule>
 	<Rule>
 		&maxscale_zoom16;
@@ -156,7 +156,7 @@
 		&maxscale_zoom11; <!-- Flight Contest -->
 		&minscale_zoom17;
 		<Filter>(([power] = 'generator') and ([generator:source] = 'wind'))</Filter>
-		<MarkersSymbolizer placement="point" file="symbols-otm/wind_turbine.png" transform="translate(1 -8)"/>
+		<MarkersSymbolizer placement="point" file="symbols-otm/wind_turbine.png" transform="translate(1 -8) scale(0.75, 0.75)"/>
 	</Rule>
 	<Rule>
 		&maxscale_zoom13;

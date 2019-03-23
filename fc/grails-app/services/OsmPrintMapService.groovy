@@ -61,6 +61,7 @@ class OsmPrintMapService
     
     final static String HIDELAYERS_OTM = "" // borders
     final static String HIDELAYERS_OTM_CONTOURS = "contours"
+    final static String HIDELAYERS_OTM_AIRFIELDS = "airports-name"
 
     final static String ATTR_PROJECTION = "3857" // EPSG-Nummer, WGS 84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
      
@@ -109,10 +110,10 @@ class OsmPrintMapService
     
     final static int GRATICULE_TEXT_FONT_SIZE = FACTOR*8
     final static BigDecimal GRATICULE_SCALEBAR_LEN = 0.2 // NM
-    final static int AIRFIELD_TEXT_FONT_SIZE = FACTOR*6
-    final static int PEAKS_TEXT_FONT_SIZE = FACTOR*5
-    final static int SPECIALS_TEXT_FONT_SIZE = FACTOR*5
-    final static String GEODATA_BUILDING_SCALE = "scale(1.0, 1.0)"
+    final static int AIRFIELD_TEXT_FONT_SIZE = FACTOR*10
+    final static int PEAKS_TEXT_FONT_SIZE = FACTOR*10
+    final static int SPECIALS_TEXT_FONT_SIZE = FACTOR*10
+    final static String GEODATA_BUILDING_SCALE = "scale(0.75, 0.75)"
     final static String GEODATA_SYMBOL_SCALE = "scale(0.75, 0.75)"
     final static int SYMBOL_TEXT_FONT_SIZE = FACTOR*10
     
@@ -170,7 +171,7 @@ class OsmPrintMapService
                              printEnrouteCanvas: false,
                              printContourLines: false,
                              printMunicipalityNames: false,
-                             printAirfields: false,
+                             printAirfields: Defs.CONTESTMAPAIRFIELDS_OSM,
                              printChurches: false,
                              printCastles: false,
                              printChateaus: false,
@@ -201,7 +202,7 @@ class OsmPrintMapService
             print_options.printEnrouteCanvas = m.'@enroutecanvas'[0] == "yes"
             print_options.printContourLines = m.'@contour_lines'[0] == "yes"
             print_options.printMunicipalityNames = m.'@municipality_names'[0] == "yes"
-            print_options.printAirfields = m.'@airfields'[0] == "yes"
+            print_options.printAirfields = m.'@airfields'[0]
             print_options.printChurches = m.'@churches'[0] == "yes"
             print_options.printCastles = m.'@castles'[0] == "yes"
             print_options.printChateaus = m.'@chateaus'[0] == "yes"
@@ -272,6 +273,9 @@ class OsmPrintMapService
             if (!printOptions.printContourLines) {
                 hide_layers += ",${HIDELAYERS_OTM_CONTOURS}"
             }
+            if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
+                hide_layers += ",${HIDELAYERS_OTM_AIRFIELDS}"
+            }
         }
         
         int print_width = 0 // mm
@@ -340,7 +344,7 @@ class OsmPrintMapService
         }
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
         String copyright_date = GeoDataService.ReadTxtFile(Defs.FCSAVE_FILE_GEODATA_DATE)
-        if (printOptions.printAirfields || printOptions.printChurches || printOptions.printCastles || printOptions.printChateaus || printOptions.printWindpowerstations || printOptions.printPeaks) {
+        if ((printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) || printOptions.printChurches || printOptions.printCastles || printOptions.printChateaus || printOptions.printWindpowerstations || printOptions.printPeaks) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.bkg',[copyright_date],true)}"
         }
         if (printOptions.printOTM) {
@@ -466,7 +470,7 @@ class OsmPrintMapService
         
         String airfields_lines = ""
         String airfields_file_name = ""
-        if (printOptions.printAirfields) {
+        if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
             airfields_file_name = Defs.FCSAVE_FILE_GEODATA_AIRFIELDS
             String airfields_short_file_name = airfields_file_name.substring(airfields_file_name.lastIndexOf('/')+1)
             airfields_lines = """,{
@@ -477,7 +481,7 @@ class OsmPrintMapService
                 "Layer": ""
             }
             ,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${AIRFIELD_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='10' placement='point'>[name]</TextSymbolizer>",
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${AIRFIELD_TEXT_FONT_SIZE}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true' dy='10' placement='point'>[name]</TextSymbolizer>",
                 "SRS": "+init=epsg:4326",
                 "Type": "csv",
                 "File": "${airfields_short_file_name}",
@@ -643,6 +647,10 @@ class OsmPrintMapService
         boolean job_successfully = false
         int img_width = 0
         int img_height = 0
+        String projection =  BootStrap.global.GetPrintServerProjection()
+        if (!projection) { 
+            projection = ATTR_PROJECTION
+        }
         
         //...........................................................................................
         printstart "Create job"
@@ -659,7 +667,7 @@ class OsmPrintMapService
                     "Latitude": ${printOptions.centerLatitude},
                     "Longitude": ${printOptions.centerLongitude},
                     "Style": "${style}",
-                    "Projection": "${ATTR_PROJECTION}",
+                    "Projection": "${projection}",
                     "HideLayers": "${hide_layers}",
                     "UserObjects": [
                         ${user_text}
@@ -851,7 +859,8 @@ class OsmPrintMapService
                 [(Defs.OSMPRINTMAP_ACTION):Defs.OSMPRINTMAP_ACTION_CHECKJOB, 
                  (Defs.OSMPRINTMAP_JOBFILENAME):printjob_filename,
                  (Defs.OSMPRINTMAP_JOBID):printjob_id,
-                 (Defs.OSMPRINTMAP_JOBIDFILENAME):printjobid_filename, 
+                 (Defs.OSMPRINTMAP_JOBIDFILENAME):printjobid_filename,
+                 (Defs.OSMPRINTMAP_FILEIDFILENAME):printfileid_filename,
                  (Defs.OSMPRINTMAP_PNGFILENAME):printParams.pngFileName,
                  (Defs.OSMPRINTMAP_PRINTLANDSCAPE):printOptions.printLandscape,
                  (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):printOptions.printColorChanges
@@ -866,7 +875,7 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String pngFileName, boolean printLandscape, boolean printColorChanges)
+    void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String fileIdFileName, String pngFileName, boolean printLandscape, boolean printColorChanges)
     {
         printstart "BackgroundJob ${actionName} ${jobId}"
         
@@ -875,17 +884,26 @@ class OsmPrintMapService
                 boolean job_successfully = false
                 int img_width = 0
                 int img_height = 0
-                
+                BigDecimal lon_min = 0.0
+                BigDecimal lon_max = 0.0
+                BigDecimal lat_min = 0.0
+                BigDecimal lat_max = 0.0
+
                 //...........................................................................................
                 printstart "Check job status"
                 Map status = CallPrintServer("/mapstate/${jobId}", [HEADER_ACCEPT], "GET", DataType.JSON, "")
                 if (status.responseCode == 200) {
                     if (status.json.Data.Attributes.MapBuildSuccessful) {
-                        img_width = status.json.Data.Attributes.MapBuildBoxPixel.Width
-                        img_height = status.json.Data.Attributes.MapBuildBoxPixel.Height
-                        String s = status.json.Data.Attributes.MapBuildMessage
-                        println "Successfully. Status='${status.json.Data.Attributes.MapBuildSuccessful}', Width=${img_width}, Height=${img_height}"
                         job_successfully = status.json.Data.Attributes.MapBuildSuccessful == "yes"
+                        if (job_successfully) {
+                            img_width = status.json.Data.Attributes.MapBuildBoxPixel.Width
+                            img_height = status.json.Data.Attributes.MapBuildBoxPixel.Height
+                            lon_min = status.json.Data.Attributes.MapBuildBoxWGS84.LonMin.toBigDecimal()
+                            lon_max = status.json.Data.Attributes.MapBuildBoxWGS84.LonMax.toBigDecimal()
+                            lat_min = status.json.Data.Attributes.MapBuildBoxWGS84.LatMin.toBigDecimal()
+                            lat_max = status.json.Data.Attributes.MapBuildBoxWGS84.LatMax.toBigDecimal()
+                        }
+                        println "Successfully. Status='${status.json.Data.Attributes.MapBuildSuccessful}', Width=${img_width}, Height=${img_height}"
                     } else {
                         printdone "Wait '${status.json.Data.Attributes.MapBuildStarted}'"
                         break
@@ -910,6 +928,7 @@ class OsmPrintMapService
                     
                         String download_zip_file_name = "${pngFileName}.zip"
                         String unpacked_png_file_name = "${pngFileName}.png"
+                        String world_file_name = "${pngFileName}w"
                         
                         printstart "Write ${download_zip_file_name}"
                         FileOutputStream zip_stream = new FileOutputStream(download_zip_file_name)
@@ -935,6 +954,22 @@ class OsmPrintMapService
                             km_reader.close()
                         }
                         kmz_file.close()
+                        
+                        printstart "Generate ${world_file_name}"
+                        try {
+                            File world_file = new File(world_file_name)
+                            BufferedWriter world_file_writer = world_file.newWriter()
+                            world_file_writer << "${(lon_max-lon_min)/img_width}\n" // 1
+                            world_file_writer << "0\n" // 2
+                            world_file_writer << "0\n" // 3
+                            world_file_writer << "${(lat_min-lat_max)/img_height}\n" // 4
+                            world_file_writer << "${lon_min}\n" // 5
+                            world_file_writer << "${lat_max}" // 6
+                            world_file_writer.close()
+                        } catch (Exception e) {
+                            println e.getMessage()
+                        }
+                        printdone ""
                         
                         printstart "Delete ${download_zip_file_name}"
                         File download_zip_file = new File(download_zip_file_name)
@@ -970,36 +1005,46 @@ class OsmPrintMapService
                             printerror ""
                         }
                         
-                        printstart "Delete ${jobIdFileName}"
-                        File printjobid_file = new File(jobIdFileName)
-                        if (printjobid_file.delete()) {
-                            printdone ""
-                        } else {
-                            printerror ""
-                        }
                     }
                     printdone "responseCode=${status.responseCode}, ${if(status.binary)'Data available.'else'No data.'}"
                 }
                 
                 //...........................................................................................
-                if (jobId) {
-                    printstart "View job"
-                    status = CallPrintServer("/metadata/${jobId}", [HEADER_CONTENTTYPE], "GET", DataType.JSON, null)
-                    printdone "responseCode=${status.responseCode}"
+                printstart "Delete ${jobIdFileName}"
+                File printjobid_file = new File(jobIdFileName)
+                if (printjobid_file.delete()) {
+                    printdone ""
+                } else {
+                    printerror ""
                 }
+
+                //...........................................................................................
+                printstart "View job"
+                status = CallPrintServer("/metadata/${jobId}", [HEADER_CONTENTTYPE], "GET", DataType.JSON, null)
+                printdone "responseCode=${status.responseCode}"
                 
                 //...........................................................................................
-                if (jobId) {
-                    printstart "Remove job"
-                    status = CallPrintServer("/${jobId}", [HEADER_ACCEPT], "DELETE", DataType.NONE, null)
-                    printdone "responseCode=${status.responseCode}"
-                }
+                printstart "Remove job"
+                status = CallPrintServer("/${jobId}", [HEADER_ACCEPT], "DELETE", DataType.NONE, null)
+                printdone "responseCode=${status.responseCode}"
             
                 //...........................................................................................
                 printstart "Stop OsmPrintMapJob"
                 quartzScheduler.unscheduleJobs(quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
                 gpxService.DeleteFile(jobFileName)
                 printdone ""
+                
+                //...........................................................................................
+                if (!job_successfully) {
+                    String printfileid_errorfilename = fileIdFileName + Defs.OSMPRINTMAP_ERR_EXTENSION
+                    printstart "Renmae ${fileIdFileName} to ${printfileid_errorfilename}"
+                    File printfileid_file = new File(fileIdFileName)
+                    if (printfileid_file.renameTo(printfileid_errorfilename)) {
+                        printdone ""
+                    } else {
+                        printerror ""
+                    }
+                }
                 
                 break
         }

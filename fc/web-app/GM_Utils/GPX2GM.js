@@ -1,15 +1,15 @@
 // GPX2GM.js
-// Darstellung von GPS-Daten aus einer GPX-Datei in Google Maps
-// Version 6.1.3
-// 7. 11. 2018 Jürgen Berkemeier
+// Darstellung von GPS-Daten aus einer GPX-Datei in Openstreetmap oder Google Maps  
+// Version 6.2
+// 15. 1. 2019 Jürgen Berkemeier
 // www.j-berkemeier.de
 
 "use strict";
 
 window.JB = window.JB || {};
 window.JB.GPX2GM = window.JB.GPX2GM || {};
-JB.GPX2GM.ver = "6.1.3";
-JB.GPX2GM.dat = "7. 11. 2018";
+JB.GPX2GM.ver = "6.2";
+JB.GPX2GM.dat = "15. 1. 2019";
 JB.GPX2GM.fname = "GPX2GM.js";
 
 if(typeof(GPXVIEW_Debuginfo)=="undefined") 
@@ -41,10 +41,8 @@ JB.Scripte = { GPX2GM_Defs:0, maplib:0, gra:0, plot:0, maputils:0 };
 JB.setgc = function() {  
 	JB.gc = {};
 	JB.gc.mapapi = (typeof(Mapapi)!="undefined") ? Mapapi : "osm";   // gm oder osm
-	JB.gc.doclang = (typeof(Doclang)!="undefined") ? Doclang : "auto"; // de oder en
+	JB.gc.doclang = (typeof(Doclang)!="undefined") ? Doclang : "auto"; // de, fr oder en
 	JB.gc.unit = (typeof(Unit)!="undefined") ? Unit : "si"; // enus oder air oder water = airwater
-	JB.gc.largemapcontrol = (typeof(Largemapcontrol)!="undefined") ? Largemapcontrol : false;
-	JB.gc.overviewmapcontrol = (typeof(Overviewmapcontrol)!="undefined") ? Overviewmapcontrol : false;
 	JB.gc.showmaptypecontroll = (typeof(Showmaptypecontroll)!="undefined") ? Showmaptypecontroll : true;
 	JB.gc.scrollwheelzoom = (typeof(Scrollwheelzoom)!="undefined") ? Scrollwheelzoom : true;
 	JB.gc.fullscreenbutton = (typeof(Fullscreenbutton)!="undefined") ? Fullscreenbutton : false;
@@ -116,6 +114,7 @@ JB.setgc = function() {
 	JB.gc.shrtziel = (typeof(Shrtziel)!="undefined") ? Shrtziel : false;
 	JB.gc.arrowroute = (typeof(Arrowroute)!="undefined") ? Arrowroute : false
 	JB.gc.arrowroutecol = (typeof(Arrowroutecol)!="undefined") ? Arrowroutecol : "";
+	JB.gc.arrowsymbol = (typeof(Arrowsymbol)!="undefined") ? Arrowsymbol : "➤"; 
 	JB.gc.groesseminibild	= (typeof(Groesseminibild)!="undefined") ? Groesseminibild : 60; // in Pixel, max. 149
 	JB.gc.displaycolor = (typeof(Displaycolor)!="undefined") ? Displaycolor : false;
 	JB.gc.laengen3d = (typeof(Laengen3d)!="undefined") ? Laengen3d : false;
@@ -207,6 +206,7 @@ JB.makeMap = function (ID) {
 	MapHead.appendChild(document.createTextNode(": "));
 	var mapdiv = document.createElement("div");
 	mapdiv.id = "map_"+id;
+	mapdiv.style.height = "100%";
 	while(div.hasChildNodes()) div.removeChild(div.firstChild);
 	if(!JB.gc.legende) MapHead.style.display="none";
 	var odiv = document.createElement("div");
@@ -214,8 +214,6 @@ JB.makeMap = function (ID) {
 	odiv.appendChild(MapHead);
 	odiv.appendChild(mapdiv);
 	div.appendChild(odiv);
-	if (JB.gc.legende) JB.addClass("JBmapdiv_map_mit_legende",mapdiv);
-	else               JB.addClass("JBmapdiv_map",mapdiv);   
 	if (JB.gc.trcolmod.length) {
 		try { mapdiv.style.width = "calc(100% - 90px)"; } catch(e) {}
 		odiv.style.position = "relative";
@@ -236,14 +234,14 @@ JB.makeMap = function (ID) {
 		cadp:{x:"x",y:"cad"},cadpt:{x:"t",y:"cad"}
 	};
 	if(JB.gc.shtrtabs_p) profil.hpt.x = profil.spt.x = profil.vpt.x = profil.hrpt.x = profil.cadpt.x = profil.wpt.x = "tabs";
-	profil.hpt.ytext = profil.hp.ytext = strings.alt+" in "+units.alt;
-	profil.spt.ytext = profil.sp.ytext = strings.grade+" in "+strings.grade_unit;
-	profil.vpt.ytext = profil.vp.ytext = strings.speed+" in "+units.speed;
-	profil.hrpt.ytext = profil.hrp.ytext = strings.hr+" in "+strings.hr_unit;
-	profil.cadpt.ytext = profil.cadp.ytext = strings.cad+" in "+strings.cad_unit;
-	profil.wpt.ytext = strings.way+" in "+units.way;
-	profil.hp.xtext = profil.vp.xtext = profil.sp.xtext = profil.hrp.xtext = profil.cadp.xtext = strings.way+" in "+units.way;
-	profil.hpt.xtext = profil.vpt.xtext = profil.spt.xtext = profil.hrpt.xtext = profil.cadpt.xtext = profil.wpt.xtext = strings.time; //+" in "+strings.time_unit; 
+	profil.hpt.ytext = profil.hp.ytext = strings.alt+strings.in+units.alt;
+	profil.spt.ytext = profil.sp.ytext = strings.grade+strings.in+strings.grade_unit;
+	profil.vpt.ytext = profil.vp.ytext = strings.speed+strings.in+units.speed;
+	profil.hrpt.ytext = profil.hrp.ytext = strings.hr+strings.in+strings.hr_unit;
+	profil.cadpt.ytext = profil.cadp.ytext = strings.cad+strings.in+strings.cad_unit;
+	profil.wpt.ytext = strings.way+strings.in+units.way;
+	profil.hp.xtext = profil.vp.xtext = profil.sp.xtext = profil.hrp.xtext = profil.cadp.xtext = strings.way+strings.in+units.way;
+	profil.hpt.xtext = profil.vpt.xtext = profil.spt.xtext = profil.hrpt.xtext = profil.cadpt.xtext = profil.wpt.xtext = strings.time; //+strings.in+strings.time_unit; 
 	profil.hpt.scale = profil.hp.scale = hscale;
 	profil.spt.scale = profil.sp.scale = sscale;
 	profil.vpt.scale = profil.vp.scale = vscale;
@@ -313,12 +311,19 @@ JB.makeMap = function (ID) {
 		JB.lpgpx(file,id,function(daten) {
 			newfile = true;
 			gpxdaten = daten;
-			if(JB.gc.tkorr && JB.gc.mapapi=="gm") getTimezone(gpxdaten);
+			JB.Wait(id,["maputils"],function() {JB.getTimezone(gpxdaten,{trackinfo:trackinfo,wpinfo:wpinfo})});
 			gpxdaten = pict2WP(gpxdaten);
 			gpxdaten = div2WP(gpxdaten);
 			if(JB.gc.tracksort) gpxdaten = sort_tracks(gpxdaten);
 			gpxdaten = wp_dist(gpxdaten);
 			setMapHead();
+			if (JB.gc.legende) {
+				JB.onresize(odiv, function(w,h) {
+					var t = MapHead.offsetHeight;
+					mapdiv.style.top = t +"px";
+					mapdiv.style.height = (h-t) + "px";
+				},true)
+			}
 			show();
 			div.removeChild(infodiv);
 			JB.Debug_Info(id,"Info weg",false);
@@ -341,7 +346,8 @@ JB.makeMap = function (ID) {
 
 	this.Clear = function() {
 	  var p,pr,i;
-		if(mapidleevent) Map.removeEvent(mapidleevent);
+		if(zoomchangeevent1) Map.removeEvent(zoomchangeevent1);
+		if(zoomchangeevent2) Map.removeEvent(zoomchangeevent2);
 		Map = null;
 		for(p in profil) {
 			pr = profil[p];                                                                  
@@ -621,7 +627,7 @@ JB.makeMap = function (ID) {
 	} // setMapHead
 	
 	var profilcanvas="X";
-	var mapidleevent=null;
+	var zoomchangeevent1=null,zoomchangeevent2=null;
 
 	function show() {
 		JB.Debug_Info(id,"show",false);
@@ -666,18 +672,24 @@ JB.makeMap = function (ID) {
 			}
 			showTracks();
 			showRoutes();
+			var zoomchangedevent = (JB.gc.mapapi=="gm")?"zoom_changed":"zoomend" ;
+			if(zoomchangeevent2) Map.removeEvent(zoomchangeevent2);
+			if( JB.gc.arrowtrack || JB.gc.arrowroute ) 
+					zoomchangeevent2 = Map.addMapEvent(zoomchangedevent, function(){ 
+					showTracks();
+					showRoutes();
+				});
 			if(JB.gc.wpcluster) { 
-				var zoomchangedevent = (JB.gc.mapapi=="gm")?"zoom_changed":"zoomend" ;
 				if(JB.gc.mapapi=="gm") Map.addMapEventOnce("idle", showWpts);
 				else showWpts();
-				if(!mapidleevent) mapidleevent = Map.addMapEvent(zoomchangedevent, function(){ 
+				if(!zoomchangeevent1) zoomchangeevent1 = Map.addMapEvent(zoomchangedevent, function(){ 
 					if(JB.gc.mapapi=="gm") Map.addMapEventOnce("idle", showWpts);
 					else showWpts();
 				});
 				else showWpts();
 			}
 			else {
-				if(mapidleevent) Map.removeEvent(mapidleevent);
+				if(zoomchangeevent1) Map.removeEvent(zoomchangeevent1);
 				showWpts();
 			}
 		});
@@ -703,7 +715,7 @@ JB.makeMap = function (ID) {
 			}
 		}
 		if(markers.length>0 && typeof(JB.GPX2GM.callback)=="function")
-			JB.GPX2GM.callback({id:id,type:"Wegpunkte_n",gpxdaten:gpxdaten,profil:profil,Map:Map});
+			JB.GPX2GM.callback({id:id,type:"Wegpunkte_n",gpxdaten:gpxdaten,profil:profil,Map:Map,markers:markers});
 	} // showWpts 
 	
 	function showWpt(waypoint) {
@@ -844,7 +856,7 @@ JB.makeMap = function (ID) {
 			}
 		}
 		if(routepolylines.length>0 && typeof(JB.GPX2GM.callback)=="function") 
-			JB.GPX2GM.callback({id:id,type:"Routen_n",gpxdaten:gpxdaten,profil:profil,Map:Map});
+			JB.GPX2GM.callback({id:id,type:"Routen_n",gpxdaten:gpxdaten,profil:profil,Map:Map,polylines:routepolylines});
 	} // showRoutes
 
 	function showTracks() {
@@ -974,7 +986,7 @@ JB.makeMap = function (ID) {
 			}
 		}
 		if(trackpolylines.length>0 && typeof(JB.GPX2GM.callback)=="function") 
-			JB.GPX2GM.callback({id:id,type:"Tracks_n",gpxdaten:gpxdaten,profil:profil,Map:Map});
+			JB.GPX2GM.callback({id:id,type:"Tracks_n",gpxdaten:gpxdaten,profil:profil,Map:Map,polylines:trackpolylines});
 	} // showTracks
 	
 	function track_click_fkt(map,daten,point) {
@@ -992,55 +1004,6 @@ JB.makeMap = function (ID) {
 		map.infowindow(info, a);
 	} // track_click_fkt
 	
-	function getTimezone(gpxdaten) {
-		var t,lat,lon,track=gpxdaten.tracks.track,wp=gpxdaten.wegpunkte.wegpunkt,daten,tzurl;
-		var count = gpxdaten.tracks.anzahl;
-		for(var i=0;i<gpxdaten.tracks.anzahl;i++) {
-			( function(tnr) { 
-				tzurl ="https://maps.googleapis.com/maps/api/timezone/json?location=";
-				daten = track[tnr].daten[0];
-				t = Math.round(daten.tabs*3600); 
-				lat = daten.lat;
-				lon = daten.lon;
-				tzurl += lat+","+lon+"&timestamp="+t;
-				window.setTimeout( function(){ JB.loadFile({name:tzurl}, "a", function(result,status) {
-					if(status == 200) {
-						var tz = JSON.parse(result.asciidata);
-						if(tz.status=="OK") {
-							JB.Debug_Info(track[tnr].name,"dstOffset:"+tz.dstOffset+", rawOffset:"+tz.rawOffset,false);
-							gpxdaten.tracks.track[tnr].tzoff = ( tz.dstOffset + tz.rawOffset );
-							trackinfo(gpxdaten.tracks.track[tnr]);
-							for(var j=0;j<gpxdaten.tracks.track[tnr].daten.length;j++) 
-								gpxdaten.tracks.track[tnr].daten[j].tabs += ( tz.dstOffset + tz.rawOffset ) / 3600;
-						}
-						count --;
-						if(!count && JB.gc.shtrtabs_p) show();
-					}
-				})},tnr*110);
-			} )(i);
-		}
-		for(var i=0;i<gpxdaten.wegpunkte.anzahl;i++) {
-			( function(wnr) { 
-				tzurl ="https://maps.googleapis.com/maps/api/timezone/json?location=";
-				daten = wp[wnr];
-				t = Math.round(daten.time);
-				lat = daten.lat;
-				lon = daten.lon;
-				tzurl += lat+","+lon+"&timestamp="+t;
-				window.setTimeout( function(){ JB.loadFile({name:tzurl}, "a", function(result,status) {
-					if(status == 200) {
-						var tz = JSON.parse(result.asciidata);
-						if(tz.status=="OK") {
-							JB.Debug_Info(gpxdaten.wegpunkte.wegpunkt[wnr].name,"dstOffset:"+tz.dstOffset+", rawOffset:"+tz.rawOffset,false);
-							gpxdaten.wegpunkte.wegpunkt[wnr].time += ( tz.dstOffset + tz.rawOffset );
-							wpinfo(gpxdaten.wegpunkte.wegpunkt[wnr]);
-						}
-					}
-				})},(wnr+gpxdaten.tracks.anzahl)*110);
-			} )(i);
-		}
-	} // getTimezone
-
 	function trackinfo(tracki) {
 		var info = "<strong>"+tracki.name+"</strong>";
 		if(JB.gc.shtrx) 
@@ -1256,15 +1219,16 @@ JB.CheckBoxGroup = function(id,Texte,Label,Farbe,def_stat,clickFunc,clickFunc2) 
 	var dieses = this;
 	var nbx = Texte.length;
 	this.status = []; for(var i=0;i<nbx;i++) this.status[i] = def_stat ;
-	var ele;
+	var inp,label,img;
 	var box=document.createElement("div");
 	JB.addClass("JBcheckbox",box);
+	box.tabIndex = 0;
 	for(var i=0;i<nbx;i++) {
-		ele = document.createElement("input");
-		ele.type = "checkbox";
-		ele.id = Label + i;
-		ele.nr = i;
-		if(i==0) ele.onclick = function() {
+		inp = document.createElement("input");
+		inp.type = "checkbox";
+		inp.id = Label + i;
+		inp.nr = i;
+		if(i==0) inp.onclick = function() {
 			var l = nbx;
 			var n = Label;
 			var status = this.checked;
@@ -1275,7 +1239,7 @@ JB.CheckBoxGroup = function(id,Texte,Label,Farbe,def_stat,clickFunc,clickFunc2) 
 			}
 			clickFunc(dieses,this);
 		};
-		else     ele.onclick = function() {
+		else     inp.onclick = function() {
 			var l = nbx;
 			var n = Label;
 			var status = false;
@@ -1285,37 +1249,41 @@ JB.CheckBoxGroup = function(id,Texte,Label,Farbe,def_stat,clickFunc,clickFunc2) 
 			dieses.status[this.nr] = this.checked;
 			clickFunc(dieses,this);
 		};
-		box.appendChild(ele);
-		ele.checked = def_stat;
-		ele=document.createElement("span");
+		label=document.createElement("label");
 		if(Farbe.length) {
-			if(i==0 && nbx==1) ele.style.color=Farbe[0];
-			else if(i) ele.style.color=Farbe[(i-1)%Farbe.length];
+			if(i==0 && nbx==1) label.style.color=Farbe[0];
+			else if(i) label.style.color=Farbe[(i-1)%Farbe.length];
 		}
-		ele.appendChild(document.createTextNode(Texte[i]));
-		box.appendChild(ele);
+		label.appendChild(inp);
+		label.appendChild(document.createTextNode(Texte[i]));
+		box.appendChild(label);
+		inp.checked = def_stat;
 		if(clickFunc2) {
-			ele = document.createElement("img");
-			ele.src = JB.GPX2GM.Path+"Icons/lupe_p.png";;
-			ele.style.cursor = "Pointer";
+			img = document.createElement("img");
+			img.src = JB.GPX2GM.Path+"Icons/lupe_p.png";;
+			img.style.cursor = "Pointer";
+			img.tabIndex = 0;
 			(function(func) {
-				ele.onclick = func;   
+				img.onclick = func;   
 			})(clickFunc2[i]);
-			box.appendChild(ele);
+			box.appendChild(img);
 		}
 		if(i<Texte.length-1) box.appendChild(document.createElement("br"));
 	}
-	ele=document.getElementById(id);
-	ele.appendChild(box);
-	var spn=document.createElement("span"); // Platzhalter
-	spn.appendChild(document.createTextNode("xX"+Texte[0]+"xX"));
-	spn.style.visibility="hidden";
-	ele.appendChild(spn);
+	document.getElementById(id).appendChild(box);
 } // JB.CheckBoxGroup
 
 JB.sec2string = function(sec,off) {
-	if(JB.gc.doclang=="de") return (new Date(sec*1000 + off*1000)).toLocaleString('de-de',{timeZone:'UTC'});
-	else return (new Date(sec*1000 + off*1000)).toLocaleString('en-en',{timeZone:'UTC'});
+	if(JB.gc.tkorr && JB.gc.mapapi=="gm") {
+		if(JB.gc.doclang=="en") return (new Date(sec*1000 + off*1000)).toLocaleString('en-en',{timeZone:'UTC'});
+		else if(JB.gc.doclang=="fr") return (new Date(sec*1000 + off*1000)).toLocaleString('fr-fr',{timeZone:'UTC'});
+		else return (new Date(sec*1000 + off*1000)).toLocaleString('de-de',{timeZone:'UTC'});
+	}
+	else {
+		if(JB.gc.doclang=="en") return (new Date(sec*1000 + off*1000)).toLocaleString('en-en');
+		else if(JB.gc.doclang=="fr") return (new Date(sec*1000 + off*1000)).toLocaleString('fr-fr');
+		else return (new Date(sec*1000 + off*1000)).toLocaleString('de-de');
+	}
 } // JB.sec2string
 
 JB.Zeitstring = function(sekunden) {
@@ -1375,8 +1343,8 @@ JB.Wait = function(id,scripte,callback,ct) {
 } // Wait
 
 // lpgpx.js
-// Version 2.14
-// 26. 2. 2017
+// Version 2.15
+// 15. 12. 2018
 // www.j-berkemeier.eu
 JB.loadFile = function(file, format, callback) {
 	if(!file.fileobject) { // ajax
@@ -1513,31 +1481,31 @@ JB.lpgpx = function(fns,id,callback) {
 		return document.createElement("div");
 	} // xmlParse
 	
-	function rauf_runter(t) {
-		var l=t.length;
+	function rauf_runter(a) {
+		var l=a.length;
 		if(l<2) return { rauf:0, runter:0 } ; 
 		var rauf = 0;
 		var runter = 0;
-		var h = t[0].hs;
-		t[0].rauf = rauf;
-		t[0].runter = runter;
+		var h = a[0].hs;
+		a[0].rauf = rauf;
+		a[0].runter = runter;
 		var hm,dh;
 		for(var i=1;i<l;i++) {
 			hm = h;
-			h = t[i].hs;
+			h = a[i].hs;
 			dh = h - hm;
 			if(dh>0) rauf += dh;
 			else runter -= dh;
-			t[i].rauf = rauf;
-			t[i].runter = runter;
+			a[i].rauf = rauf;
+			a[i].runter = runter;
 		}
-		var korrektur = ( (t[t.length-1].h-t[0].h) - (rauf-runter) ) / 2;
+		var korrektur = ( (a[a.length-1].h-a[0].h) - (rauf-runter) ) / 2;
 		rauf   += korrektur;
 		runter -= korrektur;
 		rauf = Math.round(rauf);
 		runter = Math.round(runter);
-		t[t.length-1].rauf = rauf;
-		t[t.length-1].runter = runter;		
+		a[a.length-1].rauf = rauf;
+		a[a.length-1].runter = runter;		
 		return { rauf:rauf, runter:runter } ;    
 	} // rauf_runter
 	
@@ -1605,7 +1573,7 @@ JB.lpgpx = function(fns,id,callback) {
 	function utc2sec(utcdate) {
 		return Date.parse(utcdate)/1000;
 	} // utc2sec
-
+	
 	function smooth(a,x,y,ys,range) {
 		var fak,faksum,sum,xi,xmin,xmax,xj,i,j,ai,aj,ti;
 		var l = a.length;
@@ -1621,7 +1589,8 @@ JB.lpgpx = function(fns,id,callback) {
 		var xl = a[l-1][x];
 		range /= 2000;
 		if(range>(xl-x0)/4 || range==0) return t;
-		var glattpar = 1.3;
+		var glattpar = 1.0; // 1.3;
+		var dx;
 		for(i=0;i<l;i++) {
 			ai = a[i];
 			xi = ai[x];
@@ -1633,9 +1602,8 @@ JB.lpgpx = function(fns,id,callback) {
 			if(j>=0) {
 				aj = a[j];
 				xj = aj[x];
-				var dx;
 				while(xj>xmin) {
-					dx = (xj - xi)/range;
+					dx = -(xj - xi)/range;
 					fak = 1 - glattpar*dx*dx;
 					sum += aj[y]*fak;
 					faksum += fak;
@@ -1869,11 +1837,11 @@ JB.lpgpx = function(fns,id,callback) {
 				}
 				if(hflag) {
 					daten = smooth(daten,"x","h","hs",JB.gc.hglattlaen);
-					if(JB.gc.hglatt) for(var i=0;i<trkptslen;i++) daten[i].h = daten[i].hs;
+					var rr = rauf_runter(daten);
+					if(JB.gc.hglatt) 
+						for(var i=0;i<trkptslen;i++) daten[i].h = daten[i].hs;
 					daten = diff(daten,"x","hs","s",0.1*JB.gc.sfaktor);
 					daten = smooth(daten,"x","s","s",JB.gc.hglattlaen);
-					//daten = smooth(daten,"x","hs","hs",JB.gc.hglattlaen);
-					var rr = rauf_runter(daten);
 					JB.Debug_Info(id,"Rauf: "+rr.rauf+"   Runter: "+rr.runter,false);
 					tracki.rauf = rr.rauf;
 					tracki.runter = rr.runter;
@@ -1978,7 +1946,7 @@ JB.lpgpx = function(fns,id,callback) {
 				}
 				if(lat<routei.latmin) routei.latmin=lat; if(lat>routei.latmax) routei.latmax=lat;
 				if(lon<routei.lonmin) routei.lonmin=lon; if(lon>routei.lonmax) routei.lonmax=lon;
-				daten.push({lat:lat,lon:lon});
+				daten.push({lat:lat,lon:lon,x:routlen});
 				var rpts = rteptsi.getElementsByTagName("rpt"); // Routenpunkte
 				if(rpts.length>0) JB.Debug_Info(id,rpts.length +" Routenpunkte (Garmin) gefunden",false);
 				for(var k=0;k<rpts.length;k++) {
@@ -1990,7 +1958,7 @@ JB.lpgpx = function(fns,id,callback) {
 						if(lat<latmin) latmin=lat; if(lat>latmax) latmax=lat;
 						if(lon<lonmin) lonmin=lon; if(lon>lonmax) lonmax=lon;
 					}
-					daten.push({lat:lat,lon:lon});
+					daten.push({lat:lat,lon:lon,x:routlen});
 				}
 			}
 			routei.daten = daten;
@@ -2088,9 +2056,10 @@ JB.LoadCSS = function(url) {
 	}
 } // LoadCSS
 
-JB.onresize = function(ele,callback) {
+JB.onresize = function(ele,callback,run) {
 	var w = ele.offsetWidth;
 	var h = ele.offsetHeight;
+	if(run) callback(w,h);
 	return window.setInterval(function() {
 		var ww = ele.offsetWidth;
 		var hh = ele.offsetHeight;
@@ -2126,6 +2095,7 @@ JB.farbtafel = function(n) {
 
 JB.farbtafel_bipolar = function() {
 	var tafel = [],r,g,b,i;
+	for(g=128;g<255;g++) tafel.push("rgb("+0+","+g+","+0+")");
 	for(i=0;i<255;i++) {
 		g = 255;
 		r = i;
@@ -2138,6 +2108,7 @@ JB.farbtafel_bipolar = function() {
 		b = 0;//255 - i;
 		tafel.push("rgb("+r+","+g+","+b+")");
 	}
+	for(r=255;r>128;r--) tafel.push("rgb("+r+","+0+","+0+")");
 	return tafel;
 } // farbtafel_bipolar
 
@@ -2339,7 +2310,7 @@ JB.GPX2GM.check_API = function() {
 		var parsarr = pars.split(";");
 		for(var i=0;i<parsarr.length;i++) {
 			var parset = parsarr[i].split("=");
-			if(parset[0] == "map_api") {
+			if(parset[0] == "map_api" || parset[0] == "mapapi") {
 				switch(parset[1]) { 
 					case "osm":
 						mapapi = "osm"; 

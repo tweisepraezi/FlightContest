@@ -406,7 +406,7 @@ class GpxTagLib
         }
         outln"""<script>"""
         outln"""    var Legende_fnm = false;"""
-        outln"""    var Fullscreenbutton = true;"""
+        outln"""    var Fullscreenbutton = false;""" // BUG: Aufruf scheitert
         outln"""    var Unit = 'air';"""
         outln"""    var Overviewmapcontrol = true;"""
         outln"""    var Shwpshadow = false;"""

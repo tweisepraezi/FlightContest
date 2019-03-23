@@ -59,6 +59,17 @@ class CoordTitle // DB-2.5
 		}
 	}
 	
+    String titleCode2(int addNumber)
+    {
+        switch (type) {
+            case CoordType.TP:
+            case CoordType.SECRET:
+                return "${getMsg(type.code)}${number+addNumber}"
+            default:
+                return getMsg(type.code)
+        }
+    }
+    
     String titlePrintCode()
 	{
 		switch (type) {
@@ -69,6 +80,17 @@ class CoordTitle // DB-2.5
 				return getPrintMsg(type.code)
 		}
 	}
+    
+    String titlePrintCode2(int addNumber)
+    {
+        switch (type) {
+            case CoordType.TP:
+            case CoordType.SECRET:
+                return "${getPrintMsg(type.code)}${number+addNumber}"
+            default:
+                return getPrintMsg(type.code)
+        }
+    }
     
     String titleEnrouteInput()
     {

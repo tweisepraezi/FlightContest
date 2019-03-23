@@ -1,5 +1,8 @@
 import java.util.Map;
+
 import org.quartz.JobKey
+
+import java.util.zip.*
 
 class RouteController {
     
@@ -650,6 +653,7 @@ class RouteController {
             String webroot_dir = servletContext.getRealPath("/")
             String printjobid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + route.instance.id + ".txt"
             String printfileid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + route.instance.id + ".txt"
+            String printfileid_errorfilename = printfileid_filename + Defs.OSMPRINTMAP_ERR_EXTENSION
             String route_id = ""
             String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
             File printjob_file = new File(printjob_filename)
@@ -672,6 +676,10 @@ class RouteController {
                 new_osm_map = false
                 print_button = true
                 discard_button = true
+            } else if (new File(printfileid_errorfilename).exists()) { // Job ends not successful
+                flash.message = message(code:'fc.contestmap.job.error')
+                flash.error = true
+                gpxService.DeleteFile(printfileid_errorfilename)
             }
             // quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
             
@@ -702,7 +710,7 @@ class RouteController {
                 route.instance.contestMapGraticule = params.contestMapGraticule == "on"
                 route.instance.contestMapContourLines = params.contestMapContourLines == "on"
                 route.instance.contestMapMunicipalityNames = params.contestMapMunicipalityNames == "on"
-                route.instance.contestMapAirfields = params.contestMapAirfields == "on"
+                route.instance.contestMapAirfields = params.contestMapAirfields
                 route.instance.contestMapChurches = params.contestMapChurches == "on"
                 route.instance.contestMapCastles = params.contestMapCastles == "on"
                 route.instance.contestMapChateaus = params.contestMapChateaus == "on"
@@ -801,6 +809,7 @@ class RouteController {
                             printjob_writer << route.instance.id
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
+                            String world_file_name = "${map_png_file_name}w"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
                                                                  routeTitle: route.instance.name(),
@@ -827,6 +836,7 @@ class RouteController {
                                 redirect(action:'show',id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
+                            gpxService.DeleteFile(world_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
                         }
                         gpxService.DeleteFile(route_gpx_file_name)
@@ -875,6 +885,7 @@ class RouteController {
             String webroot_dir = servletContext.getRealPath("/")
             String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
             String printjobid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + route.instance.id + ".txt"
+            String printfileid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + route.instance.id + ".txt"
             File printjobid_file = new File(printjobid_filename)
             if (printjobid_file.exists()) {
                 LineNumberReader printjobid_file_reader = printjobid_file.newReader()
@@ -890,7 +901,8 @@ class RouteController {
                     [(Defs.OSMPRINTMAP_ACTION):Defs.OSMPRINTMAP_ACTION_CHECKJOB, 
                      (Defs.OSMPRINTMAP_JOBFILENAME):printjob_filename,
                      (Defs.OSMPRINTMAP_JOBID):printjob_id,
-                     (Defs.OSMPRINTMAP_JOBIDFILENAME):printjobid_filename, 
+                     (Defs.OSMPRINTMAP_JOBIDFILENAME):printjobid_filename,
+                     (Defs.OSMPRINTMAP_FILEIDFILENAME):printfileid_filename, 
                      (Defs.OSMPRINTMAP_PNGFILENAME):png_file_name,
                      (Defs.OSMPRINTMAP_PRINTLANDSCAPE):print_landscape,
                      (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):print_colorchanges
@@ -927,8 +939,10 @@ class RouteController {
                 String map_png_file_name = printfileid_reader.readLine()
                 printfileid_reader.close()
                 String unpacked_png_file_name = "${map_png_file_name}.png"
+                String world_file_name = "${map_png_file_name}w"
                 gpxService.DeleteFile(map_png_file_name)
                 gpxService.DeleteFile(unpacked_png_file_name)
+                gpxService.DeleteFile(world_file_name)
                 gpxService.DeleteFile(printfileid_filename)
             }
             
@@ -954,6 +968,7 @@ class RouteController {
                 if (printfileid_file.exists()) {
                     LineNumberReader printfileid_file_reader = printfileid_file.newReader()
                     String map_png_file_name = printfileid_file_reader.readLine()
+                    String world_file_name = "${map_png_file_name}w"
                     boolean print_landscape = printfileid_file_reader.readLine() == 'true'
                     boolean print_a3 = printfileid_file_reader.readLine() == 'true'
                     printfileid_file_reader.close()
@@ -965,8 +980,27 @@ class RouteController {
                         gpxService.Download(map_png_file_name, map_file_name, response.outputStream)
                         gpxService.printdone ""
                         gpxService.DeleteFile(map_png_file_name)
+                        gpxService.DeleteFile(world_file_name)
                         gpxService.DeleteFile(printfileid_filename)
-                        
+                    } else if (route.instance.contestMapPrint == Defs.CONTESTMAPPRINT_PNGZIP) {
+                        String png_file_name = "Map.png"
+                        String map_zip_file_name = map_png_file_name + ".zip"
+                        gpxService.printstart "Write ${map_zip_file_name}"
+                        ZipOutputStream zip_stream = new ZipOutputStream(new FileOutputStream(map_zip_file_name))
+                        write_file_to_zip(zip_stream, png_file_name, map_png_file_name)
+                        write_file_to_zip(zip_stream, png_file_name + "w", world_file_name)
+                        zip_stream.close()
+                        gpxService.printdone ""
+                        gpxService.printstart "Download PNGZIP"
+                        String map_file_name = (route.instance.name() + '.zip').replace(' ',"_")
+                        response.setContentType("application/octet-stream")
+                        response.setHeader("Content-Disposition", "Attachment;Filename=${map_file_name}")
+                        gpxService.Download(map_zip_file_name, map_file_name, response.outputStream)
+                        gpxService.printdone ""
+                        gpxService.DeleteFile(map_zip_file_name)
+                        gpxService.DeleteFile(map_png_file_name)
+                        gpxService.DeleteFile(world_file_name)
+                        gpxService.DeleteFile(printfileid_filename)
                     } else if (route.instance.contestMapPrint == Defs.CONTESTMAPPRINT_PDFMAP) {
                         gpxService.printstart "Generate PDF"
                         Map ret = printService.printmapRoute(print_a3, print_landscape, map_png_file_name, GetPrintParams())
@@ -978,6 +1012,7 @@ class RouteController {
                         } else if (ret.content) {
                             if (printService.WritePDF(response, ret.content, session.lastContest.GetPrintPrefix(), "map-${route.instance.idTitle}", true, print_a3, print_landscape)) {
                                 gpxService.DeleteFile(map_png_file_name)
+                                gpxService.DeleteFile(world_file_name)
                                 gpxService.DeleteFile(printfileid_filename)
                             }
                         } else {
@@ -994,6 +1029,19 @@ class RouteController {
         } else {
             redirect(controller:'contest',action:'start')
         }
+    }
+    
+    private void write_file_to_zip(ZipOutputStream zipOutputStream, String zipFileName, String fileName)
+    {
+        byte[] buffer = new byte[1024]
+        FileInputStream kml_file_input_stream = new FileInputStream(fileName)
+        zipOutputStream.putNextEntry(new ZipEntry(zipFileName))
+        int length
+        while ((length = kml_file_input_stream.read(buffer)) > 0) {
+            zipOutputStream.write(buffer, 0, length)
+        }
+        zipOutputStream.closeEntry()
+        kml_file_input_stream.close()
     }
     
     def mapprintable = {

@@ -1,15 +1,17 @@
 // osmutils.js
-// Version 1.1.3 
-// 8. 11. 2018
+// Version 1.2 
+// 15. 1. 2019
 // www.j-berkemeier.de
 
 "use strict";
 
 window.JB = window.JB || {};
 
-JB.Debug_Info("","osmutils.js 1.1.3 vom 8. 11. 2018",false);
-if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "function" )
-	console.log("osmutils.js 1.1.3 vom 8. 11. 2018");
+( function(verstring) {
+		JB.Debug_Info("",verstring,false);
+		if(!JB.debuginfo && typeof(console) != "undefined" && typeof(console.log) == "function" )
+			console.log(verstring);
+} )("osmutils.js 1.2 vom 15. 1. 2019");
 
 JB.Map = function(mapcanvas,id) {
 	var dieses = this;
@@ -71,7 +73,7 @@ JB.Map = function(mapcanvas,id) {
 
 	var grau = L.tileLayer(JB.GPX2GM.Path+"Icons/Grau256x256.png", { maxZoom: 22 });
 	this.maptypes.Keine_Karte = [nr++, grau];
-	baseLayers["Keine Karte"] = grau;
+	baseLayers[JB.GPX2GM.strings[JB.gc.doclang].noMap] = grau;
 
 	var opensea = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', {
 		attribution: 'Kartendaten: © <a href="http://www.openseamap.org">OpenSeaMap</a> contributors'
@@ -80,15 +82,17 @@ JB.Map = function(mapcanvas,id) {
 	overlayLayers["Open Sea"] = opensea;
 
 	this.map = L.map(mapcanvas, { 
-		layers: osm, 
+//		layers: osm, 
 		closePopupOnClick: false,
-		scrollWheelZoom: JB.gc.scrollwheelzoom
+		scrollWheelZoom: JB.gc.scrollwheelzoom,
+		tap: false
 	} );
 	
 	if(JB.gc.unit=="si") L.control.scale({imperial:false}).addTo(this.map); // Mit Maßstab km
 	else L.control.scale({metric:false}).addTo(this.map); // Mit Maßstab ml
 	
-	L.control.layers(baseLayers, overlayLayers).addTo(this.map);
+//	if(large && JB.gc.showmaptypecontroll) L.control.layers(baseLayers, overlayLayers).addTo(this.map);
+	if(JB.gc.showmaptypecontroll) L.control.layers(baseLayers, overlayLayers).addTo(this.map);
 	
 	// Mein Copyright und Versionshinweis
 	L.Control.CP = L.Control.extend({
@@ -118,7 +122,7 @@ JB.Map = function(mapcanvas,id) {
 		var fsbim = document.createElement("img");
 		fsbim.src = JB.GPX2GM.Path+"Icons/lupe_p_32.png";
 		//fsbim.width = "200px";
-		fsbim.title = "Full Screen";
+		fsb.title = fsbim.title = fsbim.alt = JB.GPX2GM.strings[JB.gc.doclang].fullScreen;
 		fsbim.large = false;
 		var ele = mapcanvas.parentNode;
 		fsb.onclick = function() {
@@ -126,7 +130,7 @@ JB.Map = function(mapcanvas,id) {
 			if(fsbim.large) {
 				document.body.style.overflow = "";
 				fsbim.src = JB.GPX2GM.Path+"Icons/lupe_p_32.png";
-				fsb.title = fsbim.title = fsbim.alt = "Full Screen";
+				fsb.title = fsbim.title = fsbim.alt = JB.GPX2GM.strings[JB.gc.doclang].fullScreen;
 				ele.style.left = ele.oleft + "px";
 				ele.style.top = ele.otop + "px";
 				ele.style.width = ele.owidth + "px";
@@ -146,8 +150,7 @@ JB.Map = function(mapcanvas,id) {
 			else {
 				document.body.style.overflow = "hidden";
 				fsbim.src = JB.GPX2GM.Path+"Icons/lupe_m_32.png";
-				if(JB.gc.doclang=="de") fsb.title = fsbim.title = fsbim.alt = "Normale Gr\u00F6\u00dfe";
-				else                    fsb.title = fsbim.title = fsbim.alt = "Normal Size";
+				fsb.title = fsbim.title = fsbim.alt = JB.GPX2GM.strings[JB.gc.doclang].normalSize;
 				var scrollY = 0;
 				if(document.documentElement.scrollTop && document.documentElement.scrollTop!=0)  scrollY = document.documentElement.scrollTop;
 				else if(document.body.scrollTop && document.body.scrollTop!=0)  scrollY = document.body.scrollTop;
@@ -210,8 +213,7 @@ JB.Map = function(mapcanvas,id) {
 		clb.style.margin = "10px 10px 0 0";
 		clb.style.borderRadius = "2px";
 		clb.style.cursor = "pointer";
-		if(JB.gc.doclang=="de") clb.title = "Aktuelle Position anzeigen";
-		else                    clb.title = "Show current location";
+		clb.title = JB.GPX2GM.strings[JB.gc.doclang].showCurrentLocation;
 		var clbimg = document.createElement("img");
 		clbimg.style.position = "absolute";
 		clbimg.style.top = "50%";
@@ -239,15 +241,13 @@ JB.Map = function(mapcanvas,id) {
 				first = true;
 				if(!marker) marker = dieses.Marker({lat:0,lon:0},JB.icons.CL)[0];
 				if ( wpid == -1 ) {
-					if(JB.gc.doclang=="de") clb.title = "Aktuelle Position verbergen";
-					else                    clb.title = "Hide current location";
+					clb.title = JB.GPX2GM.strings[JB.gc.doclang].hideCurrentLocation;
 					wpid = navigator.geolocation.watchPosition(geolocpos,geolocerror,{enableHighAccuracy:true, timeout: 5000, maximumAge: 60000});
 					marker.addTo(dieses.map); 
 					JB.Debug_Info("","Geolocation-Dienst wird eingerichtet.",false);
 				}
 				else {
-					if(JB.gc.doclang=="de") clb.title = "Aktuelle Position anzeigen";
-					else                    clb.title = "Show current location";
+					clb.title = JB.GPX2GM.strings[JB.gc.doclang].showCurrentLocation;
 					navigator.geolocation.clearWatch(wpid);
 					wpid = -1;
 					marker.remove();
@@ -390,6 +390,13 @@ JB.Map.prototype.rescale = function(gpxdaten) {
 	dieses.zoomstatus.h = dieses.mapcanvas.offsetHeight;
 	dieses.map.on("zoomend", dieses.zoomstatus.zoom_changed);
 	dieses.map.on("moveend", dieses.zoomstatus.move_end);
+/*	var zoom = dieses.getZoom(); // --------------------!!!!!!!!!!!!!!!!!!!!!---------------------!!!!!!!!!!!!!!
+	console.log("rescale", zoom.zoom, zoom.maxzoom);
+	if(zoom.zoom > zoom.maxzoom) {
+		dieses.map.setZoom(zoom.maxzoom);
+		dieses.zoomstatus.level = zoom.maxzoom;
+		console.log("rescale", zoom.zoom, zoom.maxzoom);
+	}*/
 } // rescale
 
 JB.Map.prototype.infowindow = function(infotext,coord) {
@@ -432,12 +439,65 @@ JB.Map.prototype.Polyline = function(daten,controls,route_oder_track,cols,click_
 		line[0].addTo(this.map);
 	}
 	
-	line[1] = L.polyline(coords,{color: "white", weight: 2*controls.owidth, opacity: 0.5}).addTo(dieses.map).bringToBack();
+	var overline = line.length;
+	line[overline] = L.polyline(coords,{color: "white", weight: 2*controls.owidth, opacity: 0.5}).addTo(dieses.map).bringToBack();
 	
-	if( (JB.gc.arrowtrack && route_oder_track == "Track") || (JB.gc.arrowroute && route_oder_track == "Route") ) {
-		console.warn("Arrowtrack wird unter Leaflet (noch) nicht unterstützt.");
-	} // if arrowtrack
+	var delta = function(coords,i,latlon) {
+		return coords[i+1][latlon]-coords[i-1][latlon] + 0.5*(coords[i+2][latlon]-coords[i-2][latlon]);
+//		return coords[i+range4c][latlon]-coords[i-range4c][latlon];
+	} // delta
 
+	var atan2 = function(x,y) {
+		if(x>0) return Math.atan(y/x);
+		else if (x<0) return Math.atan(y/x) + Math.PI;
+		else if (x==0 && y>0) return Math.PI;
+		else                  return -Math.PI;
+	} // atan2
+	
+	var findNextX = function(a,x) {
+		var l = a.length,istep=l/4,i=l/2;
+		if(l<3) return 0;
+		else if (l<5) return 2;
+		while(istep>0.5) {
+			if(x < a[Math.floor(i)].x) i -= istep;
+			else i += istep;
+			istep = istep/2; 
+		}
+		return Math.floor(i);
+	} // findNextX
+	
+	if( (JB.gc.arrowtrack && route_oder_track == "Track") || (JB.gc.arrowroute && route_oder_track == "Route") ) {			
+		var bounds = this.map.getBounds();
+		if(bounds) {
+			var size_px = Math.min(this.mapcanvas.offsetWidth,this.mapcanvas.offsetHeight);
+			var latlon1 = bounds.getNorthEast();
+			var latlon2 = bounds.getSouthWest();
+			JB.entf.init(latlon1.lat,latlon1.lng,0);
+			var sizelon_km = JB.entf.rechne(latlon1.lat,latlon2.lng,0);
+			JB.entf.init(latlon1.lat,latlon1.lng,0);
+			var sizelat_km = JB.entf.rechne(latlon2.lat,latlon1.lng,0);
+			var size_km = Math.min(sizelon_km,sizelat_km);
+			var dx_arrow = 400/size_px * size_km;
+			dx_arrow = daten.laenge/Math.ceil(daten.laenge/dx_arrow);
+			if(dx_arrow > daten.laenge) dx_arrow = daten.laenge;
+		}
+		else {
+			dx_arrow = daten.laenge/5;
+		}
+		var direction;
+		var arr_col = controls.col;
+		if(route_oder_track == "Track" && JB.gc.arrowtrackcol.length>0) arr_col = JB.gc.arrowtrackcol;
+		if(route_oder_track == "Route" && JB.gc.arrowroutecol.length>0) arr_col = JB.gc.arrowroutecol;
+		if(npt>=5) {
+			for(var x=dx_arrow/2,i;x<daten.laenge;x+=dx_arrow) {
+				i = findNextX(coords,x);
+				if(i<2) i=2; if(i>npt-3) i = npt-3;
+				direction = atan2(delta(coords,i,"lat"),delta(coords,i,"lon")); // hier evtl. über Nachbarn mitteln!
+				line = line.concat(dieses.setDirectionMarker(coords[i],direction,arr_col));
+			}
+		}
+	} // if arrowtrack
+	
 	var eventline = line.length;
 	line[eventline] = L.polyline(coords,{color: "black", weight: controls.width*5, opacity: 0.01});
 	line[eventline].addTo(this.map);
@@ -446,12 +506,17 @@ JB.Map.prototype.Polyline = function(daten,controls,route_oder_track,cols,click_
 		if(!dieses.trackinfofenster) dieses.trackinfofenster = JB.Infofenster(this.map);
 		dieses.trackinfofenster.hide();
 		line[eventline].on('mouseover', function(o) {
-			line[1].setStyle({color: "black", opacity: 1.0});
+			var ocol = controls.ocol;
+			if(ocol=="" && !(cols && cols.length)) {
+				ocol = col;				
+			}
+			if(ocol=="") ocol = "black";
+			line[overline].setStyle({color: ocol, opacity: 1.0});
 			dieses.trackinfofenster.content(infotext);
 			dieses.trackinfofenster.show();
 		});
 		line[eventline].on('mouseout', function(o) {
-			line[1].setStyle({color: "white", opacity: 0.5});
+			line[overline].setStyle({color: "white", opacity: 0.5});
 			dieses.trackinfofenster.hide();
 		});
 	} // trackover */
@@ -521,6 +586,17 @@ JB.Map.prototype.setClusterMarker = function(coord,icon,title,label) {
 	marker[0].addTo(this.map);
 	return marker;
 } // setClusterMarker
+  
+JB.Map.prototype.setDirectionMarker = function(coord,direction,color) { 
+	var marker = [];
+	var dir = direction - Math.PI/2;
+	var html = "<div style='color:"+color+"; transform: translate(-50%,-50%) rotate("+dir+"rad)'>"+JB.gc.arrowsymbol+"</div>";
+	var thisicon = L.divIcon({className: "JBdirection-marker", iconAnchor: [0, 0], html: html });
+	marker[0] = L.marker(coord, {icon: thisicon, zIndexOffset: 500} ); 
+	marker[0].addTo(this.map);
+//	marker[1] = this.Marker(coord,JB.icons.MoveMarker,"")[0];
+	return marker;
+} // setDirectionMarker
   
 JB.Map.prototype.Marker = function(coord,icon,title) { 
 	return this.setMarker(coord,icon,title); 
@@ -769,5 +845,8 @@ JB.Infofenster = function(map){
 	}
 	return new Infofenster_O();
 }// JB.Infofenster
+
+JB.getTimezone = function(gpxdaten,cb) {
+}
 
 // Ende gmutils.js

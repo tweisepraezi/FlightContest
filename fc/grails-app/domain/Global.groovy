@@ -272,6 +272,18 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    String GetPrintServerProjection()
+    {
+        if (   grailsApplication.config.flightcontest.contestmap
+            && grailsApplication.config.flightcontest.contestmap.projection
+           )
+        {
+            return grailsApplication.config.flightcontest.contestmap.projection
+        }
+        return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     String GetGMApiKey()
     {
         if (   grailsApplication.config.flightcontest.maps

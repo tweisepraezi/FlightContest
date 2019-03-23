@@ -225,6 +225,9 @@
                         <g:set var="leg_duration" value="${new BigDecimal(0)}" />
                         <g:set var="leg_time" value="${testInstance.startTime}" />
                         <g:set var="total_distance" value="${new BigDecimal(0)}" />
+                        <g:set var="add_tpnum" value="${testInstance.task.flighttest.route.AddTPNum()}" />
+                        <g:set var="add_tpnum_index" value="${0}" />
+                        <g:set var="add_tpnum_addnum" value="${0}" />
                         
                         <g:each var="testlegflight_instance" in="${TestLegFlight.findAllByTest(testInstance,[sort:"id"])}">
                             <g:set var="leg_distance" value="${FcMath.AddDistance(leg_distance,testlegflight_instance.planTestDistance)}" />
@@ -237,6 +240,10 @@
                             <g:set var="leg_duration" value="${testlegflight_instance.AddPlanLegTime(leg_duration,leg_time)}" />
                             <g:set var="leg_time" value="${testlegflight_instance.AddPlanLegTime(leg_time)}" />
                             <g:set var="total_distance" value="${FcMath.AddDistance(total_distance,testlegflight_instance.planTestDistance)}" />
+                            <g:if test="${add_tpnum && add_tpnum_index < add_tpnum.tp.size() && add_tpnum.tp[add_tpnum_index] == testlegflight_instance.coordTitle.name()}">
+                                <g:set var="add_tpnum_addnum" value="${add_tpnum_addnum + add_tpnum.addNumber[add_tpnum_index]}" />
+                                <g:set var="add_tpnum_index" value="${add_tpnum_index + 1}" />
+                            </g:if>
                             <g:if test="${testlegflight_instance.coordTitle.type != CoordType.SECRET}">
                                 <g:set var="leg_no" value="${leg_no+1}" />
                                 <g:if test="${leg_procedureturn}">
@@ -276,7 +283,12 @@
                                     <g:else>
                                         <td class="legtime">${FcMath.TimeStr(leg_duration)}</td>
                                     </g:else>
-                                    <td class="tpname">${testlegflight_instance.coordTitle.titlePrintCode()}</td>
+                                    <g:if test="${add_tpnum_addnum}" >
+                                        <td class="tpname">${testlegflight_instance.coordTitle.titlePrintCode2(add_tpnum_addnum)}</td>
+                                    </g:if>
+                                    <g:else>
+                                        <td class="tpname">${testlegflight_instance.coordTitle.titlePrintCode()}</td>
+                                    </g:else>
                                     <g:if test="${show_local_time}">
                                         <td class="tptime">${FcMath.TimeStr(leg_time)}</td>
 	                                </g:if>

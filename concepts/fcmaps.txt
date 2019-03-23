@@ -54,6 +54,8 @@ added lines in mapnik/opentopomap.xml
         &postgis-settings;
     </Datasource>
   </Layer>
+  
+  transform="scale(0.75, 0.75)" added
 
 styles-otm/symbols-1.xml
 ------------------------
@@ -61,12 +63,14 @@ show churches & castles for 1:200000
 
 change all maxscales to maxscale_zoom11
 disable all TextSymbolizer
+transform="scale(0.75, 0.75)" added
 
 styles-otm/symbols-2.xml
 ------------------------
 show wind turbines
 
 change maxscales to maxscale_zoom11
+transform="scale(0.75, 0.75)" added
 
 styles-otm/powerlines.xml
 -------------------------

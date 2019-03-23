@@ -36,7 +36,7 @@ class Route
     boolean contestMapGraticule = true
     boolean contestMapContourLines = true
     boolean contestMapMunicipalityNames = true
-    boolean contestMapAirfields = true
+    String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM
     boolean contestMapChurches = true
     boolean contestMapCastles = true
     boolean contestMapChateaus = true
@@ -1156,6 +1156,52 @@ class Route
             distance_sp2fp = FcMath.AddDistance(distance_sp2fp, routelegtest_instance.testDistance())
         }
         return [distance_to2ldg:distance_to2ldg, distance_sp2fp:distance_sp2fp, procedureturn_num:procedureturn_num, secret_num:secret_num, curved_num:curved_num]
+    }
+    
+    Map AddTPNum()
+    {
+        Map ret = [tp:[], addNumber:[]]
+        contest.printStyle.eachLine {
+            if (it.contains("--route") && it.contains("--start-tp") && it.contains("--add-num")) {
+                String s = it.substring(it.indexOf("--route")+7).trim()
+                if (s.startsWith(":")) {
+                    s = s.substring(1).trim()
+                    int i = s.indexOf(";")
+                    if (i) {
+                        s = s.substring(0,i).trim()
+                        if (s == name()) {
+                            String s2 = it.substring(it.indexOf("--start-tp")+10).trim()
+                            if (s2.startsWith(":")) {
+                                s2 = s2.substring(1).trim()
+                                int j = s2.indexOf(";")
+                                if (j) {
+                                    for (String s21 in s2.substring(0,j).trim().split(',')) {
+                                        ret.tp += s21.trim().toUpperCase()
+                                    }
+                                    String s3 = it.substring(it.indexOf("--add-num")+9).trim()
+                                    if (s3.startsWith(":")) {
+                                        s3 = s3.substring(1).trim()
+                                        int k = s3.indexOf(";")
+                                        if (k) {
+                                            for (String s31 in s3.substring(0,k).trim().split(',')) {
+                                                if (s31.isInteger()) {
+                                                    ret.addNumber += s31.toInteger()
+                                                }
+                                            }
+                                        }
+                                    }
+    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!ret.tp || !ret.addNumber || ret.tp.size() != ret.addNumber.size() || ret.tp.size() < 1) {
+            return [:]
+        }
+        return ret
     }
     
 }

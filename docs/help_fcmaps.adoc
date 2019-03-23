@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.4, Ausgabe 1
-:revdate:   11.02.2019
+:revnumber: 3.1.5, Ausgabe 1
+:revdate:   17.03.2019
 :nofooter:
 :toc-title: Table of content
 :toc:
@@ -391,12 +391,9 @@ Configure services as executable
  chmod +x printmaps_buildservice
  chmod +x printmaps_webservice
 
-Start build service manually
+Start services manually
  
  nohup ./printmaps_buildservice 1>./logs/printmaps_buildservice.out 2>&1 &
-
-Start web service manually
-
  nohup ./printmaps_webservice 1>./logs/printmaps_webservice.out 2>&1 &
 
 Test web service
@@ -416,7 +413,67 @@ Show log files
  cat ./logs/printmaps_buildservice.log
  cat ./logs/printmaps_webservice.log
 
+[[install-services-autostart]]
+== Install services autostart
+
+SSH login with user *root*
+
+ cd /etc/systemd/system
+
+Create service description of build service
+
+ nano fcmaps_build.service
+
+----
+[Unit]
+Description=Flight Contest maps build service
+Requires=network.target
+After=network.target 
+
+[Service]
+User=gis
+WorkingDirectory=/home/gis/fcmaps
+ExecStart=/home/gis/fcmaps/printmaps_buildservice ./printmaps_buildservice.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+----
+
+Create service description of web service
+
+ nano fcmaps_web.service
  
+----
+[Unit]
+Description=Flight Contest maps web service
+Requires=network.target
+After=network.target
+
+[Service]
+User=gis
+WorkingDirectory=/home/gis/fcmaps
+ExecStart=/home/gis/fcmaps/printmaps_webservice ./printmaps_webservice.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+----
+
+Enable autostart
+
+ systemctl enable fcmaps_build.service
+ systemctl enable fcmaps_web.service
+ 
+Restart server
+
+ sync;sync;shutdown -r now
+ 
+Check successfully restart
+
+ who -b
+
+
 [[fc-configuration]]
 == Configure Flight Contest
 

@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.4, Ausgabe 1,</span>
-<span id="revdate">11.02.2019</span>
+<span id="revnumber">version 3.1.5, Ausgabe 1,</span>
+<span id="revdate">17.03.2019</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -456,6 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#run-services">Run services</a></li>
+<li><a href="#install-services-autostart">Install services autostart</a></li>
 <li><a href="#fc-configuration">Configure Flight Contest</a></li>
 </ul>
 </div>
@@ -1169,19 +1170,12 @@ chmod +x printmaps_webservice</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Start build service manually</p>
+<p>Start services manually</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>nohup ./printmaps_buildservice 1&gt;./logs/printmaps_buildservice.out 2&gt;&amp;1 &amp;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Start web service manually</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>nohup ./printmaps_webservice 1&gt;./logs/printmaps_webservice.out 2&gt;&amp;1 &amp;</pre>
+<pre>nohup ./printmaps_buildservice 1&gt;./logs/printmaps_buildservice.out 2&gt;&amp;1 &amp;
+nohup ./printmaps_webservice 1&gt;./logs/printmaps_webservice.out 2&gt;&amp;1 &amp;</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1215,6 +1209,94 @@ chmod +x printmaps_webservice</pre>
 <div class="content">
 <pre>cat ./logs/printmaps_buildservice.log
 cat ./logs/printmaps_webservice.log</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="install-services-autostart">Install services autostart</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>SSH login with user <strong>root</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cd /etc/systemd/system</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create service description of build service</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>nano fcmaps_build.service</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[Unit]
+Description=Flight Contest maps build service
+Requires=network.target
+After=network.target
+
+[Service]
+User=gis
+WorkingDirectory=/home/gis/fcmaps
+ExecStart=/home/gis/fcmaps/printmaps_buildservice ./printmaps_buildservice.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create service description of web service</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>nano fcmaps_web.service</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[Unit]
+Description=Flight Contest maps web service
+Requires=network.target
+After=network.target
+
+[Service]
+User=gis
+WorkingDirectory=/home/gis/fcmaps
+ExecStart=/home/gis/fcmaps/printmaps_webservice ./printmaps_webservice.yaml
+Restart=always
+
+[Install]
+WantedBy=multi-user.target</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Enable autostart</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>systemctl enable fcmaps_build.service
+systemctl enable fcmaps_web.service</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Restart server</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>sync;sync;shutdown -r now</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check successfully restart</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>who -b</pre>
 </div>
 </div>
 </div>
