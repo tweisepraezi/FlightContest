@@ -22,7 +22,7 @@ class Route
                          'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapWindpowerstations',
                          'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
                          'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintA3','contestMapColorChanges',
-                         'contestMapRunwayPoint','contestMapRunwayHorizontalPos','contestMapRunwayVerticalPos','useProcedureTurn']
+                         'contestMapDevStyle','contestMapRunwayPoint','contestMapRunwayHorizontalPos','contestMapRunwayVerticalPos','useProcedureTurn']
             
     String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP
     String contestMapPrint = Defs.CONTESTMAPPRINT_PDFMAP
@@ -51,6 +51,7 @@ class Route
     boolean contestMapPrintLandscape = true
     boolean contestMapPrintA3 = false
     boolean contestMapColorChanges = false
+    boolean contestMapDevStyle = false
     CoordType contestMapRunwayPoint = CoordType.UNKNOWN
     HorizontalPos contestMapRunwayHorizontalPos = HorizontalPos.Center
     VerticalPos contestMapRunwayVerticalPos = VerticalPos.Center

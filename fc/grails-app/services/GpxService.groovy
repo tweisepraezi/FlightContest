@@ -1727,6 +1727,7 @@ class GpxService
                             landscape: getYesNo(contestMap.contestMapPrintLandscape),
                             a3: getYesNo(contestMap.contestMapPrintA3),
                             colorchanges: getYesNo(contestMap.contestMapColorChanges),
+                            devstyle: getYesNo(contestMap.contestMapDevStyle),
                             runwayhorizontalpos: routeInstance.contestMapRunwayHorizontalPos,
                             runwayverticalpos: routeInstance.contestMapRunwayVerticalPos,
                             otm:getYesNo(contestMap.contestMapOTM)

@@ -21,7 +21,7 @@
 	                            <tbody>
 	                                <tr>
 	                                    <td><p class="warning">${message(code:'fc.contestmap.warning')}</p></td>
-	                                    <td><a href="../docs/help.html#osm-contest-map" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
+	                                    <td><a href="../../docs/help.html#osm-contest-map" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
 	                                </tr>
 	                            </tbody>
 	                        </table>
@@ -218,7 +218,7 @@
 	                                </div>
 	                            </g:if>
 	                        </fieldset>
-	                        <g:if test="${BootStrap.global.IsContestMapWriteOptions()}">
+	                        <g:if test="${BootStrap.global.IsDevelopmentEnvironment()}">
 		                        <fieldset>
 		                            <div>
 	                                    <g:if test="${routeInstance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP}">
@@ -237,7 +237,11 @@
 	                                        <label><input type="radio" name="contestMapOutput" id="${Defs.CONTESTMAPOUTPUT_EXPORTGPX}" value="${Defs.CONTESTMAPOUTPUT_EXPORTGPX}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportgpxp')}</label>
 	                                    </g:elseif>
 		                            </div>
-		                        </fieldset>
+                                    <div>
+                                        <g:checkBox name="contestMapDevStyle" value="${routeInstance.contestMapDevStyle}" tabIndex="${ti[0]++}" />
+                                        <label>${message(code:'fc.contestmap.devstyle')}</label>
+                                    </div>
+                                </fieldset>
 		                    </g:if>
 		                    <g:else>
 	                            <input type="hidden" name="contestMapOutput" value="${routeInstance.contestMapOutput}" />
@@ -297,7 +301,7 @@
                             </g:elseif>
                             <g:elseif test="${PrintButton}">
                                 <g:actionSubmit action="mapprint" value="${message(code:'fc.contestmap.job.print')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
-                                <g:actionSubmit action="mapdiscard" value="${message(code:'fc.contestmap.job.discard')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}" />
+                                <g:actionSubmit action="mapdiscard" value="${message(code:'fc.contestmap.job.finish')}" tabIndex="${ti[0]++}" />
                             </g:elseif>
                             <g:else>
                                 <g:actionSubmit action="maprefresh" value="${message(code:'fc.refresh')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />

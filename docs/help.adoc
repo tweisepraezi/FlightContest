@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.5, Ausgabe 1
-:revdate:   23.03.2019
+:revnumber: 3.1.6, Ausgabe 1
+:revdate:   14.04.2019
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -762,6 +762,7 @@ Der Ausdruck kann im Quer- oder Hochformat in A3 oder A4 erfolgen.
 Fehlende Flupplätze, Kirchen, Burgen, Schlösser, Windkraftanlagen und Höhenpunkte
 können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt werden:
 
+  id|symbol|name|wkt
   1|church.png|""|POINT (9.46600 49.50288)
   2|airfield.png|"Flugplatz"|POINT (9.54128 49.51144)
 
@@ -774,6 +775,7 @@ airfield.png, church.png, castle.png, chateau.png, windpowerstation.png, peak.pn
 Besondere Objekte können in der Datei *C:\FCSave\.geodata\specials.csv*
 zum Druck hinzugefügt werden:
 
+  id|point|name|wkt|dx|dy
   1|"Strecke 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0
 
 1. Laufende Nummer

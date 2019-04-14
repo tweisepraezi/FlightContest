@@ -55,6 +55,7 @@ class OsmPrintMapService
     final static String STYLE_STANDARD = "osm-carto"
     final static String STYLE_CONTOURLINES = "osm-carto-ele20"
     final static String STYLE_OTM = "opentopomap-fc"
+    final static String STYLE_OTM_DEV = "opentopomap-fc-dev"
     
     final static String HIDELAYERS_CARTO = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
     final static String HIDELAYERS_CARTO_MUNICIPALITY = "placenames-medium"
@@ -183,6 +184,7 @@ class OsmPrintMapService
                              printLandscape: true,
                              printA3: true,
                              printColorChanges: false,
+                             printDevStyle: false,
                              printRunwayHorizontalPos: HorizontalPos.Center,
                              printRunwayVerticalPos: VerticalPos.Center,
                              printOTM: false
@@ -214,6 +216,7 @@ class OsmPrintMapService
             print_options.printLandscape = m.'@landscape'[0] == "yes"
             print_options.printA3 = m.'@a3'[0] == "yes"
             print_options.printColorChanges = m.'@colorchanges'[0] == "yes"
+            print_options.printDevStyle = m.'@devstyle'[0] == "yes"
             print_options.printRunwayHorizontalPos = HorizontalPos.(m.'@runwayhorizontalpos'[0])
             print_options.printRunwayVerticalPos = VerticalPos.(m.'@runwayverticalpos'[0])
             print_options.printOTM = m.'@otm'[0] == "yes"
@@ -276,6 +279,9 @@ class OsmPrintMapService
             if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
                 hide_layers += ",${HIDELAYERS_OTM_AIRFIELDS}"
             }
+        }
+        if (printOptions.printDevStyle) {
+            style = STYLE_OTM_DEV
         }
         
         int print_width = 0 // mm

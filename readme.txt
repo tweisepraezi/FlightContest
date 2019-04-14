@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-23.03.2019
+14.04.2019
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -57,12 +57,18 @@ Weitere nützliche Funktionen von Flight Contest:
   Rangliste während eines laufenden Debriefings.
 
 
-Erweiterungen in dieser Version (3.1.5):
+Erweiterungen in dieser Version (3.1.6):
 ----------------------------------------
+- Zusätzliche Ausgabe-Formate der OSM-Wettbewerbs-Karte (neben PDF):
+    PNG-Grafik
+    PNG-Grafik mit World-File (in ZIP-Datei)
+
+Erweiterungen in Version 3.1.5:
+-------------------------------
 - Möglichkeit der Vergrößerung der Wendepunkt-Nummern in Flugplänen eingeführt
     Dadurch können Flupläne von Strecken, die durch Kürzen längerer Strecken
     hervorgegangen sind, an bestehenden Wettbewerbskarten der längeren Strecke
-    angepasst werden. Mehrere Kürzungn sind auch möglich.
+    angepasst werden. Mehrere Kürzungen sind auch möglich.
     -> Hilfe -> Besondere CSS-Eigenschaften
 
 Erweiterungen in Version 3.1.4:
@@ -70,7 +76,7 @@ Erweiterungen in Version 3.1.4:
 - OSM-Wettbewerbs-Karte 3.0 im TÜK-200-Stil
 - OSM-Wettbewerbs-Karten von Strecken, die nur T/O beinhalten
     Dabei ist die Position vom T/O auf der Karte auswählbar:
-    Links, Mitte, Rechts sowie Oben, Mitte, Unten.
+    Kombinationen von Links, Mitte, Rechts und Oben, Mitte, Unten.
 - Aktualisierung folgender Regelwerke
     FAI Precision Flying - Edition 2019
     FAI Air Rally Flying - Edition 2019

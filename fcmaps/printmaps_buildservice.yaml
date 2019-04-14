@@ -42,3 +42,6 @@ styles:
 - name: opentopomap-fc
   xmlpath: ../otm/mapnik
   xmlfile: opentopomap.xml
+- name: opentopomap-fc-dev
+  xmlpath: ../otm-dev/mapnik
+  xmlfile: opentopomap.xml

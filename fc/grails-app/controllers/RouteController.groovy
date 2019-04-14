@@ -644,6 +644,10 @@ class RouteController {
                 }
             }
             
+            if (BootStrap.global.IsDevelopmentEnvironment()) {
+                route.instance.contestMapDevStyle = true
+            }
+            
             // calculate show_mode
             boolean new_osm_map = true
             boolean break_button = false // unterbrechen
@@ -750,6 +754,7 @@ class RouteController {
                 route.instance.contestMapPrintLandscape = params.contestMapPrintLandscape == "on"
                 route.instance.contestMapPrintA3 = params.contestMapPrintA3 == "on"
                 route.instance.contestMapColorChanges = params.contestMapColorChanges == "on"
+                route.instance.contestMapDevStyle = params.contestMapDevStyle == "on"
                 gpxService.printstart "Export map '${route.instance.name()}'"
                 String uuid = UUID.randomUUID().toString()
                 String webroot_dir = servletContext.getRealPath("/")
@@ -780,6 +785,7 @@ class RouteController {
                      contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
                      contestMapPrintA3:route.instance.contestMapPrintA3,
                      contestMapColorChanges:route.instance.contestMapColorChanges,
+                     contestMapDevStyle:route.instance.contestMapDevStyle,
                      contestMapOTM:true,
                     ]
                 ) // false - no Print, false - no Points, false - no wrEnrouteSign
@@ -979,9 +985,9 @@ class RouteController {
                         response.setHeader("Content-Disposition", "Attachment;Filename=${map_file_name}")
                         gpxService.Download(map_png_file_name, map_file_name, response.outputStream)
                         gpxService.printdone ""
-                        gpxService.DeleteFile(map_png_file_name)
-                        gpxService.DeleteFile(world_file_name)
-                        gpxService.DeleteFile(printfileid_filename)
+                        //gpxService.DeleteFile(map_png_file_name)
+                        //gpxService.DeleteFile(world_file_name)
+                        //gpxService.DeleteFile(printfileid_filename)
                     } else if (route.instance.contestMapPrint == Defs.CONTESTMAPPRINT_PNGZIP) {
                         String png_file_name = "Map.png"
                         String map_zip_file_name = map_png_file_name + ".zip"
@@ -997,10 +1003,10 @@ class RouteController {
                         response.setHeader("Content-Disposition", "Attachment;Filename=${map_file_name}")
                         gpxService.Download(map_zip_file_name, map_file_name, response.outputStream)
                         gpxService.printdone ""
-                        gpxService.DeleteFile(map_zip_file_name)
-                        gpxService.DeleteFile(map_png_file_name)
-                        gpxService.DeleteFile(world_file_name)
-                        gpxService.DeleteFile(printfileid_filename)
+                        //gpxService.DeleteFile(map_zip_file_name)
+                        //gpxService.DeleteFile(map_png_file_name)
+                        //gpxService.DeleteFile(world_file_name)
+                        //gpxService.DeleteFile(printfileid_filename)
                     } else if (route.instance.contestMapPrint == Defs.CONTESTMAPPRINT_PDFMAP) {
                         gpxService.printstart "Generate PDF"
                         Map ret = printService.printmapRoute(print_a3, print_landscape, map_png_file_name, GetPrintParams())
@@ -1011,9 +1017,9 @@ class RouteController {
                             redirect(action:'show',id:params.id)
                         } else if (ret.content) {
                             if (printService.WritePDF(response, ret.content, session.lastContest.GetPrintPrefix(), "map-${route.instance.idTitle}", true, print_a3, print_landscape)) {
-                                gpxService.DeleteFile(map_png_file_name)
-                                gpxService.DeleteFile(world_file_name)
-                                gpxService.DeleteFile(printfileid_filename)
+                                //gpxService.DeleteFile(map_png_file_name)
+                                //gpxService.DeleteFile(world_file_name)
+                                //gpxService.DeleteFile(printfileid_filename)
                             }
                         } else {
                             redirect(action:'show',id:params.id)

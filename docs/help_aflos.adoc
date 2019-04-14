@@ -1,7 +1,7 @@
 ﻿= AFLOS-Hilfe
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revdate:   19.5.2017
-:revremark: Ausgabe 1
+:revdate:   14.04.2019
+:revremark: Ausgabe 2
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -27,7 +27,7 @@ in AFLOS eine Torbreite von 2NM oder die Markierung $secret haben.
 
 === Import von Logger-Messwerten
 
-Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Kalkuliere AFLOS-Daten
+Ergebnisse -> Navigationsflug -> Import AFLOS-Daten -> Kalkuliere AFLOS-Daten
 
 Logger-Daten werden direkt aus einer AFLOS-Datenbank gelesen 
 und daraus sofort Fehlerpunkte berechnet.
@@ -39,7 +39,7 @@ Voraussetzungen:
     
 === Import von AFLOS-Kalkulationen
 
-Auswertung -> Navigationsflug -> Import AFLOS-Daten -> Import AFLOS-Kalkulation
+Ergebnisse -> Navigationsflug -> Import AFLOS-Daten -> Import AFLOS-Kalkulation
 
 Stellen Sie zum Import sicher, dass die aus dem Logger eingelesenen Messwerte
 für eine konkrete Besatzung (= Comp.-Nr.) und Strecke (= Ref.-Nr.) und der 

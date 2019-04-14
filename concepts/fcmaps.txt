@@ -101,6 +101,13 @@ mapnik/opentopomap.xml
     &hillshade;
     -->
 
+no areas (military, nature_reserve)
+-----------------------------------
+mapnik/opentopomap.xml
+    <!--
+    <Layer name="areas">
+    -->
+    
 styles-otm/landuse.xml
 ----------------------
 modify forest green to b7d8a1
