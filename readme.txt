@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-14.04.2019
+21.05.2019
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -56,9 +56,13 @@ Weitere nützliche Funktionen von Flight Contest:
 * Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
-
-Erweiterungen in dieser Version (3.1.6):
+Erweiterungen in dieser Version (3.1.7):
 ----------------------------------------
+- Unterstützung von SkyDemon-Loggern
+  mit vom Standard abweichenden Zeitformat im gpx-File
+
+Erweiterungen in Version 3.1.6:
+-------------------------------
 - Zusätzliche Ausgabe-Formate der OSM-Wettbewerbs-Karte (neben PDF):
     PNG-Grafik
     PNG-Grafik mit World-File (in ZIP-Datei)

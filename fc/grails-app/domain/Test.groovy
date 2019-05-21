@@ -2183,32 +2183,43 @@ class Test
         String start_utc = loggerDataStartUtc
         String end_utc = loggerDataEndUtc
         if (IsLoggerData()) {
+            boolean valid_utc = true
             TrackPoint.findAllByLoggerdata(loggerData,[sort:"id"]).each { TrackPoint trackpoint_instance ->
-                boolean add_trackpoint = true
-                if (loggerDataStartUtc) {
-                    if (trackpoint_instance.utc < loggerDataStartUtc) {
+                if (valid_utc) {
+                    boolean add_trackpoint = true
+                    try {
+                        Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", trackpoint_instance.utc)
+                    } catch (Exception e) {
+                        valid_utc = false
                         add_trackpoint = false
                     }
-                }
-                if (loggerDataEndUtc) {
-                    if (trackpoint_instance.utc > loggerDataEndUtc) {
-                        add_trackpoint = false
+                    if (add_trackpoint) {
+                        if (loggerDataStartUtc) {
+                            if (trackpoint_instance.utc < loggerDataStartUtc) {
+                                add_trackpoint = false
+                            }
+                        }
+                        if (loggerDataEndUtc) {
+                            if (trackpoint_instance.utc > loggerDataEndUtc) {
+                                add_trackpoint = false
+                            }
+                        }
                     }
-                }
-                if (add_trackpoint) {
-                    if (!start_utc) {
-                        start_utc = trackpoint_instance.utc
+                    if (add_trackpoint) {
+                        if (!start_utc) {
+                            start_utc = trackpoint_instance.utc
+                        }
+                        if (!loggerDataEndUtc) {
+                            end_utc = trackpoint_instance.utc
+                        }
+                        Map new_point = [utc:       trackpoint_instance.utc,
+                                         latitude:  trackpoint_instance.latitude,
+                                         longitude: trackpoint_instance.longitude,
+                                         altitude:  trackpoint_instance.altitude,
+                                         track:     trackpoint_instance.track
+                                        ]
+                        track_points += new_point
                     }
-                    if (!loggerDataEndUtc) {
-                        end_utc = trackpoint_instance.utc
-                    }
-                    Map new_point = [utc:       trackpoint_instance.utc,
-                                     latitude:  trackpoint_instance.latitude,
-                                     longitude: trackpoint_instance.longitude,
-                                     altitude:  trackpoint_instance.altitude,
-                                     track:     trackpoint_instance.track
-                                    ]
-                    track_points += new_point
                 }
             }
         }

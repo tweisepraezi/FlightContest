@@ -25,6 +25,25 @@ class FcTime
     }
     
     //--------------------------------------------------------------------------
+    static String UTCGetValidDateTime(String utcDateTime)
+    // "yyyy-mm-ddThh:mm:ssZ"
+    {
+        boolean valid = true
+        try {
+            Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utcDateTime)
+            return utcDateTime
+        } catch (Exception e) {
+        }
+        String utc_data_time = utcDateTime.replace('.',':')
+        try {
+            Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc_data_time)
+            return utc_data_time
+        } catch (Exception e) {
+        }
+        return ""
+    }
+    
+    //--------------------------------------------------------------------------
     static String UTCGetTime(String utcDateTime)
     // "yyyy-mm-ddThh:mm:ssZ" -> hh:mm:ss
     {

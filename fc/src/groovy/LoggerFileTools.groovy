@@ -351,67 +351,76 @@ class LoggerFileTools
                     }
                     
                     // UTC
-                    String utc_time = FcTime.UTCGetTime(it.time[0].text())
-                    String utc = FcTime.UTCGetNextDateTime(last_utc, utc_time)
-                    
-                    /*
-                    if (utc == "2015-01-01T12:19:06Z") {
-                        int j = 0
+                    String valid_utc_time = ""
+                    if (it.time[0]) {
+                        valid_utc_time = FcTime.UTCGetValidDateTime(it.time[0].text())
                     }
-                    */
-                    
-                    // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
-                    BigDecimal latitude = it.'@lat'.toBigDecimal()
-
-                    // Longitude (Geographische Laenge: -179.999 (W) ... +180 Grad (E))
-                    BigDecimal longitude = it.'@lon'.toBigDecimal()
-
-                    // Altitude (Höhe) in ft
-                    BigDecimal altitude_meter = it.ele[0].text().toBigDecimal()
-                    int altitude = FcMath.RoundAltitude(altitude_meter * GpxService.ftPerMeter)
-                    
-                    // Track in Grad
-                    def track = null
-                    if (last_latitude != null && last_longitude != null) {
-                        if ((latitude == last_latitude) && (longitude == last_longitude)) {
-                            track = last_track
-                        } else {
-                            Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
-                            track = FcMath.RoundGrad(leg.dir)
+                    if (valid_utc_time) {
+                        String utc_time = FcTime.UTCGetTime(valid_utc_time)
+                        String utc = FcTime.UTCGetNextDateTime(last_utc, utc_time)
+                        
+                        /*
+                        if (utc == "2015-01-01T12:19:06Z") {
+                            int j = 0
                         }
-                    }
-                    
-                    if (REMOVE_IDENTICAL_TIMES) {
-                        if (utc == last_utc) {
-                            ignore_line = true
+                        */
+                        
+                        // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
+                        BigDecimal latitude = it.'@lat'.toBigDecimal()
+    
+                        // Longitude (Geographische Laenge: -179.999 (W) ... +180 Grad (E))
+                        BigDecimal longitude = it.'@lon'.toBigDecimal()
+    
+                        // Altitude (Höhe) in ft
+                        BigDecimal altitude_meter = 0
+                        if (it.ele[0]) {
+                            altitude_meter = it.ele[0].text().toBigDecimal()
                         }
-                    }
-                    
-                    // save track point
-                    if (!ignore_line) {
-                        if (interpolateMissingData) {
-                            track_point_num += InterpolateMissingTrackpoints(last_utc, last_latitude, last_longitude, last_altitude, utc, latitude, longitude, altitude, track, testInstance.loggerData)
+                        int altitude = FcMath.RoundAltitude(altitude_meter * GpxService.ftPerMeter)
+                        
+                        // Track in Grad
+                        def track = null
+                        if (last_latitude != null && last_longitude != null) {
+                            if ((latitude == last_latitude) && (longitude == last_longitude)) {
+                                track = last_track
+                            } else {
+                                Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
+                                track = FcMath.RoundGrad(leg.dir)
+                            }
                         }
                         
-                        TrackPoint trackpoint_instance = new TrackPoint()
-                        trackpoint_instance.loggerdata = testInstance.loggerData
-                        trackpoint_instance.utc = utc
-                        trackpoint_instance.latitude = latitude
-                        trackpoint_instance.longitude = longitude
-                        trackpoint_instance.altitude = altitude
-                        trackpoint_instance.track = track
-                        trackpoint_instance.save()
+                        if (REMOVE_IDENTICAL_TIMES) {
+                            if (utc == last_utc) {
+                                ignore_line = true
+                            }
+                        }
                         
-                        track_point_num++
+                        // save track point
+                        if (!ignore_line) {
+                            if (interpolateMissingData) {
+                                track_point_num += InterpolateMissingTrackpoints(last_utc, last_latitude, last_longitude, last_altitude, utc, latitude, longitude, altitude, track, testInstance.loggerData)
+                            }
+                            
+                            TrackPoint trackpoint_instance = new TrackPoint()
+                            trackpoint_instance.loggerdata = testInstance.loggerData
+                            trackpoint_instance.utc = utc
+                            trackpoint_instance.latitude = latitude
+                            trackpoint_instance.longitude = longitude
+                            trackpoint_instance.altitude = altitude
+                            trackpoint_instance.track = track
+                            trackpoint_instance.save()
+                            
+                            track_point_num++
+                            
+                            last_utc = utc
+                            last_latitude = latitude
+                            last_longitude = longitude
+                            last_altitude = altitude
+                            last_track = track
+                        }
                         
-                        last_utc = utc
-                        last_latitude = latitude
-                        last_longitude = longitude
-                        last_altitude = altitude
-                        last_track = track
+                        first = false
                     }
-                    
-                    first = false
                 }
             } else {
             }
