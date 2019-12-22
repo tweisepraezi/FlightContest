@@ -16,26 +16,36 @@
         }
     ],
     "ConfigMapscale": {
-        "MinScale": 100,
-        "MaxScale": 200000
+        "MinScale": 200000,
+        "MaxScale": 250000
     },
     "ConfigStyles": [
         {
-            "Name": "opentopomap-fc",
-            "ShortDescription": "OpenTopoMap for FlightContest",
+            "Name": "fcmaps",
+            "ShortDescription": "FlightContest maps",
             "LongDescription": "FlightContest maps, based on OpenTopoMap style",
-            "Release": "3.1.3",
-            "Date": "2019/01/08",
+            "Release": "3.1.8",
+            "Date": "2019/12/15",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""
         },
         {
-            "Name": "opentopomap-fc-dev",
-            "ShortDescription": "OpenTopoMap for FlightContest",
+            "Name": "fcmaps-dev",
+            "ShortDescription": "FlightContest maps",
             "LongDescription": "FlightContest maps, based on OpenTopoMap style",
-            "Release": "3.1.6",
-            "Date": "2019/03/30",
+            "Release": "3.1.8",
+            "Date": "2019/12/15",
+            "Link": "https://flightcontest.de",
+            "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
+            "Layers": ""
+        },
+        {
+            "Name": "opentopomap-fc",
+            "ShortDescription": "FlightContest maps",
+            "LongDescription": "FlightContest maps, based on OpenTopoMap style",
+            "Release": "3.1.3",
+            "Date": "2019/01/08",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""

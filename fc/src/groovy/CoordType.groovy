@@ -340,4 +340,22 @@ enum CoordType
 
     }
     
+    boolean IsContestMapQuestionCoord()
+    {
+        switch(this) {
+            case CoordType.TO:
+            case CoordType.iTO:
+            case CoordType.SP:
+            case CoordType.iSP:
+            case CoordType.TP:
+            case CoordType.FP:
+            case CoordType.iFP:
+            case CoordType.LDG:
+            case CoordType.iLDG:
+                return true
+        }
+        return false
+
+    }
+    
 }

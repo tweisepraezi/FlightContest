@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.5, Ausgabe 1,</span>
-<span id="revdate">17.03.2019</span>
+<span id="revnumber">version 3.1.8, Ausgabe 1,</span>
+<span id="revdate">27.10.2019</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -447,16 +447,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#create-data">Create data</a>
 <ul class="sectlevel2">
-<li><a href="#_create_database_strong_gis_strong">Create database <strong>gis</strong></a></li>
-<li><a href="#_create_database_strong_contours_strong">Create database <strong>contours</strong></a></li>
-<li><a href="#_download_flight_contest_maps_server">Download Flight Contest maps server</a></li>
-<li><a href="#_download_generalized_water_polygons">Download generalized water polygons</a></li>
-<li><a href="#_hillshade_and_contours">Hillshade and contours</a></li>
+<li><a href="#_create_data_folder">Create data folder</a></li>
+<li><a href="#_download_and_install_flight_contest_maps_server">Download and install Flight Contest maps server</a></li>
+<li><a href="#_download_and_install_water_polygons">Download and install water polygons</a></li>
 <li><a href="#_osm_data">OSM data</a></li>
+<li><a href="#_contour_data">Contour data</a></li>
 </ul>
 </li>
+<li><a href="#configure-server">Configure server</a>
+<ul class="sectlevel2">
+<li><a href="#_check_server_ressources">Check server ressources</a></li>
 <li><a href="#run-services">Run services</a></li>
 <li><a href="#install-services-autostart">Install services autostart</a></li>
+</ul>
+</li>
 <li><a href="#fc-configuration">Configure Flight Contest</a></li>
 </ul>
 </div>
@@ -739,219 +743,21 @@ exit</pre>
 <pre>ssh -l gis &lt;server-dns-name&gt;</pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_create_database_strong_gis_strong">Create database <strong>gis</strong></h3>
-<div class="literalblock">
-<div class="content">
-<pre>createdb gis
-psql -d gis -c 'CREATE EXTENSION postgis;'</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_create_database_strong_contours_strong">Create database <strong>contours</strong></h3>
-<div class="literalblock">
-<div class="content">
-<pre>createdb contours
-psql -d contours -c 'CREATE EXTENSION postgis;'</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_download_flight_contest_maps_server">Download Flight Contest maps server</h3>
-<div class="literalblock">
-<div class="content">
-<pre>cd ~
-wget http://download.flightcontest.de/fcmaps.zip
-unzip fcmaps.zip</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_download_generalized_water_polygons">Download generalized water polygons</h3>
-<div class="literalblock">
-<div class="content">
-<pre>cd ~/fcmaps/otm/mapnik
-mkdir data &amp;&amp; cd data
-wget http://data.openstreetmapdata.com/water-polygons-generalized-3857.zip
-wget http://data.openstreetmapdata.com/water-polygons-split-3857.zip
-unzip water-polygons-generalized-3857.zip
-unzip water-polygons-split-3857.zip</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_hillshade_and_contours">Hillshade and contours</h3>
 <div class="paragraph">
-<p>Download all necessary SRTM tiles, see <a href="http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm" class="bare">http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm</a></p>
+<p>Start screen</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>mkdir ~/srtm
-cd ~/srtm
-nano list.txt</pre>
+<pre>screen</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Insert the following (for Germany, Austria, Switzerland)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>http://viewfinderpanoramas.org/dem3/N31.zip
-http://viewfinderpanoramas.org/dem3/N32.zip
-http://viewfinderpanoramas.org/dem3/N33.zip
-http://viewfinderpanoramas.org/dem3/N34.zip
-http://viewfinderpanoramas.org/dem3/M31.zip
-http://viewfinderpanoramas.org/dem3/M32.zip
-http://viewfinderpanoramas.org/dem3/M33.zip
-http://viewfinderpanoramas.org/dem3/M34.zip
-http://viewfinderpanoramas.org/dem3/L31.zip
-http://viewfinderpanoramas.org/dem3/L32.zip
-http://viewfinderpanoramas.org/dem3/L33.zip
-http://viewfinderpanoramas.org/dem3/L34.zip</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Save it and continue with</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>wget -i list.txt</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Unpack all zip files</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for zipfile in *.zip;do unzip -j -o "$zipfile" -d unpacked; done</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Fill all voids</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cd unpacked
-for hgtfile in *.hgt;do gdal_fillnodata.py $hgtfile $hgtfile.tif; done</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Merge all .tifs into one huge tif. This file is the raw DEM with full resolution and the start for any further steps. Don&#8217;t delete raw.tif after these steps, you may use it for estimation of saddle directions.</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>mkdir ~/data</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o ../../data/raw.tif *.hgt.tif</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Convert the raw file into Mercator projection, interpolate and shrink</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cd ~/data</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 1000 1000 raw.tif warp-1000.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 5000 5000 raw.tif warp-5000.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 500 500 raw.tif warp-500.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 700 700 raw.tif warp-700.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 raw.tif warp-90.tif</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create color relief for different zoom level</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cd ~/data</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem color-relief -co COMPRESS=LZW -co PREDICTOR=2 -alpha warp-5000.tif ~/fcmaps/otm/mapnik/relief_color_text_file.txt relief-5000.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem color-relief -co COMPRESS=LZW -co PREDICTOR=2 -alpha warp-500.tif ~/fcmaps/otm/mapnik/relief_color_text_file.txt relief-500.tif</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create hillshade for different zoom levels</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem hillshade -z 7 -compute_edges -co COMPRESS=JPEG warp-5000.tif hillshade-5000.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem hillshade -z 7 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-1000.tif hillshade-1000.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem hillshade -z 4 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-700.tif hillshade-700.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem hillshade -z 5 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-500.tif hillshade-500.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem hillshade -z 2 -co compress=lzw -co predictor=2 -co bigtiff=yes -compute_edges warp-90.tif hillshade-90.tif &amp;&amp; gdal_translate -co compress=JPEG -co bigtiff=yes -co tiled=yes hillshade-90.tif hillshade-90-jpeg.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdaldem hillshade -z 5 -compute_edges -co BIGTIFF=YES -co TILED=YES -co COMPRESS=JPEG warp-90.tif hillshade-30m-jpeg.tif</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create contour lines (Lon 0&#176;&#8230;&#8203;24&#176; E, Lat 44&#176;&#8230;&#8203;56&#176; N)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>screen
-phyghtmap --max-nodes-per-tile=0 -s 10 -0 --pbf warp-90.tif</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You may close SSH console. After new SSH login continue with</p>
+<p>You may close SSH console while command is running. After new SSH login continue with</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>screen -r</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (4h)</p>
 </div>
 <div class="paragraph">
 <p>Close <code><code>screen</code></code> with</p>
@@ -961,92 +767,124 @@ phyghtmap --max-nodes-per-tile=0 -s 10 -0 --pbf warp-90.tif</pre>
 <pre>exit</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Rename generated pdf file</p>
+<div class="sect2">
+<h3 id="_create_data_folder">Create data folder</h3>
+<div class="literalblock">
+<div class="content">
+<pre>cd ~
+mkdir data</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_download_and_install_flight_contest_maps_server">Download and install Flight Contest maps server</h3>
+<div class="literalblock">
+<div class="content">
+<pre>cd ~/data
+wget http://download.flightcontest.de/fcmaps.zip
+cd ~
+unzip ~/data/fcmaps.zip</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_download_and_install_water_polygons">Download and install water polygons</h3>
+<div class="literalblock">
+<div class="content">
+<pre>cd ~/data
+wget https://osmdata.openstreetmap.de/download/water-polygons-split-3857.zip
+wget http://download.flightcontest.de/water-polygons-generalized-3857.zip</pre>
+</div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>mv lon-*.osm.pbf contours.pbf</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Load contour data into database</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>screen</pre>
+<pre>cd ~/fcmaps/otm/mapnik
+mkdir data
+cd ~/fcmaps/otm/mapnik/data
+unzip ~/data/water-polygons-split-3857.zip
+unzip ~/data/water-polygons-generalized-3857.zip</pre>
 </div>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql --slim -d contours -C 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/contours.style ~/data/contours.pbf</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (80min)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>exit</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create symbolic link to data</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>mkdir ~/fcmaps/otm/mapnik/dem
-cd ~/fcmaps/otm/mapnik/dem
-ln -s ~/data/*.tif .</pre>
+<pre>cd ~/fcmaps/otm-dev/mapnik
+ln -s ~/fcmaps/otm/mapnik/data .</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_osm_data">OSM data</h3>
 <div class="paragraph">
-<p>Download data for necessary countries (Germany, Austria, Switzerland)</p>
+<p>Data upgrade: Remove databases <strong>gis</strong> and <strong>lowzoom</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>dropdb gis
+dropdb lowzoom</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create database <strong>gis</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>createdb gis
+psql -d gis -c 'CREATE EXTENSION postgis;'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Download data for necessary countries (Germany, Austria, Switzerland, South Africa: 4GB)</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>cd ~/data
+mkdir osm &amp;&amp; cd osm
 wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
 wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
 wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
-mkdir ~/data/updates
-cd ~/data/updates
-wget http://download.geofabrik.de/europe-updates/state.txt</pre>
+wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf
+mkdir updates &amp;&amp; cd updates
+wget http://download.geofabrik.de/europe-updates/state.txt
+mv state.txt europe-state.txt
+wget http://download.geofabrik.de/africa-updates/state.txt
+mv state.txt africa-state.txt</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Merge data to one file</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cd ~/data
-osmium merge germany-latest.osm.pbf austria-latest.osm.pbf switzerland-latest.osm.pbf -o all.osm.pbf</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Load into database</p>
+<p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis)</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>cd ~
-screen</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>osm2pgsql --slim -d gis -C 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/all.osm.pbf</pre>
+osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/germany-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (4GB, 12h)</p>
+<p>Wait&#8230;&#8203; (8h)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>exit</pre>
+<pre>osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/austria-latest.osm.pbf</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (7h)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/switzerland-latest.osm.pbf</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (5h)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/south-africa-latest.osm.pbf</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (2h)</p>
 </div>
 <div class="paragraph">
 <p>Compile preprocessing tools (warnings can be ignored)</p>
@@ -1064,8 +902,7 @@ ls -l</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>screen
-cd ~/fcmaps/otm/mapnik/tools/
+<pre>cd ~/fcmaps/otm/mapnik/tools/
 psql gis &lt; arealabel.sql
 bash update_lowzoom.sh</pre>
 </div>
@@ -1095,25 +932,169 @@ bash update_lowzoom.sh</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (5min)</p>
+<p>Wait&#8230;&#8203; (15min)</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>psql gis &lt; viewpointdirection.sql
-psql gis &lt; pitchicon.sql
-exit</pre>
+psql gis &lt; pitchicon.sql</pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_contour_data">Contour data</h3>
+<div class="paragraph">
+<p>Create database <strong>contours</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>createdb contours
+psql -d contours -c 'CREATE EXTENSION postgis;'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Download all necessary SRTM tiles, see <a href="http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm" class="bare">http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm</a></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>cd ~/data
+mkdir srtm
+cd ~/data/srtm
+nano list.txt</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Insert the following (for Germany, Austria, Switzerland, South Africa)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://viewfinderpanoramas.org/dem3/L31.zip
+http://viewfinderpanoramas.org/dem3/L32.zip
+http://viewfinderpanoramas.org/dem3/L33.zip
+http://viewfinderpanoramas.org/dem3/L34.zip
+http://viewfinderpanoramas.org/dem3/M31.zip
+http://viewfinderpanoramas.org/dem3/M32.zip
+http://viewfinderpanoramas.org/dem3/M33.zip
+http://viewfinderpanoramas.org/dem3/M34.zip
+http://viewfinderpanoramas.org/dem3/N31.zip
+http://viewfinderpanoramas.org/dem3/N32.zip
+http://viewfinderpanoramas.org/dem3/N33.zip
+http://viewfinderpanoramas.org/dem3/N34.zip
+http://viewfinderpanoramas.org/dem3/SG33.zip
+http://viewfinderpanoramas.org/dem3/SG34.zip
+http://viewfinderpanoramas.org/dem3/SG35.zip
+http://viewfinderpanoramas.org/dem3/SG36.zip
+http://viewfinderpanoramas.org/dem3/SH33.zip
+http://viewfinderpanoramas.org/dem3/SH34.zip
+http://viewfinderpanoramas.org/dem3/SH35.zip
+http://viewfinderpanoramas.org/dem3/SH36.zip
+http://viewfinderpanoramas.org/dem3/SI33.zip
+http://viewfinderpanoramas.org/dem3/SI34.zip
+http://viewfinderpanoramas.org/dem3/SI35.zip</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save it and continue with</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>wget -i list.txt</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Move zip files to region folder and unpack all</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir europe &amp;&amp; mv N*.zip europe &amp;&amp; mv M*.zip europe &amp;&amp; mv L*.zip europe
+mkdir africa &amp;&amp; mv S*.zip africa
+for zipfile in europe/*.zip; do unzip -j -o "$zipfile" -d europe/unpacked; done
+for zipfile in africa/*.zip; do unzip -j -o "$zipfile" -d africa/unpacked; done</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fill all voids per region (*.hgt &#8594; *.hgt.tif)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>for hgtfile in europe/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
+for hgtfile in africa/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Merge into one huge tif per region (*.hgt.tif &#8594; raw.tif)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o europe/unpacked/raw.tif europe/unpacked/*.hgt.tif</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o africa/unpacked/raw.tif africa/unpacked/*.hgt.tif</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Convert into Mercator projection, interpolate and shrink per region (raw.tif &#8594; 90.tif)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 europe/unpacked/raw.tif europe/unpacked/90.tif</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 africa/unpacked/raw.tif africa/unpacked/90.tif</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create 10m contour data per region (90.tif &#8594; lon*.pbf)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf europe/unpacked/90.tif</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (4h)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>phyghtmap --step=10 --start-node-id=2000000000 --start-way-id=2000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf africa/unpacked/90.tif</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (2h)</p>
+</div>
+<div class="paragraph">
+<p>Load contour data into contour database</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>osm2pgsql -d contours --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (4h)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configure-server">Configure server</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_check_server_ressources">Check server ressources</h3>
 <div class="paragraph">
 <p>Find out database size</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>psql -d gis -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</pre>
+<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>gis: 84GB, contours: 54GB, lowzoom: 500MB (Germany, Austria, Switzerland)</p>
+<p>gis: 100GB, contours: 80GB, lowzoom: 500MB (Germany, Austria, Switzerland, South Africa)</p>
 </div>
 <div class="paragraph">
 <p>Display free disk space</p>
@@ -1124,7 +1105,7 @@ exit</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>162GB used, 843GB free</p>
+<p>200GB used, 800GB free</p>
 </div>
 <div class="paragraph">
 <p>SSH login with user <strong>root</strong></p>
@@ -1151,11 +1132,8 @@ exit</pre>
 </div>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="run-services">Run services</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="run-services">Run services</h3>
 <div class="paragraph">
 <p>SSH login with user <strong>gis</strong></p>
 </div>
@@ -1212,10 +1190,8 @@ cat ./logs/printmaps_webservice.log</pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="install-services-autostart">Install services autostart</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="install-services-autostart">Install services autostart</h3>
 <div class="paragraph">
 <p>SSH login with user <strong>root</strong></p>
 </div>
@@ -1297,6 +1273,7 @@ systemctl enable fcmaps_web.service</pre>
 <div class="literalblock">
 <div class="content">
 <pre>who -b</pre>
+</div>
 </div>
 </div>
 </div>

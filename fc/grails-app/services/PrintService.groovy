@@ -499,7 +499,7 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
-    Map printmapRoute(boolean a3, boolean landscape, String mapFileName, printparams)
+    Map printmapRoute(String printSize, boolean landscape, String mapFileName, printparams)
     {
         Map ret = [:]
         
@@ -508,7 +508,7 @@ class PrintService
             ITextRenderer renderer = new ITextRenderer();
             addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/route/mapprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+            String url = "${printparams.baseuri}/route/mapprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&printSize=${printSize}&landscape=${landscape}"
             String map_file_name = ("file:///" + HTMLFilter.GetStr(mapFileName)).replaceAll('\\\\','/')
             url += "&mapFileName=${map_file_name}"
             println "Print: $url"
@@ -1744,6 +1744,36 @@ class PrintService
             } else {
                 size_str += "a4"
             }
+            if (isLandscape) {
+                size_str += "l"
+            }
+        }
+        String file_name = "fc-${prefix}${suffix}${size_str}.pdf"
+        printstart "WritePDF '$file_name'"
+        try {
+            println "${contentByteArray.length} bytes."
+            response.setContentType("application/pdf")
+            response.setHeader("Content-disposition", "attachment; filename=$file_name")
+            //response.setContentLength(contentByteArray.length)
+            response.getOutputStream().write(contentByteArray)
+            ok = true
+            printdone ""
+        } catch (Throwable e) {
+            printerror "Throwable ${e}"
+        } catch (Exception e) {
+            printerror "Exception ${e}"
+        }
+        return ok
+    }
+    
+    //--------------------------------------------------------------------------
+    public boolean WritePDF(response, byte[] contentByteArray, String prefix, String suffix, boolean showSize, String printSize, boolean isLandscape)
+    {
+        boolean ok = false
+        String size_str = ""
+        if (showSize) {
+            size_str += "-"
+            size_str += printSize.toLowerCase()
             if (isLandscape) {
                 size_str += "l"
             }

@@ -2,22 +2,46 @@
     <head>
         <style type="text/css">
             @page {
-                <g:if test="${params.a3=='true'}">
-                    <g:if test="${params.landscape=='true'}">
-                        size: A3 landscape;
-                    </g:if>
-                    <g:else>
-                        size: A3;
-                    </g:else> 
-                </g:if>
-                <g:else>
+                <g:if test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_A4}">
                     <g:if test="${params.landscape=='true'}">
                         size: A4 landscape;
                     </g:if>
                     <g:else>
                         size: A4;
-                    </g:else> 
-                </g:else>
+                    </g:else>
+                </g:if>
+                <g:elseif test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_A3}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: A3 landscape;
+                    </g:if>
+                    <g:else>
+                        size: A3;
+                    </g:else>
+                </g:elseif>
+                <g:elseif test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_A2}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: 594mm 420mm;
+                    </g:if>
+                    <g:else>
+                        size: 420mm 594mm;
+                    </g:else>
+                </g:elseif>
+                <g:elseif test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_A1}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: 841mm 594mm;
+                    </g:if>
+                    <g:else>
+                        size: 594mm 841mm;
+                    </g:else>
+                </g:elseif>
+                <g:elseif test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_ANR}">
+                    <g:if test="${params.landscape=='true'}">
+                        size: 198mm 140mm;
+                    </g:if>
+                    <g:else>
+                        size: 140mm 198mm;
+                    </g:else>
+                </g:elseif>
                 margin-top: 8mm;
                 margin-left: 8mm;
                 margin-right: 8mm;

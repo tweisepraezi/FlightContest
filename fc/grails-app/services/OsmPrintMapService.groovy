@@ -52,35 +52,42 @@ class OsmPrintMapService
     final static Map HEADER_CONTENTTYPE = [name:"Content-Type", value:"application/vnd.api+json; charset=utf-8"]
     final static Map HEADER_ACCEPT = [name:"Accept", value:"application/vnd.api+json; charset=utf-8"]
     
-    final static String STYLE_STANDARD = "osm-carto"
-    final static String STYLE_CONTOURLINES = "osm-carto-ele20"
-    final static String STYLE_OTM = "opentopomap-fc"
-    final static String STYLE_OTM_DEV = "opentopomap-fc-dev"
-    
-    final static String HIDELAYERS_CARTO = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
-    final static String HIDELAYERS_CARTO_MUNICIPALITY = "placenames-medium"
-    
-    final static String HIDELAYERS_OTM = "" // borders
-    final static String HIDELAYERS_OTM_CONTOURS = "contours"
-    final static String HIDELAYERS_OTM_AIRFIELDS = "airports-name"
+    final static String STYLE_FC = "fcmaps" // < 3.1.8 nutzt Stil opentopomap-fc 
+    final static String STYLE_FC_DEV = "fcmaps-dev"
+    final static String STYLE_PRINTMAPS_CARTO = "osm-carto"
+    final static String STYLE_PRINTMAPS_CARTO_CONTOURLINES = "osm-carto-ele20"
 
+    final static String HIDELAYERS_FC = "" // borders
+    final static String HIDELAYERS_FC_CONTOURS20 = "contours20"
+    final static String HIDELAYERS_FC_CONTOURS50 = "contours50"
+    final static String HIDELAYERS_FC_CONTOURS100 = "contours100"
+    final static String HIDELAYERS_FC_AIRFIELDS = "airports-name"
+    final static String HIDELAYERS_PRINTMAPS_CARTO = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
+    final static String HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY = "placenames-medium"
+    
     final static String ATTR_PROJECTION = "3857" // EPSG-Nummer, WGS 84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
      
     // Formate
+    //   DIN-A1 Hochformat = 594 x 841 mm, DIN-A1 Querformat = 841 x 594 mm 
+    //   DIN-A2 Hochformat = 420 x 594 mm, DIN-A2 Querformat = 594 x 420 mm
     //   DIN-A3 Hochformat = 297 x 420 mm, DIN-A3 Querformat = 420 x 297 mm
     //   DIN-A4 Hochformat = 210 x 297 mm, DIN-A4 Querformat = 297 x 210 mm
     
+    final static int A1_SHORT = 594 // mm
+    final static int A1_LONG = 841 // mm
+    final static int A2_SHORT = 420 // mm
+    final static int A2_LONG = 594 // mm
     final static int A3_SHORT = 297 // mm
     final static int A3_LONG = 420 // mm
     final static int A4_SHORT = 210 // mm
     final static int A4_LONG = 297 // mm
+    final static int ANR_SHORT = 140 // mm
+    final static int ANR_LONG = 198 // mm
     final static int MARGIN = 10 // nicht bedruckbarer Rand [mm]
 
     final static int FACTOR = 1 // Maßstabsverkleinerung (1 = 1:200000, 2 =  1:100000, 4 = 1:50000)
     final static int FACTOR2 = 1 // Druckvergrößerung (1 = 1:100000, 2 = 1:50000)
     final static int DPI = 600 // Original: 300 DPI
-    
-    final static String SCALE_TITLE = "200000"
     
     final static int TEXT_XPOS_LEFT = 5  // Abstand vom linken Rand [mm]
     final static int TEXT_XPOS_RIGHT = 5 // Abstand vom rechten Rand [mm]
@@ -96,7 +103,6 @@ class OsmPrintMapService
     final static int BOTTOM_TEXT_YPOS2 = FACTOR*5 // mm
     
     final static int SCALEBAR_YPOS_TOP = 6
-    final static BigDecimal SCALEBAR_X_DIFF = FACTOR*5*GpxService.kmPerNM // 1 NM (9.26mm)
     final static String SCALEBAR_TITLE = "5 NM"
     final static int SCALEBAR_TITLE_FONT_SIZE = FACTOR*8
     
@@ -107,7 +113,6 @@ class OsmPrintMapService
     final static BigDecimal GRATICULE_STROKE_WIDTH = FACTOR*0.5
     final static BigDecimal SCALEBAR_STROKE_WIDTH = FACTOR*4
     
-    final static int SCALE = 200000/FACTOR
     
     final static int GRATICULE_TEXT_FONT_SIZE = FACTOR*8
     final static BigDecimal GRATICULE_SCALEBAR_LEN = 0.2 // NM
@@ -170,7 +175,8 @@ class OsmPrintMapService
                              centerGraticuleLongitude: 0.0,
                              printEnroutePhotos: false,
                              printEnrouteCanvas: false,
-                             printContourLines: false,
+                             printScale: Defs.CONTESTMAPSCALE_200000,
+                             printContourLines: Defs.CONTESTMAPCONTOURLINES_100M,
                              printMunicipalityNames: false,
                              printAirfields: Defs.CONTESTMAPAIRFIELDS_OSM,
                              printChurches: false,
@@ -182,12 +188,12 @@ class OsmPrintMapService
                              printSpecials: false,
                              printAirspaces: false,
                              printLandscape: true,
-                             printA3: true,
+                             printSize: Defs.CONTESTMAPPRINTSIZE_A4,
                              printColorChanges: false,
                              printDevStyle: false,
-                             printRunwayHorizontalPos: HorizontalPos.Center,
-                             printRunwayVerticalPos: VerticalPos.Center,
-                             printOTM: false
+                             printCenterHorizontalPos: HorizontalPos.Center,
+                             printCenterVerticalPos: VerticalPos.Center,
+                             printFCStyle: false
                             ]
         
         File gpx_file = new File(printParams.gpxFileName)
@@ -202,7 +208,8 @@ class OsmPrintMapService
             print_options.centerGraticuleLongitude = m.'@center_graticule_longitude'[0].toBigDecimal()
             print_options.printEnroutePhotos = m.'@enroutephotos'[0] == "yes"
             print_options.printEnrouteCanvas = m.'@enroutecanvas'[0] == "yes"
-            print_options.printContourLines = m.'@contour_lines'[0] == "yes"
+            print_options.printScale = m.'@osmscale'[0].toInteger()
+            print_options.printContourLines = m.'@contour_lines'[0].toInteger()
             print_options.printMunicipalityNames = m.'@municipality_names'[0] == "yes"
             print_options.printAirfields = m.'@airfields'[0]
             print_options.printChurches = m.'@churches'[0] == "yes"
@@ -214,12 +221,12 @@ class OsmPrintMapService
             print_options.printSpecials = m.'@specials'[0] == "yes"
             print_options.printAirspaces = m.'@airspaces'[0] == "yes"
             print_options.printLandscape = m.'@landscape'[0] == "yes"
-            print_options.printA3 = m.'@a3'[0] == "yes"
+            print_options.printSize = m.'@print_size'[0]
             print_options.printColorChanges = m.'@colorchanges'[0] == "yes"
             print_options.printDevStyle = m.'@devstyle'[0] == "yes"
-            print_options.printRunwayHorizontalPos = HorizontalPos.(m.'@runwayhorizontalpos'[0])
-            print_options.printRunwayVerticalPos = VerticalPos.(m.'@runwayverticalpos'[0])
-            print_options.printOTM = m.'@otm'[0] == "yes"
+            print_options.printCenterHorizontalPos = HorizontalPos.(m.'@centerhorizontalpos'[0])
+            print_options.printCenterVerticalPos = VerticalPos.(m.'@centerverticalpos'[0])
+            print_options.printFCStyle = m.'@fcstyle'[0] == "yes"
             println "Options: ${print_options}"
             ret.ok = true
         } catch (Exception e) {
@@ -260,65 +267,111 @@ class OsmPrintMapService
 
         String style = ""
         String hide_layers = ""
-        if (!printOptions.printOTM) {
-            if (printOptions.printContourLines) {
-                style = STYLE_CONTOURLINES
-            } else {
-                style = STYLE_STANDARD
-            }
-            hide_layers = HIDELAYERS_CARTO
-            if (!printOptions.printMunicipalityNames) {
-                hide_layers += ",${HIDELAYERS_CARTO_MUNICIPALITY}"
-            }
-        } else {
-            style = STYLE_OTM
-            hide_layers = HIDELAYERS_OTM
-            if (!printOptions.printContourLines) {
-                hide_layers += ",${HIDELAYERS_OTM_CONTOURS}"
+        if (printOptions.printFCStyle) {
+            style = STYLE_FC
+            hide_layers = HIDELAYERS_FC
+            switch (printOptions.printContourLines) {
+                case Defs.CONTESTMAPCONTOURLINES_20M:
+                    hide_layers += ",${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
+                    break
+                case Defs.CONTESTMAPCONTOURLINES_50M:
+                    hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS100}"
+                    break
+                case Defs.CONTESTMAPCONTOURLINES_100M:
+                    hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS50}"
+                    break
+                default:
+                    hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
+                    break
             }
             if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
-                hide_layers += ",${HIDELAYERS_OTM_AIRFIELDS}"
+                hide_layers += ",${HIDELAYERS_FC_AIRFIELDS}"
+            }
+        } else {
+            if (printOptions.printContourLines) {
+                style = STYLE_PRINTMAPS_CARTO_CONTOURLINES
+            } else {
+                style = STYLE_PRINTMAPS_CARTO
+            }
+            hide_layers = HIDELAYERS_PRINTMAPS_CARTO
+            if (!printOptions.printMunicipalityNames) {
+                hide_layers += ",${HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY}"
             }
         }
         if (printOptions.printDevStyle) {
-            style = STYLE_OTM_DEV
+            style = STYLE_FC_DEV
         }
+        
+        int job_scale = printOptions.printScale
+        int print_scale = job_scale/FACTOR
+        BigDecimal scalebar_x_diff = FACTOR*5*Defs.CONTESTMAPSCALE_200000/job_scale*GpxService.kmPerNM // 1 NM (9.26mm)
         
         int print_width = 0 // mm
         int print_height = 0 // mm
         String paper_size = ""
-        if (printOptions.printLandscape) {
-            if (printOptions.printA3) {
-                print_width = A3_LONG
-                print_height = A3_SHORT
-                paper_size = "A3"
-            } else {
-                print_width = A4_LONG
-                print_height = A4_SHORT
+        switch (printOptions.printSize) {
+            case Defs.CONTESTMAPPRINTSIZE_A4:
                 paper_size = "A4"
-            }
-        } else {
-            if (printOptions.printA3) {
-                print_width = A3_SHORT
-                print_height = A3_LONG
+                if (printOptions.printLandscape) {
+                    print_width = A4_LONG
+                    print_height = A4_SHORT
+                } else {
+                    print_width = A4_SHORT
+                    print_height = A4_LONG
+                }
+                break
+            case Defs.CONTESTMAPPRINTSIZE_A3:
                 paper_size = "A3"
-            } else {
-                print_width = A4_SHORT
-                print_height = A4_LONG
-                paper_size = "A4"
-            }
+                if (printOptions.printLandscape) {
+                    print_width = A3_LONG
+                    print_height = A3_SHORT
+                } else {
+                    print_width = A3_SHORT
+                    print_height = A3_LONG
+                }
+                break
+            case Defs.CONTESTMAPPRINTSIZE_A2:
+                paper_size = "A2"
+                if (printOptions.printLandscape) {
+                    print_width = A2_LONG
+                    print_height = A2_SHORT
+                } else {
+                    print_width = A2_SHORT
+                    print_height = A2_LONG
+                }
+                break
+            case Defs.CONTESTMAPPRINTSIZE_A1:
+                paper_size = "A1"
+                if (printOptions.printLandscape) {
+                    print_width = A1_LONG
+                    print_height = A1_SHORT
+                } else {
+                    print_width = A1_SHORT
+                    print_height = A1_LONG
+                }
+                break
+            case Defs.CONTESTMAPPRINTSIZE_ANR:
+                paper_size = "ANR"
+                if (printOptions.printLandscape) {
+                    print_width = ANR_LONG
+                    print_height = ANR_SHORT
+                } else {
+                    print_width = ANR_SHORT
+                    print_height = ANR_LONG
+                }
+                break
         }
         print_width -= 2*MARGIN
         print_height -= 2*MARGIN
         print_width *= FACTOR
         print_height *= FACTOR
         
-        if (printOptions.printRunwayHorizontalPos != HorizontalPos.Center || printOptions.printRunwayVerticalPos != VerticalPos.Center) {
-            BigDecimal print_width_nm = SCALE * print_width / Contest.mmPerNM
-            BigDecimal print_height_nm = SCALE * print_height / Contest.mmPerNM
+        if (printOptions.printCenterHorizontalPos != HorizontalPos.Center || printOptions.printCenterVerticalPos != VerticalPos.Center) {
+            BigDecimal print_width_nm = print_scale * print_width / Contest.mmPerNM
+            BigDecimal print_height_nm = print_scale * print_height / Contest.mmPerNM
             Map rect_width = AviationMath.getShowPoint(printOptions.centerLatitude, printOptions.centerLongitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
             Map rect_height = AviationMath.getShowPoint(printOptions.centerLatitude, printOptions.centerLongitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
-            switch (printOptions.printRunwayHorizontalPos) {
+            switch (printOptions.printCenterHorizontalPos) {
                 case HorizontalPos.Left:
                     printOptions.centerLongitude = rect_width.lonmax
                     break
@@ -326,7 +379,7 @@ class OsmPrintMapService
                     printOptions.centerLongitude = rect_width.lonmin
                     break
             }
-            switch (printOptions.printRunwayVerticalPos) {
+            switch (printOptions.printCenterVerticalPos) {
                 case VerticalPos.Top:
                     printOptions.centerLatitude = rect_height.latmin
                     break
@@ -340,12 +393,12 @@ class OsmPrintMapService
         int route_title_ypos = contest_title_ypos - ROUTE_TITLE_YPOS_CONTEST_TITLE*FACTOR
         int text_xpos_left = TEXT_XPOS_LEFT*FACTOR
         int text_xpos_right = print_width - TEXT_XPOS_RIGHT*FACTOR
-        int scalebar_xpos = text_xpos_right - TEXT_XPOS_RIGHT*SCALEBAR_X_DIFF
+        int scalebar_xpos = text_xpos_right - TEXT_XPOS_RIGHT*scalebar_x_diff
         int scalebar_ypos = print_height - SCALEBAR_YPOS_TOP*FACTOR
         int scalbar_text_ypos = scalebar_ypos - 3*FACTOR   // 3mm nach unten
         
         String generator_text = getMsg('fc.contestmap.generator.printmaps',true)
-        if (printOptions.printOTM) {
+        if (printOptions.printFCStyle) {
             generator_text = getMsg('fc.contestmap.generator.flightcontest',true)
         }
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
@@ -353,7 +406,7 @@ class OsmPrintMapService
         if ((printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) || printOptions.printChurches || printOptions.printCastles || printOptions.printChateaus || printOptions.printWindpowerstations || printOptions.printPeaks) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.bkg',[copyright_date],true)}"
         }
-        if (printOptions.printOTM) {
+        if (printOptions.printFCStyle) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
             // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
         }
@@ -378,34 +431,40 @@ class OsmPrintMapService
             "WellKnownText": "POINT(${text_xpos_left} ${BOTTOM_TEXT_YPOS})"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.scale',true)} 1:${SCALE_TITLE}, ${paper_size}'</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.scale',true)} 1:${job_scale}, ${paper_size}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS})"
         },
         {
             "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos} ${scalebar_ypos}, ${scalebar_xpos + SCALEBAR_X_DIFF} ${scalebar_ypos})"
+            "WellKnownText": "LINESTRING(${scalebar_xpos} ${scalebar_ypos}, ${scalebar_xpos + scalebar_x_diff} ${scalebar_ypos})"
         },            
         {
             "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='0.2' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + SCALEBAR_X_DIFF} ${scalebar_ypos}, ${scalebar_xpos + 2*SCALEBAR_X_DIFF} ${scalebar_ypos})"
+            "WellKnownText": "LINESTRING(${scalebar_xpos + scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 2*scalebar_x_diff} ${scalebar_ypos})"
         },            
         {
             "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + 2*SCALEBAR_X_DIFF} ${scalebar_ypos}, ${scalebar_xpos + 3*SCALEBAR_X_DIFF} ${scalebar_ypos})"
+            "WellKnownText": "LINESTRING(${scalebar_xpos + 2*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 3*scalebar_x_diff} ${scalebar_ypos})"
         },            
         {
             "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='0.2' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + 3*SCALEBAR_X_DIFF} ${scalebar_ypos}, ${scalebar_xpos + 4*SCALEBAR_X_DIFF} ${scalebar_ypos})"
+            "WellKnownText": "LINESTRING(${scalebar_xpos + 3*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 4*scalebar_x_diff} ${scalebar_ypos})"
         },            
         {
             "Style": "<LineSymbolizer stroke='black' stroke-width='${SCALEBAR_STROKE_WIDTH}' stroke-opacity='1' stroke-linecap='butt' />",
-            "WellKnownText": "LINESTRING(${scalebar_xpos + 4*SCALEBAR_X_DIFF} ${scalebar_ypos}, ${scalebar_xpos + 5*SCALEBAR_X_DIFF} ${scalebar_ypos})"
+            "WellKnownText": "LINESTRING(${scalebar_xpos + 4*scalebar_x_diff} ${scalebar_ypos}, ${scalebar_xpos + 5*scalebar_x_diff} ${scalebar_ypos})"
         },
         {
             "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SCALEBAR_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${SCALEBAR_TITLE}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_right} ${scalbar_text_ypos})"
         }"""
-
+        if (printOptions.printContourLines) {
+            user_text += """,{
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.contestmapcontourlines',true)} ${printOptions.printContourLines}${getMsg('fc.contestmap.contestmapcontourlines.unit',true)}'</TextSymbolizer>",
+                "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS2})"
+            }"""
+        }
+        
         String gpx_file_name = printParams.gpxFileName.replaceAll('\\\\', '/')
         String gpx_short_file_name = gpx_file_name.substring(gpx_file_name.lastIndexOf('/')+1)
         String gpx_lines = """,{
@@ -446,7 +505,7 @@ class OsmPrintMapService
         
         String graticule_lines = ""
         if (graticule_file_name) {
-            if (create_graticule_csv(graticule_file_name, printOptions.centerGraticuleLatitude, printOptions.centerGraticuleLongitude, printOptions.centerLatitude, printOptions.centerLongitude, print_width, print_height)) {
+            if (create_graticule_csv(graticule_file_name, printOptions.centerGraticuleLatitude, printOptions.centerGraticuleLongitude, printOptions.centerLatitude, printOptions.centerLongitude, print_scale, print_width, print_height)) {
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
                     "Style": "<PolygonSymbolizer fill='lightgrey' />",
@@ -480,7 +539,7 @@ class OsmPrintMapService
             airfields_file_name = Defs.FCSAVE_FILE_GEODATA_AIRFIELDS
             String airfields_short_file_name = airfields_file_name.substring(airfields_file_name.lastIndexOf('/')+1)
             airfields_lines = """,{
-                "Style": "<MarkersSymbolizer file='airfield.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
+                "Style": "<MarkersSymbolizer file='airfield.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' allow-overlap='true' />",
                 "SRS": "+init=epsg:4326",
                 "Type": "csv",
                 "File": "${airfields_short_file_name}",
@@ -630,7 +689,7 @@ class OsmPrintMapService
             }
         }
         
-        printstart "print_osm Scale=1:${SCALE} Width=${print_width} Height=${print_height}"
+        printstart "print_osm Scale=1:${print_scale} Width=${print_width} Height=${print_height}"
         BigDecimal INCH_2_MM = 25.4
         BigDecimal PX_PER_MM = DPI / INCH_2_MM
         BigDecimal PXX = 6.75
@@ -667,7 +726,7 @@ class OsmPrintMapService
                 "ID": "",
                 "Attributes": {
                     "Fileformat": "png",
-                    "Scale": ${SCALE},
+                    "Scale": ${print_scale},
                     "PrintWidth": ${print_width},
                     "PrintHeight": ${print_height},
                     "Latitude": ${printOptions.centerLatitude},
@@ -839,7 +898,7 @@ class OsmPrintMapService
             printjobid_writer << "\n"
             printjobid_writer << printOptions.printLandscape
             printjobid_writer << "\n"
-            printjobid_writer << printOptions.printA3
+            printjobid_writer << printOptions.printSize
             printjobid_writer << "\n"
             printjobid_writer << printOptions.printColorChanges
             printjobid_writer.close()
@@ -853,7 +912,7 @@ class OsmPrintMapService
             printfileid_writer << "\n"
             printfileid_writer << printOptions.printLandscape
             printfileid_writer << "\n"
-            printfileid_writer << printOptions.printA3
+            printfileid_writer << printOptions.printSize
             printfileid_writer.close()
             printdone ""
             
@@ -1062,15 +1121,15 @@ class OsmPrintMapService
     private boolean create_graticule_csv(String graticuleFileName,
                                          BigDecimal centerGraticuleLatitude, BigDecimal centerGraticuleLongitude,
                                          BigDecimal centerLatitude, BigDecimal centerLongitude,
-                                         int printWidth, int printHeight
+                                         int printScale, int printWidth, int printHeight
                                         )
     {
         printstart "Write ${graticuleFileName}"
         println "centerGraticuleLatitude: ${centerGraticuleLatitude}"
         println "centerGraticuleLongitude: ${centerGraticuleLongitude}"
         
-        BigDecimal print_width_nm = SCALE * printWidth / Contest.mmPerNM
-        BigDecimal print_height_nm = SCALE * printHeight / Contest.mmPerNM
+        BigDecimal print_width_nm = printScale * printWidth / Contest.mmPerNM
+        BigDecimal print_height_nm = printScale * printHeight / Contest.mmPerNM
         Map rect_width = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_width_nm / 2, GRATICULE_SCALEBAR_LEN)
         Map rect_height = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN)
         println "Width:  ${printWidth} mm, ${print_width_nm} NM, ${rect_width}"

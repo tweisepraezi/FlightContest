@@ -15,9 +15,10 @@ class ContestMapRoutePointsTagLib
     private inputCoord(CoordRoute coordrouteInstance, Route routeInstance, attrs)
     {
         if (coordrouteInstance) {
-            if (coordrouteInstance.type.IsContestMapCoord()) {
+            if (coordrouteInstance.type.IsContestMapQuestionCoord()) {
                 String check_title = coordrouteInstance.title()+','
-                checkBox("${attrs.tpid}${coordrouteInstance.title()}", coordrouteInstance.titleCode(), attrs.tp.contains(check_title), attrs)
+                boolean checked = attrs.tp.contains(check_title)
+                checkBox("${attrs.tpid}${coordrouteInstance.title()}", coordrouteInstance.titleCode(), checked, attrs)
             }
         }
     }

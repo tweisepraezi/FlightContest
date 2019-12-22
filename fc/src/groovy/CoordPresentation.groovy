@@ -130,12 +130,12 @@ enum CoordPresentation
         String direction_value = ''
         if (isLatitude) {
             direction_value = NORTH
-            if (grad_value < 0) {
+            if (decimalGrad < 0) {
                 direction_value = SOUTH
             }
         } else {
             direction_value = EAST
-            if (grad_value < 0) {
+            if (decimalGrad < 0) {
                 direction_value = WEST
             }
         }

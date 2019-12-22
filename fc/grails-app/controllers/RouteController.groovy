@@ -637,12 +637,16 @@ class RouteController {
                 } else {
                     route.instance.contestMapCenterPoints = coordroute_instance.title() 
                 }
-                if (route.instance.contestMapPrintPoints) {
-                    route.instance.contestMapPrintPoints += ",${coordroute_instance.title()}"
-                } else {
-                    route.instance.contestMapPrintPoints = coordroute_instance.title() 
+                if (!coordroute_instance.type.IsRunwayCoord()) {
+                    if (route.instance.contestMapPrintPoints) {
+                        route.instance.contestMapPrintPoints += ",${coordroute_instance.title()}"
+                    } else {
+                        route.instance.contestMapPrintPoints = coordroute_instance.title() 
+                    }
                 }
             }
+            route.instance.contestMapCenterPoints += ","
+            route.instance.contestMapPrintPoints += ","
             
             if (BootStrap.global.IsDevelopmentEnvironment()) {
                 route.instance.contestMapDevStyle = true
@@ -670,6 +674,13 @@ class RouteController {
                 new_osm_map = false
                 break_button = true
                 discard_button = true
+                def job_key = new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP)
+                if (job_key) {
+                    if (!quartzScheduler.getTriggersOfJob(job_key)*.key) {
+                        gpxService.println "Restart OsmPrintMapJob"
+                        redirect(action:'mapfetch',id:params.id)
+                    }
+                }
             } else if (route_id && route_id != route.instance.id.toString()) { // Scheduler job of another route is running
                 new_osm_map = false
             } else if (!route_id && new File(printjobid_filename).exists()) { // No scheduler job is running & Print job  of this route exists
@@ -709,10 +720,12 @@ class RouteController {
                 route.instance.contestMapLeg = params.contestMapLeg == "on"
                 route.instance.contestMapCurvedLeg = params.contestMapCurvedLeg == "on"
                 route.instance.contestMapTpName = params.contestMapTpName == "on"
+                route.instance.contestMapSecretGates = params.contestMapSecretGates == "on"
                 route.instance.contestMapEnroutePhotos = params.contestMapEnroutePhotos == "on"
                 route.instance.contestMapEnrouteCanvas = params.contestMapEnrouteCanvas == "on"
+                route.instance.contestMapScale = params.contestMapScale.toInteger()
                 route.instance.contestMapGraticule = params.contestMapGraticule == "on"
-                route.instance.contestMapContourLines = params.contestMapContourLines == "on"
+                route.instance.contestMapContourLines = params.contestMapContourLines.toInteger()
                 route.instance.contestMapMunicipalityNames = params.contestMapMunicipalityNames == "on"
                 route.instance.contestMapAirfields = params.contestMapAirfields
                 route.instance.contestMapChurches = params.contestMapChurches == "on"
@@ -746,13 +759,10 @@ class RouteController {
                 if (route.instance.contestMapPrintPoints) {
                     route.instance.contestMapPrintPoints += ","
                 }
-                if (params.contestMapRunwayPoint) {
-                    route.instance.contestMapRunwayPoint = CoordType.(params.contestMapRunwayPoint)
-                }
-                route.instance.contestMapRunwayHorizontalPos = params.contestMapRunwayHorizontalPos
-                route.instance.contestMapRunwayVerticalPos = params.contestMapRunwayVerticalPos
+                route.instance.contestMapCenterHorizontalPos = params.contestMapCenterHorizontalPos
+                route.instance.contestMapCenterVerticalPos = params.contestMapCenterVerticalPos
                 route.instance.contestMapPrintLandscape = params.contestMapPrintLandscape == "on"
-                route.instance.contestMapPrintA3 = params.contestMapPrintA3 == "on"
+                route.instance.contestMapPrintSize = params.contestMapPrintSize
                 route.instance.contestMapColorChanges = params.contestMapColorChanges == "on"
                 route.instance.contestMapDevStyle = params.contestMapDevStyle == "on"
                 gpxService.printstart "Export map '${route.instance.name()}'"
@@ -766,8 +776,10 @@ class RouteController {
                      contestMapLeg:route.instance.contestMapLeg,
                      contestMapCurvedLeg:route.instance.contestMapCurvedLeg,
                      contestMapTpName:route.instance.contestMapTpName,
+                     contestMapSecretGates:route.instance.contestMapSecretGates,
                      contestMapEnroutePhotos:route.instance.contestMapEnroutePhotos,
                      contestMapEnrouteCanvas:route.instance.contestMapEnrouteCanvas,
+                     contestMapScale:route.instance.contestMapScale,
                      contestMapGraticule:route.instance.contestMapGraticule,
                      contestMapContourLines:route.instance.contestMapContourLines,
                      contestMapMunicipalityNames:route.instance.contestMapMunicipalityNames,
@@ -783,10 +795,10 @@ class RouteController {
                      contestMapCenterPoints:route.instance.contestMapCenterPoints,
                      contestMapPrintPoints:route.instance.contestMapPrintPoints,
                      contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
-                     contestMapPrintA3:route.instance.contestMapPrintA3,
+                     contestMapPrintSize:route.instance.contestMapPrintSize,
                      contestMapColorChanges:route.instance.contestMapColorChanges,
                      contestMapDevStyle:route.instance.contestMapDevStyle,
-                     contestMapOTM:true,
+                     contestMapFCStyle:true,
                     ]
                 ) // false - no Print, false - no Points, false - no wrEnrouteSign
                 if (converter.ok) {
@@ -976,7 +988,7 @@ class RouteController {
                     String map_png_file_name = printfileid_file_reader.readLine()
                     String world_file_name = "${map_png_file_name}w"
                     boolean print_landscape = printfileid_file_reader.readLine() == 'true'
-                    boolean print_a3 = printfileid_file_reader.readLine() == 'true'
+                    String print_size = printfileid_file_reader.readLine()
                     printfileid_file_reader.close()
                     if (route.instance.contestMapPrint == Defs.CONTESTMAPPRINT_PNGMAP) {
                         gpxService.printstart "Download PNG"
@@ -1009,14 +1021,14 @@ class RouteController {
                         //gpxService.DeleteFile(printfileid_filename)
                     } else if (route.instance.contestMapPrint == Defs.CONTESTMAPPRINT_PDFMAP) {
                         gpxService.printstart "Generate PDF"
-                        Map ret = printService.printmapRoute(print_a3, print_landscape, map_png_file_name, GetPrintParams())
+                        Map ret = printService.printmapRoute(print_size, print_landscape, map_png_file_name, GetPrintParams())
                         gpxService.printdone ""
                         if (ret.error) {
                             flash.message = ret.message
                             flash.error = true
                             redirect(action:'show',id:params.id)
                         } else if (ret.content) {
-                            if (printService.WritePDF(response, ret.content, session.lastContest.GetPrintPrefix(), "map-${route.instance.idTitle}", true, print_a3, print_landscape)) {
+                            if (printService.WritePDF(response, ret.content, session.lastContest.GetPrintPrefix(), "map-${route.instance.idTitle}", true, print_size, print_landscape)) {
                                 //gpxService.DeleteFile(map_png_file_name)
                                 //gpxService.DeleteFile(world_file_name)
                                 //gpxService.DeleteFile(printfileid_filename)

@@ -38,6 +38,8 @@ class GpxService
     final static BigDecimal CONTESTMAP_CIRCLE_RADIUS = 0.5 // NM
     final static BigDecimal CONTESTMAP_PROCEDURETURN_DISTANCE = 1 // NM
     final static BigDecimal CONTESTMAP_TPNAME_DISTANCE = 1.5 // NM
+    final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DISTANCE = 1 // NM
+    final static BigDecimal CONTESTMAP_TPNAME_RUNWAY_DIRECTION = 0 // Grad
     final static BigDecimal CONTESTMAP_TPNAME_NOPROCEDURETURN_DISTANCE = 2.0 // NM
     final static BigDecimal CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE = 3.0 // NM
     final static BigDecimal CONTESTMAP_MARGIN_DISTANCE = 5 // NM
@@ -1603,7 +1605,8 @@ class GpxService
             wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
         }
         boolean use_procedureturn = routeInstance.UseProcedureTurn()
-        
+        List curved_point_ids = routeInstance.GetCurvedPointIds()
+
         // observation settings & enroute signs without position
         Map contest_map_rect = [:]
         BigDecimal center_latitude = null
@@ -1649,7 +1652,7 @@ class GpxService
                         BigDecimal max_latitude = null
                         BigDecimal max_longitude = null
                         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                            if (coordroute_instance.type.IsContestMapCoord()) {
+                            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
                                 if (!contestMap.contestMapCenterPoints || contestMap.contestMapCenterPoints.contains(coordroute_instance.title()+',')) {
                                     BigDecimal lat = coordroute_instance.latMath()
                                     BigDecimal lon = coordroute_instance.lonMath()
@@ -1664,29 +1667,6 @@ class GpxService
                                     }
                                     if (max_longitude == null || lon > max_longitude) {
                                         max_longitude = lon
-                                    }
-                                }
-                            }
-                        }
-                        if (min_latitude == null) { // get coords from runway
-                            show_runway = true
-                            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                                if (coordroute_instance.type.IsRunwayCoord()) {
-                                    if (routeInstance.contestMapRunwayPoint == CoordType.UNKNOWN || routeInstance.contestMapRunwayPoint == coordroute_instance.type) {
-                                        BigDecimal lat = coordroute_instance.latMath()
-                                        BigDecimal lon = coordroute_instance.lonMath()
-                                        if (min_latitude == null || lat < min_latitude) {
-                                            min_latitude = lat
-                                        }
-                                        if (min_longitude == null || lon < min_longitude) {
-                                            min_longitude = lon
-                                        }
-                                        if (max_latitude == null || lat > max_latitude) {
-                                            max_latitude = lat
-                                        }
-                                        if (max_longitude == null || lon > max_longitude) {
-                                            max_longitude = lon
-                                        }
                                     }
                                 }
                             }
@@ -1708,10 +1688,11 @@ class GpxService
                             max_longitude: max_longitude,
                             center_latitude: center_latitude,
                             center_longitude: center_longitude,
+                            osmscale: contestMap.contestMapScale,
                             graticule: getYesNo(contestMap.contestMapGraticule),
                             center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
                             center_graticule_longitude: GetRoundedDecimalGrad(center_longitude),
-                            contour_lines: getYesNo(contestMap.contestMapContourLines),
+                            contour_lines: contestMap.contestMapContourLines,
                             municipality_names: getYesNo(contestMap.contestMapMunicipalityNames),
                             enroutephotos: getYesNo(contestMap.contestMapEnroutePhotos),
                             enroutecanvas: getYesNo(contestMap.contestMapEnrouteCanvas),
@@ -1725,12 +1706,12 @@ class GpxService
                             specials: getYesNo(contestMap.contestMapSpecials),
                             airspaces: getYesNo(contestMap.contestMapAirspaces),
                             landscape: getYesNo(contestMap.contestMapPrintLandscape),
-                            a3: getYesNo(contestMap.contestMapPrintA3),
+                            print_size: contestMap.contestMapPrintSize,
                             colorchanges: getYesNo(contestMap.contestMapColorChanges),
                             devstyle: getYesNo(contestMap.contestMapDevStyle),
-                            runwayhorizontalpos: routeInstance.contestMapRunwayHorizontalPos,
-                            runwayverticalpos: routeInstance.contestMapRunwayVerticalPos,
-                            otm:getYesNo(contestMap.contestMapOTM)
+                            centerhorizontalpos: routeInstance.contestMapCenterHorizontalPos,
+                            centerverticalpos: routeInstance.contestMapCenterVerticalPos,
+                            fcstyle:getYesNo(contestMap.contestMapFCStyle)
                         )
                     }
                 }
@@ -1895,6 +1876,7 @@ class GpxService
             // procedure turns
             if (contestMap.contestMapProcedureTurn && use_procedureturn) {
                 CoordRoute last_coordroute_instance = null
+                CoordRoute last_coordroute_instance2 = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
@@ -1922,9 +1904,10 @@ class GpxService
                 }
             }
             
-            // tp names
+            // TP names
             if (contestMap.contestMapTpName) {
                 CoordRoute last_coordroute_instance = null
+                CoordRoute last_coordroute_instance2 = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsContestMapCoord()) {
@@ -1998,7 +1981,70 @@ class GpxService
                         }
                         last_last_coordroute_instance = last_coordroute_instance 
                         last_coordroute_instance = coordroute_instance
+                    } else if (coordroute_instance.type.IsRunwayCoord()) {
+                        if (contestMap.contestMapPrintPoints.contains(coordroute_instance.title()+',')) {
+                            Map tp_coord = AviationMath.getCoordinate(
+                                coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                CONTESTMAP_TPNAME_RUNWAY_DIRECTION,
+                                CONTESTMAP_TPNAME_RUNWAY_DISTANCE
+                            )
+                            xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                xml.sym "empty.png"
+                                xml.type ""
+                            }
+                        }
+                    } else if (contestMap.contestMapSecretGates && coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
+                        BigDecimal distance_value = coordroute_instance.gatewidth2
+                        if (distance_value < CONTESTMAP_TPNAME_DISTANCE) {
+                            distance_value = CONTESTMAP_TPNAME_DISTANCE
+                        }
+                        Map tp_coord = AviationMath.getOrthogonalTitlePoint(
+                            last_coordroute_instance2.latMath(), last_coordroute_instance2.lonMath(),
+                            coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                            center_latitude, center_longitude,
+                            distance_value
+                        )
+                        xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                            xml.name coordroute_instance.titleShortMap(isPrint)
+                            xml.sym "empty.png"
+                            xml.type ""
+                        }
                     }
+                    last_coordroute_instance2 = coordroute_instance
+                }
+            }
+            
+            // Gates unbekannter Zeitkontrollen
+            if (contestMap.contestMapSecretGates) {
+                CoordRoute last_coordroute_instance = null
+                for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                    if (coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
+                        Float gate_width = null
+                        if (testInstance) {
+                            gate_width = testInstance.GetSecretGateWidth()
+                        }
+                        if (!gate_width) {
+                            gate_width = coordroute_instance.gatewidth2
+                        }
+                        Map gate = AviationMath.getGate(
+                            last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
+                            coordroute_instance.latMath(),coordroute_instance.lonMath(),
+                            gate_width
+                        )
+                        xml.rte {
+                            wrGate(coordroute_instance, gate_width, xml)
+                            // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                            xml.name coordroute_instance.titleShortMap(isPrint)
+                            xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
+                                // xml.ele altitude_meter
+                            }
+                            xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
+                                // xml.ele altitude_meter
+                            }
+                        }
+                    }
+                    last_coordroute_instance = coordroute_instance
                 }
             }
             
@@ -2033,20 +2079,6 @@ class GpxService
                     }
                 }
             }
-            
-            // Rahmen
-            /*
-            if (contestMap.contestMapFrame) {
-                xml.rte {
-                    xml.name "Graticule"
-                    xml.rtept(lat:contest_map_rect.latmin, lon:contest_map_rect.lonmin)
-                    xml.rtept(lat:contest_map_rect.latmin, lon:contest_map_rect.lonmax)
-                    xml.rtept(lat:contest_map_rect.latmax, lon:contest_map_rect.lonmax)
-                    xml.rtept(lat:contest_map_rect.latmax, lon:contest_map_rect.lonmin)
-                    xml.rtept(lat:contest_map_rect.latmin, lon:contest_map_rect.lonmin)
-                }
-            }
-            */
             
         } else {
             // gates
@@ -2204,7 +2236,6 @@ class GpxService
                         // standard gate
                         boolean wr_gate = false
                         boolean show_curved_point = gpxExport || routeInstance.ShowCurvedPoints()
-                        List curved_point_ids = routeInstance.GetCurvedPointIds()
                         if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                             wr_gate = true
                         }

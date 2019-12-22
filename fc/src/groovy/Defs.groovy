@@ -104,8 +104,22 @@ class Defs
     static final String CONTESTMAPPRINT_PNGMAP                         = "contestMapPrint_PNGMap"
     static final String CONTESTMAPPRINT_PNGZIP                         = "contestMapPrint_PNGZip"
     
+    static final int CONTESTMAPSCALE_200000                            = 200000
+    static final int CONTESTMAPSCALE_250000                            = 250000
+    
+    static final int CONTESTMAPCONTOURLINES_NONE                       = 0
+    static final int CONTESTMAPCONTOURLINES_20M                        = 20
+    static final int CONTESTMAPCONTOURLINES_50M                        = 50
+    static final int CONTESTMAPCONTOURLINES_100M                       = 100
+    
     static final String CONTESTMAPAIRFIELDS_OSM                        = "contestMapAirfields_OSM"
     static final String CONTESTMAPAIRFIELDS_GEODATA                    = "contestMapAirfields_GEODATA"
+    
+    static final String CONTESTMAPPRINTSIZE_A4                         = "contestMapPrintSizeA4"
+    static final String CONTESTMAPPRINTSIZE_A3                         = "contestMapPrintSizeA3"
+    static final String CONTESTMAPPRINTSIZE_A2                         = "contestMapPrintSizeA2"
+    static final String CONTESTMAPPRINTSIZE_A1                         = "contestMapPrintSizeA1"
+    static final String CONTESTMAPPRINTSIZE_ANR                        = "contestMapPrintSizeANR"
     
     static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
     static final String BACKGROUNDUPLOAD_SRCDEST_SEPARATOR             = "!"

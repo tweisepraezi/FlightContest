@@ -1,4 +1,26 @@
 <Style name="areas">
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[landuse] = 'residential'</Filter>
+        <PolygonSymbolizer fill="#ffacb7" /> 
+        
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[landuse] = 'industrial'</Filter>
+        <PolygonSymbolizer fill="#aaaaaa" /> 
+        
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[landuse] = 'commercial'</Filter>
+        <PolygonSymbolizer fill="#aaaaaa" /> 
+        
+    </Rule>
+    <!-- and [type] = 'multipolygon'
 	<Rule>
 		&maxscale_zoom9;
 		&minscale_zoom10;
@@ -13,7 +35,7 @@
 		<PolygonPatternSymbolizer file="symbols-otm/military_area.png"/>
 		<LineSymbolizer stroke="#ff3939" stroke-width="2" stroke-opacity="0.5"/>
 	</Rule>
-<Rule>
+    <Rule>
 		&maxscale_zoom12;
 		&minscale_zoom13;
 		<Filter>[landuse] = 'military' and [way_area] &gt; 1E5</Filter>
@@ -46,4 +68,5 @@
 		<Filter>[leisure] = 'nature_reserve'</Filter>
 		<LineSymbolizer stroke="#85c243" stroke-width="5" stroke-opacity="0.5"/>
 	</Rule>
+	 -->
 </Style>

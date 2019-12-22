@@ -398,7 +398,7 @@ class KmlService
         BigDecimal max_latitude = null
         BigDecimal max_longitude = null
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-            if (coordroute_instance.type.IsContestMapCoord()) {
+            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
                 BigDecimal lat = coordroute_instance.latMath()
                 BigDecimal lon = coordroute_instance.lonMath()
                 if (min_latitude == null || lat < min_latitude) {

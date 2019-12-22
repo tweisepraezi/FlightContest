@@ -23,10 +23,10 @@
 <!ENTITY maxscale_zoom8 "<MaxScaleDenominator>3000000</MaxScaleDenominator>">
 <!ENTITY minscale_zoom8 "<MinScaleDenominator>1500000</MinScaleDenominator>">
 <!ENTITY maxscale_zoom9 "<MaxScaleDenominator>1500000</MaxScaleDenominator>">
-<!ENTITY minscale_zoom9 "<MinScaleDenominator>750000</MinScaleDenominator>">
-<!ENTITY maxscale_zoom10 "<MaxScaleDenominator>750000</MaxScaleDenominator>">
-<!ENTITY minscale_zoom10 "<MinScaleDenominator>400000</MinScaleDenominator>">
-<!ENTITY maxscale_zoom11 "<MaxScaleDenominator>400000</MaxScaleDenominator>">
+<!ENTITY minscale_zoom9 "<MinScaleDenominator>900000</MinScaleDenominator>">
+<!ENTITY maxscale_zoom10 "<MaxScaleDenominator>900000</MaxScaleDenominator>">
+<!ENTITY minscale_zoom10 "<MinScaleDenominator>800000</MinScaleDenominator>">
+<!ENTITY maxscale_zoom11 "<MaxScaleDenominator>800000</MaxScaleDenominator>">
 <!ENTITY minscale_zoom11 "<MinScaleDenominator>200000</MinScaleDenominator>">
 <!ENTITY maxscale_zoom12 "<MaxScaleDenominator>200000</MaxScaleDenominator>">
 <!ENTITY minscale_zoom12 "<MinScaleDenominator>100000</MinScaleDenominator>">

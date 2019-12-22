@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.6, Ausgabe 1,</span>
-<span id="revdate">14.04.2019</span>
+<span id="revnumber">version 3.1.8, Ausgabe 1,</span>
+<span id="revdate">22.12.2019</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -443,6 +443,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-import">Import von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a></li>
+<li><a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzuf&#252;gen</a></li>
 <li><a href="#route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a></li>
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
@@ -1169,6 +1170,7 @@ einem Import nur noch in 'Flight Contest'.</p>
 <a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-import">Import von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a><br>
+<a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzuf&#252;gen</a><br>
 <a href="#route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</a><br>
 <a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a><br>
 <a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></p>
@@ -1558,115 +1560,51 @@ Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
 (zur Installation hier zu finden: <a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a>)</p>
 </li>
 <li>
-<p>Klicken Sie den Ordner <strong>Route</strong> an und f&#252;gen Sie einen 'Pfad' hinzu</p>
+<p>Check-Punkte eingeben</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Check-Punkte eingeben:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Name entspr. Streckenbezeichnung festlegen</p>
+<p>Klicken Sie den Ordner <strong>Route</strong> an und f&#252;gen Sie einen 'Pfad' hinzu.<br>
+Es &#246;ffnet sich der 'Pfad bearbeiten'-Dialog. Name des Pfades entspr. Streckenbezeichnung festlegen.<br>
+Bei weiter ge&#246;ffnetem 'Pfad bearbeiten'-Dialog im Grafikbereich mit Linksklick alle Check-Punkte (TO, SP, WP1, WP2, &#8230;&#8203;, FP, LDG) der Strecke ohne UZKs nacheinander hinzuf&#252;gen.<br>
+Die Position muss hier noch nicht genau stimmen. Deren Genauigkeit kann im Nachhinein korrigiert werden.<br>
+'Pfad bearbeiten'-Dialog beenden</p>
 </li>
 <li>
-<p>Mit Linksklick alle Check-Punkte der Strecke ohne UZKs nacheinander hinzuf&#252;gen (TO, SP, WP1, WP2, &#8230;&#8203;, FP, LDG)</p>
+<p>&#196;ndern der Position eines Check-Punktes:<br>
+Zum gew&#252;nschten Check-Punkt im Grafikbereich navigieren<br>
+Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen<br>
+Bei ge&#246;ffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gew&#252;nschten Position ziehen<br>
+'Pfad bearbeiten'-Dialog beenden</p>
 </li>
 <li>
-<p>'Pfad bearbeiten'-Dialog beenden</p>
+<p>Unbekannte Zeitkontrollen oder krumme Streckenverl&#228;ufe k&#246;nnen nach dem Strecken-Import hinzugef&#252;gt werden.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>&#196;ndern der Position eines Check-Punktes:</p>
+<p>Strecken-Fotos eingeben</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Zum gew&#252;nschten Check-Punkt navigieren</p>
-</li>
-<li>
-<p>Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen</p>
-</li>
-<li>
-<p>Bei ge&#246;ffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gew&#252;nschten Position ziehen</p>
-</li>
-<li>
-<p>'Pfad bearbeiten'-Dialog beenden</p>
+<p>Klicken Sie den Ordner <strong>Photos</strong> an und f&#252;gen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu.<br>
+Es &#246;ffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen (kann nach Import ge&#228;ndert werden)<br>
+Position der Ortsmarkierung im Grafikbereich auf das gew&#252;nschte Objekt schieben<br>
+'Ortsmarkierung'-Dialog beenden</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Hinzuf&#252;gen einer UZK:</p>
+<p>Strecken-Bodenzeichen hinzuf&#252;gen</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Zum Check-Punkt navigieren, nach dessen Folge-Streckenabschnitt ein UZK eingef&#252;gt werden soll</p>
-</li>
-<li>
-<p>Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen</p>
-</li>
-<li>
-<p>Check-Punkt bei h&#246;chster Zoomstufe mit linker Masutaste anklicken (darauf achten, dass er sich nicht verschiebt)</p>
-</li>
-<li>
-<p>Mit Cursourtasten der Strecke folgen und zur gew&#252;nschten Position navigieren</p>
-</li>
-<li>
-<p>Mit der linken Maustaste auf die gew&#252;nschte Position auf der Strecke klicken (f&#252;gt Punkt ein)</p>
-</li>
-<li>
-<p>'Pfad bearbeiten'-Dialog beenden</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>L&#246;schen einer UZK:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Zum gew&#252;nschten UZK navigieren</p>
-</li>
-<li>
-<p>Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen</p>
-</li>
-<li>
-<p>Bei ge&#246;ffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anklicken und dann Del-Taste dr&#252;cken</p>
-</li>
-<li>
-<p>'Pfad bearbeiten'-Dialog beenden</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Klicken Sie den Ordner <strong>Photos</strong> an und f&#252;gen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Name entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen<br>
-(kann nach Import ge&#228;ndert werden)</p>
-</li>
-<li>
-<p>Position der Ortsmarkierung auf das gew&#252;nschte Objekt schieben</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Klicken Sie den Ordner <strong>Canvas</strong> an und f&#252;gen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Name mit 'S01' bis 'S15' festlegen<br>
-(kann nach Import ge&#228;ndert werden)</p>
-</li>
-<li>
-<p>Position der Ortsmarkierung auf die gew&#252;nschte Auslegestelle schieben</p>
+<p>Klicken Sie den Ordner <strong>Canvas</strong> an und f&#252;gen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu.<br>
+Es &#246;ffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung mit 'S01' bis 'S15' festlegen (kann nach Import ge&#228;ndert werden)<br>
+Position der Ortsmarkierung im Grafikbereich auf die gew&#252;nschte Auslegestelle schieben<br>
+'Ortsmarkierung'-Dialog beenden</p>
 </li>
 </ul>
 </div>
@@ -1732,6 +1670,51 @@ Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
 </li>
 </ul>
 </div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzuf&#252;gen</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Strecke exportieren (Strecke &#8594; <strong>KMZ-Export</strong>) und mit <strong>Google Earth Pro</strong> &#246;ffnen</p>
+</li>
+<li>
+<p>Zum Knoten 'Dateiname.kmz &#8594; Streckenname &#8594; Strecken-Export &#8594; <strong>turnpoints</strong>' navigieren</p>
+</li>
+<li>
+<p>Wendepunkt anklicken, nach dem UZKs oder ein krummer Streckenabschnitt hinzugef&#252;gt werden soll</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Kontexmen&#252;punkt "Kopieren" ausf&#252;hren<br>
+Kontexmen&#252;punkt "Einf&#252;gen" ein- oder mehrmals ausf&#252;hren (entspr. Anzahl ben&#246;tigter UZKs)<br>
+"Eigenschaften" der hinzuf&#252;gten Punkte im 'Ortsmarkierung'-Dialog bearbeiten:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Im Name-Feld Check-Punkt-Bezeichnung und Gate-Breite anpassen<br>
+(TP &#8594; SC, z.B. "TP1, Gate 1.0NM" &#8594; "SC1, Gate 2.0NM")</p>
+</li>
+<li>
+<p>Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gew&#252;nschten Position ziehen</p>
+</li>
+<li>
+<p>'Ortsmarkierung'-Dialog beenden</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>'Dateiname.kmz' mit Kontextmen&#252; 'Ort speichern unter' in neuer kmz-Datei abspeichern</p>
+</li>
+<li>
+<p>Import der korrigierten Strecke (Strecke &#8594; <strong>Import FC-Strecke</strong>)</p>
 </li>
 </ol>
 </div>
@@ -1849,7 +1832,7 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Mit 'Strecken &#8594; Strecke &#8594; OSM-Wettbewerbs-Karte' kann eine PDF-Wettbewerbskarte
-im Ma&#223;stab 1:200000 mit Hilfe eines eigenen Druckserver im T&#220;K200-Stil erzeugt werden.</p>
+im Ma&#223;stab 1:200000 oder 1:250000 mit Hilfe eines eigenen Druckserver im T&#220;K200-Stil erzeugt werden.</p>
 </div>
 <div class="paragraph">
 <p>Nutzung der Karten:<br>
@@ -1923,6 +1906,9 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 <p>Wendepunkt-Namen (in der jeweiligen Drucksprache, dt. WP, engl. TP)</p>
 </li>
 <li>
+<p>Tore unbekannter Zeitkontrollen</p>
+</li>
+<li>
 <p>Positionen von Strecken-Fotos</p>
 </li>
 <li>
@@ -1939,7 +1925,7 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 <p>Gradnetz</p>
 </li>
 <li>
-<p>H&#246;henlinen</p>
+<p>H&#246;henlinen (100m, 50m oder 20m)</p>
 </li>
 <li>
 <p>Manuell hinzugef&#252;gte Objekte</p>
@@ -1958,7 +1944,7 @@ Dazu alle Dateien von <strong><a href="https://my.hidrive.com/share/vobbr89etw#$
 </div>
 <div class="paragraph">
 <p>Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
-Strecken, die das w&#228;hlbare Druck-Format A3 oder A4 sprengen, k&#246;nnen mittels
+Strecken, die das gew&#228;hlte Druck-Format sprengen, k&#246;nnen mittels
 Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.</p>
 </div>
 <div class="paragraph">
@@ -1966,7 +1952,7 @@ Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.</p>
 Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.</p>
 </div>
 <div class="paragraph">
-<p>Der Ausdruck kann im Quer- oder Hochformat in A3 oder A4 erfolgen.</p>
+<p>Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Gr&#246;&#223;e erfolgen.</p>
 </div>
 <div class="paragraph">
 <p>Fehlende Fluppl&#228;tze, Kirchen, Burgen, Schl&#246;sser, Windkraftanlagen und H&#246;henpunkte
@@ -4075,7 +4061,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
   contestmap {
     printserverapi = "TODO"
     projection = "3857"
-    showoptions = true
+    devoptions = true
   }
 }</pre>
 </div>
@@ -4095,8 +4081,8 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <td class="tableblock halign-left valign-top"><p class="tableblock">Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung festlegen (EPSG-Nummer)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.showoptions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog zus&#228;tzliche Optionen ein</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.devoptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog zus&#228;tzliche Entwicklungsoptionen ein</p></td>
 </tr>
 </tbody>
 </table>

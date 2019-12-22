@@ -245,13 +245,13 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    boolean IsContestMapWriteOptions()
+    boolean IsContestMapDevOptions()
     {
         if (IsDevelopmentEnvironment()) {
             return true
         }
         if (   grailsApplication.config.flightcontest.contestmap
-            && grailsApplication.config.flightcontest.contestmap.showoptions
+            && grailsApplication.config.flightcontest.contestmap.devoptions
            )
         {
             return true

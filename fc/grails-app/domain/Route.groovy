@@ -17,12 +17,12 @@ class Route
     
     // transient values 
     static transients = ['contestMapOutput','contestMapPrint',
-                         'contestMapCircle','contestMapProcedureTurn','contestMapLeg','contestMapCurvedLeg','contestMapTpName',
-                         'contestMapEnroutePhotos','contestMapEnrouteCanvas','contestMapGraticule','contestMapContourLines','contestMapMunicipalityNames',
+                         'contestMapCircle','contestMapProcedureTurn','contestMapLeg','contestMapCurvedLeg','contestMapTpName', 'contestMapSecretGates',
+                         'contestMapEnroutePhotos','contestMapEnrouteCanvas','contestMapScale','contestMapGraticule','contestMapContourLines','contestMapMunicipalityNames',
                          'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapWindpowerstations',
                          'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
-                         'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintA3','contestMapColorChanges',
-                         'contestMapDevStyle','contestMapRunwayPoint','contestMapRunwayHorizontalPos','contestMapRunwayVerticalPos','useProcedureTurn']
+                         'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintSize','contestMapColorChanges',
+                         'contestMapDevStyle','contestMapCenterHorizontalPos','contestMapCenterVerticalPos','useProcedureTurn']
             
     String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP
     String contestMapPrint = Defs.CONTESTMAPPRINT_PDFMAP
@@ -31,10 +31,12 @@ class Route
     boolean contestMapLeg = true
     boolean contestMapCurvedLeg = true
     boolean contestMapTpName = true
+    boolean contestMapSecretGates = false
     boolean contestMapEnroutePhotos = false
     boolean contestMapEnrouteCanvas = false
+    int contestMapScale = Defs.CONTESTMAPSCALE_200000
     boolean contestMapGraticule = true
-    boolean contestMapContourLines = true
+    int contestMapContourLines = Defs.CONTESTMAPCONTOURLINES_100M
     boolean contestMapMunicipalityNames = true
     String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM
     boolean contestMapChurches = true
@@ -49,12 +51,11 @@ class Route
     String contestMapCenterPoints = ""                                           // list of turn points arranged in map center
     String contestMapPrintPoints = ""                                            // list of turn points for printing
     boolean contestMapPrintLandscape = true
-    boolean contestMapPrintA3 = false
+    String contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
     boolean contestMapColorChanges = false
     boolean contestMapDevStyle = false
-    CoordType contestMapRunwayPoint = CoordType.UNKNOWN
-    HorizontalPos contestMapRunwayHorizontalPos = HorizontalPos.Center
-    VerticalPos contestMapRunwayVerticalPos = VerticalPos.Center
+    HorizontalPos contestMapCenterHorizontalPos = HorizontalPos.Center
+    VerticalPos contestMapCenterVerticalPos = VerticalPos.Center
     Boolean useProcedureTurn = true                                              // TODO: DB-2.14
     
 	static belongsTo = [contest:Contest]

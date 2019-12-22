@@ -48,6 +48,12 @@
 	                                <g:checkBox name="contestMapTpName" value="${routeInstance.contestMapTpName}" tabIndex="${ti[0]++}" />
 	                                <label>${message(code:'fc.contestmap.contestmaptpname')}</label>
 	                            </div>
+	                            <g:if test="${routeInstance.GetRouteData().secret_num > 0}">
+	                                <div>
+	                                    <g:checkBox name="contestMapSecretGates" value="${routeInstance.contestMapSecretGates}" tabIndex="${ti[0]++}" />
+	                                    <label>${message(code:'fc.contestmap.contestmapsecretgates')}</label>
+	                                </div>
+	                            </g:if>
 	                            <g:if test="${routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()}">
 	                                <div>
 	                                    <g:checkBox name="contestMapEnroutePhotos" value="${routeInstance.contestMapEnroutePhotos}" tabIndex="${ti[0]++}" />
@@ -71,13 +77,21 @@
 	                        <g:set var="geodata_special" value="${new File(Defs.FCSAVE_FILE_GEODATA_SPECIALS).exists()}"/>
 	                        <g:set var="geodata_airspace" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRSPACES).exists()}"/>
 	                        <fieldset>
-	                            <div>
-	                                <g:checkBox name="contestMapGraticule" value="${routeInstance.contestMapGraticule}" tabIndex="${ti[0]++}" />
-	                                <label>${message(code:'fc.contestmap.contestmapgraticule')}</label>
-	                            </div>
                                 <div>
-                                    <g:checkBox name="contestMapContourLines" value="${routeInstance.contestMapContourLines}" tabIndex="${ti[0]++}" />
-                                    <label>${message(code:'fc.contestmap.contestmapcontourlines')}</label>
+                                    <label>${message(code:'fc.contestmap.scale')}</label>:
+                                    <label><input type="radio" name="contestMapScale" id="${Defs.CONTESTMAPSCALE_200000}" value="${Defs.CONTESTMAPSCALE_200000}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.scale.200000')}</label>
+                                    <label><input type="radio" name="contestMapScale" id="${Defs.CONTESTMAPSCALE_250000}" value="${Defs.CONTESTMAPSCALE_250000}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.scale.250000')}</label>
+                                </div>
+                                <div>
+                                    <label>${message(code:'fc.contestmap.contestmapcontourlines')}</label>:
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_100M}" value="${Defs.CONTESTMAPCONTOURLINES_100M}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.100m')}</label>
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_50M}" value="${Defs.CONTESTMAPCONTOURLINES_50M}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.50m')}</label>
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_20M}" value="${Defs.CONTESTMAPCONTOURLINES_20M}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.20m')}</label>
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_NONE}" value="${Defs.CONTESTMAPCONTOURLINES_NONE}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.none')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="contestMapGraticule" value="${routeInstance.contestMapGraticule}" tabIndex="${ti[0]++}" />
+                                    <label>${message(code:'fc.contestmap.contestmapgraticule')}</label>
                                 </div>
 	                            <g:if test="${geodata_airfields && !PrintMapsOSM}">
 	                                <div>
@@ -151,66 +165,54 @@
 	                            </g:if>
 	                        </fieldset>
 	                        <fieldset>
-	                            <g:if test="${routeInstance.IsRouteComplete()}">
-		                            <div>
-		                                <label>${message(code:'fc.contestmap.contestmapcenterpoints')}:</label>
-			                            <br/>
-			                            <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints}" tpid="${Defs.TurnpointID_ContestMapCenterPoints}" ti="${ti}" />
-		                            </div>
-		                            <div>
-		                                <br/>
-		                                <label>${message(code:'fc.contestmap.contestmapprintpoints')}:</label>
-		                                <br/>
-		                                <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints}" tpid="${Defs.TurnpointID_ContestMapPrintPoints}" ti="${ti}" />
-		                            </div>
-                                    <input type="hidden" name="contestMapRunwayPoint" value="" />
-		                            <input type="hidden" name="contestMapRunwayHorizontalPos" value="${HorizontalPos.Center}" />
-                                    <input type="hidden" name="contestMapRunwayVerticalPos" value="${VerticalPos.Center}" />
-		                        </g:if>
-		                        <g:else>
-                                    <g:set var="runways" value="${routeInstance.GetRunways()}" />
-                                    <g:if test="${runways.runwayList.size() > 1}">
-	                                    <div>
-	                                        <label>${message(code:'fc.contestmap.contestmaprunwaychoice')}:</label>
-	                                        <br/>
-                                            <g:each var="runway_entry" in="${runways.runwayList}">
-                                                <label><input type="radio" name="contestMapRunwayPoint" value="${runway_entry}" tabIndex="${ti[0]++}"/>${message(code:runway_entry.code)}</label>
-                                            </g:each>
-	                                    </div>
-                                        <br/>
-                                    </g:if>
-                                    <div>
-                                        <label>${message(code:'fc.contestmap.contestmaprunwaypos')}:</label>
-                                        <br/>
-                                        <g:each var="verticalpos_instance" in="${VerticalPos.GetValues()}">
-                                            <g:if test="${routeInstance.contestMapRunwayVerticalPos == verticalpos_instance}">
-                                                <label><input type="radio" name="contestMapRunwayVerticalPos" value="${verticalpos_instance}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:verticalpos_instance.code)}</label>
-                                            </g:if>
-                                            <g:else>
-                                                <label><input type="radio" name="contestMapRunwayVerticalPos" value="${verticalpos_instance}" tabIndex="${ti[0]++}"/>${message(code:verticalpos_instance.code)}</label>
-                                            </g:else>
-                                        </g:each>
-                                    </div>
-							        <div>
-							            <g:each var="horizontalpos_instance" in="${HorizontalPos.GetValues()}">
-									        <g:if test="${routeInstance.contestMapRunwayHorizontalPos == horizontalpos_instance}">
-									            <label><input type="radio" name="contestMapRunwayHorizontalPos" value="${horizontalpos_instance}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:horizontalpos_instance.code)}</label>
-									        </g:if>
-									        <g:else>
-									            <label><input type="radio" name="contestMapRunwayHorizontalPos" value="${horizontalpos_instance}" tabIndex="${ti[0]++}"/>${message(code:horizontalpos_instance.code)}</label>
-									        </g:else>
-								        </g:each>
-							        </div>
-	                            </g:else>
+                                <div>
+                                    <label>${message(code:'fc.contestmap.contestmapcenterpos')}:</label>
+                                    <br/>
+                                    <g:each var="verticalpos_instance" in="${VerticalPos.GetValues()}">
+                                        <g:if test="${routeInstance.contestMapCenterVerticalPos == verticalpos_instance}">
+                                            <label><input type="radio" name="contestMapCenterVerticalPos" value="${verticalpos_instance}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:verticalpos_instance.code)}</label>
+                                        </g:if>
+                                        <g:else>
+                                            <label><input type="radio" name="contestMapCenterVerticalPos" value="${verticalpos_instance}" tabIndex="${ti[0]++}"/>${message(code:verticalpos_instance.code)}</label>
+                                        </g:else>
+                                    </g:each>
+                                </div>
+                                <div>
+                                    <g:each var="horizontalpos_instance" in="${HorizontalPos.GetValues()}">
+                                        <g:if test="${routeInstance.contestMapCenterHorizontalPos == horizontalpos_instance}">
+                                            <label><input type="radio" name="contestMapCenterHorizontalPos" value="${horizontalpos_instance}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:horizontalpos_instance.code)}</label>
+                                        </g:if>
+                                        <g:else>
+                                            <label><input type="radio" name="contestMapCenterHorizontalPos" value="${horizontalpos_instance}" tabIndex="${ti[0]++}"/>${message(code:horizontalpos_instance.code)}</label>
+                                        </g:else>
+                                    </g:each>
+                                </div>
+                                <div>
+                                    <br/>
+                                    <label>${message(code:'fc.contestmap.contestmapcenterpoints')}:</label>
+                                    <br/>
+                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints}" tpid="${Defs.TurnpointID_ContestMapCenterPoints}" ti="${ti}" />
+                                </div>
+                                <div>
+                                    <br/>
+                                    <label>${message(code:'fc.contestmap.contestmapprintpoints')}:</label>
+                                    <br/>
+                                    <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints}" tpid="${Defs.TurnpointID_ContestMapPrintPoints}" ti="${ti}" />
+                                </div>
 	                            <br/>
-	                            <div>
-	                                <g:checkBox name="contestMapPrintLandscape" value="${routeInstance.contestMapPrintLandscape}" />
-	                                <label>${message(code:'fc.printlandscape')}</label>
-	                            </div>
-	                            <div>
-	                                <g:checkBox name="contestMapPrintA3" value="${routeInstance.contestMapPrintA3}" />
-	                                <label>${message(code:'fc.printa3')}</label>
-	                            </div>
+                                <div>
+                                    <label>${message(code:'fc.contestmap.printsize')}</label>:
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A4}" value="${Defs.CONTESTMAPPRINTSIZE_A4}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a4')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A3}" value="${Defs.CONTESTMAPPRINTSIZE_A3}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a3')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A2}" value="${Defs.CONTESTMAPPRINTSIZE_A2}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a2')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A1}" value="${Defs.CONTESTMAPPRINTSIZE_A1}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a1')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_ANR}" value="${Defs.CONTESTMAPPRINTSIZE_ANR}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.anr')}</label>
+                                </div>
+                                <div>
+                                    <g:checkBox name="contestMapPrintLandscape" value="${routeInstance.contestMapPrintLandscape}" />
+                                    <label>${message(code:'fc.printlandscape')}</label>
+                                </div>
+	                            
 	                            <g:if test="${PrintMapsOSM}">
 	                                <div>
 	                                    <g:checkBox name="contestMapColorChanges" value="${routeInstance.contestMapColorChanges}" />
@@ -218,7 +220,7 @@
 	                                </div>
 	                            </g:if>
 	                        </fieldset>
-	                        <g:if test="${BootStrap.global.IsDevelopmentEnvironment()}">
+	                        <g:if test="${BootStrap.global.IsContestMapDevOptions()}">
 		                        <fieldset>
 		                            <div>
 	                                    <g:if test="${routeInstance.contestMapOutput == Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP}">
@@ -263,30 +265,25 @@
                                 <p>${message(code:'fc.contestmap.job.otherrunning')}</p>
                             </g:else>
                             <g:if test="${PrintButton}">
-	                            <g:if test="${BootStrap.global.IsContestMapWriteOptions()}">
-	                                <fieldset>
-	                                    <div>
-	                                        <g:if test="${routeInstance.contestMapPrint == Defs.CONTESTMAPPRINT_PDFMAP}">
-	                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PDFMAP}" value="${Defs.CONTESTMAPPRINT_PDFMAP}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pdf')}</label>
-	                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGMAP}" value="${Defs.CONTESTMAPPRINT_PNGMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.png')}</label>
-                                                <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGZIP}" value="${Defs.CONTESTMAPPRINT_PNGZIP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pngzip')}</label>
-	                                        </g:if>
-	                                        <g:elseif test="${routeInstance.contestMapPrint == Defs.CONTESTMAPPRINT_PNGMAP}">
-	                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PDFMAP}" value="${Defs.CONTESTMAPPRINT_PDFMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pdf')}</label>
-	                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGMAP}" value="${Defs.CONTESTMAPPRINT_PNGMAP}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.png')}</label>
-                                                <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGZIP}" value="${Defs.CONTESTMAPPRINT_PNGZIP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pngzip')}</label>
-	                                        </g:elseif>
-                                            <g:elseif test="${routeInstance.contestMapPrint == Defs.CONTESTMAPPRINT_PNGZIP}">
-                                                <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PDFMAP}" value="${Defs.CONTESTMAPPRINT_PDFMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pdf')}</label>
-                                                <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGMAP}" value="${Defs.CONTESTMAPPRINT_PNGMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.png')}</label>
-                                                <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGZIP}" value="${Defs.CONTESTMAPPRINT_PNGZIP}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pngzip')}</label>
-                                            </g:elseif>
-	                                    </div>
-	                                </fieldset>
-	                            </g:if>
-	                            <g:else>
-	                                <input type="hidden" name="contestMapPrint" value="${routeInstance.contestMapPrint}" />
-	                            </g:else>
+                                <fieldset>
+                                    <div>
+                                        <g:if test="${routeInstance.contestMapPrint == Defs.CONTESTMAPPRINT_PDFMAP}">
+                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PDFMAP}" value="${Defs.CONTESTMAPPRINT_PDFMAP}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pdf')}</label>
+                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGMAP}" value="${Defs.CONTESTMAPPRINT_PNGMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.png')}</label>
+                                               <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGZIP}" value="${Defs.CONTESTMAPPRINT_PNGZIP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pngzip')}</label>
+                                        </g:if>
+                                        <g:elseif test="${routeInstance.contestMapPrint == Defs.CONTESTMAPPRINT_PNGMAP}">
+                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PDFMAP}" value="${Defs.CONTESTMAPPRINT_PDFMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pdf')}</label>
+                                            <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGMAP}" value="${Defs.CONTESTMAPPRINT_PNGMAP}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.png')}</label>
+                                               <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGZIP}" value="${Defs.CONTESTMAPPRINT_PNGZIP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pngzip')}</label>
+                                        </g:elseif>
+                                           <g:elseif test="${routeInstance.contestMapPrint == Defs.CONTESTMAPPRINT_PNGZIP}">
+                                               <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PDFMAP}" value="${Defs.CONTESTMAPPRINT_PDFMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pdf')}</label>
+                                               <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGMAP}" value="${Defs.CONTESTMAPPRINT_PNGMAP}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.png')}</label>
+                                               <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_PNGZIP}" value="${Defs.CONTESTMAPPRINT_PNGZIP}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.pngzip')}</label>
+                                           </g:elseif>
+                                    </div>
+                                </fieldset>
                             </g:if>
                             <input type="hidden" name="id" value="${routeInstance?.id}" />
                             <g:if test="${BreakButton}">

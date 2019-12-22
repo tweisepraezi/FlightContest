@@ -28,7 +28,11 @@
     <Rule>
         &maxscale_zoom11;
         &minscale_zoom17;
-        <LineSymbolizer stroke="#f7b5bd" stroke-width="1.0" />
-        <PolygonSymbolizer fill="#f7b5bd" />
+        <!--
+         <LineSymbolizer stroke="#f7b5bd" stroke-width="1.0" />
+        <PolygonSymbolizer fill="#f7b5bd" /> 
+        -->
+         <LineSymbolizer stroke="black" stroke-width="0.4" />
+        <PolygonSymbolizer fill="black" />
     </Rule>
 </Style>

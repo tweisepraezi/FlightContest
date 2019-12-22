@@ -8,10 +8,10 @@ const FCVersion = '3.1.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.1.7
-AppVersion=3.1.7
+AppVerName=Flight Contest 3.1.8
+AppVersion=3.1.8
 ; no milestone below
-VersionInfoVersion=3.1.7
+VersionInfoVersion=3.1.8
 
 AppCopyright=(C) 2009-2019 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.

@@ -1,42 +1,56 @@
 <Style name="roads-casing">
-
-<!-- zoom 11 -->
 	<Rule>
 		&maxscale_zoom11;
 		&minscale_zoom11;
 		<Filter>[highway] = 'motorway' or [highway] = 'trunk'</Filter>
-		<LineSymbolizer stroke="black" stroke-width="5" />
-	</Rule>
-	<Rule>
-		&maxscale_zoom11;
-		&minscale_zoom11;
-		<Filter>[highway] = 'motorway_link' or [highway] = 'trunk_link'</Filter>
 		<LineSymbolizer stroke="black" stroke-width="3" />
 	</Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[highway] = 'motorway_link'</Filter>
+        <LineSymbolizer stroke="black" stroke-width="2" />
+    </Rule>
 	<Rule>
 		&maxscale_zoom11;
 		&minscale_zoom11;
-		<Filter>([highway] = 'primary_link' or [highway] = 'secondary' or [highway] = 'tertiary' or [highway] = 'tertiary_link')</Filter>
+		<Filter>[highway] = 'trunk_link'</Filter>
 		<LineSymbolizer stroke="black" stroke-width="2" />
 	</Rule>
 	<Rule>
 		&maxscale_zoom11;
 		&minscale_zoom11;
 		<Filter>[highway] = 'primary'</Filter>
-		<LineSymbolizer stroke="black" stroke-width="3.5" />
+		<LineSymbolizer stroke="black" stroke-width="2" />
 	</Rule>
-	<Rule>
-		&maxscale_zoom11;
-		&minscale_zoom11;
-		<Filter>[highway] = 'secondary_link'</Filter>
-		<LineSymbolizer stroke="black" stroke-width="1.7" />
-	</Rule>
-
-    <!-- Flight Contest -->
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[highway] = 'secondary' or [highway] = 'primary_link'</Filter>
+        <LineSymbolizer stroke="black" stroke-width="2" />
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[highway] = 'secondary_link'</Filter>
+        <LineSymbolizer stroke="black" stroke-width="2" />
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>[highway] = 'tertiary' or [highway] = 'tertiary_link'</Filter>
+        <LineSymbolizer stroke="black" stroke-width="2" />
+    </Rule>
     <Rule>
         &maxscale_zoom11;
         &minscale_zoom11;
         <Filter>[highway] = 'unclassified'</Filter>
+        <LineSymbolizer stroke="black" stroke-width="1.2" />
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>([highway] = 'track') and (([tracktype] = 'grade1') or ([tracktype] = 'grade2'))</Filter>
         <LineSymbolizer stroke="black" stroke-width="1.2" />
     </Rule>
 

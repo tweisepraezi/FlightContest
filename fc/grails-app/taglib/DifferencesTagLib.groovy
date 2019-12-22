@@ -57,6 +57,24 @@ class DifferencesTagLib
                 }
             }
         }
+        if (attrs.t.showEnroutePhotos && route_instance.enroutePhotoRoute == EnrouteRoute.InputName) {
+            for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
+                if (pos >= offset) {
+                    outln"""    <th>${coordenroutephoto_instance.enroutePhotoName}</th>"""
+                }
+                pos++
+                value_list += [enroute:true,value:0,unevaluated:0]
+            }
+        }
+        if (attrs.t.showEnrouteCanavas && route_instance.enrouteCanvasRoute == EnrouteRoute.InputName) {
+            for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
+                if (pos >= offset) {
+                    outln"""    <th><img src="${createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName)}" style="height:9px;"/></th>"""
+                }
+                pos++
+                value_list += [enroute:true,value:0,unevaluated:0]
+            }
+        }
         outln"""        </tr>"""
         outln"""    </thead>"""
         outln"""    <tbody>"""
@@ -142,6 +160,36 @@ class DifferencesTagLib
                                 j++
                             }
                         }
+                    }
+                }
+                if (attrs.t.showEnroutePhotos && route_instance.enroutePhotoRoute == EnrouteRoute.InputName) {
+                    for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
+                        EnroutePhotoData enroutephotodata_instance = EnroutePhotoData.findByTestAndPhotoName(test_instance,coordenroutephoto_instance.enroutePhotoName)
+                        if (enroutephotodata_instance.resultValue == EvaluationValue.Unevaluated) {
+                            value_list[j].unevaluated++
+                        } else if (enroutephotodata_instance.resultValue.Found()) {
+                            value_list[j].value++
+                        }
+                        if (pos >= offset) {
+                            outln"""<td style="white-space:nowrap;">${message(code:enroutephotodata_instance.resultValue.enrouteResultCode+'.short')}</td>"""
+                        }
+                        pos++
+                        j++
+                    }
+                }
+                if (attrs.t.showEnrouteCanavas && route_instance.enrouteCanvasRoute == EnrouteRoute.InputName) {
+                    for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
+                        EnrouteCanvasData enroutecanvasdata_instance = EnrouteCanvasData.findByTestAndCanvasSign(test_instance,coordenroutecanvas_instance.enrouteCanvasSign)
+                        if (enroutecanvasdata_instance.resultValue == EvaluationValue.Unevaluated) {
+                            value_list[j].unevaluated++
+                        } else if (enroutecanvasdata_instance.resultValue.Found()) {
+                            value_list[j].value++
+                        }
+                        if (pos >= offset) {
+                            outln"""<td style="white-space:nowrap;">${message(code:enroutecanvasdata_instance.resultValue.enrouteResultCode+'.short')}</td>"""
+                        }
+                        pos++
+                        j++
                     }
                 }
                 outln"""</tr>"""

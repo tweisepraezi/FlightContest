@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.6, Ausgabe 1
-:revdate:   14.04.2019
+:revnumber: 3.1.8, Ausgabe 1
+:revdate:   22.12.2019
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -305,14 +305,15 @@ einem Import nur noch in 'Flight Contest'.
 [[route-planning]]
 == Streckenplanung
 
-<<help.adoc#route-planning-definitions>> +
-<<help.adoc#route-planning-mandatory-details>> +
-<<help.adoc#route-planning-input>> +
-<<help.adoc#route-planning-import>> +
-<<help.adoc#route-planning-google-earth>> +
-<<help.adoc#route-planning-verify>> +
-<<help.adoc#route-planning-deliver>> +
-<<help.adoc#route-planning-errors>>
+<<fc.adoc#route-planning-definitions>> +
+<<fc.adoc#route-planning-mandatory-details>> +
+<<fc.adoc#route-planning-input>> +
+<<fc.adoc#route-planning-import>> +
+<<fc.adoc#route-planning-google-earth>> +
+<<fc.adoc#route-planning-google-earth-add-secret>> +
+<<fc.adoc#route-planning-verify>> +
+<<fc.adoc#route-planning-deliver>> +
+<<fc.adoc#route-planning-errors>>
 
 [[route-planning-definitions]]
 === Definitionen
@@ -566,41 +567,35 @@ Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 .. Öffnen Sie bei Bedarf Luftraum-Daten (C:\FCSave\.geodata\airspaces.kmz) +
    (zur Installation hier zu finden: https://my.hidrive.com/share/vobbr89etw#$/Geodata)
 
-.. Klicken Sie den Ordner *Route* an und fügen Sie einen 'Pfad' hinzu
-*** Check-Punkte eingeben:
-- Name entspr. Streckenbezeichnung festlegen
-- Mit Linksklick alle Check-Punkte der Strecke ohne UZKs nacheinander hinzufügen (TO, SP, WP1, WP2, ..., FP, LDG)
-- 'Pfad bearbeiten'-Dialog beenden
+.. Check-Punkte eingeben
 
-*** Ändern der Position eines Check-Punktes:
-- Zum gewünschten Check-Punkt navigieren
-- Kontektmenü 'Eigenschaften' des Pfades aufrufen
-- Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gewünschten Position ziehen
-- 'Pfad bearbeiten'-Dialog beenden
-		  
-*** Hinzufügen einer UZK:
-- Zum Check-Punkt navigieren, nach dessen Folge-Streckenabschnitt ein UZK eingefügt werden soll
-- Kontektmenü 'Eigenschaften' des Pfades aufrufen
-- Check-Punkt bei höchster Zoomstufe mit linker Masutaste anklicken (darauf achten, dass er sich nicht verschiebt)
-- Mit Cursourtasten der Strecke folgen und zur gewünschten Position navigieren
-- Mit der linken Maustaste auf die gewünschte Position auf der Strecke klicken (fügt Punkt ein)
-- 'Pfad bearbeiten'-Dialog beenden
-		  
-*** Löschen einer UZK:
-- Zum gewünschten UZK navigieren
-- Kontektmenü 'Eigenschaften' des Pfades aufrufen
-- Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anklicken und dann Del-Taste drücken
-- 'Pfad bearbeiten'-Dialog beenden
+- Klicken Sie den Ordner *Route* an und fügen Sie einen 'Pfad' hinzu. +
+Es öffnet sich der 'Pfad bearbeiten'-Dialog. Name des Pfades entspr. Streckenbezeichnung festlegen. +
+Bei weiter geöffnetem 'Pfad bearbeiten'-Dialog im Grafikbereich mit Linksklick alle Check-Punkte (TO, SP, WP1, WP2, ..., FP, LDG) der Strecke ohne UZKs nacheinander hinzufügen. +
+Die Position muss hier noch nicht genau stimmen. Deren Genauigkeit kann im Nachhinein korrigiert werden. +
+'Pfad bearbeiten'-Dialog beenden
 
-.. Klicken Sie den Ordner *Photos* an und fügen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu
-*** Name entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen +
-	(kann nach Import geändert werden)
-*** Position der Ortsmarkierung auf das gewünschte Objekt schieben
+- Ändern der Position eines Check-Punktes: +
+Zum gewünschten Check-Punkt im Grafikbereich navigieren +
+Kontektmenü 'Eigenschaften' des Pfades aufrufen +
+Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gewünschten Position ziehen +
+'Pfad bearbeiten'-Dialog beenden
 
-.. Klicken Sie den Ordner *Canvas* an und fügen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu
-*** Name mit 'S01' bis 'S15' festlegen +
-	(kann nach Import geändert werden)
-*** Position der Ortsmarkierung auf die gewünschte Auslegestelle schieben
+- Unbekannte Zeitkontrollen oder krumme Streckenverläufe können nach dem Strecken-Import hinzugefügt werden.
+
+.. Strecken-Fotos eingeben
+
+- Klicken Sie den Ordner *Photos* an und fügen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu. +
+Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen (kann nach Import geändert werden) +
+Position der Ortsmarkierung im Grafikbereich auf das gewünschte Objekt schieben + 
+'Ortsmarkierung'-Dialog beenden
+
+.. Strecken-Bodenzeichen hinzufügen
+
+- Klicken Sie den Ordner *Canvas* an und fügen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu. +
+Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung mit 'S01' bis 'S15' festlegen (kann nach Import geändert werden) +
+Position der Ortsmarkierung im Grafikbereich auf die gewünschte Auslegestelle schieben +
+'Ortsmarkierung'-Dialog beenden
 
 .. Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmenü 'Ort speichern unter' mit Ihrer Streckenbezeichung ab
 
@@ -622,6 +617,26 @@ Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
 *** Abgespeicherte kmz-Datei auswählen
 *** Verzeichnisname in kml/kmz-Datei: *Canvas* eintragen
 *** 'Import' anklicken
+
+[[route-planning-google-earth-add-secret]]
+=== UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen
+
+. Strecke exportieren (Strecke -> *KMZ-Export*) und mit *Google Earth Pro* öffnen
+. Zum Knoten 'Dateiname.kmz -> Streckenname -> Strecken-Export -> *turnpoints*' navigieren
+. Wendepunkt anklicken, nach dem UZKs oder ein krummer Streckenabschnitt hinzugefügt werden soll
+
+- Kontexmenüpunkt "Kopieren" ausführen +
+Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benötigter UZKs) +
+"Eigenschaften" der hinzufügten Punkte im 'Ortsmarkierung'-Dialog bearbeiten:
+
+*** Im Name-Feld Check-Punkt-Bezeichnung und Gate-Breite anpassen +
+(TP -> SC, z.B. "TP1, Gate 1.0NM" -> "SC1, Gate 2.0NM")
+*** Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gewünschten Position ziehen
+*** 'Ortsmarkierung'-Dialog beenden
+
+. 'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern
+
+. Import der korrigierten Strecke (Strecke -> *Import FC-Strecke*)
 
 [[route-planning-verify]]
 === Prüfen der Wettbewerbsstrecke
@@ -692,7 +707,7 @@ Interner Datenfehler +
 == OSM-Wettbewerbs-Karte
 
 Mit 'Strecken -> Strecke -> OSM-Wettbewerbs-Karte' kann eine PDF-Wettbewerbskarte 
-im Maßstab 1:200000 mit Hilfe eines eigenen Druckserver im TÜK200-Stil erzeugt werden. 
+im Maßstab 1:200000 oder 1:250000 mit Hilfe eines eigenen Druckserver im TÜK200-Stil erzeugt werden. 
 
 Nutzung der Karten: +
 Die Nutzung des Kartenmaterials erfolgt auf eigene Gefahr. Das Kartenmaterial kann Fehler enthalten oder unzureichend sein.
@@ -735,13 +750,14 @@ Folgende Streckendetails können in die Karte gezeichnet werden:
 * Etappen-Linien
 * Verlauf krummer Etappen
 * Wendepunkt-Namen (in der jeweiligen Drucksprache, dt. WP, engl. TP)
+* Tore unbekannter Zeitkontrollen
 * Positionen von Strecken-Fotos
 * Positionen von Strecken-Bodenzeichen
 
 Folgende Objekte können in die Karte gezeichnet werden:
 
 * Gradnetz
-* Höhenlinen
+* Höhenlinen (100m, 50m oder 20m)
 * Manuell hinzugefügte Objekte
 * Lufträume
 
@@ -751,13 +767,13 @@ Dazu alle Dateien von *https://my.hidrive.com/share/vobbr89etw#$/Geodata* in den
 Alle genannten Streckendetails und Objekte können abgewählt werden.
 
 Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
-Strecken, die das wählbare Druck-Format A3 oder A4 sprengen, können mittels
+Strecken, die das gewählte Druck-Format sprengen, können mittels
 Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.
 
 Einzelne Wendepunkte können vom Druck ausgenommen werden.
 Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.
 
-Der Ausdruck kann im Quer- oder Hochformat in A3 oder A4 erfolgen.
+Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.
 
 Fehlende Flupplätze, Kirchen, Burgen, Schlösser, Windkraftanlagen und Höhenpunkte
 können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt werden:
@@ -900,10 +916,10 @@ Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
 [[planning-test-and-flight-preparation]]
 == Planungstest und Flugzeugvorbereitung
 
-<<help.adoc#planning-test-with-map>> +
-<<help.adoc#planning-test-with-flight-construction>> +
-<<help.adoc#no-planning-test>> +
-<<help.adoc#planning-test-hints>>
+<<fc.adoc#planning-test-with-map>> +
+<<fc.adoc#planning-test-with-flight-construction>> +
+<<fc.adoc#no-planning-test>> +
+<<fc.adoc#planning-test-hints>>
 
 [[planning-test-with-map]]
 === Planungstest mit Wettbewerbs-Karte (ohne Streckenkonstruktion)
@@ -1072,10 +1088,10 @@ Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst w
 [[evaluation]]
 == Auswertungen
 
-<<help.adoc#evaluation-contest>> +
-<<help.adoc#evaluation-class>> +
-<<help.adoc#evaluation-team>> +
-<<help.adoc#evaluation-special>>
+<<fc.adoc#evaluation-contest>> +
+<<fc.adoc#evaluation-class>> +
+<<fc.adoc#evaluation-team>> +
+<<fc.adoc#evaluation-special>>
 
 [[evaluation-contest]]
 === Wettbewerbs-Auswertung
@@ -1158,16 +1174,16 @@ Besatzungen ausgeschlossen werden.
 [[supported-logger]]
 == Unterstützte Logger
 
-<<help.adoc#supported-logger-aflos>> +
-<<help.adoc#supported-logger-aflosreader>> +
-<<help.adoc#supported-logger-airopserver>> +
-<<help.adoc#supported-logger-dg100>> +
-<<help.adoc#supported-logger-dg200>> +
-<<help.adoc#supported-logger-powerflarm>> +
-<<help.adoc#supported-logger-igc>> +
-<<help.adoc#supported-logger-gpx>> +
-<<help.adoc#supported-logger-kml>> +
-<<help.adoc#supported-logger-nmea>>
+<<fc.adoc#supported-logger-aflos>> +
+<<fc.adoc#supported-logger-aflosreader>> +
+<<fc.adoc#supported-logger-airopserver>> +
+<<fc.adoc#supported-logger-dg100>> +
+<<fc.adoc#supported-logger-dg200>> +
+<<fc.adoc#supported-logger-powerflarm>> +
+<<fc.adoc#supported-logger-igc>> +
+<<fc.adoc#supported-logger-gpx>> +
+<<fc.adoc#supported-logger-kml>> +
+<<fc.adoc#supported-logger-nmea>>
 
 [[supported-logger-aflos]]
 === AFLOS (direkt)
@@ -1273,11 +1289,11 @@ im AFLOS-Namen übereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.
 Ermöglicht Einfluß auf das Aussehen des Druckes +
 -> Wettbewerb -> Einstellungen -> Druck-Stil
 
-<<help.adoc#print-styles-title>> +
-<<help.adoc#print-styles-foot>> +
-<<help.adoc#print-styles-tables>> +
-<<help.adoc#print-styles-special>> +
-<<help.adoc#print-styles-samples>>
+<<fc.adoc#print-styles-title>> +
+<<fc.adoc#print-styles-foot>> +
+<<fc.adoc#print-styles-tables>> +
+<<fc.adoc#print-styles-special>> +
+<<fc.adoc#print-styles-samples>>
 
 [[print-styles-title]]
 === CSS-Einstellungen für Titel
@@ -1585,12 +1601,12 @@ Sollte 'Flight Contest' nach Änderungen nicht mehr starten, ist die letzte
 Änderung in 'C:\FCSave\.fc\config.groovy' rückgängig
 zu machen oder diese Datei zu löschen.
 
-<<help.adoc#configuration-email>> +
-<<help.adoc#configuration-viewemail>> +
-<<help.adoc#configuration-ftp>> +
-<<help.adoc#configuration-live>> +
-<<help.adoc#configuration-osmprint>> +
-<<help.adoc#configuration-test>>
+<<fc.adoc#configuration-email>> +
+<<fc.adoc#configuration-viewemail>> +
+<<fc.adoc#configuration-ftp>> +
+<<fc.adoc#configuration-live>> +
+<<fc.adoc#configuration-osmprint>> +
+<<fc.adoc#configuration-test>>
 
 [[configuration-email]]
 ===  E-Mail-Versand konfigurieren
@@ -1713,7 +1729,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
    contestmap {
      printserverapi = "TODO"
      projection = "3857"
-     showoptions = true
+     devoptions = true
    }
  }
 
@@ -1721,7 +1737,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 |===
 |contestmap.printserverapi|Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte
 |contestmap.projection|Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung festlegen (EPSG-Nummer)
-|contestmap.showoptions|Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Optionen ein
+|contestmap.devoptions|Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
 |===
 
 [[configuration-test]]
@@ -1817,10 +1833,10 @@ Der erste Aufruf des Scriptes schaltet automatische Aktion ein. +
 Erneuter Aufruf des Scriptes schaltet automatische Aktion nach Rückfrage aus. +
 -> 'Programme -> Flight Contest -> Scripts'
 
-<<help.adoc#automatic-actions-openpdf>> +
-<<help.adoc#automatic-actions-loadscanplanningtask>> +
-<<help.adoc#automatic-actions-loadscanobservation>> +
-<<help.adoc#automatic-actions-loadlogger>>
+<<fc.adoc#automatic-actions-openpdf>> +
+<<fc.adoc#automatic-actions-loadscanplanningtask>> +
+<<fc.adoc#automatic-actions-loadscanobservation>> +
+<<fc.adoc#automatic-actions-loadlogger>>
 
 [[automatic-actions-openpdf]]
 === FCAutoOpenPDF
@@ -1888,9 +1904,9 @@ nach Abschluss eines Wettbewerbstages oder nach Erreichen eines besonders
 wichtigen Zeitpunktes Ihres Wettbewerbes auf ein externes Speichermedium, 
 nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.
 
-<<help.adoc#save-fcdb>> +
-<<help.adoc#save-prints>> +
-<<help.adoc#restore-fcdb>>
+<<fc.adoc#save-fcdb>> +
+<<fc.adoc#save-prints>> +
+<<fc.adoc#restore-fcdb>>
 
 [[save-fcdb]]
 === Sicherung der 'Flight Contest'-Datenbank

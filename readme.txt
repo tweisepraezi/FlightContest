@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-21.05.2019
+22.12.2019
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -56,8 +56,35 @@ Weitere nützliche Funktionen von Flight Contest:
 * Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
-Erweiterungen in dieser Version (3.1.7):
-----------------------------------------
+Erweiterungen und Fehlerbehebungen in dieser Version (3.1.8):
+-------------------------------------------------------------
+- OSM-Karte 3.2
+     Maßstab 1:250000 hinzugefügt
+     Papierformate A1 und A2 hinzugefügt
+     Papierformat für ANR-Wettbewerbe hinzugefügt
+     Höhenlinienwahl 100m (Standard), 50m oder 20m
+     Option Unbekannte Zeitkontrollen
+     Optionen zur Punktewahl des Kartenzentrums
+     TO und LDG können bei Punktewahl mit gewählt werden
+     Ortskerne röter
+     Flugpläze aus OSM-Daten werden nun auch bevorzugt dargestellt 
+- OSM-Karte 3.1
+     Verbesserte Darstellung von Ortskernen (rosa)
+     Separate Darstellung einzelstehender Gebäude (schwarz)
+     Separate Darstellung von Gewerbegebieten (grau)
+     Dorfnamen mit transparenter Darstellung hinzugefügt
+     Straßen werden nun kleiner dargestellt
+     Autobahnen und wichtige Bundesstraßen in Rot
+     Kleinere Straßen hinzugefügt
+- Entwicklungsoptionen im OSM-Wettbewerbs-Karten-Dialog
+- Probleme am Nullmeridian behoben
+- Abweichungen von Strecken-Fotos und Bodenzeichen ohne Koordinaten
+  nun auch anzeigbar
+- Wettbewerbs-Kopie: Vorgaben werden nun mitkopiert
+- Neue Hilfe "UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen"
+
+Erweiterungen in Version 3.1.7:
+-------------------------------
 - Unterstützung von SkyDemon-Loggern
   mit vom Standard abweichenden Zeitformat im gpx-File
 

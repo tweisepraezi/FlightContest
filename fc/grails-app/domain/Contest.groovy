@@ -645,6 +645,22 @@ class Contest
 				landingTest4NotAllowedAerodynamicAuxiliariesPoints = contestInstance.landingTest4NotAllowedAerodynamicAuxiliariesPoints
 				landingTest4TouchingObstaclePoints = contestInstance.landingTest4TouchingObstaclePoints
 				landingTest4PenaltyCalculator = contestInstance.landingTest4PenaltyCalculator
+                
+                minRouteLegs = contestInstance.minRouteLegs
+                maxRouteLegs = contestInstance.maxRouteLegs
+                scGateWidth = contestInstance.scGateWidth
+                unsuitableStartNum = contestInstance.unsuitableStartNum
+                turnpointRule = contestInstance.turnpointRule
+                turnpointMapMeasurement = contestInstance.turnpointMapMeasurement
+                enroutePhotoRule = contestInstance.enroutePhotoRule
+                enrouteCanvasRule = contestInstance.enrouteCanvasRule
+                enrouteCanvasMultiple = contestInstance.enrouteCanvasMultiple
+                minEnroutePhotos = contestInstance.minEnroutePhotos
+                maxEnroutePhotos = contestInstance.maxEnroutePhotos
+                minEnrouteCanvas = contestInstance.minEnrouteCanvas
+                maxEnrouteCanvas = contestInstance.maxEnrouteCanvas
+                minEnrouteTargets = contestInstance.minEnrouteTargets
+                maxEnrouteTargets = contestInstance.maxEnrouteTargets
 			} 
 			
 			if (!this.save()) {

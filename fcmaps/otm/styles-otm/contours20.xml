@@ -1,0 +1,18 @@
+<Style name="contours20">
+    <!-- 100 m -->
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>([ele] % 100 = 0) and ([ele] != 0)</Filter>
+        <LineSymbolizer stroke="#c45700" stroke-width="0.4" />
+        <TextSymbolizer fontset-name="sans-book" size="4" fill="#bc7e55" upright="left" halo-radius="1" halo-fill="rgba(255,255,255,1)" halo-comp-op="soft-light" placement="line" max-char-angle-delta="10" label-position-tolerance="100" minimum-path-length="200" spacing="200">[ele]</TextSymbolizer>
+    </Rule>
+
+    <!-- 20 m -->
+     <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>([ele] % 100 != 0) and ([ele] % 20 = 0) and ([ele] != 0)</Filter>
+        <LineSymbolizer stroke="#c45700" stroke-width="0.2" smooth="0.5" />
+    </Rule>
+</Style>
