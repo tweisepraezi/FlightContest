@@ -1,0 +1,14 @@
+<Style name="airports-icao">
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>(([aeroway] = 'aerodrome' or [aeroway] = 'runway') and ([icao] != null))</Filter>
+        <MarkersSymbolizer file="symbols-otm/aerodrome.12.svg" placement="point" allow-overlap="true" clip="false" fill="#000000" transform="scale(0.75, 0.75)" />
+    </Rule>
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>(([aeroway] = 'aerodrome' or [aeroway] = 'runway') and ([icao] != null))</Filter>
+        <TextSymbolizer size="10" line-spacing="-1.5" fill="#000000" dy="10" fontset-name="fontset-0" halo-radius="1" halo-fill="white" placement="point" allow-overlap="true">[icao]</TextSymbolizer>
+    </Rule>
+</Style>

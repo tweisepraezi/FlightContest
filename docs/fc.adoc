@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.8, Ausgabe 1
-:revdate:   22.12.2019
+:revnumber: 3.1.9, Ausgabe 1
+:revdate:   03.03.2020
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -66,10 +66,10 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 [[supported-rules]]
 == Unterstützte Regelwerke
 
-* link:rules/DE_Navigationsflug_2018.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2018^]
+* link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020^]
 * link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
-* link:rules/FAI_rally_flying_rules_2019.pdf[FAI Air Rally Flying^]
-* link:rules/FAI_precision_flying_rules_2019.pdf[FAI Precision Flying^]
+* link:rules/FAI_rally_flying_rules_2020.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_precision_flying_rules_2020.pdf[FAI Precision Flying^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft^]
 * link:rules/AT_Motorflug_2017.pdf#page=17[Präzisionsflug-Reglement Österreich^]
 * link:rules/AT_Motorflug_2017.pdf#page=30[Navigationsflug-Reglement Österreich^]
@@ -775,7 +775,7 @@ Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.
 
 Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.
 
-Fehlende Flupplätze, Kirchen, Burgen, Schlösser, Windkraftanlagen und Höhenpunkte
+Fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Windkraftanlagen und Höhenpunkte
 können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt werden:
 
   id|symbol|name|wkt
@@ -784,7 +784,7 @@ können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt
 
 1. Laufende Nummer 
 2. Anzuzeigendes Symbol: +
-airfield.png, church.png, castle.png, chateau.png, windpowerstation.png, peak.png
+airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png
 3. Name des Objektes (in Anführungszeichen) ("": kein Name drucken)
 4. Anzeigeposition in Geo-Koordinaten
 
@@ -1018,7 +1018,7 @@ anklickbare Check-Boxen eingegeben.
 
 Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
 
-* link:rules/DE_Navigationsflug_2018.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018^] (alle Landungen)
+* link:rules/DE_Navigationsflug_2020.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020^] (alle Landungen)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
@@ -1026,11 +1026,11 @@ Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
-* link:rules/FAI_rally_flying_rules_2019.pdf#page=17[FAI Air Rally Flying - Edition 2019^] ((alle Landungen)
+* link:rules/FAI_rally_flying_rules_2020.pdf#page=17[FAI Air Rally Flying - Edition 2020^] ((alle Landungen)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
-* link:rules/FAI_precision_flying_rules_2019.pdf#page=20[FAI Precision Flying - Edition 2019^]
+* link:rules/FAI_precision_flying_rules_2020.pdf#page=20[FAI Precision Flying - Edition 2020^]
 ** Landung 1 und 4
 
   {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}

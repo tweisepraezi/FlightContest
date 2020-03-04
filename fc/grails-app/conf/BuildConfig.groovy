@@ -67,18 +67,18 @@ grails.project.dependency.resolution = {
 	}
 	 
 	plugins {
-		compile ":excel-import:1.0.0"
-		compile ":joda-time:1.4"
-        compile ":mail:1.0.7"
-        compile ":quartz:1.0.2"
+		compile "org.grails.plugins:excel-import:1.0.0"
+		compile "org.grails.plugins:joda-time:1.4"
+        compile "org.grails.plugins:mail:1.0.7"
+        compile "org.grails.plugins:quartz:1.0.2"
 		//compile ":poi:3.7"
-		compile ":class-diagram:0.5.2"
-		compile ":db-util:0.4"
+		compile "org.grails.plugins:class-diagram:0.5.2"
+		compile "org.grails.plugins:db-util:0.4"
         
         // plugins for the build system only
-        build ":tomcat:7.0.42"
+        build "org.grails.plugins:tomcat:7.0.42"
 
 		// plugins needed at runtime but not for compilation
-		runtime ":hibernate:3.6.10.2" 
+		runtime "org.grails.plugins:hibernate:3.6.10.2" 
 	}
 }

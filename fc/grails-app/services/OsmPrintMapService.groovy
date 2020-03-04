@@ -61,7 +61,13 @@ class OsmPrintMapService
     final static String HIDELAYERS_FC_CONTOURS20 = "contours20"
     final static String HIDELAYERS_FC_CONTOURS50 = "contours50"
     final static String HIDELAYERS_FC_CONTOURS100 = "contours100"
-    final static String HIDELAYERS_FC_AIRFIELDS = "airports-name"
+    final static String HIDELAYERS_FC_AIRFIELDSNAME = "airports-name"
+    final static String HIDELAYERS_FC_AIRFIELDSICAO = "airports-icao"
+    final static String HIDELAYERS_FC_CHURCHES = "symbols-poly-churches" // "symbols-poly-churches,symbols-point-churches"
+    final static String HIDELAYERS_FC_CASTLES = "symbols-poly-castles" // "symbols-poly-castles,symbols-point-castles"
+    final static String HIDELAYERS_FC_POWERLINES = "powerlines"
+    final static String HIDELAYERS_FC_WINDPOWERSTATIONS = "symbols-point-windpowerstations,symbols-poly-windpowerstations"
+    final static String HIDELAYERS_FC_SMALLROADS = "roads-small"
     final static String HIDELAYERS_PRINTMAPS_CARTO = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
     final static String HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY = "placenames-medium"
     
@@ -178,11 +184,13 @@ class OsmPrintMapService
                              printScale: Defs.CONTESTMAPSCALE_200000,
                              printContourLines: Defs.CONTESTMAPCONTOURLINES_100M,
                              printMunicipalityNames: false,
-                             printAirfields: Defs.CONTESTMAPAIRFIELDS_OSM,
+                             printAirfields: Defs.CONTESTMAPAIRFIELDS_OSM_ICAO,
                              printChurches: false,
                              printCastles: false,
                              printChateaus: false,
+                             printPowerlines: false,
                              printWindpowerstations: false,
+                             printSmallRoads: false,
                              printPeaks: false,
                              printAdditionals: false,
                              printSpecials: false,
@@ -215,7 +223,9 @@ class OsmPrintMapService
             print_options.printChurches = m.'@churches'[0] == "yes"
             print_options.printCastles = m.'@castles'[0] == "yes"
             print_options.printChateaus = m.'@chateaus'[0] == "yes"
+            print_options.printPowerlines = m.'@powerlines'[0] == "yes"
             print_options.printWindpowerstations = m.'@windpowerstations'[0] == "yes"
+            print_options.printSmallRoads = m.'@smallroads'[0] == "yes"
             print_options.printPeaks = m.'@peaks'[0] == "yes"
             print_options.printAdditionals = m.'@additionals'[0] == "yes"
             print_options.printSpecials = m.'@specials'[0] == "yes"
@@ -285,7 +295,26 @@ class OsmPrintMapService
                     break
             }
             if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
-                hide_layers += ",${HIDELAYERS_FC_AIRFIELDS}"
+                hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME},${HIDELAYERS_FC_AIRFIELDSICAO}"
+            } else if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO) {
+                hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME}"
+            } else {
+                hide_layers += ",${HIDELAYERS_FC_AIRFIELDSICAO}"
+            }
+            if (!printOptions.printChurches) {
+                hide_layers += ",${HIDELAYERS_FC_CHURCHES}"
+            }
+            if (!printOptions.printCastles) {
+                hide_layers += ",${HIDELAYERS_FC_CASTLES}"
+            }
+            if (!printOptions.printPowerlines) {
+                hide_layers += ",${HIDELAYERS_FC_POWERLINES}"
+            }
+            if (!printOptions.printWindpowerstations) {
+                hide_layers += ",${HIDELAYERS_FC_WINDPOWERSTATIONS}"
+            }
+            if (!printOptions.printSmallRoads) {
+                hide_layers += ",${HIDELAYERS_FC_SMALLROADS}"
             }
         } else {
             if (printOptions.printContourLines) {
@@ -308,6 +337,8 @@ class OsmPrintMapService
         
         int print_width = 0 // mm
         int print_height = 0 // mm
+        int min_print_height = 0 // mm
+        boolean alternate_pos = false
         String paper_size = ""
         switch (printOptions.printSize) {
             case Defs.CONTESTMAPPRINTSIZE_A4:
@@ -348,6 +379,7 @@ class OsmPrintMapService
                 } else {
                     print_width = A1_SHORT
                     print_height = A1_LONG
+                    alternate_pos = true
                 }
                 break
             case Defs.CONTESTMAPPRINTSIZE_ANR:
@@ -361,10 +393,16 @@ class OsmPrintMapService
                 }
                 break
         }
+        if (printOptions.printLandscape) {
+            min_print_height = A4_SHORT
+        } else {
+            min_print_height = A4_LONG
+        }
         print_width -= 2*MARGIN
         print_height -= 2*MARGIN
         print_width *= FACTOR
         print_height *= FACTOR
+        min_print_height *= FACTOR
         
         if (printOptions.printCenterHorizontalPos != HorizontalPos.Center || printOptions.printCenterVerticalPos != VerticalPos.Center) {
             BigDecimal print_width_nm = print_scale * print_width / Contest.mmPerNM
@@ -403,7 +441,7 @@ class OsmPrintMapService
         }
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
         String copyright_date = GeoDataService.ReadTxtFile(Defs.FCSAVE_FILE_GEODATA_DATE)
-        if ((printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) || printOptions.printChurches || printOptions.printCastles || printOptions.printChateaus || printOptions.printWindpowerstations || printOptions.printPeaks) {
+        if ((printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) || printOptions.printChateaus || printOptions.printPeaks) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.bkg',[copyright_date],true)}"
         }
         if (printOptions.printFCStyle) {
@@ -505,7 +543,7 @@ class OsmPrintMapService
         
         String graticule_lines = ""
         if (graticule_file_name) {
-            if (create_graticule_csv(graticule_file_name, printOptions.centerGraticuleLatitude, printOptions.centerGraticuleLongitude, printOptions.centerLatitude, printOptions.centerLongitude, print_scale, print_width, print_height)) {
+            if (create_graticule_csv(graticule_file_name, printOptions.centerGraticuleLatitude, printOptions.centerGraticuleLongitude, printOptions.centerLatitude, printOptions.centerLongitude, print_scale, print_width, print_height, min_print_height, alternate_pos)) {
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
                     "Style": "<PolygonSymbolizer fill='lightgrey' />",
@@ -556,7 +594,7 @@ class OsmPrintMapService
         
         String churches_lines = ""
         String churches_file_name = ""
-        if (printOptions.printChurches) {
+        if (false && printOptions.printChurches) {
             churches_file_name = Defs.FCSAVE_FILE_GEODATA_CHURCHES
             String churches_short_file_name = churches_file_name.substring(churches_file_name.lastIndexOf('/')+1)
             churches_lines = """,{
@@ -570,7 +608,7 @@ class OsmPrintMapService
 
         String castles_lines = ""
         String castles_file_name = ""
-        if (printOptions.printCastles) {
+        if (false && printOptions.printCastles) {
             castles_file_name = Defs.FCSAVE_FILE_GEODATA_CASTLES
             String castles_short_file_name = castles_file_name.substring(castles_file_name.lastIndexOf('/')+1)
             castles_lines = """,{
@@ -584,7 +622,7 @@ class OsmPrintMapService
 
         String chateaus_lines = ""
         String chateaus_file_name = ""
-        if (printOptions.printChateaus) {
+        if (false && printOptions.printChateaus) {
             chateaus_file_name = Defs.FCSAVE_FILE_GEODATA_CHATEAUS
             String chateaus_short_file_name = chateaus_file_name.substring(chateaus_file_name.lastIndexOf('/')+1)
             chateaus_lines = """,{
@@ -598,7 +636,7 @@ class OsmPrintMapService
         
         String windpowerstations_lines = ""
         String windpowerstations_file_name = ""
-        if (printOptions.printWindpowerstations) {
+        if (false && printOptions.printWindpowerstations) {
             windpowerstations_file_name = Defs.FCSAVE_FILE_GEODATA_WINDPOWERSTATIONS
             String windpowerstations_short_file_name = windpowerstations_file_name.substring(windpowerstations_file_name.lastIndexOf('/')+1)
             windpowerstations_lines = """,{
@@ -612,7 +650,7 @@ class OsmPrintMapService
         
         String peaks_lines = ""
         String peaks_file_name = ""
-        if (printOptions.printPeaks) {
+        if (false && printOptions.printPeaks) {
             peaks_file_name = Defs.FCSAVE_FILE_GEODATA_PEAKS
             String peaks_short_file_name = peaks_file_name.substring(peaks_file_name.lastIndexOf('/')+1)
             peaks_lines = """,{
@@ -780,6 +818,9 @@ class OsmPrintMapService
             printdone ""
             printstart "Upload castle.png"
             FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/castle.png")
+            printdone ""
+            printstart "Upload castle_ruin.png"
+            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/castle_ruin.png")
             printdone ""
             printstart "Upload chateau.png"
             FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/chateau.png")
@@ -1121,7 +1162,7 @@ class OsmPrintMapService
     private boolean create_graticule_csv(String graticuleFileName,
                                          BigDecimal centerGraticuleLatitude, BigDecimal centerGraticuleLongitude,
                                          BigDecimal centerLatitude, BigDecimal centerLongitude,
-                                         int printScale, int printWidth, int printHeight
+                                         int printScale, int printWidth, int printHeight, int minPrintHeight, boolean alternatePos
                                         )
     {
         printstart "Write ${graticuleFileName}"
@@ -1131,7 +1172,7 @@ class OsmPrintMapService
         BigDecimal print_width_nm = printScale * printWidth / Contest.mmPerNM
         BigDecimal print_height_nm = printScale * printHeight / Contest.mmPerNM
         Map rect_width = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_width_nm / 2, GRATICULE_SCALEBAR_LEN)
-        Map rect_height = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN)
+        Map rect_height = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN*printHeight/minPrintHeight) 
         println "Width:  ${printWidth} mm, ${print_width_nm} NM, ${rect_width}"
         println "Height: ${printHeight} mm, ${print_height_nm} NM, ${rect_height}"
         
@@ -1155,6 +1196,7 @@ class OsmPrintMapService
                 BigDecimal lon2 = lon
                 while (lon2 < lon + 8.5/60) {
                     lon2 += 1/60 // 1'
+                    // write lineal
                     String wkt = "LINESTRING(${lon2} ${rect_height.latmin2}, ${lon2} ${rect_height.latmax})"
                     String name = ""
                     graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
@@ -1167,8 +1209,17 @@ class OsmPrintMapService
                 line_id++
             }
             lon += 10/60 // 10'
+            // write line
             String wkt = "LINESTRING(${lon} ${rect_height.latmin}, ${lon} ${rect_height.latmax})"
-            String name = coord_presentation.GetMapName(lon, false)
+            String name = ""
+            graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
+            // write longitude value
+            if (alternatePos) {
+                wkt = "LINESTRING(${lon} ${rect_height.latmin2}, ${lon} ${rect_height.latmin2})"
+            } else {
+                wkt = "LINESTRING(${lon} ${rect_height.latmax}, ${lon} ${rect_height.latmax})"
+            }
+            name = coord_presentation.GetMapName(lon, false)
             graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
             line_id++
         }
@@ -1185,6 +1236,7 @@ class OsmPrintMapService
                 BigDecimal lat2 = lat
                 while (lat2 < lat + 8.5/60) {
                     lat2 += 1/60 // 1'
+                    // write lineal
                     String wkt = "LINESTRING(${rect_width.lonmin} ${lat2}, ${rect_width.lonmax2} ${lat2})"
                     String name = ""
                     graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
@@ -1197,8 +1249,13 @@ class OsmPrintMapService
                 line_id++
             }
             lat += 10/60 // 10'
+            // write line
             String wkt = "LINESTRING(${rect_width.lonmin} ${lat}, ${rect_width.lonmax} ${lat})"
-            String name = coord_presentation.GetMapName(lat, true)
+            String name = ""
+            graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
+            // write latitude value
+            wkt = "LINESTRING(${rect_width.lonmin} ${lat}, ${rect_width.lonmin} ${lat})"
+            name = coord_presentation.GetMapName(lat, true)
             graticule_writer << """${CSV_LINESEPARATOR}${line_id}${CSV_DELIMITER}"${name}"${CSV_DELIMITER}${wkt}"""
             line_id++
         }

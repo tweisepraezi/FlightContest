@@ -19,7 +19,7 @@ class Route
     static transients = ['contestMapOutput','contestMapPrint',
                          'contestMapCircle','contestMapProcedureTurn','contestMapLeg','contestMapCurvedLeg','contestMapTpName', 'contestMapSecretGates',
                          'contestMapEnroutePhotos','contestMapEnrouteCanvas','contestMapScale','contestMapGraticule','contestMapContourLines','contestMapMunicipalityNames',
-                         'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapWindpowerstations',
+                         'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapPowerlines','contestMapWindpowerstations','contestMapSmallRoads',
                          'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
                          'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintSize','contestMapColorChanges',
                          'contestMapDevStyle','contestMapCenterHorizontalPos','contestMapCenterVerticalPos','useProcedureTurn']
@@ -38,11 +38,13 @@ class Route
     boolean contestMapGraticule = true
     int contestMapContourLines = Defs.CONTESTMAPCONTOURLINES_100M
     boolean contestMapMunicipalityNames = true
-    String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM
+    String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM_ICAO
     boolean contestMapChurches = true
     boolean contestMapCastles = true
     boolean contestMapChateaus = true
+    boolean contestMapPowerlines = true
     boolean contestMapWindpowerstations = true
+    boolean contestMapSmallRoads = false
     boolean contestMapPeaks = true
     boolean contestMapAdditionals = true
     boolean contestMapSpecials = false

@@ -1,0 +1,8 @@
+<Style name="windpowerstations">
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>([power] = 'generator') and ([generator:source] = 'wind')</Filter>
+        <MarkersSymbolizer placement="point" file="symbols-otm/wind_turbine.png" transform="translate(1 -8) scale(0.75, 0.75)"/>
+    </Rule>
+</Style>

@@ -120,11 +120,11 @@ class RouteTagLib
         boolean add_tabindex = false
         for (EnrouteCanvasSign v in EnrouteCanvasSign.values()) {
             if (attrs.create && (attrs.coordEnroute.route.enrouteCanvasRoute == EnrouteRoute.InputName)) {
-                if (v != EnrouteCanvasSign.None && (attrs.coordEnroute.route.contest.enrouteCanvasMultiple ||!attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v))) {
+                if (v != EnrouteCanvasSign.None && !(v in attrs.coordEnroute.route.contest.contestRule.ruleValues.printIgnoreEnrouteCanvas) && (attrs.coordEnroute.route.contest.enrouteCanvasMultiple ||!attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v))) {
                     checkBoxImg("enrouteCanvasSign_${v.canvasName}", v.canvasName, createLinkTo(dir:'',file:v.imageName), attrs)
                 }
             } else {
-                if (v == EnrouteCanvasSign.None) {
+                if (v == EnrouteCanvasSign.None || (v in attrs.coordEnroute.route.contest.contestRule.ruleValues.printIgnoreEnrouteCanvas)) {
                     if (attrs.create) {
                         if (attrs.coordEnroute.enrouteCanvasSign == v) {
                             outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${v}</label>"""

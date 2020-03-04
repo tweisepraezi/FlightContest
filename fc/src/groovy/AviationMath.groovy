@@ -310,7 +310,7 @@ class AviationMath
     }
 
     //--------------------------------------------------------------------------
-    static Map getShowPoint(BigDecimal showLatitude, BigDecimal showLongitude, Float showDistance, Float scaleBarLen)
+    static Map getShowPoint(BigDecimal showLatitude, BigDecimal showLongitude, BigDecimal showDistance, BigDecimal scaleBarLen)
     // Berechnet Anzeige-Bereich um eine Koordinate
     //   showLatitude: Geographische Breite (-90 ... +90 Grad)
     //   showLongitude: Geographische Laenge (-179.999 ... +180 Grad)

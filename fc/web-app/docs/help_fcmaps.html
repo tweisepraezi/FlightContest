@@ -423,8 +423,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.8, Ausgabe 1,</span>
-<span id="revdate">27.10.2019</span>
+<span id="revnumber">version 3.1.8, Ausgabe 2,</span>
+<span id="revdate">27.12.2019</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -840,14 +840,12 @@ psql -d gis -c 'CREATE EXTENSION postgis;'</pre>
 <pre>cd ~/data
 mkdir osm &amp;&amp; cd osm
 wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
+cd ~/data
+mkdir osm2 &amp;&amp; cd osm2
 wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
 wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
-wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf
-mkdir updates &amp;&amp; cd updates
-wget http://download.geofabrik.de/europe-updates/state.txt
-mv state.txt europe-state.txt
-wget http://download.geofabrik.de/africa-updates/state.txt
-mv state.txt africa-state.txt</pre>
+wget http://download.geofabrik.de/europe/france-latest.osm.pbf
+wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -856,7 +854,7 @@ mv state.txt africa-state.txt</pre>
 <div class="literalblock">
 <div class="content">
 <pre>cd ~
-osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/germany-latest.osm.pbf</pre>
+osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/germany-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -864,27 +862,11 @@ osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/austria-latest.osm.pbf</pre>
+<pre>for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (7h)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/switzerland-latest.osm.pbf</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (5h)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/south-africa-latest.osm.pbf</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (2h)</p>
+<p>Wait&#8230;&#8203; (22h)</p>
 </div>
 <div class="paragraph">
 <p>Compile preprocessing tools (warnings can be ignored)</p>
@@ -1071,7 +1053,7 @@ for hgtfile in africa/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.ti
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d contours --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
+<pre>osm2pgsql -d contours --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
 </div>
 </div>
 <div class="paragraph">

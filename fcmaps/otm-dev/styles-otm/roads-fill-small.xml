@@ -1,0 +1,8 @@
+<Style name="roads-fill-small">
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>([highway] = 'track') and (([tracktype] = 'grade1') or ([tracktype] = 'grade2'))</Filter>
+        <LineSymbolizer stroke="white" stroke-width="0.8" />
+    </Rule>
+</Style>

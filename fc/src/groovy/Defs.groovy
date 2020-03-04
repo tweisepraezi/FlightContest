@@ -112,7 +112,8 @@ class Defs
     static final int CONTESTMAPCONTOURLINES_50M                        = 50
     static final int CONTESTMAPCONTOURLINES_100M                       = 100
     
-    static final String CONTESTMAPAIRFIELDS_OSM                        = "contestMapAirfields_OSM"
+    static final String CONTESTMAPAIRFIELDS_OSM_ICAO                   = "contestMapAirfields_OSM_ICAO"
+    static final String CONTESTMAPAIRFIELDS_OSM_NAME                   = "contestMapAirfields_OSM_NAME"
     static final String CONTESTMAPAIRFIELDS_GEODATA                    = "contestMapAirfields_GEODATA"
     
     static final String CONTESTMAPPRINTSIZE_A4                         = "contestMapPrintSizeA4"

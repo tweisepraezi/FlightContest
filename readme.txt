@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-22.12.2019
+04.03.2020
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -56,8 +56,22 @@ Weitere nützliche Funktionen von Flight Contest:
 * Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
-Erweiterungen und Fehlerbehebungen in dieser Version (3.1.8):
--------------------------------------------------------------
+Erweiterungen in dieser Version (3.1.9):
+----------------------------------------
+- OSM-Optionen zur Druckauswahl von Objekten hinzugefügt
+    ICAO-Kennzeichen von Flugplätzen (Neuer Standard)
+    Kirchen
+    Burgen, Schlösser und Ruinen 
+    Hochspannungsleitungen
+    Windkraftanlagen
+    Wald- und Feldwege (Standard: aus)
+- Aktualisierung folgender Regelwerke
+    Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
+    FAI Precision Flying - Edition 2020
+    FAI Air Rally Flying - Edition 2020
+
+Erweiterungen und Fehlerbehebungen in Version 3.1.8:
+----------------------------------------------------
 - OSM-Karte 3.2
      Maßstab 1:250000 hinzugefügt
      Papierformate A1 und A2 hinzugefügt

@@ -3,7 +3,7 @@ import java.util.List;
 enum ContestRules 
 {
 	R1 ([
-            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018",
+            ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020",
             
 			// General
 			precisionFlying:false,
@@ -20,6 +20,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/de_nav.jpg',
             printPointsTurnpointSign:false,
             printPointsEnrouteCanvas:false,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
             
 			// PlanningTest
@@ -133,7 +134,7 @@ enum ContestRules
             minEnrouteTargets:10,                                // (3.4.1)
             maxEnrouteTargets:25                                 // (3.4.1)
 		]
-	), // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018"
+	), // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020"
 
 	R2 ([
             ruleTitle:"Wettbewerbsordnung Pr\u00E4zisionsflug Deutschland - Ausgabe 2005",
@@ -153,6 +154,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/de_precision.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
             
 			// PlanningTest
@@ -286,6 +288,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/fai_rally.jpg',
             printPointsTurnpointSign:false,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
             
 			// PlanningTest
@@ -402,7 +405,7 @@ enum ContestRules
 	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
 
 	R4 ([
-            ruleTitle:"FAI Precision Flying - Edition 2019",
+            ruleTitle:"FAI Precision Flying - Edition 2020",
             
 			// General
 			precisionFlying:true,
@@ -419,6 +422,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/fai_precision1.jpg,images/landingfield/fai_precision2.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
             printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
             
 			// PlanningTest
@@ -532,7 +536,7 @@ enum ContestRules
             minEnrouteTargets:16,                                 // A3.2
             maxEnrouteTargets:25                                  // A3.2
 		]
-	), // "FAI Precision Flying - Edition 2019"
+	), // "FAI Precision Flying - Edition 2020"
 
 	R5 ([
             ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017",
@@ -552,6 +556,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/ch_precision.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"A,-1,1,D,E,F,G,H",
             
 			// PlanningTest
@@ -668,7 +673,7 @@ enum ContestRules
 	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
 
     R6 ([
-            ruleTitle:"FAI Air Rally Flying - Edition 2019",
+            ruleTitle:"FAI Air Rally Flying - Edition 2020",
             
             // General
             precisionFlying:false,
@@ -685,6 +690,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/fai_rally.jpg',
             printPointsTurnpointSign:false,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
             printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
             
             // PlanningTest
@@ -798,7 +804,7 @@ enum ContestRules
             minEnrouteTargets:15,
             maxEnrouteTargets:25
         ]
-    ), // "FAI Air Rally Flying - Edition 2019"
+    ), // "FAI Air Rally Flying - Edition 2020"
 
     R7 ([
             ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017",
@@ -818,6 +824,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/at_precision_landing1.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"C,A,I,II,III",
             
             // PlanningTest
@@ -951,6 +958,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/at_precision_landing2.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"C,B,A,-5,5,I,II,III,IV,V,VI",
             
             // PlanningTest
@@ -1084,6 +1092,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/at_precision_landing3.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"-20,-10,-1,1,10,20,30",
             
             // PlanningTest
@@ -1217,6 +1226,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/at_nav.jpg',
             printPointsTurnpointSign:false,
             printPointsEnrouteCanvas:true,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
             
             // PlanningTest
@@ -1350,6 +1360,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/de_nav2017*.jpg',
             printPointsTurnpointSign:false,
             printPointsEnrouteCanvas:false,
+            printIgnoreEnrouteCanvas:[],
             printLandingCalculatorValues:"F,E,A,B,C,D",
             
             // PlanningTest
@@ -1476,10 +1487,10 @@ enum ContestRules
     static List GetContestRules()
     {
         List ret = []
-        ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2018
+        ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
         ret += R11 // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
-        ret += R4  // FAI Precision Flying - Edition 2019
-        ret += R6  // FAI Air Rally Flying - Edition 2019
+        ret += R4  // FAI Precision Flying - Edition 2020
+        ret += R6  // FAI Air Rally Flying - Edition 2020
         ret += R5  // Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
         ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017
         ret += R8  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017

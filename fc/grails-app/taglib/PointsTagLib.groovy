@@ -1871,7 +1871,7 @@ class PointsTagLib
                 outln"""                            <th colspan="2">${message(code:'fc.observation.enroute.canvas.short')}</th>"""
                 outln"""                        </tr>"""
                 for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
-                    if (sign != EnrouteCanvasSign.None) {
+                    if (sign != EnrouteCanvasSign.None && !(sign in attrs.i.contestRule.ruleValues.printIgnoreEnrouteCanvas)) {
                         outln"""                <tr class="value">"""
                         outln"""                    <td class="name">${sign.canvasName}</td>"""
                         outln"""                    <td class="value"><img src="${createLinkTo(dir:'',file:sign.imageJpgName)}"/></td>"""

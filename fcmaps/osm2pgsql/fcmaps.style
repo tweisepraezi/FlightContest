@@ -117,6 +117,8 @@ node,way    height      text        polygon
 node,way   highway      text         linear
 node,way   historic     text         polygon
 node,way   horse        text         linear
+node,way   iata         text         linear
+node,way   icao         text         linear
 node,way   intermittent text         linear
 node,way   junction     text         linear
 node,way   landuse      text         polygon

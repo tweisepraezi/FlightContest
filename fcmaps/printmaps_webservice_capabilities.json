@@ -24,8 +24,8 @@
             "Name": "fcmaps",
             "ShortDescription": "FlightContest maps",
             "LongDescription": "FlightContest maps, based on OpenTopoMap style",
-            "Release": "3.1.8",
-            "Date": "2019/12/15",
+            "Release": "3.1.9",
+            "Date": "2020/03/04",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""
@@ -34,8 +34,8 @@
             "Name": "fcmaps-dev",
             "ShortDescription": "FlightContest maps",
             "LongDescription": "FlightContest maps, based on OpenTopoMap style",
-            "Release": "3.1.8",
-            "Date": "2019/12/15",
+            "Release": "3.1.9",
+            "Date": "2020/03/04",
             "Link": "https://flightcontest.de",
             "Copyright": "© OpenStreetMap contributors, © OpenTopoMap (CC-BY-SA), SRTM",
             "Layers": ""

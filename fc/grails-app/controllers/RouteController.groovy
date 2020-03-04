@@ -731,7 +731,9 @@ class RouteController {
                 route.instance.contestMapChurches = params.contestMapChurches == "on"
                 route.instance.contestMapCastles = params.contestMapCastles == "on"
                 route.instance.contestMapChateaus = params.contestMapChateaus == "on"
+                route.instance.contestMapPowerlines = params.contestMapPowerlines == "on"
                 route.instance.contestMapWindpowerstations = params.contestMapWindpowerstations == "on"
+                route.instance.contestMapSmallRoads = params.contestMapSmallRoads == "on"
                 route.instance.contestMapPeaks = params.contestMapPeaks == "on"
                 route.instance.contestMapAdditionals = params.contestMapAdditionals == "on"
                 route.instance.contestMapSpecials = params.contestMapSpecials == "on"
@@ -787,7 +789,9 @@ class RouteController {
                      contestMapChurches:route.instance.contestMapChurches,
                      contestMapCastles:route.instance.contestMapCastles,
                      contestMapChateaus:route.instance.contestMapChateaus,
+                     contestMapPowerlines:route.instance.contestMapPowerlines,
                      contestMapWindpowerstations:route.instance.contestMapWindpowerstations,
+                     contestMapSmallRoads:route.instance.contestMapSmallRoads,
                      contestMapPeaks:route.instance.contestMapPeaks,
                      contestMapAdditionals:route.instance.contestMapAdditionals,
                      contestMapSpecials:route.instance.contestMapSpecials,

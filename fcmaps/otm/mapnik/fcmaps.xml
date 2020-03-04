@@ -43,10 +43,13 @@
 	<!ENTITY airports-fill SYSTEM "styles-otm/airports-fill.xml">
 	<!ENTITY airports-poly SYSTEM "styles-otm/airports-poly.xml">
     <!ENTITY airports-name SYSTEM "styles-otm/airports-name.xml">
+    <!ENTITY airports-icao SYSTEM "styles-otm/airports-icao.xml">
 	<!ENTITY roads-casing-lowzoom SYSTEM "styles-otm/roads-casing-lowzoom.xml">
 	<!ENTITY roads-fill-lowzoom SYSTEM "styles-otm/roads-fill-lowzoom.xml">
 	<!ENTITY roads-casing SYSTEM "styles-otm/roads-casing.xml">
+    <!ENTITY roads-casing-small SYSTEM "styles-otm/roads-casing-small.xml">
 	<!ENTITY roads-fill SYSTEM "styles-otm/roads-fill.xml">
+    <!ENTITY roads-fill-small SYSTEM "styles-otm/roads-fill-small.xml">
 	<!ENTITY trams SYSTEM "styles-otm/trams.xml">
 	<!ENTITY housenumbers-poly SYSTEM "styles-otm/housenumbers-poly.xml">
 	<!ENTITY housenumbers-point SYSTEM "styles-otm/housenumbers-point.xml">
@@ -75,10 +78,15 @@
 	<!ENTITY text-natural-poly SYSTEM "styles-otm/text-natural-poly.xml">
     <!ENTITY symbols-peaks SYSTEM "styles-otm/symbols-peaks.xml">
     <!ENTITY text-peaks SYSTEM "styles-otm/text-peaks.xml">
-	<!ENTITY symbols-1 SYSTEM "styles-otm/symbols-1.xml">
+    <!ENTITY symbols-point-windpowerstations SYSTEM "styles-otm/windpowerstations.xml">
+    <!ENTITY symbols-poly-windpowerstations SYSTEM "styles-otm/windpowerstations.xml">
 	<!ENTITY symbols-2 SYSTEM "styles-otm/symbols-2.xml">
 	<!ENTITY symbols-poly SYSTEM "styles-otm/symbols-poly.xml">
+    <!ENTITY symbols-poly-churches SYSTEM "styles-otm/symbols-churches.xml">
+    <!ENTITY symbols-poly-castles SYSTEM "styles-otm/symbols-castles.xml">
 	<!ENTITY symbols-point SYSTEM "styles-otm/symbols-point.xml">
+    <!-- <!ENTITY symbols-point-churches SYSTEM "styles-otm/symbols-churches.xml"> -->
+    <!-- <!ENTITY symbols-point-castles SYSTEM "styles-otm/symbols-castles.xml"> -->
 	<!ENTITY symbols-viewpoint SYSTEM "styles-otm/symbols-viewpoint.xml">
 	<!ENTITY symbols-saddle SYSTEM "styles-otm/symbols-saddle.xml">
 	<!ENTITY text-roads-ref SYSTEM "styles-otm/text-roads-ref.xml">
@@ -130,10 +138,13 @@
 	&airports-fill;
 	&airports-poly;
     &airports-name;
+    &airports-icao;
 	&roads-casing-lowzoom;
 	&roads-fill-lowzoom;
 	&roads-casing;
+    &roads-casing-small;
 	&roads-fill;
+    &roads-fill-small;
 	&trams;
 	&railway-points;
 	&symbols-road;
@@ -163,7 +174,12 @@
     &symbols-peaks;
     &text-peaks;
     &symbols-saddle;
-    &symbols-1;
+    &symbols-poly-churches;
+    <!-- &symbols-point-churches; -->
+    &symbols-poly-castles;
+    <!-- &symbols-point-castles; -->
+    &symbols-point-windpowerstations;
+    &symbols-poly-windpowerstations;
 	&symbols-2;
 	&symbols-poly;
 	&symbols-point;
@@ -435,6 +451,16 @@
 		</Datasource>
 	</Layer>
 	
+    <Layer name="roads-small">
+        <StyleName>roads-casing-small</StyleName>
+        <StyleName>roads-fill-small</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
 	<Layer name="railway-points" clear-label-cache="on">
 		<StyleName>railway-points</StyleName>
 		<Datasource>
@@ -594,8 +620,65 @@
 		</Datasource>
 	</Layer>
 
+    <Layer name="symbols-poly-churches">
+        <StyleName>symbols-churches</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <!--
+    <Layer name="symbols-point-churches">
+        <StyleName>symbols-churches</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+     -->
+    
+    <Layer name="symbols-poly-castles">
+        <StyleName>symbols-castles</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+     
+    <!--
+    <Layer name="symbols-point-castles">
+        <StyleName>symbols-castles</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    -->
+    
+    <Layer name="symbols-point-windpowerstations">
+        <StyleName>windpowerstations</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,leaf_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,"summit:cross",tourism,"power","generator:source","site_type",sport,disused,abandoned,railway,train,subway,otm_isolation::INTEGER FROM planet_osm_point) AS symbols </Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+
+    <Layer name="symbols-poly-windpowerstations">
+        <StyleName>windpowerstations</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,access,amenity,highway,historic,"memorial:type",castle_type,religion,denomination,denotation,"man_made","tower:type","communication:radio","communication:television",'('&#124;&#124;substring(height from '^[\d]+')&#124;&#124;')' as height,building,"natural",name,ruins,NULL AS "summit:cross",tourism,"power","generator:source","site_type",leisure,sport,leaf_type,disused,abandoned,railway,way_area FROM planet_osm_polygon) AS symbols </Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+
 	<Layer name="symbols-poly">
-		<StyleName>symbols-1</StyleName>
 		<StyleName>symbols-2</StyleName>
 		<StyleName>symbols-poly</StyleName>
 		<Datasource>
@@ -604,9 +687,8 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
-
+	
 	<Layer name="symbols-point">
-		<StyleName>symbols-1</StyleName>
 		<StyleName>symbols-2</StyleName>
 		<StyleName>symbols-point</StyleName>
 		<Datasource>
@@ -720,7 +802,16 @@
     <Layer name="airports-name">
         <StyleName>airports-name</StyleName>
         <Datasource>
-            <Parameter name="table">(SELECT way,aeroway,way_area,name FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
+            <Parameter name="table">(SELECT way,aeroway,way_area,name,icao FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
+    <Layer name="airports-icao">
+        <StyleName>airports-icao</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,aeroway,way_area,name,icao FROM planet_osm_polygon WHERE aeroway IS NOT NULL) AS airports_name</Parameter>
             <Parameter name="dbname">gis</Parameter>
             &postgis-settings;
         </Datasource>

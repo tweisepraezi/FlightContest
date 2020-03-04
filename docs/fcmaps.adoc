@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.8, Ausgabe 1
-:revdate:   27.10.2019
+:revnumber: 3.1.8, Ausgabe 2
+:revdate:   16.02.2020
 :nofooter:
 :toc-title: Table of content
 :toc:
@@ -209,38 +209,28 @@ Create database *gis*
  createdb gis
  psql -d gis -c 'CREATE EXTENSION postgis;'
 
-Download data for necessary countries (Germany, Austria, Switzerland, South Africa: 4GB)
+Download data for necessary countries (Germany, Austria, Switzerland, France, South Africa: 4GB)
 
  cd ~/data
  mkdir osm && cd osm
  wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
+ cd ~/data
+ mkdir osm2 && cd osm2
  wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
  wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
+ wget http://download.geofabrik.de/europe/france-latest.osm.pbf
  wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf
- mkdir updates && cd updates
- wget http://download.geofabrik.de/europe-updates/state.txt
- mv state.txt europe-state.txt
- wget http://download.geofabrik.de/africa-updates/state.txt
- mv state.txt africa-state.txt
 
 Load OSM data into OSM database (~/data/osm/*.pbf -> gis)
 
  cd ~
- osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/germany-latest.osm.pbf
+ osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/germany-latest.osm.pbf
 
 Wait... (8h)
 
- osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/austria-latest.osm.pbf
+ for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done
  
-Wait... (7h)
-
- osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/switzerland-latest.osm.pbf
-
-Wait... (5h)
-
- osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/opentopomap.style ~/data/osm/south-africa-latest.osm.pbf
- 
-Wait... (2h)
+Wait... (22h) 
 
 Compile preprocessing tools (warnings can be ignored)
 
@@ -352,7 +342,7 @@ Wait... (2h)
  
 Load contour data into contour database
 
- osm2pgsql -d contours --slim --cache 12000 --number-processes 10 --style ~/fcmaps/otm/mapnik/osm2pgsql/contours.style ~/data/srtm/lon*.pbf
+ osm2pgsql -d contours --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf
 
 Wait... (4h)
  
@@ -365,13 +355,13 @@ Find out database size
 
  psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
 
-gis: 100GB, contours: 80GB, lowzoom: 500MB (Germany, Austria, Switzerland, South Africa)
+gis: 190GB, contours: 80GB, lowzoom: 800MB (Germany, Austria, Switzerland, France, South Africa)
  
 Display free disk space
  
  df
  
-200GB used, 800GB free
+320GB used, 680GB free
 
 SSH login with user *root*
 
