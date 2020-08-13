@@ -161,13 +161,21 @@ class Task
 	
 	static constraints = {
 		firstTime(blank:false, validator:{ val, obj ->
+            if (val.size() > 8) {
+                return false
+            }
 			if (val.size() > 5) {
-				return false
-			}
-			try {
-				Date t = Date.parse("HH:mm",val)
-			} catch(Exception e) {
-				return false
+                try {
+                    Date t = Date.parse("HH:mm:ss",val)
+                } catch(Exception e) {
+                    return false
+                }
+			} else {
+    			try {
+    				Date t = Date.parse("HH:mm",val)
+    			} catch(Exception e) {
+    				return false
+    			}
 			}
 			return true
 		})

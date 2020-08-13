@@ -37,9 +37,9 @@ class TestLeg
     static transients = ['resultLegTimeInput']
     
     static constraints = {
-		planTrueTrack(blank:false, range:0..<360, scale:10)
+		planTrueTrack(blank:false, range:0..360, scale:10)
 		planTestDistance(blank:false, min:0.toBigDecimal(), scale:10)
-		planTrueHeading(blank:false, range:0..<360, scale:10)
+		planTrueHeading(blank:false, range:0..360, scale:10)
 		planGroundSpeed(blank:false, min:0.toBigDecimal(), scale:10)
 		planLegTime(blank:false, min:0.toBigDecimal(), scale:10)
 		

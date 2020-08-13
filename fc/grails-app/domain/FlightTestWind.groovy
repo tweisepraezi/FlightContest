@@ -26,17 +26,17 @@ class FlightTestWind
 	static belongsTo = [flighttest:FlightTest]
 
 	static constraints = {
-		direction(range:0.0f..<360.0f,scale:10)
+		direction(range:0..360,scale:10)
 		speed(range:0.0f..<1000.0f,scale:10)
 
         // DB-2.12 compatibility
-        TODirection(nullable:true,range:0..<360,scale:10)
+        TODirection(nullable:true,range:0..360,scale:10)
         TOOffset(nullable:true,range:-2..2,scale:3)
         TOOrthogonalOffset(nullable:true,range:-1..1,scale:3)
-        LDGDirection(nullable:true,range:0..<360,scale:10)
+        LDGDirection(nullable:true,range:0..360,scale:10)
         LDGOffset(nullable:true,range:-2..2,scale:3)
         LDGOrthogonalOffset(nullable:true,range:-1..1,scale:3)
-        iTOiLDGDirection(nullable:true,range:0..<360,scale:10)
+        iTOiLDGDirection(nullable:true,range:0..360,scale:10)
         iTOiLDGOffset(nullable:true,range:-2..2,scale:3)
         iTOiLDGOrthogonalOffset(nullable:true,range:-1..1,scale:3)
         idTitle(nullable:true)

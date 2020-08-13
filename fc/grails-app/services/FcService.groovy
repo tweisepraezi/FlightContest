@@ -5039,9 +5039,11 @@ class FcService
                 reader.errors = e.getMessage()
                 printerror reader.errors
             }
+            printdone ""
+        } else {
+            printerror reader
         }
         
-        printdone ""
         return reader
     }
     
@@ -12432,7 +12434,12 @@ class FcService
     private void calulateTimetableWarnings(Task taskInstance)
     {
 		printstart "calulateTimetableWarnings"
-        Date first_date = Date.parse("HH:mm",taskInstance.firstTime)
+        Date first_date = null
+        if (taskInstance.firstTime.size() > 5) {
+            first_date = Date.parse("HH:mm:ss",taskInstance.firstTime)
+        } else {
+            first_date = Date.parse("HH:mm",taskInstance.firstTime)
+        }
         Date last_arrival_time = first_date
         
         Test.findAllByTask(taskInstance,[sort:"viewpos"]).each { Test test_instance ->
@@ -12509,7 +12516,12 @@ class FcService
         
 		int calculated_crew_num = 0
 		
-        Date first_date = Date.parse("HH:mm",taskInstance.firstTime)
+        Date first_date = null
+        if (taskInstance.firstTime.size() > 5) {
+            first_date = Date.parse("HH:mm:ss",taskInstance.firstTime)
+        } else {
+            first_date = Date.parse("HH:mm",taskInstance.firstTime)
+        }
         GregorianCalendar first_time = new GregorianCalendar() 
         first_time.setTime(first_date)
 
@@ -12517,7 +12529,7 @@ class FcService
         start_time.setTime(first_date)
         start_time.set(Calendar.HOUR_OF_DAY, first_time.get(Calendar.HOUR_OF_DAY))
         start_time.set(Calendar.MINUTE,      first_time.get(Calendar.MINUTE))
-        start_time.set(Calendar.SECOND,      0)
+        start_time.set(Calendar.SECOND,      first_time.get(Calendar.SECOND))
 
         BigDecimal last_task_tas
         Date last_arrival_time = first_date
@@ -13787,8 +13799,13 @@ class FcService
 	{
 		printstart "puttimetableTask"
 		Task task_instance = task.instance
-		Date first_date = Date.parse("HH:mm",task_instance.firstTime)
-
+        Date first_date = null
+        if (task_instance.firstTime.size() > 5) {
+            first_date = Date.parse("HH:mm:ss",task_instance.firstTime)
+        } else {
+            first_date = Date.parse("HH:mm",task_instance.firstTime)
+        }
+        
 		calculate_testlegflights(task_instance)
 		
         if (crewStartTimes) {

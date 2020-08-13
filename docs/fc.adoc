@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.1.9, Ausgabe 1
-:revdate:   03.03.2020
+:revnumber: 3.1.10, Ausgabe 1
+:revdate:   12.08.2020
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -776,7 +776,7 @@ Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.
 Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.
 
 Fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Windkraftanlagen und Höhenpunkte
-können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt werden:
+sowie eigene Symbole können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt werden:
 
   id|symbol|name|wkt
   1|church.png|""|POINT (9.46600 49.50288)
@@ -784,9 +784,12 @@ können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt
 
 1. Laufende Nummer 
 2. Anzuzeigendes Symbol: +
-airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png
+airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png oder Name des eigenen Symbols
 3. Name des Objektes (in Anführungszeichen) ("": kein Name drucken)
 4. Anzeigeposition in Geo-Koordinaten
+
+Eigene Symbole sind in *C:\FCSave\.geodata\images* zu speichern (png).
+Beachten Sie, dass die Groß-/Kleinschreibung der Symbolnamen übereinstimmt.
 
 Besondere Objekte können in der Datei *C:\FCSave\.geodata\specials.csv*
 zum Druck hinzugefügt werden:

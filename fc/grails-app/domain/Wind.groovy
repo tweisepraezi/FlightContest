@@ -8,7 +8,7 @@ class Wind
 	static belongsTo = [PlanningTestTask, FlightTestWind]
 
 	static constraints = {
-		direction(range:0..<360, scale:10)
+		direction(range:0..360, scale:10)
 		speed(range:0..<1000, scale:10)
 	}
 

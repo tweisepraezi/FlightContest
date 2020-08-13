@@ -26,7 +26,7 @@ class RouteLeg
 		title(nullable:true)
 		coordTrueTrack(scale:10)
 		coordDistance(scale:10)
-		measureTrueTrack(nullable:true,range:0..<360,scale:10)
+		measureTrueTrack(nullable:true,range:0..360,scale:10)
 		measureDistance(nullable:true,range:0..<10000,scale:10)
 		legMeasureDistance(nullable:true,range:0..<10000,scale:10)
 		legDistance(nullable:true,scale:10)

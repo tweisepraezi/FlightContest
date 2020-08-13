@@ -15,6 +15,6 @@ class TrackPoint // DB-2.12
         latitude(range:-90..90, scale:10)
         longitude(range:-179.9999999999..180, scale:10)
         altitude()
-        track(nullable:true,range:0..<360)
+        track(nullable:true,range:0..360)
     }
 }

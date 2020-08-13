@@ -4,14 +4,14 @@
 const DBCompatibelDigits = 1; // Number of digits for database compatibility
 const DBVersion = '2.13.0';   // DB-2.13
 const FCCompatibelDigits = 0; // Number of digits for application compatibility
-const FCVersion = '3.1.9';    // no milestone
+const FCVersion = '3.1.10';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.1.9
-AppVersion=3.1.9
+AppVerName=Flight Contest 3.1.10
+AppVersion=3.1.10
 ; no milestone below
-VersionInfoVersion=3.1.9
+VersionInfoVersion=3.1.10
 
 AppCopyright=(C) 2009-2020 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -80,6 +80,7 @@ Name: "C:\FCSave\.fc";     Flags: uninsneveruninstall; Permissions: everyone-mod
 Name: "C:\FCSave\.scan";   Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.logger"; Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.geodata";Flags: uninsneveruninstall; Permissions: everyone-modify;
+Name: "C:\FCSave\.geodata\images";Flags: uninsneveruninstall; Permissions: everyone-modify;
 
 [Registry]
 Root: HKLM32; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat7w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC32();

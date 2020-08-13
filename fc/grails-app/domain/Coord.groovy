@@ -120,7 +120,7 @@ class Coord
         gatewidth()
 		coordTrueTrack(scale:10)
 		coordMeasureDistance(scale:10)
-        measureTrueTrack(nullable:true,range:0..<360,scale:10)
+        measureTrueTrack(nullable:true,range:0..360,scale:10)
 		measureDistance(nullable:true,scale:10)
         legMeasureDistance(nullable:true,scale:10)
         legDistance(nullable:true,scale:10)
@@ -189,7 +189,7 @@ class Coord
         endCurved(nullable:true)
         
         // DB-2.12 compatibility
-        gateDirection(nullable:true,range:0..<360,scale:0)
+        gateDirection(nullable:true,range:0..360,scale:0)
         
         // DB-2.13 compatibility
         assignedSign(nullable:true)

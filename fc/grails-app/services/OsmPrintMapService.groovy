@@ -675,7 +675,7 @@ class OsmPrintMapService
             additionals_file_name = Defs.FCSAVE_FILE_GEODATA_ADDITIONALS
             String additionals_short_file_name = additionals_file_name.substring(additionals_file_name.lastIndexOf('/')+1)
             additionals_lines = """,{
-                "Style": "<MarkersSymbolizer file='[symbol]' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
+                "Style": "<MarkersSymbolizer file='[symbol]' transform='${GEODATA_BUILDING_SCALE}' allow-overlap='true' placement='point' />",
                 "SRS": "+init=epsg:4326",
                 "Type": "csv",
                 "File": "${additionals_short_file_name}",
@@ -696,7 +696,7 @@ class OsmPrintMapService
             specials_file_name = Defs.FCSAVE_FILE_GEODATA_SPECIALS
             String specials_short_file_name = specials_file_name.substring(specials_file_name.lastIndexOf('/')+1)
             specials_lines = """,{
-                "Style": "<MarkersSymbolizer file='special.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
+                "Style": "<MarkersSymbolizer file='special.png' transform='${GEODATA_BUILDING_SCALE}' allow-overlap='true' placement='point' />",
                 "SRS": "+init=epsg:4326",
                 "Type": "csv",
                 "File": "${specials_short_file_name}",
@@ -833,6 +833,15 @@ class OsmPrintMapService
             printdone ""
             printstart "Upload special.png"
             FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/special.png")
+            printdone ""
+            printstart "Upload all images of ${Defs.FCSAVE_FOLDER_GEODATA_IMAGES}"
+            File geodata_images_dir = new File(Defs.FCSAVE_FOLDER_GEODATA_IMAGES)
+            geodata_images_dir.eachFile() { File geodata_image ->
+                if (geodata_image.isFile()) {
+                    println "Upload ${geodata_image.name}"
+                    FileUpload("/upload/${printjob_id}", geodata_image.canonicalPath.replace("\\", "/"))
+                }
+            }
             printdone ""
             if (printOptions.printEnroutePhotos) {
                 printstart "Upload fcphoto.png"

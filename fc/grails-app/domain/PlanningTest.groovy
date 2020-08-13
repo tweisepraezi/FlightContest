@@ -16,7 +16,7 @@ class PlanningTest
 	static constraints = {
 		title()
 		route(nullable:true)
-        direction(range:0.0f..<360.0f,scale:10)
+        direction(range:0..360,scale:10)
         speed(range:0.0f..<1000.0f,scale:10)
 		task(nullable:false)
 	}

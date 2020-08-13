@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-04.03.2020
+12.08.2020
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -56,8 +56,15 @@ Weitere nützliche Funktionen von Flight Contest:
 * Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
-Erweiterungen in dieser Version (3.1.9):
-----------------------------------------
+Erweiterungen in dieser Version (3.1.10):
+-----------------------------------------
+- Optionale Sekunden-Angabe bei der Aufgaben-Anfangszeit hinzugefügt
+- UTF-8-Bug beim Export von kmz-Dateien entfernt
+- OSM-Karten-Druck: Verwendung eigener Symbole hinzugefügt
+- Unterstützung der Wind- und Landerichtung 360 Grad (zusätzlich zu 0 Grad) 
+
+Erweiterungen in Version 3.1.9:
+-------------------------------
 - OSM-Optionen zur Druckauswahl von Objekten hinzugefügt
     ICAO-Kennzeichen von Flugplätzen (Neuer Standard)
     Kirchen

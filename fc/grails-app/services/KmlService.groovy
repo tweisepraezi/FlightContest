@@ -86,7 +86,7 @@ class KmlService
             kml_writer = new BufferedWriter(kml_data)
         } else {
             kml_file = new File(webRootDir + kml_file_name)
-            kml_writer = kml_file.newWriter()
+            kml_writer = kml_file.newWriter("UTF-8")
         }
         
         MarkupBuilder xml = new MarkupBuilder(kml_writer)
@@ -135,7 +135,7 @@ class KmlService
             kml_writer = new BufferedWriter(kml_data)
         } else {
             kml_file = new File(webRootDir + kml_file_name)
-            kml_writer = kml_file.newWriter()
+            kml_writer = kml_file.newWriter("UTF-8")
         }
         
         MarkupBuilder xml = new MarkupBuilder(kml_writer)
@@ -188,7 +188,7 @@ class KmlService
             kml_writer = new BufferedWriter(kml_data)
         } else {
             kml_file = new File(webRootDir + kml_file_name)
-            kml_writer = kml_file.newWriter()
+            kml_writer = kml_file.newWriter("UTF-8")
         }
         
         MarkupBuilder xml = new MarkupBuilder(kml_writer)

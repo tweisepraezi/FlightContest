@@ -5,6 +5,7 @@ class Defs
     static final String FCSAVE_FOLDER                                  = "C:/FCSave"
     static final String FCSAVE_FOLDER_FC                               = "${FCSAVE_FOLDER}/.fc"
     static final String FCSAVE_FOLDER_GEODATA                          = "${FCSAVE_FOLDER}/.geodata"
+    static final String FCSAVE_FOLDER_GEODATA_IMAGES                   = "${FCSAVE_FOLDER}/.geodata/images"
     
     static final String FCSAVE_FILE_CONFIG                             = "${Defs.FCSAVE_FOLDER_FC}/config.groovy"
     static final String FCSAVE_FILE_GEODATA_DATE                       = "${FCSAVE_FOLDER_GEODATA}/date.txt"
