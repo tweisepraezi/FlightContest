@@ -1,5 +1,5 @@
 
-Flight Contest 3.1.10
+Flight Contest 3.1.10.Patch1
 Copyright 2009-2020 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 http://flightcontest.de

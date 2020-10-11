@@ -65,7 +65,7 @@ class AviationMath
 	   BigDecimal groundspeed
        if (windSpeed > 0) {
            BigDecimal wind_direction = windDirection - 180
-           BigDecimal beta = wind_direction - trueTrack
+           BigDecimal beta = wind_direction - trueTrack // -540 ... 180
            BigDecimal sin_beta = Math.sin(Math.toRadians(beta)) 
            BigDecimal drift_angle = 0
            if (beta != 0 && beta != 180 && beta != -180) {
@@ -74,7 +74,7 @@ class AviationMath
            trueheading = trueTrack - drift_angle 
            BigDecimal gamma = 180 + trueheading - wind_direction
            BigDecimal sin_gamma = Math.sin(Math.toRadians(gamma))
-           if (beta == 0) {
+           if (beta == 0 || beta == -360) {
         	   groundspeed = valueTAS + windSpeed
            } else if (beta == 180 || beta == -180) {
         	   groundspeed = valueTAS - windSpeed
