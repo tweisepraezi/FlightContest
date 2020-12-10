@@ -1208,6 +1208,13 @@ class FcService
                 team_instance.name = "Team-${df.format(i)}"
                 team_instance.save()
             }
+            for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"id"])) {
+                for (Test test_instance in Test.findAllByTask(task_instance,[sort:"id"])) {
+                    test_instance.scannedPlanningTest = null
+                    test_instance.scannedObservationTest = null
+                    test_instance.save()
+                }
+            }
             printdone ""
             return ['anonymized':true,'message':getMsg('fc.anonymized',["${contest_instance.title}"])]
         } else {

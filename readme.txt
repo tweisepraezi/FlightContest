@@ -10,7 +10,7 @@ and to evaluate planning, navigation, observation and/or landing test results.
 
 Thomas Weise
 Deutscher Präzisionsflug-Verein e.V.
-11.10.2020
+08.12.2020
 
 Downloads und Dokumentationen:
 http://flightcontest.de
@@ -56,8 +56,12 @@ Weitere nützliche Funktionen von Flight Contest:
 * Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
   Rangliste während eines laufenden Debriefings.
 
-Fehlerbebung in dieser Version (3.1.10.Patch1):
------------------------------------------------
+Erweiterungen in Version 3.1.11:
+--------------------------------
+- Wettbewerbs-Anonymisierung erweitert: Löscht auch gescannte Formulare
+
+Fehlerbebung in Version 3.1.10.Patch1:
+--------------------------------------
 - Fehler in Groundspeed-Berechnung behoben (bei 180°-Grenzwert zw. Wind und TrueTrack, z.B. Wind 100°, TrueTrack 280°)
 
 Erweiterungen in Version 3.1.10:
