@@ -17,18 +17,24 @@
                             <tbody>
                                 <tr>
                                     <td><g:task var="${testInstance.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
-                                    <g:if test="${testInstance.flightTestLink == Defs.EMAIL_SENDING}"> 
+									<g:set var="upload_job_status" value="${testInstance.GetFlightTestUploadJobStatus()}"/>
+                                    <g:if test="${upload_job_status == UploadJobStatus.Waiting}"> 
+                                        <td style="width:1%;"> 
+                                            <img src="${createLinkTo(dir:'images',file:'email.png')}"/>
+                                        </td>
+                                    </g:if>
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Sending}"> 
                                         <td style="width:1%;"> 
                                             <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
                                         </td>
-                                    </g:if>
-                                    <g:elseif test="${testInstance.flightTestLink == Defs.EMAIL_ERROR}"> 
+                                    </g:elseif>
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Error}"> 
                                         <td style="width:1%;"> 
                                             <img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
                                         </td>
                                     </g:elseif>
-                                    <g:elseif test="${testInstance.flightTestLink}">
-                                        <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.flightTestLink)}" />
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Done}">
+                                        <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.GetFlightTestUploadLink())}" />
                                         <g:if test="${testInstance.IsFlightTestRun()}">
 	                                        <td style="width:1%;"> 
 	                                            <a href="${email_links.map}" target="_blank"><img src="${createLinkTo(dir:'images',file:'map.png')}"/></a>

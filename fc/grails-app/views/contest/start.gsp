@@ -43,19 +43,28 @@
                         </tr>
                         <tr>
                             <td class="detailtitle">${message(code:'fc.contestrule')}:</td>
-                            <td>${contestInstance.contestRule.ruleValues.ruleTitle}</td>
-                        </tr>
-                        <tr>
-                            <td class="detailtitle">${message(code:'fc.scale')}:</td>
-                            <td>1:${fieldValue(bean:contestInstance, field:'mapScale')}</td>
+                            <td>${contestInstance.ruleTitle}</td>
                         </tr>
                         <tr>
                             <td class="detailtitle">${message(code:'fc.coordpresentation')}:</td>
                             <td>${message(code:contestInstance.coordPresentation.code)}</td>
                         </tr>
                         <tr>
+                            <td class="detailtitle">${message(code:'fc.contest.contestdate')}:</td>
+                            <td>${fieldValue(bean:contestInstance, field:'liveTrackingContestDate')}</td>
+                        </tr>
+                        <tr>
                             <td class="detailtitle">${message(code:'fc.timezone')}:</td>
-                            <td>${fieldValue(bean:contestInstance, field:'timeZone')}${message(code:'fc.time.h')}</td>
+                            <td>${contestInstance.timeZone2?.getID()}</td>
+                        </tr>
+                        <tr>
+                            <td class="detailtitle">${message(code:'fc.timezone.diff')}:</td>
+                            <g:if test="${contestInstance.liveTrackingContestDate && contestInstance.timeZone2?.inDaylightTime(Date.parse("yyyy-MM-dd",contestInstance.liveTrackingContestDate))}">
+                                <td>${fieldValue(bean:contestInstance, field:'timeZone')}${message(code:'fc.time.h')} (${message(code:'fc.timezone.daylighttime')})</td>
+                            </g:if>
+                            <g:else>
+                                <td>${fieldValue(bean:contestInstance, field:'timeZone')}${message(code:'fc.time.h')}</td>
+                            </g:else>
                         </tr>
                         <tr>
                             <td class="detailtitle">${message(code:'fc.teamcrewnum')}:</td>
@@ -65,11 +74,11 @@
                             <td class="detailtitle">${message(code:'fc.bestofanalysistasknum')}:</td>
                             <td>${fieldValue(bean:contestInstance, field:'bestOfAnalysisTaskNum')}</td>
                         </tr>
-                        <g:if test="${!contestInstance.aflosTest && contestInstance.IsAFLOSPossible()}">
-                            <tr>
-                                <td class="detailtitle">${message(code:'fc.useuploadedaflos')}:</td>
-                                <td><g:if test="${contestInstance.aflosUpload}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.no')}</g:else></td>
-                            </tr>
+                        <g:if test="${contestInstance.liveTrackingContestID}">
+	                        <tr>
+	                            <td class="detailtitle">${message(code:'fc.livetracking')} ${message(code:'fc.livetracking.contestdate')} (${message(code:'fc.livetracking.contestid')}):</td>
+	                            <td>${fieldValue(bean:contestInstance, field:'liveTrackingContestDate')} (${fieldValue(bean:contestInstance, field:'liveTrackingContestID')})</td>
+	                        </tr>
                         </g:if>
                         <tr>
                             <td class="detailtitle">${message(code:'fc.contest.uuid')}:</td>

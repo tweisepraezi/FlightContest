@@ -12,39 +12,27 @@ class DemoContestRoutesService
     static final String ROUTE_7_GPX = "Strecke_7.gpx"
 	static final String ROUTE_7M = "Strecke 7m"
 	
-    long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB, String showLanguage) 
+    long CreateTest(String testName, String printPrefix, boolean testExists, String showLanguage) 
     {
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,false,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
         
         // Routes
         Map route5 = [:]
         fcService.printstart ROUTE_5
-        if (aflosDB) {
-            route5 = fcService.importAflosRoute(contest,ROUTE_5,ROUTE_5,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route5 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_5_GPX)
-        }
+        route5 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_5_GPX)
         fcService.printdone ""
         
         Map route6 = [:]
         fcService.printstart ROUTE_6
-        if (aflosDB) {
-            route6 = fcService.importAflosRoute(contest,ROUTE_6,ROUTE_6,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route6 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_6_GPX)
-        }
+        route6 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_6_GPX)
         fcService.printdone ""
 		
         Map route7 = [:]
         fcService.printstart ROUTE_7
-        if (aflosDB) {
-            route7 = fcService.importAflosRoute(contest,ROUTE_7,ROUTE_7,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route7 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_7_GPX)
-        }
+        route7 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_7_GPX)
         fcService.printdone ""
 		
         fcService.printstart ROUTE_5M
@@ -90,7 +78,7 @@ class DemoContestRoutesService
 		return contest.instance.id
     }
 
-    Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
+    Map RunTest(Contest lastContest, String contestName)
     {
 		Map ret_test = [:]
         if (lastContest && lastContest.title == contestName) {
@@ -174,7 +162,7 @@ class DemoContestRoutesService
                 [name:"CoordResult 'Besatzung 60' '$ROUTE_6'",   count:39,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(task6,Crew.findByContestAndName(lastContest,"Besatzung 60")),[sort:"id"]),data:testCoordResult60(ROUTE_6)],    
                 [name:"CoordResult 'Besatzung 120' '$ROUTE_7'",  count:39,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(task7,Crew.findByContestAndName(lastContest,"Besatzung 120")),[sort:"id"]),data:testCoordResult120(ROUTE_7)],    
                 [name:"CoordResult 'Besatzung 60' '$ROUTE_7'",   count:39,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(task7,Crew.findByContestAndName(lastContest,"Besatzung 60")),[sort:"id"]),data:testCoordResult60(ROUTE_7)],    
-               ],aflosDB
+               ]
             )
             fcService.printdone "Test '$lastContest.title'"
             ret_test.error = ret.error

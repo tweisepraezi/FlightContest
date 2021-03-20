@@ -1,0 +1,48 @@
+FC Rule values                              Points for rule                 Live Tracking
+                                            Precision      Rally            GateScoreOverride / TrackScoreOverride
+                                            FAI2020 DE2017 FAI2020 DE2020   -> set value (condition)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+flightTestTakeoffCorrectSecond              60      60     60      60       0 -> gate_score_override.[to].checkpoint_grace_period_before (for disabled takeoff check: 0 ->)
+                                                                            -> gate_score_override.[to].checkpoint_grace_period_after
+flightTestTakeoffCheckSeconds               false   false  true    true     
+flightTestTakeoffPointsPerSecond            0       0      3       3        -> gate_score_override.[to].checkpoint_penalty_per_second (if flightTestTakeoffCheckSeconds == true, for disabled takeoff check: 0 ->)
+flightTestTakeoffMissedPoints               200     200    100     100      -> gate_score_override.[to].checkpoint_not_found (for disabled takeoff check: 0 ->)
+                                                                            -> gate_score_override.[to].checkpoint_maximum_penalty (for disabled takeoff check: 0 ->)
+                                                                            -> gate_score_override.[to].checkpoint_penalty_per_second (if flightTestTakeoffCheckSeconds == false, for disabled takeoff check: 0 ->)
+                                                                            
+
+flightTestCptimeCorrectSecond               2       2      2       2        -> gate_score_override.[sp,tp,secret,fp].checkpoint_grace_period_before
+                                                                            -> gate_score_override.[sp,tp,secret,fp].checkpoint_grace_period_after
+flightTestCptimePointsPerSecond             3       1      3       3        -> gate_score_override.[sp,tp,secret,fp].checkpoint_penalty_per_second (for disabled secret check: 0 ->)
+flightTestCpNotFoundPoints                  100     200    100     100      -> gate_score_override.[sp,tp,secret,fp].checkpoint_not_found (for disabled secret check: 0 ->)
+flightTestCptimeMaxPoints                   100     200    100     100      -> gate_score_override.[sp,tp,secret,fp].checkpoint_maximum_penalty (for disabled secret check: 0 ->)
+flightTestProcedureTurnNotFlownPoints       200	    200	   0	   0	    -> gate_score_override.[tp].missing_procedure_turn_penalty
+
+flightTestMinAltitudeMissedPoints           500     500    200     200      not relevant for Live Tracking
+
+flightTestBadCourseCorrectSecond            5       5      5       5        -> track_score_override.bad_course_grace_time
+flightTestBadCoursePoints                   200     200    100     100      -> track_score_override.bad_course_penalty
+                                                                            -> gate_score_override.[sp].bad_crossing_extended_gate_penalty
+flightTestBadCourseMaxPoints                0       0      1000    1000     -> track_score_override.bad_course_maximum_penalty
+
+flightTestLandingToLatePoints               200     200    0       200      -> gate_score_override.[ldg].checkpoint_penalty_per_second
+                                                                            -> gate_score_override.[ldg].checkpoint_maximum_penalty
+                                                                            -> gate_score_override.[ldg].checkpoint_not_found
+                                                                            1800 -> gate_score_override.[ldg].checkpoint_grace_period_before
+                                                                            0 -> gate_score_override.[ldg].checkpoint_grace_period_after
+ 
+flightTestBadCourseStartLandingPoints       200     500    0       200      not relevant for Live Tracking
+
+flightTestGivenToLatePoints                 100     100    300     300      not relevant for Live Tracking
+flightTestSafetyAndRulesInfringementPoints  0       0      600     600      not relevant for Live Tracking
+flightTestInstructionsNotFollowedPoints     0       0      200     0        not relevant for Live Tracking
+flightTestFalseEnvelopeOpenedPoints         0       0      0       0        not relevant for Live Tracking
+flightTestSafetyEnvelopeOpenedPoints        0       0      400     400      not relevant for Live Tracking
+flightTestFrequencyNotMonitoredPoints       0       0      200     0        not relevant for Live Tracking
+flightTestForbiddenEquipmentPoints          0       0      0       0        not relevant for Live Tracking
+
+
+gate_score_override.[].bad_course_penalty                      A amount of points awarded for crossing the gate in the wrong direction (e.g. for landing or takeoff)
+gate_score_override.[].bad_crossing_extended_gate_penalty      The penalty awarded when crossing the extended gate in the wrong direction (typically used for start gate)
+
+??? check for necessity

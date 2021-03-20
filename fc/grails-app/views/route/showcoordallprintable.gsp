@@ -29,7 +29,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale}"
+                    content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.mapScale}"
                 }
                 @top-right {
                     font-family: Noto Sans;
@@ -60,9 +60,6 @@
                 <thead>
                     <tr>
                         <th>${message(code:'fc.tpname')}</th>
-                        <g:if test="${routeInstance.mark}">
-                            <th>${message(code:'fc.aflos')}</th>
-                        </g:if>
                         <th>${message(code:'fc.coordroute.list')}</th>
                         <th>${message(code:'fc.altitude')}</th>
                         <th>${message(code:'fc.gatewidth.short')}</th>
@@ -72,9 +69,6 @@
                     <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
                         <tr>
                             <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
-                            <g:if test="${routeInstance.mark}">
-                                <td class="aflosname">${coordroute_instance.mark}</td>
-                            </g:if>
                             <td class="coords">${coordroute_instance.namePrintable(true,false)}</td>
                             <td class="altitude">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
                             <td class="gatewidth">${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>

@@ -56,6 +56,9 @@
     <body>
 	    <h2>${message(code:'fc.test.timetablejudge')}<g:if test="${taskInstance.printTimetableJuryPrintTitle}"> - ${taskInstance.printTimetableJuryPrintTitle}</g:if></h2>
 	    <h3>${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
+        <g:if test="${taskInstance.printTimetableJuryLandingField}">
+            <h4>${message(code:'fc.test.landing.printinfo', args:[BootStrap.global.GetLandingInfo()])}</h4>
+        </g:if>
         <g:form>
             <table class="timetablejudgelist">
                 <thead>
@@ -89,14 +92,14 @@
                                 <th>${message(code:'fc.resultclass.short.short')}</th>
                             </g:if>
                         </g:if>
-                        <g:if test="${taskInstance.planningTestDuration == 0}">
+                        <g:if test="${taskInstance.planningTestDuration == 0 || taskInstance.preparationDuration == 0}">
                             <g:if test="${taskInstance.printTimetableJuryPlanning}">
-                                <th>${message(code:'fc.test.planning.publish')}</th>
+                                <th>${message(code:'fc.test.planning.output')}</th>
                             </g:if>
                         </g:if>
                         <g:else>
                             <g:if test="${taskInstance.printTimetableJuryPlanning}">
-                                <th>${message(code:'fc.test.planning')}</th>
+                                <th>${message(code:'fc.test.planning.output')}</th>
                              </g:if>
                              <g:if test="${taskInstance.printTimetableJuryPlanningEnd}">
                                  <th>${message(code:'fc.test.planning.end.short')}</th>
@@ -134,6 +137,11 @@
                         </g:if>
                         <g:if test="${taskInstance.printTimetableJuryArrival}">
                             <th>${message(code:'fc.test.arrival')}</th>
+                        </g:if>
+                        <g:if test="${taskInstance.flighttest.submissionMinutes}">
+                            <g:if test="${taskInstance.printTimetableJurySubmission}">
+                                <th>${message(code:'fc.test.submission.latest2')}</th>
+                            </g:if>
                         </g:if>
                         <g:if test="${taskInstance.printTimetableJuryEmptyColumn1}">
                             <th>${taskInstance.printTimetableJuryEmptyTitle1}</th>
@@ -251,6 +259,9 @@
                                         <td class="arrivaltime">${test_instance.arrivalTime?.format('HH:mm:ss')}</td>
                                     </g:else>
                                 </g:if>
+                                <g:if test="${taskInstance.flighttest.submissionMinutes && taskInstance.printTimetableJurySubmission}">
+                                    <td class="submissiontime">${test_instance.GetMaxSubmissionTime().format('HH:mm:ss')}</td>
+                                </g:if>
                                 <g:if test="${taskInstance.printTimetableJuryEmptyColumn1}">
                                     <td class="empty1"></td>
                                 </g:if>
@@ -268,6 +279,16 @@
                     </g:each>
                 </tbody>
             </table>
+            <g:if test="${taskInstance.printTimetableJuryLandingField}">
+                <div style="page-break-before: always; color: white; height: 2px;">.</div>
+                <g:each var="landingfield_imagename" in="${taskInstance.contest.landingFieldImageName.split(',')}">
+                    <g:set var="landingfield_imagename2" value="${landingfield_imagename}"/>
+                    <g:if test="${landingfield_imagename.contains('*')}">
+                        <g:set var="landingfield_imagename2" value="${landingfield_imagename.replace('*', "_${session.printLanguage}")}"/>
+                    </g:if>
+                    <img class="landingfield" src="${createLinkTo(dir:'',file:landingfield_imagename2)}" />
+                </g:each>
+            </g:if>
         </g:form>
     </body>
 </html>

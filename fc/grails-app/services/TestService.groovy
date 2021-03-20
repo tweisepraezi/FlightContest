@@ -21,7 +21,6 @@ class TestService
         error_num += testCalcService_isGateTrackReached()
         error_num += testCalcService_GradDiff()
         error_num += testCalcService_GetNextUTC()
-        error_num += testCalcService_ConvertAflosUTC()
         error_num += testCalcService_IntegerMinuteStr()
         error_num += testCalcService_DecimalSecondStr()
         error_num += testCalcService_GetDirectionGradDecimalMinute()
@@ -345,34 +344,6 @@ class TestService
         return error_num
     }
     
-    //--------------------------------------------------------------------------
-    int testCalcService_ConvertAflosUTC()
-    // return error num
-    {
-        printstart "testCalcService_ConvertAflosUTC"
-        int error_num = 0
-    
-        // same day
-        if (AflosTools.ConvertAflosUTC("2015-01-01T00:00:00Z", "09h 36min 05,000sec") != "2015-01-01T09:36:05Z") {error_num++; println "1-1"}
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:05Z", "09h 36min 06,000sec") != "2015-01-01T09:36:06Z") {error_num++; println "1-2"}
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:06Z", "09h 36min 12,456sec") != "2015-01-01T09:36:12Z") {error_num++; println "1-3"}
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:06Z", "09h 36min 12,500sec") != "2015-01-01T09:36:12Z") {error_num++; println "1-4"}
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:06Z", "09h 36min 12,501sec") != "2015-01-01T09:36:13Z") {error_num++; println "1-5"}
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:06Z", "09h 36min 13,499sec") != "2015-01-01T09:36:13Z") {error_num++; println "1-6"}
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:06Z", "09h 36min 13,500sec") != "2015-01-01T09:36:14Z") {error_num++; println "1-7"}
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:06Z", "09h 36min 13,501sec") != "2015-01-01T09:36:14Z") {error_num++; println "1-8"}
-        
-        // next day
-        if (AflosTools.ConvertAflosUTC("2015-01-01T09:36:06Z", "07h 01min 20,000sec") != "2015-01-02T07:01:20Z") {error_num++; println "2-1"}
-        
-        if (error_num) {
-            printerror "$error_num tests failed."
-        } else {
-            printdone ""
-        }
-        return error_num
-    }
-
     //--------------------------------------------------------------------------
     int testCalcService_IntegerMinuteStr()
     // return error num

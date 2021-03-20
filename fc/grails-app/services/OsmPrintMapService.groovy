@@ -168,89 +168,37 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    Map PrintOSM(Map printParams)
+    Map PrintOSM(Map contestMapParams)
     {
         printstart "PrintOSM"
-        println "Params: ${printParams}"
         
         Map ret = [ok:false, message:'']
-        boolean graticule = false
-        Map print_options = [centerLatitude: 0.0,
-                             centerLongitude: 0.0,
-                             centerGraticuleLatitude: 0.0,
-                             centerGraticuleLongitude: 0.0,
-                             printEnroutePhotos: false,
-                             printEnrouteCanvas: false,
-                             printScale: Defs.CONTESTMAPSCALE_200000,
-                             printContourLines: Defs.CONTESTMAPCONTOURLINES_100M,
-                             printMunicipalityNames: false,
-                             printAirfields: Defs.CONTESTMAPAIRFIELDS_OSM_ICAO,
-                             printChurches: false,
-                             printCastles: false,
-                             printChateaus: false,
-                             printPowerlines: false,
-                             printWindpowerstations: false,
-                             printSmallRoads: false,
-                             printPeaks: false,
-                             printAdditionals: false,
-                             printSpecials: false,
-                             printAirspaces: false,
-                             printLandscape: true,
-                             printSize: Defs.CONTESTMAPPRINTSIZE_A4,
-                             printColorChanges: false,
-                             printDevStyle: false,
-                             printCenterHorizontalPos: HorizontalPos.Center,
-                             printCenterVerticalPos: VerticalPos.Center,
-                             printFCStyle: false
-                            ]
         
-        File gpx_file = new File(printParams.gpxFileName)
+        Map add_params = [centerLatitude: 0.0, centerLongitude: 0.0, centerGraticuleLatitude: 0.0, centerGraticuleLongitude: 0.0]
+        File gpx_file = new File(contestMapParams.gpxFileName)
         FileReader gpx_reader = new FileReader(gpx_file)
         try {
             def gpx = new XmlParser().parse(gpx_reader)
             def m = gpx.extensions.flightcontest.contestmap
-            graticule = m.'@graticule'[0] == "yes"
-            print_options.centerLatitude = m.'@center_latitude'[0].toBigDecimal()
-            print_options.centerLongitude = m.'@center_longitude'[0].toBigDecimal()
-            print_options.centerGraticuleLatitude = m.'@center_graticule_latitude'[0].toBigDecimal()
-            print_options.centerGraticuleLongitude = m.'@center_graticule_longitude'[0].toBigDecimal()
-            print_options.printEnroutePhotos = m.'@enroutephotos'[0] == "yes"
-            print_options.printEnrouteCanvas = m.'@enroutecanvas'[0] == "yes"
-            print_options.printScale = m.'@osmscale'[0].toInteger()
-            print_options.printContourLines = m.'@contour_lines'[0].toInteger()
-            print_options.printMunicipalityNames = m.'@municipality_names'[0] == "yes"
-            print_options.printAirfields = m.'@airfields'[0]
-            print_options.printChurches = m.'@churches'[0] == "yes"
-            print_options.printCastles = m.'@castles'[0] == "yes"
-            print_options.printChateaus = m.'@chateaus'[0] == "yes"
-            print_options.printPowerlines = m.'@powerlines'[0] == "yes"
-            print_options.printWindpowerstations = m.'@windpowerstations'[0] == "yes"
-            print_options.printSmallRoads = m.'@smallroads'[0] == "yes"
-            print_options.printPeaks = m.'@peaks'[0] == "yes"
-            print_options.printAdditionals = m.'@additionals'[0] == "yes"
-            print_options.printSpecials = m.'@specials'[0] == "yes"
-            print_options.printAirspaces = m.'@airspaces'[0] == "yes"
-            print_options.printLandscape = m.'@landscape'[0] == "yes"
-            print_options.printSize = m.'@print_size'[0]
-            print_options.printColorChanges = m.'@colorchanges'[0] == "yes"
-            print_options.printDevStyle = m.'@devstyle'[0] == "yes"
-            print_options.printCenterHorizontalPos = HorizontalPos.(m.'@centerhorizontalpos'[0])
-            print_options.printCenterVerticalPos = VerticalPos.(m.'@centerverticalpos'[0])
-            print_options.printFCStyle = m.'@fcstyle'[0] == "yes"
-            println "Options: ${print_options}"
+            add_params.centerLatitude = m.'@center_latitude'[0].toBigDecimal()
+            add_params.centerLongitude = m.'@center_longitude'[0].toBigDecimal()
+            add_params.centerGraticuleLatitude = m.'@center_graticule_latitude'[0].toBigDecimal()
+            add_params.centerGraticuleLongitude = m.'@center_graticule_longitude'[0].toBigDecimal()
             ret.ok = true
         } catch (Exception e) {
             println e.getMessage()
         }
         gpx_reader.close()
-
+        contestMapParams += add_params
+        println "Params: ${contestMapParams}"
+        
         if (ret.ok) {
-            if (!graticule) {
-                printParams.graticuleFileName = ""
+            if (!contestMapParams.contestMapGraticule) {
+                contestMapParams.graticuleFileName = ""
             }
         }
         if (ret.ok) {
-            ret = print_osm(printParams, print_options)
+            ret = print_osm(contestMapParams)
         }
         
         printdone ""
@@ -258,13 +206,13 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    private Map print_osm(Map printParams, Map printOptions)
+    private Map print_osm(Map contestMapParams)
     {
         Map ret = [ok:false, message:'']
         
-        String printjob_filename = printParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
-        String printjobid_filename = printParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + printParams.routeId + ".txt"
-        String printfileid_filename = printParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + printParams.routeId + ".txt"
+        String printjob_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+        String printjobid_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + contestMapParams.routeId + ".txt"
+        String printfileid_filename = contestMapParams.webRootDir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTFILEID + contestMapParams.routeId + ".txt"
         
         /*
         if (new File(printjob_filename).exists()) {
@@ -273,14 +221,14 @@ class OsmPrintMapService
         }
         */
         
-        String graticule_file_name = printParams.graticuleFileName.replaceAll('\\\\', '/')
+        String graticule_file_name = contestMapParams.graticuleFileName.replaceAll('\\\\', '/')
 
         String style = ""
         String hide_layers = ""
-        if (printOptions.printFCStyle) {
+        if (contestMapParams.contestMapFCStyle) {
             style = STYLE_FC
             hide_layers = HIDELAYERS_FC
-            switch (printOptions.printContourLines) {
+            switch (contestMapParams.contestMapContourLines) {
                 case Defs.CONTESTMAPCONTOURLINES_20M:
                     hide_layers += ",${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
                     break
@@ -294,56 +242,56 @@ class OsmPrintMapService
                     hide_layers += ",${HIDELAYERS_FC_CONTOURS20},${HIDELAYERS_FC_CONTOURS50},${HIDELAYERS_FC_CONTOURS100}"
                     break
             }
-            if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
+            if (contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
                 hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME},${HIDELAYERS_FC_AIRFIELDSICAO}"
-            } else if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO) {
+            } else if (contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO) {
                 hide_layers += ",${HIDELAYERS_FC_AIRFIELDSNAME}"
             } else {
                 hide_layers += ",${HIDELAYERS_FC_AIRFIELDSICAO}"
             }
-            if (!printOptions.printChurches) {
+            if (!contestMapParams.contestMapChurches) {
                 hide_layers += ",${HIDELAYERS_FC_CHURCHES}"
             }
-            if (!printOptions.printCastles) {
+            if (!contestMapParams.contestMapCastles) {
                 hide_layers += ",${HIDELAYERS_FC_CASTLES}"
             }
-            if (!printOptions.printPowerlines) {
+            if (!contestMapParams.contestMapPowerlines) {
                 hide_layers += ",${HIDELAYERS_FC_POWERLINES}"
             }
-            if (!printOptions.printWindpowerstations) {
+            if (!contestMapParams.contestMapWindpowerstations) {
                 hide_layers += ",${HIDELAYERS_FC_WINDPOWERSTATIONS}"
             }
-            if (!printOptions.printSmallRoads) {
+            if (!contestMapParams.contestMapSmallRoads) {
                 hide_layers += ",${HIDELAYERS_FC_SMALLROADS}"
             }
         } else {
-            if (printOptions.printContourLines) {
+            if (contestMapParams.contestMapContourLines) {
                 style = STYLE_PRINTMAPS_CARTO_CONTOURLINES
             } else {
                 style = STYLE_PRINTMAPS_CARTO
             }
             hide_layers = HIDELAYERS_PRINTMAPS_CARTO
-            if (!printOptions.printMunicipalityNames) {
+            if (!contestMapParams.contestMapMunicipalityNames) {
                 hide_layers += ",${HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY}"
             }
         }
-        if (printOptions.printDevStyle) {
+        if (contestMapParams.contestMapDevStyle) {
             style = STYLE_FC_DEV
         }
         
-        int job_scale = printOptions.printScale
-        int print_scale = job_scale/FACTOR
-        BigDecimal scalebar_x_diff = FACTOR*5*Defs.CONTESTMAPSCALE_200000/job_scale*GpxService.kmPerNM // 1 NM (9.26mm)
+        int map_scale = contestMapParams.mapScale
+        int print_scale = map_scale/FACTOR
+        BigDecimal scalebar_x_diff = FACTOR*5*Defs.CONTESTMAPSCALE_200000/map_scale*GpxService.kmPerNM // 1 NM (9.26mm)
         
         int print_width = 0 // mm
         int print_height = 0 // mm
         int min_print_height = 0 // mm
         boolean alternate_pos = false
         String paper_size = ""
-        switch (printOptions.printSize) {
+        switch (contestMapParams.contestMapPrintSize) {
             case Defs.CONTESTMAPPRINTSIZE_A4:
                 paper_size = "A4"
-                if (printOptions.printLandscape) {
+                if (contestMapParams.contestMapPrintLandscape) {
                     print_width = A4_LONG
                     print_height = A4_SHORT
                 } else {
@@ -353,7 +301,7 @@ class OsmPrintMapService
                 break
             case Defs.CONTESTMAPPRINTSIZE_A3:
                 paper_size = "A3"
-                if (printOptions.printLandscape) {
+                if (contestMapParams.contestMapPrintLandscape) {
                     print_width = A3_LONG
                     print_height = A3_SHORT
                 } else {
@@ -363,7 +311,7 @@ class OsmPrintMapService
                 break
             case Defs.CONTESTMAPPRINTSIZE_A2:
                 paper_size = "A2"
-                if (printOptions.printLandscape) {
+                if (contestMapParams.contestMapPrintLandscape) {
                     print_width = A2_LONG
                     print_height = A2_SHORT
                 } else {
@@ -373,7 +321,7 @@ class OsmPrintMapService
                 break
             case Defs.CONTESTMAPPRINTSIZE_A1:
                 paper_size = "A1"
-                if (printOptions.printLandscape) {
+                if (contestMapParams.contestMapPrintLandscape) {
                     print_width = A1_LONG
                     print_height = A1_SHORT
                 } else {
@@ -384,7 +332,7 @@ class OsmPrintMapService
                 break
             case Defs.CONTESTMAPPRINTSIZE_ANR:
                 paper_size = "ANR"
-                if (printOptions.printLandscape) {
+                if (contestMapParams.contestMapPrintLandscape) {
                     print_width = ANR_LONG
                     print_height = ANR_SHORT
                 } else {
@@ -393,7 +341,7 @@ class OsmPrintMapService
                 }
                 break
         }
-        if (printOptions.printLandscape) {
+        if (contestMapParams.contestMapPrintLandscape) {
             min_print_height = A4_SHORT
         } else {
             min_print_height = A4_LONG
@@ -404,25 +352,25 @@ class OsmPrintMapService
         print_height *= FACTOR
         min_print_height *= FACTOR
         
-        if (printOptions.printCenterHorizontalPos != HorizontalPos.Center || printOptions.printCenterVerticalPos != VerticalPos.Center) {
-            BigDecimal print_width_nm = print_scale * print_width / Contest.mmPerNM
-            BigDecimal print_height_nm = print_scale * print_height / Contest.mmPerNM
-            Map rect_width = AviationMath.getShowPoint(printOptions.centerLatitude, printOptions.centerLongitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
-            Map rect_height = AviationMath.getShowPoint(printOptions.centerLatitude, printOptions.centerLongitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
-            switch (printOptions.printCenterHorizontalPos) {
+        if (contestMapParams.contestMapCenterHorizontalPos != HorizontalPos.Center || contestMapParams.contestMapCenterVerticalPos != VerticalPos.Center) {
+            BigDecimal print_width_nm = print_scale * print_width / Route.mmPerNM
+            BigDecimal print_height_nm = print_scale * print_height / Route.mmPerNM
+            Map rect_width = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_width_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
+            Map rect_height = AviationMath.getShowPoint(contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_height_nm / 2 - GpxService.CONTESTMAP_RUNWAY_FRAME_DISTANCE, GRATICULE_SCALEBAR_LEN)
+            switch (contestMapParams.contestMapCenterHorizontalPos) {
                 case HorizontalPos.Left:
-                    printOptions.centerLongitude = rect_width.lonmax
+                    contestMapParams.centerLongitude = rect_width.lonmax
                     break
                 case HorizontalPos.Right:
-                    printOptions.centerLongitude = rect_width.lonmin
+                    contestMapParams.centerLongitude = rect_width.lonmin
                     break
             }
-            switch (printOptions.printCenterVerticalPos) {
+            switch (contestMapParams.contestMapCenterVerticalPos) {
                 case VerticalPos.Top:
-                    printOptions.centerLatitude = rect_height.latmin
+                    contestMapParams.centerLatitude = rect_height.latmin
                     break
                 case VerticalPos.Bottom:
-                    printOptions.centerLatitude = rect_height.latmax
+                    contestMapParams.centerLatitude = rect_height.latmax
                     break
             }
         }
@@ -436,15 +384,15 @@ class OsmPrintMapService
         int scalbar_text_ypos = scalebar_ypos - 3*FACTOR   // 3mm nach unten
         
         String generator_text = getMsg('fc.contestmap.generator.printmaps',true)
-        if (printOptions.printFCStyle) {
+        if (contestMapParams.contestMapFCStyle) {
             generator_text = getMsg('fc.contestmap.generator.flightcontest',true)
         }
         String copyright_text = getMsg('fc.contestmap.copyright.osm',true)
         String copyright_date = GeoDataService.ReadTxtFile(Defs.FCSAVE_FILE_GEODATA_DATE)
-        if ((printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) || printOptions.printChateaus || printOptions.printPeaks) {
+        if ((contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) || contestMapParams.contestMapChateaus || contestMapParams.contestMapPeaks) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.bkg',[copyright_date],true)}"
         }
-        if (printOptions.printFCStyle) {
+        if (contestMapParams.contestMapFCStyle) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
             // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
         }
@@ -453,11 +401,11 @@ class OsmPrintMapService
             "WellKnownText": "LINESTRING(0.0 0.0, 0.0 ${print_height}, ${print_width} ${print_height}, ${print_width} 0.0, 0.0 0.0)"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${CONTEST_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${printParams.contestTitle}'</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${CONTEST_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${contestMapParams.contestTitle}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_left} ${contest_title_ypos})"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${ROUTE_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${printParams.routeTitle}'</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-2' size='${ROUTE_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${contestMapParams.routeTitle}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_left} ${route_title_ypos})"
         },
         {
@@ -469,7 +417,7 @@ class OsmPrintMapService
             "WellKnownText": "POINT(${text_xpos_left} ${BOTTOM_TEXT_YPOS})"
         },
         {
-            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.scale',true)} 1:${job_scale}, ${paper_size}'</TextSymbolizer>",
+            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.scale',true)} 1:${map_scale}, ${paper_size}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS})"
         },
         {
@@ -496,14 +444,14 @@ class OsmPrintMapService
             "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SCALEBAR_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${SCALEBAR_TITLE}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_right} ${scalbar_text_ypos})"
         }"""
-        if (printOptions.printContourLines) {
+        if (contestMapParams.contestMapContourLines) {
             user_text += """,{
-                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.contestmapcontourlines',true)} ${printOptions.printContourLines}${getMsg('fc.contestmap.contestmapcontourlines.unit',true)}'</TextSymbolizer>",
+                "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='left' halo-radius='1' halo-fill='white' allow-overlap='true'>'${getMsg('fc.contestmap.contestmapcontourlines',true)} ${contestMapParams.contestMapContourLines}${getMsg('fc.contestmap.contestmapcontourlines.unit',true)}'</TextSymbolizer>",
                 "WellKnownText": "POINT(${text_xpos_right} ${BOTTOM_TEXT_YPOS2})"
             }"""
         }
         
-        String gpx_file_name = printParams.gpxFileName.replaceAll('\\\\', '/')
+        String gpx_file_name = contestMapParams.gpxFileName.replaceAll('\\\\', '/')
         String gpx_short_file_name = gpx_file_name.substring(gpx_file_name.lastIndexOf('/')+1)
         String gpx_lines = """,{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
@@ -543,7 +491,7 @@ class OsmPrintMapService
         
         String graticule_lines = ""
         if (graticule_file_name) {
-            if (create_graticule_csv(graticule_file_name, printOptions.centerGraticuleLatitude, printOptions.centerGraticuleLongitude, printOptions.centerLatitude, printOptions.centerLongitude, print_scale, print_width, print_height, min_print_height, alternate_pos)) {
+            if (create_graticule_csv(graticule_file_name, contestMapParams.centerGraticuleLatitude, contestMapParams.centerGraticuleLongitude, contestMapParams.centerLatitude, contestMapParams.centerLongitude, print_scale, print_width, print_height, min_print_height, alternate_pos)) {
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
                     "Style": "<PolygonSymbolizer fill='lightgrey' />",
@@ -573,7 +521,7 @@ class OsmPrintMapService
         
         String airfields_lines = ""
         String airfields_file_name = ""
-        if (printOptions.printAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
+        if (contestMapParams.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA) {
             airfields_file_name = Defs.FCSAVE_FILE_GEODATA_AIRFIELDS
             String airfields_short_file_name = airfields_file_name.substring(airfields_file_name.lastIndexOf('/')+1)
             airfields_lines = """,{
@@ -594,7 +542,7 @@ class OsmPrintMapService
         
         String churches_lines = ""
         String churches_file_name = ""
-        if (false && printOptions.printChurches) {
+        if (false && contestMapParams.contestMapChurches) {
             churches_file_name = Defs.FCSAVE_FILE_GEODATA_CHURCHES
             String churches_short_file_name = churches_file_name.substring(churches_file_name.lastIndexOf('/')+1)
             churches_lines = """,{
@@ -608,7 +556,7 @@ class OsmPrintMapService
 
         String castles_lines = ""
         String castles_file_name = ""
-        if (false && printOptions.printCastles) {
+        if (false && contestMapParams.contestMapCastles) {
             castles_file_name = Defs.FCSAVE_FILE_GEODATA_CASTLES
             String castles_short_file_name = castles_file_name.substring(castles_file_name.lastIndexOf('/')+1)
             castles_lines = """,{
@@ -622,7 +570,7 @@ class OsmPrintMapService
 
         String chateaus_lines = ""
         String chateaus_file_name = ""
-        if (false && printOptions.printChateaus) {
+        if (false && contestMapParams.contestMapChateaus) {
             chateaus_file_name = Defs.FCSAVE_FILE_GEODATA_CHATEAUS
             String chateaus_short_file_name = chateaus_file_name.substring(chateaus_file_name.lastIndexOf('/')+1)
             chateaus_lines = """,{
@@ -636,7 +584,7 @@ class OsmPrintMapService
         
         String windpowerstations_lines = ""
         String windpowerstations_file_name = ""
-        if (false && printOptions.printWindpowerstations) {
+        if (false && contestMapParams.contestMapWindpowerstations) {
             windpowerstations_file_name = Defs.FCSAVE_FILE_GEODATA_WINDPOWERSTATIONS
             String windpowerstations_short_file_name = windpowerstations_file_name.substring(windpowerstations_file_name.lastIndexOf('/')+1)
             windpowerstations_lines = """,{
@@ -650,7 +598,7 @@ class OsmPrintMapService
         
         String peaks_lines = ""
         String peaks_file_name = ""
-        if (false && printOptions.printPeaks) {
+        if (false && contestMapParams.contestMapPeaks) {
             peaks_file_name = Defs.FCSAVE_FILE_GEODATA_PEAKS
             String peaks_short_file_name = peaks_file_name.substring(peaks_file_name.lastIndexOf('/')+1)
             peaks_lines = """,{
@@ -671,7 +619,7 @@ class OsmPrintMapService
         
         String additionals_lines = ""
         String additionals_file_name = ""
-        if (printOptions.printAdditionals) {
+        if (contestMapParams.contestMapAdditionals) {
             additionals_file_name = Defs.FCSAVE_FILE_GEODATA_ADDITIONALS
             String additionals_short_file_name = additionals_file_name.substring(additionals_file_name.lastIndexOf('/')+1)
             additionals_lines = """,{
@@ -692,7 +640,7 @@ class OsmPrintMapService
         
         String specials_lines = ""
         String specials_file_name = ""
-        if (printOptions.printSpecials) {
+        if (contestMapParams.contestMapSpecials) {
             specials_file_name = Defs.FCSAVE_FILE_GEODATA_SPECIALS
             String specials_short_file_name = specials_file_name.substring(specials_file_name.lastIndexOf('/')+1)
             specials_lines = """,{
@@ -713,10 +661,10 @@ class OsmPrintMapService
         
         String airspaces_lines = ""
         String airspaces_file_name = ""
-        if (printOptions.printAirspaces && printParams.contestMapAirspacesLayer) {
+        if (contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer) {
             airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
             String airspaces_short_file_name = airspaces_file_name.substring(airspaces_file_name.lastIndexOf('/')+1)
-            for (String airspaces_layer in printParams.contestMapAirspacesLayer.split(",")) {
+            for (String airspaces_layer in contestMapParams.contestMapAirspacesLayer.split(",")) {
                 airspaces_lines += """,{
                     "Style": "<PolygonSymbolizer fill-opacity='0.2' fill='steelblue' />",
                     "SRS": "+init=epsg:4326",
@@ -767,8 +715,8 @@ class OsmPrintMapService
                     "Scale": ${print_scale},
                     "PrintWidth": ${print_width},
                     "PrintHeight": ${print_height},
-                    "Latitude": ${printOptions.centerLatitude},
-                    "Longitude": ${printOptions.centerLongitude},
+                    "Latitude": ${contestMapParams.centerLatitude},
+                    "Longitude": ${contestMapParams.centerLongitude},
                     "Style": "${style}",
                     "Projection": "${projection}",
                     "HideLayers": "${hide_layers}",
@@ -811,28 +759,28 @@ class OsmPrintMapService
             printdone ""
             // symbols
             printstart "Upload airfield.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/airfield.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/airfield.png")
             printdone ""
             printstart "Upload church.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/church.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/church.png")
             printdone ""
             printstart "Upload castle.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/castle.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/castle.png")
             printdone ""
             printstart "Upload castle_ruin.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/castle_ruin.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/castle_ruin.png")
             printdone ""
             printstart "Upload chateau.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/chateau.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/chateau.png")
             printdone ""
             printstart "Upload windpowerstation.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/windpowerstation.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/windpowerstation.png")
             printdone ""
             printstart "Upload peak.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/peak.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/peak.png")
             printdone ""
             printstart "Upload special.png"
-            FileUpload("/upload/${printjob_id}", printParams.webRootDir + "images/map/special.png")
+            FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/special.png")
             printdone ""
             printstart "Upload all images of ${Defs.FCSAVE_FOLDER_GEODATA_IMAGES}"
             File geodata_images_dir = new File(Defs.FCSAVE_FOLDER_GEODATA_IMAGES)
@@ -843,16 +791,16 @@ class OsmPrintMapService
                 }
             }
             printdone ""
-            if (printOptions.printEnroutePhotos) {
+            if (contestMapParams.contestMapEnroutePhotos) {
                 printstart "Upload fcphoto.png"
-                FileUpload("/upload/${printjob_id}", printParams.webRootDir + "GM_Utils/Icons/fcphoto.png")
+                FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "GM_Utils/Icons/fcphoto.png")
                 printdone ""
             }
-            if (printOptions.printEnrouteCanvas) {
+            if (contestMapParams.contestMapEnrouteCanvas) {
                 EnrouteCanvasSign.each { enroute_canvas_sign ->
                     if (enroute_canvas_sign.imageName) {
                         printstart "Upload ${enroute_canvas_sign.imageName}"
-                        FileUpload("/upload/${printjob_id}", printParams.webRootDir + enroute_canvas_sign.imageName)
+                        FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + enroute_canvas_sign.imageName)
                         printdone ""
                     }
                 }
@@ -933,7 +881,7 @@ class OsmPrintMapService
             printstart "Generate ${printjob_filename}"
             File printjob_file = new File(printjob_filename)
             BufferedWriter printjob_writer = printjob_file.newWriter()
-            printjob_writer << printParams.routeId
+            printjob_writer << contestMapParams.routeId
             printjob_writer.close()
             printdone ""
             */
@@ -944,13 +892,13 @@ class OsmPrintMapService
             BufferedWriter printjobid_writer = printjobid_file.newWriter()
             printjobid_writer << printjob_id
             printjobid_writer << "\n"
-            printjobid_writer << printParams.pngFileName
+            printjobid_writer << contestMapParams.pngFileName
             printjobid_writer << "\n"
-            printjobid_writer << printOptions.printLandscape
+            printjobid_writer << contestMapParams.contestMapPrintLandscape
             printjobid_writer << "\n"
-            printjobid_writer << printOptions.printSize
+            printjobid_writer << contestMapParams.contestMapPrintSize
             printjobid_writer << "\n"
-            printjobid_writer << printOptions.printColorChanges
+            printjobid_writer << false // contestMapParams.printColorChanges
             printjobid_writer.close()
             printdone ""
             
@@ -958,11 +906,11 @@ class OsmPrintMapService
             printstart "Generate ${printfileid_filename}"
             File printfileid_file = new File(printfileid_filename)
             BufferedWriter printfileid_writer = printfileid_file.newWriter()
-            printfileid_writer << printParams.pngFileName
+            printfileid_writer << contestMapParams.pngFileName
             printfileid_writer << "\n"
-            printfileid_writer << printOptions.printLandscape
+            printfileid_writer << contestMapParams.contestMapPrintLandscape
             printfileid_writer << "\n"
-            printfileid_writer << printOptions.printSize
+            printfileid_writer << contestMapParams.contestMapPrintSize
             printfileid_writer.close()
             printdone ""
             
@@ -976,9 +924,9 @@ class OsmPrintMapService
                  (Defs.OSMPRINTMAP_JOBID):printjob_id,
                  (Defs.OSMPRINTMAP_JOBIDFILENAME):printjobid_filename,
                  (Defs.OSMPRINTMAP_FILEIDFILENAME):printfileid_filename,
-                 (Defs.OSMPRINTMAP_PNGFILENAME):printParams.pngFileName,
-                 (Defs.OSMPRINTMAP_PRINTLANDSCAPE):printOptions.printLandscape,
-                 (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):printOptions.printColorChanges
+                 (Defs.OSMPRINTMAP_PNGFILENAME):contestMapParams.pngFileName,
+                 (Defs.OSMPRINTMAP_PRINTLANDSCAPE):contestMapParams.contestMapPrintLandscape,
+                 (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):false // contestMapParams.printColorChanges
                 ]
             )
             printdone ""
@@ -1178,8 +1126,8 @@ class OsmPrintMapService
         println "centerGraticuleLatitude: ${centerGraticuleLatitude}"
         println "centerGraticuleLongitude: ${centerGraticuleLongitude}"
         
-        BigDecimal print_width_nm = printScale * printWidth / Contest.mmPerNM
-        BigDecimal print_height_nm = printScale * printHeight / Contest.mmPerNM
+        BigDecimal print_width_nm = printScale * printWidth / Route.mmPerNM
+        BigDecimal print_height_nm = printScale * printHeight / Route.mmPerNM
         Map rect_width = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_width_nm / 2, GRATICULE_SCALEBAR_LEN)
         Map rect_height = AviationMath.getShowPoint(centerLatitude, centerLongitude, print_height_nm / 2, GRATICULE_SCALEBAR_LEN*printHeight/minPrintHeight) 
         println "Width:  ${printWidth} mm, ${print_width_nm} NM, ${rect_width}"

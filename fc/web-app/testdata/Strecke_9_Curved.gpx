@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<gpx version='1.1' creator='Flight Contest - flightcontest.de - Version 2'>
+<gpx version='1.1' creator='Flight Contest - flightcontest.de - Version 4'>
+  <extensions>
+    <flightcontest>
+      <observationsettings turnpoint='None' turnpointmapmeasurement='no' enroutephoto='None' enroutephotomeasurement='None' enroutecanvas='None' enroutecanvasmeasurement='None' useprocedureturn='yes' />
+    </flightcontest>
+  </extensions>
   <rte>
     <extensions>
       <flightcontest>
@@ -35,37 +40,37 @@
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='TO' number='1' lat='0.1166666667' lon='9.7500000000' alt='0' width='1.0' dir='0' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' />
+        <gate type='TO' number='1' lat='0.1166666667' lon='9.7500000000' alt='0' width='1.0' dir='0' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>T/O</name>
-    <rtept lat='0.1166666667' lon='9.75833335060911963472485286530400117044337093830108642578125' />
-    <rtept lat='0.1166666667' lon='9.74166664939088036527514713469599882955662906169891357421875' />
+    <rtept lat='0.1166666667' lon='9.7583333506' />
+    <rtept lat='0.1166666667' lon='9.7416666494' />
   </rte>
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='SP' number='1' lat='0.2833333333' lon='9.7500000000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' />
+        <gate type='SP' number='1' lat='0.2833333333' lon='9.7500000000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>SP</name>
-    <rtept lat='0.2833333333' lon='9.74166656477392210213006595864726477884687483310699462890625' />
-    <rtept lat='0.2833333333' lon='9.75833343522607789786993404135273522115312516689300537109375' />
+    <rtept lat='0.2833333333' lon='9.7416665648' />
+    <rtept lat='0.2833333333' lon='9.7583334352' />
   </rte>
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='SECRET' number='1' lat='0.4500000000' lon='9.7500000000' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' />
+        <gate type='SECRET' number='1' lat='0.4500000000' lon='9.7500000000' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>UZK1</name>
-    <rtept lat='0.4500000000' lon='9.74166640963911257926344244850724862772040069103240966796875' />
-    <rtept lat='0.4500000000' lon='9.75833359036088742073655755149275137227959930896759033203125' />
+    <rtept lat='0.4500000000' lon='9.7416664096' />
+    <rtept lat='0.4500000000' lon='9.7583335904' />
   </rte>
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='SECRET' number='2' lat='0.4500000000' lon='9.9166666667' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' />
+        <gate type='SECRET' number='2' lat='0.4500000000' lon='9.9166666667' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>UZK2</name>
@@ -75,7 +80,7 @@
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='SECRET' number='3' lat='0.4500000000' lon='10.0833333333' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' />
+        <gate type='SECRET' number='3' lat='0.4500000000' lon='10.0833333333' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>UZK3</name>
@@ -85,7 +90,7 @@
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='SECRET' number='4' lat='0.4500000000' lon='10.2500000000' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' />
+        <gate type='SECRET' number='4' lat='0.4500000000' lon='10.2500000000' alt='500' width='1.0' dir='' notimecheck='yes' nogatecheck='yes' noplanningtest='yes' endcurved='no' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>UZK4</name>
@@ -95,21 +100,33 @@
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='FP' number='1' lat='0.2833333333' lon='10.2500000000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='yes' dist='' track='' duration='' />
+        <gate type='FP' number='1' lat='0.2833333333' lon='10.2500000000' alt='500' width='1.0' dir='' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='yes' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>FP</name>
-    <rtept lat='0.2833333333' lon='10.25833343522607789786993404135273522115312516689300537109375' />
-    <rtept lat='0.2833333333' lon='10.24166656477392210213006595864726477884687483310699462890625' />
+    <rtept lat='0.2833333333' lon='10.2583334352' />
+    <rtept lat='0.2833333333' lon='10.2416665648' />
   </rte>
   <rte>
     <extensions>
       <flightcontest>
-        <gate type='LDG' number='1' lat='0.1166666667' lon='10.2500000000' alt='0' width='1.0' dir='0' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' />
+        <gate type='LDG' number='1' lat='0.1166666667' lon='10.2500000000' alt='0' width='1.0' dir='0' notimecheck='no' nogatecheck='no' noplanningtest='no' endcurved='no' dist='' track='' duration='' assignedsign='None' correctsign='Unassigned' />
       </flightcontest>
     </extensions>
     <name>LDG</name>
-    <rtept lat='0.1166666667' lon='10.25833335060911963472485286530400117044337093830108642578125' />
-    <rtept lat='0.1166666667' lon='10.24166664939088036527514713469599882955662906169891357421875' />
+    <rtept lat='0.1166666667' lon='10.2583333506' />
+    <rtept lat='0.1166666667' lon='10.2416666494' />
   </rte>
+  <wpt lat='0.1166666667' lon='9.7500000000'>
+    <sym>airport</sym>
+  </wpt>
+  <wpt lat='0.2833333333' lon='9.7500000000'>
+    <sym>start</sym>
+  </wpt>
+  <wpt lat='0.2833333333' lon='10.2500000000'>
+    <sym>finish</sym>
+  </wpt>
+  <wpt lat='0.1166666667' lon='10.2500000000'>
+    <sym>airport</sym>
+  </wpt>
 </gpx>

@@ -1,4 +1,17 @@
-﻿Code
+﻿Java
+====
+  Funktionierende Java-Version: 1.8.0_25
+  Siehe https://stackoverflow.com/questions/28880781/incompatible-jvm-in-ggts-eclipse-and-java-1-8
+  
+Add Let's Encrypt root certificate to certificate store
+=======================================================
+  1. Root-Zertifikat letsencryptauthorityx3.der von https://letsencrypt.org/certificates/ holen 
+  2. https://connect2id.com/blog/importing-ca-root-cert-into-jvm-trust-store
+        ch K:\Projects\Java\jdk1.8.0_25x64\jre\lib\security
+        check certificate: K:\Projects\Java\jdk1.8.0_25x64\bin\keytool -v -printcert -file letsencryptauthorityx3.der
+        add certificate: K:\Projects\Java\jdk1.8.0_25x64\bin\keytool -importcert -alias startssl -keystore cacerts -storepass changeit -file letsencryptauthorityx3.der
+
+Code
 ====
     <domain class>.list()
     <domain class>.count()
@@ -94,7 +107,6 @@
         p1.name.compareTo(p2.name)
     }
 
-
 Konfiguration
 =============
     Alle Grails-Konfigurationsänderungen sind mit FC: markiert.
@@ -142,14 +154,6 @@ Development
         BUG
         UNUSED
     
-    Konfiguration für AFLOS-Datenbankanzeige
-    ----------------------------------------
-        flightcontest {
-          aflos {
-            showmenu = true
-          }
-        }
-
     BuildConfig.groovy
     ------------------
        grails.project.fork (http://docs.grails.org/2.3.6/guide/commandLine.html -> 5.2 Forked Execution)
@@ -289,3 +293,14 @@ Tests
             <= 5 s                  -> Warning      x
             Judge disabled          -> Disabled     x
             Other                   -> Error        x
+
+Live Tracking
+=============
+    Test-Einstellungen
+        - Druck-Sprache Englisch
+        - TO/LDG-Auswertung abschalten
+        - Klassen-abh. Abweichungen abschalten
+        - Regelwerk auf FAI Precision 2020 umstellen
+        - Ggf. Contest-Name umschalten
+        - Ggf. Benutzer deaktivieren
+

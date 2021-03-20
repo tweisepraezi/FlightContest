@@ -29,7 +29,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale}"
+                    content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.mapScale}"
                 }
                 @top-right {
                     font-family: Noto Sans;

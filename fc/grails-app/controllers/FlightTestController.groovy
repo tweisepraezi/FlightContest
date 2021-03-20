@@ -1,6 +1,5 @@
 import java.util.Map;
-
-
+import groovy.json.*
 
 class FlightTestController {
     
@@ -106,13 +105,14 @@ class FlightTestController {
 	def cancel = {
 		// process return action
 		if (params.flighttestReturnAction) {
+            println "YY1 $params"
 			redirect(action:params.flighttestReturnAction,controller:params.flighttestReturnController,id:params.flighttestReturnID)
 		} else if (params.fromlistplanning) {
             redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else if (params.fromtask) {
             redirect(controller:"task",action:show,id:params.taskid)
         } else {
-            redirect(controller:"contest",action:"tasks")
+            redirect(controller:"contest", action:"tasks")
         }
 	}
 	
@@ -172,6 +172,22 @@ class FlightTestController {
             printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"observation-task${flighttest.instance.task.idTitle}",true,false,false)
         } else {
             redirect(action:listplanning,id:flighttest.instance.id)
+        }
+    }
+
+    def getroutedata_ajax() {
+        if (params.routeId) {
+            Route route_instance = Route.get(params.routeId.toLong())
+            if (route_instance) {
+                StringWriter w = new StringWriter()
+                def builder = new StreamingJsonBuilder(w)
+                builder route_instance.GetFlightTestWindDirection()
+                render(text: w.toString())
+            } else {
+                render(text: "")
+            }
+        } else {
+            render(text: "")
         }
     }
 

@@ -5,7 +5,11 @@
         <title>${message(code:'fc.crew.edit')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" importaction="${message(code:'fc.crew.import')}" />
+		<g:set var="new_action" value=""/>
+		<g:if test="${!crewInstance.contest.liveTrackingManagedCrews}">
+			<g:set var="new_action" value="${message(code:'fc.crew.new')}"/>
+		</g:if>
+        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${new_action}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <div class="box boxborder" >
@@ -46,6 +50,11 @@
 	                                <g:select optionKey="id" optionValue="name" from="${ResultClass.findAllByContest(crewInstance.contest,[sort:'name'])}" name="resultclass.id" value="${crewInstance?.resultclass?.id}" noSelection="['null':'']" tabIndex="${ti[0]++}"></g:select>
 	                            </p>
 	                        </g:if>
+                            <p>
+                                <label>${message(code:'fc.crew.trackerid')}:</label>
+                                <br/>
+                                <input type="text" id="trackerID" name="trackerID" value="${fieldValue(bean:crewInstance,field:'trackerID')}" tabIndex="${ti[0]++}"/>
+                            </p>
                         </fieldset>
                         <fieldset>
                             <legend>${message(code:'fc.aircraft')}</legend>
@@ -86,6 +95,14 @@
                                 </p>
                             </fieldset>
                         </g:if>
+	                    <g:if test="${BootStrap.global.IsLiveTrackingPossible() && crewInstance.contest.liveTrackingContestID}">
+							<fieldset>
+								<legend>${message(code:'fc.livetracking')}</legend>
+								<p>
+									${message(code:'fc.livetracking.teamid')}: ${fieldValue(bean:crewInstance, field:'liveTrackingTeamID')}
+								</p>
+							</fieldset>
+						</g:if>
                         <fieldset>
                             ${message(code:'fc.crew.uuid')}: ${fieldValue(bean:crewInstance, field:'uuid')}
                         </fieldset>

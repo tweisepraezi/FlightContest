@@ -121,6 +121,22 @@
                                         <td>${fieldValue(bean:testInstance, field:'taskTAS')}${message(code:'fc.knot')}</td>
                                     </tr>
 	                            </g:else>
+                                <g:if test="${testInstance.crew.trackerID != testInstance.taskTrackerID}">
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.crewtrackerid')}:</td>
+	                                    <td>${fieldValue(bean:testInstance.crew, field:'trackerID')}</td>
+	                                </tr>
+	                                <tr>
+	                                    <td class="detailtitle">${message(code:'fc.tasktrackerid')}:</td>
+	                                    <td>${fieldValue(bean:testInstance, field:'taskTrackerID')}</td>
+	                                </tr>
+	                            </g:if>
+	                            <g:else>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.crew.trackerid')}:</td>
+                                        <td>${fieldValue(bean:testInstance, field:'taskTrackerID')}</td>
+                                    </tr>
+	                            </g:else>
 
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.planningtest')}:</td>
@@ -220,7 +236,7 @@
                                     <td>${testInstance.planningTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.flightresults')}<g:if test="${testInstance.aflosStartNum}"> (${message(code:'fc.aflos')}: ${testInstance.aflosStartNum})</g:if>:</td>
+                                    <td class="detailtitle">${message(code:'fc.flightresults')}:</td>
                                     <td>${testInstance.flightTestPenalties} ${message(code:'fc.points')}</td>
                                 </tr>
                                 <tr>

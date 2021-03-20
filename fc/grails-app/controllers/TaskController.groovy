@@ -9,6 +9,7 @@ class TaskController {
 	def fcService
     def evaluationService
     def emailService
+    def trackerService
     
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
@@ -159,6 +160,17 @@ class TaskController {
 	
 	def updatetimetablejudgesettingsplanning = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryPlanning) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+		} else {
+			flash.message = task.message
+			redirect(controller:"contest",action:"tasks")
+		}
+	}
+	
+	def updatetimetablejudgesettingsdocumentsoutput = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryDocumentsOutput) 
         if (task.instance) {
 			flash.message = task.message
 			render(view:'timetablejudge',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
@@ -1424,6 +1436,78 @@ class TaskController {
     def formimportcancel = {
         BootStrap.tempData.RemoveData(params.imagefile)
         redirect(controller:"task",action:"startresults")
+    }
+
+    def livetracking_navigationtaskcreate = {
+        def ret = trackerService.createNavigationTask(params)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'edit',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskconnect = {
+        def ret = trackerService.connectNavigationTask(params)
+        flash.message = ret.message
+        flash.error = !ret.connected
+        render(view:'edit',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskdelete = {
+        def ret = trackerService.deleteNavigationTask(params)
+        flash.message = ret.message
+        flash.error = !ret.deleted
+        render(view:'edit',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskdisconnect = {
+        def ret = trackerService.disconnectNavigationTask(params)
+        flash.message = ret.message
+        flash.error = !ret.disconnected
+        render(view:'edit',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskaddtracks = {
+        def ret = trackerService.addTracksNavigationTask(params, false)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        } else {
+            flash.error = false
+        }
+        render(view:'edit',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskaddtracks_incomplete = {
+        def ret = trackerService.addTracksNavigationTask(params, true)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        } else {
+            flash.error = false
+        }
+        render(view:'edit',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskupdatecrews = {
+        def ret = trackerService.updateCrewsNavigationTask(params) 
+      	flash.message = ret.message
+        if (ret.error) {
+           	flash.error = true
+        } else {
+           	flash.error = false
+        }
+        redirect(action:listplanning, id:ret.taskInstance.id)
+    }
+    
+    def livetracking_navigationtaskaddtrackcrews = {
+        def ret = trackerService.addTrackCrewsNavigationTask(params)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        } else {
+            flash.error = false
+        }
+        redirect(action:listplanning, id:ret.taskInstance.id)
     }
     
 	Map GetPrintParams() {

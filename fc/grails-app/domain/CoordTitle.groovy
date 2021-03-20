@@ -92,6 +92,34 @@ class CoordTitle // DB-2.5
         }
     }
     
+    String titleTrackingCode()
+	{
+		switch (type) {
+			case CoordType.TP:
+            case CoordType.SECRET:
+				return "${getTrackingMsg(type.code)}${number}"
+			default:
+				return getTrackingMsg(type.code)
+		}
+	}
+	
+	String titleMediaCode(Media media)
+	{
+		String title = ""
+        switch (media) {
+            case Media.Screen:
+                title = titleCode()
+                break
+            case Media.Print:
+                title = titlePrintCode()
+                break
+            case Media.Tracking:
+                title = titleTrackingCode()
+                break
+        }
+		return title
+	}
+	
     String titleEnrouteInput()
     {
         switch (type) {

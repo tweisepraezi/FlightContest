@@ -8,7 +8,7 @@ class PointsTagLib
         outln"""<table>"""
         outln"""    <tbody>"""
         outln"""        <tr>"""
-        outln"""            <td>${attrs.i.contestRule.ruleValues.ruleTitle}</td>"""
+        outln"""            <td>${attrs.i.ruleTitle}</td>"""
         outln"""        </tr>"""
         outln"""    </tbody>"""
         outln"""</table>"""
@@ -225,10 +225,19 @@ class PointsTagLib
         }
         outln"""        </p>"""
         outln"""        <p>"""
-        outln"""            <label>${message(code:'fc.flighttest.badcourse')}* [${message(code:'fc.points')}]:</label>"""
+        outln"""            <label>${message(code:'fc.flighttest.badcoursepoints')}* [${message(code:'fc.points')}]:</label>"""
         outln"""            <br/>"""
         outln"""            <input type="text" id="flightTestBadCoursePoints" name="flightTestBadCoursePoints" value="${fieldValue(bean:attrs.i,field:'flightTestBadCoursePoints')}" tabIndex="${attrs.ti[0]++}"/>"""
         if (attrs.i.flightTestBadCoursePoints != attrs.i.contestRule.ruleValues.flightTestBadCoursePoints) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""        </p>"""
+        outln"""        <p>"""
+        outln"""            <label>${message(code:'fc.flighttest.badcoursemaxpoints')}* [${message(code:'fc.points')}]:</label>"""
+        outln"""            <br/>"""
+        outln"""            <input type="text" id="flightTestBadCourseMaxPoints" name="flightTestBadCourseMaxPoints" value="${fieldValue(bean:attrs.i,field:'flightTestBadCourseMaxPoints')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.i.flightTestBadCourseMaxPoints != attrs.i.contestRule.ruleValues.flightTestBadCourseMaxPoints) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -1121,9 +1130,29 @@ class PointsTagLib
                 }
                 outln"""                        </tr>"""
                 outln"""                        <tr class="value">"""
-                outln"""                            <td class="name">${message(code:'fc.flighttest.badcourse')}</td>"""
+                outln"""                            <td class="name">${message(code:'fc.flighttest.badcoursepoints')}</td>"""
                 outln"""                            <td class="value">${attrs.i.flightTestBadCoursePoints} ${message(code:'fc.points')}</td>"""
                 if (attrs.i.flightTestBadCoursePoints != attrs.i.contestRule.ruleValues.flightTestBadCoursePoints) {
+                    outln"""                        <td class="modify">!</td>"""
+                } else {
+                    outln"""                        <td class="modify"/>"""
+                }
+                outln"""                        </tr>"""
+            }
+            if (attrs.i.printPointsZero || attrs.i.flightTestBadCourseMaxPoints > 0) {
+                outln"""                        <tr class="value">"""
+                outln"""                            <td class="name">${message(code:'fc.flighttest.badcoursecorrectsecond')}</td>"""
+                outln"""                            <td class="value">${attrs.i.flightTestBadCourseCorrectSecond}${message(code:'fc.time.s')}</td>"""
+                if (attrs.i.flightTestBadCourseCorrectSecond != attrs.i.contestRule.ruleValues.flightTestBadCourseCorrectSecond) {
+                    outln"""                        <td class="modify">!</td>"""
+                } else {
+                    outln"""                        <td class="modify"/>"""
+                }
+                outln"""                        </tr>"""
+                outln"""                        <tr class="value">"""
+                outln"""                            <td class="name">${message(code:'fc.flighttest.badcoursemaxpoints')}</td>"""
+                outln"""                            <td class="value">${attrs.i.flightTestBadCourseMaxPoints} ${message(code:'fc.points')}</td>"""
+                if (attrs.i.flightTestBadCourseMaxPoints != attrs.i.contestRule.ruleValues.flightTestBadCourseMaxPoints) {
                     outln"""                        <td class="modify">!</td>"""
                 } else {
                     outln"""                        <td class="modify"/>"""

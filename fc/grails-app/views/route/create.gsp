@@ -25,6 +25,17 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:routeInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
+                            <g:editRouteUseProcedureTurns route="${routeInstance}" ti="${ti}"/>
+                            <g:if test="${BootStrap.global.IsLiveTrackingPossible()}">
+                                <g:editRouteLiveTrackingScorecard route="${routeInstance}" ti="${ti}"/>
+	                        </g:if>
+                            <fieldset>
+                                <p>
+                                    <label>${message(code:'fc.scale')}*:</label>
+                                    <br/>
+                                    <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:routeInstance,field:'mapScale')}" tabIndex="${ti[0]++}"/>
+                                </p>
+                            </fieldset>
                             <g:editRouteObservations route="${routeInstance}" ti="${ti}"/>
                         </fieldset>
                         <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>

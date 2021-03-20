@@ -121,7 +121,7 @@ class KmlService
         
         Route route_instance = testInstance.task.flighttest.route
         
-        printstart "ConvertTest2KMZ '${testInstance.aflosStartNum}:${testInstance.crew.name}' -> ${webRootDir + kmzFileName}"
+        printstart "ConvertTest2KMZ '${testInstance.crew.name}' -> ${webRootDir + kmzFileName}"
         
         String kml_file_name = kmzFileName + ".kml"
         
@@ -146,7 +146,7 @@ class KmlService
                 KMZRoute(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
                 xml.Folder {
                     xml.name getMsg('fc.kmz.flights',isPrint)
-                    found_track = KMZTrack(testInstance, testInstance.aflosStartNum, isPrint, xml)
+                    found_track = KMZTrack(testInstance, isPrint, xml)
                 }
             }
         }
@@ -202,7 +202,7 @@ class KmlService
                     for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"viewpos"])) {
                         if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                             if (test_instance.IsFlightTestRun()) {
-                                if (KMZTrack(test_instance, test_instance.aflosStartNum, isPrint, xml)) {
+                                if (KMZTrack(test_instance, isPrint, xml)) {
                                     found_track = true
                                 }
                             }
@@ -390,6 +390,11 @@ class KmlService
     {
         printstart "KMZRoute Print:$isPrint wrEnrouteSign:$wrEnrouteSign"
         
+        Media media = Media.Screen
+        if (isPrint) {
+            media = Media.Print
+        }
+        
         Map contest_map_rect = [:]
         BigDecimal center_latitude = null
         BigDecimal center_longitude = null
@@ -425,7 +430,6 @@ class KmlService
         center_longitude = (max_longitude+min_longitude)/2
         
         String route_name = routeInstance.GetName(isPrint)
-        boolean use_procedureturn = routeInstance.UseProcedureTurn()
 
         xml.Folder {
             xml.name "${getMsg('fc.kmz.route',isPrint)} '${route_name.encodeAsHTML()}'"
@@ -494,7 +498,7 @@ class KmlService
             
             // procedure turns
             int procedureturn_num = 0
-            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.UseProcedureTurn()) {
+            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.useProcedureTurns) {
                 for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (routeleg_instance.IsProcedureTurn()) {
                         BigDecimal course_change = AviationMath.courseChange(routeleg_instance.turnTrueTrack,routeleg_instance.testTrueTrack())
@@ -510,7 +514,7 @@ class KmlService
                     CoordRoute last_coordroute_instance = null
                     CoordRoute last_last_coordroute_instance = null
                     for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                        if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
+                        if (routeInstance.useProcedureTurns && coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
                             List circle_coords = AviationMath.getProcedureTurnCircle(
                                 last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -525,7 +529,7 @@ class KmlService
                             )
                             xml.Placemark {
                                 xml.styleUrl "#${STYLE_ROUTELEG}"
-                                xml.name last_coordroute_instance.titleShortMap(isPrint)
+                                xml.name last_coordroute_instance.titleMediaCode(media)
                                 String route_coordinates = ""
                                 for (Map circle_coord in circle_coords) {
                                     if (route_coordinates) {
@@ -555,7 +559,7 @@ class KmlService
             // points
             xml.Folder {
                 xml.name getMsg('fc.kmz.points',isPrint)
-                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, isPrint, true, true, messageSource) // true - showEnrouteSign, true - showCurvedPoints
+                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:isPrint, wrEnrouteSign:true, showCurvedPoints:true])
                 int route_point_pos = 0
                 CoordRoute last_coordroute_instance = null
                 boolean first = true
@@ -581,7 +585,7 @@ class KmlService
                                 )
                                 xml.Placemark {
                                     xml.styleUrl "#${STYLE_AIRPORT}"
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.LookAt {
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
@@ -610,7 +614,7 @@ class KmlService
                                 )
                                 xml.Placemark {
                                     xml.styleUrl "#${STYLE_AIRPORT}"
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.LookAt {
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
@@ -642,7 +646,7 @@ class KmlService
                                 )
                                 xml.Placemark {
                                     xml.styleUrl "#${STYLE_AIRPORT}"
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.LookAt {
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
@@ -671,7 +675,7 @@ class KmlService
                                 )
                                 xml.Placemark {
                                     xml.styleUrl "#${STYLE_AIRPORT}"
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.LookAt {
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
@@ -704,7 +708,7 @@ class KmlService
                                 )
                                 xml.Placemark {
                                     xml.styleUrl "#${STYLE_AIRPORT}"
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.LookAt {
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
@@ -733,7 +737,7 @@ class KmlService
                                 )
                                 xml.Placemark {
                                     xml.styleUrl "#${STYLE_AIRPORT}"
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.LookAt {
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
@@ -767,7 +771,7 @@ class KmlService
                             xml.Placemark {
                                 BigDecimal altitude_meter2 = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.styleUrl "#${STYLE_START}"
-                                xml.name last_coordroute_instance.titleShortMap(isPrint)
+                                xml.name last_coordroute_instance.titleMediaCode(media)
                                 xml.LookAt {
                                     xml.longitude last_coordroute_instance.lonMath()
                                     xml.latitude last_coordroute_instance.latMath()
@@ -842,7 +846,7 @@ class KmlService
                         } else {
                             // standard gate
                             boolean wr_gate = false
-                            boolean show_curved_point = routeInstance.ShowCurvedPoints()
+                            boolean show_curved_point = routeInstance.showCurvedPoints
                             List curved_point_ids = routeInstance.GetCurvedPointIds()
                             if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                                 wr_gate = true
@@ -867,7 +871,7 @@ class KmlService
                                     } else {
                                         xml.styleUrl "#${STYLE_GATE}"
                                     }
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.LookAt {
                                         xml.longitude coordroute_instance.lonMath()
                                         xml.latitude coordroute_instance.latMath()
@@ -939,7 +943,7 @@ class KmlService
                                 xml.value routeInstance.enrouteCanvasMeasurement
                             }
                             xml.Data(name:"useprocedureturn") {
-                                xml.value getYesNo(routeInstance.UseProcedureTurn())
+                                xml.value getYesNo(routeInstance.useProcedureTurns)
                             }
                             if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                                 for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
@@ -1077,7 +1081,7 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private boolean KMZTrack(Test testInstance, int startNum, boolean isPrint, MarkupBuilder xml)
+    private boolean KMZTrack(Test testInstance, boolean isPrint, MarkupBuilder xml)
     // Return true: data found
     {
         printstart "KMZTrack"
@@ -1087,9 +1091,6 @@ class KmlService
         if (testInstance.IsLoggerData()) {
             println "Get track points from '${testInstance.loggerDataStartUtc}' to '${testInstance.loggerDataEndUtc}'"
             track_points = testInstance.GetTrackPoints(testInstance.loggerDataStartUtc, testInstance.loggerDataEndUtc).trackPoints 
-        } else {
-            println "Get track points from AFLOS startnum $startNum"
-            track_points = AflosTools.GetAflosCrewNamesTrackPoints(testInstance, startNum)
         }
         if (track_points) {
             println "Write track points"

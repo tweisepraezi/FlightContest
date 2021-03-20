@@ -7,8 +7,14 @@ class ResultClass
 	String shortName = ""                               // DB-2.8
 	String contestTitle = ""
 	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung
+    String ruleTitle = ""                               // DB-2.21
 	Boolean precisionFlying = false                     // DB-2.3
     Integer increaseFactor = 0                          // DB-2.13
+
+    // Klassen-spezifische Abweichungen    
+    Float secretGateWidth                               // DB-2.19
+    Integer minutesBeforeStartTime                      // DB-2.19
+    Integer minutesAddSubmission                        // DB-2.19
 	
 	// Klassen-Auswertung
 	String contestTaskResults = ""                      // Zu berücksichtigende Aufgaben, DB-2.1
@@ -56,6 +62,7 @@ class ResultClass
 	int flightTestMinAltitudeMissedPoints = 500
 	int flightTestBadCourseCorrectSecond = 5
 	int flightTestBadCoursePoints = 200
+    Integer flightTestBadCourseMaxPoints = 1000         // DB-2.17
 	int flightTestBadCourseStartLandingPoints = 500
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
@@ -282,6 +289,17 @@ class ResultClass
         landingFieldImageName(nullable:true)
         printPointsTurnpointSign(nullable:true)
         printPointsEnrouteCanvas(nullable:true)
+        
+        // DB-2.17 compatibility
+        flightTestBadCourseMaxPoints(nullable:true, blank:false, min:0)
+        
+        // DB-2.19 compatibility
+        secretGateWidth(nullable:true,scale:10,min:0.0f)
+        minutesBeforeStartTime(nullable:true,min:0)
+        minutesAddSubmission(nullable:true,min:0)
+        
+        // DB-2.21 compatibility
+        ruleTitle(nullable:true)
 	}
 
 	String GetPrintContestTitle()
@@ -542,9 +560,14 @@ class ResultClass
 		contestTitle = resultClassInstance.contestTitle
         
 		contestRule = resultClassInstance.contestRule
+        ruleTitle = resultClassInstance.ruleTitle
         
 		precisionFlying = resultClassInstance.precisionFlying
         increaseFactor = resultClassInstance.increaseFactor
+        secretGateWidth = resultClassInstance.secretGateWidth
+        minutesBeforeStartTime = resultClassInstance.minutesBeforeStartTime
+        minutesAddSubmission = resultClassInstance.minutesAddSubmission
+        
         landingFieldImageName = resultClassInstance.landingFieldImageName
         printLandingCalculatorValues = resultClassInstance.printLandingCalculatorValues
 		
@@ -569,6 +592,7 @@ class ResultClass
 		flightTestMinAltitudeMissedPoints = resultClassInstance.flightTestMinAltitudeMissedPoints
 		flightTestBadCourseCorrectSecond = resultClassInstance.flightTestBadCourseCorrectSecond
 		flightTestBadCoursePoints = resultClassInstance.flightTestBadCoursePoints
+        flightTestBadCourseMaxPoints = resultClassInstance.flightTestBadCourseMaxPoints
 		flightTestBadCourseStartLandingPoints = resultClassInstance.flightTestBadCourseStartLandingPoints
 		flightTestLandingToLatePoints = resultClassInstance.flightTestLandingToLatePoints
 		flightTestGivenToLatePoints = resultClassInstance.flightTestGivenToLatePoints

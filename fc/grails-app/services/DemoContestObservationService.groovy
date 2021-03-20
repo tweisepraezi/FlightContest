@@ -5,12 +5,12 @@ class DemoContestObservationService
 	def fcService
     def evaluationService
     
-	long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,false,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,false,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
         contest.instance.maxRouteLegs = 15
         contest.instance.save()
 
@@ -139,7 +139,7 @@ class DemoContestObservationService
 		return contest.instance.id
 	}
 
-	Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
+	Map RunTest(Contest lastContest, String contestName)
 	{
 		Map ret_test = [:]
         if (lastContest && lastContest.title == contestName) {
@@ -169,7 +169,7 @@ class DemoContestObservationService
                 [name:"CoordResult 'Besatzung 11'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
                 [name:"CoordResult 'Besatzung 13'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
                 [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(lastContest),[sort:"id"]),data:test1Test()],
-               ],aflosDB
+               ]
             )
             fcService.printdone "Test '$lastContest.title'"
             ret_test.error = ret.error

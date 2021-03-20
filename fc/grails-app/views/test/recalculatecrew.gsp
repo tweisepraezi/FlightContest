@@ -12,11 +12,12 @@
                 <h2>${message(code:'fc.flightresults.recalculate')}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="['id':testInstance.id]">
+                        <g:set var="ti" value="${[]+1}"/>
                         <table>
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td>${testInstance.crew.startNum}: <g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.aflosStartNum}"> (${message(code:'fc.aflos')}: ${testInstance.aflosStartNum})</g:if></td>
+                                    <td>${testInstance.crew.startNum}: <g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
                                 </tr>
                                 <g:if test="${testInstance.crew.team}">
                                     <tr>
@@ -86,17 +87,17 @@
                                        <td><g:select from="${track_points.trackPoints}" name="loggerdata_endutc" value="${last_endutc}" optionKey="utc" optionValue="${{FcTime.UTCGetLocalTime(it.utc,testInstance.task.contest.timeZone)}}"></g:select></td>
                                    </tr>
                                 <tr>
-                                    <td class="detailtitle"><label>${message(code:'fc.aflos.noremove.existingdata')}:</label></td>
+                                    <td class="detailtitle"><label>${message(code:'fc.flightresults.noremove.existingdata')}:</label></td>
                                     <td><g:checkBox name="no_remove_existing_data" value="${false}"/></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <g:actionSubmit action="recalculateresults" value="${message(code:'fc.flightresults.recalculate.loggerdata')}" tabIndex="1"/>
-                        <g:if test="${testInstance.IsAFLOSImportPossible()}">
-                            <g:actionSubmit action="importaflos" value="${message(code:'fc.flightresults.aflosimport')}" onclick="this.form.target='_self';return true;" tabIndex="2"/>
+                        <g:actionSubmit action="recalculateresults" value="${message(code:'fc.flightresults.recalculate.loggerdata')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${testInstance.IsTrackerImportPossible()}">
+                            <g:actionSubmit action="importtracker" value="${message(code:'fc.flightresults.trackerimport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                         </g:if>
-                        <g:actionSubmit action="importlogger" value="${message(code:'fc.flightresults.loggerimport')}" onclick="this.form.target='_self';return true;" tabIndex="3"/>
-                        <g:actionSubmit action="cancelimportcrew" value="${message(code:'fc.cancel')}" tabIndex="10"/>
+                        <g:actionSubmit action="importlogger" value="${message(code:'fc.flightresults.loggerimport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancelimportcrew" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

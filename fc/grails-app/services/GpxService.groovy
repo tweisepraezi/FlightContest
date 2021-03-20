@@ -316,7 +316,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
+                gpx_route(routeInstance, null, xml, [isPrint:false, wrEnrouteSign:false, gpxExport:false])
             }
         }
         gpx_writer.close()
@@ -334,7 +334,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:false, wrEnrouteSign:false, showCurvedPoints:false])]
         }
         ret += [ok:converted]
         return ret
@@ -455,7 +455,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
+                gpx_route(routeInstance, null, xml, [isPrint:false, wrEnrouteSign:false, gpxExport:false])
             }
         }
         gac_reader.close()
@@ -468,7 +468,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:false, wrEnrouteSign:false, showCurvedPoints:false])]
         }
         ret += [ok:converted]
         return ret
@@ -588,7 +588,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
+                gpx_route(routeInstance, null, xml, [isPrint:false, wrEnrouteSign:false, gpxExport:false])
             }
         }
         igc_reader.close()
@@ -601,7 +601,7 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:false, wrEnrouteSign:false, showCurvedPoints:false])]
         }
         ret += [ok:converted]
         return ret
@@ -726,7 +726,7 @@ class GpxService
                 }
             }
             if (routeInstance) {
-                GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
+                gpx_route(routeInstance, null, xml, [isPrint:false, wrEnrouteSign:false, gpxExport:false])
             }
         }
         nmea_reader.close()
@@ -739,16 +739,16 @@ class GpxService
         }
         if (routeInstance) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
+            ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:false, wrEnrouteSign:false, showCurvedPoints:false])]
         }
         ret += [ok:converted]
         return ret
     }
     
     //--------------------------------------------------------------------------
-    Map ConvertRoute2GPX(Route routeInstance, String gpxFileName, boolean isPrint, boolean showPoints, boolean wrEnrouteSign, boolean gpxExport, Map contestMap = [:])
+    Map ConvertRoute2GPX(Route routeInstance, String gpxFileName, Map params, Map contestMapParams = [:])
     {
-        printstart "ConvertRoute2GPX ${routeInstance.GetName(isPrint)} -> ${gpxFileName}"
+        printstart "ConvertRoute2GPX ${routeInstance.GetName(params.isPrint)} -> ${gpxFileName}"
         
         printstart "Generate GPX"
         BufferedWriter gpx_writer = null
@@ -763,13 +763,13 @@ class GpxService
         }
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
-        if (contestMap) {
+        if (contestMapParams) {
             xml.gpx(version:GPXVERSION, creator:GPXCREATOR_CONTESTMAP) {
-                GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, gpxExport, xml, contestMap)
+                gpx_route(routeInstance, null, xml, params, contestMapParams)
             }
         } else {
             xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
-                GPXRoute(routeInstance, null, isPrint, wrEnrouteSign, gpxExport, xml, [:])
+                gpx_route(routeInstance, null, xml, params, [:])
             }
         }
         gpx_writer.close()
@@ -781,9 +781,9 @@ class GpxService
         }
 
         List show_points = []
-        if (showPoints) {
+        if (params.showPoints) {
             println "Generate points for buttons (GetShowPointsRoute)"
-            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, isPrint, wrEnrouteSign, false, messageSource, contestMap) // false - no showCurvedPoints
+            show_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:params.isPrint, wrEnrouteSign:params.wrEnrouteSign, showCurvedPoints:false], contestMapParams)
         }
         
         printdone ""
@@ -827,7 +827,7 @@ class GpxService
             }
             gpx_reader.close()
             
-            GPXRoute(routeInstance, null, false, false, false, xml) // false - no Print, false - no wrEnrouteSign, false - no gpxExport
+            gpx_route(routeInstance, null, xml, [isPrint:false, wrEnrouteSign:false, gpxExport:false])
         }
         gpx_writer.close()
         
@@ -840,7 +840,7 @@ class GpxService
             printerror err_msg
         }
         println "Generate points for buttons (GetShowPointsRoute)"
-        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, false, false, false, messageSource)] // false - no Print, false - no showEnrouteSign, false - no showCurvedPoints
+        ret += [gpxShowPoints:RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:false, wrEnrouteSign:false, showCurvedPoints:false])]
         ret += [ok:converted]
         return ret
     }
@@ -849,7 +849,7 @@ class GpxService
     Map ConvertTest2PrintMap(Test testInstance, String gpxFileName, String pngFileName) 
     {
         printstart "ConvertTest2PrintMap"
-        Map ret = ConvertTest2GPX(testInstance,gpxFileName, true, false, false, false) // true - Print, false - no Points, false - no wrEnrouteSign, false - no gpxExport
+        Map ret = ConvertTest2GPX(testInstance,gpxFileName, [isPrint:true, showPoints:false, wrEnrouteSign:false, gpxExport:false])
         if (ret.ok && ret.track) {
             printstart "Generate ${pngFileName} from ${gpxFileName}"
             
@@ -1424,13 +1424,13 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    Map ConvertTest2GPX(Test testInstance, String gpxFileName, boolean isPrint, boolean showPoints, boolean wrEnrouteSign, boolean gpxExport)
+    Map ConvertTest2GPX(Test testInstance, String gpxFileName, Map params)
     {
         boolean found_track = false
         
         Route route_instance = testInstance.task.flighttest.route
         
-        printstart "ConvertTest2GPX '${testInstance.aflosStartNum}:${testInstance.crew.name}' -> ${gpxFileName}"
+        printstart "ConvertTest2GPX '${testInstance.crew.name}' -> ${gpxFileName} [${params}]"
         
         printstart "Generate GPX"
         BufferedWriter gpx_writer = null
@@ -1446,8 +1446,8 @@ class GpxService
         MarkupBuilder xml = new MarkupBuilder(gpx_writer)
         gpx_writer.writeLine(XMLHEADER)
         xml.gpx(version:GPXVERSION, creator:Defs.ROUTEEXPORT_CREATOR) {
-            GPXRoute(route_instance, testInstance, isPrint, wrEnrouteSign, gpxExport, xml)
-            found_track = GPXTrack(testInstance, testInstance.aflosStartNum, isPrint, xml)
+            gpx_route(route_instance, testInstance, xml, params)
+            found_track = gpx_track(testInstance, xml, params)
         }
         gpx_writer.close()
         if (gpxFileName.startsWith(GPXDATA)) {
@@ -1458,13 +1458,13 @@ class GpxService
         }
         
         List show_points = []
-        if (showPoints) {
+        if (params.showPoints) {
             if (testInstance.IsLoggerResultWithoutRunwayMissed()) {
                 println "Generate points for buttons (GetShowPoints)"
-                show_points = GetShowPoints(gpxFileName, wrEnrouteSign)
+                show_points = GetShowPoints(gpxFileName, params.wrEnrouteSign)
             } else {
                 println "Generate points for buttons (GetShowPointsRoute)"
-                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, isPrint, wrEnrouteSign, false, messageSource) // false - no showCurvedPoints
+                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, messageSource, [isPrint:params.isPrint, wrEnrouteSign:params.wrEnrouteSign, showCurvedPoints:false])
             }
         }
         
@@ -1596,23 +1596,32 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void GPXRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, boolean gpxExport, MarkupBuilder xml, Map contestMap = [:])
+    private void gpx_route(Route routeInstance, Test testInstance, MarkupBuilder xml, Map params, Map contestMapParams = [:])
     {
-        printstart "GPXRoute Print:$isPrint wrEnrouteSign:$wrEnrouteSign contestMap:$contestMap"
+        printstart "gpx_route $params $contestMapParams"
         
-        boolean wr_enroutesign = wrEnrouteSign
-        if (wrEnrouteSign && testInstance) {
+        boolean wr_enroutesign = params.wrEnrouteSign
+        if (params.wrEnrouteSign && testInstance) {
             wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
         }
-        boolean use_procedureturn = routeInstance.UseProcedureTurn()
         List curved_point_ids = routeInstance.GetCurvedPointIds()
+        Media media = Media.Screen
+        if (params.isTracking) {
+            media = Media.Tracking
+        } else if (params.isPrint) {
+            media = Media.Print
+        }
+        Task task_instance = null
+        if (params.taskInstance) {
+            task_instance = params.taskInstance
+        }
 
         // observation settings & enroute signs without position
         Map contest_map_rect = [:]
         BigDecimal center_latitude = null
         BigDecimal center_longitude = null
         boolean show_runway = false
-        if (wr_enroutesign || contestMap) {
+        if (wr_enroutesign || contestMapParams) {
             xml.extensions {
                 xml.flightcontest {
                     if (wr_enroutesign) {
@@ -1623,7 +1632,7 @@ class GpxService
                             enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
                             enroutecanvas: routeInstance.enrouteCanvasRoute,
                             enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
-                            useprocedureturn: getYesNo(use_procedureturn)
+                            useprocedureturn: getYesNo(routeInstance.useProcedureTurns)
                         )
                         if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                             xml.enroutephotosigns {
@@ -1646,14 +1655,14 @@ class GpxService
                             }
                         }
                     }
-                    if (contestMap) {
+                    if (contestMapParams) {
                         BigDecimal min_latitude = null
                         BigDecimal min_longitude = null
                         BigDecimal max_latitude = null
                         BigDecimal max_longitude = null
                         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                             if (coordroute_instance.type.IsContestMapQuestionCoord()) {
-                                if (!contestMap.contestMapCenterPoints || contestMap.contestMapCenterPoints.contains(coordroute_instance.title()+',')) {
+                                if (!contestMapParams.contestMapCenterPoints || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCenterPoints).contains(coordroute_instance.title()+',')) {
                                     BigDecimal lat = coordroute_instance.latMath()
                                     BigDecimal lon = coordroute_instance.lonMath()
                                     if (min_latitude == null || lat < min_latitude) {
@@ -1681,39 +1690,14 @@ class GpxService
                         center_longitude = (max_longitude+min_longitude)/2
                         
                         xml.contestmap(
-                            scale: routeInstance.contest.mapScale,
                             min_latitude: min_latitude,
                             min_longitude: min_longitude,
                             max_latitude: max_latitude,
                             max_longitude: max_longitude,
                             center_latitude: center_latitude,
                             center_longitude: center_longitude,
-                            osmscale: contestMap.contestMapScale,
-                            graticule: getYesNo(contestMap.contestMapGraticule),
                             center_graticule_latitude: GetRoundedDecimalGrad(center_latitude),
-                            center_graticule_longitude: GetRoundedDecimalGrad(center_longitude),
-                            contour_lines: contestMap.contestMapContourLines,
-                            municipality_names: getYesNo(contestMap.contestMapMunicipalityNames),
-                            enroutephotos: getYesNo(contestMap.contestMapEnroutePhotos),
-                            enroutecanvas: getYesNo(contestMap.contestMapEnrouteCanvas),
-                            airfields: contestMap.contestMapAirfields,
-                            churches: getYesNo(contestMap.contestMapChurches),
-                            castles: getYesNo(contestMap.contestMapCastles),
-                            chateaus: getYesNo(contestMap.contestMapChateaus),
-                            powerlines: getYesNo(contestMap.contestMapPowerlines),
-                            windpowerstations: getYesNo(contestMap.contestMapWindpowerstations),
-                            smallroads: getYesNo(contestMap.contestMapSmallRoads),
-                            peaks: getYesNo(contestMap.contestMapPeaks),
-                            additionals: getYesNo(contestMap.contestMapAdditionals),
-                            specials: getYesNo(contestMap.contestMapSpecials),
-                            airspaces: getYesNo(contestMap.contestMapAirspaces),
-                            landscape: getYesNo(contestMap.contestMapPrintLandscape),
-                            print_size: contestMap.contestMapPrintSize,
-                            colorchanges: getYesNo(contestMap.contestMapColorChanges),
-                            devstyle: getYesNo(contestMap.contestMapDevStyle),
-                            centerhorizontalpos: routeInstance.contestMapCenterHorizontalPos,
-                            centerverticalpos: routeInstance.contestMapCenterVerticalPos,
-                            fcstyle:getYesNo(contestMap.contestMapFCStyle)
+                            center_graticule_longitude: GetRoundedDecimalGrad(center_longitude)
                         )
                     }
                 }
@@ -1721,26 +1705,26 @@ class GpxService
         }
         
         // tracks
-        if (contestMap) {
+        if (contestMapParams) {
             if (show_runway) {
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsRunwayCoord()) {
                         xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                            xml.name "${coordroute_instance.titleShortMap(isPrint)}"
+                            xml.name "${coordroute_instance.titleMediaCode(media)}"
                             xml.sym "airport"
                             xml.type ""
                         }
                     }
                 }
-            } else if (contestMap.contestMapLeg || contestMap.contestMapCurvedLeg) {
+            } else if (contestMapParams.contestMapLeg || contestMapParams.contestMapCurvedLeg) {
                 CoordRoute last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsContestMapCoord()) {
                         if (last_coordroute_instance) {
                             if (coordroute_instance.endCurved) {
-                                if (contestMap.contestMapCurvedLeg) {
+                                if (contestMapParams.contestMapCurvedLeg && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints).contains(coordroute_instance.title()+',')) {
                                     xml.rte {
-                                        xml.name "${last_coordroute_instance.titleShortMap(isPrint)} - ${coordroute_instance.titleShortMap(isPrint)}"
+                                        xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
                                         boolean run = false
                                         CoordRoute last_coordroute_instance2 = null
                                         for (CoordRoute coordroute_instance2 in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
@@ -1775,15 +1759,15 @@ class GpxService
                                         }
                                     }
                                 }
-                            } else if (contestMap.contestMapLeg) {
-                                if (contestMap.contestMapPrintPoints.contains(coordroute_instance.title()+',') && contestMap.contestMapPrintPoints.contains(last_coordroute_instance.title()+',')) {
+                            } else if (contestMapParams.contestMapLeg) {
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
                                     Map track_coords = AviationMath.getTrack2Circle(
                                         last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                         CONTESTMAP_CIRCLE_RADIUS
                                     )
                                     xml.rte {
-                                        xml.name "${last_coordroute_instance.titleShortMap(isPrint)} - ${coordroute_instance.titleShortMap(isPrint)}"
+                                        xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
                                         xml.rtept(lat:track_coords.srcLat, lon:track_coords.srcLon)
                                         xml.rtept(lat:track_coords.destLat, lon:track_coords.destLon)
                                     }
@@ -1809,7 +1793,7 @@ class GpxService
                     if (coordroute_instance.type.IsCpCheckCoord()) {
                         BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                         xml.rtept(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                            xml.name coordroute_instance.titleShortMap(isPrint)
+                            xml.name coordroute_instance.titleMediaCode(media)
                             xml.ele altitude_meter
                         }
                     }
@@ -1833,7 +1817,7 @@ class GpxService
                             if (coordroute_instance.type.IsCpCheckCoord()) {
                                 BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.rtept(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                                    xml.name coordroute_instance.titleShortMap(isPrint)
+                                    xml.name coordroute_instance.titleMediaCode(media)
                                     xml.ele altitude_meter
                                 }
                             }
@@ -1850,18 +1834,18 @@ class GpxService
             }
         }
         
-        if (contestMap) {
+        if (contestMapParams) {
             // circles
-            if (contestMap.contestMapCircle) {
+            if (contestMapParams.contestMapCircle) {
                 CoordRoute last_coordroute_instance = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsContestMapCoord()) {
-                        if (contestMap.contestMapPrintPoints.contains(coordroute_instance.title()+',')) {
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
                             List circle_coords = AviationMath.getCircle(coordroute_instance.latMath(), coordroute_instance.lonMath(), CONTESTMAP_CIRCLE_RADIUS)
                             xml.rte {
                                 // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                xml.name "Circle ${coordroute_instance.titleShortMap(isPrint)}"
+                                xml.name "Circle ${coordroute_instance.titleMediaCode(media)}"
                                 for (Map circle_coord in circle_coords) {
                                     xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
                                         // xml.ele altitude_meter
@@ -1876,13 +1860,13 @@ class GpxService
             }
             
             // procedure turns
-            if (contestMap.contestMapProcedureTurn && use_procedureturn) {
+            if (contestMapParams.contestMapProcedureTurn && routeInstance.useProcedureTurns) {
                 CoordRoute last_coordroute_instance = null
                 CoordRoute last_coordroute_instance2 = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.planProcedureTurn && last_coordroute_instance && last_last_coordroute_instance && last_coordroute_instance.type.IsProcedureTurnCoord()) {
-                        if (contestMap.contestMapPrintPoints.contains(last_coordroute_instance.title()+',')) {
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
                             List circle_coords = AviationMath.getProcedureTurnCircle(
                                 last_last_coordroute_instance.latMath(), last_last_coordroute_instance.lonMath(),
                                 last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -1892,7 +1876,7 @@ class GpxService
                             )
                             xml.rte {
                                 // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                xml.name "Procedure turn ${last_coordroute_instance.titleShortMap(isPrint)}"
+                                xml.name "Procedure turn ${last_coordroute_instance.titleMediaCode(media)}"
                                 for (Map circle_coord in circle_coords) {
                                     xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
                                         // xml.ele altitude_meter
@@ -1907,7 +1891,7 @@ class GpxService
             }
             
             // TP names
-            if (contestMap.contestMapTpName) {
+            if (contestMapParams.contestMapTpName) {
                 CoordRoute last_coordroute_instance = null
                 CoordRoute last_coordroute_instance2 = null
                 CoordRoute last_last_coordroute_instance = null
@@ -1916,7 +1900,7 @@ class GpxService
                         if (last_coordroute_instance && last_last_coordroute_instance) {
                             if (!coordroute_instance.type.IsEnrouteStartCoord()) {
                                 if (last_coordroute_instance.type.IsEnrouteStartCoord()) { // iSP
-                                    if (contestMap.contestMapPrintPoints.contains(coordroute_instance.title()+',')) {
+                                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
                                         Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                             coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                             last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -1924,17 +1908,17 @@ class GpxService
                                             CONTESTMAP_TPNAME_DISTANCE
                                         )
                                         xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                            xml.name last_coordroute_instance.titleShortMap(isPrint)
+                                            xml.name last_coordroute_instance.titleMediaCode(media)
                                             xml.sym "empty.png"
                                             xml.type ""
                                         }
                                     }
                                 } else { // TP
-                                    if (contestMap.contestMapPrintPoints.contains(last_coordroute_instance.title()+',')) {
+                                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
                                         BigDecimal distancevalue_procedureturn = CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE
                                         if (coordroute_instance.endCurved) {
                                             distancevalue_procedureturn = CONTESTMAP_TPNAME_DISTANCE
-                                        } else if (!use_procedureturn) {
+                                        } else if (!routeInstance.useProcedureTurns) {
                                             distancevalue_procedureturn = CONTESTMAP_TPNAME_NOPROCEDURETURN_DISTANCE
                                         }
                                         Map tp_coord = AviationMath.getTitlePoint(
@@ -1944,7 +1928,7 @@ class GpxService
                                             CONTESTMAP_TPNAME_DISTANCE, distancevalue_procedureturn
                                         )
                                         xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                            xml.name last_coordroute_instance.titleShortMap(isPrint)
+                                            xml.name last_coordroute_instance.titleMediaCode(media)
                                             xml.sym "empty.png"
                                             xml.type ""
                                         }
@@ -1952,7 +1936,7 @@ class GpxService
                                 }
                             }
                             if (coordroute_instance.type.IsEnrouteFinishCoord()) { // FP, iFP
-                                if (contestMap.contestMapPrintPoints.contains(coordroute_instance.title()+',')) {
+                                if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
                                     Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                         last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
                                         coordroute_instance.latMath(), coordroute_instance.lonMath(),
@@ -1960,14 +1944,14 @@ class GpxService
                                         CONTESTMAP_TPNAME_DISTANCE
                                     )
                                     xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                        xml.name coordroute_instance.titleShortMap(isPrint)
+                                        xml.name coordroute_instance.titleMediaCode(media)
                                         xml.sym "empty.png"
                                         xml.type ""
                                     }
                                 }
                             }
                         } else if (last_coordroute_instance && last_coordroute_instance.type.IsEnrouteStartCoord()) { // SP
-                            if (contestMap.contestMapPrintPoints.contains(last_coordroute_instance.title()+',')) {
+                            if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
                                 Map tp_coord = AviationMath.getOrthogonalTitlePoint(
                                     coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                     last_coordroute_instance.latMath(), last_coordroute_instance.lonMath(),
@@ -1975,7 +1959,7 @@ class GpxService
                                     CONTESTMAP_TPNAME_DISTANCE
                                 )
                                 xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                    xml.name last_coordroute_instance.titleShortMap(isPrint)
+                                    xml.name last_coordroute_instance.titleMediaCode(media)
                                     xml.sym "empty.png"
                                     xml.type ""
                                 }
@@ -1984,19 +1968,19 @@ class GpxService
                         last_last_coordroute_instance = last_coordroute_instance 
                         last_coordroute_instance = coordroute_instance
                     } else if (coordroute_instance.type.IsRunwayCoord()) {
-                        if (contestMap.contestMapPrintPoints.contains(coordroute_instance.title()+',')) {
+                        if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
                             Map tp_coord = AviationMath.getCoordinate(
                                 coordroute_instance.latMath(), coordroute_instance.lonMath(),
                                 CONTESTMAP_TPNAME_RUNWAY_DIRECTION,
                                 CONTESTMAP_TPNAME_RUNWAY_DISTANCE
                             )
                             xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.sym "empty.png"
                                 xml.type ""
                             }
                         }
-                    } else if (contestMap.contestMapSecretGates && coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
+                    } else if (contestMapParams.contestMapSecretGates && coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
                         BigDecimal distance_value = coordroute_instance.gatewidth2
                         if (distance_value < CONTESTMAP_TPNAME_DISTANCE) {
                             distance_value = CONTESTMAP_TPNAME_DISTANCE
@@ -2008,7 +1992,7 @@ class GpxService
                             distance_value
                         )
                         xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                            xml.name coordroute_instance.titleShortMap(isPrint)
+                            xml.name coordroute_instance.titleMediaCode(media)
                             xml.sym "empty.png"
                             xml.type ""
                         }
@@ -2018,7 +2002,7 @@ class GpxService
             }
             
             // Gates unbekannter Zeitkontrollen
-            if (contestMap.contestMapSecretGates) {
+            if (contestMapParams.contestMapSecretGates) {
                 CoordRoute last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
@@ -2035,9 +2019,9 @@ class GpxService
                             gate_width
                         )
                         xml.rte {
-                            wrGate(coordroute_instance, gate_width, xml)
+                            wr_gate(coordroute_instance, gate_width, xml, task_instance)
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                            xml.name coordroute_instance.titleShortMap(isPrint)
+                            xml.name coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
                                 // xml.ele altitude_meter
                             }
@@ -2051,11 +2035,11 @@ class GpxService
             }
             
             // CoordEnroutePhoto
-            if (contestMap.contestMapEnroutePhotos) {
+            if (contestMapParams.contestMapEnroutePhotos) {
                 for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                    if (contestMap.contestMapPrintPoints.contains(coordenroutephoto_instance.title()+',')) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutephoto_instance.title()+',')) {
                         Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutephoto_instance)
-                        if (!next_coord_instance || contestMap.contestMapPrintPoints.contains(next_coord_instance.title()+',')) {
+                        if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
                             xml.wpt(lat:coordenroutephoto_instance.latMath(), lon:coordenroutephoto_instance.lonMath()) {
                                 xml.name ""
                                 xml.sym "fcphoto.png"
@@ -2067,11 +2051,11 @@ class GpxService
             }
             
             // CoordEnrouteCanvas
-            if (contestMap.contestMapEnrouteCanvas) {
+            if (contestMapParams.contestMapEnrouteCanvas) {
                 for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
-                    if (contestMap.contestMapPrintPoints.contains(coordenroutecanvas_instance.title()+',')) {
+                    if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordenroutecanvas_instance.title()+',')) {
                         Coord next_coord_instance = routeInstance.GetNextEnrouteSignCoord(coordenroutecanvas_instance)
-                        if (!next_coord_instance || contestMap.contestMapPrintPoints.contains(next_coord_instance.title()+',')) {
+                        if (!next_coord_instance || DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(next_coord_instance.title()+',')) {
                             xml.wpt(lat:coordenroutecanvas_instance.latMath(), lon:coordenroutecanvas_instance.lonMath()) {
                                 xml.name ""
                                 xml.sym "${coordenroutecanvas_instance.enrouteCanvasSign.toString().toLowerCase()}.png"
@@ -2099,8 +2083,8 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml, gate.coord.lat, gate.coord.lon)
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, gate.coord.lat, gate.coord.lon)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
                                 }
@@ -2117,8 +2101,8 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml)
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
                                 }
@@ -2138,8 +2122,8 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml, gate.coord.lat, gate.coord.lon)
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, gate.coord.lat, gate.coord.lon)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
                                 }
@@ -2156,8 +2140,8 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml)
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
                                 }
@@ -2178,8 +2162,8 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml, gate.coord.lat, gate.coord.lon)
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, gate.coord.lat, gate.coord.lon)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
                                 }
@@ -2196,8 +2180,8 @@ class GpxService
                                 coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, coordroute_instance.gatewidth2, xml)
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                     // xml.ele altitude_meter
                                 }
@@ -2210,7 +2194,7 @@ class GpxService
                 }
                 if (show_wpt) {
                     xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
-                        xml.name coordroute_instance.titleShortMap(isPrint)
+                        xml.name coordroute_instance.titleMediaCode(media)
                     }
                 }
                 if (last_coordroute_instance && last_coordroute_instance.type.IsCpCheckCoord() && coordroute_instance.type.IsCpCheckCoord()) {
@@ -2221,9 +2205,9 @@ class GpxService
                             last_coordroute_instance.gatewidth2
                         )
                         xml.rte {
-                            wrGate(last_coordroute_instance, last_coordroute_instance.gatewidth2, xml)
+                            wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, xml, task_instance)
                             //BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
-                            xml.name last_coordroute_instance.titleShortMap(isPrint)
+                            xml.name last_coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
                                 // xml.ele altitude_meter
                             }
@@ -2236,12 +2220,12 @@ class GpxService
                         // no standard gate
                     } else {
                         // standard gate
-                        boolean wr_gate = false
-                        boolean show_curved_point = gpxExport || routeInstance.ShowCurvedPoints()
+                        boolean write_gate = false
+                        boolean show_curved_point = params.gpxExport || routeInstance.showCurvedPoints
                         if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
-                            wr_gate = true
+                            write_gate = true
                         }
-                        if (wr_gate) {
+                        if (write_gate) {
                             Float gate_width = null
                             if (testInstance && coordroute_instance.type == CoordType.SECRET) {
                                 gate_width = testInstance.GetSecretGateWidth()
@@ -2255,9 +2239,9 @@ class GpxService
                                 gate_width
                             )
                             xml.rte {
-                                wrGate(coordroute_instance, gate_width, xml)
+                                wr_gate(coordroute_instance, gate_width, xml, task_instance)
                                 // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                xml.name coordroute_instance.titleShortMap(isPrint)
+                                xml.name coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
                                     // xml.ele altitude_meter
                                 }
@@ -2276,7 +2260,7 @@ class GpxService
             }
             
             // procedure turns
-            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && use_procedureturn) {
+            if ((!testInstance || testInstance.task.procedureTurnDuration > 0) && routeInstance.useProcedureTurns) {
                 last_coordroute_instance = null
                 CoordRoute last_last_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
@@ -2290,7 +2274,7 @@ class GpxService
                         )
                         xml.rte {
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                            xml.name "Procedure turn ${last_coordroute_instance.titleShortMap(isPrint)}"
+                            xml.name "Procedure turn ${last_coordroute_instance.titleMediaCode(media)}"
                             for (Map circle_coord in circle_coords) {
                                 xml.rtept(lat:circle_coord.lat, lon:circle_coord.lon) {
                                     // xml.ele altitude_meter
@@ -2305,7 +2289,7 @@ class GpxService
         }
         
         // Important points
-        if (!contestMap) {
+        if (!contestMapParams) {
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                 if (coordroute_instance.type.IsRunwayCoord()) {
                     xml.wpt(lat:coordroute_instance.latMath(), lon:coordroute_instance.lonMath()) {
@@ -2384,7 +2368,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void wrGate(CoordRoute coordrouteInstance, Float gateWidth, MarkupBuilder xml, BigDecimal latValue = null, BigDecimal lonValue = null)
+    private void wr_gate(CoordRoute coordrouteInstance, Float gateWidth, MarkupBuilder xml, Task taskInstance, BigDecimal latValue = null, BigDecimal lonValue = null)
     {
         BigDecimal altitude_meter = coordrouteInstance.altitude.toLong() / ftPerMeter
         String dir = ""
@@ -2397,6 +2381,14 @@ class GpxService
         if (lonValue == null) {
             lonValue = coordrouteInstance.lonMath()
         }
+        boolean no_timecheck = coordrouteInstance.noTimeCheck
+        if (taskInstance) {
+            no_timecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPoints).contains("${coordrouteInstance.title()},")
+        }
+        boolean no_gatecheck = coordrouteInstance.noGateCheck
+        if (taskInstance) {
+            no_gatecheck = DisabledCheckPointsTools.Uncompress(taskInstance.disabledCheckPointsNotFound).contains("${coordrouteInstance.title()},")
+        }
         xml.extensions {
             xml.flightcontest {
                 xml.gate(
@@ -2407,8 +2399,8 @@ class GpxService
                     alt:            coordrouteInstance.altitude,
                     width:          gateWidth,
                     dir:            dir,
-                    notimecheck:    getYesNo(coordrouteInstance.noTimeCheck),
-                    nogatecheck:    getYesNo(coordrouteInstance.noGateCheck),
+                    notimecheck:    getYesNo(no_timecheck),
+                    nogatecheck:    getYesNo(no_gatecheck),
                     noplanningtest: getYesNo(coordrouteInstance.noPlanningTest),
                     endcurved:      getYesNo(coordrouteInstance.endCurved),
                     dist:           coordrouteInstance.measureDistance,
@@ -2431,26 +2423,29 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private boolean GPXTrack(Test testInstance, int startNum, boolean isPrint, MarkupBuilder xml)
+    private boolean gpx_track(Test testInstance, MarkupBuilder xml, Map params)
     // Return true: data found
     {
-        printstart "GPXTrack"
+        printstart "gpx_track"
         
         boolean found = false
         List track_points = []
         if (testInstance.IsLoggerData()) {
             println "Get track points from '${testInstance.loggerDataStartUtc}' to '${testInstance.loggerDataEndUtc}'"
             track_points = testInstance.GetTrackPoints(testInstance.loggerDataStartUtc, testInstance.loggerDataEndUtc).trackPoints 
-        } else {
-            println "Get track points from AFLOS startnum $startNum"
-            track_points = AflosTools.GetAflosCrewNamesTrackPoints(testInstance, startNum)
         }
         if (track_points) {
             println "Write track points"
+            Media media = Media.Screen
+            if (params.isTracking) {
+                media = Media.Tracking
+            } else if (params.isPrint) {
+                media = Media.Print
+            }
             Route route_instance = testInstance.task.flighttest.route
             boolean observationsign_used = testInstance.task.flighttest.IsObservationSignUsed()
-            boolean show_curved_point = route_instance.ShowCurvedPoints()
-            List curved_point_titlecodes = route_instance.GetCurvedPointTitleCodes(isPrint)
+            boolean show_curved_point = route_instance.showCurvedPoints
+            List curved_point_titlecodes = route_instance.GetCurvedPointTitleCodes(media)
             // cache calc results
             List calc_results = []
             if (testInstance.IsLoggerResult()) {
@@ -2460,16 +2455,16 @@ class GpxService
                     int title_number = 1
                     boolean is_runway = false
                     if (calcresult_instance.coordTitle) {
-                        if (isPrint) {
-                            title_code = calcresult_instance.coordTitle.titlePrintCode()
-                        } else {
-                            title_code = calcresult_instance.coordTitle.titleCode()
-                        }
+                        title_code = calcresult_instance.coordTitle.titleMediaCode(media)
                         coord_type = calcresult_instance.coordTitle.type
                         title_number = calcresult_instance.coordTitle.number
                         is_runway = calcresult_instance.coordTitle.type.IsRunwayCoord()
                     }
-                    Map new_calc_result = [utc: calcresult_instance.utc, 
+                    String utc = calcresult_instance.utc
+                    if (params.gpxDate) {
+                        utc = FcTime.UTCReplaceDate(calcresult_instance.utc, params.gpxDate)
+                    }
+                    Map new_calc_result = [utc: utc, 
                                            latitude: calcresult_instance.latitude,
                                            longitude: calcresult_instance.longitude,
                                            altitude: calcresult_instance.altitude,
@@ -2502,14 +2497,25 @@ class GpxService
                     Map from_tp = [:]
                     for (Map p in track_points) {
                         
+                        String utc = p.utc
+                        if (params.gpxDate) {
+                            utc = FcTime.UTCReplaceDate(p.utc, params.gpxDate)
+                            if (params.gpxEndTime) {
+                                if (utc > params.gpxEndTime) {
+                                    println "Track points cut off: ${utc}"
+                                    break
+                                }
+                            }
+                        }
+                        
                         // <trkpt>
                         xml.trkpt(lat:p.latitude, lon:p.longitude) {
                             xml.ele p.altitude / GpxService.ftPerMeter
-                            xml.time p.utc
+                            xml.time utc
                             
                             // add <extensions> for tp and flight errors
                             for (Map calc_result in calc_results) {
-                                if (calc_result.utc == p.utc) {
+                                if (calc_result.utc == utc) {
                                     if (observationsign_used && !calc_result.badCourse && !calc_result.badTurn && !calc_result.gateMissed && !calc_result.gateNotFound && calc_result.coordType.IsEnrouteSignCoord()) { // cache enroute photo / canvas data
                                         enroute_points = RoutePointsTools.GetEnrouteSignShowPoints(route_instance,calc_result.coordType,calc_result.titleNumber)
                                         enroute_point_pos = 0
@@ -2948,6 +2954,41 @@ class GpxService
                     
                     boolean error = false
                     
+                    // Save links
+                    if (save_links) {
+                        for (String save_link in save_links.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
+                            Map set_link = [save_link:save_link, error:error]
+                            set_links += set_link
+                        }
+                    }
+                        
+					printstart "Process links"
+					for (Map set_link in set_links) {
+						String[] l = set_link.save_link.split(Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR)
+						if (l[0] == "UploadJobTest") {
+							try {
+								UploadJobTest uploadjob_test = UploadJobTest.get(l[1])
+								println "Test ${uploadjob_test.test.name()}: Upload sending"
+								uploadjob_test.uploadJobStatus = UploadJobStatus.Sending
+								uploadjob_test.uploadJobLink = ""
+								uploadjob_test.save(flush:true)
+							} catch (Exception e) {
+								println "UploadJobTest ${l[1]} locked (1): ${e.getMessage()}"
+							}
+						} else if (l[0] == "UploadJobRoute") {
+							try {
+								UploadJobRoute uploadjob_route = UploadJobRoute.get(l[1])
+								println "Route ${uploadjob_route.route.name()}: Upload sending"
+								uploadjob_route.uploadJobStatus = UploadJobStatus.Sending
+								uploadjob_route.uploadJobLink = ""
+								uploadjob_route.save(flush:true)
+							} catch (Exception e) {
+								println "UploadJobRoute ${l[1]} locked (1): ${e.getMessage()}"
+							}
+						}
+					}
+					printdone ""
+					
                     // FTP uploads
                     if (ftp_basedir && ftp_uploads) {
                         for (String ftp_upload in ftp_uploads.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
@@ -2984,14 +3025,6 @@ class GpxService
                         }
                     }
                         
-                    // Save links
-                    if (save_links) {
-                        for (String save_link in save_links.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
-                            Map set_link = [save_link:save_link, error:error]
-                            set_links += set_link
-                        }
-                    }
-                        
                     // Remove files
                     if (remove_files) {
                         for (String remove_file in remove_files.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
@@ -3015,25 +3048,39 @@ class GpxService
                 printstart "Process links"
                 for (Map set_link in set_links) {
                     String[] l = set_link.save_link.split(Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR)
-                    if (l[0] == "Test") {
+                    if (l[0] == "UploadJobTest") {
                         try {
-                            Test test_instance = Test.get(l[1])
-                            if (test_instance.isDirty()) {
-                                println "Test ${test_instance.name()} locked: dirty"
-                                test_instance = null
-                            }
-                            if (test_instance) {
-                                if (set_link.error) {
-                                    println "Test ${test_instance.name()}: Set E-Mail-Error"
-                                    test_instance.flightTestLink = Defs.EMAIL_ERROR
-                                } else {
-                                    println "Test ${test_instance.name()}: Save link '${l[2]}'"
-                                    test_instance.flightTestLink = l[2]
-                                }
-                                test_instance.save()
-                            }
+                            UploadJobTest uploadjob_test = UploadJobTest.get(l[1])
+							if (set_link.error) {
+								println "Test ${uploadjob_test.test.name()}: Set E-Mail-Error"
+								uploadjob_test.uploadJobStatus = UploadJobStatus.Error // test_instance.flightTestLink = Defs.EMAIL_ERROR
+								uploadjob_test.uploadJobLink = ""
+								
+							} else {
+								println "Test ${uploadjob_test.test.name()}: Save link '${l[2]}'"
+								uploadjob_test.uploadJobStatus = UploadJobStatus.Done // test_instance.flightTestLink = l[2]
+								uploadjob_test.uploadJobLink = l[2]
+							}
+							uploadjob_test.save(flush:true)
                         } catch (Exception e) {
-                            println "Test ${test_instance.name()} locked: ${e.getMessage()}"
+                            println "UploadJobTest ${l[1]} locked (2): ${e.getMessage()}"
+                        }
+                    } else if (l[0] == "UploadJobRoute") {
+                        try {
+                            UploadJobRoute uploadjob_route = UploadJobRoute.get(l[1])
+							if (set_link.error) {
+								println "Route ${uploadjob_route.route.name()}: Set E-Mail-Error"
+								uploadjob_route.uploadJobStatus = UploadJobStatus.Error
+								uploadjob_route.uploadJobLink = ""
+								
+							} else {
+								println "Route ${uploadjob_route.route.name()}: Save link '${l[2]}'"
+								uploadjob_route.uploadJobStatus = UploadJobStatus.Done
+								uploadjob_route.uploadJobLink = l[2]
+							}
+							uploadjob_route.save(flush:true)
+                        } catch (Exception e) {
+                            println "UploadJobRoute ${l[1]} locked (2): ${e.getMessage()}"
                         }
                     }
                 }

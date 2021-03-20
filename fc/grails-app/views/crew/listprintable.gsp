@@ -93,6 +93,9 @@
                         <g:if test="${contestInstance.printCrewTAS}">
                             <th>${message(code:'fc.tas')}</th>
                         </g:if>
+                        <g:if test="${contestInstance.printCrewTrackerID}">
+                            <th>${message(code:'fc.crew.trackerid')}</th>
+                        </g:if>
                         <g:if test="${contestInstance.printCrewUUID}">
                             <th>${message(code:'fc.crew.uuid')}</th>
                         </g:if>

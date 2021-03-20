@@ -550,7 +550,7 @@ class BootStrap {
                                 crew_instance.save()
                             }
                             Test.findAll().each { Test test_instance ->
-                                test_instance.aflosStartNum = test_instance.crew.GetOldAFLOSStartNum()
+                                test_instance.aflosStartNum = 0
                                 test_instance.flightTestLink = ""
                                 test_instance.save()
                             }
@@ -575,7 +575,7 @@ class BootStrap {
                                 test_instance.loggerDataStartUtc = ""
                                 test_instance.loggerDataEndUtc = ""
                                 test_instance.loggerResult = new LoggerResult()
-                                test_instance.showAflosMark = true
+                                test_instance.showAflosMark = false
                                 test_instance.reserve = ""
                                 test_instance.save()
                             }
@@ -597,7 +597,7 @@ class BootStrap {
                                 flighttestwind_instance.save()
                             }
                             Route.findAll().each { Route route_instance ->
-                                route_instance.showAflosMark = true
+                                route_instance.showAflosMark = false
                                 route_instance.save()
                             }
                             Coord.findAll().each { Coord coord_instance ->
@@ -743,6 +743,186 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 14) { // DB-2.14 compatibility
+                            print "    2.14 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.liveTrackingContestID = 0
+                                contest_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.liveTrackingNavigationTaskID = 0
+                                task_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 15) { // DB-2.15 compatibility
+                            print "    2.15 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.liveTrackingManagedCrews = false
+                                contest_instance.liveTrackingContestDate = ""
+                                contest_instance.save()
+                            }
+                            Crew.findAll().each { Crew crew_instance ->
+                                crew_instance.liveTrackingTeamID = 0
+								crew_instance.trackerID = ""
+                                crew_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.liveTrackingNavigationTaskDate = ""
+                                task_instance.liveTrackingTracksAvailable = false
+                                task_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.taskTrackerID = ""
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 16) { // DB-2.16 compatibility
+                            print "    2.16 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.printCrewTrackerID = false
+                                contest_instance.crewPilotNavigatorDelimiter = ","
+                                contest_instance.crewSurnameForenameDelimiter = ""
+                                contest_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 17) { // DB-2.17 compatibility
+                            print "    2.17 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.liveTrackingScorecard = contest_instance.contestRule.ruleValues.liveTrackingScorecard
+                                contest_instance.flightTestBadCourseMaxPoints = contest_instance.contestRule.ruleValues.flightTestBadCourseMaxPoints
+                                contest_instance.save()
+                            }
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+                                resultclass_instance.flightTestBadCourseMaxPoints = resultclass_instance.contestRule.ruleValues.flightTestBadCourseMaxPoints
+								resultclass_instance.save()
+							}
+                            println " done."
+                        }
+                        if (global.versionMinor < 18) { // DB-2.18 compatibility
+                            print "    2.18 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.useProcedureTurns = contest_instance.contestRule.ruleValues.useProcedureTurns
+                                contest_instance.save()
+                            }
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.useProcedureTurns = route_instance.contest.contestRule.ruleValues.useProcedureTurns && OldCSSProperties.UseProcedureTurn(route_instance)
+                                route_instance.liveTrackingScorecard = route_instance.contest.contestRule.ruleValues.liveTrackingScorecard
+                                route_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 19) { // DB-2.19 compatibility
+                            print "    2.19 modifications"
+                            ResultClass.findAll().each { ResultClass resultclass_instance ->
+                                resultclass_instance.secretGateWidth = OldCSSProperties.GetSecretGateWidth(resultclass_instance)
+                                resultclass_instance.minutesBeforeStartTime = OldCSSProperties.GetMinutesBeforeStartTime(resultclass_instance)
+                                resultclass_instance.minutesAddSubmission = OldCSSProperties.GetMinutesAddSubmission(resultclass_instance)
+                                resultclass_instance.save()
+                            }
+                            Crew.findAll().each { Crew crew_instance ->
+                                if (crew_instance.trackerID.startsWith("tracker-") && crew_instance.trackerID.contains("-${crew_instance.startNum}-")) {
+                                    crew_instance.trackerID = ""
+                                }
+                                crew_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                if (test_instance.taskTrackerID.startsWith("tracker-") && test_instance.taskTrackerID.contains("-${test_instance.crew.startNum}-")) {
+                                    test_instance.taskTrackerID = ""
+                                }
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 20) { // DB-2.20 compatibility
+                            print "    2.20 modifications"
+                            FlightTest.findAll().each { FlightTest flighttest_instance ->
+                                Map flighttest_style = OldCSSProperties.GetTestLegStyle(flighttest_instance.task.contest)
+                                flighttest_instance.flightPlanShowLegDistance = flighttest_style.showLegDistance
+                                flighttest_instance.flightPlanShowTrueTrack = flighttest_style.showTrueTrack
+                                flighttest_instance.flightPlanShowTrueHeading = flighttest_style.showTrueHeading
+                                flighttest_instance.flightPlanShowGroundSpeed = flighttest_style.showGroundSpeed
+                                flighttest_instance.flightPlanShowLocalTime = flighttest_style.showLocalTime
+                                flighttest_instance.flightPlanShowElapsedTime = flighttest_style.showElapsedTime
+                                flighttest_instance.submissionMinutes = OldCSSProperties.GetSubmissionMinutes(flighttest_instance.task.contest)
+                                flighttest_instance.flightPlanAddTPNum = OldCSSProperties.GetAddTPNum(flighttest_instance.route)
+                                flighttest_instance.flightResultsShowCurvedPoints = OldCSSProperties.ShowFlightResultsCurvedPoints(flighttest_instance.task.contest)
+                                flighttest_instance.save()
+                            }
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.flightPlanShowLegDistance = contest_instance.contestRule.ruleValues.flightPlanShowLegDistance
+                                contest_instance.flightPlanShowTrueTrack = contest_instance.contestRule.ruleValues.flightPlanShowTrueTrack
+                                contest_instance.flightPlanShowTrueHeading = contest_instance.contestRule.ruleValues.flightPlanShowTrueHeading
+                                contest_instance.flightPlanShowGroundSpeed = contest_instance.contestRule.ruleValues.flightPlanShowGroundSpeed
+                                contest_instance.flightPlanShowLocalTime = contest_instance.contestRule.ruleValues.flightPlanShowLocalTime
+                                contest_instance.flightPlanShowElapsedTime = contest_instance.contestRule.ruleValues.flightPlanShowElapsedTime
+                                contest_instance.flightTestSubmissionMinutes = contest_instance.contestRule.ruleValues.flightTestSubmissionMinutes
+                                contest_instance.contestLandingResultsFactor = OldCSSProperties.GetLandingResultsFactor(contest_instance)
+                                contest_instance.save()
+                            }
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.showCurvedPoints = OldCSSProperties.ShowCurvedPoints(route_instance)
+                                route_instance.save()
+                            }
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.printStyle = OldCSSProperties.DeleteAllProperties(contest_instance)
+                                contest_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 21) { // DB-2.21 compatibility
+                            print "    2.21 modifications"
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.mapScale = route_instance.contest.mapScale
+                                route_instance.contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM_ICAO
+                                route_instance.contestMapCircle = true
+                                route_instance.contestMapProcedureTurn = true
+                                route_instance.contestMapLeg = true
+                                route_instance.contestMapCurvedLeg = true
+                                route_instance.contestMapCurvedLegPoints = Defs.CONTESTMAPPOINTS_INIT
+                                route_instance.contestMapTpName = true
+                                route_instance.contestMapSecretGates = false
+                                route_instance.contestMapEnroutePhotos = false
+                                route_instance.contestMapEnrouteCanvas = false
+                                route_instance.contestMapGraticule = true
+                                route_instance.contestMapContourLines = Defs.CONTESTMAPCONTOURLINES_100M
+                                route_instance.contestMapMunicipalityNames = true
+                                route_instance.contestMapChurches = true
+                                route_instance.contestMapCastles = true
+                                route_instance.contestMapChateaus = true
+                                route_instance.contestMapPowerlines = true
+                                route_instance.contestMapWindpowerstations = true
+                                route_instance.contestMapSmallRoads = false
+                                route_instance.contestMapPeaks = true
+                                route_instance.contestMapDropShadow = false
+                                route_instance.contestMapAdditionals = true
+                                route_instance.contestMapSpecials = false
+                                route_instance.contestMapAirspaces = false
+                                route_instance.contestMapAirspacesLayer = ""
+                                route_instance.contestMapCenterHorizontalPos = HorizontalPos.Center
+                                route_instance.contestMapCenterVerticalPos = VerticalPos.Center
+                                route_instance.SetAllContestMapPoints()
+                                route_instance.contestMapPrintLandscape = true
+                                route_instance.contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A3
+                                route_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.printTimetableJurySubmission = true
+                                task_instance.printTimetableJuryLandingField = false
+                                task_instance.save()
+                            }
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.ruleTitle = contest_instance.contestRule.ruleValues.ruleTitle
+                                contest_instance.save()
+                            }
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+                                resultclass_instance.ruleTitle = resultclass_instance.contestRule.ruleValues.ruleTitle
+								resultclass_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }
@@ -824,6 +1004,12 @@ class BootStrap {
             domain_class.metaClass.getPrintMsgArgs = { code, args ->
                 def session_obj = RequestContextHolder.currentRequestAttributes().getSession()
                 return messageSource.getMessage(code, args.toArray(), new Locale(session_obj.printLanguage))
+            }
+			domain_class.metaClass.getTrackingMsg = { code ->
+	            return messageSource.getMessage(code, null, new Locale("en"))
+			}
+            domain_class.metaClass.getTrackingMsgArgs = { code, args ->
+                return messageSource.getMessage(code, args.toArray(), new Locale("en"))
             }
 		}
         

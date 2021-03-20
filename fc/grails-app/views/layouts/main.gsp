@@ -24,6 +24,7 @@
         <g:layoutHead />
 
         <g:javascript library="application" />
+        <g:javascript library="jquery-3.3.1"/>
     </head>
     <body>
         <div class="container_12">

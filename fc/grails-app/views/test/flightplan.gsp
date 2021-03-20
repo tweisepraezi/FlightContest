@@ -12,10 +12,6 @@
                 <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.timetableModified}">*</g:if><g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['flightplanReturnAction':flightplanReturnAction,'flightplanReturnController':flightplanReturnController,'flightplanReturnID':flightplanReturnID]}">
-			            <g:set var="show_submission_time" value="${false}" />
-			            <g:if test="${testInstance.task.contest.printStyle.contains('--submission')}">
-			                <g:set var="show_submission_time" value="${true}" />
-			            </g:if>
                         <table>
                             <tbody>
                                 <tr>
@@ -64,7 +60,7 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.route')}:</td>
                                     <g:if test="${testInstance.flighttestwind}">
-                                        <td><g:route var="${testInstance.flighttestwind.flighttest.route}" link="${createLink(controller:'route',action:'show')}"/></td>
+                                        <td><g:route var="${testInstance.task.flighttest.route}" link="${createLink(controller:'route',action:'show')}"/></td>
                                     </g:if> <g:else>
                                         <td>${message(code:'fc.noassigned')}</td>
                                     </g:else>
@@ -82,25 +78,25 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <g:if test="${testInstance.task.planningTestDuration == 0}">
-                                        <td class="detailtitle">${message(code:'fc.test.planning.publish.localtime')}:</th>
+                                    <g:if test="${testInstance.task.planningTestDuration == 0 || testInstance.task.preparationDuration == 0}">
+                                        <td class="detailtitle">${message(code:'fc.flighttest.documentsoutput.localtime')}:</th>
                                     </g:if>
                                     <g:else>
                                         <td class="detailtitle">${message(code:'fc.test.planning.localtime')}:</td>
                                     </g:else>
                                     <g:if test="${testInstance.timeCalculated}">
-                                        <g:if test="${testInstance.task.planningTestDuration > 0}">
-                                            <td>${testInstance.GetTestingTime().format('HH:mm:ss')} - ${testInstance.endTestingTime?.format('HH:mm:ss')}</td>
+                                        <g:if test="${testInstance.task.planningTestDuration == 0 || testInstance.task.preparationDuration == 0}">
+                                            <td>${testInstance.GetTestingTime().format('HH:mm:ss')}</td>
                                         </g:if>
                                         <g:else>
-                                            <td>${testInstance.GetTestingTime().format('HH:mm:ss')}</td>
+                                            <td>${testInstance.GetTestingTime().format('HH:mm:ss')} - ${testInstance.endTestingTime?.format('HH:mm:ss')}</td>
                                         </g:else>
                                     </g:if>
                                     <g:else>
                                         <td>${message(code:'fc.nocalculated')}</td>
                                     </g:else>
                                 </tr>
-			                    <g:if test="${show_submission_time}">
+			                    <g:if test="${testInstance.task.flighttest.submissionMinutes}">
 			                        <tr>
 			                            <td class="detailtitle">${message(code:'fc.test.submission.latest')}:</td>
 	                                    <g:if test="${testInstance.timeCalculated}">
@@ -177,7 +173,7 @@
                                         <g:set var="leg_duration" value="${new BigDecimal(0)}" />
                                         <g:set var="leg_time" value="${testInstance.startTime}" />
                                         <g:set var="total_distance" value="${new BigDecimal(0)}" />
-				                        <g:set var="add_tpnum" value="${testInstance.task.flighttest.route.AddTPNum()}" />
+				                        <g:set var="add_tpnum" value="${testInstance.task.flighttest.AddTPNum()}" />
 				                        <g:set var="add_tpnum_index" value="${0}" />
 				                        <g:set var="add_tpnum_addnum" value="${0}" />
                                         

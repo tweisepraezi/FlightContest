@@ -8,16 +8,24 @@ class DefaultsTagLib
         outln"""<table>"""
         outln"""    <tbody>"""
         outln"""        <tr>"""
-        outln"""            <td>${attrs.i.contestRule.ruleValues.ruleTitle}</td>"""
+        outln"""            <td>${attrs.contest.ruleTitle}</td>"""
         outln"""        </tr>"""
         outln"""    </tbody>"""
         outln"""</table>"""
         outln"""<fieldset>"""
+        outln"""    <div>"""
+        checkBox("useProcedureTurns", attrs.contest.useProcedureTurns, 'fc.contestrule.useprocedureturns', attrs)
+        if (attrs.contest.useProcedureTurns != attrs.contest.contestRule.ruleValues.useProcedureTurns) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </div>"""
+        outln"""    <br/>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.minroutelegs')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="minRouteLegs" name="minRouteLegs" value="${fieldValue(bean:attrs.i,field:'minRouteLegs')}" tabIndex="1"/>"""
-        if (attrs.i.minRouteLegs != attrs.i.contestRule.ruleValues.minRouteLegs) {
+        outln"""        <input type="text" id="minRouteLegs" name="minRouteLegs" value="${fieldValue(bean:attrs.contest,field:'minRouteLegs')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.minRouteLegs != attrs.contest.contestRule.ruleValues.minRouteLegs) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -25,8 +33,8 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.maxroutelegs')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="maxRouteLegs" name="maxRouteLegs" value="${fieldValue(bean:attrs.i,field:'maxRouteLegs')}" tabIndex="2"/>"""
-        if (attrs.i.maxRouteLegs != attrs.i.contestRule.ruleValues.maxRouteLegs) {
+        outln"""        <input type="text" id="maxRouteLegs" name="maxRouteLegs" value="${fieldValue(bean:attrs.contest,field:'maxRouteLegs')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.maxRouteLegs != attrs.contest.contestRule.ruleValues.maxRouteLegs) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -34,8 +42,8 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.gatewidth.sc')}* [${message(code:'fc.mile')}]:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="scGateWidth" name="scGateWidth" value="${fieldValue(bean:attrs.i,field:'scGateWidth')}" tabIndex="3"/>"""
-        if (attrs.i.scGateWidth != attrs.i.contestRule.ruleValues.scGateWidth) {
+        outln"""        <input type="text" id="scGateWidth" name="scGateWidth" value="${fieldValue(bean:attrs.contest,field:'scGateWidth')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.scGateWidth != attrs.contest.contestRule.ruleValues.scGateWidth) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -44,17 +52,17 @@ class DefaultsTagLib
         outln"""        <label>${message(code:'fc.observation.turnpoint')}*:</label>"""
         outln"""        <br/>"""
         for (def v in TurnpointRule.values()) {
-            radioEntry("turnpointRule", v, attrs.i.turnpointRule == v, message(code:v.code),"4")
+            radioEntry("turnpointRule", v, attrs.contest.turnpointRule == v, message(code:v.code), attrs)
         }
-        if (attrs.i.turnpointRule != attrs.i.contestRule.ruleValues.turnpointRule) {
+        if (attrs.contest.turnpointRule != attrs.contest.contestRule.ruleValues.turnpointRule) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </div>"""
         outln"""    <br/>"""
         outln"""    <div>"""
-        checkBox("turnpointMapMeasurement", attrs.i.turnpointMapMeasurement, 'fc.contestrule.turnpointmapmeasurement', "5")
-        if (attrs.i.turnpointMapMeasurement != attrs.i.contestRule.ruleValues.turnpointMapMeasurement) {
+        checkBox("turnpointMapMeasurement", attrs.contest.turnpointMapMeasurement, 'fc.contestrule.turnpointmapmeasurement', attrs)
+        if (attrs.contest.turnpointMapMeasurement != attrs.contest.contestRule.ruleValues.turnpointMapMeasurement) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -64,9 +72,9 @@ class DefaultsTagLib
         outln"""        <label>${message(code:'fc.observation.enroute.photo')}*:</label>"""
         outln"""        <br/>"""
         for (def v in EnrouteRule.values()) {
-            radioEntry("enroutePhotoRule", v, attrs.i.enroutePhotoRule == v, message(code:v.code),"6")
+            radioEntry("enroutePhotoRule", v, attrs.contest.enroutePhotoRule == v, message(code:v.code), attrs)
         }
-        if (attrs.i.enroutePhotoRule != attrs.i.contestRule.ruleValues.enroutePhotoRule) {
+        if (attrs.contest.enroutePhotoRule != attrs.contest.contestRule.ruleValues.enroutePhotoRule) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -76,17 +84,17 @@ class DefaultsTagLib
         outln"""        <label>${message(code:'fc.observation.enroute.canvas')}*:</label>"""
         outln"""        <br/>"""
         for (def v in EnrouteRule.values()) {
-            radioEntry("enrouteCanvasRule", v, attrs.i.enrouteCanvasRule == v, message(code:v.code),"7")
+            radioEntry("enrouteCanvasRule", v, attrs.contest.enrouteCanvasRule == v, message(code:v.code), attrs)
         }
-        if (attrs.i.enrouteCanvasRule != attrs.i.contestRule.ruleValues.enrouteCanvasRule) {
+        if (attrs.contest.enrouteCanvasRule != attrs.contest.contestRule.ruleValues.enrouteCanvasRule) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
         outln"""    </div>"""
         outln"""    <br/>"""
         outln"""    <div>"""
-        checkBox("enrouteCanvasMultiple", attrs.i.enrouteCanvasMultiple, 'fc.contestrule.enroutecanvasmultiple', "8")
-        if (attrs.i.enrouteCanvasMultiple != attrs.i.contestRule.ruleValues.enrouteCanvasMultiple) {
+        checkBox("enrouteCanvasMultiple", attrs.contest.enrouteCanvasMultiple, 'fc.contestrule.enroutecanvasmultiple', attrs)
+        if (attrs.contest.enrouteCanvasMultiple != attrs.contest.contestRule.ruleValues.enrouteCanvasMultiple) {
             outln"""    !"""
             attrs.ret.modifynum++
         }
@@ -95,8 +103,8 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.minenroutephotos')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="minEnroutePhotos" name="minEnroutePhotos" value="${fieldValue(bean:attrs.i,field:'minEnroutePhotos')}" tabIndex="9"/>"""
-        if (attrs.i.minEnroutePhotos != attrs.i.contestRule.ruleValues.minEnroutePhotos) {
+        outln"""        <input type="text" id="minEnroutePhotos" name="minEnroutePhotos" value="${fieldValue(bean:attrs.contest,field:'minEnroutePhotos')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.minEnroutePhotos != attrs.contest.contestRule.ruleValues.minEnroutePhotos) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -104,8 +112,8 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.maxenroutephotos')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="maxEnroutePhotos" name="maxEnroutePhotos" value="${fieldValue(bean:attrs.i,field:'maxEnroutePhotos')}" tabIndex="10"/>"""
-        if (attrs.i.maxEnroutePhotos != attrs.i.contestRule.ruleValues.maxEnroutePhotos) {
+        outln"""        <input type="text" id="maxEnroutePhotos" name="maxEnroutePhotos" value="${fieldValue(bean:attrs.contest,field:'maxEnroutePhotos')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.maxEnroutePhotos != attrs.contest.contestRule.ruleValues.maxEnroutePhotos) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -113,8 +121,8 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.minenroutecanvas')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="minEnrouteCanvas" name="minEnrouteCanvas" value="${fieldValue(bean:attrs.i,field:'minEnrouteCanvas')}" tabIndex="11"/>"""
-        if (attrs.i.minEnrouteCanvas != attrs.i.contestRule.ruleValues.minEnrouteCanvas) {
+        outln"""        <input type="text" id="minEnrouteCanvas" name="minEnrouteCanvas" value="${fieldValue(bean:attrs.contest,field:'minEnrouteCanvas')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.minEnrouteCanvas != attrs.contest.contestRule.ruleValues.minEnrouteCanvas) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -122,8 +130,8 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.maxenroutecanvas')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="maxEnrouteCanvas" name="maxEnrouteCanvas" value="${fieldValue(bean:attrs.i,field:'maxEnrouteCanvas')}" tabIndex="12"/>"""
-        if (attrs.i.maxEnrouteCanvas != attrs.i.contestRule.ruleValues.maxEnrouteCanvas) {
+        outln"""        <input type="text" id="maxEnrouteCanvas" name="maxEnrouteCanvas" value="${fieldValue(bean:attrs.contest,field:'maxEnrouteCanvas')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.maxEnrouteCanvas != attrs.contest.contestRule.ruleValues.maxEnrouteCanvas) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -131,8 +139,8 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.minenroutetargets')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="minEnrouteTargets" name="minEnrouteTargets" value="${fieldValue(bean:attrs.i,field:'minEnrouteTargets')}" tabIndex="13"/>"""
-        if (attrs.i.minEnrouteTargets != attrs.i.contestRule.ruleValues.minEnrouteTargets) {
+        outln"""        <input type="text" id="minEnrouteTargets" name="minEnrouteTargets" value="${fieldValue(bean:attrs.contest,field:'minEnrouteTargets')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.minEnrouteTargets != attrs.contest.contestRule.ruleValues.minEnrouteTargets) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -140,8 +148,60 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.maxenroutetargets')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="maxEnrouteTargets" name="maxEnrouteTargets" value="${fieldValue(bean:attrs.i,field:'maxEnrouteTargets')}" tabIndex="14"/>"""
-        if (attrs.i.maxEnrouteTargets != attrs.i.contestRule.ruleValues.maxEnrouteTargets) {
+        outln"""        <input type="text" id="maxEnrouteTargets" name="maxEnrouteTargets" value="${fieldValue(bean:attrs.contest,field:'maxEnrouteTargets')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.maxEnrouteTargets != attrs.contest.contestRule.ruleValues.maxEnrouteTargets) {
+            outln"""        !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </p>"""
+        outln"""    <div>"""
+        checkBox("flightPlanShowLegDistance", attrs.contest.flightPlanShowLegDistance, 'fc.flighttest.flightplan.showlegdistance', attrs)
+        if (attrs.contest.flightPlanShowLegDistance != attrs.contest.contestRule.ruleValues.flightPlanShowLegDistance) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </div>"""
+        outln"""    <div>"""
+        checkBox("flightPlanShowTrueTrack", attrs.contest.flightPlanShowTrueTrack, 'fc.flighttest.flightplan.showtruetrack', attrs)
+        if (attrs.contest.flightPlanShowTrueTrack != attrs.contest.contestRule.ruleValues.flightPlanShowTrueTrack) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </div>"""
+        outln"""    <div>"""
+        checkBox("flightPlanShowTrueHeading", attrs.contest.flightPlanShowTrueHeading, 'fc.flighttest.flightplan.showtrueheading', attrs)
+        if (attrs.contest.flightPlanShowTrueHeading != attrs.contest.contestRule.ruleValues.flightPlanShowTrueHeading) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </div>"""
+        outln"""    <div>"""
+        checkBox("flightPlanShowGroundSpeed", attrs.contest.flightPlanShowGroundSpeed, 'fc.flighttest.flightplan.showgroundspeed', attrs)
+        if (attrs.contest.flightPlanShowGroundSpeed != attrs.contest.contestRule.ruleValues.flightPlanShowGroundSpeed) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </div>"""
+        outln"""    <div>"""
+        checkBox("flightPlanShowLocalTime", attrs.contest.flightPlanShowLocalTime, 'fc.flighttest.flightplan.showlocaltime', attrs)
+        if (attrs.contest.flightPlanShowLocalTime != attrs.contest.contestRule.ruleValues.flightPlanShowLocalTime) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </div>"""
+        outln"""    <div>"""
+        checkBox("flightPlanShowElapsedTime", attrs.contest.flightPlanShowElapsedTime, 'fc.flighttest.flightplan.showelapsedtime', attrs)
+        if (attrs.contest.flightPlanShowElapsedTime != attrs.contest.contestRule.ruleValues.flightPlanShowElapsedTime) {
+            outln"""    !"""
+            attrs.ret.modifynum++
+        }
+        outln"""    </div>"""
+        outln"""    <br/>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.flighttest.flightplan.submissionminutes')} [${message(code:'fc.time.min')}]:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="flightTestSubmissionMinutes" name="flightTestSubmissionMinutes" value="${fieldValue(bean:attrs.contest,field:'flightTestSubmissionMinutes')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.flightTestSubmissionMinutes != attrs.contest.contestRule.ruleValues.flightTestSubmissionMinutes) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
@@ -149,12 +209,23 @@ class DefaultsTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.contestrule.unsuitablestartnum')}*:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="unsuitableStartNum" name="unsuitableStartNum" value="${fieldValue(bean:attrs.i,field:'unsuitableStartNum')}" tabIndex="15"/>"""
-        if (attrs.i.unsuitableStartNum != attrs.i.contestRule.ruleValues.unsuitableStartNum) {
+        outln"""        <input type="text" id="unsuitableStartNum" name="unsuitableStartNum" value="${fieldValue(bean:attrs.contest,field:'unsuitableStartNum')}" tabIndex="${attrs.ti[0]++}"/>"""
+        if (attrs.contest.unsuitableStartNum != attrs.contest.contestRule.ruleValues.unsuitableStartNum) {
             outln"""        !"""
             attrs.ret.modifynum++
         }
         outln"""    </p>"""
+        if (BootStrap.global.IsLiveTrackingPossible()) {
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.general.livetrackingscorecard')}:</label>"""
+            outln"""    <br/>"""
+            outln"""    <input type="text" id="liveTrackingScorecard" name="liveTrackingScorecard" value="${fieldValue(bean:attrs.contest,field:'liveTrackingScorecard')}" tabIndex="${attrs.ti[0]++}"/>"""
+            if (attrs.contest.liveTrackingScorecard != attrs.contest.contestRule.ruleValues.liveTrackingScorecard) {
+                outln"""    !"""
+                attrs.ret.modifynum++
+            }
+            outln"""</p>"""
+        }
         outln"""</fieldset>"""
         if (attrs.ret.modifynum > 0) {
             outln"""<fieldset>"""
@@ -172,8 +243,8 @@ class DefaultsTagLib
         outln"""        </tr>"""
         outln"""        <tr class="value">"""
         outln"""            <td class="name">${message(code:'fc.planningtest.directioncorrectgrad')}</td>"""
-        outln"""            <td class="value">${attrs.i.planningTestDirectionCorrectGrad}${message(code:'fc.grad')}</td>"""
-        if (attrs.i.planningTestDirectionCorrectGrad != attrs.i.contestRule.ruleValues.planningTestDirectionCorrectGrad) {
+        outln"""            <td class="value">${attrs.contest.planningTestDirectionCorrectGrad}${message(code:'fc.grad')}</td>"""
+        if (attrs.contest.planningTestDirectionCorrectGrad != attrs.contest.contestRule.ruleValues.planningTestDirectionCorrectGrad) {
             outln"""        <td class="modify">!</td>"""
         } else {
             outln"""        <td class="modify"/>"""
@@ -184,24 +255,24 @@ class DefaultsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private checkBox(String name, boolean checked, String label, String tabIndex)
+    private checkBox(String name, boolean checked, String label, attrs)
     {
         outln"""<input type="hidden" name="_${name}"/>"""
         if (checked) {
-            outln"""            <input type="checkbox" id="${name}" name="${name}" checked="checked" tabIndex="${tabIndex}"/>"""
+            outln"""            <input type="checkbox" id="${name}" name="${name}" checked="checked" tabIndex="${attrs.ti[0]++}"/>"""
         } else {
-            outln"""            <input type="checkbox" id="${name}" name="${name}" tabIndex="${tabIndex}"/>"""
+            outln"""            <input type="checkbox" id="${name}" name="${name}" tabIndex="${attrs.ti[0]++}"/>"""
         }
         outln"""<label>${message(code:label)}</label>"""
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private radioEntry(String name, def value, boolean checked, String label, String tabIndex)
+    private radioEntry(String name, def value, boolean checked, String label, attrs)
     {
         if (checked) {
-            outln"""    <label><input type="radio" name="${name}" value="${value}" checked="checked" tabIndex="${tabIndex}"/>${label}</label>"""
+            outln"""    <label><input type="radio" name="${name}" value="${value}" checked="checked" tabIndex="${attrs.ti[0]++}"/>${label}</label>"""
         } else {
-            outln"""    <label><input type="radio" name="${name}" value="${value}" tabIndex="${tabIndex}"/>${label}</label>"""
+            outln"""    <label><input type="radio" name="${name}" value="${value}" tabIndex="${attrs.ti[0]++}"/>${label}</label>"""
         }
     }
     

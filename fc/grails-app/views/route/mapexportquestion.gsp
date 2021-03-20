@@ -31,7 +31,7 @@
 	                                <g:checkBox name="contestMapCircle" value="${routeInstance.contestMapCircle}" tabIndex="${ti[0]++}" />
 	                                <label>${message(code:'fc.contestmap.contestmapcircle')}</label>
 	                            </div>
-	                            <g:if test="${route_data.procedureturn_num && routeInstance.UseProcedureTurn()}">
+	                            <g:if test="${route_data.procedureturn_num && routeInstance.useProcedureTurns}">
 		                            <div>
 		                                <g:checkBox name="contestMapProcedureTurn" value="${routeInstance.contestMapProcedureTurn}" tabIndex="${ti[0]++}" />
 		                                <label>${message(code:'fc.contestmap.contestmapprocedureturn')}</label>
@@ -44,7 +44,8 @@
                                 <g:if test="${route_data.curved_num}">
 		                            <div>
 		                                <g:checkBox name="contestMapCurvedLeg" value="${routeInstance.contestMapCurvedLeg}" tabIndex="${ti[0]++}" />
-		                                <label>${message(code:'fc.contestmap.contestmapcurvedleg')}</label>
+		                                <label>${message(code:'fc.contestmap.contestmapcurvedleg')}: </label>
+                                        <g:contestMapCurvedPointsInput r="${routeInstance}" tp="${routeInstance.contestMapCurvedLegPoints}" tpid="${Defs.TurnpointID_ContestMapCurvedLegPoints}" ti="${ti}" />
 		                            </div>
                                 </g:if>
 	                            <div>
@@ -71,34 +72,50 @@
 	                            </g:if>
 	                        </fieldset>
 	                        <g:set var="geodata_airfields" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRFIELDS).exists()}"/>
-	                        <g:set var="geodata_chateaus" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_CHATEAUS).exists()}"/>
-	                        <g:set var="geodata_peaks" value="${PrintMapsOSM && new File(Defs.FCSAVE_FILE_GEODATA_PEAKS).exists()}"/>
+	                        <g:set var="geodata_chateaus" value="${false && new File(Defs.FCSAVE_FILE_GEODATA_CHATEAUS).exists()}"/>
+	                        <g:set var="geodata_peaks" value="${false && new File(Defs.FCSAVE_FILE_GEODATA_PEAKS).exists()}"/>
 	                        <g:set var="geodata_additionals" value="${new File(Defs.FCSAVE_FILE_GEODATA_ADDITIONALS).exists()}"/>
 	                        <g:set var="geodata_special" value="${new File(Defs.FCSAVE_FILE_GEODATA_SPECIALS).exists()}"/>
 	                        <g:set var="geodata_airspace" value="${new File(Defs.FCSAVE_FILE_GEODATA_AIRSPACES).exists()}"/>
 	                        <fieldset>
                                 <div>
-                                    <label>${message(code:'fc.contestmap.scale')}</label>:
-                                    <label><input type="radio" name="contestMapScale" id="${Defs.CONTESTMAPSCALE_200000}" value="${Defs.CONTESTMAPSCALE_200000}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.scale.200000')}</label>
-                                    <label><input type="radio" name="contestMapScale" id="${Defs.CONTESTMAPSCALE_250000}" value="${Defs.CONTESTMAPSCALE_250000}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.scale.250000')}</label>
-                                </div>
-                                <div>
+                                    <g:if test="${routeInstance.contestMapContourLines == Defs.CONTESTMAPCONTOURLINES_100M}">
+                                        <g:set var="contourlines_checked_100m" value="checked"/>
+                                    </g:if>
+                                    <g:elseif test="${routeInstance.contestMapContourLines == Defs.CONTESTMAPCONTOURLINES_50M}">
+                                        <g:set var="contourlines_checked_50m" value="checked"/>
+                                    </g:elseif>
+                                    <g:elseif test="${routeInstance.contestMapContourLines == Defs.CONTESTMAPCONTOURLINES_20M}">
+                                        <g:set var="contourlines_checked_20m" value="checked"/>
+                                    </g:elseif>
+                                    <g:else>
+                                        <g:set var="contourlines_checked_none" value="checked"/>
+                                    </g:else>
                                     <label>${message(code:'fc.contestmap.contestmapcontourlines')}</label>:
-                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_100M}" value="${Defs.CONTESTMAPCONTOURLINES_100M}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.100m')}</label>
-                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_50M}" value="${Defs.CONTESTMAPCONTOURLINES_50M}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.50m')}</label>
-                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_20M}" value="${Defs.CONTESTMAPCONTOURLINES_20M}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.20m')}</label>
-                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_NONE}" value="${Defs.CONTESTMAPCONTOURLINES_NONE}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.none')}</label>
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_100M}" value="${Defs.CONTESTMAPCONTOURLINES_100M}" ${contourlines_checked_100m} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.100m')}</label>
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_50M}" value="${Defs.CONTESTMAPCONTOURLINES_50M}" ${contourlines_checked_50m} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.50m')}</label>
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_20M}" value="${Defs.CONTESTMAPCONTOURLINES_20M}" ${contourlines_checked_20m} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.20m')}</label>
+                                    <label><input type="radio" name="contestMapContourLines" id="${Defs.CONTESTMAPCONTOURLINES_NONE}" value="${Defs.CONTESTMAPCONTOURLINES_NONE}" ${contourlines_checked_none} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapcontourlines.none')}</label>
                                 </div>
                                 <div>
                                     <g:checkBox name="contestMapGraticule" value="${routeInstance.contestMapGraticule}" tabIndex="${ti[0]++}" />
                                     <label>${message(code:'fc.contestmap.contestmapgraticule')}</label>
                                 </div>
-	                            <g:if test="${geodata_airfields && !PrintMapsOSM}">
+	                            <g:if test="${geodata_airfields}">
 	                                <div>
+                                        <g:if test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}">
+                                            <g:set var="airfields_checked_icao" value="checked"/>
+                                        </g:if>
+                                        <g:elseif test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_NAME}">
+                                            <g:set var="airfields_checked_name" value="checked"/>
+                                        </g:elseif>
+                                        <g:elseif test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA}">
+                                            <g:set var="airfields_checked_geodata" value="checked"/>
+                                        </g:elseif>
 	                                    <label>${message(code:'fc.contestmap.contestmapairfields')}</label> <img src="${createLinkTo(dir:'images/map',file:'airfield.png')}"/>:
-                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.icao')}</label>
-                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.name')}</label>
-                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" value="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.geodata')}</label>
+                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" ${airfields_checked_icao} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.icao')}</label>
+                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" ${airfields_checked_name} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.name')}</label>
+                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" value="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" ${airfields_checked_geodata} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.geodata')}</label>
 	                                </div>
 	                            </g:if>
 	                            <div>
@@ -138,7 +155,13 @@
 	                                    <img src="${createLinkTo(dir:'images/map',file:'peak.png')}"/>
 	                                </div>
 	                            </g:if>
-	                            <g:if test="${PrintMapsOSM}">
+	                            <g:if test="${false}">
+	                                <div>
+	                                    <g:checkBox name="contestMapDropShadow" value="${routeInstance.contestMapDropShadow}" tabIndex="${ti[0]++}" />
+	                                    <label>${message(code:'fc.contestmap.contestmapdropshadow')}</label>
+	                                </div>
+	                            </g:if>
+	                            <g:if test="${false}">
 	                                <div>
 	                                    <g:checkBox name="contestMapMunicipalityNames" value="${routeInstance.contestMapMunicipalityNames}" tabIndex="${ti[0]++}" />
 	                                    <label>${message(code:'fc.contestmap.contestmapmunicipalitynames')}</label>
@@ -204,24 +227,32 @@
                                 </div>
 	                            <br/>
                                 <div>
+                                    <g:if test="${routeInstance.contestMapPrintSize == Defs.CONTESTMAPPRINTSIZE_A4}">
+                                        <g:set var="printsize_checked_a4" value="checked"/>
+                                    </g:if>
+                                    <g:elseif test="${routeInstance.contestMapPrintSize == Defs.CONTESTMAPPRINTSIZE_A3}">
+                                        <g:set var="printsize_checked_a3" value="checked"/>
+                                    </g:elseif>
+                                    <g:elseif test="${routeInstance.contestMapPrintSize == Defs.CONTESTMAPPRINTSIZE_A2}">
+                                        <g:set var="printsize_checked_a2" value="checked"/>
+                                    </g:elseif>
+                                    <g:elseif test="${routeInstance.contestMapPrintSize == Defs.CONTESTMAPPRINTSIZE_A1}">
+                                        <g:set var="printsize_checked_a1" value="checked"/>
+                                    </g:elseif>
+                                    <g:elseif test="${routeInstance.contestMapPrintSize == Defs.CONTESTMAPPRINTSIZE_ANR}">
+                                        <g:set var="printsize_checked_anr" value="checked"/>
+                                    </g:elseif>
                                     <label>${message(code:'fc.contestmap.printsize')}</label>:
-                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A4}" value="${Defs.CONTESTMAPPRINTSIZE_A4}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a4')}</label>
-                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A3}" value="${Defs.CONTESTMAPPRINTSIZE_A3}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a3')}</label>
-                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A2}" value="${Defs.CONTESTMAPPRINTSIZE_A2}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a2')}</label>
-                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A1}" value="${Defs.CONTESTMAPPRINTSIZE_A1}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a1')}</label>
-                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_ANR}" value="${Defs.CONTESTMAPPRINTSIZE_ANR}" tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.anr')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A4}" value="${Defs.CONTESTMAPPRINTSIZE_A4}" ${printsize_checked_a4} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a4')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A3}" value="${Defs.CONTESTMAPPRINTSIZE_A3}" ${printsize_checked_a3} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a3')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A2}" value="${Defs.CONTESTMAPPRINTSIZE_A2}" ${printsize_checked_a2} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a2')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_A1}" value="${Defs.CONTESTMAPPRINTSIZE_A1}" ${printsize_checked_a1} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.a1')}</label>
+                                    <label><input type="radio" name="contestMapPrintSize" id="${Defs.CONTESTMAPPRINTSIZE_ANR}" value="${Defs.CONTESTMAPPRINTSIZE_ANR}" ${printsize_checked_anr} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.printsize.anr')}</label>
                                 </div>
                                 <div>
                                     <g:checkBox name="contestMapPrintLandscape" value="${routeInstance.contestMapPrintLandscape}" />
                                     <label>${message(code:'fc.printlandscape')}</label>
                                 </div>
-	                            
-	                            <g:if test="${PrintMapsOSM}">
-	                                <div>
-	                                    <g:checkBox name="contestMapColorChanges" value="${routeInstance.contestMapColorChanges}" />
-	                                    <label>${message(code:'fc.contestmap.contestmapcolorchanges')}</label>
-	                                </div>
-	                            </g:if>
 	                        </fieldset>
 	                        <g:if test="${BootStrap.global.IsContestMapDevOptions()}">
 		                        <fieldset>
@@ -253,6 +284,7 @@
 		                    </g:else>
                             <input type="hidden" name="id" value="${routeInstance?.id}" />
                             <g:actionSubmit action="mapgenerate" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                            <g:actionSubmit action="mapsavesettings" value="${message(code:'fc.save')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                         </g:if>
                         <g:else>
                             <g:if test="${BreakButton}">

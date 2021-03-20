@@ -57,7 +57,7 @@ class ResultClassController {
 	}
 
 	def update = {
-		def resultclass = fcService.updateResultClass(params)
+		def resultclass = fcService.updateResultClass(session.showLanguage, params)
 		if (resultclass.saved) {
 			flash.message = resultclass.message
 			// process return action
@@ -88,7 +88,7 @@ class ResultClassController {
 	}
 
     def updatenext = {
-        def resultclass = fcService.updateResultClass(params)
+        def resultclass = fcService.updateResultClass(session.showLanguage, params)
         if (resultclass.instance) {
             long next_id = resultclass.instance.GetNextID()
             long next_id2 = ResultClass.GetNextID2(next_id)
@@ -119,7 +119,7 @@ class ResultClassController {
     }
     
 	def savesettings = {
-		def resultclass = fcService.updateResultClass(params)
+		def resultclass = fcService.updateResultClass(session.showLanguage, params)
 		if (resultclass.saved) {
 			flash.message = resultclass.message
             long next_resultclassid = resultclass.instance.GetNextID()
@@ -141,7 +141,7 @@ class ResultClassController {
 	}
 
 	def savepoints = {
-		def resultclass = fcService.updateResultClass(params)
+		def resultclass = fcService.updateResultClass(session.showLanguage, params)
 		if (resultclass.saved) {
 			flash.message = resultclass.message
             redirect(action:editpoints,id:params.id)

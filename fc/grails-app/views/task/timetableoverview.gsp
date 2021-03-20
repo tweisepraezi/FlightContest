@@ -17,11 +17,12 @@
                 </g:hasErrors>
                 <div class="block" id="forms">
                     <g:form params="${['taskReturnAction':taskReturnAction,'taskReturnController':taskReturnController,'taskReturnID':taskReturnID]}">
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.task.briefingtime')} [${message(code:'fc.time.hmin')}]:</label>
                                 <br/>
-                                <input type="text" id="briefingTime" name="briefingTime" value="${fieldValue(bean:taskInstance,field:'briefingTime')}" tabIndex="1"/>
+                                <input type="text" id="briefingTime" name="briefingTime" value="${fieldValue(bean:taskInstance,field:'briefingTime')}" tabIndex="${ti[0]++}" onkeydown="modify();"/>
                             </p>
                             <g:set var="first_test" value="${taskInstance.GetFirstTestBefore()}"/>
                             <g:if test="${!first_test}">
@@ -125,25 +126,31 @@
 		                    </table>
                             <p>
                                 <div>
-                                    <g:checkBox name="printTimetableOverviewLegTimes" value="${taskInstance.printTimetableOverviewLegTimes}" />
+                                    <g:checkBox name="printTimetableOverviewLegTimes" value="${taskInstance.printTimetableOverviewLegTimes}" onclick="modify();"/>
                                     <label>${message(code:'fc.legtime.total')}</label>
                                 </div>
                                 <br/>
                                 <div>
-                                    <g:checkBox name="printTimetableOverviewLandscape" value="${taskInstance.printTimetableOverviewLandscape}" />
+                                    <g:checkBox name="printTimetableOverviewLandscape" value="${taskInstance.printTimetableOverviewLandscape}" onclick="modify();"/>
                                     <label>${message(code:'fc.printlandscape')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableOverviewA3" value="${taskInstance.printTimetableOverviewA3}" />
+                                    <g:checkBox name="printTimetableOverviewA3" value="${taskInstance.printTimetableOverviewA3}" onclick="modify();"/>
                                     <label>${message(code:'fc.printa3')}</label>
                                 </div>
                             </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
-                        <g:actionSubmit action="savetimetableoverviewsettings" value="${message(code:'fc.save')}" tabIndex="101"/>
-                        <g:actionSubmit action="printtimetableoverview" value="${message(code:'fc.print')}" tabIndex="102"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="103"/>
+                        <g:actionSubmit action="savetimetableoverviewsettings" id="savetimetableoverviewsettings_id" value="${message(code:'fc.save')}" disabled tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="printtimetableoverview" id="printtimetableoverview_id" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
+                        <script>
+                            function modify() {
+                                $("#savetimetableoverviewsettings_id").prop("disabled", false);
+                                $("#printtimetableoverview_id").prop("disabled", true);
+                            }
+                        </script>
                     </g:form>
                 </div>
             </div>

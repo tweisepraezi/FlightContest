@@ -4,9 +4,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.13
+	// Actual database version: DB-2.21
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 13
+	static int DB_MINOR = 21
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -17,8 +17,6 @@ class Global
     Long liveContestID = 0                               // Live-Anzeige: Gewählter Contest, DB-2.11
     Integer liveUploadSeconds = Defs.LIVE_UPLOADSECONDS  // Live-Anzeige: Upload-Zeit in Sekunden, DB-2.11
     String liveLanguage = "de"                           // Live-Anzeige: Sprache, DB-2.11
-    
-    final static String PRINTSERVER_API = "http://printmaps-osm.de:8282/api/beta2/maps"
     
     static constraints = {
         // DB-2.11 compatibility
@@ -189,37 +187,79 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    boolean IsAFLOSPossible()
+    boolean IsLiveTrackingPossible()
     {
-        if (AflosTools.ExistAflosConnection()) {
-            if (IsDevelopmentEnvironment()) {
-                return true
-            }
-            if (   grailsApplication.config.flightcontest.aflos
-                && grailsApplication.config.flightcontest.aflos.showmenu
-               )
-            {
-                return true
-            }
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.server
+            && grailsApplication.config.flightcontest.livetracking.api
+            && grailsApplication.config.flightcontest.livetracking.token
+        ) {
+            return true
         }
         return false
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    boolean IsDBUtilPossible()
+    String GetLiveTrackingAPI()
     {
-        if (IsDevelopmentEnvironment()) {
-            return true
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.server
+            && grailsApplication.config.flightcontest.livetracking.api
+        ) {
+            return grailsApplication.config.flightcontest.livetracking.server + grailsApplication.config.flightcontest.livetracking.api
         }
-        if (   grailsApplication.config.flightcontest.dbutil
-            && grailsApplication.config.flightcontest.dbutil.showmenu
-           )
-        {
+        return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetLiveTrackingToken()
+    {
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.token
+        ) {
+            return grailsApplication.config.flightcontest.livetracking.token
+        }
+        return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetLiveTrackingMap(Integer navigationTaskID)
+    {
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.server
+            && grailsApplication.config.flightcontest.livetracking.display
+            && grailsApplication.config.flightcontest.livetracking.display.frontend
+            && grailsApplication.config.flightcontest.livetracking.display.frontendMap
+        ) {
+            return grailsApplication.config.flightcontest.livetracking.server + grailsApplication.config.flightcontest.livetracking.display.frontend + navigationTaskID.toString() + grailsApplication.config.flightcontest.livetracking.display.frontendMap
+        }
+        return ""
+	}
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsLiveTrackingContestDeletePossible()
+    {
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.contest
+            && grailsApplication.config.flightcontest.livetracking.contest.showDelete
+        ) {
             return true
         }
         return false
     }
-    
+	
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsLiveTrackingNavigationTaskDeletePossible()
+    {
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.navigationtask
+            && grailsApplication.config.flightcontest.livetracking.navigationtask.showDelete
+        ) {
+            return true
+        }
+        return false
+    }
+	
     // --------------------------------------------------------------------------------------------------------------------
     boolean IsLogPossible()
     {
@@ -291,6 +331,19 @@ class Global
            )
         {
             return grailsApplication.config.flightcontest.maps.gm_api_key
-        }   
+        }
+        return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetLandingInfo()
+    {
+        if (   grailsApplication.config.flightcontest.landing
+            && grailsApplication.config.flightcontest.landing.info
+           )
+        {
+            return grailsApplication.config.flightcontest.landing.info
+        }
+        return ""
     }
 }

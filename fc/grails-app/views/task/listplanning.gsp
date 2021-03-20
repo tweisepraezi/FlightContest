@@ -218,6 +218,29 @@
                                 <td colspan="2"><g:actionSubmit action="exporttimetable" value="${message(code:'fc.test.timetable.export')}" /></td>
                                 <td/>
                             </tr>
+                            <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.contest.liveTrackingContestID && taskInstance.contest.liveTrackingScorecard && taskInstance.liveTrackingNavigationTaskID}" >
+                                <tr class="join">
+                                    <td colspan="2"><g:actionSubmit action="livetracking_navigationtaskupdatecrews" value="${message(code:'fc.livetracking.navigationtaskupdatecrews')}"/></td>
+                                    <g:if test="${taskInstance.contest.resultClasses}">
+                                        <g:if test="${taskInstance.liveTrackingTracksAvailable}">
+                                            <td colspan="3"><g:actionSubmit action="livetracking_navigationtaskaddtrackcrews" value="${message(code:'fc.livetracking.navigationtaskaddtrackcrews')}"/></td>
+                                        </g:if>
+                                        <g:else>
+                                            <td colspan="3"></td>
+                                        </g:else>
+                                    </g:if>
+                                    <g:else>
+                                        <g:if test="${taskInstance.liveTrackingTracksAvailable}">
+                                            <td colspan="2"><g:actionSubmit action="livetracking_navigationtaskaddtrackcrews" value="${message(code:'fc.livetracking.navigationtaskaddtrackcrews')}"/></td>
+                                        </g:if>
+                                        <g:else>
+                                            <td colspan="3"></td>
+                                        </g:else>
+                                    </g:else>
+                                    <td colspan="8"></td>
+                                    <td/>
+                                </tr>
+                            </g:if>
                         </tfoot>
                     </table>
                     <a name="end"/>

@@ -18,10 +18,6 @@
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td>${fieldValue(bean:contestInstance, field:'title')}</td>
                                 </tr>
-                                <tr>
-                                    <td class="detailtitle">${message(code:'fc.scale')}:</td>
-                                    <td>1:${fieldValue(bean:contestInstance, field:'mapScale')}</td>
-                                </tr>
                             </tbody>
                         </table>
                         <input type="hidden" name="id" value="${contestInstance?.id}" />

@@ -5,8 +5,31 @@ hibernate {
 	cache.provider_class = 'net.sf.ehcache.hibernate.EhCacheProvider'
 }
 
-// environment specific settings
-//   dbCreate: enable one of 'create', 'create-drop','update'
+dataSource {
+    properties {
+        // https://tomcat.apache.org/tomcat-9.0-doc/jdbc-pool.html#Common_Attributes
+        jmxEnabled = true
+        initialSize = 10
+        maxActive = 100
+        minIdle = 10
+        maxIdle = 100
+        maxWait = 180000
+        maxAge = 600000
+        timeBetweenEvictionRunsMillis = 5000
+        minEvictableIdleTimeMillis = 60000
+        validationQuery = "SELECT 1"
+        validationQueryTimeout = 10
+        validationInterval = 15000
+        testOnBorrow = true
+        testWhileIdle = true
+        testOnReturn = false
+        jdbcInterceptors = 'ConnectionState'
+        defaultTransactionIsolation = 1 
+            // https://github.com/JetBrains/jdk8u_jdk/blob/master/src/share/classes/java/sql/Connection.java
+            // 1 - TRANSACTION_READ_UNCOMMITTED, 2 - TRANSACTION_READ_COMMITTED, 4 - TRANSACTION_REPEATABLE_READ, 8 - TRANSACTION_SERIALIZABLE
+    }
+}
+
 environments {
 	lastdb {
 		dataSource {
@@ -17,37 +40,6 @@ environments {
             username = 'sa'
             password = ''
 		}
-        /*
-        dataSource_aflos {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS'
-            readOnly = true
-        }
-        
-        dataSource_aflostest {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-TEST'
-            readOnly = true
-        }
-        
-        dataSource_aflosupload {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-UPLOAD'
-            readOnly = true
-        }
-        */
 	}
 	development {
 		dataSource {
@@ -58,37 +50,6 @@ environments {
             username = 'sa'
             password = ''
 		}
-        /*
-        dataSource_aflos {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS'
-            readOnly = true
-        }
-        
-        dataSource_aflostest {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-TEST'
-            readOnly = true
-        }
-        
-        dataSource_aflosupload {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-UPLOAD'
-            readOnly = true
-        }
-        */
 	}
 	test {
 		dataSource {
@@ -99,76 +60,16 @@ environments {
             username = 'sa'
             password = ''
 		}
-        /*
-        dataSource_aflos {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS'
-            readOnly = true
-        }
-        
-        dataSource_aflostest {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-TEST'
-            readOnly = true
-        }
-        
-        dataSource_aflosupload {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-UPLOAD'
-            readOnly = true
-        }
-        */
 	}
 	production {
 		dataSource {
 			dbCreate = "update"
-			url = "jdbc:h2:file:fcdb"
+			url = "jdbc:h2:file:../fc/fcdb"
             pooled = true
             driverClassName = 'org.h2.Driver'
             username = 'sa'
             password = ''
 		}
-        dataSource_aflos {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS'
-            readOnly = true
-        }
-        
-        dataSource_aflostest {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-TEST'
-            readOnly = true
-        }
-        
-        dataSource_aflosupload {
-            pooled = false
-            dialect = org.hibernate.dialect.SQLServerDialect    
-            driverClassName = "sun.jdbc.odbc.JdbcOdbcDriver"
-            username = ''
-            password = ''
-            url = 'jdbc:odbc:FC-AFLOS-UPLOAD'
-            readOnly = true
-        }
 	}
     cloudfoundry {
         dataSource {

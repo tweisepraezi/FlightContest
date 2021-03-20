@@ -67,7 +67,7 @@
 
                             <g:set var="route_data" value="${route_instance.GetRouteData()}" />
                             <g:if test="${route_data.procedureturn_num}">
-                                <td style="white-space: nowrap;"><g:if test="${route_instance.UseProcedureTurn()}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</td>
+                                <td style="white-space: nowrap;"><g:if test="${route_instance.useProcedureTurns}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</td>
                             </g:if>
                             <g:else>
                                 <td style="white-space: nowrap;">${message(code:'fc.no')}</td>

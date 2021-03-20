@@ -1,88 +1,90 @@
 
-Flight Contest 3.1.11
-Copyright 2009-2020 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 3.2.M10
+Copyright 2009-2021 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
-http://flightcontest.de
+https://flightcontest.de
 
-============================================================================
-
-Developed with Groovy/Grails Tool Suite
-
-http://www.grails.org/products/ggts
+GNU General Public License 3
+https://www.gnu.org/licenses/gpl-3.0
 
 ============================================================================
 
-Apache Tomcat 7.0
-Copyright 1999-2009 The Apache Software Foundation
+Developed with Notepad++
+https://notepad-plus-plus.org/
 
-http://tomcat.apache.org
-
-This product includes software developed by
-The Apache Software Foundation.
-
-http://www.apache.org
+GNU General Public License 2
+https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 ============================================================================
 
-Grails, release 2.3.6
+OpenJDK 8
+https://github.com/ojdkbuild/ojdkbuild
 
-http://grails.org
+GNU General Public License 2
+https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 ============================================================================
 
-iText, release 2.1.5
+Apache Tomcat 9
+https://tomcat.apache.org
 
+Apache License 2.0
+https://www.apache.org/licenses/LICENSE-2.0
+
+============================================================================
+
+Grails 2.5.6
+https://grails.org
+
+Apache License 2.0
+https://www.apache.org/licenses/LICENSE-2.0
+
+============================================================================
+
+jQuery 3.3.1
+https://jquery.com/
+
+MIT License
+https://jquery.org/license/
+
+============================================================================
+
+iText 2.0.8
 http://www.itextpdf.com
 http://sourceforge.net/projects/itext
 
-GNU AFFERO GENERAL PUBLIC LICENSE, Version 3
+GNU AFFERO GENERAL PUBLIC LICENSE 3
 
 ============================================================================
 
 Google Noto Fonts
-
 http://www.google.com/get/noto/
 
-SIL OPEN FONT LICENSE, Version 1.1
+SIL OPEN FONT LICENSE 1.1
 http://scripts.sil.org/OFL
 
 ============================================================================
 
-Java(TM) Runtime Environment Version 6.0
-
-http://java.com/license
-
-============================================================================
-
-AFLOS, Advanced Flight Logging System
-BeHeTec GmbH & Co. KG, Bertram Henn
-
-http://www.aflos.de
-
-============================================================================
-
-AFLOS Kurzanleitung
-
-Mit freundlicher Genehmigung von Ralf-Rainer Schmalstieg.
-
-============================================================================
-
-GPX Viewer
+GPX Viewer 6.2
 Jürgen Berkemeier
+https://www.j-berkemeier.de/GPXViewer
 
-http://www.j-berkemeier.de/GPXViewer
+License CC BY-NC-SA 4.0
+https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de
+https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.de
 
 ============================================================================
 
 Printmaps
 Klaus Tockloth
+http://printmaps-osm.de
 
-http://printmaps-osm.de:8080
+MIT License
+https://github.com/printmaps/printmaps/blob/master/LICENSE.txt
 
 ============================================================================
 
 OpenTopoMap
-
 https://github.com/der-stefan/OpenTopoMap
 
 ============================================================================

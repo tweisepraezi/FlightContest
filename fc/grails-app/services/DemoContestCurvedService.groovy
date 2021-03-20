@@ -23,29 +23,22 @@ class DemoContestCurvedService
 	static final String WIND = "$WIND_DIRECTION/$WIND_SPEED"
 	static final String NOWIND = "0/0"
 	
-	long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,false,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
 		
 		// Routes
 		fcService.printstart ROUTE_NAME
-        Map route_curved = [:]
-        Map route_normal = [:]
-        if (aflosDB) {
-            route_curved = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_CURVED,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-            route_normal = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NORMAL,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,true,[])
-        } else {
-            route_curved = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_CURVED_GPX)
-            route_normal = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NORMAL_GPX)
-        }
+        Map route_curved = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_CURVED_GPX)
+        Map route_normal = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NORMAL_GPX)
         
 		fcService.printdone ""
 		
 		// Crews and Aircrafts
-		fcService.importCrewList(contest,"C:\\Program Files (x86)\\Flight Contest\\samples\\FC-CrewList-Test.xls",false) // false - mit Start-Nr. 13
+		fcService.importCrewList(contest, "FC-CrewList-Test.xlsx", false) // false - mit Start-Nr. 13
 		
 		// Task Curved
 		Map task_curved = fcService.putTask(contest,"$ROUTE_NAME_CURVED ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind+:2NM","wind+:2NM",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
@@ -92,7 +85,7 @@ class DemoContestCurvedService
 		return contest.instance.id
 	}
 	
-	Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
+	Map RunTest(Contest lastContest, String contestName)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -183,7 +176,7 @@ class DemoContestCurvedService
 				[name:"CoordResult '$ROUTE_NAME_NORMAL ($WIND) - $CREW_60'",       count:8,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal_wind,Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testCoordResult60(     ROUTE_NAME_NORMAL,true)],
 				[name:"CoordResult '$ROUTE_NAME_NORMAL ($WIND) - $CREW_90'",       count:8,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal_wind,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(     ROUTE_NAME_NORMAL,true)],
 				[name:"CoordResult '$ROUTE_NAME_NORMAL ($WIND) - $CREW_120'",      count:8,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_normal_wind,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(    ROUTE_NAME_NORMAL,true)],
-			   ],aflosDB
+			   ]
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error

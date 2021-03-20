@@ -20,17 +20,17 @@ class Contest
     
     static final int LIVE_REFRESHSECONDS = 10           // DB-2.8
 	
-    static int mmPerNM = 1852000
-    static int mmPerkm = 1000000
-    
 	String title = ""
-	int mapScale = 200000
+	int mapScale = 200000                               // UNUSED, since DB-2.21
     CoordPresentation coordPresentation = CoordPresentation.DEGREEMINUTE // DB-2.12 
+    TimeZone timeZone2 = TimeZone.getDefault()          // DB-2.21
     String timeZone = "02:00"                           // Difference between UTC and local time [hh:mm]
 	boolean resultClasses = false          	            // Klassen, DB-2.0
 	ContestRules contestRule = ContestRules.R1          // Wettbewerbsordnung, DB-2.0
     Boolean contestRuleForEachClass = false             // Eigene Wettbewerbsordnung für jede Klasse, DB-2.8 
+    String ruleTitle = ""                               // DB-2.21
 	Boolean precisionFlying = false                     // DB-2.3
+    Boolean useProcedureTurns = false                   // DB-2.18
     Integer increaseFactor = 0                          // DB-2.13
 	boolean testExists = false                          // Integrierter Test vorhanden, DB-2.0
 	boolean aflosTest = false                           // Nutzung der AFLOS-Test-Datenbank, DB-2.0
@@ -48,6 +48,7 @@ class Contest
 	boolean contestFlightResults = true                 // Navigationstest berüchsichtigen, DB-2.0
 	boolean contestObservationResults = true            // Beobachtungstest berüchsichtigen, DB-2.0
 	boolean contestLandingResults = true                // Landetest berüchsichtigen, DB-2.0
+    BigDecimal contestLandingResultsFactor              // DB-2.20
 	boolean contestSpecialResults = false               // Sondertest berücksichtigen, DB-2.0
 	Integer contestContestTitle = 0            	        // Wettbewerbstitel beim Ausdruck, DB-2.1
 	String contestPrintTitle = ""                       // Ausdruck-Titel, DB-2.3
@@ -112,6 +113,7 @@ class Contest
 	int flightTestMinAltitudeMissedPoints = 500
 	int flightTestBadCourseCorrectSecond = 5
 	int flightTestBadCoursePoints = 200
+    Integer flightTestBadCourseMaxPoints = 1000         // DB-2.17
 	int flightTestBadCourseStartLandingPoints = 500
 	int flightTestLandingToLatePoints = 200
 	int flightTestGivenToLatePoints = 100
@@ -121,6 +123,7 @@ class Contest
 	Integer flightTestSafetyEnvelopeOpenedPoints = 0    // DB-2.3
 	Integer flightTestFrequencyNotMonitoredPoints = 0   // DB-2.3
     Integer flightTestForbiddenEquipmentPoints = 0      // DB-2.13
+    Integer flightTestSubmissionMinutes                 // DB-2.20
     
     // ObservationTest
     EnrouteValueUnit observationTestEnrouteValueUnit = EnrouteValueUnit.mm // DB-2.13
@@ -210,6 +213,7 @@ class Contest
 	Boolean printCrewAircraftType = false               // DB-2.7
 	Boolean printCrewAircraftColour = false             // DB-2.7
 	Boolean printCrewTAS = true                         // DB-2.3
+    Boolean printCrewTrackerID = false                  // DB-2.16
     Boolean printCrewUUID = false                       // DB-2.10
 	Boolean printCrewEmptyColumn1 = false               // DB-2.3
 	String printCrewEmptyTitle1 = ""                    // DB-2.3
@@ -249,6 +253,15 @@ class Contest
     Boolean printFreeTextA3 = false                     // DB-2.8
     String printFreeTextStyle = DEFAULT_FREETEXTSTYLE   // DB-2.8
     
+    // print styles
+	String printStyle = ""                              // DB-2.8
+    Boolean flightPlanShowLegDistance = true            // DB-2.20
+    Boolean flightPlanShowTrueTrack = true              // DB-2.20
+    Boolean flightPlanShowTrueHeading = true            // DB-2.20
+    Boolean flightPlanShowGroundSpeed = true            // DB-2.20
+    Boolean flightPlanShowLocalTime = true              // DB-2.20
+    Boolean flightPlanShowElapsedTime = false           // DB-2.20
+    
 	// Images
 	byte[] imageLeft = null                             // DB-2.3
 	Integer imageLeftHeight = IMAGEHEIGHT               // DB-2.3
@@ -260,7 +273,6 @@ class Contest
 	BigDecimal a3PortraitFactor = A3PORTRAITFACTOR      // DB-2.7
 	BigDecimal a4LandscapeFactor = A4LANDSCAPEFACTOR    // DB-2.7
 	BigDecimal a3LandscapeFactor = A3LANDSCAPEFACTOR    // DB-2.7
-	String printStyle = ""                              // DB-2.8
 	Boolean imageBottomOn = false                       // DB-2.8
 	byte[] imageBottomLeft = null                       // DB-2.8
 	Integer imageBottomLeftHeight = IMAGEBOTTOMHEIGHT   // DB-2.8
@@ -270,8 +282,18 @@ class Contest
 	String imageBottomRightText = ""                    // DB-2.8
 	String imageBottomTextSize = IMAGEBOTTOMTEXTSIZE    // DB-2.8
     
+    // Crew management
+    String crewPilotNavigatorDelimiter = ","            // DB-2.16
+    String crewSurnameForenameDelimiter = ""            // DB-2.16
+    
     String reserve = ""                                 // DB-2.12
 	
+    // Live-Tracking
+    Integer liveTrackingContestID = 0                   // DB-2.14
+    String liveTrackingContestDate = ""                 // DB-2.15
+    Boolean liveTrackingManagedCrews = false            // DB-2.15
+    String liveTrackingScorecard = ""                   // DB-2.17
+    
 	// transient values
 	static transients = ['copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
 	boolean copyContestSettings = true
@@ -279,7 +301,7 @@ class Contest
 	boolean copyCrews = true
 	boolean copyTaskSettings = true
 	
-	static hasMany = [routes:Route, tasks:Task, crews:Crew, aircrafts:Aircraft, teams:Team, resultclasses:ResultClass]
+	static hasMany = [routes:Route, tasks:Task, crews:Crew, aircrafts:Aircraft, teams:Team, resultclasses:ResultClass, contestproperties:ContestProperty]
 	
 	static constraints = {
 		title(blank:false)
@@ -528,6 +550,51 @@ class Contest
         landingFieldImageName(nullable:true)
         printPointsTurnpointSign(nullable:true)
         printPointsEnrouteCanvas(nullable:true)
+        
+        // DB-2.14 compatibility
+        liveTrackingContestID(nullable:true)
+		
+		// DB-2.15 compatibility
+		liveTrackingManagedCrews(nullable:true)
+        liveTrackingContestDate(nullable:true, validator:{ val, obj ->
+            if (val && val.size()) {
+                if (val.size() != 10) {
+                    return false
+                }
+                try {
+                    Date t = Date.parse("yyyy-MM-dd",val)
+                } catch(Exception e) {
+                    return false
+                }
+			}
+			return true
+		})
+        
+		// DB-2.16 compatibility
+        printCrewTrackerID(nullable:true)
+        crewPilotNavigatorDelimiter(nullable:true, size:0..1)
+        crewSurnameForenameDelimiter(nullable:true, size:0..1)
+        
+        // DB-2.17 compatibility
+        liveTrackingScorecard(nullable:true)
+        flightTestBadCourseMaxPoints(nullable:true, blank:false, min:0)
+        
+        // DB-2.18 compatibility
+        useProcedureTurns(nullable:true)
+        
+        // DB-2.20 compatibility
+        flightPlanShowLegDistance(nullable:true)
+        flightPlanShowTrueTrack(nullable:true)
+        flightPlanShowTrueHeading(nullable:true)
+        flightPlanShowGroundSpeed(nullable:true)
+        flightPlanShowLocalTime(nullable:true)
+        flightPlanShowElapsedTime(nullable:true)
+        flightTestSubmissionMinutes(nullable:true, min:0)
+        contestLandingResultsFactor(nullable:true, min:0.0, max:1.0)
+        
+        // DB-2.21 compatibility
+        ruleTitle(nullable:true)
+        timeZone2(nullable:true)
 	}
 
     static mapping = {
@@ -537,6 +604,7 @@ class Contest
 		aircrafts sort:"id"
 		teams sort:"id"
 		resultclasses sort:"id"
+        contestproperties sort:"id"
 	}
 
 	void CopyValues(Contest contestInstance)
@@ -544,6 +612,7 @@ class Contest
 		if (contestInstance) {
 			if (copyContestSettings) {
 				mapScale = contestInstance.mapScale
+                timeZone2 = contestInstance.timeZone2
 				timeZone = contestInstance.timeZone
 				resultClasses = contestInstance.resultClasses
                 teamCrewNum = contestInstance.teamCrewNum
@@ -551,6 +620,7 @@ class Contest
 
                 contestRule = contestInstance.contestRule
                 contestRuleForEachClass = contestInstance.contestRuleForEachClass
+                ruleTitle = contestInstance.ruleTitle
                 
 				precisionFlying = contestInstance.precisionFlying
                 increaseFactor = contestInstance.increaseFactor
@@ -578,6 +648,7 @@ class Contest
 				flightTestMinAltitudeMissedPoints = contestInstance.flightTestMinAltitudeMissedPoints
 				flightTestBadCourseCorrectSecond = contestInstance.flightTestBadCourseCorrectSecond
 				flightTestBadCoursePoints = contestInstance.flightTestBadCoursePoints
+                flightTestBadCourseMaxPoints = contestInstance.flightTestBadCourseMaxPoints
 				flightTestBadCourseStartLandingPoints = contestInstance.flightTestBadCourseStartLandingPoints
 				flightTestLandingToLatePoints = contestInstance.flightTestLandingToLatePoints
 				flightTestGivenToLatePoints = contestInstance.flightTestGivenToLatePoints
@@ -661,12 +732,28 @@ class Contest
                 maxEnrouteCanvas = contestInstance.maxEnrouteCanvas
                 minEnrouteTargets = contestInstance.minEnrouteTargets
                 maxEnrouteTargets = contestInstance.maxEnrouteTargets
+                useProcedureTurns = contestInstance.useProcedureTurns
+                liveTrackingScorecard = contestInstance.liveTrackingScorecard
+                
+                if (copyCrews) {
+                    crewPilotNavigatorDelimiter = contestInstance.crewPilotNavigatorDelimiter
+                    crewSurnameForenameDelimiter = contestInstance.crewSurnameForenameDelimiter
+                }
 			} 
 			
 			if (!this.save()) {
 				throw new Exception("Contest.CopyValues could not save")
 			}
 			
+			if (copyContestSettings) { // contestproperties:ContestProperty
+				ContestProperty.findAllByContest(contestInstance,[sort:"id"]).each { ContestProperty contest_property_instance ->
+					ContestProperty new_contest_property_instance = new ContestProperty()
+					new_contest_property_instance.contest = this
+					new_contest_property_instance.CopyValues(contest_property_instance)
+					new_contest_property_instance.save()
+				}
+            }
+            
 			if (copyRoutes) { // routes:Route
 				Route.findAllByContest(contestInstance,[sort:"id"]).each { Route route_instance ->
 					Route new_route_instance = new Route()
@@ -721,46 +808,6 @@ class Contest
 		}
 	}
 	
-    BigDecimal Convert_mm2NM(BigDecimal measureValue)
-    {
-        if (measureValue == null) {
-            return null
-        }
-        return mapScale * measureValue / mmPerNM
-    }
-
-    BigDecimal Convert_NM2mm(BigDecimal distanceValue)
-    {
-        if (distanceValue == null) {
-            return null
-        }
-        return distanceValue * mmPerNM / mapScale 
-    }
-
-    static BigDecimal Convert_NM2m(BigDecimal distanceValue)
-    {
-        if (distanceValue == null) {
-            return null
-        }
-        return distanceValue * mmPerNM / 1000 
-    }
-
-    BigDecimal Convert_mm2km(BigDecimal measureValue)
-    {
-        if (measureValue == null) {
-            return null
-        }
-        return mapScale * measureValue / mmPerkm
-    }
-
-    BigDecimal Convert_km2mm(Contest contestInstance, BigDecimal distanceValue)
-    {
-        if (distanceValue == null) {
-            return null
-        }
-        return distanceValue * mmPerkm / mapScale 
-    }
-
 	String idName()
 	{
 		return "${getMsg('fc.contest')}-${id}"
@@ -1276,14 +1323,6 @@ class Contest
         return getPrintMsg('fc.info')
     }
     
-    boolean IsAFLOSPossible()
-    {
-        if (BootStrap.global.IsAFLOSPossible()) {
-            return true
-        }
-        return false
-    }
-    
     String GetIncreaseValues()
     {
         if (resultClasses && contestRuleForEachClass) {
@@ -1314,30 +1353,6 @@ class Contest
             }
         }
         return false
-    }
-    
-    BigDecimal GetLandingResultsFactor()
-    {
-        BigDecimal landingresults_factor = null
-        printStyle.eachLine {
-            if (it.contains("--landingresults")) {
-                String s = it.substring(it.indexOf("--landingresults")+16).trim()
-                if (s.startsWith(":")) {
-                    s = s.substring(1).trim()
-                    int i = s.indexOf(";")
-                    if (i) {
-                        s = s.substring(0,i).trim()
-                        if (s.isBigDecimal()) {
-                            BigDecimal f = s.toBigDecimal()
-                            if ((f >= 0.0f) && (f <= 1.0f)) {
-                                landingresults_factor = f
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return landingresults_factor
     }
 
     boolean RouteTitleFound(String newTitle)

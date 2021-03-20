@@ -13,6 +13,7 @@ class Test
 	int viewpos = 0
 	BigDecimal taskTAS = 0
 	Aircraft taskAircraft                                  // DB-2.3
+    String taskTrackerID = ""                              // DB-2.15
     Integer aflosStartNum = 0                              // DB-2.10
     Boolean showAflosMark = false                          // DB-2.12
 
@@ -177,6 +178,8 @@ class Test
 	
 	static hasMany = [testlegplannings:TestLegPlanning,testlegflights:TestLegFlight,coordresults:CoordResult,turnpointdata:TurnpointData,enroutephotodata:EnroutePhotoData,enroutecanvasdata:EnrouteCanvasData]
 	
+	static hasOne = [uploadjobtest:UploadJobTest]          // DB-2.21
+	
     static constraints = {
 		crew(nullable:true)
 		planningtesttask(nullable:true)
@@ -232,6 +235,12 @@ class Test
         observationTestOtherPenalties(nullable:true)
         scannedPlanningTest(nullable:true,maxSize:SCANNEDIMAGEMAXSIZE)
         scannedObservationTest(nullable:true,maxSize:SCANNEDIMAGEMAXSIZE)
+        
+        // DB-2.15 compatibility
+        taskTrackerID(nullable:true)
+		
+		// DB-2.21 compatibility
+		uploadjobtest(nullable:true)
     }
 
 	static mapping = {
@@ -360,7 +369,7 @@ class Test
 			taskPenalties += observationTestPenalties
 		}
 		if (IsLandingTestRun()) {
-        	taskPenalties += FcMath.GetLandingPenalties(task.contest.GetLandingResultsFactor(), landingTestPenalties)
+        	taskPenalties += FcMath.GetLandingPenalties(task.contest.contestLandingResultsFactor, landingTestPenalties)
 		}
 		if (IsSpecialTestRun()) {
 			taskPenalties += specialTestPenalties
@@ -724,7 +733,7 @@ class Test
 		}
 		if (resultSettings["Landing"]) {
 			if (IsLandingTestRun()) {
-				penalties += FcMath.GetLandingPenalties(task.contest.GetLandingResultsFactor(), landingTestPenalties)
+				penalties += FcMath.GetLandingPenalties(task.contest.contestLandingResultsFactor, landingTestPenalties)
 			}
 		}
 		if (resultSettings["Special"]) {
@@ -857,6 +866,17 @@ class Test
         return provisional
     }
 
+    Map GetResultClassName() {
+        Map ret = [name:"", shortName:""]
+        if (task.contest.resultClasses) {
+            if (crew.resultclass) {
+                ret.name = crew.resultclass.name
+                ret.shortName = crew.resultclass.shortName
+            }
+        }
+        return ret
+    }
+    
     boolean IsPrecisionFlying()
     {
         if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
@@ -879,7 +899,7 @@ class Test
             if (crew.resultclass) {
                 return crew.resultclass.printLandingCalculatorValues
             }
-            return false
+            return ""
         }
         return task.contest.printLandingCalculatorValues
     }
@@ -1083,6 +1103,16 @@ class Test
 			}
 		}
 		return task.contest.flightTestBadCoursePoints
+	}
+	
+	int GetFlightTestBadCourseMaxPoints()
+	{
+		if (task.contest.resultClasses && task.contest.contestRuleForEachClass) {
+			if (crew.resultclass) {
+				return crew.resultclass.flightTestBadCourseMaxPoints
+			}
+		}
+		return task.contest.flightTestBadCourseMaxPoints
 	}
 	
 	int GetFlightTestBadCourseStartLandingPoints()
@@ -1406,7 +1436,7 @@ class Test
             case 3: return GetLandingTest3PenaltyCalculator()
             case 4: return GetLandingTest4PenaltyCalculator()
         }
-        return 0
+        return ""
     }
     
 	private int GetLandingTest1MaxPoints()
@@ -2110,43 +2140,40 @@ class Test
     
     boolean IsSendEMailPossible()
     {
-        return IsEMailPossible() && (flightTestLink != Defs.EMAIL_SENDING) && !crewResultsModified && !IsTestResultsProvisional(GetResultSettings())
+        return IsEMailPossible() && !crewResultsModified && !GetFlightTestUploadJobStatus().InWork() && !IsTestResultsProvisional(GetResultSettings())
     }
     
+	UploadJobStatus GetFlightTestUploadJobStatus()
+	{
+		UploadJobTest uploadjob_test = UploadJobTest.findByTest(this)
+		if (uploadjob_test) {
+			return uploadjob_test.uploadJobStatus
+		}
+		return UploadJobStatus.None
+	}
+	
+	String GetFlightTestUploadLink()
+	{
+		UploadJobTest uploadjob_test = UploadJobTest.findByTest(this)
+		if (uploadjob_test) {
+			if (uploadjob_test.uploadJobStatus == UploadJobStatus.Done) {
+				return uploadjob_test.uploadJobLink
+			}
+		}
+		return ""
+	}
+	
     boolean IsShowMapPossible()
     {
         if (IsLoggerData()) {
             return true
-        } else if (   aflosStartNum
-                   && AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
-                   && AflosTools.GetAflosCrewName(task.contest, aflosStartNum)
-                   //&& AflosTools.GetAflosCheckPoints(task.contest, flighttestwind.flighttest.route.mark, aflosStartNum)
-                  ) 
-        {
-            return true
         }
         return false
     }
     
-    boolean IsAFLOSImportPossible()
+    boolean IsTrackerImportPossible()
     {
-        if (   AflosTools.GetAflosRouteName(task.contest, flighttestwind.flighttest.route.mark)
-            && AflosTools.ExistAnyAflosCrew(task.contest)
-           ) 
-        {
-            return true
-        }
-        return false
-    }
-    
-    boolean IsAFLOSResultsPossible()
-    {
-        Route route_instance = flighttestwind.flighttest.route
-        if (   route_instance.showAflosMark
-            && AflosTools.GetAflosRouteName(task.contest, route_instance.mark)
-            && AflosTools.ExistAnyAflosCheckPoints(task.contest, route_instance.mark)
-           )
-        {
+        if (BootStrap.global.IsLiveTrackingPossible() && task.contest.liveTrackingContestID && task.contest.liveTrackingScorecard && task.liveTrackingNavigationTaskID) {
             return true
         }
         return false
@@ -2399,8 +2426,8 @@ class Test
         BigDecimal inexact_check_value = GetObservationTestEnrouteInexactValue()
         
         if (GetObservationTestEnrouteValueUnit() == EnrouteValueUnit.mm) {
-            correct_check_value = FcMath.RoundDistance(task.contest.Convert_mm2NM(correct_check_value))
-            inexact_check_value = FcMath.RoundDistance(task.contest.Convert_mm2NM(inexact_check_value))
+            correct_check_value = FcMath.RoundDistance(task.flighttest.route.Convert_mm2NM(correct_check_value))
+            inexact_check_value = FcMath.RoundDistance(task.flighttest.route.Convert_mm2NM(inexact_check_value))
         }
         
         return [inexact_points: inexact_points,
@@ -2420,8 +2447,8 @@ class Test
         BigDecimal inexact_check_value = GetObservationTestEnrouteInexactValue()
         
         if (GetObservationTestEnrouteValueUnit() == EnrouteValueUnit.NM) {
-            correct_check_value = FcMath.RoundMeasureDistance(task.contest.Convert_NM2mm(correct_check_value))
-            inexact_check_value = FcMath.RoundMeasureDistance(task.contest.Convert_NM2mm(inexact_check_value))
+            correct_check_value = FcMath.RoundMeasureDistance(task.flighttest.route.Convert_NM2mm(correct_check_value))
+            inexact_check_value = FcMath.RoundMeasureDistance(task.flighttest.route.Convert_NM2mm(inexact_check_value))
         }
         
         return [inexact_points: inexact_points,
@@ -2519,28 +2546,12 @@ class Test
     
     Date GetMaxSubmissionTime()
     {
-        int add_minutes = 0
-        task.contest.printStyle.eachLine {
-            if (it.contains("--submission")) {
-                String s = it.substring(it.indexOf("--submission")+12).trim()
-                if (s.startsWith(":")) {
-                    s = s.substring(1).trim()
-                    int i = s.indexOf(";")
-                    if (i) {
-                        s = s.substring(0,i).trim()
-                        if (s.isInteger()) {
-                            add_minutes = s.toInteger()
-                        }
-                    }
-                }
-            }
-        }
-        
-        Integer add_minutes2 = GetMinutesAddSubmission()
-        
         GregorianCalendar time = new GregorianCalendar()
-        time.setTime(finishTime) 
-        time.add(Calendar.MINUTE, add_minutes)
+        time.setTime(finishTime)
+        if (task.flighttest.submissionMinutes) {
+            time.add(Calendar.MINUTE, task.flighttest.submissionMinutes)
+        }
+        Integer add_minutes2 = GetMinutesAddSubmission()
         if (add_minutes2) {
             time.add(Calendar.MINUTE, add_minutes2)
         }
@@ -2568,101 +2579,18 @@ class Test
 
     Float GetSecretGateWidth()
     {
-        Float ret = null
         if (crew.resultclass) {
-            task.contest.printStyle.eachLine {
-                if (it.contains("--class") && it.contains("--secret-gatewidth")) {
-                    String s = it.substring(it.indexOf("--class")+7).trim()
-                    if (s.startsWith(":")) {
-                        s = s.substring(1).trim()
-                        int i = s.indexOf(";")
-                        if (i) {
-                            s = s.substring(0,i).trim()
-                            if (s == crew.resultclass.name) {
-                                s = it.substring(it.indexOf("--secret-gatewidth")+18).trim()
-                                if (s.startsWith(":")) {
-                                    s = s.substring(1).trim()
-                                    i = s.indexOf(";")
-                                    if (i) {
-                                        s = s.substring(0,i).trim()
-                                        if (s.isNumber()) {
-                                            ret = s.toFloat()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            return crew.resultclass.secretGateWidth
         }
-        return ret
+        return null
     }
     
     Integer GetMinutesBeforeStartTime()
     {
-        Integer ret = null
         if (crew.resultclass) {
-            task.contest.printStyle.eachLine {
-                if (it.contains("--class") && it.contains("--before-starttime")) {
-                    String s = it.substring(it.indexOf("--class")+7).trim()
-                    if (s.startsWith(":")) {
-                        s = s.substring(1).trim()
-                        int i = s.indexOf(";")
-                        if (i) {
-                            s = s.substring(0,i).trim()
-                            if (s == crew.resultclass.name) {
-                                s = it.substring(it.indexOf("--before-starttime")+18).trim()
-                                if (s.startsWith(":")) {
-                                    s = s.substring(1).trim()
-                                    i = s.indexOf(";")
-                                    if (i) {
-                                        s = s.substring(0,i).trim()
-                                        if (s.isInteger()) {
-                                            ret = s.toInteger()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            return crew.resultclass.minutesBeforeStartTime
         }
-        return ret
-    }
-    
-    Integer GetMinutesAddSubmission()
-    {
-        Integer ret = null
-        if (crew.resultclass) {
-            task.contest.printStyle.eachLine {
-                if (it.contains("--class") && it.contains("--add-submission")) {
-                    String s = it.substring(it.indexOf("--class")+7).trim()
-                    if (s.startsWith(":")) {
-                        s = s.substring(1).trim()
-                        int i = s.indexOf(";")
-                        if (i) {
-                            s = s.substring(0,i).trim()
-                            if (s == crew.resultclass.name) {
-                                s = it.substring(it.indexOf("--add-submission")+16).trim()
-                                if (s.startsWith(":")) {
-                                    s = s.substring(1).trim()
-                                    i = s.indexOf(";")
-                                    if (i) {
-                                        s = s.substring(0,i).trim()
-                                        if (s.isInteger()) {
-                                            ret = s.toInteger()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return ret
+        return null
     }
     
     Date GetTestingTime()
@@ -2678,4 +2606,11 @@ class Test
         return time.getTime()
     }
     
+    Integer GetMinutesAddSubmission()
+    {
+        if (crew.resultclass) {
+            return crew.resultclass.minutesAddSubmission
+        }
+        return null
+    }
 }

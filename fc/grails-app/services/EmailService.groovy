@@ -25,7 +25,7 @@ class EmailService
         String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.gpx"
         String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.kmz"
         String upload_pdf_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.pdf"
-        Map gpx_converter = gpxService.ConvertRoute2GPX(routeInstance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
+        Map gpx_converter = gpxService.ConvertRoute2GPX(routeInstance, webroot_dir + upload_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:true, gpxExport:false])
         Map kmz_converter = kmlService.ConvertRoute2KMZ(routeInstance, webroot_dir, upload_kmz_file_name, true, true) // true - Print, true - wrEnrouteSign
         Map pdf_converter = printService.ConvertRoute2PDF(routeInstance, webroot_dir + upload_pdf_file_name, false, false, GetPrintParams(routeInstance.contest, printLanguage, grailsAttributes, request)) 
         if (gpx_converter.ok && kmz_converter.ok && pdf_converter.ok) {
@@ -62,6 +62,15 @@ class EmailService
                 remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
                 remove_files += webroot_dir + upload_pdf_file_name
 
+				// job status
+				UploadJobRoute uploadjob_route = UploadJobRoute.findByRoute(routeInstance)
+				if (uploadjob_route) {
+					uploadjob_route.uploadJobStatus = UploadJobStatus.Waiting // testInstance.flightTestLink = Defs.EMAIL_SENDING
+				} else {
+					uploadjob_route = new UploadJobRoute(route:routeInstance, uploadJobStatus:UploadJobStatus.Waiting)
+				}
+				uploadjob_route.save(flush:true)
+				
                 // create email job
                 File job_file = new File(webroot_dir + job_file_name)
                 job_writer = job_file.newWriter()
@@ -71,7 +80,7 @@ class EmailService
                 gpxService.WriteLine(job_writer,routeInstance.contest.contestUUID) // 4
                 gpxService.WriteLine(job_writer,ftp_uploads) // 5
                 gpxService.WriteLine(job_writer,remove_files) // 6
-                gpxService.WriteLine(job_writer,"Route${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${routeInstance.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
+                gpxService.WriteLine(job_writer,"UploadJobRoute${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${uploadjob_route.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
                 job_writer.close()
                 
                 ret_message = getMsg('fc.net.mail.prepared',[email_to])
@@ -114,22 +123,19 @@ class EmailService
         List ok_test_instances = []
         for ( Test test_instance in Test.findAllByTask(task.instance,[sort:"viewpos"])) {
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                if ((allResults || !test_instance.flightTestLink || (test_instance.flightTestLink == Defs.EMAIL_ERROR)) && test_instance.IsSendEMailPossible()) {
-                    email_num++
-                    Map ret = SendEmailTest(test_instance, printLanguage, grailsAttributes, request)
-                    if (ret.ok) {
-                        ok_test_instances += test_instance
-                    } else {
-                        error_num++
-                    }
+				UploadJobStatus upload_job_status = test_instance.GetFlightTestUploadJobStatus()
+                if (allResults || upload_job_status == UploadJobStatus.None || upload_job_status == UploadJobStatus.Error) {
+					if (test_instance.IsSendEMailPossible()) {
+						email_num++
+						Map ret = SendEmailTest(test_instance, printLanguage, grailsAttributes, request)
+						if (ret.ok) {
+							ok_test_instances += test_instance
+						} else {
+							error_num++
+						}
+					}
                 }
             }
-        }
-        
-        // set sending link
-        for (Test test_instance in ok_test_instances) {
-            test_instance.flightTestLink = Defs.EMAIL_SENDING
-            test_instance.save()
         }
         
         gpxService.DeleteFile(lock_file_name)
@@ -161,7 +167,7 @@ class EmailService
         Map gpx_converter = [ok:true, track:true]
         Map kmz_converter = [ok:true, track:true]
         if (is_flight_test) {
-            gpx_converter = gpxService.ConvertTest2GPX(testInstance, webroot_dir + upload_gpx_file_name, true, true, true, false) // true - Print, true - Points, true - wrEnrouteSign, false - no gpxExport
+            gpx_converter = gpxService.ConvertTest2GPX(testInstance, webroot_dir + upload_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:true, gpxExport:false])
             kmz_converter = kmlService.ConvertTest2KMZ(testInstance, webroot_dir, upload_kmz_file_name, true, true) // true - Print, true - wrEnrouteSign
         }
         if (gpx_converter.ok && gpx_converter.track && kmz_converter.ok && kmz_converter.track) {
@@ -202,6 +208,15 @@ class EmailService
                     remove_files += webroot_dir + upload_kmz_file_name
                 }
 
+				// job status
+				UploadJobTest uploadjob_test = UploadJobTest.findByTest(testInstance)
+				if (uploadjob_test) {
+					uploadjob_test.uploadJobStatus = UploadJobStatus.Waiting // testInstance.flightTestLink = Defs.EMAIL_SENDING
+				} else {
+					uploadjob_test = new UploadJobTest(test:testInstance, uploadJobStatus:UploadJobStatus.Waiting)
+				}
+				uploadjob_test.save(flush:true)
+				
                 // create email job
                 File job_file = new File(webroot_dir + job_file_name)
                 BufferedWriter job_writer = job_file.newWriter()
@@ -211,7 +226,7 @@ class EmailService
                 gpxService.WriteLine(job_writer,testInstance.crew.uuid) // 4
                 gpxService.WriteLine(job_writer,ftp_uploads) // 5
                 gpxService.WriteLine(job_writer,remove_files) // 6
-                gpxService.WriteLine(job_writer,"Test${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${testInstance.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
+                gpxService.WriteLine(job_writer,"UploadJobTest${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${uploadjob_test.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
                 job_writer.close()
                 
                 ret_message = getMsg('fc.net.mail.prepared',[email_to])

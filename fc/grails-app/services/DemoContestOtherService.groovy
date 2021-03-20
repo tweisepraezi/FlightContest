@@ -4,12 +4,12 @@ class DemoContestOtherService
 {
 	def fcService
 	
-	long CreateTest11(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest11(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R11,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,false,2,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
         
         // Crews with Teams, ResultClasses and Aircrafts
         Map crew11 = fcService.putCrew(contest,11,"Crew 1-1","crew1.1.fc@localhost","Deutschland","","D-EAAA","","",85)
@@ -88,12 +88,12 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	long CreateTest12(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest12(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R11,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,true,2,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
         
         // Classes with properties
         Map resultclass1 = fcService.putResultClass(contest,"Class-1","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -187,12 +187,12 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	long CreateTest13(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest13(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,false,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
     
         // Crews and Aircrafts
         (1..100).each {
@@ -206,12 +206,12 @@ class DemoContestOtherService
 		return contest.instance.id
 	}
 	
-	long CreateTest14(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest14(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
+        Map contest = fcService.putContest(testName,printPrefix,false,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
         // Crews and Aircrafts
         (1..20).each {
             fcService.putCrew(contest,it,"Name-${it.toString()}","crew-${it.toString()}.fc@localhost","Deutschland","","D-${it.toString()}","C172","rot",110)

@@ -315,6 +315,17 @@ class Coord
 		}
 	}
 	
+    String titleTrackingCode()
+	{
+		switch (type) {
+			case CoordType.TP:
+            case CoordType.SECRET:
+				return "${getTrackingMsg(type.code)}${titleNumber}"
+			default:
+				return getTrackingMsg(type.code)
+		}
+	}
+	
     String titleWithRatio()
     {
         switch (type) {
@@ -330,21 +341,20 @@ class Coord
         }
     }
     
-	String titleShortMap(boolean isPrint)
+	String titleMediaCode(Media media)
 	{
-		String title
-        if (isPrint) {
-            title = titlePrintCode()
-        }  else {
-            title = titleCode()
+		String title = ""
+        switch (media) {
+            case Media.Screen:
+                title = titleCode()
+                break
+            case Media.Print:
+                title = titlePrintCode()
+                break
+            case Media.Tracking:
+                title = titleTrackingCode()
+                break
         }
-        /*
-		switch (type) {
-			case CoordType.TP:
-			case CoordType.SECRET:
-				title += " (${mark})"
-		}
-		*/
 		return title
 	}
 	
@@ -838,23 +848,23 @@ class Coord
             case EnrouteRoute.InputCoord:
                 measureDistance = null
                 calculateCoordEnrouteFromTP()
-                enrouteDistance = route.contest.Convert_mm2NM(coordMeasureDistance)
+                enrouteDistance = route.Convert_mm2NM(coordMeasureDistance)
                 calculateCoordEnrouteOrthogonalDistance()
                 break
             case EnrouteRoute.InputCoordmm:
                 calculateCoordEnrouteFromTP()
-                enrouteDistance = route.contest.Convert_mm2NM(GetMeasureDistance())
+                enrouteDistance = route.Convert_mm2NM(GetMeasureDistance())
                 calculateCoordEnrouteOrthogonalDistance()
                 break
             case EnrouteRoute.InputNMFromTP:
-                coordMeasureDistance = route.contest.Convert_NM2mm(enrouteDistance)
+                coordMeasureDistance = route.Convert_NM2mm(enrouteDistance)
                 measureDistance = null
                 calculateCoordEnrouteCoordinate()
                 enrouteOrthogonalDistance = 0
                 break
             case EnrouteRoute.InputmmFromTP:
                 coordMeasureDistance = measureDistance
-                enrouteDistance = route.contest.Convert_mm2NM(coordMeasureDistance)
+                enrouteDistance = route.Convert_mm2NM(coordMeasureDistance)
                 calculateCoordEnrouteCoordinate()
                 enrouteOrthogonalDistance = 0
                 break
@@ -1141,9 +1151,9 @@ class Coord
                         titleNumber = from_titlenumber
                         // direkte Entfernung bei krummen Strecken
                         enroute = AviationMath.calculateLeg(latMath(),lonMath(),from_coordroute_instance.latMath(),from_coordroute_instance.lonMath())
-                        coordMeasureDistance = route.contest.Convert_NM2mm(enroute.dis)
+                        coordMeasureDistance = route.Convert_NM2mm(enroute.dis)
                         // Entferung an der krummen Strecke entlang
-                        // coordMeasureDistance = route.contest.Convert_NM2mm(from_distance + enroute.dis)
+                        // coordMeasureDistance = route.Convert_NM2mm(from_distance + enroute.dis)
                         enrouteDistanceOk = true
                         return
                     }
@@ -1167,14 +1177,14 @@ class Coord
             Map line_coord = AviationMath.getCoordinate(values.from_cp.lat, values.from_cp.lon, values.true_track, get_from_dis(values))
             Map orthogonal = AviationMath.calculateLeg(latMath(), lonMath(), line_coord.lat, line_coord.lon)
             if (AviationMath.courseChange(orthogonal_track,orthogonal.dir).abs() < Defs.ENROUTE_MAX_COURSE_DIFF) {
-                enrouteOrthogonalDistance = Contest.Convert_NM2m(orthogonal.dis) // right
+                enrouteOrthogonalDistance = Route.Convert_NM2m(orthogonal.dis) // right
             } else {
-                enrouteOrthogonalDistance = -Contest.Convert_NM2m(orthogonal.dis) // left
+                enrouteOrthogonalDistance = -Route.Convert_NM2m(orthogonal.dis) // left
             }
         }
         
         /*
-        BigDecimal enroute_distance = route.contest.Convert_mm2NM(coordMeasureDistance)
+        BigDecimal enroute_distance = route.Convert_mm2NM(coordMeasureDistance)
         BigDecimal true_track = null
         BigDecimal leg_distance = null
         BigDecimal secret_legs_distance = 0
@@ -1219,9 +1229,9 @@ class Coord
                 Map orthogonal = AviationMath.calculateLeg(latMath(),lonMath(),enroute_coord.lat,enroute_coord.lon)
                 BigDecimal orthogonal_track = AviationMath.getOrthogonalTrackRight(true_track)
                 if ((orthogonal.dir - orthogonal_track).abs() < Defs.ENROUTE_MAX_COURSE_DIFF) {
-                    enrouteOrthogonalDistance = Contest.Convert_NM2m(orthogonal.dis)
+                    enrouteOrthogonalDistance = Route.Convert_NM2m(orthogonal.dis)
                 } else {
-                    enrouteOrthogonalDistance = -Contest.Convert_NM2m(orthogonal.dis)
+                    enrouteOrthogonalDistance = -Route.Convert_NM2m(orthogonal.dis)
                 }
             }
         }

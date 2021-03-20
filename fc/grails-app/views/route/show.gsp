@@ -18,7 +18,7 @@
                         <g:set var="route_used" value="${routeInstance.Used()}"/>
                         <g:set var="route_empty" value="${routeInstance.IsRouteEmpty()}"/>
                         <g:set var="route_canturnpointsignmodify" value="${routeInstance.CanTurnpointSignModify()}"/>
-                        <g:set var="route_useproecdureturn" value="${routeInstance.UseProcedureTurn()}" />
+                        <g:set var="route_useprocedureturns" value="${routeInstance.useProcedureTurns}" />
                         <table>
                             <tbody>
                                 <tr>
@@ -29,13 +29,49 @@
                                     <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
-                                <g:if test="${routeInstance.showAflosMark || routeInstance.mark}">
-                                    <tr>
-                                        <td class="detailtitle">${message(code:'fc.route.aflosimport.name')}:</td>
-                                        <td colspan="2">${routeInstance.mark}</td>
-                                        <td colspan="2"/>
-                                    </tr>
-                                </g:if>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.scale')}:</td>
+                                    <td>1:${fieldValue(bean:routeInstance, field:'mapScale')}</td>
+									<g:set var="upload_job_status" value="${routeInstance.GetUploadJobStatus()}"/>
+                                    <g:if test="${upload_job_status == UploadJobStatus.Waiting}"> 
+                                        <td style="width:1%;"> 
+                                            <img src="${createLinkTo(dir:'images',file:'email.png')}"/>
+                                        </td>
+										<td style="width:1%;"/>
+										<td style="width:1%;"/>
+                                    </g:if>
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Sending}"> 
+                                        <td style="width:1%;"> 
+                                            <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
+                                        </td>
+										<td style="width:1%;"/>
+										<td style="width:1%;"/>
+                                    </g:elseif>
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Error}"> 
+                                        <td style="width:1%;"> 
+                                            <img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
+                                        </td>
+										<td style="width:1%;"/>
+										<td style="width:1%;"/>
+                                    </g:elseif>
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Done}">
+                                        <g:set var="email_links" value="${NetTools.EMailLinks(routeInstance.GetUploadLink())}" />
+										<td style="width:1%;"> 
+											<a href="${email_links.map}" target="_blank"><img src="${createLinkTo(dir:'images',file:'map.png')}"/></a>
+										</td>
+										<td style="width:1%;"> 
+											<a href="${email_links.kmz}" target="_blank"><img src="${createLinkTo(dir:'images',file:'kmz.png')}"/></a>
+										</td>
+                                        <td style="width:1%;"> 
+                                            <a href="${email_links.pdf}" target="_blank"><img src="${createLinkTo(dir:'images',file:'pdf.png')}"/></a>
+                                        </td>
+                                    </g:elseif>
+                                    <g:else>
+										<td style="width:1%;"/>
+										<td style="width:1%;"/>
+										<td style="width:1%;"/>
+                                    </g:else>
+                                </tr>
                                 <tr>
                                     <g:set var="info" value=""/>
                                     <td class="detailtitle">${message(code:'fc.observation.turnpoint')}:</td>
@@ -60,10 +96,17 @@
                                     <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td/>
                                 </tr>
+                                <g:if test="${BootStrap.global.IsLiveTrackingPossible()}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.general.livetrackingscorecard')}:</td>
+                                        <td>${routeInstance.liveTrackingScorecard}</td>
+                                        <td colspan="3"/>
+                                    </tr>
+                                </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.procedureturns')}:</td>
                                     <td colspan="2" style="white-space: nowrap;">
-                                        <g:if test="${route_data.procedureturn_num}"><g:if test="${route_useproecdureturn}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
+                                        <g:if test="${route_data.procedureturn_num}"><g:if test="${route_useprocedureturns}">${message(code:'fc.yes')}</g:if><g:else>${message(code:'fc.disabled')}</g:else> (${route_data.procedureturn_num})</g:if><g:else>${message(code:'fc.no')}</g:else>
                                     </td>
                                     <td colspan="2"/>
                                 </tr>
@@ -139,9 +182,6 @@
                                         </g:else>
                                         <g:actionSubmit action="edit" value="${message(code:'fc.route.settings')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         <g:if test="${!route_used}">
-                                            <g:if test="${route_data.procedureturn_num && route_useproecdureturn}">
-                                                <g:actionSubmit action="disableprocedureturn" value="${message(code:'fc.route.disableprocedureturn')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                                            </g:if>
                                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
@@ -213,10 +253,7 @@
 	                                        </g:if>
                                             <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             <g:actionSubmit action="gpxexport" value="${message(code:'fc.gpx.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-	                                        <g:if test="${routeInstance.IsAflosReferenceExportPossible()}">
-	                                            <g:actionSubmit action="aflosrefexport" value="${message(code:'fc.aflosrefexport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-	                                        </g:if>
-	                                        <g:if test="${routeInstance.IsEMailPossible()}">
+	                                        <g:if test="${routeInstance.IsSendEMailPossible()}">
 	                                            <g:actionSubmit action="sendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
 	                                        </g:if>
 	                                        <g:actionSubmit action="printroute" value="${message(code:'fc.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>

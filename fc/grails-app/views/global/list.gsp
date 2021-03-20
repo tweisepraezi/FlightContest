@@ -23,6 +23,15 @@
                                         </td>
                                     </tr>
                                     <tr>
+                                        <td class="detailtitle">${message(code:'fc.contest.properties')}:</td>
+                                        <td>
+                                            <g:each var="contest_property_instance" in="${ContestProperty.findAllByContest(contestInstance,[sort:"id"])}">
+                                                ${contest_property_instance.key}:${contest_property_instance.value}
+                                                <br/>
+                                            </g:each>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td class="detailtitle">${message(code:'fc.crew.list')}:</td>
                                         <td>
                                             <g:each var="crewInstance" in="${Crew.findAllByContest(contestInstance,[sort:"id"])}">

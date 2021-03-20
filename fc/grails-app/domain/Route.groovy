@@ -8,62 +8,70 @@ class Route
     int idTitle
     String mark = ""
     Boolean showAflosMark = false                                                // DB-2.12
+    Boolean useProcedureTurns = false                                            // DB-2.18
+    String liveTrackingScorecard = ""                                            // DB-2.18
     TurnpointRoute turnpointRoute = TurnpointRoute.Unassigned                    // DB-2.13
     Boolean turnpointMapMeasurement = false                                      // DB-2.13
     EnrouteRoute enroutePhotoRoute = EnrouteRoute.Unassigned                     // DB-2.13
     EnrouteRoute enrouteCanvasRoute = EnrouteRoute.Unassigned                    // DB-2.13
     EnrouteMeasurement enroutePhotoMeasurement = EnrouteMeasurement.Unassigned   // DB-2.13
     EnrouteMeasurement enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned  // DB-2.13
+    Boolean showCurvedPoints = false                                             // DB-2.20
+	Integer mapScale = 200000                                                    // DB-2.21
+    
+    static int mmPerNM = 1852000
+    static int mmPerkm = 1000000
     
     // transient values 
-    static transients = ['contestMapOutput','contestMapPrint',
-                         'contestMapCircle','contestMapProcedureTurn','contestMapLeg','contestMapCurvedLeg','contestMapTpName', 'contestMapSecretGates',
-                         'contestMapEnroutePhotos','contestMapEnrouteCanvas','contestMapScale','contestMapGraticule','contestMapContourLines','contestMapMunicipalityNames',
-                         'contestMapAirfields','contestMapChurches','contestMapCastles','contestMapChateaus','contestMapPowerlines','contestMapWindpowerstations','contestMapSmallRoads',
-                         'contestMapPeaks','contestMapAdditionals','contestMapSpecials','contestMapAirspaces','contestMapAirspacesLayer',
-                         'contestMapCenterPoints','contestMapPrintPoints','contestMapPrintLandscape','contestMapPrintSize','contestMapColorChanges',
-                         'contestMapDevStyle','contestMapCenterHorizontalPos','contestMapCenterVerticalPos','useProcedureTurn']
+    static transients = ['contestMapOutput','contestMapPrint','contestMapDevStyle']
             
     String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP
     String contestMapPrint = Defs.CONTESTMAPPRINT_PDFMAP
-    boolean contestMapCircle = true
-    boolean contestMapProcedureTurn = true
-    boolean contestMapLeg = true
-    boolean contestMapCurvedLeg = true
-    boolean contestMapTpName = true
-    boolean contestMapSecretGates = false
-    boolean contestMapEnroutePhotos = false
-    boolean contestMapEnrouteCanvas = false
-    int contestMapScale = Defs.CONTESTMAPSCALE_200000
-    boolean contestMapGraticule = true
-    int contestMapContourLines = Defs.CONTESTMAPCONTOURLINES_100M
-    boolean contestMapMunicipalityNames = true
-    String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM_ICAO
-    boolean contestMapChurches = true
-    boolean contestMapCastles = true
-    boolean contestMapChateaus = true
-    boolean contestMapPowerlines = true
-    boolean contestMapWindpowerstations = true
-    boolean contestMapSmallRoads = false
-    boolean contestMapPeaks = true
-    boolean contestMapAdditionals = true
-    boolean contestMapSpecials = false
-    boolean contestMapAirspaces = false
-    String contestMapAirspacesLayer = ""
-    String contestMapCenterPoints = ""                                           // list of turn points arranged in map center
-    String contestMapPrintPoints = ""                                            // list of turn points for printing
-    boolean contestMapPrintLandscape = true
-    String contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A4
-    boolean contestMapColorChanges = false
     boolean contestMapDevStyle = false
-    HorizontalPos contestMapCenterHorizontalPos = HorizontalPos.Center
-    VerticalPos contestMapCenterVerticalPos = VerticalPos.Center
-    Boolean useProcedureTurn = true                                              // TODO: DB-2.14
+    
+    String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM_ICAO               // DB-2.21
+    Boolean contestMapCircle = true                                              // DB-2.21
+    Boolean contestMapProcedureTurn = true                                       // DB-2.21
+    Boolean contestMapLeg = true                                                 // DB-2.21
+    Boolean contestMapCurvedLeg = true                                           // DB-2.21
+    String contestMapCurvedLegPoints = Defs.CONTESTMAPPOINTS_INIT                // DB-2.21, list of turn points after curved legs
+    Boolean contestMapTpName = true                                              // DB-2.21
+    Boolean contestMapSecretGates = false                                        // DB-2.21
+    Boolean contestMapEnroutePhotos = false                                      // DB-2.21
+    Boolean contestMapEnrouteCanvas = false                                      // DB-2.21
+    Boolean contestMapGraticule = true                                           // DB-2.21
+    Integer contestMapContourLines = Defs.CONTESTMAPCONTOURLINES_100M            // DB-2.21
+    Boolean contestMapMunicipalityNames = true                                   // DB-2.21
+    Boolean contestMapChurches = true                                            // DB-2.21
+    Boolean contestMapCastles = true                                             // DB-2.21
+    Boolean contestMapChateaus = true                                            // DB-2.21
+    Boolean contestMapPowerlines = true                                          // DB-2.21
+    Boolean contestMapWindpowerstations = true                                   // DB-2.21
+    Boolean contestMapSmallRoads = false                                         // DB-2.21
+    Boolean contestMapPeaks = true                                               // DB-2.21
+    Boolean contestMapDropShadow = false                                         // DB-2.21
+    Boolean contestMapAdditionals = true                                         // DB-2.21
+    Boolean contestMapSpecials = false                                           // DB-2.21
+    Boolean contestMapAirspaces = false                                          // DB-2.21
+    String contestMapAirspacesLayer = ""                                         // DB-2.21
+    HorizontalPos contestMapCenterHorizontalPos = HorizontalPos.Center           // DB-2.21
+    VerticalPos contestMapCenterVerticalPos = VerticalPos.Center                 // DB-2.21
+    String contestMapCenterPoints = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.21, list of turn points arranged in map center
+    String contestMapPrintPoints = Defs.CONTESTMAPPOINTS_INIT                    // DB-2.21, list of turn points for printing
+    Boolean contestMapPrintLandscape = true                                      // DB-2.21
+    String contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A3                     // DB-2.21
+    Boolean contestMapReserve1                                                   // DB-2.21
+    Boolean contestMapReserve2                                                   // DB-2.21
+    Boolean contestMapReserve3                                                   // DB-2.21
+    String contestMapReserve4                                                    // DB-2.21
+    String contestMapReserve5                                                    // DB-2.21
     
 	static belongsTo = [contest:Contest]
 
 	static hasMany = [coords:CoordRoute,routelegs:RouteLegCoord,testlegs:RouteLegTest,enroutephotos:CoordEnroutePhoto,enroutecanvas:CoordEnrouteCanvas]
 
+	static hasOne = [uploadjobroute:UploadJobRoute]                              // DB-2.21
+	
 	static constraints = {
 		contest(nullable:false)
         
@@ -77,6 +85,53 @@ class Route
         enrouteCanvasRoute(nullable:true)
         enroutePhotoMeasurement(nullable:true)
         enrouteCanvasMeasurement(nullable:true)
+        
+        // DB-2.18 compatibility
+        useProcedureTurns(nullable:true)
+        liveTrackingScorecard(nullable:true)
+        
+        // DB-2.20 compatibility
+        showCurvedPoints(nullable:true)
+        
+        // DB-2.21 compatibility
+        mapScale(nullable:true, range:1..1000000000)
+        contestMapAirfields(nullable:true)
+        contestMapCircle(nullable:true)
+        contestMapProcedureTurn(nullable:true)
+        contestMapLeg(nullable:true)
+        contestMapCurvedLeg(nullable:true)
+        contestMapCurvedLegPoints(nullable:true)
+        contestMapTpName(nullable:true)
+        contestMapSecretGates(nullable:true)
+        contestMapEnroutePhotos(nullable:true)
+        contestMapEnrouteCanvas(nullable:true)
+        contestMapGraticule(nullable:true)
+        contestMapContourLines(nullable:true)
+        contestMapMunicipalityNames(nullable:true)
+        contestMapChurches(nullable:true)
+        contestMapCastles(nullable:true)
+        contestMapChateaus(nullable:true)
+        contestMapPowerlines(nullable:true)
+        contestMapWindpowerstations(nullable:true)
+        contestMapSmallRoads(nullable:true)
+        contestMapPeaks(nullable:true)
+        contestMapDropShadow(nullable:true)
+        contestMapAdditionals(nullable:true)
+        contestMapSpecials(nullable:true)
+        contestMapAirspaces(nullable:true)
+        contestMapAirspacesLayer(nullable:true)
+        contestMapCenterHorizontalPos(nullable:true)
+        contestMapCenterVerticalPos(nullable:true)
+        contestMapCenterPoints(nullable:true)
+        contestMapPrintPoints(nullable:true)
+        contestMapPrintLandscape(nullable:true)
+        contestMapPrintSize(nullable:true)
+        contestMapReserve1(nullable:true)
+        contestMapReserve2(nullable:true)
+        contestMapReserve3(nullable:true)
+        contestMapReserve4(nullable:true)
+        contestMapReserve5(nullable:true)
+		uploadjobroute(nullable:true)
 	}
 
 	static mapping = {
@@ -92,13 +147,48 @@ class Route
 		title = routeInstance.title
 		idTitle = routeInstance.idTitle
 		mark = routeInstance.mark
+        useProcedureTurns = routeInstance.useProcedureTurns
         turnpointRoute = routeInstance.turnpointRoute
         turnpointMapMeasurement = routeInstance.turnpointMapMeasurement
         enroutePhotoRoute = routeInstance.enroutePhotoRoute
         enrouteCanvasRoute = routeInstance.enrouteCanvasRoute
         enroutePhotoMeasurement = routeInstance.enroutePhotoMeasurement
         enrouteCanvasMeasurement = routeInstance.enrouteCanvasMeasurement
+        liveTrackingScorecard = routeInstance.liveTrackingScorecard
+        mapScale = routeInstance.mapScale
 
+        contestMapAirfields = routeInstance.contestMapAirfields
+        contestMapCircle = routeInstance.contestMapCircle
+        contestMapProcedureTurn = routeInstance.contestMapProcedureTurn
+        contestMapLeg = routeInstance.contestMapLeg
+        contestMapCurvedLeg = routeInstance.contestMapCurvedLeg
+        contestMapCurvedLegPoints = routeInstance.contestMapCurvedLegPoints
+        contestMapTpName = routeInstance.contestMapTpName
+        contestMapSecretGates = routeInstance.contestMapSecretGates
+        contestMapEnroutePhotos = routeInstance.contestMapEnroutePhotos
+        contestMapEnrouteCanvas = routeInstance.contestMapEnrouteCanvas
+        contestMapGraticule = routeInstance.contestMapGraticule
+        contestMapContourLines = routeInstance.contestMapContourLines
+        contestMapMunicipalityNames = routeInstance.contestMapMunicipalityNames
+        contestMapChurches = routeInstance.contestMapChurches
+        contestMapCastles = routeInstance.contestMapCastles
+        contestMapChateaus = routeInstance.contestMapChateaus
+        contestMapPowerlines = routeInstance.contestMapPowerlines
+        contestMapWindpowerstations = routeInstance.contestMapWindpowerstations
+        contestMapSmallRoads = routeInstance.contestMapSmallRoads
+        contestMapPeaks = routeInstance.contestMapPeaks
+        contestMapDropShadow = routeInstance.contestMapDropShadow
+        contestMapAdditionals = routeInstance.contestMapAdditionals
+        contestMapSpecials = routeInstance.contestMapSpecials
+        contestMapAirspaces = routeInstance.contestMapAirspaces
+        contestMapAirspacesLayer = routeInstance.contestMapAirspacesLayer
+        contestMapCenterHorizontalPos = routeInstance.contestMapCenterHorizontalPos
+        contestMapCenterVerticalPos = routeInstance.contestMapCenterVerticalPos
+        contestMapCenterPoints = routeInstance.contestMapCenterPoints
+        contestMapPrintPoints = routeInstance.contestMapPrintPoints
+        contestMapPrintLandscape = routeInstance.contestMapPrintLandscape
+        contestMapPrintSize = routeInstance.contestMapPrintSize
+        
 		if (!this.save()) {
 			throw new Exception("Route.CopyValues could not save")
 		}
@@ -260,6 +350,31 @@ class Route
         return grailsApplication.config.flightcontest.mail.cc
     }
     
+    boolean IsSendEMailPossible()
+    {
+        return IsEMailPossible() && !GetUploadJobStatus().InWork()
+    }
+    
+	UploadJobStatus GetUploadJobStatus()
+	{
+		UploadJobRoute uploadjob_route = UploadJobRoute.findByRoute(this)
+		if (uploadjob_route) {
+			return uploadjob_route.uploadJobStatus
+		}
+		return UploadJobStatus.None
+	}
+	
+	String GetUploadLink()
+	{
+		UploadJobRoute uploadjob_route = UploadJobRoute.findByRoute(this)
+		if (uploadjob_route) {
+			if (uploadjob_route.uploadJobStatus == UploadJobStatus.Done) {
+				return uploadjob_route.uploadJobLink
+			}
+		}
+		return ""
+	}
+
     boolean IsIntermediateRunway()
     {
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,,[sort:"id"])) {
@@ -280,24 +395,6 @@ class Route
                     return true
             }
         }
-        return false
-    }
-    
-    boolean ExistAnyAflosRoute()
-    {
-        return AflosTools.ExistAnyAflosRoute(contest)
-    }
-    
-    boolean IsAflosReferenceExportPossible()
-    {
-        if (mark) {
-            return true
-        }
-        /*
-        if (showAflosMark || AflosTools.GetAflosRouteName(contest, mark)) {
-            return true
-        }
-        */
         return false
     }
     
@@ -925,17 +1022,84 @@ class Route
         return s
     }
     
-    static List GetOkRoutes(Contest contestInstance)
+    static List GetOkPlanningTestTaskRoutes(Contest contestInstance)
     {
-        List ret = []
+        List ok_routes = []
         for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
             if (route_instance.IsRouteOk()) {
-                ret += route_instance
+                ok_routes += route_instance
             }
         }
-        return ret
+        List ret_routes = []
+        // add unused routes
+        for (Route route_instance in ok_routes) {
+            if (!PlanningTestTask.findByRoute(route_instance,[sort:"id"])) {
+                ret_routes += route_instance
+            }
+        }
+        // add used routes
+        for (Route route_instance in ok_routes) {
+            if (PlanningTestTask.findByRoute(route_instance,[sort:"id"])) {
+                ret_routes += route_instance
+            }
+        }
+        return ret_routes
     }
     
+	String GetPlanningTestTaskRouteName()
+	{
+        String ret_name = ""
+		if (title) {
+			ret_name = title
+		} else {
+            ret_name = idName()
+		}
+        int used_num = PlanningTestTask.findAllByRoute(this,[sort:"id"]).size()
+        if (used_num) {
+            ret_name += " [${getMsgArgs('fc.route.usednum',[used_num])}]"
+        }
+        return ret_name
+	}
+	
+    static List GetOkFlightTestRoutes(Contest contestInstance)
+    {
+        List ok_routes = []
+        for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
+            if (route_instance.IsRouteOk()) {
+                ok_routes += route_instance
+            }
+        }
+        List ret_routes = []
+        // add unused routes
+        for (Route route_instance in ok_routes) {
+            if (!FlightTest.findByRoute(route_instance,[sort:"id"])) {
+                ret_routes += route_instance
+            }
+        }
+        // add used routes
+        for (Route route_instance in ok_routes) {
+            if (FlightTest.findByRoute(route_instance,[sort:"id"])) {
+                ret_routes += route_instance
+            }
+        }
+        return ret_routes
+    }
+    
+	String GetFlightTestRouteName()
+	{
+        String ret_name = ""
+		if (title) {
+			ret_name = title
+		} else {
+            ret_name = idName()
+		}
+        int used_num = FlightTest.findAllByRoute(this,[sort:"id"]).size()
+        if (used_num) {
+            ret_name += " [${getMsgArgs('fc.route.usednum',[used_num])}]"
+        }
+        return ret_name
+	}
+	
     void calculateEnroutPhotoViewPos()
     {
         if (enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
@@ -1025,7 +1189,7 @@ class Route
         return curved_point_ids
     }
     
-    List GetCurvedPointTitleCodes(boolean isPrint)
+    List GetCurvedPointTitleCodes(Media media)
     {
         List curved_point_titlecodes = []
         boolean curved_point = false
@@ -1034,7 +1198,7 @@ class Route
                 if (coordroute_instance.type != CoordType.SECRET) {
                     curved_point = false
                 } else {
-                    curved_point_titlecodes += coordroute_instance.titleCode(isPrint)
+                    curved_point_titlecodes += coordroute_instance.titleMediaCode(media)
                 }
             } else if (coordroute_instance.endCurved) {
                 curved_point = true
@@ -1071,63 +1235,6 @@ class Route
         return next_id
     }
     
-    boolean UseProcedureTurn()
-    {
-        boolean use_pt = true
-        contest.printStyle.eachLine {
-            if (it.contains("--route") && it.contains("--disable-procedureturn")) {
-                String s = it.substring(it.indexOf("--route")+7).trim()
-                if (s.startsWith(":")) {
-                    s = s.substring(1).trim()
-                    int i = s.indexOf(";")
-                    if (i) {
-                        s = s.substring(0,i).trim()
-                        if (s == name()) {
-                            use_pt = false
-                        }
-                    }
-                }
-            }
-        }
-        return use_pt
-    }
-    
-    void DisableProcedureTurn()
-    {
-        if (useProcedureTurn != UseProcedureTurn()) {
-            if (!useProcedureTurn) {
-                contest.printStyle += "\nbody { --route: ${name()}; --disable-procedureturn; }"
-                contest.save()
-            }
-        }
-    }
-    
-    void DisableProcedureTurn2()
-    {
-        contest.printStyle += "\nbody { --route: ${name()}; --disable-procedureturn; }"
-    }
-    
-    boolean ShowCurvedPoints()
-    {
-        boolean show_curved_points = false
-        contest.printStyle.eachLine {
-            if (it.contains("--route") && it.contains("--show-curved-points")) {
-                String s = it.substring(it.indexOf("--route")+7).trim()
-                if (s.startsWith(":")) {
-                    s = s.substring(1).trim()
-                    int i = s.indexOf(";")
-                    if (i) {
-                        s = s.substring(0,i).trim()
-                        if (s == name()) {
-                            show_curved_points = true
-                        }
-                    }
-                }
-            }
-        }
-        return show_curved_points
-    }
-    
     Map GetRouteData()
     {
         BigDecimal distance_to2ldg = 0.0
@@ -1162,50 +1269,99 @@ class Route
         return [distance_to2ldg:distance_to2ldg, distance_sp2fp:distance_sp2fp, procedureturn_num:procedureturn_num, secret_num:secret_num, curved_num:curved_num]
     }
     
-    Map AddTPNum()
+    void SetAllContestMapPoints()
     {
-        Map ret = [tp:[], addNumber:[]]
-        contest.printStyle.eachLine {
-            if (it.contains("--route") && it.contains("--start-tp") && it.contains("--add-num")) {
-                String s = it.substring(it.indexOf("--route")+7).trim()
-                if (s.startsWith(":")) {
-                    s = s.substring(1).trim()
-                    int i = s.indexOf(";")
-                    if (i) {
-                        s = s.substring(0,i).trim()
-                        if (s == name()) {
-                            String s2 = it.substring(it.indexOf("--start-tp")+10).trim()
-                            if (s2.startsWith(":")) {
-                                s2 = s2.substring(1).trim()
-                                int j = s2.indexOf(";")
-                                if (j) {
-                                    for (String s21 in s2.substring(0,j).trim().split(',')) {
-                                        ret.tp += s21.trim().toUpperCase()
-                                    }
-                                    String s3 = it.substring(it.indexOf("--add-num")+9).trim()
-                                    if (s3.startsWith(":")) {
-                                        s3 = s3.substring(1).trim()
-                                        int k = s3.indexOf(";")
-                                        if (k) {
-                                            for (String s31 in s3.substring(0,k).trim().split(',')) {
-                                                if (s31.isInteger()) {
-                                                    ret.addNumber += s31.toInteger()
-                                                }
-                                            }
-                                        }
-                                    }
-    
-                                }
-                            }
-                        }
+        String center_points = ""
+        String print_points = ""
+        String curvedleg_points = ""
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id"])) {
+            if (coordroute_instance.type.IsContestMapQuestionCoord()) {
+                if (center_points) {
+                    center_points += ",${coordroute_instance.title()}"
+                } else {
+                    center_points = coordroute_instance.title() 
+                }
+                if (!coordroute_instance.type.IsRunwayCoord()) {
+                    if (print_points) {
+                        print_points += ",${coordroute_instance.title()}"
+                    } else {
+                        print_points = coordroute_instance.title() 
+                    }
+                }
+                if (coordroute_instance.endCurved) {
+                    if (curvedleg_points) {
+                        curvedleg_points += ",${coordroute_instance.title()}"
+                    } else {
+                        curvedleg_points = coordroute_instance.title() 
                     }
                 }
             }
         }
-        if (!ret.tp || !ret.addNumber || ret.tp.size() != ret.addNumber.size() || ret.tp.size() < 1) {
-            return [:]
+        center_points += ","
+        print_points += ","
+        curvedleg_points += ","
+        this.contestMapCenterPoints = DisabledCheckPointsTools.Compress(center_points, this)
+        this.contestMapPrintPoints = DisabledCheckPointsTools.Compress(print_points, this)
+        this.contestMapCurvedLegPoints = DisabledCheckPointsTools.Compress(curvedleg_points, this)
+    }
+    
+    BigDecimal Convert_mm2NM(BigDecimal measureValue)
+    {
+        if (measureValue == null) {
+            return null
+        }
+        return mapScale * measureValue / mmPerNM
+    }
+
+    BigDecimal Convert_NM2mm(BigDecimal distanceValue)
+    {
+        if (distanceValue == null) {
+            return null
+        }
+        return distanceValue * mmPerNM / mapScale 
+    }
+
+    static BigDecimal Convert_NM2m(BigDecimal distanceValue)
+    {
+        if (distanceValue == null) {
+            return null
+        }
+        return distanceValue * mmPerNM / 1000 
+    }
+
+    BigDecimal Convert_mm2km(BigDecimal measureValue)
+    {
+        if (measureValue == null) {
+            return null
+        }
+        return mapScale * measureValue / mmPerkm
+    }
+
+    BigDecimal Convert_km2mm(Contest contestInstance, BigDecimal distanceValue)
+    {
+        if (distanceValue == null) {
+            return null
+        }
+        return distanceValue * mmPerkm / mapScale 
+    }
+    
+    Map GetFlightTestWindDirection()
+    {
+        Map ret = [TODirection:0.0, LDGDirection:0.0, iTOiLDGDirection:0.0]
+        CoordRoute.findAllByRoute(this,[sort:"id"]).each { CoordRoute coordroute_instance ->
+            switch (coordroute_instance.type) {
+                case CoordType.TO:
+                    ret.TODirection = coordroute_instance.gateDirection
+                    break
+                case CoordType.LDG:
+                    ret.LDGDirection = coordroute_instance.gateDirection
+                    break
+                case CoordType.iTO:
+                case CoordType.iLDG:
+                    ret.iTOiLDGDirection = coordroute_instance.gateDirection
+                    break
+            }
         }
         return ret
     }
-    
 }

@@ -1,3 +1,4 @@
+/output
 /fcdb.h2.db
 /fcdb.lock.db
 /fcdb.trace.db
@@ -14,3 +15,5 @@
 /web-app/gpxupload
 /web-app/jobs
 /web-app/live
+/old-aflos
+/old-excelimport

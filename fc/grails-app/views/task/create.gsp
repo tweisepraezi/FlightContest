@@ -17,86 +17,92 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post">
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.title')}:</label>
                                 <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:taskInstance,field:'title')}" tabIndex="1"/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:taskInstance,field:'title')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.task.date')}:</label>
+                                <br/>
+                                <input type="date" id="liveTrackingNavigationTaskDate" name="liveTrackingNavigationTaskDate" value="${fieldValue(bean:taskInstance,field:'liveTrackingNavigationTaskDate')}" min="${taskInstance.contest.liveTrackingContestDate}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.task.firsttime')}* [${message(code:'fc.time.hmin')}]:</label>
                                 <br/>
-                                <input type="text" id="firstTime" name="firstTime" value="${fieldValue(bean:taskInstance,field:'firstTime')}" tabIndex="2"/>
+                                <input type="text" id="firstTime" name="firstTime" value="${fieldValue(bean:taskInstance,field:'firstTime')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.takeoffinterval.normal')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}" tabIndex="3"/>
+                                <input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.takeoffinterval.sloweraircraft')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="takeoffIntervalSlowerAircraft" name="takeoffIntervalSlowerAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalSlowerAircraft')}" tabIndex="4"/>
+                                <input type="text" id="takeoffIntervalSlowerAircraft" name="takeoffIntervalSlowerAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalSlowerAircraft')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.takeoffinterval.fasteraircraft')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="5"/>
+                                <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.task.planningtestduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="6"/>
+                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.preparationduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="7"/>
+                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.risingduration')}*:</label>
                                 <a href="../docs/help.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" tabIndex="8"/>
+                                <input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.maxlandingduration')}*:</label>
                                 <a href="../docs/help.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" tabIndex="9"/>
+                                <input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="10"/>
+                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="11"/>
+                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.ilandingduration')}*:</label>
                                 <a href="../docs/help.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" tabIndex="12"/>
+                                <input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.irisingduration')}*:</label>
                                 <a href="../docs/help.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" tabIndex="13"/>
+                                <input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.task.minnextflightduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="14"/>
+                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
                         <g:if test="${contestInstance.resultClasses}">
@@ -268,16 +274,16 @@
 	                   	</g:else>
                         <fieldset>
                             <label>${message(code:'fc.landingtest.landing1')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="95"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="${ti[0]++}"/>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing2')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="96"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="${ti[0]++}"/>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing3')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="97"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="${ti[0]++}"/>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing4')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="98"/>
+                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="${ti[0]++}"/>
                         </fieldset>
                         <fieldset>
                             <p>
@@ -297,11 +303,11 @@
                             <p>
                                 <label>${message(code:'fc.task.addtimevalue')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="101"/>
+                                <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="102"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="103"/>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

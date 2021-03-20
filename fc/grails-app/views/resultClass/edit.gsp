@@ -34,6 +34,8 @@
                                 <br/>
                                 <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="${ti[0]++}"/>
                             </p>
+                        </fieldset>
+                        <fieldset>
                             <g:if test="${resultclassInstance.contest.contestRuleForEachClass}">
 	                            <p>
 	                                <label>${message(code:'fc.contestrule')}*:</label>
@@ -42,6 +44,21 @@
 	                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" value="${resultclassInstance.contestRule}" tabIndex="${ti[0]++}"/>
 	                            </p>
 	                        </g:if>
+                            <p>
+                                <label>${message(code:'fc.resultclass.gatewidth')} [${message(code:'fc.mile')}]:</label>
+                                <br/>
+                                <input type="text" id="secretGateWidth" name="secretGateWidth" value="${fieldValue(bean:resultclassInstance,field:'secretGateWidth')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.resultclass.minutesbeforestarttime')} [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="minutesBeforeStartTime" name="minutesBeforeStartTime" value="${fieldValue(bean:resultclassInstance,field:'minutesBeforeStartTime')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.resultclass.minutesaddsubmission')} [${message(code:'fc.time.min')}]:</label>
+                                <br/>
+                                <input type="text" id="minutesAddSubmission" name="minutesAddSubmission" value="${fieldValue(bean:resultclassInstance,field:'minutesAddSubmission')}" tabIndex="${ti[0]++}"/>
+                            </p>
                         </fieldset>
                         <input type="hidden" name="id" value="${resultclassInstance?.id}"/>
                         <input type="hidden" name="version" value="${resultclassInstance?.version}"/>

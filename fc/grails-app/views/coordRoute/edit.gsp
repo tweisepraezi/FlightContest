@@ -24,12 +24,6 @@
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td>${coordRouteInstance.titleCode()}</td>
                                 </tr>
-                                <g:if test="${coordRouteInstance.route.showAflosMark}" >
-	                                <tr>
-	                                    <td class="detailtitle">${message(code:'fc.aflos.checkpoint')}:</td>
-	                                    <td>${coordRouteInstance.mark}</td>
-	                                </tr>
-	                            </g:if>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.coordroute.from')}:</td>
                                     <td><g:route var="${coordRouteInstance?.route}" link="${createLink(controller:'route',action:'show')}"/></td>

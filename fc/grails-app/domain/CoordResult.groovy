@@ -2,8 +2,7 @@ class CoordResult extends Coord
 {
 	static belongsTo = [test:Test]
     
-    boolean HideSecret(List curvedPointIds)
-    {
+    boolean HideSecret(List curvedPointIds) {
         boolean id_found = false
         for (curved_point_id in curvedPointIds) {
             if (id == curved_point_id) {
@@ -39,4 +38,15 @@ class CoordResult extends Coord
         return true
     }
 
+    int GetBadCoursePenalties() {
+        if (resultBadCourseNum) {
+            int badcourse_penalties = resultBadCourseNum * test.GetFlightTestBadCoursePoints()
+            int badcourse_maxpenalties = test.GetFlightTestBadCourseMaxPoints()
+            if (badcourse_maxpenalties > 0 && badcourse_penalties > badcourse_maxpenalties) {
+                badcourse_penalties = badcourse_maxpenalties
+            }
+            return badcourse_penalties
+        }
+        return 0
+    }
 }

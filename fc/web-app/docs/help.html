@@ -5,8 +5,9 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<meta name="author" content="Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.">
+<meta name="author" content="Thomas Weise, Deutscher Präzisionsflug-Verein e.V.">
 <title>Flight Contest</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove comment around @import statement below when using as a custom stylesheet */
@@ -422,29 +423,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Flight Contest</h1>
 <div class="details">
-<span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.10, Ausgabe 1,</span>
-<span id="revdate">12.08.2020</span>
+<span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
+<span id="revnumber">version 3.2.M10,</span>
+<span id="revdate">20.03.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
 <ul class="sectlevel1">
 <li><a href="#introduction">Einleitung</a></li>
 <li><a href="#manuals">Bedienungsanleitungen</a></li>
-<li><a href="#supported-rules">Unterst&#252;tzte Regelwerke</a></li>
+<li><a href="#supported-rules">Unterstützte Regelwerke</a></li>
 <li><a href="#default-competition">Standard-Wettbewerbsablauf / Zu erledigende Aufgaben</a></li>
 <li><a href="#hints">Bedien-Tipps</a></li>
-<li><a href="#response-to-modifications">&#196;nderungen bei Wettbewerbs-Durchf&#252;hrung</a></li>
+<li><a href="#response-to-modifications">Änderungen bei Wettbewerbs-Durchführung</a></li>
 <li><a href="#create-crew-list">Besatzungsliste erstellen</a></li>
 <li><a href="#route-planning">Streckenplanung</a>
 <ul class="sectlevel2">
 <li><a href="#route-planning-definitions">Definitionen</a></li>
-<li><a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r eine Wettbewerbsstrecke</a></li>
+<li><a href="#route-planning-mandatory-details">Erforderliche Angaben für eine Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-import">Import von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a></li>
-<li><a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzuf&#252;gen</a></li>
-<li><a href="#route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</a></li>
+<li><a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a></li>
+<li><a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a></li>
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
 </ul>
@@ -457,7 +458,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#osm-contest-map-workflow">Ablauf einer Karten-basierten Streckenkonstruktion</a></li>
 </ul>
 </li>
-<li><a href="#flight-time-calculation">Flugzeit-Berechnung f&#252;r Starts und Landungen</a></li>
+<li><a href="#flight-time-calculation">Flugzeit-Berechnung für Starts und Landungen</a></li>
 <li><a href="#planning-test-and-flight-preparation">Planungstest und Flugzeugvorbereitung</a>
 <ul class="sectlevel2">
 <li><a href="#planning-test-with-map">Planungstest mit Wettbewerbs-Karte (ohne Streckenkonstruktion)</a></li>
@@ -475,10 +476,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#evaluation-special">Sonder-Auswertungen</a></li>
 </ul>
 </li>
-<li><a href="#supported-logger">Unterst&#252;tzte Logger</a>
+<li><a href="#supported-logger">Unterstützte Logger</a>
 <ul class="sectlevel2">
-<li><a href="#supported-logger-aflos">AFLOS (direkt)</a></li>
-<li><a href="#supported-logger-aflosreader">AFLOS (mit Reader)</a></li>
+<li><a href="#supported-logger-aflosreader">AFLOS</a></li>
 <li><a href="#supported-logger-airopserver">AirObserver basierte Logger</a></li>
 <li><a href="#supported-logger-dg100">DG-100</a></li>
 <li><a href="#supported-logger-dg200">DG-200</a></li>
@@ -491,24 +491,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#print-styles">Druck-Stil beeinflussen</a>
 <ul class="sectlevel2">
-<li><a href="#print-styles-title">CSS-Einstellungen f&#252;r Titel</a></li>
-<li><a href="#print-styles-foot">CSS-Einstellungen f&#252;r Unterschrift</a></li>
-<li><a href="#print-styles-tables">CSS-Einstellungen f&#252;r Tabellen</a></li>
-<li><a href="#print-styles-special">Besondere CSS-Eigenschaften</a></li>
+<li><a href="#print-styles-title">CSS-Einstellungen für Titel</a></li>
+<li><a href="#print-styles-foot">CSS-Einstellungen für Unterschrift</a></li>
+<li><a href="#print-styles-tables">CSS-Einstellungen für Tabellen</a></li>
 <li><a href="#print-styles-samples">Beispiele</a></li>
+<li><a href="#print-styles-special-old">Ersetzte CSS-Eigenschaften</a></li>
 </ul>
 </li>
-<li><a href="#configuration">Installationsabh&#228;ngige Konfiguration</a>
+<li><a href="#contest-properties">Wettbewerbs-Eigenschaften</a></li>
+<li><a href="#configuration">Installationsabhängige Konfiguration</a>
 <ul class="sectlevel2">
 <li><a href="#configuration-email">E-Mail-Versand konfigurieren</a></li>
 <li><a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a></li>
 <li><a href="#configuration-ftp">FTP-Versand konfigurieren</a></li>
+<li><a href="#configuration-landing">Information für Landeschiedsrichter konfigurieren</a></li>
 <li><a href="#configuration-live">Live-Anzeige konfigurieren</a></li>
+<li><a href="#configuration-livetracking">Live-Tracking konfigurieren</a></li>
 <li><a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a></li>
 <li><a href="#configuration-test">Test-Anzeigen konfigurieren</a></li>
 </ul>
 </li>
 <li><a href="#live-scoring">Live-Ergebnisanzeige</a></li>
+<li><a href="#live-tracking">Live-Tracking</a></li>
 <li><a href="#automatic-actions">Automatische Aktionen</a>
 <ul class="sectlevel2">
 <li><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a></li>
@@ -533,16 +537,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="paragraph">
 <p>Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes der General Aviation
-und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen und/oder Landungen aus.</p>
+und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/oder Landungen aus.</p>
 </div>
 <div class="paragraph">
-<p>Flight Contest hat ein flexibles Wettbewerbsmanagement. Dazu z&#228;hlen die Unterst&#252;tzung:</p>
+<p>Flight Contest hat ein flexibles Wettbewerbsmanagement. Dazu zählen die Unterstützung:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>unterschiedlicher Wettbewerbsordnungen (FAI, Deutschland, Schweiz, &#214;sterreich, erweiterbar)<br>
-(Anpassung einzelner Auswertungs-Details (Punkte) bei Bedarf m&#246;glich)</p>
+<p>unterschiedlicher Wettbewerbsordnungen (FAI, Deutschland, Schweiz, Österreich, erweiterbar)<br>
+(Anpassung einzelner Auswertungs-Details (Punkte) bei Bedarf möglich)</p>
 </li>
 <li>
 <p>von Wettbewerbsklassen (unterschiedliche Auswertung von Besatzungsgruppen in einem Wettbewerb)</p>
@@ -551,20 +555,20 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p>kombinierter Wettbewerbe (gleichzeitig stattfindende Wettbewerbe mit einem gemeinsamen Startfeld)</p>
 </li>
 <li>
-<p>paralleler Wettbewerbe (gleichzeitig stattfindende Wettbewerbe mit unabh&#228;ngigen Startfeldern)</p>
+<p>paralleler Wettbewerbe (gleichzeitig stattfindende Wettbewerbe mit unabhängigen Startfeldern)</p>
 </li>
 <li>
-<p>der Auswertung besonderer Besatzungs-Gruppen, die ad hoc festgelegt werden k&#246;nnen</p>
+<p>der Auswertung besonderer Besatzungs-Gruppen, die ad hoc festgelegt werden können</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkf&#228;hige Open-Source-Datenbank-Anwendung:</p>
+<p>Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkfähige Open-Source-Datenbank-Anwendung:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Die Benutzer-Oberfl&#228;che l&#228;uft im Web-Browser (Firefox, Internet Explorer u.a.).</p>
+<p>Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Internet Explorer u.a.).</p>
 </li>
 <li>
 <p>Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden.</p>
@@ -581,19 +585,19 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </ul>
 </div>
 <div class="paragraph">
-<p>Unterst&#252;tzt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).</p>
+<p>Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).</p>
 </div>
 <div class="paragraph">
-<p>Erzeugt OSM-basierte A3- u. A4-Wettbewerbs-Karten im T&#220;K-200-Stil.</p>
+<p>Erzeugt OSM-basierte A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.</p>
 </div>
 <div class="paragraph">
-<p>Erzeugt PDF f&#252;r Druck und Internet-Ver&#246;ffentlichung.</p>
+<p>Erzeugt PDF für Druck und Internet-Veröffentlichung.</p>
 </div>
 <div class="paragraph">
 <p>Versendet E-Mails der Navigationsflug-Karten an die Teilnehmer.</p>
 </div>
 <div class="paragraph">
-<p>Unterst&#252;tzt besondere Streckeneigenschaften:</p>
+<p>Unterstützt besondere Streckeneigenschaften:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -614,15 +618,15 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <div class="ulist">
 <ul>
 <li>
-<p>Anzeige der vorl&#228;ufigen Rangliste w&#228;hrend eines Debriefings</p>
+<p>Anzeige der vorläufigen Rangliste während eines Debriefings</p>
 </li>
 <li>
-<p>Gleichzeitige Ver&#246;ffentlichung im lokalen Netzwerk und im Internet</p>
+<p>Gleichzeitige Veröffentlichung im lokalen Netzwerk und im Internet</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Stellt integrierte Karten-Viewer f&#252;r Navigationsfl&#252;ge, Strecken und Logger-Dateien bereit:</p>
+<p>Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dateien bereit:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -633,7 +637,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p>Online-Kartenanzeige mit Open Street Map</p>
 </li>
 <li>
-<p>Logger-Daten-Anzeige f&#252;r GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien</p>
+<p>Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien</p>
 </li>
 </ul>
 </div>
@@ -659,7 +663,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </div>
 </div>
 <div class="sect1">
-<h2 id="supported-rules">Unterst&#252;tzte Regelwerke</h2>
+<h2 id="supported-rules">Unterstützte Regelwerke</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -676,13 +680,13 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p><a href="rules/FAI_precision_flying_rules_2020.pdf" target="_blank">FAI Precision Flying</a></p>
 </li>
 <li>
-<p><a href="rules/CH_Praezisionsflug_2017.pdf" target="_blank">Wettkampfreglement Pr&#228;zisionsflug-Schweizermeisterschaft</a></p>
+<p><a href="rules/CH_Praezisionsflug_2017.pdf" target="_blank">Wettkampfreglement Präzisionsflug-Schweizermeisterschaft</a></p>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2017.pdf#page=17" target="_blank">Pr&#228;zisionsflug-Reglement &#214;sterreich</a></p>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=17" target="_blank">Präzisionsflug-Reglement Österreich</a></p>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2017.pdf#page=30" target="_blank">Navigationsflug-Reglement &#214;sterreich</a></p>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=30" target="_blank">Navigationsflug-Reglement Österreich</a></p>
 </li>
 </ul>
 </div>
@@ -718,15 +722,15 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 (wenn Planungstest Streckenkonstruktion beinhaltet)</p>
 </li>
 <li>
-<p><em>Unterlagenumschl&#228;ge vorbereiten</em><br>
+<p><em>Unterlagenumschläge vorbereiten</em><br>
 (Karten, Bilder,  An- u. Abflugstrecke, Funk-Frequenzen, ggf. Beschreibung Streckenkonstruktion)</p>
 </li>
 <li>
-<p><strong>Strecke importieren und auf Plausibilit&#228;t pr&#252;fen</strong><br>
+<p><strong>Strecke importieren und auf Plausibilität prüfen</strong><br>
 (Wendeschleifen, Exaktheit der Koordinaten)</p>
 </li>
 <li>
-<p><strong>Vorl&#228;ufigen Zeitplan des Wettbewerbstages berechnen</strong><br>
+<p><strong>Vorläufigen Zeitplan des Wettbewerbstages berechnen</strong><br>
 (angenommene Start-/Landerichtung, ohne Wind)</p>
 </li>
 </ol>
@@ -742,29 +746,29 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <ol class="arabic" start="7">
 <li>
 <p><strong>Zeitplan des Wettbewerbstages berechnen</strong><br>
-(unter Ber&#252;cksichtigung der festgelegten Start-/Landerichtung und des festgelegten Windes)</p>
+(unter Berücksichtigung der festgelegten Start-/Landerichtung und des festgelegten Windes)</p>
 </li>
 <li>
-<p><strong>Zeitpl&#228;ne u. Auswertelisten f&#252;r Aushang u. verschiedene Schiedsrichter drucken</strong></p>
+<p><strong>Zeitpläne u. Auswertelisten für Aushang u. verschiedene Schiedsrichter drucken</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>&#220;bersichts- und Besatzungszeitplan f&#252;r Aushang</p>
+<p>Übersichts- und Besatzungszeitplan für Aushang</p>
 </li>
 <li>
-<p>Besatzungsliste f&#252;r Loggerausgabe</p>
+<p>Besatzungsliste für Loggerausgabe</p>
 </li>
 <li>
-<p>Schiedsrichter-Zeitplan f&#252;r Tower (Flugzeug, Takeoff-Zeit, Sp&#228;teste Landezeit)</p>
+<p>Schiedsrichter-Zeitplan für Tower (Flugzeug, Takeoff-Zeit, Späteste Landezeit)</p>
 </li>
 <li>
-<p>Schiedsrichter-Zeitplan f&#252;r Vorbereitungsraum (Besatzung, Flugzeug, Ausgabezeit)</p>
+<p>Schiedsrichter-Zeitplan für Vorbereitungsraum (Besatzung, Flugzeug, Ausgabezeit)</p>
 </li>
 <li>
-<p>Schiedsrichter-Zeitplan f&#252;r Landungen (Flugzeug, Sp&#228;teste Landezeit)</p>
+<p>Schiedsrichter-Zeitplan für Landungen (Flugzeug, Späteste Landezeit)</p>
 </li>
 <li>
-<p>Schiedsrichter-Zeitplan f&#252;r Unterlagenabgabe (Flugzeug, Sp&#228;teste Landezeit, Parken)</p>
+<p>Schiedsrichter-Zeitplan für Unterlagenabgabe (Flugzeug, Späteste Landezeit, Parken)</p>
 </li>
 </ul>
 </div>
@@ -774,16 +778,16 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <div class="ulist">
 <ul>
 <li>
-<p>Label f&#252;r Unterlagenumschl&#228;ge</p>
+<p>Label für Unterlagenumschläge</p>
 </li>
 <li>
-<p>Eingabeformulare f&#252;r Planungstest</p>
+<p>Eingabeformulare für Planungstest</p>
 </li>
 <li>
-<p>Auswerteformulare f&#252;r Beobachtungen</p>
+<p>Auswerteformulare für Beobachtungen</p>
 </li>
 <li>
-<p>Flugpl&#228;ne</p>
+<p>Flugpläne</p>
 </li>
 </ul>
 </div>
@@ -802,17 +806,17 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </div>
 </li>
 <li>
-<p><em>Unterlagenumschl&#228;ge komplettieren</em></p>
+<p><em>Unterlagenumschläge komplettieren</em></p>
 <div class="ulist">
 <ul>
 <li>
 <p>Besatzungsspezifische Label aufkleben</p>
 </li>
 <li>
-<p>Besatzungsspezifische Eingabeformulare f&#252;r Planungstest hinzuf&#252;gen</p>
+<p>Besatzungsspezifische Eingabeformulare für Planungstest hinzufügen</p>
 </li>
 <li>
-<p>Besatzungsspezifische Auswerteformulare f&#252;r Beobachtungen hinzuf&#252;gen</p>
+<p>Besatzungsspezifische Auswerteformulare für Beobachtungen hinzufügen</p>
 </li>
 </ul>
 </div>
@@ -834,14 +838,14 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </div>
 </li>
 <li>
-<p><em>Vorbereitungsraum f&#252;r Planungstest und Flugvorbereitung koordinieren</em></p>
+<p><em>Vorbereitungsraum für Planungstest und Flugvorbereitung koordinieren</em></p>
 <div class="ulist">
 <ul>
 <li>
 <p>Unterlagenumschlag-Ausgabe</p>
 </li>
 <li>
-<p>R&#252;cknahme Planungstest-Eingabeformulare</p>
+<p>Rücknahme Planungstest-Eingabeformulare</p>
 </li>
 <li>
 <p>Besatzungsspezifischen Flugplan ausgeben</p>
@@ -866,7 +870,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 </div>
 </li>
 <li>
-<p><em>Eingeschalter Logger bei abfliegenden Besatzungen pr&#252;fen</em></p>
+<p><em>Eingeschalter Logger bei abfliegenden Besatzungen prüfen</em></p>
 </li>
 <li>
 <p><em>Landungen vermessen</em></p>
@@ -879,7 +883,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p>Abnormale Landung dokumentieren</p>
 </li>
 <li>
-<p>Lande-Ergebnis kontinuierlich an Auswerte-Schiedsrichter &#252;bermitteln</p>
+<p>Lande-Ergebnis kontinuierlich an Auswerte-Schiedsrichter übermitteln</p>
 </li>
 </ul>
 </div>
@@ -889,7 +893,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <div class="ulist">
 <ul>
 <li>
-<p>&#220;berwachung der Zeit f&#252;r Komplettierung des Auswerteformulares</p>
+<p>Überwachung der Zeit für Komplettierung des Auswerteformulares</p>
 </li>
 <li>
 <p>Auswerteformular und Logger entgegennehmen</p>
@@ -917,7 +921,7 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p>Dateneingabe Beobachtungen</p>
 </li>
 <li>
-<p>Ergebnis f&#252;r Besatzung drucken und &#252;bergeben</p>
+<p>Ergebnis für Besatzung drucken und übergeben</p>
 </li>
 <li>
 <p>Live-Auswertung aktualisieren</p>
@@ -933,13 +937,13 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <p>Ergebnisse vom Auswerte-Schiedsrichter abholen</p>
 </li>
 <li>
-<p>Ergebnisse kontinuierlich an Besatzungen &#252;bergeben</p>
+<p>Ergebnisse kontinuierlich an Besatzungen übergeben</p>
 </li>
 <li>
-<p>R&#252;ckfragen der Besatzungen entgegennehmen u. entscheiden</p>
+<p>Rückfragen der Besatzungen entgegennehmen u. entscheiden</p>
 </li>
 <li>
-<p>Korrekturen an Auswerte-Schiedsrichter &#252;bergeben</p>
+<p>Korrekturen an Auswerte-Schiedsrichter übergeben</p>
 </li>
 </ul>
 </div>
@@ -949,10 +953,10 @@ und wertet Ergebnisse f&#252;r Planungstests, Navigationstests, Beobachtungen un
 <div class="ulist">
 <ul>
 <li>
-<p>Korrekturen auf R&#252;ckfragen der Besatzungen verarbeiten</p>
+<p>Korrekturen auf Rückfragen der Besatzungen verarbeiten</p>
 </li>
 <li>
-<p>Endg&#252;ltige Landeliste verarbeiten</p>
+<p>Endgültige Landeliste verarbeiten</p>
 </li>
 <li>
 <p>Endauswertung erstellen</p>
@@ -982,19 +986,19 @@ hinter denen sich weitere Daten verbergen.</p>
 </li>
 <li>
 <p>Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
-wodurch das Dr&#252;cken der Shift-Taste nicht notwendig ist.</p>
+wodurch das Drücken der Shift-Taste nicht notwendig ist.</p>
 </li>
 <li>
 <p>Bei der Eingabe gebrochener Zahlen kann anstelle des "," auch ein '.' benutzt
 werden.</p>
 </li>
 <li>
-<p>Bei der Eingabe von Landemesswerten k&#246;nnen Klein- anstelle von Gro&#223;buchstaben
-eingegeben werden, wodurch das Dr&#252;cken der Shift-Taste nicht notwendig ist.</p>
+<p>Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben
+eingegeben werden, wodurch das Drücken der Shift-Taste nicht notwendig ist.</p>
 </li>
 <li>
-<p>Bei der Eingabe von Landemesswerten kann der Landemesswert "out" f&#252;r Landungen
-au&#223;erhalb der Landebox und "no" f&#252;r keine Landung eingegeben werden, um
+<p>Bei der Eingabe von Landemesswerten kann der Landemesswert "out" für Landungen
+außerhalb der Landebox und "no" für keine Landung eingegeben werden, um
 diese Fehler ohne Maus-Bedienung einzugeben.</p>
 </li>
 </ul>
@@ -1003,52 +1007,52 @@ diese Fehler ohne Maus-Bedienung einzugeben.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="response-to-modifications">&#196;nderungen bei Wettbewerbs-Durchf&#252;hrung</h2>
+<h2 id="response-to-modifications">Änderungen bei Wettbewerbs-Durchführung</h2>
 <div class="sectionbody">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Besatzung nimmt kurzfritig nicht teil</dt>
 <dd>
 <p>Besatzung deaktivieren (Besatzungen)<br>
-Zeitplan bleibt unver&#228;ndert.</p>
+Zeitplan bleibt unverändert.</p>
 </dd>
 <dt class="hdlist1">Besatzung kann nicht wie geplant starten</dt>
 <dd>
 <p>Besatzung ans Ende der Aufgabe schieben (Planung)<br>
-F&#252;r die betroffene Besatzung wird ein neuer Flugplan berechnet.</p>
+Für die betroffene Besatzung wird ein neuer Flugplan berechnet.</p>
 </dd>
 <dt class="hdlist1">Starts verschieben sich zeitlich</dt>
 <dd>
 <p>Anfangszeit betroffener Besatzungen korrigieren (Planung)<br>
-F&#252;r die betroffenen Besatzungen wird ein neuer Flugplan berechnet.</p>
+Für die betroffenen Besatzungen wird ein neuer Flugplan berechnet.</p>
 </dd>
-<dt class="hdlist1">Flugwind &#228;ndert sich im Laufe der Starts</dt>
+<dt class="hdlist1">Flugwind ändert sich im Laufe der Starts</dt>
 <dd>
 <p>Verbliebenen Besatzungen anderen Flugwind zuweisen (Planung)<br>
-F&#252;r die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.</p>
+Für die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.</p>
 </dd>
-<dt class="hdlist1">Planungstest soll mit einem anderen Wind als dem urspr&#252;nglich vorgegeben Wind bewertet werden</dt>
+<dt class="hdlist1">Planungstest soll mit einem anderen Wind als dem ursprünglich vorgegeben Wind bewertet werden</dt>
 <dd>
 <p>Dem Planungstest eine neue Planungsaufgabe mit anderem Wind zuweisen
 und Besatzung diese neue Planungsaufgabe zuweisen (Planung)</p>
 </dd>
-<dt class="hdlist1">TAS einer Besatzung &#228;ndert sich, nachdem bereits Planungstests und Flugpl&#228;ne berechnet wurden</dt>
+<dt class="hdlist1">TAS einer Besatzung ändert sich, nachdem bereits Planungstests und Flugpläne berechnet wurden</dt>
 <dd>
-<p>Nach &#196;nderung der TAS einer Besatzung die Besatzung
+<p>Nach Änderung der TAS einer Besatzung die Besatzung
 markieren und einmal nach unten und oben schieben (Planung)<br>
-Ge&#228;nderte TAS wird in die Aufgabe &#252;bernommen.<br>
+Geänderte TAS wird in die Aufgabe übernommen.<br>
 Planungstest wird sofort neu berechnet.<br>
 Flugplan wird mit 'Zeitplan berechnen' neu berechnet.<br>
-Hierbei k&#246;nnen Warnungen f&#252;r Folgeflugzeuge entstehen.
+Hierbei können Warnungen für Folgeflugzeuge entstehen.
 Ggf. Besatzung ans Ende der Aufgabe schieben.</p>
 </dd>
-<dt class="hdlist1">Besatzung mu&#223; wegen Defekt das Flugzeug wechseln</dt>
+<dt class="hdlist1">Besatzung muß wegen Defekt das Flugzeug wechseln</dt>
 <dd>
 <p>Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen (Besatzungen)<br>
 Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet.<br>
-Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unver&#228;ndert.</p>
+Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unverändert.</p>
 </dd>
-<dt class="hdlist1">Wendepunkt-&#220;berflugzeit einer Aufgabe soll nicht gewertet werden</dt>
+<dt class="hdlist1">Wendepunkt-Überflugzeit einer Aufgabe soll nicht gewertet werden</dt>
 <dd>
 <p>'Zeitauswertung' des Wendepunktes deaktivieren (Ergebnisse &#8594; Check-Punkte deaktivieren)<br>
 Bewirkt Neuberechnung des Ergebnisses.</p>
@@ -1061,10 +1065,10 @@ Bewirkt Neuberechnung des Ergebnisses.</p>
 </dd>
 <dt class="hdlist1">Zeitplan einer Aufgabe neu berechnen</dt>
 <dd>
-<p>'Reihenfolge zur&#252;cksetzen' und 'Zeitplan berechnen' nacheinander ausf&#252;hren<br>
-L&#246;scht alle Flugpl&#228;ne und setzt die Reihenfolge der Besatzungen
+<p>'Reihenfolge zurücksetzen' und 'Zeitplan berechnen' nacheinander ausführen<br>
+Löscht alle Flugpläne und setzt die Reihenfolge der Besatzungen
 auf die Reihenfolge in der Besatzungsliste.<br>
-Anfangszeiten aller Besatzungen und Flugpl&#228;ne werden neu berechnet.</p>
+Anfangszeiten aller Besatzungen und Flugpläne werden neu berechnet.</p>
 </dd>
 </dl>
 </div>
@@ -1076,7 +1080,7 @@ Anfangszeiten aller Besatzungen und Flugpl&#228;ne werden neu berechnet.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Besatzungslisten werden mit Excel erstellt.<br>
-Verwenden Sie die Vorlage <a href="samples/FC-CrewList-Sample.xls" target="_blank">FC-CrewList-Sample.xls</a>, deren Aufbau einen erfolgreichen Import sicherstellt.</p>
+Verwenden Sie die Vorlage <a href="samples/FC-CrewList-Sample.xlsx" target="_blank">FC-CrewList-Sample.xlsx</a>, deren Aufbau einen erfolgreichen Import sicherstellt.</p>
 </div>
 <div class="paragraph">
 <p>Die Liste erfasst folgende Daten:</p>
@@ -1087,19 +1091,16 @@ Verwenden Sie die Vorlage <a href="samples/FC-CrewList-Sample.xls" target="_blan
 <p>Nr. (Start-Nummer) (optional)</p>
 </li>
 <li>
-<p>Pilot</p>
+<p>Pilot (Vorname, Nachname und optionaler E-Mail)</p>
 </li>
 <li>
-<p>Copilot (optional)</p>
-</li>
-<li>
-<p>E-Mail (optional) (mehrere E-Mails mit Komma trennen)</p>
+<p>Navigator (optional, mit Vorname, Nachname und optionaler E-Mail)</p>
 </li>
 <li>
 <p>Mannschaft (optional)</p>
 </li>
 <li>
-<p>Klasse (f&#252;r Wettbewerbe mit unterschiedlichen Auswerte-Klassen)</p>
+<p>Klasse (für Wettbewerbe mit unterschiedlichen Auswerte-Klassen)</p>
 </li>
 <li>
 <p>TAS (kn)</p>
@@ -1108,10 +1109,13 @@ Verwenden Sie die Vorlage <a href="samples/FC-CrewList-Sample.xls" target="_blan
 <p>Flugzeug-Kennzeichen</p>
 </li>
 <li>
-<p>Flugzeug-Typ (optional) (vermeiden Sie hier Leerzeichen)</p>
+<p>Flugzeug-Typ (optional)</p>
 </li>
 <li>
-<p>Flugzeug-Farbe (optional) (vermeiden Sie hier Leerzeichen)</p>
+<p>Flugzeug-Farbe (optional)</p>
+</li>
+<li>
+<p>Tracker-ID (für Wettbewerbe mit Live-Tracking)</p>
 </li>
 </ul>
 </div>
@@ -1119,26 +1123,26 @@ Verwenden Sie die Vorlage <a href="samples/FC-CrewList-Sample.xls" target="_blan
 <p>Diese Liste muss am Wettbewerbstag vorliegen (Sortierung nicht notwendig).</p>
 </div>
 <div class="paragraph">
-<p>Start-Nummern nur angegeben, wenn eine besondere Nummerierung ben&#246;tigt wird.
+<p>Start-Nummern nur angegeben, wenn eine besondere Nummerierung benötigt wird.
 Nicht angegebene Start-Nummern erhalten beim Import automatisch eine Nummer
-(die jeweils erste Nummer nach der h&#246;chsten existierenden Nummer).</p>
+(die jeweils erste Nummer nach der höchsten existierenden Nummer).</p>
 </div>
 <div class="paragraph">
 <p>Diese Vorlage kann auch zur Planung anderer Belange des Wettbewerbes
-(Hotel, Kontaktdaten) verwendet werden. Dazu d&#252;rfen Spalten, Zeilen und
-Tabellenbl&#228;tter nach folgenden Regeln eingef&#252;gt werden:</p>
+(Hotel, Kontaktdaten) verwendet werden. Dazu dürfen Spalten, Zeilen und
+Tabellenblätter nach folgenden Regeln eingefügt werden:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Beliebig viele weitere Spalten am Ende (nach der Spalte 'Farbe/Color')</p>
+<p>Beliebig viele weitere Spalten am Ende (nach der Spalte 'Tracker-ID')</p>
 </li>
 <li>
 <p>Beliebig viele weitere Zeilen nach einer der letzten zu importierenden
 Besatzung folgenden Leerzeile</p>
 </li>
 <li>
-<p>Beliebig viele Tabellenbl&#228;tter an beliebigen Positionen.
+<p>Beliebig viele Tabellenblätter an beliebigen Positionen.
 Importiert werden nur Daten aus dem Tabellenblatt 'Crews'.</p>
 </li>
 </ul>
@@ -1148,13 +1152,13 @@ Importiert werden nur Daten aus dem Tabellenblatt 'Crews'.</p>
 'Flight Contest'-Datenbank aufgenommen.
 Bei angegebener Option "Start-Nr. weglassen" werden die angegebenen Nummern
 nicht verwendet bzw. bei Angabe durch eine andere Startnummer ersetzt.
-Die angegebenen Nummern k&#246;nnen unter 'Wettbewerb &#8594; Vorgaben' konfiguriert
+Die angegebenen Nummern können unter 'Wettbewerb &#8594; Vorgaben' konfiguriert
 werden (Standard: '13').</p>
 </div>
 <div class="paragraph">
-<p>Importiert werden nur Besatzungsnamen (Pilot + Copilot), die noch nicht in der
+<p>Importiert werden nur Besatzungsnamen (Pilot + Navigator), die noch nicht in der
 'Flight Contest'-Datenbank vorhanden sind. Korrekturen bereits importierter
-Besatzungsnamen (Pilot oder Copilot) bewirken den erneuten Import der Besatzung
+Besatzungsnamen (Pilot oder Navigator) bewirken den erneuten Import der Besatzung
 mit Zuordnung einer weiteren Start-Nummer. Korrigieren Sie deshalb Besatzungen nach
 einem Import nur noch in 'Flight Contest'.</p>
 </div>
@@ -1166,12 +1170,12 @@ einem Import nur noch in 'Flight Contest'.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p><a href="#route-planning-definitions">Definitionen</a><br>
-<a href="#route-planning-mandatory-details">Erforderliche Angaben f&#252;r eine Wettbewerbsstrecke</a><br>
+<a href="#route-planning-mandatory-details">Erforderliche Angaben für eine Wettbewerbsstrecke</a><br>
 <a href="#route-planning-input">Eingabe von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-import">Import von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a><br>
-<a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzuf&#252;gen</a><br>
-<a href="#route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</a><br>
+<a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a><br>
+<a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a><br>
 <a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a><br>
 <a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></p>
 </div>
@@ -1179,39 +1183,39 @@ einem Import nur noch in 'Flight Contest'.</p>
 <h3 id="route-planning-definitions">Definitionen</h3>
 <div class="paragraph">
 <p>Startpunkt (SP), Check-Punkte (CP) und Endpunkt (FP = Finish point)
-sind Logger-Messpunkte einer Strecke, wo &#220;berflugzeit und Flugh&#246;he gemessen
-sowie vorangegangene Kurs&#228;nderungen &gt;= 90 Grad festgestellt werden.</p>
+sind Logger-Messpunkte einer Strecke, wo Überflugzeit und Flughöhe gemessen
+sowie vorangegangene Kursänderungen &gt;= 90 Grad festgestellt werden.</p>
 </div>
 <div class="paragraph">
 <p>Wendepunkte (WP o. TP = Turn point) sind Check-Punkte,
-wo eine Kurs&#228;nderung erfolgt und die im Flugplan einer Besatzung stehen.</p>
+wo eine Kursänderung erfolgt und die im Flugplan einer Besatzung stehen.</p>
 </div>
 <div class="paragraph">
-<p>Unbekannte Zeitkontrollen (UZK o. SC) sind Check-Punkte f&#252;r
+<p>Unbekannte Zeitkontrollen (UZK o. SC) sind Check-Punkte für
 Zeitmessungen auf der Strecke, die nicht im Flugplan einer Besatzung stehen.</p>
 </div>
 <div class="paragraph">
-<p>Takeoff (TO) ist ein Check-Punkt, wo die &#220;berflugzeit zur Auswertung
+<p>Takeoff (TO) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
 der Einhaltung des Takeoff-Zeitfensters gemessen wird.</p>
 </div>
 <div class="paragraph">
-<p>Landung (LDG) ist ein Check-Punkt, wo die &#220;berflugzeit zur Auswertung
-der Einhaltung der sp&#228;testen Landezeit gemessen wird.</p>
+<p>Landung (LDG) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
+der Einhaltung der spätesten Landezeit gemessen wird.</p>
 </div>
 <div class="paragraph">
-<p>Intermediate-Punkte sind Konstruktionspunkte f&#252;r eine Zwischenlandung.
+<p>Intermediate-Punkte sind Konstruktionspunkte für eine Zwischenlandung.
 Beim Intermediate-Endpunkt (iFP) und Intermediate-Startpunkt (iSP) werden
-&#220;berflugzeit und Flugh&#246;he gemessen und ausgewertet.
+Überflugzeit und Flughöhe gemessen und ausgewertet.
 Intermediate-Landung (iLDG) und Intermediate-Takeoff (iTO) dienen nur
 zur Anzeige im Flugplan einer Besatzung.
 Bei einer Touch&amp;Go-Zwischenlandung ist auf iTO zu verzichten.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-mandatory-details">Erforderliche Angaben f&#252;r eine Wettbewerbsstrecke</h3>
+<h3 id="route-planning-mandatory-details">Erforderliche Angaben für eine Wettbewerbsstrecke</h3>
 <div class="paragraph">
 <p>In einer Wettbewerbs-Karte sind Startpunkt, Wendepunkte und Endpunkt
-einer Strecke sprachabh&#228;ngig mit folgenden Bezeichnungen anzugeben:</p>
+einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:</p>
 </div>
 <table class="tableblock frame-all grid-all">
 <colgroup>
@@ -1240,7 +1244,7 @@ einer Strecke sprachabh&#228;ngig mit folgenden Bezeichnungen anzugeben:</p>
   iFP, iLDG, iTO, iSP</p>
 </div>
 <div class="paragraph">
-<p>F&#252;r eine Wettbewerbsstrecke sind f&#252;r alle Check-Punkte folgende Angaben n&#246;tig:</p>
+<p>Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1248,7 +1252,7 @@ einer Strecke sprachabh&#228;ngig mit folgenden Bezeichnungen anzugeben:</p>
 <p>Koordinaten</p>
 </li>
 <li>
-<p>Minimale Flug-H&#246;he &#252;ber Normal-Null (Altitude, in ft)</p>
+<p>Minimale Flug-Höhe über Normal-Null (Altitude, in ft)</p>
 <div class="paragraph">
 <p>TO, LDG, iTO, iLDG: 0 ft</p>
 </div>
@@ -1259,33 +1263,33 @@ einer Strecke sprachabh&#228;ngig mit folgenden Bezeichnungen anzugeben:</p>
 <p>TO, LDG, iTO, iLDG: 0.02 NM (entspr. Landebahn-Breite)</p>
 </div>
 <div class="paragraph">
-<p>UZK: 2 NM (f&#252;r Wettbewerb nach dt. Regelwerk, sonst 1 NM)</p>
+<p>UZK: 2 NM (für Wettbewerb nach dt. Regelwerk, sonst 1 NM)</p>
 </div>
 <div class="paragraph">
 <p>sonst: 1 NM</p>
 </div>
 </li>
 <li>
-<p>Tor-Richtung f&#252;r TO, LDG, iTO, iLDG (in Grad)</p>
+<p>Tor-Richtung für TO, LDG, iTO, iLDG (in Grad)</p>
 </li>
 <li>
-<p>F&#252;r pr&#228;zise &#220;bereinstimmung der ausgegebenen gedruckten Wettbewerbs-Karte
-mit den zu verarbeitenden Daten m&#252;ssen bei Pr&#228;zisionsflug-Wettbewerben
+<p>Für präzise Übereinstimmung der ausgegebenen gedruckten Wettbewerbs-Karte
+mit den zu verarbeitenden Daten müssen bei Präzisionsflug-Wettbewerben
 Entfernungen auf der Wettbewerbs-Karte gemessen und bei jedem Check-Punkt
 ins Feld 'Entfernungsmessung (Karte) [mm]' eingetragen werden. Dabei
 wird die Entfernung vom vorangegangenen Wendepunkt in mm
-(f&#252;r eine Karte mit dem Wettbewerbs-Ma&#223;stab 1:200000) eingetragen.
+(für eine Karte mit dem Wettbewerbs-Maßstab 1:200000) eingetragen.
 Der vorangegangene Wendepunkt ist ein Check-Punkt, der keine
 unbekannte Zeitkontrolle ist.</p>
 </li>
 <li>
-<p>F&#252;r krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. Diese sind
+<p>Für krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. Diese sind
 als UZK mit folgenden Angaben einzugeben:</p>
 <div class="ulist">
 <ul>
 <li>
 <p>Tor-Breite &gt;= 2 NM, damit Abweichungen nicht zu viele manuell
-nachzupr&#252;fende Logger-Fehler verursachen.</p>
+nachzuprüfende Logger-Fehler verursachen.</p>
 </li>
 <li>
 <p>Keine Zeitauswertung</p>
@@ -1311,7 +1315,7 @@ Flugplanungstest enthalten ist</p>
 <li>
 <p>Check-Punkt nach krummer Strecke</p>
 <div class="paragraph">
-<p>Der Flugplan der Besatzung erh&#228;lt als Richtung automatisch die Richtung
+<p>Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
 auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 </div>
 </li>
@@ -1319,7 +1323,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 </div>
 </li>
 <li>
-<p>F&#252;r Zwischenlandungen sind f&#252;r iLDG und iTO folgenden Angaben einzugeben:</p>
+<p>Für Zwischenlandungen sind für iLDG und iTO folgenden Angaben einzugeben:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1338,7 +1342,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <p>Kein Flugplanungstest</p>
 </li>
 <li>
-<p>Feste Flugzeit f&#252;r Zwischenlandung mit Pause (in min)</p>
+<p>Feste Flugzeit für Zwischenlandung mit Pause (in min)</p>
 </li>
 </ul>
 </div>
@@ -1352,7 +1356,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <div class="listingblock">
 <div class="content">
 <pre>  Punkt                       Check-       Gate              in         Auswertung
-                              Punkt        Breite  Richtung  Flugplan   Zeit Kurs H&#246;he
+                              Punkt        Breite  Richtung  Flugplan   Zeit Kurs Höhe
 
   Takeoff                     TO           0.02    250       ja         ja   nein nein
   Startpunkt                  SP           1       -         ja         ja   nein ja
@@ -1374,7 +1378,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <div class="listingblock">
 <div class="content">
 <pre>  Strecken-Beispiele          Check-      Gate              in         Auswertung
-                              Punkt       Breite  Richtung  Flugplan   Zeit Kurs H&#246;he
+                              Punkt       Breite  Richtung  Flugplan   Zeit Kurs Höhe
 
   Normal                      TO          0.02    250       ja         ja   nein nein
                               SP          1       -         ja         ja   nein ja
@@ -1430,44 +1434,44 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <h3 id="route-planning-input">Eingabe von Wettbewerbsstrecken</h3>
 <div class="paragraph">
 <p>Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur
-nacheinander eingeben werden k&#246;nnen und das Einf&#252;gen von Check-Punkten nicht m&#246;glich ist.
-Alle Eigenschaften bis auf den Check-Punkt-Typ sind bis zur ersten Nutzung &#228;nderbar.
-Flug-H&#246;he und Tor-Breite sind auch nach der ersten Nutzung &#228;nderbar.</p>
+nacheinander eingeben werden können und das Einfügen von Check-Punkten nicht möglich ist.
+Alle Eigenschaften bis auf den Check-Punkt-Typ sind bis zur ersten Nutzung änderbar.
+Flug-Höhe und Tor-Breite sind auch nach der ersten Nutzung änderbar.</p>
 </div>
 <div class="paragraph">
 <p>Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon
-auch mit Textdateien (UTF-8) m&#246;glich. In einer leeren Strecke k&#246;nnen alle Check-Punkte mit
-"Koordinaten importieren" aus einer Text-Datei hinzugef&#252;gt werden (einschl. Eigenschaften):</p>
+auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Check-Punkte mit
+"Koordinaten importieren" aus einer Text-Datei hinzugefügt werden (einschl. Eigenschaften):</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>TO, Lat 48&#176; 46.66700' N, Lon 010&#176; 15.79600' E, Alt 1915ft, Gate 270&#176; 0.02NM
-SP, Lat 48&#176; 49.84000' N, Lon 010&#176; 12.70000' E, Alt 2567ft, Gate 1.0NM
-TP1, Lat 49&#176; 00.96800' N, Lon 010&#176; 12.89500' E, Alt 2395ft, Gate 1.0NM
-SC1, Lat 49&#176; 01.83100' N, Lon 009&#176; 55.43200' E, Alt 2063ft, Gate 2.0NM
-TP2, Lat 48&#176; 53.41200' N, Lon 009&#176; 53.52700' E, Alt 2162ft, Gate 1.0NM
-iFP, Lat 49&#176; 04.22500' N, Lon 009&#176; 45.77600' E, Alt 1713ft, Gate 1.0NM
-iLDG, Lat 49&#176; 07.09700' N, Lon 009&#176; 47.07600' E, Alt 1308ft, Gate 280&#176; 1.0NM, notime, nogate, noplan
-iSP, Lat 49&#176; 10.58100' N, Lon 009&#176; 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
-TP3, Lat 49&#176; 15.92100' N, Lon 009&#176; 45.44600' E, Alt 1279ft, Gate 1.0NM
-TP4, Lat 49&#176; 18.40600' N, Lon 009&#176; 57.57000' E, Alt 2021ft, Gate 1.0NM
-FP, Lat 48&#176; 51.90800' N, Lon 010&#176; 18.04600' E, Alt 2266ft, Gate 1.0NM
-LDG, Lat 48&#176; 46.68300' N, Lon 010&#176; 16.05600' E, Alt 1915ft, Gate 270&#176; 0.02NM</pre>
+<pre>TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
+iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Check-Punkt (engl.), Latitude, Longitude, Altitude, Gate-Richtung und -Breite, u.a.</p>
 </div>
 <div class="paragraph">
-<p>Zul&#228;ssige Koordinaten-Darstellungen entspr. Wettbewerbseinstellung.</p>
+<p>Zulässige Koordinaten-Darstellungen entspr. Wettbewerbseinstellung.</p>
 </div>
 <div class="paragraph">
 <p>Import von Beobachtungen aus Text-Dateien (siehe 'Programme &#8594; Flight Contest &#8594; Anleitung Beobachtungen'
 &#8594; Kapitel "Beobachtungsauswertung konfigurieren")</p>
 </div>
 <div class="paragraph">
-<p>Der Strecken-Ausdruck (Strecke &#8594; Druck) enth&#228;lt die Text-Darstellungen aller Check-Punkte
-und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet werden k&#246;nnen:</p>
+<p>Der Strecken-Ausdruck (Strecke &#8594; Druck) enthält die Text-Darstellungen aller Check-Punkte
+und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet werden können:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1485,16 +1489,11 @@ und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet 
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>Alternativ ist die Eingabe und Weitergabe von Strecken mit AFLOS-Datenbanken m&#246;glich
-(siehe <a href="help_aflos.html#aflos_route_planning" target="_blank">Streckenplanung mit AFLOS</a>).
-Dazu muss 'AFLOS 2.15' installiert sein.</p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="route-planning-import">Import von Wettbewerbsstrecken</h3>
 <div class="paragraph">
-<p>Mit 'Strecken &#8594; Import Strecke' k&#246;nnen Strecken folgender Formate auch importiert werden:</p>
+<p>Mit 'Strecken &#8594; Import Strecke' können Strecken folgender Formate auch importiert werden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1504,7 +1503,7 @@ Dazu muss 'AFLOS 2.15' installiert sein.</p>
 <p>Darf nur genau eine Strecke (&lt;rte&gt;&#8230;&#8203;&lt;/ret&gt;) beinhalten.</p>
 </div>
 <div class="paragraph">
-<p>Muss H&#246;henangaben beinhalten (&lt;rtept lat="49.118333" lon="9.784000"&gt;&lt;ele&gt;400.00&lt;/ele&gt;&lt;/rtept&gt;).</p>
+<p>Muss Höhenangaben beinhalten (&lt;rtept lat="49.118333" lon="9.784000"&gt;&lt;ele&gt;400.00&lt;/ele&gt;&lt;/rtept&gt;).</p>
 </div>
 </li>
 <li>
@@ -1514,22 +1513,22 @@ Dazu muss 'AFLOS 2.15' installiert sein.</p>
 <p>REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.</p>
 </li>
 <li>
-<p>TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enth&#228;lt:</p>
+<p>TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enthält:</p>
 <div class="paragraph">
 <p>Latitude, Longitude, Altitude</p>
 </div>
 <div class="paragraph">
-<p>Beispiele f&#252;r verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):</p>
+<p>Beispiele für verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Lat 52.20167&#176;, Lon 16.76500&#176;, Alt 1243ft
-Lat 52&#176; 12.10000' N, Lon 016&#176; 45.90000' E, Alt 1243ft
-Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
+<pre>Lat 52.20167°, Lon 16.76500°, Alt 1243ft
+Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Werte mit Komma getrennt (Leerzeichen vor Pr&#228;fix und nach Einheit werden ignoriert)</p>
+<p>Werte mit Komma getrennt (Leerzeichen vor Präfix und nach Einheit werden ignoriert)</p>
 </div>
 <div class="paragraph">
 <p>Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert</p>
@@ -1553,10 +1552,10 @@ Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
 <p>Speichern Sie <a href="samples/FC-Route-Sample.kmz" target="_blank">FC-Route-Sample.kmz</a> auf Ihren Computer</p>
 </li>
 <li>
-<p>&#214;ffnen Sie 'FC-Route-Sample.kmz' auf Ihrem Computer mit 'Google Earth Pro'</p>
+<p>Öffnen Sie 'FC-Route-Sample.kmz' auf Ihrem Computer mit 'Google Earth Pro'</p>
 </li>
 <li>
-<p>&#214;ffnen Sie bei Bedarf Luftraum-Daten (C:\FCSave\.geodata\airspaces.kmz)<br>
+<p>Öffnen Sie bei Bedarf Luftraum-Daten (C:\FCSave\.geodata\airspaces.kmz)<br>
 (zur Installation hier zu finden: <a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a>)</p>
 </li>
 <li>
@@ -1564,21 +1563,21 @@ Lat 52&#176; 12' 06.0000" N, Lon 016&#176; 45' 54.0000" E, Alt 1243ft</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>Klicken Sie den Ordner <strong>Route</strong> an und f&#252;gen Sie einen 'Pfad' hinzu.<br>
-Es &#246;ffnet sich der 'Pfad bearbeiten'-Dialog. Name des Pfades entspr. Streckenbezeichnung festlegen.<br>
-Bei weiter ge&#246;ffnetem 'Pfad bearbeiten'-Dialog im Grafikbereich mit Linksklick alle Check-Punkte (TO, SP, WP1, WP2, &#8230;&#8203;, FP, LDG) der Strecke ohne UZKs nacheinander hinzuf&#252;gen.<br>
+<p>Klicken Sie den Ordner <strong>Route</strong> an und fügen Sie einen 'Pfad' hinzu.<br>
+Es öffnet sich der 'Pfad bearbeiten'-Dialog. Name des Pfades entspr. Streckenbezeichnung festlegen.<br>
+Bei weiter geöffnetem 'Pfad bearbeiten'-Dialog im Grafikbereich mit Linksklick alle Check-Punkte (TO, SP, WP1, WP2, &#8230;&#8203;, FP, LDG) der Strecke ohne UZKs nacheinander hinzufügen.<br>
 Die Position muss hier noch nicht genau stimmen. Deren Genauigkeit kann im Nachhinein korrigiert werden.<br>
 'Pfad bearbeiten'-Dialog beenden</p>
 </li>
 <li>
-<p>&#196;ndern der Position eines Check-Punktes:<br>
-Zum gew&#252;nschten Check-Punkt im Grafikbereich navigieren<br>
-Kontektmen&#252; 'Eigenschaften' des Pfades aufrufen<br>
-Bei ge&#246;ffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gew&#252;nschten Position ziehen<br>
+<p>Ändern der Position eines Check-Punktes:<br>
+Zum gewünschten Check-Punkt im Grafikbereich navigieren<br>
+Kontektmenü 'Eigenschaften' des Pfades aufrufen<br>
+Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gewünschten Position ziehen<br>
 'Pfad bearbeiten'-Dialog beenden</p>
 </li>
 <li>
-<p>Unbekannte Zeitkontrollen oder krumme Streckenverl&#228;ufe k&#246;nnen nach dem Strecken-Import hinzugef&#252;gt werden.</p>
+<p>Unbekannte Zeitkontrollen oder krumme Streckenverläufe können nach dem Strecken-Import hinzugefügt werden.</p>
 </li>
 </ul>
 </div>
@@ -1588,29 +1587,29 @@ Bei ge&#246;ffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punk
 <div class="ulist">
 <ul>
 <li>
-<p>Klicken Sie den Ordner <strong>Photos</strong> an und f&#252;gen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu.<br>
-Es &#246;ffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen (kann nach Import ge&#228;ndert werden)<br>
-Position der Ortsmarkierung im Grafikbereich auf das gew&#252;nschte Objekt schieben<br>
+<p>Klicken Sie den Ordner <strong>Photos</strong> an und fügen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu.<br>
+Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen (kann nach Import geändert werden)<br>
+Position der Ortsmarkierung im Grafikbereich auf das gewünschte Objekt schieben<br>
 'Ortsmarkierung'-Dialog beenden</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Strecken-Bodenzeichen hinzuf&#252;gen</p>
+<p>Strecken-Bodenzeichen hinzufügen</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Klicken Sie den Ordner <strong>Canvas</strong> an und f&#252;gen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu.<br>
-Es &#246;ffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung mit 'S01' bis 'S15' festlegen (kann nach Import ge&#228;ndert werden)<br>
-Position der Ortsmarkierung im Grafikbereich auf die gew&#252;nschte Auslegestelle schieben<br>
+<p>Klicken Sie den Ordner <strong>Canvas</strong> an und fügen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu.<br>
+Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung mit 'S01' bis 'S15' festlegen (kann nach Import geändert werden)<br>
+Position der Ortsmarkierung im Grafikbereich auf die gewünschte Auslegestelle schieben<br>
 'Ortsmarkierung'-Dialog beenden</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmen&#252; 'Ort speichern unter' mit Ihrer Streckenbezeichung ab</p>
+<p>Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmenü 'Ort speichern unter' mit Ihrer Streckenbezeichung ab</p>
 </li>
 </ol>
 </div>
@@ -1628,7 +1627,7 @@ Position der Ortsmarkierung im Grafikbereich auf die gew&#252;nschte Auslegestel
 <div class="ulist">
 <ul>
 <li>
-<p>Abgespeicherte kmz-Datei ausw&#228;hlen</p>
+<p>Abgespeicherte kmz-Datei auswählen</p>
 </li>
 <li>
 <p>Verzeichnisname in kml/kmz-Datei: <strong>Route</strong> eintragen</p>
@@ -1644,7 +1643,7 @@ Position der Ortsmarkierung im Grafikbereich auf die gew&#252;nschte Auslegestel
 <div class="ulist">
 <ul>
 <li>
-<p>Abgespeicherte kmz-Datei ausw&#228;hlen</p>
+<p>Abgespeicherte kmz-Datei auswählen</p>
 </li>
 <li>
 <p>Verzeichnisname in kml/kmz-Datei: <strong>Photos</strong> eintragen</p>
@@ -1660,7 +1659,7 @@ Position der Ortsmarkierung im Grafikbereich auf die gew&#252;nschte Auslegestel
 <div class="ulist">
 <ul>
 <li>
-<p>Abgespeicherte kmz-Datei ausw&#228;hlen</p>
+<p>Abgespeicherte kmz-Datei auswählen</p>
 </li>
 <li>
 <p>Verzeichnisname in kml/kmz-Datei: <strong>Canvas</strong> eintragen</p>
@@ -1675,23 +1674,23 @@ Position der Ortsmarkierung im Grafikbereich auf die gew&#252;nschte Auslegestel
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzuf&#252;gen</h3>
+<h3 id="route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Strecke exportieren (Strecke &#8594; <strong>KMZ-Export</strong>) und mit <strong>Google Earth Pro</strong> &#246;ffnen</p>
+<p>Strecke exportieren (Strecke &#8594; <strong>KMZ-Export</strong>) und mit <strong>Google Earth Pro</strong> öffnen</p>
 </li>
 <li>
 <p>Zum Knoten 'Dateiname.kmz &#8594; Streckenname &#8594; Strecken-Export &#8594; <strong>turnpoints</strong>' navigieren</p>
 </li>
 <li>
-<p>Wendepunkt anklicken, nach dem UZKs oder ein krummer Streckenabschnitt hinzugef&#252;gt werden soll</p>
+<p>Wendepunkt anklicken, nach dem UZKs oder ein krummer Streckenabschnitt hinzugefügt werden soll</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Kontexmen&#252;punkt "Kopieren" ausf&#252;hren<br>
-Kontexmen&#252;punkt "Einf&#252;gen" ein- oder mehrmals ausf&#252;hren (entspr. Anzahl ben&#246;tigter UZKs)<br>
-"Eigenschaften" der hinzuf&#252;gten Punkte im 'Ortsmarkierung'-Dialog bearbeiten:</p>
+<p>Kontexmenüpunkt "Kopieren" ausführen<br>
+Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benötigter UZKs)<br>
+"Eigenschaften" der hinzufügten Punkte im 'Ortsmarkierung'-Dialog bearbeiten:</p>
 <div class="ulist">
 <ul>
 <li>
@@ -1699,7 +1698,7 @@ Kontexmen&#252;punkt "Einf&#252;gen" ein- oder mehrmals ausf&#252;hren (entspr. 
 (TP &#8594; SC, z.B. "TP1, Gate 1.0NM" &#8594; "SC1, Gate 2.0NM")</p>
 </li>
 <li>
-<p>Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gew&#252;nschten Position ziehen</p>
+<p>Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gewünschten Position ziehen</p>
 </li>
 <li>
 <p>'Ortsmarkierung'-Dialog beenden</p>
@@ -1711,7 +1710,7 @@ Kontexmen&#252;punkt "Einf&#252;gen" ein- oder mehrmals ausf&#252;hren (entspr. 
 </div>
 </li>
 <li>
-<p>'Dateiname.kmz' mit Kontextmen&#252; 'Ort speichern unter' in neuer kmz-Datei abspeichern</p>
+<p>'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern</p>
 </li>
 <li>
 <p>Import der korrigierten Strecke (Strecke &#8594; <strong>Import FC-Strecke</strong>)</p>
@@ -1720,9 +1719,9 @@ Kontexmen&#252;punkt "Einf&#252;gen" ein- oder mehrmals ausf&#252;hren (entspr. 
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-verify">Pr&#252;fen der Wettbewerbsstrecke</h3>
+<h3 id="route-planning-verify">Prüfen der Wettbewerbsstrecke</h3>
 <div class="paragraph">
-<p>Pr&#252;fen Sie Ihre eingegebene Strecke in 'Streckendetails' folgenderma&#223;en:</p>
+<p>Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1747,7 +1746,7 @@ Kontexmen&#252;punkt "Einf&#252;gen" ein- oder mehrmals ausf&#252;hren (entspr. 
 <p>Gesamt-Entfernung plausibel?</p>
 </li>
 <li>
-<p>Wendeschleifen (Kurs&#228;nderungen &gt; 90 Grad) korrekt?</p>
+<p>Wendeschleifen (Kursänderungen &gt; 90 Grad) korrekt?</p>
 </li>
 </ul>
 </div>
@@ -1766,7 +1765,7 @@ in sein 'Flight Contest' zur Nutzung importieren kann.</p>
 <div class="sect2">
 <h3 id="route-planning-errors">Fehlermeldungen in Streckendetails</h3>
 <div class="paragraph">
-<p>Sind Strecken unvollst&#228;ndig oder abweichend vom gew&#228;hlten Regelwerk konfiguriert,
+<p>Sind Strecken unvollständig oder abweichend vom gewählten Regelwerk konfiguriert,
 erscheinen in der Streckenliste vor dem Strecken-Titel ein !
 und in den Streckendetails rot markierte Fehlerausschriften.</p>
 </div>
@@ -1781,9 +1780,9 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 <dd>
 <p>'Min. Streckenabschnitte' verkleinern (Wettbewerb &#8594; Vorgaben)</p>
 </dd>
-<dt class="hdlist1">Etappen-Anzahl zu gro&#223;</dt>
+<dt class="hdlist1">Etappen-Anzahl zu groß</dt>
 <dd>
-<p>'Max. Streckenabschnitte' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+<p>'Max. Streckenabschnitte' vergrößern (Wettbewerb &#8594; Vorgaben)</p>
 </dd>
 <dt class="hdlist1">Foto-Anzahl zu klein</dt>
 <dd>
@@ -1799,27 +1798,27 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 <dd>
 <p>'Min. Strecken-Fotos+Bodenzeichen' verkleinern (Wettbewerb &#8594; Vorgaben)</p>
 </dd>
-<dt class="hdlist1">Foto-Anzahl zu gro&#223;</dt>
+<dt class="hdlist1">Foto-Anzahl zu groß</dt>
 <dd>
-<p>'Max. Strecken-Fotos' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+<p>'Max. Strecken-Fotos' vergrößern (Wettbewerb &#8594; Vorgaben)</p>
 </dd>
-<dt class="hdlist1">Bodenzeichen-Anzahl zu gro&#223;</dt>
+<dt class="hdlist1">Bodenzeichen-Anzahl zu groß</dt>
 <dd>
-<p>'Max. Strecken-Bodenzeichen' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+<p>'Max. Strecken-Bodenzeichen' vergrößern (Wettbewerb &#8594; Vorgaben)</p>
 </dd>
-<dt class="hdlist1">Foto+Bodenzeichen-Anzahl zu gro&#223;</dt>
+<dt class="hdlist1">Foto+Bodenzeichen-Anzahl zu groß</dt>
 <dd>
-<p>'Max. Strecken-Fotos+Bodenzeichen' vergr&#246;&#223;ern (Wettbewerb &#8594; Vorgaben)</p>
+<p>'Max. Strecken-Fotos+Bodenzeichen' vergrößern (Wettbewerb &#8594; Vorgaben)</p>
 </dd>
 <dt class="hdlist1">Kartenentfernungen abweichend</dt>
 <dd>
 <p>Interner Datenfehler<br>
-'Etappen neu berechnen' ausf&#252;hren</p>
+'Etappen neu berechnen' ausführen</p>
 </dd>
 <dt class="hdlist1">Koordinaten-Wendeschleifen abweichend</dt>
 <dd>
 <p>Interner Datenfehler<br>
-'Etappen neu berechnen' ausf&#252;hren</p>
+'Etappen neu berechnen' ausführen</p>
 </dd>
 </dl>
 </div>
@@ -1832,18 +1831,18 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Mit 'Strecken &#8594; Strecke &#8594; OSM-Wettbewerbs-Karte' kann eine PDF-Wettbewerbskarte
-im Ma&#223;stab 1:200000 oder 1:250000 mit Hilfe eines eigenen Druckserver im T&#220;K200-Stil erzeugt werden.</p>
+im Maßstab 1:200000 oder 1:250000 mit Hilfe eines eigenen Druckserver im TÜK200-Stil erzeugt werden.</p>
 </div>
 <div class="paragraph">
 <p>Nutzung der Karten:<br>
 Die Nutzung des Kartenmaterials erfolgt auf eigene Gefahr. Das Kartenmaterial kann Fehler enthalten oder unzureichend sein.
-Die Ersteller dieser Karten &#252;bernehmen keinerlei Gew&#228;hrleistung oder Haftung f&#252;r Sch&#228;den, die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.</p>
+Die Ersteller dieser Karten übernehmen keinerlei Gewährleistung oder Haftung für Schäden, die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.</p>
 </div>
 <div class="paragraph">
 <p>Lizenzbedingungen des Kartendaten:<br>
-Map data &#169; OpenStreetMap contributors (ODbL).<br>
+Map data © OpenStreetMap contributors (ODbL).<br>
 Die dargestellten Kartenobjekte basieren auf den Daten des OpenStreetMap-Projektes.
-OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und erm&#246;glicht es, geographische Daten gemeinschaftlich von &#252;berall auf der Welt anzuschauen und zu bearbeiten.<br>
+OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und ermöglicht es, geographische Daten gemeinschaftlich von überall auf der Welt anzuschauen und zu bearbeiten.<br>
 Link: <a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a><br>
 Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
 </div>
@@ -1854,13 +1853,13 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 <a href="help_fcmaps.html" target="_blank">Flight Contest maps server</a></p>
 </div>
 <div class="paragraph">
-<p>Kartendaten sind nur f&#252;r installierte L&#228;nder verf&#252;gbar.</p>
+<p>Kartendaten sind nur für installierte Länder verfügbar.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="osm-contest-map-additional-datasources">Weitere Datenquellen</h3>
 <div class="paragraph">
-<p>Luftr&#228;ume:</p>
+<p>Lufträume:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1873,7 +1872,7 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 </ul>
 </div>
 <div class="paragraph">
-<p>H&#246;henlinien und Oberfl&#228;chenkonturen:</p>
+<p>Höhenlinien und Oberflächenkonturen:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1886,7 +1885,7 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 <div class="sect2">
 <h3 id="osm-contest-map-configuration">Konfigurationsdetails</h3>
 <div class="paragraph">
-<p>Folgende Streckendetails k&#246;nnen in die Karte gezeichnet werden:</p>
+<p>Folgende Streckendetails können in die Karte gezeichnet werden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1917,7 +1916,7 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 </ul>
 </div>
 <div class="paragraph">
-<p>Folgende Objekte k&#246;nnen in die Karte gezeichnet werden:</p>
+<p>Folgende Objekte können in die Karte gezeichnet werden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1925,38 +1924,38 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 <p>Gradnetz</p>
 </li>
 <li>
-<p>H&#246;henlinen (100m, 50m oder 20m)</p>
+<p>Höhenlinen (100m, 50m oder 20m)</p>
 </li>
 <li>
-<p>Manuell hinzugef&#252;gte Objekte</p>
+<p>Manuell hinzugefügte Objekte</p>
 </li>
 <li>
-<p>Luftr&#228;ume</p>
+<p>Lufträume</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Luftr&#228;ume m&#252;ssen vor der ersten Nutzung manuell installiert werden.
+<p>Lufträume müssen vor der ersten Nutzung manuell installiert werden.
 Dazu alle Dateien von <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> in den Ordner <strong>C:\FCSave\.geodata</strong> kopieren.</p>
 </div>
 <div class="paragraph">
-<p>Alle genannten Streckendetails und Objekte k&#246;nnen abgew&#228;hlt werden.</p>
+<p>Alle genannten Streckendetails und Objekte können abgewählt werden.</p>
 </div>
 <div class="paragraph">
 <p>Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
-Strecken, die das gew&#228;hlte Druck-Format sprengen, k&#246;nnen mittels
+Strecken, die das gewählte Druck-Format sprengen, können mittels
 Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.</p>
 </div>
 <div class="paragraph">
-<p>Einzelne Wendepunkte k&#246;nnen vom Druck ausgenommen werden.
+<p>Einzelne Wendepunkte können vom Druck ausgenommen werden.
 Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.</p>
 </div>
 <div class="paragraph">
-<p>Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Gr&#246;&#223;e erfolgen.</p>
+<p>Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.</p>
 </div>
 <div class="paragraph">
-<p>Fehlende Fluppl&#228;tze, Kirchen, Burgen, Burgruinen, Landh&#228;user, Windkraftanlagen und H&#246;henpunkte
-sowie eigene Symbole k&#246;nnen in der Datei <strong>C:\FCSave\.geodata\additionals.csv</strong> zum Druck hinzugef&#252;gt werden:</p>
+<p>Fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Windkraftanlagen und Höhenpunkte
+sowie eigene Symbole können in der Datei <strong>C:\FCSave\.geodata\additionals.csv</strong> zum Druck hinzugefügt werden:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1975,7 +1974,7 @@ sowie eigene Symbole k&#246;nnen in der Datei <strong>C:\FCSave\.geodata\additio
 airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png oder Name des eigenen Symbols</p>
 </li>
 <li>
-<p>Name des Objektes (in Anf&#252;hrungszeichen) ("": kein Name drucken)</p>
+<p>Name des Objektes (in Anführungszeichen) ("": kein Name drucken)</p>
 </li>
 <li>
 <p>Anzeigeposition in Geo-Koordinaten</p>
@@ -1984,16 +1983,16 @@ airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowersta
 </div>
 <div class="paragraph">
 <p>Eigene Symbole sind in <strong>C:\FCSave\.geodata\images</strong> zu speichern (png).
-Beachten Sie, dass die Gro&#223;-/Kleinschreibung der Symbolnamen &#252;bereinstimmt.</p>
+Beachten Sie, dass die Groß-/Kleinschreibung der Symbolnamen übereinstimmt.</p>
 </div>
 <div class="paragraph">
-<p>Besondere Objekte k&#246;nnen in der Datei <strong>C:\FCSave\.geodata\specials.csv</strong>
-zum Druck hinzugef&#252;gt werden:</p>
+<p>Besondere Objekte können in der Datei <strong>C:\FCSave\.geodata\specials.csv</strong>
+zum Druck hinzugefügt werden:</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>id|point|name|wkt|dx|dy
-1|"Strecke 1 - WP3"|"Ferienhof K&#246;nig"|POINT (9.9166569218 48.9058522143)|10|0</pre>
+1|"Strecke 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0</pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -2002,10 +2001,10 @@ zum Druck hinzugef&#252;gt werden:</p>
 <p>Laufende Nummer</p>
 </li>
 <li>
-<p>Beschreibung (in Anf&#252;hrungszeichen, wird nicht gedruckt)</p>
+<p>Beschreibung (in Anführungszeichen, wird nicht gedruckt)</p>
 </li>
 <li>
-<p>Name des Objektes (in Anf&#252;hrungszeichen) ("": kein Name drucken)</p>
+<p>Name des Objektes (in Anführungszeichen) ("": kein Name drucken)</p>
 </li>
 <li>
 <p>Anzeigeposition in Geo-Koordinaten</p>
@@ -2022,7 +2021,7 @@ zum Druck hinzugef&#252;gt werden:</p>
 <p>Geo-Koordinaten von Wendepunkten werden beim Strecken-Druck mit ausgegeben (CSV-GeoDaten).</p>
 </div>
 <div class="paragraph">
-<p>Die Namen von Luftr&#228;umen entnehme man der Datei <strong>C:\FCSave\.geodata\airspaces.kmz</strong>.
+<p>Die Namen von Lufträumen entnehme man der Datei <strong>C:\FCSave\.geodata\airspaces.kmz</strong>.
 Fehlerhafte Namen verhindern die Kartenerzeugung.</p>
 </div>
 </div>
@@ -2031,40 +2030,40 @@ Fehlerhafte Namen verhindern die Kartenerzeugung.</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Gebiet um TO ausw&#228;hlen</p>
+<p>Gebiet um TO auswählen</p>
 </li>
 <li>
 <p>Strecke mit TO anlegen (Strecken &#8594; <strong>Neue Strecke</strong>)</p>
 </li>
 <li>
 <p>Wettbewerbs-Karte mit TO drucken (Strecke &#8594; <strong>OSM-Wettbewerbs-Karte</strong>)<br>
-Dabei TO an eine gew&#252;nschte Position legen (rechts oben, links unten o.&#228;.).</p>
+Dabei TO an eine gewünschte Position legen (rechts oben, links unten o.ä.).</p>
 </li>
 <li>
-<p>Geeignete Wendepunkte auf der gedruckten Karte ausw&#228;hlen<br>
-Mit den Koordinaten-Linealen links und oben k&#246;nnen mit einem Zirkel die Wendepunkt-Koordinaten Minuten-genau bestimmt werden.</p>
+<p>Geeignete Wendepunkte auf der gedruckten Karte auswählen<br>
+Mit den Koordinaten-Linealen links und oben können mit einem Zirkel die Wendepunkt-Koordinaten Minuten-genau bestimmt werden.</p>
 </li>
 <li>
-<p>Strecke mit den abgelesenden Koordinaten eingeben (Strecke &#8594; <strong>Koordinate hinzuf&#252;gen</strong>)</p>
+<p>Strecke mit den abgelesenden Koordinaten eingeben (Strecke &#8594; <strong>Koordinate hinzufügen</strong>)</p>
 </li>
 <li>
 <p>Strecke exportieren (Strecke &#8594; <strong>KMZ-Export</strong>)</p>
 </li>
 <li>
-<p>KMZ-Datei mit <strong>Google Earth Pro</strong> &#246;ffnen und Wendepunkte auf die exakten Positionen schieben</p>
+<p>KMZ-Datei mit <strong>Google Earth Pro</strong> öffnen und Wendepunkte auf die exakten Positionen schieben</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
 <p>Zum Knoten 'Dateiname.kmz &#8594; Streckenname &#8594; Strecken-Export &#8594; turnpoints' navigieren</p>
 </li>
 <li>
-<p>Jeden Punkt anklicken und jeweils Kontextmen&#252;punkt 'Eigenschaften' aufrufen</p>
+<p>Jeden Punkt anklicken und jeweils Kontextmenüpunkt 'Eigenschaften' aufrufen</p>
 </li>
 <li>
-<p>Punkt zur exakten Position schieben und Eigenschaften-Dialog schlie&#223;en</p>
+<p>Punkt zur exakten Position schieben und Eigenschaften-Dialog schließen</p>
 </li>
 <li>
-<p>'Dateiname.kmz' mit Kontextmen&#252; 'Ort speichern unter' in neuer kmz-Datei abspeichern</p>
+<p>'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern</p>
 </li>
 </ol>
 </div>
@@ -2073,7 +2072,7 @@ Mit den Koordinaten-Linealen links und oben k&#246;nnen mit einem Zirkel die Wen
 <p>Import der korrigierten Strecke (Strecke &#8594; <strong>Import FC-Strecke</strong>)</p>
 </li>
 <li>
-<p>Wettbewerbs-Karte pr&#252;fen (Strecke &#8594; <strong>OSM-Online-Karte</strong>)</p>
+<p>Wettbewerbs-Karte prüfen (Strecke &#8594; <strong>OSM-Online-Karte</strong>)</p>
 </li>
 <li>
 <p>Wettbewerbs-Karte drucken (Strecke &#8594; <strong>OSM-Wettbewerbs-Karte</strong>)</p>
@@ -2085,10 +2084,10 @@ Mit den Koordinaten-Linealen links und oben k&#246;nnen mit einem Zirkel die Wen
 </div>
 </div>
 <div class="sect1">
-<h2 id="flight-time-calculation">Flugzeit-Berechnung f&#252;r Starts und Landungen</h2>
+<h2 id="flight-time-calculation">Flugzeit-Berechnung für Starts und Landungen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>F&#252;r folgende Punkte k&#246;nnen Festlegungen getroffen werden:</p>
+<p>Für folgende Punkte können Festlegungen getroffen werden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2108,17 +2107,17 @@ Mit den Koordinaten-Linealen links und oben k&#246;nnen mit einem Zirkel die Wen
 </div>
 <div class="paragraph">
 <p>Der Standard-Wert neuer Aufgaben "wind+:3NM" bewirkt, dass bei der
-Flugzeit-Berechnung der Wind der Navigationsflugaufgabe mit ber&#252;cksichtigt wird,
-die Entfernung zwischen den Punkten zur Berechnung um 3NM verg&#246;&#223;ert wird
-(was sich f&#252;r eine Standard-Platzrunde bew&#228;hrt hat) und die berechnete
-&#220;berflug-Zeit auf ganze Minuten aufgerundet wird.</p>
+Flugzeit-Berechnung der Wind der Navigationsflugaufgabe mit berücksichtigt wird,
+die Entfernung zwischen den Punkten zur Berechnung um 3NM vergößert wird
+(was sich für eine Standard-Platzrunde bewährt hat) und die berechnete
+Überflug-Zeit auf ganze Minuten aufgerundet wird.</p>
 </div>
 <div class="paragraph">
 <p>Verwenden Sie die Vorlage <a href="samples/FC-TakoffLandingCalculation-Sample.xlsx" target="_blank">FC-TakoffLandingCalculation-Sample.xlsx</a>,
-um Einstell-Werte f&#252;r l&#228;ngere An- und Abflugentfernungen zu berechnen.</p>
+um Einstell-Werte für längere An- und Abflugentfernungen zu berechnen.</p>
 </div>
 <div class="paragraph">
-<p>F&#252;r jeden genannten Punkt k&#246;nnen folgende Ausdr&#252;cke verwendet werden:</p>
+<p>Für jeden genannten Punkt können folgende Ausdrücke verwendet werden:</p>
 </div>
 <table class="tableblock frame-all grid-all">
 <colgroup>
@@ -2200,7 +2199,7 @@ um Einstell-Werte f&#252;r l&#228;ngere An- und Abflugentfernungen zu berechnen.
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LegTime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Interne Funktion zur windabh&#228;ngigen Flugzeit-Berechnung</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Interne Funktion zur windabhängigen Flugzeit-Berechnung</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tas</p></td>
@@ -2220,21 +2219,21 @@ um Einstell-Werte f&#252;r l&#228;ngere An- und Abflugentfernungen zu berechnen.
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">+</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Flugplan-Zeit wird auf die n&#228;chste ganze Minute aufgerundet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flugplan-Zeit wird auf die nächste ganze Minute aufgerundet</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Individuelle Zeit f&#252;r jede Besatzung unter Beachtung von TAS,<br>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Individuelle Zeit für jede Besatzung unter Beachtung von TAS,<br>
 Wind, Kurs und Entfernung zwischen den Punkten.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">nowind</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Individuelle Zeit f&#252;r jede Besatzung unter Beachtung von TAS,<br>
-Entfernung und Kurs zwischen den Punkten, ohne Wind zu ber&#252;cksichtigen.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Individuelle Zeit für jede Besatzung unter Beachtung von TAS,<br>
+Entfernung und Kurs zwischen den Punkten, ohne Wind zu berücksichtigen.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">time</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Feste Zeit in Minuten f&#252;r alle Besatzungen.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Feste Zeit in Minuten für alle Besatzungen.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1.3</p></td>
@@ -2242,7 +2241,7 @@ Entfernung und Kurs zwischen den Punkten, ohne Wind zu ber&#252;cksichtigen.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3NM</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Die Zeitberechnung erfolgt unter Vergr&#246;&#223;erung der Entfernung<br>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Die Zeitberechnung erfolgt unter Vergrößerung der Entfernung<br>
 zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 </tr>
 </tbody>
@@ -2265,19 +2264,19 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind+:xNM</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Bei gr&#246;&#223;eren Platzrunden eine gr&#246;&#223;ere Entfernung x anwenden.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bei größeren Platzrunden eine größere Entfernung x anwenden.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind+:6NM</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sp&#228;testete Landezeit (FP &#8594; LDG)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spätestete Landezeit (FP &#8594; LDG)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">time+:xmin</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Feste Flugzeit von x Minuten (f&#252;r Pr&#228;zisionsflug-Wettbewerbe)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind+:1.3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Berechnete Flugzeit um 30% vergr&#246;&#223;ern und auf Minute korrigieren.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Berechnete Flugzeit um 30% vergrößern und auf Minute korrigieren.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">wind:1</p></td>
@@ -2286,7 +2285,7 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 </tbody>
 </table>
 <div class="paragraph">
-<p>Pr&#252;fen Sie Ihre Einstellungen durch Erstellung von Flugpl&#228;nen:</p>
+<p>Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2294,7 +2293,7 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <p>Flugzeit TO &#8594; SP plausibel?</p>
 </li>
 <li>
-<p>Flugzeit FP &#8594; LDG (zur Ermittlung der sp&#228;testen Landezeit) ausreichend?</p>
+<p>Flugzeit FP &#8594; LDG (zur Ermittlung der spätesten Landezeit) ausreichend?</p>
 </li>
 <li>
 <p>Flugzeit iFP &#8594; iLDG (&#8594; iTO) &#8594; iSP bei Zwischenlandung plausibel?</p>
@@ -2358,11 +2357,11 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <div class="ulist">
 <ul>
 <li>
-<p>Besatzung erh&#228;lt Planungstest-Karte und Planungstest-Aufgabenblatt</p>
+<p>Besatzung erhält Planungstest-Karte und Planungstest-Aufgabenblatt</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Kurs &#252;ber Grund messen</p>
+<p>Kurs über Grund messen</p>
 </li>
 <li>
 <p>Steuerkurs und Flugzeit berechnen und in Planungstest-Aufgabenblatt eintragen</p>
@@ -2374,11 +2373,11 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 </div>
 </li>
 <li>
-<p>Besatzung erh&#228;lt Navigationstest-Karte und Flugplan</p>
+<p>Besatzung erhält Navigationstest-Karte und Flugplan</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Navigationstest-Karte vorbereiten (Wendeschleifen, Wendepunkt-&#220;berflugzeiten, Steuerkurs, Minuten-Striche)</p>
+<p>Navigationstest-Karte vorbereiten (Wendeschleifen, Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)</p>
 </li>
 </ul>
 </div>
@@ -2387,7 +2386,7 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 </div>
 </li>
 <li>
-<p>Anweisungen f&#252;r Schiedsrichter (zum Ausdrucken)</p>
+<p>Anweisungen für Schiedsrichter (zum Ausdrucken)</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2424,7 +2423,7 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <div class="ulist">
 <ul>
 <li>
-<p>Enth&#228;lt keine Wendepunkte</p>
+<p>Enthält keine Wendepunkte</p>
 </li>
 </ul>
 </div>
@@ -2444,14 +2443,14 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 <div class="ulist">
 <ul>
 <li>
-<p>Besatzung erh&#228;lt Streckenkonstruktions-Anweisungen, Planungstest-Karte und Planungstest-Aufgabenblatt</p>
+<p>Besatzung erhält Streckenkonstruktions-Anweisungen, Planungstest-Karte und Planungstest-Aufgabenblatt</p>
 <div class="ulist">
 <ul>
 <li>
 <p>Strecke in Planungstest-Karte konstruieren</p>
 </li>
 <li>
-<p>Kurs &#252;ber Grund messen</p>
+<p>Kurs über Grund messen</p>
 </li>
 <li>
 <p>Steuerkurs und Flugzeit berechnen und in Planungstest-Aufgabenblatt eintragen</p>
@@ -2463,12 +2462,12 @@ zwischen den Punkten um den angegebenen Wert (hier um 3NM).</p></td>
 </div>
 </li>
 <li>
-<p>Besatzung erh&#228;lt Navigationstest-Karte und Flugplan</p>
+<p>Besatzung erhält Navigationstest-Karte und Flugplan</p>
 <div class="ulist">
 <ul>
 <li>
 <p>Navigationstest-Karte vorbereiten (Wendeschleifen,
-Wendepunkt-&#220;berflugzeiten, Steuerkurs, Minuten-Striche)</p>
+Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)</p>
 </li>
 </ul>
 </div>
@@ -2511,12 +2510,12 @@ Wendepunkt-&#220;berflugzeiten, Steuerkurs, Minuten-Striche)</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Besatzung erh&#228;lt Navigationstest-Karte und Flugplan</p>
+<p>Besatzung erhält Navigationstest-Karte und Flugplan</p>
 <div class="ulist">
 <ul>
 <li>
 <p>Navigationstest-Karte vorbereiten (Wendeschleifen,
-Wendepunkt-&#220;berflugzeiten, Steuerkurs, Minuten-Striche)</p>
+Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)</p>
 </li>
 </ul>
 </div>
@@ -2543,10 +2542,10 @@ ausgemessen und bei den Strecken-Koordinaten unter
 <h2 id="landings">Landungen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Je nach ausgew&#228;hlter Wettbewerbsordnung wird ein festgelegtes Landeschema verwendet.
+<p>Je nach ausgewählter Wettbewerbsordnung wird ein festgelegtes Landeschema verwendet.
 Deren Strafpunkt-Berechnung aus einem Landemesswert ist als Formel hinterlegt.
-Diese Formel kann angepasst werden, um ein von der gew&#228;hlten Wettbewerbsordnung
-abweichendes Landeschema zu benutzen. Die Formeln k&#246;nnen unter
+Diese Formel kann angepasst werden, um ein von der gewählten Wettbewerbsordnung
+abweichendes Landeschema zu benutzen. Die Formeln können unter
 'Wettbewerb &#8594; Punkte' oder 'Klasse &#8594; Punkte' je Landung (max. 4) eingestellt werden.
 Besondere Landefehler wie 'Keine Landung', 'Abnormale Landung' usw. werden durch
 anklickbare Check-Boxen eingegeben.</p>
@@ -2603,7 +2602,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Die Reihenfolge der Anwendung kann f&#252;r eine Aufgabe konfiguriert werden.</p>
+<p>Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.</p>
 </div>
 </li>
 </ul>
@@ -2612,7 +2611,7 @@ anklickbare Check-Boxen eingegeben.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="rules/CH_Praezisionsflug_2017.pdf#page=19" target="_blank">Wettkampfreglement Pr&#228;zisionsflug-Schweizermeisterschaft - Ausgabe 2017</a></p>
+<p><a href="rules/CH_Praezisionsflug_2017.pdf#page=19" target="_blank">Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017</a></p>
 <div class="ulist">
 <ul>
 <li>
@@ -2634,11 +2633,11 @@ anklickbare Check-Boxen eingegeben.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Die Reihenfolge der Anwendung kann f&#252;r eine Aufgabe konfiguriert werden.</p>
+<p>Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.</p>
 </div>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Pr&#228;zisionsflug-Reglement &#214;sterreich - Landefeld Typ 1 - Ausgabe 2017</a> (alle Landungen)</p>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2017</a> (alle Landungen)</p>
 <div class="literalblock">
 <div class="content">
 <pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}</pre>
@@ -2646,7 +2645,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </div>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Pr&#228;zisionsflug-Reglement &#214;sterreich - Landefeld Typ 2 - Ausgabe 2017</a> (alle Landungen)</p>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017</a> (alle Landungen)</p>
 <div class="literalblock">
 <div class="content">
 <pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}</pre>
@@ -2654,7 +2653,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </div>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Pr&#228;zisionsflug-Reglement &#214;sterreich - Landefeld Typ 3 - Ausgabe 2017</a> (alle Landungen)</p>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017</a> (alle Landungen)</p>
 <div class="literalblock">
 <div class="content">
 <pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 2*i}else{return -(3*i)}}else{return null;}}</pre>
@@ -2662,7 +2661,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </div>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2017.pdf#page=37" target="_blank">Navigationsflug-Reglement &#214;sterreich - Ausgabe 2017 (alle Landungen)</a></p>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=37" target="_blank">Navigationsflug-Reglement Österreich - Ausgabe 2017 (alle Landungen)</a></p>
 <div class="literalblock">
 <div class="content">
 <pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
@@ -2689,7 +2688,7 @@ anklickbare Check-Boxen eingegeben.</p>
 <p>Farbe (sofern erfasst)</p>
 </li>
 <li>
-<p>Sp&#228;teste Landezeit</p>
+<p>Späteste Landezeit</p>
 </li>
 <li>
 <p>Leerspalte 1&#8230;&#8203;4 (zur Erfassung der Landefelder und von Landefehlern)</p>
@@ -2700,7 +2699,7 @@ anklickbare Check-Boxen eingegeben.</p>
 <p>Drucken Sie nicht die Besatzung aus, da dass dem Regelwerk widerspricht.</p>
 </div>
 <div class="paragraph">
-<p>Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung m&#246;glichst wenig &#252;ber die konkrete Besatzung eines Flugzeuges wissen.</p>
+<p>Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig über die konkrete Besatzung eines Flugzeuges wissen.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -2720,7 +2719,7 @@ anklickbare Check-Boxen eingegeben.</p>
 <p>&#8594; Auswertung &#8594; Wettbewerbs-Auswertung</p>
 </div>
 <div class="paragraph">
-<p>Wettbewerbs-Auswertungen k&#246;nnen nach folgenden Kriterien gefiltert werden:</p>
+<p>Wettbewerbs-Auswertungen können nach folgenden Kriterien gefiltert werden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2744,16 +2743,16 @@ anklickbare Check-Boxen eingegeben.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>zu einer gew&#228;hlten Klasse geh&#246;rt und</p>
+<p>zu einer gewählten Klasse gehört und</p>
 </li>
 <li>
-<p>zu einem gew&#228;hlten Team geh&#246;rt und</p>
+<p>zu einem gewählten Team gehört und</p>
 </li>
 <li>
-<p>nicht f&#252;r eine gew&#228;hlte Aufgabe deaktviert wurde und</p>
+<p>nicht für eine gewählte Aufgabe deaktviert wurde und</p>
 </li>
 <li>
-<p>nicht f&#252;r eine Wettbewerbs-Auswertung deaktiviert wurde und</p>
+<p>nicht für eine Wettbewerbs-Auswertung deaktiviert wurde und</p>
 </li>
 <li>
 <p>nicht generell deaktiviert wurde.</p>
@@ -2762,7 +2761,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </div>
 <div class="paragraph">
 <p>Aufgabe und Aufgaben-Details (Planungstest, Navigationstest, Beobachtungstest,
-Landetest, Anderer Test) bestimmen, wof&#252;r Strafpunkte in der Auswertung
+Landetest, Anderer Test) bestimmen, wofür Strafpunkte in der Auswertung
 berechnet werden.</p>
 </div>
 </div>
@@ -2772,7 +2771,7 @@ berechnet werden.</p>
 <p>&#8594; Auswertung &#8594; Klassen-Titel</p>
 </div>
 <div class="paragraph">
-<p>Klassen-Auswertungen k&#246;nnen nach folgenden Kriterien gefiltert werden:</p>
+<p>Klassen-Auswertungen können nach folgenden Kriterien gefiltert werden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2793,16 +2792,16 @@ berechnet werden.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>zu der gew&#228;hlten Klasse geh&#246;rt und</p>
+<p>zu der gewählten Klasse gehört und</p>
 </li>
 <li>
-<p>zu einem gew&#228;hlten Team geh&#246;rt und</p>
+<p>zu einem gewählten Team gehört und</p>
 </li>
 <li>
-<p>nicht f&#252;r eine gew&#228;hlte Aufgabe deaktviert wurde und</p>
+<p>nicht für eine gewählte Aufgabe deaktviert wurde und</p>
 </li>
 <li>
-<p>nicht f&#252;r eine Wettbewerbs-Auswertung deaktiviert wurde und</p>
+<p>nicht für eine Wettbewerbs-Auswertung deaktiviert wurde und</p>
 </li>
 <li>
 <p>nicht generell deaktiviert wurde.</p>
@@ -2811,7 +2810,7 @@ berechnet werden.</p>
 </div>
 <div class="paragraph">
 <p>Aufgabe und Aufgaben-Details (Planungstest, Navigationstest, Beobachtungstest,
-Landetest, Anderer Test) bestimmen, wof&#252;r Strafpunkte in der Auswertung
+Landetest, Anderer Test) bestimmen, wofür Strafpunkte in der Auswertung
 berechnet werden.</p>
 </div>
 </div>
@@ -2821,7 +2820,7 @@ berechnet werden.</p>
 <p>&#8594; Auswertung &#8594; Team-Auswertung</p>
 </div>
 <div class="paragraph">
-<p>Team-Auswertungen k&#246;nnen nach folgenden Kriterien gefiltert werden:</p>
+<p>Team-Auswertungen können nach folgenden Kriterien gefiltert werden:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -2842,13 +2841,13 @@ berechnet werden.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>zu einer gew&#228;hlten Klasse geh&#246;rt und</p>
+<p>zu einer gewählten Klasse gehört und</p>
 </li>
 <li>
-<p>nicht f&#252;r eine gew&#228;hlte Aufgabe deaktviert wurde und</p>
+<p>nicht für eine gewählte Aufgabe deaktviert wurde und</p>
 </li>
 <li>
-<p>nicht f&#252;r eine Team-Auswertung deaktiviert wurde und</p>
+<p>nicht für eine Team-Auswertung deaktiviert wurde und</p>
 </li>
 <li>
 <p>nicht generell deaktiviert wurde.</p>
@@ -2856,12 +2855,12 @@ berechnet werden.</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>Ein Team erh&#228;lt eine Plazierung, wenn es</p>
+<p>Ein Team erhält eine Plazierung, wenn es</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>die eingestellte Besatzungs-Anzahl f&#252;r die Team-Auswertung erreicht und</p>
+<p>die eingestellte Besatzungs-Anzahl für die Team-Auswertung erreicht und</p>
 </li>
 <li>
 <p>das Team nicht deaktiviert wurde.</p>
@@ -2870,15 +2869,15 @@ berechnet werden.</p>
 </div>
 <div class="paragraph">
 <p>Aufgabe und Aufgaben-Details (Planungstest, Navigationstest, Beobachtungstest,
-Landetest, Anderer Test) bestimmen, wof&#252;r Strafpunkte in der Auswertung
+Landetest, Anderer Test) bestimmen, wofür Strafpunkte in der Auswertung
 berechnet werden.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="evaluation-special">Sonder-Auswertungen</h3>
 <div class="paragraph">
-<p>Reichen Klassen- und Team-Zuordnungen nicht f&#252;r eine Einschr&#228;nkung der Wettbewerbs-Auswertung aus,
-k&#246;nnen mit der Besatzungs-Option "Keine Wettbewerbs-Auswertung" alle nicht zutreffenden
+<p>Reichen Klassen- und Team-Zuordnungen nicht für eine Einschränkung der Wettbewerbs-Auswertung aus,
+können mit der Besatzungs-Option "Keine Wettbewerbs-Auswertung" alle nicht zutreffenden
 Besatzungen ausgeschlossen werden.</p>
 </div>
 <div style="page-break-after: always;"></div>
@@ -2886,11 +2885,10 @@ Besatzungen ausgeschlossen werden.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="supported-logger">Unterst&#252;tzte Logger</h2>
+<h2 id="supported-logger">Unterstützte Logger</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="#supported-logger-aflos">AFLOS (direkt)</a><br>
-<a href="#supported-logger-aflosreader">AFLOS (mit Reader)</a><br>
+<p><a href="#supported-logger-aflosreader">AFLOS</a><br>
 <a href="#supported-logger-airopserver">AirObserver basierte Logger</a><br>
 <a href="#supported-logger-dg100">DG-100</a><br>
 <a href="#supported-logger-dg200">DG-200</a><br>
@@ -2901,31 +2899,7 @@ Besatzungen ausgeschlossen werden.</p>
 <a href="#supported-logger-nmea">Beliebiger anderer NMEA-Logger</a></p>
 </div>
 <div class="sect2">
-<h3 id="supported-logger-aflos">AFLOS (direkt)</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Logger-Auslese-Software: 'AFLOS 2.15'</p>
-</li>
-<li>
-<p>Logger-Aufzeichnung auslesen: 'AFLOS &#8594; Read Data &#8594; Competitor-Nr &#8594; Read AFLOS'</p>
-</li>
-<li>
-<p>Logger-Daten-Import: 'Flight Contest &#8594; Ergebnisse &#8594; Aufgaben-Titel &#8594; Navigationsflug
-&#8594; &#8230;&#8203; &#8594; Import AFLOS-Daten &#8594; Kalkuliere AFLOS-Daten'</p>
-<div class="paragraph">
-<p>nur m&#246;glich, wenn AFLOS-Referenzstrecke existiert, die mit 'Flight Contest'-Strecke
-im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
-</div>
-</li>
-<li>
-<p>Logger-Aufzeichnung l&#246;schen: direkt am AFLOS-Logger</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="supported-logger-aflosreader">AFLOS (mit Reader)</h3>
+<h3 id="supported-logger-aflosreader">AFLOS</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2936,10 +2910,10 @@ im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
 </li>
 <li>
 <p>Logger-Daten-Import: 'Flight Contest &#8594; Ergebnisse &#8594; Aufgaben-Titel &#8594; Navigationsflug
-&#8594; &#8230;&#8203; &#8594; Import Logger-Daten &#8594; GAC-Datei ausw&#228;hlen &#8594; Import'</p>
+&#8594; &#8230;&#8203; &#8594; Import Logger-Daten &#8594; GAC-Datei auswählen &#8594; Import'</p>
 </li>
 <li>
-<p>Logger-Aufzeichnung l&#246;schen: direkt am AFLOS-Logger</p>
+<p>Logger-Aufzeichnung löschen: direkt am AFLOS-Logger</p>
 </li>
 </ul>
 </div>
@@ -2958,17 +2932,17 @@ im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
 <p>Logger-Aufzeichnung auslesen: 'AirObserver &#8594; Logger &#8594; Download' (Auslesen sehr langsam)</p>
 </li>
 <li>
-<p>Logger-Aufzeichnung (*.G00) &#246;ffnen: 'AirObserver &#8594; File &#8594; Load Flight Log'</p>
+<p>Logger-Aufzeichnung (*.G00) öffnen: 'AirObserver &#8594; File &#8594; Load Flight Log'</p>
 </li>
 <li>
 <p>GAC-Datei erzeugen: 'AirObserver &#8594; File &#8594; Export &#8594; GAC'</p>
 </li>
 <li>
 <p>Logger-Daten-Import: 'Flight Contest &#8594; Ergebnisse &#8594; Aufgaben-Titel &#8594; Navigationsflug
-&#8594; &#8230;&#8203; &#8594; Import Logger-Daten &#8594; GAC-Datei ausw&#228;hlen &#8594; Import'</p>
+&#8594; &#8230;&#8203; &#8594; Import Logger-Daten &#8594; GAC-Datei auswählen &#8594; Import'</p>
 </li>
 <li>
-<p>Logger-Aufzeichnung l&#246;schen: 'AirObserver &#8594; Logger &#8594; Clear'</p>
+<p>Logger-Aufzeichnung löschen: 'AirObserver &#8594; Logger &#8594; Clear'</p>
 </li>
 </ul>
 </div>
@@ -2994,10 +2968,10 @@ im AFLOS-Namen &#252;bereinstimmt. Leere AFLOS-Referenzstrecke ausreichend.</p>
 </li>
 <li>
 <p>Logger-Daten-Import: Ergebnisse &#8594; Aufgaben-Titel &#8594; Navigationsflug &#8594; &#8230;&#8203; &#8594;
-Import Logger-Daten &#8594; GAC-Datei ausw&#228;hlen &#8594; Import</p>
+Import Logger-Daten &#8594; GAC-Datei auswählen &#8594; Import</p>
 </li>
 <li>
-<p>Logger-Aufzeichnung l&#246;schen: 'FSNavigator.net &#8594; Plugins &#8594; FRPocket device &#8594; Clear memory'</p>
+<p>Logger-Aufzeichnung löschen: 'FSNavigator.net &#8594; Plugins &#8594; FRPocket device &#8594; Clear memory'</p>
 </li>
 </ul>
 </div>
@@ -3014,7 +2988,7 @@ Import Logger-Daten &#8594; GAC-Datei ausw&#228;hlen &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Data logging format: "Position,Time,Date,Speed,Altitude" w&#228;hlen</p>
+<p>Data logging format: "Position,Time,Date,Speed,Altitude" wählen</p>
 </li>
 <li>
 <p>"Enable WAAS" aktivieren</p>
@@ -3035,14 +3009,14 @@ Import Logger-Daten &#8594; GAC-Datei ausw&#228;hlen &#8594; Import</p>
 <p>Logger-Aufzeichnung auslesen: 'DG200Tool.exe &#8594; Device &#8594; Download all track points'</p>
 </li>
 <li>
-<p>GPX-Datei erzeugen: 'DG200Tool.exe &#8594; File &#8594; Save' aufrufen und "*.gpx" w&#228;hlen</p>
+<p>GPX-Datei erzeugen: 'DG200Tool.exe &#8594; File &#8594; Save' aufrufen und "*.gpx" wählen</p>
 </li>
 <li>
 <p>Logger-Daten-Import: Ergebnisse &#8594; Aufgaben-Titel &#8594; Navigationsflug &#8594; &#8230;&#8203; &#8594;
-Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
+Import Logger-Daten &#8594; GPX-Datei auswählen &#8594; Import</p>
 </li>
 <li>
-<p>Logger-Aufzeichnung l&#246;schen: 'DG200Tool.exe &#8594; Device &#8594; Delete all track points'</p>
+<p>Logger-Aufzeichnung löschen: 'DG200Tool.exe &#8594; Device &#8594; Delete all track points'</p>
 </li>
 </ul>
 </div>
@@ -3052,14 +3026,14 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu kl&#228;ren.</p>
+<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.</p>
 </li>
 <li>
 <p>Eine Logger-Aufzeichnung kann als IGC-Datei auf eine Micro-SD-Karte geschrieben werden.</p>
 </li>
 <li>
 <p>Logger-Daten-Import: 'Flight Contest &#8594; Ergebnisse &#8594; Aufgaben-Titel &#8594; Navigationsflug
-&#8594; &#8230;&#8203; &#8594; Import Logger-Daten &#8594; IGC-Datei ausw&#228;hlen &#8594; Import'</p>
+&#8594; &#8230;&#8203; &#8594; Import Logger-Daten &#8594; IGC-Datei auswählen &#8594; Import'</p>
 </li>
 </ul>
 </div>
@@ -3069,10 +3043,10 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu kl&#228;ren.</p>
+<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.</p>
 </li>
 <li>
-<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verf&#252;gung zu stellen.</p>
+<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.</p>
 </li>
 </ul>
 </div>
@@ -3082,10 +3056,10 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu kl&#228;ren.</p>
+<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.</p>
 </li>
 <li>
-<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verf&#252;gung zu stellen.</p>
+<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.</p>
 </li>
 <li>
 <p>Notwendige Logger-Einstellungen:</p>
@@ -3095,7 +3069,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <p>Aufzeichnungs-Intervall: 1 Sekunde</p>
 </li>
 <li>
-<p>Aufzeichnung mit H&#246;hen-Angaben</p>
+<p>Aufzeichnung mit Höhen-Angaben</p>
 </li>
 </ul>
 </div>
@@ -3108,7 +3082,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <p>darf nur eine Strecken-Aufzeichnung beinhalten (&lt;trk&gt;&#8230;&#8203;&lt;/trk&gt;)</p>
 </li>
 <li>
-<p>wenn nein, nicht gew&#252;nschte Strecken-Aufzeichnungen in Datei l&#246;schen</p>
+<p>wenn nein, nicht gewünschte Strecken-Aufzeichnungen in Datei löschen</p>
 </li>
 </ul>
 </div>
@@ -3121,10 +3095,10 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu kl&#228;ren.</p>
+<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.</p>
 </li>
 <li>
-<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verf&#252;gung zu stellen.</p>
+<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.</p>
 </li>
 <li>
 <p>Notwendige Logger-Einstellungen:</p>
@@ -3134,7 +3108,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <p>Aufzeichnungs-Intervall: 1 Sekunde</p>
 </li>
 <li>
-<p>Aufzeichnung mit H&#246;hen-Angaben</p>
+<p>Aufzeichnung mit Höhen-Angaben</p>
 </li>
 <li>
 <p>Aufzeichnung mit Zeit-Angaben</p>
@@ -3150,7 +3124,7 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <p>darf nur eine Strecken-Aufzeichnung beinhalten (&lt;gx:Track&gt;&#8230;&#8203;&lt;/gx:Track&gt;)</p>
 </li>
 <li>
-<p>wenn nein, nicht gew&#252;nschte Strecken-Aufzeichnungen in Datei l&#246;schen</p>
+<p>wenn nein, nicht gewünschte Strecken-Aufzeichnungen in Datei löschen</p>
 </li>
 </ul>
 </div>
@@ -3163,13 +3137,13 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Der Logger mus den Standard 'NMEA 0183' unterst&#252;tzen.</p>
+<p>Der Logger mus den Standard 'NMEA 0183' unterstützen.</p>
 </li>
 <li>
-<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu kl&#228;ren.</p>
+<p>Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.</p>
 </li>
 <li>
-<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verf&#252;gung zu stellen.</p>
+<p>Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.</p>
 </li>
 </ul>
 </div>
@@ -3181,26 +3155,26 @@ Import Logger-Daten &#8594; GPX-Datei ausw&#228;hlen &#8594; Import</p>
 <h2 id="print-styles">Druck-Stil beeinflussen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Erm&#246;glicht Einflu&#223; auf das Aussehen des Druckes<br>
+<p>Ermöglicht Einfluß auf das Aussehen des Druckes<br>
 &#8594; Wettbewerb &#8594; Einstellungen &#8594; Druck-Stil</p>
 </div>
 <div class="paragraph">
-<p><a href="#print-styles-title">CSS-Einstellungen f&#252;r Titel</a><br>
-<a href="#print-styles-foot">CSS-Einstellungen f&#252;r Unterschrift</a><br>
-<a href="#print-styles-tables">CSS-Einstellungen f&#252;r Tabellen</a><br>
-<a href="#print-styles-special">Besondere CSS-Eigenschaften</a><br>
-<a href="#print-styles-samples">Beispiele</a></p>
+<p><a href="#print-styles-title">CSS-Einstellungen für Titel</a><br>
+<a href="#print-styles-foot">CSS-Einstellungen für Unterschrift</a><br>
+<a href="#print-styles-tables">CSS-Einstellungen für Tabellen</a><br>
+<a href="#print-styles-samples">Beispiele</a><br>
+<a href="#print-styles-special-old">Ersetzte CSS-Eigenschaften</a></p>
 </div>
 <div class="sect2">
-<h3 id="print-styles-title">CSS-Einstellungen f&#252;r Titel</h3>
+<h3 id="print-styles-title">CSS-Einstellungen für Titel</h3>
 <div class="literalblock">
 <div class="content">
 <pre>h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>font-size: Gr&#246;&#223;e des 1. Titels festlegen. Nur nutzbar, wenn die Titelgr&#246;&#223;e leer ist und keine Grafiken verwendet werden.<br>
-margin-top,margin-bottom,padding-top,padding-bottom: Abst&#228;nde des 1. Titels nach oben und unten festlegen</p>
+<p>font-size: Größe des 1. Titels festlegen. Nur nutzbar, wenn die Titelgröße leer ist und keine Grafiken verwendet werden.<br>
+margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 1. Titels nach oben und unten festlegen</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -3208,8 +3182,8 @@ margin-top,margin-bottom,padding-top,padding-bottom: Abst&#228;nde des 1. Titels
 </div>
 </div>
 <div class="paragraph">
-<p>font-size: Gr&#246;&#223;e des 2. Titels festlegen<br>
-margin-top,margin-bottom,padding-top,padding-bottom: Abst&#228;nde des 2. Titels nach oben und unten festlegen</p>
+<p>font-size: Größe des 2. Titels festlegen<br>
+margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 2. Titels nach oben und unten festlegen</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -3217,24 +3191,24 @@ margin-top,margin-bottom,padding-top,padding-bottom: Abst&#228;nde des 2. Titels
 </div>
 </div>
 <div class="paragraph">
-<p>font-size: Gr&#246;&#223;e des 3. Titels festlegen<br>
-margin-top,margin-bottom,padding-top,padding-bottom: Abst&#228;nde des 3. Titels nach oben und unten festlegen</p>
+<p>font-size: Größe des 3. Titels festlegen<br>
+margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 3. Titels nach oben und unten festlegen</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="print-styles-foot">CSS-Einstellungen f&#252;r Unterschrift</h3>
+<h3 id="print-styles-foot">CSS-Einstellungen für Unterschrift</h3>
 <div class="literalblock">
 <div class="content">
 <pre>h2#signature { margin-top:100px; }</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>margin-top: Abstand zur Tabelle oder zum Unterschriften-Bild vergr&#246;&#223;ern</p>
+<p>margin-top: Abstand zur Tabelle oder zum Unterschriften-Bild vergrößern</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="print-styles-tables">CSS-Einstellungen f&#252;r Tabellen</h3>
+<h3 id="print-styles-tables">CSS-Einstellungen für Tabellen</h3>
 <div class="paragraph">
 <p>Anwendung:</p>
 </div>
@@ -3280,7 +3254,7 @@ td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
 <td class="tableblock halign-left valign-top"><p class="tableblock">color: red;</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Kleinere Textgr&#246;&#223;e</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kleinere Textgröße</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">font-size: 80%;</p></td>
 </tr>
 <tr>
@@ -3294,7 +3268,7 @@ td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
 </tbody>
 </table>
 <div class="paragraph">
-<p>CSS-Ausdr&#252;cke: <a href="http://www.w3schools.com/cssref" class="bare">http://www.w3schools.com/cssref</a><br>
+<p>CSS-Ausdrücke: <a href="http://www.w3schools.com/cssref" class="bare">http://www.w3schools.com/cssref</a><br>
 Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">http://localhost:8080/fc/css/fcprint.css</a></p>
 </div>
 <div class="paragraph">
@@ -3432,7 +3406,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetablejudgelist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime empty1 empty2 empty3 empty4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist</p></td>
@@ -3584,108 +3558,6 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="print-styles-special">Besondere CSS-Eigenschaften</h3>
-<div class="paragraph">
-<p>Anwendung:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>body {Eigenschaft: Wert1 Wert2 ...;}</pre>
-</div>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 60%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Eigenschaft</th>
-<th class="tableblock halign-left valign-top">Wert</th>
-<th class="tableblock halign-left valign-top">Wirkung</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--flightplan</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">hide-distance
-</p><p class="tableblock">hide-truetrack
-</p><p class="tableblock">hide-trueheading
-</p><p class="tableblock">hide-groundspeed
-</p><p class="tableblock">disable-local-time
-</p><p class="tableblock">show-elapsed-time</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan Spalte "Entfernung" leer lassen
-</p><p class="tableblock">im Flugplan Spalte "Rechtweisender Kurs" leer lassen
-</p><p class="tableblock">im Flugplan Spalte "Rechtweisender Steuerkurs" leer lassen
-</p><p class="tableblock">im Flugplan Spalte "Geschwindigkeit &#252;ber Grund" leer lassen
-</p><p class="tableblock">im Flugplan Spalte "Ortszeit" weglassen
-</p><p class="tableblock">im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--submission</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan die sp&#228;teste Abgabezeit des L&#246;sungsbogens anzeigen<br>
-(der Wert definiert die Minuten nach dem FP)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---add-submission</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
-10</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flupplan f&#252;r Besatzungen dieser Klasse die sp&#228;teste Abgabezeit des L&#246;sungsbogens verl&#228;ngern (der Zahlen-Wert definiert die Minuten nach der regul&#228;ren Abgabezeit)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---start-tp<br>
---add-num</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1<br>
-TP3 [,TP5]<br>
-1 [,2]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan f&#252;r Besatzungen die Wendepunkte-Nummer um den angegebenen Wert
-ab dem angegebenen Wendepunkt erh&#246;hen
-(mehrere Erh&#246;hungen m&#246;glich; f&#252;r abk&#252;rzende Strecken, wo die Wettbewerbskarte einer anderen Strecke mitverwendet wird)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---secret-gatewidth</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
-2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">bei Zeitauswertung f&#252;r Besatzungen dieser Klasse eine andere Gate-Breite f&#252;r UZKs verwenden (Gate-Breite in NM)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
---before-starttime</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
-30</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Zeitplan f&#252;r Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regul&#228;ren Planungszeit)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---disable-procedureturn</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Wendeschleifen f&#252;r diese Strecke deaktivieren</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
---show-curved-points</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">in Strecken-Anzeigen dieser Strecke UZKs der krummen Strecke anzeigen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">--landingresults</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
 <h3 id="print-styles-samples">Beispiele</h3>
 <div class="ulist">
 <ul>
@@ -3698,34 +3570,10 @@ ab dem angegebenen Wendepunkt erh&#246;hen
 </div>
 </li>
 <li>
-<p>Strecken - Wendeschleifen deaktivieren</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --route: Strecke-1; --disable-procedureturn; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Strecken-Anzeigen - UZKs der krummen Strecke anzeigen</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --route: Strecke-1; --show-curved-points; }</pre>
-</div>
-</div>
-</li>
-<li>
 <p>Besatzungs-Zeitplan - Zeilen verkleinern</p>
 <div class="literalblock">
 <div class="content">
 <pre>table.timetablelist tr.value td { font-size: 90%; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Besatzungs-Zeitplan - f&#252;r Einsteiger-Klasse Anfangs-Zeit der Planung um 30 Minuten vorverlegen</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --class: Einsteiger; --before-starttime: 30; }</pre>
 </div>
 </div>
 </li>
@@ -3738,40 +3586,7 @@ ab dem angegebenen Wendepunkt erh&#246;hen
 </div>
 </li>
 <li>
-<p>Flugplan - Formatierung f&#252;r Rallyeflug (Entfernung, Kurse und Ortszeit nicht drucken; Zeitverlauf drucken; Sp&#228;teste Abgabezeit anzeigen)</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --flightplan: hide-distance hide-truetrack hide-trueheading disable-local-time show-elapsed-time; }
-body { --submission: 20; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Flugplan - f&#252;r Einsteiger-Klasse sp&#228;teste Abgabezeit des L&#246;sungsbogens um 10 Minuten verl&#228;ngern</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --class: Einsteiger; --add-submission: 10; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Flugplan - Wendepunkte-Nummer ab WP3 um 1 erh&#246;hen (druckt WP3 als WP4, WP4 als WP5 usw.)</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --route: Strecke-1; --start-tp: TP3; --add-num: 1; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Flugplan - Wendepunkte-Nummer ab WP3 um 1 erh&#246;hen, ab WP5 um weitere 2 erh&#246;hen</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --route: Strecke-1; --start-tp: TP3,TP5; --add-num: 1,2; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Gescannte Beobachtungsformulare - Gr&#246;&#223;e ver&#228;ndern</p>
+<p>Gescannte Beobachtungsformulare - Größe verändern</p>
 <div class="literalblock">
 <div class="content">
 <pre>img.scannedobservationtest { width:80%; }</pre>
@@ -3779,34 +3594,10 @@ body { --submission: 20; }</pre>
 </div>
 </li>
 <li>
-<p>Gescannte Planungsaufgabenformulare - Gr&#246;&#223;e ver&#228;ndern</p>
+<p>Gescannte Planungsaufgabenformulare - Größe verändern</p>
 <div class="literalblock">
 <div class="content">
 <pre>img.scannedplanningtest { width:80%; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Navigationsflug-Ergebnis - UZKs der krummen Strecke anzeigen</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --flightresults: show-curved-points; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Navigationsflug-Ergebnis - f&#252;r Einsteiger-Klasse Gate-Breite 2NM f&#252;r UZKs verwenden</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --class: Einsteiger; --secret-gatewidth: 2; }</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren</p>
-<div class="literalblock">
-<div class="content">
-<pre>body { --landingresults: 0.5; }</pre>
 </div>
 </div>
 </li>
@@ -3844,7 +3635,7 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 </div>
 </li>
 <li>
-<p>Punkte-Druck Landefeld - Gr&#246;&#223;e ver&#228;ndern</p>
+<p>Punkte-Druck Landefeld - Größe verändern</p>
 <div class="literalblock">
 <div class="content">
 <pre>img.landingfield { width:200%; }</pre>
@@ -3853,30 +3644,148 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 </li>
 </ul>
 </div>
+</div>
+<div class="sect2">
+<h3 id="print-styles-special-old">Ersetzte CSS-Eigenschaften</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Eigenschaft</th>
+<th class="tableblock halign-left valign-top">Wert</th>
+<th class="tableblock halign-left valign-top">Wirkung</th>
+<th class="tableblock halign-left valign-top">jetzt zu finden in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--disable-procedureturn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wendeschleifen für diese Strecke deaktivieren</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Strecken &#8594; &lt;Strecken-Name&gt; &#8594; Strecken-Einstellungen &#8594; Wendeschleifen verwenden</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--show-curved-points</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in Strecken-Anzeigen dieser Strecke UZKs der krummen Strecke anzeigen</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Strecken &#8594; &lt;Strecken-Name&gt; &#8594; Strecken-Einstellungen &#8594; UZKs der krummen Strecke in Strecken-Karten dieser Strecke anzeigen</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--secret-gatewidth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
+2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bei Zeitauswertung für Besatzungen dieser Klasse eine andere Gate-Breite für UZKs verwenden (Gate-Breite in NM)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Klassen &#8594; &lt;Klassen-Name&gt; &#8594; Abweichende Tor-Breite von UZK-Koordinaten für diese Klasse</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--before-starttime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
+30</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Zeitplan für Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regulären Planungszeit)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Klassen &#8594; &lt;Klassen-Name&gt; &#8594; Vorverlegung der Planungs-Anfangs-Zeit vor der regulären Planungszeit für diese Klasse</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--add-submission</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Einsteiger<br>
+10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flupplan für Besatzungen dieser Klasse die späteste Abgabezeit des Lösungsbogens verlängern (der Zahlen-Wert definiert die Minuten nach der regulären Abgabezeit)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Klassen &#8594; &lt;Klassen-Name&gt; &#8594; Verlängerung der spätesten Abgabezeit des Lösungsbogens für diese Klasse</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--flightplan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hide-distance
+</p><p class="tableblock">hide-truetrack
+</p><p class="tableblock">hide-trueheading
+</p><p class="tableblock">hide-groundspeed
+</p><p class="tableblock">disable-local-time
+</p><p class="tableblock">show-elapsed-time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan Spalte "Entfernung" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Rechtweisender Kurs" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Rechtweisender Steuerkurs" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Geschwindigkeit über Grund" leer lassen
+</p><p class="tableblock">im Flugplan Spalte "Ortszeit" weglassen
+</p><p class="tableblock">im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--submission</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan die späteste Abgabezeit des Lösungsbogens anzeigen<br>
+(der Wert definiert die Minuten nach dem FP)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten &#8594; Späteste Abgabezeit des Lösungsbogens nach Erreichen des FP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--start-tp<br>
+--add-num</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Strecke-1<br>
+TP3 [,TP5]<br>
+1 [,2]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Flugplan für Besatzungen die Wendepunkte-Nummer um den angegebenen Wert
+ab dem angegebenen Wendepunkt erhöhen
+(mehrere Erhöhungen möglich; für abkürzende Strecken, wo die Wettbewerbskarte einer anderen Strecke mitverwendet wird)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten &#8594; Wendepunkte-Nummern um den angegebenen Wert ab dem angegebenen Wendepunkt im Flugplan für Besatzungen erhöhen<br>
+TP3,TP5:1,2 = ab TP3 um 1 erhöhen, ab TP5 um weitere 2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Aufgaben &#8594; Navigationstest &#8594; &lt;Navigationstest-Name&gt; &#8594; Bearbeiten &#8594; UZKs der krummen Strecke im Navigationsflug-Ergebnis immer anzeigen</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--landingresults</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Auswertung &#8594; Wettbewerbs-Auswertung &#8594; Wettbewerbs-Auswertungs-Einstellungen &#8594; Lande-Strafpunkte um angegebenen Faktor reduzieren</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration">Installationsabh&#228;ngige Konfiguration</h2>
+<h2 id="contest-properties">Wettbewerbs-Eigenschaften</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Erm&#246;glicht Anpassungen der Einsatzumgebung der 'Flight Contest'-Installation<br>
+<p>Bisher keine definiert.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration">Installationsabhängige Konfiguration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ermöglicht Anpassungen der Einsatzumgebung der 'Flight Contest'-Installation<br>
 &#8594; Extras &#8594; Einstellungen &#8594; Konfiguration</p>
 </div>
 <div class="paragraph">
-<p>&#196;nderungen erst wirksam nach Neustart von 'Flight Contest'.</p>
+<p>Änderungen erst wirksam nach Neustart von 'Flight Contest'.</p>
 </div>
 <div class="paragraph">
-<p>Sollte 'Flight Contest' nach &#196;nderungen nicht mehr starten, ist die letzte
-&#196;nderung in 'C:\FCSave\.fc\config.groovy' r&#252;ckg&#228;ngig
-zu machen oder diese Datei zu l&#246;schen.</p>
+<p>Sollte 'Flight Contest' nach Änderungen nicht mehr starten, ist die letzte
+Änderung in 'C:\FCSave\.fc\config.groovy' rückgängig
+zu machen oder diese Datei zu löschen.</p>
 </div>
 <div class="paragraph">
 <p><a href="#configuration-email">E-Mail-Versand konfigurieren</a><br>
 <a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a><br>
 <a href="#configuration-ftp">FTP-Versand konfigurieren</a><br>
+<a href="#configuration-landing">Information für Landeschiedsrichter konfigurieren</a><br>
 <a href="#configuration-live">Live-Anzeige konfigurieren</a><br>
+<a href="#configuration-livetracking">Live-Tracking konfigurieren</a><br>
 <a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a><br>
 <a href="#configuration-test">Test-Anzeigen konfigurieren</a></p>
 </div>
@@ -3887,14 +3796,14 @@ zu machen oder diese Datei zu l&#246;schen.</p>
 <pre>grails {
   mail {
     host = "TODO"       // SMTP-Server-Adresse (DNS-Name oder IP-Adresse)
-    port = 587          // SMTP-Server-Port (f&#252;r Client-Verbindungen)
+    port = 587          // SMTP-Server-Port (für Client-Verbindungen)
     username = "TODO"   // SMTP-Server-Login-Name
     password = "TODO"   // SMTP-Server-Passwort
   }
 }
 flightcontest {
   mail {
-    from = "TODO"       // Absender-E-Mail-Adresse (muss auf SMTP-Server g&#252;ltig sein)
+    from = "TODO"       // Absender-E-Mail-Adresse (muss auf SMTP-Server gültig sein)
     cc = "TODO"         // E-Mail-Adresse des Auswerte-Schiedsrichters
   }
   testmail {
@@ -3932,7 +3841,7 @@ flightcontest {
     port = 21           // FTP-Server-Port
     username = "TODO"   // FTP-Login-Name
     password = "TODO"   // FTP-Passwort
-    contesturl = "TODO" // &#214;ffentlicher Zugang zum Wettbewerbs-Verzeichnis
+    contesturl = "TODO" // Öffentlicher Zugang zum Wettbewerbs-Verzeichnis
                         // auf FTP-Server (z.B. "http://results.flightcontest.de/demo")
     testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Quell-URL
   }
@@ -3940,7 +3849,7 @@ flightcontest {
 </div>
 </div>
 <div class="paragraph">
-<p>Im Root-Verzeichnis des FTP-Servers m&#252;ssen 2 Verzeichnisse existieren:</p>
+<p>Im Root-Verzeichnis des FTP-Servers müssen 2 Verzeichnisse existieren:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -3961,11 +3870,11 @@ flightcontest {
 </div>
 </div>
 <div class="paragraph">
-<p>Im Root-Verzeichnis des FTP-Server muss f&#252;r GPX-Dateien ein eigener
-MIME-Typ konfiguriert werden. Weiterhin sollte f&#252;r diesen MIME-Typ die
+<p>Im Root-Verzeichnis des FTP-Server muss für GPX-Dateien ein eigener
+MIME-Typ konfiguriert werden. Weiterhin sollte für diesen MIME-Typ die
 Browser-Komprimierung aktiviert werden
 (<a href="https://betterexplained.com/articles/how-to-optimize-your-site-with-gzip-compression" class="bare">https://betterexplained.com/articles/how-to-optimize-your-site-with-gzip-compression</a>).
-Dazu in Datei '.htaccess' folgende Zeilen hinzuf&#252;gen:</p>
+Dazu in Datei '.htaccess' folgende Zeilen hinzufügen:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -3978,6 +3887,21 @@ AddOutputFilterByType DEFLATE application/gpx</pre>
 nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="configuration-landing">Information für Landeschiedsrichter konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  landing {
+    info = "WhatsApp an +49(170)12345678 senden."
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Diese Information wird auf den Lande-Schiedsrichter-Zeitplan gedruckt.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="configuration-live">Live-Anzeige konfigurieren</h3>
@@ -4005,16 +3929,16 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 <p>Der FTP-Upload erfordert einen konfigurierten FTP-Versand.</p>
 </div>
 <div class="paragraph">
-<p>Lokale und Share-Kopien k&#246;nnen nicht direkt im Firefox ge&#246;ffnet werden.</p>
+<p>Lokale und Share-Kopien können nicht direkt im Firefox geöffnet werden.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Folgenderma&#223;en zum &#214;ffnen einer lokalen Kopie vorgehen:</p>
+<p>Folgendermaßen zum Öffnen einer lokalen Kopie vorgehen:</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Link in neuem Tab &#246;ffnen
+<p>Link in neuem Tab öffnen
 &#8594; C:/Live/fclive.htm</p>
 </li>
 <li>
@@ -4025,11 +3949,11 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 </div>
 </li>
 <li>
-<p>Folgenderma&#223;en zum &#214;ffnen einer Share-Kopie vorgehen:</p>
+<p>Folgendermaßen zum Öffnen einer Share-Kopie vorgehen:</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Link in neuem Tab &#246;ffnen
+<p>Link in neuem Tab öffnen
 &#8594; Server/Share/fclive.htm</p>
 </li>
 <li>
@@ -4058,6 +3982,86 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
+<h3 id="configuration-livetracking">Live-Tracking konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  livetracking {
+    server = "https://tracking.airsports.no"
+    api = "/api/v1"
+    token = "..."
+    display {
+      frontend = "/display/frontend/"
+      frontendMap = "/map/"
+    }
+    contest {
+      // showDelete = true // Default: false
+      // createPublic = true // Default: false
+      startLocalTimeOfDay = "08:00" // Default: 06:00
+      endLocalTimeOfDay = "20:00" // Default: 22:00
+      timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+    }
+    navigationtask {
+      // showDelete = true // Default: false
+      // createPublic = true // Default: false
+    }
+    contestant {
+      minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+    }
+  }
+}</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adresse des Live-Tracking-Servers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Token, mit dem der Zugriff auf den Live-Tracking-Server ermöglicht wird</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.showDelete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Löschen von Live-Tracking-Contests ermöglichen</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.createPublic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Öffentliche Live-Tracking-Contests anlegen</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.startLocalTimeOfDay</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lokale Start-Zeit des Live-Tracking-Contests am Wettbewerbstag</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.endLocalTimeOfDay</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lokale End-Zeit des Live-Tracking-Contests am Wettbewerbstag</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.timeZone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zeit-Zone des Live-Tracking-Contests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.showDelete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Löschen von Live-Tracking-Navigationtasks ermöglichen</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.createPublic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Öffentliche Live-Tracking-Navigationtasks anlegen</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestant.minutesBetweenTrackerStartAndTakeoff</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trackeraufzeichnung beginnt angegebene Minuten vor Takeoff</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
 <h3 id="configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
@@ -4078,7 +4082,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.printserverapi</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Adresse des Druck-Servers f&#252;r die Erzeugung der OSM-Wettbewerbs-Karte</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.projection</p></td>
@@ -4086,7 +4090,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.devoptions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog zus&#228;tzliche Entwicklungsoptionen ein</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein</p></td>
 </tr>
 </tbody>
 </table>
@@ -4098,12 +4102,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <pre>flightcontest {
   wrlog {
     enable = true
-  }
-  dbutil {
-    showmenu = true
-  }
-  aflos {
-    showmenu = true
   }
   clouddemo {
     enable = true
@@ -4121,14 +4119,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <td class="tableblock halign-left valign-top"><p class="tableblock">wrlog.enable</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Aktiviert das Schreiben von Logs in &lt;Installationsverzeichnis&gt;\fc\logs</p></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">dbutil.showmenu</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet "Extras &#8594; DB" zur Anzeige von Datenbank-Inhalten ein</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">aflos.showmenu</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet AFLOS-Men&#252; zur Anzeige des AFLOS-Datenbank-Inhaltes ein</p></td>
-</tr>
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
@@ -4139,13 +4129,13 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <h2 id="live-scoring">Live-Ergebnisanzeige</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Erm&#246;glicht Anzeige eines vorl&#228;ufigen Ergebnisses w&#228;hrend des Debriefings.</p>
+<p>Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
 <p>Zuerst Anpassung der Einsatzumgebung vornehmen:<br>
-&#8594; Installations-abh&#228;ngige Konfiguration &#8594; Live-Anzeige konfigurieren</p>
+&#8594; <a href="#configuration-live">Live-Anzeige konfigurieren</a></p>
 </li>
 <li>
 <p>Wettbewerbs-Einstellungen:<br>
@@ -4168,12 +4158,12 @@ Nur sinnvoll, wenn es mehrere Aufgaben (= Wettbewerbstage) gibt.</p>
 <li>
 <p>Live-Ergebnis-Positionsberechnung<br>
 Auswahl, welche Aufgabe die Live-Ergebnis-Plazierung bestimmt.
-Hier kann auch Wettbewerbs-Summe gew&#228;hlt werden.</p>
+Hier kann auch Wettbewerbs-Summe gewählt werden.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Vorgenommene Einstellungen k&#246;nnen mit der integrierten Live-Anzeige gepr&#252;ft werden.<br>
+<p>Vorgenommene Einstellungen können mit der integrierten Live-Anzeige geprüft werden.<br>
 &#8594; Auswertung &#8594; Wettbewerbs-Auswertung &#8594; Live-Ergebnisanzeige</p>
 </div>
 </li>
@@ -4189,25 +4179,25 @@ Hier kann auch Wettbewerbs-Summe gew&#228;hlt werden.</p>
 <li>
 <p>Upload-Zeit: 60 Sekunden (Standard)<br>
 Intervall, mit dem die Live-Ergebnis-Datei erzeugt und hochgeladen wird.
-Nach &#196;nderung 'Speichern' bet&#228;tigen</p>
+Nach Änderung 'Speichern' betätigen</p>
 </li>
 <li>
 <p>Sprache: Deutsch (Standard)<br>
-Nach &#196;nderung 'Speichern' bet&#228;tigen</p>
+Nach Änderung 'Speichern' betätigen</p>
 </li>
 <li>
 <p>Live-Stylesheet hochladen<br>
-Einmal auszuf&#252;hren, wenn neue Upload-Ziele konfiguriert wurden.</p>
+Einmal auszuführen, wenn neue Upload-Ziele konfiguriert wurden.</p>
 </li>
 <li>
-<p>Live-Ergebnis l&#246;schen<br>
-Einmal auszuf&#252;hren, wenn neue Upload-Ziele konfiguriert wurden.
-Kann auch ausgef&#252;hrt werden, um den Inhalt einer hochgeladenen
-Live-Ergebnis-Datei zu l&#246;schen.</p>
+<p>Live-Ergebnis löschen<br>
+Einmal auszuführen, wenn neue Upload-Ziele konfiguriert wurden.
+Kann auch ausgeführt werden, um den Inhalt einer hochgeladenen
+Live-Ergebnis-Datei zu löschen.</p>
 </li>
 <li>
-<p>&#214;ffentliche Links<br>
-Hier k&#246;nnen die hochgeladenen Live-Ergebnis-Dateien gepr&#252;ft werden.</p>
+<p>Öffentliche Links<br>
+Hier können die hochgeladenen Live-Ergebnis-Dateien geprüft werden.</p>
 </li>
 </ul>
 </div>
@@ -4217,18 +4207,133 @@ Hier k&#246;nnen die hochgeladenen Live-Ergebnis-Dateien gepr&#252;ft werden.</p
 <div class="ulist">
 <ul>
 <li>
-<p>Live-Ergebnis-Anzeige f&#252;r Wettbewerb<br>
-Wettbewerb w&#228;hlen, f&#252;r den eine Live-Ergebnis-Anzeige erfolgen soll.
-Zum Aktivieren 'Speichern' bet&#228;tigen</p>
+<p>Live-Ergebnis-Anzeige für Wettbewerb<br>
+Wettbewerb wählen, für den eine Live-Ergebnis-Anzeige erfolgen soll.
+Zum Aktivieren 'Speichern' betätigen</p>
 </li>
 <li>
 <p>Live-Ergebnis-Anzeige einschalten<br>
-Live-Ergebnis-Anzeige f&#252;r den aktiven Wettbewerb einschalten.</p>
+Live-Ergebnis-Anzeige für den aktiven Wettbewerb einschalten.</p>
 </li>
 <li>
 <p>Live-Ergebnis-Anzeige ausschalten<br>
 Live-Ergebnis-Anzeige auschalten.
 Der letzte Stand der Live-Ergebnis-Datei wird eingefroren.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="live-tracking">Live-Tracking</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Ermöglicht das Verfolgen der Positionen der Besatzungen während ihres Navigationsfluges mit automatischer Zeitauswertung.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Zuerst Anpassung der Einsatzumgebung vornehmen:<br>
+&#8594; <a href="#configuration-livetracking">Live-Tracking konfigurieren</a></p>
+</li>
+<li>
+<p>Scenario 1: Airsports Live Tracking mit Flight Contest konfigurieren</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Vorbereitende Schritte in Flight Contest</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Allen Besatzungen die Tracker-ID ihres Trackers zuweisen.<br>
+&#8594; Besatzungen &#8594; &lt;Besatzungs-Name&gt; &#8594; Tracker-ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Auszuführende Funktionen in Flight Contest</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Live-Tracking-Contest anlegen<br>
+&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest-Datum<br>
+&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest anlegen</p>
+</li>
+<li>
+<p>Live-Tracking-Navigation-Task anlegen<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task-Datum<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task anlegen</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Auszuführende Funktionen in Airsports Live Tracking</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Live-Tracking-Contest und -Navigation-Task für öffentlichen Zugriff freischalten</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Scenario 2: Flight Contest mit Airsports Live Tracking Teams konfigurieren</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Vorbereitende Schritte in Airsports Live Tracking</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Live-Tracking-Contest anlegen</p>
+</li>
+<li>
+<p>Teams zuordnen (Namen, Club, Land, Fotos, Flugzeuge, TAS, Tracker-ID)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Auszuführende Funktionen in Flight Contest</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Verbinden mit Live-Tracking-Contest<br>
+&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest verbinden</p>
+</li>
+<li>
+<p>Teams aus Live-Tracking-Contest als Besatzungen importieren<br>
+&#8594; Besatzungen &#8594; Live-Tracking-Teams importieren</p>
+</li>
+<li>
+<p>Zeitplan für Navigations-Flug in Aufgabe berechnen</p>
+</li>
+<li>
+<p>Live-Tracking-Navigation-Task anlegen<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task-Datum<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task anlegen</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Auszuführende Funktionen in Airsports Live Tracking</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Live-Tracking-Contest und -Navigation-Task für öffentlichen Zugriff freischalten</p>
 </li>
 </ul>
 </div>
@@ -4248,7 +4353,7 @@ Der letzte Stand der Live-Ergebnis-Datei wird eingefroren.</p>
 <p>Automatische Aktionen werden durch dauerhaft laufende Scripte erledigt
 und funktionieren nur mit dem Firefox-Browser.<br>
 Der erste Aufruf des Scriptes schaltet automatische Aktion ein.<br>
-Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage aus.<br>
+Erneuter Aufruf des Scriptes schaltet automatische Aktion nach Rückfrage aus.<br>
 &#8594; 'Programme &#8594; Flight Contest &#8594; Scripts'</p>
 </div>
 <div class="paragraph">
@@ -4260,7 +4365,7 @@ Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage au
 <div class="sect2">
 <h3 id="automatic-actions-openpdf">FCAutoOpenPDF</h3>
 <div class="paragraph">
-<p>Automatisches &#214;ffnen von PDF im Acrobat Reader.</p>
+<p>Automatisches Öffnen von PDF im Acrobat Reader.</p>
 </div>
 <div class="paragraph">
 <p>Notwendige Firefox-Einstellungen:</p>
@@ -4370,7 +4475,7 @@ Erneuter Aufruf des Scriptes schaltet automatische Aktion nach R&#252;ckfrage au
 <h2 id="save-data">Datensicherung eines laufenden Wettbewerbes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>W&#228;hrend eines laufenden Wettbewerbes sollten Sie folgende Daten sichern:</p>
+<p>Während eines laufenden Wettbewerbes sollten Sie folgende Daten sichern:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -4392,7 +4497,7 @@ des Windows-Rechners, auf dem der Wettbewerb ausgewertet wird.
 Kopieren Sie deshalb das Sicherungsverzeichnis 'C:\FCSave'
 nach Abschluss eines Wettbewerbstages oder nach Erreichen eines besonders
 wichtigen Zeitpunktes Ihres Wettbewerbes auf ein externes Speichermedium,
-nachdem Sie Sicherungen wie unten beschrieben durchgef&#252;hrt haben.</p>
+nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.</p>
 </div>
 <div class="paragraph">
 <p><a href="#save-fcdb">Sicherung der 'Flight Contest'-Datenbank</a><br>
@@ -4421,16 +4526,16 @@ Anwendungen -&gt; Adobe Acrobat Document: Datei speichern</pre>
 </div>
 <div class="paragraph">
 <p>Diese Einstellungen stellen sicher, dass alle Ausdrucke im Sicherungsverzeichnis
-C:\FCSave gespeichert werden. &#214;ffnen der PDF und Ausdruck erfolgt dann &#252;ber
+C:\FCSave gespeichert werden. Öffnen der PDF und Ausdruck erfolgt dann über
 den Download-Manager.</p>
 </div>
 <div class="paragraph">
-<p>Ist diese Einstellung nicht m&#246;glich oder gew&#252;nscht,
+<p>Ist diese Einstellung nicht möglich oder gewünscht,
 landen Ausdrucke im Windows-Temp-Verzeichnis.
-Von dort k&#246;nnen sie mit dem Script 'Programme &#8594; Flight Contest &#8594; Scripts &#8594; Save contest prints'
+Von dort können sie mit dem Script 'Programme &#8594; Flight Contest &#8594; Scripts &#8594; Save contest prints'
 ins Sicherungsverzeichnis C:\FCSave gespeichert werden.
-Beachten Sie jedoch, dass Firefox beim Schlie&#223;en alle Downloads aus dem Windows-Temp-Verzeichnis l&#246;scht,
-so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Script nicht regelm&#228;ssig aufgerufen wird.</p>
+Beachten Sie jedoch, dass Firefox beim Schließen alle Downloads aus dem Windows-Temp-Verzeichnis löscht,
+so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Script nicht regelmässig aufgerufen wird.</p>
 </div>
 </div>
 <div class="sect2">
@@ -4443,7 +4548,7 @@ so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Script nicht regelm&#
 <li>
 <p>Kopieren Sie 'C:\FCSave\&lt;Datum&gt;-&lt;Uhrzeit&gt;-fcdb.h2.db'
 nach 'C:\Program Files (x86)\Flight Contest\fc\fcdb.h2.db'.
-Hierf&#252;r ben&#246;tigen Sie Administrator-Privilegien.</p>
+Hierfür benötigen Sie Administrator-Privilegien.</p>
 </li>
 </ol>
 </div>

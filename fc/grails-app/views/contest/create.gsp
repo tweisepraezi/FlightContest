@@ -17,21 +17,22 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post" >
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.title')}*:</label>
                                 <br/>
-                                <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}" tabIndex="1"/>
+                                <input type="text" id="title" name="title" value="${fieldValue(bean:contestInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.titleprintprefix')}:</label>
                                 <br/>
-                                <input type="text" id="printPrefix" name="printPrefix" value="${fieldValue(bean:contestInstance,field:'printPrefix')}" tabIndex="2"/>
+                                <input type="text" id="printPrefix" name="printPrefix" value="${fieldValue(bean:contestInstance,field:'printPrefix')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.organizer')}*:</label>
                                 <br/>
-                                <input type="text" id="printOrganizer" name="printOrganizer" value="${fieldValue(bean:contestInstance,field:'printOrganizer')}" tabIndex="3"/>
+                                <input type="text" id="printOrganizer" name="printOrganizer" value="${fieldValue(bean:contestInstance,field:'printOrganizer')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <div>
@@ -47,12 +48,7 @@
                                 <label>${message(code:'fc.contestrule')}*:</label>
                                 <a href="../docs/help.html#supported-rules" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" tabIndex="4"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.scale')}*:</label>
-                                <br/>
-                                <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:contestInstance,field:'mapScale')}" tabIndex="5"/>
+                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" tabIndex="${ti[0]++}"/>
                             </p>
                             <label>${message(code:'fc.coordpresentation')}:</label>
                             <g:set var="format_labels" value="${[]}"/>
@@ -67,23 +63,27 @@
                             </g:radioGroup>
                             <br/>
                             <p>
-                                <label>${message(code:'fc.timezone')}* [${message(code:'fc.time.hmin')}]:</label>
+                                <label>${message(code:'fc.contest.contestdate')}:*:</label>
                                 <br/>
-                                <input type="text" id="timeZone" name="timeZone" value="${fieldValue(bean:contestInstance,field:'timeZone')}" tabIndex="6"/>
+                                <input type="date" id="liveTrackingContestDate" name="liveTrackingContestDate" value="${fieldValue(bean:contestInstance,field:'liveTrackingContestDate')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.timezone')}*:</label>
+                                <g:select from="${TimeZone.getAvailableIDs()}" optionValue="${{it}}" name="timeZone2" value="${TimeZone.getDefault().getID()}" tabIndex="${ti[0]++}" />
                             </p>
                             <p>
                                 <label>${message(code:'fc.teamcrewnum')}*:</label>
                                 <br/>
-                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="7"/>
+                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.bestofanalysistasknum')}*:</label>
                                 <br/>
-                                <input type="text" id="bestOfAnalysisTaskNum" name="bestOfAnalysisTaskNum" value="${fieldValue(bean:contestInstance,field:'bestOfAnalysisTaskNum')}" tabIndex="8"/>
+                                <input type="text" id="bestOfAnalysisTaskNum" name="bestOfAnalysisTaskNum" value="${fieldValue(bean:contestInstance,field:'bestOfAnalysisTaskNum')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="101"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="102"/>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

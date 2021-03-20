@@ -5,8 +5,9 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<meta name="author" content="Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.">
+<meta name="author" content="Thomas Weise, Deutscher Präzisionsflug-Verein e.V.">
 <title>Flight Contest maps server</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 /* Remove comment around @import statement below when using as a custom stylesheet */
@@ -422,9 +423,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Flight Contest maps server</h1>
 <div class="details">
-<span id="author" class="author">Thomas Weise, Deutscher Pr&#228;zisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.1.8, Ausgabe 2,</span>
-<span id="revdate">27.12.2019</span>
+<span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
+<span id="revnumber">version 3.2.M10,</span>
+<span id="revdate">20.03.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -478,7 +479,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>Printmaps (<a href="http://printmaps-osm.de:8080" class="bare">http://printmaps-osm.de:8080</a>, <a href="https://github.com/printmaps/printmaps" class="bare">https://github.com/printmaps/printmaps</a>)</p>
+<p>Printmaps (<a href="http://printmaps-osm.de" class="bare">http://printmaps-osm.de</a>, <a href="https://github.com/printmaps/printmaps" class="bare">https://github.com/printmaps/printmaps</a>)</p>
 </li>
 <li>
 <p>OpenTopoMap (<a href="https://github.com/der-stefan/OpenTopoMap" class="bare">https://github.com/der-stefan/OpenTopoMap</a>)</p>
@@ -833,7 +834,7 @@ psql -d gis -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Download data for necessary countries (Germany, Austria, Switzerland, South Africa: 4GB)</p>
+<p>Download data for necessary countries (Germany, Austria, Switzerland, France, South Africa: 4GB)</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1076,7 +1077,7 @@ for hgtfile in africa/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.ti
 </div>
 </div>
 <div class="paragraph">
-<p>gis: 100GB, contours: 80GB, lowzoom: 500MB (Germany, Austria, Switzerland, South Africa)</p>
+<p>gis: 190GB, contours: 80GB, lowzoom: 800MB (Germany, Austria, Switzerland, France, South Africa)</p>
 </div>
 <div class="paragraph">
 <p>Display free disk space</p>
@@ -1087,7 +1088,7 @@ for hgtfile in africa/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.ti
 </div>
 </div>
 <div class="paragraph">
-<p>200GB used, 800GB free</p>
+<p>320GB used, 680GB free</p>
 </div>
 <div class="paragraph">
 <p>SSH login with user <strong>root</strong></p>

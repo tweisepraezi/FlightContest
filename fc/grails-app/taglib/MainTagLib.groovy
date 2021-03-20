@@ -5,7 +5,7 @@ class MainTagLib
     // --------------------------------------------------------------------------------------------------------------------
 	// <g:mainnav link="${createLink(controller:'contest')}" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" />
-	// <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" printaction="${message(code:'fc.aircraft.print')}" importaction="${message(code:'fc.route.aflosimport')}" />
+	// <g:mainnav link="${createLink(controller:'contest')}" controller="aircraft" newaction="${message(code:'fc.aircraft.new')}" printaction="${message(code:'fc.aircraft.print')}" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="contest" show="${message(code:'fc.contest.show')}" id="${contestInstance.id}" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="contest" id="${contestInstance.id}" conteststart="true" />
 	// <g:mainnav link="${createLink(controller:'contest')}" controller="contest" id="${contestInstance.id}" contesttasks="true" />
@@ -59,13 +59,8 @@ class MainTagLib
         outln """        <li class="secondary"> <a name="start" class="${active(p.controller,'flightcontest')}" href="http://flightcontest.de" target="_blank">flightcontest.de</a> </li>"""
         outln """        <li class="secondary"> <a href="${p.link}/../../docs/help.html" target="_blank">${message(code:'fc.help')}</a></li>"""
         outln """        <li class="secondary"> <a class="${active(p.controller,'global')}" href="${p.link}/../../global/info">${message(code:'fc.extras')}</a> </li>"""
-		if (BootStrap.global.IsAFLOSPossible()) {
-			outln """    <li class="secondary"> <a class="${if (isAflos(p.controller)) "active"}" href="${p.link}/../../aflos/start">${message(code:'fc.aflos')}</a> </li>"""
-        }
-        if (BootStrap.global.IsDBUtilPossible()) {
-            outln """    <li class="secondary"> <a href="${p.link}/../../dbUtil">${message(code:'fc.dbutil')}</a> </li>"""
-        }
         if (Global.IsDevelopmentEnvironment()) {
+            outln """    <li class="secondary"> <a href="${p.link}/../../dbconsole">${message(code:'fc.dbconsole')}</a> </li>"""
             outln """    <li class="secondary"> <a href="${p.link}/../../contest/runmodultests">${message(code:'fc.contest.modultests')}</a> </li>"""
         }
         if (BootStrap.global.IsLivePossible()) {
@@ -90,7 +85,7 @@ class MainTagLib
         // ---------------------------------------------------------------
 		// 2. menu line
         // ---------------------------------------------------------------
-        if (p.newaction || p.show || p.edit || p.printaction || p.printsettings || p.importaction) {
+        if (p.newaction || p.show || p.edit || p.printaction || p.printsettings || p.importaction || p.importaction2) {
             if (p.controller != "contest" || session.lastContest) {
 	        	outln """<div class="clear"></div>"""
 				outln """<div class="grid">"""
@@ -104,15 +99,17 @@ class MainTagLib
 				}
 				if (p.importaction) {
 					if (p.controller == "route") {
-                        if (session.lastContest && AflosTools.ExistAnyAflosRoute(session.lastContest)) {
-                            outln """    <li> <a href="${p.link}/../../${p.controller}/importaflosroute">${message(code:'fc.route.aflosimport')}</a> </li>"""
-                        }
                         outln """    <li> <a href="${p.link}/../../${p.controller}/importfcroute">${message(code:'fc.route.fcfileimport')}</a> </li>"""
                         outln """    <li> <a href="${p.link}/../../${p.controller}/importfileroute">${message(code:'fc.route.fileimport')}</a> </li>"""
 					} else if (p.controller == "crew") {
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
 					}
 				}
+				if (p.importaction2) {
+					if (p.controller == "crew") {
+						outln """    <li> <a href="${p.link}/../../contest/livetracking_teamsimport/${session.lastContest.id}">${p.importaction2}</a> </li>"""
+                    }
+                }
 				if (p.show) {
 					outln """    <li> <a href="${p.link}/../../${p.controller}/show/${p.id}">${p.show}</a> </li>"""
 		        }
@@ -217,24 +214,6 @@ class MainTagLib
 			outln """</div>"""
             outln """<div class="clear"></div>"""
 			second_nav = true
-		} else if (isAflos(p.controller)) {
-			outln """<div class="clear"></div>"""
-            outln """<div class="grid">"""
-			outln """  <ul class="nav main">"""
-            outln """    <li> <a class="${active(p.controller,'aflosRouteDefs')}" href="${p.link}/../../aflosRouteDefs/list" >${message(code:'fc.aflos.routedefs.list')}</a> </li>"""
-			outln """    <li> <a class="${active(p.controller,'aflosCrewNames')}" href="${p.link}/../../aflosCrewNames/list" >${message(code:'fc.aflos.crewnames.list')}</a> </li>"""
-            outln """    <li> <a class="${active(p.controller,'aflosErrors')}" href="${p.link}/../../aflosErrors/list" >${message(code:'fc.aflos.errors.list')}</a> </li>"""
-			outln """    <li> <a class="${active(p.controller,'aflosCheckPoints')}" href="${p.link}/../../aflosCheckPoints/list" >${message(code:'fc.aflos.checkpoints.list')}</a> </li>"""
-            outln """    <li> <a class="${active(p.controller,'aflosErrorPoints')}" href="${p.link}/../../aflosErrorPoints/list" >${message(code:'fc.aflos.errorpoints.list')}</a> </li>"""
-			if (session?.lastContest) {
-				if (!session.lastContest.aflosTest) {
-					outln """    <li> <a href="${p.link}/../../aflos/selectfilename" >${message(code:'fc.aflos.upload')}</a> </li>"""
-				}
-			}
-            outln """  </ul>"""
-			outln """</div>"""
-			outln """<div class="clear"></div>"""
-			second_nav = true
 		} else if (p.controller == "global") {
 			outln """<div class="clear"></div>"""
             outln """<div class="grid">"""
@@ -278,21 +257,6 @@ class MainTagLib
         }
     }
     
-    // --------------------------------------------------------------------------------------------------------------------
-    boolean isAflos(controller)
-    {
-    	switch (controller) {
-        	case "aflosRouteDefs":
-        	case "aflosRouteNames":
-        	case "aflosCrewNames":
-        	case "aflosErrors":
-        	case "aflosCheckPoints":
-        	case "aflosErrorPoints":
-        		return true
-        }
-		return false
-    }
-	
     // --------------------------------------------------------------------------------------------------------------------
     String active(controller, name)
     {

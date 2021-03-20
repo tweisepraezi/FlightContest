@@ -23,12 +23,12 @@ class DemoContestIntermediateService
 	static final String WIND = "$WIND_DIRECTION/$WIND_SPEED"
 	static final String NOWIND = "0/0"
 	
-	long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,false,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
 		
 		// Routes
         Map route = [:]
@@ -36,36 +36,20 @@ class DemoContestIntermediateService
         Map route_noildg = [:]
         Map route_noitoldg = [:]
 		fcService.printstart ROUTE_NAME
-        if (aflosDB) {
-            route = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_GPX)
-        }
+        route = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_GPX)
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOITO
-        if (aflosDB) {
-            route_noito = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITO,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O'])
-        } else {
-            route_noito = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITO_GPX)
-        }
+        route_noito = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITO_GPX)
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOILDG
-        if (aflosDB) {
-            route_noildg = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOILDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iLDG'])
-        } else {
-            route_noildg = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOILDG_GPX)
-        }
+        route_noildg = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOILDG_GPX)
 		fcService.printdone ""
 		fcService.printstart ROUTE_NAME_NOITOLDG
-        if (aflosDB) {
-            route_noitoldg = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_NOITOLDG,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,['iT/O','iLDG'])
-        } else {
-            route_noitoldg = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITOLDG_GPX)
-        }
+        route_noitoldg = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_NOITOLDG_GPX)
 		fcService.printdone ""
 
 		// Crews and Aircrafts
-		fcService.importCrewList(contest,"C:\\Program Files (x86)\\Flight Contest\\samples\\FC-CrewList-Test.xls",false) // false - mit Start-Nr. 13
+		fcService.importCrewList(contest, "FC-CrewList-Test.xlsx", false) // false - mit Start-Nr. 13
 		
 		// Flight Tests
 		Map task_normal = fcService.putTask(contest,"$ROUTE_NAME ($NOWIND)",START_TIME,2,"time:10min","time:10min",5,"wind:1","wind:1",true,true,false,false,false, false,true, true,true,true, false,false,false,false, false,false,false, false,false)
@@ -136,7 +120,7 @@ class DemoContestIntermediateService
 		return contest.instance.id
 	}
 	
-	Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
+	Map RunTest(Contest lastContest, String contestName)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -299,7 +283,7 @@ class DemoContestIntermediateService
 				[name:"CoordResult '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_90'",      count:8, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testCoordResult90(ROUTE_NAME_NOITOLDG,true,true,true)],
 				[name:"CoordResult '$ROUTE_NAME_NOITOLDG ($WIND+) All - $CREW_120'",     count:8, table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_wind_noitoldg,Crew.findByContestAndName(lastContest,CREW_120)),[sort:"id"]),data:testCoordResult120(ROUTE_NAME_NOITOLDG,true,true,true)],
 
-			   ],aflosDB
+			   ]
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error

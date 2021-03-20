@@ -21,23 +21,6 @@ class CalcService
     final static int COORDINATE_SCALE          = 10   // Nachkommastellen für Koordinaten
     
     //--------------------------------------------------------------------------
-    void CalculateAflos(Test testInstance, int aflosStartNum, String aflosRouteName)
-    {
-        printstart "CalculateAflos: crew '$testInstance.crew.name', AFLOS startnum $aflosStartNum, AFLOS route $aflosRouteName"
-        
-        printstart "Import track points from AFLOS startnum $aflosStartNum"
-        if (AflosTools.GetAflosCrewNamesLoggerData(testInstance, aflosStartNum)) {
-            printdone "Track points found."
-        } else {
-            printdone "No track points found."
-        }
-        
-        Calculate(testInstance, "", "")
-        
-        printdone ""
-    }
-    
-    //--------------------------------------------------------------------------
     Map CalculateLoggerFile(String fileExtension, Test testInstance, String loggerFileName, boolean interpolateMissingData)
     {
         printstart "CalculateLoggerFile: extension '$fileExtension', crew '$testInstance.crew.name', file '$loggerFileName'"
@@ -746,7 +729,6 @@ class CalcService
         FlightTestWind flighttestwind_instance = testInstance.flighttestwind
         FlightTest flighttest_instance = flighttestwind_instance.flighttest
         Route route_instance = flighttest_instance.route
-        boolean use_procedureturn = route_instance.UseProcedureTurn()
         
         CoordRoute last_coordroute_instance = null
         boolean add_sp_gate = true
@@ -892,7 +874,7 @@ class CalcService
                         }
                         break
                     case CoordType.TP:
-                        if (use_procedureturn && coordroute_instance.planProcedureTurn) {
+                        if (route_instance.useProcedureTurns && coordroute_instance.planProcedureTurn) {
                             BigDecimal gate_distance = AviationMath.calculateLeg(
                                 last_coordroute_instance.latMath(),last_coordroute_instance.lonMath(),
                                 coordroute_instance.latMath(),coordroute_instance.lonMath()
@@ -927,7 +909,7 @@ class CalcService
                         coordroute_instance.latMath(),coordroute_instance.lonMath(),
                         ADVANCED_GATE_WIDTH
                     )
-                    boolean procedure_turn = use_procedureturn && coordroute_instance.planProcedureTurn && (testInstance.task.procedureTurnDuration > 0)
+                    boolean procedure_turn = route_instance.useProcedureTurns && coordroute_instance.planProcedureTurn && (testInstance.task.procedureTurnDuration > 0)
                     Map new_gate = [coordType:coordroute_instance.type, 
                                     coordTypeNumber:coordroute_instance.titleNumber,
                                     coordLeft:gate.coordLeft,

@@ -18,18 +18,24 @@
                             <tbody>
                                 <tr>
                                     <td><g:task var="${testInstance?.task}" link="${createLink(controller:'task',action:'listresults')}"/></td>
-                                    <g:if test="${testInstance.flightTestLink == Defs.EMAIL_SENDING}"> 
+									<g:set var="upload_job_status" value="${testInstance.GetFlightTestUploadJobStatus()}"/>
+                                    <g:if test="${upload_job_status == UploadJobStatus.Waiting}"> 
+                                        <td style="width:1%;"> 
+                                            <img src="${createLinkTo(dir:'images',file:'email.png')}"/>
+                                        </td>
+                                    </g:if>
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Sending}"> 
                                         <td style="width:1%;"> 
                                             <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
                                         </td>
-                                    </g:if>
-                                    <g:elseif test="${testInstance.flightTestLink == Defs.EMAIL_ERROR}"> 
+                                    </g:elseif>
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Error}"> 
                                         <td style="width:1%;"> 
                                             <img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
                                         </td>
                                     </g:elseif>
-                                    <g:elseif test="${testInstance.flightTestLink}">
-                                        <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.flightTestLink)}" />
+                                    <g:elseif test="${upload_job_status == UploadJobStatus.Done}">
+                                        <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.GetFlightTestUploadLink())}" />
                                         <td style="width:1%;"> 
                                             <a href="${email_links.map}" target="_blank"><img src="${createLinkTo(dir:'images',file:'map.png')}"/></a>
                                         </td>
@@ -47,7 +53,7 @@
                             <tbody>
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.crew')}:</td>
-                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${testInstance.aflosStartNum}"> (${message(code:'fc.aflos')}: ${testInstance.aflosStartNum})</g:if></td>
+                                    <td><g:crew var="${testInstance.crew}" link="${createLink(controller:'crew',action:'edit')}"/></td>
                                 </tr>
                                 <g:if test="${testInstance.crew.team}">
                                     <tr>
@@ -296,8 +302,8 @@
                                                 <g:actionSubmit action="recalculatecrew" value="${message(code:'fc.flightresults.recalculate')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:if>
                                             <g:else>
-	                                            <g:if test="${testInstance.IsAFLOSImportPossible()}">
-	                                                <g:actionSubmit action="importaflos" value="${message(code:'fc.flightresults.aflosimport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+	                                            <g:if test="${testInstance.IsTrackerImportPossible()}">
+	                                                <g:actionSubmit action="importtracker" value="${message(code:'fc.flightresults.trackerimport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 	                                            </g:if>
                                                 <g:actionSubmit action="importlogger" value="${message(code:'fc.flightresults.loggerimport')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                             </g:else>

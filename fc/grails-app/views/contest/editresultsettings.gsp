@@ -122,6 +122,14 @@
 	                                    <label>${message(code:'fc.specialresults')}</label>
 	                                </div>
                                 </g:if>
+                            	<g:if test="${contestInstance.IsLandingTestRun()}">
+                                        <br/>
+                                        <p>
+                                            <label>${message(code:'fc.landingresults.factor')}:</label>
+                                            <br/>
+                                            <input type="text" id="contestLandingResultsFactor" name="contestLandingResultsFactor" value="${fieldValue(bean:contestInstance,field:'contestLandingResultsFactor')}" />
+                                        </p>
+                                </g:if>
                             </p>
                         </fieldset>
                         <fieldset>

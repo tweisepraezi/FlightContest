@@ -21,6 +21,7 @@ class Crew
     
     String uuid = UUID.randomUUID().toString()// DB-2.10
     String email = ""                         // DB-2.10
+	String trackerID = ""                     // DB-2.15
 
 	// transient values 
 	static transients = ['name2','registration','type','colour','teamname','resultclassname'] 
@@ -50,6 +51,9 @@ class Crew
     Boolean classEqualPosition = false        // DB-2.8
     Integer classAddPosition = 0              // DB-2.8
 
+    // Live-Tracking
+    Integer liveTrackingTeamID = 0            // DB-2.15
+    
 	static belongsTo = [contest:Contest]
 
 	static constraints = {
@@ -86,6 +90,10 @@ class Crew
         
         // DB-2.13 compatibility
         increaseEnabled(nullable:true)
+		
+		// DB-2.15 compatibility
+		trackerID(nullable:true)
+		liveTrackingTeamID(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)
@@ -117,6 +125,8 @@ class Crew
 		viewpos = crewInstance.viewpos
 		disabled = crewInstance.disabled
 		startNum = crewInstance.startNum
+        email = crewInstance.email
+        trackerID = crewInstance.trackerID
 
 		if (crewInstance.aircraft) {
 			Aircraft aircraft_instance = Aircraft.findByRegistrationAndContest(crewInstance.aircraft.registration, contest)
@@ -184,23 +194,6 @@ class Crew
         }
         return false
     }
-    
-	int GetOldAFLOSStartNum()
-	{
-        int aflos_start_num = 0
-        if (mark) {
-            String s = mark
-            if (mark.contains(':')) {
-                s = mark.substring(0, mark.indexOf(':') )
-            }
-            if (s.isInteger()) {
-                aflos_start_num = s.toInteger()
-            }
-        } else {
-            aflos_start_num = startNum
-        }
-        return aflos_start_num
-	}
     
     Integer GetIncreaseFactor()
     {

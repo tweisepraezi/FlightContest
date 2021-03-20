@@ -181,7 +181,7 @@ class EvaluationService
                             getTestDetailsTasksIDs:contestInstance.GetTestDetailsTasksIDs(contestInstance.contestPrintTaskTestDetails),
                             getResultSettings:result_settings,
                             getResultTitle:contestInstance.GetResultTitle(result_settings,false),
-                            getLandingResultsFactor:contestInstance.GetLandingResultsFactor(),
+                            getLandingResultsFactor:contestInstance.contestLandingResultsFactor,
                             bestOfAnalysisTaskNum:contestInstance.bestOfAnalysisTaskNum,
                             
                             liveShowSummary:contestInstance.liveShowSummary,
@@ -1178,7 +1178,7 @@ class EvaluationService
     private void calculate_crew_penalties(Contest contestInstance, ResultClass resultclassInstance, List tastSettings, List teamSettings, Map resultSettings, ResultFilter resultFilter)
     {
         printstart "calculate_crew_penalties $resultFilter"
-        BigDecimal landing_results_factor = contestInstance.GetLandingResultsFactor()
+        BigDecimal landing_results_factor = contestInstance.contestLandingResultsFactor
         for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
             if (!resultclassInstance || (crew_instance.resultclass.id == resultclassInstance.id)) {
                 if (!teamSettings || (crew_instance.team in teamSettings)) {

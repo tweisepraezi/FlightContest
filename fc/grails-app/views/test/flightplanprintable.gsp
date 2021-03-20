@@ -57,36 +57,6 @@
         <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()}</h2>
         <h3>${testInstance.task.printName()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h3>
         <g:form>
-            <g:set var="show_distance" value="${true}" />
-            <g:set var="show_truetrack" value="${true}" />
-            <g:set var="show_trueheading" value="${true}" />
-            <g:set var="show_groundspeed" value="${true}" />
-            <g:set var="show_local_time" value="${true}" />
-            <g:set var="show_elapsed_time" value="${false}" />
-            <g:if test="${contestInstance.printStyle.contains('--flightplan')}">
-	            <g:if test="${contestInstance.printStyle.contains('hide-distance')}">
-	                <g:set var="show_distance" value="${false}" />
-	            </g:if>
-	            <g:if test="${contestInstance.printStyle.contains('hide-truetrack')}">
-	                <g:set var="show_truetrack" value="${false}" />
-	            </g:if>
-	            <g:if test="${contestInstance.printStyle.contains('hide-trueheading')}">
-	                <g:set var="show_trueheading" value="${false}" />
-	            </g:if>
-	            <g:if test="${contestInstance.printStyle.contains('hide-groundspeed')}">
-	                <g:set var="show_groundspeed" value="${false}" />
-	            </g:if>
-	            <g:if test="${contestInstance.printStyle.contains('disable-local-time')}">
-	                <g:set var="show_local_time" value="${false}" />
-	            </g:if>
-	            <g:if test="${contestInstance.printStyle.contains('show-elapsed-time')}">
-	                <g:set var="show_elapsed_time" value="${true}" />
-	            </g:if>
-	        </g:if>
-            <g:set var="show_submission_time" value="${false}" />
-            <g:if test="${contestInstance.printStyle.contains('--submission')}">
-                <g:set var="show_submission_time" value="${true}" />
-            </g:if>
             <g:crewTestPrintable t="${testInstance}"/>
             <br/>
             <table class="info">
@@ -103,8 +73,8 @@
                     </tr>
                     <tr class="planning">
                         <td class="title">
-                            <g:if test="${testInstance.task.planningTestDuration == 0}">
-                                ${message(code:'fc.test.planning.publish.localtime')}:
+                            <g:if test="${testInstance.task.planningTestDuration == 0 || testInstance.task.preparationDuration == 0}">
+                                ${message(code:'fc.flighttest.documentsoutput.localtime')}:
                             </g:if>
                             <g:else>
                                 ${message(code:'fc.test.planning.localtime')}:
@@ -112,11 +82,11 @@
                         </td>
                         <td class="value">
                             <g:if test="${testInstance.timeCalculated}">
-                                <g:if test="${testInstance.task.planningTestDuration > 0}">
-                                    ${testInstance.GetTestingTime().format('HH:mm:ss')} - ${testInstance.endTestingTime?.format('HH:mm:ss')}
+                                <g:if test="${testInstance.task.planningTestDuration == 0 || testInstance.task.preparationDuration == 0}">
+                                    ${testInstance.GetTestingTime().format('HH:mm:ss')}
                                 </g:if>
                                 <g:else>
-                                    ${testInstance.GetTestingTime().format('HH:mm:ss')}
+                                    ${testInstance.GetTestingTime().format('HH:mm:ss')} - ${testInstance.endTestingTime?.format('HH:mm:ss')}
                                 </g:else>
                             </g:if>
                             <g:else>
@@ -124,7 +94,7 @@
                             </g:else>
                         </td>
                     </tr>
-                    <g:if test="${show_elapsed_time && !show_local_time}">
+                    <g:if test="${testInstance.task.flighttest.flightPlanShowElapsedTime && !testInstance.task.flighttest.flightPlanShowLocalTime}">
 	                    <tr class="takeoff">
 	                        <td class="title">${message(code:'fc.test.takeoff.localtime')}:</td>
 	                        <td class="value">
@@ -137,7 +107,7 @@
                             </td>
 	                    </tr>
                     </g:if>
-                    <g:if test="${show_submission_time}">
+                    <g:if test="${testInstance.task.flighttest.submissionMinutes}">
                         <tr class="submission">
                             <td class="title">${message(code:'fc.test.submission.latest')}:</td>
                             <td class="value">
@@ -165,7 +135,7 @@
                             <th>${message(code:'fc.groundspeed')}</th>
                             <th>${message(code:'fc.legtime')}<br/>${message(code:'fc.time.values')}</th>
                             <th>${message(code:'fc.tpname')}</th>
-                            <g:if test="${show_local_time}">
+                            <g:if test="${testInstance.task.flighttest.flightPlanShowLocalTime}">
                                 <th>${message(code:'fc.time.local')}<br/>${message(code:'fc.time.values')}</th>
                             </g:if>
                         </tr>
@@ -177,14 +147,14 @@
                             <td class="truetrack"/>
                             <td class="trueheading"/>
                             <td class="groundspeed"/>
-                            <g:if test="${show_elapsed_time}">
+                            <g:if test="${testInstance.task.flighttest.flightPlanShowElapsedTime}">
                                 <td class="legtime">${FcMath.TimeStr(Date.parse("HH:mm","00:00"))}</td>
                             </g:if>
                             <g:else>
                                 <td class="legtime"/>
                             </g:else>
                             <td class="tpname">${message(code:CoordType.TO.code)}</td>
-                            <g:if test="${show_local_time}">
+                            <g:if test="${testInstance.task.flighttest.flightPlanShowLocalTime}">
 	                            <g:if test="${testInstance.timeCalculated}">
 	                                <td class="tptime">${FcMath.TimeStr(testInstance.takeoffTime)}<g:if test="${testInstance.takeoffTimeWarning}"> !</g:if></td>
 	                            </g:if> 
@@ -199,14 +169,14 @@
                             <td class="truetrack"/>
                             <td class="trueheading"/>
                             <td class="groundspeed"/>
-                            <g:if test="${show_elapsed_time}">
+                            <g:if test="${testInstance.task.flighttest.flightPlanShowElapsedTime}">
                                 <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime))}</td>
                             </g:if>
                             <g:else>
                                 <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime))}</td>
                             </g:else>
                             <td class="tpname">${message(code:CoordType.SP.code)}</td>
-                            <g:if test="${show_local_time}">
+                            <g:if test="${testInstance.task.flighttest.flightPlanShowLocalTime}">
 	                            <g:if test="${testInstance.timeCalculated}">
 	                                <td class="tptime">${FcMath.TimeStr(testInstance.startTime)}</td>
 	                            </g:if>
@@ -225,7 +195,7 @@
                         <g:set var="leg_duration" value="${new BigDecimal(0)}" />
                         <g:set var="leg_time" value="${testInstance.startTime}" />
                         <g:set var="total_distance" value="${new BigDecimal(0)}" />
-                        <g:set var="add_tpnum" value="${testInstance.task.flighttest.route.AddTPNum()}" />
+                        <g:set var="add_tpnum" value="${testInstance.task.flighttest.AddTPNum()}" />
                         <g:set var="add_tpnum_index" value="${0}" />
                         <g:set var="add_tpnum_addnum" value="${0}" />
                         
@@ -253,31 +223,31 @@
                                 </g:if>
                                 <tr class="value" id="${testlegflight_instance.coordTitle.titlePrintCode()}">
                                     <td class="num">${leg_no}</td>
-                                    <g:if test="${show_distance}">
+                                    <g:if test="${testInstance.task.flighttest.flightPlanShowLegDistance}">
                                         <td class="distance">${FcMath.DistanceStr(leg_distance)}${message(code:'fc.mile')}</td>
                                     </g:if>
                                     <g:else>
                                         <td class="distance"/>
                                     </g:else>
-                                    <g:if test="${show_truetrack}">
+                                    <g:if test="${testInstance.task.flighttest.flightPlanShowTrueTrack}">
                                         <td class="truetrack"><g:if test="${testlegflight_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${FcMath.GradStr(leg_plantruetrack)}${message(code:'fc.grad')}</td>
                                     </g:if>
                                     <g:else>
                                         <td class="truetrack"/>
                                     </g:else>
-                                    <g:if test="${show_trueheading}">
+                                    <g:if test="${testInstance.task.flighttest.flightPlanShowTrueHeading}">
                                         <td class="trueheading"><g:if test="${testlegflight_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${FcMath.GradStr(leg_plantrueheading)}${message(code:'fc.grad')}</td>
                                     </g:if>
                                     <g:else>
                                         <td class="trueheading"/>
                                     </g:else>
-                                    <g:if test="${show_groundspeed}">
+                                    <g:if test="${testInstance.task.flighttest.flightPlanShowGroundSpeed}">
                                         <td class="groundspeed"><g:if test="${testlegflight_instance.endCurved}">${message(code:'fc.endcurved')}</g:if>${FcMath.SpeedStr_Flight(leg_plangroundspeed)}${message(code:'fc.knot')}</td>
                                     </g:if>
                                     <g:else>
                                         <td class="groundspeed"/>
                                     </g:else>
-                                    <g:if test="${show_elapsed_time}">
+                                    <g:if test="${testInstance.task.flighttest.flightPlanShowElapsedTime}">
                                         <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,leg_time))}</td>
                                     </g:if>
                                     <g:else>
@@ -289,7 +259,7 @@
                                     <g:else>
                                         <td class="tpname">${testlegflight_instance.coordTitle.titlePrintCode()}</td>
                                     </g:else>
-                                    <g:if test="${show_local_time}">
+                                    <g:if test="${testInstance.task.flighttest.flightPlanShowLocalTime}">
                                         <td class="tptime">${FcMath.TimeStr(leg_time)}</td>
 	                                </g:if>
                                 </tr>
@@ -310,14 +280,14 @@
                             <td class="truetrack"/>
                             <td class="trueheading"/> 
                             <td class="groundspeed"/>
-                            <g:if test="${show_elapsed_time}">
+                            <g:if test="${testInstance.task.flighttest.flightPlanShowElapsedTime}">
                                 <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))}</td>
                             </g:if>
                             <g:else>
                                 <td class="legtime">${FcMath.TimeStr(FcMath.TimeDiff(leg_time,testInstance.maxLandingTime))}</td>
                             </g:else>
                             <td class="tpname">${message(code:CoordType.LDG.code)}</td>
-                            <g:if test="${show_local_time}"> 
+                            <g:if test="${testInstance.task.flighttest.flightPlanShowLocalTime}"> 
                                 <td class="tptime">${FcMath.TimeStr(testInstance.maxLandingTime)}</td>
                             </g:if>
                         </tr>
@@ -326,7 +296,7 @@
                         <tr class="summary">
                             <td/>
                             <td class="distance" colspan="4">${FcMath.DistanceStr(total_distance)}${message(code:'fc.mile')} ${message(code:'fc.distance.sp2fp')}</td>
-                            <td class="legtime" colspan="3"><g:if test="${!show_elapsed_time}">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))} ${message(code:'fc.legtime.total')}</g:if></td>
+                            <td class="legtime" colspan="3"><g:if test="${!testInstance.task.flighttest.flightPlanShowElapsedTime}">${FcMath.TimeStr(FcMath.TimeDiff(testInstance.takeoffTime,testInstance.maxLandingTime))} ${message(code:'fc.legtime.total')}</g:if></td>
                         </tr>
                     </tfoot>
                 </table>

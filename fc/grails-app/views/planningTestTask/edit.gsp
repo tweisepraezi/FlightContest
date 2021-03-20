@@ -36,7 +36,7 @@
                                 <p>
                                     <label>${message(code:'fc.route')}*:</label>
                                     <br/>
-                                    <g:select from="${Route.GetOkRoutes(contestInstance)}" optionKey="id" optionValue="${{it.name()}}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
+                                    <g:select from="${Route.GetOkPlanningTestTaskRoutes(contestInstance)}" optionKey="id" optionValue="${{it.GetPlanningTestTaskRouteName()}}" name="route.id" value="${planningTestTaskInstance?.route?.id}" ></g:select>
                                 </p>
                             </fieldset>
                          </g:if>

@@ -17,31 +17,26 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form method="post">
+                        <g:set var="ti" value="${[]+1}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.resultclass.name')}*:</label>
                                 <br/>
-                                <input type="text" id="name" name="name" value="${fieldValue(bean:resultclassInstance,field:'name')}" tabIndex="1"/>
+                                <input type="text" id="name" name="name" value="${fieldValue(bean:resultclassInstance,field:'name')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.resultclass.name.short')}:</label>
                                 <br/>
-                                <input type="text" id="shortName" name="shortName" value="${fieldValue(bean:resultclassInstance,field:'shortName')}" tabIndex="2"/>
+                                <input type="text" id="shortName" name="shortName" value="${fieldValue(bean:resultclassInstance,field:'shortName')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.resultclass.contesttitle')}:</label>
                                 <br/>
-                                <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="3"/>
-                            </p>
-                            <p>
-                                <label>${message(code:'fc.contestrule')}*:</label>
-                                <a href="../docs/help.html#supported-rules" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
-                                <br/>
-                                <g:select from="${ContestRules.GetContestRules()}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" value="${contestInstance.contestRule}" tabIndex="4"/>
+                                <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
-                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="11"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="12"/>
+                        <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

@@ -313,6 +313,36 @@ class RouteTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    def editRouteUseProcedureTurns = { attrs, body ->
+        outln"""<fieldset>"""
+        outln"""    <div>"""
+        checkBox("useProcedureTurns", attrs.route.useProcedureTurns, 'fc.route.useprocedureturns', attrs)
+        outln"""    </div>"""
+        outln"""</fieldset>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def editRouteLiveTrackingScorecard = { attrs, body ->
+        outln"""<fieldset>"""
+        outln"""<p>"""
+        //outln"""    <p class="group">${message(code:'fc.livetracking')}</p>"""
+        outln"""    <label>${message(code:'fc.general.livetrackingscorecard')}:</label>"""
+        outln"""    <br/>"""
+        outln"""    <input type="text" id="liveTrackingScorecard" name="liveTrackingScorecard" value="${fieldValue(bean:attrs.route,field:'liveTrackingScorecard')}" tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""</p>"""
+        outln"""</fieldset>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def editRouteSpecialSettings = { attrs, body ->
+        outln"""<fieldset>"""
+        outln"""    <div>"""
+        checkBox("showCurvedPoints", attrs.route.showCurvedPoints, 'fc.route.showcurvedpoints', attrs)
+        outln"""    </div>"""
+        outln"""</fieldset>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     def editRouteObservations = { attrs, body ->
         outln"""<fieldset>"""
         outln"""    <p class="group">${message(code:'fc.observation.turnpoint')}</p>"""
@@ -418,9 +448,6 @@ class RouteTagLib
         outln"""        <tr>"""
         outln"""            <th>${message(code:'fc.number')}</th>"""
         outln"""            <th>${message(code:'fc.title')}</th>"""
-        if (attrs.route.showAflosMark) {
-            outln"""        <th>${message(code:'fc.aflos.checkpoint')}</th>"""
-        }
         outln"""            <th>${message(code:'fc.latitude')}</th>"""
         outln"""            <th>${message(code:'fc.longitude')}</th>"""
         outln"""            <th>${message(code:'fc.altitude')}</th>"""
@@ -474,9 +501,6 @@ class RouteTagLib
             }
             s += """        </td>"""
             outln s
-            if (attrs.route.showAflosMark) {
-                outln"""    <td style="white-space: nowrap;">${coordroute_instance.mark}</td>"""
-            }
             outln"""        <td style="white-space: nowrap;">${coordroute_instance.latName()}</td>"""
             outln"""        <td style="white-space: nowrap;">${coordroute_instance.lonName()}</td>"""
             outln"""        <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>"""
@@ -558,7 +582,7 @@ class RouteTagLib
                 outln"""<tr class="${(i % 2) == 0 ? 'odd' : ''}">"""
                 String s = """<td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}"""
                 if (routeleg_instance.IsProcedureTurn()) {
-                    if (attrs.route.UseProcedureTurn()) {
+                    if (attrs.route.useProcedureTurns) {
                         s += """ (${message(code:'fc.procedureturn')})"""
                     } else {
                         s += """ (${message(code:'fc.procedureturn.disabled')})"""
@@ -619,7 +643,7 @@ class RouteTagLib
                 outln"""<tr class="${(i % 2) == 0 ? 'odd' : ''}">"""
                 String s = """<td class="center" colspan="6">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}"""
                 if (routeleg_instance.IsProcedureTurn()) {
-                    if (attrs.route.UseProcedureTurn()) {
+                    if (attrs.route.useProcedureTurns) {
                         s += """ (${message(code:'fc.procedureturn')})"""
                     } else {
                         s += """ (${message(code:'fc.procedureturn.disabled')})"""

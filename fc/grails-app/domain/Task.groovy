@@ -87,6 +87,7 @@ class Task
 	Boolean printTimetableJuryFinishPoint    = false // DB-2.3
 	Boolean printTimetableJuryLanding        = true  // DB-2.3
 	Boolean printTimetableJuryArrival        = true  // DB-2.3
+    Boolean printTimetableJurySubmission     = true  // DB-2.21
 	Boolean printTimetableJuryEmptyColumn1   = true  // DB-2.3
 	String printTimetableJuryEmptyTitle1     = ""    // DB-2.3
 	Boolean printTimetableJuryEmptyColumn2   = false // DB-2.3
@@ -95,6 +96,10 @@ class Task
 	String printTimetableJuryEmptyTitle3     = ""    // DB-2.3
 	Boolean printTimetableJuryEmptyColumn4   = false // DB-2.8
 	String printTimetableJuryEmptyTitle4     = ""    // DB-2.8
+    Boolean printTimetableJuryLandingField   = false // DB-2.21
+    Boolean printTimetableJuryReserve1               // DB-2.21 
+    Boolean printTimetableJuryReserve2               // DB-2.21 
+    Boolean printTimetableJuryReserve3               // DB-2.21 
 	Boolean printTimetableJuryLandscape      = true  // DB-2.3
 	Boolean printTimetableJuryA3             = false // DB-2.3
 	
@@ -124,6 +129,11 @@ class Task
     
     String reserve                           = ""    // DB-2.12
 	
+    // Live-Tracking
+    Integer liveTrackingNavigationTaskID     = 0     // DB-2.14
+    String liveTrackingNavigationTaskDate    = ""    // DB-2.15
+    Boolean liveTrackingTracksAvailable      = false // DB-2.15
+    
 	// transient values 
 	static transients = ['printSummaryResults','printPlanningResults','printPlanningResultsScan',
                          'printFlightResults','printFlightMap',
@@ -296,6 +306,32 @@ class Task
         observationTestTurnpointRun(nullable:true)
         observationTestEnroutePhotoRun(nullable:true)
         observationTestEnrouteCanvasRun(nullable:true)
+        
+        // DB-2.14 compatibility
+        liveTrackingNavigationTaskID(nullable:true)
+        
+        // DB-2.15 compatibility
+        liveTrackingNavigationTaskDate(nullable:true, validator:{ val, obj ->
+            if (val && val.size()) {
+                if (val.size() != 10) {
+                    return false
+                }
+                try {
+                    Date t = Date.parse("yyyy-MM-dd",val)
+                } catch(Exception e) {
+                    return false
+                }
+			}
+			return true
+		})
+        liveTrackingTracksAvailable(nullable:true)
+        
+        // DB-2.21 compatibility
+        printTimetableJurySubmission(nullable:true)
+        printTimetableJuryLandingField(nullable:true)
+        printTimetableJuryReserve1(nullable:true)
+        printTimetableJuryReserve2(nullable:true)
+        printTimetableJuryReserve3(nullable:true)
 	}
 
     static mapping = {
@@ -531,6 +567,11 @@ class Task
         return "${getPrintMsg('fc.task')}-${idTitle}"
     }
     
+    String idNameTracking()
+    {
+        return "${getTrackingMsg('fc.task')}-${idTitle}"
+    }
+    
 	String name()
 	{
 		if(title) {
@@ -549,6 +590,15 @@ class Task
         }
     }
     
+    String trackingName()
+    {
+		if(title) {
+			return title
+		} else {
+            return idNameTracking()
+		}
+    }
+    
     String GetName(boolean isPrint)
     {
         if (isPrint) {
@@ -556,6 +606,23 @@ class Task
         } else {
             return printName()
         }
+    }
+    
+    String GetMediaName(Media media)
+    {
+		String name = ""
+        switch (media) {
+            case Media.Screen:
+                name = name()
+                break
+            case Media.Print:
+                name = printName()
+                break
+            case Media.Tracking:
+                name = trackingName()
+                break
+        }
+		return name
     }
     
 	String bestOfName()

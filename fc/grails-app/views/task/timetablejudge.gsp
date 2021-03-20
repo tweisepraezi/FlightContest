@@ -19,69 +19,69 @@
                             <p>
                                 <label>${message(code:'fc.printsubtitle')}:</label>
                                 <br/>
-                                <input type="text" id="printTimetableJuryPrintTitle" name="printTimetableJuryPrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryPrintTitle')}" tabIndex="${ti[0]++}"/>
+                                <input type="text" id="printTimetableJuryPrintTitle" name="printTimetableJuryPrintTitle" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryPrintTitle')}" tabIndex="${ti[0]++}" onkeydown="modify();"/>
                             </p>
                             <p>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryNumber" value="${taskInstance.printTimetableJuryNumber}" />
+                                    <g:checkBox name="printTimetableJuryNumber" value="${taskInstance.printTimetableJuryNumber}" onclick="modify();"/>
                                     <label>${message(code:'fc.number')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryCrew" value="${taskInstance.printTimetableJuryCrew}" />
+                                    <g:checkBox name="printTimetableJuryCrew" value="${taskInstance.printTimetableJuryCrew}" onclick="modify();"/>
                                     <label>${message(code:'fc.crew')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryAircraft" value="${taskInstance.printTimetableJuryAircraft}" />
+                                    <g:checkBox name="printTimetableJuryAircraft" value="${taskInstance.printTimetableJuryAircraft}" onclick="modify();"/>
                                     <label>${message(code:'fc.aircraft')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryAircraftType" value="${taskInstance.printTimetableJuryAircraftType}" />
+                                    <g:checkBox name="printTimetableJuryAircraftType" value="${taskInstance.printTimetableJuryAircraftType}" onclick="modify();"/>
                                     <label>${message(code:'fc.aircraft.type')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryAircraftColour" value="${taskInstance.printTimetableJuryAircraftColour}" />
+                                    <g:checkBox name="printTimetableJuryAircraftColour" value="${taskInstance.printTimetableJuryAircraftColour}" onclick="modify();"/>
                                     <label>${message(code:'fc.aircraft.colour')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryTAS" value="${taskInstance.printTimetableJuryTAS}" />
+                                    <g:checkBox name="printTimetableJuryTAS" value="${taskInstance.printTimetableJuryTAS}" onclick="modify();"/>
                                     <label>${message(code:'fc.tas')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryTeam" value="${taskInstance.printTimetableJuryTeam}" />
+                                    <g:checkBox name="printTimetableJuryTeam" value="${taskInstance.printTimetableJuryTeam}" onclick="modify();"/>
                                     <label>${message(code:'fc.team')}</label>
                                 </div>
                                 <g:if test="${taskInstance.contest.resultClasses}">
 	                                <div>
-	                                    <g:checkBox name="printTimetableJuryClass" value="${taskInstance.printTimetableJuryClass}" />
+	                                    <g:checkBox name="printTimetableJuryClass" value="${taskInstance.printTimetableJuryClass}" onclick="modify();"/>
 	                                    <label>${message(code:'fc.resultclass')}</label>
 	                                </div>
                                     <div>
-                                        <g:checkBox name="printTimetableJuryShortClass" value="${taskInstance.printTimetableJuryShortClass}" />
+                                        <g:checkBox name="printTimetableJuryShortClass" value="${taskInstance.printTimetableJuryShortClass}" onclick="modify();"/>
                                         <label>${message(code:'fc.resultclass.short')}</label>
                                     </div>
                                 </g:if>
                                 <g:if test="${taskInstance.planningTestDuration == 0}">
                                     <div>
-                                        <g:checkBox name="printTimetableJuryPlanning" value="${taskInstance.printTimetableJuryPlanning}" />
+                                        <g:checkBox name="printTimetableJuryPlanning" value="${taskInstance.printTimetableJuryPlanning}" onclick="modify();"/>
                                         <label>${message(code:'fc.test.planning.publish')}</label>
                                     </div>
                                 </g:if>
                                 <g:else>
                                     <div>
-                                        <g:checkBox name="printTimetableJuryPlanning" value="${taskInstance.printTimetableJuryPlanning}" />
+                                        <g:checkBox name="printTimetableJuryPlanning" value="${taskInstance.printTimetableJuryPlanning}" onclick="modify();"/>
                                         <label>${message(code:'fc.test.planning')}</label>
                                     </div>
                                     <div>
-                                        <g:checkBox name="printTimetableJuryPlanningEnd" value="${taskInstance.printTimetableJuryPlanningEnd}" />
+                                        <g:checkBox name="printTimetableJuryPlanningEnd" value="${taskInstance.printTimetableJuryPlanningEnd}" onclick="modify();"/>
                                         <label>${message(code:'fc.test.planning.end')}</label>
                                     </div>
                                 </g:else>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryTakeoff" value="${taskInstance.printTimetableJuryTakeoff}" />
+                                    <g:checkBox name="printTimetableJuryTakeoff" value="${taskInstance.printTimetableJuryTakeoff}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.takeoff')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryStartPoint" value="${taskInstance.printTimetableJuryStartPoint}" />
+                                    <g:checkBox name="printTimetableJuryStartPoint" value="${taskInstance.printTimetableJuryStartPoint}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.startpoint')}</label>
                                 </div>
                                 <g:set var="test_instance" value="${Test.findByTask(taskInstance)}" />
@@ -98,10 +98,10 @@
                                             <div>
                                                 <g:set var="leg_checkpoint" value=",${leg_no},"/>
                                                 <g:if test="${print_timetablejudge_checkpoints.contains(leg_checkpoint)}">
-                                                    <g:checkBox name="${leg_name}" value="${true}" />
+                                                    <g:checkBox name="${leg_name}" value="${true}" onclick="modify();"/>
                                                 </g:if>
                                                 <g:else>
-                                                    <g:checkBox name="${leg_name}" value="${false}" />
+                                                    <g:checkBox name="${leg_name}" value="${false}" onclick="modify();"/>
                                                 </g:else>
                                                 <label>${leg_name}</label>
                                             </div>
@@ -116,71 +116,90 @@
                                     </g:each>
                                 </g:if>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryFinishPoint" value="${taskInstance.printTimetableJuryFinishPoint}" />
+                                    <g:checkBox name="printTimetableJuryFinishPoint" value="${taskInstance.printTimetableJuryFinishPoint}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.finishpoint')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryLanding" value="${taskInstance.printTimetableJuryLanding}" />
+                                    <g:checkBox name="printTimetableJuryLanding" value="${taskInstance.printTimetableJuryLanding}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.landing.latest')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryArrival" value="${taskInstance.printTimetableJuryArrival}" />
+                                    <g:checkBox name="printTimetableJuryArrival" value="${taskInstance.printTimetableJuryArrival}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.arrival')}</label>
                                 </div>
+			                    <g:if test="${taskInstance.flighttest?.submissionMinutes}">
+                                    <div>
+                                        <g:checkBox name="printTimetableJurySubmission" value="${taskInstance.printTimetableJurySubmission}" onclick="modify();"/>
+                                        <label>${message(code:'fc.test.submission.latest2')}</label>
+                                    </div>
+                                </g:if>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryEmptyColumn1" value="${taskInstance.printTimetableJuryEmptyColumn1}" />
+                                    <g:checkBox name="printTimetableJuryEmptyColumn1" value="${taskInstance.printTimetableJuryEmptyColumn1}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.emptycolumn')} 1</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle1" name="printTimetableJuryEmptyTitle1" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle1')}" tabIndex="${ti[0]++}"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle1" name="printTimetableJuryEmptyTitle1" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle1')}" tabIndex="${ti[0]++}" onkeydown="modify();"/>
                                 </p>
                             </p>
                             <p>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryEmptyColumn2" value="${taskInstance.printTimetableJuryEmptyColumn2}" />
+                                    <g:checkBox name="printTimetableJuryEmptyColumn2" value="${taskInstance.printTimetableJuryEmptyColumn2}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.emptycolumn')} 2</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle2" name="printTimetableJuryEmptyTitle2" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle2')}" tabIndex="${ti[0]++}"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle2" name="printTimetableJuryEmptyTitle2" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle2')}" tabIndex="${ti[0]++}" onkeydown="modify();"/>
                                 </p>
                             </p>
                             <p>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryEmptyColumn3" value="${taskInstance.printTimetableJuryEmptyColumn3}" />
+                                    <g:checkBox name="printTimetableJuryEmptyColumn3" value="${taskInstance.printTimetableJuryEmptyColumn3}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.emptycolumn')} 3</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle3" name="printTimetableJuryEmptyTitle3" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle3')}" tabIndex="${ti[0]++}"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle3" name="printTimetableJuryEmptyTitle3" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle3')}" tabIndex="${ti[0]++}" onkeydown="modify();"/>
                                 </p>
                             </p>
                             <p>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryEmptyColumn4" value="${taskInstance.printTimetableJuryEmptyColumn4}" />
+                                    <g:checkBox name="printTimetableJuryEmptyColumn4" value="${taskInstance.printTimetableJuryEmptyColumn4}" onclick="modify();"/>
                                     <label>${message(code:'fc.test.emptycolumn')} 4</label>
                                 </div>
                                 <p>
-                                    <input type="text" id="printTimetableJuryEmptyTitle4" name="printTimetableJuryEmptyTitle4" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle4')}" tabIndex="${ti[0]++}"/>
+                                    <input type="text" id="printTimetableJuryEmptyTitle4" name="printTimetableJuryEmptyTitle4" value="${fieldValue(bean:taskInstance,field:'printTimetableJuryEmptyTitle4')}" tabIndex="${ti[0]++}" onkeydown="modify();"/>
                                 </p>
                             </p>
                             <p>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryLandscape" value="${taskInstance.printTimetableJuryLandscape}" />
+                                    <g:checkBox name="printTimetableJuryLandingField" value="${taskInstance.printTimetableJuryLandingField}" onclick="modify();"/>
+                                    <label>${message(code:'fc.test.landing.field')}</label>
+                                </div>
+                            </p>
+                            <p>
+                                <div>
+                                    <g:checkBox name="printTimetableJuryLandscape" value="${taskInstance.printTimetableJuryLandscape}" onclick="modify();"/>
                                     <label>${message(code:'fc.printlandscape')}</label>
                                 </div>
                                 <div>
-                                    <g:checkBox name="printTimetableJuryA3" value="${taskInstance.printTimetableJuryA3}" />
+                                    <g:checkBox name="printTimetableJuryA3" value="${taskInstance.printTimetableJuryA3}" onclick="modify();"/>
                                     <label>${message(code:'fc.printa3')}</label>
                                 </div>
                             </p>
                             <g:actionSubmit action="updatetimetablejudgesettingsstandard" value="${message(code:'fc.standard')}" tabIndex="${ti[0]++}"/>
-                            <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            <g:if test="${taskInstance.IsPlanningTestRun() && taskInstance.planningTestDuration && taskInstance.preparationDuration}">
+                                <g:actionSubmit action="updatetimetablejudgesettingsplanning" value="${message(code:'fc.planningtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            </g:if>
+                            <g:else>
+                                <g:actionSubmit action="updatetimetablejudgesettingsdocumentsoutput" value="${message(code:'fc.flighttest.documentsoutput.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                            </g:else>
                             <g:actionSubmit action="updatetimetablejudgesettingstower" value="${message(code:'fc.setprintsettings.tower')}" tabIndex="${ti[0]++}"/>
                             <g:if test="${intermediate_tower}">
                                 <g:actionSubmit action="updatetimetablejudgesettingsintermediatetower" value="${message(code:'fc.setprintsettings.tower.intermediate')}" tabIndex="${ti[0]++}"/>
                             </g:if>
-                            <g:actionSubmit action="updatetimetablejudgesettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
-                            <g:if test="${intermediate_landing}">
-                                <g:actionSubmit action="updatetimetablejudgesettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="${ti[0]++}"/>
+                            <g:if test="${taskInstance.IsLandingTestRun()}">
+                                <g:actionSubmit action="updatetimetablejudgesettingslanding" value="${message(code:'fc.landingtest.setprintsettings')}" tabIndex="${ti[0]++}"/>
+                                <g:if test="${intermediate_landing}">
+                                    <g:actionSubmit action="updatetimetablejudgesettingsintermediatelanding" value="${message(code:'fc.landingtest.setprintsettings.intermediate')}" tabIndex="${ti[0]++}"/>
+                                </g:if>
                             </g:if>
                             <g:actionSubmit action="updatetimetablejudgesettingsarrival" value="${message(code:'fc.flighttest.arrival.setprintsettings')}" tabIndex="${ti[0]++}"/>
                             <g:actionSubmit action="updatetimetablejudgesettingsdebriefing" value="${message(code:'fc.flighttest.debriefing.setprintsettings')}" tabIndex="${ti[0]++}"/>
@@ -189,9 +208,15 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
-                        <g:actionSubmit action="savetimetablejudgesettings" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
-                        <g:actionSubmit action="printtimetablejudge" value="${message(code:'fc.print')}"tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="savetimetablejudgesettings" id="savetimetablejudgesettings_id" value="${message(code:'fc.save')}" disabled tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="printtimetablejudge" id="printtimetablejudge_id" value="${message(code:'fc.print')}"tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
+                        <script>
+                            function modify() {
+                                $("#savetimetablejudgesettings_id").prop("disabled", false);
+                                $("#printtimetablejudge_id").prop("disabled", true);
+                            }
+                        </script>
                     </g:form>
                 </div>
             </div>

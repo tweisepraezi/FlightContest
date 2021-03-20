@@ -1,0 +1,51 @@
+
+CalcService.Calculate
+
+Main algorithm
+--------------
+
+1. calculate gate crossings
+    Recognition of the leg: A leg ends when the infinite line of the gate is flown through.
+    Turnpoints > 90°: If a pilot flies past the turnpoint (fly-by), the end of the leg is recognized by one or more auxiliary gates on the new leg.
+    If the finite gate itself is not flown through, it is registered as 'Gate not flown'.
+
+2. calculate bad course
+    - detection of course deviations > 90°
+      The course of each measurement point must be constantly compared with the direction of the current leg.
+      (curved legs for air rallyes are divided into several sub-legs by secret points).
+    
+    - Recognition of procedure turns
+      Immediately after flying through the turnpoint I add up all course changes of the pilot for 180 seconds (procedureturn_track_changes) 
+      and check afterwards if the difference between leg course change and the sum of the pilot course changes is in the range of -60° to 60° (isBadProcedureTurn).
+
+
+Passing gates before starting point
+-----------------------------------
+
+To avoid this problem I‘m looking at first only for SP. If SP has been found I’m looking only for the next CP, and so on…
+If I don’t find a point, I look for the next point.
+
+SP: To detect the flyby, I still have additional gates after SP (after 1 NM, after 1/4 the length of the following leg, and after 1/2 the length of the following leg).
+TP: To detect the flyby, I still have one additional gate 1NM after TP.
+TP with procedure Turn: To detect the flyby, I still have one additional gates after 1/2 the length of the following leg.
+
+SP: I look for gate crossing only with gate width of 4 NM, not with infinite line.
+
+I have my problems to understand my own algorithm today...
+CalcService.calculateGateCrossings()
+onTrackLine – the infinite line crossed
+onGateLine – the gate with gatewidth crossed
+onAdvancedGateLine - the gate with 4NM crossed
+
+Procedure turn and Bad courses detection
+----------------------------------------
+
+But that does not really explain why you do not give penalties for the backtracking that occurred immediately after the procedure turn, just south of TP3? 
+this is before you have detected that the turn has been missed. 
+Do you go back and guess where the gate passing should have occurred so that the contestant is on the leg towards SC7 immediately after the procedure turn?
+
+If I detect a fly-by-gate I tolerate also the course of the new track. 
+For this I use information of the actual, the last and the next gate. 
+Therefore I can ignore “Bad Courses” at a procedure turn turn-point. 
+
+Procedure turns  and bad course will be analyzed after all gate line crossings and fly-bys have been found (see main algorithm)

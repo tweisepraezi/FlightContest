@@ -17,8 +17,34 @@ class ContestMapRoutePointsTagLib
         if (coordrouteInstance) {
             if (coordrouteInstance.type.IsContestMapQuestionCoord()) {
                 String check_title = coordrouteInstance.title()+','
-                boolean checked = attrs.tp.contains(check_title)
+                boolean checked = DisabledCheckPointsTools.Uncompress(attrs.tp).contains(check_title)
                 checkBox("${attrs.tpid}${coordrouteInstance.title()}", coordrouteInstance.titleCode(), checked, attrs)
+            }
+        }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def contestMapCurvedPointsInput = { attrs, body ->
+        Route route_instance = attrs.r
+        CoordRoute last_tp_coordroute_instance
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
+            if (coordroute_instance.endCurved) {
+                inputCurvedCoord(last_tp_coordroute_instance, coordroute_instance, route_instance, attrs)
+            }
+            if (coordroute_instance.type != CoordType.SECRET) {
+                last_tp_coordroute_instance = coordroute_instance
+            }
+        }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    private inputCurvedCoord(CoordRoute lastCoordrouteInstance, CoordRoute coordrouteInstance, Route routeInstance, attrs)
+    {
+        if (coordrouteInstance) {
+            if (coordrouteInstance.type.IsContestMapQuestionCoord()) {
+                String check_title = coordrouteInstance.title()+','
+                boolean checked = DisabledCheckPointsTools.Uncompress(attrs.tp).contains(check_title)
+                checkBox("${attrs.tpid}${coordrouteInstance.title()}", "${lastCoordrouteInstance.titleCode()}...${coordrouteInstance.titleCode()}", checked, attrs)
             }
         }
     }

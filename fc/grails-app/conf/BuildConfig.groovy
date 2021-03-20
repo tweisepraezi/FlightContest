@@ -7,7 +7,7 @@ grails.project.work.dir = "target/work"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 
-grails.project.war.file = "..\\output\\fc.war"
+grails.project.war.file = ".\\output\\fc.war"
 
 
 grails.project.fork = [ 
@@ -44,41 +44,51 @@ grails.project.dependency.resolution = {
 	
 	repositories { 
 		//inherits true // Whether to inherit repository definitions from plugins
-
-		grailsHome() 
-		grailsPlugins() 
-		//mavenLocal() // ~/.m2/repository
-		grailsCentral() 
-		mavenCentral() 
-		// uncomment these (or add new ones) to enable remote dependency resolution from public Maven repositories 
-		//mavenRepo "http://repository.codehaus.org" 
-		//mavenRepo "http://download.java.net/maven/2/" }
-
+        mavenRepo "file://K:/Projects/Grails/maven" // lokal
+        mavenRepo "https://repo1.maven.org/maven2" // mavenCentral()
+        mavenRepo "https://repo.grails.org/grails/core" // Grails
+        mavenRepo "https://repo.grails.org/grails/plugins" // Grails plugins
 	}	
 	
 	dependencies { 
 		// specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g. 
-		//runtime 'mysql:mysql-connector-java:5.1.24' 
-		//compile 'org.springframework.integration:spring-integration-core:2.2.5.RELEASE'
+		//runtime "mysql:mysql-connector-java:5.1.24" 
+		//compile "org.springframework.integration:spring-integration-core:2.2.5.RELEASE"
+        
+        compile "commons-net:commons-net:3.7.2" // https://repo1.maven.org/maven2/commons-net/commons-net
 		
-		compile 'org.xhtmlrenderer:core-renderer:R8'
-		
-		runtime 'com.lowagie:itext:2.0.8' // vorher 2.1.5 
+		compile "org.xhtmlrenderer:core-renderer:R8" // https://repo1.maven.org/maven2/org/xhtmlrenderer/core-renderer
+        
+        // excel import
+        compile "org.apache.poi:poi:4.1.2" // https://repo1.maven.org/maven2/org/apache/poi/
+        compile "org.apache.poi:poi-ooxml:4.1.2" // https://repo1.maven.org/maven2/org/apache/poi/poi-ooxml/
+        
+		runtime "com.lowagie:itext:2.0.8" // https://repo1.maven.org/maven2/com/lowagie/itext, vorher 2.1.5
+        
+        //test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
 	}
 	 
 	plugins {
-		compile "org.grails.plugins:excel-import:1.0.0"
-		compile "org.grails.plugins:joda-time:1.4"
-        compile "org.grails.plugins:mail:1.0.7"
-        compile "org.grails.plugins:quartz:1.0.2"
-		//compile ":poi:3.7"
-		compile "org.grails.plugins:class-diagram:0.5.2"
-		compile "org.grails.plugins:db-util:0.4"
+        // plugins for the compile step
+        //compile ":scaffolding:2.1.2"
+        // compile ":cache:1.1.8"
+        // asset-pipeline 2.0+ requires Java 7, use version 1.9.x with Java 6
+        // compile ":asset-pipeline:2.5.7"
+        
+		compile "org.grails.plugins:joda-time:1.5" // https://repo.grails.org/grails/plugins/org/grails/plugins/joda-time/
+        compile "org.grails.plugins:mail:1.0.7" // https://repo.grails.org/grails/plugins/org/grails/plugins/mail/
+        compile "org.grails.plugins:quartz:1.0.2" // https://repo.grails.org/grails/plugins/org/grails/plugins/quartz/
+		
+		//compile "org.grails.plugins:class-diagram:0.5.2"
+		//compile "org.grails.plugins:db-util:0.4"
+		//compile "org.grails.plugins:excel-import:1.0.0"
         
         // plugins for the build system only
-        build "org.grails.plugins:tomcat:7.0.42"
+        //build "org.grails.plugins:tomcat:7.0.42"
+        build "org.grails.plugins:tomcat:8.0.22" // https://repo.grails.org/grails/plugins/org/grails/plugins/tomcat/
 
 		// plugins needed at runtime but not for compilation
-		runtime "org.grails.plugins:hibernate:3.6.10.2" 
+		// runtime "org.grails.plugins:hibernate:3.6.10.2" 
+        runtime "org.grails.plugins:hibernate4:4.3.10" // https://repo.grails.org/grails/plugins/org/grails/plugins/hibernate/
 	}
 }

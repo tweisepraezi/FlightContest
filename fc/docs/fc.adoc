@@ -1,0 +1,1994 @@
+﻿= Flight Contest
+Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+:revnumber: 3.2.M10
+:revdate:   20.03.2021
+:nofooter:
+:toc-title: Inhaltsverzeichnis
+:toc:
+:lang: de
+
+[[introduction]]
+== Einleitung
+
+Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes der General Aviation 
+und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/oder Landungen aus.
+
+Flight Contest hat ein flexibles Wettbewerbsmanagement. Dazu zählen die Unterstützung:
+
+* unterschiedlicher Wettbewerbsordnungen (FAI, Deutschland, Schweiz, Österreich, erweiterbar) +
+(Anpassung einzelner Auswertungs-Details (Punkte) bei Bedarf möglich)
+* von Wettbewerbsklassen (unterschiedliche Auswertung von Besatzungsgruppen in einem Wettbewerb)
+* kombinierter Wettbewerbe (gleichzeitig stattfindende Wettbewerbe mit einem gemeinsamen Startfeld)
+* paralleler Wettbewerbe (gleichzeitig stattfindende Wettbewerbe mit unabhängigen Startfeldern)
+* der Auswertung besonderer Besatzungs-Gruppen, die ad hoc festgelegt werden können
+
+Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkfähige Open-Source-Datenbank-Anwendung:
+
+* Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Internet Explorer u.a.).
+* Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden.
+* Jeder Benutzer kann dabei seine bevorzugte Bediensprache verwenden (Deutsch, Englisch, erweiterbar).
+* Absturzsicher.
+* Hohe Sicherheit gegen Fehlbedienung.
+
+Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).
+
+Erzeugt OSM-basierte A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.
+
+Erzeugt PDF für Druck und Internet-Veröffentlichung.
+
+Versendet E-Mails der Navigationsflug-Karten an die Teilnehmer.
+
+Unterstützt besondere Streckeneigenschaften:
+
+* Unbekannte Zeitkontrollen
+* Krumme Streckenabschnitte
+* Touch & Go-Landungen
+
+
+Stellt eine Live-Ergebnis-Anzeige (Live Scoring) bereit:
+
+* Anzeige der vorläufigen Rangliste während eines Debriefings
+* Gleichzeitige Veröffentlichung im lokalen Netzwerk und im Internet
+
+Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dateien bereit:
+
+* Offline-Kartenanzeige zur Beurteilung des Navigationsfluges
+* Online-Kartenanzeige mit Open Street Map
+* Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien
+
+<<<
+[[manuals]]
+== Bedienungsanleitungen
+* link:manuals/FC-Manual.pdf[Bedienungsanleitung^]
+* link:manuals/FC-Manual_en.pdf[Bedienungsanleitung (englisch)^]
+* link:manuals/FC-Manual-Observations.pdf[Anleitung Beobachtungen^]
+
+[[supported-rules]]
+== Unterstützte Regelwerke
+
+* link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020^]
+* link:rules/DE_Navigationsflug_2017.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
+* link:rules/FAI_rally_flying_rules_2020.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_precision_flying_rules_2020.pdf[FAI Precision Flying^]
+* link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft^]
+* link:rules/AT_Motorflug_2017.pdf#page=17[Präzisionsflug-Reglement Österreich^]
+* link:rules/AT_Motorflug_2017.pdf#page=30[Navigationsflug-Reglement Österreich^]
+
+<<<
+[[default-competition]]
+== Standard-Wettbewerbsablauf / Zu erledigende Aufgaben
+
+_Ausrichter des Wettbewerbes_ +
+*Auswerte-Schiedsrichter*
+
+[upperalpha]
+. Vor Wettbewerbstag
+
+[arabic]
+.. _Wettbewerbsstrecke ausarbeiten_ +
+   (Koordinaten, Karten, Bilder, Bodenzeichen, Funk, Wendeschleifen, Unbekannte Zeitkontrollen)
+   
+.. _An- u. Abflugstrecke ausarbeiten_ +
+   (Entfernungen/Zeit-Bedarf, Karten, Funk, Tower-Kommunikation)
+
+.. _Streckenkonstruktions-Beschreibung ausarbeiten_ +
+    (wenn Planungstest Streckenkonstruktion beinhaltet)
+
+.. _Unterlagenumschläge vorbereiten_ +
+   (Karten, Bilder,  An- u. Abflugstrecke, Funk-Frequenzen, ggf. Beschreibung Streckenkonstruktion)
+   
+.. *Strecke importieren und auf Plausibilität prüfen* +
+   (Wendeschleifen, Exaktheit der Koordinaten)
+
+.. *Vorläufigen Zeitplan des Wettbewerbstages berechnen* +
+   (angenommene Start-/Landerichtung, ohne Wind)
+
+[upperalpha, start=2]
+. Am Wettbewerbstag
+
+[arabic, start=7]
+.. *Zeitplan des Wettbewerbstages berechnen* +
+   (unter Berücksichtigung der festgelegten Start-/Landerichtung und des festgelegten Windes)
+   
+.. *Zeitpläne u. Auswertelisten für Aushang u. verschiedene Schiedsrichter drucken*
+*** Übersichts- und Besatzungszeitplan für Aushang
+*** Besatzungsliste für Loggerausgabe
+*** Schiedsrichter-Zeitplan für Tower (Flugzeug, Takeoff-Zeit, Späteste Landezeit)
+*** Schiedsrichter-Zeitplan für Vorbereitungsraum (Besatzung, Flugzeug, Ausgabezeit)
+*** Schiedsrichter-Zeitplan für Landungen (Flugzeug, Späteste Landezeit)
+*** Schiedsrichter-Zeitplan für Unterlagenabgabe (Flugzeug, Späteste Landezeit, Parken)
+
+.. *Besatzungsspezifische Daten drucken*
+*** Label für Unterlagenumschläge
+*** Eingabeformulare für Planungstest
+*** Auswerteformulare für Beobachtungen
+*** Flugpläne
+
+.. _Loggerausgabe_
+*** Logger einschalten
+*** Logger-Nummer dokumentieren
+
+.. _Unterlagenumschläge komplettieren_
+*** Besatzungsspezifische Label aufkleben
+*** Besatzungsspezifische Eingabeformulare für Planungstest hinzufügen
+*** Besatzungsspezifische Auswerteformulare für Beobachtungen hinzufügen
+
+.. _Briefing_
+*** Strecke (Wendeschleifen, Unbekannte Zeitkontrollen, An-/Abflugverfahren, Funk, Tower-Kommunikation)
+*** Ablauf (Unterlagenausgabe, Auswerteformular-/Loggerabgabe nach Ankunft, Ergebnis-Entgegennahme)
+*** Wetter
+
+.. _Vorbereitungsraum für Planungstest und Flugvorbereitung koordinieren_
+*** Unterlagenumschlag-Ausgabe
+*** Rücknahme Planungstest-Eingabeformulare
+*** Besatzungsspezifischen Flugplan ausgeben
+*** Zeit des Verlassens des Vorbereitungsraumes dokumentieren
+
+.. *Planungstest auswerten*
+*** Planungstestformular scannen und importieren
+*** Dateneingabe Planungstest
+
+.. _Eingeschalter Logger bei abfliegenden Besatzungen prüfen_
+
+.. _Landungen vermessen_
+*** Landefeld dokumentieren (0, Feld-Name, Out)
+*** Abnormale Landung dokumentieren
+*** Lande-Ergebnis kontinuierlich an Auswerte-Schiedsrichter übermitteln
+
+.. _Ankommende Besatzungen koordinieren_
+*** Überwachung der Zeit für Komplettierung des Auswerteformulares
+*** Auswerteformular und Logger entgegennehmen
+*** Transport von Auswerteformular und Logger zum Auswerte-Schiedsrichter
+
+.. *Landungen und Navigationsflug auswerten*
+*** Dateneingabe Landungen
+*** Loggerauswertung
+*** Beobachtungs-Auswerteformular scannen und importieren
+*** Dateneingabe Beobachtungen
+*** Ergebnis für Besatzung drucken und übergeben
+*** Live-Auswertung aktualisieren
+
+.. _Ergebnisse verteilen_
+*** Ergebnisse vom Auswerte-Schiedsrichter abholen
+*** Ergebnisse kontinuierlich an Besatzungen übergeben
+*** Rückfragen der Besatzungen entgegennehmen u. entscheiden
+*** Korrekturen an Auswerte-Schiedsrichter übergeben
+
+.. *Endauswertung*
+*** Korrekturen auf Rückfragen der Besatzungen verarbeiten
+*** Endgültige Landeliste verarbeiten
+*** Endauswertung erstellen
+
+.. _Urkunden erstellen_
+
+.. _Siegerehrung_
+
+<<<
+[[hints]]
+== Bedien-Tipps
+
+- Fett markierte Texte und Zahlen sowie das Zeichen '...' sind Links, 
+  hinter denen sich weitere Daten verbergen.
+- Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
+  wodurch das Drücken der Shift-Taste nicht notwendig ist.
+- Bei der Eingabe gebrochener Zahlen kann anstelle des "," auch ein '.' benutzt 
+  werden.
+- Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben 
+  eingegeben werden, wodurch das Drücken der Shift-Taste nicht notwendig ist.
+- Bei der Eingabe von Landemesswerten kann der Landemesswert "out" für Landungen
+  außerhalb der Landebox und "no" für keine Landung eingegeben werden, um
+  diese Fehler ohne Maus-Bedienung einzugeben. 
+
+<<<
+[[response-to-modifications]]
+== Änderungen bei Wettbewerbs-Durchführung
+Besatzung nimmt kurzfritig nicht teil::
+Besatzung deaktivieren (Besatzungen) +
+Zeitplan bleibt unverändert.
+  
+Besatzung kann nicht wie geplant starten::
+  Besatzung ans Ende der Aufgabe schieben (Planung) +
+  Für die betroffene Besatzung wird ein neuer Flugplan berechnet.
+  
+Starts verschieben sich zeitlich::
+  Anfangszeit betroffener Besatzungen korrigieren (Planung) +
+  Für die betroffenen Besatzungen wird ein neuer Flugplan berechnet.
+  
+Flugwind ändert sich im Laufe der Starts::
+  Verbliebenen Besatzungen anderen Flugwind zuweisen (Planung) +
+  Für die verbliebenen Besatzungen wird ein neuer Flugplan berechnet.
+
+Planungstest soll mit einem anderen Wind als dem ursprünglich vorgegeben Wind bewertet werden::
+  Dem Planungstest eine neue Planungsaufgabe mit anderem Wind zuweisen
+  und Besatzung diese neue Planungsaufgabe zuweisen (Planung)
+
+TAS einer Besatzung ändert sich, nachdem bereits Planungstests und Flugpläne berechnet wurden::
+  Nach Änderung der TAS einer Besatzung die Besatzung 
+  markieren und einmal nach unten und oben schieben (Planung) +
+  Geänderte TAS wird in die Aufgabe übernommen. +
+  Planungstest wird sofort neu berechnet. +
+  Flugplan wird mit 'Zeitplan berechnen' neu berechnet. +
+  Hierbei können Warnungen für Folgeflugzeuge entstehen.
+  Ggf. Besatzung ans Ende der Aufgabe schieben.
+
+Besatzung muß wegen Defekt das Flugzeug wechseln::
+  Besatzung das neue Flugzeug und ggf. eine andere TAS zuweisen (Besatzungen) +
+  Neues Flugzeug und neue TAS wird bei neuen Aufgaben verwendet. +
+  Bei den erledigten Aufgaben bleiben altes Flugzeug und alte TAS unverändert.
+
+Wendepunkt-Überflugzeit einer Aufgabe soll nicht gewertet werden::
+  'Zeitauswertung' des Wendepunktes deaktivieren (Ergebnisse -> Check-Punkte deaktivieren) +
+  Bewirkt Neuberechnung des Ergebnisses.
+  
+Unbekannte Zeitkontrolle einer Aufgabe soll nicht gewertet werden::
+  'Zeitauswertung' und 'Tor verfehlt' der unbekannten Zeitkontrolle
+     deaktivieren (Ergebnisse -> Check-Punkte deaktivieren) +
+  Bewirkt Neuberechnung des Ergebnisses.
+
+Zeitplan einer Aufgabe neu berechnen::
+  'Reihenfolge zurücksetzen' und 'Zeitplan berechnen' nacheinander ausführen +
+  Löscht alle Flugpläne und setzt die Reihenfolge der Besatzungen
+  auf die Reihenfolge in der Besatzungsliste. +
+  Anfangszeiten aller Besatzungen und Flugpläne werden neu berechnet.
+
+  
+<<<
+[[create-crew-list]]
+== Besatzungsliste erstellen
+
+Besatzungslisten werden mit Excel erstellt. +
+Verwenden Sie die Vorlage link:samples/FC-CrewList-Sample.xlsx[FC-CrewList-Sample.xlsx^], deren Aufbau einen erfolgreichen Import sicherstellt.
+
+Die Liste erfasst folgende Daten:
+
+* Nr. (Start-Nummer) (optional)
+* Pilot (Vorname, Nachname und optionaler E-Mail)
+* Navigator (optional, mit Vorname, Nachname und optionaler E-Mail)
+* Mannschaft (optional)
+* Klasse (für Wettbewerbe mit unterschiedlichen Auswerte-Klassen)
+* TAS (kn)
+* Flugzeug-Kennzeichen
+* Flugzeug-Typ (optional)
+* Flugzeug-Farbe (optional)
+* Tracker-ID (für Wettbewerbe mit Live-Tracking)
+
+Diese Liste muss am Wettbewerbstag vorliegen (Sortierung nicht notwendig).
+
+Start-Nummern nur angegeben, wenn eine besondere Nummerierung benötigt wird.
+Nicht angegebene Start-Nummern erhalten beim Import automatisch eine Nummer
+(die jeweils erste Nummer nach der höchsten existierenden Nummer).
+
+Diese Vorlage kann auch zur Planung anderer Belange des Wettbewerbes 
+(Hotel, Kontaktdaten) verwendet werden. Dazu dürfen Spalten, Zeilen und
+Tabellenblätter nach folgenden Regeln eingefügt werden:
+
+* Beliebig viele weitere Spalten am Ende (nach der Spalte 'Tracker-ID')
+* Beliebig viele weitere Zeilen nach einer der letzten zu importierenden
+  Besatzung folgenden Leerzeile
+* Beliebig viele Tabellenblätter an beliebigen Positionen.
+  Importiert werden nur Daten aus dem Tabellenblatt 'Crews'.
+
+Besatzungslisten werden mit 'Besatzungen -> Import Excel-Besatzungsliste' in die
+'Flight Contest'-Datenbank aufgenommen. 
+Bei angegebener Option "Start-Nr. weglassen" werden die angegebenen Nummern 
+nicht verwendet bzw. bei Angabe durch eine andere Startnummer ersetzt.
+Die angegebenen Nummern können unter 'Wettbewerb -> Vorgaben' konfiguriert
+werden (Standard: '13').
+
+Importiert werden nur Besatzungsnamen (Pilot + Navigator), die noch nicht in der 
+'Flight Contest'-Datenbank vorhanden sind. Korrekturen bereits importierter
+Besatzungsnamen (Pilot oder Navigator) bewirken den erneuten Import der Besatzung 
+mit Zuordnung einer weiteren Start-Nummer. Korrigieren Sie deshalb Besatzungen nach
+einem Import nur noch in 'Flight Contest'.
+
+<<<
+[[route-planning]]
+== Streckenplanung
+
+<<fc.adoc#route-planning-definitions>> +
+<<fc.adoc#route-planning-mandatory-details>> +
+<<fc.adoc#route-planning-input>> +
+<<fc.adoc#route-planning-import>> +
+<<fc.adoc#route-planning-google-earth>> +
+<<fc.adoc#route-planning-google-earth-add-secret>> +
+<<fc.adoc#route-planning-verify>> +
+<<fc.adoc#route-planning-deliver>> +
+<<fc.adoc#route-planning-errors>>
+
+[[route-planning-definitions]]
+=== Definitionen
+
+Startpunkt (SP), Check-Punkte (CP) und Endpunkt (FP = Finish point)
+sind Logger-Messpunkte einer Strecke, wo Überflugzeit und Flughöhe gemessen
+sowie vorangegangene Kursänderungen >= 90 Grad festgestellt werden.
+
+Wendepunkte (WP o. TP = Turn point) sind Check-Punkte,
+wo eine Kursänderung erfolgt und die im Flugplan einer Besatzung stehen.
+
+Unbekannte Zeitkontrollen (UZK o. SC) sind Check-Punkte für 
+Zeitmessungen auf der Strecke, die nicht im Flugplan einer Besatzung stehen.
+
+Takeoff (TO) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
+der Einhaltung des Takeoff-Zeitfensters gemessen wird.
+
+Landung (LDG) ist ein Check-Punkt, wo die Überflugzeit zur Auswertung
+der Einhaltung der spätesten Landezeit gemessen wird.
+
+Intermediate-Punkte sind Konstruktionspunkte für eine Zwischenlandung.
+Beim Intermediate-Endpunkt (iFP) und Intermediate-Startpunkt (iSP) werden
+Überflugzeit und Flughöhe gemessen und ausgewertet. 
+Intermediate-Landung (iLDG) und Intermediate-Takeoff (iTO) dienen nur
+zur Anzeige im Flugplan einer Besatzung.
+Bei einer Touch&Go-Zwischenlandung ist auf iTO zu verzichten.
+
+[[route-planning-mandatory-details]]
+=== Erforderliche Angaben für eine Wettbewerbsstrecke
+
+In einer Wettbewerbs-Karte sind Startpunkt, Wendepunkte und Endpunkt 
+einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:
+
+[%autowidth]
+|===
+|Wettbewerbssprache|Check-Punkt-Bezeichnungen
+
+|Deutsch|SP, WP1, WP2, ..., FP
+|Englisch|SP, TP1, TP2, ..., FP
+|===
+
+Intermediate-Punkte sind mit folgenden Bezeichnungen anzugeben:
+  iFP, iLDG, iTO, iSP
+  
+Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig:
+
+* Koordinaten
+* Minimale Flug-Höhe über Normal-Null (Altitude, in ft)
++ 
+TO, LDG, iTO, iLDG: 0 ft
+* Tor-Breite (in NM)
++
+TO, LDG, iTO, iLDG: 0.02 NM (entspr. Landebahn-Breite)
++
+UZK: 2 NM (für Wettbewerb nach dt. Regelwerk, sonst 1 NM)
++
+sonst: 1 NM
+* Tor-Richtung für TO, LDG, iTO, iLDG (in Grad)
+* Für präzise Übereinstimmung der ausgegebenen gedruckten Wettbewerbs-Karte 
+  mit den zu verarbeitenden Daten müssen bei Präzisionsflug-Wettbewerben 
+  Entfernungen auf der Wettbewerbs-Karte gemessen und bei jedem Check-Punkt
+  ins Feld 'Entfernungsmessung (Karte) [mm]' eingetragen werden. Dabei 
+  wird die Entfernung vom vorangegangenen Wendepunkt in mm 
+  (für eine Karte mit dem Wettbewerbs-Maßstab 1:200000) eingetragen.
+  Der vorangegangene Wendepunkt ist ein Check-Punkt, der keine 
+  unbekannte Zeitkontrolle ist.
+* Für krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. Diese sind 
+  als UZK mit folgenden Angaben einzugeben:
+** Tor-Breite >= 2 NM, damit Abweichungen nicht zu viele manuell 
+	  nachzuprüfende Logger-Fehler verursachen.
+** Keine Zeitauswertung
+** Keine Torauswertung
+** Kein Flugplanungstest
+* Der Wendepunkt, mit dem die krumme Strecke endet, ist mit folgenden Angaben
+  einzugeben:
+** Kein Flugplanungstest, damit die krumme Strecke nicht im 
+	  Flugplanungstest enthalten ist
+** Check-Punkt nach krummer Strecke
++
+Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
+auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke. 
+  
+* Für Zwischenlandungen sind für iLDG und iTO folgenden Angaben einzugeben:
+** Tor-Breite 0.02 NM (entspr. Landebahn-Breite)
+** Tor-Richtung (in Grad)
+** Keine Zeitauswertung
+** Keine Torauswertung
+** Kein Flugplanungstest
+** Feste Flugzeit für Zwischenlandung mit Pause (in min)
+
+<<<
+Einzugebende Eigenschaften der Check-Punkte einer Strecke:
+----
+  Punkt                       Check-       Gate              in         Auswertung   
+                              Punkt        Breite  Richtung  Flugplan   Zeit Kurs Höhe
+							  
+  Takeoff                     TO           0.02    250       ja         ja   nein nein
+  Startpunkt                  SP           1       -         ja         ja   nein ja
+  Wendepunkt                  WP1          1       -         ja         ja   ja   ja
+  Unbekannte Zeitkontrolle    UZK1         2       -         nein       ja   ja   ja
+  Touch&Go-Landung            iFP          1       -         ja         ja   ja   ja
+                              iLDG  (1,2)  0.02    250       ja         nein nein nein
+                              iSP   (2)    1       -         ja         ja   nein ja
+  Krummer Streckenabschnitt   UZK2  (1,2)  2       -         nein       nein ja   ja
+                              WP2   (2,3)  1       -         ja         ja   ja   ja
+  Finalpunkt                  FP           1       -         ja         ja   ja   ja
+  Landung                     LDG          0.02    250       ja         ja   nein nein
+
+  (1) Keine Zeitauswertung, Keine Torauswertung
+  (2) Kein Flugplanungstest
+  (3) Check-Punkt nach krummer Strecke
+----
+  
+----
+  Strecken-Beispiele          Check-      Gate              in         Auswertung   
+                              Punkt       Breite  Richtung  Flugplan   Zeit Kurs Höhe
+
+  Normal                      TO          0.02    250       ja         ja   nein nein
+                              SP          1       -         ja         ja   nein ja
+                              WP1         1       -         ja         ja   ja   ja
+                              WP2         1       -         ja         ja   ja   ja
+                              WP3         1       -         ja         ja   ja   ja
+                              WP4         1       -         ja         ja   ja   ja
+                              FP          1       -         ja         ja   ja   ja
+                              LDG         0.02    250       ja         ja   nein nein
+                                             
+  Unbekannte Zeitkontrollen   TO          0.02    250       ja         ja   nein nein
+                              SP          1       -         ja         ja   nein ja
+                              WP1         1       -         ja         ja   ja   ja
+                              UZK1        2       -         nein       ja   ja   ja
+                              UZK2        2       -         nein       ja   ja   ja
+                              WP2         1       -         ja         ja   ja   ja
+                              FP          1       -         ja         ja   ja   ja
+                              LDG         0.02    250       ja         ja   nein nein
+                                             
+  Touch&Go-Zwischenlandung    TO          0.02    250       ja         ja   nein nein
+                              SP          1       -         ja         ja   nein ja
+                              WP1         1       -         ja         ja   ja   ja
+                              iFP         1       -         ja         ja   ja   ja
+                              iLDG (1,2)  0.02    250       ja         nein nein nein
+                              iSP  (2)    1       -         ja         ja   nein ja
+                              WP2         1       -         ja         ja   ja   ja
+                              FP          1       -         ja         ja   ja   ja
+                              LDG         0.02    250       ja         ja   nein nein
+  
+  Zwischenlandung mit Pause   TO          0.02    250       ja         ja   nein nein
+                              SP          1       -         ja         ja   nein ja
+                              WP1         1       -         ja         ja   ja   ja
+                              iFP         1       -         ja         ja   ja   ja
+                              iLDG (1,2)  0.02    250       ja         nein nein nein
+                              iTO  (1,2)  0.02    250       ja         nein nein nein
+                              iSP  (2)    1       -         ja         ja   nein ja
+                              WP2         1       -         ja         ja   ja   ja
+                              FP          1       -         ja         ja   ja   ja
+                              LDG         0.02    250       ja         ja   nein nein
+  
+  Krumme Strecke              TO          0.02    250       ja         ja   nein nein
+                              SP          1       -         ja         ja   nein ja
+                              WP1         1       -         ja         ja   ja   ja
+                              UZK1 (1,2)  2       -         nein       nein ja   ja
+                              UZK2 (1,2)  2       -         nein       nein ja   ja
+                              WP2  (2,3)  1       -         ja         ja   ja   ja
+                              FP          1       -         ja         ja   ja   ja
+                              LDG         0.02    250       ja         ja   nein nein
+----
+
+[[route-planning-input]]
+=== Eingabe von Wettbewerbsstrecken
+
+Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur 
+nacheinander eingeben werden können und das Einfügen von Check-Punkten nicht möglich ist. 
+Alle Eigenschaften bis auf den Check-Punkt-Typ sind bis zur ersten Nutzung änderbar.
+Flug-Höhe und Tor-Breite sind auch nach der ersten Nutzung änderbar.
+
+Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon 
+auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Check-Punkte mit 
+"Koordinaten importieren" aus einer Text-Datei hinzugefügt werden (einschl. Eigenschaften):
+  
+ TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+ SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+ TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+ SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+ TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+ iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+ iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
+ iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+ TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+ TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+ FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+ LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
+
+Check-Punkt (engl.), Latitude, Longitude, Altitude, Gate-Richtung und -Breite, u.a.
+
+Zulässige Koordinaten-Darstellungen entspr. Wettbewerbseinstellung.
+  
+Import von Beobachtungen aus Text-Dateien (siehe 'Programme -> Flight Contest -> Anleitung Beobachtungen' 
+-> Kapitel "Beobachtungsauswertung konfigurieren")
+  
+Der Strecken-Ausdruck (Strecke -> Druck) enthält die Text-Darstellungen aller Check-Punkte
+und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet werden können:
+
+* Strecken-Koordinaten (Export)
+* Wendepunkt-Zeichen (Export)
+* Strecken-Fotos (Export)
+* Strecken-Bodenzeichen (Export)
+
+[[route-planning-import]]
+=== Import von Wettbewerbsstrecken
+
+Mit 'Strecken -> Import Strecke' können Strecken folgender Formate auch importiert werden:
+
+* GPX-Datei, die von einem Fremd-Programm (z.B. 'Flight Planner') erzeugt wurde.
++
+Darf nur genau eine Strecke (<rte>...</ret>) beinhalten.
++
+Muss Höhenangaben beinhalten (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
+
+* KML- oder KMZ-Datei, die von einem Fremd-Programm erzeugt wurde.
+
+* REF-Datei, die aus einer AFLOS-Referenzstrecke erzeugt wurde.
+
+* TXT-Datei (UTF-8), die pro Zeile eine Koordinate mit folgendem Aufbau enthält:
++
+Latitude, Longitude, Altitude
++
+Beispiele für verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):
+
+ Lat 52.20167°, Lon 16.76500°, Alt 1243ft
+ Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft
++ 
+Werte mit Komma getrennt (Leerzeichen vor Präfix und nach Einheit werden ignoriert)
++
+Leerzeilen und Zeilen, die mit # beginnen, werden ignoriert
+
+[[route-planning-google-earth]]
+=== Wettbewerbsstrecken mit Google Earth Pro erstellen
+
+[upperalpha]
+. Eingabe (Google Earth Pro)
+
+[arabic]
+.. Speichern Sie link:samples/FC-Route-Sample.kmz[FC-Route-Sample.kmz^] auf Ihren Computer
+
+.. Öffnen Sie 'FC-Route-Sample.kmz' auf Ihrem Computer mit 'Google Earth Pro'
+
+.. Öffnen Sie bei Bedarf Luftraum-Daten (C:\FCSave\.geodata\airspaces.kmz) +
+   (zur Installation hier zu finden: https://my.hidrive.com/share/vobbr89etw#$/Geodata)
+
+.. Check-Punkte eingeben
+
+- Klicken Sie den Ordner *Route* an und fügen Sie einen 'Pfad' hinzu. +
+Es öffnet sich der 'Pfad bearbeiten'-Dialog. Name des Pfades entspr. Streckenbezeichnung festlegen. +
+Bei weiter geöffnetem 'Pfad bearbeiten'-Dialog im Grafikbereich mit Linksklick alle Check-Punkte (TO, SP, WP1, WP2, ..., FP, LDG) der Strecke ohne UZKs nacheinander hinzufügen. +
+Die Position muss hier noch nicht genau stimmen. Deren Genauigkeit kann im Nachhinein korrigiert werden. +
+'Pfad bearbeiten'-Dialog beenden
+
+- Ändern der Position eines Check-Punktes: +
+Zum gewünschten Check-Punkt im Grafikbereich navigieren +
+Kontektmenü 'Eigenschaften' des Pfades aufrufen +
+Bei geöffnetem 'Pfad bearbeiten'-Dialog mit der linken Maustaste Check-Punkt anfassen und zur gewünschten Position ziehen +
+'Pfad bearbeiten'-Dialog beenden
+
+- Unbekannte Zeitkontrollen oder krumme Streckenverläufe können nach dem Strecken-Import hinzugefügt werden.
+
+.. Strecken-Fotos eingeben
+
+- Klicken Sie den Ordner *Photos* an und fügen Sie je Strecken-Photo eine 'Ortsmarkierung' hinzu. +
+Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung entspr. Bildbezeichnung (laufende/r Zahl oder Buchstabe) festlegen (kann nach Import geändert werden) +
+Position der Ortsmarkierung im Grafikbereich auf das gewünschte Objekt schieben + 
+'Ortsmarkierung'-Dialog beenden
+
+.. Strecken-Bodenzeichen hinzufügen
+
+- Klicken Sie den Ordner *Canvas* an und fügen Sie je Strecken-Bodenzeichen eine 'Ortsmarkierung' hinzu. +
+Es öffnet sich der 'Ortsmarkierung'-Dialog. Name der Ortsmarkierung mit 'S01' bis 'S15' festlegen (kann nach Import geändert werden) +
+Position der Ortsmarkierung im Grafikbereich auf die gewünschte Auslegestelle schieben +
+'Ortsmarkierung'-Dialog beenden
+
+.. Speichern Sie 'FC-Route-Sample.kmz' mit Kontextmenü 'Ort speichern unter' mit Ihrer Streckenbezeichung ab
+
+[upperalpha, start=2]
+. Strecken-Import (Flight Contest)
+
+[arabic, start=7]
+.. Strecken -> Import Strecke
+*** Abgespeicherte kmz-Datei auswählen
+*** Verzeichnisname in kml/kmz-Datei: *Route* eintragen
+*** 'Import' anklicken
+
+.. Strecken -> Strecke -> Strecken-Fotos importieren
+*** Abgespeicherte kmz-Datei auswählen
+*** Verzeichnisname in kml/kmz-Datei: *Photos* eintragen
+*** 'Import' anklicken
+	
+.. Strecken -> Strecke -> Strecken-Bodenzeichen importieren
+*** Abgespeicherte kmz-Datei auswählen
+*** Verzeichnisname in kml/kmz-Datei: *Canvas* eintragen
+*** 'Import' anklicken
+
+[[route-planning-google-earth-add-secret]]
+=== UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen
+
+. Strecke exportieren (Strecke -> *KMZ-Export*) und mit *Google Earth Pro* öffnen
+. Zum Knoten 'Dateiname.kmz -> Streckenname -> Strecken-Export -> *turnpoints*' navigieren
+. Wendepunkt anklicken, nach dem UZKs oder ein krummer Streckenabschnitt hinzugefügt werden soll
+
+- Kontexmenüpunkt "Kopieren" ausführen +
+Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benötigter UZKs) +
+"Eigenschaften" der hinzufügten Punkte im 'Ortsmarkierung'-Dialog bearbeiten:
+
+*** Im Name-Feld Check-Punkt-Bezeichnung und Gate-Breite anpassen +
+(TP -> SC, z.B. "TP1, Gate 1.0NM" -> "SC1, Gate 2.0NM")
+*** Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gewünschten Position ziehen
+*** 'Ortsmarkierung'-Dialog beenden
+
+. 'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern
+
+. Import der korrigierten Strecke (Strecke -> *Import FC-Strecke*)
+
+[[route-planning-verify]]
+=== Prüfen der Wettbewerbsstrecke
+
+Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
+
+* OSM-Online-Karte: 
+** Check-Punkte an den korrekten Stellen?
+* Auswerte-Etappen:
+** Entfernungen plausibel?
+** Gesamt-Entfernung plausibel?
+** Wendeschleifen (Kursänderungen > 90 Grad) korrekt?
+
+[[route-planning-deliver]]
+=== Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter
+
+Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' oder 'KMZ-Export'
+zur Weitergabe an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
+in sein 'Flight Contest' zur Nutzung importieren kann.
+
+[[route-planning-errors]]
+=== Fehlermeldungen in Streckendetails
+
+Sind Strecken unvollständig oder abweichend vom gewählten Regelwerk konfiguriert,
+erscheinen in der Streckenliste vor dem Strecken-Titel ein ! 
+und in den Streckendetails rot markierte Fehlerausschriften.
+
+Unbekannte letzte Wendepunkte::
+Einige letzte Wendepunkte von Strecken-Fotos oder -Bodenzeichen konnten nicht berechnet werden. +
+Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.
+
+Etappen-Anzahl zu klein::
+'Min. Streckenabschnitte' verkleinern (Wettbewerb -> Vorgaben)
+
+Etappen-Anzahl zu groß::
+'Max. Streckenabschnitte' vergrößern (Wettbewerb -> Vorgaben)
+
+Foto-Anzahl zu klein::
+'Strecken-Foto-Beobachtungen -> Definition' mit 'Keine' einstellen (Bearbeiten) oder +
+'Min. Strecken-Fotos' verkleinern (Wettbewerb -> Vorgaben)
+
+Bodenzeichen-Anzahl zu klein::
+'Strecken-Bodenzeichen-Beobachtungen -> Definition' mit 'Keine' einstellen (Bearbeiten) oder +
+'Min. Strecken-Bodenzeichen' verkleinern (Wettbewerb -> Vorgaben)
+
+Foto+Bodenzeichen-Anzahl zu klein::
+'Min. Strecken-Fotos+Bodenzeichen' verkleinern (Wettbewerb -> Vorgaben)
+
+Foto-Anzahl zu groß::
+'Max. Strecken-Fotos' vergrößern (Wettbewerb -> Vorgaben)
+
+Bodenzeichen-Anzahl zu groß::
+'Max. Strecken-Bodenzeichen' vergrößern (Wettbewerb -> Vorgaben)
+
+Foto+Bodenzeichen-Anzahl zu groß::
+'Max. Strecken-Fotos+Bodenzeichen' vergrößern (Wettbewerb -> Vorgaben)
+
+Kartenentfernungen abweichend::
+Interner Datenfehler +
+'Etappen neu berechnen' ausführen
+
+Koordinaten-Wendeschleifen abweichend::
+Interner Datenfehler +
+'Etappen neu berechnen' ausführen
+
+<<<
+[[osm-contest-map]]
+== OSM-Wettbewerbs-Karte
+
+Mit 'Strecken -> Strecke -> OSM-Wettbewerbs-Karte' kann eine PDF-Wettbewerbskarte 
+im Maßstab 1:200000 oder 1:250000 mit Hilfe eines eigenen Druckserver im TÜK200-Stil erzeugt werden. 
+
+Nutzung der Karten: +
+Die Nutzung des Kartenmaterials erfolgt auf eigene Gefahr. Das Kartenmaterial kann Fehler enthalten oder unzureichend sein.
+Die Ersteller dieser Karten übernehmen keinerlei Gewährleistung oder Haftung für Schäden, die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.
+
+Lizenzbedingungen des Kartendaten: +
+Map data © OpenStreetMap contributors (ODbL). +
+Die dargestellten Kartenobjekte basieren auf den Daten des OpenStreetMap-Projektes. 
+OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und ermöglicht es, geographische Daten gemeinschaftlich von überall auf der Welt anzuschauen und zu bearbeiten. + 
+Link: http://www.openstreetmap.org/ +
+Lizenz: http://www.openstreetmap.org/copyright/en 
+
+[[osm-contest-map-printserver]]
+=== Eigener Druckserver
+
+Installation:
+link:help_fcmaps.html[Flight Contest maps server^]
+
+Kartendaten sind nur für installierte Länder verfügbar.
+
+[[osm-contest-map-additional-datasources]]
+=== Weitere Datenquellen
+
+Lufträume:
+
+* DAeC (https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten)
+* Skyfool.de (http://www.skyfool.de/luftraeume)
+
+Höhenlinien und Oberflächenkonturen:
+
+* Viewfinder Panoramas (http://www.viewfinderpanoramas.org)
+
+[[osm-contest-map-configuration]]
+=== Konfigurationsdetails
+
+Folgende Streckendetails können in die Karte gezeichnet werden:
+
+* Wendepunkt-Kreise (Durchmesser 1 NM)
+* Wendeschleifen
+* Etappen-Linien
+* Verlauf krummer Etappen
+* Wendepunkt-Namen (in der jeweiligen Drucksprache, dt. WP, engl. TP)
+* Tore unbekannter Zeitkontrollen
+* Positionen von Strecken-Fotos
+* Positionen von Strecken-Bodenzeichen
+
+Folgende Objekte können in die Karte gezeichnet werden:
+
+* Gradnetz
+* Höhenlinen (100m, 50m oder 20m)
+* Manuell hinzugefügte Objekte
+* Lufträume
+
+Lufträume müssen vor der ersten Nutzung manuell installiert werden.
+Dazu alle Dateien von *https://my.hidrive.com/share/vobbr89etw#$/Geodata* in den Ordner *C:\FCSave\.geodata* kopieren.
+
+Alle genannten Streckendetails und Objekte können abgewählt werden.
+
+Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
+Strecken, die das gewählte Druck-Format sprengen, können mittels
+Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.
+
+Einzelne Wendepunkte können vom Druck ausgenommen werden.
+Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.
+
+Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.
+
+Fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Windkraftanlagen und Höhenpunkte
+sowie eigene Symbole können in der Datei *C:\FCSave\.geodata\additionals.csv* zum Druck hinzugefügt werden:
+
+  id|symbol|name|wkt
+  1|church.png|""|POINT (9.46600 49.50288)
+  2|airfield.png|"Flugplatz"|POINT (9.54128 49.51144)
+
+1. Laufende Nummer 
+2. Anzuzeigendes Symbol: +
+airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png oder Name des eigenen Symbols
+3. Name des Objektes (in Anführungszeichen) ("": kein Name drucken)
+4. Anzeigeposition in Geo-Koordinaten
+
+Eigene Symbole sind in *C:\FCSave\.geodata\images* zu speichern (png).
+Beachten Sie, dass die Groß-/Kleinschreibung der Symbolnamen übereinstimmt.
+
+Besondere Objekte können in der Datei *C:\FCSave\.geodata\specials.csv*
+zum Druck hinzugefügt werden:
+
+  id|point|name|wkt|dx|dy
+  1|"Strecke 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0
+
+1. Laufende Nummer
+2. Beschreibung (in Anführungszeichen, wird nicht gedruckt)
+3. Name des Objektes (in Anführungszeichen) ("": kein Name drucken)
+4. Anzeigeposition in Geo-Koordinaten
+5. Horizontale Verschiebung des zu druckenden Objekt-Namens (in Pixel)
+6. Vertikale Verschiebung des zu druckenden Objekt-Namens (in Pixel)
+
+Geo-Koordinaten von Wendepunkten werden beim Strecken-Druck mit ausgegeben (CSV-GeoDaten).
+
+Die Namen von Lufträumen entnehme man der Datei *C:\FCSave\.geodata\airspaces.kmz*.
+Fehlerhafte Namen verhindern die Kartenerzeugung.
+
+[[osm-contest-map-workflow]]
+=== Ablauf einer Karten-basierten Streckenkonstruktion
+
+. Gebiet um TO auswählen
+
+. Strecke mit TO anlegen (Strecken -> *Neue Strecke*)
+
+. Wettbewerbs-Karte mit TO drucken (Strecke -> *OSM-Wettbewerbs-Karte*) +
+Dabei TO an eine gewünschte Position legen (rechts oben, links unten o.ä.).
+
+. Geeignete Wendepunkte auf der gedruckten Karte auswählen +
+Mit den Koordinaten-Linealen links und oben können mit einem Zirkel die Wendepunkt-Koordinaten Minuten-genau bestimmt werden.
+
+. Strecke mit den abgelesenden Koordinaten eingeben (Strecke -> *Koordinate hinzufügen*)
+
+. Strecke exportieren (Strecke -> *KMZ-Export*)
+
+. KMZ-Datei mit *Google Earth Pro* öffnen und Wendepunkte auf die exakten Positionen schieben
+
+.. Zum Knoten 'Dateiname.kmz -> Streckenname -> Strecken-Export -> turnpoints' navigieren
+.. Jeden Punkt anklicken und jeweils Kontextmenüpunkt 'Eigenschaften' aufrufen
+.. Punkt zur exakten Position schieben und Eigenschaften-Dialog schließen
+.. 'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern
+
+. Import der korrigierten Strecke (Strecke -> *Import FC-Strecke*)
+
+. Wettbewerbs-Karte prüfen (Strecke -> *OSM-Online-Karte*)
+
+. Wettbewerbs-Karte drucken (Strecke -> *OSM-Wettbewerbs-Karte*)
+
+<<<
+[[flight-time-calculation]]
+== Flugzeit-Berechnung für Starts und Landungen
+
+Für folgende Punkte können Festlegungen getroffen werden:
+
+* Abflug bis Startpunkt (TO -> SP)
+* Finalpunkt bis Landung (FP -> LDG)
+* Intermediate-Landung (iFP -> iLDG)
+* Intermediate-Startpunkt (iFP, iLDG oder iTO -> iSP)
+
+Der Standard-Wert neuer Aufgaben "wind+:3NM" bewirkt, dass bei der 
+Flugzeit-Berechnung der Wind der Navigationsflugaufgabe mit berücksichtigt wird,
+die Entfernung zwischen den Punkten zur Berechnung um 3NM vergößert wird 
+(was sich für eine Standard-Platzrunde bewährt hat) und die berechnete 
+Überflug-Zeit auf ganze Minuten aufgerundet wird.
+
+Verwenden Sie die Vorlage link:samples/FC-TakoffLandingCalculation-Sample.xlsx[FC-TakoffLandingCalculation-Sample.xlsx^],
+um Einstell-Werte für längere An- und Abflugentfernungen zu berechnen.
+
+Für jeden genannten Punkt können folgende Ausdrücke verwendet werden:
+
+[%autowidth]
+|===
+|Ausdruck (Beispiel)|Angewendete Formel|Aufrunden auf ganze Minuten
+
+|wind+:3NM|LegTime(tas,wind,track,dist + 3)|ja
+|wind:3NM|LegTime(tas,wind,track,dist + 3)|nein
+|nowind+:3.5NM|LegTime(tas,null,track,dist + 3.5)|ja
+|nowind:3.5NM|LegTime(tas,null,track,dist + 3.5)|nein
+|wind+:1.3|1.3 * LegTime(tas,wind,track,dist)|ja
+|wind:1.3|1.3 * LegTime(tas,wind,track,dist)|nein
+|nowind+:1.3|1.3 * LegTime(tas,null,track,dist)|ja
+|nowind:1.3|1.3 * LegTime(tas,null,track,dist)|nein
+|time+:10min|10|ja
+|time:10min|10|nein
+|===
+
+[%autowidth]
+|===
+|Ausdruck|Bedeutung
+
+|LegTime|Interne Funktion zur windabhängigen Flugzeit-Berechnung
+|tas|TAS des Flugzeuges
+|wind|Wind-Richtung und -Geschwindigkeit (null = kein Wind)
+|track|Kurs des Navigationsfluges
+|dist|Entfernung zwischen den jeweiligen Punkten
+|+|Flugplan-Zeit wird auf die nächste ganze Minute aufgerundet
+|wind|Individuelle Zeit für jede Besatzung unter Beachtung von TAS, + 
+Wind, Kurs und Entfernung zwischen den Punkten.
+|nowind|Individuelle Zeit für jede Besatzung unter Beachtung von TAS, +
+Entfernung und Kurs zwischen den Punkten, ohne Wind zu berücksichtigen.
+|time|Feste Zeit in Minuten für alle Besatzungen.
+|1.3|Die berechnete Zeit wird mit dem angegebenen Faktor (hier mit 1.3) multipliziert.
+|3NM|Die Zeitberechnung erfolgt unter Vergrößerung der Entfernung +
+zwischen den Punkten um den angegebenen Wert (hier um 3NM).
+|===
+
+[%autowidth]
+|===
+|Ausdruck|Anwendungsbeispiel
+
+|wind+:3NM|Flugplatz mit Standard-Platzrunde (TO -> SP, iTO -> iSP)
+|wind+:xNM|Bei größeren Platzrunden eine größere Entfernung x anwenden.
+|wind+:6NM|Spätestete Landezeit (FP -> LDG)
+|time+:xmin|Feste Flugzeit von x Minuten (für Präzisionsflug-Wettbewerbe)
+|wind+:1.3|Berechnete Flugzeit um 30% vergrößern und auf Minute korrigieren.
+|wind:1|Flugzeit mit Entfernung und Wind ohne Korrekturen berechnen
+|===
+  
+Prüfen Sie Ihre Einstellungen durch Erstellung von Flugplänen:
+
+* Flugzeit TO -> SP plausibel?
+* Flugzeit FP -> LDG (zur Ermittlung der spätesten Landezeit) ausreichend?
+* Flugzeit iFP -> iLDG (-> iTO) -> iSP bei Zwischenlandung plausibel?
+
+<<<
+[[planning-test-and-flight-preparation]]
+== Planungstest und Flugzeugvorbereitung
+
+<<fc.adoc#planning-test-with-map>> +
+<<fc.adoc#planning-test-with-flight-construction>> +
+<<fc.adoc#no-planning-test>> +
+<<fc.adoc#planning-test-hints>>
+
+[[planning-test-with-map]]
+=== Planungstest mit Wettbewerbs-Karte (ohne Streckenkonstruktion)
+
+. Aufgaben-Konfiguration
+
+* Dauer des Planungstests: 60 min
+* Dauer der Flugzeugvorbereitung: 15 min
+
+. Planungstest-Karte
+
+* Wendepunkte sind bereits eingezeichnet 
+* Streckenverlauf kann eingezeichnet sein
+
+. Navigationstest-Karte
+
+* Wendepunkte und Streckenverlauf sind eingezeichnet
+
+. Arbeiten der Besatzung
+
+* Besatzung erhält Planungstest-Karte und Planungstest-Aufgabenblatt
+** Kurs über Grund messen
+** Steuerkurs und Flugzeit berechnen und in Planungstest-Aufgabenblatt eintragen
+** Abgabe des Planungstest-Aufgabenblattes
+* Besatzung erhält Navigationstest-Karte und Flugplan
+** Navigationstest-Karte vorbereiten (Wendeschleifen, Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)
+
+. Anweisungen für Schiedsrichter (zum Ausdrucken)
+
+* link:info/FC-PlanningTest-Info.docx[Zeitlicher Ablauf des Planungstests^] +
+* link:info/FC-PlanningTest-Info_en.docx[Time schedule of Planning Test^]
+
+[[planning-test-with-flight-construction]]
+=== Planungstest mit Streckenkonstruktion
+
+. Aufgaben-Konfiguration
+
+* Dauer des Planungstests: 75 min (bei komplizierten Strecken ggf. mehr)
+* Dauer der Flugzeugvorbereitung: 15 min
+
+. Planungstest-Karte
+
+* Enthält keine Wendepunkte
+
+. Navigationstest-Karte
+
+* Wendepunkte und Streckenverlauf sind eingezeichnet
+
+. Arbeiten der Besatzung
+
+* Besatzung erhält Streckenkonstruktions-Anweisungen, Planungstest-Karte und Planungstest-Aufgabenblatt
+** Strecke in Planungstest-Karte konstruieren
+** Kurs über Grund messen
+** Steuerkurs und Flugzeit berechnen und in Planungstest-Aufgabenblatt eintragen
+** Abgabe des Planungstest-Aufgabenblattes
+* Besatzung erhält Navigationstest-Karte und Flugplan
+** Navigationstest-Karte vorbereiten (Wendeschleifen,
+   Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)
+
+[[no-planning-test]]
+=== Kein Planungstest
+
+. Aufgaben-Konfiguration
+
+* Dauer des Planungstests: 0 min
+* Dauer der Flugzeugvorbereitung: 45 min (bei langen Strecken ggf. mehr)
+
+. Navigationstest-Karte
+
+* Wendepunkte und Streckenverlauf sind eingezeichnet
+
+. Arbeiten der Besatzung
+
+* Besatzung erhält Navigationstest-Karte und Flugplan
+** Navigationstest-Karte vorbereiten (Wendeschleifen,
+   Wendepunkt-Überflugzeiten, Steuerkurs, Minuten-Striche)
+
+[[planning-test-hints]]
+=== Hinweis zur Konfiguration des Planungstests
+
+Die Option "Entfernungsmessung beim Planungstest" ist nur sinnvoll,
+wenn die Entfernungen zwischen den Check-Punkten mit der verwendeten Karte
+ausgemessen und bei den Strecken-Koordinaten unter 
+'Entfernungsmessung (Karte) [mm]' eingetragen wurden.
+
+<<<
+[[landings]]
+== Landungen
+Je nach ausgewählter Wettbewerbsordnung wird ein festgelegtes Landeschema verwendet.
+Deren Strafpunkt-Berechnung aus einem Landemesswert ist als Formel hinterlegt.
+Diese Formel kann angepasst werden, um ein von der gewählten Wettbewerbsordnung 
+abweichendes Landeschema zu benutzen. Die Formeln können unter 
+'Wettbewerb -> Punkte' oder 'Klasse -> Punkte' je Landung (max. 4) eingestellt werden.
+Besondere Landefehler wie 'Keine Landung', 'Abnormale Landung' usw. werden durch
+anklickbare Check-Boxen eingegeben.
+
+Folgende Formeln werden zur Strafpunkt-Berechnung von Landungen verwendet:
+
+* link:rules/DE_Navigationsflug_2020.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020^] (alle Landungen)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+
+* link:rules/DE_Navigationsflug_2017.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017^] (alle Landungen)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
+
+* link:rules/FAI_rally_flying_rules_2020.pdf#page=17[FAI Air Rally Flying - Edition 2020^] ((alle Landungen)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+
+* link:rules/FAI_precision_flying_rules_2020.pdf#page=20[FAI Precision Flying - Edition 2020^]
+** Landung 1 und 4
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
+
+** Landung 2 und 3
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
+
++ 
+Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.
+
+<<<
+* link:rules/CH_Praezisionsflug_2017.pdf#page=19[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017^]
+** Landung 1 und 4
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
+ 
+** Landung 2 und 3
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
+
++  
+Die Reihenfolge der Anwendung kann für eine Aufgabe konfiguriert werden.
+
+* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2017^] (alle Landungen)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}
+  
+* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017^] (alle Landungen)
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}
+  
+* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017^] (alle Landungen)
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}
+  
+* link:rules/AT_Motorflug_2017.pdf#page=37[Navigationsflug-Reglement Österreich - Ausgabe 2017 (alle Landungen)^]
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+
+Zur Erfassung der Landungen drucken Sie den Schiedsrichter-Zeitplan einer Aufgabe mit folgenden Feldern aus:
+
+* Nr. (Start-Nummer)
+* Flugzeug (Kennzeichen)
+* Flugzeugtyp
+* Farbe (sofern erfasst)
+* Späteste Landezeit
+* Leerspalte 1...4 (zur Erfassung der Landefelder und von Landefehlern)
+
+Drucken Sie nicht die Besatzung aus, da dass dem Regelwerk widerspricht.
+
+Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig über die konkrete Besatzung eines Flugzeuges wissen.
+
+<<<
+[[evaluation]]
+== Auswertungen
+
+<<fc.adoc#evaluation-contest>> +
+<<fc.adoc#evaluation-class>> +
+<<fc.adoc#evaluation-team>> +
+<<fc.adoc#evaluation-special>>
+
+[[evaluation-contest]]
+=== Wettbewerbs-Auswertung
+-> Auswertung -> Wettbewerbs-Auswertung
+
+Wettbewerbs-Auswertungen können nach folgenden Kriterien gefiltert werden:
+
+* Klassen
+* Teams
+* Aufgaben
+* Aufgaben-Details
+
+Eine Besatzung ist in einer Wettbewerbs-Auswertung enthalten, wenn sie
+
+* zu einer gewählten Klasse gehört und
+* zu einem gewählten Team gehört und
+* nicht für eine gewählte Aufgabe deaktviert wurde und
+* nicht für eine Wettbewerbs-Auswertung deaktiviert wurde und
+* nicht generell deaktiviert wurde.
+
+Aufgabe und Aufgaben-Details (Planungstest, Navigationstest, Beobachtungstest, 
+Landetest, Anderer Test) bestimmen, wofür Strafpunkte in der Auswertung 
+berechnet werden.
+
+[[evaluation-class]]
+=== Klassen-Auswertung
+-> Auswertung -> Klassen-Titel
+
+Klassen-Auswertungen können nach folgenden Kriterien gefiltert werden:
+
+* Teams
+* Aufgaben
+* Aufgaben-Details
+
+Eine Besatzung ist in einer Klassen-Auswertung enthalten, wenn sie
+
+* zu der gewählten Klasse gehört und
+* zu einem gewählten Team gehört und
+* nicht für eine gewählte Aufgabe deaktviert wurde und
+* nicht für eine Wettbewerbs-Auswertung deaktiviert wurde und
+* nicht generell deaktiviert wurde.
+
+Aufgabe und Aufgaben-Details (Planungstest, Navigationstest, Beobachtungstest, 
+Landetest, Anderer Test) bestimmen, wofür Strafpunkte in der Auswertung 
+berechnet werden.
+
+[[evaluation-team]]
+=== Team-Auswertung
+-> Auswertung -> Team-Auswertung
+
+Team-Auswertungen können nach folgenden Kriterien gefiltert werden:
+
+* Klassen
+* Aufgaben
+* Aufgaben-Details
+
+Eine Besatzung ist in einer Team-Auswertung enthalten, wenn sie
+
+* zu einer gewählten Klasse gehört und
+* nicht für eine gewählte Aufgabe deaktviert wurde und
+* nicht für eine Team-Auswertung deaktiviert wurde und
+* nicht generell deaktiviert wurde.
+
+Ein Team erhält eine Plazierung, wenn es
+
+* die eingestellte Besatzungs-Anzahl für die Team-Auswertung erreicht und
+* das Team nicht deaktiviert wurde.
+
+Aufgabe und Aufgaben-Details (Planungstest, Navigationstest, Beobachtungstest, 
+Landetest, Anderer Test) bestimmen, wofür Strafpunkte in der Auswertung 
+berechnet werden.
+
+[[evaluation-special]]
+=== Sonder-Auswertungen
+Reichen Klassen- und Team-Zuordnungen nicht für eine Einschränkung der Wettbewerbs-Auswertung aus,
+können mit der Besatzungs-Option "Keine Wettbewerbs-Auswertung" alle nicht zutreffenden
+Besatzungen ausgeschlossen werden.
+
+<<<
+[[supported-logger]]
+== Unterstützte Logger
+
+<<fc.adoc#supported-logger-aflosreader>> +
+<<fc.adoc#supported-logger-airopserver>> +
+<<fc.adoc#supported-logger-dg100>> +
+<<fc.adoc#supported-logger-dg200>> +
+<<fc.adoc#supported-logger-powerflarm>> +
+<<fc.adoc#supported-logger-igc>> +
+<<fc.adoc#supported-logger-gpx>> +
+<<fc.adoc#supported-logger-kml>> +
+<<fc.adoc#supported-logger-nmea>>
+
+[[supported-logger-aflosreader]]
+=== AFLOS
+* Logger-Auslese-Software: 'AFLOS Reader 2.04'
+* Logger-Aufzeichnung auslesen und GAC-Datei erzeugen: 'AFLOS Reader -> Competitor-Nr -> Read AFLOS'
+* Logger-Daten-Import: 'Flight Contest -> Ergebnisse -> Aufgaben-Titel -> Navigationsflug
+                        -> ... -> Import Logger-Daten -> GAC-Datei auswählen -> Import'
+* Logger-Aufzeichnung löschen: direkt am AFLOS-Logger
+
+[[supported-logger-airopserver]]
+=== AirObserver basierte Logger
+* Logger-Auslese-Software: 'AirObserver 2.5.1'
+* Logger-Einstellung: 'AirObserver -> Logger -> Configure'
+* Logger-Aufzeichnung auslesen: 'AirObserver -> Logger -> Download' (Auslesen sehr langsam)
+* Logger-Aufzeichnung (*.G00) öffnen: 'AirObserver -> File -> Load Flight Log'
+* GAC-Datei erzeugen: 'AirObserver -> File -> Export -> GAC'
+* Logger-Daten-Import: 'Flight Contest -> Ergebnisse -> Aufgaben-Titel -> Navigationsflug
+                        -> ... -> Import Logger-Daten -> GAC-Datei auswählen -> Import'
+* Logger-Aufzeichnung löschen: 'AirObserver -> Logger -> Clear'
+
+[[supported-logger-dg100]]
+=== DG-100
+* Logger-Einstellungs-Software: 'Data Logger Utility S-OPC-0L-110631'
+* Logger-Einstellung: 'Data Logger Utility -> Settings -> Configuration'
+* Logger-Auslese-Software: 'FSNavigator.net 2.0.0.90'
+* Logger-Aufzeichnung auslesen: 'FSNavigator.net -> Plugins -> FRPocket device -> Download tracks'
+* GAC-Datei erzeugen: 'FSNavigator.net -> Logger-Object -> Save'
+* Logger-Daten-Import: Ergebnisse -> Aufgaben-Titel -> Navigationsflug -> ... -> 
+                       Import Logger-Daten -> GAC-Datei auswählen -> Import
+* Logger-Aufzeichnung löschen: 'FSNavigator.net -> Plugins -> FRPocket device -> Clear memory'
+
+[[supported-logger-dg200]]
+=== DG-200
+* Logger-Auslese-Software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'
+* Logger-Einstellung: 'DG200Tool.exe -> Device -> Device settings'
+** Data logging format: "Position,Time,Date,Speed,Altitude" wählen
+** "Enable WAAS" aktivieren
+** "Disable data logging if speed falls below a threshold" aktivieren und "30" km/hour einstellen
+** "Disable data logging if distance is less then teh selected radius" deaktivieren (Standard)
+** Data logging intervall mode: "By time" aktivieren (Standard) und "1" seconds einstellen
+* Logger-Aufzeichnung auslesen: 'DG200Tool.exe -> Device -> Download all track points'
+* GPX-Datei erzeugen: 'DG200Tool.exe -> File -> Save' aufrufen und "*.gpx" wählen
+* Logger-Daten-Import: Ergebnisse -> Aufgaben-Titel -> Navigationsflug -> ... -> 
+                       Import Logger-Daten -> GPX-Datei auswählen -> Import
+* Logger-Aufzeichnung löschen: 'DG200Tool.exe -> Device -> Delete all track points'
+
+[[supported-logger-powerflarm]]
+=== PowerFLARM
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Eine Logger-Aufzeichnung kann als IGC-Datei auf eine Micro-SD-Karte geschrieben werden.
+* Logger-Daten-Import: 'Flight Contest -> Ergebnisse -> Aufgaben-Titel -> Navigationsflug
+                        -> ... -> Import Logger-Daten -> IGC-Datei auswählen -> Import'
+
+[[supported-logger-igc]]
+=== Beliebiger anderer IGC-Logger
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
+
+[[supported-logger-gpx]]
+=== Beliebiger anderer GPX-Logger
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
+* Notwendige Logger-Einstellungen:
+** Aufzeichnungs-Intervall: 1 Sekunde
+** Aufzeichnung mit Höhen-Angaben
+* Anforderungen an GPX-Datei-Inhalt
+** darf nur eine Strecken-Aufzeichnung beinhalten (<trk>...</trk>)
+** wenn nein, nicht gewünschte Strecken-Aufzeichnungen in Datei löschen
+
+[[supported-logger-kml]]
+=== Beliebiger anderer KML-Logger
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
+* Notwendige Logger-Einstellungen:
+** Aufzeichnungs-Intervall: 1 Sekunde
+** Aufzeichnung mit Höhen-Angaben
+** Aufzeichnung mit Zeit-Angaben
+* Anforderungen an KML/KMZ-Datei-Inhalt
+** darf nur eine Strecken-Aufzeichnung beinhalten (<gx:Track>...</gx:Track>)
+** wenn nein, nicht gewünschte Strecken-Aufzeichnungen in Datei löschen
+
+[[supported-logger-nmea]]
+=== Beliebiger anderer NMEA-Logger
+* Der Logger mus den Standard 'NMEA 0183' unterstützen.
+* Eine Nutzung im Wettbewerb ist mit dem Wettbewerbsleiter zu klären.
+* Dem Auswerte-Schiedrichter ist das Auslese-Programm zur Verfügung zu stellen.
+
+<<<
+[[print-styles]]
+== Druck-Stil beeinflussen
+Ermöglicht Einfluß auf das Aussehen des Druckes +
+-> Wettbewerb -> Einstellungen -> Druck-Stil
+
+<<fc.adoc#print-styles-title>> +
+<<fc.adoc#print-styles-foot>> +
+<<fc.adoc#print-styles-tables>> +
+<<fc.adoc#print-styles-samples>> +
+<<fc.adoc#print-styles-special-old>>
+
+[[print-styles-title]]
+=== CSS-Einstellungen für Titel
+  
+ h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+
+font-size: Größe des 1. Titels festlegen. Nur nutzbar, wenn die Titelgröße leer ist und keine Grafiken verwendet werden. +
+margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 1. Titels nach oben und unten festlegen
+    
+ h2 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+ 
+font-size: Größe des 2. Titels festlegen +
+margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 2. Titels nach oben und unten festlegen
+    
+ h3 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+
+font-size: Größe des 3. Titels festlegen +
+margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 3. Titels nach oben und unten festlegen
+
+[[print-styles-foot]]      
+=== CSS-Einstellungen für Unterschrift
+  
+  h2#signature { margin-top:100px; }
+
+margin-top: Abstand zur Tabelle oder zum Unterschriften-Bild vergrößern
+
+<<<
+[[print-styles-tables]]
+=== CSS-Einstellungen für Tabellen
+
+Anwendung:
+
+ table.Tabellenname tr.Zeilenname td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
+ table.Tabellenname tr.Zeilenname td { Eigenschaft1; Eigenschaft2; ... }
+ table.Tabellenname tr#ID td { Eigenschaft1; Eigenschaft2; ... }
+ td.Spaltenname { Eigenschaft1; Eigenschaft2; ... }
+ .Spaltenname { Eigenschaft1; Eigenschaft2; ... }
+
+[%autowidth]
+|===
+|Eigenschaft|CSS-Ausdruck
+
+|Kein Umbruch bei Leerzeichen|white-space: nowrap;
+|Spaltenbreite|width: 10%;
+|Fettdruck|font-weight: bold;
+|Kursivdruck|font-style: italic;
+|Farbe|color: red;
+|Kleinere Textgröße|font-size: 80%;
+|Text zentriert ausrichten|text-align: center;
+|Textabstand zum Rahmen oben|padding-top:2cm;
+|===
+
+CSS-Ausdrücke: http://www.w3schools.com/cssref +
+Default-Werte: http://localhost:8080/fc/css/fcprint.css
+
+Tabellen-Klassen:
+
+[cols="3", options="header"]
+|===
+|Tabellen-Namen [Geltungsbereich]|Zeilen-Namen [#ID]|Spalten-Namen
+
+|generalpoints|title value|name value modify
+|planningpoints|title value|name value modify
+|flightpoints|title value|name value modify
+|observationpoints|title group value|name value modify
+|landingpoints|title value penaltycalculator|name value modify
+|turnpointsignpoints|title value|name value
+|enroutecanvaspoints|title value|name value
+
+|routecoords|title value|tpname aflosname coords altitude gatewidth sign
+|routelegs|name value coursechange summary|from2tp trackdistance
+|enroutephotos|name title value|photoname coords distfromtp tpname
+|enroutecanvas|name title value|canvassign coords distfromtp tpname
+|routecoordexport|title value|
+|turnpointsignexport|title value|
+|enroutephotoexport|title value|
+|enroutecanvasexport|title value|
+|routecoordgeodata|title value|
+|routetpcoords|title value|tpname coords
+
+|crewlist|value [#num]|num crew email team resultclass shortresultclass aircraft aircrafttype aircraftcolor tas id empty1 empty2 empty3 empty4
+|teamlist|value [#crew.num]|team crew aircraft tas
+|resultclasslist|value [#crew.num]|resultclass shortresultclass crew aircraft tas
+|aircraftlist|value [#aircraft]|aircraft aircrafttype aircraftcolor crew1 crew2
+
+|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime version
+|legtimelist|value [#tas]|tas legtime
+|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
+|timetableoverviewlist|briefing planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]|col1 col2 col3
+|timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
+
+|crewtest||title crew team resultclass aircraft aircrafttype tas
+|crewneutral||title num crew aircraft col
+|info|wind planning submission endcurved landinglatest planninginfo planningignore planningevaluation|title separator value
+|planningtasklist|valuename unit value [#tpname]|tpname distance truetrack trueheading groundspeed legtime
+|flightplanlist|value [#tpname], procedureturn summary|num distance truetrack trueheading groundspeed legtime tpname tptime
+|observationturnpointlist|title subtitle data|tpname turnpointphoto turnpointcanvas turnpointtrue turnpointfalse
+|observationenroutephotolist|title subtitle data|name correct inexact false nmfromtp mmfromtp fromlasttp
+|observationenroutecanvaslist|title subtitle data|sign correct inexact false nmfromtp mmfromtp fromlasttp
+|observationenroutecrewjudgesign|title|name line
+
+|planningtaskresultlist|name1 name2 value [#tpname] summary|tpname plantrueheading trueheading penaltytrueheading planlegtime legtime penaltylegtime 
+|summary [planningtaskresults]|legpenalties giventolate exitroomtolate otherpenalties penalties|
+|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyprocedureturn penaltybadcourse penaltyaltitudemissed 
+|summary [flightresults]|checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened frequencynotmonitored otherpenalties penalties|
+|flightmeasurementlist|name1 name2 value [#tpname]|tpname aflosname plancptime cptime procedureturn badcoursenum altitude
+|loggerdatalist|title value tpvalue|time latitude longitude altitude truetrack groundspeed info badcourseinfo nobadcourseinfo
+|observationturnpointresultlist|name1 name2 value [#tpname] summary|tpname evaluation plan result penalties
+|observationenroutephotoresultlist|name1 name2 value [#photoName] summary|photoname evaluation plan result penalties
+|observationenroutecanvasresultlist|name1 name2 value [#imageName] summary|imagename evaluation plan result penalties
+
+|summary [observationresults]|turnpointphotopenalties routephotopenalties groundtargetpenalties otherpenalties penalties|
+|landingresultlist|name [#1...4], values [#1...4], summary [#1...4]|
+|summary [landingresults]|otherpenalties penalties|
+|summary [specialresults]|penalties|
+|crewresultsummary||planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties increasepenalties penalties
+
+|resultlist|[#pos]|pos crew aircraft team resultclass shortresultclass planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties taskpenalties contestpenalties
+|teamresultlist|[#pos]|pos team crews teampenalties
+
+|freetext||#line
+|testlist||testcol1 testcol2 testcol3 testcol4 testcol5
+|===
+
+<<<
+[[print-styles-samples]]
+=== Beispiele
+
+** Besatzungs-Liste - Zeilen verkleinern
+
+ table.crewlist tr.value td { font-size: 90%; }
+
+** Besatzungs-Zeitplan - Zeilen verkleinern
+
+ table.timetablelist tr.value td { font-size: 90%; }
+  
+** Schiedsrichter-Zeitplan - Zeilen verkleinern
+
+ table.timetablejudgelist tr.value td { font-size: 90%; }
+  
+** Gescannte Beobachtungsformulare - Größe verändern
+
+ img.scannedobservationtest { width:80%; }
+ 
+** Gescannte Planungsaufgabenformulare - Größe verändern
+  
+ img.scannedplanningtest { width:80%; }
+ 
+** Besatzungs-Ergebnis - Zeilen verkleinern
+ 
+ table.crewresultsummary td { font-size: 70%; }
+ table.planningtaskresultlist tr.value td { font-size: 70%; }
+ table.flightresultlist tr.value td { font-size: 70%; }
+ table.observationturnpointresultlist tr.value td { font-size: 70%; }
+ table.observationenroutephotoresultlist tr.value td { font-size: 70%; }
+ table.observationenroutecanvasresultlist tr.value td { font-size: 70%; }
+ table.summary tr { font-size: 70%; }
+ table.landingresultlist tr.name { font-size: 70%; }
+ table.landingresultlist tr.values { font-size: 70%; }
+ table.landingresultlist tr.summary { font-size: 70%; }
+ 
+** Ergebnis-Liste Wettbewerbs- und Klassen-Auswertung - Zeilen verkleinern
+
+ table.resultlist td { font-size: 90%; }
+ 
+** Ergebnis-Liste Team-Auswertung - Zeilen verkleinern
+
+ table.teamresultlist td { font-size: 90%; }
+
+** Punkte-Druck Landefeld - Größe verändern
+
+ img.landingfield { width:200%; }
+ 
+[[print-styles-special-old]]
+=== Ersetzte CSS-Eigenschaften
+
+[cols="1,1,1,1", options="header"]
+|===
+|Eigenschaft
+|Wert
+|Wirkung
+|jetzt zu finden in
+|--route +
+--disable-procedureturn
+|Strecke-1
+|Wendeschleifen für diese Strecke deaktivieren
+|-> Strecken -> <Strecken-Name> -> Strecken-Einstellungen -> Wendeschleifen verwenden
+|--route +
+--show-curved-points
+|Strecke-1
+|in Strecken-Anzeigen dieser Strecke UZKs der krummen Strecke anzeigen
+|-> Strecken -> <Strecken-Name> -> Strecken-Einstellungen -> UZKs der krummen Strecke in Strecken-Karten dieser Strecke anzeigen
+|--class +
+--secret-gatewidth
+|Einsteiger +
+2
+|bei Zeitauswertung für Besatzungen dieser Klasse eine andere Gate-Breite für UZKs verwenden (Gate-Breite in NM)
+|-> Klassen -> <Klassen-Name> -> Abweichende Tor-Breite von UZK-Koordinaten für diese Klasse
+|--class +
+--before-starttime
+|Einsteiger +
+30
+|im Zeitplan für Besatzungen dieser Klasse die Anfangs-Zeit der Planung vorverlegen (der Zahlen-Wert definiert die Minuten vor der regulären Planungszeit)
+|-> Klassen -> <Klassen-Name> -> Vorverlegung der Planungs-Anfangs-Zeit vor der regulären Planungszeit für diese Klasse
+|--class +
+--add-submission
+|Einsteiger +
+10
+|im Flupplan für Besatzungen dieser Klasse die späteste Abgabezeit des Lösungsbogens verlängern (der Zahlen-Wert definiert die Minuten nach der regulären Abgabezeit)
+|-> Klassen -> <Klassen-Name> -> Verlängerung der spätesten Abgabezeit des Lösungsbogens für diese Klasse
+|--flightplan
+|hide-distance
+
+hide-truetrack
+
+hide-trueheading
+
+hide-groundspeed
+
+disable-local-time
+
+show-elapsed-time
+|im Flugplan Spalte "Entfernung" leer lassen
+
+im Flugplan Spalte "Rechtweisender Kurs" leer lassen
+
+im Flugplan Spalte "Rechtweisender Steuerkurs" leer lassen
+
+im Flugplan Spalte "Geschwindigkeit über Grund" leer lassen
+
+im Flugplan Spalte "Ortszeit" weglassen
+
+im Flugplan Zeitverlauf in Spalte "Flugzeit" drucken
+|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten
+|--submission
+|20
+|im Flugplan die späteste Abgabezeit des Lösungsbogens anzeigen +
+(der Wert definiert die Minuten nach dem FP)
+|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten -> Späteste Abgabezeit des Lösungsbogens nach Erreichen des FP
+|--route +
+--start-tp +
+--add-num
+|Strecke-1 +
+TP3 [,TP5] + 
+1 [,2]
+|im Flugplan für Besatzungen die Wendepunkte-Nummer um den angegebenen Wert 
+ab dem angegebenen Wendepunkt erhöhen 
+(mehrere Erhöhungen möglich; für abkürzende Strecken, wo die Wettbewerbskarte einer anderen Strecke mitverwendet wird)
+|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten -> Wendepunkte-Nummern um den angegebenen Wert ab dem angegebenen Wendepunkt im Flugplan für Besatzungen erhöhen +
+TP3,TP5:1,2 = ab TP3 um 1 erhöhen, ab TP5 um weitere 2
+|--flightresults
+|show-curved-points
+|im Navigationsflug-Ergebnis UZKs der krummen Strecke anzeigen
+|-> Aufgaben -> Navigationstest -> <Navigationstest-Name> -> Bearbeiten -> UZKs der krummen Strecke im Navigationsflug-Ergebnis immer anzeigen
+|--landingresults
+|0.5
+|Lande-Strafpunkte in Gesamtwertung um angegebenen Faktor reduzieren
+|-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen -> Lande-Strafpunkte um angegebenen Faktor reduzieren
+|===
+
+ 
+<<<
+[[contest-properties]]
+== Wettbewerbs-Eigenschaften
+
+Bisher keine definiert.
+
+<<<
+[[configuration]]
+== Installationsabhängige Konfiguration
+Ermöglicht Anpassungen der Einsatzumgebung der 'Flight Contest'-Installation +
+-> Extras -> Einstellungen -> Konfiguration
+
+Änderungen erst wirksam nach Neustart von 'Flight Contest'.
+
+Sollte 'Flight Contest' nach Änderungen nicht mehr starten, ist die letzte
+Änderung in 'C:\FCSave\.fc\config.groovy' rückgängig
+zu machen oder diese Datei zu löschen.
+
+<<fc.adoc#configuration-email>> +
+<<fc.adoc#configuration-viewemail>> +
+<<fc.adoc#configuration-ftp>> +
+<<fc.adoc#configuration-landing>> +
+<<fc.adoc#configuration-live>> +
+<<fc.adoc#configuration-livetracking>> +
+<<fc.adoc#configuration-osmprint>> +
+<<fc.adoc#configuration-test>>
+
+[[configuration-email]]
+===  E-Mail-Versand konfigurieren
+ grails {
+   mail {
+     host = "TODO"       // SMTP-Server-Adresse (DNS-Name oder IP-Adresse)
+     port = 587          // SMTP-Server-Port (für Client-Verbindungen)
+     username = "TODO"   // SMTP-Server-Login-Name
+     password = "TODO"   // SMTP-Server-Passwort
+   } 
+ }
+ flightcontest {
+   mail {
+     from = "TODO"       // Absender-E-Mail-Adresse (muss auf SMTP-Server gültig sein)
+     cc = "TODO"         // E-Mail-Adresse des Auswerte-Schiedsrichters
+   }
+   testmail {
+     to = "TODO"         // Ziel-E-Mail-Adresse
+     subject = "Flight Contest: Test-E-Mail"
+     body = "Flight Contest hat erfolgreich eine E-Mail versandt." 
+   }
+ }
+
+[[configuration-viewemail]]
+=== E-Mail-Anzeige konfigurieren
+ grails {
+   webmail {
+     url = "TODO"                // Adresse des Web-Mail-Dienstes 
+     loginname_name = "TODO"     // Name des Benutzername-Feldes
+     loginpassword_name = "TODO" // Name des Passwort-Feldes
+     username = "TODO"           // Login-Name
+     password = "TODO"           // Passwort
+   }
+ }
+
+[[configuration-ftp]]
+=== FTP-Versand konfigurieren
+ flightcontest {
+   ftp {
+     host = "results.flightcontest.de" // FTP-Server-Adresse
+     port = 21           // FTP-Server-Port
+     username = "TODO"   // FTP-Login-Name
+     password = "TODO"   // FTP-Passwort
+     contesturl = "TODO" // Öffentlicher Zugang zum Wettbewerbs-Verzeichnis
+                         // auf FTP-Server (z.B. "http://results.flightcontest.de/demo")
+     testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Quell-URL
+   }
+ }
+
+Im Root-Verzeichnis des FTP-Servers müssen 2 Verzeichnisse existieren:
+
+* GM_Utils-6.2 - GPX-Viewer-JavaScript-Bibliothek
+* Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis (obiges Beispiel: "demo")
+
+Die genannte Version des GPX-Views kann folgendem Verzeichnis entnommen werden:
+
+ C:\Program Files (x86)\Flight Contest\tomcat\webapps\fc\GM_Utils
+
+Im Root-Verzeichnis des FTP-Server muss für GPX-Dateien ein eigener
+MIME-Typ konfiguriert werden. Weiterhin sollte für diesen MIME-Typ die 
+Browser-Komprimierung aktiviert werden
+(https://betterexplained.com/articles/how-to-optimize-your-site-with-gzip-compression).
+Dazu in Datei '.htaccess' folgende Zeilen hinzufügen:
+
+ AddType application/gpx .gpx
+ AddOutputFilterByType DEFLATE application/gpx
+
+Der FTP-Login-Name muss Schreibrechte auf das Wettbewerbs-Verzeichnis erhalten,
+nicht jedoch auf das Root-Verzeichnis des FTP-Servers.
+
+<<<
+[[configuration-landing]]
+=== Information für Landeschiedsrichter konfigurieren
+ flightcontest {
+   landing {
+     info = "WhatsApp an +49(170)12345678 senden."
+   }
+ }
+
+Diese Information wird auf den Lande-Schiedsrichter-Zeitplan gedruckt.
+
+[[configuration-live]]
+=== Live-Anzeige konfigurieren
+ flightcontest {
+   live {
+     ftpupload {            // FTP-Upload des Live-Ergebnisses
+        workingdir = "/"    //   Verzeichnis auf dem FTP-Server
+        name = "fclive.htm" //   Dateiname
+     }
+     copy {                 // Kopie des Live-Ergebnisses
+        dest = "TODO"       //   Verzeichnis und Dateiname
+                            //     z.B. "C:/Live/fclive.htm" (lokale Kopie)
+                            //          "//Server/Share/fclive.htm" (Share-Kopie)
+                            //   Mehrere Kopien erlaubt
+                            //     (dest1 = ...)  
+                            //     (dest2 = ...)  
+     }
+   }
+ }
+
+Der FTP-Upload erfordert einen konfigurierten FTP-Versand.
+
+Lokale und Share-Kopien können nicht direkt im Firefox geöffnet werden.
+  
+* Folgendermaßen zum Öffnen einer lokalen Kopie vorgehen:
+. Link in neuem Tab öffnen
+         -> C:/Live/fclive.htm
+. In der Adresszeile dem Link "file:///" voranstellen
+         -> file:///C:/Live/fclive.htm
+* Folgendermaßen zum Öffnen einer Share-Kopie vorgehen:
+. Link in neuem Tab öffnen
+         -> Server/Share/fclive.htm
+. In der Adresszeile dem Link "file://///" voranstellen
+         -> file://///Server/Share/fclive.htm
+
+Bei konfigurierten Kopien und/oder FTP-Upload wird auch immer ein Live-Ergebnis 
+in die eigene Server-Instanz kopiert. +
+Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwenden:
+
+ flightcontest {
+   live {
+     show = true
+   }
+ }
+ 
+<<<
+[[configuration-livetracking]]
+=== Live-Tracking konfigurieren
+ flightcontest {
+   livetracking {
+     server = "https://tracking.airsports.no"
+     api = "/api/v1"
+     token = "..."
+     display {
+       frontend = "/display/frontend/"
+       frontendMap = "/map/"
+     }
+     contest {
+       // showDelete = true // Default: false
+       // createPublic = true // Default: false
+       startLocalTimeOfDay = "08:00" // Default: 06:00
+       endLocalTimeOfDay = "20:00" // Default: 22:00
+       timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+     }
+     navigationtask {
+       // showDelete = true // Default: false
+       // createPublic = true // Default: false
+     }
+     contestant {
+       minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+     }
+   }
+ }
+
+[%autowidth]
+|===
+|server|Adresse des Live-Tracking-Servers
+|token|Token, mit dem der Zugriff auf den Live-Tracking-Server ermöglicht wird
+|contest.showDelete|Löschen von Live-Tracking-Contests ermöglichen
+|contest.createPublic|Öffentliche Live-Tracking-Contests anlegen
+|contest.startLocalTimeOfDay|Lokale Start-Zeit des Live-Tracking-Contests am Wettbewerbstag
+|contest.endLocalTimeOfDay|Lokale End-Zeit des Live-Tracking-Contests am Wettbewerbstag
+|contest.timeZone|Zeit-Zone des Live-Tracking-Contests
+|navigationtask.showDelete|Löschen von Live-Tracking-Navigationtasks ermöglichen
+|navigationtask.createPublic|Öffentliche Live-Tracking-Navigationtasks anlegen
+|contestant.minutesBetweenTrackerStartAndTakeoff|Trackeraufzeichnung beginnt angegebene Minuten vor Takeoff
+|===
+
+
+[[configuration-osmprint]]
+=== OSM-Wettbewerbs-Kartendruck konfigurieren
+ flightcontest {
+   contestmap {
+     printserverapi = "TODO"
+     projection = "3857"
+     devoptions = true
+   }
+ }
+
+[%autowidth]
+|===
+|contestmap.printserverapi|Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte
+|contestmap.projection|Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung festlegen (EPSG-Nummer)
+|contestmap.devoptions|Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
+|===
+
+
+[[configuration-test]]
+=== Test-Anzeigen konfigurieren
+ flightcontest {
+   wrlog {
+     enable = true
+   }
+   clouddemo {
+     enable = true
+   }
+ }
+
+[%autowidth]
+|===
+|wrlog.enable|Aktiviert das Schreiben von Logs in <Installationsverzeichnis>\fc\logs
+|===
+
+<<<
+[[live-scoring]]
+== Live-Ergebnisanzeige
+Ermöglicht Anzeige eines vorläufigen Ergebnisses während des Debriefings.
+
+* Zuerst Anpassung der Einsatzumgebung vornehmen: +
+-> <<fc.adoc#configuration-live>>
+
+* Wettbewerbs-Einstellungen: +
+-> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen
+
++
+Es werden die selben Filter-Kriterien wie bei der Wettbewerbs-Auswertung angewendet. +
+Live-spezifische Einstellungen:
+
+** Live-Ergebnis-Refresh - 10 Sekunden (Standard) +
+Intervall, mit dem sich die Live-Ergebnis-Datei selbst im Browser aktualisiert.
+
+** Live-Ergebnis-Wettbewerbs-Summe +
+Wenn aktiviert, wird die Summe der Strafpunkte aller Aufgaben mit ausgegeben. +
+Nur sinnvoll, wenn es mehrere Aufgaben (= Wettbewerbstage) gibt.
+
+** Live-Ergebnis-Positionsberechnung +
+Auswahl, welche Aufgabe die Live-Ergebnis-Plazierung bestimmt.
+Hier kann auch Wettbewerbs-Summe gewählt werden.
+
++
+Vorgenommene Einstellungen können mit der integrierten Live-Anzeige geprüft werden. +
+-> Auswertung -> Wettbewerbs-Auswertung -> Live-Ergebnisanzeige
+
+
+* Live-Anzeige im laufenden Wettbewerb +
+-> Extras -> Live-Einstellungen
+
+** Vorbereitung
+
+*** Upload-Zeit: 60 Sekunden (Standard) +
+        Intervall, mit dem die Live-Ergebnis-Datei erzeugt und hochgeladen wird.
+        Nach Änderung 'Speichern' betätigen
+*** Sprache: Deutsch (Standard) +
+        Nach Änderung 'Speichern' betätigen
+*** Live-Stylesheet hochladen +
+        Einmal auszuführen, wenn neue Upload-Ziele konfiguriert wurden.
+*** Live-Ergebnis löschen +
+        Einmal auszuführen, wenn neue Upload-Ziele konfiguriert wurden.
+        Kann auch ausgeführt werden, um den Inhalt einer hochgeladenen
+        Live-Ergebnis-Datei zu löschen.
+*** Öffentliche Links +
+        Hier können die hochgeladenen Live-Ergebnis-Dateien geprüft werden.
+
+** Live-Aktualisierung
+*** Live-Ergebnis-Anzeige für Wettbewerb +
+        Wettbewerb wählen, für den eine Live-Ergebnis-Anzeige erfolgen soll.  
+        Zum Aktivieren 'Speichern' betätigen
+*** Live-Ergebnis-Anzeige einschalten +
+        Live-Ergebnis-Anzeige für den aktiven Wettbewerb einschalten.
+*** Live-Ergebnis-Anzeige ausschalten +
+        Live-Ergebnis-Anzeige auschalten.
+        Der letzte Stand der Live-Ergebnis-Datei wird eingefroren.
+
+<<<
+[[live-tracking]]
+== Live-Tracking
+Ermöglicht das Verfolgen der Positionen der Besatzungen während ihres Navigationsfluges mit automatischer Zeitauswertung.
+
+* Zuerst Anpassung der Einsatzumgebung vornehmen: +
+-> <<fc.adoc#configuration-livetracking>>
+
+* Scenario 1: Airsports Live Tracking mit Flight Contest konfigurieren
+
+** Vorbereitende Schritte in Flight Contest
+*** Allen Besatzungen die Tracker-ID ihres Trackers zuweisen. +
+-> Besatzungen -> <Besatzungs-Name> -> Tracker-ID
+        
+** Auszuführende Funktionen in Flight Contest
+*** Live-Tracking-Contest anlegen +
+-> Wettbewerb -> Einstellungen -> Live-Tracking -> Contest-Datum +
+-> Wettbewerb -> Einstellungen -> Live-Tracking -> Contest anlegen
+*** Live-Tracking-Navigation-Task anlegen +
+-> Aufgaben -> <Aufgaben-Name> -> Einstellungen -> Live-Tracking -> Navigation-Task-Datum +
+-> Aufgaben -> <Aufgaben-Name> -> Einstellungen -> Live-Tracking -> Navigation-Task anlegen
+        
+** Auszuführende Funktionen in Airsports Live Tracking
+*** Live-Tracking-Contest und -Navigation-Task für öffentlichen Zugriff freischalten
+
+* Scenario 2: Flight Contest mit Airsports Live Tracking Teams konfigurieren
+
+** Vorbereitende Schritte in Airsports Live Tracking
+*** Live-Tracking-Contest anlegen
+*** Teams zuordnen (Namen, Club, Land, Fotos, Flugzeuge, TAS, Tracker-ID)
+
+** Auszuführende Funktionen in Flight Contest
+*** Verbinden mit Live-Tracking-Contest +
+-> Wettbewerb -> Einstellungen -> Live-Tracking -> Contest verbinden
+*** Teams aus Live-Tracking-Contest als Besatzungen importieren +
+-> Besatzungen -> Live-Tracking-Teams importieren
+*** Zeitplan für Navigations-Flug in Aufgabe berechnen
+*** Live-Tracking-Navigation-Task anlegen +
+-> Aufgaben -> <Aufgaben-Name> -> Einstellungen -> Live-Tracking -> Navigation-Task-Datum +
+-> Aufgaben -> <Aufgaben-Name> -> Einstellungen -> Live-Tracking -> Navigation-Task anlegen
+
+** Auszuführende Funktionen in Airsports Live Tracking
+*** Live-Tracking-Contest und -Navigation-Task für öffentlichen Zugriff freischalten
+
+<<<
+[[automatic-actions]]
+== Automatische Aktionen
+Automatische Aktionen werden durch dauerhaft laufende Scripte erledigt
+und funktionieren nur mit dem Firefox-Browser. +
+Der erste Aufruf des Scriptes schaltet automatische Aktion ein. +
+Erneuter Aufruf des Scriptes schaltet automatische Aktion nach Rückfrage aus. +
+-> 'Programme -> Flight Contest -> Scripts'
+
+<<fc.adoc#automatic-actions-openpdf>> +
+<<fc.adoc#automatic-actions-loadscanplanningtask>> +
+<<fc.adoc#automatic-actions-loadscanobservation>> +
+<<fc.adoc#automatic-actions-loadlogger>>
+
+[[automatic-actions-openpdf]]
+=== FCAutoOpenPDF
+Automatisches Öffnen von PDF im Acrobat Reader.
+
+Notwendige Firefox-Einstellungen:
+
+* Allgemein -> Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
+* Anwendungen -> Adobe Acrobat Document: Datei speichern
+
+[[automatic-actions-loadscanplanningtask]]
+=== FCAutoLoadScanPlanningTask
+Automatisches Laden gescannter Planungstest-Formulare.
+
+Notwendige Scanner-Einstellungen:
+
+* JPG-Dateien in das Verzeichnis "C:\FCSave\.scan" speichern
+  
+Notwendige Vorbereitung:
+
+* Firefox muss laufen
+* 'Wettbewerb -> Ergebnisse' mit der aktuellen Aufgabe muss aktiv sein
+
+[[automatic-actions-loadscanobservation]]
+=== FCAutoLoadScanObservation
+Automatisches Laden gescannter Beobachtungstest-Formulare.
+
+Notwendige Scanner-Einstellungen:
+
+* JPG-Dateien in das Verzeichnis "C:\FCSave\.scan" speichern
+  
+Notwendige Vorbereitung:
+
+* Firefox muss laufen
+* 'Wettbewerb -> Ergebnisse' mit der aktuellen Aufgabe muss aktiv sein
+
+[[automatic-actions-loadlogger]]
+=== FCAutoLoadLogger
+Automatisches Laden eingelesener Logger-Daten.
+
+Notwendige Logger-Software-Einstellungen:
+
+* GAC-, IGC-, GPX-, KML-, KMZ- oder NMEA-Dateien in das Verzeichnis "C:\FCSave\.logger" speichern
+  
+Notwendige Vorbereitung:
+
+* Firefox muss laufen
+* 'Wettbewerb -> Ergebnisse' mit der aktuellen Aufgabe muss aktiv sein
+
+<<<
+[[save-data]]
+== Datensicherung eines laufenden Wettbewerbes
+Während eines laufenden Wettbewerbes sollten Sie folgende Daten sichern:
+
+* 'Flight Contest'-Datenbank
+* 'Flight Contest'-Ausdrucke
+  
+Datensicherungen erfolgen ins Verzeichnis 'C:\FCSave',
+welches durch die 'Flight Contest'-Installation angelegt wird.
+
+Datensicherungen dienen vor allem als Schutz vor Ausfall oder Verlust 
+des Windows-Rechners, auf dem der Wettbewerb ausgewertet wird.
+Kopieren Sie deshalb das Sicherungsverzeichnis 'C:\FCSave'
+nach Abschluss eines Wettbewerbstages oder nach Erreichen eines besonders
+wichtigen Zeitpunktes Ihres Wettbewerbes auf ein externes Speichermedium, 
+nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.
+
+<<fc.adoc#save-fcdb>> +
+<<fc.adoc#save-prints>> +
+<<fc.adoc#restore-fcdb>>
+
+[[save-fcdb]]
+=== Sicherung der 'Flight Contest'-Datenbank
+
+Rufen Sie das Script 
+'Programme -> Flight Contest -> Scripts -> Save contest database' auf. +
+Die Datenbank wird mit Datum und Uhrzeit versehen
+ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-fcdb.h2.db).
+
+[[save-prints]]
+=== Sicherung der 'Flight Contest'-Ausdrucke (Firefox)
+
+Empfohlene Firefox-Einstellungen:
+
+ Allgemein -> Alle Dateien in folgendem Ordner abspeichern: C:\FCSave
+ Anwendungen -> Adobe Acrobat Document: Datei speichern
+ 
+Diese Einstellungen stellen sicher, dass alle Ausdrucke im Sicherungsverzeichnis 
+C:\FCSave gespeichert werden. Öffnen der PDF und Ausdruck erfolgt dann über
+den Download-Manager.
+  
+Ist diese Einstellung nicht möglich oder gewünscht,
+landen Ausdrucke im Windows-Temp-Verzeichnis. 
+Von dort können sie mit dem Script 'Programme -> Flight Contest -> Scripts -> Save contest prints' 
+ins Sicherungsverzeichnis C:\FCSave gespeichert werden.
+Beachten Sie jedoch, dass Firefox beim Schließen alle Downloads aus dem Windows-Temp-Verzeichnis löscht, 
+so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Script nicht regelmässig aufgerufen wird.
+
+[[restore-fcdb]]
+=== Datenwiederherstellung der 'Flight Contest'-Datenbank
+
+. Zur Datenwiederherstellung muss der Dienst 'Apache Tomcat FlightContest' gestoppt sein.
+. Kopieren Sie 'C:\FCSave\<Datum>-<Uhrzeit>-fcdb.h2.db'
+    nach 'C:\Program Files (x86)\Flight Contest\fc\fcdb.h2.db'.
+    Hierfür benötigen Sie Administrator-Privilegien.

@@ -13,6 +13,17 @@ class FlightTest
     BigDecimal LDGDirection = 0.0
     BigDecimal iTOiLDGDirection = 0.0
 
+    // print styles
+    Boolean flightPlanShowLegDistance = true      // DB-2.20
+    Boolean flightPlanShowTrueTrack = true        // DB-2.20
+    Boolean flightPlanShowTrueHeading = true      // DB-2.20
+    Boolean flightPlanShowGroundSpeed = true      // DB-2.20
+    Boolean flightPlanShowLocalTime = true        // DB-2.20
+    Boolean flightPlanShowElapsedTime = false     // DB-2.20
+    Integer submissionMinutes = 0                 // DB-2.20
+    String flightPlanAddTPNum = ""                // DB-2.20
+    Boolean flightResultsShowCurvedPoints = false // DB-2.20
+	
 	static belongsTo = [task:Task]
 
 	static hasMany = [flighttestwinds:FlightTestWind]
@@ -26,6 +37,17 @@ class FlightTest
         LDGDirection(range:0..360,scale:10)
         iTOiLDGDirection(range:0..360,scale:10)
 		task(nullable:false)
+        
+        // DB-2.20 compatibility
+        flightPlanShowLegDistance(nullable:true)
+        flightPlanShowTrueTrack(nullable:true)
+        flightPlanShowTrueHeading(nullable:true)
+        flightPlanShowGroundSpeed(nullable:true)
+        flightPlanShowLocalTime(nullable:true)
+        flightPlanShowElapsedTime(nullable:true)
+        submissionMinutes(nullable:true)
+        flightPlanAddTPNum(nullable:true)
+        flightResultsShowCurvedPoints(nullable:true)
 	}
 
 	static mapping = {
@@ -83,4 +105,27 @@ class FlightTest
         }
         return false
     }
+    
+    Map AddTPNum()
+    {
+        Map ret = [tp:[], addNumber:[]]
+        if (flightPlanAddTPNum) {
+            List v = flightPlanAddTPNum.split(':')
+            if (v.size() == 2) {
+                for (String v1 in v[0].split(',')) {
+                    ret.tp += v1.trim().toUpperCase()
+                }
+                for (String v2 in v[1].split(',')) {
+                    if (v2.isInteger()) {
+                        ret.addNumber += v2.toInteger()
+                    }
+                }
+            }
+        }
+        if (!ret.tp || !ret.addNumber || ret.tp.size() != ret.addNumber.size() || ret.tp.size() < 1) {
+            return [:]
+        }
+        return ret
+    }
+    
 }

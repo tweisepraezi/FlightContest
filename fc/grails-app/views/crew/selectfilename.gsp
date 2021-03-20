@@ -12,8 +12,9 @@
                 <h2>${message(code:'fc.crew.import.selectfilename')}</h2>
                 <div class="block" id="forms" >
                 	<g:uploadForm action="importcrews">
+                        <g:set var="ti" value="${[]+1}"/>
                     	<div>
-    						<input type="file" size="80" accept=".xls" name="loadfile" tabIndex="1"/>
+    						<input type="file" size="80" accept=".xls,.xlsx" name="loadfile" tabIndex="${ti[0]++}"/>
                     	</div>
                     	<g:if test="${contestInstance.unsuitableStartNum}">
 	                        <p>
@@ -24,8 +25,8 @@
 	                        </p>
 	                    </g:if>
                     	<div>
-	    					<input type="submit" value="${message(code:'fc.import')}" tabIndex="2"/>
-		                    <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+	    					<input type="submit" value="${message(code:'fc.import')}" tabIndex="${ti[0]++}"/>
+		                    <g:actionSubmit action="list" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     	</div>
 					</g:uploadForm>
                 </div>

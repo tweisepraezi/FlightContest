@@ -16,9 +16,6 @@ class FlightResultsTagLib
             outln"""            <tr>"""
             outln"""                <th>${message(code:'fc.number')}</th>"""
             outln"""                <th>${message(code:'fc.title')}</th>"""
-            if (attrs.t.showAflosMark) {
-                outln"""            <th>${message(code:'fc.aflos.checkpoint')}</th>"""
-            }
             outln"""                <th/>"""
             //outln"""              <th>${message(code:'fc.latitude')}</th>"""
             //outln"""              <th>${message(code:'fc.longitude')}</th>"""
@@ -41,9 +38,6 @@ class FlightResultsTagLib
                     outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                     outln"""        <td>${coordresult_link(coordresult_instance, leg_no.toString(), true, createLink(controller:'coordResult',action:'editprocedureturn'),0)}</td>"""
                     outln"""        <td>${message(code:'fc.procedureturn')}</td>"""
-                    if (attrs.t.showAflosMark) {
-                        outln"""    <td/>"""
-                    }
                     outln"""        <td>${message(code:'fc.test.results.measured')}</td>"""
                     //outln"""      <td/>"""
                     //outln"""      <td/>"""
@@ -68,9 +62,6 @@ class FlightResultsTagLib
                     outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                     outln"""        <td/>"""
                     outln"""        <td/>"""
-                    if (attrs.t.showAflosMark) {
-                        outln"""    <td/>"""
-                    }
                     outln"""        <td>${message(code:'fc.test.results.penalty')}</td>"""
                     //outln"""      <td/>"""
                     //outln"""      <td/>"""
@@ -109,9 +100,6 @@ class FlightResultsTagLib
                 }
                 outln"""            <td>${coordresult_link(coordresult_instance, leg_no.toString(), false, createLink(controller:'coordResult',action:'edit'), next_id)}</td>"""
                 outln"""            <td>${coordresult_instance.titleCode()}</td>"""
-                if (attrs.t.showAflosMark) {
-                    outln"""        <td>${coordresult_instance.mark}</td>"""
-                }
                 outln"""            <td>${message(code:'fc.test.results.plan')}</td>"""
                 //outln"""          <td>${coordresult_instance.latName()}</td>"""
                 //outln"""          <td>${coordresult_instance.lonName()}</td>"""
@@ -126,9 +114,6 @@ class FlightResultsTagLib
                 outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                 outln"""            <td/>"""
                 outln"""            <td/>"""
-                if (attrs.t.showAflosMark) {
-                    outln"""        <td/>"""
-                }
                 outln"""            <td>${message(code:'fc.test.results.measured')}</td>"""
                 //outln"""          <td>${coordresult_instance.resultLatitude}</td>"""
                 //outln"""          <td>${coordresult_instance.resultLongitude}</td>"""
@@ -191,9 +176,6 @@ class FlightResultsTagLib
                 outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                 outln"""            <td/>"""
                 outln"""            <td/>"""
-                if (attrs.t.showAflosMark) {
-                    outln"""        <td/>"""
-                }
                 outln"""            <td>${message(code:'fc.test.results.penalty')}</td>"""
                 //outln"""          <td/>"""
                 //outln"""          <td/>"""
@@ -228,12 +210,13 @@ class FlightResultsTagLib
                             if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
                                 outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                             } else {
-                                penalty_badcourse_summary += coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()
+                                int badcourse_penalties = coordresult_instance.GetBadCoursePenalties()
+                                penalty_badcourse_summary += badcourse_penalties
                                 String points_class = "points"
                                 if (!coordresult_instance.resultBadCourseNum) {
                                     points_class = "zeropoints"
                                 }
-                                outln"""<td class="${points_class}">${coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()} ${message(code:'fc.points')}</td>"""
+                                outln"""<td class="${points_class}">${badcourse_penalties} ${message(code:'fc.points')}</td>"""
                             }
                         } else {
                             outln"""<td/>"""
@@ -280,9 +263,6 @@ class FlightResultsTagLib
             outln"""            <tr>"""
             outln"""                <td/>"""
             outln"""                <td/>"""
-            if (attrs.t.showAflosMark) {
-                outln"""            <td/>"""
-            }
             outln"""                <td>${message(code:'fc.test.results.summary')}</td>"""
             //outln"""              <td/>"""
             //outln"""              <td/>"""
@@ -564,11 +544,12 @@ class FlightResultsTagLib
                                     outln"""<td>-</td>"""
                                 }
                             } else {
-                                penalty_badcourse_summary += last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()
+                                int badcourse_penalties = last_coordresult_instance.GetBadCoursePenalties()
+                                penalty_badcourse_summary += badcourse_penalties
                                 if (last_coordresult_instance.resultBadCourseNum > 0) {
-                                    outln"""<td>${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()} (${last_coordresult_instance.resultBadCourseNum})</td>"""
+                                    outln"""<td>${badcourse_penalties} (${last_coordresult_instance.resultBadCourseNum})</td>"""
                                 } else {
-                                    outln"""<td>${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()}</td>"""
+                                    outln"""<td>${badcourse_penalties}</td>"""
                                 }
                             }
                         } else {
@@ -638,11 +619,12 @@ class FlightResultsTagLib
                                 outln"""<td>-</td>"""
                             }
                         } else {
-                            penalty_badcourse_summary += last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()
+                            int badcourse_penalties = last_coordresult_instance.GetBadCoursePenalties()
+                            penalty_badcourse_summary += badcourse_penalties
                             if (last_coordresult_instance.resultBadCourseNum > 0) {
-                                outln"""<td>${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()} (${last_coordresult_instance.resultBadCourseNum})</td>"""
+                                outln"""<td>${badcourse_penalties} (${last_coordresult_instance.resultBadCourseNum})</td>"""
                             } else {
-                                outln"""<td>${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()}</td>"""
+                                outln"""<td>${badcourse_penalties}</td>"""
                             }
                         }
                     } else {
@@ -781,11 +763,8 @@ class FlightResultsTagLib
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.tpname')}</th>"""
-            if (attrs.t.showAflosMark) {
-                outln"""    	<th>${message(code:'fc.aflos.checkpoint')}</th>"""
-            }
 			outln"""			<th colspan="3">${message(code:'fc.cptime')}</th>"""
-			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
+			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
 				outln"""		<th>${message(code:'fc.procedureturn')}</th>"""
 			}
 			if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
@@ -797,13 +776,10 @@ class FlightResultsTagLib
 			outln"""		</tr>"""
 			outln"""		<tr class="name2">"""
 			outln"""			<th/>"""
-            if (attrs.t.showAflosMark) {
-                outln"""		<th/>"""
-            }
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
 			outln"""			<th>${message(code:'fc.points')}</th>"""
-			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
+			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
                 outln"""		<th/>"""
 			}
 			if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
@@ -821,7 +797,7 @@ class FlightResultsTagLib
 			Integer penalty_altitude_summary = 0
 			boolean check_secretpoints = attrs.t.IsFlightTestCheckSecretPoints()
             List curved_point_ids = attrs.t.GetCurvedPointIds()
-            boolean show_curved_point = attrs.t.task.contest.printStyle.contains('--flightresults') && attrs.t.task.contest.printStyle.contains('show-curved-points')
+            boolean show_curved_point = attrs.t.task.flighttest.flightResultsShowCurvedPoints
 			CoordResult last_coordresult_instance = null
 			for (CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
 				if (last_coordresult_instance) {
@@ -831,9 +807,6 @@ class FlightResultsTagLib
                     if (show_curved_point || !last_coordresult_instance.HideSecret(curved_point_ids)) {
     					outln"""<tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
     					outln"""	<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-                        if (attrs.t.showAflosMark) {
-                            outln"""<td class="aflosname">${last_coordresult_instance.mark}</td>"""
-                        }
     					outln"""	<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     					if (last_coordresult_instance.resultCpNotFound) {
     						outln"""<td class="cptime">-</td>"""
@@ -857,7 +830,7 @@ class FlightResultsTagLib
         						outln"""<td class="penaltycp">-</td>"""
         					}
                         }
-    					if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
+    					if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
     						if (coordresult_instance.planProcedureTurn) {
     							if (coordresult_instance.resultProcedureTurnEntered) {
     								if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsProcedureTurn).contains("${last_coordresult_instance.title()},")) {
@@ -886,11 +859,12 @@ class FlightResultsTagLib
                                         outln"""<td class="penaltybadcourse">-</td>"""
                                     }
                                 } else {
-        							penalty_badcourse_summary += last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()
+                                    int badcourse_penalties = last_coordresult_instance.GetBadCoursePenalties()
+        							penalty_badcourse_summary += badcourse_penalties
         							if (last_coordresult_instance.resultBadCourseNum > 0) {
-        								outln"""<td class="penaltybadcourse">${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()} (${last_coordresult_instance.resultBadCourseNum})</td>"""
+        								outln"""<td class="penaltybadcourse">${badcourse_penalties} (${last_coordresult_instance.resultBadCourseNum})</td>"""
         							} else {
-        								outln"""<td class="penaltybadcourse">${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()}</td>"""
+        								outln"""<td class="penaltybadcourse">${badcourse_penalties}</td>"""
         							}
                                 }
     						} else {
@@ -927,9 +901,6 @@ class FlightResultsTagLib
                 if (show_curved_point || !last_coordresult_instance.HideSecret(curved_point_ids)) {
     				outln"""    <tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
     				outln"""		<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-                    if (attrs.t.showAflosMark) {
-                        outln"""	<td class="aflosname">${last_coordresult_instance.mark}</td>"""
-                    }
     				outln"""		<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     				if (last_coordresult_instance.resultCpNotFound) {
     					outln"""	<td class="cptime">-</td>"""
@@ -953,7 +924,7 @@ class FlightResultsTagLib
         					outln"""<td class="penaltycp">-</td>"""
         				}
                     }
-    				if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
+    				if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
     					outln"""	<td class="penaltyprocedureturn"/>"""
     				}
     				if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
@@ -965,11 +936,12 @@ class FlightResultsTagLib
                                     outln"""<td class="penaltybadcourse">-</td>"""
                                 }
                             } else {
-        						penalty_badcourse_summary += last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()
+                                int badcourse_penalties = last_coordresult_instance.GetBadCoursePenalties()
+        						penalty_badcourse_summary += badcourse_penalties
         						if (last_coordresult_instance.resultBadCourseNum > 0) {
-        							outln"""<td class="penaltybadcourse">${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()} (${last_coordresult_instance.resultBadCourseNum})</td>"""
+        							outln"""<td class="penaltybadcourse">${badcourse_penalties} (${last_coordresult_instance.resultBadCourseNum})</td>"""
         						} else {
-        						   	outln"""<td class="penaltybadcourse">${last_coordresult_instance.resultBadCourseNum*attrs.t.GetFlightTestBadCoursePoints()}</td>"""
+        						   	outln"""<td class="penaltybadcourse">${badcourse_penalties}</td>"""
         						}
                             }
     					} else {
@@ -1000,13 +972,9 @@ class FlightResultsTagLib
 			outln"""	</tbody>"""
 			outln"""	<tfoot>"""
 			outln"""		<tr class="summary">"""
-            if (attrs.t.showAflosMark) {
-                outln"""        <td class="tpname" colspan="4">${message(code:'fc.test.results.summary')}</td>"""
-            } else {
-			    outln"""	    <td class="tpname" colspan="3">${message(code:'fc.test.results.summary')}</td>"""
-            }
+            outln"""	        <td class="tpname" colspan="3">${message(code:'fc.test.results.summary')}</td>"""
 			outln"""			<td class="penaltycp">${penalty_coord_summary}</td>"""
-			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.UseProcedureTurn()) {
+			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0) && route_instance.useProcedureTurns) {
 				outln"""		<td class="penaltyprocedureturn">${penalty_procedureturn_summary}</td>"""
 			}
 			if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
@@ -1100,9 +1068,6 @@ class FlightResultsTagLib
 			outln"""	<thead>"""
 			outln"""		<tr class="name1">"""
 			outln"""			<th>${message(code:'fc.tpname')}</th>"""
-            if (attrs.t.showAflosMark) {
-                outln"""		<th>${message(code:'fc.aflos.checkpoint')}</th>"""
-            }
 			outln"""			<th colspan="2">${message(code:'fc.cptime')}</th>"""
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
 				outln"""		<th>${message(code:'fc.procedureturn')}</th>"""
@@ -1116,9 +1081,6 @@ class FlightResultsTagLib
 			outln"""		</tr>"""
 			outln"""		<tr class="name2">"""
 			outln"""			<th/>"""
-            if (attrs.t.showAflosMark) {
-                outln"""		<th/>"""
-            }
 			outln"""			<th>${message(code:'fc.test.results.plan')}</th>"""
 			outln"""			<th>${message(code:'fc.test.results.measured')}</th>"""
 			if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() > 0) && (attrs.t.task.procedureTurnDuration > 0)) {
@@ -1134,16 +1096,13 @@ class FlightResultsTagLib
 			outln"""	</thead>"""
 			outln"""	<tbody>"""
             List curved_point_ids = attrs.t.GetCurvedPointIds()
-            boolean show_curved_point = attrs.t.task.contest.printStyle.contains('--flightresults') && attrs.t.task.contest.printStyle.contains('show-curved-points')
+            boolean show_curved_point = attrs.t.task.flighttest.flightResultsShowCurvedPoints
 			CoordResult last_coordresult_instance = null
 			for (CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
 				if (last_coordresult_instance) {
                     if (show_curved_point || !last_coordresult_instance.HideSecret(curved_point_ids)) {
     					outln"""<tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
     					outln"""	<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-                        if (attrs.t.showAflosMark) {
-                            outln"""<td class="aflosname">${last_coordresult_instance.mark}</td>"""
-                        }
     					outln"""	<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     					if (last_coordresult_instance.resultCpNotFound) {
     						outln"""<td class="cptime">-</td>"""
@@ -1196,9 +1155,6 @@ class FlightResultsTagLib
                 if (show_curved_point || !last_coordresult_instance.HideSecret(curved_point_ids)) {
     				outln"""	<tr class="value" id="${last_coordresult_instance.titlePrintCode()}">"""
     				outln"""		<td class="tpname">${last_coordresult_instance.titlePrintCode()}</td>"""
-                    if (attrs.t.showAflosMark) {
-                        outln"""	<td class="aflosname">${last_coordresult_instance.mark}</td>"""
-                    }
     				outln"""		<td class="plancptime">${FcMath.TimeStr(last_coordresult_instance.planCpTime)}</td>"""
     				if (last_coordresult_instance.resultCpNotFound) {
     					outln"""	<td class="cptime">-</td>"""

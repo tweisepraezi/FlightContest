@@ -5,21 +5,29 @@
         <title>${message(code:'fc.crew.list')}</title>
     </head>
     <body>
-        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${message(code:'fc.crew.new')}" importaction="${message(code:'fc.crew.import')}" printsettings="${message(code:'fc.crew.print')}" />
+		<g:set var="new_action" value=""/>
+        <g:set var="import_action" value=""/>
+        <g:set var="import_action2" value=""/>
+		<g:if test="${!contestInstance.liveTrackingManagedCrews}">
+			<g:set var="new_action" value="${message(code:'fc.crew.new')}"/>
+            <g:set var="import_action" value="${message(code:'fc.crew.import')}"/>
+		</g:if>
+        <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && !Crew.findByContest(contestInstance)}">
+            <g:set var="import_action2" value="${message(code:'fc.livetracking.teamsimport')}"/>
+        </g:if>
+        <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${new_action}" importaction="${import_action}" importaction2="${import_action2}" printsettings="${message(code:'fc.crew.print')}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <g:form method="post" >
                 <g:set var="ti" value="${[]+1}"/>
+                <g:set var="columns" value="${6}"/>
+                <g:if test="${resultClasses}">
+                    <g:set var="columns" value="${columns+1}"/>
+                </g:if>
 	            <table>
 	                <thead>
 	                    <tr>
-	                    	<g:if test="${resultClasses}">
-	                        	<th colspan="6" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
-	                        </g:if>
-	                        <g:else>
-	                        	<th colspan="5" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
-	                        </g:else>
-	                        
+	                        <th colspan="${columns}" class="table-head">${message(code:'fc.crew.list')} (${activeCrewList.size()})</th>
 	                        <th class="table-head"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a>&#x00A0;&#x00A0;&#x00A0;<a href="../docs/help.html#create-crew-list" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
 	                    </tr>
 	                    <tr>
@@ -32,6 +40,7 @@
                             </g:if>
 	                        <th>${message(code:'fc.aircraft')}</th>
 	                        <th>${message(code:'fc.tas')}</th>
+                            <th>${message(code:'fc.crew.trackerid')}</th>
 	                    </tr>
 	                </thead>
 	                <tbody>
@@ -63,7 +72,7 @@
                                     <td>-</td>
                                 </g:else>
                                 <g:if test="${resultClasses}">
-                                    <g:if test="${crew_instance.resultclass}">                          
+                                    <g:if test="${crew_instance.resultclass}">
                                         <td><g:resultclass var="${crew_instance.resultclass}" link="${createLink(controller:'resultClass',action:'edit')}"/></td>
 	                                </g:if>
 	                                <g:else>
@@ -72,6 +81,13 @@
                                 </g:if>
 	                            <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/><g:if test="${crew_instance.aircraft?.user1 && crew_instance.aircraft?.user2}"> *</g:if></td>
 	                            <td>${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}<g:if test="${crew_instance.disabledContest}"> (${message(code:'fc.crew.disabledcontest')})</g:if></td>
+                                
+                                <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && !crew_instance.trackerID}">
+                                    <td class="errors">${message(code:'fc.crew.notrackerid')}</td>
+                                </g:if>
+                                <g:else>
+                                    <td>${fieldValue(bean:crew_instance, field:'trackerID')}</td>
+                                </g:else>
 	                        </tr>
 	                    </g:each>
 	                </tbody>
@@ -79,45 +95,23 @@
 	                    <tr class="">
 	                        <td><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" tabIndex="${ti[0]++}"/></td>
 	                        <td><g:actionSubmit action="calculatesequence" value="${message(code:'fc.test.sequence.calculate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/></td>
-	                    	<g:if test="${resultClasses}">
-		                        <td colspan="4">
-		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="${ti[0]++}"/>
-                                    <g:actionSubmit action="sortstartnumgaps" value="${message(code:'fc.crew.sortstartnum.gaps')}" tabIndex="${ti[0]++}"/>
-		                        </td>
-		                    </g:if>
-		                    <g:else>
-		                        <td colspan="3">
-		                            <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-		                            <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="${ti[0]++}"/>
-                                    <g:actionSubmit action="sortstartnumgaps" value="${message(code:'fc.crew.sortstartnum.gaps')}" tabIndex="${ti[0]++}"/>
-		                        </td>
-		                    </g:else>
+                            <td colspan="${columns-2}">
+                                <g:actionSubmit action="deletecrews" value="${message(code:'fc.crew.deletecrews')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="sortstartnum" value="${message(code:'fc.crew.sortstartnum')}" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="sortstartnumgaps" value="${message(code:'fc.crew.sortstartnum.gaps')}" tabIndex="${ti[0]++}"/>
+                            </td>
 		                    <td><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
 	                    </tr>
 	                    <tr class="join">
 	                        <td><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" tabIndex="${ti[0]++}"/></td>
 	                        <td><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}" tabIndex="${ti[0]++}"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}" tabIndex="${ti[0]++}"/></td>
-	                    	<g:if test="${resultClasses}">
-		                        <td colspan="5"/>
-		                    </g:if>
-		                    <g:else>
-		                        <td colspan="4"/>
-		                    </g:else>
+	                        <td colspan="${columns-1}"/>
 	                    </tr>
                         <tr>
-                            <g:if test="${resultClasses}">
-                                <td colspan="7">
-                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="${ti[0]++}"/>
-                                    <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="${ti[0]++}" />
-                                </td>
-                            </g:if>
-                            <g:else>
-                                <td colspan="6">
-                                    <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "")}" optionValue="${{message(code:it.titleCode)}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="${ti[0]++}"/>
-                                    <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="${ti[0]++}" />
-                                </td>
-                            </g:else>
+                            <td colspan="${columns+1}">
+                                <g:select from="${CrewCommands.GetValues(contestInstance.GetIncreaseValues() != "", contestInstance.crewPilotNavigatorDelimiter.trim() != "")}" optionValue="${{message(code:it.titleCode,args:[contestInstance.crewPilotNavigatorDelimiter])}}" value="${CrewCommands.SELECTCOMMAND}" name="crewcommand" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="runcommand" value="${message(code:'fc.crew.runcommand')}" tabIndex="${ti[0]++}" />
+                            </td>
                         </tr>
 	                </tfoot>
 	            </table>

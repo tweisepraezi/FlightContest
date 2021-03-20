@@ -35,14 +35,6 @@
 	                                </div>
                                 </g:radioGroup>
                             </p>
-                            <g:if test="${BootStrap.global.IsAFLOSPossible()}" >
-	                            <p>
-	                                <div>
-	                                    <g:checkBox name="aflos_db" value="${aflos_db}" />
-	                                    <label>${message(code:'fc.contest.new.test.aflosdb')}</label>
-	                                </div>
-	                            </p>
-	                        </g:if>
                         </fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>
                         <g:actionSubmit action="createtest" value="${message(code:'fc.create')}" tabIndex="2"/>

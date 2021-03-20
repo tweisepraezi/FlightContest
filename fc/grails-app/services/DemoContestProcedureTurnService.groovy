@@ -16,21 +16,17 @@ class DemoContestProcedureTurnService
 	
 	static final String NOWIND = "0/0"
 	
-	long CreateTest(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,0,ContestRules.R11,aflosDB,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,false,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
 		
 		// Routes
         Map route_pt = [:]
 		fcService.printstart ROUTE_NAME
-        if (aflosDB) {
-            route_pt = fcService.importAflosRoute(contest,ROUTE_NAME,ROUTE_NAME_PT,SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route_pt = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_PT_GPX)
-        }
+        route_pt = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, ROUTE_NAME_PT_GPX)
 		fcService.printdone ""
 		
 		// Crews and Aircrafts
@@ -48,7 +44,7 @@ class DemoContestProcedureTurnService
 		return contest.instance.id
 	}
 	
-	Map RunTest(Contest lastContest, String contestName, boolean aflosDB)
+	Map RunTest(Contest lastContest, String contestName)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -83,7 +79,7 @@ class DemoContestProcedureTurnService
 				
 				[name:"CoordResult '$ROUTE_NAME_PT ($NOWIND) - $CREW_60'",     count:11,table:CoordResult.findAllByTest(    Test.findByTaskAndCrew(task_pt,     Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testCoordResult60(     ROUTE_NAME_PT,false)],
 				
-			   ],aflosDB
+			   ]
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error

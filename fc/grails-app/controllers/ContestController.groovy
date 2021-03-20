@@ -1,8 +1,6 @@
 import java.util.Date;
 import java.util.Map;
 
-import org.junit.After;
-
 class ContestController {
     
     def printService
@@ -11,6 +9,7 @@ class ContestController {
     def evaluationService
 	def demoContestService
     def testService
+    def trackerService
 
     def index = { redirect(action:start,params:params) }
 
@@ -169,7 +168,7 @@ class ContestController {
     }
 
     def update = {
-        def contest = fcService.updateContest(params)
+        def contest = fcService.updateContest(session.showLanguage, params)
         if (contest.saved) {
             flash.message = contest.message
             session.lastContest = contest.instance
@@ -188,6 +187,8 @@ class ContestController {
                 redirect(action:start,id:contest.instance.id)
             }
         } else if (contest.instance) {
+            flash.message = contest.message
+            flash.error = true
             render(view:'edit',model:[contestInstance:contest.instance])
         } else {
             flash.message = contest.message
@@ -196,7 +197,7 @@ class ContestController {
     }
 
     def savecontest = {
-        def contest = fcService.updateContest(params)
+        def contest = fcService.updateContest(session.showLanguage, params)
         if (contest.saved) {
             flash.message = contest.message
             session.lastContest = contest.instance
@@ -210,7 +211,7 @@ class ContestController {
     }
 
     def savepoints = {
-        def contest = fcService.updateContest(params)
+        def contest = fcService.updateContest(session.showLanguage, params)
         if (contest.saved) {
             flash.message = contest.message
             session.lastContest = contest.instance
@@ -222,7 +223,7 @@ class ContestController {
     }
 
     def savedefaults = {
-        def contest = fcService.updateContest(params)
+        def contest = fcService.updateContest(session.showLanguage, params)
         if (contest.saved) {
             flash.message = contest.message
             session.lastContest = contest.instance
@@ -234,7 +235,7 @@ class ContestController {
     }
 
     def savefreetext = {
-        def contest = fcService.updateContest(params)
+        def contest = fcService.updateContest(session.showLanguage, params)
         if (contest.saved) {
             flash.message = contest.message
             session.lastContest = contest.instance
@@ -278,6 +279,8 @@ class ContestController {
             flash.message = contest.message
             redirect(action:start,id:contest.instance.id)
         } else {
+            flash.message = contest.message
+            flash.error = true
             render(view:'create',model:[contestInstance:contest.instance])
         }
     }
@@ -623,7 +626,36 @@ class ContestController {
 			response.outputStream << contest.imageBottomRight
 		}
 	}
-	     
+
+    def delete_contestproperty = {
+        fcService.println "delete_contestproperty $params"
+        if (params.contestPropertyId) {
+            ContestProperty contest_property_instance = ContestProperty.get(params.contestPropertyId)
+            if (contest_property_instance) {
+                flash.message = message(code:'fc.contest.properties.deleted', args:[contest_property_instance.key, contest_property_instance.value])
+                contest_property_instance.delete()
+            }
+        }
+		redirect(action:edit)
+    }
+    
+    def add_contestproperty = {
+        fcService.println "add_contestproperty $params"
+        if (params.id && params.key && params.value) {
+	        Contest contest_instance = Contest.get(params.id)
+            if (contest_instance) {
+                ContestProperty contest_property_instance = new ContestProperty(key:params.key, value:params.value, contest:contest_instance)
+                if (contest_property_instance.save()) {
+                    flash.message = message(code:'fc.contest.properties.saved', args:[params.key, params.value])
+                } else {
+                    flash.message = message(code:'fc.contest.properties.notsaved', args:[params.key, params.value])
+                    flash.error = true
+                }
+            }
+        }
+		redirect(action:edit)
+    }
+    
     def cancel = {
         // process return action
         if (params.positionsReturnAction) {
@@ -1067,13 +1099,12 @@ class ContestController {
     }
     
     def createtest = {
-        boolean aflos_db = params?.aflos_db == 'on'
-		Map ret = demoContestService.CreateTest(params.demoContest, aflos_db, session.showLanguage)
+		Map ret = demoContestService.CreateTest(params.demoContest, session.showLanguage)
         redirect(controller:'contest',action:'activate',id:ret.contestid,params:[flashmessage:ret.message,flasherror:ret.error])
     }
             
     def runtest = {
-        Map ret = demoContestService.RunTest(session.lastContest, session.lastContest.aflosTest)
+        Map ret = demoContestService.RunTest(session.lastContest)
 		flash.error = ret.error
 		flash.message = ret.message
         redirect(controller:'contest',action:start)
@@ -1085,4 +1116,50 @@ class ContestController {
         flash.message = ret.message
         redirect(controller:'contest',action:start)
     }
+    
+    def livetracking_contestcreate = {
+        def ret = trackerService.createContest(params)
+        flash.message = ret.message
+        if (!ret.created) {
+            flash.error = true
+        }
+        render(view:'edit',model:[contestInstance:ret.instance])
+    }
+    
+    def livetracking_contestconnect = {
+        def ret = trackerService.connectContest(params)
+        flash.message = ret.message
+        if (!ret.connected) {
+            flash.error = true
+        }
+        render(view:'edit',model:[contestInstance:ret.instance])
+    }
+    
+    def livetracking_contestdelete = {
+        def ret = trackerService.deleteContest(params)
+        flash.message = ret.message
+        if (!ret.deleted) {
+            flash.error = true
+        }
+        render(view:'edit',model:[contestInstance:ret.instance])
+    }
+	
+    def livetracking_contestdisconnect = {
+        def ret = trackerService.disconnectContest(params)
+        flash.message = ret.message
+        if (!ret.connected) {
+            flash.error = true
+        }
+        render(view:'edit',model:[contestInstance:ret.instance])
+    }
+    
+    def livetracking_teamsimport = {
+        def ret = trackerService.importTeams(params)
+        flash.message = ret.message
+        if (!ret.imported) {
+            flash.error = true
+        }
+        redirect(controller:"crew", action:"list") // ,model:[contestInstance:ret.instance])
+    }
+    
 }

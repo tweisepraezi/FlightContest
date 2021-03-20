@@ -24,16 +24,23 @@
                                 <br/>
                                 <input type="text" id="title" name="title" value="${fieldValue(bean:routeInstance,field:'title')}" tabIndex="${ti[0]++}"/>
                             </p>
-                            <g:if test="${routeInstance.mark || routeInstance.ExistAnyAflosRoute()}">
-	                            <p>
-	                                <label>${message(code:'fc.route.aflosimport.name')}:</label>
-	                                <br/>
-	                                <input type="text" id="mark" name="mark" value="${fieldValue(bean:routeInstance,field:'mark')}" tabIndex="${ti[0]++}"/>
-	                            </p>
+	                        <g:if test="${!routeInstance.Used()}">
+                                <g:editRouteUseProcedureTurns route="${routeInstance}" ti="${ti}"/>
 	                        </g:if>
+                            <g:if test="${BootStrap.global.IsLiveTrackingPossible()}">
+                                <g:editRouteLiveTrackingScorecard route="${routeInstance}" ti="${ti}"/>
+	                        </g:if>
+                            <fieldset>
+                                <p>
+                                    <label>${message(code:'fc.scale')}*:</label>
+                                    <br/>
+                                    <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:routeInstance,field:'mapScale')}" tabIndex="${ti[0]++}"/>
+                                </p>
+                            </fieldset>
 	                        <g:if test="${!routeInstance.IsObservationSignUsed()}">
                                 <g:editRouteObservations route="${routeInstance}" ti="${ti}"/>
 	                        </g:if>
+                            <g:editRouteSpecialSettings route="${routeInstance}" ti="${ti}"/>
                         </fieldset>
                         <input type="hidden" name="id" value="${routeInstance?.id}" />
                         <input type="hidden" name="version" value="${routeInstance?.version}" />

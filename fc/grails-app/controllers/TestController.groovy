@@ -10,6 +10,7 @@ class TestController
     def kmlService
     def calcService
     def emailService
+    def trackerService
 
     def show = {
         Map test = domainService.GetTest(params) 
@@ -626,29 +627,22 @@ class TestController
         }
     }
 
-    def importaflos = {
-		if (session?.lastContest) {
-			session.lastContest.refresh()
-	        def ret = fcService.existAnyAflosCrew(session.lastContest)
-	        if (ret.error) {
-	            flash.error = ret.error
-	            flash.message = ret.message
-	            redirect(action:flightresults,id:params.id)
-	        } else {
-	            redirect(action:importafloscrew,id:params.id)
-	        }
-		} else {
+    def importtracker = {
+        if (session?.lastContest) {
+            session.lastContest.refresh()
+            redirect(action:importtrackercrew,id:params.id)
+        } else {
             redirect(controller:"task",action:"startresults")
-		}
+        }
     }
-	 
-    def importafloscrew = {
-        Map test = domainService.GetTest(params) 
+    
+    def importtrackercrew = {
+        Map test = domainService.GetTest(params)
         if (test.instance) {
-			// save return action
-			session.crewReturnAction = actionName 
-			session.crewReturnController = controllerName
-			session.crewReturnID = params.id
+            // save return action
+            session.crewReturnAction = actionName
+            session.crewReturnController = controllerName
+            session.crewReturnID = params.id
             return [testInstance:test.instance]
         } else {
             flash.message = test.message
@@ -702,31 +696,8 @@ class TestController
         }
     }
     
-    def calculateaflosresults = {
-        def ret = fcService.calculateAflosResultsTest(params)
-        if (ret.saved) {
-            flash.message = ret.message
-            if (ret.error) {
-                flash.error = ret.error
-            }
-            Map test = domainService.GetTest(params)
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
-            if (nexttest_id) {
-                redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
-            } else {
-                redirect(action:flightresults,id:params.id)
-            }
-        } else if (ret.error) {
-            flash.error = ret.error
-            flash.message = ret.message
-            redirect(action:flightresults,id:params.id)
-        } else {
-            redirect(action:flightresults,id:params.id)
-        }
-    }
-	    
-    def importaflosresults = {
-        def ret = fcService.importAflosTrackPointsAndCalcTest(params) 
+    def importtrackerdata = {
+        def ret = trackerService.importTrackerPointsAndCalcTest(params) 
         if (ret.saved) {
             flash.message = ret.message
             if (ret.error) {
@@ -1494,7 +1465,7 @@ class TestController
             gpxService.printstart "Show offline map of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, false, true, false, false) // false - no Print, true - Points, false - no wrEnrouteSign, false - no gpxExport
+            Map converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:true])
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
@@ -1523,7 +1494,7 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, true, true, false) // false - no Print, true - Points, true - wrEnrouteSign, false - no gpxExport
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:false])
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
@@ -1552,7 +1523,7 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, false, false, true, true) // false - no Print, false - no Points, true - wrEnrouteSign, true - gpxExport
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:false, wrEnrouteSign:true, gpxExport:true])
             if (converter.ok && converter.track) {
                 String logger_file_name = (test.instance.GetTitle(ResultType.Flight) + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -1616,10 +1587,7 @@ class TestController
         if (test.instance) {
             Map ret = emailService.SendEmailTest(test.instance, session.printLanguage, grailsAttributes, request)
             flash.message = ret.message
-            if (ret.ok) {
-                test.instance.flightTestLink = Defs.EMAIL_SENDING
-                test.instance.save()
-            } else {
+            if (!ret.ok) {
                 flash.error = true
             }
             redirect(controller:"task",action:"startresults",params:[message:ret.message])

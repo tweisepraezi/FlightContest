@@ -7,7 +7,7 @@ class DifferencesTagLib
     def listDifferences = { attrs, body ->
         Route route_instance = attrs.t.flighttest.route
         List curved_point_ids = route_instance.GetCurvedPointIds()
-        boolean show_curved_point = route_instance.ShowCurvedPoints()
+        boolean show_curved_point = route_instance.showCurvedPoints
         int offset = attrs.t.showOffset
         
         outln"""<table>"""

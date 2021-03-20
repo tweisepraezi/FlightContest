@@ -251,16 +251,20 @@
 		                                        <td/>
 		                                    </g:else>
 		                                    <td>
-		                                       <g:if test="${testInstance.flightTestLink == Defs.EMAIL_SENDING}"> 
-		                                           <img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
-		                                       </g:if>
-                                               <g:elseif test="${testInstance.flightTestLink == Defs.EMAIL_ERROR}"> 
-                                                   <img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
-                                               </g:elseif>
-		                                       <g:elseif test="${testInstance.flightTestLink}"> 
-                                                   <g:set var="email_links" value="${NetTools.EMailLinks(testInstance.flightTestLink)}" />
-		                                           <a href="${email_links.pdf}" target="_blank"><img src="${createLinkTo(dir:'images',file:'pdf.png')}"/></a>
-		                                       </g:elseif>
+												<g:set var="upload_job_status" value="${testInstance.GetFlightTestUploadJobStatus()}"/>
+												<g:if test="${upload_job_status == UploadJobStatus.Waiting}"> 
+													<img src="${createLinkTo(dir:'images',file:'email.png')}"/>
+												</g:if>
+												<g:elseif test="${upload_job_status == UploadJobStatus.Sending}"> 
+													<img src="${createLinkTo(dir:'images',file:'email-sending.png')}"/>
+												</g:elseif>
+												<g:elseif test="${upload_job_status == UploadJobStatus.Error}"> 
+													<img src="${createLinkTo(dir:'images',file:'email-error.png')}"/>
+												</g:elseif>
+												<g:elseif test="${upload_job_status == UploadJobStatus.Done}"> 
+													<g:set var="email_links" value="${NetTools.EMailLinks(testInstance.GetFlightTestUploadLink())}" />
+													<a href="${email_links.pdf}" target="_blank"><img src="${createLinkTo(dir:'images',file:'pdf.png')}"/></a>
+												</g:elseif>
 		                                    </td>
 	                                    </g:else>
 	                                </tr>

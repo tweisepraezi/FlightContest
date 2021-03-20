@@ -29,17 +29,17 @@
 		<link>
 			<name>src/AviationMath.groovy</name>
 			<type>1</type>
-			<location>K:/Projects/GIT/FlightContest/fc/src/groovy/AviationMath.groovy</location>
+			<location>K:/Projects/GIT/FlightContest/fc/grails-app/utils/AviationMath.groovy</location>
 		</link>
 		<link>
 			<name>src/FcMath.groovy</name>
 			<type>1</type>
-			<location>K:/Projects/GIT/FlightContest/fc/src/groovy/FcMath.groovy</location>
+			<location>K:/Projects/GIT/FlightContest/fc/grails-app/utils/FcMath.groovy</location>
 		</link>
 		<link>
 			<name>src/GPX2GAC.groovy</name>
 			<type>1</type>
-			<location>K:/Projects/GIT/FlightContest/fc/src/groovy/GPX2GAC.groovy</location>
+			<location>K:/Projects/GIT/FlightContest/fc/grails-app/utils/GPX2GAC.groovy</location>
 		</link>
 	</linkedResources>
 </projectDescription>

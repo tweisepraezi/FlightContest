@@ -10,9 +10,6 @@ class CrewTagLib
         outln"""        <tr>"""
         outln"""            <td class="detailtitle">${message(code:'fc.crew')}:</td>"""
         String s = """      <td>${attrs.t.crew.startNum}: ${crew(attrs.t.crew,createLink(controller:'crew',action:'edit'))}"""
-        if (attrs.t.aflosStartNum) {
-             s += """ (${message(code:'fc.aflos')}: ${attrs.t.aflosStartNum})"""
-        }
         s += """            </td>"""
         outln s
         outln"""        </tr>"""
@@ -122,6 +119,9 @@ class CrewTagLib
         }
         if (attrs.contest.printCrewTAS) {
             outln"""<td class="tas">${fieldValue(bean:attrs.crew, field:'tas')}${message(code:'fc.knot')}</td>"""
+        }
+        if (attrs.contest.printCrewTrackerID) {
+            outln"""<td class="trackerID">${attrs.crew.trackerID}</td>"""
         }
         if (attrs.contest.printCrewUUID) {
             outln"""<td class="id">${fieldValue(bean:attrs.crew, field:'uuid')}</td>"""

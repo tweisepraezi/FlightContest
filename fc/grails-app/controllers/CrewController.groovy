@@ -154,6 +154,18 @@ class CrewController {
 		}
 	}
 	
+	def updateprintsettingslanding = {
+		session.lastContest.refresh()
+        def contest = fcService.updatecrewprintsettingsContest(session.lastContest,params,PrintSettings.CrewLanding) 
+        if (contest.instance) {
+			flash.message = contest.message
+			render(view:'editprintsettings',model:[contestInstance:contest.instance,crewReturnAction:session.crewReturnAction,crewReturnController:session.crewReturnController,crewReturnID:session.crewReturnID])
+		} else {
+			flash.message = contest.message
+			redirect(controller:"contest",action:"crews")
+		}
+	}
+	
     def create = {
         def crew = fcService.createCrew(params)
         crew.instance.startNum = 1
@@ -227,11 +239,14 @@ class CrewController {
 		if (file && !file.empty) {
 			String file_name = file.getOriginalFilename()
 			fcService.printstart "Upload '$file_name'"
-			fcService.println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream" 
-			if (file_name.toLowerCase().endsWith('.xls')) {
+			fcService.println file.getContentType() // "application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+			if (file_name.toLowerCase().endsWith('.xls') || file_name.toLowerCase().endsWith('.xlsx')) {
                 boolean no_unsuitable_startnum = params?.noUnsuitableStartNum == 'on'
 				String uuid = UUID.randomUUID().toString()
 				String load_file_name = "CREWLIST-${uuid}-UPLOAD.xls"
+                if (file_name.toLowerCase().endsWith('.xlsx')) {
+                    load_file_name = "CREWLIST-${uuid}-UPLOAD.xlsx"
+                }
 				file.transferTo(new File(load_file_name))
 		        def crews = fcService.importCrews(file_name, load_file_name, no_unsuitable_startnum, session.lastContest) 
 		        if (crews.saved) {
@@ -380,6 +395,7 @@ class CrewController {
     }
     
     def runcommand = {
+        boolean run_redirect = true
         switch (params.crewcommand) {
             case CrewCommands.SELECTCOMMAND.toString():
                 flash.message = message(code:'fc.crew.selectcommand.noselection')
@@ -418,11 +434,8 @@ class CrewController {
                 flash.message = ret.message
                 break
             case CrewCommands.EXPORTCREWS.toString():
-            case CrewCommands.EXPORTPILOTSCOMMA.toString():
-            case CrewCommands.EXPORTPILOTSSEMICOLON.toString():
-            case CrewCommands.EXPORTNAVIGATORSCOMMA.toString():
-            case CrewCommands.EXPORTNAVIGATORSSEMICOLON.toString():
-                //def ret = export_crews(session.lastContest, params)
+            case CrewCommands.EXPORTPILOTS.toString():
+            case CrewCommands.EXPORTNAVIGATORS.toString():
                 fcService.printstart "export_crews"
                 
                 String uuid = UUID.randomUUID().toString()
@@ -438,9 +451,12 @@ class CrewController {
                 fcService.printdone ret.message
                 flash.message = ret.message
                 flash.error = ret.error
+                run_redirect = false
                 break
         }
-        redirect(action:list)
+        if (run_redirect) {
+            redirect(action:list)
+        }
     }
     
 	Map GetPrintParams() {

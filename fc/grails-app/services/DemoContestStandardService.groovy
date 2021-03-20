@@ -5,12 +5,12 @@ class DemoContestStandardService
 	def fcService
     def evaluationService
     
-	long CreateTest1(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest1(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,false,2,ContestRules.R11,aflosDB,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,false,2,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
 
 		// Teams
 		Map team1 = fcService.putTeam(contest,"Deutschland")
@@ -26,11 +26,7 @@ class DemoContestStandardService
 		// Route
         Map route1 = [:]
         fcService.printstart "Route"
-        if (aflosDB) {
-            route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
-        }
+        route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
         fcService.printdone ""
         
         // Task
@@ -183,7 +179,7 @@ class DemoContestStandardService
 												  flightTestFrequencyNotMonitored:false,
                                                   flightTestForbiddenEquipment:false,
 												  testComplete:true],
-												],aflosDB,LoggerFileTools.GAC_EXTENSION)
+												],LoggerFileTools.GAC_EXTENSION)
 		fcService.putobservationresultsTask(task1, [
 													[crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
 													[crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -272,12 +268,12 @@ class DemoContestStandardService
 		return contest.instance.id
 	}
 
-	long CreateTest2(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest2(String testName, String printPrefix, boolean testExists)
 	{
 		fcService.printstart "Create test contest '$testName'"
 		
 		// Contest
-		Map contest = fcService.putContest(testName,printPrefix,200000,true,2,ContestRules.R11,aflosDB,testExists)
+		Map contest = fcService.putContest(testName,printPrefix,true,2,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists)
 
 		// Classes with properties
 		Map resultclass1 = fcService.putResultClass(contest,"Pr\u00E4zi","Pr\u00E4zisionsflugmeisterschaft",ContestRules.R1)
@@ -311,11 +307,7 @@ class DemoContestStandardService
 		// Route
         fcService.printstart "Route"
         Map route1 = [:]
-        if (aflosDB) {
-            route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
-        }
+        route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
         fcService.printdone ""
         
 		// Planning Test
@@ -465,7 +457,7 @@ class DemoContestStandardService
 												  flightTestFrequencyNotMonitored:false,
                                                   flightTestForbiddenEquipment:false,
 												  testComplete:true],
-												],aflosDB,LoggerFileTools.GAC_EXTENSION)
+												],LoggerFileTools.GAC_EXTENSION)
 		fcService.putobservationresultsTask(task1, [
 													[crew:crew1,routePhotos:20,turnPointPhotos:0,groundTargets:0,testComplete:true],
 													[crew:crew2,routePhotos:0,turnPointPhotos:0,groundTargets:10,testComplete:true],
@@ -547,31 +539,23 @@ class DemoContestStandardService
 		return contest.instance.id
 	}
 
-	long CreateTest3(String testName, String printPrefix, boolean testExists, boolean aflosDB)
+	long CreateTest3(String testName, String printPrefix, boolean testExists)
 	{
         fcService.printstart "Create test contest '$testName'"
         
         // Contest
-        Map contest = fcService.putContest(testName,printPrefix,200000,true,0,ContestRules.R11,aflosDB,testExists) // 0 - keine Team-Auswertung
+        Map contest = fcService.putContest(testName,printPrefix,true,0,ContestRules.R11,"2020-08-01","Europe/Berlin",testExists) // 0 - keine Team-Auswertung
 		
 		// Route 1
         Map route1 = [:]
 		fcService.printstart "Route 1"
-        if (aflosDB) {
-            route1 = fcService.importAflosRoute(contest,"Strecke 1","Strecke 1",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
-        }
+        route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_1.gpx")
 		fcService.printdone ""
 		
 		// Route 2
         Map route2 = [:]
 		fcService.printstart "Route 2"
-        if (aflosDB) {
-            route2 = fcService.importAflosRoute(contest,"Strecke 2","Strecke 2",SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK,false,[])
-        } else {
-            route2 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_2.gpx")
-        }
+        route2 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_2.gpx")
 		fcService.printdone ""
 		
 		// Teams
@@ -667,7 +651,7 @@ class DemoContestStandardService
 		return contest.instance.id
 	}
 
-	Map RunTest1(Contest lastContest, String contestName, boolean aflosDB)
+	Map RunTest1(Contest lastContest, String contestName)
 	{
 		Map ret_test = [:]
         if (lastContest && lastContest.title == contestName) {
@@ -697,7 +681,7 @@ class DemoContestStandardService
                 [name:"CoordResult 'Besatzung 11'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
                 [name:"CoordResult 'Besatzung 13'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
                 [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(lastContest),[sort:"id"]),data:test1Test()],
-               ],aflosDB
+               ]
             )
             fcService.printdone "Test '$lastContest.title'"
             ret_test.error = ret.error
@@ -709,7 +693,7 @@ class DemoContestStandardService
 		return ret_test
 	}
 	
-	Map RunTest2(Contest lastContest, String contestName, boolean aflosDB)
+	Map RunTest2(Contest lastContest, String contestName)
 	{
 		Map ret_test = [:]
 		if (lastContest && lastContest.title == contestName) {
@@ -741,7 +725,7 @@ class DemoContestStandardService
 				[name:"CoordResult 'Besatzung 11'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],
 				[name:"CoordResult 'Besatzung 13'",count:14,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],
 				[name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(lastContest),[sort:"id"]),data:test2Test()],
-			   ],aflosDB
+			   ]
 			)
 			fcService.printdone "Test '$lastContest.title'"
 			ret_test.error = ret.error
@@ -753,7 +737,7 @@ class DemoContestStandardService
 		return ret_test
 	}
 	
-	Map RunTest3(Contest lastContest, String contestName, boolean aflosDB)
+	Map RunTest3(Contest lastContest, String contestName)
 	{
 		Map ret_test = [:]
         if (lastContest && lastContest.title == contestName) {
@@ -785,7 +769,7 @@ class DemoContestStandardService
                 [name:"CoordResult 'Besatzung 11'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 11")),[sort:"id"]),data:test1CoordResult11()],    
                 [name:"CoordResult 'Besatzung 13'",count:12,table:CoordResult.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 13")),[sort:"id"]),data:test1CoordResult13()],    
                 [name:"Test",count:5,table:Test.findAllByTask(Task.findByContest(lastContest),[sort:"id"]),data:test2Test()],
-               ],aflosDB
+               ]
             )
             fcService.printdone "Test '$lastContest.title'"
             ret_test.error = ret.error

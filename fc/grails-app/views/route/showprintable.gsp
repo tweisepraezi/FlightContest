@@ -29,7 +29,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.contest.mapScale}"
+                    content: "${routeInstance.printName()} - ${message(code:'fc.scale')} 1:${routeInstance.mapScale}"
                 }
                 @top-right {
                     font-family: Noto Sans;
@@ -60,9 +60,6 @@
                 <thead>
                     <tr class="title">
                         <th>${message(code:'fc.tpname')}</th>
-                        <g:if test="${routeInstance.mark}">
-                            <th>${message(code:'fc.aflos')}</th>
-                        </g:if>
                         <th>${message(code:'fc.coordroute.list')}</th>
                         <th>${message(code:'fc.altitude')}</th>
                         <th>${message(code:'fc.gatewidth.short')}</th>
@@ -83,9 +80,6 @@
                     <g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
                         <tr class="value">
                             <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
-                            <g:if test="${routeInstance.mark}">
-                                <td class="aflosname">${coordroute_instance.mark}</td>
-                            </g:if>
                             <td class="coords">${coordroute_instance.namePrintable(true,true)}</td>
                             <td class="altitude">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
                             <td class="gatewidth">${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
@@ -111,7 +105,7 @@
                             <g:set var="course_change" value="${AviationMath.courseChange(routelegcoord_instance.turnTrueTrack,routelegcoord_instance.testTrueTrack())}"/>
                             <g:if test="${course_change.abs() >= 90}">
                                 <tr class="coursechange">
-                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegcoord_instance.IsProcedureTurn()}"> (<g:if test="${routeInstance.UseProcedureTurn()}">${message(code:'fc.procedureturn')}</g:if><g:else>${message(code:'fc.procedureturn.disabled')}</g:else>)</g:if></td>
+                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegcoord_instance.IsProcedureTurn()}"> (<g:if test="${routeInstance.useProcedureTurns}">${message(code:'fc.procedureturn')}</g:if><g:else>${message(code:'fc.procedureturn.disabled')}</g:else>)</g:if></td>
                                 </tr>
                             </g:if>
                             <tr class="value">
@@ -142,7 +136,7 @@
                             <g:set var="course_change" value="${AviationMath.courseChange(routelegtest_instance.turnTrueTrack,routelegtest_instance.testTrueTrack())}"/>
                             <g:if test="${course_change.abs() >= 90}">
                                 <tr class="coursechange">
-                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegtest_instance.IsProcedureTurn()}"> (<g:if test="${routeInstance.UseProcedureTurn()}">${message(code:'fc.procedureturn')}</g:if><g:else>${message(code:'fc.procedureturn.disabled')}</g:else>)</g:if></td>
+                                    <td class="center" align="center" colspan="2">${message(code:'fc.coursechange')} ${FcMath.GradStrMinus(course_change)}${message(code:'fc.grad')}<g:if test="${routelegtest_instance.IsProcedureTurn()}"> (<g:if test="${routeInstance.useProcedureTurns}">${message(code:'fc.procedureturn')}</g:if><g:else>${message(code:'fc.procedureturn.disabled')}</g:else>)</g:if></td>
                                 </tr>
                             </g:if>
                             <tr class="value">

@@ -89,7 +89,7 @@
                       raiseOnDrag: false,
                       map: map,
                       title: '${coordroute_instance.titleMap()}',
-                      labelContent: "${coordroute_instance.titleShortMap(false)}",
+                      labelContent: "${coordroute_instance.titleMediaCode(Media.Screen)}",
                       labelAnchor: new google.maps.Point(40, 60),
                       labelClass: "labels", // the CSS class for the label
                       labelStyle: {opacity: 0.75}

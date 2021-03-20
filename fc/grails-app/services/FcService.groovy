@@ -15,7 +15,6 @@ class FcService
     def messageSource
 	def logService
     def domainService
-	def fcExcelImportService
     def servletContext
     def gpxService
     def kmlService
@@ -137,7 +136,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map updateContest(Map params)
+    Map updateContest(String showLanguage, Map params)
     {
 		printstart "updateContest $params.resultfilter"
 		
@@ -179,9 +178,18 @@ class FcService
 			String contest_class_results = contest_instance.contestClassResults
 			String contest_task_results = contest_instance.contestTaskResults
 			String contest_team_results = contest_instance.contestTeamResults
-			
+            BigDecimal contest_landing_results_factor = contest_instance.contestLandingResultsFactor
+            
+            params.contestLandingResultsFactor = Languages.GetLanguageDecimal(showLanguage, params.contestLandingResultsFactor)
+            
             contest_instance.properties = params
 
+            if (!contest_instance.liveTrackingContestDate) {
+                Map ret = ['instance':contest_instance, 'message':getMsg('fc.contest.contestdate.notexists')]
+                printerror ret
+                return ret
+            }
+            
 			if (contest_instance.bestOfAnalysisTaskNum == null) {
 				contest_instance.bestOfAnalysisTaskNum = 0
 			}
@@ -261,6 +269,8 @@ class FcService
 					break
 			}
 			
+            CalculateTimezone2(contest_instance)
+            
 			boolean set_result_classes = (result_classes != contest_instance.resultClasses) && contest_instance.resultClasses
 			
 			boolean modify_contest_rule = contest_instance.contestRule != contest_rule
@@ -283,7 +293,8 @@ class FcService
 										     (contest_instance.contestClassResults != contest_class_results) ||
 											 (contest_instance.contestTaskResults != contest_task_results) ||
 											 (contest_instance.contestTeamResults != contest_team_results) ||
-										     (contest_instance.bestOfAnalysisTaskNum != bestofanalysis_task_num)
+										     (contest_instance.bestOfAnalysisTaskNum != bestofanalysis_task_num) ||
+                                             (contest_instance.contestLandingResultsFactor != contest_landing_results_factor)
 											 
 			boolean modify_result_classes_results = (contest_instance.bestOfAnalysisTaskNum != bestofanalysis_task_num) && contest_instance.resultClasses
 			
@@ -441,6 +452,9 @@ class FcService
 				if (params["printCrewTAS"]) {
 					contestInstance.printCrewTAS = params.printCrewTAS == "on"
 				}
+                if (params["printCrewTrackerID"]) {
+                    contestInstance.printCrewTrackerID = params.printCrewTrackerID == "on"
+                }
                 if (params["printCrewUUID"]) {
                     contestInstance.printCrewUUID = params.printCrewUUID == "on"
                 }
@@ -476,6 +490,7 @@ class FcService
 				contestInstance.printCrewAircraftType = false
 				contestInstance.printCrewAircraftColour = false
 				contestInstance.printCrewTAS = true
+                contestInstance.printCrewTrackerID = false
                 contestInstance.printCrewUUID = false
 				contestInstance.printCrewEmptyColumn1 = false
 				contestInstance.printCrewEmptyTitle1 = ""
@@ -501,6 +516,7 @@ class FcService
 				contestInstance.printCrewAircraftType = false
 				contestInstance.printCrewAircraftColour = false
 				contestInstance.printCrewTAS = false
+                contestInstance.printCrewTrackerID = false
                 contestInstance.printCrewUUID = false
 				contestInstance.printCrewEmptyColumn1 = false
 				contestInstance.printCrewEmptyTitle1 = ""
@@ -526,6 +542,7 @@ class FcService
 				contestInstance.printCrewAircraftType = true
 				contestInstance.printCrewAircraftColour = true
 				contestInstance.printCrewTAS = true
+                contestInstance.printCrewTrackerID = true
                 contestInstance.printCrewUUID = true
 				contestInstance.printCrewEmptyColumn1 = true
 				contestInstance.printCrewEmptyTitle1 = ""
@@ -536,6 +553,32 @@ class FcService
 				contestInstance.printCrewEmptyColumn4 = true
 				contestInstance.printCrewEmptyTitle4 = ""
 				contestInstance.printCrewLandscape = true
+				contestInstance.printCrewA3 = false
+				break
+			case PrintSettings.CrewLanding:
+				detail_name = getMsg('fc.landingtest.setprintsettings')
+				contestInstance.printCrewPrintTitle = getPrintMsg('fc.test.landing')
+				contestInstance.printCrewNumber = true
+				contestInstance.printCrewName = false
+                contestInstance.printCrewEmail = false
+				contestInstance.printCrewTeam = false
+				contestInstance.printCrewClass = false
+				contestInstance.printCrewShortClass = false
+				contestInstance.printCrewAircraft = true
+				contestInstance.printCrewAircraftType = true
+				contestInstance.printCrewAircraftColour = false
+				contestInstance.printCrewTAS = false
+                contestInstance.printCrewTrackerID = false
+                contestInstance.printCrewUUID = false
+				contestInstance.printCrewEmptyColumn1 = true
+				contestInstance.printCrewEmptyTitle1 = getPrintMsg('fc.test.landing.field')
+				contestInstance.printCrewEmptyColumn2 = true
+				contestInstance.printCrewEmptyTitle2 = ""
+				contestInstance.printCrewEmptyColumn3 = true
+				contestInstance.printCrewEmptyTitle3 = ""
+				contestInstance.printCrewEmptyColumn4 = true
+				contestInstance.printCrewEmptyTitle4 = ""
+				contestInstance.printCrewLandscape = false
 				contestInstance.printCrewA3 = false
 				break
 		}
@@ -635,11 +678,45 @@ class FcService
 		if (contest_instance.bestOfAnalysisTaskNum == null) {
 			contest_instance.bestOfAnalysisTaskNum = 0
 		}
+
+        if (!contest_instance.liveTrackingContestDate) {
+			return ['instance':contest_instance, 'message':getMsg('fc.contest.contestdate.notexists')]
+        }
+        
+        CalculateTimezone2(contest_instance)
 		
         if(!contest_instance.hasErrors() && contest_instance.save()) {
             return ['instance':contest_instance,'saved':true,'message':getMsg('fc.created',["${contest_instance.title}"])]
         } else {
             return ['instance':contest_instance]
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    void CalculateTimezone2(Contest contestInstance)
+    {
+        if (contestInstance.timeZone2) {
+            Date contest_date = Date.parse("yyyy-MM-dd", contestInstance.liveTrackingContestDate)
+            int timezone_offset = contestInstance.timeZone2.getOffset(contest_date.getTime())
+            
+            int timezone_offset_hour = timezone_offset/3600000
+            String timezone_offset_hour_str = ""
+            if (timezone_offset_hour < 0) {
+                timezone_offset_hour_str = "-"
+            }
+            if (timezone_offset_hour.abs() < 10) {
+                timezone_offset_hour_str += "0"
+            }
+            timezone_offset_hour_str += timezone_offset_hour.abs()
+            
+            int timezone_offset_min = (timezone_offset_hour*3600000 - timezone_offset)/60000
+            String timezone_offset_min_str = ""
+            if (timezone_offset_min < 10) {
+                timezone_offset_min_str += "0"
+            }
+            timezone_offset_min_str += timezone_offset_min
+            
+            contestInstance.timeZone = "${timezone_offset_hour_str}:${timezone_offset_min_str}"
         }
     }
     
@@ -685,6 +762,7 @@ class FcService
 		println "setContestRulePoints '${contestRule.ruleValues.ruleTitle}'"
 		
 		// General
+        toInstance.ruleTitle = contestRule.ruleValues.ruleTitle
 		toInstance.precisionFlying = contestRule.ruleValues.precisionFlying
         toInstance.increaseFactor = contestRule.ruleValues.increaseFactor
         toInstance.printLandingCalculatorValues = contestRule.ruleValues.printLandingCalculatorValues
@@ -724,6 +802,7 @@ class FcService
 		toInstance.flightTestMinAltitudeMissedPoints = contestRule.ruleValues.flightTestMinAltitudeMissedPoints
 		toInstance.flightTestBadCourseCorrectSecond = contestRule.ruleValues.flightTestBadCourseCorrectSecond
 		toInstance.flightTestBadCoursePoints = contestRule.ruleValues.flightTestBadCoursePoints
+		toInstance.flightTestBadCourseMaxPoints = contestRule.ruleValues.flightTestBadCourseMaxPoints
 		toInstance.flightTestBadCourseStartLandingPoints = contestRule.ruleValues.flightTestBadCourseStartLandingPoints
 		toInstance.flightTestLandingToLatePoints = contestRule.ruleValues.flightTestLandingToLatePoints
 		toInstance.flightTestGivenToLatePoints = contestRule.ruleValues.flightTestGivenToLatePoints
@@ -802,13 +881,19 @@ class FcService
         List routes_with_disabled_procedureturns = []
         if (!newContest) {
             for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
-                if (!route_instance.UseProcedureTurn()) {
+                if (!route_instance.useProcedureTurns) {
                     routes_with_disabled_procedureturns += route_instance.id
                 }
             }
         }
         
-        contestInstance.printStyle = contestRule.ruleValues.printStyle
+        contestInstance.flightPlanShowLegDistance = contestRule.ruleValues.flightPlanShowLegDistance
+        contestInstance.flightPlanShowTrueTrack = contestRule.ruleValues.flightPlanShowTrueTrack
+        contestInstance.flightPlanShowTrueHeading = contestRule.ruleValues.flightPlanShowTrueHeading
+        contestInstance.flightPlanShowGroundSpeed = contestRule.ruleValues.flightPlanShowGroundSpeed
+        contestInstance.flightPlanShowLocalTime = contestRule.ruleValues.flightPlanShowLocalTime
+        contestInstance.flightPlanShowElapsedTime = contestRule.ruleValues.flightPlanShowElapsedTime
+        contestInstance.flightTestSubmissionMinutes = contestRule.ruleValues.flightTestSubmissionMinutes
         contestInstance.minRouteLegs = contestRule.ruleValues.minRouteLegs
         contestInstance.maxRouteLegs = contestRule.ruleValues.maxRouteLegs
         contestInstance.scGateWidth = contestRule.ruleValues.scGateWidth
@@ -824,11 +909,13 @@ class FcService
         contestInstance.maxEnrouteCanvas = contestRule.ruleValues.maxEnrouteCanvas
         contestInstance.minEnrouteTargets = contestRule.ruleValues.minEnrouteTargets
         contestInstance.maxEnrouteTargets = contestRule.ruleValues.maxEnrouteTargets
+        contestInstance.useProcedureTurns = contestRule.ruleValues.useProcedureTurns
+        contestInstance.liveTrackingScorecard = contestRule.ruleValues.liveTrackingScorecard
         
         if (!newContest) {
             for (long route_id in routes_with_disabled_procedureturns) {
                 Route route_instance = Route.get(route_id)
-                route_instance.DisableProcedureTurn2()
+                route_instance.useProcedureTurns = false
                 println "Disable procedure turn of '${route_instance.name()}'"
             }
         }
@@ -841,6 +928,7 @@ class FcService
         Map values = [:]
         
         // General
+        values += [ruleTitle:fromInstance.ruleTitle]
         values += [precisionFlying:fromInstance.precisionFlying]
         values += [increaseFactor:fromInstance.increaseFactor]
         values += [printLandingCalculatorValues:fromInstance.printLandingCalculatorValues]
@@ -880,6 +968,7 @@ class FcService
         values += [flightTestMinAltitudeMissedPoints:fromInstance.flightTestMinAltitudeMissedPoints]
         values += [flightTestBadCourseCorrectSecond:fromInstance.flightTestBadCourseCorrectSecond]
         values += [flightTestBadCoursePoints:fromInstance.flightTestBadCoursePoints]
+        values += [flightTestBadCourseMaxPoints:fromInstance.flightTestBadCourseMaxPoints]
         values += [flightTestBadCourseStartLandingPoints:fromInstance.flightTestBadCourseStartLandingPoints]
         values += [flightTestLandingToLatePoints:fromInstance.flightTestLandingToLatePoints]
         values += [flightTestGivenToLatePoints:fromInstance.flightTestGivenToLatePoints]
@@ -957,8 +1046,13 @@ class FcService
     {
         Map values = [:]
         
-        values += [minRouteLegs:fromInstance.minRouteLegs]
-        values += [maxRouteLegs:fromInstance.maxRouteLegs]
+        values += [flightPlanShowLegDistance:fromInstance.flightPlanShowLegDistance]
+        values += [flightPlanShowTrueTrack:fromInstance.flightPlanShowTrueTrack]
+        values += [flightPlanShowTrueHeading:fromInstance.flightPlanShowTrueHeading]
+        values += [flightPlanShowGroundSpeed:fromInstance.flightPlanShowGroundSpeed]
+        values += [flightPlanShowLocalTime:fromInstance.flightPlanShowLocalTime]
+        values += [flightPlanShowElapsedTime:fromInstance.flightPlanShowElapsedTime]
+        values += [flightTestSubmissionMinutes:fromInstance.flightTestSubmissionMinutes]
         values += [scGateWidth:fromInstance.scGateWidth]
         values += [unsuitableStartNum:fromInstance.unsuitableStartNum]
         values += [turnpointRule:fromInstance.turnpointRule]
@@ -966,12 +1060,16 @@ class FcService
         values += [enroutePhotoRule:fromInstance.enroutePhotoRule]
         values += [enrouteCanvasRule:fromInstance.enrouteCanvasRule]
         values += [enrouteCanvasMultiple:fromInstance.enrouteCanvasMultiple]
+        values += [minRouteLegs:fromInstance.minRouteLegs]
+        values += [maxRouteLegs:fromInstance.maxRouteLegs]
         values += [minEnroutePhotos:fromInstance.minEnroutePhotos]
         values += [maxEnroutePhotos:fromInstance.maxEnroutePhotos]
         values += [minEnrouteCanvas:fromInstance.minEnrouteCanvas]
         values += [maxEnrouteCanvas:fromInstance.maxEnrouteCanvas]
         values += [minEnrouteTargets:fromInstance.minEnrouteTargets]
         values += [maxEnrouteTargets:fromInstance.maxEnrouteTargets]
+        values += [useProcedureTurns:fromInstance.useProcedureTurns]
+        values += [liveTrackingScorecard:fromInstance.liveTrackingScorecard]
         
         return values
     }
@@ -982,8 +1080,8 @@ class FcService
         // General
         if (fromInstance.increaseFactor != oldContestRuleValues.increaseFactor) {return true;}
         /*
+        if (fromInstance.ruleTitle != oldContestRuleValues.ruleTitle) {return true;}
         if (fromInstance.precisionFlying != oldContestRuleValues.precisionFlying) {return true;}
-        if (fromInstance.printStyle != oldContestRuleValues.printStyle) {return true;}
         if (fromInstance.printLandingCalculatorValues != oldContestRuleValues.printLandingCalculatorValues) {return true;}
         if (fromInstance.printPointsGeneral != oldContestRuleValues.printPointsGeneral) {return true;}
         if (fromInstance.printPointsPlanningTest != oldContestRuleValues.printPointsPlanningTest) {return true;}
@@ -1022,6 +1120,7 @@ class FcService
         if (fromInstance.flightTestMinAltitudeMissedPoints != oldContestRuleValues.flightTestMinAltitudeMissedPoints) {return true}
         if (fromInstance.flightTestBadCourseCorrectSecond != oldContestRuleValues.flightTestBadCourseCorrectSecond) {return true}
         if (fromInstance.flightTestBadCoursePoints != oldContestRuleValues.flightTestBadCoursePoints) {return true}
+        if (fromInstance.flightTestBadCourseMaxPoints != oldContestRuleValues.flightTestBadCourseMaxPoints) {return true}
         if (fromInstance.flightTestBadCourseStartLandingPoints != oldContestRuleValues.flightTestBadCourseStartLandingPoints) {return true}
         if (fromInstance.flightTestLandingToLatePoints != oldContestRuleValues.flightTestLandingToLatePoints) {return true}
         if (fromInstance.flightTestGivenToLatePoints != oldContestRuleValues.flightTestGivenToLatePoints) {return true}
@@ -1112,6 +1211,8 @@ class FcService
         if (fromInstance.maxEnrouteCanvas != oldContestRuleValues.maxEnrouteCanvas) {return true}
         if (fromInstance.minEnrouteTargets != oldContestRuleValues.minEnrouteTargets) {return true}
         if (fromInstance.maxEnrouteTargets != oldContestRuleValues.maxEnrouteTargets) {return true}
+        if (fromInstance.useProcedureTurns != oldContestRuleValues.useProcedureTurns) {return true}
+        if (fromInstance.liveTrackingScorecard != oldContestRuleValues.liveTrackingScorecard) {return true}
         
         return false
     }
@@ -1186,11 +1287,18 @@ class FcService
         printstart "anonymizeContest"
         Contest contest_instance = Contest.get(params.id)
         if (contest_instance) {
-            DecimalFormat df = new DecimalFormat("000")
+            Crew crew_with_max_startnum = Crew.findByContest(contest_instance,[sort:'startNum', order:'desc'])
+            String format_value = "0"
+            if (crew_with_max_startnum) {
+                for (int i = 1; i < crew_with_max_startnum.startNum.toString().size(); i++) {
+                    format_value += "0"
+                }
+            }
+            DecimalFormat df = new DecimalFormat(format_value)
             int i = 0
             for (Crew crew_instance in Crew.findAllByContest(contest_instance,[sort:'viewpos'])) {
                 i++
-                crew_instance.name = "Crew-${df.format(i)}"
+                crew_instance.name = anonymize_crew(crew_instance.name, df.format(i), contest_instance)
                 crew_instance.email = ""
                 crew_instance.save()
             }
@@ -1221,6 +1329,24 @@ class FcService
             printerror ""
             return ['message':getMsg('fc.notfound',[getMsg('fc.contest'),params.id])]
         }
+    }
+    
+    //--------------------------------------------------------------------------
+    private String anonymize_crew(String crewName, String crewNumber, Contest contestInstance)
+    {
+        String pilot_firstname = "PilotFirst"
+        String pilot_lastname = "PilotLast"
+        String navigator_firstname = "NavFirst"
+        String navigator_lastname = "NavLast"
+        if (contestInstance.crewPilotNavigatorDelimiter) {
+            if (contestInstance.crewSurnameForenameDelimiter) {
+                return "${pilot_lastname}-${crewNumber}${contestInstance.crewSurnameForenameDelimiter} ${pilot_firstname}-${crewNumber}${contestInstance.crewPilotNavigatorDelimiter} ${navigator_lastname}-${crewNumber}${contestInstance.crewSurnameForenameDelimiter} ${navigator_firstname}-${crewNumber}"
+            }
+            return "${pilot_firstname}-${crewNumber} ${pilot_lastname}-${crewNumber}${contestInstance.crewPilotNavigatorDelimiter} ${navigator_firstname}-${crewNumber} ${navigator_lastname}-${crewNumber}"
+        } else if (contestInstance.crewSurnameForenameDelimiter) { // no navigator
+            return "${pilot_lastname}-${crewNumber}${contestInstance.crewSurnameForenameDelimiter} ${pilot_firstname}-${crewNumber}"
+        }
+        return "${pilot_firstname}-${crewNumber} ${pilot_lastname}-${crewNumber}"
     }
     
     //--------------------------------------------------------------------------
@@ -1655,6 +1781,9 @@ class FcService
 					if (params["printTimetableJuryArrival"]) {
 						task_instance.printTimetableJuryArrival = params.printTimetableJuryArrival == "on"
 					}
+					if (params["printTimetableJurySubmission"]) {
+						task_instance.printTimetableJurySubmission = params.printTimetableJurySubmission == "on"
+					}
 					if (params["printTimetableJuryEmptyColumn1"]) {
 						task_instance.printTimetableJuryEmptyColumn1 = params.printTimetableJuryEmptyColumn1 == "on"
 					}
@@ -1666,6 +1795,9 @@ class FcService
 					}
 					if (params["printTimetableJuryEmptyColumn4"]) {
 						task_instance.printTimetableJuryEmptyColumn4 = params.printTimetableJuryEmptyColumn4 == "on"
+					}
+					if (params["printTimetableJuryLandingField"]) {
+						task_instance.printTimetableJuryLandingField = params.printTimetableJuryLandingField == "on"
 					}
 					if (params["printTimetableJuryLandscape"]) {
 						task_instance.printTimetableJuryLandscape = params.printTimetableJuryLandscape == "on"
@@ -1738,6 +1870,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = true
+                    task_instance.printTimetableJurySubmission = true
 					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = ""
 					task_instance.printTimetableJuryEmptyColumn2 = false
@@ -1746,6 +1879,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
 					task_instance.printTimetableJuryLandscape = true
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1770,6 +1904,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = false
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = false
 					task_instance.printTimetableJuryEmptyTitle1 = ""
 					task_instance.printTimetableJuryEmptyColumn2 = false
@@ -1778,6 +1913,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1816,6 +1952,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = true
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = true
+                    task_instance.printTimetableJurySubmission = true
 					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = ""
 					task_instance.printTimetableJuryEmptyColumn2 = true
@@ -1824,6 +1961,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = true
 					task_instance.printTimetableJuryLandscape = true
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1848,6 +1986,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = ""
 					task_instance.printTimetableJuryEmptyColumn2 = true
@@ -1856,6 +1995,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1899,6 +2039,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = false
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = ""
 					task_instance.printTimetableJuryEmptyColumn2 = true
@@ -1907,6 +2048,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1931,14 +2073,50 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = false
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
-					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.planning.answergiven')
+					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.planning.solutiongiven')
 					task_instance.printTimetableJuryEmptyColumn2 = true
 					task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.planning.exitroom')
 					task_instance.printTimetableJuryEmptyColumn3 = false
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
+					task_instance.printTimetableJuryLandscape = false
+					task_instance.printTimetableJuryA3 = false
+					break
+				case PrintSettings.TimetableJuryDocumentsOutput:
+					settings_name = getMsg('fc.task.timetablejudge')
+					detail_name = getMsg('fc.flighttest.documentsoutput.setprintsettings')
+					task_instance.printTimetableJuryPrintTitle = getPrintMsg('fc.flighttest.documentsoutput')
+					task_instance.printTimetableJuryNumber = true
+					task_instance.printTimetableJuryCrew = true
+					task_instance.printTimetableJuryAircraft = true
+					task_instance.printTimetableJuryAircraftType = false
+					task_instance.printTimetableJuryAircraftColour = false
+					task_instance.printTimetableJuryTAS = false
+					task_instance.printTimetableJuryTeam = false
+					task_instance.printTimetableJuryClass = false
+					task_instance.printTimetableJuryShortClass = true
+					task_instance.printTimetableJuryPlanning = true
+					task_instance.printTimetableJuryPlanningEnd = false
+					task_instance.printTimetableJuryTakeoff = true
+					task_instance.printTimetableJuryStartPoint = false
+					task_instance.printTimetableJuryCheckPoints = ""
+					task_instance.printTimetableJuryFinishPoint = false
+					task_instance.printTimetableJuryLanding = false
+					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
+					task_instance.printTimetableJuryEmptyColumn1 = true
+					task_instance.printTimetableJuryEmptyTitle1 = ""
+					task_instance.printTimetableJuryEmptyColumn2 = false
+					task_instance.printTimetableJuryEmptyTitle2 = ""
+					task_instance.printTimetableJuryEmptyColumn3 = false
+					task_instance.printTimetableJuryEmptyTitle3 = ""
+					task_instance.printTimetableJuryEmptyColumn4 = false
+					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1963,6 +2141,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = false
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = "" // getPrintMsg('fc.test.takeoff.real')
 					task_instance.printTimetableJuryEmptyColumn2 = true
@@ -1971,6 +2150,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -1995,6 +2175,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.landing.field') // getPrintMsg('fc.test.landing.real')
 					task_instance.printTimetableJuryEmptyColumn2 = true
@@ -2003,6 +2184,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = true
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2043,6 +2225,7 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = false
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = false
 					task_instance.printTimetableJuryEmptyColumn1 = true
 					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.landing.field') // getPrintMsg('fc.test.landing.real')
 					task_instance.printTimetableJuryEmptyColumn2 = true
@@ -2051,6 +2234,7 @@ class FcService
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = true
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = true
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2075,14 +2259,24 @@ class FcService
 					task_instance.printTimetableJuryFinishPoint = false
 					task_instance.printTimetableJuryLanding = true
 					task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = true
 					task_instance.printTimetableJuryEmptyColumn1 = true
-					task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.arrival.stoptime')
+                    if (task_instance.flighttest.submissionMinutes) {
+                        task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.arrival.givingtime')
+                    } else {
+                        task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.arrival.stoptime')
+                    }
 					task_instance.printTimetableJuryEmptyColumn2 = true
-					task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.arrival.givingtime')
+                    if (task_instance.flighttest.submissionMinutes) {
+                        task_instance.printTimetableJuryEmptyTitle2 = ""
+                    } else {
+                        task_instance.printTimetableJuryEmptyTitle2 = getPrintMsg('fc.test.arrival.givingtime')
+                    }
 					task_instance.printTimetableJuryEmptyColumn3 = true
 					task_instance.printTimetableJuryEmptyTitle3 = ""
 					task_instance.printTimetableJuryEmptyColumn4 = false
 					task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
 					task_instance.printTimetableJuryLandscape = false
 					task_instance.printTimetableJuryA3 = false
 					break
@@ -2107,6 +2301,7 @@ class FcService
                     task_instance.printTimetableJuryFinishPoint = false
                     task_instance.printTimetableJuryLanding = true
                     task_instance.printTimetableJuryArrival = false
+                    task_instance.printTimetableJurySubmission = true
                     task_instance.printTimetableJuryEmptyColumn1 = true
                     task_instance.printTimetableJuryEmptyTitle1 = getPrintMsg('fc.test.debriefing.exittime')
                     task_instance.printTimetableJuryEmptyColumn2 = true
@@ -2115,6 +2310,7 @@ class FcService
                     task_instance.printTimetableJuryEmptyTitle3 = ""
                     task_instance.printTimetableJuryEmptyColumn4 = false
                     task_instance.printTimetableJuryEmptyTitle4 = ""
+                    task_instance.printTimetableJuryLandingField = false
                     task_instance.printTimetableJuryLandscape = false
                     task_instance.printTimetableJuryA3 = false
                     break
@@ -2262,6 +2458,7 @@ class FcService
         Task task_instance = new Task()
         task_instance.contest = contestInstance
         task_instance.properties = params
+        task_instance.liveTrackingNavigationTaskDate = contestInstance.liveTrackingContestDate
         return ['instance':task_instance]
     }
     
@@ -2372,6 +2569,7 @@ class FcService
                 test_instance.crew = crew_instance
 				test_instance.taskTAS = crew_instance.tas
 				test_instance.taskAircraft = crew_instance.aircraft
+                test_instance.taskTrackerID = crew_instance.trackerID
                 test_instance.viewpos = i
                 test_instance.task = task_instance
                 test_instance.timeCalculated = false
@@ -2735,39 +2933,15 @@ class FcService
             return task
         }
 
-        // Multiple PlanningTestTasks?  
-        if (PlanningTestTask.countByPlanningtest(task.instance.planningtest) > 0) {
-            List test_instance_ids = [""]
-            Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-                if (params["selectedTestID${test_instance.id}"] == "on") {
-                    test_instance_ids += test_instance.id.toString()
-                }
-            }
-            task.testinstanceids = test_instance_ids
-			printdone ""
-            return task
-        }
-
-        // Code wird ab hier nicht mehr ausgeführt
-        
-        // set single PlanningTestTask to all selected Tests
+        List test_instance_ids = [""]
         int assign_num = 0
-        PlanningTestTask planningtesttask_instance = PlanningTestTask.findByPlanningtest(task.instance.planningtest) 
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
-				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-	                test_instance.planningtesttask = planningtesttask_instance
-	                calulateTestLegPlannings(test_instance)
-					test_instance.ResetPlanningTestResults()
-					test_instance.CalculateTestPenalties()
-                    test_instance.flightTestLink = ""
-                    test_instance.crewResultsModified = true
-	                test_instance.save()
-                    assign_num++
-				}
+                test_instance_ids += test_instance.id.toString()
+                assign_num++
             }
         }
-        
+        task.testinstanceids = test_instance_ids
         if (!assign_num) {
             task.message = getMsg('fc.planningtesttask.someonemustselected.assign')
             task.error = true
@@ -2775,8 +2949,7 @@ class FcService
             return task
         }
         
-        task.message = getMsg('fc.planningtesttask.assigned',[assign_num])
-		printdone task.message
+        printdone ""
         return task
     }
     
@@ -2832,39 +3005,20 @@ class FcService
             return task
         }
         
-        // Multiple FlightTestWinds?  
-        if (FlightTestWind.countByFlighttest(task.instance.flighttest) > 0) {
-            List test_instance_ids = [""]
-            int assign_num = 0
-            Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
-                if (params["selectedTestID${test_instance.id}"] == "on") {
-                    test_instance_ids += test_instance.id.toString()
-                    assign_num++
-                }
-            }
-            task.testinstanceids = test_instance_ids
-            if (!assign_num) {
-                task.message = getMsg('fc.flighttestwind.someonemustselected.assign')
-                task.error = true
-                printerror task.message
-                return task
-            }
-            
-			printdone ""
-            return task
-        }
-        
-        // Code wird ab hier nicht mehr ausgeführt
-        
-        // set single FlightTestWind to all selected Tests
-        FlightTestWind flighttestwind_instance = FlightTestWind.findByFlighttest(task.instance.flighttest)
+        List test_instance_ids = [""]
+        int assign_num = 0
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
-				if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-					setflighttestwindTest(test_instance, task.instance, flighttestwind_instance)
-                    assign_num++
-				}
+                test_instance_ids += test_instance.id.toString()
+                assign_num++
             }
+        }
+        task.testinstanceids = test_instance_ids
+        if (!assign_num) {
+            task.message = getMsg('fc.flighttestwind.someonemustselected.assign')
+            task.error = true
+            printerror task.message
+            return task
         }
         
         printdone ""
@@ -3046,14 +3200,7 @@ class FcService
     	// set viewpos with crew viewpos
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
    			test_instance.viewpos = test_instance.crew.viewpos
-			if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
-				test_instance.taskTAS = test_instance.crew.tas
-				calulateTestLegPlannings(test_instance)
-				test_instance.ResetPlanningTestResults()
-			}
-			if (test_instance.taskAircraft != test_instance.crew.aircraft) { // taskAircraft-Korrektur
-				test_instance.taskAircraft = test_instance.crew.aircraft
-			}
+            task_crew_correction(test_instance)
             test_instance.timeCalculated = false
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
@@ -3114,14 +3261,7 @@ class FcService
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
                 test_instance.viewpos--
-				if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
-					test_instance.taskTAS = test_instance.crew.tas
-					calulateTestLegPlannings(test_instance)
-					test_instance.ResetPlanningTestResults()
-				}
-				if (test_instance.taskAircraft != test_instance.crew.aircraft) { // taskAircraft-Korrektur
-					test_instance.taskAircraft = test_instance.crew.aircraft
-				}
+                task_crew_correction(test_instance)
                 test_instance.timeCalculated = false
                 test_instance.save()
                 selected_testids["selectedTestID${test_instance.id}"] = "on"
@@ -3212,14 +3352,7 @@ class FcService
         Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
             if (params["selectedTestID${test_instance.id}"] == "on") {
                 test_instance.viewpos++
-				if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
-					test_instance.taskTAS = test_instance.crew.tas
-					calulateTestLegPlannings(test_instance)
-					test_instance.ResetPlanningTestResults()
-				}
-				if (test_instance.taskAircraft != test_instance.crew.aircraft) { // taskAircraft-Korrektur
-					test_instance.taskAircraft = test_instance.crew.aircraft
-				}
+                task_crew_correction(test_instance)
                 test_instance.timeCalculated = false
                 test_instance.save()
                 selected_testids["selectedTestID${test_instance.id}"] = "on"
@@ -3311,14 +3444,7 @@ class FcService
                     movefirstpos = test_instance.viewpos
                 }
                 test_instance.viewpos = Crew.countByContest(task.instance.contest) + movenum
-				if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
-					test_instance.taskTAS = test_instance.crew.tas
-					calulateTestLegPlannings(test_instance)
-					test_instance.ResetPlanningTestResults()
-				}
-				if (test_instance.taskAircraft != test_instance.crew.aircraft) { // taskAircraft-Korrektur
-					test_instance.taskAircraft = test_instance.crew.aircraft
-				}
+                task_crew_correction(test_instance)
                 test_instance.timeCalculated = false
                 test_instance.save()
                 selected_testids["selectedTestID${test_instance.id}"] = "on"
@@ -3349,6 +3475,22 @@ class FcService
         return task
     }
     
+    //--------------------------------------------------------------------------
+    private void task_crew_correction(Test test_instance) 
+    { 
+        if (test_instance.taskTAS != test_instance.crew.tas) { // taskTAS-Korrektur
+            test_instance.taskTAS = test_instance.crew.tas
+            calulateTestLegPlannings(test_instance)
+            test_instance.ResetPlanningTestResults()
+        }
+        if (test_instance.taskAircraft != test_instance.crew.aircraft) { // taskAircraft-Korrektur
+            test_instance.taskAircraft = test_instance.crew.aircraft
+        }
+        if (test_instance.taskTrackerID != test_instance.crew.trackerID) { // taskTrackerID-Korrektur
+            test_instance.taskTrackerID = test_instance.crew.trackerID
+        }
+    }
+
     //--------------------------------------------------------------------------
     Map disableCrewsTask(Map params,session)
     {
@@ -3948,7 +4090,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    Map updateResultClass(Map params)
+    Map updateResultClass(String showLanguage, Map params)
     {
 		printstart "updateResultClass $params.resultfilter"
 		
@@ -3981,6 +4123,8 @@ class FcService
 			boolean contest_special_results = resultclass_instance.contestSpecialResults
 			String contest_task_results = resultclass_instance.contestTaskResults
 			String contest_team_results = resultclass_instance.contestTeamResults
+
+            params.secretGateWidth = Languages.GetLanguageDecimal(showLanguage, params.secretGateWidth)
 			
             resultclass_instance.properties = params
 
@@ -4244,6 +4388,8 @@ class FcService
     {
         Route route_instance = new Route()
         route_instance.properties = params
+        route_instance.useProcedureTurns = contestInstance.useProcedureTurns
+        route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
         route_instance.turnpointRoute = contestInstance.turnpointRule.GetTurnpointRoute()
         route_instance.turnpointMapMeasurement = contestInstance.turnpointMapMeasurement
         route_instance.enroutePhotoMeasurement = contestInstance.enroutePhotoRule.GetEnrouteMeasurement()
@@ -4260,6 +4406,10 @@ class FcService
         
         route_instance.contest = contestInstance
         route_instance.idTitle = Route.countByContest(contestInstance) + 1
+        
+        if (!route_instance.liveTrackingScorecard) {
+            route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
+        }
         
         String error_messages = ""
         if (route_instance.turnpointRoute == TurnpointRoute.Unassigned) {
@@ -4394,509 +4544,6 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map existAnyAflosRoute(Contest contestInstance)
-    {
-        if (!AflosTools.ExistAnyAflosRoute(contestInstance)) {
-            return ['error':true,'message':getMsg('fc.route.aflosimport.notfound')]
-		}
-    	return [:]
-    }
-    
-    //--------------------------------------------------------------------------
-	Map importAflosRoute(Map contest, String aflosRouteName, String routeTitle, SecretCoordRouteIdentification secretCoordRouteIdentification, boolean ignoreCurved, List ignorePoints)
-	{
-		printstart "importAflosRoute"
-		Map ret = [:]
-		AflosRouteNames aflosroutenames_instance = AflosTools.GetAflosRouteName(contest.instance,aflosRouteName)
-		if (aflosroutenames_instance) {
-			Map params = [aflosroutenames:[id:aflosroutenames_instance.id,secretcoordrouteidentification:secretCoordRouteIdentification]]
-			ret = importAflosRoute2(params, contest.instance,routeTitle,ignoreCurved,ignorePoints)
-		}
-		printdone ret
-		return ret
-	}
-	
-    //--------------------------------------------------------------------------
-    Map importAflosRoute2(Map params, Contest contestInstance, String routeTitle, boolean ignoreCurved, List ignorePoints)
-    {
-        AflosRouteNames aflosroutenames_instance = AflosTools.GetAflosRouteName(contestInstance, params.aflosroutenames.id.toLong())
-    	if (aflosroutenames_instance) {
-            printstart "importAflosRoute2 $routeTitle ignoreCurved:$ignoreCurved ignorePoints:$ignorePoints"
-            
-    		Route route_instance = new Route()
-	        
-	        route_instance.contest = contestInstance
-	        route_instance.idTitle = Route.countByContest(contestInstance) + 1
-            String route_name = ""
-			if (routeTitle) {
-				route_name = routeTitle
-			} else {
-	        	route_name = aflosroutenames_instance.name
-			}
-            int num = 0
-            while (Route.findByContestAndTitle(contestInstance, route_name)) {
-                num++
-                if (routeTitle) {
-                    route_name = "${routeTitle} ($num)"
-                } else {
-                    route_name = "${aflosroutenames_instance.name} ($num)"
-                }
-            }
-            route_instance.title = route_name
-	        route_instance.mark = aflosroutenames_instance.name
-            route_instance.showAflosMark = true
-            route_instance.turnpointRoute = contestInstance.turnpointRule.GetTurnpointRoute()
-            route_instance.turnpointMapMeasurement = contestInstance.turnpointMapMeasurement
-            if (route_instance.turnpointRoute == TurnpointRoute.Unassigned) {
-                route_instance.turnpointRoute = TurnpointRoute.None
-                route_instance.turnpointMapMeasurement = false
-            }
-            route_instance.enroutePhotoMeasurement = contestInstance.enroutePhotoRule.GetEnrouteMeasurement()
-            if (route_instance.enroutePhotoMeasurement == EnrouteMeasurement.Unassigned) {
-                route_instance.enroutePhotoMeasurement = EnrouteMeasurement.None
-            }
-            if (route_instance.enroutePhotoRoute == EnrouteRoute.Unassigned) {
-                route_instance.enroutePhotoRoute = EnrouteRoute.None
-            }
-            route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
-            if (route_instance.enrouteCanvasMeasurement == EnrouteMeasurement.Unassigned) {
-                route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
-            }
-            if (route_instance.enrouteCanvasRoute == EnrouteRoute.Unassigned) {
-                route_instance.enrouteCanvasRoute = EnrouteRoute.None
-            }
-
-	        if(!route_instance.hasErrors() && route_instance.save()) {
-				List aflosroutedefs_instances = AflosTools.GetAflosRouteDefs(contestInstance, aflosroutenames_instance)
-				
-                CoordRoute last_coordroute_instance
-                CoordRoute last_coordroute_test_instance
-				BigDecimal last_legdata_distance = 0
-                int tp_num = 1
-                int sc_num = 1
-				String cp_errors = ""
-				BigDecimal last_mapmeasure_distance = null
-                BigDecimal last_map_distance = null
-				int last_legduration = 0
-				BigDecimal last_coord_distance = 0
-				BigDecimal first_coord_truetrack = null
-				BigDecimal turn_true_track = null
-				BigDecimal test_turn_true_track = null
-				BigDecimal last_measure_truetrack = null
-				CoordType last_coordtype = CoordType.UNKNOWN
-                boolean last_curved = false
-				boolean found_ifp = false
-                aflosroutedefs_instances.each { AflosRouteDefs aflosroutedefs_instance ->
-					printstart "$aflosroutedefs_instance.mark"
-					
-                	CoordRoute coordroute_instance = new CoordRoute()
-                    boolean curved = false
-                    
-                    // set latitude
-                    aflosroutedefs_instance.latitude.split().eachWithIndex{ String latValue, int i ->
-                		switch(i) {
-                			case 0: 
-                				coordroute_instance.latDirection = latValue
-                				break
-                			case 1:
-                				coordroute_instance.latGrad = latValue.toInteger()
-                				break
-                			case 2:
-                				coordroute_instance.latMinute = FcMath.toBigDecimal(latValue)
-                				break
-                		}
-                	}
-                    
-                    // set longitude
-                    aflosroutedefs_instance.longitude.split().eachWithIndex{ String lonValue, int i ->
-                        switch(i) {
-                            case 0: 
-                                coordroute_instance.lonDirection = lonValue
-                                break
-                            case 1:
-                                coordroute_instance.lonGrad = lonValue.toInteger()
-                                break
-                            case 2:
-                                coordroute_instance.lonMinute = FcMath.toBigDecimal(lonValue)
-                                break
-                        }
-                    }
-    
-                    // set type and titleNumber
-                    coordroute_instance.type = CoordType.UNKNOWN
-                    CoordType.each { CoordType coord_type ->
-                    	if (coordroute_instance.type == CoordType.UNKNOWN) { // Typ der Koordinate noch nicht ermittelt
-							if (!IgnorePoint(aflosroutedefs_instance,ignorePoints)) { // Punkt soll nicht ignoriert werden
-								if (coord_type != CoordType.UNKNOWN && aflosroutedefs_instance.mark && aflosroutedefs_instance.mark.startsWith(coord_type.aflosMark)) {  // zutreffender AFLOS-Typ gefunden
-									if ((coord_type.aflosGateWidth == 0)                                                                   // kein CoordType.SECRET erkannt
-									 || (coord_type.aflosGateWidth == aflosroutedefs_instance.gatewidth2)                                  // mögliches CoordType.SECRET an Gatebreite 2NM erkannt
-									 || (aflosroutedefs_instance.info && aflosroutedefs_instance.info.contains(coord_type.secretMark))     // mögliches CoordType.SECRET an $secret erkannt
-									 || (!ignoreCurved && aflosroutedefs_instance.info && aflosroutedefs_instance.info.contains(coord_type.secretMark2))) { // mögliches CoordType.SECRET an $curved erkannt
-									 
-										// set type
-										if (coord_type == CoordType.SECRET) { // mögliches CoordType.SECRET
-											switch (params.aflosroutenames.secretcoordrouteidentification) {
-												case SecretCoordRouteIdentification.GATEWIDTH2.toString():
-													if (coord_type.aflosGateWidth == aflosroutedefs_instance.gatewidth2) {
-														coordroute_instance.type = CoordType.SECRET 
-													} else {
-														coordroute_instance.type = CoordType.TP 
-													}
-													break
-												case SecretCoordRouteIdentification.SECRETMARK.toString():
-													if (aflosroutedefs_instance.info && (aflosroutedefs_instance.info.contains(coord_type.secretMark) || aflosroutedefs_instance.info.contains(coord_type.secretMark2))) {
-														coordroute_instance.type = CoordType.SECRET 
-													} else {
-														coordroute_instance.type = CoordType.TP
-													}
-													break
-												case SecretCoordRouteIdentification.GATEWIDTH2ORSECRETMARK.toString():
-													if (coord_type.aflosGateWidth == aflosroutedefs_instance.gatewidth2) {
-														coordroute_instance.type = CoordType.SECRET 
-													} else if (aflosroutedefs_instance.info && (aflosroutedefs_instance.info.contains(coord_type.secretMark) || aflosroutedefs_instance.info.contains(coord_type.secretMark2))) {
-														coordroute_instance.type = CoordType.SECRET 
-													} else {
-														coordroute_instance.type = CoordType.TP 
-													}
-													break
-												default:
-													coordroute_instance.type = CoordType.TP
-													break
-											}
-										} else {
-											coordroute_instance.type = coord_type
-										}
-
-										// set titleNumber
-										switch (coordroute_instance.type) {
-											case CoordType.TP:
-												coordroute_instance.titleNumber = tp_num
-                                                tp_num++
-												break
-											case CoordType.SECRET:
-												coordroute_instance.titleNumber = sc_num
-                                                sc_num++
-												break
-										}
-									}
-								}
-							}
-                    	}
-                    }
-                    
-					if (coordroute_instance.type == CoordType.UNKNOWN) { // Typ der Koordinate nicht ermittelt 
-						if (cp_errors) {
-							cp_errors += ", "
-						}
-						cp_errors += "'$aflosroutedefs_instance.mark' has unknown type"
-						println "Unknown type -> Ignored."
-					} else if (!coordroute_instance.type.IsTypeAllowed(last_coordtype)) {
-						if (cp_errors) {
-							cp_errors += ", "
-						}
-						cp_errors += "'$aflosroutedefs_instance.mark' has wrong position"
-						println "Type '$coordroute_instance.type' at this position is not allowed -> Ignored."
-					} else if (found_ifp && (coordroute_instance.type == CoordType.iFP)) {
-						if (cp_errors) {
-							cp_errors += ", "
-						}
-						cp_errors += "'$aflosroutedefs_instance.mark' is double"
-						println "Double iFP is not allowed -> Ignored."
-					} else { // Typ der Koordinate ermittelt
-						println "Type '$coordroute_instance.type' detected."
-					
-						// iFP
-						if (coordroute_instance.type == CoordType.iFP) {
-							found_ifp = true
-						}
-						
-						// set other
-						coordroute_instance.altitude = aflosroutedefs_instance.altitude.toInteger()
-						coordroute_instance.mark = aflosroutedefs_instance.mark
-						coordroute_instance.gatewidth2 = aflosroutedefs_instance.gatewidth2
-                        if (coordroute_instance.type.IsRunwayCoord()) {
-                            coordroute_instance.gateDirection = aflosroutedefs_instance.truetrack
-                        }
-						coordroute_instance.route = route_instance
-						switch (coordroute_instance.type) {
-							case CoordType.iLDG:
-							case CoordType.iTO:
-								coordroute_instance.noTimeCheck = true
-								println "Set noTimeCheck (${coordroute_instance.type})."
-                                coordroute_instance.noGateCheck = true
-                                println "Set noGateCheck (${coordroute_instance.type})."
-								break
-						}
-						switch (coordroute_instance.type) {
-							case CoordType.iLDG:
-							case CoordType.iTO:
-							case CoordType.iSP:
-								coordroute_instance.noPlanningTest = true
-								println "Set noPlanningTest (${coordroute_instance.type})."
-								break
-						}
-						if (aflosroutedefs_instance.info) {
-							boolean dist_found = false
-							boolean track_found = false
-							boolean duration_found = false
-							boolean notimecheck_found = false
-                            boolean nogatecheck_found = false
-							boolean notplanningtest_found = false
-							for( String v in aflosroutedefs_instance.info.split()) {
-								boolean read_value_ok = false
-								if (v.startsWith('$dist:')) {
-									if (!dist_found) {
-										if (v.endsWith('mm')) {
-											String v1 = v.substring(6,v.size()-2).replace(',','.')
-											if (v1.isBigDecimal()) {
-												coordroute_instance.measureDistance = v1.toBigDecimal()
-												println "Set measureDistance to $coordroute_instance.measureDistance mm."
-												dist_found = true
-											} else {
-												if (cp_errors) {
-													cp_errors += ", "
-												}
-												cp_errors += "'$aflosroutedefs_instance.mark' $v"
-												println "Error: $v"
-											}
-										} else if (v.endsWith('NM')) {
-											String v1 = v.substring(6,v.size()-2).replace(',','.')
-											if (v1.isBigDecimal()) {
-												BigDecimal nm_distance = v1.toBigDecimal()
-												coordroute_instance.measureDistance = route_instance.contest.Convert_NM2mm(nm_distance)
-												println "Set measureDistance to $coordroute_instance.measureDistance mm (${nm_distance}NM)."
-												dist_found = true
-											} else {
-												if (cp_errors) {
-													cp_errors += ", "
-												}
-												cp_errors += "'$aflosroutedefs_instance.mark' $v"
-												println "Error: $v"
-											}
-										} else if (v.endsWith('km')) {
-											String v1 = v.substring(6,v.size()-2).replace(',','.')
-											if (v1.isBigDecimal()) {
-												BigDecimal km_distance = v1.toBigDecimal()
-												coordroute_instance.measureDistance = route_instance.contest.Convert_km2mm(km_distance)
-												println "Set measureDistance to $coordroute_instance.measureDistance mm (${km_distance}km)."
-												dist_found = true
-											} else {
-												if (cp_errors) {
-													cp_errors += ", "
-												}
-												cp_errors += "'$aflosroutedefs_instance.mark' $v"
-												println "Error: $v"
-											}
-										} else {
-											if (cp_errors) {
-												cp_errors += ", "
-											}
-											cp_errors += "'$aflosroutedefs_instance.mark' $v"
-											println "Error: $v"
-										}
-										if (dist_found) {
-											calculateLegMeasureDistance(coordroute_instance, true)
-										}
-									}
-									read_value_ok = true
-								}
-								if (v.startsWith('$track:')) {
-									if (!track_found) {
-										String v1 = v.substring(7).replace(',','.')
-										if (v1.isBigDecimal()) {
-											coordroute_instance.measureTrueTrack = v1.toBigDecimal()
-											println "Set measureTrueTrack to $coordroute_instance.measureTrueTrack Grad."
-											track_found = true
-										} else {
-											if (cp_errors) {
-												cp_errors += ", "
-											}
-											cp_errors += "'$aflosroutedefs_instance.mark' $v"
-											println "Error: $v"
-										}
-									}
-									read_value_ok = true
-								}
-								if (v.startsWith('$duration:')) {
-									if (!duration_found) {
-										if (v.endsWith('min')) {
-											String v1 = v.substring(10,v.size()-3).replace(',','.')
-											if (v1.isInteger()) {
-												coordroute_instance.legDuration = v1.toInteger()
-												println "Set legDuration to $coordroute_instance.legDuration min."
-												duration_found = true
-											} else {
-												if (cp_errors) {
-													cp_errors += ", "
-												}
-												cp_errors += "'$aflosroutedefs_instance.mark' $v"
-												println "Error: $v"
-											}
-	
-										} else {
-											if (cp_errors) {
-												cp_errors += ", "
-											}
-											cp_errors += "'$aflosroutedefs_instance.mark' $v"
-											println "Error: $v"
-										}
-									}
-									read_value_ok = true
-								}
-								if (v.startsWith('$notimecheck') || (!ignoreCurved && v.startsWith('$curved'))) {
-									if (!notimecheck_found) {
-										coordroute_instance.noTimeCheck = true
-										println "Set noTimeCheck."
-										notimecheck_found = true
-									}
-									read_value_ok = true
-								}
-                                if (v.startsWith('$nogatecheck') || (!ignoreCurved && v.startsWith('$curved'))) {
-                                    if (!nogatecheck_found) {
-                                        coordroute_instance.noGateCheck = true
-                                        println "Set noGateCheck."
-                                        nogatecheck_found = true
-                                    }
-                                    read_value_ok = true
-                                }
-								if (v.startsWith('$noplanningtest') || (!ignoreCurved && v.startsWith('$curved'))) {
-									if (!notplanningtest_found) {
-										coordroute_instance.noPlanningTest = true
-										println "Set noPlanningTest."
-										notplanningtest_found = true
-									}
-									read_value_ok = true
-								}
-								if (v.startsWith('$secret')) {
-									read_value_ok = true
-								}
-								if (!ignoreCurved && v.startsWith('$curved')) {
-                                    curved = true
-									read_value_ok = true
-								}
-								if (v.startsWith('$ignore')) {
-									read_value_ok = true
-								}
-								if (!read_value_ok && v.startsWith('$')) {
-									if (cp_errors) {
-										cp_errors += ", "
-									}
-									cp_errors += "'$aflosroutedefs_instance.mark' $v"
-									println "Error: $v"
-								}
-							}
-						}
-						
-						// calculate coordTrueTrack/coordMeasureDistance
-						if (last_coordroute_instance) {
-							Map legdata_coord = calculateLegData(coordroute_instance, last_coordroute_instance)
-							last_legdata_distance += legdata_coord.dis
-							coordroute_instance.coordTrueTrack = legdata_coord.dir
-							coordroute_instance.coordMeasureDistance = route_instance.contest.Convert_NM2mm(last_legdata_distance)
-						}
-                        
-                        if (!curved && last_curved) {
-                            coordroute_instance.endCurved = true
-                            println "Set endCurved."
-                        }
-						
-						coordroute_instance.save()
-						
-						calculateSecretLegRatio(route_instance)
-						last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
-                        last_map_distance = addMapDistance(last_map_distance,route_instance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
-						if (coordroute_instance.legDuration) {
-							last_legduration += coordroute_instance.legDuration
-						}
-						if (last_coordtype != CoordType.SECRET) {
-							last_measure_truetrack = coordroute_instance.measureTrueTrack
-						}
-						Map r = newLeg(
-							route_instance,
-							coordroute_instance,
-							last_coordroute_instance,
-							last_coordroute_test_instance,
-							last_mapmeasure_distance,
-                            last_map_distance,
-							last_legduration,
-							last_coord_distance,
-							first_coord_truetrack,
-							turn_true_track,
-							test_turn_true_track,
-							last_measure_truetrack
-						)
-						last_coord_distance = r.lastCoordDistance
-						first_coord_truetrack = r.firstCoordTrueTrack
-						turn_true_track = r.turnTrueTrack
-						test_turn_true_track = r.testTurnTrueTrack
-						last_coordroute_instance = coordroute_instance
-						if (coordroute_instance.type != CoordType.SECRET) {
-							last_coordroute_test_instance = coordroute_instance
-							last_mapmeasure_distance = null
-                            last_map_distance = null
-							last_legduration = 0
-							last_coord_distance = 0
-							first_coord_truetrack = null
-							last_measure_truetrack = null
-						}
-						if (last_coordroute_instance == last_coordroute_test_instance) {
-							last_legdata_distance = 0
-							println "Set last_legdata_distance = 0"
-						}
-						last_coordtype = coordroute_instance.type
-                        last_curved = curved
-					}
-					printdone ""
-                }
-				
-                // calculateSecretLegRatio(route_instance)
-				
-				Map ret = [:]
-				if (cp_errors) {
-					ret = ['instance':route_instance,'saved':true,'error':true,'message':getMsg('fc.aflos.route.imported.cperror',[aflosroutenames_instance.name,cp_errors])]
-				} else {
-					ret = ['instance':route_instance,'saved':true,'message':getMsg('fc.aflos.route.imported',[aflosroutenames_instance.name])]
-				}
-				printdone ret
-				return ret
-	        } else {
-	            Map ret = ['error':true,'message':getMsg('fc.notimported',["${aflosroutenames_instance.name}"])]
-				printerror ret.message
-				return ret
-	        }
-        } else {
-            Map ret = ['error':true,'message':getMsg('fc.notimported',["${params.aflosroutenames.id}"])]
-			printerror ret.message
-			return ret
-    	}
-    }
-    
-    //--------------------------------------------------------------------------
-	private boolean IgnorePoint(AflosRouteDefs aflosRouteDefsInstance, List ignorePoints)
-	{
-		if (aflosRouteDefsInstance.info?.contains('$ignore')) {
-			return true
-		}
-		if (ignorePoints) {
-			for(String ignore_point in ignorePoints) {
-				if (ignore_point == aflosRouteDefsInstance.mark) {
-					return true
-				}
-			}
-		}
-		return false
-	}
-							
-    //--------------------------------------------------------------------------
-    Map existAnyAflosCrew(Contest contestInstance)
-    {
-        if (AflosTools.ExistAnyAflosCrew(contestInstance)) {
-            return [:]
-        }
-        return ['error':true,'message':getMsg('fc.aflos.points.notfound')]
-    }
-    
-    //--------------------------------------------------------------------------
     Map recalculateResultsTest(Map params)
     {
         Test test_instance = Test.get(params.id)
@@ -4921,8 +4568,11 @@ class FcService
             }
             no_flightresults = true
         } else {
-            errors = importResults(testInstance, testInstance.aflosStartNum, testInstance.showAflosMark, noRemoveExistingData, loggerDataStartUtc, loggerDataEndUtc)
+            errors = importResults(testInstance, noRemoveExistingData, loggerDataStartUtc, loggerDataEndUtc)
         }
+
+        testInstance.task.liveTrackingTracksAvailable = false
+        testInstance.task.save()
         
         if (no_flightresults) {
             Map ret = ['error':true,'saved':true,'message':getMsg('fc.flightresults.recalculate.nologgerdata',[testInstance.crew.name])]
@@ -5374,8 +5024,10 @@ class FcService
                 }
                 no_flightresults = true
             } else {
-                flight_failures = importResults(testInstance, 0, false, noRemoveExistingData, testInstance.GetLoggerDataFirstUtc(), testInstance.GetLoggerDataLastUtc()) // false - no showAflosMark
+                flight_failures = importResults(testInstance, noRemoveExistingData, testInstance.GetLoggerDataFirstUtc(), testInstance.GetLoggerDataLastUtc())
             }
+            testInstance.task.liveTrackingTracksAvailable = false
+            testInstance.task.save()
         }
         reader.noflightresults = no_flightresults
         reader.flightfailures = flight_failures
@@ -5385,106 +5037,26 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map calculateAflosResultsTest(Map params)
+    Map ImportResults(Test testInstance, boolean noRemoveExistingData, int trackPointNum) 
     {
-        Test test_instance = Test.get(params.id)
-        if (params.afloscrewnames.startnum != "null") {
-            int start_num = params.afloscrewnames.startnum.toInteger()
-            String route_name = params.aflosroutenames?.name
-            return calculateAflosResults(test_instance, start_num, route_name, false)
-        }
-        return [error:true, message:getMsg('fc.aflos.points.imported.nodata',[test_instance.crew.name])]
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map calculateAflosResults(Test testInstance, int aflosStartNum, String aflosRouteName, boolean noRemoveExistingData)
-    {
-        printstart "calculateAflosResults: crew '$testInstance.crew.name', AFLOS startnum $aflosStartNum, AFLOS route $aflosRouteName, noRemoveExistingData $noRemoveExistingData"
-        
-        calcService.CalculateAflos(testInstance, aflosStartNum, aflosRouteName)
-        
-        boolean errors = false
-        boolean no_flightresults = false
-        if (!testInstance.IsLoggerResult()) {
+        Map ret = [no_flightresults:false, flight_failures:false]
+        if (!trackPointNum) {
+            ret.no_flightresults = true
+        } else if (!testInstance.IsLoggerResult()) {
             if (!noRemoveExistingData) {
                 set_noflightresults(testInstance)
             }
-            no_flightresults = true
+            ret.no_flightresults = true
         } else {
-            errors = importResults(testInstance, aflosStartNum, false, noRemoveExistingData, testInstance.GetLoggerDataFirstUtc(), testInstance.GetLoggerDataLastUtc()) // false - no showAflosMark
+            ret.flight_failures = importResults(testInstance, noRemoveExistingData, testInstance.GetLoggerDataFirstUtc(), testInstance.GetLoggerDataLastUtc())
         }
-        
-        if (no_flightresults) {
-            Map ret = ['error':true,'saved':true,'message':getMsg('fc.aflos.points.imported.nodata',[testInstance.crew.name])]
-            printerror ret.message
-            return ret
-        } else if (errors) {
-            Map ret = ['saved':true,'message':getMsg('fc.aflos.points.imported.naverrors',[testInstance.crew.name])]
-            printdone ret.message
-            return ret
-        } else {
-            Map ret = ['saved':true,'message':getMsg('fc.aflos.points.imported',[testInstance.crew.name])]
-            printdone ret.message
-            return ret
-        }
+        testInstance.task.liveTrackingTracksAvailable = false
+        testInstance.task.save()
+        return ret
     }
     
     //--------------------------------------------------------------------------
-    Map importAflosTrackPointsAndCalcTest(Map params)
-    {
-        Test test_instance = Test.get(params.id)
-        if (params.afloscrewnames.startnum != "null") {
-            int start_num = params.afloscrewnames.startnum.toInteger()
-            String route_name = params.aflosroutenames?.name
-            return importAflosTrackPointsAndCalc(test_instance, start_num, route_name, false)
-        }
-        return [error:true, message:getMsg('fc.aflos.points.imported.nodata',[test_instance.crew.name])]
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map importAflosTrackPointsAndCalc(Test testInstance, int aflosStartNum, String aflosRouteName, boolean noRemoveExistingData)
-    {
-        printstart "importAflosTrackPointsAndCalc: crew '$testInstance.crew.name', AFLOS startnum $aflosStartNum, AFLOS route $aflosRouteName, noRemoveExistingData $noRemoveExistingData"
-        
-        printstart "Import track points from AFLOS startnum $aflosStartNum"
-        if (AflosTools.GetAflosCrewNamesLoggerData(testInstance, aflosStartNum)) {
-            printdone "Track points found."
-        } else {
-            printdone "No track points found."
-        }
-        
-        printstart "Import error points from AFLOS startnum $aflosStartNum"
-        AflosTools.ImportAflosCalc(testInstance, aflosStartNum, aflosRouteName)
-        printdone ""
-		
-        boolean errors = false
-        boolean no_flightresults = false
-        if (!testInstance.IsLoggerResult()) {
-            if (!noRemoveExistingData) {
-                set_noflightresults(testInstance)
-            }
-            no_flightresults = true
-        } else {
-            errors = importResults(testInstance, aflosStartNum, true, noRemoveExistingData, testInstance.GetLoggerDataFirstUtc(), testInstance.GetLoggerDataLastUtc()) // true - showAflosMark
-        }
-        
-        if (no_flightresults) {
-            Map ret = ['error':true,'saved':true,'message':getMsg('fc.aflos.points.imported.nodata',[testInstance.crew.name])]
-            printerror ret.message
-            return ret
-        } else if (errors) {
-            Map ret = ['saved':true,'message':getMsg('fc.aflos.points.imported.naverrors',[testInstance.crew.name])]
-            printdone ret.message
-            return ret
-        } else {
-            Map ret = ['saved':true,'message':getMsg('fc.aflos.points.imported',[testInstance.crew.name])]
-            printdone ret.message
-            return ret
-        }
-    }
-    
-    //--------------------------------------------------------------------------
-    private boolean importResults(Test testInstance, int aflosStartNum, boolean showAflosMark, boolean noRemoveExistingData, String loggerDataStartUtc, String loggerDataEndUtc)
+    private boolean importResults(Test testInstance, boolean noRemoveExistingData, String loggerDataStartUtc, String loggerDataEndUtc)
     // Return true - Errors
     {
         printstart "importResults"
@@ -5500,11 +5072,6 @@ class FcService
             for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
         		if (calcresult_instance.IsCoordTitleEqual(coordresult_instance.type, coordresult_instance.titleNumber)) {
                     found = true
-
-                    // set aflos mark                    
-                    if (showAflosMark && !coordresult_instance.mark) {
-                        coordresult_instance.mark = CoordRoute.findByRouteAndTypeAndTitleNumber(testInstance.flighttestwind.flighttest.route, coordresult_instance.type, coordresult_instance.titleNumber).mark
-                    }
 
         			// reset results
         			coordresult_instance.ResetResults(true) // true - with procedure turn
@@ -5602,8 +5169,6 @@ class FcService
         testInstance.flightTestModified = true
         testInstance.flightTestLink = ""
         testInstance.crewResultsModified = true
-        testInstance.aflosStartNum = aflosStartNum
-        testInstance.showAflosMark = showAflosMark
         testInstance.loggerDataStartUtc = loggerDataStartUtc
         testInstance.loggerDataEndUtc = loggerDataEndUtc
         
@@ -5746,7 +5311,7 @@ class FcService
         set_noflightresults(test.instance)
 
         printdone ""
-        return ['instance':test.instance,'message':getMsg('fc.aflos.points.nodata',[test.instance.crew.name])]
+        return ['instance':test.instance,'message':getMsg('fc.test.results.nodata',[test.instance.crew.name])]
     }
     
     //--------------------------------------------------------------------------
@@ -5778,11 +5343,13 @@ class FcService
         testInstance.flightTestModified = true
         testInstance.flightTestLink = ""
         testInstance.crewResultsModified = true
-        testInstance.aflosStartNum = 0
         
         // Penalties berechnen
         calculateTestPenalties(testInstance,false)
         testInstance.save()
+        
+        testInstance.task.liveTrackingTracksAvailable = false
+        testInstance.task.save()
     }
     
     //--------------------------------------------------------------------------
@@ -5794,7 +5361,7 @@ class FcService
         set_calcresult_judgedisabled(calcresult_instance, !enableCalcResult)
         
         Test test_instance = calcresult_instance.loggerresult.test
-        boolean errors = importResults(test_instance, test_instance.aflosStartNum, test_instance.showAflosMark, false, "", "") // false - noRemoveExistingData
+        boolean errors = importResults(test_instance, false, "", "") // false - noRemoveExistingData
         
         if (errors) {
             Map ret = ['instance':test_instance,'saved':true,'message':getMsg('fc.flightresults.loggerresults.changed.naverrors',[test_instance.crew.name,test_instance.flightTestPenalties])]
@@ -5848,7 +5415,7 @@ class FcService
 			if (coordroute_instance.route.Used()) {
                 // return ['instance':coordroute_instance,'error':true,'message':getMsg('fc.coordroute.update.notallowed.routeused')]
                 
-                params.gatewidth2 = params.gatewidth2.replace('.',',')
+                params.gatewidth2 = Languages.GetLanguageDecimal(showLanguage, params.gatewidth2)
                 
                 coordroute_instance.properties = params
                 if (coordroute_instance.gatewidth2 == null) {
@@ -6057,7 +5624,7 @@ class FcService
 			if (!last_coordroute_test_instance) {
 				if (coordroute_instance.type == CoordType.SECRET) {
 	        		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
-                    last_map_distance = addMapDistance(last_map_distance,route_instance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
+                    last_map_distance = addMapDistance(last_map_distance,route_instance.Convert_mm2NM(coordroute_instance.legMeasureDistance))
 					if (coordroute_instance.legDuration) {
 						last_legduration += coordroute_instance.legDuration
 					}
@@ -6116,7 +5683,7 @@ class FcService
 			Map legdata_coord = calculateLegData(coordroute_instance, last_coordroute_instance)
 			last_legdata_distance += legdata_coord.dis
 			coordroute_instance.coordTrueTrack = legdata_coord.dir
-			coordroute_instance.coordMeasureDistance = coordroute_instance.route.contest.Convert_NM2mm(last_legdata_distance)
+			coordroute_instance.coordMeasureDistance = coordroute_instance.route.Convert_NM2mm(last_legdata_distance)
 		} 
 		
 		// calculate turn_true_track / test_turn_true_track
@@ -6150,7 +5717,7 @@ class FcService
         if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
             calculateSecretLegRatio(coordroute_instance.route)
        		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
-            last_map_distance = addMapDistance(last_map_distance,route_instance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
+            last_map_distance = addMapDistance(last_map_distance,route_instance.Convert_mm2NM(coordroute_instance.legMeasureDistance))
 			BigDecimal last_measure_truetrack
 			if (last_coordtype != CoordType.SECRET) {
 				last_measure_truetrack = coordroute_instance.measureTrueTrack
@@ -6223,7 +5790,7 @@ class FcService
 					}
 				}
 			}
-			coordRouteInstance.legDistance = route_instance.contest.Convert_mm2NM(coordRouteInstance.legMeasureDistance)
+			coordRouteInstance.legDistance = route_instance.Convert_mm2NM(coordRouteInstance.legMeasureDistance)
 		} else {
             println "calculateLegMeasureDistance (remove)"
             coordRouteInstance.legMeasureDistance = null
@@ -6265,7 +5832,7 @@ class FcService
 					BigDecimal old_leg_measure_distance = coordroute_instance.legMeasureDistance
 					BigDecimal old_leg_distance = coordroute_instance.legDistance  
 					coordroute_instance.legMeasureDistance = leg_measure_distance
-					coordroute_instance.legDistance = routeInstance.contest.Convert_mm2NM(leg_measure_distance)
+					coordroute_instance.legDistance = routeInstance.Convert_mm2NM(leg_measure_distance)
 					coordroute_instance.save()
 					println "$coordroute_instance.mark ${coordroute_instance.titleWithRatio()} modified: $old_leg_measure_distance -> $coordroute_instance.legMeasureDistance, $old_leg_distance -> $coordroute_instance.legDistance"
 				}
@@ -6276,7 +5843,7 @@ class FcService
                 Map legdata_coord = calculateLegData(coordroute_instance, last_coordroute_instance)
                 last_legdata_distance += legdata_coord.dis
                 coordroute_instance.coordTrueTrack = legdata_coord.dir
-                coordroute_instance.coordMeasureDistance = routeInstance.contest.Convert_NM2mm(last_legdata_distance)
+                coordroute_instance.coordMeasureDistance = routeInstance.Convert_NM2mm(last_legdata_distance)
                 coordroute_instance.save()
             }
             
@@ -6368,7 +5935,6 @@ class FcService
     {
     	printstart "calculateRouteLegCoordMapDistances $routeLegCoordInstance"
     	
-    	Contest contest_instance = routeLegCoordInstance.route.contest
 		BigDecimal secrets_distance = 0
     		
     	// search coord for routeLegCoordInstance
@@ -6394,7 +5960,7 @@ class FcService
 
     	// calculate legDistance
 		routeLegCoordInstance.legMeasureDistance = routeLegCoordInstance.measureDistance - secrets_distance 
-    	routeLegCoordInstance.legDistance = contest_instance.Convert_mm2NM(routeLegCoordInstance.legMeasureDistance)
+    	routeLegCoordInstance.legDistance = routeLegCoordInstance.route.Convert_mm2NM(routeLegCoordInstance.legMeasureDistance)
     	
         // save legDistance to coord
     	if (found_coordroute_instance) {
@@ -6434,7 +6000,7 @@ class FcService
                 	RouteLegTest.findAllByRoute(routeLegCoordInstance.route,[sort:"id"]).eachWithIndex { RouteLegTest routelegtest_instance, int i ->
                 		if (i == testlegpos) {
                 			routelegtest_instance.legMeasureDistance = last_mapmeasure_distance 
-                			routelegtest_instance.legDistance = contest_instance.Convert_mm2NM(last_mapmeasure_distance)
+                			routelegtest_instance.legDistance = routeLegCoordInstance.route.Convert_mm2NM(last_mapmeasure_distance)
                 			routelegtest_instance.measureTrueTrack = lastMapMeasureTrueTrack
                 			routelegtest_instance.save()
                 		}
@@ -7394,6 +6960,12 @@ class FcService
 	            return ['instance':crew_instance]
 			}
 
+			if (BootStrap.global.IsLiveTrackingPossible() && crew_instance.contest.liveTrackingContestID && !params.trackerID) {
+				crew_instance.errors.rejectValue("trackerID", "", getMsg('fc.crew.trackerid.emptyerror',[params.trackerID]))
+				printerror "trackerID must be assigned."
+				return ['instance':crew_instance]
+			}
+
             if (!crew_instance.hasErrors()) {
 
 				boolean modify_tas = false
@@ -7401,6 +6973,10 @@ class FcService
                     modify_tas = crew_instance.tas != FcMath.toBigDecimal(params.tas)
                 }
 				boolean modify_aircraft = crew_instance.aircraft.toString() != params.aircraft 
+                boolean modify_tracker = false
+                if (params.trackerID) {
+                    modify_tracker = crew_instance.trackerID != params.trackerID
+                }
 				boolean old_disabled = crew_instance.disabled
                 boolean old_disabled_team = crew_instance.disabledTeam
                 boolean old_disabled_contest = crew_instance.disabledContest
@@ -7454,6 +7030,7 @@ class FcService
 
 					int no_modify_tas_num = 0
 					int no_modify_aircraft_num = 0
+                    int no_modify_tracker_num = 0
                     if (old_increase_enabled != crew_instance.increaseEnabled) {
                         println "Increase modified."
                         Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
@@ -7495,10 +7072,22 @@ class FcService
 							}
 						}
 					}
+                    if (modify_tracker) {
+						println "Tracker modified."
+						Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
+							if (test_instance.timeCalculated) {
+								println "'${test_instance.task.name()}' '$test_instance.crew.name': do nothing."
+								no_modify_tracker_num++
+							} else {
+								test_instance.taskTrackerID = crew_instance.trackerID
+								test_instance.save()
+							}
+						}
+                    }
 
 					printdone ""
 					if (no_modify_tas_num) {
-						return ['instance':crew_instance,'saved':true,'message':getMsg('fc.crew.updated.nomodify',["${crew_instance.name}",no_modify_tas_num.toString(),no_modify_aircraft_num.toString()])]
+						return ['instance':crew_instance,'saved':true,'message':getMsg('fc.crew.updated.nomodify',["${crew_instance.name}",no_modify_tas_num.toString(),no_modify_aircraft_num.toString(),no_modify_tracker_num.toString()])]
 					} else {
 						return ['instance':crew_instance,'saved':true,'message':getMsg('fc.updated',["${crew_instance.name}"])]
 					}
@@ -7545,6 +7134,12 @@ class FcService
 		if (Crew.findByStartNumAndContest(params.startNum,contestInstance)) {
             crew_instance.errors.rejectValue("startNum", "", getMsg('fc.crew.startnum.uniqueerror',[params.startNum]))
 			printerror "startNum is not unique."
+            return ['instance':crew_instance]
+		}
+		
+		if (BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && !params.trackerID) {
+            crew_instance.errors.rejectValue("trackerID", "", getMsg('fc.crew.trackerid.emptyerror',[params.trackerID]))
+			printerror "trackerID must be assigned."
             return ['instance':crew_instance]
 		}
 
@@ -7628,6 +7223,7 @@ class FcService
                     test_instance.disabledCrew = true
 					test_instance.taskTAS = crew_instance.tas
 					test_instance.taskAircraft = crew_instance.aircraft
+                    test_instance.taskTrackerID = crew_instance.trackerID
 	                test_instance.viewpos = Crew.countByContest(contestInstance) - 1
 	                test_instance.task = task_instance
 	                test_instance.timeCalculated = false
@@ -7664,7 +7260,11 @@ class FcService
         
         if(crew_instance) {
             try {
-				deleteCrewInstance(crew_instance)
+				delete_crew(crew_instance)
+				if (crew_instance.contest.liveTrackingManagedCrews && !Crew.findByContest(crew_instance.contest)) {
+					crew_instance.contest.liveTrackingManagedCrews = false
+					crew_instance.contest.save()
+				}
 				Map ret = ['deleted':true,'message':getMsg('fc.deleted',["${crew_instance.name}"])]
 				printdone ret 
                 return ret
@@ -7686,14 +7286,20 @@ class FcService
 	{
 		printstart "deleteCrews"
 		
+		Contest contest_instance = Contest.get(contestInstance.id)
 		int delete_num = 0
 		 
-        Crew.findAllByContest(contestInstance,[sort:"viewpos"]).each { Crew crew_instance ->
+        Crew.findAllByContest(contest_instance,[sort:"viewpos"]).each { Crew crew_instance ->
             if (params["selectedCrewID${crew_instance.id}"] == "on") {
-				deleteCrewInstance(crew_instance)
+				delete_crew(crew_instance)
 				delete_num++
             }
         }
+
+		if (contest_instance.liveTrackingManagedCrews && !Crew.findByContest(contest_instance)) {
+			contest_instance.liveTrackingManagedCrews = false
+			contest_instance.save()
+		}
 		
 		Map ret = ['deleted':delete_num > 0,'message':getMsg('fc.crew.deleted',["${delete_num}"])]
 		printdone ret
@@ -7905,7 +7511,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-	void deleteCrewInstance(Crew crewInstance)
+	private void delete_crew(Crew crewInstance)
 	{
 		println "Crew '$crewInstance.name' deleted"
         
@@ -8326,136 +7932,42 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+	void importCrewList(Map contest, String originalFileName, boolean noUnsuitableStartNum)
+	{
+		printstart "importCrewList '$originalFileName'"
+        
+        String webroot_dir = servletContext.getRealPath("/")
+        String file_name = webroot_dir + "testdata/" + originalFileName
+        
+		//println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream"
+		if (file_name.toLowerCase().endsWith('.xlsx')) {
+			def crews = importCrews(file_name, file_name, noUnsuitableStartNum, contest.instance)
+			if (crews.saved) {
+				printdone crews.message
+			} else if (crews.error) {
+				printerror crews.message
+			}
+		} else {
+			printerror "No excel file (*.xls)."
+		}
+	}
+	
+    //--------------------------------------------------------------------------
     Map importCrews(String fileName, String loadFileName, boolean noUnsuitableStartNum, Contest contestInstance)
     {
 		printstart "importCrews $fileName [$loadFileName]"
 		int new_crew_num = 0
 		int new_crew_error_num = 0
-		int exist_crew_num = 0
-        boolean valid_excel_file = true
-		try {
-			CrewExcelImporter crew_importer = new CrewExcelImporter(loadFileName)
-			
-			List crews = []
-			int i = 0
-			List crew_list = fcExcelImportService.convertColumnMapConfigManyRows(crew_importer.workbook, crew_importer.CONFIG_CREWS_COLUMN_MAP, null, null, crew_importer.CONFIG_CREWS_PROPERTY_CONFIGURATION_MAP, -1)
-			for (Map crew_entry in crew_list) {
-				if (i == 0) {
-					int col_num = 0
-					crew_entry.each { key, value ->
-						if (key == value) {
-							col_num++
-						}
-					}
-					if (col_num != crew_importer.CONFIG_CREWS_COLUMN_NUM) {
-                        valid_excel_file = false
-						break
-					}
-				} else {
-					Map new_entry = [:]
-					crew_importer.CONFIG_CREWS_COLUMN_MAP.columnMap.each { key, value ->
-						new_entry += [(value):""]
-					}
-                    boolean empty_row = true
-					crew_entry.each { key, value ->
-						if (value) {
-                            if (value.toString() == crew_importer.CONFIG_CREWS_EMPTY_VALUE) {
-                                new_entry[(key)] = ""
-                            } else {
-							    new_entry[(key)] = value.toString()
-                                empty_row = false
-                            }
-						}
-					}
-                    if (empty_row) {
-                        break
-                    }
-					crews += new_entry
-				}
-				i++
-			}
-	
-            if (valid_excel_file) {
-    			crews.each { Map crew_entry ->
-    				if (crew_entry.name) {
-    					String crew_name = crew_entry.name.trim()
-    					if (crew_name) {
-    						if (crew_entry.name2) {
-    							String crew_name2 = crew_entry.name2.trim()
-    							if (crew_name2) {
-    								if (crew_name.contains(',') || crew_name2.contains(',')) {
-    									crew_name += "; " + crew_name2
-    								} else {
-    									crew_name += ", " + crew_name2
-    								}
-    							}
-    						}
-    						crew_entry.name = crew_name
-                            
-    						if (crew_entry.startNum) {
-    							if (crew_entry.startNum.contains('.')) {
-    								crew_entry.startNum = crew_entry.startNum.substring(0,crew_entry.startNum.indexOf('.'))
-    							}
-    							try {
-    								crew_entry.startNum = crew_entry.startNum.toInteger()
-    							} catch (Exception e) {
-    								crew_entry.startNum = 1
-    							}
-                                if (noUnsuitableStartNum) {
-                                    if (contestInstance.IsUnsuitableStartNum(crew_entry.startNum)) {
-                                        crew_entry.startNum++
-                                    }
-                                }
-    						} else {
-                                crew_entry.startNum = 1
-                                for(Crew crew_instance in Crew.findAllByContest(contestInstance)) {
-                                    if (crew_instance.startNum >= crew_entry.startNum) {
-                                        crew_entry.startNum = crew_instance.startNum + 1
-                                        if (noUnsuitableStartNum) {
-                                            if (contestInstance.IsUnsuitableStartNum(crew_entry.startNum)) {
-                                                crew_entry.startNum++
-                                            }
-                                        }
-                                    }
-                                }
-    						}
-                            
-                            // doppelte Startnummer auflösen
-                            while (Crew.findByStartNumAndContest(crew_entry.startNum,contestInstance)) {
-                                crew_entry.startNum++
-                                if (noUnsuitableStartNum) {
-                                    if (contestInstance.IsUnsuitableStartNum(crew_entry.startNum)) {
-                                        crew_entry.startNum++
-                                    }
-                                }
-                            }
-                            
-    						printstart crew_name
-    						Crew crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
-    						if (crew) {
-    							printdone "Crew already exists."
-    							exist_crew_num++
-    						} else {
-    							Map ret = saveCrew(crew_entry,contestInstance)
-    							printdone "Created $ret"
-    							if (ret.saved) {
-    								new_crew_num++
-    							} else {
-    								new_crew_error_num++
-    							}
-    						}
-    					}
-    				}
-    			}
-            }
-		} catch (Exception e) {
-			Map ret = ['error':true,'message':getMsg('fc.notimported.msg',[fileName,e.getMessage()])]
-			printerror ret
-			return ret
-		}
+        
+        Map ret3 = CrewTools.ImportExcelCrews(loadFileName, contestInstance)
+        if (ret3.validFile) {
+            Map ret2 = importCrews2(ret3.crewList, noUnsuitableStartNum, contestInstance)
+            new_crew_num = ret2.new_crew_num
+            new_crew_error_num = ret2.new_crew_error_num
+        }
 		
-		Map ret
-		if (!valid_excel_file) {
+		Map ret = [:]
+		if (!ret3.validFile) {
             ret = ['error':true,'message':getMsg('fc.notimported.excel.invalid',[fileName])]
 		} else if (new_crew_num) {
 			ret = ['saved':true,'message':getMsg('fc.imported.crews',[fileName,new_crew_num])]
@@ -8467,22 +7979,68 @@ class FcService
 		printdone ret
 		return ret
 	}
-	
+
     //--------------------------------------------------------------------------
-	void importCrewList(Map contest, String fileName, boolean noUnsuitableStartNum)
-	{
-		printstart "Import '$fileName'"
-		//println file.getContentType() // "application/vnd.ms-excel", "application/octet-stream"
-		if (fileName.toLowerCase().endsWith('.xls')) {
-			def crews = importCrews(fileName, fileName, noUnsuitableStartNum, contest.instance)
-			if (crews.saved) {
-				printdone crews.message
-			} else if (crews.error) {
-				printerror crews.message
+	Map importCrews2(List crewList, boolean noUnsuitableStartNum, Contest contestInstance) {
+		Map ret = [new_crew_num:0, new_crew_error_num:0, exist_crew_num:0]
+		crewList.each { Map crew_entry ->
+			if (crew_entry.name) {
+                
+                if (crew_entry.startNum) {
+                    if (crew_entry.startNum.contains('.')) {
+                        crew_entry.startNum = crew_entry.startNum.substring(0,crew_entry.startNum.indexOf('.'))
+                    }
+                    try {
+                        crew_entry.startNum = crew_entry.startNum.toInteger()
+                    } catch (Exception e) {
+                        crew_entry.startNum = 1
+                    }
+                    if (noUnsuitableStartNum) {
+                        if (contestInstance.IsUnsuitableStartNum(crew_entry.startNum)) {
+                            crew_entry.startNum++
+                        }
+                    }
+                } else {
+                    crew_entry.startNum = 1
+                    for(Crew crew_instance in Crew.findAllByContest(contestInstance)) {
+                        if (crew_instance.startNum >= crew_entry.startNum) {
+                            crew_entry.startNum = crew_instance.startNum + 1
+                            if (noUnsuitableStartNum) {
+                                if (contestInstance.IsUnsuitableStartNum(crew_entry.startNum)) {
+                                    crew_entry.startNum++
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // doppelte Startnummer auflösen
+                while (Crew.findByStartNumAndContest(crew_entry.startNum,contestInstance)) {
+                    crew_entry.startNum++
+                    if (noUnsuitableStartNum) {
+                        if (contestInstance.IsUnsuitableStartNum(crew_entry.startNum)) {
+                            crew_entry.startNum++
+                        }
+                    }
+                }
+                
+                printstart crew_entry.name
+                Crew crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
+                if (crew) {
+                    printdone "Crew already exists."
+                    ret.exist_crew_num++
+                } else {
+                    Map ret2 = saveCrew(crew_entry,contestInstance)
+                    printdone "Created $ret2"
+                    if (ret2.saved) {
+                        ret.new_crew_num++
+                    } else {
+                        ret.new_crew_error_num++
+                    }
+                }
 			}
-		} else {
-			printerror "No excel file (*.xls)."
 		}
+		return ret
 	}
 	
     //--------------------------------------------------------------------------
@@ -8543,12 +8101,10 @@ class FcService
                 case CrewCommands.EXPORTCREWS.toString():
                     layout = "Standard-Layout,Team-Layout 1,Team-Layout 2"
                     break
-                case CrewCommands.EXPORTPILOTSCOMMA.toString():
-                case CrewCommands.EXPORTPILOTSSEMICOLON.toString():
+                case CrewCommands.EXPORTPILOTS.toString():
                     layout = "Team-Layout 1"
                     break
-                case CrewCommands.EXPORTNAVIGATORSCOMMA.toString():
-                case CrewCommands.EXPORTNAVIGATORSSEMICOLON.toString():
+                case CrewCommands.EXPORTNAVIGATORS.toString():
                     layout = "Team-Layout 1"
                     break
             }
@@ -8566,35 +8122,23 @@ class FcService
                             team = crew_instance.team.name
                         }
                         String crew = crew_instance.name
-                        switch (crew_command) {
-                            case CrewCommands.EXPORTPILOTSCOMMA.toString():
-                                if (crew.contains(',')) {
-                                    crew = crew.split(',')[0].trim()
-                                }
-                                team = getMsg('fc.crew.exportpilots.text')
-                                break
-                            case CrewCommands.EXPORTPILOTSSEMICOLON.toString():
-                                if (crew.contains(';')) {
-                                    crew = crew.split(';')[0].trim()
-                                }
-                                team = getMsg('fc.crew.exportpilots.text')
-                                break
-                            case CrewCommands.EXPORTNAVIGATORSCOMMA.toString():
-                                if (crew.contains(',')) {
-                                    crew = crew.split(',')[1].trim()
-                                } else {
-                                    crew = ""
-                                }
-                                team = getMsg('fc.crew.exportnavigators.text')
-                                break
-                            case CrewCommands.EXPORTNAVIGATORSSEMICOLON.toString():
-                                if (crew.contains(';')) {
-                                    crew = crew.split(';')[1].trim()
-                                } else {
-                                    crew = ""
-                                }
-                                team = getMsg('fc.crew.exportnavigators.text')
-                                break
+                        if (contestInstance.crewPilotNavigatorDelimiter) {
+                            switch (crew_command) {
+                                case CrewCommands.EXPORTPILOTS.toString():
+                                    if (crew.contains(contestInstance.crewPilotNavigatorDelimiter)) {
+                                        crew = Tools.Split(crew, contestInstance.crewPilotNavigatorDelimiter)[0].trim()
+                                    }
+                                    team = getMsg('fc.crew.exportpilots.text')
+                                    break
+                                case CrewCommands.EXPORTNAVIGATORS.toString():
+                                    if (crew.contains(contestInstance.crewPilotNavigatorDelimiter)) {
+                                        crew = Tools.Split(crew, contestInstance.crewPilotNavigatorDelimiter)[1].trim()
+                                    } else {
+                                        crew = ""
+                                    }
+                                    team = getMsg('fc.crew.exportnavigators.text')
+                                    break
+                            }
                         }
                         if (crew) {
                             Map new_value = [startnum:    crew_instance.startNum,
@@ -9964,7 +9508,7 @@ class FcService
                     // no penalties
                     set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, true) // noBadCourse
                 } else {
-                    testInstance.flightTestCheckPointPenalties += coordresult_instance.resultBadCourseNum * testInstance.GetFlightTestBadCoursePoints()
+                    testInstance.flightTestCheckPointPenalties += coordresult_instance.GetBadCoursePenalties()
                     set_calcresult_nobadcourse(testInstance, last_coordresult_instance, coordresult_instance, false) // no noBadCourse
                 }
     		}
@@ -10519,7 +10063,10 @@ class FcService
         }
          
         FlightTest flighttest_instance = new FlightTest()
-        setFlightTestWindDirection(Route.findByContest(contestInstance), flighttest_instance)
+        List flighttest_routes = Route.GetOkFlightTestRoutes(contestInstance)
+        if (flighttest_routes) {
+            setFlightTestWindDirection(flighttest_routes[0], flighttest_instance)
+        }
         flighttest_instance.properties = params
         return ['instance':flighttest_instance]
     }
@@ -10542,6 +10089,14 @@ class FcService
         if (!flighttest_instance.speed) {
         	flighttest_instance.speed = 0
         }
+        
+        flighttest_instance.flightPlanShowLegDistance = flighttest_instance.task.contest.flightPlanShowLegDistance
+        flighttest_instance.flightPlanShowTrueTrack = flighttest_instance.task.contest.flightPlanShowTrueTrack
+        flighttest_instance.flightPlanShowTrueHeading = flighttest_instance.task.contest.flightPlanShowTrueHeading
+        flighttest_instance.flightPlanShowGroundSpeed = flighttest_instance.task.contest.flightPlanShowGroundSpeed
+        flighttest_instance.flightPlanShowLocalTime = flighttest_instance.task.contest.flightPlanShowLocalTime
+        flighttest_instance.flightPlanShowElapsedTime = flighttest_instance.task.contest.flightPlanShowElapsedTime
+        flighttest_instance.submissionMinutes = flighttest_instance.task.contest.flightTestSubmissionMinutes
         
         if (!flighttest_instance.route) {
             Map ret = ['instance':flighttest_instance,error:true,'message':getMsg('fc.flighttest.noroute')]
@@ -10675,18 +10230,6 @@ class FcService
             disabled_checkpoints_notfound += ","
             println "disabledCheckPointsNotFound has been set with route settings: $disabled_checkpoints_notfound"
         }
-        /*
-        println "XX1 '$disabled_checkpoints_timecheck'"
-        String c = DisabledCheckPointsTools.Compress(disabled_checkpoints_timecheck, routeInstance)
-        println "XX2 '$c'"
-        String u = DisabledCheckPointsTools.Uncompress(c)
-        println "XX3 '$u'"
-        if (disabled_checkpoints_timecheck == u) {
-            println "XX4 Ok"
-        } else {
-            println "XX4 Error"
-        }
-        */
         taskInstance.disabledCheckPoints = DisabledCheckPointsTools.Compress(disabled_checkpoints_timecheck, routeInstance)
         taskInstance.disabledCheckPointsNotFound = DisabledCheckPointsTools.Compress(disabled_checkpoints_notfound, routeInstance)
         taskInstance.save()
@@ -11742,13 +11285,13 @@ class FcService
                         altitude_points = coordresult_instance.test.GetFlightTestMinAltitudeMissedPoints().toString()
                     }
 				}
-                String badcourse_points = "0"
+                int badcourse_penalties = 0
                 if (coordresult_instance.resultBadCourseNum) {
                     if (!DisabledCheckPointsTools.Uncompress(coordresult_instance.test.task.disabledCheckPointsBadCourse).contains("${coordresult_instance.title()},")) {
-                        badcourse_points = (coordresult_instance.resultBadCourseNum*coordresult_instance.test.GetFlightTestBadCoursePoints()).toString()
+                        badcourse_penalties = coordresult_instance.GetBadCoursePenalties()
                     }
                 }
-				String msg = "${coordresult_instance.givenName()} ${getMsg('fc.coordresult.points',[altitude_points,"${coordresult_instance.penaltyCoord}",badcourse_points])}"
+				String msg = "${coordresult_instance.givenName()} ${getMsg('fc.coordresult.points',[altitude_points,"${coordresult_instance.penaltyCoord}",badcourse_penalties.toString()])}"
                 return ['instance':coordresult_instance,'saved':true,'message':msg]
             } else {
                 return ['instance':coordresult_instance]
@@ -12170,7 +11713,7 @@ class FcService
 		BigDecimal last_measure_truetrack
         CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
       		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
-            last_map_distance = addMapDistance(last_map_distance,routeInstance.contest.Convert_mm2NM(coordroute_instance.legMeasureDistance))
+            last_map_distance = addMapDistance(last_map_distance,routeInstance.Convert_mm2NM(coordroute_instance.legMeasureDistance))
 			if (coordroute_instance.legDuration) {
 				last_legduration += coordroute_instance.legDuration
 			}
@@ -12323,7 +11866,7 @@ class FcService
         	}
 
         	// Set planProcedureTurn (CoordRoute)
-			if (last_coordroute_instance) { // && routeInstance.UseProcedureTurn()
+			if (last_coordroute_instance) { // && routeInstance.useProcedureTurns
 				BigDecimal legdir
 				if (coordroute_instance.measureTrueTrack) {
 					legdir = coordroute_instance.measureTrueTrack
@@ -12948,7 +12491,6 @@ class FcService
 		printstart "Create and calculate CoordResult instances"
         int coord_index = 0
         Route route_instance = testInstance.flighttestwind.flighttest.route
-        boolean use_procedureturn = route_instance.UseProcedureTurn()
 		CoordType last_coordtype = CoordType.UNKNOWN
         CoordRoute.findAllByRoute(route_instance,[sort:"id"]).each { CoordRoute coordroute_instance ->
             CoordResult coordresult_instance = new CoordResult()
@@ -12966,7 +12508,7 @@ class FcService
             coordresult_instance.endCurved = coordroute_instance.endCurved
             
 			// Set planProcedureTurn (CoordResult)
-			if (use_procedureturn && coordroute_instance.planProcedureTurn && last_coordtype.IsProcedureTurnCoord()) {
+			if (route_instance.useProcedureTurns && coordroute_instance.planProcedureTurn && last_coordtype.IsProcedureTurnCoord()) {
 				coordresult_instance.planProcedureTurn = true
 			}
 			
@@ -13100,7 +12642,7 @@ class FcService
         // Set planProcedureTurn (TestLeg)
         testLegInstance.planProcedureTurn = false
         testLegInstance.planProcedureTurnDuration = 0
-        if ((procedureTurnDuration > 0) && (lastTrueTrack != null) && routeInstance.UseProcedureTurn()) {
+        if ((procedureTurnDuration > 0) && (lastTrueTrack != null) && routeInstance.useProcedureTurns) {
 			if (routeLegInstance.startTitle.type.IsProcedureTurnCoord()) {
 	            if (IsCourseChangeGreaterEqual90(testLegInstance.planTrueTrack,lastTrueTrack)) {
 	        	    testLegInstance.planProcedureTurn = true
@@ -13131,17 +12673,17 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map putContest(String title, String printPrefix, int mapScale, boolean resultclasses, int teamCrewNum, ContestRules contestRule, boolean aflosTest, boolean testExists)
+    Map putContest(String title, String printPrefix, boolean resultclasses, int teamCrewNum, ContestRules contestRule, String contestDate, String timeZone, boolean testExists)
     {
 		printstart "putContest"
         Map p = [:]
         p.title = title
 		p.printPrefix = printPrefix
-        p.mapScale = mapScale
 		p.resultClasses = resultclasses
 		p.teamCrewNum = teamCrewNum
 		p.contestRule = contestRule
-		p.aflosTest = aflosTest
+        p.liveTrackingContestDate = contestDate
+        p.timeZone2 = TimeZone.getTimeZone(timeZone)
 		p.testExists = testExists
         Map ret = saveContest(p)
 		printdone ret
@@ -13542,7 +13084,7 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
-    void importflightresultsTask(Map task, List crewResults, boolean aflosDB, String fileExtension)
+    void importflightresultsTask(Map task, List crewResults, String fileExtension)
     {
 		printstart "importflightresultsTask $fileExtension"
 		Task task_instance = task.instance
@@ -13550,12 +13092,7 @@ class FcService
 		crewResults.each { Map crew_result ->
 	        Test.findAllByTask(task_instance,[sort:"viewpos"]).each { Test test_instance ->
 				if (test_instance.crew == crew_result.crew.instance) {
-                    Map ret = [:]
-                    if (aflosDB) {
-                        ret = calculateAflosResults(test_instance, crew_result.startNum, test_instance.flighttestwind.flighttest.route.mark, false)
-                    } else {
-                        ret = importLoggerResultTest(fileExtension, test_instance, crew_result.fileName)
-                    }
+                    Map ret = importLoggerResultTest(fileExtension, test_instance, crew_result.fileName)
 					if (!ret.error) {
 						putflightresults(test_instance, crew_result)
 					}
@@ -13857,7 +13394,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-	Map testData(List testData, boolean aflosDB)
+	Map testData(List testData)
 	{
 		printstart "testData"
 		int error_num = 0
@@ -13882,7 +13419,7 @@ class FcService
 				// check data
 				table_test_data.data.eachWithIndex { Map test_datum, int test_datum_index ->
 					def table_datum = table_test_data.table[test_datum_index]
-					table_error_num = test_data(test_datum, test_datum_index, table_error_num, table_datum, table_name, table_datum, aflosDB)
+					table_error_num = test_data(test_datum, test_datum_index, table_error_num, table_datum, table_name, table_datum)
 				}
 				 
 			} else {
@@ -13909,7 +13446,7 @@ class FcService
 	}
 	
     //--------------------------------------------------------------------------
-	private int test_data(Map testData, int testDataIndex, int tableErrorNum, tableDatum, tableName, recurseValue, boolean aflosDB)
+	private int test_data(Map testData, int testDataIndex, int tableErrorNum, tableDatum, tableName, recurseValue)
 	{
 		testData.each { key, value ->
 			try {
@@ -13929,20 +13466,14 @@ class FcService
 						break
                     case "latMinute":
                     case "lonMinute":
-                        if (!aflosDB) {
-                            value1 = coord_format(value, value1)
-                        }
+                        value1 = coord_format(value, value1)
                         break
                     case "resultLatitude":
                     case "resultLongitude":
-                        if (!aflosDB) {
-                            value1 = latlon_format(value, value1)
-                        }
+                        value1 = latlon_format(value, value1)
                         break
                     case "mark":
-                        if (!aflosDB) {
-                            ignore = true
-                        }
+                        ignore = true
                         break
 				}
                 if (!ignore) {
@@ -13952,7 +13483,7 @@ class FcService
     						println "${testDataIndex}: field '$key' has different value '$value1' ['$value' expected]."
     					} 
     				} else if (!value?.class) {
-    					tableErrorNum = test_data(value, testDataIndex, tableErrorNum, tableDatum, tableName, value1, aflosDB)
+    					tableErrorNum = test_data(value, testDataIndex, tableErrorNum, tableDatum, tableName, value1)
     				} else if (value1 != value) {
     					tableErrorNum = add_error_num(tableErrorNum, tableName)
     					println "${testDataIndex}: field '$key' has different value '$value1' ['$value' expected]."
