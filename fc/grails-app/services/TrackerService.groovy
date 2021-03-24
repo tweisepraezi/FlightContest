@@ -289,7 +289,7 @@ class TrackerService
 			}
 			
 			if (import_num) {
-				fcService.importCrews2(crew_list, false, contest_instance)
+				import_num = fcService.importCrews2(crew_list, false, contest_instance).new_crew_num
 				contest_instance.liveTrackingManagedCrews = true
 				contest_instance.save()
 			}
@@ -369,7 +369,7 @@ class TrackerService
         Date finish_date = null
         List contestant_list = []
         for (Test test_instance in Test.findAllByTask(task_instance,[sort:'viewpos'])) {
-            if (!test_instance.crew.disabled && (test_instance.taskTrackerID || tracks_available) && !test_instance.disabledCrew && test_instance.IsFlightTestRun()) {
+            if (!test_instance.crew.disabled && !test_instance.disabledCrew && test_instance.IsFlightTestRun()) {
                 Map contestant = get_contestant(test_instance, task_instance.liveTrackingNavigationTaskDate, tracks_available)
                 contestant_list += contestant.data
                 finish_date = contestant.arrivalTime
@@ -802,7 +802,7 @@ class TrackerService
         
         String tracker_id = testInstance.taskTrackerID
         if (!tracker_id && createTrackerID) {
-            tracker_id = get_random_tracker_id(contest_instance.liveTrackingContestID, testInstance.crew.startNum)
+            // tracker_id = get_random_tracker_id(contest_instance.liveTrackingContestID, testInstance.crew.startNum)
         }
         
         ret.data = [

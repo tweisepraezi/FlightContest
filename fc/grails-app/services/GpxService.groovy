@@ -2626,7 +2626,7 @@ class GpxService
     Map SendFTP(Object configFlightContest, String baseDir, String sourceURL, String destFileName)
     {
         printstart "SendFTP ${configFlightContest.ftp.host}:${configFlightContest.ftp.port}"
-        Map ret = [:]
+        Map ret = [error:false, message:'']
         try {
             String dest_file_name = "/${baseDir}/${destFileName}"
             println "${configFlightContest.ftp.host}:${configFlightContest.ftp.port}${dest_file_name}"
@@ -2668,8 +2668,8 @@ class GpxService
     //--------------------------------------------------------------------------
     Map SendFTP2(Object configFlightContest, String baseDir, String sourceURL, String destFileName) // TODO: getMsg
     {
-        printstart "SendFTP2 ${configFlightContest.ftp.host}:${configFlightContest.ftp.port}"
-        Map ret = [:]
+        printstart "SendFTP2 ${configFlightContest.ftp.host}:${configFlightContest.ftp.port}:${sourceURL}"
+        Map ret = [error:false, message:'']
         try {
             String dest_file_name = "/${baseDir}/${destFileName}"
             println "${configFlightContest.ftp.host}:${configFlightContest.ftp.port}${dest_file_name}"
@@ -2702,7 +2702,7 @@ class GpxService
             printdone ""
         } catch (Exception e) {
             ret.error = true
-            ret.message = """getMsg('fc.net.ftp.connecterror',["${configFlightContest.ftp.host}:${configFlightContest.ftp.port}"]) + ": ${e.getMessage()}" """
+            ret.message = """getMsg('fc.net.ftp.connecterror',["${configFlightContest.ftp.host}:${configFlightContest.ftp.port}:${sourceURL}"]) + ": ${e.getMessage()}" """
             printerror ret.message
         }
         return ret
@@ -2908,7 +2908,7 @@ class GpxService
                     
                     printstart "Process '${file}'"
                     
-                    LineNumberReader job_file_reader = file.newReader()
+                    BufferedReader job_file_reader = file.newReader("UTF-8")
                     String line = ""
                     int line_nr = 0
                     
@@ -2952,12 +2952,10 @@ class GpxService
                     }
                     job_file_reader.close()
                     
-                    boolean error = false
-                    
                     // Save links
                     if (save_links) {
                         for (String save_link in save_links.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
-                            Map set_link = [save_link:save_link, error:error]
+                            Map set_link = [save_link:save_link, error:false]
                             set_links += set_link
                         }
                     }
@@ -2989,6 +2987,8 @@ class GpxService
 					}
 					printdone ""
 					
+                    boolean error = false
+                    
                     // FTP uploads
                     if (ftp_basedir && ftp_uploads) {
                         for (String ftp_upload in ftp_uploads.split(Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR)) {
@@ -3032,6 +3032,13 @@ class GpxService
                         }
                     }
                     
+                    // Modify links
+                    if (set_links && error) {
+                        for (Map set_link in set_links) {
+                            set_link.error = true
+                        }
+                    }
+                        
                     if (!error) {
                         String new_file_name = webroot_dir + "${Defs.ROOT_FOLDER_JOBS_DONE}/" + file.name
                         file.renameTo(new File(new_file_name))

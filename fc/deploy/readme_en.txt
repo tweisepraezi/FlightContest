@@ -86,11 +86,11 @@ Remove comment characters for optional configuration values
 
 flightcontest {
   livetracking {
-    server = "https://tracking.airsports.no"
+    server = "https://airsports.no"
     api = "/api/v1"
     token = "..."
     display {
-        frontend = "/display/frontend/"
+        frontend = "/display/task/"
         frontendMap = "/map/"
     }
     contest {

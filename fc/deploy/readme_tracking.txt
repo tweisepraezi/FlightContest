@@ -1,6 +1,14 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M11
+---------------
+- Crew list tracker id is now optional
+- Missing tracker id no longer leads to crew exclusion in the navigation task
+- Random tracker id for historical contests removed
+- Default configuration updated (frontend = "/display/task/"
+- kml route import improved (ignore to much spaces in LineString coordinates)
+
 Changes 3.2.M10
 ---------------
 - Choice list for time zone added.
@@ -109,11 +117,11 @@ Remove comment characters for optional configuration values
 
 flightcontest {
   livetracking {
-    server = "https://tracking.airsports.no"
+    server = "https://airsports.no"
     api = "/api/v1"
     token = "..."
     display {
-        frontend = "/display/frontend/"
+        frontend = "/display/task/"
         frontendMap = "/map/"
     }
     contest {

@@ -247,31 +247,32 @@ class RouteFileTools
         BigDecimal last_longitude = lastLongitude
         def last_track = null
         for (coordinate in coordinate_values.split(' ')) {
-            
-            List coord = coordinate.split(',')
-            BigDecimal latitude = coord[1].toBigDecimal()
-            BigDecimal longitude = coord[0].toBigDecimal()
-            
-            Map lat = CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)
-            Map lon = CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)
-            Integer alt = (coord[2].toBigDecimal() * GpxService.ftPerMeter).toInteger()
-            
-            def track = null
-            if (last_latitude != null && last_longitude != null) {
-                if ((latitude == last_latitude) && (longitude == last_longitude)) {
-                    track = last_track
-                } else {
-                    Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
-                    track = leg.dir // FcMath.RoundGrad(leg.dir)
+            if (coordinate) {
+                List coord = coordinate.split(',')
+                BigDecimal latitude = coord[1].toBigDecimal()
+                BigDecimal longitude = coord[0].toBigDecimal()
+                
+                Map lat = CoordPresentation.GetDirectionGradDecimalMinute(latitude, true)
+                Map lon = CoordPresentation.GetDirectionGradDecimalMinute(longitude, false)
+                Integer alt = (coord[2].toBigDecimal() * GpxService.ftPerMeter).toInteger()
+                
+                def track = null
+                if (last_latitude != null && last_longitude != null) {
+                    if ((latitude == last_latitude) && (longitude == last_longitude)) {
+                        track = last_track
+                    } else {
+                        Map leg = AviationMath.calculateLeg(latitude,longitude,last_latitude,last_longitude)
+                        track = leg.dir // FcMath.RoundGrad(leg.dir)
+                    }
                 }
+                
+                Map gate = [lat:lat, lon:lon, alt:alt, track:track, next_track:null]
+                gates += gate
+                
+                last_latitude = latitude
+                last_longitude = longitude
+                last_track = track
             }
-            
-            Map gate = [lat:lat, lon:lon, alt:alt, track:track, next_track:null]
-            gates += gate
-            
-            last_latitude = latitude
-            last_longitude = longitude
-            last_track = track
         }
 
         return [gates: gates, lastlatitude: last_latitude, lastlongitude: last_longitude]

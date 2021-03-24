@@ -151,6 +151,15 @@ class FcTime
     }
     
     //--------------------------------------------------------------------------
+	static String GetDateStr(Date dateValue)
+	{
+		if (dateValue) {
+			return dateValue.format("yyyy-MM-dd")
+		}
+		return ""
+	}
+    
+    //--------------------------------------------------------------------------
 	static String GetTimeStr(Date dateValue)
 	{
 		if (dateValue) {

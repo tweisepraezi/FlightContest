@@ -51,7 +51,7 @@ class EmailService
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.pdf"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr(gpx_converter.gpxShowPoints)}"
+                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.htm"
                 
@@ -73,7 +73,7 @@ class EmailService
 				
                 // create email job
                 File job_file = new File(webroot_dir + job_file_name)
-                job_writer = job_file.newWriter()
+                job_writer = job_file.newWriter("UTF-8")
                 gpxService.WriteLine(job_writer,email_to) // 1
                 gpxService.WriteLine(job_writer,routeInstance.GetEMailTitle()) // 2
                 gpxService.WriteLine(job_writer,email.body) // 3
@@ -194,7 +194,7 @@ class EmailService
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                     ftp_uploads += "${test_name}.kmz"
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                    ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${file_name}&originalFilename=${HTMLFilter.GetStr(flight_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr(gpx_converter.gpxShowPoints)}"
+                    ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${file_name}&originalFilename=${HTMLFilter.GetStr(flight_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                     ftp_uploads += "${test_name}.htm"
                 }
@@ -219,7 +219,7 @@ class EmailService
 				
                 // create email job
                 File job_file = new File(webroot_dir + job_file_name)
-                BufferedWriter job_writer = job_file.newWriter()
+                BufferedWriter job_writer = job_file.newWriter("UTF-8")
                 gpxService.WriteLine(job_writer,email_to) // 1
                 gpxService.WriteLine(job_writer,email_title) // 2
                 gpxService.WriteLine(job_writer,email.body) // 3

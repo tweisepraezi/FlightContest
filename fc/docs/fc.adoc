@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M10
-:revdate:   20.03.2021
+:revnumber: 3.2.M11
+:revdate:   24.03.2021
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -1697,11 +1697,11 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 === Live-Tracking konfigurieren
  flightcontest {
    livetracking {
-     server = "https://tracking.airsports.no"
+     server = "https://airsports.no"
      api = "/api/v1"
      token = "..."
      display {
-       frontend = "/display/frontend/"
+       frontend = "/display/task/"
        frontendMap = "/map/"
      }
      contest {

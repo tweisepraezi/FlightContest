@@ -626,6 +626,7 @@ class FcService
         Contest contest_instance = new Contest()
 		contest_instance.title = getPrintMsg('fc.contest.new.title')
         contest_instance.properties = params
+        contest_instance.liveTrackingContestDate = FcTime.GetDateStr(new Date())
         return ['instance':contest_instance,'created':true]
     }
     
@@ -6960,12 +6961,6 @@ class FcService
 	            return ['instance':crew_instance]
 			}
 
-			if (BootStrap.global.IsLiveTrackingPossible() && crew_instance.contest.liveTrackingContestID && !params.trackerID) {
-				crew_instance.errors.rejectValue("trackerID", "", getMsg('fc.crew.trackerid.emptyerror',[params.trackerID]))
-				printerror "trackerID must be assigned."
-				return ['instance':crew_instance]
-			}
-
             if (!crew_instance.hasErrors()) {
 
 				boolean modify_tas = false
@@ -7137,12 +7132,6 @@ class FcService
             return ['instance':crew_instance]
 		}
 		
-		if (BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && !params.trackerID) {
-            crew_instance.errors.rejectValue("trackerID", "", getMsg('fc.crew.trackerid.emptyerror',[params.trackerID]))
-			printerror "trackerID must be assigned."
-            return ['instance':crew_instance]
-		}
-
         if (!crew_instance.hasErrors() && crew_instance.save()) {
             
             if (params.registration) {

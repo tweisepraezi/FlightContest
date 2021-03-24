@@ -15,9 +15,9 @@ echo.
 ::-------------------------------------------------------------------
 :fcsetup
 
-echo.
-echo Uninstall Flight Contest...
-"%ProgramFiles%\Flight Contest\unins000.exe" /silent
+::echo.
+::echo Uninstall Flight Contest...
+::"%ProgramFiles%\Flight Contest\unins000.exe" /silent
 
 echo.
 echo Install Flight Contest...

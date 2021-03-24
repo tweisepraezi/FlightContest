@@ -12,7 +12,7 @@
 			<g:set var="new_action" value="${message(code:'fc.crew.new')}"/>
             <g:set var="import_action" value="${message(code:'fc.crew.import')}"/>
 		</g:if>
-        <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && !Crew.findByContest(contestInstance)}">
+        <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID}">
             <g:set var="import_action2" value="${message(code:'fc.livetracking.teamsimport')}"/>
         </g:if>
         <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${new_action}" importaction="${import_action}" importaction2="${import_action2}" printsettings="${message(code:'fc.crew.print')}" />
@@ -81,13 +81,7 @@
                                 </g:if>
 	                            <td><g:aircraft var="${crew_instance.aircraft}" link="${createLink(controller:'aircraft',action:'edit')}"/><g:if test="${crew_instance.aircraft?.user1 && crew_instance.aircraft?.user2}"> *</g:if></td>
 	                            <td>${fieldValue(bean:crew_instance, field:'tas')}${message(code:'fc.knot')}<g:if test="${crew_instance.disabledContest}"> (${message(code:'fc.crew.disabledcontest')})</g:if></td>
-                                
-                                <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && !crew_instance.trackerID}">
-                                    <td class="errors">${message(code:'fc.crew.notrackerid')}</td>
-                                </g:if>
-                                <g:else>
-                                    <td>${fieldValue(bean:crew_instance, field:'trackerID')}</td>
-                                </g:else>
+                                <td>${fieldValue(bean:crew_instance, field:'trackerID')}</td>
 	                        </tr>
 	                    </g:each>
 	                </tbody>

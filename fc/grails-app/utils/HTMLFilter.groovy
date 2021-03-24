@@ -19,6 +19,11 @@ class HTMLFilter {
         return sourceList.inspect().replace(' ',"%20")
     }
     
+    static String GetStr2(List sourceList)
+    {
+        return sourceList.inspect().replace(' ',"%20").replace('/',"%2f").replace(':',"%3a").replace(',',"%2c").replace('[',"%5b").replace(']',"%5d")
+    }
+    
     static List GetList(String sourceStr)
     {
         return Eval.me(sourceStr.replace("%20",' '))
