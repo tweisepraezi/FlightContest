@@ -1,13 +1,19 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M12
+---------------
+- Tracker points import improved (tolerates timestamps with fractions of a seconds, e.g. 2021-03-23T13:38:21.999000Z)
+- Map configuration parameters display.frontend and display.frontendMap removed. They are now hard coded.
+- Planning -> Update live tracking: Detailed error messages added.
+- Using of endpoint /api/v1/contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestants/{id}/update_without_team/ for contests with teams managed by live tracking.
+
 Changes 3.2.M11
 ---------------
 - Crew list tracker id is now optional
 - Missing tracker id no longer leads to crew exclusion in the navigation task
 - Random tracker id for historical contests removed
-- Default configuration updated (frontend = "/display/task/"
-- kml route import improved (ignore to much spaces in LineString coordinates)
+- kml route import improved (ignore too much spaces in LineString coordinates)
 
 Changes 3.2.M10
 ---------------
@@ -120,10 +126,6 @@ flightcontest {
     server = "https://airsports.no"
     api = "/api/v1"
     token = "..."
-    display {
-        frontend = "/display/task/"
-        frontendMap = "/map/"
-    }
     contest {
         showDelete = true // Default: false
         // createPublic = true // Default: false

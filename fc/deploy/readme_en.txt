@@ -89,10 +89,6 @@ flightcontest {
     server = "https://airsports.no"
     api = "/api/v1"
     token = "..."
-    display {
-        frontend = "/display/task/"
-        frontendMap = "/map/"
-    }
     contest {
         showDelete = true // Default: false
         // createPublic = true // Default: false

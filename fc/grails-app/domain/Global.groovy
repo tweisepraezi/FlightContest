@@ -227,11 +227,8 @@ class Global
     {
         if (   grailsApplication.config.flightcontest.livetracking
             && grailsApplication.config.flightcontest.livetracking.server
-            && grailsApplication.config.flightcontest.livetracking.display
-            && grailsApplication.config.flightcontest.livetracking.display.frontend
-            && grailsApplication.config.flightcontest.livetracking.display.frontendMap
         ) {
-            return grailsApplication.config.flightcontest.livetracking.server + grailsApplication.config.flightcontest.livetracking.display.frontend + navigationTaskID.toString() + grailsApplication.config.flightcontest.livetracking.display.frontendMap
+            return "${grailsApplication.config.flightcontest.livetracking.server}${Defs.LIVETRACKING_DISPLAY_TASK}${navigationTaskID.toString()}${Defs.LIVETRACKING_DISPLAY_MAP}"
         }
         return ""
 	}

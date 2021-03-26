@@ -1,4 +1,5 @@
-import java.util.Date;
+import java.util.Date
+import java.math.*
 
 class FcTime
 {
@@ -29,18 +30,41 @@ class FcTime
     static String UTCGetValidDateTime(String utcDateTime)
     // "yyyy-mm-ddThh:mm:ssZ"
     {
-        boolean valid = true
         try {
             Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utcDateTime)
             return utcDateTime
         } catch (Exception e) {
         }
-        String utc_data_time = utcDateTime.replace('.',':')
+        
+        // yyyy-mm-ddThh:mm:ss.xxxxxxZ
+        if (utcDateTime.size() > 20 && utcDateTime.endsWith('Z')) {
+            String second = utcDateTime.substring(17,utcDateTime.size()-1)
+            String second2 = ""
+            String utc_data_time = ""
+            if (second.isBigDecimal()) {
+                second2 = second.toBigDecimal().setScale(0, RoundingMode.HALF_EVEN).toInteger()
+                if (second2.size() == 1) {
+                    second2 = "0" + second2
+                }
+                utc_data_time = "${utcDateTime.substring(0,17)}${second2}Z"
+            } else {
+                utc_data_time = "${utcDateTime.substring(0,19)}Z"
+            }
+            try {
+                Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc_data_time)
+                return utc_data_time
+            } catch (Exception e) {
+            }
+        }
+        
+        // yyyy-mm-ddThh.mm.ssZ
+        String utc_data_time2 = utcDateTime.replace('.',':')
         try {
-            Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc_data_time)
-            return utc_data_time
+            Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utc_data_time2)
+            return utc_data_time2
         } catch (Exception e) {
         }
+        
         return ""
     }
     

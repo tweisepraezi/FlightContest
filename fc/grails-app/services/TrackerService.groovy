@@ -712,12 +712,18 @@ class TrackerService
 
         int crew_num = 0
         int error_num = 0
+        String error_str = ""
         for (Test test_instance in Test.findAllByTask(task_instance,[sort:'viewpos'])) {
             if (!test_instance.crew.disabled && !test_instance.disabledCrew && test_instance.timeCalculated) {
                 if (test_instance.id in test_instance_ids) {
-                    if (update_crew(test_instance, ret1.data)) {
+                    Map ret = update_crew(test_instance, ret1.data)
+                    if (ret.ok) {
                         crew_num++
                     } else {
+                        if (error_str) {
+                            error_str += ", "
+                        }
+                        error_str += ret.errorMsg
                         error_num++
                     }
                 }
@@ -725,11 +731,12 @@ class TrackerService
         }
         
         printdone ""
-        return [taskInstance:task_instance, error:error_num > 0, message:getMsg('fc.livetracking.navigationtaskupdatecrews.done',[crew_num, error_num])]
+        return [taskInstance:task_instance, error:error_num > 0, message:getMsg('fc.livetracking.navigationtaskupdatecrews.done',[crew_num, error_num, error_str])]
     }
     
     //--------------------------------------------------------------------------
-    private boolean update_crew(Test testInstance, def contestantList) {
+    private Map update_crew(Test testInstance, def contestantList) {
+        Map ret = [ok:false, errorMsg:'']
         println "update_crew ${testInstance.crew.name}"
 
         // get contestant_id
@@ -750,12 +757,19 @@ class TrackerService
         if (contestant_id) {
             Map contestant = get_contestant(testInstance, task_instance.liveTrackingNavigationTaskDate, false)
             JsonBuilder json_builder = new JsonBuilder(contestant.data)
-            Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/", "PUT", 200, json_builder.toString(), "")
+            Map ret2 = [:]
+            if (contest_instance.liveTrackingManagedCrews) {
+                ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/update_without_team/", "PUT", 200, json_builder.toString(), "")
+            } else {
+                ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/", "PUT", 200, json_builder.toString(), "")
+            }
             if (ret2.ok) {
-                return true
+                ret.ok = true
+            } else {
+                ret.errorMsg = ret2.errorMsg
             }
         }
-        return false
+        return ret
     }
     
     //--------------------------------------------------------------------------

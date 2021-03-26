@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M11
-:revdate:   24.03.2021
+:revnumber: 3.2.M12
+:revdate:   26.03.2021
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -1700,10 +1700,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
      server = "https://airsports.no"
      api = "/api/v1"
      token = "..."
-     display {
-       frontend = "/display/task/"
-       frontendMap = "/map/"
-     }
      contest {
        // showDelete = true // Default: false
        // createPublic = true // Default: false
