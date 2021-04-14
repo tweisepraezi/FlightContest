@@ -1,5 +1,5 @@
 
-Flight Contest 3.2.M12
+Flight Contest 3.2.M13
 Copyright 2009-2021 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
@@ -46,6 +46,14 @@ https://jquery.com/
 
 MIT License
 https://jquery.org/license/
+
+============================================================================
+
+GDAL 3.2.1
+https://gdal.org
+
+MIT License
+https://gdal.org/license.html#license
 
 ============================================================================
 

@@ -974,7 +974,7 @@ class ObservationResultsTagLib
                     col_span = 5
                 }
                 outln"""<div style="page-break-inside:avoid">"""
-                outln"""<table class="observationenroutephotoresultlist">"""
+                outln"""<table class="observationsroutephotoresultlist">"""
                 outln"""    <thead>"""
                 outln"""            <tr class="name1">"""
                 outln"""                <th class="table-head" colspan="${col_span}">${message(code:'fc.observation.enroute.photo.short')}</th>"""
@@ -1065,7 +1065,7 @@ class ObservationResultsTagLib
                     col_span = 5
                 }
                 outln"""<div style="page-break-inside:avoid">"""
-                outln"""<table class="observationenroutecanvasresultlist">"""
+                outln"""<table class="observationsroutecanvasresultlist">"""
                 outln"""    <thead>"""
                 outln"""            <tr class="name1">"""
                 outln"""                <th class="table-head" colspan="${col_span}">${message(code:'fc.observation.enroute.canvas.short')}</th>"""

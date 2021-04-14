@@ -2,7 +2,7 @@
 
 [Code]
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
-const DBVersion = '2.21.0';     // DB-2.21
+const DBVersion = '2.22.0';     // DB-2.22
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
 const FCVersion = '3.2.0';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
@@ -10,8 +10,8 @@ const FCVersion64 = '3.2.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.2.M12
-AppVersion=3.2.M12
+AppVerName=Flight Contest 3.2.M13
+AppVersion=3.2.M13
 ; no milestone below
 VersionInfoVersion=3.2.0
 
@@ -53,8 +53,15 @@ en.BackupError=Backup error
 de.BackupError=Backup-Fehler
 
 [Files]
-Source: "..\..\..\..\Java\openjdk-1.8.0.275x64\jre\*";DestDir: "{app}\java";            Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
-Source: "..\..\..\..\Server\apache-tomcat-9.0.41-windows-x64\*"; DestDir: "{app}\tomcat";  Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
+Source: "..\..\..\..\Java\openjdk-1.8.0.275x64\jre\*";                DestDir: "{app}\java";       Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
+Source: "..\..\..\..\Server\apache-tomcat-9.0.41-windows-x64\*";      DestDir: "{app}\tomcat";     Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
+;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\*.dll";                      DestDir: "{app}\tomcat\bin";
+;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\gdal\java\gdalalljni.dll";   DestDir: "{app}\tomcat\bin";
+Source: ".\setenv.bat";                                               DestDir: "{app}\tomcat\bin";
+;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\*.dll";                      DestDir: "{app}\gdal\bin";
+;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\gdal\java\gdalalljni.dll";   DestDir: "{app}\gdal\bin";
+;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\proj7\share\proj.db";        DestDir: "{app}\gdal";
+;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\proj7\share\proj.ini";       DestDir: "{app}\gdal";
 Source: "..\output\fc.war";                           DestDir: "{app}\tomcat\webapps";
 Source: ".\readme.txt";                               DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly;
 Source: ".\install-service.bat";                      DestDir: "{app}";
@@ -99,6 +106,7 @@ Filename: "{app}\install-service.bat";      Parameters: "remove FlightContest"; 
 [InstallDelete]
 Type: filesandordirs; Name: "{app}\java";
 Type: filesandordirs; Name: "{app}\tomcat";
+Type: filesandordirs; Name: "{app}\gdal";
 Type: filesandordirs; Name: "{app}\samples";
 Type: filesandordirs; Name: "{app}\scripts";
 Type: filesandordirs; Name: "{app}\rules";
@@ -107,6 +115,7 @@ Type: filesandordirs; Name: "{group}";
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\java";
 Type: filesandordirs; Name: "{app}\tomcat";
+Type: filesandordirs; Name: "{app}\gdal";
 Type: filesandordirs; Name: "{app}\samples";
 Type: filesandordirs; Name: "{app}\scripts";
 Type: filesandordirs; Name: "{app}\rules";
@@ -119,7 +128,8 @@ Name: "{group}\Flight Contest Service Manager"; Filename: "{app}\tomcat\bin\tomc
 Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";
 Name: "{group}\flightcontest.de";               Filename: "http://flightcontest.de";                                                             WorkingDir: "{commondesktop}";
 Name: "{group}\Readme";                         Filename: "{app}\readme.txt";                                                                    WorkingDir: "{commondesktop}";
-Name: "{group}\Help";                           Filename: "{app}\tomcat\webapps\fc\docs\help.html";                                              WorkingDir: "{commondesktop}";
+Name: "{group}\Hilfe";                          Filename: "{app}\tomcat\webapps\fc\docs\help_de.html";                                           WorkingDir: "{commondesktop}";
+Name: "{group}\Help";                           Filename: "{app}\tomcat\webapps\fc\docs\help_en.html";                                           WorkingDir: "{commondesktop}";
 Name: "{group}\Bedienungsanleitung";            Filename: "{app}\tomcat\webapps\fc\docs\manuals\FC-Manual.pdf";                                  WorkingDir: "{commondesktop}";
 Name: "{group}\Manual";                         Filename: "{app}\tomcat\webapps\fc\docs\manuals\FC-Manual_en.pdf";                               WorkingDir: "{commondesktop}";
 Name: "{group}\Anleitung Beobachtungen";        Filename: "{app}\tomcat\webapps\fc\docs\manuals\FC-Manual-Observations.pdf";                     WorkingDir: "{commondesktop}";

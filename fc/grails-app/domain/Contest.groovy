@@ -613,6 +613,7 @@ class Contest
 			if (copyContestSettings) {
 				mapScale = contestInstance.mapScale
                 timeZone2 = contestInstance.timeZone2
+                liveTrackingContestDate = contestInstance.liveTrackingContestDate
 				timeZone = contestInstance.timeZone
 				resultClasses = contestInstance.resultClasses
                 teamCrewNum = contestInstance.teamCrewNum

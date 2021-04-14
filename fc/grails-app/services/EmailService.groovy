@@ -102,6 +102,63 @@ class EmailService
     }
     
     //--------------------------------------------------------------------------
+    Map emailRouteMap(Route routeInstance, String routeMapFileName)
+    {
+        String email_to = routeInstance.EMailAddress()
+        printstart "Send mail of '${routeInstance.name()}' to '${email_to}'"
+        
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        
+        String route_name = routeInstance.printName().replaceAll(' ','-')
+        String file_name = "${route_name}-Map-${routeInstance.contestMapEdition}.pdf"
+        String route_title = routeInstance.GetEMailTitle()
+        
+        Map email = GetRouteMapEMailBody(routeInstance.contest.contestUUID, file_name)
+        String ret_message = ""
+        String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
+        BufferedWriter job_writer = null
+        try {
+            String ftp_uploads = ""
+            ftp_uploads += "file:${routeMapFileName}"
+            ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+            ftp_uploads += file_name
+            
+            String remove_files = ""
+            remove_files += routeMapFileName
+
+            // job status
+            UploadJobRouteMap uploadjob_routemap = UploadJobRouteMap.findByRouteAndUploadJobMapEdition(routeInstance, routeInstance.contestMapEdition)
+            if (uploadjob_routemap) {
+                uploadjob_routemap.uploadJobStatus = UploadJobStatus.Waiting
+            } else {
+                uploadjob_routemap = new UploadJobRouteMap(route:routeInstance, uploadJobMapEdition:routeInstance.contestMapEdition, uploadJobStatus:UploadJobStatus.Waiting)
+            }
+            uploadjob_routemap.save(flush:true)
+            
+            // create email job
+            File job_file = new File(webroot_dir + job_file_name)
+            job_writer = job_file.newWriter("UTF-8")
+            gpxService.WriteLine(job_writer,email_to) // 1
+            gpxService.WriteLine(job_writer,routeInstance.GetEMailTitle()) // 2
+            gpxService.WriteLine(job_writer,email.body) // 3
+            gpxService.WriteLine(job_writer,routeInstance.contest.contestUUID) // 4
+            gpxService.WriteLine(job_writer,ftp_uploads) // 5
+            gpxService.WriteLine(job_writer,remove_files) // 6
+            gpxService.WriteLine(job_writer,"UploadJobRouteMap${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${uploadjob_routemap.id}${Defs.BACKGROUNDUPLOAD_IDLINK_SEPARATOR}${email.link}") // 7
+            job_writer.close()
+            
+            ret_message = getMsg('fc.net.mail.prepared',[email_to])
+            println "Job '${job_file_name}' created." 
+        } catch (Exception e) {
+            println "Error: '${job_file_name}' could not be created ('${e.getMessage()}')"
+        }
+        
+        printdone ""
+        return [ok:true, message:ret_message]
+    }
+    
+    //--------------------------------------------------------------------------
     Map emailcrewresultsTask(Map params, String printLanguage, def grailsAttributes, def request, boolean allResults)
     {
         printstart "emailcrewresultsTask"
@@ -275,6 +332,60 @@ class EmailService
     }
 
     //--------------------------------------------------------------------------
+    private Map GetRouteMapEMailBody(String contestUUID, String mapFileName)
+    {
+        Map ret = [:]
+        String body = ""
+        
+        String contest_dir = "${grailsApplication.config.flightcontest.ftp.contesturl}/${contestUUID}"
+        
+        String map_url = "${contest_dir}/${mapFileName}"
+        body += """<p>${getPrintMsg('fc.net.mail.route.body.contestmap')}: <a href="${map_url}">${map_url}</a></p>"""
+        
+        ret += [body:body, link:map_url]
+        
+        return ret
+    }
+
+    //--------------------------------------------------------------------------
+    String GetRouteLinks(Route routeInstance)
+    {
+        String links = ""
+        if (routeInstance.GetUploadJobStatus() == UploadJobStatus.Done) {
+            Map route_links = NetTools.EMailLinks(routeInstance.GetUploadLink())
+            links += "${getPrintMsg('fc.net.mail.route.body.map')}: "
+            links += route_links.map
+            links += "\n"
+            links += "${getPrintMsg('fc.net.mail.route.body.kmz')}: "
+            links += route_links.kmz
+            links += "\n"
+            links += "${getPrintMsg('fc.net.mail.route.body.gpx')}: "
+            links += route_links.gpx
+            links += "\n"
+            links += "${getPrintMsg('fc.net.mail.route.body.pdf')}: "
+            links += route_links.pdf
+        }
+        for (Map map_link in routeInstance.GetMapUploadLinks()) {
+            links += "\n"
+            if (!map_link.secondoptions) {
+                if (!map_link.noroute) {
+                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap')}: "
+                } else {
+                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap.noroute')}: "
+                }
+            } else {
+                if (!map_link.noroute) {
+                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap2')}: "
+                } else {
+                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap2.noroute')}: "
+                }
+            }
+            links += map_link.link
+        }
+        return links
+    }
+    
+    //--------------------------------------------------------------------------
     private Map GetTestEMailBody(String crewUUID, String testName, String printOrganizer, boolean isFlightTest)
     {
         Map ret = [:]
@@ -303,6 +414,16 @@ class EmailService
         return ret
     }
 
+    //--------------------------------------------------------------------------
+    void CreateUploadJobRouteMap(Route routeInstance, boolean noRoute, boolean secondOptions)
+    {
+        UploadJobRouteMap uploadjob_routemap = UploadJobRouteMap.findByRouteAndUploadJobMapEdition(routeInstance, routeInstance.contestMapEdition)
+        if (!uploadjob_routemap) {
+            uploadjob_routemap = new UploadJobRouteMap(route:routeInstance, uploadJobMapEdition:routeInstance.contestMapEdition, uploadJobStatus:UploadJobStatus.None, uploadJobNoRoute:noRoute, uploadJobSecondOptions:secondOptions)
+            uploadjob_routemap.save(flush:true)
+        }
+    }
+    
     //--------------------------------------------------------------------------
     private Map GetPrintParams(Contest contestInstance, String printLanguage, def grailsAttributes, def request)
     {

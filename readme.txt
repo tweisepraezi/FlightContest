@@ -1,47 +1,46 @@
 ﻿Flight Contest
 
 Thomas Weise
-Deutscher Präzisionsflug-Verein e.V.
+Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)
 
-http://flightcontest.de
+https://flightcontest.de
 
+Flight Contest is a Tool to schedule general aviation power flying competitions and to evaluate planning, navigation, observation and/or landing test results.
 
-Flight Contest plant den zeitlichen Wettbewerbsablauf eines Motorflug-Wettbewerbes
-der General Aviation und wertet Ergebnisse für Planungstests, Navigationstests, 
-Beobachtungen und/oder Landungen aus.
+Flight Contest features flexible competition management, particularly supporting
+* differing competition rules and regulations (FAI, Germany, Switzerland, Austria, expandable; adjustment of individual evaluation details (points) possible, should the need arise)
+* competition classes (different evaluation of groups of crews participating in a competition)
+* combined competitions (competitions taking place at the same time with the same competitors participating in)
+* parallel competitions (competitions taking place at the same time with different competitors participating in)
+* the evaluation of specific groups of crews, which can be determined on an ad hoc basis
 
-Flight Contest is a Tool to schedule general aviation power flying competitions 
-and to evaluate planning, navigation, observation and/or landing test results.
+Is an advanced, Java technology-based, multilingual and networkcompatible open source database application:
+* User interface runs in a (modern) web browser (Chrome, Firefox, Edge Chromium, etc.).
+* It can be used simultaneously on several networked computers.
+* Every user can use his/her preferred language (German, English, expandable).
+* Crash-safe.
+* High protection against operating errors.
 
+Supports special route features:
+* Secret time checks
+* Curved legs
+* Touch-and-go landings
 
-Flight Contest ist eine auf Java-Techniken basierende, mehrsprachige
-und netzwerkfähige Open-Source-Datenbank-Anwendung:
-* Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Chrome, Edge Chromium). 
-* Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden.
-* Jeder Benutzer kann dabei seine bevorzugte Bediensprache verwenden
-  (Deutsch, Englisch, erweiterbar).
- 
-Flight Contest hat gegenüber bisherigen Programmen ein flexibles
-Wettbewerbsmanagement. Dazu zählen die Unterstützung
-* unterschiedlicher Wettbewerbsordnungen 
-  (FAI Precision and Air Rally Flying, Deutschland Navigationsflug, 
-   Schweiz Präzisionsflug, Österreich Präzisions- und Navigationsflug, 
-   erweiterbar),
-* von Wettbewerbsklassen 
-  (unterschiedliche Auswertung von Teilnehmergruppen in einem Wettbewerb),
-* paralleler Wettbewerbe 
-  (gleichzeitig stattfindende Wettbewerbe mit unabhängigen Startfeldern),
-* kombinierter Wettbewerbe 
-  (gleichzeitig stattfindende Wettbewerbe mit einem gemeinsamen Startfeld).
- 
-Weitere nützliche Funktionen von Flight Contest:
-* Direkte Strafpunkt-Berechnung beim Laden einer Logger-Datendatei
-  (GAC, IGC, GPX, KML, KMZ und NMEA 0183).
-* PDF-Erzeugung aller Formulare für Druck und Internet-Veröffentlichung.
-* OSM-Online-Karte für Strecken und Navigationsflüge.
-* OSM-Wettbewerbs-Karten-Druck
-* Offline-Anzeige für Strecken und Navigationsflüge.
-* E-Mail-Versand des Besatzungsergebnisses an Teilnehmer.
-* Live-Ergebnis-Anzeige (Live Scoring) zur Anzeige der vorläufigen
-  Rangliste während eines laufenden Debriefings.
-* Unterstützung von Airsport Live Tracking (https://tracking.airsports.no)
+Supports GAC, IGC, GPX, KML, KMZ and NMEA-0183 logger data formats (expandable).
+
+Provides integrated map viewers for navigation flights, routes and logger files:
+* Offline map display for navigation flight evaluation
+* Online map display using Google Maps and Open Street Map
+* Logger data display for supported logger data formats
+
+Creates PDF for printing and publication on the internet.
+
+OSM competition map printing.
+
+Emailing of crew result to participants.
+
+Displays live results (live scoring):
+* Display of preliminary ranking during a debriefing
+* Simultaneous publication in the local network and on the internet
+  
+Airsports Live Tracking support (https://airsports.no)

@@ -26,7 +26,7 @@
                                     <td class="detailtitle">${message(code:'fc.title')}:</td>
                                     <td>${routeInstance.name()}</td>
                                     <td class="errors">${info = routeInstance.GetRouteStatusInfo()}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                                 </tr>
                                 <tr>
@@ -72,20 +72,49 @@
 										<td style="width:1%;"/>
                                     </g:else>
                                 </tr>
+                                <g:set var="map_links" value="${routeInstance.GetMapUploadLinks()}" />
+                                <g:if test="${map_links}">
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.contestmap.contestmaps')}:</td>
+                                        <td colspan="4" style="text-align: right;">
+                                            <g:each var="map_link" in="${map_links}">
+                                                <a style="margin-left: 0.8rem; font-size: 0.8rem;" href="${map_link.link}" target="_blank">${map_link.edition}</a><a style="margin-left: 0.5rem;" id="deletelink_${map_link.edition}_id" hidden href="/fc/route/mapdeletelink/${routeInstance.id}?edition=${map_link.edition}" onclick="return confirm('${message(code:'fc.areyousure')}');" ><img src="${createLinkTo(dir:'images',file:'delete.png')}" style="width: 10px; heigth: 10px;" /></a></a>
+                                            </g:each>
+                                            <script>
+                                                $(document).on('change', '#show_delete_id', function() {
+                                                    if ($("#show_delete_id").prop("checked")) {
+                                                        <g:each var="map_link" in="${map_links}">
+                                                            $("#deletelink_${map_link.edition}_id").show();
+                                                        </g:each>
+                                                    } else {
+                                                        <g:each var="map_link" in="${map_links}">
+                                                            $("#deletelink_${map_link.edition}_id").hide();
+                                                        </g:each>
+                                                    }
+                                                });
+                                            </script>
+                                            <input type="checkbox" id="show_delete_id" style="margin-left: 0.8rem;"/>
+                                        </td>
+                                    </tr>
+                                </g:if>
                                 <tr>
                                     <g:set var="info" value=""/>
                                     <td class="detailtitle">${message(code:'fc.observation.turnpoint')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.turnpointRoute.code)}<br/>${message(code:'fc.observation.measurement')}: <g:if test="${routeInstance.turnpointMapMeasurement}">${message(code:'fc.observation.turnpoint.map')}</g:if><g:else>${message(code:'fc.observation.turnpoint.log')}</g:else></td>
                                     <td class="errors">${info = routeInstance.GetTurnpointSignStatusInfo()}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
-                                    <td/>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td>
+                                        <g:if test="${upload_job_status == UploadJobStatus.Done || map_links}">
+                                            <a href="/fc/route/routelinks/${routeInstance.id}">...</a>
+                                        </g:if>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <g:set var="info" value=""/>
                                     <td class="detailtitle">${message(code:'fc.observation.enroute.photo')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enroutePhotoRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enroutePhotoMeasurement.code)}</td>
                                     <td class="errors">${info = routeInstance.GetEnrouteSignStatusInfo(true)}<br/>${info += routeInstance.GetEnrouteMeasurementStatusInfo(true)}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td/>
                                 </tr>
                                 <tr>
@@ -93,7 +122,7 @@
                                     <td class="detailtitle">${message(code:'fc.observation.enroute.canvas')}:</td>
                                     <td>${message(code:'fc.observation.input')}: ${message(code:routeInstance.enrouteCanvasRoute.code)}<br/>${message(code:'fc.observation.measurement')}: ${message(code:routeInstance.enrouteCanvasMeasurement.code)}</td>
                                     <td class="errors">${info = routeInstance.GetEnrouteSignStatusInfo(false)}<br/>${info += routeInstance.GetEnrouteMeasurementStatusInfo(false)}</td>
-                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
+                                    <td style="width:1%;"><g:if test="${info}"><a href="../../docs/help_${session.showLanguage}.html#route-planning-errors" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></g:if></td>
                                     <td/>
                                 </tr>
                                 <g:if test="${BootStrap.global.IsLiveTrackingPossible()}">

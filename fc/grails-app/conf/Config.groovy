@@ -106,6 +106,7 @@ environments {
         grails.serverURL = "" // must be empty, for use from external pc, old was: http://localhost:8080/${appName}
     }
 	lastdb {
+		grails.dbconsole.enabled = true
         grails.logging.jul.usebridge = true
         grails.serverURL = "" // must be empty, for use from external pc, old was: http://localhost:8080/${appName}
 	}

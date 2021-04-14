@@ -1,0 +1,84 @@
+Translate
+---------
+    https://gdal.org/programs/gdal_translate.html
+    
+    https://gdal.org/drivers/raster/gtiff.html#raster-gtiff
+    
+    Sample:
+    gdal_translate -of GTiff -a_srs EPSG:4326 -a_ullr 9.09164669416 54.8137083581 9.94768930584 54.0952270631 myfile.png output.tif
+    gdal_translate -of GTiff -a_srs WGS84 -a_ullr 9.09164669416 54.8137083581 9.94768930584 54.0952270631 myfile.png output.tif
+
+    https://gdal.org/java/org/gdal/gdal/gdal.html -> Translate
+    https://gdal.org/java/org/gdal/gdal/TranslateOptions.html
+    https://gdal.org/java/org/gdal/gdal/Dataset.html
+    
+Tiles generation
+----------------
+    Open OSGeo4 shell (start menu shortcut)
+
+    Create a vrt file: gdalbuildvrt.exe mosaic.vrt map.tif
+        https://gdal.org/programs/gdalbuildvrt.html
+    
+        https://gdal.org/java/org/gdal/gdal/gdal.html -> BuildVRT
+        https://gdal.org/java/org/gdal/gdal/BuildVRTOptions.html
+
+    Generate the tiles: c:\OSGeo4W64\apps\Python37\python.exe c:\OSGeo4W64\apps\Python37\Scripts\gdal2tiles.py -z 5-13 mosaic.vrt map_tiles
+        https://gdal.org/programs/gdal2tiles.html
+        
+    cd /d K:\Projects\GIT\FlightContest\fc\web-app\gpxupload
+    set USE_PATH_FOR_GDAL_PYTHON=YES
+    python scripts\gdal2tiles.py MAP-4a5c4e84-3fb6-4e83-8430-defbf1ef61c7.tif.vrt map_tiles
+
+GDAL Binaries for Windows
+-------------------------
+
+    Python 3.7.0: https://www.python.org/downloads/
+    GDAL 3.2.1: https://www.gisinternals.com/release.php
+
+    GDAL 3.2.1 and MapServer 7.6.2 and MSVC 2019
+        https://www.gisinternals.com/release.php -> release-1928-x64-gdal-3-2-1-mapserver-7-6-2
+            -> gdal-302-1928-x64-core.msi (Generic installer for the GDAL core components)
+            -> GDAL-3.2.1.win-amd64-py3.7.msi (Installer for the GDAL python bindings (requires to install the GDAL core))
+
+            MSVC 2017
+            -> gdal-302-1911-x64-core.msi
+            -> GDAL-3.2.1.win-amd64-py3.7.msi
+            
+    Install
+        - Python 3.7.9 with 'Add Python to PATH' (python-3.7.9-amd64.exe)
+        - GDAL 3.0.2 (MSVC 2019) (gdal-302-1928-x64-core.msi, GDAL-3.2.1.win-amd64-py3.7.msi)
+        - Add C:\Program Files\GDAL to PATH
+
+    https://github.com/OSGeo/gdal/issues/2693
+
+
+GDAL Java API
+-------------
+    https://gdal.org/java/org/gdal/gdal/package-summary.html
+    
+    import org.gdal.gdal.gdalJNI
+    gdalJNI.isAvailable()
+
+Jython (only 2.7.2)
+------
+    StringWriter writer = new StringWriter();
+    ScriptContext context = new SimpleScriptContext();
+    context.setWriter(writer);
+
+    ScriptEngineManager manager = new ScriptEngineManager();
+    ScriptEngine engine = manager.getEngineByName("python");
+    engine.eval(new FileReader(resolvePythonScriptPath("hello.py")), context);
+    
+    assertEquals("Should contain script output: ", "Hello Baeldung Readers!!", writer.toString().trim());
+
+Tiles
+-----
+
+http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification
+http://wiki.osgeo.org/wiki/WMS_Tiling_Client_Recommendation
+http://msdn.microsoft.com/en-us/library/bb259689.aspx
+http://code.google.com/apis/maps/documentation/overlays.html#Google_Maps_Coordinates
+
+
+https://wiki.openstreetmap.org/wiki/DE:Slippy_map_tilenames
+    - Java

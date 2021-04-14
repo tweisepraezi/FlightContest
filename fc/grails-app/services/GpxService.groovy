@@ -16,6 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder
 
 import groovy.xml.*
 
+import org.apache.commons.net.ftp.FTP
 import org.apache.commons.net.ftp.FTPClient
 
 class GpxService 
@@ -2709,6 +2710,70 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
+    Map UploadTiles(String tilesDirName)
+    {
+        Map ret = [error:false, message:'']
+        printstart "UploadTiles $tilesDirName"
+        FTPClient ftp_client = new FTPClient()
+        ftp_client.with {
+            connect(grailsApplication.config.flightcontest.contestmap.tiles.ftp.host, grailsApplication.config.flightcontest.contestmap.tiles.ftp.port)
+            enterLocalPassiveMode()
+            if (login(grailsApplication.config.flightcontest.contestmap.tiles.ftp.username, grailsApplication.config.flightcontest.contestmap.tiles.ftp.password)) {
+                String base_dir = grailsApplication.config.flightcontest.contestmap.tiles.ftp.basedir
+                if (changeWorkingDirectory(base_dir) || makeDirectory(base_dir)) {
+                    println "upload $tilesDirName -> $base_dir"
+                    upload_dir(ftp_client, tilesDirName, tilesDirName)
+                    ret.message = getMsg('fc.contestmap.exportmap.tiles.done', [], false)
+                } else {
+                    ret.message = getMsg('fc.net.ftp.dircreateerror', [base_dir], false)
+                    ret.error = true
+                }
+            } else {
+                ret.message = getMsg('fc.net.ftp.loginerror', [grailsApplication.config.flightcontest.contestmap.tiles.ftp.username], false)
+                ret.error = true
+            }
+            disconnect()
+        }
+        if (ret.error) {
+            printerror ret.message
+        } else {
+            printdone ret.message
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private void upload_dir(FTPClient ftpClient, String startSourceDirName, String sourceDirName)
+    {
+        File source_dir = new File(sourceDirName)
+        
+        // create sub directories or upload maps
+        source_dir.eachFile() { File source_file ->
+            String dest_file_name = source_file.canonicalPath.substring(source_file.canonicalPath.lastIndexOf('\\')+1)
+            if (source_file.isFile()) {
+                println "Upload $source_file.canonicalPath"
+                def stream = new FileInputStream(source_file)
+                ftpClient.setFileType(FTP.BINARY_FILE_TYPE)
+                ftpClient.storeFile(dest_file_name, stream)
+                stream.close()
+            } else {
+                println "Create $dest_file_name"
+                ftpClient.makeDirectory(dest_file_name)
+            }
+        }
+        
+        // process sub directories
+        source_dir.eachFile() { File source_file ->
+            String dest_file_name = source_file.canonicalPath.substring(startSourceDirName.size()).replace('\\','/')
+            if (!source_file.isFile()) {
+                if (ftpClient.changeWorkingDirectory(dest_file_name)) {
+                    upload_dir(ftpClient, startSourceDirName, source_file.canonicalPath)
+                }
+            }
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     public Map PublishLiveResults(long liveContestID, boolean uploadNoLiveResults)
     {
         Map ret = [error:false,failedDestinations:[]]
@@ -2983,6 +3048,16 @@ class GpxService
 							} catch (Exception e) {
 								println "UploadJobRoute ${l[1]} locked (1): ${e.getMessage()}"
 							}
+						} else if (l[0] == "UploadJobRouteMap") {
+							try {
+								UploadJobRouteMap uploadjob_routemap = UploadJobRouteMap.get(l[1])
+								println "Route ${uploadjob_routemap.route.name()}: Upload sending"
+								uploadjob_routemap.uploadJobStatus = UploadJobStatus.Sending
+								uploadjob_routemap.uploadJobLink = ""
+								uploadjob_routemap.save(flush:true)
+							} catch (Exception e) {
+								println "UploadJobRouteMap ${l[1]} locked (1): ${e.getMessage()}"
+							}
 						}
 					}
 					printdone ""
@@ -3089,6 +3164,23 @@ class GpxService
                         } catch (Exception e) {
                             println "UploadJobRoute ${l[1]} locked (2): ${e.getMessage()}"
                         }
+                    } else if (l[0] == "UploadJobRouteMap") {
+                        try {
+                            UploadJobRouteMap uploadjob_routemap = UploadJobRouteMap.get(l[1])
+							if (set_link.error) {
+								println "Route ${uploadjob_routemap.route.name()}: Set E-Mail-Error"
+								uploadjob_routemap.uploadJobStatus = UploadJobStatus.Error
+								uploadjob_routemap.uploadJobLink = ""
+								
+							} else {
+								println "Route ${uploadjob_routemap.route.name()}: Save link '${l[2]}'"
+								uploadjob_routemap.uploadJobStatus = UploadJobStatus.Done
+								uploadjob_routemap.uploadJobLink = l[2]
+							}
+							uploadjob_routemap.save(flush:true)
+                        } catch (Exception e) {
+                            println "UploadJobRouteMap ${l[1]} locked (2): ${e.getMessage()}"
+                        }
                     }
                 }
                 printdone ""
@@ -3102,7 +3194,7 @@ class GpxService
     //--------------------------------------------------------------------------
     void DeleteFile(String fileName)
     {
-        printstart "Delete '$fileName'"
+        printstart "DeleteFile '$fileName'"
         if (fileName.startsWith(GPXDATA)) {
             if (BootStrap.tempData.RemoveData(fileName)) {
                 printdone ""
@@ -3116,6 +3208,30 @@ class GpxService
             }
             File file = new File(file_name)
             if (file.delete()) {
+                printdone ""
+            } else {
+                printerror ""
+            }
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    void DeleteDir(String fileName)
+    {
+        printstart "DeleteDir '$fileName'"
+        if (fileName.startsWith(GPXDATA)) {
+            if (BootStrap.tempData.RemoveData(fileName)) {
+                printdone ""
+            } else {
+                printerror ""
+            }
+        } else {
+            String file_name = fileName
+            if (fileName.startsWith(Defs.ROOT_FOLDER_GPXUPLOAD)) {
+                file_name = servletContext.getRealPath("/") + fileName
+            }
+            File file = new File(file_name)
+            if (file.deleteDir()) {
                 printdone ""
             } else {
                 printerror ""

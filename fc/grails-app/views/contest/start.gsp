@@ -17,7 +17,7 @@
                     <thead>
                         <tr>
                             <th class="table-head">${message(code:'fc.contest.show')}</th>
-                            <th class="table-head"><a href="../docs/help.html#default-competition" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
+                            <th class="table-head"><a href="../docs/help_${session.showLanguage}.html#default-competition" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                         </tr>
                     </thead>
                     <tbody>

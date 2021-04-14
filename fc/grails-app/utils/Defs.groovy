@@ -57,7 +57,9 @@ class Defs
     static final String TurnpointID_MinAltitude                        = "minaltitude_"
     static final String TurnpointID_TurnpointObs                       = "turnpointobs_"
     static final String TurnpointID_ContestMapCenterPoints             = "contestmapcenterpoints_"
+    static final String TurnpointID_ContestMapCenterPoints2            = "contestmapcenterpoints2_"
     static final String TurnpointID_ContestMapPrintPoints              = "contestmapprintpoints_"
+    static final String TurnpointID_ContestMapPrintPoints2             = "contestmapprintpoints2_"
     static final String TurnpointID_ContestMapCurvedLegPoints          = "contestmapcurvedlegpoints_"
     
     static final String EnrouteID_PhotoObs                             = "photoobs_"
@@ -105,6 +107,8 @@ class Defs
     static final String CONTESTMAPPRINT_PDFMAP                         = "contestMapPrint_PDFMap"
     static final String CONTESTMAPPRINT_PNGMAP                         = "contestMapPrint_PNGMap"
     static final String CONTESTMAPPRINT_PNGZIP                         = "contestMapPrint_PNGZip"
+    static final String CONTESTMAPPRINT_TIFMAP                         = "contestMapPrint_TIFMAP"
+    static final String CONTESTMAPPRINT_TILES                          = "contestMapPrint_TILES"
     
     static final int CONTESTMAPSCALE_200000                            = 200000
     static final int CONTESTMAPSCALE_250000                            = 250000

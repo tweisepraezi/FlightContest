@@ -1,12 +1,13 @@
 import grails.util.Environment
+import org.gdal.gdal.gdalJNI
 
 class Global 
 {
     def grailsApplication
     
-	// Actual database version: DB-2.21
+	// Actual database version: DB-2.22
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 21
+	static int DB_MINOR = 22
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -330,6 +331,29 @@ class Global
             return grailsApplication.config.flightcontest.maps.gm_api_key
         }
         return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsGDALAvailable() {
+        return gdalJNI.isAvailable()
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsTitlesUploadAvailable() {
+        if (   grailsApplication.config.flightcontest.contestmap
+            && grailsApplication.config.flightcontest.contestmap.tiles
+            && grailsApplication.config.flightcontest.contestmap.tiles.ftp
+            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.host
+            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.port
+            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.username
+            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.password
+            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.basedir
+            && gdalJNI.isAvailable()
+           )
+        {
+            return true
+        }
+        return false
     }
     
     // --------------------------------------------------------------------------------------------------------------------

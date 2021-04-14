@@ -1,0 +1,9 @@
+
+
+https://tomcat.apache.org/tomcat-9.0-doc/windows-service-howto.html
+
+Registry:   HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Apache Software Foundation\Procrun 2.0\FlightContest
+
+
+https://stackoverflow.com/questions/14018817/how-to-add-a-native-library-in-tomcat
+

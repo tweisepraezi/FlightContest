@@ -1,0 +1,4545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="author" content="Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)">
+<title>Flight Contest</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<style>
+/* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
+/* Remove comment around @import statement below when using as a custom stylesheet */
+/*@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";*/
+article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,summary{display:block}
+audio,canvas,video{display:inline-block}
+audio:not([controls]){display:none;height:0}
+[hidden],template{display:none}
+script{display:none!important}
+html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}
+a{background:transparent}
+a:focus{outline:thin dotted}
+a:active,a:hover{outline:0}
+h1{font-size:2em;margin:.67em 0}
+abbr[title]{border-bottom:1px dotted}
+b,strong{font-weight:bold}
+dfn{font-style:italic}
+hr{-moz-box-sizing:content-box;box-sizing:content-box;height:0}
+mark{background:#ff0;color:#000}
+code,kbd,pre,samp{font-family:monospace;font-size:1em}
+pre{white-space:pre-wrap}
+q{quotes:"\201C" "\201D" "\2018" "\2019"}
+small{font-size:80%}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+img{border:0}
+svg:not(:root){overflow:hidden}
+figure{margin:0}
+fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}
+legend{border:0;padding:0}
+button,input,select,textarea{font-family:inherit;font-size:100%;margin:0}
+button,input{line-height:normal}
+button,select{text-transform:none}
+button,html input[type="button"],input[type="reset"],input[type="submit"]{-webkit-appearance:button;cursor:pointer}
+button[disabled],html input[disabled]{cursor:default}
+input[type="checkbox"],input[type="radio"]{box-sizing:border-box;padding:0}
+input[type="search"]{-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
+input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
+button::-moz-focus-inner,input::-moz-focus-inner{border:0;padding:0}
+textarea{overflow:auto;vertical-align:top}
+table{border-collapse:collapse;border-spacing:0}
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+html,body{font-size:100%}
+body{background:#fff;color:rgba(0,0,0,.8);padding:0;margin:0;font-family:"Noto Serif","DejaVu Serif",serif;font-weight:400;font-style:normal;line-height:1;position:relative;cursor:auto;tab-size:4;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased}
+a:hover{cursor:pointer}
+img,object,embed{max-width:100%;height:auto}
+object,embed{height:100%}
+img{-ms-interpolation-mode:bicubic}
+.left{float:left!important}
+.right{float:right!important}
+.text-left{text-align:left!important}
+.text-right{text-align:right!important}
+.text-center{text-align:center!important}
+.text-justify{text-align:justify!important}
+.hide{display:none}
+img,object,svg{display:inline-block;vertical-align:middle}
+textarea{height:auto;min-height:50px}
+select{width:100%}
+.center{margin-left:auto;margin-right:auto}
+.spread{width:100%}
+p.lead,.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{font-size:1.21875em;line-height:1.6}
+.subheader,.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{line-height:1.45;color:#7a2518;font-weight:400;margin-top:0;margin-bottom:.25em}
+div,dl,dt,dd,ul,ol,li,h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6,pre,form,p,blockquote,th,td{margin:0;padding:0;direction:ltr}
+a{color:#2156a5;text-decoration:underline;line-height:inherit}
+a:hover,a:focus{color:#1d4b8f}
+a img{border:none}
+p{font-family:inherit;font-weight:400;font-size:1em;line-height:1.6;margin-bottom:1.25em;text-rendering:optimizeLegibility}
+p aside{font-size:.875em;line-height:1.35;font-style:italic}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{font-family:"Open Sans","DejaVu Sans",sans-serif;font-weight:300;font-style:normal;color:#ba3925;text-rendering:optimizeLegibility;margin-top:1em;margin-bottom:.5em;line-height:1.0125em}
+h1 small,h2 small,h3 small,#toctitle small,.sidebarblock>.content>.title small,h4 small,h5 small,h6 small{font-size:60%;color:#e99b8f;line-height:0}
+h1{font-size:2.125em}
+h2{font-size:1.6875em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.375em}
+h4,h5{font-size:1.125em}
+h6{font-size:1em}
+hr{border:solid #ddddd8;border-width:1px 0 0;clear:both;margin:1.25em 0 1.1875em;height:0}
+em,i{font-style:italic;line-height:inherit}
+strong,b{font-weight:bold;line-height:inherit}
+small{font-size:60%;line-height:inherit}
+code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;color:rgba(0,0,0,.9)}
+ul,ol,dl{font-size:1em;line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
+ul,ol,ul.no-bullet,ol.no-bullet{margin-left:1.5em}
+ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0;font-size:1em}
+ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
+ul.square{list-style-type:square}
+ul.circle{list-style-type:circle}
+ul.disc{list-style-type:disc}
+ul.no-bullet{list-style:none}
+ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
+dl dt{margin-bottom:.3125em;font-weight:bold}
+dl dd{margin-bottom:1.25em}
+abbr,acronym{text-transform:uppercase;font-size:90%;color:rgba(0,0,0,.8);border-bottom:1px dotted #ddd;cursor:help}
+abbr{text-transform:none}
+blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
+blockquote cite{display:block;font-size:.9375em;color:rgba(0,0,0,.6)}
+blockquote cite:before{content:"\2014 \0020"}
+blockquote cite a,blockquote cite a:visited{color:rgba(0,0,0,.6)}
+blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
+@media only screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
+h1{font-size:2.75em}
+h2{font-size:2.3125em}
+h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+h4{font-size:1.4375em}}
+table{background:#fff;margin-bottom:1.25em;border:solid 1px #dedede}
+table thead,table tfoot{background:#f7f8f7;font-weight:bold}
+table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
+table tr th,table tr td{padding:.5625em .625em;font-size:inherit;color:rgba(0,0,0,.8)}
+table tr.even,table tr.alt,table tr:nth-of-type(even){background:#f8f8f7}
+table thead tr th,table tfoot tr th,table tbody tr td,table tr td,table tfoot tr td{display:table-cell;line-height:1.6}
+h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2;word-spacing:-.05em}
+h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title strong,h4 strong,h5 strong,h6 strong{font-weight:400}
+.clearfix:before,.clearfix:after,.float-group:before,.float-group:after{content:" ";display:table}
+.clearfix:after,.float-group:after{clear:both}
+*:not(pre)>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background-color:#f7f7f8;-webkit-border-radius:4px;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed;word-wrap:break-word}
+*:not(pre)>code.nobreak{word-wrap:normal}
+*:not(pre)>code.nowrap{white-space:nowrap}
+pre,pre>code{line-height:1.45;color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;text-rendering:optimizeSpeed}
+em em{font-style:normal}
+strong strong{font-weight:400}
+.keyseq{color:rgba(51,51,51,.8)}
+kbd{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;display:inline-block;color:rgba(0,0,0,.8);font-size:.65em;line-height:1.45;background-color:#f7f7f7;border:1px solid #ccc;-webkit-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em white inset;box-shadow:0 1px 0 rgba(0,0,0,.2),0 0 0 .1em #fff inset;margin:0 .15em;padding:.2em .5em;vertical-align:middle;position:relative;top:-.1em;white-space:nowrap}
+.keyseq kbd:first-child{margin-left:0}
+.keyseq kbd:last-child{margin-right:0}
+.menuseq,.menu{color:rgba(0,0,0,.8)}
+b.button:before,b.button:after{position:relative;top:-1px;font-weight:400}
+b.button:before{content:"[";padding:0 3px 0 2px}
+b.button:after{content:"]";padding:0 2px 0 3px}
+p a>code:hover{color:rgba(0,0,0,.9)}
+#header,#content,#footnotes,#footer{width:100%;margin-left:auto;margin-right:auto;margin-top:0;margin-bottom:0;max-width:62.5em;*zoom:1;position:relative;padding-left:.9375em;padding-right:.9375em}
+#header:before,#header:after,#content:before,#content:after,#footnotes:before,#footnotes:after,#footer:before,#footer:after{content:" ";display:table}
+#header:after,#content:after,#footnotes:after,#footer:after{clear:both}
+#content{margin-top:1.25em}
+#content:before{content:none}
+#header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
+#header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #ddddd8}
+#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #ddddd8;padding-bottom:8px}
+#header .details{border-bottom:1px solid #ddddd8;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-flow:row wrap;-webkit-flex-flow:row wrap;flex-flow:row wrap}
+#header .details span:first-child{margin-left:-.125em}
+#header .details span.email a{color:rgba(0,0,0,.85)}
+#header .details br{display:none}
+#header .details br+span:before{content:"\00a0\2013\00a0"}
+#header .details br+span.author:before{content:"\00a0\22c5\00a0";color:rgba(0,0,0,.85)}
+#header .details br+span#revremark:before{content:"\00a0|\00a0"}
+#header #revnumber{text-transform:capitalize}
+#header #revnumber:after{content:"\00a0"}
+#content>h1:first-child:not([class]){color:rgba(0,0,0,.85);border-bottom:1px solid #ddddd8;padding-bottom:8px;margin-top:0;padding-top:1rem;margin-bottom:1.25rem}
+#toc{border-bottom:1px solid #efefed;padding-bottom:.5em}
+#toc>ul{margin-left:.125em}
+#toc ul.sectlevel0>li>a{font-style:italic}
+#toc ul.sectlevel0 ul.sectlevel1{margin:.5em 0}
+#toc ul{font-family:"Open Sans","DejaVu Sans",sans-serif;list-style-type:none}
+#toc li{line-height:1.3334;margin-top:.3334em}
+#toc a{text-decoration:none}
+#toc a:active{text-decoration:underline}
+#toctitle{color:#7a2518;font-size:1.2em}
+@media only screen and (min-width:768px){#toctitle{font-size:1.375em}
+body.toc2{padding-left:15em;padding-right:0}
+#toc.toc2{margin-top:0!important;background-color:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #efefed;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+#toc.toc2>ul{font-size:.9em;margin-bottom:0}
+#toc.toc2 ul ul{margin-left:0;padding-left:1em}
+#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+body.toc2.toc-right{padding-left:0;padding-right:15em}
+body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #efefed;left:auto;right:0}}
+@media only screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
+#toc.toc2{width:20em}
+#toc.toc2 #toctitle{font-size:1.375em}
+#toc.toc2>ul{font-size:.95em}
+#toc.toc2 ul ul{padding-left:1.25em}
+body.toc2.toc-right{padding-left:0;padding-right:20em}}
+#content #toc{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+#content #toc>:first-child{margin-top:0}
+#content #toc>:last-child{margin-bottom:0}
+#footer{max-width:100%;background-color:rgba(0,0,0,.8);padding:1.25em}
+#footer-text{color:rgba(255,255,255,.8);line-height:1.44}
+.sect1{padding-bottom:.625em}
+@media only screen and (min-width:768px){.sect1{padding-bottom:1.25em}}
+.sect1+.sect1{border-top:1px solid #efefed}
+#content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
+#content h1>a.anchor:before,h2>a.anchor:before,h3>a.anchor:before,#toctitle>a.anchor:before,.sidebarblock>.content>.title>a.anchor:before,h4>a.anchor:before,h5>a.anchor:before,h6>a.anchor:before{content:"\00A7";font-size:.85em;display:block;padding-top:.1em}
+#content h1:hover>a.anchor,#content h1>a.anchor:hover,h2:hover>a.anchor,h2>a.anchor:hover,h3:hover>a.anchor,#toctitle:hover>a.anchor,.sidebarblock>.content>.title:hover>a.anchor,h3>a.anchor:hover,#toctitle>a.anchor:hover,.sidebarblock>.content>.title>a.anchor:hover,h4:hover>a.anchor,h4>a.anchor:hover,h5:hover>a.anchor,h5>a.anchor:hover,h6:hover>a.anchor,h6>a.anchor:hover{visibility:visible}
+#content h1>a.link,h2>a.link,h3>a.link,#toctitle>a.link,.sidebarblock>.content>.title>a.link,h4>a.link,h5>a.link,h6>a.link{color:#ba3925;text-decoration:none}
+#content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
+.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
+.admonitionblock td.content>.title,.audioblock>.title,.exampleblock>.title,.imageblock>.title,.listingblock>.title,.literalblock>.title,.stemblock>.title,.openblock>.title,.paragraph>.title,.quoteblock>.title,table.tableblock>.title,.verseblock>.title,.videoblock>.title,.dlist>.title,.olist>.title,.ulist>.title,.qlist>.title,.hdlist>.title{text-rendering:optimizeLegibility;text-align:left;font-family:"Noto Serif","DejaVu Serif",serif;font-size:1rem;font-style:italic}
+table.tableblock>caption.title{white-space:nowrap;overflow:visible;max-width:0}
+.paragraph.lead>p,#preamble>.sectionbody>.paragraph:first-of-type p{color:rgba(0,0,0,.85)}
+table.tableblock #preamble>.sectionbody>.paragraph:first-of-type p{font-size:inherit}
+.admonitionblock>table{border-collapse:separate;border:0;background:none;width:100%}
+.admonitionblock>table td.icon{text-align:center;width:80px}
+.admonitionblock>table td.icon img{max-width:none}
+.admonitionblock>table td.icon .title{font-weight:bold;font-family:"Open Sans","DejaVu Sans",sans-serif;text-transform:uppercase}
+.admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #ddddd8;color:rgba(0,0,0,.6)}
+.admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content{border-style:solid;border-width:1px;border-color:#e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;-webkit-border-radius:4px;border-radius:4px}
+.exampleblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child{margin-bottom:0}
+.sidebarblock{border-style:solid;border-width:1px;border-color:#e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;-webkit-border-radius:4px;border-radius:4px}
+.sidebarblock>:first-child{margin-top:0}
+.sidebarblock>:last-child{margin-bottom:0}
+.sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
+.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.literalblock pre,.listingblock pre:not(.highlight),.listingblock pre[class="highlight"],.listingblock pre[class^="highlight "],.listingblock pre.CodeRay,.listingblock pre.prettyprint{background:#f7f7f8}
+.sidebarblock .literalblock pre,.sidebarblock .listingblock pre:not(.highlight),.sidebarblock .listingblock pre[class="highlight"],.sidebarblock .listingblock pre[class^="highlight "],.sidebarblock .listingblock pre.CodeRay,.sidebarblock .listingblock pre.prettyprint{background:#f2f1f1}
+.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{-webkit-border-radius:4px;border-radius:4px;word-wrap:break-word;padding:1em;font-size:.8125em}
+.literalblock pre.nowrap,.literalblock pre[class].nowrap,.listingblock pre.nowrap,.listingblock pre[class].nowrap{overflow-x:auto;white-space:pre;word-wrap:normal}
+@media only screen and (min-width:768px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:.90625em}}
+@media only screen and (min-width:1280px){.literalblock pre,.literalblock pre[class],.listingblock pre,.listingblock pre[class]{font-size:1em}}
+.literalblock.output pre{color:#f7f7f8;background-color:rgba(0,0,0,.9)}
+.listingblock pre.highlightjs{padding:0}
+.listingblock pre.highlightjs>code{padding:1em;-webkit-border-radius:4px;border-radius:4px}
+.listingblock pre.prettyprint{border-width:0}
+.listingblock>.content{position:relative}
+.listingblock code[data-lang]:before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:#999}
+.listingblock:hover code[data-lang]:before{display:block}
+.listingblock.terminal pre .command:before{content:attr(data-prompt);padding-right:.5em;color:#999}
+.listingblock.terminal pre .command:not([data-prompt]):before{content:"$"}
+table.pyhltable{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.pyhltable td{vertical-align:top;padding-top:0;padding-bottom:0;line-height:1.45}
+table.pyhltable td.code{padding-left:.75em;padding-right:0}
+pre.pygments .lineno,table.pyhltable td:not(.code){color:#999;padding-left:0;padding-right:.5em;border-right:1px solid #ddddd8}
+pre.pygments .lineno{display:inline-block;margin-right:.25em}
+table.pyhltable .linenodiv{background:none!important;padding-right:0!important}
+.quoteblock{margin:0 1em 1.25em 1.5em;display:table}
+.quoteblock>.title{margin-left:-1.5em;margin-bottom:.75em}
+.quoteblock blockquote,.quoteblock blockquote p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
+.quoteblock blockquote{margin:0;padding:0;border:0}
+.quoteblock blockquote:before{content:"\201c";float:left;font-size:2.75em;font-weight:bold;line-height:.6em;margin-left:-.6em;color:#7a2518;text-shadow:0 1px 2px rgba(0,0,0,.1)}
+.quoteblock blockquote>.paragraph:last-child p{margin-bottom:0}
+.quoteblock .attribution{margin-top:.5em;margin-right:.5ex;text-align:right}
+.quoteblock .quoteblock{margin-left:0;margin-right:0;padding:.5em 0;border-left:3px solid rgba(0,0,0,.6)}
+.quoteblock .quoteblock blockquote{padding:0 0 0 .75em}
+.quoteblock .quoteblock blockquote:before{display:none}
+.verseblock{margin:0 1em 1.25em 1em}
+.verseblock pre{font-family:"Open Sans","DejaVu Sans",sans;font-size:1.15rem;color:rgba(0,0,0,.85);font-weight:300;text-rendering:optimizeLegibility}
+.verseblock pre strong{font-weight:400}
+.verseblock .attribution{margin-top:1.25rem;margin-left:.5ex}
+.quoteblock .attribution,.verseblock .attribution{font-size:.9375em;line-height:1.45;font-style:italic}
+.quoteblock .attribution br,.verseblock .attribution br{display:none}
+.quoteblock .attribution cite,.verseblock .attribution cite{display:block;letter-spacing:-.025em;color:rgba(0,0,0,.6)}
+.quoteblock.abstract{margin:0 0 1.25em 0;display:block}
+.quoteblock.abstract blockquote,.quoteblock.abstract blockquote p{text-align:left;word-spacing:0}
+.quoteblock.abstract blockquote:before,.quoteblock.abstract blockquote p:first-of-type:before{display:none}
+table.tableblock{max-width:100%;border-collapse:separate}
+table.tableblock td>.paragraph:last-child p>p:last-child,table.tableblock th>p:last-child,table.tableblock td>p:last-child{margin-bottom:0}
+table.tableblock,th.tableblock,td.tableblock{border:0 solid #dedede}
+table.grid-all th.tableblock,table.grid-all td.tableblock{border-width:0 1px 1px 0}
+table.grid-all tfoot>tr>th.tableblock,table.grid-all tfoot>tr>td.tableblock{border-width:1px 1px 0 0}
+table.grid-cols th.tableblock,table.grid-cols td.tableblock{border-width:0 1px 0 0}
+table.grid-all *>tr>.tableblock:last-child,table.grid-cols *>tr>.tableblock:last-child{border-right-width:0}
+table.grid-rows th.tableblock,table.grid-rows td.tableblock{border-width:0 0 1px 0}
+table.grid-all tbody>tr:last-child>th.tableblock,table.grid-all tbody>tr:last-child>td.tableblock,table.grid-all thead:last-child>tr>th.tableblock,table.grid-rows tbody>tr:last-child>th.tableblock,table.grid-rows tbody>tr:last-child>td.tableblock,table.grid-rows thead:last-child>tr>th.tableblock{border-bottom-width:0}
+table.grid-rows tfoot>tr>th.tableblock,table.grid-rows tfoot>tr>td.tableblock{border-width:1px 0 0 0}
+table.frame-all{border-width:1px}
+table.frame-sides{border-width:0 1px}
+table.frame-topbot{border-width:1px 0}
+th.halign-left,td.halign-left{text-align:left}
+th.halign-right,td.halign-right{text-align:right}
+th.halign-center,td.halign-center{text-align:center}
+th.valign-top,td.valign-top{vertical-align:top}
+th.valign-bottom,td.valign-bottom{vertical-align:bottom}
+th.valign-middle,td.valign-middle{vertical-align:middle}
+table thead th,table tfoot th{font-weight:bold}
+tbody tr th{display:table-cell;line-height:1.6;background:#f7f8f7}
+tbody tr th,tbody tr th p,tfoot tr th,tfoot tr th p{color:rgba(0,0,0,.8);font-weight:bold}
+p.tableblock>code:only-child{background:none;padding:0}
+p.tableblock{font-size:1em}
+td>div.verse{white-space:pre}
+ol{margin-left:1.75em}
+ul li ol{margin-left:1.5em}
+dl dd{margin-left:1.125em}
+dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ul.unstyled,ol.unnumbered,ul.checklist,ul.none{list-style-type:none}
+ul.unstyled,ol.unnumbered,ul.checklist{margin-left:.625em}
+ul.checklist li>p:first-child>.fa-square-o:first-child,ul.checklist li>p:first-child>.fa-check-square-o:first-child{width:1em;font-size:.85em}
+ul.checklist li>p:first-child>input[type="checkbox"]:first-child{width:1em;position:relative;top:1px}
+ul.inline{margin:0 auto .625em auto;margin-left:-1.375em;margin-right:0;padding:0;list-style:none;overflow:hidden}
+ul.inline>li{list-style:none;float:left;margin-left:1.375em;display:block}
+ul.inline>li>*{display:block}
+.unstyled dl dt{font-weight:400;font-style:normal}
+ol.arabic{list-style-type:decimal}
+ol.decimal{list-style-type:decimal-leading-zero}
+ol.loweralpha{list-style-type:lower-alpha}
+ol.upperalpha{list-style-type:upper-alpha}
+ol.lowerroman{list-style-type:lower-roman}
+ol.upperroman{list-style-type:upper-roman}
+ol.lowergreek{list-style-type:lower-greek}
+.hdlist>table,.colist>table{border:0;background:none}
+.hdlist>table>tbody>tr,.colist>table>tbody>tr{background:none}
+td.hdlist1,td.hdlist2{vertical-align:top;padding:0 .625em}
+td.hdlist1{font-weight:bold;padding-bottom:1.25em}
+.literalblock+.colist,.listingblock+.colist{margin-top:-.5em}
+.colist>table tr>td:first-of-type{padding:0 .75em;line-height:1}
+.colist>table tr>td:last-of-type{padding:.25em 0}
+.thumb,.th{line-height:0;display:inline-block;border:solid 4px #fff;-webkit-box-shadow:0 0 0 1px #ddd;box-shadow:0 0 0 1px #ddd}
+.imageblock.left,.imageblock[style*="float: left"]{margin:.25em .625em 1.25em 0}
+.imageblock.right,.imageblock[style*="float: right"]{margin:.25em 0 1.25em .625em}
+.imageblock>.title{margin-bottom:0}
+.imageblock.thumb,.imageblock.th{border-width:6px}
+.imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
+.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.image.left{margin-right:.625em}
+.image.right{margin-left:.625em}
+a.image{text-decoration:none;display:inline-block}
+a.image object{pointer-events:none}
+sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
+sup.footnote a,sup.footnoteref a{text-decoration:none}
+sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+#footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
+#footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em 0;border-width:1px 0 0 0}
+#footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;text-indent:-1.05em;margin-bottom:.2em}
+#footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none}
+#footnotes .footnote:last-of-type{margin-bottom:0}
+#content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
+div.unbreakable{page-break-inside:avoid}
+.big{font-size:larger}
+.small{font-size:smaller}
+.underline{text-decoration:underline}
+.overline{text-decoration:overline}
+.line-through{text-decoration:line-through}
+.aqua{color:#00bfbf}
+.aqua-background{background-color:#00fafa}
+.black{color:#000}
+.black-background{background-color:#000}
+.blue{color:#0000bf}
+.blue-background{background-color:#0000fa}
+.fuchsia{color:#bf00bf}
+.fuchsia-background{background-color:#fa00fa}
+.gray{color:#606060}
+.gray-background{background-color:#7d7d7d}
+.green{color:#006000}
+.green-background{background-color:#007d00}
+.lime{color:#00bf00}
+.lime-background{background-color:#00fa00}
+.maroon{color:#600000}
+.maroon-background{background-color:#7d0000}
+.navy{color:#000060}
+.navy-background{background-color:#00007d}
+.olive{color:#606000}
+.olive-background{background-color:#7d7d00}
+.purple{color:#600060}
+.purple-background{background-color:#7d007d}
+.red{color:#bf0000}
+.red-background{background-color:#fa0000}
+.silver{color:#909090}
+.silver-background{background-color:#bcbcbc}
+.teal{color:#006060}
+.teal-background{background-color:#007d7d}
+.white{color:#bfbfbf}
+.white-background{background-color:#fafafa}
+.yellow{color:#bfbf00}
+.yellow-background{background-color:#fafa00}
+span.icon>.fa{cursor:default}
+.admonitionblock td.icon [class^="fa icon-"]{font-size:2.5em;text-shadow:1px 1px 2px rgba(0,0,0,.5);cursor:default}
+.admonitionblock td.icon .icon-note:before{content:"\f05a";color:#19407c}
+.admonitionblock td.icon .icon-tip:before{content:"\f0eb";text-shadow:1px 1px 2px rgba(155,155,0,.8);color:#111}
+.admonitionblock td.icon .icon-warning:before{content:"\f071";color:#bf6900}
+.admonitionblock td.icon .icon-caution:before{content:"\f06d";color:#bf3400}
+.admonitionblock td.icon .icon-important:before{content:"\f06a";color:#bf0000}
+.conum[data-value]{display:inline-block;color:#fff!important;background-color:rgba(0,0,0,.8);-webkit-border-radius:100px;border-radius:100px;text-align:center;font-size:.75em;width:1.67em;height:1.67em;line-height:1.67em;font-family:"Open Sans","DejaVu Sans",sans-serif;font-style:normal;font-weight:bold}
+.conum[data-value] *{color:#fff!important}
+.conum[data-value]+b{display:none}
+.conum[data-value]:after{content:attr(data-value)}
+pre .conum[data-value]{position:relative;top:-.125em}
+b.conum *{color:inherit!important}
+.conum:not([data-value]):empty{display:none}
+dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
+h1,h2,p,td.content,span.alt{letter-spacing:-.01em}
+p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
+p,blockquote,dt,td.content,span.alt{font-size:1.0625rem}
+p{margin-bottom:1.25rem}
+.sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
+.exampleblock>.content{background-color:#fffef7;border-color:#e0e0dc;-webkit-box-shadow:0 1px 4px #e0e0dc;box-shadow:0 1px 4px #e0e0dc}
+.print-only{display:none!important}
+@media print{@page{margin:1.25cm .75cm}
+*{-webkit-box-shadow:none!important;box-shadow:none!important;text-shadow:none!important}
+a{color:inherit!important;text-decoration:underline!important}
+a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+a[href^="http:"]:not(.bare):after,a[href^="https:"]:not(.bare):after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+abbr[title]:after{content:" (" attr(title) ")"}
+pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+thead{display:table-header-group}
+svg{max-width:100%}
+p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+#toc,.sidebarblock,.exampleblock>.content{background:none!important}
+#toc{border-bottom:1px solid #ddddd8!important;padding-bottom:0!important}
+.sect1{padding-bottom:0!important}
+.sect1+.sect1{border:0!important}
+#header>h1:first-child{margin-top:1.25rem}
+body.book #header{text-align:center}
+body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em 0}
+body.book #header .details{border:0!important;display:block;padding:0!important}
+body.book #header .details span:first-child{margin-left:0!important}
+body.book #header .details br{display:block}
+body.book #header .details br+span:before{content:none!important}
+body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+.listingblock code[data-lang]:before{display:block}
+#footer{background:none!important;padding:0 .9375em}
+#footer-text{color:rgba(0,0,0,.6)!important;font-size:.9em}
+.hide-on-print{display:none!important}
+.print-only{display:block!important}
+.hide-for-print{display:none!important}
+.show-for-print{display:inherit!important}}
+</style>
+</head>
+<body class="article">
+<div id="header">
+<h1>Flight Contest</h1>
+<div class="details">
+<span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)</span><br>
+<span id="revnumber">version 3.2.M13,</span>
+<span id="revdate">14.04.2021</span>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#manuals">Operating manuals</a></li>
+<li><a href="#supported-rules">Supported rulesets</a></li>
+<li><a href="#default-competition">Default competition / Tasks to be done</a></li>
+<li><a href="#hints">Operating tips</a></li>
+<li><a href="#response-to-modifications">Changes to competition implementation</a></li>
+<li><a href="#create-crew-list">Create crew list</a></li>
+<li><a href="#route-planning">Route planning</a>
+<ul class="sectlevel2">
+<li><a href="#route-planning-definitions">Definitions</a></li>
+<li><a href="#route-planning-mandatory-details">Required details for a competitive route</a></li>
+<li><a href="#route-planning-input">Competitive route input</a></li>
+<li><a href="#route-planning-import">Import of competition routes</a></li>
+<li><a href="#route-planning-google-earth">Create competition routes with Google Earth Pro</a></li>
+<li><a href="#route-planning-google-earth-add-secret">Add SCs and curved route sections with Google Earth Pro.</a></li>
+<li><a href="#route-planning-verify">Verify the competition route</a></li>
+<li><a href="#route-planning-deliver">Passing the competition route to the evaluation referee</a></li>
+<li><a href="#route-planning-errors">Error messages in route details</a></li>
+</ul>
+</li>
+<li><a href="#osm-contest-map">OSM contest map</a>
+<ul class="sectlevel2">
+<li><a href="#osm-contest-map-printserver">Own print server</a></li>
+<li><a href="#osm-contest-map-additional-datasources">Other data sources</a></li>
+<li><a href="#osm-contest-map-configuration">Configuration details</a></li>
+<li><a href="#osm-contest-map-workflow">Workflow of a map-based route construction</a></li>
+</ul>
+</li>
+<li><a href="#flight-time-calculation">Flight-time-calculation for take-offs and landings</a></li>
+<li><a href="#planning-test-and-flight-preparation">Planning test and flight preparation</a>
+<ul class="sectlevel2">
+<li><a href="#planning-test-with-map">Planning test with competition map (without route construction)</a></li>
+<li><a href="#planning-test-with-flight-construction">Planning test with flight construction</a></li>
+<li><a href="#no-planning-test">No planning test</a></li>
+<li><a href="#planning-test-hints">Planning test configuration hint</a></li>
+</ul>
+</li>
+<li><a href="#landings">Landings</a></li>
+<li><a href="#evaluation">Evaluations</a>
+<ul class="sectlevel2">
+<li><a href="#evaluation-contest">Contest evaluation</a></li>
+<li><a href="#evaluation-class">Class evaluation</a></li>
+<li><a href="#evaluation-team">Team evaluation</a></li>
+<li><a href="#evaluation-special">Special evaluations</a></li>
+</ul>
+</li>
+<li><a href="#supported-logger">Supported loggers</a>
+<ul class="sectlevel2">
+<li><a href="#supported-logger-aflosreader">AFLOS</a></li>
+<li><a href="#supported-logger-airopserver">AirObserver based loggers</a></li>
+<li><a href="#supported-logger-dg100">DG-100</a></li>
+<li><a href="#supported-logger-dg200">DG-200</a></li>
+<li><a href="#supported-logger-powerflarm">PowerFLARM</a></li>
+<li><a href="#supported-logger-igc">Any other IGC logger</a></li>
+<li><a href="#supported-logger-gpx">Any other GPX logger</a></li>
+<li><a href="#supported-logger-kml">Any other KML logger</a></li>
+<li><a href="#supported-logger-nmea">Any other NMEA logger</a></li>
+</ul>
+</li>
+<li><a href="#print-styles">Influence print style</a>
+<ul class="sectlevel2">
+<li><a href="#print-styles-title">CSS settings for title</a></li>
+<li><a href="#print-styles-foot">CSS settings for signature</a></li>
+<li><a href="#print-styles-tables">CSS settings for tables</a></li>
+<li><a href="#print-styles-samples">Examples</a></li>
+<li><a href="#print-styles-special-old">Replaced CSS properties</a></li>
+</ul>
+</li>
+<li><a href="#contest-properties">Contest properties</a></li>
+<li><a href="#configuration">Installation dependent configuration</a>
+<ul class="sectlevel2">
+<li><a href="#configuration-email">Configure email sending</a></li>
+<li><a href="#configuration-viewemail">Configure email viewer</a></li>
+<li><a href="#configuration-ftp">Configure FTP dispatch</a></li>
+<li><a href="#configuration-landing">Configure information for landing referees.</a></li>
+<li><a href="#configuration-live">Configure live display</a></li>
+<li><a href="#configuration-livetracking">Configure live tracking</a></li>
+<li><a href="#configuration-osmprint">Configure OSM contest map printing</a></li>
+<li><a href="#configuration-test">Configure test displays</a></li>
+</ul>
+</li>
+<li><a href="#live-scoring">Live result display</a></li>
+<li><a href="#live-tracking">live-tracking</a></li>
+<li><a href="#automatic-actions">Automatic actions</a>
+<ul class="sectlevel2">
+<li><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a></li>
+<li><a href="#automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</a></li>
+<li><a href="#automatic-actions-loadscanobservation">FCAutoLoadScanObservation</a></li>
+<li><a href="#automatic-actions-loadlogger">FCAutoLoadLogger</a></li>
+</ul>
+</li>
+<li><a href="#save-data">Data backup of a running competition</a>
+<ul class="sectlevel2">
+<li><a href="#save-fcdb">Backup of the 'Flight Contest' database</a></li>
+<li><a href="#save-prints">Save 'Flight Contest' prints (Firefox)</a></li>
+<li><a href="#restore-fcdb">Data recovery of the 'Flight Contest' database</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Flight Contest plans the timed competition sequence of a general aviation powered flight contest
+and evaluates results for planning tests, navigation tests, observations and/or landings.</p>
+</div>
+<div class="paragraph">
+<p>Flight Contest has a flexible contest management system. This includes the support:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>different competition regulations (FAI, Germany, Switzerland, Austria, expandable)<br>
+(adaptation of individual evaluation details (points) possible if required)</p>
+</li>
+<li>
+<p>of competition classes (different evaluation of crew groups in one competition)</p>
+</li>
+<li>
+<p>combined competitions (simultaneous competitions with a common starting field)</p>
+</li>
+<li>
+<p>parallel competitions (concurrent competitions with independent starting fields)</p>
+</li>
+<li>
+<p>the evaluation of special crew groups, which can be defined ad hoc</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Is an open source, multilingual, network-enabled database application based on Java techniques:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The user interface runs in the web browser (Firefox, Internet Explorer, etc.).</p>
+</li>
+<li>
+<p>It can be used on multiple networked computers simultaneously.</p>
+</li>
+<li>
+<p>Each user can use his preferred operating language (German, English, extensible).</p>
+</li>
+<li>
+<p>Crash-proof.</p>
+</li>
+<li>
+<p>High security against operating errors.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Supports logger data formats GAC, IGC, GPX, KML, KMZ and NMEA 0183 (extensible).</p>
+</div>
+<div class="paragraph">
+<p>Generates OSM-based A3 &amp; A4 competition maps in TÜK-200 style.</p>
+</div>
+<div class="paragraph">
+<p>Creates PDF for print and internet publishing.</p>
+</div>
+<div class="paragraph">
+<p>Sends emails of the navigation flight charts to the participants.</p>
+</div>
+<div class="paragraph">
+<p>Supports special stretching properties:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Unknown time controls</p>
+</li>
+<li>
+<p>Curved track sections</p>
+</li>
+<li>
+<p>Touch &amp; Go landings</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Provides a live score display (Live Scoring):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Display of the preliminary ranking during a debriefing.</p>
+</li>
+<li>
+<p>Simultaneous publication on the local network and on the Internet</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Provides integrated map viewers for navigation flights, routes and logger files:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Offline map display for navigation flight assessment.</p>
+</li>
+<li>
+<p>Online map display with Open Street Map</p>
+</li>
+<li>
+<p>Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="manuals">Operating manuals</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="manuals/FC-Manual_en.pdf" target="_blank">Operating Instructions</a></p>
+</li>
+<li>
+<p><a href="manuals/FC-Manual-Observations.pdf" target="_blank">Instructions Observations (German)</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="supported-rules">Supported rulesets</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="rules/DE_Navigationsflug_2020.pdf" target="_blank">Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)</a></p>
+</li>
+<li>
+<p><a href="rules/DE_Navigationsflug_2017_en.pdf" target="_blank">Wettbewerbsordnung Navigationsflug Deutschland 2017</a></p>
+</li>
+<li>
+<p><a href="rules/FAI_rally_flying_rules_2020.pdf" target="_blank">FAI Air Rally Flying</a></p>
+</li>
+<li>
+<p><a href="rules/FAI_precision_flying_rules_2020.pdf" target="_blank">FAI Precision Flying</a></p>
+</li>
+<li>
+<p><a href="rules/CH_Praezisionsflug_2017.pdf" target="_blank">Wettkampfreglement Präzisionsflug-Schweizermeisterschaft (German)</a></p>
+</li>
+<li>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=17" target="_blank">Präzisionsflug-Reglement Österreich (German)</a></p>
+</li>
+<li>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=30" target="_blank">Navigationsflug-Reglement Österreich (German)</a></p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="default-competition">Default competition / Tasks to be done</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Contest organizer</em><br>
+*Evaluation referee</p>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Before competition day</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><em>Engineer competition route</em><br>
+(Coordinates, maps, pictures, ground signs, radio, turning loops, unknown time controls).</p>
+</li>
+<li>
+<p><em>Engineer approach and departure route</em><br>
+(distances/time requirements, maps, radio, tower communication)</p>
+</li>
+<li>
+<p><em>Engineer track design description</em><br>
+(if planning test includes track construction)</p>
+</li>
+<li>
+<p><em>Prepare document envelopes</em><br>
+(maps, pictures, approach and departure routes, radio frequencies, description of route construction if necessary)</p>
+</li>
+<li>
+<p><strong>Import route and check for plausibility</strong><br>
+(turning loops, exactness of coordinates)</p>
+</li>
+<li>
+<p><strong>Calculate preliminary schedule of the competition day</strong><br>
+(assumed takeoff/landing direction, without wind)</p>
+</li>
+</ol>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A" start="2">
+<li>
+<p>On contest day</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="7">
+<li>
+<p><strong>Calculate schedule of the competition day</strong><br>
+(taking into account the specified start/landing direction and the specified wind)</p>
+</li>
+<li>
+<p><strong>Print schedules &amp; evaluation lists for notice board &amp; various referees</strong>.
+***overview and crew schedule for posting</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Crew list for logger output</p>
+</li>
+<li>
+<p>Referee schedule for tower (aircraft, takeoff time, latest landing time)</p>
+</li>
+<li>
+<p>Referee schedule for preparation room (crew, aircraft, issue time)</p>
+</li>
+<li>
+<p>Referee schedule for landings (Aircraft, Latest landing time)</p>
+</li>
+<li>
+<p>Referee schedule for documents handover (Aircraft, Latest landing time, Parking)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>*Print crew specific data</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Label for document envelopes</p>
+</li>
+<li>
+<p>Input forms for planning test</p>
+</li>
+<li>
+<p>Evaluation forms for observations</p>
+</li>
+<li>
+<p>Flight plans</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Logger output</em>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Switch on logger</p>
+</li>
+<li>
+<p>Document logger number</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Complete document envelopes</em> .</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Add crew specific labels</p>
+</li>
+<li>
+<p>Add crew-specific input forms for planning test</p>
+</li>
+<li>
+<p>Add crew specific evaluation forms for observations</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Briefing</em> .</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Route (turn loops, unknown time controls, approach/departure procedures, radio, tower communication)</p>
+</li>
+<li>
+<p>Procedure (handing out of documents, handing in of evaluation forms/loggers after arrival, receipt of results)</p>
+</li>
+<li>
+<p>Weather</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Coordinate planning test and flight preparation room</em>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Document envelope issuance</p>
+</li>
+<li>
+<p>Take back planning test input forms</p>
+</li>
+<li>
+<p>Issue crew-specific flight plan</p>
+</li>
+<li>
+<p>Document time of leaving the preparation room.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Evaluate planning test</strong> .
+***Scan and import planning test form</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data input planning test</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Check logger on departing crews</em>.</p>
+</li>
+<li>
+<p><em>Survey landings</em>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Document landing field (0, Field name, Out)</p>
+</li>
+<li>
+<p>Document abnormal landing</p>
+</li>
+<li>
+<p>Transmit landing result continuously to evaluation referee</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Coordinate arriving crews</em>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Monitor time for completion of evaluation form</p>
+</li>
+<li>
+<p>Receive evaluation form and logger</p>
+</li>
+<li>
+<p>Transport evaluation form and logger to evaluation referee</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Evaluate landings and navigation flight</strong> .</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Data entry landings</p>
+</li>
+<li>
+<p>Logger evaluation</p>
+</li>
+<li>
+<p>Scan and import observation evaluation form</p>
+</li>
+<li>
+<p>Data input observations</p>
+</li>
+<li>
+<p>Print and transfer result for crew</p>
+</li>
+<li>
+<p>Update live evaluation</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Distribute results</em> .</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Collect results from the evaluation referee</p>
+</li>
+<li>
+<p>Hand over results continuously to crews</p>
+</li>
+<li>
+<p>Receive queries from the crews and make decisions</p>
+</li>
+<li>
+<p>Hand over corrections to the evaluation referee</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Final evaluation</strong>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Process corrections in response to crew queries.</p>
+</li>
+<li>
+<p>Process final landing list</p>
+</li>
+<li>
+<p>Create final evaluation</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><em>Create certificates</em></p>
+</li>
+<li>
+<p><em>Victory ceremony</em></p>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="hints">Operating tips</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Bold marked texts and numbers as well as the sign '&#8230;&#8203;' are links,
+behind which further data are hidden.</p>
+</li>
+<li>
+<p>When entering times, a '.' can also be used instead of the ':',
+which makes it unnecessary to press the shift key.</p>
+</li>
+<li>
+<p>When entering fractional numbers, a '.' can also be used instead of the ','.
+can be used.</p>
+</li>
+<li>
+<p>When entering land measurement values, lowercase letters can be used instead of uppercase letters.
+instead of uppercase letters, which eliminates the need to press the Shift key.</p>
+</li>
+<li>
+<p>When entering landing values, the landing value "out" for landings outside the landing box and "no" for landings outside the landing box can be entered.
+outside the landing box and "no" for no landing can be entered, in order to
+enter these errors without mouse operation.</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="response-to-modifications">Changes to competition implementation</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Crew does not participate in the short term</dt>
+<dd>
+<p>Deactivate crew (crews)<br>
+Schedule remains unchanged.</p>
+</dd>
+<dt class="hdlist1">Crew cannot start as planned</dt>
+<dd>
+<p>Push crew to the end of the task (planning)<br>
+A new flight plan is calculated for the affected crew.</p>
+</dd>
+<dt class="hdlist1">Starts shift in time</dt>
+<dd>
+<p>Correct start time of affected crews (planning)<br>
+A new flight plan is calculated for the affected crews.</p>
+</dd>
+<dt class="hdlist1">Flying wind changes during takeoffs</dt>
+<dd>
+<p>Assign other flight wind to remaining crews (planning)<br>
+A new flight plan is calculated for the remaining crews.</p>
+</dd>
+<dt class="hdlist1">Planning test is to be evaluated with a different wind than the one originally specified</dt>
+<dd>
+<p>Assign a new planning task with a different wind to the planning test
+and assign crew to this new planning task (planning)</p>
+</dd>
+<dt class="hdlist1">TAS of a crew changes after planning tests and flight plans have already been calculated</dt>
+<dd>
+<p>After changing the TAS of a crew, mark the crew
+and move it down and up once (planning)<br>
+Changed TAS is transferred to the task.<br>
+Planning test is recalculated immediately.<br>
+Flight plan is recalculated with 'Calculate schedule'.<br>
+This may result in warnings for subsequent aircraft.
+If necessary, move crew to the end of the task.</p>
+</dd>
+<dt class="hdlist1">Crew must change aircraft due to defect</dt>
+<dd>
+<p>Assign crew the new aircraft and if necessary another TAS (crews)<br>
+New aircraft and new TAS will be used on new tasks.<br>
+Old aircraft and old TAS remain unchanged for completed tasks.</p>
+</dd>
+<dt class="hdlist1">Turnpoint overflight time of a task should not be evaluated</dt>
+<dd>
+<p>Disable 'time evaluation' of the turn point (Results &#8594; Disable check points)<br>
+Causes recalculation of the result.</p>
+</dd>
+<dt class="hdlist1">Unknown time control of a task should not be scored</dt>
+<dd>
+<p>'Time evaluation' and 'Goal missed' of the unknown time control.
+   deactivate (Results &#8594; Deactivate check points)<br>
+Causes recalculation of the result.</p>
+</dd>
+<dt class="hdlist1">Recalculate schedule of a task</dt>
+<dd>
+<p>'Reset order' and 'Calculate schedule' in succession<br>
+Deletes all flight schedules and sets the order of the crews
+to the order in the crew list.<br>
+Start times of all crews and flight plans are recalculated.</p>
+</dd>
+</dl>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="create-crew-list">Create crew list</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Crew lists are created using Excel.<br>
+Use the template <a href="samples/FC-CrewList-Sample.xlsx" target="_blank">FC-CrewList-Sample.xlsx</a>, whose structure ensures a successful import.</p>
+</div>
+<div class="paragraph">
+<p>The list captures the following data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>No. (start number) (optional)</p>
+</li>
+<li>
+<p>Pilot (first name, last name and optional e-mail)</p>
+</li>
+<li>
+<p>Navigator (optional, with first name, last name and optional e-mail)</p>
+</li>
+<li>
+<p>Team (optional)</p>
+</li>
+<li>
+<p>Class (for competitions with different evaluation classes)</p>
+</li>
+<li>
+<p>TAS (kn)</p>
+</li>
+<li>
+<p>Aircraft registration number</p>
+</li>
+<li>
+<p>Aircraft type (optional)</p>
+</li>
+<li>
+<p>Aircraft color (optional)</p>
+</li>
+<li>
+<p>Tracker ID (for competitions with live tracking)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This list must be available on the day of the competition (sorting is not necessary).</p>
+</div>
+<div class="paragraph">
+<p>Start numbers only specified if special numbering is required.
+Start numbers that are not specified are automatically assigned a number during import.
+(the first number after the highest existing number).</p>
+</div>
+<div class="paragraph">
+<p>This template can also be used for planning other matters of the competition
+(hotel, contact details). For this purpose, columns, rows and
+table sheets may be inserted according to the following rules:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Any number of additional columns at the end (after the 'Tracker ID' column).</p>
+</li>
+<li>
+<p>Any number of additional rows after a blank row following the last
+crew to be imported</p>
+</li>
+<li>
+<p>Any number of spreadsheets at any positions.
+Only data from the spreadsheet 'Crews' will be imported.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Crew lists are added to the 'Flight Contest' database with 'Crews &#8594; Import Excel crew list'.
+Flight Contest' database.
+If the option "Omit start number" is selected, the specified numbers will not be used.
+will not be used or replaced by another start number.
+The given numbers can be configured under 'Contest &#8594; Defaults' (default: '13').
+(default: '13').</p>
+</div>
+<div class="paragraph">
+<p>Only crew names (pilot + navigator) that are not yet in the 'Flight Contest' database are imported.
+Flight Contest' database. Corrections of already imported crew names
+already imported crew names (pilot or navigator) will cause the re-import of the crew
+with assignment of another start number. Therefore correct crews after an import only in
+only in 'Flight Contest' after an import.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="route-planning">Route planning</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="#route-planning-definitions">Definitions</a><br>
+<a href="#route-planning-mandatory-details">Required details for a competitive route</a><br>
+<a href="#route-planning-input">Competitive route input</a><br>
+<a href="#route-planning-import">Import of competition routes</a><br>
+<a href="#route-planning-google-earth">Create competition routes with Google Earth Pro</a><br>
+<a href="#route-planning-google-earth-add-secret">Add SCs and curved route sections with Google Earth Pro.</a><br>
+<a href="#route-planning-verify">Verify the competition route</a><br>
+<a href="#route-planning-deliver">Passing the competition route to the evaluation referee</a><br>
+<a href="#route-planning-errors">Error messages in route details</a></p>
+</div>
+<div class="sect2">
+<h3 id="route-planning-definitions">Definitions</h3>
+<div class="paragraph">
+<p>Start point (SP), check points (CP) and end point (FP = Finish point)
+are logger measuring points of a route, where overflight time and flight altitude are measured
+as well as previous course changes &gt;= 90 degrees are determined.</p>
+</div>
+<div class="paragraph">
+<p>Turn points (WP o. TP = Turn point) are check points,
+where a course change occurs and which are in the flight plan of a crew.</p>
+</div>
+<div class="paragraph">
+<p>Unknown time checks (UZK o. SC) are check points for
+time measurements on the route that are not in a crew&#8217;s flight plan.</p>
+</div>
+<div class="paragraph">
+<p>Takeoff (TO) is a check point where the overflight time is measured to evaluate
+compliance with the takeoff time window is measured.</p>
+</div>
+<div class="paragraph">
+<p>Landing (LDG) is a check point where the overflight time is measured to evaluate
+compliance with the latest landing time is measured.</p>
+</div>
+<div class="paragraph">
+<p>Intermediate points are design points for an intermediate landing.
+At the intermediate final point (iFP) and intermediate takeoff point (iSP) the
+Overflight time and altitude are measured and evaluated.
+Intermediate landing (iLDG) and intermediate takeoff (iTO) only serve
+for display in the flight plan of a crew.
+In the case of a touch&amp;go intermediate landing, iTO must be dispensed with.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-mandatory-details">Required details for a competitive route</h3>
+<div class="paragraph">
+<p>In a competition map, the starting point, turning points and end point of a route are to be
+of a route are to be indicated language-dependently with the following designations:</p>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">competition language</th>
+<th class="tableblock halign-left valign-top">check point designations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">German</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SP, WP1, WP2, &#8230;&#8203;, FP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">English</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SP, TP1, TP2, &#8230;&#8203;, FP</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Intermediate points shall be indicated with the following designations:
+  iFP, iLDG, iTO, iSP</p>
+</div>
+<div class="paragraph">
+<p>For a competition route, the following information is required for all check points:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Coordinates</p>
+</li>
+<li>
+<p>Minimum flight altitude above sea level (Altitude, in ft)</p>
+<div class="paragraph">
+<p>TO, LDG, iTO, iLDG: 0 ft</p>
+</div>
+</li>
+<li>
+<p>Gate width (in NM)</p>
+<div class="paragraph">
+<p>TO, LDG, iTO, iLDG: 0.02 NM (corresponding to runway width)</p>
+</div>
+<div class="paragraph">
+<p>UZK: 2 NM (for competition according to German regulations, otherwise 1 NM)</p>
+</div>
+<div class="paragraph">
+<p>otherwise: 1 NM</p>
+</div>
+</li>
+<li>
+<p>Gate direction for TO, LDG, iTO, iLDG (in degrees)</p>
+</li>
+<li>
+<p>For precise correspondence of the printed competition map with the data to be processed
+with the data to be processed, distances must be measured on the competition map
+distances must be measured on the competition map and entered into the field
+in the field 'Distance measurement (map) [mm]'. Thereby
+the distance from the previous turn point is measured in mm
+(for a map with the competition scale 1:200000).
+The previous turn point is a check point that is not an unknown time control.
+unknown time check.</p>
+</li>
+<li>
+<p>Auxiliary points are to be entered for curved sections of the course. These are to be
+entered as UZK with the following information:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Gate width &gt;= 2 NM, so that deviations are not too many manually
+to cause too many logger errors to be checked manually.</p>
+</li>
+<li>
+<p>No time evaluation</p>
+</li>
+<li>
+<p>No gate evaluation</p>
+</li>
+<li>
+<p>No flight planning test</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The turning point, with which the curved route ends, is to be
+entered:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>No flight planning test, so that the curved route is not included in the
+is not included in the flight planning test</p>
+</li>
+<li>
+<p>Check point after curved route</p>
+<div class="paragraph">
+<p>The flight plan of the crew receives as direction automatically the direction
+to the first auxiliary point as entry course to the curved route.</p>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>For stopovers, enter the following information for iLDG and iTO:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>gate width 0.02 NM (corresponding to runway width)</p>
+</li>
+<li>
+<p>Gate direction (in degrees)</p>
+</li>
+<li>
+<p>No time evaluation</p>
+</li>
+<li>
+<p>No gate evaluation</p>
+</li>
+<li>
+<p>No flight planning test</p>
+</li>
+<li>
+<p>Fixed flight time for stopover with pause (in min)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>Properties to be entered for the check points of a route:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>  Point                       Check        Gate              in         Evaluation
+                              Point        Width   Direction Flightplan Time Course Altitude
+
+  Takeoff                     TO           0.02    250       yes        yes  no     no
+  Start point                 SP           1       -         yes        yes  no     yes
+  Turning point               TP1          1       -         yes        yes  yes    yes
+  Secret time control         SC1          2       -         no         yes  yes    yes
+  Touch&amp;Go landing            iFP          1       -         yes        yes  yes    yes
+                              iLDG (1,2)   0.02    250       yes        no   no     no
+                              iSP (2)      1       -         yes        yes  no     yes
+  Curved section              SC2 (1,2)    2       -         no         no   yes    yes
+                              TP2 (2,3)    1       -         yes        yes  yes    yes
+  Final point                 FP           1       -         yes        yes  yes    yes
+  Landing                     LDG          0.02    250       yes        yes  no     no
+
+  (1) No time evaluation, No goal evaluation
+  (2) No flight planning test
+  (3) Check point after curved route</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>  Route examples              Check        Gate              in         Evaluation
+                              Point        Width   Direction Flightplan Time Course Altitude
+  Normal                      TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              TP2          1       -         yes        yes  yes    yes
+                              TP3          1       -         yes        yes  yes    yes
+                              TP4          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+
+  Secret time controls        TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              SC1          2       -         no         yes  yes    yes
+                              SC2          2       -         no         yes  yes    yes
+                              TP2          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+
+  Touch&amp;Go intermediate       TO           0.02    250       yes        yes  no     no
+  landing                     SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              iFP          1       -         yes        yes  yes    yes
+                              iLDG (1,2)   0.02    250       yes        no   no     no
+                              iSP (2)      1       -         yes        yes  no     yes
+                              TP2          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+
+  Stopover with pause         TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              iFP          1       -         yes        yes  yes    yes
+                              iLDG (1,2)   0.02    250       yes        no   no     no
+                              iTO (1,2)    0.02    250       yes        no   no     no
+                              iSP (2)      1       -         yes        yes  no     yes
+                              WP2          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+
+  Curved track                TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              SC1 (1,2)    2       -         no         no   yes    yes
+                              SC2 (1,2)    2       -         no         no   yes    yes
+                              TP2 (2,3)    1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        no   no     no</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-input">Competitive route input</h3>
+<div class="paragraph">
+<p>When entering a route in 'Flight Contest', please note that the check points can only be entered one after the other.
+can be entered one after the other and inserting check points is not possible.
+All properties except the check point type can be changed until the first use.
+Flight altitude and gate width are also changeable after the first use.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, the input and forwarding of routes or parts of them is
+is also possible with text files (UTF-8). In an empty route all check points can be added with
+"Import coordinates" from a text file can be added (incl. properties):</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
+iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check point, latitude, longitude, altitude, gate direction and latitude, etc.</p>
+</div>
+<div class="paragraph">
+<p>Allowed coordinate representations according to competition setting.</p>
+</div>
+<div class="paragraph">
+<p>Import of observations from text files (see 'Programs &#8594; Flight Contest &#8594; Instructions Observations'
+&#8594; chapter 'Configure observation evaluation')</p>
+</div>
+<div class="paragraph">
+<p>The Route Printout (Route &#8594; Print) contains the text representations of all check points
+and observations, which can be saved to text files and then used for import:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Route coordinates (export)</p>
+</li>
+<li>
+<p>Turning point signs (export)</p>
+</li>
+<li>
+<p>Route photos (export)</p>
+</li>
+<li>
+<p>Route ground signs (Export)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-import">Import of competition routes</h3>
+<div class="paragraph">
+<p>With 'Routes &#8594; Import Route' routes of the following formats can also be imported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>GPX file generated by a third-party program (e.g. 'Flight Planner').</p>
+<div class="paragraph">
+<p>May contain only exactly one route (&lt;rte&gt;&#8230;&#8203;&lt;/ret&gt;).</p>
+</div>
+<div class="paragraph">
+<p>Must contain altitude information (&lt;rtept lat="49.118333" lon="9.784000"&gt;&lt;ele&gt;400.00&lt;/ele&gt;&lt;/rtept&gt;).</p>
+</div>
+</li>
+<li>
+<p>KML or KMZ file generated by a third-party program.</p>
+</li>
+<li>
+<p>REF file generated from an AFLOS reference line.</p>
+</li>
+<li>
+<p>TXT file (UTF-8) containing one coordinate per line with the following structure:</p>
+<div class="paragraph">
+<p>Latitude, Longitude, Altitude</p>
+</div>
+<div class="paragraph">
+<p>Examples for different coordinate representations (according to competition settings):</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Lat 52.20167°, Lon 16.76500°, Alt 1243ft
+Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Values separated by comma (spaces before prefix and after unit are ignored)</p>
+</div>
+<div class="paragraph">
+<p>Blank lines and lines starting with # are ignored</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-google-earth">Create competition routes with Google Earth Pro</h3>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A">
+<li>
+<p>Input (Google Earth Pro)</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Save <a href="samples/FC-Route-Sample.kmz" target="_blank">FC-Route-Sample.kmz</a> to your computer</p>
+</li>
+<li>
+<p>Open 'FC-Route-Sample.kmz' on your computer with 'Google Earth Pro'.</p>
+</li>
+<li>
+<p>Open airspace data (C:\FCSave\.geodata\airspaces.kmz) if needed<br>
+(to be found here for installation: <a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a>).</p>
+</li>
+<li>
+<p>Enter check points</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Click the <strong>Route</strong> folder and add a 'Path'.<br>
+The 'Edit Path' dialog opens. Set the name of the path according to the route name.<br>
+With the 'Edit Path' dialog still open, left click in the graphics area to add all check points (TO, SP, WP1, WP2, &#8230;&#8203;, FP, LDG) of the route without SCs one after the other.<br>
+The position does not have to be exact yet. Its accuracy can be corrected afterwards.<br>
+Exit 'Edit path' dialog</p>
+</li>
+<li>
+<p>To change the position of a check point:<br>
+Navigate to the desired check point in the graphic area<br>
+Open the 'Properties' context menu of the path<br>
+With the 'Edit path' dialog open, grab the check point with the left mouse button and drag it to the desired position + Close the 'Edit path' dialog
+Close 'Edit path' dialog</p>
+</li>
+<li>
+<p>Unknown time controls or curved courses can be added after the course import.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Enter route photos</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Click the <strong>Photos</strong> folder and add a 'location marker' per track photo.<br>
+The 'Placemark' dialog opens. Set the name of the placemark according to the image name (running number or letter) (can be changed after importing)<br>
+Move the position of the placemark in the graphics area to the desired object<br>
+Exit 'Placemark' dialog</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Add route ground sign</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Click the <strong>Canvas</strong> folder and add a 'placemark' per route ground sign.<br>
+The 'placemark' dialog will open. Set name of placemark with 'S01' to 'S15' (can be changed after import)<br>
+Move the position of the placemark in the graphic area to the desired position<br>
+Close 'Placemark' dialog</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Save 'FC-Route-Sample.kmz' with context menu 'Save location as' with your route name</p>
+</li>
+</ol>
+</div>
+<div class="olist upperalpha">
+<ol class="upperalpha" type="A" start="2">
+<li>
+<p>Route import (Flight Contest)</p>
+</li>
+</ol>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="7">
+<li>
+<p>Routes &#8594; Import route</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Select saved kmz file</p>
+</li>
+<li>
+<p>Directory name in kml/kmz file: *enter route</p>
+</li>
+<li>
+<p>click 'Import</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Tracks &#8594; Track &#8594; Import track photos</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Select saved kmz file</p>
+</li>
+<li>
+<p>Enter directory name in kml/kmz file: *Photos</p>
+</li>
+<li>
+<p>click 'Import</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Routes &#8594; Route &#8594; Import route ground sign</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Select saved kmz file</p>
+</li>
+<li>
+<p>Directory name in kml/kmz file: *Canvas</p>
+</li>
+<li>
+<p>click 'Import</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-google-earth-add-secret">Add SCs and curved route sections with Google Earth Pro.</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Export route (Route &#8594; <strong>KMZ-Export</strong>) and open with <strong>Google Earth Pro</strong> .</p>
+</li>
+<li>
+<p>Navigate to the node 'Filename.kmz &#8594; Route name &#8594; Route export &#8594; <strong>turnpoints</strong>' .</p>
+</li>
+<li>
+<p>Click on the turnpoint after which you want to add SCs or a curved section of the route.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Execute context menu item "Copy"<br>
+Execute context menu item "Paste" once or several times (according to the number of required IPCs) + "Edit properties of added points in 'Place marker' dialog
+Edit "Properties" of the added points in the 'Placemark' dialog:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>In the Name field adjust check point name and gate width<br>
+(TP &#8594; SC, e.g. "TP1, Gate 1.0NM" &#8594; "SC1, Gate 2.0NM")</p>
+</li>
+<li>
+<p>Grab point in graphic area with left mouse button and drag to desired position</p>
+</li>
+<li>
+<p>Close 'Place marking' dialog</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Save 'Filename.kmz' with context menu 'Save location as' in new kmz file</p>
+</li>
+<li>
+<p>Import the corrected route (Route &#8594; <strong>Import FC Route</strong>)</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-verify">Verify the competition route</h3>
+<div class="paragraph">
+<p>Check your entered route in 'Route details' as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>OSM online map:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Check points at the correct locations?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Evaluation stages:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Distances plausible?</p>
+</li>
+<li>
+<p>Total distance plausible?</p>
+</li>
+<li>
+<p>Turning loops (course changes &gt; 90 degrees) correct?</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-deliver">Passing the competition route to the evaluation referee</h3>
+<div class="paragraph">
+<p>Export a course entered with 'Flight Contest' with 'GPX-Export' or 'KMZ-Export'.
+to pass it on to the judge, who can import it with 'Routes &#8594; Import FC-Route'.
+into his 'Flight Contest' for use.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-errors">Error messages in route details</h3>
+<div class="paragraph">
+<p>If tracks are incomplete or configured differently from the selected rule set,
+a ! appears in front of the track title in the track list.
+appears in front of the track title in the track list and error messages are marked in red in the track details.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Unknown last turning points</dt>
+<dd>
+<p>Some last turn points of route photos or ground signs could not be calculated.<br>
+Correct the coordinate of the track photo or ground sign.</p>
+</dd>
+<dt class="hdlist1">Number of stages too small</dt>
+<dd>
+<p>Reduce 'Min. stages' (Competition &#8594; Defaults)</p>
+</dd>
+<dt class="hdlist1">Number of stages too large</dt>
+<dd>
+<p>'Max. Enlarge stages' (Competition &#8594; Defaults)</p>
+</dd>
+<dt class="hdlist1">Photo number too small</dt>
+<dd>
+<p>'Track photo observations &#8594; Definition' set with 'None' (Edit) or<br>
+Reduce 'Min. track photos' (Competition &#8594; Defaults)</p>
+</dd>
+<dt class="hdlist1">Ground sign count too small</dt>
+<dd>
+<p>'Route ground mark observations &#8594; Definition' set with 'None' (Edit) or<br>
+Decrease 'Min. distance ground signs' (Competition &#8594; Defaults)</p>
+</dd>
+<dt class="hdlist1">Photo+ground sign count too small</dt>
+<dd>
+<p>Reduce 'Min. track photos+ground characters' (Competition &#8594; Defaults).</p>
+</dd>
+<dt class="hdlist1">Photo number too large</dt>
+<dd>
+<p>'Max. Enlarge track photos' (Competition &#8594; Defaults)</p>
+</dd>
+<dt class="hdlist1">Floor character count too large</dt>
+<dd>
+<p>'Max. Increase track ground characters' (Competition &#8594; Defaults)</p>
+</dd>
+<dt class="hdlist1">Photo+ground character count too large</dt>
+<dd>
+<p>'Max. Enlarge track photos+ground signs' (Competition &#8594; Defaults)</p>
+</dd>
+<dt class="hdlist1">Map distances differ</dt>
+<dd>
+<p>Internal data error<br>
+Execute 'Recalculate stages</p>
+</dd>
+<dt class="hdlist1">Coordinate turning loops deviating</dt>
+<dd>
+<p>Internal data error<br>
+Execute 'Recalculate stages</p>
+</dd>
+</dl>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="osm-contest-map">OSM contest map</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With 'Routes &#8594; Route &#8594; OSM competition map' a PDF competition map can be
+in scale 1:200000 or 1:250000 can be generated using a custom print server in TÜK200 style.</p>
+</div>
+<div class="paragraph">
+<p>Use of the maps:<br>
+The use of the map material is at your own risk. The map material may contain errors or be insufficient.
+The creators of these maps do not assume any warranty or liability for damages caused directly or indirectly by the use of the map material.</p>
+</div>
+<div class="paragraph">
+<p>Map data license conditions:<br>
+Map data © OpenStreetMap contributors (ODbL).<br>
+The map objects shown are based on the data of the OpenStreetMap project.
+OpenStreetMap is a free, editable map of the entire world and enables collaborative viewing and editing of geographic data from anywhere in the world.<br>
+Link: <a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a><br>
+License: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-printserver">Own print server</h3>
+<div class="paragraph">
+<p>installation:
+<a href="help_fcmaps.html" target="_blank">Flight Contest maps server</a></p>
+</div>
+<div class="paragraph">
+<p>Map data is only available for installed countries.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-additional-datasources">Other data sources</h3>
+<div class="paragraph">
+<p>Air Spaces:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DAeC (<a href="https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten" class="bare">https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten</a>)</p>
+</li>
+<li>
+<p>Skyfool.de (<a href="http://www.skyfool.de/luftraeume" class="bare">http://www.skyfool.de/luftraeume</a>)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Contour lines and surface contours:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Viewfinder Panoramas (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-configuration">Configuration details</h3>
+<div class="paragraph">
+<p>The following route details can be drawn on the map:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Turning point circles (diameter 1 NM)</p>
+</li>
+<li>
+<p>Turning loops</p>
+</li>
+<li>
+<p>Stage lines</p>
+</li>
+<li>
+<p>Course of curved stages</p>
+</li>
+<li>
+<p>Turning point names (in the respective print language, German WP, English TP)</p>
+</li>
+<li>
+<p>Gates of unknown time controls</p>
+</li>
+<li>
+<p>Positions of track photos</p>
+</li>
+<li>
+<p>Positions of track ground signs</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The following objects can be drawn on the map:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Grade grid</p>
+</li>
+<li>
+<p>Elevation lines (100m, 50m or 20m)</p>
+</li>
+<li>
+<p>Manually added objects</p>
+</li>
+<li>
+<p>Airspaces</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Airspaces must be installed manually before first use.
+To do this, copy all files from <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> to the folder <strong>C:\FCSave\.geodata</strong>.</p>
+</div>
+<div class="paragraph">
+<p>All mentioned route details and objects can be deselected.</p>
+</div>
+<div class="paragraph">
+<p>The center of the map is determined from the positions of all turning points.
+Routes that exceed the selected print format can be divided into several prints by deselecting
+can be divided into several prints by deselecting suitable turning points.</p>
+</div>
+<div class="paragraph">
+<p>Individual turning points can be excluded from printing.
+This also eliminates associated stages and turning loops.</p>
+</div>
+<div class="paragraph">
+<p>The printout can be made in landscape or portrait format in A1 to A4 or ANR size.</p>
+</div>
+<div class="paragraph">
+<p>Missing flying sites, churches, castles, castle ruins, country houses, wind turbines and elevation points.
+as well as own symbols can be added in the file <strong>C:\FCSave\.geodata\additionals.csv</strong> for printing:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>id|symbol|name|wkt
+1|church.png|""|POINT (9.46600 49.50288)
+2|airfield.png|"airfield"|POINT (9.54128 49.51144)</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>sequential number</p>
+</li>
+<li>
+<p>symbol to be displayed:<br>
+airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png or name of own symbol</p>
+</li>
+<li>
+<p>name of object (in quotes) ("": print no name)</p>
+</li>
+<li>
+<p>display position in geo-coordinates</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Own symbols are to be saved in <strong>C:\FCSave\.geodata\images</strong> (png).
+Note that symbol names are case-sensitive.</p>
+</div>
+<div class="paragraph">
+<p>Special objects can be added to the file <strong>C:\FCSave\.geodata\specials.csv</strong>.
+to be added to the print:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>id|point|name|wkt|dx|dy
+1|"Route 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>sequence number</p>
+</li>
+<li>
+<p>description (in quotation marks, will not be printed)</p>
+</li>
+<li>
+<p>name of object (in quotes) ("": do not print name)</p>
+</li>
+<li>
+<p>display position in geo-coordinates</p>
+</li>
+<li>
+<p>horizontal displacement of the object name to be printed (in pixels)</p>
+</li>
+<li>
+<p>vertical displacement of the object name to be printed (in pixels)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Geo-coordinates of turning points are output with the route printout (CSV-GeoData).</p>
+</div>
+<div class="paragraph">
+<p>The names of airspaces are taken from the file <strong>C:\FCSave\.geodata\airspaces.kmz</strong>.
+Incorrect names prevent the map generation.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-workflow">Workflow of a map-based route construction</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Select area around TO</p>
+</li>
+<li>
+<p>Create route with TO (Routes &#8594; <strong>New route</strong>)</p>
+</li>
+<li>
+<p>Print competition map with TO (route &#8594; <strong>OSM competition map</strong>)<br>
+Place TO at a desired position (top right, bottom left or similar).</p>
+</li>
+<li>
+<p>Select suitable turning points on the printed map<br>
+With the coordinate rulers on the left and above, the turning point coordinates can be determined to the minute with a compass.</p>
+</li>
+<li>
+<p>Enter distance with the coordinates read off (Distance &#8594; <strong>Add coordinate</strong>).</p>
+</li>
+<li>
+<p>Export route (Route &#8594; <strong>KMZ-Export</strong>)</p>
+</li>
+<li>
+<p>Open KMZ file with <strong>Google Earth Pro</strong> and move turning points to the exact positions.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Navigate to the node 'Filename.kmz &#8594; Route name &#8594; Route export &#8594; turnpoints'.</p>
+</li>
+<li>
+<p>Click on each point and select context menu item 'Properties' &#8230;&#8203;</p>
+</li>
+<li>
+<p>Move point to exact position and close properties dialog &#8230;&#8203;</p>
+</li>
+<li>
+<p>Save 'Filename.kmz' with context menu 'Save location as' in new kmz file</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Import the corrected route (Route &#8594; <strong>Import FC Route</strong>)</p>
+</li>
+<li>
+<p>Check competition map (route &#8594; <strong>OSM online map</strong>)</p>
+</li>
+<li>
+<p>Print competition map (route &#8594; <strong>OSM competition map</strong>)</p>
+</li>
+</ol>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="flight-time-calculation">Flight-time-calculation for take-offs and landings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Specifications can be made for the following items:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Departure to take-off point (TO &#8594; SP)</p>
+</li>
+<li>
+<p>Final point to landing (FP &#8594; LDG)</p>
+</li>
+<li>
+<p>Intermediate landing (iFP &#8594; iLDG)</p>
+</li>
+<li>
+<p>Intermediate take-off point (iFP, iLDG or iTO &#8594; iSP)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The default value of new tasks "wind+:3NM" causes that the wind of the
+the wind of the navigation flight task is taken into account for the time-of-flight calculation,
+the distance between the points for calculation is increased by 3NM
+(which has proven to be useful for a standard course round) and the calculated
+overflight time is rounded up to whole minutes.</p>
+</div>
+<div class="paragraph">
+<p>Use the template <a href="samples/FC-TakoffLandingCalculation-Sample.xlsx" target="_blank">FC-TakoffLandingCalculation-Sample.xlsx</a>,
+to calculate setting values for longer approach and departure distances.</p>
+</div>
+<div class="paragraph">
+<p>For each point mentioned, the following expressions can be used:</p>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Expression (example)</th>
+<th class="tableblock halign-left valign-top">Applied formula</th>
+<th class="tableblock halign-left valign-top">Round up to whole minutes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind+:3NM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LegTime(tas,wind,track,dist + 3)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind:3NM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LegTime(tas,wind,track,dist + 3)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nowind+:3.5NM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LegTime(tas,null,track,dist + 3.5)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nowind:3.5NM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LegTime(tas,null,track,dist + 3.5)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind+:1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3 * LegTime(tas,wind,track,dist)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind:1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3 * LegTime(tas,wind,track,dist)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nowind+:1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3 * LegTime(tas,null,track,dist)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nowind:1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3 * LegTime(tas,null,track,dist)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time+:10min</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time:10min</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">no</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">expression</th>
+<th class="tableblock halign-left valign-top">meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LegTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Internal function for wind-dependent flight time calculation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TAS of the aircraft</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind direction and speed (zero = no wind)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">track</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">course of the navigation flight</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">distance between the respective points</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">+</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flight plan time rounded up to the nearest whole minute</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Individual time for each crew considering TAS,<br>
+wind, heading and distance between points.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nowind</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Individual time for each crew respecting TAS,<br>
+distance and course between points, without considering wind.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed time in minutes for all crews.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The calculated time is multiplied by the given factor (here 1.3).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3NM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The time is calculated by increasing the distance<br>
+between the points by the given value (here by 3NM).</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">expression</th>
+<th class="tableblock halign-left valign-top">application example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind+:3NM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Airfield with standard course round (TO &#8594; SP, iTO &#8594; iSP).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind+:xNM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apply a larger distance x for larger airfield circles.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind+:6NM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Latest landing time (FP &#8594; LDG)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time+:xmin</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fixed flight time of x minutes (for precision flight competitions)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind+:1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Increase calculated flight time by 30% and correct to minute.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind:1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Calculate flight time with distance and wind without corrections</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Check your settings by creating flight plans:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Flight time TO &#8594; SP plausible?</p>
+</li>
+<li>
+<p>Flight time FP &#8594; LDG (to determine latest landing time) sufficient?</p>
+</li>
+<li>
+<p>Flight time iFP &#8594; iLDG (&#8594; iTO) &#8594; iSP plausible for stopover?</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="planning-test-and-flight-preparation">Planning test and flight preparation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="#planning-test-with-map">Planning test with competition map (without route construction)</a><br>
+<a href="#planning-test-with-flight-construction">Planning test with flight construction</a><br>
+<a href="#no-planning-test">No planning test</a><br>
+<a href="#planning-test-hints">Planning test configuration hint</a></p>
+</div>
+<div class="sect2">
+<h3 id="planning-test-with-map">Planning test with competition map (without route construction)</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Task Configuration</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Planning test duration: 60 min</p>
+</li>
+<li>
+<p>Duration of the aircraft preparation: 15 min</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Planning Test Card</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Turning points are already drawn</p>
+</li>
+<li>
+<p>route can be drawn in</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Navigation test map</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Turning points and route are drawn</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Work of the crew</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Crew receives planning test chart and planning test task sheet.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Measure course over ground</p>
+</li>
+<li>
+<p>Calculate heading and flight time and enter in planning test task sheet</p>
+</li>
+<li>
+<p>Hand in planning test task sheet</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Crew receives navigation test chart and flight plan</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Prepare navigation test chart (turn loops, turn point overflight times, heading, minute dashes)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Instructions for referees (printable)</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="info/FC-PlanningTest-Info_en.docx" target="_blank">Time schedule of Planning Test</a></p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="planning-test-with-flight-construction">Planning test with flight construction</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Task Configuration</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Duration of the planning test: 75 min (more if necessary for complicated routes).</p>
+</li>
+<li>
+<p>Duration of the aircraft preparation: 15 min</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Planning Test Card</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Does not contain turning points</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Navigation test map</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Turning points and route are drawn</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Work of the crew</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Crew receives route construction instructions, planning test map and planning test task sheet.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Construct course on planning test chart</p>
+</li>
+<li>
+<p>Measure course over ground</p>
+</li>
+<li>
+<p>Calculate heading and flight time and enter in planning test task sheet.</p>
+</li>
+<li>
+<p>Hand in the planning test task sheet</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Crew receives navigation test chart and flight plan</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Prepare navigation test chart (turn loops,
+turnpoint overflight times, heading, minute dashes)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="no-planning-test">No planning test</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Task Configuration</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Planning test duration: 0 min</p>
+</li>
+<li>
+<p>Duration of aircraft preparation: 45 min (possibly more for long routes).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Navigation test map</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Turning points and route are drawn</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Work of the crew</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Crew receives navigation test chart and flight plan.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Prepare navigation test chart (turn loops,
+turnpoint overflight times, heading, minute dashes)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="planning-test-hints">Planning test configuration hint</h3>
+<div class="paragraph">
+<p>The option "Distance measurement during planning test" is only useful,
+if the distances between the check points have been measured with the used map
+and have been entered in the distance coordinates under
+Distance measurement (map) [mm]'.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="landings">Landings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Depending on the selected competition rules, a fixed landing scheme is used.
+Its penalty point calculation from a landing measurement value is stored as a formula.
+This formula can be adapted to use a landing scheme that differs from the selected
+to use a different landing scheme. The formulas can be found under
+'Competition &#8594; Points' or 'Class &#8594; Points' for each landing (max. 4).
+Special landing errors like 'No landing', 'Abnormal landing' etc. are entered through
+clickable check boxes.</p>
+</div>
+<div class="paragraph">
+<p>The following formulas are used for penalty point calculation of landings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="rules/DE_Navigationsflug_2020.pdf#page=16" target="_blank">Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020</a> (all landings)</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="rules/DE_Navigationsflug_2017.pdf#page=16" target="_blank">Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017</a> (all landings)</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="rules/FAI_rally_flying_rules_2020.pdf#page=17" target="_blank">FAI Air Rally Flying - Edition 2020</a> ( all landings)</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="rules/FAI_precision_flying_rules_2020.pdf#page=20" target="_blank">FAI Precision Flying - Edition 2020</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Landing 1 and 4</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Landing 2 and 3</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The order of application can be configured for a task.</p>
+</div>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="rules/CH_Praezisionsflug_2017.pdf#page=19" target="_blank">Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Landing 1 and 4</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Landing 2 and 3</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The order of application can be configured for a task.</p>
+</div>
+</li>
+<li>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2017</a> (all landings).</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017</a> (all landings).</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=27" target="_blank">Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017</a> (all landings).</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; if(x.isInteger()){i=x.toInteger();if(i&gt;0){return 2*i}else{return -(3*i)}}else{return null;}}</pre>
+</div>
+</div>
+</li>
+<li>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=37" target="_blank">Navigationsflug-Reglement Österreich - Ausgabe 2017</a> (all landings)</p>
+<div class="literalblock">
+<div class="content">
+<pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To record the landings, print the referee schedule of a task with the following fields:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>No. (start number)</p>
+</li>
+<li>
+<p>Aircraft (registration number)</p>
+</li>
+<li>
+<p>Aircraft type</p>
+</li>
+<li>
+<p>Color (if recorded)</p>
+</li>
+<li>
+<p>Latest landing time</p>
+</li>
+<li>
+<p>Blank column 1&#8230;&#8203;4 (for recording landing fields and landing errors)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Do not print the crew, as this is against the rules.</p>
+</div>
+<div class="paragraph">
+<p>Landing judges should know as little as possible about the specific crew of an aircraft in order to objectively judge a landing.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="evaluation">Evaluations</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="#evaluation-contest">Contest evaluation</a><br>
+<a href="#evaluation-class">Class evaluation</a><br>
+<a href="#evaluation-team">Team evaluation</a><br>
+<a href="#evaluation-special">Special evaluations</a></p>
+</div>
+<div class="sect2">
+<h3 id="evaluation-contest">Contest evaluation</h3>
+<div class="paragraph">
+<p>&#8594; evaluation &#8594; contest-evaluation</p>
+</div>
+<div class="paragraph">
+<p>Contest evaluations can be filtered by the following criteria:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Classes</p>
+</li>
+<li>
+<p>Teams</p>
+</li>
+<li>
+<p>Tasks</p>
+</li>
+<li>
+<p>Tasks details</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A crew is included in a competition evaluation if it is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>belongs to a chosen class and</p>
+</li>
+<li>
+<p>belongs to a chosen team and</p>
+</li>
+<li>
+<p>has not been deactivated for a chosen task and</p>
+</li>
+<li>
+<p>has not been deactivated for a contest evaluation and</p>
+</li>
+<li>
+<p>has not been deactivated in general.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Task and task details (Planning test, Navigation test, Observation test,
+landing test, other test) determine for which penalty points are calculated in the evaluation.
+are calculated.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="evaluation-class">Class evaluation</h3>
+<div class="paragraph">
+<p>&#8594; evaluation &#8594; class-title</p>
+</div>
+<div class="paragraph">
+<p>Class evaluations can be filtered by the following criteria:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Teams</p>
+</li>
+<li>
+<p>Tasks</p>
+</li>
+<li>
+<p>Tasks details</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A crew is included in a class evaluation if it is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>belongs to the chosen class and</p>
+</li>
+<li>
+<p>belongs to a chosen team and</p>
+</li>
+<li>
+<p>has not been deactivated for a chosen task and</p>
+</li>
+<li>
+<p>has not been deactivated for a competition evaluation and</p>
+</li>
+<li>
+<p>has not been deactivated in general.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Task and task details (Planning test, Navigation test, Observation test,
+landing test, other test) determine for which penalty points are calculated in the evaluation.
+are calculated.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="evaluation-team">Team evaluation</h3>
+<div class="paragraph">
+<p>&#8594; evaluation &#8594; team-evaluation</p>
+</div>
+<div class="paragraph">
+<p>Team evaluations can be filtered by the following criteria:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Classes</p>
+</li>
+<li>
+<p>Tasks</p>
+</li>
+<li>
+<p>Tasks details</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A crew is included in a team evaluation if it is</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>belongs to a selected class and</p>
+</li>
+<li>
+<p>has not been deactivated for a selected task and</p>
+</li>
+<li>
+<p>has not been deactivated for a team evaluation and</p>
+</li>
+<li>
+<p>has not been deactivated in general.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A team receives a placement when it has</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the set number of crews for the team evaluation has been reached and</p>
+</li>
+<li>
+<p>the team has not been deactivated.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Task and task details (Planning test, Navigation test, Observation test,
+landing test, other test) determine for which penalty points are calculated in the evaluation.
+are calculated.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="evaluation-special">Special evaluations</h3>
+<div class="paragraph">
+<p>If class and team assignments are not sufficient to restrict competition evaluation,
+the crew option "No competition evaluation" can be used to exclude all crews that do not apply.
+crews can be excluded.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="supported-logger">Supported loggers</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="#supported-logger-aflosreader">AFLOS</a><br>
+<a href="#supported-logger-airopserver">AirObserver based loggers</a><br>
+<a href="#supported-logger-dg100">DG-100</a><br>
+<a href="#supported-logger-dg200">DG-200</a><br>
+<a href="#supported-logger-powerflarm">PowerFLARM</a><br>
+<a href="#supported-logger-igc">Any other IGC logger</a><br>
+<a href="#supported-logger-gpx">Any other GPX logger</a><br>
+<a href="#supported-logger-kml">Any other KML logger</a><br>
+<a href="#supported-logger-nmea">Any other NMEA logger</a></p>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-aflosreader">AFLOS</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Logger readout software: 'AFLOS Reader 2.04'.</p>
+</li>
+<li>
+<p>Read logger record and generate GAC file: 'AFLOS Reader &#8594; Competitor-No &#8594; Read AFLOS'.</p>
+</li>
+<li>
+<p>Logger data import: 'Flight Contest &#8594; Results &#8594; Task Title &#8594; Navigation Flight
+&#8594; &#8230;&#8203; &#8594; Import Logger Data &#8594; Select GAC File &#8594; Import'</p>
+</li>
+<li>
+<p>Delete logger recording: directly at the AFLOS logger.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-airopserver">AirObserver based loggers</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Logger readout software: 'AirObserver 2.5.1'.</p>
+</li>
+<li>
+<p>Logger setup: 'AirObserver &#8594; Logger &#8594; Configure'.</p>
+</li>
+<li>
+<p>Logger readout: 'AirObserver &#8594; Logger &#8594; Download' (readout very slow)</p>
+</li>
+<li>
+<p>Open logger record (*.G00): 'AirObserver &#8594; File &#8594; Load Flight Log'.</p>
+</li>
+<li>
+<p>Create GAC file: 'AirObserver &#8594; File &#8594; Export &#8594; GAC'.</p>
+</li>
+<li>
+<p>Import logger data: 'Flight Contest &#8594; Results &#8594; Task Title &#8594; Navigation Flight
+&#8594; &#8230;&#8203; &#8594; Import Logger Data &#8594; Select GAC File &#8594; Import'.</p>
+</li>
+<li>
+<p>Clear logger recording: 'AirObserver &#8594; Logger &#8594; Clear'.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-dg100">DG-100</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Logger settings software: 'Data Logger Utility S-OPC-0L-110631'.</p>
+</li>
+<li>
+<p>Logger setting: 'Data Logger Utility &#8594; Settings &#8594; Configuration'.</p>
+</li>
+<li>
+<p>Logger readout software: 'FSNavigator.net 2.0.0.90'.</p>
+</li>
+<li>
+<p>Logger readout: 'FSNavigator.net &#8594; Plugins &#8594; FRPocket device &#8594; Download tracks'.</p>
+</li>
+<li>
+<p>Create GAC file: 'FSNavigator.net &#8594; Logger object &#8594; Save'.</p>
+</li>
+<li>
+<p>Import logger data: results &#8594; task title &#8594; navigation flight &#8594; &#8230;&#8203; &#8594;
+Import Logger Data &#8594; Select GAC File &#8594; Import</p>
+</li>
+<li>
+<p>Clear logger record: 'FSNavigator.net &#8594; Plugins &#8594; FRPocket device &#8594; Clear memory'.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-dg200">DG-200</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Logger readout software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'.</p>
+</li>
+<li>
+<p>Logger setting: 'DG200Tool.exe &#8594; Device &#8594; Device settings'.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Select data logging format: "Position,Time,Date,Speed,Altitude".</p>
+</li>
+<li>
+<p>Enable WAAS</p>
+</li>
+<li>
+<p>Enable "Disable data logging if speed falls below a threshold" and set "30" km/hour</p>
+</li>
+<li>
+<p>Disable data logging if distance is less than the selected radius" (default)</p>
+</li>
+<li>
+<p>Data logging interval mode: enable "By time" (default) and set "1" seconds</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Read logger record: 'DG200Tool.exe &#8594; Device &#8594; Download all track points'.</p>
+</li>
+<li>
+<p>create GPX file: 'DG200Tool.exe &#8594; File &#8594; Save' and select "*.gpx</p>
+</li>
+<li>
+<p>Logger data import: Results &#8594; Task title &#8594; Navigation flight &#8594; &#8230;&#8203; &#8594;
+Import logger data &#8594; select GPX file &#8594; Import</p>
+</li>
+<li>
+<p>Delete logger recording: 'DG200Tool.exe &#8594; Device &#8594; Delete all track points'.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-powerflarm">PowerFLARM</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A use in competition has to be clarified with the competition manager.</p>
+</li>
+<li>
+<p>A logger recording can be written as IGC file to a micro SD card.</p>
+</li>
+<li>
+<p>Logger data import: 'Flight Contest &#8594; Results &#8594; Task title &#8594; Navigation flight.
+&#8594; &#8230;&#8203; &#8594; Import Logger Data &#8594; Select IGC File &#8594; Import'.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-igc">Any other IGC logger</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A use in the competition is to be clarified with the competition leader.</p>
+</li>
+<li>
+<p>The readout program is to be made available to the evaluation referee.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-gpx">Any other GPX logger</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A use in the competition is to be clarified with the competition leader.</p>
+</li>
+<li>
+<p>The readout program is to be made available to the evaluation referee.</p>
+</li>
+<li>
+<p>Necessary logger settings:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Recording interval: 1 second</p>
+</li>
+<li>
+<p>Recording with altitude information</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>GPX file content requirements</p>
+<div class="ulist">
+<ul>
+<li>
+<p>must contain only one track recording (&lt;trk&gt;&#8230;&#8203;&lt;/trk&gt;)</p>
+</li>
+<li>
+<p>if no, delete unwanted track records in file</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-kml">Any other KML logger</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A use in the competition is to be clarified with the competition leader.</p>
+</li>
+<li>
+<p>The readout program is to be made available to the evaluation referee.</p>
+</li>
+<li>
+<p>Necessary logger settings:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Recording interval: 1 second</p>
+</li>
+<li>
+<p>Recording with altitude data</p>
+</li>
+<li>
+<p>Recording with time information</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Requirements for KML/KMZ file content</p>
+<div class="ulist">
+<ul>
+<li>
+<p>must contain only one track recording (&lt;gx:Track&gt;&#8230;&#8203;&lt;/gx:Track&gt;)</p>
+</li>
+<li>
+<p>if no, delete unwanted track records in file</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-nmea">Any other NMEA logger</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>The logger must support the standard 'NMEA 0183'.</p>
+</li>
+<li>
+<p>A use in competition has to be clarified with the competition manager.</p>
+</li>
+<li>
+<p>The readout program must be made available to the evaluation referee.</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="print-styles">Influence print style</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Allows you to influence the appearance of the print<br>
+&#8594; Contest &#8594; Settings &#8594; Print-Style</p>
+</div>
+<div class="paragraph">
+<p><a href="#print-styles-title">CSS settings for title</a><br>
+<a href="#print-styles-foot">CSS settings for signature</a><br>
+<a href="#print-styles-tables">CSS settings for tables</a><br>
+<a href="#print-styles-samples">Examples</a><br>
+<a href="#print-styles-special-old">Replaced CSS properties</a></p>
+</div>
+<div class="sect2">
+<h3 id="print-styles-title">CSS settings for title</h3>
+<div class="literalblock">
+<div class="content">
+<pre>h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>font-size: Set the size of the 1st title. Only usable if the title size is empty and no graphics are used.<br>
+margin-top,margin-bottom,padding-top,padding-bottom: set spacing of the 1st title to top and bottom.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>h2 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>font-size: set size of 2nd title<br>
+margin-top,margin-bottom,padding-top,padding-bottom: set spacing of the 2nd title to top and bottom.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>h3 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>font-size: set size of 3rd title<br>
+margin-top,margin-bottom,padding-top,padding-bottom: set spacing of the 3rd title to top and bottom.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="print-styles-foot">CSS settings for signature</h3>
+<div class="literalblock">
+<div class="content">
+<pre>h2#signature { margin-top:100px; }</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>margin-top: Increase distance to table or signature image</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="print-styles-tables">CSS settings for tables</h3>
+<div class="paragraph">
+<p>Application:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>table.TableName tr.RowName td.ColumnName { property1; property2; ... }
+table.table_name tr.row_name td { property1; property2; ... }
+table.TableName tr#ID td { property1; property2; ... }
+td.ColumnName { property1; property2; ... }
+.columnname { property1; property2; ... }</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">property</th>
+<th class="tableblock halign-left valign-top">CSS expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No wrap for spaces</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">white-space: nowrap;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">column-width</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">width: 10%;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">bold print</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">font-weight: bold;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">italic-print</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">font-style: italic;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">color</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">color: red;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Small text size</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">font-size: 80%;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">justify text centered</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">text-align: center;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">text distance to frame top</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">padding-top:2cm;</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>CSS expressions: <a href="http://www.w3schools.com/cssref" class="bare">http://www.w3schools.com/cssref</a><br>
+Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">http://localhost:8080/fc/css/fcprint.css</a></p>
+</div>
+<div class="paragraph">
+<p>Table classes:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">table names [scope]</th>
+<th class="tableblock halign-left valign-top">row names [#ID]</th>
+<th class="tableblock halign-left valign-top">column names</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">generalpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value modify</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">planningpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value modify</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value modify</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title group value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value modify</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">landingpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value penaltycalculator</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value modify</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turnpointsignpoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enroutecanvaspoints</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">routecoords</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname coords altitude gatewidth sign</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">routelegs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name value coursechange summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">from2tp trackdistance</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enroutephotos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">photoname coords distfromtp tpname</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enroutecanvas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">canvassign coords distfromtp tpname</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">routecoordexport</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turnpointsignexport</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enroutephotoexport</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enroutecanvasexport</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">routecoordgeodata</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">routetpcoords</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname coords</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">crewlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#num]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew email team resultclass shortresultclass aircraft aircrafttype aircraftcolor tas id empty1 empty2 empty3 empty4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">teamlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">team crew aircraft tas</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">resultclasslist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">resultclass shortresultclass crew aircraft tas</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">aircraftlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#aircraft]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">aircraft aircrafttype aircraftcolor crew1 crew2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timetablelist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime version</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">legtimelist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#tas]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tas legtime</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timetablejudgelist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">col1 col2 col3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">head, times [#tas]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tas to2sp ifp2ildg ildg2isp fp2ldg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">crewtest</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title crew team resultclass aircraft aircrafttype tas</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">crewneutral</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title num crew aircraft col</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">info</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wind planning submission endcurved landinglatest planninginfo planningignore planningevaluation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title separator value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">planningtasklist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">valuename unit value [#tpname]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname distance truetrack trueheading groundspeed legtime</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightplanlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#tpname], procedureturn summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">num distance truetrack trueheading groundspeed legtime tpname tptime</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationturnpointlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title subtitle data</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname turnpointphoto turnpointcanvas turnpointtrue turnpointfalse</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutephotolist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title subtitle data</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name correct inexact false nmfromtp mmfromtp fromlasttp</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutecanvaslist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title subtitle data</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">sign correct inexact false nmfromtp mmfromtp fromlasttp</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutecrewjudgesign</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name line</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">planningtaskresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#tpname] summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname plantrueheading trueheading penaltytrueheading planlegtime legtime penaltylegtime</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">summary [planningtaskresults]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">legpenalties giventolate exitroomtolate otherpenalties penalties</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#tpname] summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime penaltycp penaltyprocedureturn penaltybadcourse penaltyaltitudemissed</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">summary [flightresults]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened frequencynotmonitored otherpenalties penalties</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">flightmeasurementlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#tpname]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname aflosname plancptime cptime procedureturn badcoursenum altitude</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">loggerdatalist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title value tpvalue</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time latitude longitude altitude distance truetrack groundspeed info badcourseinfo nobadcourseinfo</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationturnpointresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#tpname] summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname evaluation plan result penalties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutephotoresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#photoName] summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">photoname evaluation plan result penalties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutecanvasresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#imageName] summary</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">imagename evaluation plan result penalties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">summary [observationresults]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">turnpointphotopenalties routephotopenalties groundtargetpenalties otherpenalties penalties</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">landingresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name [#1&#8230;&#8203;4], values [#1&#8230;&#8203;4], summary [#1&#8230;&#8203;4]</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">summary [landingresults]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">otherpenalties penalties</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">summary [specialresults]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">penalties</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">crewresultsummary</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties increasepenalties penalties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">resultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[#pos]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pos crew aircraft team resultclass shortresultclass planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties taskpenalties contestpenalties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">teamresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[#pos]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pos team crews teampenalties</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">freetext</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">#line</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testlist</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testcol1 testcol2 testcol3 testcol4 testcol5</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="print-styles-samples">Examples</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Crew list - reduce lines</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.crewlist tr.value td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Crew schedule - reduce lines</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.timetablelist tr.value td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Referee schedule - reduce lines</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.timetablejudgelist tr.value td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Scanned observation forms - resize</p>
+<div class="literalblock">
+<div class="content">
+<pre>img.scannedobservationtest { width:80%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Scanned Planning Task Forms - Resize</p>
+<div class="literalblock">
+<div class="content">
+<pre>img.scannedplanningtest { width:80%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Occupation result - reduce lines</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.crewresultsummary td { font-size: 70%; }
+table.planningtaskresultlist tr.value td { font-size: 70%; }
+table.flightresultlist tr.value td { font-size: 70%; }
+table.observationturnpointresultlist tr.value td { font-size: 70%; }
+table.observationsroutephotoresultlist tr.value td { font-size: 70%; }
+table.observationsroutecanvasresultlist tr.value td { font-size: 70%; }
+table.summary tr { font-size: 70%; }
+table.landingresultlist tr.name { font-size: 70%; }
+table.landingresultlist tr.values { font-size: 70%; }
+table.landingresultlist tr.summary { font-size: 70%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Result list competition and class evaluation - reduce rows</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.resultlist td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Result list team evaluation - reduce lines</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.teamresultlist td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Points pressure landing field - change size</p>
+<div class="literalblock">
+<div class="content">
+<pre>img.landingfield { width:200%; }</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="print-styles-special-old">Replaced CSS properties</h3>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">property</th>
+<th class="tableblock halign-left valign-top">value</th>
+<th class="tableblock halign-left valign-top">effect</th>
+<th class="tableblock halign-left valign-top">now found in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--disable-procedureturn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">route-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Disable turning loops for this route</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594;routes &#8594; &lt;route-name&gt; &#8594; route-settings &#8594; use turning loops</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--show-curved-points</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">route-1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in route displays of this route show SCs of the curved route</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594;routes &#8594; &lt;route-name&gt; &#8594; route-settings &#8594; show SCs of curved route in route-maps of this route</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--secret-gatewidth</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--use a different gate width for SCs in time evaluation for crews of this class (gate width in NM)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; &lt;class-name&gt; &#8594; different gate-width from UZK coordinates for this class</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--before-starttime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+30</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; move forward the start time of planning in the schedule for crews of this class (the numeric value defines the minutes before the regular planning time)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; &lt;class-name&gt; &#8594; advance the planning start time before the regular planning time for this class</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class<br>
+--add-submission</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--beginner<br>
+10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--class &#8594; extend the latest submission time of the solution sheet in the flight plan for crews of this class (the number value defines the minutes after the regular submission time)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; classes &#8594; &lt;class-name&gt; &#8594; extend the latest solution sheet submission time for this class</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--flightplan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">hide-distance
+</p><p class="tableblock">hide-truetrack
+</p><p class="tableblock">hide-trueheading
+</p><p class="tableblock">hide-groundspeed
+</p><p class="tableblock">disable-local-time
+</p><p class="tableblock">show-elapsed-time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Leave column "Distance" empty in flight plan
+</p><p class="tableblock">In the flight plan, leave the "Right course" column empty.
+</p><p class="tableblock">in the flight plan, leave the column "Right heading" empty
+</p><p class="tableblock">Leave column "Speed over ground" empty in flight plan
+</p><p class="tableblock">omit "local time" column in flight plan
+</p><p class="tableblock">in flight plan print time history in column "flight time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; tasks &#8594; navigation test &#8594; &lt;navigation test name&gt; &#8594; edit</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--submission</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--display in the flight plan the latest submission time of the solution sheet<br>
+(the value defines the minutes after the FP)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; tasks &#8594; navigation test &#8594; &lt;navigation test name&gt; &#8594; edit &#8594; latest submission time of solution sheet after reaching FP</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--route<br>
+--start-tp<br>
+--add-num</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">route-1<br>
+TP3 [,TP5]<br>
+1 [,2]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">in the flight plan for crews, increase the turnpoint number by the specified value
+from the specified turnpoint
+(several increases possible; for abbreviated routes, where the competition map of another route is used)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Tasks &#8594; Navigation test &#8594; &lt;Navigation test name&gt; &#8594; Edit &#8594; Increase turnpoint numbers by the specified value from the specified turnpoint in the flight plan for crews<br>
+TP3,TP5:1,2 = increase from TP3 by 1, from TP5 by another 2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--flightresults</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">show-curved-points</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">show curved points in navigation flight results</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Tasks &#8594; Navigation test &#8594; &lt;navigation test name&gt; &#8594; Edit &#8594; Always show SCs of the curved route in the navigation flight result</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--landingresults</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">--reduce landing penalty points in overall ranking by specified factor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&#8594; Evaluation &#8594; Competition Evaluation &#8594; Competition Evaluation Settings &#8594; Reduce landing penalty points by specified factor</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="contest-properties">Contest properties</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>None defined yet.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuration">Installation dependent configuration</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Allows customization of the deployment environment of the 'Flight Contest' installation<br>
+&#8594; Tools &#8594; Settings &#8594; Configuration</p>
+</div>
+<div class="paragraph">
+<p>Changes only effective after restarting 'Flight Contest'.</p>
+</div>
+<div class="paragraph">
+<p>If 'Flight Contest' does not start anymore after changes, the last
+change in 'C:\FCSave\.fc\config.groovy' has to be undone or deleted.
+or delete this file.</p>
+</div>
+<div class="paragraph">
+<p><a href="#configuration-email">Configure email sending</a><br>
+<a href="#configuration-viewemail">Configure email viewer</a><br>
+<a href="#configuration-ftp">Configure FTP dispatch</a><br>
+<a href="#configuration-landing">Configure information for landing referees.</a><br>
+<a href="#configuration-live">Configure live display</a><br>
+<a href="#configuration-livetracking">Configure live tracking</a><br>
+<a href="#configuration-osmprint">Configure OSM contest map printing</a><br>
+<a href="#configuration-test">Configure test displays</a></p>
+</div>
+<div class="sect2">
+<h3 id="configuration-email">Configure email sending</h3>
+<div class="literalblock">
+<div class="content">
+<pre>grails {
+  mail {
+    host = "TODO" // SMTP server address (DNS name or IP address)
+    port = 587 // SMTP server port (for client connections)
+    username = "TODO" // SMTP server login name
+    password = "TODO" // SMTP server password
+  }
+}
+flightcontest {
+  mail {
+    from = "TODO" // sender email address (must be valid on SMTP server)
+    cc = "TODO" // e-mail address of the evaluating referee
+  }
+  testmail {
+    to = "TODO" // destination email address
+    subject = "Flight Contest: test email" }
+    body = "Flight Contest has successfully sent an email."
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-viewemail">Configure email viewer</h3>
+<div class="literalblock">
+<div class="content">
+<pre>grails {
+  webmail {
+    url = "TODO" // address of the webmail service
+    loginname_name = "TODO" // name of the username field
+    loginpassword_name = "TODO" // name of the password field
+    username = "TODO" // Login name
+    password = "TODO" // Password
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-ftp">Configure FTP dispatch</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  ftp {
+    host = "results.flightcontest.de" // FTP server address
+    port = 21 // FTP server port
+    username = "TODO" // FTP login name
+    password = "TODO" // FTP password
+    contesturl = "TODO" // Public access to contest directory
+                        // on FTP server (e.g. "http://results.flightcontest.de/demo")
+    testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Source URL
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>2 directories must exist in the root directory of the FTP server:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>GM_Utils-6.2 - GPX viewer JavaScript library.</p>
+</li>
+<li>
+<p>Any name without spaces or special characters - contest directory (above example: "demo").</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The mentioned version of the GPX view can be taken from the following directory:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>C:\Program Files\Flight Contest\tomcat\webapps\fc\GM_Utils</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the root directory of the FTP server, GPX files must have their own
+MIME type must be configured for GPX files. Furthermore, browser compression should be enabled for this MIME type.
+browser compression should be activated
+(<a href="https://betterexplained.com/articles/how-to-optimize-your-site-with-gzip-compression" class="bare">https://betterexplained.com/articles/how-to-optimize-your-site-with-gzip-compression</a>).
+To do this, add the following lines to the '.htaccess' file:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>AddType application/gpx .gpx
+AddOutputFilterByType DEFLATE application/gpx</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The FTP login name must be granted write permissions to the contest directory,
+but not to the root directory of the FTP server.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="configuration-landing">Configure information for landing referees.</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  landing {
+    info = "Send WhatsApp to +49(170)12345678."
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This information will be printed on the State Referee Schedule.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-live">Configure live display</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  live {
+    ftpupload { // FTP upload of the live result
+       workingdir = "/" // directory on the FTP server
+       name = "fclive.htm" // file name
+    }
+    copy { // copy of the live result
+       dest = "TODO" // directory and filename
+                           // e.g. "C:/Live/fclive.htm" (local copy)
+                           // "//Server/Share/fclive.htm" (share copy)
+                           // Multiple copies allowed
+                           // (dest1 = ...)
+                           // (dest2 = ...)
+    }
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The FTP upload requires a configured FTP send.</p>
+</div>
+<div class="paragraph">
+<p>Local and share copies cannot be opened directly in Firefox.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Follow these steps to open a local copy:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open link in new tab
+&#8594; C:/Live/fclive.htm</p>
+</li>
+<li>
+<p>In the address bar, prefix the link with "file:///".
+&#8594; <a href="file:///C:/Live/fclive.htm" class="bare">file:///C:/Live/fclive.htm</a></p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Follow these steps to open a share copy:</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open link in new tab
+&#8594; Server/Share/fclive.htm</p>
+</li>
+<li>
+<p>In the address bar, prefix the link with "file://///".
+&#8594; <a href="file://///Server/Share/fclive.htm" class="bare">file://///Server/Share/fclive.htm</a></p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In case of configured copies and/or FTP upload, a live result is also always
+is copied to the own server instance.<br>
+To achieve this without copies or FTP upload, use the following configuration:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  live {
+    show = true
+  }
+}</pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+<div class="sect2">
+<h3 id="configuration-livetracking">Configure live tracking</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  livetracking {
+    server = "https://airsports.no"
+    api = "/api/v1"
+    token = "..."
+    contest {
+      // showDelete = true // Default: false
+      // createPublic = true // Default: false
+      startLocalTimeOfDay = "08:00" // Default: 06:00
+      endLocalTimeOfDay = "20:00" // Default: 22:00
+      timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+    }
+    navigationtask {
+      // showDelete = true // Default: false
+      // createPublic = true // Default: false
+    }
+    contestant {
+      minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+    }
+  }
+}</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">address of the live tracking server</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">token</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Token used to enable access to the live tracking server</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.showDelete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable deletion of live tracking contests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.createPublic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create public live tracking contests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.startLocalTimeOfDay</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local start time of live tracking contest on contest day</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.endLocalTimeOfDay</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Local end time of the live tracking contest on the contest day</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contest.timeZone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time zone of the live tracking contest</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.showDelete</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable deletion of live tracking navigation tasks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.createPublic</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create public live tracking navigation tasks</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestant.minutesBetweenTrackerStartAndTakeoff</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tracker recording starts specified minutes before takeoff</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="configuration-osmprint">Configure OSM contest map printing</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  contestmap {
+    printserverapi = "TODO"
+    projection = "3857"
+    devoptions = true
+  }
+}</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.printserverapi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Address of the print server for OSM contest map generation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.projection</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set other projection of OSM contest map generation (EPSG number)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.devoptions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Show additional devoptions in the OSM contest map dialog</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="configuration-test">Configure test displays</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  wrlog {
+    enable = true
+  }
+  clouddemo {
+    enable = true
+  }
+}</pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">wrlog.enable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable writing logs to &lt;installation directory&gt;\fc\logs</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="live-scoring">Live result display</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Allows display of a preliminary result during debriefing.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First, make adjustments to the deployment environment:<br>
+&#8594; <a href="#configuration-live">Configure live display</a></p>
+</li>
+<li>
+<p>Contest settings:<br>
+&#8594; Evaluation &#8594; Contest evaluation &#8594; Contest evaluation settings.</p>
+<div class="paragraph">
+<p>The same filter criteria are used as for the competition evaluation.<br>
+Live-specific settings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Live result refresh - 10 seconds (default)<br>
+Interval at which the live results file refreshes itself in the browser.</p>
+</li>
+<li>
+<p>Live score competition sum<br>
+If enabled, the sum of penalty points of all tasks will be output as well.<br>
+Only useful if there are several tasks (= competition days).</p>
+</li>
+<li>
+<p>Live result placement calculation<br>
+Selection which task determines the live result placement.
+Competition sum can also be selected here.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Settings made can be checked with the integrated live display.<br>
+&#8594; Evaluation &#8594; Competition evaluation &#8594; Live result display</p>
+</div>
+</li>
+<li>
+<p>Live display in the current competition<br>
+&#8594; Extras &#8594; Live settings</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Preparation</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Upload time: 60 seconds (default)<br>
+Interval with which the live result file is created and uploaded.
+After change press 'Save</p>
+</li>
+<li>
+<p>Language: German (default)<br>
+Press 'Save' after change</p>
+</li>
+<li>
+<p>Upload live stylesheet<br>
+To be executed once when new upload targets have been configured.</p>
+</li>
+<li>
+<p>Delete live result<br>
+To be executed once when new upload targets have been configured.
+Can also be executed to delete the content of an uploaded live result
+live result file.</p>
+</li>
+<li>
+<p>Public links<br>
+Here the uploaded live result files can be checked.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Live update</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Live result display for contest<br>
+Select competition for which a live result display is to be made.
+Press 'Save' to activate</p>
+</li>
+<li>
+<p>Switch on live result display<br>
+Switch on live result display for the active contest.</p>
+</li>
+<li>
+<p>Switch off live result display<br>
+Switch off live results display.
+The last state of the live result file is frozen.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="live-tracking">live-tracking</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Allows tracking of crew positions during their navigation flight with automatic time evaluation.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First, make adjustments to the deployment environment:<br>
+&#8594; <a href="#configuration-livetracking">Configure live tracking</a></p>
+</li>
+<li>
+<p>Scenario 1: Configure Airsports Live Tracking with Flight Contest</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Preparatory steps in Flight Contest</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Assign all crews the tracker ID of their tracker.<br>
+&#8594; Crews &#8594; &lt;crew name&gt; &#8594; Tracker ID</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Functions to be executed in Flight Contest</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Create live tracking contest<br>
+&#8594; Contest &#8594; Settings &#8594; Live Tracking &#8594; Contest Date<br>
+&#8594; Contest &#8594; Settings &#8594; Live Tracking &#8594; Create Contest</p>
+</li>
+<li>
+<p>Create Live Tracking Navigation Task<br>
+&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Navigation Task Date<br>
+&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Create Navigation Task</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Functions to perform in Airsports Live Tracking</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Unlock Live Tracking Contest and Navigation Task for Public Access</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Scenario 2: Configure Flight Contest with Airsports Live Tracking Teams</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Preparatory steps in Airsports Live Tracking</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Create Live Tracking Contest</p>
+</li>
+<li>
+<p>Assign teams (name, club, country, photos, aircraft, TAS, tracker ID)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Functions to be performed in Flight Contest</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Connect to live tracking contest<br>
+&#8594; Contest &#8594; Settings &#8594; Live tracking &#8594; Connect contest</p>
+</li>
+<li>
+<p>Import teams from live tracking contest as crews<br>
+&#8594; Crews &#8594; Import Live Tracking Teams</p>
+</li>
+<li>
+<p>Calculate schedule for navigation flight in task</p>
+</li>
+<li>
+<p>Create live tracking navigation task<br>
+&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Navigation Task Date<br>
+&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Create Navigation Task</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Functions to perform in Airsports Live Tracking</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Unlock Live Tracking Contest and Navigation Task for Public Access</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="automatic-actions">Automatic actions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Automatic actions are handled by permanently running scripts
+and only work with the Firefox browser.<br>
+The first call of the script turns automatic action on.<br>
+Calling the script again turns off automatic action after confirmation.<br>
+&#8594; 'Programs &#8594; Flight Contest &#8594; Scripts'.</p>
+</div>
+<div class="paragraph">
+<p><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a><br>
+<a href="#automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</a><br>
+<a href="#automatic-actions-loadscanobservation">FCAutoLoadScanObservation</a><br>
+<a href="#automatic-actions-loadlogger">FCAutoLoadLogger</a></p>
+</div>
+<div class="sect2">
+<h3 id="automatic-actions-openpdf">FCAutoOpenPDF</h3>
+<div class="paragraph">
+<p>Automatically open PDF in Acrobat Reader.</p>
+</div>
+<div class="paragraph">
+<p>Necessary Firefox settings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>General &#8594; Save all files to the following folder: C:\FCSave</p>
+</li>
+<li>
+<p>Applications &#8594; Adobe Acrobat Document: Save file</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="automatic-actions-loadscanplanningtask">FCAutoLoadScanPlanningTask</h3>
+<div class="paragraph">
+<p>Automatically load scanned planning test forms.</p>
+</div>
+<div class="paragraph">
+<p>Necessary scanner settings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Save JPG files to the directory "C:\FCSave\.scan</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Necessary preparation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Firefox must be running</p>
+</li>
+<li>
+<p>'Competition &#8594; Results' with the current task must be active</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="automatic-actions-loadscanobservation">FCAutoLoadScanObservation</h3>
+<div class="paragraph">
+<p>Automatically load scanned observation test forms.</p>
+</div>
+<div class="paragraph">
+<p>Necessary scanner settings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Save JPG files to the directory "C:\FCSave\.scan</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Necessary preparation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Firefox must be running</p>
+</li>
+<li>
+<p>'Competition &#8594; Results' with the current task must be active</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="automatic-actions-loadlogger">FCAutoLoadLogger</h3>
+<div class="paragraph">
+<p>Automatic loading of read-in logger data.</p>
+</div>
+<div class="paragraph">
+<p>Necessary logger software settings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Save GAC, IGC, GPX, KML, KMZ or NMEA files to the "C:\FCSave\.logger" directory.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Necessary preparation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Firefox must be running</p>
+</li>
+<li>
+<p>'Competition &#8594; Results' with the current task must be active</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="save-data">Data backup of a running competition</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>During an ongoing contest, you should save the following data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Flight Contest database</p>
+</li>
+<li>
+<p>'Flight Contest' printouts</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Backups are made to the directory 'C:\FCSave',
+which is created by the 'Flight Contest' installation.</p>
+</div>
+<div class="paragraph">
+<p>Data backups are primarily used as protection against failure or loss
+of the Windows computer on which the contest is evaluated.
+Therefore copy the backup directory 'C:\FCSave'.
+after the end of the competition day or after reaching a particularly important
+important time of your contest to an external storage medium,
+after you have made backups as described below.</p>
+</div>
+<div class="paragraph">
+<p><a href="#save-fcdb">Backup of the 'Flight Contest' database</a><br>
+<a href="#save-prints">Save 'Flight Contest' prints (Firefox)</a><br>
+<a href="#restore-fcdb">Data recovery of the 'Flight Contest' database</a></p>
+</div>
+<div class="sect2">
+<h3 id="save-fcdb">Backup of the 'Flight Contest' database</h3>
+<div class="paragraph">
+<p>Call the script
+'Programs &#8594; Flight Contest &#8594; Scripts &#8594; Save contest database'.<br>
+The database will be saved with date and time
+saved to the backup directory C:\FCSave (&lt;date&gt;-&lt;time&gt;-fcdb.h2.db).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="save-prints">Save 'Flight Contest' prints (Firefox)</h3>
+<div class="paragraph">
+<p>Recommended Firefox settings:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>General -&gt; Save all files to the following folder: C:\FCSave
+Applications -&gt; Adobe Acrobat Document: Save file</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These settings ensure that all printouts are saved in the backup directory
+C:\FCSave. Opening the PDF and printing is then done via
+the download manager.</p>
+</div>
+<div class="paragraph">
+<p>If this setting is not possible or desired,
+prints will end up in the Windows-Temp-Directory.
+From there they can be saved with the script 'Programs &#8594; Flight Contest &#8594; Scripts &#8594; Save contest prints'.
+to the backup directory C:\FCSave.
+Note, however, that Firefox deletes all downloads from the Windows temp directory when it is closed,
+so there is a risk of losing prints if this script is not called regularly.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="restore-fcdb">Data recovery of the 'Flight Contest' database</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>For data recovery, the 'Apache Tomcat FlightContest' service must be stopped.</p>
+</li>
+<li>
+<p>Copy 'C:\FCSave\&lt;date&gt;-&lt;time&gt;-fcdb.h2.db'
+to 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'.
+You need administrator privileges for this.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

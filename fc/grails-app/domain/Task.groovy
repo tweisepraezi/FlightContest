@@ -423,6 +423,7 @@ class Task
 	{
 		title = taskInstance.title
 	    idTitle = taskInstance.idTitle
+        liveTrackingNavigationTaskDate = taskInstance.liveTrackingNavigationTaskDate
 		planningTestRun = taskInstance.planningTestRun
 		flightTestRun = taskInstance.flightTestRun
 		observationTestRun = taskInstance.observationTestRun

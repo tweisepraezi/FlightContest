@@ -23,6 +23,11 @@ import javax.imageio.stream.ImageOutputStream
 
 import org.quartz.JobKey
 
+import org.gdal.gdal.Dataset
+import org.gdal.gdal.TranslateOptions
+import org.gdal.gdal.gdal
+import org.gdal.gdalconst.gdalconstConstants
+
 // OSM-Karten erstellen
 //   https://github.com/printmaps/printmaps
 //     Map generation: https://github.com/printmaps/printmaps/tree/master/Nik4
@@ -103,6 +108,9 @@ class OsmPrintMapService
      
     final static int ROUTE_TITLE_FONT_SIZE = FACTOR*10
     final static int ROUTE_TITLE_YPOS_CONTEST_TITLE = 4
+    
+    final static int EDITION_TITLE_FONT_SIZE = FACTOR*8
+    final static int EDITION_TITLE_YPOS_CONTEST_TITLE = 3
     
     final static int BOTTOM_TEXT_FONT_SIZE = FACTOR*8
     final static int BOTTOM_TEXT_YPOS = FACTOR*2 // mm
@@ -377,12 +385,14 @@ class OsmPrintMapService
         
         int contest_title_ypos = print_height - CONTEST_TITLE_YPOS_TOP*FACTOR
         int route_title_ypos = contest_title_ypos - ROUTE_TITLE_YPOS_CONTEST_TITLE*FACTOR
+        int edition_title_ypos = route_title_ypos - EDITION_TITLE_YPOS_CONTEST_TITLE*FACTOR
         int text_xpos_left = TEXT_XPOS_LEFT*FACTOR
         int text_xpos_right = print_width - TEXT_XPOS_RIGHT*FACTOR
         int scalebar_xpos = text_xpos_right - TEXT_XPOS_RIGHT*scalebar_x_diff
         int scalebar_ypos = print_height - SCALEBAR_YPOS_TOP*FACTOR
         int scalbar_text_ypos = scalebar_ypos - 3*FACTOR   // 3mm nach unten
         
+        String edition_text = "${getMsg('fc.contestmap.edition',true)} ${contestMapParams.contestMapEdition}"
         String generator_text = getMsg('fc.contestmap.generator.printmaps',true)
         if (contestMapParams.contestMapFCStyle) {
             generator_text = getMsg('fc.contestmap.generator.flightcontest',true)
@@ -407,6 +417,10 @@ class OsmPrintMapService
         {
             "Style": "<TextSymbolizer fontset-name='fontset-2' size='${ROUTE_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${contestMapParams.routeTitle}'</TextSymbolizer>",
             "WellKnownText": "POINT(${text_xpos_left} ${route_title_ypos})"
+        },
+        {
+            "Style": "<TextSymbolizer fontset-name='fontset-0' size='${EDITION_TITLE_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${edition_text}'</TextSymbolizer>",
+            "WellKnownText": "POINT(${text_xpos_left} ${edition_title_ypos})"
         },
         {
             "Style": "<TextSymbolizer fontset-name='fontset-0' size='${BOTTOM_TEXT_FONT_SIZE}' fill='black' horizontal-alignment='right' halo-radius='1' halo-fill='white' allow-overlap='true'>'${generator_text}'</TextSymbolizer>",
@@ -992,6 +1006,7 @@ class OsmPrintMapService
                         String download_zip_file_name = "${pngFileName}.zip"
                         String unpacked_png_file_name = "${pngFileName}.png"
                         String world_file_name = "${pngFileName}w"
+                        String tif_file_name = "${pngFileName.substring(0,pngFileName.lastIndexOf('.'))}.tif"
                         
                         printstart "Write ${download_zip_file_name}"
                         FileOutputStream zip_stream = new FileOutputStream(download_zip_file_name)
@@ -1059,7 +1074,53 @@ class OsmPrintMapService
                             }
                             src_file.close()
                         }
-                        
+
+                        // generate GeoTIFF
+                        if (BootStrap.global.IsGDALAvailable()) {
+                            String projection =  BootStrap.global.GetPrintServerProjection()
+                            if (!projection) { 
+                                projection = ATTR_PROJECTION
+                            }
+                            printstart "Generate ${tif_file_name}"
+                            try {
+                                //println "-a_srs EPSG:${projection}"
+                                println "-of GTiff -a_srs WGS84 -a_ullr $lon_min $lat_max $lon_max $lat_min -co COMPRESS=JPEG -co TILED=YES"
+                                gdal.AllRegister()
+                                Vector translate_options = new Vector()
+                                translate_options.add("-of")
+                                translate_options.add("GTiff")
+                                translate_options.add("-a_srs")
+                                translate_options.add("WGS84")
+                                //translate_options.add("EPSG:${projection}".toString())
+                                //translate_options.add("EPSG:4326")
+                                translate_options.add("-a_ullr") // upper left, lower right
+                                translate_options.add(lon_min.toString())
+                                translate_options.add(lat_max.toString())
+                                translate_options.add(lon_max.toString())
+                                translate_options.add(lat_min.toString())
+                                translate_options.add("-co")
+                                translate_options.add("COMPRESS=JPEG") // compress
+                                translate_options.add("-co")
+                                translate_options.add("TILED=YES") // creation of tiled TIFF files
+                                TranslateOptions options = new TranslateOptions(translate_options)
+                                Dataset png_data = gdal.Open(pngFileName, gdalconstConstants.GA_ReadOnly)
+                                if (png_data) {
+                                    Dataset ds = gdal.Translate(tif_file_name.toString(), png_data, options)
+                                    if (ds) {
+                                        ds.delete()
+                                        printdone ""
+                                    } else {
+                                        printerror "No tif generated."
+                                    }
+                                    png_data.delete()
+                                } else {
+                                    printerror "No png loaded."
+                                }
+                            } catch (Exception e) {
+                                printerror e.getMessage()
+                            }
+                        }
+
                         printstart "Delete ${unpacked_png_file_name}"
                         File unpacked_png_file = new File(unpacked_png_file_name)
                         if (unpacked_png_file.delete()) {
@@ -1067,9 +1128,15 @@ class OsmPrintMapService
                         } else {
                             printerror ""
                         }
-                        
                     }
                     printdone "responseCode=${status.responseCode}, ${if(status.binary)'Data available.'else'No data.'}"
+                }
+                
+                // Test graphic processing
+                boolean test_on = false
+                if (test_on && job_successfully) {
+                    printdone ""
+                    throw new Exception()
                 }
                 
                 //...........................................................................................

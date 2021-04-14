@@ -7,6 +7,7 @@ class TrackPoint // DB-2.12
     BigDecimal longitude      // Längengrad
     Integer altitude          // ft
     Integer track             // Grad
+    Boolean interpolated      // DB-2.22
     
     static belongsTo = [loggerdata:LoggerData]
     
@@ -16,5 +17,8 @@ class TrackPoint // DB-2.12
         longitude(range:-179.9999999999..180, scale:10)
         altitude()
         track(nullable:true,range:0..360)
+        
+        // DB-2.22 compatibility
+        interpolated(nullable:true)
     }
 }

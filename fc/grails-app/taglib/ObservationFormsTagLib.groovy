@@ -96,7 +96,7 @@ class ObservationFormsTagLib
             if (attrs.printResults && (enroutephoto_measurement == EnrouteMeasurement.Map)) {
                 enroutephoto_measurement = attrs.t.GetEnroutePhotoResultMeasurement()
             }
-            outln"""<table class="observationenroutephotolist" style="${enroutephoto_style}">"""
+            outln"""<table class="observationsroutephotolist" style="${enroutephoto_style}">"""
             outln"""    <thead>"""
             if (enroutephoto_measurement == EnrouteMeasurement.Map) {
                 outln"""    <tr class="title">"""
@@ -171,7 +171,7 @@ class ObservationFormsTagLib
         
         // Judge sign
         if (!attrs.printResults) {
-            outln"""<table class="observationenroutecrewjudgesign">"""
+            outln"""<table class="observationsroutecrewjudgesign">"""
             if (attrs.t.IsObservationJudgeSign()) {
                 outln"""    <thead>"""
                 outln"""        <tr class="hide">"""
@@ -230,7 +230,7 @@ class ObservationFormsTagLib
             if (attrs.printResults && (enroutecanvas_measurement == EnrouteMeasurement.Map)) {
                 enroutecanvas_measurement = attrs.t.GetEnrouteCanvasResultMeasurement()
             }
-            outln"""<table class="observationenroutecanvaslist">"""
+            outln"""<table class="observationsroutecanvaslist">"""
             outln"""    <thead>"""
             if (enroutecanvas_measurement == EnrouteMeasurement.Map) {
                 outln"""    <tr class="hide">"""

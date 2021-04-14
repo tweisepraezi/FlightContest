@@ -98,12 +98,16 @@ Erweiterungen in dieser Version (3.2):
 - OSM-Wettbewerbs-Karte:
     Alle Optionen werden in der Datenbank gespeichert.
     Krumme Etappen können separat deaktiviert werden.
+    Direktes Erzeugen ohne Streckendetails hinzugefügt.
+    Einen 2. Satz Erzeugungs-Optionen hinzugefügt.
+    E-Mail-Versand von Wettbewerbskarten hinzugefügt.
 - Schiedsrichter-Zeitplan:
     Druck-Option 'Späteste Abgabezeit' hinzugefügt
     Druck-Option 'Landefeld' hinzugefügt
     Konfigurationswert 'flightcontest.landing.info' hinzugefügt
 - Neue Vorlage für die Besatzungsliste
   -> Hilfe -> Besatzungsliste erstellen -> FC-CrewList-Sample.xlsx
+- Englische Hilfe hinzugefügt
 
 Erweiterungen in Version 3.1.11:
 --------------------------------

@@ -613,6 +613,7 @@ class FcService
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 				calculateTestPenalties(test_instance,true)
                 test_instance.flightTestLink = ""
+				delete_uploadjobtest(test_instance)
                 test_instance.crewResultsModified = true
 				test_instance.save()
 			}
@@ -1321,6 +1322,7 @@ class FcService
                 for (Test test_instance in Test.findAllByTask(task_instance,[sort:"id"])) {
                     test_instance.scannedPlanningTest = null
                     test_instance.scannedObservationTest = null
+					delete_uploadjobtest(test_instance)
                     test_instance.save()
                 }
             }
@@ -1639,7 +1641,8 @@ class FcService
 		        Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 					calculateTestPenalties(test_instance,recalculate_penalties)
                     test_instance.flightTestLink = ""
-                    test_instance.crewResultsModified = true
+					delete_uploadjobtest(test_instance)
+					test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
 			}
@@ -2687,11 +2690,13 @@ class FcService
                     if (coordresult_modified) {
                         test_instance.flightTestModified = true
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
                     }
                     if (observationresult_modified) {
                         test_instance.observationTestModified = true
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
                     }
 		            test_instance.save()
@@ -2790,11 +2795,13 @@ class FcService
                     if (coordresult_modified) {
                         test_instance.flightTestModified = true
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
                     }
                     if (observationresult_modified) {
                         test_instance.observationTestModified = true
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
                     }
 		            test_instance.save()
@@ -2969,6 +2976,7 @@ class FcService
 						test_instance.ResetPlanningTestResults()
 						test_instance.CalculateTestPenalties()
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
 	                    test_instance.save()
 					}
@@ -3100,6 +3108,7 @@ class FcService
 				test_instance.ResetFlightTestResults()
 				test_instance.CalculateTestPenalties()
                 test_instance.flightTestLink = ""
+				delete_uploadjobtest(test_instance)
                 test_instance.crewResultsModified = true
 		        test_instance.save()
 			}
@@ -3178,6 +3187,7 @@ class FcService
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
             test_instance.flightTestLink = ""
+			delete_uploadjobtest(test_instance)
             test_instance.crewResultsModified = true
             test_instance.save()
         }
@@ -3206,6 +3216,7 @@ class FcService
 			test_instance.ResetFlightTestResults()
 			test_instance.CalculateTestPenalties()
             test_instance.flightTestLink = ""
+			delete_uploadjobtest(test_instance)
             test_instance.crewResultsModified = true
             test_instance.save()
         }
@@ -4244,6 +4255,7 @@ class FcService
 				if (test_instance.crew.resultclass.id == resultclassInstance.id) {
 					calculateTestPenalties(test_instance,true)
                     test_instance.flightTestLink = ""
+					delete_uploadjobtest(test_instance)
                     test_instance.crewResultsModified = true
 					test_instance.save()
 				}
@@ -5169,6 +5181,7 @@ class FcService
 
         testInstance.flightTestModified = true
         testInstance.flightTestLink = ""
+		delete_uploadjobtest(testInstance)
         testInstance.crewResultsModified = true
         testInstance.loggerDataStartUtc = loggerDataStartUtc
         testInstance.loggerDataEndUtc = loggerDataEndUtc
@@ -5343,6 +5356,7 @@ class FcService
         
         testInstance.flightTestModified = true
         testInstance.flightTestLink = ""
+		delete_uploadjobtest(testInstance)
         testInstance.crewResultsModified = true
         
         // Penalties berechnen
@@ -7031,6 +7045,7 @@ class FcService
                         Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                             test_instance.CalculateTestPenalties()
                             test_instance.flightTestLink = ""
+							delete_uploadjobtest(test_instance)
                             test_instance.crewResultsModified = true
                             test_instance.save()
                         }
@@ -7050,6 +7065,7 @@ class FcService
 								test_instance.ResetFlightTestResults()
 								test_instance.CalculateTestPenalties()
                                 test_instance.flightTestLink = ""
+								delete_uploadjobtest(test_instance)
                                 test_instance.crewResultsModified = true
 			                    test_instance.save()
 							}
@@ -7456,6 +7472,7 @@ class FcService
                     Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                         test_instance.CalculateTestPenalties()
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
                         test_instance.save()
                     }
@@ -7486,6 +7503,7 @@ class FcService
                     Test.findAllByCrew(crew_instance,[sort:"id"]).each { Test test_instance ->
                         test_instance.CalculateTestPenalties()
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
                         test_instance.save()
                     }
@@ -8384,6 +8402,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.planningTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 
@@ -8418,6 +8437,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.planningTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 
@@ -8477,6 +8497,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.flightTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 
@@ -8511,6 +8532,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.flightTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 		
@@ -8575,6 +8597,7 @@ class FcService
 		if (observation_data.modified || test.instance.isDirty()) {
 			test.instance.observationTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 
@@ -8640,6 +8663,7 @@ class FcService
 		if (observation_data.modified || test.instance.isDirty()) {
 			test.instance.observationTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 
@@ -8965,6 +8989,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.landingTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 
@@ -9045,6 +9070,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.landingTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 		
@@ -9248,6 +9274,7 @@ class FcService
 		if (test.instance.isDirty()) {
 			test.instance.specialTestModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 			test.instance.crewResultsModified = true
 		}
 
@@ -9309,6 +9336,7 @@ class FcService
 			test.instance.specialTestModified = true
 			test.instance.crewResultsModified = true
             test.instance.flightTestLink = ""
+			delete_uploadjobtest(test.instance)
 		}
 
         calculateTestPenalties(test.instance,false)
@@ -9983,6 +10011,7 @@ class FcService
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
                     test_instance.flightTestLink = ""
+					delete_uploadjobtest(test_instance)
                     test_instance.crewResultsModified = true
 		            test_instance.save()
 		        }
@@ -10581,6 +10610,7 @@ class FcService
                         test_instance.ResetFlightTestResults()
                         test_instance.CalculateTestPenalties()
                         test_instance.flightTestLink = ""
+						delete_uploadjobtest(test_instance)
                         test_instance.crewResultsModified = true
                         test_instance.save()
                         calulate_reset_num++
@@ -10937,6 +10967,7 @@ class FcService
 					test_instance.ResetPlanningTestResults()
 					test_instance.CalculateTestPenalties()
                     test_instance.flightTestLink = ""
+					delete_uploadjobtest(test_instance)
                     test_instance.crewResultsModified = true
 	                test_instance.save()
 	            }
@@ -11101,6 +11132,7 @@ class FcService
             if (testlegplanning_instance.isDirty()) {
                 testlegplanning_instance.test.planningTestModified = true
                 testlegplanning_instance.test.flightTestLink = ""
+				delete_uploadjobtest(testlegplanning_instance.test)
                 testlegplanning_instance.test.crewResultsModified = true
             }
             
@@ -11262,6 +11294,7 @@ class FcService
             if (coordresult_instance.isDirty()) {
                 coordresult_instance.test.flightTestModified = true
                 coordresult_instance.test.flightTestLink = ""
+				delete_uploadjobtest(coordresult_instance.test)
                 coordresult_instance.test.crewResultsModified = true
             }
 
@@ -11307,6 +11340,7 @@ class FcService
 			if (coordresult_instance.isDirty()) {
 				coordresult_instance.test.flightTestModified = true
                 coordresult_instance.test.flightTestLink = ""
+				delete_uploadjobtest(coordresult_instance.test)
 				coordresult_instance.test.crewResultsModified = true
 			}
             coordresult_instance.resultProcedureTurnEntered = true
@@ -11930,6 +11964,7 @@ class FcService
 			testInstance.ResetFlightTestResults()
 			testInstance.CalculateTestPenalties()
             testInstance.flightTestLink = ""
+			delete_uploadjobtest(testInstance)
             testInstance.crewResultsModified = true
             testInstance.save()
             
@@ -11958,6 +11993,7 @@ class FcService
 			testInstance.ResetFlightTestResults()
 			testInstance.CalculateTestPenalties()
             testInstance.flightTestLink = ""
+			delete_uploadjobtest(testInstance)
             testInstance.crewResultsModified = true
             testInstance.save()
             
@@ -12175,6 +12211,7 @@ class FcService
 		}
 		testInstance.CalculateTestPenalties()
         testInstance.flightTestLink = ""
+		delete_uploadjobtest(testInstance)
         testInstance.crewResultsModified = true
 		testInstance.save()
 		
@@ -13307,6 +13344,7 @@ class FcService
 					test_instance.ResetFlightTestResults()
 					test_instance.CalculateTestPenalties()
                     test_instance.flightTestLink = ""
+					delete_uploadjobtest(test_instance)
                     test_instance.crewResultsModified = true
 					test_instance.save()
 					view_pos++
@@ -13316,6 +13354,17 @@ class FcService
 		printdone ""
 	}
 
+    //--------------------------------------------------------------------------
+	private void delete_uploadjobtest(Test testInstance)
+	{
+		UploadJobTest uploadjob_test = UploadJobTest.findByTest(testInstance)
+		if (uploadjob_test) {
+			testInstance.uploadjobtest = null
+			testInstance.save()
+			uploadjob_test.delete()
+		}
+	}
+	
     //--------------------------------------------------------------------------
     Map runcalculatesequenceTask(Map task)
     {

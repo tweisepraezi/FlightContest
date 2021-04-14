@@ -1,0 +1,1987 @@
+= Flight Contest
+Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)
+:revnumber: 3.2.M13
+:revdate: 14.04.2021
+:nofooter:
+:toc-title: Table of Contents
+:toc:
+:lang: en
+
+[[introduction]]
+== Introduction
+
+Flight Contest plans the timed competition sequence of a general aviation powered flight contest
+and evaluates results for planning tests, navigation tests, observations and/or landings.
+
+Flight Contest has a flexible contest management system. This includes the support:
+
+* different competition regulations (FAI, Germany, Switzerland, Austria, expandable) +
+(adaptation of individual evaluation details (points) possible if required)
+* of competition classes (different evaluation of crew groups in one competition)
+* combined competitions (simultaneous competitions with a common starting field)
+* parallel competitions (concurrent competitions with independent starting fields)
+* the evaluation of special crew groups, which can be defined ad hoc
+
+Is an open source, multilingual, network-enabled database application based on Java techniques:
+
+* The user interface runs in the web browser (Firefox, Internet Explorer, etc.).
+* It can be used on multiple networked computers simultaneously.
+* Each user can use his preferred operating language (German, English, extensible).
+* Crash-proof.
+* High security against operating errors.
+
+Supports logger data formats GAC, IGC, GPX, KML, KMZ and NMEA 0183 (extensible).
+
+Generates OSM-based A3 & A4 competition maps in TÜK-200 style.
+
+Creates PDF for print and internet publishing.
+
+Sends emails of the navigation flight charts to the participants.
+
+Supports special stretching properties:
+
+* Unknown time controls
+* Curved track sections
+* Touch & Go landings
+
+
+Provides a live score display (Live Scoring):
+
+* Display of the preliminary ranking during a debriefing.
+* Simultaneous publication on the local network and on the Internet
+
+Provides integrated map viewers for navigation flights, routes and logger files:
+
+* Offline map display for navigation flight assessment.
+* Online map display with Open Street Map
+* Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files
+
+<<<
+[[manuals]]
+== Operating manuals
+* link:manuals/FC-Manual_en.pdf[Operating Instructions^]
+* link:manuals/FC-Manual-Observations.pdf[Instructions Observations (German)^]
+
+[[supported-rules]]
+== Supported rulesets
+
+* link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)^]
+* link:rules/DE_Navigationsflug_2017_en.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
+* link:rules/FAI_rally_flying_rules_2020.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_precision_flying_rules_2020.pdf[FAI Precision Flying^]
+* link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft (German)^]
+* link:rules/AT_Motorflug_2017.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
+* link:rules/AT_Motorflug_2017.pdf#page=30[Navigationsflug-Reglement Österreich (German)^]
+
+<<<
+[[default-competition]]
+== Default competition / Tasks to be done
+
+_Contest organizer_ +
+*Evaluation referee
+
+[upperalpha]
+. Before competition day
+
+[arabic]
+.. _Engineer competition route_ +
+   (Coordinates, maps, pictures, ground signs, radio, turning loops, unknown time controls).
+   
+.. _Engineer approach and departure route_ +
+   (distances/time requirements, maps, radio, tower communication)
+
+.. _Engineer track design description_ +
+    (if planning test includes track construction)
+
+.. _Prepare document envelopes_ +
+   (maps, pictures, approach and departure routes, radio frequencies, description of route construction if necessary)
+   
+.. *Import route and check for plausibility* +
+   (turning loops, exactness of coordinates)
+
+.. *Calculate preliminary schedule of the competition day* +
+   (assumed takeoff/landing direction, without wind)
+
+[upperalpha, start=2]
+. On contest day
+
+[arabic, start=7]
+.. *Calculate schedule of the competition day* +
+   (taking into account the specified start/landing direction and the specified wind)
+   
+.. *Print schedules & evaluation lists for notice board & various referees*.
+***overview and crew schedule for posting
+*** Crew list for logger output
+*** Referee schedule for tower (aircraft, takeoff time, latest landing time)
+*** Referee schedule for preparation room (crew, aircraft, issue time)
+*** Referee schedule for landings (Aircraft, Latest landing time)
+*** Referee schedule for documents handover (Aircraft, Latest landing time, Parking)
+
+.. *Print crew specific data
+*** Label for document envelopes
+*** Input forms for planning test
+*** Evaluation forms for observations
+*** Flight plans
+
+.. _Logger output_.
+*** Switch on logger
+*** Document logger number
+
+.. _Complete document envelopes_ .
+*** Add crew specific labels
+*** Add crew-specific input forms for planning test
+*** Add crew specific evaluation forms for observations
+
+.. _Briefing_ .
+*** Route (turn loops, unknown time controls, approach/departure procedures, radio, tower communication)
+*** Procedure (handing out of documents, handing in of evaluation forms/loggers after arrival, receipt of results)
+*** Weather
+
+.. _Coordinate planning test and flight preparation room_.
+*** Document envelope issuance
+*** Take back planning test input forms
+*** Issue crew-specific flight plan
+*** Document time of leaving the preparation room.
+
+.. *Evaluate planning test* .
+***Scan and import planning test form
+*** Data input planning test
+
+.. _Check logger on departing crews_.
+
+.. _Survey landings_.
+*** Document landing field (0, Field name, Out)
+*** Document abnormal landing
+*** Transmit landing result continuously to evaluation referee
+
+.. _Coordinate arriving crews_.
+*** Monitor time for completion of evaluation form
+*** Receive evaluation form and logger
+*** Transport evaluation form and logger to evaluation referee
+
+.. *Evaluate landings and navigation flight* .
+*** Data entry landings
+*** Logger evaluation
+*** Scan and import observation evaluation form
+*** Data input observations
+*** Print and transfer result for crew
+*** Update live evaluation
+
+.. _Distribute results_ .
+*** Collect results from the evaluation referee
+*** Hand over results continuously to crews
+*** Receive queries from the crews and make decisions
+*** Hand over corrections to the evaluation referee
+
+.. *Final evaluation*.
+*** Process corrections in response to crew queries.
+*** Process final landing list
+*** Create final evaluation
+
+.. _Create certificates_
+
+.. _Victory ceremony_
+
+<<<
+[[hints]]
+== Operating tips
+
+- Bold marked texts and numbers as well as the sign '...' are links,
+  behind which further data are hidden.
+- When entering times, a '.' can also be used instead of the ':',
+  which makes it unnecessary to press the shift key.
+- When entering fractional numbers, a '.' can also be used instead of the ','.
+  can be used.
+- When entering land measurement values, lowercase letters can be used instead of uppercase letters.
+  instead of uppercase letters, which eliminates the need to press the Shift key.
+- When entering landing values, the landing value "out" for landings outside the landing box and "no" for landings outside the landing box can be entered.
+  outside the landing box and "no" for no landing can be entered, in order to
+  enter these errors without mouse operation.
+
+<<<
+[[response-to-modifications]]
+== Changes to competition implementation
+Crew does not participate in the short term::
+Deactivate crew (crews) +
+Schedule remains unchanged.
+  
+Crew cannot start as planned::
+  Push crew to the end of the task (planning) +
+  A new flight plan is calculated for the affected crew.
+  
+Starts shift in time::
+  Correct start time of affected crews (planning) +
+  A new flight plan is calculated for the affected crews.
+  
+Flying wind changes during takeoffs::
+  Assign other flight wind to remaining crews (planning) +
+  A new flight plan is calculated for the remaining crews.
+
+Planning test is to be evaluated with a different wind than the one originally specified::
+  Assign a new planning task with a different wind to the planning test
+  and assign crew to this new planning task (planning)
+
+TAS of a crew changes after planning tests and flight plans have already been calculated::
+  After changing the TAS of a crew, mark the crew
+  and move it down and up once (planning) +
+  Changed TAS is transferred to the task. +
+  Planning test is recalculated immediately. +
+  Flight plan is recalculated with 'Calculate schedule'. +
+  This may result in warnings for subsequent aircraft.
+  If necessary, move crew to the end of the task.
+
+Crew must change aircraft due to defect::
+  Assign crew the new aircraft and if necessary another TAS (crews) +
+  New aircraft and new TAS will be used on new tasks. +
+  Old aircraft and old TAS remain unchanged for completed tasks.
+
+Turnpoint overflight time of a task should not be evaluated::
+  Disable 'time evaluation' of the turn point (Results -> Disable check points) +
+  Causes recalculation of the result.
+  
+Unknown time control of a task should not be scored::
+  'Time evaluation' and 'Goal missed' of the unknown time control.
+     deactivate (Results -> Deactivate check points) +
+  Causes recalculation of the result.
+
+Recalculate schedule of a task::
+  'Reset order' and 'Calculate schedule' in succession +
+  Deletes all flight schedules and sets the order of the crews
+  to the order in the crew list. +
+  Start times of all crews and flight plans are recalculated.
+
+  
+<<<
+[[create-crew-list]]
+== Create crew list
+
+Crew lists are created using Excel. +
+Use the template link:samples/FC-CrewList-Sample.xlsx[FC-CrewList-Sample.xlsx^], whose structure ensures a successful import.
+
+The list captures the following data:
+
+* No. (start number) (optional)
+* Pilot (first name, last name and optional e-mail)
+* Navigator (optional, with first name, last name and optional e-mail)
+* Team (optional)
+* Class (for competitions with different evaluation classes)
+* TAS (kn)
+* Aircraft registration number
+* Aircraft type (optional)
+* Aircraft color (optional)
+* Tracker ID (for competitions with live tracking)
+
+This list must be available on the day of the competition (sorting is not necessary).
+
+Start numbers only specified if special numbering is required.
+Start numbers that are not specified are automatically assigned a number during import.
+(the first number after the highest existing number).
+
+This template can also be used for planning other matters of the competition
+(hotel, contact details). For this purpose, columns, rows and
+table sheets may be inserted according to the following rules:
+
+* Any number of additional columns at the end (after the 'Tracker ID' column).
+* Any number of additional rows after a blank row following the last
+  crew to be imported
+* Any number of spreadsheets at any positions.
+  Only data from the spreadsheet 'Crews' will be imported.
+
+Crew lists are added to the 'Flight Contest' database with 'Crews -> Import Excel crew list'.
+Flight Contest' database.
+If the option "Omit start number" is selected, the specified numbers will not be used.
+will not be used or replaced by another start number.
+The given numbers can be configured under 'Contest -> Defaults' (default: '13').
+(default: '13').
+
+Only crew names (pilot + navigator) that are not yet in the 'Flight Contest' database are imported.
+Flight Contest' database. Corrections of already imported crew names
+already imported crew names (pilot or navigator) will cause the re-import of the crew
+with assignment of another start number. Therefore correct crews after an import only in
+only in 'Flight Contest' after an import.
+
+<<<
+[[route-planning]]
+== Route planning
+
+<<fc_en.adoc#route-planning-definitions>> +
+<<fc_en.adoc#route-planning-mandatory-details>> +
+<<fc_en.adoc#route-planning-input>> +
+<<fc_en.adoc#route-planning-import>> +
+<<fc_en.adoc#route-planning-google-earth>> +
+<<fc_en.adoc#route-planning-google-earth-add-secret>> +
+<<fc_en.adoc#route-planning-verify>> +
+<<fc_en.adoc#route-planning-deliver>> +
+<<fc_en.adoc#route-planning-errors>>
+
+[[route-planning-definitions]]
+=== Definitions
+
+Start point (SP), check points (CP) and end point (FP = Finish point)
+are logger measuring points of a route, where overflight time and flight altitude are measured
+as well as previous course changes >= 90 degrees are determined.
+
+Turn points (WP o. TP = Turn point) are check points,
+where a course change occurs and which are in the flight plan of a crew.
+
+Unknown time checks (UZK o. SC) are check points for
+time measurements on the route that are not in a crew's flight plan.
+
+Takeoff (TO) is a check point where the overflight time is measured to evaluate
+compliance with the takeoff time window is measured.
+
+Landing (LDG) is a check point where the overflight time is measured to evaluate
+compliance with the latest landing time is measured.
+
+Intermediate points are design points for an intermediate landing.
+At the intermediate final point (iFP) and intermediate takeoff point (iSP) the
+Overflight time and altitude are measured and evaluated.
+Intermediate landing (iLDG) and intermediate takeoff (iTO) only serve
+for display in the flight plan of a crew.
+In the case of a touch&go intermediate landing, iTO must be dispensed with.
+
+[[route-planning-mandatory-details]]
+=== Required details for a competitive route
+
+In a competition map, the starting point, turning points and end point of a route are to be
+of a route are to be indicated language-dependently with the following designations:
+
+[%autowidth]
+|===
+|competition language|check point designations
+
+|German|SP, WP1, WP2, ..., FP
+|English|SP, TP1, TP2, ..., FP
+|===
+
+Intermediate points shall be indicated with the following designations:
+  iFP, iLDG, iTO, iSP
+  
+For a competition route, the following information is required for all check points:
+
+* Coordinates
+* Minimum flight altitude above sea level (Altitude, in ft)
++
+TO, LDG, iTO, iLDG: 0 ft
+* Gate width (in NM)
++
+TO, LDG, iTO, iLDG: 0.02 NM (corresponding to runway width)
++
+UZK: 2 NM (for competition according to German regulations, otherwise 1 NM)
++
+otherwise: 1 NM
+* Gate direction for TO, LDG, iTO, iLDG (in degrees)
+* For precise correspondence of the printed competition map with the data to be processed
+  with the data to be processed, distances must be measured on the competition map
+  distances must be measured on the competition map and entered into the field
+  in the field 'Distance measurement (map) [mm]'. Thereby
+  the distance from the previous turn point is measured in mm
+  (for a map with the competition scale 1:200000).
+  The previous turn point is a check point that is not an unknown time control.
+  unknown time check.
+* Auxiliary points are to be entered for curved sections of the course. These are to be
+  entered as UZK with the following information:
+** Gate width >= 2 NM, so that deviations are not too many manually
+	  to cause too many logger errors to be checked manually.
+** No time evaluation
+** No gate evaluation
+** No flight planning test
+* The turning point, with which the curved route ends, is to be
+  entered:
+** No flight planning test, so that the curved route is not included in the
+	  is not included in the flight planning test
+** Check point after curved route
++
+The flight plan of the crew receives as direction automatically the direction
+to the first auxiliary point as entry course to the curved route.
+  
+* For stopovers, enter the following information for iLDG and iTO:
+** gate width 0.02 NM (corresponding to runway width)
+** Gate direction (in degrees)
+** No time evaluation
+** No gate evaluation
+** No flight planning test
+** Fixed flight time for stopover with pause (in min)
+
+<<<
+Properties to be entered for the check points of a route:
+----
+  Point                       Check        Gate              in         Evaluation
+                              Point        Width   Direction Flightplan Time Course Altitude
+							  
+  Takeoff                     TO           0.02    250       yes        yes  no     no
+  Start point                 SP           1       -         yes        yes  no     yes
+  Turning point               TP1          1       -         yes        yes  yes    yes
+  Secret time control         SC1          2       -         no         yes  yes    yes
+  Touch&Go landing            iFP          1       -         yes        yes  yes    yes
+                              iLDG (1,2)   0.02    250       yes        no   no     no
+                              iSP (2)      1       -         yes        yes  no     yes
+  Curved section              SC2 (1,2)    2       -         no         no   yes    yes
+                              TP2 (2,3)    1       -         yes        yes  yes    yes
+  Final point                 FP           1       -         yes        yes  yes    yes
+  Landing                     LDG          0.02    250       yes        yes  no     no
+
+  (1) No time evaluation, No goal evaluation
+  (2) No flight planning test
+  (3) Check point after curved route
+----
+  
+----
+  Route examples              Check        Gate              in         Evaluation
+                              Point        Width   Direction Flightplan Time Course Altitude
+  Normal                      TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              TP2          1       -         yes        yes  yes    yes
+                              TP3          1       -         yes        yes  yes    yes
+                              TP4          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+                                             
+  Secret time controls        TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              SC1          2       -         no         yes  yes    yes
+                              SC2          2       -         no         yes  yes    yes
+                              TP2          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+                                             
+  Touch&Go intermediate       TO           0.02    250       yes        yes  no     no
+  landing                     SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              iFP          1       -         yes        yes  yes    yes
+                              iLDG (1,2)   0.02    250       yes        no   no     no
+                              iSP (2)      1       -         yes        yes  no     yes
+                              TP2          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+  
+  Stopover with pause         TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              iFP          1       -         yes        yes  yes    yes
+                              iLDG (1,2)   0.02    250       yes        no   no     no
+                              iTO (1,2)    0.02    250       yes        no   no     no
+                              iSP (2)      1       -         yes        yes  no     yes
+                              WP2          1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        yes  no     no
+  
+  Curved track                TO           0.02    250       yes        yes  no     no
+                              SP           1       -         yes        yes  no     yes
+                              TP1          1       -         yes        yes  yes    yes
+                              SC1 (1,2)    2       -         no         no   yes    yes
+                              SC2 (1,2)    2       -         no         no   yes    yes
+                              TP2 (2,3)    1       -         yes        yes  yes    yes
+                              FP           1       -         yes        yes  yes    yes
+                              LDG          0.02    250       yes        no   no     no
+----
+
+[[route-planning-input]]
+=== Competitive route input
+
+When entering a route in 'Flight Contest', please note that the check points can only be entered one after the other.
+can be entered one after the other and inserting check points is not possible.
+All properties except the check point type can be changed until the first use.
+Flight altitude and gate width are also changeable after the first use.
+
+Alternatively, the input and forwarding of routes or parts of them is
+is also possible with text files (UTF-8). In an empty route all check points can be added with
+"Import coordinates" from a text file can be added (incl. properties):
+  
+ TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+ SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+ TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+ SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+ TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+ iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+ iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
+ iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+ TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+ TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+ FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+ LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
+
+Check point, latitude, longitude, altitude, gate direction and latitude, etc.
+
+Allowed coordinate representations according to competition setting.
+  
+Import of observations from text files (see 'Programs -> Flight Contest -> Instructions Observations'
+-> chapter 'Configure observation evaluation')
+  
+The Route Printout (Route -> Print) contains the text representations of all check points
+and observations, which can be saved to text files and then used for import:
+
+* Route coordinates (export)
+* Turning point signs (export)
+* Route photos (export)
+* Route ground signs (Export)
+
+[[route-planning-import]]
+=== Import of competition routes
+
+With 'Routes -> Import Route' routes of the following formats can also be imported:
+
+* GPX file generated by a third-party program (e.g. 'Flight Planner').
++
+May contain only exactly one route (<rte>...</ret>).
++
+Must contain altitude information (<rtept lat="49.118333" lon="9.784000"><ele>400.00</ele></rtept>).
+
+* KML or KMZ file generated by a third-party program.
+
+* REF file generated from an AFLOS reference line.
+
+* TXT file (UTF-8) containing one coordinate per line with the following structure:
++
+Latitude, Longitude, Altitude
++
+Examples for different coordinate representations (according to competition settings):
+
+ Lat 52.20167°, Lon 16.76500°, Alt 1243ft
+ Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+ Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft
++
+Values separated by comma (spaces before prefix and after unit are ignored)
++
+Blank lines and lines starting with # are ignored
+
+[[route-planning-google-earth]]
+=== Create competition routes with Google Earth Pro
+
+[upperalpha]
+. Input (Google Earth Pro)
+
+[arabic]
+.. Save link:samples/FC-Route-Sample.kmz[FC-Route-Sample.kmz^] to your computer
+
+.. Open 'FC-Route-Sample.kmz' on your computer with 'Google Earth Pro'.
+
+.. Open airspace data (C:\FCSave\.geodata\airspaces.kmz) if needed +
+   (to be found here for installation: https://my.hidrive.com/share/vobbr89etw#$/Geodata).
+
+.. Enter check points
+
+- Click the *Route* folder and add a 'Path'. +
+The 'Edit Path' dialog opens. Set the name of the path according to the route name. +
+With the 'Edit Path' dialog still open, left click in the graphics area to add all check points (TO, SP, WP1, WP2, ..., FP, LDG) of the route without SCs one after the other. +
+The position does not have to be exact yet. Its accuracy can be corrected afterwards. +
+Exit 'Edit path' dialog
+
+- To change the position of a check point: +
+Navigate to the desired check point in the graphic area +
+Open the 'Properties' context menu of the path +
+With the 'Edit path' dialog open, grab the check point with the left mouse button and drag it to the desired position + Close the 'Edit path' dialog
+Close 'Edit path' dialog
+
+- Unknown time controls or curved courses can be added after the course import.
+
+.. Enter route photos
+
+- Click the *Photos* folder and add a 'location marker' per track photo. +
+The 'Placemark' dialog opens. Set the name of the placemark according to the image name (running number or letter) (can be changed after importing) +
+Move the position of the placemark in the graphics area to the desired object +
+Exit 'Placemark' dialog
+
+.. Add route ground sign
+
+- Click the *Canvas* folder and add a 'placemark' per route ground sign. +
+The 'placemark' dialog will open. Set name of placemark with 'S01' to 'S15' (can be changed after import) +
+Move the position of the placemark in the graphic area to the desired position +
+Close 'Placemark' dialog
+
+.. Save 'FC-Route-Sample.kmz' with context menu 'Save location as' with your route name
+
+[upperalpha, start=2]
+. Route import (Flight Contest)
+
+[arabic, start=7]
+.. Routes -> Import route
+*** Select saved kmz file
+*** Directory name in kml/kmz file: *enter route
+*** click 'Import
+
+.. Tracks -> Track -> Import track photos
+*** Select saved kmz file
+*** Enter directory name in kml/kmz file: *Photos
+*** click 'Import
+	
+.. Routes -> Route -> Import route ground sign
+*** Select saved kmz file
+*** Directory name in kml/kmz file: *Canvas
+*** click 'Import
+
+[[route-planning-google-earth-add-secret]]
+=== Add SCs and curved route sections with Google Earth Pro.
+
+. Export route (Route -> *KMZ-Export*) and open with *Google Earth Pro* .
+. Navigate to the node 'Filename.kmz -> Route name -> Route export -> *turnpoints*' .
+. Click on the turnpoint after which you want to add SCs or a curved section of the route.
+
+- Execute context menu item "Copy" +
+Execute context menu item "Paste" once or several times (according to the number of required IPCs) + "Edit properties of added points in 'Place marker' dialog
+Edit "Properties" of the added points in the 'Placemark' dialog:
+
+*** In the Name field adjust check point name and gate width +
+(TP -> SC, e.g. "TP1, Gate 1.0NM" -> "SC1, Gate 2.0NM")
+*** Grab point in graphic area with left mouse button and drag to desired position
+*** Close 'Place marking' dialog
+
+. Save 'Filename.kmz' with context menu 'Save location as' in new kmz file
+
+. Import the corrected route (Route -> *Import FC Route*)
+
+[[route-planning-verify]]
+=== Verify the competition route
+
+Check your entered route in 'Route details' as follows:
+
+* OSM online map:
+** Check points at the correct locations?
+* Evaluation stages:
+** Distances plausible?
+** Total distance plausible?
+** Turning loops (course changes > 90 degrees) correct?
+
+[[route-planning-deliver]]
+=== Passing the competition route to the evaluation referee
+
+Export a course entered with 'Flight Contest' with 'GPX-Export' or 'KMZ-Export'.
+to pass it on to the judge, who can import it with 'Routes -> Import FC-Route'.
+into his 'Flight Contest' for use.
+
+[[route-planning-errors]]
+=== Error messages in route details
+
+If tracks are incomplete or configured differently from the selected rule set,
+a ! appears in front of the track title in the track list.
+appears in front of the track title in the track list and error messages are marked in red in the track details.
+
+Unknown last turning points::
+Some last turn points of route photos or ground signs could not be calculated. +
+Correct the coordinate of the track photo or ground sign.
+
+Number of stages too small::
+Reduce 'Min. stages' (Competition -> Defaults)
+
+Number of stages too large::
+'Max. Enlarge stages' (Competition -> Defaults)
+
+Photo number too small::
+'Track photo observations -> Definition' set with 'None' (Edit) or +
+Reduce 'Min. track photos' (Competition -> Defaults)
+
+Ground sign count too small::
+'Route ground mark observations -> Definition' set with 'None' (Edit) or +
+Decrease 'Min. distance ground signs' (Competition -> Defaults)
+
+Photo+ground sign count too small::
+Reduce 'Min. track photos+ground characters' (Competition -> Defaults).
+
+Photo number too large::
+'Max. Enlarge track photos' (Competition -> Defaults)
+
+Floor character count too large::
+'Max. Increase track ground characters' (Competition -> Defaults)
+
+Photo+ground character count too large::
+'Max. Enlarge track photos+ground signs' (Competition -> Defaults)
+
+Map distances differ::
+Internal data error +
+Execute 'Recalculate stages
+
+Coordinate turning loops deviating::
+Internal data error +
+Execute 'Recalculate stages
+
+<<<
+[[osm-contest-map]]
+== OSM contest map
+
+With 'Routes -> Route -> OSM competition map' a PDF competition map can be
+in scale 1:200000 or 1:250000 can be generated using a custom print server in TÜK200 style.
+
+Use of the maps: +
+The use of the map material is at your own risk. The map material may contain errors or be insufficient.
+The creators of these maps do not assume any warranty or liability for damages caused directly or indirectly by the use of the map material.
+
+Map data license conditions: +
+Map data © OpenStreetMap contributors (ODbL). +
+The map objects shown are based on the data of the OpenStreetMap project.
+OpenStreetMap is a free, editable map of the entire world and enables collaborative viewing and editing of geographic data from anywhere in the world. +
+Link: http://www.openstreetmap.org/ +
+License: http://www.openstreetmap.org/copyright/en
+
+[[osm-contest-map-printserver]]
+=== Own print server
+
+installation:
+link:help_fcmaps.html[Flight Contest maps server^]
+
+Map data is only available for installed countries.
+
+[[osm-contest-map-additional-datasources]]
+=== Other data sources
+
+Air Spaces:
+
+* DAeC (https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten)
+* Skyfool.de (http://www.skyfool.de/luftraeume)
+
+Contour lines and surface contours:
+
+* Viewfinder Panoramas (http://www.viewfinderpanoramas.org)
+
+[[osm-contest-map-configuration]]
+=== Configuration details
+
+The following route details can be drawn on the map:
+
+* Turning point circles (diameter 1 NM)
+* Turning loops
+* Stage lines
+* Course of curved stages
+* Turning point names (in the respective print language, German WP, English TP)
+* Gates of unknown time controls
+* Positions of track photos
+* Positions of track ground signs
+
+The following objects can be drawn on the map:
+
+* Grade grid
+* Elevation lines (100m, 50m or 20m)
+* Manually added objects
+* Airspaces
+
+Airspaces must be installed manually before first use.
+To do this, copy all files from *https://my.hidrive.com/share/vobbr89etw#$/Geodata* to the folder *C:\FCSave\.geodata*.
+
+All mentioned route details and objects can be deselected.
+
+The center of the map is determined from the positions of all turning points.
+Routes that exceed the selected print format can be divided into several prints by deselecting
+can be divided into several prints by deselecting suitable turning points.
+
+Individual turning points can be excluded from printing.
+This also eliminates associated stages and turning loops.
+
+The printout can be made in landscape or portrait format in A1 to A4 or ANR size.
+
+Missing flying sites, churches, castles, castle ruins, country houses, wind turbines and elevation points.
+as well as own symbols can be added in the file *C:\FCSave\.geodata\additionals.csv* for printing:
+
+  id|symbol|name|wkt
+  1|church.png|""|POINT (9.46600 49.50288)
+  2|airfield.png|"airfield"|POINT (9.54128 49.51144)
+
+1. sequential number
+2. symbol to be displayed: +
+airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png or name of own symbol
+3. name of object (in quotes) ("": print no name)
+4. display position in geo-coordinates
+
+Own symbols are to be saved in *C:\FCSave\.geodata\images* (png).
+Note that symbol names are case-sensitive.
+
+Special objects can be added to the file *C:\FCSave\.geodata\specials.csv*.
+to be added to the print:
+
+  id|point|name|wkt|dx|dy
+  1|"Route 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0
+
+1. sequence number
+2. description (in quotation marks, will not be printed)
+3. name of object (in quotes) ("": do not print name)
+4. display position in geo-coordinates
+5. horizontal displacement of the object name to be printed (in pixels)
+6. vertical displacement of the object name to be printed (in pixels)
+
+Geo-coordinates of turning points are output with the route printout (CSV-GeoData).
+
+The names of airspaces are taken from the file *C:\FCSave\.geodata\airspaces.kmz*.
+Incorrect names prevent the map generation.
+
+[[osm-contest-map-workflow]]
+=== Workflow of a map-based route construction
+
+. Select area around TO
+
+. Create route with TO (Routes -> *New route*)
+
+. Print competition map with TO (route -> *OSM competition map*) +
+Place TO at a desired position (top right, bottom left or similar).
+
+. Select suitable turning points on the printed map +
+With the coordinate rulers on the left and above, the turning point coordinates can be determined to the minute with a compass.
+
+. Enter distance with the coordinates read off (Distance -> *Add coordinate*).
+
+. Export route (Route -> *KMZ-Export*)
+
+. Open KMZ file with *Google Earth Pro* and move turning points to the exact positions.
+
+.. Navigate to the node 'Filename.kmz -> Route name -> Route export -> turnpoints'.
+.. Click on each point and select context menu item 'Properties' ...
+.. Move point to exact position and close properties dialog ...
+.. Save 'Filename.kmz' with context menu 'Save location as' in new kmz file
+
+. Import the corrected route (Route -> *Import FC Route*)
+
+. Check competition map (route -> *OSM online map*)
+
+. Print competition map (route -> *OSM competition map*)
+
+<<<
+[[flight-time-calculation]]
+== Flight-time-calculation for take-offs and landings
+
+Specifications can be made for the following items:
+
+* Departure to take-off point (TO -> SP)
+* Final point to landing (FP -> LDG)
+* Intermediate landing (iFP -> iLDG)
+* Intermediate take-off point (iFP, iLDG or iTO -> iSP)
+
+The default value of new tasks "wind+:3NM" causes that the wind of the
+the wind of the navigation flight task is taken into account for the time-of-flight calculation,
+the distance between the points for calculation is increased by 3NM
+(which has proven to be useful for a standard course round) and the calculated
+overflight time is rounded up to whole minutes.
+
+Use the template link:samples/FC-TakoffLandingCalculation-Sample.xlsx[FC-TakoffLandingCalculation-Sample.xlsx^],
+to calculate setting values for longer approach and departure distances.
+
+For each point mentioned, the following expressions can be used:
+
+[%autowidth]
+|===
+|Expression (example)|Applied formula|Round up to whole minutes
+
+|wind+:3NM|LegTime(tas,wind,track,dist + 3)|yes
+|wind:3NM|LegTime(tas,wind,track,dist + 3)|no
+|nowind+:3.5NM|LegTime(tas,null,track,dist + 3.5)|yes
+|nowind:3.5NM|LegTime(tas,null,track,dist + 3.5)|no
+|wind+:1.3|1.3 * LegTime(tas,wind,track,dist)|yes
+|wind:1.3|1.3 * LegTime(tas,wind,track,dist)|no
+|nowind+:1.3|1.3 * LegTime(tas,null,track,dist)|yes
+|nowind:1.3|1.3 * LegTime(tas,null,track,dist)|no
+|time+:10min|10|yes
+|time:10min|10|no
+|===
+
+[%autowidth]
+|===
+|expression|meaning
+
+|LegTime|Internal function for wind-dependent flight time calculation
+|tas|TAS of the aircraft
+|wind|wind direction and speed (zero = no wind)
+|track|course of the navigation flight
+|dist|distance between the respective points
+|+|flight plan time rounded up to the nearest whole minute
+|wind|Individual time for each crew considering TAS, +
+wind, heading and distance between points.
+|nowind|Individual time for each crew respecting TAS, +
+distance and course between points, without considering wind.
+|time|Fixed time in minutes for all crews.
+|1.3|The calculated time is multiplied by the given factor (here 1.3).
+|3NM|The time is calculated by increasing the distance +
+between the points by the given value (here by 3NM).
+|===
+
+[%autowidth]
+|===
+|expression|application example
+
+|wind+:3NM|Airfield with standard course round (TO -> SP, iTO -> iSP).
+|wind+:xNM|Apply a larger distance x for larger airfield circles.
+|wind+:6NM|Latest landing time (FP -> LDG)
+|time+:xmin|Fixed flight time of x minutes (for precision flight competitions)
+|wind+:1.3|Increase calculated flight time by 30% and correct to minute.
+|wind:1|Calculate flight time with distance and wind without corrections
+|===
+  
+Check your settings by creating flight plans:
+
+* Flight time TO -> SP plausible?
+* Flight time FP -> LDG (to determine latest landing time) sufficient?
+* Flight time iFP -> iLDG (-> iTO) -> iSP plausible for stopover?
+
+<<<
+[[planning-test-and-flight-preparation]]
+== Planning test and flight preparation
+
+<<fc_en.adoc#planning-test-with-map>> +
+<<fc_en.adoc#planning-test-with-flight-construction>> +
+<<fc_en.adoc#no-planning-test>> +
+<<fc_en.adoc#planning-test-hints>>
+
+[[planning-test-with-map]]
+=== Planning test with competition map (without route construction)
+
+. Task Configuration
+
+* Planning test duration: 60 min
+* Duration of the aircraft preparation: 15 min
+
+. Planning Test Card
+
+* Turning points are already drawn
+* route can be drawn in
+
+. Navigation test map
+
+* Turning points and route are drawn
+
+. Work of the crew
+
+* Crew receives planning test chart and planning test task sheet.
+** Measure course over ground
+** Calculate heading and flight time and enter in planning test task sheet
+** Hand in planning test task sheet
+* Crew receives navigation test chart and flight plan
+** Prepare navigation test chart (turn loops, turn point overflight times, heading, minute dashes)
+
+. Instructions for referees (printable)
+
+* link:info/FC-PlanningTest-Info_en.docx[Time schedule of Planning Test^]
+
+[[planning-test-with-flight-construction]]
+=== Planning test with flight construction
+
+. Task Configuration
+
+* Duration of the planning test: 75 min (more if necessary for complicated routes).
+* Duration of the aircraft preparation: 15 min
+
+. Planning Test Card
+
+* Does not contain turning points
+
+. Navigation test map
+
+* Turning points and route are drawn
+
+. Work of the crew
+
+* Crew receives route construction instructions, planning test map and planning test task sheet.
+** Construct course on planning test chart
+** Measure course over ground
+** Calculate heading and flight time and enter in planning test task sheet.
+** Hand in the planning test task sheet
+* Crew receives navigation test chart and flight plan
+** Prepare navigation test chart (turn loops,
+   turnpoint overflight times, heading, minute dashes)
+
+[[no-planning-test]]
+=== No planning test
+
+. Task Configuration
+
+* Planning test duration: 0 min
+* Duration of aircraft preparation: 45 min (possibly more for long routes).
+
+. Navigation test map
+
+* Turning points and route are drawn
+
+. Work of the crew
+
+* Crew receives navigation test chart and flight plan.
+** Prepare navigation test chart (turn loops,
+   turnpoint overflight times, heading, minute dashes)
+
+[[planning-test-hints]]
+=== Planning test configuration hint
+
+The option "Distance measurement during planning test" is only useful,
+if the distances between the check points have been measured with the used map
+and have been entered in the distance coordinates under
+Distance measurement (map) [mm]'.
+
+<<<
+[[landings]]
+== Landings
+Depending on the selected competition rules, a fixed landing scheme is used.
+Its penalty point calculation from a landing measurement value is stored as a formula.
+This formula can be adapted to use a landing scheme that differs from the selected
+to use a different landing scheme. The formulas can be found under
+'Competition -> Points' or 'Class -> Points' for each landing (max. 4).
+Special landing errors like 'No landing', 'Abnormal landing' etc. are entered through
+clickable check boxes.
+
+The following formulas are used for penalty point calculation of landings:
+
+* link:rules/DE_Navigationsflug_2020.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020^] (all landings)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+
+* link:rules/DE_Navigationsflug_2017.pdf#page=16[Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017^] (all landings)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
+
+* link:rules/FAI_rally_flying_rules_2020.pdf#page=17[FAI Air Rally Flying - Edition 2020^] ( all landings)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+
+* link:rules/FAI_precision_flying_rules_2020.pdf#page=20[FAI Precision Flying - Edition 2020^]
+** Landing 1 and 4
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
+
+** Landing 2 and 3
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
+
++
+The order of application can be configured for a task.
+
+<<<
+* link:rules/CH_Praezisionsflug_2017.pdf#page=19[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft - Ausgabe 2017^]
+** Landing 1 and 4
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
+ 
+** Landing 2 and 3
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}
+
++
+The order of application can be configured for a task.
+
+* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2017^] (all landings).
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}
+  
+* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017^] (all landings).
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}
+  
+* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017^] (all landings).
+
+  {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}
+  
+* link:rules/AT_Motorflug_2017.pdf#page=37[Navigationsflug-Reglement Österreich - Ausgabe 2017^] (all landings)
+
+  {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
+
+To record the landings, print the referee schedule of a task with the following fields:
+
+* No. (start number)
+* Aircraft (registration number)
+* Aircraft type
+* Color (if recorded)
+* Latest landing time
+* Blank column 1...4 (for recording landing fields and landing errors)
+
+Do not print the crew, as this is against the rules.
+
+Landing judges should know as little as possible about the specific crew of an aircraft in order to objectively judge a landing.
+
+<<<
+[[evaluation]]
+== Evaluations
+
+<<fc_en.adoc#evaluation-contest>> +
+<<fc_en.adoc#evaluation-class>> +
+<<fc_en.adoc#evaluation-team>> +
+<<fc_en.adoc#evaluation-special>>
+
+[[evaluation-contest]]
+=== Contest evaluation
+-> evaluation -> contest-evaluation
+
+Contest evaluations can be filtered by the following criteria:
+
+* Classes
+* Teams
+* Tasks
+* Tasks details
+
+A crew is included in a competition evaluation if it is
+
+* belongs to a chosen class and
+* belongs to a chosen team and
+* has not been deactivated for a chosen task and
+* has not been deactivated for a contest evaluation and
+* has not been deactivated in general.
+
+Task and task details (Planning test, Navigation test, Observation test,
+landing test, other test) determine for which penalty points are calculated in the evaluation.
+are calculated.
+
+[[evaluation-class]]
+=== Class evaluation
+-> evaluation -> class-title
+
+Class evaluations can be filtered by the following criteria:
+
+* Teams
+* Tasks
+* Tasks details
+
+A crew is included in a class evaluation if it is
+
+* belongs to the chosen class and
+* belongs to a chosen team and
+* has not been deactivated for a chosen task and
+* has not been deactivated for a competition evaluation and
+* has not been deactivated in general.
+
+Task and task details (Planning test, Navigation test, Observation test,
+landing test, other test) determine for which penalty points are calculated in the evaluation.
+are calculated.
+
+[[evaluation-team]]
+=== Team evaluation
+-> evaluation -> team-evaluation
+
+Team evaluations can be filtered by the following criteria:
+
+* Classes
+* Tasks
+* Tasks details
+
+A crew is included in a team evaluation if it is
+
+* belongs to a selected class and
+* has not been deactivated for a selected task and
+* has not been deactivated for a team evaluation and
+* has not been deactivated in general.
+
+A team receives a placement when it has
+
+* the set number of crews for the team evaluation has been reached and
+* the team has not been deactivated.
+
+Task and task details (Planning test, Navigation test, Observation test,
+landing test, other test) determine for which penalty points are calculated in the evaluation.
+are calculated.
+
+[[evaluation-special]]
+=== Special evaluations
+If class and team assignments are not sufficient to restrict competition evaluation,
+the crew option "No competition evaluation" can be used to exclude all crews that do not apply.
+crews can be excluded.
+
+<<<
+[[supported-logger]]
+== Supported loggers
+
+<<fc_en.adoc#supported-logger-aflosreader>> +
+<<fc_en.adoc#supported-logger-airopserver>> +
+<<fc_en.adoc#supported-logger-dg100>> +
+<<fc_en.adoc#supported-logger-dg200>> +
+<<fc_en.adoc#supported-logger-powerflarm>> +
+<<fc_en.adoc#supported-logger-igc>> +
+<<fc_en.adoc#supported-logger-gpx>> +
+<<fc_en.adoc#supported-logger-kml>> +
+<<fc_en.adoc#supported-logger-nmea>>
+
+[[supported-logger-aflosreader]]
+=== AFLOS
+* Logger readout software: 'AFLOS Reader 2.04'.
+* Read logger record and generate GAC file: 'AFLOS Reader -> Competitor-No -> Read AFLOS'.
+* Logger data import: 'Flight Contest -> Results -> Task Title -> Navigation Flight
+                        -> ... -> Import Logger Data -> Select GAC File -> Import'
+* Delete logger recording: directly at the AFLOS logger.
+
+[[supported-logger-airopserver]]
+=== AirObserver based loggers
+* Logger readout software: 'AirObserver 2.5.1'.
+* Logger setup: 'AirObserver -> Logger -> Configure'.
+* Logger readout: 'AirObserver -> Logger -> Download' (readout very slow)
+* Open logger record (*.G00): 'AirObserver -> File -> Load Flight Log'.
+* Create GAC file: 'AirObserver -> File -> Export -> GAC'.
+* Import logger data: 'Flight Contest -> Results -> Task Title -> Navigation Flight
+                        -> ... -> Import Logger Data -> Select GAC File -> Import'.
+* Clear logger recording: 'AirObserver -> Logger -> Clear'.
+
+[[supported-logger-dg100]]
+=== DG-100
+* Logger settings software: 'Data Logger Utility S-OPC-0L-110631'.
+* Logger setting: 'Data Logger Utility -> Settings -> Configuration'.
+* Logger readout software: 'FSNavigator.net 2.0.0.90'.
+* Logger readout: 'FSNavigator.net -> Plugins -> FRPocket device -> Download tracks'.
+* Create GAC file: 'FSNavigator.net -> Logger object -> Save'.
+* Import logger data: results -> task title -> navigation flight -> ... ->
+                       Import Logger Data -> Select GAC File -> Import
+* Clear logger record: 'FSNavigator.net -> Plugins -> FRPocket device -> Clear memory'.
+
+[[supported-logger-dg200]]
+=== DG-200
+* Logger readout software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'.
+* Logger setting: 'DG200Tool.exe -> Device -> Device settings'.
+** Select data logging format: "Position,Time,Date,Speed,Altitude".
+** Enable WAAS
+** Enable "Disable data logging if speed falls below a threshold" and set "30" km/hour
+** Disable data logging if distance is less than the selected radius" (default)
+** Data logging interval mode: enable "By time" (default) and set "1" seconds
+* Read logger record: 'DG200Tool.exe -> Device -> Download all track points'.
+* create GPX file: 'DG200Tool.exe -> File -> Save' and select "*.gpx
+* Logger data import: Results -> Task title -> Navigation flight -> ... ->
+                       Import logger data -> select GPX file -> Import
+* Delete logger recording: 'DG200Tool.exe -> Device -> Delete all track points'.
+
+[[supported-logger-powerflarm]]
+=== PowerFLARM
+* A use in competition has to be clarified with the competition manager.
+* A logger recording can be written as IGC file to a micro SD card.
+* Logger data import: 'Flight Contest -> Results -> Task title -> Navigation flight.
+                        -> ... -> Import Logger Data -> Select IGC File -> Import'.
+
+[[supported-logger-igc]]
+=== Any other IGC logger
+* A use in the competition is to be clarified with the competition leader.
+* The readout program is to be made available to the evaluation referee.
+
+[[supported-logger-gpx]]
+=== Any other GPX logger
+* A use in the competition is to be clarified with the competition leader.
+* The readout program is to be made available to the evaluation referee.
+* Necessary logger settings:
+** Recording interval: 1 second
+** Recording with altitude information
+* GPX file content requirements
+** must contain only one track recording (<trk>...</trk>)
+** if no, delete unwanted track records in file
+
+[[supported-logger-kml]]
+=== Any other KML logger
+* A use in the competition is to be clarified with the competition leader.
+* The readout program is to be made available to the evaluation referee.
+* Necessary logger settings:
+** Recording interval: 1 second
+** Recording with altitude data
+** Recording with time information
+* Requirements for KML/KMZ file content
+** must contain only one track recording (<gx:Track>...</gx:Track>)
+** if no, delete unwanted track records in file
+
+[[supported-logger-nmea]]
+=== Any other NMEA logger
+* The logger must support the standard 'NMEA 0183'.
+* A use in competition has to be clarified with the competition manager.
+* The readout program must be made available to the evaluation referee.
+
+<<<
+[[print-styles]]
+== Influence print style
+Allows you to influence the appearance of the print +
+-> Contest -> Settings -> Print-Style
+
+<<fc_en.adoc#print-styles-title>> +
+<<fc_en.adoc#print-styles-foot>> +
+<<fc_en.adoc#print-styles-tables>> +
+<<fc_en.adoc#print-styles-samples>> +
+<<fc_en.adoc#print-styles-special-old>>
+
+[[print-styles-title]]
+=== CSS settings for title
+  
+ h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+
+font-size: Set the size of the 1st title. Only usable if the title size is empty and no graphics are used. +
+margin-top,margin-bottom,padding-top,padding-bottom: set spacing of the 1st title to top and bottom.
+    
+ h2 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+ 
+font-size: set size of 2nd title +
+margin-top,margin-bottom,padding-top,padding-bottom: set spacing of the 2nd title to top and bottom.
+    
+ h3 { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+
+font-size: set size of 3rd title +
+margin-top,margin-bottom,padding-top,padding-bottom: set spacing of the 3rd title to top and bottom.
+
+[[print-styles-foot]]
+=== CSS settings for signature
+  
+  h2#signature { margin-top:100px; }
+
+margin-top: Increase distance to table or signature image
+
+<<<
+[[print-styles-tables]]
+=== CSS settings for tables
+
+Application:
+
+ table.TableName tr.RowName td.ColumnName { property1; property2; ... }
+ table.table_name tr.row_name td { property1; property2; ... }
+ table.TableName tr#ID td { property1; property2; ... }
+ td.ColumnName { property1; property2; ... }
+ .columnname { property1; property2; ... }
+
+[%autowidth]
+|===
+|property|CSS expression
+
+|No wrap for spaces|white-space: nowrap;
+|column-width|width: 10%;
+|bold print|font-weight: bold;
+|italic-print|font-style: italic;
+|color|color: red;
+|Small text size|font-size: 80%;
+|justify text centered|text-align: center;
+|text distance to frame top|padding-top:2cm;
+|===
+
+CSS expressions: http://www.w3schools.com/cssref +
+Default values: http://localhost:8080/fc/css/fcprint.css
+
+Table classes:
+
+[cols="3", options="header"]
+|===
+|table names [scope]|row names [#ID]|column names
+
+|generalpoints|title value|name value modify
+|planningpoints|title value|name value modify
+|flightpoints|title value|name value modify
+|observationpoints|title group value|name value modify
+|landingpoints|title value penaltycalculator|name value modify
+|turnpointsignpoints|title value|name value
+|enroutecanvaspoints|title value|name value
+
+|routecoords|title value|tpname aflosname coords altitude gatewidth sign
+|routelegs|name value coursechange summary|from2tp trackdistance
+|enroutephotos|name title value|photoname coords distfromtp tpname
+|enroutecanvas|name title value|canvassign coords distfromtp tpname
+|routecoordexport|title value|
+|turnpointsignexport|title value|
+|enroutephotoexport|title value|
+|enroutecanvasexport|title value|
+|routecoordgeodata|title value|
+|routetpcoords|title value|tpname coords
+
+|crewlist|value [#num]|num crew email team resultclass shortresultclass aircraft aircrafttype aircraftcolor tas id empty1 empty2 empty3 empty4
+|teamlist|value [#crew.num]|team crew aircraft tas
+|resultclasslist|value [#crew.num]|resultclass shortresultclass crew aircraft tas
+|aircraftlist|value [#aircraft]|aircraft aircrafttype aircraftcolor crew1 crew2
+
+|timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime version
+|legtimelist|value [#tas]|tas legtime
+|timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
+|timetableoverviewlist|briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]|col1 col2 col3
+|timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
+
+|crewtest||title crew team resultclass aircraft aircrafttype tas
+|crewneutral||title num crew aircraft col
+|info|wind planning submission endcurved landinglatest planninginfo planningignore planningevaluation|title separator value
+|planningtasklist|valuename unit value [#tpname]|tpname distance truetrack trueheading groundspeed legtime
+|flightplanlist|value [#tpname], procedureturn summary|num distance truetrack trueheading groundspeed legtime tpname tptime
+|observationturnpointlist|title subtitle data|tpname turnpointphoto turnpointcanvas turnpointtrue turnpointfalse
+|observationsroutephotolist|title subtitle data|name correct inexact false nmfromtp mmfromtp fromlasttp
+|observationsroutecanvaslist|title subtitle data|sign correct inexact false nmfromtp mmfromtp fromlasttp
+|observationsroutecrewjudgesign|title|name line
+
+|planningtaskresultlist|name1 name2 value [#tpname] summary|tpname plantrueheading trueheading penaltytrueheading planlegtime legtime penaltylegtime
+|summary [planningtaskresults]|legpenalties giventolate exitroomtolate otherpenalties penalties|
+|flightresultlist|name1 name2 value [#tpname] summary|tpname aflosname plancptime cptime penaltycp penaltyprocedureturn penaltybadcourse penaltyaltitudemissed
+|summary [flightresults]|checkpointpenalties takeoffmissed landingtolate badcoursestartlanding giventolate safetyandrulesinfringement instructionsnotfollowed falseenvelopeopened safetyenvelopeopened frequencynotmonitored otherpenalties penalties|
+|flightmeasurementlist|name1 name2 value [#tpname]|tpname aflosname plancptime cptime procedureturn badcoursenum altitude
+|loggerdatalist|title value tpvalue|time latitude longitude altitude distance truetrack groundspeed info badcourseinfo nobadcourseinfo
+|observationturnpointresultlist|name1 name2 value [#tpname] summary|tpname evaluation plan result penalties
+|observationsroutephotoresultlist|name1 name2 value [#photoName] summary|photoname evaluation plan result penalties
+|observationsroutecanvasresultlist|name1 name2 value [#imageName] summary|imagename evaluation plan result penalties
+
+|summary [observationresults]|turnpointphotopenalties routephotopenalties groundtargetpenalties otherpenalties penalties|
+|landingresultlist|name [#1...4], values [#1...4], summary [#1...4]|
+|summary [landingresults]|otherpenalties penalties|
+|summary [specialresults]|penalties|
+|crewresultsummary||planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties increasepenalties penalties
+
+|resultlist|[#pos]|pos crew aircraft team resultclass shortresultclass planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties taskpenalties contestpenalties
+|teamresultlist|[#pos]|pos team crews teampenalties
+
+|freetext||#line
+|testlist||testcol1 testcol2 testcol3 testcol4 testcol5
+|===
+
+<<<
+[[print-styles-samples]]
+=== Examples
+
+** Crew list - reduce lines
+
+ table.crewlist tr.value td { font-size: 90%; }
+
+** Crew schedule - reduce lines
+
+ table.timetablelist tr.value td { font-size: 90%; }
+  
+** Referee schedule - reduce lines
+
+ table.timetablejudgelist tr.value td { font-size: 90%; }
+  
+** Scanned observation forms - resize
+
+ img.scannedobservationtest { width:80%; }
+ 
+** Scanned Planning Task Forms - Resize
+  
+ img.scannedplanningtest { width:80%; }
+ 
+** Occupation result - reduce lines
+ 
+ table.crewresultsummary td { font-size: 70%; }
+ table.planningtaskresultlist tr.value td { font-size: 70%; }
+ table.flightresultlist tr.value td { font-size: 70%; }
+ table.observationturnpointresultlist tr.value td { font-size: 70%; }
+ table.observationsroutephotoresultlist tr.value td { font-size: 70%; }
+ table.observationsroutecanvasresultlist tr.value td { font-size: 70%; }
+ table.summary tr { font-size: 70%; }
+ table.landingresultlist tr.name { font-size: 70%; }
+ table.landingresultlist tr.values { font-size: 70%; }
+ table.landingresultlist tr.summary { font-size: 70%; }
+ 
+** Result list competition and class evaluation - reduce rows
+
+ table.resultlist td { font-size: 90%; }
+ 
+** Result list team evaluation - reduce lines
+
+ table.teamresultlist td { font-size: 90%; }
+
+** Points pressure landing field - change size
+
+ img.landingfield { width:200%; }
+ 
+[[print-styles-special-old]]
+=== Replaced CSS properties
+
+[cols="1,1,1,1", options="header"]
+|===
+|property
+|value
+|effect
+|now found in
+|--route +
+--disable-procedureturn
+|route-1
+|Disable turning loops for this route
+|->routes -> <route-name> -> route-settings -> use turning loops
+|--route +
+--show-curved-points
+|route-1
+|in route displays of this route show SCs of the curved route
+|->routes -> <route-name> -> route-settings -> show SCs of curved route in route-maps of this route
+|--class +
+--secret-gatewidth
+|--class +
+2
+|--use a different gate width for SCs in time evaluation for crews of this class (gate width in NM)
+|--class -> <class-name> -> different gate-width from UZK coordinates for this class
+|--class +
+--before-starttime
+|--class +
+30
+|--class -> move forward the start time of planning in the schedule for crews of this class (the numeric value defines the minutes before the regular planning time)
+|--class -> <class-name> -> advance the planning start time before the regular planning time for this class
+|--class +
+--add-submission
+|--beginner +
+10
+|--class -> extend the latest submission time of the solution sheet in the flight plan for crews of this class (the number value defines the minutes after the regular submission time)
+|-> classes -> <class-name> -> extend the latest solution sheet submission time for this class
+|--flightplan
+|hide-distance
+
+hide-truetrack
+
+hide-trueheading
+
+hide-groundspeed
+
+disable-local-time
+
+show-elapsed-time
+|Leave column "Distance" empty in flight plan
+
+In the flight plan, leave the "Right course" column empty.
+
+in the flight plan, leave the column "Right heading" empty
+
+Leave column "Speed over ground" empty in flight plan
+
+omit "local time" column in flight plan
+
+in flight plan print time history in column "flight time
+|-> tasks -> navigation test -> <navigation test name> -> edit
+|--submission
+|20
+|--display in the flight plan the latest submission time of the solution sheet +
+(the value defines the minutes after the FP)
+|-> tasks -> navigation test -> <navigation test name> -> edit -> latest submission time of solution sheet after reaching FP
+|--route +
+--start-tp +
+--add-num
+|route-1 +
+TP3 [,TP5] +
+1 [,2]
+|in the flight plan for crews, increase the turnpoint number by the specified value
+from the specified turnpoint
+(several increases possible; for abbreviated routes, where the competition map of another route is used)
+|-> Tasks -> Navigation test -> <Navigation test name> -> Edit -> Increase turnpoint numbers by the specified value from the specified turnpoint in the flight plan for crews +
+TP3,TP5:1,2 = increase from TP3 by 1, from TP5 by another 2
+|--flightresults
+|show-curved-points
+|show curved points in navigation flight results
+|-> Tasks -> Navigation test -> <navigation test name> -> Edit -> Always show SCs of the curved route in the navigation flight result
+|--landingresults
+|0.5
+|--reduce landing penalty points in overall ranking by specified factor
+|-> Evaluation -> Competition Evaluation -> Competition Evaluation Settings -> Reduce landing penalty points by specified factor
+|===
+
+ 
+<<<
+[[contest-properties]]
+== Contest properties
+
+None defined yet.
+
+<<<
+[[configuration]]
+== Installation dependent configuration
+Allows customization of the deployment environment of the 'Flight Contest' installation +
+-> Tools -> Settings -> Configuration
+
+Changes only effective after restarting 'Flight Contest'.
+
+If 'Flight Contest' does not start anymore after changes, the last
+change in 'C:\FCSave\.fc\config.groovy' has to be undone or deleted.
+or delete this file.
+
+<<fc_en.adoc#configuration-email>> +
+<<fc_en.adoc#configuration-viewemail>> +
+<<fc_en.adoc#configuration-ftp>> +
+<<fc_en.adoc#configuration-landing>> +
+<<fc_en.adoc#configuration-live>> +
+<<fc_en.adoc#configuration-livetracking>> +
+<<fc_en.adoc#configuration-osmprint>> +
+<<fc_en.adoc#configuration-test>>
+
+[[configuration-email]]
+=== Configure email sending
+ grails {
+   mail {
+     host = "TODO" // SMTP server address (DNS name or IP address)
+     port = 587 // SMTP server port (for client connections)
+     username = "TODO" // SMTP server login name
+     password = "TODO" // SMTP server password
+   }
+ }
+ flightcontest {
+   mail {
+     from = "TODO" // sender email address (must be valid on SMTP server)
+     cc = "TODO" // e-mail address of the evaluating referee
+   }
+   testmail {
+     to = "TODO" // destination email address
+     subject = "Flight Contest: test email" }
+     body = "Flight Contest has successfully sent an email."
+   }
+ }
+
+[[configuration-viewemail]]
+=== Configure email viewer
+ grails {
+   webmail {
+     url = "TODO" // address of the webmail service
+     loginname_name = "TODO" // name of the username field
+     loginpassword_name = "TODO" // name of the password field
+     username = "TODO" // Login name
+     password = "TODO" // Password
+   }
+ }
+
+[[configuration-ftp]]
+=== Configure FTP dispatch
+ flightcontest {
+   ftp {
+     host = "results.flightcontest.de" // FTP server address
+     port = 21 // FTP server port
+     username = "TODO" // FTP login name
+     password = "TODO" // FTP password
+     contesturl = "TODO" // Public access to contest directory
+                         // on FTP server (e.g. "http://results.flightcontest.de/demo")
+     testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Source URL
+   }
+ }
+
+2 directories must exist in the root directory of the FTP server:
+
+* GM_Utils-6.2 - GPX viewer JavaScript library.
+* Any name without spaces or special characters - contest directory (above example: "demo").
+
+The mentioned version of the GPX view can be taken from the following directory:
+
+ C:\Program Files\Flight Contest\tomcat\webapps\fc\GM_Utils
+
+In the root directory of the FTP server, GPX files must have their own
+MIME type must be configured for GPX files. Furthermore, browser compression should be enabled for this MIME type.
+browser compression should be activated
+(https://betterexplained.com/articles/how-to-optimize-your-site-with-gzip-compression).
+To do this, add the following lines to the '.htaccess' file:
+
+ AddType application/gpx .gpx
+ AddOutputFilterByType DEFLATE application/gpx
+
+The FTP login name must be granted write permissions to the contest directory,
+but not to the root directory of the FTP server.
+
+<<<
+[[configuration-landing]]
+=== Configure information for landing referees.
+ flightcontest {
+   landing {
+     info = "Send WhatsApp to +49(170)12345678."
+   }
+ }
+
+This information will be printed on the State Referee Schedule.
+
+[[configuration-live]]
+=== Configure live display
+ flightcontest {
+   live {
+     ftpupload { // FTP upload of the live result
+        workingdir = "/" // directory on the FTP server
+        name = "fclive.htm" // file name
+     }
+     copy { // copy of the live result
+        dest = "TODO" // directory and filename
+                            // e.g. "C:/Live/fclive.htm" (local copy)
+                            // "//Server/Share/fclive.htm" (share copy)
+                            // Multiple copies allowed
+                            // (dest1 = ...)
+                            // (dest2 = ...)
+     }
+   }
+ }
+
+The FTP upload requires a configured FTP send.
+
+Local and share copies cannot be opened directly in Firefox.
+  
+* Follow these steps to open a local copy:
+. Open link in new tab
+         -> C:/Live/fclive.htm
+. In the address bar, prefix the link with "file:///".
+         -> file:///C:/Live/fclive.htm
+* Follow these steps to open a share copy:
+. Open link in new tab
+         -> Server/Share/fclive.htm
+. In the address bar, prefix the link with "file://///".
+         -> file://///Server/Share/fclive.htm
+
+In case of configured copies and/or FTP upload, a live result is also always
+is copied to the own server instance. +
+To achieve this without copies or FTP upload, use the following configuration:
+
+ flightcontest {
+   live {
+     show = true
+   }
+ }
+ 
+<<<
+[[configuration-livetracking]]
+=== Configure live tracking
+ flightcontest {
+   livetracking {
+     server = "https://airsports.no"
+     api = "/api/v1"
+     token = "..."
+     contest {
+       // showDelete = true // Default: false
+       // createPublic = true // Default: false
+       startLocalTimeOfDay = "08:00" // Default: 06:00
+       endLocalTimeOfDay = "20:00" // Default: 22:00
+       timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+     }
+     navigationtask {
+       // showDelete = true // Default: false
+       // createPublic = true // Default: false
+     }
+     contestant {
+       minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+     }
+   }
+ }
+
+[%autowidth]
+|===
+|server|address of the live tracking server
+|token|Token used to enable access to the live tracking server
+|contest.showDelete|Enable deletion of live tracking contests
+|contest.createPublic|Create public live tracking contests
+|contest.startLocalTimeOfDay|Local start time of live tracking contest on contest day
+|contest.endLocalTimeOfDay|Local end time of the live tracking contest on the contest day
+|contest.timeZone|Time zone of the live tracking contest
+|navigationtask.showDelete|Enable deletion of live tracking navigation tasks
+|navigationtask.createPublic|Create public live tracking navigation tasks
+|contestant.minutesBetweenTrackerStartAndTakeoff|Tracker recording starts specified minutes before takeoff
+|===
+
+
+[[configuration-osmprint]]
+=== Configure OSM contest map printing
+ flightcontest {
+   contestmap {
+     printserverapi = "TODO"
+     projection = "3857"
+     devoptions = true
+   }
+ }
+
+[%autowidth]
+|===
+|contestmap.printserverapi|Address of the print server for OSM contest map generation
+|contestmap.projection|Set other projection of OSM contest map generation (EPSG number)
+|contestmap.devoptions|Show additional devoptions in the OSM contest map dialog
+|===
+
+
+[[configuration-test]]
+=== Configure test displays
+ flightcontest {
+   wrlog {
+     enable = true
+   }
+   clouddemo {
+     enable = true
+   }
+ }
+
+[%autowidth]
+|===
+|wrlog.enable|Enable writing logs to <installation directory>\fc\logs
+|===
+
+<<<
+[[live-scoring]]
+== Live result display
+Allows display of a preliminary result during debriefing.
+
+* First, make adjustments to the deployment environment: +
+-> <<fc_en.adoc#configuration-live>>
+
+* Contest settings: +
+-> Evaluation -> Contest evaluation -> Contest evaluation settings.
+
++
+The same filter criteria are used as for the competition evaluation. +
+Live-specific settings:
+
+** Live result refresh - 10 seconds (default) +
+Interval at which the live results file refreshes itself in the browser.
+
+** Live score competition sum +
+If enabled, the sum of penalty points of all tasks will be output as well. +
+Only useful if there are several tasks (= competition days).
+
+** Live result placement calculation +
+Selection which task determines the live result placement.
+Competition sum can also be selected here.
+
++
+Settings made can be checked with the integrated live display. +
+-> Evaluation -> Competition evaluation -> Live result display
+
+
+* Live display in the current competition +
+-> Extras -> Live settings
+
+** Preparation
+
+*** Upload time: 60 seconds (default) +
+        Interval with which the live result file is created and uploaded.
+        After change press 'Save
+*** Language: German (default) +
+        Press 'Save' after change
+*** Upload live stylesheet +
+        To be executed once when new upload targets have been configured.
+*** Delete live result +
+        To be executed once when new upload targets have been configured.
+        Can also be executed to delete the content of an uploaded live result
+        live result file.
+*** Public links +
+        Here the uploaded live result files can be checked.
+
+** Live update
+*** Live result display for contest +
+        Select competition for which a live result display is to be made.  
+        Press 'Save' to activate
+*** Switch on live result display +
+        Switch on live result display for the active contest.
+*** Switch off live result display +
+        Switch off live results display.
+        The last state of the live result file is frozen.
+
+<<<
+[[live-tracking]]
+== live-tracking
+Allows tracking of crew positions during their navigation flight with automatic time evaluation.
+
+* First, make adjustments to the deployment environment: +
+-> <<fc_en.adoc#configuration-livetracking>>
+
+* Scenario 1: Configure Airsports Live Tracking with Flight Contest
+
+** Preparatory steps in Flight Contest
+*** Assign all crews the tracker ID of their tracker. +
+-> Crews -> <crew name> -> Tracker ID
+        
+** Functions to be executed in Flight Contest
+*** Create live tracking contest +
+-> Contest -> Settings -> Live Tracking -> Contest Date +
+-> Contest -> Settings -> Live Tracking -> Create Contest
+*** Create Live Tracking Navigation Task +
+-> Tasks -> <Task Name> -> Settings -> Live Tracking -> Navigation Task Date +
+-> Tasks -> <Task Name> -> Settings -> Live Tracking -> Create Navigation Task
+        
+** Functions to perform in Airsports Live Tracking
+*** Unlock Live Tracking Contest and Navigation Task for Public Access
+
+* Scenario 2: Configure Flight Contest with Airsports Live Tracking Teams
+
+** Preparatory steps in Airsports Live Tracking
+*** Create Live Tracking Contest
+*** Assign teams (name, club, country, photos, aircraft, TAS, tracker ID)
+
+** Functions to be performed in Flight Contest
+*** Connect to live tracking contest +
+-> Contest -> Settings -> Live tracking -> Connect contest
+*** Import teams from live tracking contest as crews +
+-> Crews -> Import Live Tracking Teams
+*** Calculate schedule for navigation flight in task
+*** Create live tracking navigation task +
+-> Tasks -> <Task Name> -> Settings -> Live Tracking -> Navigation Task Date +
+-> Tasks -> <Task Name> -> Settings -> Live Tracking -> Create Navigation Task
+
+** Functions to perform in Airsports Live Tracking
+*** Unlock Live Tracking Contest and Navigation Task for Public Access
+
+<<<
+[[automatic-actions]]
+== Automatic actions
+Automatic actions are handled by permanently running scripts
+and only work with the Firefox browser. +
+The first call of the script turns automatic action on. +
+Calling the script again turns off automatic action after confirmation. +
+-> 'Programs -> Flight Contest -> Scripts'.
+
+<<fc_en.adoc#automatic-actions-openpdf>> +
+<<fc_en.adoc#automatic-actions-loadscanplanningtask>> +
+<<fc_en.adoc#automatic-actions-loadscanobservation>> +
+<<fc_en.adoc#automatic-actions-loadlogger>>
+
+[[automatic-actions-openpdf]]
+=== FCAutoOpenPDF
+Automatically open PDF in Acrobat Reader.
+
+Necessary Firefox settings:
+
+* General -> Save all files to the following folder: C:\FCSave
+* Applications -> Adobe Acrobat Document: Save file
+
+[[automatic-actions-loadscanplanningtask]]
+=== FCAutoLoadScanPlanningTask
+Automatically load scanned planning test forms.
+
+Necessary scanner settings:
+
+* Save JPG files to the directory "C:\FCSave\.scan
+  
+Necessary preparation:
+
+* Firefox must be running
+* 'Competition -> Results' with the current task must be active
+
+[[automatic-actions-loadscanobservation]]
+=== FCAutoLoadScanObservation
+Automatically load scanned observation test forms.
+
+Necessary scanner settings:
+
+* Save JPG files to the directory "C:\FCSave\.scan
+  
+Necessary preparation:
+
+* Firefox must be running
+* 'Competition -> Results' with the current task must be active
+
+[[automatic-actions-loadlogger]]
+=== FCAutoLoadLogger
+Automatic loading of read-in logger data.
+
+Necessary logger software settings:
+
+* Save GAC, IGC, GPX, KML, KMZ or NMEA files to the "C:\FCSave\.logger" directory.
+  
+Necessary preparation:
+
+* Firefox must be running
+* 'Competition -> Results' with the current task must be active
+
+<<<
+[[save-data]]
+== Data backup of a running competition
+During an ongoing contest, you should save the following data:
+
+* Flight Contest database
+* 'Flight Contest' printouts
+  
+Backups are made to the directory 'C:\FCSave',
+which is created by the 'Flight Contest' installation.
+
+Data backups are primarily used as protection against failure or loss
+of the Windows computer on which the contest is evaluated.
+Therefore copy the backup directory 'C:\FCSave'.
+after the end of the competition day or after reaching a particularly important
+important time of your contest to an external storage medium,
+after you have made backups as described below.
+
+<<fc_en.adoc#save-fcdb>> +
+<<fc_en.adoc#save-prints>> +
+<<fc_en.adoc#restore-fcdb>>
+
+[[save-fcdb]]
+=== Backup of the 'Flight Contest' database
+
+Call the script
+'Programs -> Flight Contest -> Scripts -> Save contest database'. +
+The database will be saved with date and time
+saved to the backup directory C:\FCSave (<date>-<time>-fcdb.h2.db).
+
+[[save-prints]]
+=== Save 'Flight Contest' prints (Firefox)
+
+Recommended Firefox settings:
+
+ General -> Save all files to the following folder: C:\FCSave
+ Applications -> Adobe Acrobat Document: Save file
+ 
+These settings ensure that all printouts are saved in the backup directory
+C:\FCSave. Opening the PDF and printing is then done via
+the download manager.
+  
+If this setting is not possible or desired,
+prints will end up in the Windows-Temp-Directory.
+From there they can be saved with the script 'Programs -> Flight Contest -> Scripts -> Save contest prints'.
+to the backup directory C:\FCSave.
+Note, however, that Firefox deletes all downloads from the Windows temp directory when it is closed,
+so there is a risk of losing prints if this script is not called regularly.
+
+[[restore-fcdb]]
+=== Data recovery of the 'Flight Contest' database
+
+. For data recovery, the 'Apache Tomcat FlightContest' service must be stopped.
+. Copy 'C:\FCSave\<date>-<time>-fcdb.h2.db'
+    to 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'.
+    You need administrator privileges for this.

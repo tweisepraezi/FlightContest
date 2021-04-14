@@ -11,8 +11,14 @@ set JAVA_HOME=
 set JRE_HOME=%PRGDIR%java
 set path=%JRE_HOME%\bin;%path%
 set CATALINA_HOME=%PRGDIR%tomcat
+
+:: gdal binaries
+set JvmArgs=-Djava.library.path=%ProgramFiles%\GDAL
+set PR_ENVIRONMENT=PROJ_LIB=%ProgramFiles%\GDAL\projlib
+
 :: set JvmMs=128
 set JvmMx=2048
+
 :: set SERVICE_STARTUP_MODE=manual
 set SERVICE_STARTUP_MODE=auto
 

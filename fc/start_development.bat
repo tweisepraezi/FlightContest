@@ -12,9 +12,12 @@ set GRAILS_OPTS=-server -Xmx4096M -Xms768M -Dfile.encoding=UTF-8
 set FC_DOCS=%startdir%docs
 set FC_OUTPUT_DOCS=%startdir%web-app\docs
 set FC_OUTPUT=%startdir%output
+::set GDAL_BIN=%basedir%\gdal\gdal-3.2.1\bin;%basedir%\gdal\gdal-3.2.1\bin\gdal\java
+set PROJ_LIB=%ProgramFiles%\GDAL\projlib
+::set USE_PATH_FOR_GDAL_PYTHON=YES
 
 echo.
-set PATH=%PATH%;%JAVA_HOME%\bin;%GRAILS_HOME%\bin
+set PATH=%PATH%;%JAVA_HOME%\bin;%GRAILS_HOME%\bin;%GDAL_BIN%
 echo.
 echo JAVA_HOME=%JAVA_HOME%
 echo RUBY_HOME=%RUBY_HOME%
@@ -23,5 +26,7 @@ echo GRAILS_OPTS=%GRAILS_OPTS%
 echo FC_DOCS=%FC_DOCS%
 echo FC_OUTPUT_DOCS=%FC_OUTPUT_DOCS%
 echo FC_OUTPUT=%FC_OUTPUT%
+echo GDAL_BIN=%GDAL_BIN%
+echo PROJ_LIB=%PROJ_LIB%
 echo.
 cmd

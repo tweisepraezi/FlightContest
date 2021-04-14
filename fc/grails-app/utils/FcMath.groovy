@@ -26,6 +26,13 @@ class FcMath
     }
     
     //--------------------------------------------------------------------------
+	static BigDecimal RoundTrackpointDistance(BigDecimal distanceValue)
+    // m
+	{
+		return distanceValue.setScale(0, RoundingMode.HALF_EVEN)
+	}
+	
+    //--------------------------------------------------------------------------
 	static String DistanceStr(BigDecimal distanceValue)
 	{
 		if (distanceValue != null) {

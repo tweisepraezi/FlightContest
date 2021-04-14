@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.M12,</span>
-<span id="revdate">26.03.2021</span>
+<span id="revnumber">version 3.2.M13,</span>
+<span id="revdate">14.04.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -2661,7 +2661,7 @@ anklickbare Check-Boxen eingegeben.</p>
 </div>
 </li>
 <li>
-<p><a href="rules/AT_Motorflug_2017.pdf#page=37" target="_blank">Navigationsflug-Reglement Österreich - Ausgabe 2017 (alle Landungen)</a></p>
+<p><a href="rules/AT_Motorflug_2017.pdf#page=37" target="_blank">Navigationsflug-Reglement Österreich - Ausgabe 2017</a> (alle Landungen)</p>
 <div class="literalblock">
 <div class="content">
 <pre>{x -&gt; switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}</pre>
@@ -3449,17 +3449,17 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">tpname turnpointphoto turnpointcanvas turnpointtrue turnpointfalse</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">observationenroutephotolist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutephotolist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title subtitle data</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name correct inexact false nmfromtp mmfromtp fromlasttp</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">observationenroutecanvaslist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutecanvaslist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title subtitle data</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">sign correct inexact false nmfromtp mmfromtp fromlasttp</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">observationenroutecrewjudgesign</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutecrewjudgesign</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name line</p></td>
 </tr>
@@ -3491,7 +3491,7 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">loggerdatalist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title value tpvalue</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">time latitude longitude altitude truetrack groundspeed info badcourseinfo nobadcourseinfo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">time latitude longitude altitude distance truetrack groundspeed info badcourseinfo nobadcourseinfo</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">observationturnpointresultlist</p></td>
@@ -3499,12 +3499,12 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">tpname evaluation plan result penalties</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">observationenroutephotoresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutephotoresultlist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#photoName] summary</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">photoname evaluation plan result penalties</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">observationenroutecanvasresultlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">observationsroutecanvasresultlist</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name1 name2 value [#imageName] summary</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">imagename evaluation plan result penalties</p></td>
 </tr>
@@ -3609,8 +3609,8 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 table.planningtaskresultlist tr.value td { font-size: 70%; }
 table.flightresultlist tr.value td { font-size: 70%; }
 table.observationturnpointresultlist tr.value td { font-size: 70%; }
-table.observationenroutephotoresultlist tr.value td { font-size: 70%; }
-table.observationenroutecanvasresultlist tr.value td { font-size: 70%; }
+table.observationsroutephotoresultlist tr.value td { font-size: 70%; }
+table.observationsroutecanvasresultlist tr.value td { font-size: 70%; }
 table.summary tr { font-size: 70%; }
 table.landingresultlist tr.name { font-size: 70%; }
 table.landingresultlist tr.values { font-size: 70%; }
@@ -3866,7 +3866,7 @@ flightcontest {
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>C:\Program Files (x86)\Flight Contest\tomcat\webapps\fc\GM_Utils</pre>
+<pre>C:\Program Files\Flight Contest\tomcat\webapps\fc\GM_Utils</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4543,7 +4543,7 @@ so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Script nicht regelmä
 </li>
 <li>
 <p>Kopieren Sie 'C:\FCSave\&lt;Datum&gt;-&lt;Uhrzeit&gt;-fcdb.h2.db'
-nach 'C:\Program Files (x86)\Flight Contest\fc\fcdb.h2.db'.
+nach 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'.
 Hierfür benötigen Sie Administrator-Privilegien.</p>
 </li>
 </ol>

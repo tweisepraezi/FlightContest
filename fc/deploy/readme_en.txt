@@ -68,6 +68,9 @@ Changes
 - OSM Contest Map:
     All options will be saved in database.
     Curved legs can be disabled separately.
+    Direct generation without route details added.
+    A 2nd set of generation options added.
+    Emailing of contest maps added.
 
 - Judge timetable: 
     Print option 'Latest submission time' added
@@ -75,8 +78,9 @@ Changes
     Configuration value 'flightcontest.landing.info' added
 
 - New crew list template:
-  -> Help -> Besatzungsliste erstellen -> FC-CrewList-Sample.xlsx
+  -> Help -> Create crew list -> FC-CrewList-Sample.xlsx
 
+- English help added
 
 Live Tracking Configuration
 ---------------------------

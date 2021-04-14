@@ -1,6 +1,10 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M13
+---------------
+- English help added
+
 Changes 3.2.M12
 ---------------
 - Tracker points import improved (tolerates timestamps with fractions of a seconds, e.g. 2021-03-23T13:38:21.999000Z)

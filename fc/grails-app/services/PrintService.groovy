@@ -1797,6 +1797,27 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
+    public boolean WritePDF3(response, byte[] contentByteArray, String fileName)
+    {
+        boolean ok = false
+        printstart "WritePDF '$fileName'"
+        try {
+            println "${contentByteArray.length} bytes."
+            response.setContentType("application/pdf")
+            response.setHeader("Content-disposition", "attachment; filename=$fileName")
+            //response.setContentLength(contentByteArray.length)
+            response.getOutputStream().write(contentByteArray)
+            ok = true
+            printdone ""
+        } catch (Throwable e) {
+            printerror "Throwable ${e}"
+        } catch (Exception e) {
+            printerror "Exception ${e}"
+        }
+        return ok
+    }
+    
+    //--------------------------------------------------------------------------
     private void addFonts(ITextRenderer renderer)
     {
         String webroot_dir = servletContext.getRealPath("/")

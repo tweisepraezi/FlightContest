@@ -1377,6 +1377,7 @@ class TrackerService
                     trackpoint_instance.longitude = longitude
                     trackpoint_instance.altitude = altitude
                     trackpoint_instance.track = track
+                    trackpoint_instance.interpolated = false
                     trackpoint_instance.save()
                     
                     track_point_num++

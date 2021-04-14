@@ -923,6 +923,20 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 22) { // DB-2.22 compatibility
+                            print "    2.22 modifications"
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.contestMapCenterHorizontalPos2 = HorizontalPos.Center
+                                route_instance.contestMapShowSecondOptions = false
+                                route_instance.contestMapCenterVerticalPos2 = VerticalPos.Center
+                                route_instance.SetAllContestMapPoints()
+                                route_instance.contestMapPrintLandscape2 = true
+                                route_instance.contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A3
+                                route_instance.contestMapEdition = 0
+                                route_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

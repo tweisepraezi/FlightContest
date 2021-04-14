@@ -1,6 +1,6 @@
 @echo off
 
-set FCSETUP_NAME=FCSetup-3.2.M12.exe
-set FCWAR_NAME=flightcontest-3.2.M12.war
+set FCSETUP_NAME=FCSetup-3.2.M13.exe
+set FCWAR_NAME=flightcontest-3.2.M13.war
 
-set DEPLOY_TIME=2021-03-26T09:00:00
+set DEPLOY_TIME=2021-04-14T18:00:00

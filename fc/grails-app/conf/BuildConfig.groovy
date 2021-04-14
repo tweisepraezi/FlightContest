@@ -26,7 +26,7 @@ grails.project.fork = [
 ]
 
 
-grails.dependency.cache.dir = "K:/Projects/Grails/Dependency-Cache"
+grails.dependency.cache.dir = "K:/Projects/Grails/Dependency-Cache" // file://K:/Projects/Grails/Dependency-Cache
 
 grails.project.dependency.resolver = "maven" // or ivy
 
@@ -64,6 +64,9 @@ grails.project.dependency.resolution = {
         compile "org.apache.poi:poi-ooxml:4.1.2" // https://repo1.maven.org/maven2/org/apache/poi/poi-ooxml/
         
 		runtime "com.lowagie:itext:2.0.8" // https://repo1.maven.org/maven2/com/lowagie/itext, vorher 2.1.5
+        
+        compile "org.gdal:gdal:3.2.0" // https://repo1.maven.org/maven2/org/gdal/gdal
+        //compile "org.python:jython:2.7.2" // https://repo1.maven.org/maven2/org/python/jython
         
         //test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
 	}

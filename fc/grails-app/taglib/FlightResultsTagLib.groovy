@@ -1238,6 +1238,7 @@ class FlightResultsTagLib
             outln"""            <th class="latitude">${message(code:'fc.latitude')}</th>"""
             outln"""            <th class="longitude">${message(code:'fc.longitude')}</th>"""
             outln"""            <th class="altitude">${message(code:'fc.altitude')}</th>"""
+            outln"""            <th class="distance">${message(code:'fc.distance.short')}</th>"""
             outln"""            <th class="track">${message(code:'fc.truetrack.short')}</th>"""
             outln"""            <th class="track">${message(code:'fc.groundspeed.short')}</th>"""
             outln"""            <th class="info">${message(code:'fc.info')}</th>"""
@@ -1252,7 +1253,11 @@ class FlightResultsTagLib
                 Map r = GetLoggerResult(logger_result,trackpoint_instance.utc,bc_sec)
                 bc_sec = r.bcsec
                 outln"""    <tr class="${r.trclass}">"""
-                outln"""        <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone)}</td>"""
+                if (trackpoint_instance.interpolated) {
+                    outln"""    <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone)} i</td>"""
+                } else {
+                    outln"""    <td class="time">${FcTime.UTCGetLocalTime(trackpoint_instance.utc,time_zone)}</td>"""
+                }
                 outln"""        <td class="latitude">${coord_presentation.GetCoordName(trackpoint_instance.latitude,true)}</td>"""
                 outln"""        <td class="longitude">${coord_presentation.GetCoordName(trackpoint_instance.longitude,false)}</td>"""
                 outln"""        <td class="altitude">${trackpoint_instance.altitude}${message(code:'fc.foot')}</td>"""
@@ -1260,9 +1265,11 @@ class FlightResultsTagLib
                     Map leg = AviationMath.calculateLeg(trackpoint_instance.latitude,trackpoint_instance.longitude,last_latitude,last_longitude)
                     int diff_seconds = FcTime.UTCTimeDiffSeconds(last_utc, trackpoint_instance.utc)
                     BigDecimal ground_speed = leg.dis * 3600 / diff_seconds
+                    outln"""    <td class="distance">${FcMath.RoundTrackpointDistance(leg.dis*GpxService.kmPerNM*1000)}${message(code:'fc.m')}</td>"""
                     outln"""    <td class="truetrack">${trackpoint_instance.track}${message(code:'fc.grad')}</td>"""
                     outln"""    <td class="groundspeed">${FcMath.SpeedStr_Flight(ground_speed)}${message(code:'fc.knot')}</td>"""
                 } else {
+                    outln"""    <td class="distance">-</td>"""
                     outln"""    <td class="truetrack">-</td>"""
                     outln"""    <td class="groundspeed">-</td>"""
                 }

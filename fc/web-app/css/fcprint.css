@@ -201,72 +201,72 @@ table.observationturnpointlist th, table.observationturnpointlist td {
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
-table.observationenroutephotolist {
+table.observationsroutephotolist {
     width: 48%;
 }
 
-table.observationenroutephotolist th, table.observationenroutephotolist td {
+table.observationsroutephotolist th, table.observationsroutephotolist td {
     font-size: 105%;
     text-align: center;
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
-table.observationenroutecanvaslist {
+table.observationsroutecanvaslist {
     clear: left;
 	width: 48%;
 }
 
-table.observationenroutecanvaslist tr.hide th {
+table.observationsroutecanvaslist tr.hide th {
     border-color: white; 
     color: white;
 }
 
-table.observationenroutecanvaslist th, table.observationenroutecanvaslist td {
+table.observationsroutecanvaslist th, table.observationsroutecanvaslist td {
 	font-size: 105%;
     text-align: center;
 }
 
-table.observationenroutecanvaslist td.sign img {
+table.observationsroutecanvaslist td.sign img {
     height: 14px;
 }
 
-table.observationenroutecanvaslist tr.data td.sign {
+table.observationsroutecanvaslist tr.data td.sign {
 	color: white;
     font-size: 105%;
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
-table.observationenroutecanvasresultlist td.imagename img {
+table.observationsroutecanvasresultlist td.imagename img {
     height: 14px;
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
-table.observationenroutecrewjudgesign {
+table.observationsroutecrewjudgesign {
     float: right;
 	width: 48%;
 }
 
-table.observationenroutecrewjudgesign tr.hide th, table.observationenroutecrewjudgesign tr.hide td {
+table.observationsroutecrewjudgesign tr.hide th, table.observationsroutecrewjudgesign tr.hide td {
     border-style: hidden;
 	color: white;
 }
 
-table.observationenroutecrewjudgesign tr.hide2 th, table.observationenroutecrewjudgesign tr.hide2 td {
+table.observationsroutecrewjudgesign tr.hide2 th, table.observationsroutecrewjudgesign tr.hide2 td {
     color: white;
 }
 
-table.observationenroutecrewjudgesign td {
+table.observationsroutecrewjudgesign td {
 	border-left-style: hidden;
     border-right-style: hidden;
     border-bottom-style: hidden;
 }
 
-table.observationenroutecrewjudgesign td.name {
+table.observationsroutecrewjudgesign td.name {
 	white-space: nowrap;
     width: 20%;
 }
 
-table.observationenroutecrewjudgesign tr.title td.line {
+table.observationsroutecrewjudgesign tr.title td.line {
     border-bottom: solid black 1px;
 }
 

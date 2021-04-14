@@ -14,6 +14,8 @@ Grails 2.5.6: https://grails.org/download.html/
 Apache Tomcat 9: https://tomcat.apache.org/download-90.cgi
 Ruby 2.3.3: https://www.ruby-lang.org/de/downloads/
 Inno Setup 6.1.2: http://www.innosetup.com/
+Python 3.7.9: https://www.python.org/downloads/
+GDAL 3.2.1: https://www.gisinternals.com/release.php
 
 Build for Windows:
 ------------------
@@ -59,3 +61,12 @@ Deployment sequence:
 Application running details:
     Using the in memory database H2
     Data location: C:\Program Files\Flight Contest\fc\fcdb.h2.db
+    
+GDAL installation for advanced OSM map generation:
+    1. python-3.7.9-amd64.exe (with 'Add Python to PATH')
+        (-> start Python shell and check for '[MSC v.1900 64 bit (AMD64)] on win32')
+    2. gdal-302-1900-x64-core.msi (Generic installer for the GDAL core components)
+    3. GDAL-3.2.1.win-amd64-py3.7.msi (Installer for the GDAL python bindings)
+    4. Repair GDAL
+        Copy https://github.com/OSGeo/gdal/blob/release/3.1/gdal/swig/python/osgeo/osr.py to C:\Program Files\Python37\Lib\site-packages\osgeo
+    5. Add 'C:\Program Files\GDAL' to system environment variable PATH

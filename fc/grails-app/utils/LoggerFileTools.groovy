@@ -152,6 +152,7 @@ class LoggerFileTools
                                 trackpoint_instance.longitude = longitude
                                 trackpoint_instance.altitude = altitude
                                 trackpoint_instance.track = track
+                                trackpoint_instance.interpolated = false
                                 trackpoint_instance.save()
                                 
                                 track_point_num++
@@ -285,6 +286,7 @@ class LoggerFileTools
                                 trackpoint_instance.longitude = longitude
                                 trackpoint_instance.altitude = altitude
                                 trackpoint_instance.track = track
+                                trackpoint_instance.interpolated = false
                                 trackpoint_instance.save()
                                 
                                 track_point_num++
@@ -408,6 +410,7 @@ class LoggerFileTools
                             trackpoint_instance.longitude = longitude
                             trackpoint_instance.altitude = altitude
                             trackpoint_instance.track = track
+                            trackpoint_instance.interpolated = false
                             trackpoint_instance.save()
                             
                             track_point_num++
@@ -530,6 +533,7 @@ class LoggerFileTools
                         trackpoint_instance.longitude = longitude
                         trackpoint_instance.altitude = altitude
                         trackpoint_instance.track = track
+                        trackpoint_instance.interpolated = false
                         trackpoint_instance.save()
                         
                         track_point_num++
@@ -674,6 +678,7 @@ class LoggerFileTools
                                 trackpoint_instance.longitude = longitude
                                 trackpoint_instance.altitude = altitude
                                 trackpoint_instance.track = track
+                                trackpoint_instance.interpolated = false
                                 trackpoint_instance.save()
                                 
                                 track_point_num++
@@ -751,6 +756,7 @@ class LoggerFileTools
                         trackpoint_instance.longitude = next_coord.lon
                         trackpoint_instance.altitude = next_altitude
                         trackpoint_instance.track = actTrack
+                        trackpoint_instance.interpolated = true
                         trackpoint_instance.save()
                         
                         last_latitude = next_coord.lat

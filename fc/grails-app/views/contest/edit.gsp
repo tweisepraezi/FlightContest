@@ -47,7 +47,7 @@
                             </p>
                             <p style="margin-right:1%;">
                                 <label>${message(code:'fc.contestrule')}*:</label>
-                                <a href="../../docs/help.html#supported-rules" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                <a href="../../docs/help_${session.showLanguage}.html#supported-rules" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
                                 <g:select from="${ContestRules.GetContestRules()}" optionValue="${{it.ruleValues.ruleTitle}}" name="contestRule" value="${contestInstance.contestRule}" tabIndex="${ti[0]++}"/>
                             </p>
@@ -109,7 +109,7 @@
                                     <td colspan="5">
                                         <p style="margin-right:2%;">
                                             <label>${message(code:'fc.contest.paper.style')}:</label>
-                                            <a href="../../docs/help.html#print-styles-samples" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
+                                            <a href="../../docs/help_${session.showLanguage}.html#print-styles-samples" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                             <br/>
                                             <g:textArea name="printStyle" value="${contestInstance.printStyle}" rows="5" style="width:100%;" tabIndex="${ti[0]++}"/>
                                         </p>
@@ -283,7 +283,7 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td style="width:10%;">${message(code:'fc.contest.properties')}: <a href="../../docs/help.html#contest-properties" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
+                                    <td style="width:10%;">${message(code:'fc.contest.properties')}: <a href="../../docs/help_${session.showLanguage}.html#contest-properties" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></td>
                                     <th>${message(code:'fc.contest.properties.key')}</th>
                                     <th>${message(code:'fc.contest.properties.value')}</th>
                                     <th>${message(code:'fc.contest.properties.actions')}</th>
