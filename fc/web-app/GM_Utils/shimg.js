@@ -1,24 +1,22 @@
 "use strict";
-window.JB = window.JB || {};
-JB.GPX2GM.callback = function(pars) {
-	if(pars.type == "click_Marker_Bild") {
-		JB.show_im(pars.src,pars.text,pars.coord);
-		return false;
-	}
-	return true;
-};
-JB.show_im = function(url,info,coords) {
-	var imdiv = document.createElement("div");
-	var fig = document.createElement("figure");
-	var im = document.createElement("img");
-	var figcap = document.createElement("figcaption");
-	var but = document.createElement("button");
-	var cross = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><line x1="0.1" y1="0.1" x2="0.9" y2="0.9" stroke-width="0.15" stroke="black"/><line x1="0.1" y1="0.9" x2="0.9" y2="0.1" stroke-width="0.15" stroke="black"/></svg>'; 
-//	but.innerHTML = "<img src='data:image/svg+xml,"+encodeURIComponent(cross)+"'>";  // "&#x274c;"; "&times;";
+const mapeles = document.querySelectorAll("div[class*='gpxview:'],figure[class*='gpxview:']");
+for(let i=0;i<mapeles.length;i++) { mapeles[i].addEventListener("click_Marker_Bild",function(event) { 
+	const text = event.detail.events.eventparameter.text;
+	const coord = event.detail.events.eventparameter.coord;
+	const src = event.detail.events.eventparameter.src;
+	
+	event.preventDefault();
+
+	const imdiv = document.createElement("div");
+	const fig = document.createElement("figure");
+	const im = document.createElement("img");
+	const figcap = document.createElement("figcaption");
+	const but = document.createElement("button");
+	const cross = '<svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1"><line x1="0.1" y1="0.1" x2="0.9" y2="0.9" stroke-width="0.15" stroke="black"/><line x1="0.1" y1="0.9" x2="0.9" y2="0.1" stroke-width="0.15" stroke="black"/></svg>'; 
 	but.innerHTML = cross;
-	im.src = url;
+	im.src = src;
 	imdiv.className = "JB_Photo";
-	figcap.innerHTML = info;
+	figcap.innerHTML = text;
 	fig.appendChild(but);
 	fig.appendChild(im);
 	fig.appendChild(figcap);
@@ -36,14 +34,13 @@ JB.show_im = function(url,info,coords) {
 		im.className="";
 		window.setTimeout(function(){document.body.removeChild(imdiv)},1000) ;
 	} 
-	if (coords.link && coords.link.length) {
+	if (coord.link && coord.link.length) {
 		im.style.cursor = "pointer";
 		im.onclick = function() {
-			console.log(coords.link);
-			location.href = coords.link;
+			location.href = coord.link;
 		}
 	}
-};
+})}	
 ( function() {
 	var style = function() {};
 	style.prototype.create = function() {

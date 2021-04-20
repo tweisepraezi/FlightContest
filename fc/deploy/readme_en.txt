@@ -82,6 +82,9 @@ Changes
 
 - English help added
 
+- OSM online map layer 'Flight Contest' added.
+  Allows to display route and navigation flights interactively on the OSM contest map.
+
 Live Tracking Configuration
 ---------------------------
 

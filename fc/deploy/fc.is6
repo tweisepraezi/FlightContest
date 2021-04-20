@@ -10,8 +10,8 @@ const FCVersion64 = '3.2.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.2.M13
-AppVersion=3.2.M13
+AppVerName=Flight Contest 3.2.M14
+AppVersion=3.2.M14
 ; no milestone below
 VersionInfoVersion=3.2.0
 
@@ -54,7 +54,7 @@ de.BackupError=Backup-Fehler
 
 [Files]
 Source: "..\..\..\..\Java\openjdk-1.8.0.275x64\jre\*";                DestDir: "{app}\java";       Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
-Source: "..\..\..\..\Server\apache-tomcat-9.0.41-windows-x64\*";      DestDir: "{app}\tomcat";     Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
+Source: "..\..\..\..\Server\apache-tomcat-9.0.45-windows-x64\*";      DestDir: "{app}\tomcat";     Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
 ;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\*.dll";                      DestDir: "{app}\tomcat\bin";
 ;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\gdal\java\gdalalljni.dll";   DestDir: "{app}\tomcat\bin";
 Source: ".\setenv.bat";                                               DestDir: "{app}\tomcat\bin";

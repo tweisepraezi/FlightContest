@@ -19,6 +19,10 @@ import groovy.xml.*
 import org.apache.commons.net.ftp.FTP
 import org.apache.commons.net.ftp.FTPClient
 
+import org.gdal.gdal.BuildVRTOptions
+import org.gdal.gdal.Dataset
+import org.gdal.gdal.gdal
+
 class GpxService 
 {
 	def logService
@@ -2709,27 +2713,71 @@ class GpxService
         return ret
     }
     
+    // ----------------------------------------------------------------------------------
+    void BuildVRT(String tifFileName, String vrtFileName)
+    {
+        println "BuildVRT $tifFileName -> $vrtFileName"
+        gdal.AllRegister()
+        Vector source_filenames = new Vector()
+        source_filenames.add(tifFileName)
+        Vector built_vrt_options = new Vector()
+        Dataset vrt_data = gdal.BuildVRT(vrtFileName, source_filenames, new BuildVRTOptions(built_vrt_options))
+        if (vrt_data) {
+            vrt_data.delete()
+        }
+    }
+
+    // ----------------------------------------------------------------------------------
+    void Gdal2Tiles(String workingDir, String vrtFileName, String tilesDirName)
+    {
+        vrtFileName = vrtFileName.replace('\\','/')
+        println "Gdal2Tiles '${vrtFileName}' -> '${tilesDirName}'"
+        
+        List<String> command = ["C:/Program Files/Python37/python.exe", "C:/Program Files/GDAL/gdal2tiles.py", "--tilesize=256", "-z 5-13", vrtFileName, tilesDirName]
+        ProcessBuilder process_builder = new ProcessBuilder(command)
+        Map<String, String> process_env = process_builder.environment()
+        process_env.put("PROJ_LIB", "C:\\Program Files\\GDAL\\projlib")
+        process_builder = process_builder.directory(new File(workingDir))
+        process_builder.redirectErrorStream(true)
+        Process process = process_builder.start()
+        
+        InputStream inputstream_instance = process.getInputStream()
+        BufferedReader input_reader = inputstream_instance.newReader("UTF-8")
+        while (true) {
+            String line = input_reader.readLine()
+            if (line == null) {
+                break
+            }
+            println line
+        }
+        input_reader.close()
+        inputstream_instance.close()
+    }
+    
     //--------------------------------------------------------------------------
     Map UploadTiles(String tilesDirName)
     {
-        Map ret = [error:false, message:'']
+        Map ret = [error:false, message:'', errornum:0]
         printstart "UploadTiles $tilesDirName"
         FTPClient ftp_client = new FTPClient()
         ftp_client.with {
-            connect(grailsApplication.config.flightcontest.contestmap.tiles.ftp.host, grailsApplication.config.flightcontest.contestmap.tiles.ftp.port)
+            connect(grailsApplication.config.flightcontest.ftptiles.host, grailsApplication.config.flightcontest.ftptiles.port)
             enterLocalPassiveMode()
-            if (login(grailsApplication.config.flightcontest.contestmap.tiles.ftp.username, grailsApplication.config.flightcontest.contestmap.tiles.ftp.password)) {
-                String base_dir = grailsApplication.config.flightcontest.contestmap.tiles.ftp.basedir
+            if (login(grailsApplication.config.flightcontest.ftptiles.username, grailsApplication.config.flightcontest.ftptiles.password)) {
+                String base_dir = grailsApplication.config.flightcontest.ftptiles.basedir
                 if (changeWorkingDirectory(base_dir) || makeDirectory(base_dir)) {
                     println "upload $tilesDirName -> $base_dir"
-                    upload_dir(ftp_client, tilesDirName, tilesDirName)
-                    ret.message = getMsg('fc.contestmap.exportmap.tiles.done', [], false)
+                    Map ret1 = upload_dir(ftp_client, tilesDirName, tilesDirName)
+                    ret.message = getMsg('fc.contestmap.exportmap.tiles.done', [ret1.done_num, ret1.error_num], false)
+                    if (ret1.error_num) {
+                        ret.error = true
+                    }
                 } else {
                     ret.message = getMsg('fc.net.ftp.dircreateerror', [base_dir], false)
                     ret.error = true
                 }
             } else {
-                ret.message = getMsg('fc.net.ftp.loginerror', [grailsApplication.config.flightcontest.contestmap.tiles.ftp.username], false)
+                ret.message = getMsg('fc.net.ftp.loginerror', [grailsApplication.config.flightcontest.ftptiles.username], false)
                 ret.error = true
             }
             disconnect()
@@ -2743,22 +2791,43 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void upload_dir(FTPClient ftpClient, String startSourceDirName, String sourceDirName)
+    private Map upload_dir(FTPClient ftpClient, String startSourceDirName, String sourceDirName)
     {
+        Map ret = [error_num:0, done_num:0]
+        
         File source_dir = new File(sourceDirName)
         
         // create sub directories or upload maps
         source_dir.eachFile() { File source_file ->
             String dest_file_name = source_file.canonicalPath.substring(source_file.canonicalPath.lastIndexOf('\\')+1)
             if (source_file.isFile()) {
-                println "Upload $source_file.canonicalPath"
-                def stream = new FileInputStream(source_file)
-                ftpClient.setFileType(FTP.BINARY_FILE_TYPE)
-                ftpClient.storeFile(dest_file_name, stream)
-                stream.close()
+                printstart "Upload $source_file.canonicalPath"
+                try {
+                    def stream = new FileInputStream(source_file)
+                    ftpClient.deleteFile(dest_file_name)
+                    ftpClient.setFileType(FTP.BINARY_FILE_TYPE)
+                    boolean done = ftpClient.storeFile(dest_file_name, stream)
+                    stream.close()
+                    if (done) {
+                        ret.done_num++
+                        printdone ""
+                    } else {
+                        ret.error_num++
+                        printerror ""
+                    }
+                } catch (Exception e) {
+                    ret.error_num++
+                    printerror e.getMessage()
+                }
             } else {
-                println "Create $dest_file_name"
-                ftpClient.makeDirectory(dest_file_name)
+                printstart "Create $dest_file_name"
+                try {
+                    ftpClient.makeDirectory(dest_file_name)
+                    printdone ""
+                } catch (Exception e) {
+                    ret.error_num++
+                    printerror e.getMessage()
+                }
             }
         }
         
@@ -2767,10 +2836,14 @@ class GpxService
             String dest_file_name = source_file.canonicalPath.substring(startSourceDirName.size()).replace('\\','/')
             if (!source_file.isFile()) {
                 if (ftpClient.changeWorkingDirectory(dest_file_name)) {
-                    upload_dir(ftpClient, startSourceDirName, source_file.canonicalPath)
+                    Map ret1 = upload_dir(ftpClient, startSourceDirName, source_file.canonicalPath)
+                    ret.error_num += ret1.error_num
+                    ret.done_num += ret1.done_num
                 }
             }
         }
+        
+        return ret
     }
     
     //--------------------------------------------------------------------------

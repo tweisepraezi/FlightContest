@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M13
-:revdate:   14.04.2021
+:revnumber: 3.2.M14
+:revdate:   20.04.2021
 :nofooter:
 :toc-title: Table of content
 :toc:

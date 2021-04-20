@@ -1,6 +1,6 @@
 class Defs
 {
-    static final String GPX_VIEWER_VERSION                             = "GM_Utils-6.2"
+    static final String GPX_VIEWER_VERSION                             = "GM_Utils-6.13"
  
     static final String FCSAVE_FOLDER                                  = "C:/FCSave"
     static final String FCSAVE_FOLDER_FC                               = "${FCSAVE_FOLDER}/.fc"

@@ -380,7 +380,7 @@ class GpxTagLib
             outln"""    document.getElementById("map_hp").style.height = (max_height/8 ) + "px";"""
             outln"""    document.getElementById("map_vp").style.height = (max_height/8 ) + "px";"""
         } else {
-            outln"""    document.getElementById("map").style.height = (max_height ) + "px";"""
+            outln"""    document.getElementById("map").style.height = (0.95*max_height) + "px";"""
         }
         outln"""    }"""
         outln"""    window.addEventListener("resize", resize_map);"""

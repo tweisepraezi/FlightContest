@@ -3,6 +3,6 @@
 		&maxscale_zoom11;
 		&minscale_zoom11;
 		<Filter>[amenity] = 'place_of_worship' and [religion] = 'christian' and ([denomination] = NULL or [denomination] = 'catholic' or [denomination] = 'roman_catholic' or [denomination] = 'greek_catholic' or [denomination] = 'lutheran' or [denomination] = 'protestant') and not (([building] = 'chapel') or ([building] = 'wayside_chapel') or ([historic] = 'wayside_chapel') or ([historic] = 'wayside_shrine') or ([historic] = 'wayside_cross'))</Filter>
-		<MarkersSymbolizer placement="point" file="symbols-otm/church_z13.png" transform="translate(0 -3) scale(0.75, 0.75)"/>
+		<MarkersSymbolizer placement="point" allow-overlap="true" file="symbols-otm/church_z13.png" transform="translate(0 -3) scale(0.75, 0.75)"/>
 	</Rule>
 </Style>

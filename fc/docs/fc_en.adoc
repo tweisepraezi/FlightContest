@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)
-:revnumber: 3.2.M13
-:revdate: 14.04.2021
+:revnumber: 3.2.M14
+:revdate: 20.04.2021
 :nofooter:
 :toc-title: Table of Contents
 :toc:
@@ -1562,6 +1562,7 @@ or delete this file.
 <<fc_en.adoc#configuration-landing>> +
 <<fc_en.adoc#configuration-live>> +
 <<fc_en.adoc#configuration-livetracking>> +
+<<fc_en.adoc#configuration-osmonlinemap>> +
 <<fc_en.adoc#configuration-osmprint>> +
 <<fc_en.adoc#configuration-test>>
 
@@ -1615,7 +1616,7 @@ or delete this file.
 
 2 directories must exist in the root directory of the FTP server:
 
-* GM_Utils-6.2 - GPX viewer JavaScript library.
+* GM_Utils-6.13 - GPX viewer JavaScript library.
 * Any name without spaces or special characters - contest directory (above example: "demo").
 
 The mentioned version of the GPX view can be taken from the following directory:
@@ -1696,7 +1697,7 @@ To achieve this without copies or FTP upload, use the following configuration:
    livetracking {
      server = "https://airsports.no"
      api = "/api/v1"
-     token = "..."
+     token = "TODO"
      contest {
        // showDelete = true // Default: false
        // createPublic = true // Default: false
@@ -1727,6 +1728,19 @@ To achieve this without copies or FTP upload, use the following configuration:
 |navigationtask.createPublic|Create public live tracking navigation tasks
 |contestant.minutesBetweenTrackerStartAndTakeoff|Tracker recording starts specified minutes before takeoff
 |===
+
+
+[[configuration-osmonlinemap]]
+=== Configure OSM online map
+ flightcontest {
+   maps {
+     tiles_server = "TODO" // Address of an alternative OSM tiles server
+     tiles_xyz = true // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
+   }
+ }
+
+Enables switching of the OSM online map layer 'Flight Contest'
+to an alternative tiles server (instead of https://tiles.flightcontest.de).
 
 
 [[configuration-osmprint]]

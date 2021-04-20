@@ -3,12 +3,12 @@
 		&maxscale_zoom11;
 		&minscale_zoom11;
 		<Filter>([historic] = 'castle')</Filter>
-		<MarkersSymbolizer placement="point" file="symbols-otm/castle_z13.png" transform="translate(0 -3) scale(0.75, 0.75)"/>
+		<MarkersSymbolizer placement="point" allow-overlap="true" file="symbols-otm/castle_z13.png" transform="translate(0 -3) scale(0.75, 0.75)"/>
 	</Rule>
 	<Rule>
 		&maxscale_zoom11;
 		&minscale_zoom11;
 		<Filter>([historic] = 'ruins') or (([ruins] = 'yes') and ([historic] = 'castle'))</Filter>
-		<MarkersSymbolizer placement="point" file="symbols-otm/castle_ruins_z13.png" transform="translate(2 -3) scale(0.75, 0.75)"/>
+		<MarkersSymbolizer placement="point" allow-overlap="true" file="symbols-otm/castle_ruins_z13.png" transform="translate(2 -3) scale(0.75, 0.75)"/>
 	</Rule>
 </Style>

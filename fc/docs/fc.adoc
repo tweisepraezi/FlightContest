@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M13
-:revdate:   14.04.2021
+:revnumber: 3.2.M14
+:revdate:   20.04.2021
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -1565,6 +1565,7 @@ zu machen oder diese Datei zu löschen.
 <<fc.adoc#configuration-landing>> +
 <<fc.adoc#configuration-live>> +
 <<fc.adoc#configuration-livetracking>> +
+<<fc.adoc#configuration-osmonlinemap>> +
 <<fc.adoc#configuration-osmprint>> +
 <<fc.adoc#configuration-test>>
 
@@ -1618,7 +1619,7 @@ zu machen oder diese Datei zu löschen.
 
 Im Root-Verzeichnis des FTP-Servers müssen 2 Verzeichnisse existieren:
 
-* GM_Utils-6.2 - GPX-Viewer-JavaScript-Bibliothek
+* GM_Utils-6.13 - GPX-Viewer-JavaScript-Bibliothek
 * Beliebiger Name ohne Leer- oder Sonderzeichen - Wettbewerbs-Verzeichnis (obiges Beispiel: "demo")
 
 Die genannte Version des GPX-Views kann folgendem Verzeichnis entnommen werden:
@@ -1699,7 +1700,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
    livetracking {
      server = "https://airsports.no"
      api = "/api/v1"
-     token = "..."
+     token = "TODO"
      contest {
        // showDelete = true // Default: false
        // createPublic = true // Default: false
@@ -1730,6 +1731,19 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 |navigationtask.createPublic|Öffentliche Live-Tracking-Navigationtasks anlegen
 |contestant.minutesBetweenTrackerStartAndTakeoff|Trackeraufzeichnung beginnt angegebene Minuten vor Takeoff
 |===
+
+
+[[configuration-osmonlinemap]]
+=== OSM-Online-Karte konfigurieren
+ flightcontest {
+   maps {
+     tiles_server = "TODO" // Adresse eines alternativen OSM-Tiles-Servers
+     tiles_xyz = true // Nutzt XYZ tiles (OSM Slippy Map standard) anstelle von TMS
+   }
+ }
+
+Ermöglicht Umstellung des OSM-Online-Karten-Layers 'Flight Contest'
+auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de).
 
 
 [[configuration-osmprint]]

@@ -22,6 +22,9 @@ class ContestController {
 		session.contestTitle = ""
         boolean restart = false
         
+        session.maxInactiveInterval = 60*240 // 4h
+        fcService.println "Session timeout ${session.maxInactiveInterval/60} minutes."
+        
         // check ShowLanguage
         String show_language = ""
         if (params.lang) {
@@ -44,7 +47,7 @@ class ContestController {
                 session.showLanguage = show_language
             }
         }
-
+        
         if (restart) {
             fcService.printdone "Restart contest with language $show_language"
 			redirect(controller:'contest',action:'start',params:[lang:show_language])

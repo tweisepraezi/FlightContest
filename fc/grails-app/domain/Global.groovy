@@ -334,26 +334,58 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    String GetMapTilesServer()
+    {
+        if (   grailsApplication.config.flightcontest.maps
+            && grailsApplication.config.flightcontest.maps.tiles_server
+           )
+        {
+            return grailsApplication.config.flightcontest.maps.tiles_server
+        }
+        return "https://tiles.flightcontest.de"
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean GetMapTilesTMS()
+    {
+        if (   grailsApplication.config.flightcontest.maps
+            && grailsApplication.config.flightcontest.maps.tiles_xyz
+           )
+        {
+            return false
+        }
+        return true
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     boolean IsGDALAvailable() {
         return gdalJNI.isAvailable()
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    boolean IsTitlesUploadAvailable() {
-        if (   grailsApplication.config.flightcontest.contestmap
-            && grailsApplication.config.flightcontest.contestmap.tiles
-            && grailsApplication.config.flightcontest.contestmap.tiles.ftp
-            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.host
-            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.port
-            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.username
-            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.password
-            && grailsApplication.config.flightcontest.contestmap.tiles.ftp.basedir
+    boolean IsTitlesUploadAvailable()
+    {
+        if (   grailsApplication.config.flightcontest.ftptiles
+            && grailsApplication.config.flightcontest.ftptiles.host
+            && grailsApplication.config.flightcontest.ftptiles.port
+            && grailsApplication.config.flightcontest.ftptiles.username
+            && grailsApplication.config.flightcontest.ftptiles.password
+            && grailsApplication.config.flightcontest.ftptiles.basedir
             && gdalJNI.isAvailable()
            )
         {
             return true
         }
         return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetTitlesUploadHost()
+    {
+        if (IsTitlesUploadAvailable()) {
+            return grailsApplication.config.flightcontest.ftptiles.host
+        }
+        return ""
     }
     
     // --------------------------------------------------------------------------------------------------------------------

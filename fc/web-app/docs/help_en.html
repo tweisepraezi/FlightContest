@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)</span><br>
-<span id="revnumber">version 3.2.M13,</span>
-<span id="revdate">14.04.2021</span>
+<span id="revnumber">version 3.2.M14,</span>
+<span id="revdate">20.04.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -507,6 +507,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-landing">Configure information for landing referees.</a></li>
 <li><a href="#configuration-live">Configure live display</a></li>
 <li><a href="#configuration-livetracking">Configure live tracking</a></li>
+<li><a href="#configuration-osmonlinemap">Configure OSM online map</a></li>
 <li><a href="#configuration-osmprint">Configure OSM contest map printing</a></li>
 <li><a href="#configuration-test">Configure test displays</a></li>
 </ul>
@@ -3775,6 +3776,7 @@ or delete this file.</p>
 <a href="#configuration-landing">Configure information for landing referees.</a><br>
 <a href="#configuration-live">Configure live display</a><br>
 <a href="#configuration-livetracking">Configure live tracking</a><br>
+<a href="#configuration-osmonlinemap">Configure OSM online map</a><br>
 <a href="#configuration-osmprint">Configure OSM contest map printing</a><br>
 <a href="#configuration-test">Configure test displays</a></p>
 </div>
@@ -3843,7 +3845,7 @@ flightcontest {
 <div class="ulist">
 <ul>
 <li>
-<p>GM_Utils-6.2 - GPX viewer JavaScript library.</p>
+<p>GM_Utils-6.13 - GPX viewer JavaScript library.</p>
 </li>
 <li>
 <p>Any name without spaces or special characters - contest directory (above example: "demo").</p>
@@ -3978,7 +3980,7 @@ To achieve this without copies or FTP upload, use the following configuration:</
   livetracking {
     server = "https://airsports.no"
     api = "/api/v1"
-    token = "..."
+    token = "TODO"
     contest {
       // showDelete = true // Default: false
       // createPublic = true // Default: false
@@ -4045,6 +4047,23 @@ To achieve this without copies or FTP upload, use the following configuration:</
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="configuration-osmonlinemap">Configure OSM online map</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  maps {
+    tiles_server = "TODO" // Address of an alternative OSM tiles server
+    tiles_xyz = true // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Enables switching of the OSM online map layer 'Flight Contest'
+to an alternative tiles server (instead of <a href="https://tiles.flightcontest.de" class="bare">https://tiles.flightcontest.de</a>).</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="configuration-osmprint">Configure OSM contest map printing</h3>

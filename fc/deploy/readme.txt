@@ -108,6 +108,8 @@ Erweiterungen in dieser Version (3.2):
 - Neue Vorlage für die Besatzungsliste
   -> Hilfe -> Besatzungsliste erstellen -> FC-CrewList-Sample.xlsx
 - Englische Hilfe hinzugefügt
+- OSM-Online-Karten-Layer 'Flight Contest' hinzugefügt.
+  Ermöglicht die Anzeige von Strecke und Navigationsflügen interaktiv auf der OSM-Wettbewerbs-Karte.
 
 Erweiterungen in Version 3.1.11:
 --------------------------------

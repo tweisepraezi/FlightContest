@@ -9,12 +9,15 @@ set TOMCATW=tomcat9w.exe
 set PRGDIR=%~dp0
 set JAVA_HOME=
 set JRE_HOME=%PRGDIR%java
-set path=%JRE_HOME%\bin;%path%
+set PATH=%JRE_HOME%\bin;%PATH%
 set CATALINA_HOME=%PRGDIR%tomcat
 
 :: gdal binaries
 set JvmArgs=-Djava.library.path=%ProgramFiles%\GDAL
 set PR_ENVIRONMENT=PROJ_LIB=%ProgramFiles%\GDAL\projlib
+
+:: set service display name
+set PR_DISPLAYNAME=%2
 
 :: set JvmMs=128
 set JvmMx=2048

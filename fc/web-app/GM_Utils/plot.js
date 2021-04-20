@@ -1,20 +1,22 @@
 // plot
-// Version vom 10. 9. 2018
+// Version vom 24. 2. 2021
 // Jürgen Berkemeier
 // www.j-berkemeier.de
 
 "use strict";
 
 var JB = window.JB || {};
+JB.plot_version = 'Plot vom 24. 2. 2021';
+console.info(JB.plot_version);
 
 // Math.log10 wird noch nicht von allen Browsern unterstützt
 if(!Math.log10) Math.log10 = function(x) { return Math.log(x)/Math.LN10; };
 
 // Das Plotobjekt
-// feld ist das Objekt bzw. dessen Id, in dem das Diagramm erstellt werden soll
+// plotarea ist das Objekt bzw. dessen Id, in dem das Diagramm erstellt werden soll
 // xstr und ystr geben die Bezeichner der Objektelemente mit den x- und y-Werten im Datenarray an.
 // Defaultwerte sind x und y. Das Datenarray sieht dan so aus: [{x:xwert,y:ywert}{...},...]
-JB.plot = function(feld,xstr,ystr) {
+JB.plot = function(plotarea,xstr,ystr) {
 	// Defaultwerte
 	this.ticwidth = 1;
 	this.linewidth = 1;
@@ -25,55 +27,97 @@ JB.plot = function(feld,xstr,ystr) {
 	this.markercol = "black";
 	this.fillopac = 0.1;
 	this.xscaletime = "";
+	this.tkorr = true;
+	
+	// Plot-History
+	this.history = [];
+	this.generate_history = true;
 	
 	// Plotbereich anlegen
-	if(typeof feld == "string") feld = document.getElementById(feld);
-	feld.innerHTML = "";
+	if(typeof plotarea == "string") plotarea = document.getElementById(plotarea);
+	plotarea.innerHTML = "";
+	
+//	var feld = JB.makediv(plotarea,"","","",plotarea.offsetWidth-1,plotarea.offsetHeight-1);
+	var feld = JB.makediv(plotarea,"","","","100%","100%");
+	feld.style.position = "relative";
 
 	// Einige Variablen
 	var xobj = xstr?xstr:"x";
 	var yobj = ystr?ystr:"y";
 	var xmin=0,xmax=0,ymin=0,ymax=0;
+	var dataxmin=0,dataxmax=0,dataymin=0,dataymax=0;
 	var xfak=0,yfak=0;
 	var dx,dy,fx,fy;
 	var gr = null;
 	var marker;
+	const dieses = this;
+	
+	// Bei Änderung der Größe des Plot-Canvas this.replot aufrufen
+	if(typeof(ResizeObserver) != "undefined") {
+		let to,last=0,delta=500,now;
+		const resizeObserver = new ResizeObserver(function(entries, observer) {
+			now = Date.now();
+			clearTimeout(to);
+			to = setTimeout(function() { 
+				dieses.replot();
+				last = Date.now();
+			},delta);
+			if( (now-last) > delta) {
+				dieses.replot();
+				last = now;
+			}
+		});
+		resizeObserver.observe(plotarea);
+	}
 
 	// Zu den Werten in daten xmin, xmax, ymin und ymax ermitteln
 	this.scale = function(daten) {
-		if(xmin==xmax) { // Startwerte beim ersten Datensatz
-			xmax = xmin = daten[0][xobj];
-			ymax = ymin = daten[0][yobj];
+		if(dataxmin==dataxmax) { // Startwerte beim ersten Datensatz
+			dataxmax = dataxmin = daten[0][xobj];
+			dataymax = dataymin = daten[0][yobj];
 		}
 		for(var i=0;i<daten.length;i++) {
 			var t = daten[i];
-			if(t[xobj]<xmin) xmin = t[xobj];
-			if(t[xobj]>xmax) xmax = t[xobj];
-			if(t[yobj]<ymin) ymin = t[yobj];
-			if(t[yobj]>ymax) ymax = t[yobj];
+			if(t[xobj]<dataxmin) dataxmin = t[xobj];
+			if(t[xobj]>dataxmax) dataxmax = t[xobj];
+			if(t[yobj]<dataymin) dataymin = t[yobj];
+			if(t[yobj]>dataymax) dataymax = t[yobj];
 		}
 	} // scale
 	
 	// Plotbereich leeren
 	this.clear = function() {
-		feld.innerHTML = "";
-		xmax = xmin = ymax = ymin = xfak = yfak = 0;
+		if(this.generate_history) this.history = [];
+		plotarea.innerHTML = "";
+		dataxmax = dataxmin = dataymax = dataymin = xfak = yfak = 0;
 	} // clear
 
 	// Achsenkreuz, Tics und Beschriftung, linke untere Ecke bei (x0,y0)
 	// xtext und ytext sind die Beschriftungen der Achsen
 	this.frame = function(x0,y0,xtext,ytext) {
+		if(this.generate_history) {
+			this.history.push({
+				cmd: "frame",
+				x0: x0,
+				y0:y0,
+				xtext: xtext,
+				ytext:ytext
+			});
+		}
+		xmin = dataxmin; xmax = dataxmax; ymin = dataymin; ymax = dataymax;
 		this.x0 = x0;
 		this.y0 = y0;
 		// Den Bereich für das Diagramm anlegen
-		feld.innerHTML = "";
+//		feld = JB.makediv(plotarea,"","","",plotarea.offsetWidth-1,plotarea.offsetHeight-1);
+		feld = JB.makediv(plotarea,"","","","100%","100%");
+		feld.style.position = "relative";
 		gr = new JB.grafik(feld);
 		this.method = gr.method;
 		// Elemente für ...
 		this.ifeld = JB.makediv(feld,"","","",feld.offsetWidth-1,feld.offsetHeight-1);
 		// ... Copyright
 		this.cp = JB.makediv(this.ifeld,"",0,0,10,10);
-		this.cp.innerHTML = "<a href='http://www.j-berkemeier.de' title='Plot 10. 9. 2018'>JB</a><button></button";
+		this.cp.innerHTML = "<a href='http://www.j-berkemeier.de' title='"+JB.plot_version+"'>JB</a><button></button";
 		this.cp.style.zIndex = "100";
 		this.cp.style.opacity = "0";
 		// ... und Mouseover, Marker, etc.
@@ -139,8 +183,13 @@ JB.plot = function(feld,xstr,ystr) {
 				}
 			}
 			else if(this.xscaletime=="absolute") {
+				var doclang = "de";
 				var locale = "de-de";
-				if(document.documentElement.hasAttribute("lang") && document.documentElement.getAttribute("lang")!="de") locale = "en-en";
+				if(document.documentElement.hasAttribute("lang")) doclang = document.documentElement.getAttribute("lang");
+				if(doclang == "de") locale = "de-de";
+				else if(doclang == "en") locale = "en-en";
+				else if(doclang == "fr") locale = "fr-fr";
+				else if(doclang == "es") locale = "es-es";
 				var date;
 				tx  *= 2;
 				var mxmin = Math.ceil(xmin/tx)*tx;
@@ -149,8 +198,14 @@ JB.plot = function(feld,xstr,ystr) {
 					vz = "";
 					r = Math.round(x*3600)/3600;
 					date = new Date(r*3600000);
-					if(tx<24) xt = date.toLocaleString(locale, { timeZone: 'UTC' });
-					else      xt = date.toLocaleDateString(locale, { timeZone: 'UTC' });
+					if(this.tkorr) {
+						if(tx<24) xt = date.toLocaleString(locale);
+						else      xt = date.toLocaleDateString(locale);
+					}
+					else {
+						if(tx<24) xt = date.toLocaleString(locale, { timeZone: 'UTC' });
+						else      xt = date.toLocaleDateString(locale, { timeZone: 'UTC' });
+					}
 					gr.line(xx,y0,xx,gr.h,this.gridcol);
 					if(xtext.length && xx<(gr.w-5) && xx>5) gr.text(xx,y0-2,".8em",this.labelcol,xt,"mo","h");
 				}
@@ -197,6 +252,13 @@ JB.plot = function(feld,xstr,ystr) {
 	// daten: Datenarray mit Objekten mit den x- und y-Werten
 	// color Diagrammfarbe
 	this.plot = function(daten,color) {
+		if(this.generate_history) {
+			this.history.push({
+				cmd: "plot",
+				daten: daten,
+				color: color
+			});
+		}
 		var arr=[];
 		for(var i=0,l=daten.length;i<l;i++)
 			arr.push({x:(daten[i][xobj]-xmin)*xfak+this.x0, y:(daten[i][yobj]-ymin)*yfak+this.y0});
@@ -243,53 +305,88 @@ JB.plot = function(feld,xstr,ystr) {
 		}
 	} // plot.setmarker
 	this.markeron = function(a,callback_over,callback_out,callback_move,callback_click,markertype) {
+		if(this.generate_history) {
+			this.history.push({
+				cmd: "markeron",
+				a: a,
+				callback_over: callback_over,
+				callback_out: callback_out,
+				callback_move: callback_move,
+				callback_click: callback_click,
+				markertype: markertype
+			});
+		}
 		var dieses = this;
-		var posx=0,offx;
-		this.mele.onmouseover = this.mele.ontouchstart = function(e) {
-			//dieses.mele.click(); 
-			dieses.cp.querySelector("button").focus();
-			if(!e) e = window.event;
-			e.cancelBubble = true;
-			if (e.stopPropagation) e.stopPropagation();
-			var feldt = dieses.mele;
-			var pi=0,al;
+		var posx=0,posy=0,offx,offy;
+		this.ystart=-1000;
+		var pi=0,al;
+		var starttime;
+		var can_pointer = ("PointerEvent" in window);
+		var can_touch = ("TouchEvent" in window) && !can_pointer;
+		var handle_move = function(e) {
+			e.preventDefault();
+			if(e.targetTouches && e.targetTouches[0] && e.targetTouches[0].clientX) {
+				posx = e.targetTouches[0].clientX - offx;
+				posy = e.targetTouches[0].clientY - offy;
+				if(dieses.ystart>-1000 && Math.abs(dieses.ystart-posy)>10) {
+					window.scrollBy(0,dieses.ystart - posy);
+					dieses.ystart = posy;
+				}
+			}
+			else if(e.clientX) {
+				posx = e.clientX - offx;
+				posy = e.clientY - offy;
+			}
+			pi = dieses.getPolylinePos(posx,a);
+			dieses.setmarker(a[pi],markertype);
+			if(callback_move && typeof(callback_move)=="function") callback_move(pi,a[pi],e,posx,posy);
+		} // handle_move
+		var handle_click = function(e) {
+			e.preventDefault();
+			if(e.targetTouches && e.targetTouches[0] && e.targetTouches[0].clientX) {
+				posx = e.targetTouches[0].clientX - offx;
+				posy = e.targetTouches[0].clientY - offy;
+			}
+			else if(e.clientX) {
+				posx = e.clientX - offx;
+				posy = e.clientY - offy;
+			}
+			pi = dieses.getPolylinePos(posx,a);
+			dieses.setmarker(a[pi],markertype);
+			if(callback_click && typeof(callback_click)=="function") callback_click(pi,a[pi],e,posx,posy);
+		} // handle_click
+		var handle_start = function(e) {
+			e.preventDefault();
 			offx = 0;
+			offy = 0;
+			var feldt = dieses.mele;
 			if(feldt.offsetParent) 
 				do {
 					offx += feldt.offsetLeft;
-				} while(feldt = feldt.offsetParent);
+					offy += feldt.offsetTop;
+				} while(feldt = feldt.offsetParent); 
+			dieses.cp.querySelector("button").focus();
+			if(e.targetTouches && e.targetTouches[0] && e.targetTouches[0].clientX) posx = e.targetTouches[0].clientX - offx;
+			else if(e.clientX) posx = e.clientX - offx;
+			if(can_touch) handle_down(e);
+			if(e.targetTouches && e.targetTouches[0] && e.targetTouches[0].clientY) 
+				dieses.ystart = e.targetTouches[0].clientY;
 			if(callback_over && typeof(callback_over)=="function") callback_over();
-			dieses.mele.onmousemove = dieses.mele.ontouchmove = function(e) {
-				if(!e) e = window.event;
-				e.cancelBubble = true;
-				if(e.stopPropagation) e.stopPropagation();
-				if(e.targetTouches && e.targetTouches[0] && e.targetTouches[0].clientX) posx = e.targetTouches[0].clientX;
-				else if(e.pageX) posx = e.pageX;
-				else if(e.clientX) posx = e.clientX + document.body.scrollLeft + document.body.clientLeft;
-				posx -= offx;
-				pi = dieses.getPolylinePos(posx,a);
-				dieses.setmarker(a[pi],markertype);
-				if(callback_move && typeof(callback_move)=="function") callback_move(pi,a[pi]);
-				return false;
+			if(can_pointer) {
+				dieses.mele.addEventListener("pointermove",handle_move,false);
 			}
-			dieses.mele.onclick = dieses.mele.ontouch = function(e) {
-				if(!e) e = window.event;
-				e.cancelBubble = true;
-				if(e.stopPropagation) e.stopPropagation();
-				if(e.targetTouches && e.targetTouches[0] && e.targetTouches[0].clientX) posx = e.targetTouches[0].clientX;
-				else if(e.pageX) posx = e.pageX;
-				else if(e.clientX) posx = e.clientX + document.body.scrollLeft + document.body.clientLeft;
-				posx -= offx;
-				pi = dieses.getPolylinePos(posx,a);
-				dieses.setmarker(a[pi],markertype);
-				if(callback_click && typeof(callback_click)=="function") callback_click(pi,a[pi]);
-				return false;
+			else if(can_touch) {
+				dieses.mele.addEventListener("touchmove",handle_move,false);
 			}
-			document.onkeydown = function(e) {
-				if(!e) e = window.event;
+			else {
+				dieses.mele.addEventListener("mousemove",handle_move,false);
+				dieses.mele.addEventListener("click",handle_click,false);
+			}
+			document.addEventListener("keydown",handle_keydown,false);
+		} // handle_start
+		var handle_keydown = function(e) {
 				if(e.keyCode && (e.keyCode==37 || e.keyCode==39)) { 
-					e.cancelBubble = true;
-					if (e.stopPropagation) e.stopPropagation();
+					e.preventDefault();
 					if(e.keyCode==37) { pi--; if(pi<0) pi=0; }
 					if(e.keyCode==39) { pi++; if(pi>=al) pi=al-1; }
 					dieses.setmarker(a[pi],markertype);
@@ -301,22 +398,61 @@ JB.plot = function(feld,xstr,ystr) {
 					if(callback_click && typeof(callback_click)=="function") callback_click(pi,a[pi]);
 					return false;
 				}
-				return true;
 			}
-			return false;
-		} 
-		this.mele.onmouseout = this.mele.ontouchend = function(e) {
-			if(!e) e = window.event;
-			document.onkeydown = null;
-			dieses.mele.onclick = dieses.mele.ontouch = dieses.mele.onmousemove = dieses.mele.ontouchmove = null;
+		var handle_end = function(e) {
+			if(can_touch) handle_up(e);
+			dieses.ystart=-1000;
+			document.removeEventListener("keydown",handle_keydown);
+			dieses.mele.removeEventListener("click",handle_click);
+			dieses.mele.removeEventListener("mousemove",handle_move);
+			dieses.mele.removeEventListener("touchmove",handle_move);
+			dieses.mele.removeEventListener("pointermove",handle_move);
 			dieses.hidemarker();
 			if(callback_out && typeof(callback_out)=="function") callback_out();
-			return false;
+		} // handle_end
+		var handle_up = function(e) {
+			e.preventDefault();
+			if(e.pointerType == "mouse") handle_click(e);
+			else if((Date.now()-starttime)<150	) {
+				handle_click(e);
+			}
+		} // handle_up
+		var handle_down = function(e) { 
+			starttime = Date.now();
+		} // handle_down
+		if(can_pointer) {
+			this.mele.style.touchAction = "pan-y"; // "none"; // "pan-y"; // "manipulation";
+			this.mele.addEventListener("pointerover",handle_start,false);
+			this.mele.addEventListener("pointerout",handle_end,false);
+			this.mele.addEventListener("pointerdown",handle_down,false);
+			this.mele.addEventListener("pointerup",handle_up,false);
+		}
+		else {
+			if(can_touch) {
+				this.mele.addEventListener("touchstart",handle_start,false);
+				this.mele.addEventListener("touchend",handle_end,false);
+			}
+			else {
+				this.mele.addEventListener("mouseover",handle_start,false);
+				this.mele.addEventListener("mouseout",handle_end,false);
+			}
 		}
 	} // plot.markeron
 	this.markeroff = function() {
-		this.mele.onmousemove = this.mele.ontouchmove = null;
-		this.mele.onmouseout = this.mele.ontouchend = null;
+		if(this.generate_history) {
+			this.history.push({
+				cmd: "markeroff"
+			});
+		}
+		this.mele.removeEventListener("pointerover",handle_start);
+		this.mele.removeEventListener("pointerout",handle_end);
+		this.mele.removeEventListener("pointerdown",handle_down);
+		this.mele.removeEventListener("pointerup",handle_up);
+		this.mele.removeEventListener("touchstart",handle_start);
+		this.mele.removeEventListener("touchend",handle_end);
+		this.mele.removeEventListener("mouseover",handle_start);
+		this.mele.removeEventListener("mouseout",handle_end);
+		this.mele.touchAction = "auto";
 	} // plot.markeroff
 	this.getPolylinePos =  function(posx,a) {
 		var x = posx/xfak+xmin;
@@ -339,7 +475,32 @@ JB.plot = function(feld,xstr,ystr) {
 		}
 		return pi;
 	} // plot.getPolylinePos
+	
+	this.replot = function() {
+		var save_generate_history = this.generate_history;
+		this.generate_history = false;
+		plotarea.innerHTML = "";
+		for(var i=0;i<this.history.length;i++) {
+			var hi = this.history[i];
+			switch(hi.cmd) {
+				case "frame":
+					this.frame(hi.x0,hi.y0,hi.xtext,hi.ytext);
+				break;
+				case "plot":
+					this.plot(hi.daten,hi.color);
+				break;
+				case "markeron":
+					this.markeron(hi.a,hi.callback_over,hi.callback_out,hi.callback_move,hi.callback_click,hi.markertype)
+				break;
+				case "markeroff":
+					this.markeroff();
+				break;
+			}
+		}
+		this.generate_history = save_generate_history;
+	} // plot.replot
 } // plot
+
 JB.farbbalken = function(ele) {
 	this.create = function(r,o,u,farbtafel,ymin,ymax,yl) {
 		this.fbdiv = document.createElement("div");
@@ -354,7 +515,7 @@ JB.farbbalken = function(ele) {
 		this.fb = new JB.grafik(this.fbdiv);
 		this.fb.setwidth(2);
 		for(var i=0;i<this.fb.h;i++)
-			this.fb.line(0,i,this.fb.w,i,farbtafel[Math.floor(i*farbtafel.length/this.fb.h)]); // !!!!!!!!!!!!!!!!!!!!!!!!
+			this.fb.line(0,i,this.fb.w,i,farbtafel[Math.floor(i*farbtafel.length/this.fb.h)]);
 		var lbu = Math.max(0,u-6);
 		var lbo = Math.max(0,o-6);
 		var yoff = u - lbu;
@@ -364,7 +525,7 @@ JB.farbbalken = function(ele) {
 		this.lbdiv.style.top = lbo + "px";
 		this.lbdiv.style.bottom = lbu + "px";
 		this.lbdiv.style.width = "50px";
-		try { this.lbdiv.style.backgroundColor = "rgba(255,255,255,.2)"; } catch(e) { this.lbdiv.style.backgroundColor = "rgb(200,200,200)"; };
+		this.lbdiv.style.backgroundColor = "rgba(255,255,255,.2)";
 		this.lbdiv.style.zIndex = "1";
 		ele.appendChild(this.lbdiv);
 		this.lb = new JB.grafik(this.lbdiv);
@@ -422,7 +583,9 @@ JB.makediv = function(parentnode,id,x,y,w,h) {
 	if(typeof x == "number") ele.style.left = x + "px";
 	if(typeof y == "number") ele.style.top = y + "px";
 	if(typeof w == "number") ele.style.width = w + "px";
+	else if(typeof w == "string") ele.style.width = w ;
 	if(typeof h == "number") ele.style.height = h + "px";
+	else if(typeof h == "string") ele.style.height = h ; 
 	parentnode.appendChild(ele);
 	return ele;
 } // makediv

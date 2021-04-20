@@ -1,6 +1,13 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M14
+---------------
+- OSM online map layer 'Flight Contest' added.
+  Allows to display route and navigation flights interactively on the OSM contest map.
+- Configuration of a custom tile server
+  -> Help -> Installation dependent configuration -> Configure OSM online map
+
 Changes 3.2.M13
 ---------------
 - English help added

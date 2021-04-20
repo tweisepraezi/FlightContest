@@ -426,7 +426,7 @@
                                         <g:if test="${BootStrap.global.IsGDALAvailable()}">
                                             <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_TIFMAP}" value="${Defs.CONTESTMAPPRINT_TIFMAP}" ${contestmapprint_checked_tifmap} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.tif')}</label>
                                             <g:if test="${BootStrap.global.IsTitlesUploadAvailable()}">
-                                                <label><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_TILES}" value="${Defs.CONTESTMAPPRINT_TILES}" ${contestmapprint_checked_tiles} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.tiles')}</label>
+                                                <label title="${BootStrap.global.GetTitlesUploadHost()}"><input type="radio" name="contestMapPrint" id="${Defs.CONTESTMAPPRINT_TILES}" value="${Defs.CONTESTMAPPRINT_TILES}" ${contestmapprint_checked_tiles} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.exportmap.tiles')}</label>
                                             </g:if>
                                         </g:if>
                                     </div>
