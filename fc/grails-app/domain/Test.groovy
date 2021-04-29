@@ -40,6 +40,8 @@ class Test
 	int     planningTestOtherPenalties = 0                 // DB-2.0
 	int     planningTestPenalties = 0
 	boolean planningTestComplete = false
+    Boolean planningTestLiveTrackingResultOk = false       // DB-2.23
+    Boolean planningTestLiveTrackingResultError = false    // DB-2.23
 	boolean planningTestModified = true                    // Änderungsanzeige, DB-2.0
 	int     planningTestVersion = 0                        // Änderungsanzeige, DB-2.0
 
@@ -58,6 +60,8 @@ class Test
     int     flightTestOtherPenalties = 0                   // DB-2.0
     int     flightTestPenalties = 0
     boolean flightTestComplete = false
+    Boolean flightTestLiveTrackingResultOk = false         // DB-2.23
+    Boolean flightTestLiveTrackingResultError = false      // DB-2.23
 	boolean flightTestModified = true                      // Änderungsanzeige, DB-2.0
 	int     flightTestVersion = 0                          // Änderungsanzeige, DB-2.0
     String  flightTestLink = ""                            // DB-2.10
@@ -68,6 +72,8 @@ class Test
     Integer observationTestOtherPenalties = 0              // DB-2.13
     int     observationTestPenalties = 0
 	boolean observationTestComplete = false
+    Boolean observationTestLiveTrackingResultOk = false    // DB-2.23
+    Boolean observationTestLiveTrackingResultError = false // DB-2.23
 	boolean observationTestModified = true                 // Änderungsanzeige, DB-2.0
 	int     observationTestVersion = 0                     // Änderungsanzeige, DB-2.0
     EnrouteValueUnit observationTestEnroutePhotoValueUnit  // DB-2.13
@@ -132,11 +138,15 @@ class Test
 	int     landingTestOtherPenalties = 0                  // DB-2.0
 	int     landingTestPenalties = 0
     boolean landingTestComplete = false
+    Boolean landingTestLiveTrackingResultOk = false        // DB-2.23
+    Boolean landingTestLiveTrackingResultError = false     // DB-2.23
 	boolean landingTestModified = true                     // Änderungsanzeige, DB-2.0
 	int     landingTestVersion = 0                         // Änderungsanzeige, DB-2.0
 
 	int     specialTestPenalties = 0 
 	boolean specialTestComplete = false
+    Boolean specialTestLiveTrackingResultOk = false        // DB-2.23
+    Boolean specialTestLiveTrackingResultError = false     // DB-2.23
 	boolean specialTestModified = true                     // Änderungsanzeige, DB-2.0
 	int     specialTestVersion = 0                         // Änderungsanzeige, DB-2.0
 
@@ -241,6 +251,18 @@ class Test
 		
 		// DB-2.21 compatibility
 		uploadjobtest(nullable:true)
+        
+        // DB-2.23 compatibility
+        planningTestLiveTrackingResultOk(nullable:true)
+        planningTestLiveTrackingResultError(nullable:true)
+        flightTestLiveTrackingResultOk(nullable:true)
+        flightTestLiveTrackingResultError(nullable:true)
+        observationTestLiveTrackingResultOk(nullable:true)
+        observationTestLiveTrackingResultError(nullable:true)
+        landingTestLiveTrackingResultOk(nullable:true)
+        landingTestLiveTrackingResultError(nullable:true)
+        specialTestLiveTrackingResultOk(nullable:true)
+        specialTestLiveTrackingResultError(nullable:true)
     }
 
 	static mapping = {
@@ -260,6 +282,8 @@ class Test
         planningTestForbiddenCalculators = false
 		planningTestPenalties = 0
 		planningTestComplete = false
+        planningTestLiveTrackingResultOk = false
+        planningTestLiveTrackingResultError = false
 	}
 	
 	void ResetFlightTestResults()
@@ -278,6 +302,8 @@ class Test
         flightTestForbiddenEquipment = false
 		flightTestPenalties = 0
 		flightTestComplete = false
+        flightTestLiveTrackingResultOk = false
+        flightTestLiveTrackingResultError = false
 	}
 	
 	void ResetObservationTestResults()
@@ -287,6 +313,8 @@ class Test
 		observationTestGroundTargetPenalties = 0
 		observationTestPenalties = 0
 		observationTestComplete = false
+        observationTestLiveTrackingResultOk = false
+        observationTestLiveTrackingResultError = false
         observationTestEnroutePhotoValueUnit = null
         observationTestEnrouteCanvasValueUnit = null
 	}
@@ -299,12 +327,16 @@ class Test
 		landingTest4Penalties = 0
 		landingTestPenalties = 0
 		landingTestComplete = false
+        landingTestLiveTrackingResultOk = false
+        landingTestLiveTrackingResultError = false
 	}
 	
 	void ResetSpecialTestResults()
 	{
 		specialTestPenalties = 0
 		specialTestComplete = false
+        specialTestLiveTrackingResultOk = false
+        specialTestLiveTrackingResultError = false
 	}
 
 	int GetPlanningTestVersion()

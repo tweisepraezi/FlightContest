@@ -126,6 +126,16 @@ class FcTagLib
     }
 
     // ====================================================================================================================
+    // <g:livetrackingtask var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>
+    def livetrackingtask = { p ->
+        String next_str = ""
+        if (p.next) {
+            next_str = p.next
+        }
+      	out << """<a href="${p.link}/${p.var.id}${next_str}">${p.var.bestOfName().encodeAsHTML()} (${message(code:'fc.livetracking.settings')})</a>"""
+    }
+
+    // ====================================================================================================================
     // <g:crew var="${crewInstance}" link="${createLink(controller:'crew',action:'edit')}"/>
     def crew = { p ->
         if (p.var) {

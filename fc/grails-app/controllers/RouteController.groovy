@@ -1397,16 +1397,22 @@ class RouteController {
                         String tiles_dir_name = tif_file_name.substring(0,tif_file_name.lastIndexOf('/')) + "/tiles-" + route.instance.id
                         gpxService.printstart "Write ${tiles_zip_file_name}"
                         gpxService.DeleteDir(tiles_dir_name)
-                        gpxService.BuildVRT(tif_file_name, vrt_file_name)
+                        //gpxService.BuildVRT(tif_file_name, vrt_file_name)
                         gpxService.println "Generate tiles $tiles_dir_name"
-                        gpxService.Gdal2Tiles(webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD, vrt_file_name, tiles_dir_name)
-                        Map ret = gpxService.UploadTiles(tiles_dir_name)
+                        //gpxService.Gdal2Tiles(webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD, vrt_file_name, tiles_dir_name)
+                        gpxService.Gdal2Tiles(webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD, tif_file_name, tiles_dir_name)
+                        Map ret = [message:'Tiles generated']
+                        if (!(params.contestMapNoTilesUpload == 'on')) {
+                            ret = gpxService.UploadTiles(tiles_dir_name)
+                        }
                         /*
                         ZipOutputStream zip_stream = new ZipOutputStream(new FileOutputStream(tiles_zip_file_name))
                         write_folder_to_zip(zip_stream, tiles_dir_name.substring(tiles_dir_name.lastIndexOf('/')+1), tiles_dir_name)
                         zip_stream.close()
                         */
-                        gpxService.DeleteDir(tiles_dir_name)
+                        if (!(params.contestMapNoTilesUpload == 'on')) {
+                            gpxService.DeleteDir(tiles_dir_name)
+                        }
                         gpxService.printdone ""
                         /*
                         gpxService.printstart "Download TILES"

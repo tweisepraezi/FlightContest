@@ -28,6 +28,9 @@ Tiles generation
     cd /d K:\Projects\GIT\FlightContest\fc\web-app\gpxupload
     set USE_PATH_FOR_GDAL_PYTHON=YES
     python scripts\gdal2tiles.py MAP-4a5c4e84-3fb6-4e83-8430-defbf1ef61c7.tif.vrt map_tiles
+    
+    New:
+    gdal2tiles.py -z 5-13 -p raster input.tif output_folder
 
 GDAL Binaries for Windows
 -------------------------

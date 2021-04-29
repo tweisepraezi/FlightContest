@@ -430,6 +430,13 @@
                                             </g:if>
                                         </g:if>
                                     </div>
+                                    <g:if test="${BootStrap.global.IsContestMapDevOptions()}">
+                                        <div>
+                                            <br/>
+                                            <g:checkBox name="contestMapNoTilesUpload" value="${true}" tabIndex="${ti[0]++}" />
+                                            <label>${message(code:'fc.contestmap.notilesupload')}</label>
+                                        </div>
+                                    </g:if>
                                 </fieldset>
                                 <script>
                                     $(document).on('change', '#${Defs.CONTESTMAPPRINT_PDFMAP}', function() {

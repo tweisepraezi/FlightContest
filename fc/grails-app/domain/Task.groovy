@@ -133,6 +133,14 @@ class Task
     Integer liveTrackingNavigationTaskID     = 0     // DB-2.14
     String liveTrackingNavigationTaskDate    = ""    // DB-2.15
     Boolean liveTrackingTracksAvailable      = false // DB-2.15
+    Integer liveTrackingResultsTaskID        = 0     // DB-2.23
+    Integer liveTrackingResultsPlanningID    = 0     // DB-2.23
+    Integer liveTrackingResultsFlightID      = 0     // DB-2.23
+    Boolean liveTrackingResultsFlightOn      = false // DB-2.23
+    Integer liveTrackingResultsObservationID = 0     // DB-2.23
+    Integer liveTrackingResultsLandingID     = 0     // DB-2.23
+    Integer liveTrackingResultsSpecialID     = 0     // DB-2.23
+    Boolean liveTrackingResultsPublishImmediately = false // DB-2.23
     
 	// transient values 
 	static transients = ['printSummaryResults','printPlanningResults','printPlanningResultsScan',
@@ -332,6 +340,16 @@ class Task
         printTimetableJuryReserve1(nullable:true)
         printTimetableJuryReserve2(nullable:true)
         printTimetableJuryReserve3(nullable:true)
+        
+        // DB-2.23 compatibility
+        liveTrackingResultsTaskID(nullable:true)
+        liveTrackingResultsPlanningID(nullable:true)
+        liveTrackingResultsFlightID(nullable:true)
+        liveTrackingResultsFlightOn(nullable:true)
+        liveTrackingResultsObservationID(nullable:true)
+        liveTrackingResultsLandingID(nullable:true)
+        liveTrackingResultsSpecialID(nullable:true)
+        liveTrackingResultsPublishImmediately(nullable:true)
 	}
 
     static mapping = {

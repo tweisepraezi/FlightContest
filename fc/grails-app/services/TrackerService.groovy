@@ -180,10 +180,7 @@ class TrackerService
 			contest_instance.liveTrackingManagedCrews = false
             contest_instance.save()
             for (Task task_instance in Task.findAllByContest(contest_instance)) {
-                task_instance.liveTrackingNavigationTaskID = 0
-                task_instance.liveTrackingTracksAvailable = false
-                //task_instance.liveTrackingNavigationTaskDate = ""
-                task_instance.save()
+                reset_task(task_instance)
             }
             Map ret = ['instance':contest_instance, 'deleted':true, 'message':getMsg('fc.livetracking.contestdelete.done',[old_tacking_id])]
             printdone ret
@@ -207,10 +204,7 @@ class TrackerService
 		contest_instance.liveTrackingManagedCrews = false
 		contest_instance.save()
 		for (Task task_instance in Task.findAllByContest(contest_instance)) {
-			task_instance.liveTrackingNavigationTaskID = 0
-            task_instance.liveTrackingTracksAvailable = false
-            //task_instance.liveTrackingNavigationTaskDate = ""
-			task_instance.save()
+            reset_task(task_instance)
 		}
 		Map ret = ['instance':contest_instance, 'connected':true, 'message':getMsg('fc.livetracking.contestdisconnect.done',[old_livetracking_contestid])]
 		printdone ret
@@ -309,16 +303,73 @@ class TrackerService
 		return "tracker-${liveTrackingContestID}-${startNum}-${FcTime.GetTimeStr(new Date())}"
 	}
 	
+    //--------------------------------------------------------------------------
+    Map saveLiveTrackingTask(Map params)
+    {
+		printstart "saveLiveTrackingTask"
+		
+        Task task_instance = Task.get(params.id)
+        
+        if (task_instance) {
+            
+            if(params.version) {
+                long version = params.version.toLong()
+                if(task_instance.version > version) {
+                    task_instance.errors.rejectValue("version", "task.optimistic.locking.failure", getMsg('fc.notupdated'))
+					printerror ""
+                    return ['instance':task_instance]
+                }
+            }
+            
+            task_instance.properties = params
+			
+            if (params["liveTrackingResultsFlightOn"]) {
+                task_instance.liveTrackingResultsFlightOn = true
+            } else {
+                task_instance.liveTrackingResultsFlightOn = false
+            }
+            if (params["liveTrackingResultsPublishImmediately"]) {
+                task_instance.liveTrackingResultsPublishImmediately = true
+            } else {
+                task_instance.liveTrackingResultsPublishImmediately = false
+            }
+            
+            if(!task_instance.hasErrors() && task_instance.save()) {
+                if (!task_instance.liveTrackingResultsFlightOn) {
+                    println "XX1"
+                    reset_tests2(task_instance, ResultType.Flight)
+                }
+				try {
+	                Map ret = ['instance':task_instance,'saved':true,'message':getMsg('fc.saved',["${task_instance.name()}"])]
+					printdone ret
+					return ret
+				} catch (Exception e) {
+					Map ret = ['instance':task_instance,'error':true,'message':e.getMessage()]
+					printerror ret
+					return ret
+				}
+            } else {
+				printerror ""
+                return ['instance':task_instance]
+            }
+        } else {
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
+			printerror ret
+			return ret
+        }
+    }
+    
 	//--------------------------------------------------------------------------
     Map createNavigationTask(Map params)
     {
-        printstart "createNavigationTask"
+        Map ret9 = saveLiveTrackingTask(params)
+        if (!ret9.saved) {
+            return ret9
+        }
+        
+        printstart "createNavigationTask $params"
         
         Task task_instance = Task.get(params.id)
-        if (params.liveTrackingNavigationTaskDate) {
-            task_instance.liveTrackingNavigationTaskDate = params.liveTrackingNavigationTaskDate
-            task_instance.save()
-        }
         Map ret4 = is_task_complete(task_instance, true)
         if (!ret4.ok) {
             Map ret = ['instance':task_instance, 'created':false, 'message':ret4.message]
@@ -448,6 +499,20 @@ class TrackerService
         task_instance.liveTrackingNavigationTaskID = ret1.data.toInteger()
         task_instance.save()
         
+        // get result task id and navigation tasktest id
+        Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+        if (ret5.ok && ret5.data) {
+            for (Map tasktest in ret5.data) {
+                if (tasktest.navigation_task == task_instance.liveTrackingNavigationTaskID) {
+                    task_instance.liveTrackingResultsTaskID = tasktest.task
+                    task_instance.liveTrackingResultsFlightID = tasktest.id
+                    task_instance.liveTrackingResultsFlightOn = false
+                    task_instance.save()
+                    break
+                }
+            }
+        }
+        
         Map ret = ['instance':task_instance, 'created':true, 'message':getMsg('fc.livetracking.navigationtaskcreate.done',[task_instance.liveTrackingNavigationTaskID])]
         printdone ret
         return ret
@@ -456,6 +521,11 @@ class TrackerService
     //--------------------------------------------------------------------------
     Map connectNavigationTask(Map params)
     {
+        Map ret9 = saveLiveTrackingTask(params)
+        if (!ret9.saved) {
+            return ret9
+        }
+        
         printstart "connectNavigationTask"
         
         Task task_instance = Task.get(params.id)
@@ -489,9 +559,54 @@ class TrackerService
         
         task_instance.liveTrackingNavigationTaskID = navigationtask_id
         task_instance.liveTrackingNavigationTaskDate = navigationtask_date
+        
+        String error_msg = ""
+        
+        // get result task id and navigation tasktest id
+        Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+        if (ret5.ok && ret5.data) {
+            for (Map tasktest in ret5.data) {
+                if (tasktest.navigation_task == task_instance.liveTrackingNavigationTaskID) {
+                    task_instance.liveTrackingResultsTaskID = tasktest.task
+                    task_instance.liveTrackingResultsFlightID = tasktest.id
+                    task_instance.liveTrackingResultsFlightOn = false
+                    break
+                }
+            }
+        } else {
+            error_msg = ret5.errorMsg
+        }
+        
+        // get special result tasktest ids
+        Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+        if (ret6.ok && ret6.data) {
+            for (Map tasktest in ret6.data) {
+                if (tasktest.task == task_instance.liveTrackingResultsTaskID) {
+                    if (tasktest.name == Defs.LIVETRACKING_TASKTEST_PLANNING) {
+                        task_instance.liveTrackingResultsPlanningID = tasktest.id
+                    } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_OBSERVATION) {
+                        task_instance.liveTrackingResultsObservationID = tasktest.id
+                    } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING) {
+                        task_instance.liveTrackingResultsLandingID = tasktest.id
+                    } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_SPECIAL) {
+                        task_instance.liveTrackingResultsSpecialID = tasktest.id
+                    }
+                }
+            }
+        } else {
+            if (error_msg) {
+                error_msg += ", "
+            }
+            error_msg += ret6.errorMsg
+        }
+
+        if (error_msg) {
+            error_msg = ": " + error_msg
+        }
+        
         task_instance.save()
         
-        Map ret = ['instance':task_instance, 'connected':true, 'message':getMsg('fc.livetracking.navigationtaskconnect.done',[navigationtask_id])]
+        Map ret = ['instance':task_instance, 'connected':true, 'message':getMsg('fc.livetracking.navigationtaskconnect.done',[navigationtask_id]) + error_msg]
         printdone ret
         return ret
     }
@@ -586,11 +701,52 @@ class TrackerService
         Contest contest_instance = task_instance.contest
         Integer old_navigationtask_id = task_instance.liveTrackingNavigationTaskID
         
+        // delete all result tasktests
+        Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+        if (ret5.ok && ret5.data) {
+            for (Map tasktest in ret5.data) {
+                if (tasktest.task == task_instance.liveTrackingResultsTaskID) {
+                    Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/${tasktest.id}/", "DELETE", 204, "", "")
+                    if (ret6.ok) {
+                        if (tasktest.id == task_instance.liveTrackingResultsPlanningID) {
+                            task_instance.liveTrackingResultsPlanningID = 0
+                        } else if (tasktest.id == task_instance.liveTrackingResultsFlightID) {
+                            task_instance.liveTrackingResultsFlightID = 0
+                            task_instance.liveTrackingResultsFlightOn = false
+                        } else if (tasktest.id == task_instance.liveTrackingResultsObservationID) {
+                            task_instance.liveTrackingResultsObservationID = 0
+                        } else if (tasktest.id == task_instance.liveTrackingResultsLandingID) {
+                            task_instance.liveTrackingResultsLandingID = 0
+                        } else if (tasktest.id == task_instance.liveTrackingResultsSpecialID) {
+                            task_instance.liveTrackingResultsSpecialID = 0
+                        }
+                        println "Result tasktest ${tasktest.id}, name:'${tasktest.name}', heading:'${tasktest.heading}' deleted"
+                    }
+                }
+            }
+        }
+        
+        // delete result task
+        ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/", "GET", 200, "", ALL_DATA)
+        if (ret5.ok && ret5.data) {
+            for (Map task in ret5.data) {
+                if (task.id == task_instance.liveTrackingResultsTaskID) {
+                    Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/${task.id}/", "DELETE", 204, "", "")
+                    if (ret6.ok) {
+                        task_instance.liveTrackingResultsTaskID = 0
+                        println "Result task ${task.id}, name:'${task.name}', heading:'${task.heading}' deleted"
+                    }
+                }
+            }
+        }
+        
+        task_instance.liveTrackingResultsPublishImmediately = false
+        task_instance.save()
+        
         Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/", "DELETE", 204, "", "")
         
         if (ret1.ok) {
-            task_instance.liveTrackingNavigationTaskID = 0
-            task_instance.liveTrackingTracksAvailable = false
+            reset_task(task_instance)
             task_instance.save()
             Map ret = ['instance':task_instance, 'deleted':true, 'message':getMsg('fc.livetracking.navigationtaskdelete.done',[old_navigationtask_id])]
             printdone ret
@@ -603,20 +759,249 @@ class TrackerService
     }
     
     //--------------------------------------------------------------------------
+    Map createTest(Map params, ResultType resultType)
+    {
+        Map ret9 = saveLiveTrackingTask(params)
+        if (!ret9.saved) {
+            return ret9
+        }
+        
+        printstart "createTest $resultType $params"
+        
+        Task task_instance = Task.get(params.id)
+        Contest contest_instance = task_instance.contest
+        
+        // if (contest_instance.liveTrackingManagedCrews && task_instance.liveTrackingResultsTaskID) {
+            
+        JsonBuilder json_builder_tasktest = new JsonBuilder()
+        switch (resultType) {
+            case ResultType.Planningtask:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_PLANNING
+                    heading Defs.LIVETRACKING_TASKTEST_PLANNING
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
+            case ResultType.Observation:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_OBSERVATION
+                    heading Defs.LIVETRACKING_TASKTEST_OBSERVATION
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
+            case ResultType.Landing:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_LANDING
+                    heading Defs.LIVETRACKING_TASKTEST_LANDING
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
+            case ResultType.Special:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_SPECIAL
+                    heading Defs.LIVETRACKING_TASKTEST_SPECIAL
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
+        }
+        Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "POST", 201, json_builder_tasktest.toString(), "id")
+        if (ret6.ok && ret6.data) {
+            switch (resultType) {
+                case ResultType.Planningtask:
+                    task_instance.liveTrackingResultsPlanningID = ret6.data.toInteger()
+                    break
+                case ResultType.Observation:
+                    task_instance.liveTrackingResultsObservationID = ret6.data.toInteger()
+                    break
+                case ResultType.Landing:
+                    task_instance.liveTrackingResultsLandingID = ret6.data.toInteger()
+                    break
+                case ResultType.Special:
+                    task_instance.liveTrackingResultsSpecialID = ret6.data.toInteger()
+                    break
+            }
+            task_instance.save()
+        } else {
+            boolean connected = false
+            Map ret7 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+            if (ret7.ok && ret7.data) {
+                for (Map tasktest in ret7.data) {
+                    println "XX2 $tasktest"
+                    if (tasktest.task == task_instance.liveTrackingResultsTaskID) {
+                        println "XX3"
+                        switch (resultType) {
+                            case ResultType.Planningtask:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_PLANNING) {
+                                    task_instance.liveTrackingResultsPlanningID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                            case ResultType.Observation:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_OBSERVATION) {
+                                    task_instance.liveTrackingResultsObservationID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                            case ResultType.Landing:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING) {
+                                    task_instance.liveTrackingResultsLandingID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                            case ResultType.Special:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_SPECIAL) {
+                                    task_instance.liveTrackingResultsSpecialID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                        }
+                    }
+                }
+            }
+
+            if (connected) {
+                Map ret = ['instance':task_instance, 'created':true, 'message':getMsg('fc.livetracking.results.tasktestcreate.connected')]
+                printdone ret
+                return ret
+            } else {
+                Map ret = ['instance':task_instance, 'created':false, 'message':getMsg('fc.livetracking.results.tasktestcreate.error',[ret6.errorMsg])]
+                printerror ret
+                return ret
+            }
+        }
+        
+        Map ret = ['instance':task_instance, 'created':true, 'message':getMsg('fc.livetracking.results.tasktestcreate.done')]
+        printdone ret
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map deleteTest(Map params, ResultType resultType)
+    {
+        Map ret9 = saveLiveTrackingTask(params)
+        if (!ret9.saved) {
+            return ret9
+        }
+        
+        printstart "deleteTest $resultType $params"
+        
+        Task task_instance = Task.get(params.id)
+        Contest contest_instance = task_instance.contest
+        
+        Integer tasktest_id = 0
+        switch (resultType) {
+            case ResultType.Planningtask:
+                tasktest_id = task_instance.liveTrackingResultsPlanningID
+                task_instance.liveTrackingResultsPlanningID = 0
+                break
+            case ResultType.Observation:
+                tasktest_id = task_instance.liveTrackingResultsObservationID
+                task_instance.liveTrackingResultsObservationID = 0
+                break
+            case ResultType.Landing:
+                tasktest_id = task_instance.liveTrackingResultsLandingID
+                task_instance.liveTrackingResultsLandingID = 0
+                break
+            case ResultType.Special:
+                tasktest_id = task_instance.liveTrackingResultsSpecialID
+                task_instance.liveTrackingResultsSpecialID = 0
+                break
+        }
+        task_instance.save()
+        reset_tests2(task_instance, resultType)
+        
+        Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/${tasktest_id}/", "DELETE", 204, "", "")
+        if (!ret6.ok) {
+            Map ret = ['instance':task_instance, 'created':false, 'message':getMsg('fc.livetracking.results.tasktestdelete.error',[ret6.errorMsg])]
+            printerror ret
+            return ret
+        }
+        
+        Map ret = ['instance':task_instance, 'created':true, 'message':getMsg('fc.livetracking.results.tasktestdelete.done')]
+        printdone ret
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private void reset_tests2(Task taskInstance, ResultType resultType)
+    {
+        for (Test test_instance in Test.findAllByTask(taskInstance)) {
+            switch (resultType) {
+                case ResultType.Planningtask:
+                    test_instance.planningTestLiveTrackingResultOk = false
+                    test_instance.planningTestLiveTrackingResultError = false
+                    break
+                case ResultType.Flight:
+                    test_instance.flightTestLiveTrackingResultOk = false
+                    test_instance.flightTestLiveTrackingResultError = false
+                    break
+                case ResultType.Observation:
+                    test_instance.observationTestLiveTrackingResultOk = false
+                    test_instance.observationTestLiveTrackingResultError = false
+                    break
+                case ResultType.Landing:
+                    test_instance.landingTestLiveTrackingResultOk = false
+                    test_instance.landingTestLiveTrackingResultError = false
+                    break
+                case ResultType.Special:
+                    test_instance.specialTestLiveTrackingResultOk = false
+                    test_instance.specialTestLiveTrackingResultError = false
+                    break
+            }
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     Map disconnectNavigationTask(Map params)
     {
         printstart "disconnectNavigationTask"
         
         Task task_instance = Task.get(params.id)
-        Contest contest_instance = task_instance.contest
         Integer old_navigationtask_id = task_instance.liveTrackingNavigationTaskID
         
-		task_instance.liveTrackingNavigationTaskID = 0
-        task_instance.liveTrackingTracksAvailable = false
-		task_instance.save()
+        reset_task(task_instance)
+        
 		Map ret = ['instance':task_instance, 'disconnected':true, 'message':getMsg('fc.livetracking.navigationtaskdisconnect.done',[old_navigationtask_id])]
 		printdone ret
 		return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private void reset_task(Task taskInstance)
+    {
+        reset_tests(taskInstance)
+		taskInstance.liveTrackingNavigationTaskID = 0
+        taskInstance.liveTrackingResultsTaskID = 0
+        taskInstance.liveTrackingResultsPlanningID = 0
+        taskInstance.liveTrackingResultsFlightID = 0
+        taskInstance.liveTrackingResultsFlightOn = false
+        taskInstance.liveTrackingResultsObservationID = 0
+        taskInstance.liveTrackingResultsLandingID = 0
+        taskInstance.liveTrackingResultsSpecialID = 0
+        taskInstance.liveTrackingTracksAvailable = false
+        taskInstance.liveTrackingResultsPublishImmediately = false
+        taskInstance.save()
+    }
+    
+    //--------------------------------------------------------------------------
+    private void reset_tests(Task taskInstance)
+    {
+        for (Test test_instance in Test.findAllByTask(taskInstance)) {
+            test_instance.planningTestLiveTrackingResultOk = false
+            test_instance.planningTestLiveTrackingResultError = false
+            test_instance.flightTestLiveTrackingResultOk = false
+            test_instance.flightTestLiveTrackingResultError = false
+            test_instance.observationTestLiveTrackingResultOk = false
+            test_instance.observationTestLiveTrackingResultError = false
+            test_instance.landingTestLiveTrackingResultOk = false
+            test_instance.landingTestLiveTrackingResultError = false
+            test_instance.specialTestLiveTrackingResultOk = false
+            test_instance.specialTestLiveTrackingResultError = false
+        }
     }
     
     //--------------------------------------------------------------------------
@@ -1271,7 +1656,7 @@ class TrackerService
         Task task_instance = test_instance.task
         Contest contest_instance = task_instance.contest
         
-        printstart "importTrackerPointsAndCalcTest: crew '$test_instance.crew.name', $params"
+        printstart "importTrackerPointsAndCalcTest: crew '$test_instance.crew.name'"
         
         boolean interpolate_missing_data = params?.interpolate_missing_data == "on"
         
@@ -1409,6 +1794,189 @@ class TrackerService
             
         Map ret = ['saved':true,'message':getMsg('fc.livetracking.imported',[test_instance.crew.name])]
         printdone ret.message
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map updateTestResult(Map params, ResultType resultType)
+    {
+        Test test_instance = Test.get(params.id)
+        Task task_instance = test_instance.task
+        Contest contest_instance = task_instance.contest
+        
+        if (test_instance.crew.liveTrackingTeamID && task_instance.liveTrackingResultsPublishImmediately) {
+            update_test_result(test_instance, resultType)
+        }    
+        
+        return [:]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map updateTestResults(Map params)
+    {
+        printstart "updateTestResults"
+        
+        Task task_instance = Task.get(params.id)
+        
+        int result_num = 0
+        int error_num = 0
+        String error_str = ""
+        for ( Test test_instance in Test.findAllByTask(task_instance,[sort:"viewpos"])) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID) {
+                if (test_instance.planningTestComplete && !test_instance.planningTestLiveTrackingResultOk || test_instance.planningTestLiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Planningtask)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+                if (test_instance.flightTestComplete && !test_instance.flightTestLiveTrackingResultOk || test_instance.flightTestLiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Flight)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+                if (test_instance.observationTestComplete && !test_instance.observationTestLiveTrackingResultOk || test_instance.observationTestLiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Observation)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+                if (test_instance.landingTestComplete && !test_instance.landingTestLiveTrackingResultOk || test_instance.landingTestLiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Landing)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+                if (test_instance.specialTestComplete && !test_instance.specialTestLiveTrackingResultOk || test_instance.specialTestLiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Special)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+            }
+        }
+        
+        printdone ""
+        
+        return [taskInstance:task_instance, error:error_num > 0, message:getMsg('fc.livetracking.results.updatetestresults.done',[result_num, error_num, error_str])]
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map update_test_result(Test testInstance, ResultType resultType)
+    {
+        Map ret = [ok:false, error:false]
+        
+        Task task_instance = testInstance.task
+        Contest contest_instance = task_instance.contest
+        
+        Integer tasktest_id = 0
+        int test_penalties = 0
+        switch (resultType) {
+            case ResultType.Planningtask:
+                tasktest_id = task_instance.liveTrackingResultsPlanningID
+                test_penalties = testInstance.planningTestPenalties
+                break
+            case ResultType.Flight:
+                if (task_instance.liveTrackingResultsFlightOn) {
+                    tasktest_id = task_instance.liveTrackingResultsFlightID
+                }
+                test_penalties = testInstance.flightTestPenalties
+                break
+            case ResultType.Observation:
+                tasktest_id = task_instance.liveTrackingResultsObservationID
+                test_penalties = testInstance.observationTestPenalties
+                break
+            case ResultType.Landing:
+                tasktest_id = task_instance.liveTrackingResultsLandingID
+                test_penalties = testInstance.landingTestPenalties
+                break
+            case ResultType.Special:
+                tasktest_id = task_instance.liveTrackingResultsSpecialID
+                test_penalties = testInstance.specialTestPenalties
+                break
+        }
+        
+        if (tasktest_id) {
+            printstart "updateTestResult $resultType for crew '$testInstance.crew.name': $test_penalties points."
+        
+            JsonBuilder json_builder_result = new JsonBuilder()
+            json_builder_result {
+                task_test tasktest_id
+                points test_penalties
+                team testInstance.crew.liveTrackingTeamID
+            }
+            Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/update_test_result/", "PUT", 200, json_builder_result.toString(), "")
+            switch (resultType) {
+                case ResultType.Planningtask:
+                    if (ret5.ok) {
+                        testInstance.planningTestLiveTrackingResultOk = true
+                        testInstance.planningTestLiveTrackingResultError = false
+                    } else {
+                        testInstance.planningTestLiveTrackingResultOk = false
+                        testInstance.planningTestLiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Flight:
+                    if (ret5.ok) {
+                        testInstance.flightTestLiveTrackingResultOk = true
+                        testInstance.flightTestLiveTrackingResultError = false
+                    } else {
+                        testInstance.flightTestLiveTrackingResultOk = false
+                        testInstance.flightTestLiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Observation:
+                    if (ret5.ok) {
+                        testInstance.observationTestLiveTrackingResultOk = true
+                        testInstance.observationTestLiveTrackingResultError = false
+                    } else {
+                        testInstance.observationTestLiveTrackingResultOk = false
+                        testInstance.observationTestLiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Landing:
+                    if (ret5.ok) {
+                        testInstance.landingTestLiveTrackingResultOk = true
+                        testInstance.landingTestLiveTrackingResultError = false
+                    } else {
+                        testInstance.landingTestLiveTrackingResultOk = false
+                        testInstance.landingTestLiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Special:
+                    if (ret5.ok) {
+                        testInstance.specialTestLiveTrackingResultOk = true
+                        testInstance.specialTestLiveTrackingResultError = false
+                    } else {
+                        testInstance.specialTestLiveTrackingResultOk = false
+                        testInstance.specialTestLiveTrackingResultError = true
+                    }
+                    break
+            }
+            testInstance.save()
+            if (ret5.ok) {
+                ret.ok = true
+            } else {
+                ret.error = true
+            }
+            
+            printdone ""
+        }
         return ret
     }
     

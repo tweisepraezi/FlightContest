@@ -1,6 +1,50 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M15
+---------------
+- Live Tracking task settings have been moved to a separate dialog:
+    -> Tasks -> <Task name> (Live tracking settings)
+    -> Results -> <Task name> (Live tracking settings)
+- Live Tracking task settings contains follow new controls for configuring of the 'Results Service':
+    * Buttons "Create planning test" and "Delete planning test"
+        Available if task setting 'Planning Test' has been enabled.
+        Enable/Disable submitting of planning test results to 'Results Service'
+        Enabled submitting will be shown by a column header symbol.
+    * Buttons "Create observation test" and "Delete observation test"
+        Available if task setting 'Observation Test' has been enabled.
+        Enable/Disable submitting of observation test results to 'Results Service'
+        Enabled submitting will be shown by a column header symbol.
+    * Buttons "Create landing test" and "Delete landing test"
+        Available if task setting 'Landing Test' has been enabled.
+        Enable/Disable submitting of landing test results to 'Results Service'
+        Enabled submitting will be shown by a column header symbol.
+    * Buttons "Create other test" and "Delete other test"
+        Available if task setting 'Other Test' has been enabled.
+        Enable/Disable submitting of other test results to 'Results Service'
+        Enabled submitting will be shown by a column header symbol.
+    * Check box "Submit navigation test results"
+        If enabled navigation test results will be submitted to 'Results Service'
+        Enabled submitting will be shown by a column header symbol.
+    * Check box "Submit test results immediately"
+        If enabled each 'Result ready' submits the calculated or edited penalties to the associated team's test immediately.
+        Immediate submit will be shown with a not crossed out header symbol.
+- Publishing of results to the 'Results Service' added.
+    Mode 1 - Immediate submit by 'Result ready' (shown by not crossed out header symbol):
+        Each with 'Result ready' approved test result will be submitted immediately.
+    Mode 2 - Send on command (shown by crossed out header symbol):
+        -> Results -> <Task name> -> Update live tracking results
+            Each not sent test results will be submitted.
+            If there are submit errors you can sent affected test results with this command again.
+    Successfully submitted test results will be shown by a green upload symbol.
+    Test results with submit error will be shown by a red upload symbol.
+    If there are differences between Flight Contest results and the 'Results Service':
+      * Disconnect navigation task
+      * Connect navigation task
+      * Enable 'Submit navigation test results' and 'Save'
+      * Update live tracking results: All approved test results will be submitted again
+- Results Service for teams managed by Flight Contest not available yet. This feature comes with the next version.
+
 Changes 3.2.M14
 ---------------
 - OSM online map layer 'Flight Contest' added.

@@ -36,6 +36,14 @@ class Defs
     
     static final String LIVETRACKING_DISPLAY_TASK                      = "/display/task/"
     static final String LIVETRACKING_DISPLAY_MAP                       = "/map/"
+    static final String LIVETRACKING_RESULTS_SERVICE                   = "/resultsservice/"
+    static final String LIVETRACKING_RESULTS_TASKRESULTS               = "/taskresults/"
+    
+    static final String LIVETRACKING_TASKTEST_PLANNING                 = "Planning"
+    static final String LIVETRACKING_TASKTEST_NAVIGATION               = "Navigation"
+    static final String LIVETRACKING_TASKTEST_OBSERVATION              = "Observation"
+    static final String LIVETRACKING_TASKTEST_LANDING                  = "Landing"
+    static final String LIVETRACKING_TASKTEST_SPECIAL                  = "Other"
     
     static final int OSMPRINTMAP_RUNSECONDS                            = 2
     static final String OSMPRINTMAP_GROUP                              = "OsmPrintMapGroup"

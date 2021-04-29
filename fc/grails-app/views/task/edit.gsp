@@ -332,37 +332,6 @@
                                 <a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a>
                             </p>
                         </fieldset>
-                        <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.contest.liveTrackingContestID && taskInstance.contest.liveTrackingScorecard}" >
-                            <fieldset>
-                                <legend>${message(code:'fc.livetracking')}</legend>
-                                <div>
-                                    <g:if test="${taskInstance.liveTrackingNavigationTaskID}" >
-										<label>${message(code:'fc.livetracking.navigationtaskid')}: ${taskInstance.liveTrackingNavigationTaskID}</label>
-                                        <br/>
-                                        <label>${message(code:'fc.livetracking.navigationtaskdate')}: ${taskInstance.liveTrackingNavigationTaskDate}</label>
-                                        <br/>
-										<g:set var="livetracking_map" value="${BootStrap.global.GetLiveTrackingMap(taskInstance.liveTrackingNavigationTaskID)}"/>
-										<g:if test="${livetracking_map}">
-											<label><a href="${livetracking_map}" target="_blank">${message(code:'fc.livetracking.navigationtaskmap')}</a></label>
-										</g:if>
-                                        <br/>
-                                        <br/>
-                                        <g:if test="${BootStrap.global.IsLiveTrackingNavigationTaskDeletePossible()}" >
-                                            <g:actionSubmit action="livetracking_navigationtaskdelete" value="${message(code:'fc.livetracking.navigationtaskdelete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                                        </g:if>
-                                        <g:actionSubmit action="livetracking_navigationtaskdisconnect" value="${message(code:'fc.livetracking.navigationtaskdisconnect')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                                        <g:if test="${taskInstance.liveTrackingTracksAvailable}">
-                                            <g:actionSubmit action="livetracking_navigationtaskaddtracks" value="${message(code:'fc.livetracking.navigationtaskaddtracks')}" tabIndex="${ti[0]++}"/>
-                                            <g:actionSubmit action="livetracking_navigationtaskaddtracks_incomplete" value="${message(code:'fc.livetracking.navigationtaskaddtracks.incomplete')}" tabIndex="${ti[0]++}"/>
-                                        </g:if>
-                                    </g:if>
-                                    <g:else>
-                                        <g:actionSubmit action="livetracking_navigationtaskcreate" value="${message(code:'fc.livetracking.navigationtaskcreate')}" tabIndex="${ti[0]++}"/>
-                                        <g:actionSubmit action="livetracking_navigationtaskconnect" value="${message(code:'fc.livetracking.navigationtaskconnect')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                                    </g:else>
-                                </div>
-                            </fieldset>
-                        </g:if>
                         <input type="hidden" name="id" value="${taskInstance?.id}"/>
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
                         <g:if test="${params.next}">

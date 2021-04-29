@@ -16,12 +16,20 @@
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="5" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                            <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
+                                <th colspan="6" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                            </g:if>
+                            <g:else>
+                                <th colspan="5" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                            </g:else>
                         </tr>
                         <tr>
                             <th>${message(code:'fc.task')}</th>
                             <th>${message(code:'fc.planningtest')}</th>
                             <th>${message(code:'fc.flighttest')}</th>
+                            <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
+                                <th>${message(code:'fc.livetracking')}</th>
+                            </g:if>
                             <th>${message(code:'fc.task.listplanning')}</th>
                             <th>${message(code:'fc.task.listresults')}</th>
                         </tr>
@@ -35,20 +43,24 @@
 	                                <g:set var="next_task" value="?next=${next_task_id}"/>
 	                            </g:if>
 	                            
-                                <td colspan=1><g:task var="${task_instance}" link="${createLink(controller:'task',action:'edit')}" next="${next_task}"/></td>
-
+                                <td><g:task var="${task_instance}" link="${createLink(controller:'task',action:'edit')}" next="${next_task}"/></td>
+                                
                                 <g:if test="${task_instance.planningtest}">
-                                    <td colspan=1><g:planningtest var="${task_instance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
+                                    <td><g:planningtest var="${task_instance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
                                 </g:if> <g:else>
-                                    <td class="add" colspan=1><g:link controller="planningTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
+                                    <td class="add"><g:link controller="planningTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.planningtest.add')}</g:link></td>
                                 </g:else>
 
                                 <g:if test="${task_instance.flighttest}">
-                                    <td colspan=1><g:flighttest var="${task_instance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
+                                    <td><g:flighttest var="${task_instance.flighttest}" link="${createLink(controller:'flightTest',action:'show')}"/></td>
                                 </g:if> <g:else>
-                                    <td class="add" colspan=1><g:link controller="flightTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
+                                    <td class="add"><g:link controller="flightTest" params="['task.id':task_instance?.id,'taskid':task_instance?.id]" action="create">${message(code:'fc.flighttest.add')}</g:link></td>
                                 </g:else>
                                 
+                                <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
+                                    <td><g:livetrackingtask var="${task_instance}" link="${createLink(controller:'task',action:'editlivetracking')}"/><img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></td>
+                                </g:if>
+
                                 <g:if test="${task_instance.hidePlanning}">
                                     <td>${message(code:'fc.hided')}</td>
                                 </g:if>

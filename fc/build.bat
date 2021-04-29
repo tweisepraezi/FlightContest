@@ -73,7 +73,9 @@ if "%1" == "-deploy" goto deploy
 echo.
 echo Remove files...
 echo.
-del /Q web-app\gpxupload\*
+rmdir /Q /S web-app\gpxupload
+md web-app\gpxupload
+attrib +h web-app\gpxupload
 del /Q web-app\jobs\*
 del /Q web-app\jobs\done\*
 del /Q web-app\jobs\error\*

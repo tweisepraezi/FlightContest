@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.22
+	// Actual database version: DB-2.23
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 22
+	static int DB_MINOR = 23
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -230,6 +230,17 @@ class Global
             && grailsApplication.config.flightcontest.livetracking.server
         ) {
             return "${grailsApplication.config.flightcontest.livetracking.server}${Defs.LIVETRACKING_DISPLAY_TASK}${navigationTaskID.toString()}${Defs.LIVETRACKING_DISPLAY_MAP}"
+        }
+        return ""
+	}
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetLiveTrackingResults(Integer contestID, Integer navigationTaskID)
+    {
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.server
+        ) {
+            return "${grailsApplication.config.flightcontest.livetracking.server}${Defs.LIVETRACKING_RESULTS_SERVICE}${contestID.toString()}${Defs.LIVETRACKING_RESULTS_TASKRESULTS}${navigationTaskID}/"
         }
         return ""
 	}

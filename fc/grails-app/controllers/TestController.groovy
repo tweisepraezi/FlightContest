@@ -172,6 +172,7 @@ class TestController
             flash.message = test.message
             redirect(action:planningtaskresults,id:params.id)
         } else {
+            trackerService.updateTestResult(params, ResultType.Planningtask)
             flash.message = test.message
             redirect(controller:"task",action:"startresults",params:[message:test.message])
         }
@@ -184,6 +185,7 @@ class TestController
             flash.message = test.message
             redirect(action:planningtaskresults,id:params.id)
         } else if (test.instance) {
+            trackerService.updateTestResult(params, ResultType.Planningtask)
             flash.message = test.message
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Planningtask)
@@ -405,6 +407,7 @@ class TestController
             flash.message = test.message
             redirect(action:flightresults,id:params.id)
         } else {
+            trackerService.updateTestResult(params, ResultType.Flight)
             flash.message = test.message
             redirect(controller:"task",action:"startresults",params:[message:test.message])
         }
@@ -417,6 +420,7 @@ class TestController
             flash.message = test.message
             redirect(action:flightresults,id:params.id)
         } else if (test.instance) {
+            trackerService.updateTestResult(params, ResultType.Flight)
             flash.message = test.message
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Flight)
@@ -847,6 +851,7 @@ class TestController
                 redirect(action:observationresults,id:params.id)
             }
         } else {
+            trackerService.updateTestResult(params, ResultType.Observation)
             flash.message = test.message
             redirect(controller:"task",action:"startresults",params:[message:test.message])
         }
@@ -864,6 +869,7 @@ class TestController
                 redirect(action:observationresults,id:params.id)
             }
         } else if (test.instance) {
+            trackerService.updateTestResult(params, ResultType.Observation)
             flash.message = test.message
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Observation)
@@ -1099,6 +1105,7 @@ class TestController
 	            	redirect(action:landingresults,id:params.id)
 				}
 	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing)
 	            redirect(controller:"task",action:"startresults",params:[message:test.message])
 	        }
         } else {
@@ -1120,6 +1127,7 @@ class TestController
 	            	redirect(action:landingresults,id:params.id)
 				}
 	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing)
 				if (nexttest_id) {
 					if (next2test_id) {
 						redirect(action:landingresults,id:nexttest_id,params:[next:next2test_id])
@@ -1244,6 +1252,7 @@ class TestController
             flash.message = test.message
             redirect(action:specialresults,id:params.id)
         } else {
+            trackerService.updateTestResult(params, ResultType.Special)
             flash.message = test.message
             redirect(controller:"task",action:"startresults",params:[message:test.message])
         }
@@ -1256,6 +1265,7 @@ class TestController
             flash.message = test.message
             redirect(action:specialresults,id:params.id)
         } else if (test.instance) {
+            trackerService.updateTestResult(params, ResultType.Special)
             flash.message = test.message
 			long nexttest_id = test.instance.GetNextTestID(ResultType.Special)
 			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Special)

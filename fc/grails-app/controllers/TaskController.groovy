@@ -1438,32 +1438,119 @@ class TaskController {
         redirect(controller:"task",action:"startresults")
     }
 
+    def editlivetracking = {
+        Map task = domainService.GetTask(params) 
+        if (task.instance) {
+			// assign return action
+			if (session.taskReturnAction) {
+				return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+			}
+			return [taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+
+    def savelivetracking = {
+        def task = trackerService.saveLiveTrackingTask(params) 
+		if (task.saved) {
+        	flash.message = task.message
+            render(view:'editlivetracking',model:[taskInstance:task.instance])
+        } else if (task.instance) {
+			if (task.error) {
+				flash.error = true
+				flash.message = task.message
+			}
+			render(view:'editlivetracking',model:[taskInstance:task.instance])
+        } else {
+			flash.message = task.message
+			redirect(action:edit,id:params.id)
+        }
+    }
+
     def livetracking_navigationtaskcreate = {
         def ret = trackerService.createNavigationTask(params)
         flash.message = ret.message
         flash.error = !ret.created
-        render(view:'edit',model:[taskInstance:ret.instance])
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
     def livetracking_navigationtaskconnect = {
         def ret = trackerService.connectNavigationTask(params)
         flash.message = ret.message
         flash.error = !ret.connected
-        render(view:'edit',model:[taskInstance:ret.instance])
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
     def livetracking_navigationtaskdelete = {
         def ret = trackerService.deleteNavigationTask(params)
         flash.message = ret.message
         flash.error = !ret.deleted
-        render(view:'edit',model:[taskInstance:ret.instance])
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
     def livetracking_navigationtaskdisconnect = {
         def ret = trackerService.disconnectNavigationTask(params)
         flash.message = ret.message
         flash.error = !ret.disconnected
-        render(view:'edit',model:[taskInstance:ret.instance])
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_planningcreate = {
+        def ret = trackerService.createTest(params, ResultType.Planningtask)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_planningdelete = {
+        def ret = trackerService.deleteTest(params, ResultType.Planningtask)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_observationcreate = {
+        def ret = trackerService.createTest(params, ResultType.Observation)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_observationdelete = {
+        def ret = trackerService.deleteTest(params, ResultType.Observation)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landingcreate = {
+        def ret = trackerService.createTest(params, ResultType.Landing)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landingdelete = {
+        def ret = trackerService.deleteTest(params, ResultType.Landing)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_othercreate = {
+        def ret = trackerService.createTest(params, ResultType.Special)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_otherdelete = {
+        def ret = trackerService.deleteTest(params, ResultType.Special)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
     def livetracking_navigationtaskaddtracks = {
@@ -1474,7 +1561,7 @@ class TaskController {
         } else {
             flash.error = false
         }
-        render(view:'edit',model:[taskInstance:ret.instance])
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
     def livetracking_navigationtaskaddtracks_incomplete = {
@@ -1485,7 +1572,7 @@ class TaskController {
         } else {
             flash.error = false
         }
-        render(view:'edit',model:[taskInstance:ret.instance])
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
     def livetracking_navigationtaskupdatecrews = {
@@ -1508,6 +1595,17 @@ class TaskController {
             flash.error = false
         }
         redirect(action:listplanning, id:ret.taskInstance.id)
+    }
+    
+    def livetracking_updatetestresults = {
+        def ret = trackerService.updateTestResults(params) 
+      	flash.message = ret.message
+        if (ret.error) {
+           	flash.error = true
+        } else {
+           	flash.error = false
+        }
+        redirect(action:listresults, id:ret.taskInstance.id)
     }
     
 	Map GetPrintParams() {

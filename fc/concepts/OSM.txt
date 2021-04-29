@@ -1,0 +1,29 @@
+OSM-Karten erstellen
+   https:github.com/printmaps/printmaps
+     Map generation: https:github.com/printmaps/printmaps/tree/master/Nik4
+     OpenTopoMap-Stil: https:github.com/der-stefan/OpenTopoMap  
+
+https:www.gdal.org/
+     https:www.gdal.org/ogr_formats.html
+     https:www.gdal.org/drv_csv.html
+     https:giswiki.hsr.ch/WKT
+
+https:forum.openstreetmap.org/viewtopic.php?id=57945&p=3
+https:docs.oracle.com/javase/7/docs/api/java/net/URLConnection.html
+https:stackoverflow.com/questions/321736/how-to-set-dpi-information-in-an-image
+https:docs.oracle.com/javase/7/docs/api/javax/imageio/metadata/doc-files/standard_metadata.html
+https:de.wikipedia.org/wiki/European_Petroleum_Survey_Group_Geodesy   EPSG-Nummern
+
+https://wiki.openstreetmap.org/wiki/Creating_your_own_tiles
+
+https://raw.githubusercontent.com/openstreetmap/mapnik-stylesheets/master/generate_image.py
+
+Mapnik
+   https:github.com/mapnik/mapnik/wiki/XMLConfigReference
+   https:help.openstreetmap.org/questions/13250/what-is-the-correct-projection-i-should-use-with-mapnik 
+
+   https:github.com/mapnik/mapnik/wiki/TextSymbolizer
+   https:github.com/mapnik/mapnik/wiki/LineSymbolizer
+   https:github.com/mapnik/mapnik/wiki/PolygonSymbolizer
+   https:github.com/mapnik/mapnik/wiki/MarkersSymbolizer
+   https:github.com/mapnik/mapnik/wiki/PointSymbolizer

@@ -1,0 +1,52 @@
+Live Tracking
+=============
+
+Results Service
+---------------
+
+-> Task -> <Taskname> -> Create navigation task (additional calls)
+    GET POST/PUT/DELETE /api/v1/contests/{id}/tasks/
+        Fetches the list of tasks, or post/update a new task for a contest
+            name*	                        string      Name
+            heading*	                    string      Heading
+            contest*	                    integer     Contest    
+            autosum_scores	                boolean     Autosum scores, If true, the server sum all tests into TaskSummary when any test is updated
+            summary_score_sorting_direction	string      Summary score sorting direction, desc or asc, Whether the lowest (ascending) or highest (ascending) score is the best result
+            index	                        integer     Index, The index of the task when displayed as columns in a table. Indexes are sorted in ascending order to determine column order 
+        
+    PlanningTest, NavigationTest, ObservationTest, LandingTest, OtherTest -> POST /GET/PUT/DELETE /api/v1/contests/{id}/tasktests/ 
+        Fetches the lists of tasks tests (there are many tests for a task), or post/update a new task test for the task (task ID provided in post data) and contest
+            name*	        string      Name
+            heading*	    string      Heading
+            task*	        integer     Task
+            navigation_task	integer     Navigation task
+            sorting	        string      Sorting, desc or asc, Whether the lowest (ascending) or highest (ascending) score is the best result
+            index	        integer     Index, The index of the task when displayed as columns in a table. Indexes are sorted in ascending order to determine column order
+    
+-> Results -> <Taskname> -> Update live tracking results
+    FC.Task.Test.Detail -> PUT /api/v1/contests/{id}/update_test_result/ 
+        Update the individual score for a test for a team. Requires reference to a task_test, this id to get from posting a new task test
+            task_test*	integer     Task test
+            points*	    number      Points
+            team*	    integer     Team
+
+    PUT /api/v1/contests/{id}/update_task_summary/ 
+        Update the total score for a task for a team. Requires reference to a task, this id you get from posting a new task
+            task*	integer     Task
+            points*	number      Points
+            team*	integer     Team
+
+-> Evaluation -> Contest Evaluation -> Update live tracking results
+    PUT /api/v1/contests/{id}/update_contest_summary/ 
+        Update the total score for the contest for a team
+            points*	number      Points
+            team*	integer     Team
+ 
+
+GET /api/v1/contests/{id}/teams/ -> Team-IDs ermitteln
+    provides a list of all teams for the contest. 
+    
+GET /api/v1/contests/{id}/results_details/ 
+    returns all data that is part of the results service for the contest
+    
+

@@ -28,25 +28,6 @@ import org.gdal.gdal.TranslateOptions
 import org.gdal.gdal.gdal
 import org.gdal.gdalconst.gdalconstConstants
 
-// OSM-Karten erstellen
-//   https://github.com/printmaps/printmaps
-//     Map generation: https://github.com/printmaps/printmaps/tree/master/Nik4
-//     OpenTopoMap-Stil: https://github.com/der-stefan/OpenTopoMap  
-//   https://www.gdal.org/
-//     https://www.gdal.org/ogr_formats.html
-//     https://www.gdal.org/drv_csv.html
-//     https://giswiki.hsr.ch/WKT
-//   https://forum.openstreetmap.org/viewtopic.php?id=57945&p=3
-//   https://github.com/mapnik/mapnik/wiki/TextSymbolizer
-//   https://github.com/mapnik/mapnik/wiki/LineSymbolizer
-//   https://github.com/mapnik/mapnik/wiki/PolygonSymbolizer
-//   https://github.com/mapnik/mapnik/wiki/MarkersSymbolizer
-//   https://github.com/mapnik/mapnik/wiki/PointSymbolizer
-//   https://docs.oracle.com/javase/7/docs/api/java/net/URLConnection.html
-//   https://stackoverflow.com/questions/321736/how-to-set-dpi-information-in-an-image
-//   https://docs.oracle.com/javase/7/docs/api/javax/imageio/metadata/doc-files/standard_metadata.html
-//   https://de.wikipedia.org/wiki/European_Petroleum_Survey_Group_Geodesy   EPSG-Nummern
-
 class OsmPrintMapService
 {
     def logService
@@ -76,9 +57,9 @@ class OsmPrintMapService
     final static String HIDELAYERS_PRINTMAPS_CARTO = "admin-low-zoom,admin-mid-zoom,admin-high-zoom,placenames-small,text-point,text-poly,text-poly-low-zoom,nature-reserve-boundaries,landuse-overlay,roads-text-name,roads-text-ref,roads-text-ref-low-zoom,amenity-points,amenity-points-poly,junctions,ferry-routes,stations,stations-poly,tourism-boundary,water-lines-text,bridge-text,railways-text-name"
     final static String HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY = "placenames-medium"
     
-    final static String ATTR_PROJECTION = "3857" // EPSG-Nummer, WGS84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
-    final static String SRS_ATTR = "epsg:4326"
-    final static String SRS_GEOTIFF = "WGS84" // "EPSG:4326" geht nicht im war-Container
+    final static String ATTR_OUTPUT_PROJECTION = "3857" // EPSG-Nummer, WGS84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
+    final static String ATTR_INPUT_SRS = "epsg:4326"
+    final static String GEOTIFF_OUTPUT_SRS = "" // "WGS84" // "EPSG:4326" geht nicht im war-Container
      
     // Formate
     //   DIN-A1 Hochformat = 594 x 841 mm, DIN-A1 Querformat = 841 x 594 mm 
@@ -471,35 +452,35 @@ class OsmPrintMapService
         String gpx_short_file_name = gpx_file_name.substring(gpx_file_name.lastIndexOf('/')+1)
         String gpx_lines = """,{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
-            "SRS": "+init=${SRS_ATTR}",
+            "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "routes"
         },
         {
             "Style": "<LineSymbolizer stroke='red' stroke-width='${TRACK_STROKE_WIDTH}' stroke-linecap='round' />",
-            "SRS": "+init=${SRS_ATTR}",
+            "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "tracks"
         },
         {
             "Style": "<TextSymbolizer fontset-name='fontset-2' size='${TP_FONT_SIZE}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true'>[name]</TextSymbolizer>",
-            "SRS": "+init=${SRS_ATTR}",
+            "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "waypoints"
         },
         {
             "Style": "<MarkersSymbolizer file='[sym]' transform='${GEODATA_SYMBOL_SCALE}' placement='point' />",
-            "SRS": "+init=${SRS_ATTR}",
+            "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "waypoints"
         },
         {
             "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SYMBOL_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='10' placement='point'>[type]</TextSymbolizer>",
-            "SRS": "+init=${SRS_ATTR}",
+            "SRS": "+init=${ATTR_INPUT_SRS}",
             "Type": "ogr",
             "File": "${gpx_short_file_name}",
             "Layer": "waypoints"
@@ -511,21 +492,21 @@ class OsmPrintMapService
                 String graticule_short_file_name = graticule_file_name.substring(graticule_file_name.lastIndexOf('/')+1)
                 graticule_lines = """,{
                     "Style": "<PolygonSymbolizer fill='lightgrey' />",
-                    "SRS": "+init=${SRS_ATTR}",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
                     "Type": "csv",
                     "File": "${graticule_short_file_name}",
                     "Layer": ""
                 },
                 {
                     "Style": "<LineSymbolizer stroke='black' stroke-width='${GRATICULE_STROKE_WIDTH}' stroke-linecap='round' />",
-                    "SRS": "+init=${SRS_ATTR}",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
                     "Type": "csv",
                     "File": "${graticule_short_file_name}",
                     "Layer": ""
                 },
                 {
                     "Style": "<TextSymbolizer fontset-name='fontset-0' size='${GRATICULE_TEXT_FONT_SIZE}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true' horizontal-alignment='right' dx='5' dy='8' placement='vertex'>[name]</TextSymbolizer>",
-                    "SRS": "+init=${SRS_ATTR}",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
                     "Type": "csv",
                     "File": "${graticule_short_file_name}",
                     "Layer": ""
@@ -542,14 +523,14 @@ class OsmPrintMapService
             String airfields_short_file_name = airfields_file_name.substring(airfields_file_name.lastIndexOf('/')+1)
             airfields_lines = """,{
                 "Style": "<MarkersSymbolizer file='airfield.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' allow-overlap='true' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${airfields_short_file_name}",
                 "Layer": ""
             }
             ,{
                 "Style": "<TextSymbolizer fontset-name='fontset-0' size='${AIRFIELD_TEXT_FONT_SIZE}' fill='black' halo-radius='1' halo-fill='white' allow-overlap='true' dy='10' placement='point'>[name]</TextSymbolizer>",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${airfields_short_file_name}",
                 "Layer": ""
@@ -563,7 +544,7 @@ class OsmPrintMapService
             String churches_short_file_name = churches_file_name.substring(churches_file_name.lastIndexOf('/')+1)
             churches_lines = """,{
                 "Style": "<MarkersSymbolizer file='church.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${churches_short_file_name}",
                 "Layer": ""
@@ -577,7 +558,7 @@ class OsmPrintMapService
             String castles_short_file_name = castles_file_name.substring(castles_file_name.lastIndexOf('/')+1)
             castles_lines = """,{
                 "Style": "<MarkersSymbolizer file='castle.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${castles_short_file_name}",
                 "Layer": ""
@@ -591,7 +572,7 @@ class OsmPrintMapService
             String chateaus_short_file_name = chateaus_file_name.substring(chateaus_file_name.lastIndexOf('/')+1)
             chateaus_lines = """,{
                 "Style": "<MarkersSymbolizer file='chateau.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${chateaus_short_file_name}",
                 "Layer": ""
@@ -605,7 +586,7 @@ class OsmPrintMapService
             String windpowerstations_short_file_name = windpowerstations_file_name.substring(windpowerstations_file_name.lastIndexOf('/')+1)
             windpowerstations_lines = """,{
                 "Style": "<MarkersSymbolizer file='windpowerstation.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${windpowerstations_short_file_name}",
                 "Layer": ""
@@ -619,14 +600,14 @@ class OsmPrintMapService
             String peaks_short_file_name = peaks_file_name.substring(peaks_file_name.lastIndexOf('/')+1)
             peaks_lines = """,{
                 "Style": "<MarkersSymbolizer file='peak.png' transform='${GEODATA_BUILDING_SCALE}' placement='point' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${peaks_short_file_name}",
                 "Layer": ""
             }
             ,{
                 "Style": "<TextSymbolizer fontset-name='fontset-0' size='${PEAKS_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='10' placement='point'>[altitude]</TextSymbolizer>",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${peaks_short_file_name}",
                 "Layer": ""
@@ -640,14 +621,14 @@ class OsmPrintMapService
             String additionals_short_file_name = additionals_file_name.substring(additionals_file_name.lastIndexOf('/')+1)
             additionals_lines = """,{
                 "Style": "<MarkersSymbolizer file='[symbol]' transform='${GEODATA_BUILDING_SCALE}' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${additionals_short_file_name}",
                 "Layer": ""
             }
             ,{
                 "Style": "<TextSymbolizer fontset-name='fontset-0' size='${AIRFIELD_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dy='10' placement='point'>[name]</TextSymbolizer>",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${additionals_short_file_name}",
                 "Layer": ""
@@ -661,14 +642,14 @@ class OsmPrintMapService
             String specials_short_file_name = specials_file_name.substring(specials_file_name.lastIndexOf('/')+1)
             specials_lines = """,{
                 "Style": "<MarkersSymbolizer file='special.png' transform='${GEODATA_BUILDING_SCALE}' allow-overlap='true' placement='point' />",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${specials_short_file_name}",
                 "Layer": ""
             }
             ,{
                 "Style": "<TextSymbolizer fontset-name='fontset-0' size='${SPECIALS_TEXT_FONT_SIZE}' fill='black' allow-overlap='true' dx='[dx]' dy='[dy]' placement='point'>[name]</TextSymbolizer>",
-                "SRS": "+init=${SRS_ATTR}",
+                "SRS": "+init=${ATTR_INPUT_SRS}",
                 "Type": "csv",
                 "File": "${specials_short_file_name}",
                 "Layer": ""
@@ -683,7 +664,7 @@ class OsmPrintMapService
             for (String airspaces_layer in contestMapParams.contestMapAirspacesLayer.split(",")) {
                 airspaces_lines += """,{
                     "Style": "<PolygonSymbolizer fill-opacity='0.2' fill='steelblue' />",
-                    "SRS": "+init=${SRS_ATTR}",
+                    "SRS": "+init=${ATTR_INPUT_SRS}",
                     "Type": "ogr",
                     "File": "${airspaces_short_file_name}",
                     "Layer": "${airspaces_layer.trim()}"
@@ -716,7 +697,7 @@ class OsmPrintMapService
         int img_height = 0
         String projection =  BootStrap.global.GetPrintServerProjection()
         if (!projection) { 
-            projection = ATTR_PROJECTION
+            projection = ATTR_OUTPUT_PROJECTION
         }
         
         //...........................................................................................
@@ -987,7 +968,7 @@ class OsmPrintMapService
                             pix_height = (lat_max - lat_min) / img_width
                             println "Successfully. Status='${status.json.Data.Attributes.MapBuildSuccessful}', Width=${img_width}, Height=${img_height}, LonDiff=${lon_max-lon_min}, LatDiff=${lat_max-lat_min}, PixWidth=${pix_width}, PixHeight=${pix_height}"
                             
-                            // correction
+                            // correction TODO remove
                             int add_pix = 4
                             lat_min += add_pix*pix_height
                             lat_max += add_pix*pix_height
@@ -1092,18 +1073,24 @@ class OsmPrintMapService
                         if (BootStrap.global.IsGDALAvailable()) {
                             String projection =  BootStrap.global.GetPrintServerProjection()
                             if (!projection) { 
-                                projection = ATTR_PROJECTION
+                                projection = ATTR_OUTPUT_PROJECTION
                             }
                             printstart "Generate ${tif_file_name}"
                             try {
-                                //println "-a_srs EPSG:${projection}"
-                                println "-of GTiff -a_srs $SRS_GEOTIFF -a_ullr $lon_min $lat_max $lon_max $lat_min -co COMPRESS=JPEG -co TILED=YES"
+                                String parameters = "-of GTiff "
+                                if (GEOTIFF_OUTPUT_SRS) {
+                                    parameters += "-a_srs $GEOTIFF_OUTPUT_SRS "
+                                }
+                                parameters += "-a_ullr $lon_min $lat_max $lon_max $lat_min -co COMPRESS=JPEG -co TILED=YES"
+                                println parameters
                                 gdal.AllRegister()
                                 Vector translate_options = new Vector()
                                 translate_options.add("-of")
                                 translate_options.add("GTiff")
-                                translate_options.add("-a_srs")
-                                translate_options.add(SRS_GEOTIFF)
+                                if (GEOTIFF_OUTPUT_SRS) {
+                                    translate_options.add("-a_srs")
+                                    translate_options.add(GEOTIFF_OUTPUT_SRS)
+                                }
                                 translate_options.add("-a_ullr") // upper left, lower right
                                 translate_options.add(lon_min.toString())
                                 translate_options.add(lat_max.toString())

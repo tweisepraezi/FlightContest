@@ -2728,12 +2728,18 @@ class GpxService
     }
 
     // ----------------------------------------------------------------------------------
-    void Gdal2Tiles(String workingDir, String vrtFileName, String tilesDirName)
+    void Gdal2Tiles(String workingDir, String inputFileName, String tilesDirName)
     {
-        vrtFileName = vrtFileName.replace('\\','/')
-        println "Gdal2Tiles '${vrtFileName}' -> '${tilesDirName}'"
+        inputFileName = inputFileName.replace('\\','/')
+        println "Gdal2Tiles '${inputFileName}' -> '${tilesDirName}'"
         
-        List<String> command = ["C:/Program Files/Python37/python.exe", "C:/Program Files/GDAL/gdal2tiles.py", "--tilesize=256", "-z 5-13", vrtFileName, tilesDirName]
+        String output_profile = "--profile=mercator"
+        //String output_profile = "--profile=geodetic"
+        //String output_profile = "--profile=raster"
+        String input_srs = "--s_srs=EPSG:4326"
+        //String input_srs = "--s_srs=EPSG:3857"
+        
+        List<String> command = ["C:/Program Files/Python37/python.exe", "C:/Program Files/GDAL/gdal2tiles.py", input_srs, output_profile, "--zoom=5-13", "--tilesize=256", "--webviewer=leaflet", "--exclude", inputFileName, tilesDirName]
         ProcessBuilder process_builder = new ProcessBuilder(command)
         Map<String, String> process_env = process_builder.environment()
         process_env.put("PROJ_LIB", "C:\\Program Files\\GDAL\\projlib")

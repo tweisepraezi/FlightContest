@@ -8407,6 +8407,8 @@ class FcService
 		}
 
         test.instance.planningTestComplete = true
+        test.instance.planningTestLiveTrackingResultOk = false
+        test.instance.planningTestLiveTrackingResultError = false
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -8502,6 +8504,8 @@ class FcService
 		}
 
         test.instance.flightTestComplete = true
+        test.instance.flightTestLiveTrackingResultOk = false
+        test.instance.flightTestLiveTrackingResultError = false
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -8602,6 +8606,8 @@ class FcService
 		}
 
         test.instance.observationTestComplete = true
+        test.instance.observationTestLiveTrackingResultOk = false
+        test.instance.observationTestLiveTrackingResultError = false
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -9002,6 +9008,8 @@ class FcService
 		String error = GetLandingMeasureError(test.instance)
 		if (!error) {
 			test.instance.landingTestComplete = true
+            test.instance.landingTestLiveTrackingResultOk = false
+            test.instance.landingTestLiveTrackingResultError = false
 		}
 		
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -9279,6 +9287,8 @@ class FcService
 		}
 
         test.instance.specialTestComplete = true
+        test.instance.specialTestLiveTrackingResultOk = false
+        test.instance.specialTestLiveTrackingResultError = false
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {

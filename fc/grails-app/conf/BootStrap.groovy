@@ -937,6 +937,34 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 23) { // DB-2.23 compatibility
+                            print "    2.23 modifications"
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.liveTrackingResultsTaskID = 0
+                                task_instance.liveTrackingResultsPlanningID = 0
+                                task_instance.liveTrackingResultsFlightID = 0
+                                task_instance.liveTrackingResultsFlightOn = false
+                                task_instance.liveTrackingResultsObservationID = 0
+                                task_instance.liveTrackingResultsLandingID = 0
+                                task_instance.liveTrackingResultsSpecialID = 0
+                                task_instance.liveTrackingResultsPublishImmediately = false
+                                task_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.planningTestLiveTrackingResultOk = false
+                                test_instance.planningTestLiveTrackingResultError = false
+                                test_instance.flightTestLiveTrackingResultOk = false
+                                test_instance.flightTestLiveTrackingResultError = false
+                                test_instance.observationTestLiveTrackingResultOk = false
+                                test_instance.observationTestLiveTrackingResultError = false
+                                test_instance.landingTestLiveTrackingResultOk = false
+                                test_instance.landingTestLiveTrackingResultError = false
+                                test_instance.specialTestLiveTrackingResultOk = false
+                                test_instance.specialTestLiveTrackingResultError = false
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }
