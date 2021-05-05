@@ -24,8 +24,7 @@ class Crew
 	String trackerID = ""                     // DB-2.15
 
 	// transient values 
-	static transients = ['name2','registration','type','colour','teamname','resultclassname'] 
-	String name2 
+	static transients = ['registration','type','colour','teamname','resultclassname'] 
 	String registration
 	String type
 	String colour
@@ -53,6 +52,8 @@ class Crew
 
     // Live-Tracking
     Integer liveTrackingTeamID = 0            // DB-2.15
+    Integer liveTrackingContestTeamID = 0     // DB-2.24
+    Boolean liveTrackingDifferences = false   // DB-2.24
     
 	static belongsTo = [contest:Contest]
 
@@ -94,6 +95,10 @@ class Crew
 		// DB-2.15 compatibility
 		trackerID(nullable:true)
 		liveTrackingTeamID(nullable:true)
+        
+        // DB-2.24 compatibility
+        liveTrackingContestTeamID(nullable:true)
+        liveTrackingDifferences(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)

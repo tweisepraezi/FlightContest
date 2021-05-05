@@ -33,7 +33,9 @@
                                         <g:if test="${livetracking_map}">
                                             <a href="${livetracking_map}" target="_blank">${message(code:'fc.livetracking.navigationtaskmap')}</a>
                                         </g:if>
-                                        ${message(code:'fc.livetracking.navigationtaskid')}: ${taskInstance.liveTrackingNavigationTaskID}
+                                        <g:if test="${BootStrap.global.ShowLiveTrackingIDs()}">
+                                            ${message(code:'fc.livetracking.navigationtaskid')}: ${taskInstance.liveTrackingNavigationTaskID}
+                                        </g:if>
                                     </label>
                                     <br/>
                                     <g:if test="${taskInstance.liveTrackingResultsTaskID}" >
@@ -41,13 +43,15 @@
                                         <g:if test="${livetracking_results}">
                                             <label><a href="${livetracking_results}" target="_blank">${message(code:'fc.livetracking.results.service')}</a></label>
                                         </g:if>
-                                        <label>${message(code:'fc.livetracking.results.task.id')}: ${taskInstance.liveTrackingResultsTaskID}<g:if test="${taskInstance.liveTrackingResultsPlanningID}" >,
-                                            ${message(code:'fc.livetracking.results.task.planning')}: ${taskInstance.liveTrackingResultsPlanningID}</g:if><g:if test="${taskInstance.liveTrackingResultsFlightID}" >,
-                                            ${message(code:'fc.livetracking.results.task.flight')}: ${taskInstance.liveTrackingResultsFlightID}</g:if><g:if test="${taskInstance.liveTrackingResultsObservationID}" >,
-                                            ${message(code:'fc.livetracking.results.task.observation')}: ${taskInstance.liveTrackingResultsObservationID}</g:if><g:if test="${taskInstance.liveTrackingResultsLandingID}" >,
-                                            ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLandingID}</g:if><g:if test="${taskInstance.liveTrackingResultsSpecialID}" >,
-                                            ${message(code:'fc.livetracking.results.task.special')}: ${taskInstance.liveTrackingResultsSpecialID}</g:if>
-                                        </label>
+                                        <g:if test="${BootStrap.global.ShowLiveTrackingIDs()}">
+                                            <label>${message(code:'fc.livetracking.results.task.id')}: ${taskInstance.liveTrackingResultsTaskID}<g:if test="${taskInstance.liveTrackingResultsPlanningID}" >,
+                                                ${message(code:'fc.livetracking.results.task.planning')}: ${taskInstance.liveTrackingResultsPlanningID}</g:if><g:if test="${taskInstance.liveTrackingResultsFlightID}" >,
+                                                ${message(code:'fc.livetracking.results.task.flight')}: ${taskInstance.liveTrackingResultsFlightID}</g:if><g:if test="${taskInstance.liveTrackingResultsObservationID}" >,
+                                                ${message(code:'fc.livetracking.results.task.observation')}: ${taskInstance.liveTrackingResultsObservationID}</g:if><g:if test="${taskInstance.liveTrackingResultsLandingID}" >,
+                                                ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLandingID}</g:if><g:if test="${taskInstance.liveTrackingResultsSpecialID}" >,
+                                                ${message(code:'fc.livetracking.results.task.special')}: ${taskInstance.liveTrackingResultsSpecialID}</g:if>
+                                            </label>
+                                        </g:if>
                                         <br/>
                                     </g:if>
                                     <p>

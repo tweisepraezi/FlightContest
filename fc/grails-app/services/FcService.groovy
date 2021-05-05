@@ -7266,10 +7266,6 @@ class FcService
         if(crew_instance) {
             try {
 				delete_crew(crew_instance)
-				if (crew_instance.contest.liveTrackingManagedCrews && !Crew.findByContest(crew_instance.contest)) {
-					crew_instance.contest.liveTrackingManagedCrews = false
-					crew_instance.contest.save()
-				}
 				Map ret = ['deleted':true,'message':getMsg('fc.deleted',["${crew_instance.name}"])]
 				printdone ret 
                 return ret
@@ -7301,11 +7297,6 @@ class FcService
             }
         }
 
-		if (contest_instance.liveTrackingManagedCrews && !Crew.findByContest(contest_instance)) {
-			contest_instance.liveTrackingManagedCrews = false
-			contest_instance.save()
-		}
-		
 		Map ret = ['deleted':delete_num > 0,'message':getMsg('fc.crew.deleted',["${delete_num}"])]
 		printdone ret
         return ret
@@ -7968,7 +7959,7 @@ class FcService
         
         Map ret3 = CrewTools.ImportExcelCrews(loadFileName, contestInstance)
         if (ret3.validFile) {
-            Map ret2 = importCrews2(ret3.crewList, noUnsuitableStartNum, contestInstance)
+            Map ret2 = importCrews2(ret3.crewList, noUnsuitableStartNum, false, contestInstance)
             new_crew_num = ret2.new_crew_num
             new_crew_error_num = ret2.new_crew_error_num
         }
@@ -7988,10 +7979,10 @@ class FcService
 	}
 
     //--------------------------------------------------------------------------
-	Map importCrews2(List crewList, boolean noUnsuitableStartNum, Contest contestInstance) {
-		Map ret = [new_crew_num:0, new_crew_error_num:0, exist_crew_num:0]
+	Map importCrews2(List crewList, boolean noUnsuitableStartNum, boolean emailPrimary, Contest contestInstance) {
+		Map ret = [new_crew_num:0, new_crew_error_num:0, exist_crews:[]]
 		crewList.each { Map crew_entry ->
-			if (crew_entry.name) {
+			if (crew_entry.name && (!emailPrimary || crew_entry.email)) {
                 
                 if (crew_entry.startNum) {
                     if (crew_entry.startNum.contains('.')) {
@@ -8031,11 +8022,17 @@ class FcService
                     }
                 }
                 
-                printstart crew_entry.name
-                Crew crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
+                Crew crew = null
+                if (emailPrimary) {
+                    printstart "${crew_entry.email} (${crew_entry.name})"
+                    crew = Crew.findByEmailAndContest(crew_entry.email, contestInstance)
+                } else {
+                    printstart crew_entry.name
+                    crew = Crew.findByNameAndContest(crew_entry.name, contestInstance)
+                }
                 if (crew) {
                     printdone "Crew already exists."
-                    ret.exist_crew_num++
+                    ret.exist_crews += crew_entry
                 } else {
                     Map ret2 = saveCrew(crew_entry,contestInstance)
                     printdone "Created $ret2"

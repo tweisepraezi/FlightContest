@@ -76,8 +76,14 @@
                         </tr>
                         <g:if test="${contestInstance.liveTrackingContestID}">
 	                        <tr>
-	                            <td class="detailtitle">${message(code:'fc.livetracking')} ${message(code:'fc.livetracking.contestdate')} (${message(code:'fc.livetracking.contestid')}):</td>
-	                            <td>${fieldValue(bean:contestInstance, field:'liveTrackingContestDate')} (${fieldValue(bean:contestInstance, field:'liveTrackingContestID')})</td>
+                                <g:if test="${BootStrap.global.ShowLiveTrackingIDs()}">
+                                    <td class="detailtitle">${message(code:'fc.livetracking')} ${message(code:'fc.livetracking.contestdate')} (${message(code:'fc.livetracking.contestid')}):</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'liveTrackingContestDate')} (${fieldValue(bean:contestInstance, field:'liveTrackingContestID')})</td>
+                                </g:if>
+                                <g:else>
+                                    <td class="detailtitle">${message(code:'fc.livetracking')} ${message(code:'fc.livetracking.contestdate')}:</td>
+                                    <td>${fieldValue(bean:contestInstance, field:'liveTrackingContestDate')}</td>
+                                </g:else>
 	                        </tr>
                         </g:if>
                         <tr>

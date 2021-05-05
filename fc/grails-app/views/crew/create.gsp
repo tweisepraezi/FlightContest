@@ -75,14 +75,6 @@
                                 <input type="text" id="tas" name="tas" value="${fieldValue(bean:crewInstance,field:'tas')}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
-	                    <g:if test="${BootStrap.global.IsLiveTrackingPossible() && session.lastContest.liveTrackingContestID}">
-							<fieldset>
-								<legend>${message(code:'fc.livetracking')}</legend>
-								<p>
-									${message(code:'fc.livetracking.teamid')}: ${fieldValue(bean:crewInstance, field:'liveTrackingTeamID')}
-								</p>
-							</fieldset>
-						</g:if>
                         <g:actionSubmit action="save" value="${message(code:'fc.create')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>

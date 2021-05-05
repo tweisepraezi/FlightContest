@@ -5,15 +5,11 @@
         <title>${message(code:'fc.crew.list')}</title>
     </head>
     <body>
-		<g:set var="new_action" value=""/>
-        <g:set var="import_action" value=""/>
+        <g:set var="new_action" value="${message(code:'fc.crew.new')}"/>
+        <g:set var="import_action" value="${message(code:'fc.crew.import')}"/>
         <g:set var="import_action2" value=""/>
-		<g:if test="${!contestInstance.liveTrackingManagedCrews}">
-			<g:set var="new_action" value="${message(code:'fc.crew.new')}"/>
-            <g:set var="import_action" value="${message(code:'fc.crew.import')}"/>
-		</g:if>
         <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID}">
-            <g:set var="import_action2" value="${message(code:'fc.livetracking.teamsimport')}"/>
+            <g:set var="import_action2" value="${message(code:'fc.livetracking.teams.import')}"/>
         </g:if>
         <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${new_action}" importaction="${import_action}" importaction2="${import_action2}" printsettings="${message(code:'fc.crew.print')}" />
         <div class="box">
@@ -61,6 +57,9 @@
                                     <g:checkBox name="${crew_id}" value="${crew_selected}"/> ${crew_instance.startNum}
                                     <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && crew_instance.liveTrackingTeamID}" >
                                         <img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.5rem; height:0.7rem;"/>
+                                        <g:if test="${crew_instance.liveTrackingDifferences}" >
+                                            <a href="${createLink(controller:'crew',action:'livetracking_teamdifferencies')}/${crew_instance.id}"><img src="${createLinkTo(dir:'images',file:'team-different.svg')}" style="margin-left:0.2rem; height:0.7rem;"/></a>
+                                        </g:if>
                                     </g:if>
                                 </td>
                                 <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}" next="${next_crew}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:if test="${crew_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[crew_instance.GetIncreaseFactor()])})</g:if></td>
@@ -103,7 +102,13 @@
 	                    <tr class="join">
 	                        <td><g:actionSubmit action="deselectall" value="${message(code:'fc.deselectall')}" tabIndex="${ti[0]++}"/></td>
 	                        <td><g:actionSubmit action="moveup" value="${message(code:'fc.test.moveup')}" tabIndex="${ti[0]++}"/> <g:actionSubmit action="movedown" value="${message(code:'fc.test.movedown')}" tabIndex="${ti[0]++}"/></td>
-	                        <td colspan="${columns-1}"/>
+                            <td colspan="${columns-2}">
+                                <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID}">
+                                    <g:actionSubmit action="livetracking_connectteams" value="${message(code:'fc.livetracking.teams.connect')}" tabIndex="${ti[0]++}"/>
+                                    <g:actionSubmit action="livetracking_disconnectteams" value="${message(code:'fc.livetracking.teams.disconnect')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                </g:if>
+                            </td>
+	                        <td/>
 	                    </tr>
                         <tr>
                             <td colspan="${columns+1}">

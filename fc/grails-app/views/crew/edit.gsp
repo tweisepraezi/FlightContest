@@ -5,10 +5,7 @@
         <title>${message(code:'fc.crew.edit')}</title>
     </head>
     <body>
-		<g:set var="new_action" value=""/>
-		<g:if test="${!crewInstance.contest.liveTrackingManagedCrews}">
-			<g:set var="new_action" value="${message(code:'fc.crew.new')}"/>
-		</g:if>
+		<g:set var="new_action" value="${message(code:'fc.crew.new')}"/>
         <g:mainnav link="${createLink(controller:'contest')}" controller="crew" newaction="${new_action}" />
         <div class="box">
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
@@ -95,11 +92,14 @@
                                 </p>
                             </fieldset>
                         </g:if>
-	                    <g:if test="${BootStrap.global.IsLiveTrackingPossible() && crewInstance.contest.liveTrackingContestID}">
+	                    <g:if test="${BootStrap.global.IsLiveTrackingPossible() && BootStrap.global.ShowLiveTrackingIDs() && crewInstance.contest.liveTrackingContestID}">
 							<fieldset>
 								<legend>${message(code:'fc.livetracking')}</legend>
 								<p>
-									${message(code:'fc.livetracking.teamid')}: ${fieldValue(bean:crewInstance, field:'liveTrackingTeamID')}
+									${message(code:'fc.livetracking.teams.teamid')}: ${fieldValue(bean:crewInstance, field:'liveTrackingTeamID')}
+								</p>
+								<p>
+									${message(code:'fc.livetracking.teams.contestteamid')}: ${fieldValue(bean:crewInstance, field:'liveTrackingContestTeamID')}
 								</p>
 							</fieldset>
 						</g:if>

@@ -291,7 +291,7 @@ class Contest
     // Live-Tracking
     Integer liveTrackingContestID = 0                   // DB-2.14
     String liveTrackingContestDate = ""                 // DB-2.15
-    Boolean liveTrackingManagedCrews = false            // DB-2.15
+    Boolean liveTrackingManagedCrews = false            // DB-2.15, UNUSED, since DB-2.24
     String liveTrackingScorecard = ""                   // DB-2.17
     
 	// transient values

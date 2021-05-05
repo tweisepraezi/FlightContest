@@ -16,7 +16,6 @@ class TrackerService
     
     final static String ALL_DATA = "*"
     final static String EMPTY_NAME = "."
-    final static String ANONYMOUS_EMAIL_DOMAIN = "anonymous.flightcontest.de"
     final static int FP_MINUTES = 2
     
     //--------------------------------------------------------------------------
@@ -177,10 +176,12 @@ class TrackerService
         
         if (ret1.ok) {
             contest_instance.liveTrackingContestID = 0
-			contest_instance.liveTrackingManagedCrews = false
             contest_instance.save()
             for (Task task_instance in Task.findAllByContest(contest_instance)) {
                 reset_task(task_instance)
+            }
+            for (Crew crew_instance in Crew.findAllByContest(contest_instance)) {
+                reset_crew(crew_instance)
             }
             Map ret = ['instance':contest_instance, 'deleted':true, 'message':getMsg('fc.livetracking.contestdelete.done',[old_tacking_id])]
             printdone ret
@@ -201,11 +202,13 @@ class TrackerService
         
 		Integer old_livetracking_contestid = contest_instance.liveTrackingContestID
 		contest_instance.liveTrackingContestID = 0
-		contest_instance.liveTrackingManagedCrews = false
 		contest_instance.save()
 		for (Task task_instance in Task.findAllByContest(contest_instance)) {
             reset_task(task_instance)
 		}
+        for (Crew crew_instance in Crew.findAllByContest(contest_instance)) {
+            reset_crew(crew_instance)
+        }
 		Map ret = ['instance':contest_instance, 'connected':true, 'message':getMsg('fc.livetracking.contestdisconnect.done',[old_livetracking_contestid])]
 		printdone ret
 		return ret
@@ -217,8 +220,11 @@ class TrackerService
         printstart "importTeams"
 		
         Contest contest_instance = Contest.get(params.id)
-		
+        int found_num = 0
 		int import_num = 0
+        int connected_num = 0
+        int already_connected_num = 0
+        int differency_num = 0
 		
 		Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/teams/", "GET", 200, "", ALL_DATA)
 		if (ret1.ok && ret1.data) {
@@ -226,81 +232,408 @@ class TrackerService
 			List crew_list = []
 			int start_num = 1
             for (Map team_datum in ret1.data) {
-				String name = "${team_datum.team.crew.member1.first_name} ${team_datum.team.crew.member1.last_name}"
-				String name2 = ""
-				if (team_datum.team.crew.member2) {
-					name2 = "${team_datum.team.crew.member2.first_name} ${team_datum.team.crew.member2.last_name}"
-				}
-				String email = ""
-				if (team_datum.team.crew.member1.email) {
-					email = team_datum.team.crew.member1.email
-				}
-				if (team_datum.team.crew.member2?.email) {
-					if (email) {
-						email += Defs.EMAIL_LIST_SEPARATOR
-					}
-					email += team_datum.team.crew.member2.email
-				}
-				String teamname = ""
-				if (team_datum.team.club?.name) {
-					teamname = team_datum.team.club.name
-					if (team_datum.team.club?.country) {
-						teamname += ", "
-						teamname += team_datum.team.club.country
-					}
-				} else if (team_datum.team.country) {
-					teamname = team_datum.team.country
-				}
-				int tas = team_datum.air_speed
-				String registration = team_datum.team.aeroplane.registration
-				String type = ""
-				if (team_datum.team.aeroplane.type) {
-					type = team_datum.team.aeroplane.type
-				}
-				String colour = ""
-				if (team_datum.team.aeroplane.colour) {
-					colour = team_datum.team.aeroplane.colour
-				}
-				String tracker_id = team_datum.tracker_device_id
-				//if (!tracker_id) {
-				//	tracker_id = get_random_tracker_id(contest_instance.liveTrackingContestID, start_num)
-				//}
-				Map new_crew = [startNum:start_num.toString(),
-							    name:name,
-								name2:name2,
-								email:email,
-								teamname:teamname,
-								resultclassname:"",
-								tas:tas.toString(),
-								registration:registration,
-								type:type, colour:colour,
-                				liveTrackingTeamID:team_datum.team.id,
-								trackerID:tracker_id
-							   ]
+                Map new_crew = get_new_crew(team_datum.team, team_datum, start_num.toString(), contest_instance)
 				crew_list += new_crew
 				start_num++
-				import_num++
+				found_num++
 			}
 			
-			if (import_num) {
-				import_num = fcService.importCrews2(crew_list, false, contest_instance).new_crew_num
-				contest_instance.liveTrackingManagedCrews = true
-				contest_instance.save()
+			if (found_num) {
+				Map ret2 = fcService.importCrews2(crew_list, false, true, contest_instance)
+                import_num = ret2.new_crew_num
+                if (ret2.exist_crews) { // connect and check differencies
+                    for (Map crew in ret2.exist_crews) {
+                        Crew crew_instance = Crew.findByEmailAndContest(crew.email, contest_instance)
+                        if (crew_instance) {
+                            if (!crew_instance.liveTrackingTeamID) {
+                                crew_instance.liveTrackingTeamID = crew.liveTrackingTeamID
+                                crew_instance.liveTrackingContestTeamID = crew.liveTrackingContestTeamID
+                                connected_num++
+                            } else {
+                                already_connected_num++
+                            }
+                            crew_instance.liveTrackingDifferences = false
+                            if (check_differencies(crew_instance, crew).different) {
+                                differency_num++
+                            }
+                            crew_instance.save()
+                        }
+                    }
+                }
 			}
 			
-			Map ret = ['instance':contest_instance, 'imported':true, 'message':getMsg('fc.livetracking.teamsimport.done',[import_num])]
+			Map ret = ['instance':contest_instance, 'imported':true, 'message':getMsg('fc.livetracking.teams.import.done',[found_num, import_num, connected_num, already_connected_num, differency_num])]
 			printdone ret
 			return ret
 		} else {
-			Map ret = ['instance':contest_instance, 'imported':false, 'message':getMsg('fc.livetracking.teamsimport.error',[])]
+			Map ret = ['instance':contest_instance, 'imported':false, 'message':getMsg('fc.livetracking.teams.import.error',[ret1.errorMsg])]
 			printdone ret
 			return ret
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	private String get_random_tracker_id(Integer liveTrackingContestID, int startNum) {
-		return "tracker-${liveTrackingContestID}-${startNum}-${FcTime.GetTimeStr(new Date())}"
+    //--------------------------------------------------------------------------
+	Map connectTeams(Contest contestInstance, Map params, session)
+	{
+		printstart "connectTeams"
+		
+		Contest contest_instance = Contest.get(contestInstance.id)
+		int connect_num = 0
+        int differency_num = 0
+        String error_msg = ""
+		 
+        Crew.findAllByContest(contest_instance,[sort:"viewpos"]).each { Crew crew_instance ->
+            if (params["selectedCrewID${crew_instance.id}"] == "on") {
+                if (crew_instance.email && !crew_instance.liveTrackingTeamID) {
+                    Map team = get_team(crew_instance, true)
+                    JsonBuilder team_json_builder = new JsonBuilder(team)
+                    Map ret1 = call_rest("teams/", "POST", 201, team_json_builder.toString(), ALL_DATA)
+                    if (team.crew.member2 && !(ret1.ok && ret1.data)) {
+                        team_json_builder = new JsonBuilder(get_team(crew_instance, false))
+                        ret1 = call_rest("teams/", "POST", 201, team_json_builder.toString(), ALL_DATA)
+                    }
+                    if (ret1.ok && ret1.data) {
+                        Map contest_team = [
+                            "air_speed": crew_instance.tas,
+                            "tracker_device_id": crew_instance.trackerID,
+                            "contest": contest_instance.liveTrackingContestID,
+                            "team": ret1.data.id
+                        ]
+                        JsonBuilder contestteam_json_builder = new JsonBuilder(contest_team)
+                        Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/contestteams/", "POST", 201, contestteam_json_builder.toString(), ALL_DATA)
+                        if (ret2.ok && ret2.data) {
+                            crew_instance.liveTrackingTeamID = ret1.data.id
+                            crew_instance.liveTrackingContestTeamID = ret2.data.id
+                            Map crew = get_new_crew(ret1.data, ret2.data, crew_instance.startNum.toString(), contest_instance)
+                            crew_instance.liveTrackingDifferences = false
+                            if (check_differencies(crew_instance, crew).different) {
+                                differency_num++
+                            }
+                            crew_instance.save()
+                            connect_num++
+                        } else {
+                            if (error_msg) {
+                                error_msg += ", "
+                            }
+                            error_msg += ret2.errorMsg
+                        }
+                    } else {
+                        if (error_msg) {
+                            error_msg += ", "
+                        }
+                        error_msg += ret1.errorMsg
+                    }
+                    
+                }
+            }
+        }
+
+		Map ret = ['error':error_msg != "",'message':getMsg('fc.livetracking.teams.connect.done',[connect_num, differency_num, error_msg])]
+		printdone ret
+        return ret
+	}
+	
+    //--------------------------------------------------------------------------
+    private Map get_team(Crew crewInstance, boolean withMember2)
+    {
+        Map team = ["aeroplane": ["registration": crewInstance.aircraft.registration, "colour":crewInstance.aircraft.colour, "type":crewInstance.aircraft.type]]
+        team += ["crew": get_crew(crewInstance, withMember2)]
+        if (crewInstance.team?.name) {
+            team += ["club": ["name":crewInstance.team.name]]
+        }
+        return team
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map get_crew(Crew crewInstance, boolean withMember2)
+    {
+        Contest contest_instance = crewInstance.contest
+        String pilot_first = ""
+        String pilot_last = ""
+        String pilot_email = ""
+        String navigator_first = ""
+        String navigator_last = ""
+        String navigator_email = ""
+        
+        List email_list = NetTools.EMailList(crewInstance.email)
+        if (email_list.size() > 0) { // pilot
+            pilot_email = email_list[0]
+            if (email_list.size() > 1) { // navigator
+                navigator_email = email_list[1]
+            }
+        }
+        
+        if (contest_instance.crewPilotNavigatorDelimiter && navigator_email) { // pilot & navigator
+            List pilot_navigator = Tools.Split(crewInstance.name, contest_instance.crewPilotNavigatorDelimiter)
+            if (contest_instance.crewSurnameForenameDelimiter) {
+                if (pilot_navigator.size() > 0) { // pilot
+                    Map pilot_name = get_person_name_with_surenameforename_delimiter(pilot_navigator[0], contest_instance.crewSurnameForenameDelimiter)
+                    pilot_first = pilot_name.first
+                    pilot_last = pilot_name.last
+                    if (pilot_navigator.size() > 1) { // navigator
+                        Map navigator_name = get_person_name_with_surenameforename_delimiter(pilot_navigator[1], contest_instance.crewSurnameForenameDelimiter)
+                        navigator_first = navigator_name.first
+                        navigator_last = navigator_name.last
+                    }
+                }
+            } else {
+                if (pilot_navigator.size() > 0) { // pilot
+                    Map pilot_name = get_person_name_with_space_delimiter(pilot_navigator[0])
+                    pilot_first = pilot_name.first
+                    pilot_last = pilot_name.last
+                    if (pilot_navigator.size() > 1) { // navigator
+                        Map navigator_name = get_person_name_with_space_delimiter(pilot_navigator[1])
+                        navigator_first = navigator_name.first
+                        navigator_last = navigator_name.last
+                    }
+                }
+            }
+        } else { // only pilot
+            if (contest_instance.crewSurnameForenameDelimiter) {
+                Map pilot_name = get_person_name_with_surenameforename_delimiter(crewInstance.name, contest_instance.crewSurnameForenameDelimiter)
+                pilot_first = pilot_name.first
+                pilot_last = pilot_name.last
+            } else {
+                Map pilot_name = get_person_name_with_space_delimiter(crewInstance.name)
+                pilot_first = pilot_name.first
+                pilot_last = pilot_name.last
+            }
+        }
+        
+        if (pilot_first) {
+            Map ret = ["member1": ["first_name": pilot_first, "last_name": pilot_last, "email":pilot_email]]
+            if (withMember2 && navigator_first) {
+                ret += ["member2": ["first_name": navigator_first, "last_name": navigator_last, "email":navigator_email]]
+            }
+            return ret
+        }
+        return ["member1": ["first_name": crewInstance.name, "last_name": EMPTY_NAME, "email":pilot_email]]
+    }
+        
+    //--------------------------------------------------------------------------
+    private Map get_person_name_with_surenameforename_delimiter(String crewName, String crewSurnameForenameDelimiter)
+    {   // "Last, First1 First2" -> "First1 First2" & "Last"
+        Map ret = [first:"", last:""]
+        List names = Tools.Split(crewName, crewSurnameForenameDelimiter)
+        if (names.size() > 0) {
+            ret.last = names[0].trim()
+            if (names.size() > 1) {
+                ret.first = names[1].trim()
+            } else {
+                ret.first = ret.last
+                ret.last = EMPTY_NAME
+            }
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map get_person_name_with_space_delimiter(String crewName)
+    {   // "First1 First2 Last" -> "First1 First2" & "Last"
+        Map ret = [first:"", last:""]
+        List names = Tools.Split(crewName, " ")
+        for (String name in names) {
+            String name2 = name.trim()
+            if (name2) {
+                if (!ret.first) {
+                    ret.first = name2
+                } else if (!ret.last) {
+                    ret.last = name2
+                } else {
+                    ret.first += " "
+                    ret.first += ret.last
+                    ret.last = name2
+                }
+            }
+        }
+        if (ret.last) {
+        } else {
+            ret.last = EMPTY_NAME
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+	Map showTeamDifferencies(Contest contestInstance, Map params, session)
+	{
+		printstart "showTeamDifferencies"
+		
+        Crew crew_instance = Crew.get(params.id)
+		Contest contest_instance = crew_instance.contest
+        String differences = ""
+        
+        if (crew_instance.liveTrackingTeamID) {
+            Map ret1 = call_rest("teams/${crew_instance.liveTrackingTeamID}/", "GET", 200, "", ALL_DATA)
+            if (ret1.ok && ret1.data) {
+                Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/contestteams/${crew_instance.liveTrackingContestTeamID}/", "GET", 200, "", ALL_DATA)
+                if (ret2.ok && ret2.data) {
+                    Map crew = get_new_crew(ret1.data, ret2.data, crew_instance.startNum.toString(), contest_instance)
+                    crew_instance.liveTrackingDifferences = false
+                    Map ret3 = check_differencies(crew_instance, crew)
+                    if (ret3.different) {
+                        differences = ret3.differences
+                    }
+                    crew_instance.save()
+                }
+            }
+        }
+                
+        if (differences) {
+            Map ret = ['error':true, 'message':getMsg('fc.livetracking.teams.differences',[differences])]
+            printdone ret
+            return ret
+        }
+        Map ret = ['error':false, 'message':getMsg('fc.livetracking.teams.differences.no')]
+        printdone ret
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map get_new_crew(Map teamData, Map contestTeamData, String startNum, Contest contestInstance)
+    {
+        String name = "${teamData.crew.member1.first_name} ${teamData.crew.member1.last_name}"
+        if (teamData.crew.member2) {
+            name += contestInstance.crewPilotNavigatorDelimiter
+            name += " "
+            name += "${teamData.crew.member2.first_name} ${teamData.crew.member2.last_name}"
+        }
+        String email = ""
+        if (teamData.crew.member1.email) {
+            email = teamData.crew.member1.email
+        }
+        if (teamData.crew.member2?.email) {
+            if (email) {
+                email += Defs.EMAIL_LIST_SEPARATOR
+            }
+            email += teamData.crew.member2.email
+        }
+        String teamname = ""
+        if (teamData.club?.name) {
+            teamname = teamData.club.name
+            if (teamData.club?.country) {
+                teamname += ", "
+                teamname += teamData.club.country
+            }
+        } else if (teamData.country) {
+            teamname = teamData.country
+        }
+        int tas = contestTeamData.air_speed
+        String registration = teamData.aeroplane.registration
+        String type = ""
+        if (teamData.aeroplane.type) {
+            type = teamData.aeroplane.type
+        }
+        String colour = ""
+        if (teamData.aeroplane.colour) {
+            colour = teamData.aeroplane.colour
+        }
+        return [startNum:startNum,
+                name:name,
+                email:email,
+                teamname:teamname,
+                resultclassname:"",
+                tas:tas.toString(),
+                registration:registration,
+                type:type,
+                colour:colour,
+                liveTrackingTeamID:teamData.id,
+                liveTrackingContestTeamID:contestTeamData.id,
+                liveTrackingDifferences:false,
+                trackerID:contestTeamData.tracker_device_id
+               ]
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map check_differencies(Crew crewInstance, Map crewData)
+    {
+        Map ret = [different:false, differences:""]
+        if (crewInstance.name != crewData.name) {
+            crewInstance.liveTrackingDifferences = true
+            ret.differences += "'${crewInstance.name}' <> '${crewData.name}'"
+            ret.different = true
+        }
+        BigDecimal data_tas = crewData.tas.toBigDecimal()
+        if (crewInstance.tas != data_tas) {
+            crewInstance.liveTrackingDifferences = true
+            if (ret.differences) {
+                ret.differences += ", "
+            }
+            ret.differences += "'${crewInstance.tas}' <> '${data_tas}'"
+            ret.different = true
+        }
+        if (crewInstance.aircraft.registration != crewData.registration) {
+            crewInstance.liveTrackingDifferences = true
+            if (ret.differences) {
+                ret.differences += ", "
+            }
+            ret.differences += "'${crewInstance.aircraft.registration}' <> '${crewData.registration}'"
+            ret.different = true
+        }
+        if (crewInstance.aircraft.type != crewData.type) {
+            crewInstance.liveTrackingDifferences = true
+            if (ret.differences) {
+                ret.differences += ", "
+            }
+            ret.differences += "'${crewInstance.aircraft.type}' <> '${crewData.type}'"
+            ret.different = true
+        }
+        if (crewInstance.aircraft.colour != crewData.colour) {
+            crewInstance.liveTrackingDifferences = true
+            if (ret.differences) {
+                ret.differences += ", "
+            }
+            ret.differences += "'${crewInstance.aircraft.colour}' <> '${crewData.colour}'"
+            ret.different = true
+        }
+        String crew_team_name = ""
+        if (crewInstance.team) {
+            crew_team_name = crewInstance.team.name
+        }
+        String data_team_name = ""
+        if (crewData.teamname) {
+            data_team_name = crewData.teamname
+        }
+        if (crew_team_name != data_team_name) {
+            crewInstance.liveTrackingDifferences = true
+            if (ret.differences) {
+                ret.differences += ", "
+            }
+            ret.differences += "'${crew_team_name}' <> '${data_team_name}'"
+            ret.different = true
+        }
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+	Map disconnectTeams(Contest contestInstance, Map params, session)
+	{
+		printstart "disconnectTeams"
+		
+		Contest contest_instance = Contest.get(contestInstance.id)
+		int disconnect_num = 0
+        String error_msg = ""
+		 
+        Crew.findAllByContest(contest_instance,[sort:"viewpos"]).each { Crew crew_instance ->
+            if (params["selectedCrewID${crew_instance.id}"] == "on") {
+                if (crew_instance.liveTrackingTeamID) {
+
+                    // remove team from contest
+                    Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/contestteams/${crew_instance.liveTrackingContestTeamID}/", "DELETE", 204, "", "")
+                    if (!ret1.ok) {
+                        if (error_msg) {
+                            error_msg += ", "
+                        }
+                        error_msg += ret1.errorMsg
+                    }
+                    reset_crew(crew_instance)
+                    disconnect_num++
+                }
+            }
+        }
+
+		Map ret = ['error':error_msg != '','message':getMsg('fc.livetracking.teams.disconnect.done',[disconnect_num, error_msg])]
+		printdone ret
+        return ret
 	}
 	
     //--------------------------------------------------------------------------
@@ -336,7 +669,6 @@ class TrackerService
             
             if(!task_instance.hasErrors() && task_instance.save()) {
                 if (!task_instance.liveTrackingResultsFlightOn) {
-                    println "XX1"
                     reset_tests2(task_instance, ResultType.Flight)
                 }
 				try {
@@ -420,7 +752,7 @@ class TrackerService
         Date finish_date = null
         List contestant_list = []
         for (Test test_instance in Test.findAllByTask(task_instance,[sort:'viewpos'])) {
-            if (!test_instance.crew.disabled && !test_instance.disabledCrew && test_instance.IsFlightTestRun()) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID && test_instance.IsFlightTestRun()) {
                 Map contestant = get_contestant(test_instance, task_instance.liveTrackingNavigationTaskDate, tracks_available)
                 contestant_list += contestant.data
                 finish_date = contestant.arrivalTime
@@ -480,12 +812,8 @@ class TrackerService
             route_file route_data
         }
         
-        Map ret1 = [:]
-        if (contest_instance.liveTrackingManagedCrews) {
-            ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
-        } else {
-            ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtask/", "POST", 201, json_builder.toString(), "id")
-        }
+        Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
+        // ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtask/", "POST", 201, json_builder.toString(), "id")
     
         gpxService.DeleteFile(upload_gpx_file_name)
         
@@ -614,20 +942,18 @@ class TrackerService
     //--------------------------------------------------------------------------
     private boolean check_tracks_availability(Task taskInstance)
     {
-        if (!taskInstance.contest.liveTrackingManagedCrews) {
-            boolean tracks_available = true
-            for (Test test_instance in Test.findAllByTask(taskInstance,[sort:'viewpos'])) {
-                if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                    if (test_instance.IsFlightTestRun() && test_instance.timeCalculated) {
-                        if (!test_instance.flightTestComplete) {
-                            tracks_available = false
-                        }
+        boolean tracks_available = true
+        for (Test test_instance in Test.findAllByTask(taskInstance,[sort:'viewpos'])) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID) {
+                if (test_instance.IsFlightTestRun() && test_instance.timeCalculated) {
+                    if (!test_instance.flightTestComplete) {
+                        tracks_available = false
                     }
                 }
             }
-            if (tracks_available) {
-                return true
-            }
+        }
+        if (tracks_available) {
+            return true
         }
         return false
     }
@@ -663,7 +989,7 @@ class TrackerService
         // FlightTestWind assigned to all crews?
         int enabled_crew_num = 0
         for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
-			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID) {
 	            if (!test_instance.flighttestwind) {
                     ret.message = getMsg('fc.flighttestwind.notassigned')
                     return ret
@@ -672,15 +998,15 @@ class TrackerService
             }
         }
         
-        // Any crew enabled?
+        // Any crew configured for live tracking?
         if (!enabled_crew_num) {
-            ret.message = getMsg('fc.test.enableanycrew')
+            ret.message = getMsg('fc.livetracking.teams.minimum.one')
             return ret
         }
 
         // Time calculated for all crews?
         for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"id"])) {
-			if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+			if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID) {
                 if (!test_instance.timeCalculated) {
                     ret.message = getMsg('fc.test.timetable.newcalculate')
                     return ret
@@ -771,8 +1097,6 @@ class TrackerService
         Task task_instance = Task.get(params.id)
         Contest contest_instance = task_instance.contest
         
-        // if (contest_instance.liveTrackingManagedCrews && task_instance.liveTrackingResultsTaskID) {
-            
         JsonBuilder json_builder_tasktest = new JsonBuilder()
         switch (resultType) {
             case ResultType.Planningtask:
@@ -830,9 +1154,7 @@ class TrackerService
             Map ret7 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
             if (ret7.ok && ret7.data) {
                 for (Map tasktest in ret7.data) {
-                    println "XX2 $tasktest"
                     if (tasktest.task == task_instance.liveTrackingResultsTaskID) {
-                        println "XX3"
                         switch (resultType) {
                             case ResultType.Planningtask:
                                 if (tasktest.name == Defs.LIVETRACKING_TASKTEST_PLANNING) {
@@ -1005,6 +1327,15 @@ class TrackerService
     }
     
     //--------------------------------------------------------------------------
+    private void reset_crew(Crew crewInstance)
+    {
+        crewInstance.liveTrackingTeamID = 0
+        crewInstance.liveTrackingContestTeamID = 0
+        crewInstance.liveTrackingDifferences = 0
+        crewInstance.save()
+    }
+    
+    //--------------------------------------------------------------------------
     Map addTracksNavigationTask(Map params, boolean incompleteTracks)
     {
         printstart "addTracksNavigationTask"
@@ -1025,7 +1356,7 @@ class TrackerService
         if (incompleteTracks) {
             Date end_time = null
             for (Test test_instance in Test.findAllByTask(task_instance,[sort:'viewpos'])) {
-                if (!test_instance.crew.disabled && !test_instance.disabledCrew && test_instance.IsFlightTestRun() && test_instance.timeCalculated && test_instance.flightTestComplete) {
+                if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID && test_instance.IsFlightTestRun() && test_instance.timeCalculated && test_instance.flightTestComplete) {
                     GregorianCalendar endtime_calendar = new GregorianCalendar() 
                     endtime_calendar.setTime(test_instance.finishTime)
                     endtime_calendar.add(Calendar.MINUTE, FP_MINUTES)
@@ -1036,7 +1367,7 @@ class TrackerService
         }
        
         for (Test test_instance in Test.findAllByTask(task_instance,[sort:'viewpos'])) {
-            if (!test_instance.crew.disabled && !test_instance.disabledCrew && test_instance.IsFlightTestRun() && test_instance.timeCalculated && test_instance.flightTestComplete) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID && test_instance.IsFlightTestRun() && test_instance.timeCalculated && test_instance.flightTestComplete) {
                 if (add_track(test_instance, ret1.data, track_end_time)) {
                     add_num++
                 } else {
@@ -1099,7 +1430,7 @@ class TrackerService
         int error_num = 0
         String error_str = ""
         for (Test test_instance in Test.findAllByTask(task_instance,[sort:'viewpos'])) {
-            if (!test_instance.crew.disabled && !test_instance.disabledCrew && test_instance.timeCalculated) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID && test_instance.timeCalculated) {
                 if (test_instance.id in test_instance_ids) {
                     Map ret = update_crew(test_instance, ret1.data)
                     if (ret.ok) {
@@ -1142,12 +1473,8 @@ class TrackerService
         if (contestant_id) {
             Map contestant = get_contestant(testInstance, task_instance.liveTrackingNavigationTaskDate, false)
             JsonBuilder json_builder = new JsonBuilder(contestant.data)
-            Map ret2 = [:]
-            if (contest_instance.liveTrackingManagedCrews) {
-                ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/update_without_team/", "PUT", 200, json_builder.toString(), "")
-            } else {
-                ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/", "PUT", 200, json_builder.toString(), "")
-            }
+            Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/update_without_team/", "PUT", 200, json_builder.toString(), "")
+            // ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/", "PUT", 200, json_builder.toString(), "")
             if (ret2.ok) {
                 ret.ok = true
             } else {
@@ -1188,27 +1515,11 @@ class TrackerService
         
         ret.arrivalTime = testInstance.arrivalTime
         
-        def team = null
-        if (contest_instance.liveTrackingManagedCrews) {
-            team = testInstance.crew.liveTrackingTeamID
-        } else {
-            team = ["aeroplane": ["registration": testInstance.taskAircraft.registration]]
-            team += ["crew": get_crew(testInstance)]
-            if (testInstance.crew.team?.name) {
-                team += ["club": ["name":testInstance.crew.team.name]]
-            }
-        }
-        
-        String tracker_id = testInstance.taskTrackerID
-        if (!tracker_id && createTrackerID) {
-            // tracker_id = get_random_tracker_id(contest_instance.liveTrackingContestID, testInstance.crew.startNum)
-        }
-        
         ret.data = [
             "contestant_number": testInstance.crew.startNum,
-            "team": team,
+            "team": testInstance.crew.liveTrackingTeamID,
             "air_speed": testInstance.taskTAS,
-            "tracker_device_id":  tracker_id,
+            "tracker_device_id":  testInstance.taskTrackerID,
             "tracker_start_time": tracker_start_time,
             "takeoff_time": to_time,
             "minutes_to_starting_point": (60*FcMath.TimeDiff(testInstance.takeoffTime,testInstance.startTime)).toInteger(),
@@ -1257,153 +1568,6 @@ class TrackerService
         }
                         
         return ret
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map get_crew(Test testInstance)
-    {
-        Contest contest_instance = testInstance.task.contest
-        String pilot_first = ""
-        String pilot_last = ""
-        String pilot_email = ""
-        String navigator_first = ""
-        String navigator_last = ""
-        String navigator_email = ""
-        
-        List email_list = NetTools.EMailList(testInstance.crew.email)
-        if (email_list.size() > 0) { // pilot
-            pilot_email = email_list[0]
-            if (email_list.size() > 1) { // navigator
-                navigator_email = email_list[1]
-            }
-        }
-        
-        if (contest_instance.crewPilotNavigatorDelimiter) { // pilot & navigator
-            List pilot_navigator = Tools.Split(testInstance.crew.name, contest_instance.crewPilotNavigatorDelimiter)
-            if (contest_instance.crewSurnameForenameDelimiter) {
-                if (pilot_navigator.size() > 0) { // pilot
-                    Map pilot_name = get_person_name_with_surenameforename_delimiter(pilot_navigator[0], contest_instance.crewSurnameForenameDelimiter)
-                    pilot_first = pilot_name.first
-                    pilot_last = pilot_name.last
-                    if (!pilot_email) {
-                        pilot_email = pilot_name.email
-                    }
-                    if (pilot_navigator.size() > 1) { // navigator
-                        Map navigator_name = get_person_name_with_surenameforename_delimiter(pilot_navigator[1], contest_instance.crewSurnameForenameDelimiter)
-                        navigator_first = navigator_name.first
-                        navigator_last = navigator_name.last
-                        if (!navigator_email) {
-                            navigator_email = navigator_name.email
-                        }
-                    }
-                }
-            } else {
-                if (pilot_navigator.size() > 0) { // pilot
-                    Map pilot_name = get_person_name_with_space_delimiter(pilot_navigator[0])
-                    pilot_first = pilot_name.first
-                    pilot_last = pilot_name.last
-                    if (!pilot_email) {
-                        pilot_email = pilot_name.email
-                    }
-                    if (pilot_navigator.size() > 1) { // navigator
-                        Map navigator_name = get_person_name_with_space_delimiter(pilot_navigator[1])
-                        navigator_first = navigator_name.first
-                        navigator_last = navigator_name.last
-                        if (!navigator_email) {
-                            navigator_email = navigator_name.email
-                        }
-                    }
-                }
-            }
-        } else { // only pilot
-            if (contest_instance.crewSurnameForenameDelimiter) {
-                Map pilot_name = get_person_name_with_surenameforename_delimiter(testInstance.crew.name, contest_instance.crewSurnameForenameDelimiter)
-                pilot_first = pilot_name.first
-                pilot_last = pilot_name.last
-                if (!pilot_email) {
-                    pilot_email = pilot_name.email
-                }
-            } else {
-                Map pilot_name = get_person_name_with_space_delimiter(testInstance.crew.name)
-                pilot_first = pilot_name.first
-                pilot_last = pilot_name.last
-                if (!pilot_email) {
-                    pilot_email = pilot_name.email
-                }
-            }
-        }
-        
-        if (pilot_first) {
-            Map ret = ["member1": ["first_name": pilot_first, "last_name": pilot_last, "email":pilot_email]]
-            if (navigator_first) {
-                ret += ["member2": ["first_name": navigator_first, "last_name": navigator_last, "email":navigator_email]]
-            }
-            return ret
-        }
-        if (!pilot_email) {
-            pilot_email = get_person_email(testInstance.crew.name,"")
-        }
-        return ["member1": ["first_name": testInstance.crew.name, "last_name": EMPTY_NAME, "email":pilot_email]]
-    }
-        
-    //--------------------------------------------------------------------------
-    private Map get_person_name_with_surenameforename_delimiter(String crewName, String crewSurnameForenameDelimiter)
-    {   // "Last, First1 First2" -> "First1 First2" & "Last"
-        Map ret = [first:"", last:"", email:""]
-        List names = Tools.Split(crewName, crewSurnameForenameDelimiter)
-        if (names.size() > 0) {
-            ret.last = names[0].trim()
-            if (names.size() > 1) {
-                ret.first = names[1].trim()
-                ret.email = get_person_email(ret.first, ret.last)
-            } else {
-                ret.first = ret.last
-                ret.last = EMPTY_NAME
-                ret.email = get_person_email(ret.last, "")
-            }
-        }
-        return ret
-    }
-    
-    //--------------------------------------------------------------------------
-    private Map get_person_name_with_space_delimiter(String crewName)
-    {   // "First1 First2 Last" -> "First1 First2" & "Last"
-        Map ret = [first:"", last:"", email:""]
-        List names = Tools.Split(crewName, " ")
-        for (String name in names) {
-            String name2 = name.trim()
-            if (name2) {
-                if (!ret.first) {
-                    ret.first = name2
-                } else if (!ret.last) {
-                    ret.last = name2
-                } else {
-                    ret.first += " "
-                    ret.first += ret.last
-                    ret.last = name2
-                }
-            }
-        }
-        if (ret.last) {
-            ret.email = get_person_email(ret.first, ret.last)
-        } else {
-            ret.last = EMPTY_NAME
-            ret.email = get_person_email(ret.first)
-        }
-        return ret
-    }
-    
-    //--------------------------------------------------------------------------
-    private String get_person_email(String firstName, String lastName)
-    {
-        String email = firstName.replace(' ', '')
-        if (lastName) {
-            email += Defs.EMAIL_NAME_SEPARATOR
-            email += lastName.replace(' ', '')
-        }
-        email += Defs.EMAIL_AT_CHAR
-        email += ANONYMOUS_EMAIL_DOMAIN
-        return email.toLowerCase()
     }
     
     //--------------------------------------------------------------------------
@@ -1586,7 +1750,7 @@ class TrackerService
         int crew_num = 0
         int error_num = 0
         for (Test test_instance in Test.findAllByTask(task_instance,[sort:'viewpos'])) {
-            if (!test_instance.crew.disabled && !test_instance.disabledCrew && test_instance.timeCalculated) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled && test_instance.crew.liveTrackingTeamID && test_instance.timeCalculated) {
                 if (test_instance.id in test_instance_ids) {
                     if (add_track(test_instance, ret1.data, null)) {
                         crew_num++

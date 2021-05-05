@@ -335,11 +335,11 @@
                                 <legend>${message(code:'fc.livetracking')}</legend>
 	                            <div>
                                     <g:if test="${contestInstance.liveTrackingContestID}" >
-                                        <label>${message(code:'fc.livetracking.contestid')}: ${contestInstance.liveTrackingContestID}</label>
-                                        <br/>
-                                        <label>${message(code:'fc.livetracking.contestdate')}: ${contestInstance.liveTrackingContestDate}</label>
-                                        <br/>
-                                        <br/>
+                                        <g:if test="${BootStrap.global.ShowLiveTrackingIDs()}">
+                                            <label>${message(code:'fc.livetracking.contestid')}: ${contestInstance.liveTrackingContestID}</label>
+                                            <br/>
+                                            <br/>
+                                        </g:if>
                                         <g:if test="${BootStrap.global.IsLiveTrackingContestDeletePossible()}" >
                                             <g:actionSubmit action="livetracking_contestdelete" value="${message(code:'fc.livetracking.contestdelete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                         </g:if>

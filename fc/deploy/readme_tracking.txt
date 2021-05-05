@@ -1,6 +1,32 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M16
+---------------
+- Bidirectional Live Tracking team management added to crew list
+  * Allows to import crews from Live Tracking contest's team list
+    -> Crews -> Import live tracking teams
+    Existing teams will be identified by e-mail and not imported again.
+    Existing disconnected teams will be connected.
+    Name differences will be shown by a red symbol. Click on it for more information.
+  * Allows to add crews to Live Tracking contest's team list
+    -> Crews -> Create and connect live tracking teams for selected crews
+    Non existing teams will be created.
+    Live Tracking teams are an unique combination of Name/Email (Live Tracking crew), Team (Live Tracking club), and Aircraft (Live Tracking aeroplane).
+    Aeroplane's colour and type will be updated if aeroplane's registration exists.
+  * Allows to delete crews from Live Tracking contest's team list
+    -> Crews -> Disconnect and delete live tracking teams for selected crews
+    Teams will be deleted from Live Tracking contest's team list but not from the list of registered teams.
+  * Differences between Live Tracking contest's team list and the crew list can be resolved by modifications on both sides.
+    Call "-> Crews -> Import live tracking teams" again to check for remaining differences.
+  * It is possible to use connected and non-connected crews at the same time for tasks.
+    Connected crews will be shown by a connection symbol behind the start no.
+    After the creation of a navigation task it is not possible to use afterwards connected crews for this navigation task.
+- Endpoint POST "contests/{id}/importnavigationtask/" is no longer used and can be deleted
+- Chapter "Full Live Tracking management by Flight Contest" added, see below
+- Chapter "Team Management by Live Tracking" added, see below
+- Chapter "Load historical contests" modified, see below
+
 Changes 3.2.M15
 ---------------
 - Live Tracking task settings have been moved to a separate dialog:
@@ -43,7 +69,6 @@ Changes 3.2.M15
       * Connect navigation task
       * Enable 'Submit navigation test results' and 'Save'
       * Update live tracking results: All approved test results will be submitted again
-- Results Service for teams managed by Flight Contest not available yet. This feature comes with the next version.
 
 Changes 3.2.M14
 ---------------
@@ -83,7 +108,6 @@ Changes 3.2.M10
 Changes 3.2.M9
 --------------
 - Contest latitude and longitude added. Calculated from the take-off coordinate of the first route.
-- Endpoint "importnavigationtask": E-Mail addresses "...@anonymous.flightcontest.de" added to contestants if email does not exist in crews list.
 
 Changes 3.2.M8
 --------------
@@ -159,7 +183,7 @@ Changes 3.2.M2
     Allows to etablish the connection to an existing contest or navigation task
     It parses the contest / navigation task titles.
     Connect command of a navigation task does not check the exact match of contestants.
-- Crews-Command "Import Live Tracking Teams" added.
+- Crews-Command "Import live tracking teams" added.
 - Process for a new Live Tracking contest implemented.
 - A lot of new configuration settings added.
 
@@ -180,7 +204,8 @@ flightcontest {
   livetracking {
     server = "https://airsports.no"
     api = "/api/v1"
-    token = "..."
+    token = "TODO"
+    // showids = true // Default: false
     contest {
         showDelete = true // Default: false
         // createPublic = true // Default: false
@@ -213,6 +238,62 @@ Take over of old data from previous 3.1.x installation
   5.3. Start FC (Start menu -> Flight Contest -> Start Flight Contest)
 
 
+Full Live Tracking management by Flight Contest
+-----------------------------------------------
+1. Create contest (with crews and routes)
+   -> Contest -> New Contest
+   -> Routes -> Import route
+   -> Crews -> Import Excel crew list
+
+2. Create live tracking contest
+   -> Contest -> Settings -> Live tracking -> Create contest
+
+3. Create live tracking teams
+   -> Crews -> Select all
+   -> Crews -> Create and connect live tracking teams for selected crews
+   
+4. Create task with navigation test (generates flight plans)
+   -> Tasks -> New task
+   -> Tasks -> <Task name> -> Add Navigation Test
+   -> Planning -> <Task name> -> Select all
+   -> Planning -> <Task name> -> Assign wind
+   -> Planning -> <Task name> -> Calculate timetable
+   
+5. Create live tracking navigation task
+   -> Tasks -> <Task name> (Live tracking settings) -> Create navigation task
+   
+6. Configuring the 'Results Service' for additional tests
+   -> Tasks -> <Task name> (Live tracking settings) -> Create planning test (if exists)
+   -> Tasks -> <Task name> (Live tracking settings) -> Create observation test (if exists)
+   -> Tasks -> <Task name> (Live tracking settings) -> Create landing test (if exists)
+   -> Tasks -> <Task name> (Live tracking settings) -> Create other test (if exists)
+   -> Tasks -> <Task name> (Live tracking settings) -> Enable "Submit test results immediately"
+   -> Tasks -> <Task name> (Live tracking settings) -> Save
+   With these settings each with 'Result ready' approved test result will be submitted immediately.
+
+7. Enter test results
+   -> Results
+   
+8. Publish final navigation test results to the 'Results Service'
+   -> Tasks -> <Task name> (Live tracking settings) -> Enable "Submit navigation test results"
+   -> Tasks -> <Task name> (Live tracking settings) -> Save
+   -> Results -> <Task name> -> Update live tracking results
+   
+
+Team Management by Live Tracking
+--------------------------------
+
+1. Live Tracking: Create teams, with very detailed information (first name, last name of pilot and co-pilot, aeroplane, club, ...)
+   -> New contest
+   -> Contest - Team-List -> Add team
+
+2. Flight Contest: Connect with a live tracking contest
+   -> Contest -> Settings -> Live tracking -> Connect contest
+   
+3. Flight Contest: Live tracking teams take over
+   -> Crews -> Import live tracking teams
+   
+
 Load historical contests
 ------------------------
 
@@ -221,47 +302,21 @@ Load historical contests
   1.2. Copy 'HistoricalContest.fcdb.h2.db' to 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'
   1.3. Start FC (Start menu -> Flight Contest -> Start Flight Contest)
 
-2.
-Open FC with http://localhost:8080/fc
+2. Open FC
+   -> http://localhost:8080/fc -> <Contest name>
 
-3.
-Create a new live tracking contest
--> Contest -> Settings -> Live tracking -> Create contest (at the bottom of the form)
+3. Create live tracking contest
+   -> Contest -> Settings -> Live tracking -> Create contest
 
-4.
-Create a new navigation task
--> Tasks -> <Task name> -> Settings -> Live tracking -> Create navigation task
+4. Set emails of crews you want to show
+   -> Crews -> <Name> -> Email
 
-5.
-Add tracks
--> Tasks -> <Task name> -> Settings -> Live tracking -> Add navigation tracks
+5. Create live tracking teams
+   -> Crews -> Select all
+   -> Crews -> Create and connect live tracking teams for selected crews
 
+6. Create navigation task
+   -> Tasks -> <Task name> (Live tracking settings) -> Create navigation task
 
-New contest with Live Tracking
-------------------------------
-
-Before the competition:
-1. Teams are created in the tracking system, with very detailed information (first name, last name and pictures of pilot and co-pilot, country, club, ...)
-   -> New contest
-   -> Contest - Team-List -> Add team
-2. Routes are created in Flight Contest
-   -> Contest -> New Contest
-   -> Routes -> Import route
-   
-Contest names must be identical in both systems (neccessary for connecting with each other).
-
-On the day of the competition:
-3. Flight Contest: Connect with a tracking contest
-   -> Contest -> Settings -> Live tracking -> Connect contest
-4. Flight Contest: Takeover of the crews from the tracking contest
-   -> Crews -> Import Live Tracking Teams
-5. Flight Contest: Create task with navigation test (generates flight plans)
-   -> Tasks -> New task
-   -> Tasks -> <Task name> -> Add navigation test
-   -> Planning -> <Task name> -> Select all
-   -> Planning -> <Task name> -> Assign wind
-   -> Planning -> <Task name> -> Calculate timetable
-6. Flight Contest: Creating a tracking navigation task
-   -> Tasks -> <Task name> -> Settings -> Live tracking -> Create navigation task
-   
-With this the tracking system is ready for use and it can receive data from suitable tracking loggers and immediately calculate penalty points from it.
+7. Add tracks
+   -> Tasks -> <Task name> (Live tracking settings) -> Add navigation tracks

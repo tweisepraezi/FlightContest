@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)</span><br>
-<span id="revnumber">version 3.2.M15,</span>
-<span id="revdate">29.04.2021</span>
+<span id="revnumber">version 3.2.M16,</span>
+<span id="revdate">05.05.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -1438,18 +1438,18 @@ is also possible with text files (UTF-8). In an empty route all check points can
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
-SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
-TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
-SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
-TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
-iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
-iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
-iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
-TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
-TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
-FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
-LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM</pre>
+<pre>TO,   Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+SP,   Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+TP1,  Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+TP2,  Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+iFP,  Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM,notime,nogate,noplan
+iSP,  Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+TP3,  Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+TP4,  Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+FP,   Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+LDG,  Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1515,8 +1515,8 @@ and observations, which can be saved to text files and then used for import:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Lat 52.20167°, Lon 16.76500°, Alt 1243ft
-Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+<pre>Lat 52.20167°,          Lon 16.76500°,           Alt 1243ft
+Lat 52° 12.10000' N,    Lon 016° 45.90000' E,    Alt 1243ft
 Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 </div>
 </div>
@@ -3159,7 +3159,7 @@ Import logger data &#8594; select GPX file &#8594; Import</p>
 <h3 id="print-styles-title">CSS settings for title</h3>
 <div class="literalblock">
 <div class="content">
-<pre>h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }</pre>
+<pre>h1#branding{font-size:1.0em;margin-top:0px;margin-bottom:0px;padding-top:0px;padding-bottom:0px;}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3786,19 +3786,19 @@ or delete this file.</p>
 <div class="content">
 <pre>grails {
   mail {
-    host = "TODO" // SMTP server address (DNS name or IP address)
-    port = 587 // SMTP server port (for client connections)
+    host = "TODO"     // SMTP server address (DNS name or IP address)
+    port = 587        // SMTP server port (for client connections)
     username = "TODO" // SMTP server login name
     password = "TODO" // SMTP server password
   }
 }
 flightcontest {
   mail {
-    from = "TODO" // sender email address (must be valid on SMTP server)
-    cc = "TODO" // e-mail address of the evaluating referee
+    from = "TODO"     // sender email address (must be valid on SMTP server)
+    cc = "TODO"       // e-mail address of the evaluating referee
   }
   testmail {
-    to = "TODO" // destination email address
+    to = "TODO"       // destination email address
     subject = "Flight Contest: test email" }
     body = "Flight Contest has successfully sent an email."
   }
@@ -3812,11 +3812,11 @@ flightcontest {
 <div class="content">
 <pre>grails {
   webmail {
-    url = "TODO" // address of the webmail service
-    loginname_name = "TODO" // name of the username field
+    url = "TODO"                // address of the webmail service
+    loginname_name = "TODO"     // name of the username field
     loginpassword_name = "TODO" // name of the password field
-    username = "TODO" // Login name
-    password = "TODO" // Password
+    username = "TODO"           // Login name
+    password = "TODO"           // Password
   }
 }</pre>
 </div>
@@ -3829,11 +3829,11 @@ flightcontest {
 <pre>flightcontest {
   ftp {
     host = "results.flightcontest.de" // FTP server address
-    port = 21 // FTP server port
-    username = "TODO" // FTP login name
-    password = "TODO" // FTP password
-    contesturl = "TODO" // Public access to contest directory
-                        // on FTP server (e.g. "http://results.flightcontest.de/demo")
+    port = 21                         // FTP server port
+    username = "TODO"                 // FTP login name
+    password = "TODO"                 // FTP password
+    contesturl = "TODO"               // Public access to contest directory on FTP server
+                                      // (e.g. "http://results.flightcontest.de/demo")
     testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Source URL
   }
 }</pre>
@@ -3900,12 +3900,12 @@ but not to the root directory of the FTP server.</p>
 <div class="content">
 <pre>flightcontest {
   live {
-    ftpupload { // FTP upload of the live result
-       workingdir = "/" // directory on the FTP server
+    ftpupload {            // FTP upload of the live result
+       workingdir = "/"    // directory on the FTP server
        name = "fclive.htm" // file name
     }
-    copy { // copy of the live result
-       dest = "TODO" // directory and filename
+    copy {                 // copy of the live result
+       dest = "TODO"       // directory and filename
                            // e.g. "C:/Live/fclive.htm" (local copy)
                            // "//Server/Share/fclive.htm" (share copy)
                            // Multiple copies allowed
@@ -3978,75 +3978,39 @@ To achieve this without copies or FTP upload, use the following configuration:</
 <div class="content">
 <pre>flightcontest {
   livetracking {
-    server = "https://airsports.no"
+    server = "https://airsports.no" // Address of the live tracking server
     api = "/api/v1"
-    token = "TODO"
+    token = "TODO"                  // Token used to enable access to the live tracking server
+    // showids = true               // Default: false
     contest {
-      // showDelete = true // Default: false
-      // createPublic = true // Default: false
-      startLocalTimeOfDay = "08:00" // Default: 06:00
-      endLocalTimeOfDay = "20:00" // Default: 22:00
-      timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+      // showDelete = true          // Enable deletion of live tracking contests
+                                    // Default: false
+      // createPublic = true        // Create public live tracking contests
+                                    // Default: false
+      startLocalTimeOfDay = "08:00" // Local start time of live tracking contest on contest day
+                                    // Default: 06:00
+      endLocalTimeOfDay = "20:00"   // Local end time of the live tracking contest
+                                    // on the contest day
+                                    // Default: 22:00
+      timeZone = "Europe/Berlin"    // Time zone of the live tracking contest
+                                    // for historical contests without time zone
+                                    // Default: Europe/Oslo
     }
     navigationtask {
-      // showDelete = true // Default: false
-      // createPublic = true // Default: false
+      // showDelete = true          // Enable deletion of live tracking navigation tasks
+                                    // Default: false
+      // createPublic = true        // Create public live tracking navigation tasks
+                                    // Default: false
     }
     contestant {
-      minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+      minutesBetweenTrackerStartAndTakeoff = 10
+                                    // Tracker recording starts specified minutes before takeoff
+                                    // Default: 5
     }
   }
 }</pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all">
-<colgroup>
-<col>
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">server</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">address of the live tracking server</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">token</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Token used to enable access to the live tracking server</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.showDelete</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enable deletion of live tracking contests</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.createPublic</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Create public live tracking contests</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.startLocalTimeOfDay</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Local start time of live tracking contest on contest day</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.endLocalTimeOfDay</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Local end time of the live tracking contest on the contest day</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.timeZone</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Time zone of the live tracking contest</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.showDelete</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enable deletion of live tracking navigation tasks</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.createPublic</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Create public live tracking navigation tasks</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestant.minutesBetweenTrackerStartAndTakeoff</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Tracker recording starts specified minutes before takeoff</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect2">
 <h3 id="configuration-osmonlinemap">Configure OSM online map</h3>
@@ -4055,7 +4019,7 @@ To achieve this without copies or FTP upload, use the following configuration:</
 <pre>flightcontest {
   maps {
     tiles_server = "TODO" // Address of an alternative OSM tiles server
-    tiles_xyz = true // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
+    tiles_xyz = true      // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
   }
 }</pre>
 </div>
@@ -4071,33 +4035,13 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
 <div class="content">
 <pre>flightcontest {
   contestmap {
-    printserverapi = "TODO"
-    projection = "3857"
-    devoptions = true
+    printserverapi = "TODO" // Address of the print server for OSM contest map generation
+    projection = "3857"     // Set other projection of OSM contest map generation (EPSG number)
+    devoptions = true       // Show additional devoptions in the OSM contest map dialog
   }
 }</pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all">
-<colgroup>
-<col>
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.printserverapi</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Address of the print server for OSM contest map generation</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.projection</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Set other projection of OSM contest map generation (EPSG number)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.devoptions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Show additional devoptions in the OSM contest map dialog</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect2">
 <h3 id="configuration-test">Configure test displays</h3>
@@ -4105,26 +4049,14 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
 <div class="content">
 <pre>flightcontest {
   wrlog {
-    enable = true
+    enable = true // Enable writing logs to &lt;installation directory&gt;\fc\logs
   }
   clouddemo {
-    enable = true
+    enable = true // Enables the cloud demo display
   }
 }</pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all">
-<colgroup>
-<col>
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">wrlog.enable</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enable writing logs to &lt;installation directory&gt;\fc\logs</p></td>
-</tr>
-</tbody>
-</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -4319,7 +4251,7 @@ The last state of the live result file is frozen.</p>
 </li>
 <li>
 <p>Import teams from live tracking contest as crews<br>
-&#8594; Crews &#8594; Import Live Tracking Teams</p>
+&#8594; Crews &#8594; Import live tracking teams</p>
 </li>
 <li>
 <p>Calculate schedule for navigation flight in task</p>

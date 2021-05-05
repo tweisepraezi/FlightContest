@@ -758,7 +758,6 @@ class BootStrap {
                         if (global.versionMinor < 15) { // DB-2.15 compatibility
                             print "    2.15 modifications"
                             Contest.findAll().each { Contest contest_instance ->
-                                contest_instance.liveTrackingManagedCrews = false
                                 contest_instance.liveTrackingContestDate = ""
                                 contest_instance.save()
                             }
@@ -962,6 +961,15 @@ class BootStrap {
                                 test_instance.specialTestLiveTrackingResultOk = false
                                 test_instance.specialTestLiveTrackingResultError = false
                                 test_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 24) { // DB-2.24 compatibility
+                            print "    2.24 modifications"
+                            Crew.findAll().each { Crew crew_instance ->
+                                crew_instance.liveTrackingContestTeamID = 0
+                                crew_instance.liveTrackingDifferences = false
+                                crew_instance.save()
                             }
                             println " done."
                         }

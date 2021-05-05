@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)
-:revnumber: 3.2.M15
-:revdate: 29.04.2021
+:revnumber: 3.2.M16
+:revdate: 05.05.2021
 :nofooter:
 :toc-title: Table of Contents
 :toc:
@@ -490,18 +490,18 @@ Alternatively, the input and forwarding of routes or parts of them is
 is also possible with text files (UTF-8). In an empty route all check points can be added with
 "Import coordinates" from a text file can be added (incl. properties):
   
- TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
- SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
- TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
- SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
- TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
- iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
- iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
- iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
- TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
- TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
- FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
- LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
+ TO,   Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+ SP,   Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+ TP1,  Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+ SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+ TP2,  Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+ iFP,  Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+ iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM,notime,nogate,noplan
+ iSP,  Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+ TP3,  Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+ TP4,  Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+ FP,   Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+ LDG,  Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
 
 Check point, latitude, longitude, altitude, gate direction and latitude, etc.
 
@@ -539,8 +539,8 @@ Latitude, Longitude, Altitude
 +
 Examples for different coordinate representations (according to competition settings):
 
- Lat 52.20167°, Lon 16.76500°, Alt 1243ft
- Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+ Lat 52.20167°,          Lon 16.76500°,           Alt 1243ft
+ Lat 52° 12.10000' N,    Lon 016° 45.90000' E,    Alt 1243ft
  Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft
 +
 Values separated by comma (spaces before prefix and after unit are ignored)
@@ -1281,7 +1281,7 @@ Allows you to influence the appearance of the print +
 [[print-styles-title]]
 === CSS settings for title
   
- h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+ h1#branding{font-size:1.0em;margin-top:0px;margin-bottom:0px;padding-top:0px;padding-bottom:0px;}
 
 font-size: Set the size of the 1st title. Only usable if the title size is empty and no graphics are used. +
 margin-top,margin-bottom,padding-top,padding-bottom: set spacing of the 1st title to top and bottom.
@@ -1570,19 +1570,19 @@ or delete this file.
 === Configure email sending
  grails {
    mail {
-     host = "TODO" // SMTP server address (DNS name or IP address)
-     port = 587 // SMTP server port (for client connections)
+     host = "TODO"     // SMTP server address (DNS name or IP address)
+     port = 587        // SMTP server port (for client connections)
      username = "TODO" // SMTP server login name
      password = "TODO" // SMTP server password
    }
  }
  flightcontest {
    mail {
-     from = "TODO" // sender email address (must be valid on SMTP server)
-     cc = "TODO" // e-mail address of the evaluating referee
+     from = "TODO"     // sender email address (must be valid on SMTP server)
+     cc = "TODO"       // e-mail address of the evaluating referee
    }
    testmail {
-     to = "TODO" // destination email address
+     to = "TODO"       // destination email address
      subject = "Flight Contest: test email" }
      body = "Flight Contest has successfully sent an email."
    }
@@ -1592,11 +1592,11 @@ or delete this file.
 === Configure email viewer
  grails {
    webmail {
-     url = "TODO" // address of the webmail service
-     loginname_name = "TODO" // name of the username field
+     url = "TODO"                // address of the webmail service
+     loginname_name = "TODO"     // name of the username field
      loginpassword_name = "TODO" // name of the password field
-     username = "TODO" // Login name
-     password = "TODO" // Password
+     username = "TODO"           // Login name
+     password = "TODO"           // Password
    }
  }
 
@@ -1605,11 +1605,11 @@ or delete this file.
  flightcontest {
    ftp {
      host = "results.flightcontest.de" // FTP server address
-     port = 21 // FTP server port
-     username = "TODO" // FTP login name
-     password = "TODO" // FTP password
-     contesturl = "TODO" // Public access to contest directory
-                         // on FTP server (e.g. "http://results.flightcontest.de/demo")
+     port = 21                         // FTP server port
+     username = "TODO"                 // FTP login name
+     password = "TODO"                 // FTP password
+     contesturl = "TODO"               // Public access to contest directory on FTP server 
+                                       // (e.g. "http://results.flightcontest.de/demo")
      testsourceurl = "http://localhost:8080/fc/licenses/README.txt" // Source URL
    }
  }
@@ -1650,12 +1650,12 @@ This information will be printed on the State Referee Schedule.
 === Configure live display
  flightcontest {
    live {
-     ftpupload { // FTP upload of the live result
-        workingdir = "/" // directory on the FTP server
+     ftpupload {            // FTP upload of the live result
+        workingdir = "/"    // directory on the FTP server
         name = "fclive.htm" // file name
      }
-     copy { // copy of the live result
-        dest = "TODO" // directory and filename
+     copy {                 // copy of the live result
+        dest = "TODO"       // directory and filename
                             // e.g. "C:/Live/fclive.htm" (local copy)
                             // "//Server/Share/fclive.htm" (share copy)
                             // Multiple copies allowed
@@ -1695,47 +1695,44 @@ To achieve this without copies or FTP upload, use the following configuration:
 === Configure live tracking
  flightcontest {
    livetracking {
-     server = "https://airsports.no"
+     server = "https://airsports.no" // Address of the live tracking server
      api = "/api/v1"
-     token = "TODO"
+     token = "TODO"                  // Token used to enable access to the live tracking server
+     // showids = true               // Default: false
      contest {
-       // showDelete = true // Default: false
-       // createPublic = true // Default: false
-       startLocalTimeOfDay = "08:00" // Default: 06:00
-       endLocalTimeOfDay = "20:00" // Default: 22:00
-       timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+       // showDelete = true          // Enable deletion of live tracking contests
+                                     // Default: false
+       // createPublic = true        // Create public live tracking contests
+                                     // Default: false
+       startLocalTimeOfDay = "08:00" // Local start time of live tracking contest on contest day
+                                     // Default: 06:00
+       endLocalTimeOfDay = "20:00"   // Local end time of the live tracking contest
+                                     // on the contest day
+                                     // Default: 22:00
+       timeZone = "Europe/Berlin"    // Time zone of the live tracking contest
+                                     // for historical contests without time zone
+                                     // Default: Europe/Oslo
      }
      navigationtask {
-       // showDelete = true // Default: false
-       // createPublic = true // Default: false
+       // showDelete = true          // Enable deletion of live tracking navigation tasks
+                                     // Default: false
+       // createPublic = true        // Create public live tracking navigation tasks
+                                     // Default: false
      }
      contestant {
-       minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+       minutesBetweenTrackerStartAndTakeoff = 10
+                                     // Tracker recording starts specified minutes before takeoff
+                                     // Default: 5
      }
    }
  }
-
-[%autowidth]
-|===
-|server|address of the live tracking server
-|token|Token used to enable access to the live tracking server
-|contest.showDelete|Enable deletion of live tracking contests
-|contest.createPublic|Create public live tracking contests
-|contest.startLocalTimeOfDay|Local start time of live tracking contest on contest day
-|contest.endLocalTimeOfDay|Local end time of the live tracking contest on the contest day
-|contest.timeZone|Time zone of the live tracking contest
-|navigationtask.showDelete|Enable deletion of live tracking navigation tasks
-|navigationtask.createPublic|Create public live tracking navigation tasks
-|contestant.minutesBetweenTrackerStartAndTakeoff|Tracker recording starts specified minutes before takeoff
-|===
-
 
 [[configuration-osmonlinemap]]
 === Configure OSM online map
  flightcontest {
    maps {
      tiles_server = "TODO" // Address of an alternative OSM tiles server
-     tiles_xyz = true // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
+     tiles_xyz = true      // Uses XYZ tiles (OSM Slippy Map standard) instead of TMS
    }
  }
 
@@ -1747,35 +1744,22 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
 === Configure OSM contest map printing
  flightcontest {
    contestmap {
-     printserverapi = "TODO"
-     projection = "3857"
-     devoptions = true
+     printserverapi = "TODO" // Address of the print server for OSM contest map generation
+     projection = "3857"     // Set other projection of OSM contest map generation (EPSG number)
+     devoptions = true       // Show additional devoptions in the OSM contest map dialog
    }
  }
-
-[%autowidth]
-|===
-|contestmap.printserverapi|Address of the print server for OSM contest map generation
-|contestmap.projection|Set other projection of OSM contest map generation (EPSG number)
-|contestmap.devoptions|Show additional devoptions in the OSM contest map dialog
-|===
-
 
 [[configuration-test]]
 === Configure test displays
  flightcontest {
    wrlog {
-     enable = true
+     enable = true // Enable writing logs to <installation directory>\fc\logs
    }
    clouddemo {
-     enable = true
+     enable = true // Enables the cloud demo display
    }
  }
-
-[%autowidth]
-|===
-|wrlog.enable|Enable writing logs to <installation directory>\fc\logs
-|===
 
 <<<
 [[live-scoring]]
@@ -1872,7 +1856,7 @@ Allows tracking of crew positions during their navigation flight with automatic 
 *** Connect to live tracking contest +
 -> Contest -> Settings -> Live tracking -> Connect contest
 *** Import teams from live tracking contest as crews +
--> Crews -> Import Live Tracking Teams
+-> Crews -> Import live tracking teams
 *** Calculate schedule for navigation flight in task
 *** Create live tracking navigation task +
 -> Tasks -> <Task Name> -> Settings -> Live Tracking -> Navigation Task Date +

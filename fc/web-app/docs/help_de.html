@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.M15,</span>
-<span id="revdate">29.04.2021</span>
+<span id="revnumber">version 3.2.M16,</span>
+<span id="revdate">05.05.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -1446,18 +1446,18 @@ auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Chec
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
-SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
-TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
-SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
-TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
-iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
-iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
-iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
-TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
-TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
-FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
-LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM</pre>
+<pre>TO,   Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+SP,   Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+TP1,  Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+TP2,  Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+iFP,  Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM,notime,nogate,noplan
+iSP,  Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+TP3,  Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+TP4,  Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+FP,   Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+LDG,  Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1523,8 +1523,8 @@ und Beobachtungen, die in Textdateien gespeichert und dann zum Import verwendet 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Lat 52.20167°, Lon 16.76500°, Alt 1243ft
-Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+<pre>Lat 52.20167°,          Lon 16.76500°,           Alt 1243ft
+Lat 52° 12.10000' N,    Lon 016° 45.90000' E,    Alt 1243ft
 Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft</pre>
 </div>
 </div>
@@ -3170,7 +3170,7 @@ Import Logger-Daten &#8594; GPX-Datei auswählen &#8594; Import</p>
 <h3 id="print-styles-title">CSS-Einstellungen für Titel</h3>
 <div class="literalblock">
 <div class="content">
-<pre>h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }</pre>
+<pre>h1#branding{font-size:1.0em;margin-top:0px;margin-bottom:0px;padding-top:0px;padding-bottom:0px;}</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3989,75 +3989,39 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <div class="content">
 <pre>flightcontest {
   livetracking {
-    server = "https://airsports.no"
+    server = "https://airsports.no" // Adresse des Live-Tracking-Servers
     api = "/api/v1"
-    token = "TODO"
+    token = "TODO"                  // Token, mit dem der Zugriff
+                                    // auf den Live-Tracking-Server ermöglicht wird
+    // showids = true               // Default: false
     contest {
-      // showDelete = true // Default: false
-      // createPublic = true // Default: false
-      startLocalTimeOfDay = "08:00" // Default: 06:00
-      endLocalTimeOfDay = "20:00" // Default: 22:00
-      timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+      // showDelete = true          // Löschen von Live-Tracking-Contests ermöglichen
+                                    // Default: false
+      // createPublic = true        // Öffentliche Live-Tracking-Contests anlegen
+                                    // Default: false
+      startLocalTimeOfDay = "08:00" // Lokale Start-Zeit des Live-Tracking-Contests
+                                    // am Wettbewerbstag, Default: 06:00
+      endLocalTimeOfDay = "20:00"   // Lokale End-Zeit des Live-Tracking-Contests
+                                    // am Wettbewerbstag, Default: 22:00
+      timeZone = "Europe/Berlin"    // Zeit-Zone des Live-Tracking-Contests
+                                    // für historische Wettbewerbe ohne Zeit-Zone
+                                    // Default: Europe/Oslo
     }
     navigationtask {
-      // showDelete = true // Default: false
-      // createPublic = true // Default: false
+      // showDelete = true          // Löschen von Live-Tracking-Navigationtasks ermöglichen
+                                    // Default: false
+      // createPublic = true        // Öffentliche Live-Tracking-Navigationtasks anlegen
+                                    // Default: false
     }
     contestant {
-      minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+      minutesBetweenTrackerStartAndTakeoff = 10
+                                    // Trackeraufzeichnung beginnt angegebene Minuten vor Takeoff
+                                    // Default: 5
     }
   }
 }</pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all">
-<colgroup>
-<col>
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">server</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Adresse des Live-Tracking-Servers</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">token</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Token, mit dem der Zugriff auf den Live-Tracking-Server ermöglicht wird</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.showDelete</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Löschen von Live-Tracking-Contests ermöglichen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.createPublic</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Öffentliche Live-Tracking-Contests anlegen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.startLocalTimeOfDay</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lokale Start-Zeit des Live-Tracking-Contests am Wettbewerbstag</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.endLocalTimeOfDay</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Lokale End-Zeit des Live-Tracking-Contests am Wettbewerbstag</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contest.timeZone</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Zeit-Zone des Live-Tracking-Contests</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.showDelete</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Löschen von Live-Tracking-Navigationtasks ermöglichen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">navigationtask.createPublic</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Öffentliche Live-Tracking-Navigationtasks anlegen</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestant.minutesBetweenTrackerStartAndTakeoff</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Trackeraufzeichnung beginnt angegebene Minuten vor Takeoff</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect2">
 <h3 id="configuration-osmonlinemap">OSM-Online-Karte konfigurieren</h3>
@@ -4066,7 +4030,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 <pre>flightcontest {
   maps {
     tiles_server = "TODO" // Adresse eines alternativen OSM-Tiles-Servers
-    tiles_xyz = true // Nutzt XYZ tiles (OSM Slippy Map standard) anstelle von TMS
+    tiles_xyz = true      // Nutzt XYZ tiles (OSM Slippy Map standard) anstelle von TMS
   }
 }</pre>
 </div>
@@ -4082,33 +4046,16 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
 <div class="content">
 <pre>flightcontest {
   contestmap {
-    printserverapi = "TODO"
-    projection = "3857"
-    devoptions = true
+    printserverapi = "TODO" // Adresse des Druck-Servers für die Erzeugung
+                            // der OSM-Wettbewerbs-Karte
+    projection = "3857"     // Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung
+                            // festlegen (EPSG-Nummer)
+    devoptions = true       // Blendet beim OSM-Wettbewerbs-Karten-Dialog
+                            // zusätzliche Entwicklungsoptionen ein
   }
 }</pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all">
-<colgroup>
-<col>
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.printserverapi</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.projection</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung festlegen (EPSG-Nummer)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">contestmap.devoptions</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect2">
 <h3 id="configuration-test">Test-Anzeigen konfigurieren</h3>
@@ -4116,26 +4063,14 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
 <div class="content">
 <pre>flightcontest {
   wrlog {
-    enable = true
+    enable = true // Aktiviert das Schreiben von Logs in &lt;Installationsverzeichnis&gt;\fc\logs
   }
   clouddemo {
-    enable = true
+    enable = true // Aktiviert die Cloud-Demo-Anzeige
   }
 }</pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all">
-<colgroup>
-<col>
-<col>
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">wrlog.enable</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Aktiviert das Schreiben von Logs in &lt;Installationsverzeichnis&gt;\fc\logs</p></td>
-</tr>
-</tbody>
-</table>
 <div style="page-break-after: always;"></div>
 </div>
 </div>

@@ -2,6 +2,7 @@ class CrewController {
     
     def printService
 	def fcService
+    def trackerService
 	
     def index = { redirect(action:list,params:params) }
 
@@ -457,6 +458,27 @@ class CrewController {
         if (run_redirect) {
             redirect(action:list)
         }
+    }
+    
+    def livetracking_connectteams = {
+        def ret = trackerService.connectTeams(session.lastContest, params, session)
+        flash.error = ret.error
+        flash.message = ret.message
+        redirect(action:list)
+    }
+    
+    def livetracking_disconnectteams = {
+        def ret = trackerService.disconnectTeams(session.lastContest,params,session)
+        flash.error = ret.error
+        flash.message = ret.message
+        redirect(action:list)
+    }
+    
+    def livetracking_teamdifferencies = {
+        def ret = trackerService.showTeamDifferencies(session.lastContest,params,session)
+        flash.error = ret.error
+        flash.message = ret.message
+        redirect(action:list)
     }
     
 	Map GetPrintParams() {

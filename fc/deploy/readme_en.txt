@@ -18,33 +18,45 @@ Changes
 - Live Tracking added.
     Configuration for Airsports Live Tracking see below.
 
-    Contest management by Flight Contest:
-        1. Set email addresses of pilots and navigators and tracker id of each crew
-           -> Crews
+    Full Live Tracking management by Flight Contest:
+        1. Create contest (with crews and routes)
+           -> Contest -> New Contest
+           -> Routes -> Import route
+           -> Crews -> Import Excel crew list
+
         2. Create live tracking contest
            -> Contest -> Settings -> Live tracking -> Create contest
-        3. Create live tracking navigation task
-           -> Tasks -> <Task name> -> Settings -> Live tracking -> Create navigation task
-        4. Set Public for live tracking contest and navigation task
-           -> https://airsports.no/contests -> <Contest name> -> update
 
-    Crew management by Airsports Live Tracking:
-        1. Create contest in Airsports Live Tracking
-           -> https://airsports.no/contests -> New contest
-        2. Add teams with email addresses of pilots and navigators and tracker id to contest in Airsports Live Tracking
-           -> https://airsports.no/contests -> <Contest name> -> Team list
-        3. Connect with live tracking contest
-           -> Contest -> Settings -> Live tracking -> Connect contest
-        4. Import teams from live tracking contest
-           -> Crews -> Import Live Tracking Teams
-        5. Calculate timetable
+        3. Create live tracking teams
+           -> Crews -> Select all
+           -> Crews -> Create and connect live tracking teams for selected crews
+           
+        4. Create task with navigation test (generates flight plans)
+           -> Tasks -> New task
+           -> Tasks -> <Task name> -> Add Navigation Test
            -> Planning -> <Task name> -> Select all
-           -> Planning -> <Task name> -> Enable
+           -> Planning -> <Task name> -> Assign wind
            -> Planning -> <Task name> -> Calculate timetable
-        6. Create live tracking navigation task
-           -> Tasks -> <Task name> -> Settings -> Live tracking -> Create navigation task
-        7. Set Public for live tracking contest and navigation task
-           -> https://airsports.no/contests -> <Contest name> -> update
+           
+        5. Create live tracking navigation task
+           -> Tasks -> <Task name> (Live tracking settings) -> Create navigation task
+           
+        6. Configuring the 'Results Service' for additional tests
+           -> Tasks -> <Task name> (Live tracking settings) -> Create planning test (if exists)
+           -> Tasks -> <Task name> (Live tracking settings) -> Create observation test (if exists)
+           -> Tasks -> <Task name> (Live tracking settings) -> Create landing test (if exists)
+           -> Tasks -> <Task name> (Live tracking settings) -> Create other test (if exists)
+           -> Tasks -> <Task name> (Live tracking settings) -> Enable "Submit test results immediately"
+           -> Tasks -> <Task name> (Live tracking settings) -> Save
+           With these settings each with 'Result ready' approved test result will be submitted immediately.
+
+        7. Enter test results
+           -> Results
+           
+        8. Publish final navigation test results to the 'Results Service'
+           -> Tasks -> <Task name> (Live tracking settings) -> Enable "Submit navigation test results"
+           -> Tasks -> <Task name> (Live tracking settings) -> Save
+           -> Results -> <Task name> -> Update live tracking results
 
 - Special CSS properties moved to several dialogs
     --route --disable-procedureturn     -> Routes -> <Route name> -> Route settings -> Use procedure turns
@@ -95,7 +107,8 @@ flightcontest {
   livetracking {
     server = "https://airsports.no"
     api = "/api/v1"
-    token = "..."
+    token = "TODO"
+    // showids = true // Default: false
     contest {
         showDelete = true // Default: false
         // createPublic = true // Default: false

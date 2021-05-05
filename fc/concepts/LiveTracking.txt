@@ -1,6 +1,56 @@
 Live Tracking
 =============
 
+Team Management
+---------------
+
+-> Crews -> Import live tracking teams
+    Existing teams will be identified by e-mail and not imported again.
+    
+    GET /api/v1/contests/{id}/teams/
+        Get all teams of a contest with detailed team information
+
+
+-> Crews -> Create and connect live tracking teams for selected crews
+    Only for non-connected crews with e-mail.
+    
+    GET/POST /api/v1/teams/ 
+        Gives access to the entire list of teams in the system. You can post to submit a new team, or search for an existing team. 
+        Any post will return an existing team if it exists, or create a new one.
+        Existing teams will be identified by * attributes.
+            aeroplane*	
+                registration*	string  *
+                colour	        string
+                type	        string
+
+            crew*	    
+                member1*
+                    first_name*	string
+                    last_name*	string
+                    email*	    string  *
+                member2
+                    first_name*	string
+                    last_name*	string
+                    email*	    string  *
+            club	    
+                name*	        string  ?
+                country	        string
+            country	            string
+    
+    POST/PUT/DELETE /api/v1/contests/{id}/contestteams/
+        Allows managing the team is assigned to a contest. You can post new team assignments, modify existing assignments, and delete assignments. 
+        You need to include a reference both to the contest ID and the team ID inside the post data (even though the contest ID is also present in the path).
+            air_speed	        number      The planned airspeed for the contestant
+            tracking_service	string      Tracking service, Supported tracking services: (('traccar', 'Traccar'),)
+            tracking_device	    string      Tracking device, The device used for tracking the team: pilot_app or copilot_app
+            tracker_device_id	string      Tracker device id, ID of physical tracking device that will be brought into the plane. Leave empty if official Air Sports Live Tracking app is used. Note that only a single tracker is to be used per plane.
+            contest*	        integer     Contest
+            team*	            integer     Team
+
+-> Crews -> Disconnect and delete live tracking teams for selected crews
+    Only for connected crews.
+
+
 Results Service
 ---------------
 

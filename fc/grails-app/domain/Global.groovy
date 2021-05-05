@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.23
+	// Actual database version: DB-2.24
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 23
+	static int DB_MINOR = 24
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -221,6 +221,20 @@ class Global
             return grailsApplication.config.flightcontest.livetracking.token
         }
         return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean ShowLiveTrackingIDs()
+    {
+        if (IsDevelopmentEnvironment()) {
+            return true
+        }
+        if (   grailsApplication.config.flightcontest.livetracking
+            && grailsApplication.config.flightcontest.livetracking.showids
+        ) {
+            return true
+        }
+        return false
     }
     
     // --------------------------------------------------------------------------------------------------------------------

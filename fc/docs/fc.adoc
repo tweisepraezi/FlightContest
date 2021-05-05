@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M15
-:revdate:   29.04.2021
+:revnumber: 3.2.M16
+:revdate:   05.05.2021
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -492,18 +492,18 @@ Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon
 auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Check-Punkte mit 
 "Koordinaten importieren" aus einer Text-Datei hinzugefügt werden (einschl. Eigenschaften):
   
- TO, Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
- SP, Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
- TP1, Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
- SC1, Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
- TP2, Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
- iFP, Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
- iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM, notime, nogate, noplan
- iSP, Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
- TP3, Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
- TP4, Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
- FP, Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
- LDG, Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
+ TO,   Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
+ SP,   Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
+ TP1,  Lat 49° 00.96800' N, Lon 010° 12.89500' E, Alt 2395ft, Gate 1.0NM
+ SC1,  Lat 49° 01.83100' N, Lon 009° 55.43200' E, Alt 2063ft, Gate 2.0NM
+ TP2,  Lat 48° 53.41200' N, Lon 009° 53.52700' E, Alt 2162ft, Gate 1.0NM
+ iFP,  Lat 49° 04.22500' N, Lon 009° 45.77600' E, Alt 1713ft, Gate 1.0NM
+ iLDG, Lat 49° 07.09700' N, Lon 009° 47.07600' E, Alt 1308ft, Gate 280° 1.0NM,notime,nogate,noplan
+ iSP,  Lat 49° 10.58100' N, Lon 009° 47.80100' E, Alt 1920ft, Gate 1.0NM, noplan
+ TP3,  Lat 49° 15.92100' N, Lon 009° 45.44600' E, Alt 1279ft, Gate 1.0NM
+ TP4,  Lat 49° 18.40600' N, Lon 009° 57.57000' E, Alt 2021ft, Gate 1.0NM
+ FP,   Lat 48° 51.90800' N, Lon 010° 18.04600' E, Alt 2266ft, Gate 1.0NM
+ LDG,  Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
 
 Check-Punkt (engl.), Latitude, Longitude, Altitude, Gate-Richtung und -Breite, u.a.
 
@@ -541,8 +541,8 @@ Latitude, Longitude, Altitude
 +
 Beispiele für verschiedene Koordinaten-Darstellungen (entspr. Wettbewerbseinstellung):
 
- Lat 52.20167°, Lon 16.76500°, Alt 1243ft
- Lat 52° 12.10000' N, Lon 016° 45.90000' E, Alt 1243ft
+ Lat 52.20167°,          Lon 16.76500°,           Alt 1243ft
+ Lat 52° 12.10000' N,    Lon 016° 45.90000' E,    Alt 1243ft
  Lat 52° 12' 06.0000" N, Lon 016° 45' 54.0000" E, Alt 1243ft
 + 
 Werte mit Komma getrennt (Leerzeichen vor Präfix und nach Einheit werden ignoriert)
@@ -1284,7 +1284,7 @@ Ermöglicht Einfluß auf das Aussehen des Druckes +
 [[print-styles-title]]
 === CSS-Einstellungen für Titel
   
- h1#branding { font-size:1.0em; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; }
+ h1#branding{font-size:1.0em;margin-top:0px;margin-bottom:0px;padding-top:0px;padding-bottom:0px;}
 
 font-size: Größe des 1. Titels festlegen. Nur nutzbar, wenn die Titelgröße leer ist und keine Grafiken verwendet werden. +
 margin-top,margin-bottom,padding-top,padding-bottom: Abstände des 1. Titels nach oben und unten festlegen
@@ -1698,39 +1698,37 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
 === Live-Tracking konfigurieren
  flightcontest {
    livetracking {
-     server = "https://airsports.no"
+     server = "https://airsports.no" // Adresse des Live-Tracking-Servers
      api = "/api/v1"
-     token = "TODO"
+     token = "TODO"                  // Token, mit dem der Zugriff
+                                     // auf den Live-Tracking-Server ermöglicht wird
+     // showids = true               // Default: false
      contest {
-       // showDelete = true // Default: false
-       // createPublic = true // Default: false
-       startLocalTimeOfDay = "08:00" // Default: 06:00
-       endLocalTimeOfDay = "20:00" // Default: 22:00
-       timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
+       // showDelete = true          // Löschen von Live-Tracking-Contests ermöglichen
+                                     // Default: false
+       // createPublic = true        // Öffentliche Live-Tracking-Contests anlegen
+                                     // Default: false
+       startLocalTimeOfDay = "08:00" // Lokale Start-Zeit des Live-Tracking-Contests
+                                     // am Wettbewerbstag, Default: 06:00
+       endLocalTimeOfDay = "20:00"   // Lokale End-Zeit des Live-Tracking-Contests
+                                     // am Wettbewerbstag, Default: 22:00
+       timeZone = "Europe/Berlin"    // Zeit-Zone des Live-Tracking-Contests
+                                     // für historische Wettbewerbe ohne Zeit-Zone
+                                     // Default: Europe/Oslo
      }
      navigationtask {
-       // showDelete = true // Default: false
-       // createPublic = true // Default: false
+       // showDelete = true          // Löschen von Live-Tracking-Navigationtasks ermöglichen
+                                     // Default: false
+       // createPublic = true        // Öffentliche Live-Tracking-Navigationtasks anlegen
+                                     // Default: false
      }
      contestant {
-       minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5
+       minutesBetweenTrackerStartAndTakeoff = 10
+                                     // Trackeraufzeichnung beginnt angegebene Minuten vor Takeoff
+                                     // Default: 5
      }
    }
  }
-
-[%autowidth]
-|===
-|server|Adresse des Live-Tracking-Servers
-|token|Token, mit dem der Zugriff auf den Live-Tracking-Server ermöglicht wird
-|contest.showDelete|Löschen von Live-Tracking-Contests ermöglichen
-|contest.createPublic|Öffentliche Live-Tracking-Contests anlegen
-|contest.startLocalTimeOfDay|Lokale Start-Zeit des Live-Tracking-Contests am Wettbewerbstag
-|contest.endLocalTimeOfDay|Lokale End-Zeit des Live-Tracking-Contests am Wettbewerbstag
-|contest.timeZone|Zeit-Zone des Live-Tracking-Contests
-|navigationtask.showDelete|Löschen von Live-Tracking-Navigationtasks ermöglichen
-|navigationtask.createPublic|Öffentliche Live-Tracking-Navigationtasks anlegen
-|contestant.minutesBetweenTrackerStartAndTakeoff|Trackeraufzeichnung beginnt angegebene Minuten vor Takeoff
-|===
 
 
 [[configuration-osmonlinemap]]
@@ -1738,7 +1736,7 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
  flightcontest {
    maps {
      tiles_server = "TODO" // Adresse eines alternativen OSM-Tiles-Servers
-     tiles_xyz = true // Nutzt XYZ tiles (OSM Slippy Map standard) anstelle von TMS
+     tiles_xyz = true      // Nutzt XYZ tiles (OSM Slippy Map standard) anstelle von TMS
    }
  }
 
@@ -1750,35 +1748,25 @@ auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de
 === OSM-Wettbewerbs-Kartendruck konfigurieren
  flightcontest {
    contestmap {
-     printserverapi = "TODO"
-     projection = "3857"
-     devoptions = true
+     printserverapi = "TODO" // Adresse des Druck-Servers für die Erzeugung
+                             // der OSM-Wettbewerbs-Karte
+     projection = "3857"     // Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung 
+                             // festlegen (EPSG-Nummer)
+     devoptions = true       // Blendet beim OSM-Wettbewerbs-Karten-Dialog
+                             // zusätzliche Entwicklungsoptionen ein
    }
  }
-
-[%autowidth]
-|===
-|contestmap.printserverapi|Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte
-|contestmap.projection|Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung festlegen (EPSG-Nummer)
-|contestmap.devoptions|Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
-|===
-
 
 [[configuration-test]]
 === Test-Anzeigen konfigurieren
  flightcontest {
    wrlog {
-     enable = true
+     enable = true // Aktiviert das Schreiben von Logs in <Installationsverzeichnis>\fc\logs
    }
    clouddemo {
-     enable = true
+     enable = true // Aktiviert die Cloud-Demo-Anzeige
    }
  }
-
-[%autowidth]
-|===
-|wrlog.enable|Aktiviert das Schreiben von Logs in <Installationsverzeichnis>\fc\logs
-|===
 
 <<<
 [[live-scoring]]
