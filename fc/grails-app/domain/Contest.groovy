@@ -293,6 +293,7 @@ class Contest
     String liveTrackingContestDate = ""                 // DB-2.15
     Boolean liveTrackingManagedCrews = false            // DB-2.15, UNUSED, since DB-2.24
     String liveTrackingScorecard = ""                   // DB-2.17
+    String liveTrackingContestVisibility = Defs.LIVETRACKING_VISIBILITY_PRIVATE // DB-2.25
     
 	// transient values
 	static transients = ['copyContestSettings','copyRoutes','copyCrews','copyTaskSettings']
@@ -595,6 +596,9 @@ class Contest
         // DB-2.21 compatibility
         ruleTitle(nullable:true)
         timeZone2(nullable:true)
+        
+        // DB-2.25 compatibility
+        liveTrackingContestVisibility(nullable:true)
 	}
 
     static mapping = {
@@ -1364,5 +1368,10 @@ class Contest
            }
         }
         return false
+    }
+    
+    String GetLiveTrackingVisibility()
+    {
+        return "${liveTrackingContestVisibility.substring(0,1).toUpperCase()}${liveTrackingContestVisibility.substring(1).toLowerCase()}"
     }
 }

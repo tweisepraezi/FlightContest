@@ -58,7 +58,7 @@
                                 </g:else>
                                 
                                 <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
-                                    <td><g:livetrackingtask var="${task_instance}" link="${createLink(controller:'task',action:'editlivetracking')}"/><img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></td>
+                                    <td><g:livetrackingtask var="${task_instance}" link="${createLink(controller:'task',action:'editlivetracking')}"/><img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/> (${task_instance.GetLiveTrackingVisibility()})</td>
                                 </g:if>
 
                                 <g:if test="${task_instance.hidePlanning}">

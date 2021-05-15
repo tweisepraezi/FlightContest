@@ -132,6 +132,7 @@ class Task
     // Live-Tracking
     Integer liveTrackingNavigationTaskID     = 0     // DB-2.14
     String liveTrackingNavigationTaskDate    = ""    // DB-2.15
+    String liveTrackingNavigationTaskVisibility = Defs.LIVETRACKING_VISIBILITY_PRIVATE // DB-2.25
     Boolean liveTrackingTracksAvailable      = false // DB-2.15
     Integer liveTrackingResultsTaskID        = 0     // DB-2.23
     Integer liveTrackingResultsPlanningID    = 0     // DB-2.23
@@ -148,7 +149,8 @@ class Task
                          'printObservationResults','printObservationResultsScan',
                          'printLandingResults','printSpecialResults','printAircraft','printTeam','printClass','printShortClass',
                          'printModifiedResults','printCompletedResults','printProvisionalResults',
-                         'showOffset','showTurnPoints','showTurnPointSigns','showEnroutePhotos','showEnrouteCanavas']
+                         'showOffset','showTurnPoints','showTurnPointSigns','showEnroutePhotos','showEnrouteCanavas',
+                         'setLiveTrackingNavigationTaskDate']
     boolean printSummaryResults = true
 	boolean printPlanningResults = true
     boolean printPlanningResultsScan = true
@@ -170,6 +172,7 @@ class Task
     boolean showTurnPointSigns = true
     boolean showEnroutePhotos = true
     boolean showEnrouteCanavas = true
+    boolean setLiveTrackingNavigationTaskDate = true
 	
     static belongsTo = [contest:Contest]
     
@@ -350,6 +353,9 @@ class Task
         liveTrackingResultsLandingID(nullable:true)
         liveTrackingResultsSpecialID(nullable:true)
         liveTrackingResultsPublishImmediately(nullable:true)
+        
+        // DB-2.25 compatibility
+        liveTrackingNavigationTaskVisibility(nullable:true)
 	}
 
     static mapping = {
@@ -1221,5 +1227,10 @@ class Task
             }
         }
         return next_id
+    }
+    
+    String GetLiveTrackingVisibility()
+    {
+        return "${liveTrackingNavigationTaskVisibility.substring(0,1).toUpperCase()}${liveTrackingNavigationTaskVisibility.substring(1).toLowerCase()}"
     }
 }

@@ -1156,6 +1156,33 @@ class ContestController {
         render(view:'edit',model:[contestInstance:ret.instance])
     }
     
+    def livetracking_contestvisibility_setpublic = {
+        def ret = trackerService.setContestVisibility(params, Defs.LIVETRACKING_VISIBILITY_PUBLIC)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        }
+        render(view:'edit',model:[contestInstance:ret.instance])
+    }
+    
+    def livetracking_contestvisibility_setprivate = {
+        def ret = trackerService.setContestVisibility(params, Defs.LIVETRACKING_VISIBILITY_PRIVATE)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        }
+        render(view:'edit',model:[contestInstance:ret.instance])
+    }
+    
+    def livetracking_contestvisibility_setunlisted = {
+        def ret = trackerService.setContestVisibility(params, Defs.LIVETRACKING_VISIBILITY_UNLISTED)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        }
+        render(view:'edit',model:[contestInstance:ret.instance])
+    }
+    
     def livetracking_teamsimport = {
         def ret = trackerService.importTeams(params)
         flash.message = ret.message

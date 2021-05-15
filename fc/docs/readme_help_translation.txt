@@ -1,5 +1,5 @@
 
-Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)
+Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)
 link:rules durch deutsche Version austauschen
 
 Überschriften am Anfang groß

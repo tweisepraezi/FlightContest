@@ -100,3 +100,12 @@ GET /api/v1/contests/{id}/results_details/
     returns all data that is part of the results service for the contest
     
 
+Publish Management
+------------------
+
+PUT /api/v1/contests/{id}/share/
+    visibility*	    string      VisibilityEnum: public, private, unlisted
+
+PUT /api/v1/contests/{contest_pk}/navigationtasks/{id}/share/ 
+    visibility*	    string      VisibilityEnum: public, private, unlisted
+

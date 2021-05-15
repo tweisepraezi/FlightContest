@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<meta name="author" content="Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)">
+<meta name="author" content="Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)">
 <title>Flight Contest</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -423,9 +423,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Flight Contest</h1>
 <div class="details">
-<span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)</span><br>
-<span id="revnumber">version 3.2.M16,</span>
-<span id="revdate">05.05.2021</span>
+<span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)</span><br>
+<span id="revnumber">version 3.2.M17,</span>
+<span id="revdate">15.05.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -513,7 +513,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#live-scoring">Live result display</a></li>
-<li><a href="#live-tracking">live-tracking</a></li>
+<li><a href="#live-tracking">Live tracking</a></li>
 <li><a href="#automatic-actions">Automatic actions</a>
 <ul class="sectlevel2">
 <li><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a></li>
@@ -3985,8 +3985,6 @@ To achieve this without copies or FTP upload, use the following configuration:</
     contest {
       // showDelete = true          // Enable deletion of live tracking contests
                                     // Default: false
-      // createPublic = true        // Create public live tracking contests
-                                    // Default: false
       startLocalTimeOfDay = "08:00" // Local start time of live tracking contest on contest day
                                     // Default: 06:00
       endLocalTimeOfDay = "20:00"   // Local end time of the live tracking contest
@@ -3998,8 +3996,6 @@ To achieve this without copies or FTP upload, use the following configuration:</
     }
     navigationtask {
       // showDelete = true          // Enable deletion of live tracking navigation tasks
-                                    // Default: false
-      // createPublic = true        // Create public live tracking navigation tasks
                                     // Default: false
     }
     contestant {
@@ -4168,7 +4164,7 @@ The last state of the live result file is frozen.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="live-tracking">live-tracking</h2>
+<h2 id="live-tracking">Live tracking</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Allows tracking of crew positions during their navigation flight with automatic time evaluation.</p>
@@ -4180,99 +4176,115 @@ The last state of the live result file is frozen.</p>
 &#8594; <a href="#configuration-livetracking">Configure live tracking</a></p>
 </li>
 <li>
-<p>Scenario 1: Configure Airsports Live Tracking with Flight Contest</p>
+<p>Full Live Tracking management by Flight Contest</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Preparatory steps in Flight Contest</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Assign all crews the tracker ID of their tracker.<br>
-&#8594; Crews &#8594; &lt;crew name&gt; &#8594; Tracker ID</p>
+<p>Create contest (with crews and routes)<br>
+&#8594; Contest &#8594; New Contest<br>
+&#8594; Routes &#8594; Import route<br>
+&#8594; Crews &#8594; Import Excel crew list</p>
 </li>
-</ul>
-</div>
-</li>
-<li>
-<p>Functions to be executed in Flight Contest</p>
-<div class="ulist">
-<ul>
 <li>
 <p>Create live tracking contest<br>
-&#8594; Contest &#8594; Settings &#8594; Live Tracking &#8594; Contest Date<br>
-&#8594; Contest &#8594; Settings &#8594; Live Tracking &#8594; Create Contest</p>
+&#8594; Contest &#8594; Settings &#8594; Live tracking &#8594; Create contest<br>
+&#8594; Contest &#8594; Settings &#8594; Live tracking &#8594; Set Public</p>
 </li>
 <li>
-<p>Create Live Tracking Navigation Task<br>
-&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Navigation Task Date<br>
-&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Create Navigation Task</p>
-</li>
-</ul>
-</div>
+<p>Create live tracking teams<br>
+&#8594; Crews &#8594; Select all<br>
+&#8594; Crews &#8594; Create and connect live tracking teams for selected crews</p>
 </li>
 <li>
-<p>Functions to perform in Airsports Live Tracking</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Unlock Live Tracking Contest and Navigation Task for Public Access</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Scenario 2: Configure Flight Contest with Airsports Live Tracking Teams</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Preparatory steps in Airsports Live Tracking</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Create Live Tracking Contest</p>
-</li>
-<li>
-<p>Assign teams (name, club, country, photos, aircraft, TAS, tracker ID)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Functions to be performed in Flight Contest</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Connect to live tracking contest<br>
-&#8594; Contest &#8594; Settings &#8594; Live tracking &#8594; Connect contest</p>
-</li>
-<li>
-<p>Import teams from live tracking contest as crews<br>
-&#8594; Crews &#8594; Import live tracking teams</p>
-</li>
-<li>
-<p>Calculate schedule for navigation flight in task</p>
+<p>Create task with navigation test (generates flight plans)<br>
+&#8594; Tasks &#8594; New task<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; &#8594; Add Navigation Test<br>
+&#8594; Planning &#8594; &lt;Task name&gt; &#8594; Select all<br>
+&#8594; Planning &#8594; &lt;Task name&gt; &#8594; Assign wind<br>
+&#8594; Planning &#8594; &lt;Task name&gt; &#8594; Calculate timetable</p>
 </li>
 <li>
 <p>Create live tracking navigation task<br>
-&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Navigation Task Date<br>
-&#8594; Tasks &#8594; &lt;Task Name&gt; &#8594; Settings &#8594; Live Tracking &#8594; Create Navigation Task</p>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Create navigation task<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Set Public</p>
+</li>
+<li>
+<p>Configuring the 'Results Service' for additional tests<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Create planning test (if exists)<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Create observation test (if exists)<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Create landing test (if exists)<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Create other test (if exists)<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Enable "Submit test results immediately"<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Save<br>
+With these settings each with 'Result ready' approved test result will be submitted immediately.</p>
+</li>
+<li>
+<p>Enter test results<br>
+&#8594; Results</p>
+</li>
+<li>
+<p>Publish final navigation test results to the 'Results Service'<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Enable "Submit navigation test results"<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Save<br>
+&#8594; Results &#8594; &lt;Task name&gt; &#8594; Update live tracking results<br></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Functions to perform in Airsports Live Tracking</p>
+<p>Team Management by Live Tracking</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Unlock Live Tracking Contest and Navigation Task for Public Access</p>
+<p>Live Tracking: Create teams, with very detailed information (first name, last name of pilot and navigator, aeroplane, club, &#8230;&#8203;)<br>
+&#8594; Contest management &#8594; New contest<br>
+&#8594; Contest management &#8594; &lt;Contest name&gt; &#8594; Team list &#8594; Add team</p>
+</li>
+<li>
+<p>Flight Contest: Connect with a live tracking contest<br>
+&#8594; Contest &#8594; Settings &#8594; Live tracking &#8594; Connect contest</p>
+</li>
+<li>
+<p>Flight Contest: Live tracking teams take over<br>
+&#8594; Crews &#8594; Import live tracking teams</p>
 </li>
 </ul>
 </div>
+</li>
+<li>
+<p>Load historical contests</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Copy database of the historical contest<br>
+&#8594; Stop Flight Contest (Start menu &#8594; Flight Contest &#8594; Stop Flight Contest)<br>
+&#8594; Copy 'HistoricalContest.fcdb.h2.db' to 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'<br>
+&#8594; Start Flight Contest (Start menu &#8594; Flight Contest &#8594; Start Flight Contest)</p>
+</li>
+<li>
+<p>Open Flight Contest<br>
+&#8594; <a href="http://localhost:8080/fc" class="bare">http://localhost:8080/fc</a> &#8594; &lt;Contest name&gt;</p>
+</li>
+<li>
+<p>Create live tracking contest<br>
+&#8594; Contest &#8594; Settings &#8594; Live tracking &#8594; Create contest</p>
+</li>
+<li>
+<p>Set emails of crews you want to show<br>
+&#8594; Crews &#8594; &lt;Name&gt; &#8594; Email</p>
+</li>
+<li>
+<p>Create live tracking teams<br>
+&#8594; Crews &#8594; Select all<br>
+&#8594; Crews &#8594; Create and connect live tracking teams for selected crews</p>
+</li>
+<li>
+<p>Create navigation task<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Create navigation task</p>
+</li>
+<li>
+<p>Add tracks<br>
+&#8594; Tasks &#8594; &lt;Task name&gt; (Live tracking settings) &#8594; Add navigation tracks</p>
 </li>
 </ul>
 </div>

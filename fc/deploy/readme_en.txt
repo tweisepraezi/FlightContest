@@ -26,6 +26,7 @@ Changes
 
         2. Create live tracking contest
            -> Contest -> Settings -> Live tracking -> Create contest
+           -> Contest -> Settings -> Live tracking -> Set Public
 
         3. Create live tracking teams
            -> Crews -> Select all
@@ -40,6 +41,7 @@ Changes
            
         5. Create live tracking navigation task
            -> Tasks -> <Task name> (Live tracking settings) -> Create navigation task
+           -> Tasks -> <Task name> (Live tracking settings) -> Set Public
            
         6. Configuring the 'Results Service' for additional tests
            -> Tasks -> <Task name> (Live tracking settings) -> Create planning test (if exists)
@@ -111,14 +113,12 @@ flightcontest {
     // showids = true // Default: false
     contest {
         showDelete = true // Default: false
-        // createPublic = true // Default: false
         startLocalTimeOfDay = "08:00" // Default: 06:00
         endLocalTimeOfDay = "20:00" // Default: 22:00
         // timeZone = "Europe/Berlin" // for historical contests without time zone, Default: Europe/Oslo
     }
     navigationtask {
         showDelete = true // Default: false
-        // createPublic = true // Default: false
     }
     contestant {
         minutesBetweenTrackerStartAndTakeoff = 10 // Default: 5

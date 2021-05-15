@@ -17,7 +17,7 @@
                     <thead>
                         <tr>
                             <th class="table-head">${message(code:'fc.contest.show')}</th>
-                            <th class="table-head"><a href="../docs/help_${session.showLanguage}.html#default-competition" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
+                            <th class="table-head"><a href="/fc/docs/help_${session.showLanguage}.html#default-competition" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,12 +77,12 @@
                         <g:if test="${contestInstance.liveTrackingContestID}">
 	                        <tr>
                                 <g:if test="${BootStrap.global.ShowLiveTrackingIDs()}">
-                                    <td class="detailtitle">${message(code:'fc.livetracking')} ${message(code:'fc.livetracking.contestdate')} (${message(code:'fc.livetracking.contestid')}):</td>
-                                    <td>${fieldValue(bean:contestInstance, field:'liveTrackingContestDate')} (${fieldValue(bean:contestInstance, field:'liveTrackingContestID')})</td>
+                                    <td class="detailtitle">${message(code:'fc.livetracking.contestvisibility')} (${message(code:'fc.livetracking.contestid')}):</td>
+                                    <td>${contestInstance.GetLiveTrackingVisibility()} (${fieldValue(bean:contestInstance, field:'liveTrackingContestID')})</td>
                                 </g:if>
                                 <g:else>
-                                    <td class="detailtitle">${message(code:'fc.livetracking')} ${message(code:'fc.livetracking.contestdate')}:</td>
-                                    <td>${fieldValue(bean:contestInstance, field:'liveTrackingContestDate')}</td>
+                                    <td class="detailtitle">${message(code:'fc.livetracking.contestvisibility')}:</td>
+                                    <td>${contestInstance.GetLiveTrackingVisibility()}</td>
                                 </g:else>
 	                        </tr>
                         </g:if>

@@ -23,12 +23,20 @@
                                 <label>${message(code:'fc.task.date')}:</label>
                                 <br/>
                                 <input type="date" id="liveTrackingNavigationTaskDate" name="liveTrackingNavigationTaskDate" value="${fieldValue(bean:taskInstance,field:'liveTrackingNavigationTaskDate')}" min="${taskInstance.contest.liveTrackingContestDate}" tabIndex="${ti[0]++}"/>
+                                <g:if test="${!taskInstance.liveTrackingNavigationTaskID && taskInstance.IsFlightTestRun()}" >
+                                    <div>
+                                        <g:checkBox name="setLiveTrackingNavigationTaskDate" value="${taskInstance.setLiveTrackingNavigationTaskDate}" tabIndex="${ti[0]++}"/>
+                                        <label>${message(code:'fc.livetracking.navigationtaskdate.setactualdate')}</label>
+                                    </div>
+                                </g:if>
                             </p>
                         </fieldset>
                         <fieldset>
                             <div>
                                 <g:if test="${taskInstance.liveTrackingNavigationTaskID}" >
                                     <g:set var="livetracking_map" value="${BootStrap.global.GetLiveTrackingMap(taskInstance.liveTrackingNavigationTaskID)}"/>
+                                    <label>${message(code:'fc.livetracking.navigationtaskvisibility')}: ${taskInstance.GetLiveTrackingVisibility()}</label>
+                                    <br/>
                                     <label>
                                         <g:if test="${livetracking_map}">
                                             <a href="${livetracking_map}" target="_blank">${message(code:'fc.livetracking.navigationtaskmap')}</a>
@@ -76,10 +84,38 @@
                                 <g:actionSubmit action="livetracking_navigationtaskdelete" value="${message(code:'fc.livetracking.navigationtaskdelete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:actionSubmit action="livetracking_navigationtaskdisconnect" value="${message(code:'fc.livetracking.navigationtaskdisconnect')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                            <g:if test="${taskInstance.liveTrackingNavigationTaskVisibility == Defs.LIVETRACKING_VISIBILITY_PUBLIC}" >
+                                <g:actionSubmit action="livetracking_navigationtaskvisiblity_setprivate" value="${message(code:'fc.livetracking.navigationtaskvisibility.setprivate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="livetracking_navigationtaskvisiblity_setunlisted" value="${message(code:'fc.livetracking.navigationtaskvisibility.setunlisted')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                            </g:if>
+                            <g:if test="${taskInstance.liveTrackingNavigationTaskVisibility == Defs.LIVETRACKING_VISIBILITY_PRIVATE}" >
+                                <g:actionSubmit action="livetracking_navigationtaskvisiblity_setpublic" value="${message(code:'fc.livetracking.navigationtaskvisibility.setpublic')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="livetracking_navigationtaskvisiblity_setunlisted" value="${message(code:'fc.livetracking.navigationtaskvisibility.setunlisted')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                            </g:if>
+                            <g:if test="${taskInstance.liveTrackingNavigationTaskVisibility == Defs.LIVETRACKING_VISIBILITY_UNLISTED}" >
+                                <g:actionSubmit action="livetracking_navigationtaskvisiblity_setpublic" value="${message(code:'fc.livetracking.navigationtaskvisibility.setpublic')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="livetracking_navigationtaskvisiblity_setprivate" value="${message(code:'fc.livetracking.navigationtaskvisibility.setprivate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                            </g:if>
                             <g:if test="${taskInstance.liveTrackingTracksAvailable}">
                                 <g:actionSubmit action="livetracking_navigationtaskaddtracks" value="${message(code:'fc.livetracking.navigationtaskaddtracks')}" tabIndex="${ti[0]++}"/>
                                 <g:actionSubmit action="livetracking_navigationtaskaddtracks_incomplete" value="${message(code:'fc.livetracking.navigationtaskaddtracks.incomplete')}" tabIndex="${ti[0]++}"/>
                             </g:if>
+                        </g:if>
+                        <g:else>
+                            <g:if test="${taskInstance.IsFlightTestRun()}">
+                                <g:actionSubmit action="livetracking_navigationtaskcreate" value="${message(code:'fc.livetracking.navigationtaskcreate')}" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="livetracking_navigationtaskconnect" value="${message(code:'fc.livetracking.navigationtaskconnect')}" tabIndex="${ti[0]++}"/>
+                            </g:if>
+                            <g:else>
+                                <g:if test="${taskInstance.liveTrackingResultsTaskID}" >
+                                    <g:actionSubmit action="livetracking_taskdelete" value="${message(code:'fc.livetracking.results.task.delete')}" tabIndex="${ti[0]++}"/>
+                                </g:if>
+                                <g:else>
+                                    <g:actionSubmit action="livetracking_taskcreate" value="${message(code:'fc.livetracking.results.task.create')}" tabIndex="${ti[0]++}"/>
+                                </g:else>
+                            </g:else>
+                        </g:else>
+                        <g:if test="${taskInstance.liveTrackingResultsTaskID}" >
                             <g:if test="${taskInstance.IsPlanningTestRun()}">
                                 <g:if test="${!taskInstance.liveTrackingResultsPlanningID}" >
                                     <g:actionSubmit action="livetracking_planningcreate" value="${message(code:'fc.livetracking.results.task.planningcreate')}" tabIndex="${ti[0]++}"/>
@@ -113,10 +149,7 @@
                                 </g:else>
                             </g:if>
                         </g:if>
-                        <g:else>
-                            <g:actionSubmit action="livetracking_navigationtaskcreate" value="${message(code:'fc.livetracking.navigationtaskcreate')}" tabIndex="${ti[0]++}"/>
-                            <g:actionSubmit action="livetracking_navigationtaskconnect" value="${message(code:'fc.livetracking.navigationtaskconnect')}" tabIndex="${ti[0]++}"/>
-                        </g:else>
+                        <a href="/fc/docs/help_${session.showLanguage}.html#live-tracking" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                         <a name="end"/>
                     </g:form>
                 </div>

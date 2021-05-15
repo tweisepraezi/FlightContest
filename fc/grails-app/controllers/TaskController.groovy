@@ -1497,6 +1497,47 @@ class TaskController {
         render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
+    def livetracking_navigationtaskvisiblity_setpublic = {
+        def ret = trackerService.setNavigationTaskVisibility(params, Defs.LIVETRACKING_VISIBILITY_PUBLIC)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        }
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskvisiblity_setprivate = {
+        def ret = trackerService.setNavigationTaskVisibility(params, Defs.LIVETRACKING_VISIBILITY_PRIVATE)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        }
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_navigationtaskvisiblity_setunlisted = {
+        def ret = trackerService.setNavigationTaskVisibility(params, Defs.LIVETRACKING_VISIBILITY_UNLISTED)
+        flash.message = ret.message
+        if (ret.error) {
+            flash.error = true
+        }
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_taskcreate = {
+        def ret = trackerService.createTask(params)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_taskdelete = {
+        def ret = trackerService.deleteTask(params)
+        flash.message = ret.message
+        flash.error = !ret.deleted
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
     def livetracking_planningcreate = {
         def ret = trackerService.createTest(params, ResultType.Planningtask)
         flash.message = ret.message

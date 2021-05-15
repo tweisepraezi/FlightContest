@@ -27,3 +27,8 @@ Mapnik
    https:github.com/mapnik/mapnik/wiki/PolygonSymbolizer
    https:github.com/mapnik/mapnik/wiki/MarkersSymbolizer
    https:github.com/mapnik/mapnik/wiki/PointSymbolizer
+
+   https://www.volkerschatz.com/net/osm/osm.html
+                    https://www.volkerschatz.com/net/osm/styleadv.html
+   Projektionen     http://pubs.usgs.gov/of/1990/0284/report.pdf 
+                    https://proj.org/operations/projections/merc.html

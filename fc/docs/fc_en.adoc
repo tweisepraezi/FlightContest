@@ -1,7 +1,7 @@
 = Flight Contest
-Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)
-:revnumber: 3.2.M16
-:revdate: 05.05.2021
+Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)
+:revnumber: 3.2.M17
+:revdate: 15.05.2021
 :nofooter:
 :toc-title: Table of Contents
 :toc:
@@ -1702,8 +1702,6 @@ To achieve this without copies or FTP upload, use the following configuration:
      contest {
        // showDelete = true          // Enable deletion of live tracking contests
                                      // Default: false
-       // createPublic = true        // Create public live tracking contests
-                                     // Default: false
        startLocalTimeOfDay = "08:00" // Local start time of live tracking contest on contest day
                                      // Default: 06:00
        endLocalTimeOfDay = "20:00"   // Local end time of the live tracking contest
@@ -1715,8 +1713,6 @@ To achieve this without copies or FTP upload, use the following configuration:
      }
      navigationtask {
        // showDelete = true          // Enable deletion of live tracking navigation tasks
-                                     // Default: false
-       // createPublic = true        // Create public live tracking navigation tasks
                                      // Default: false
      }
      contestant {
@@ -1823,48 +1819,93 @@ Settings made can be checked with the integrated live display. +
 
 <<<
 [[live-tracking]]
-== live-tracking
+== Live tracking
 Allows tracking of crew positions during their navigation flight with automatic time evaluation.
 
 * First, make adjustments to the deployment environment: +
 -> <<fc_en.adoc#configuration-livetracking>>
 
-* Scenario 1: Configure Airsports Live Tracking with Flight Contest
+* Full Live Tracking management by Flight Contest
 
-** Preparatory steps in Flight Contest
-*** Assign all crews the tracker ID of their tracker. +
--> Crews -> <crew name> -> Tracker ID
-        
-** Functions to be executed in Flight Contest
-*** Create live tracking contest +
--> Contest -> Settings -> Live Tracking -> Contest Date +
--> Contest -> Settings -> Live Tracking -> Create Contest
-*** Create Live Tracking Navigation Task +
--> Tasks -> <Task Name> -> Settings -> Live Tracking -> Navigation Task Date +
--> Tasks -> <Task Name> -> Settings -> Live Tracking -> Create Navigation Task
-        
-** Functions to perform in Airsports Live Tracking
-*** Unlock Live Tracking Contest and Navigation Task for Public Access
+** Create contest (with crews and routes) +
+-> Contest -> New Contest +
+-> Routes -> Import route +
+-> Crews -> Import Excel crew list
 
-* Scenario 2: Configure Flight Contest with Airsports Live Tracking Teams
+** Create live tracking contest +
+-> Contest -> Settings -> Live tracking -> Create contest +
+-> Contest -> Settings -> Live tracking -> Set Public
 
-** Preparatory steps in Airsports Live Tracking
-*** Create Live Tracking Contest
-*** Assign teams (name, club, country, photos, aircraft, TAS, tracker ID)
+** Create live tracking teams +
+-> Crews -> Select all +
+-> Crews -> Create and connect live tracking teams for selected crews
+   
+** Create task with navigation test (generates flight plans) +
+-> Tasks -> New task +
+-> Tasks -> <Task name> -> Add Navigation Test +
+-> Planning -> <Task name> -> Select all +
+-> Planning -> <Task name> -> Assign wind +
+-> Planning -> <Task name> -> Calculate timetable
+   
+** Create live tracking navigation task +
+-> Tasks -> <Task name> (Live tracking settings) -> Create navigation task +
+-> Tasks -> <Task name> (Live tracking settings) -> Set Public
+   
+** Configuring the 'Results Service' for additional tests +
+-> Tasks -> <Task name> (Live tracking settings) -> Create planning test (if exists) +
+-> Tasks -> <Task name> (Live tracking settings) -> Create observation test (if exists) +
+-> Tasks -> <Task name> (Live tracking settings) -> Create landing test (if exists) +
+-> Tasks -> <Task name> (Live tracking settings) -> Create other test (if exists) +
+-> Tasks -> <Task name> (Live tracking settings) -> Enable "Submit test results immediately" +
+-> Tasks -> <Task name> (Live tracking settings) -> Save +
+With these settings each with 'Result ready' approved test result will be submitted immediately.
 
-** Functions to be performed in Flight Contest
-*** Connect to live tracking contest +
+** Enter test results +
+-> Results
+   
+** Publish final navigation test results to the 'Results Service' +
+-> Tasks -> <Task name> (Live tracking settings) -> Enable "Submit navigation test results" +
+-> Tasks -> <Task name> (Live tracking settings) -> Save +
+-> Results -> <Task name> -> Update live tracking results +
+   
+* Team Management by Live Tracking
+
+** Live Tracking: Create teams, with very detailed information (first name, last name of pilot and navigator, aeroplane, club, ...) +
+-> Contest management -> New contest +
+-> Contest management -> <Contest name> -> Team list -> Add team
+
+** Flight Contest: Connect with a live tracking contest + 
 -> Contest -> Settings -> Live tracking -> Connect contest
-*** Import teams from live tracking contest as crews +
+   
+** Flight Contest: Live tracking teams take over + 
 -> Crews -> Import live tracking teams
-*** Calculate schedule for navigation flight in task
-*** Create live tracking navigation task +
--> Tasks -> <Task Name> -> Settings -> Live Tracking -> Navigation Task Date +
--> Tasks -> <Task Name> -> Settings -> Live Tracking -> Create Navigation Task
 
-** Functions to perform in Airsports Live Tracking
-*** Unlock Live Tracking Contest and Navigation Task for Public Access
+* Load historical contests
 
+** Copy database of the historical contest +
+-> Stop Flight Contest (Start menu -> Flight Contest -> Stop Flight Contest) +
+-> Copy 'HistoricalContest.fcdb.h2.db' to 'C:\Program Files\Flight Contest\fc\fcdb.h2.db' +
+-> Start Flight Contest (Start menu -> Flight Contest -> Start Flight Contest)
+
+** Open Flight Contest +
+-> http://localhost:8080/fc -> <Contest name>
+
+** Create live tracking contest +
+-> Contest -> Settings -> Live tracking -> Create contest
+
+** Set emails of crews you want to show +
+-> Crews -> <Name> -> Email
+
+** Create live tracking teams +
+-> Crews -> Select all +
+-> Crews -> Create and connect live tracking teams for selected crews
+
+** Create navigation task +
+-> Tasks -> <Task name> (Live tracking settings) -> Create navigation task
+
+** Add tracks +
+-> Tasks -> <Task name> (Live tracking settings) -> Add navigation tracks
+   
 <<<
 [[automatic-actions]]
 == Automatic actions

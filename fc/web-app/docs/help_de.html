@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.M16,</span>
-<span id="revdate">05.05.2021</span>
+<span id="revnumber">version 3.2.M17,</span>
+<span id="revdate">15.05.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -3997,8 +3997,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
     contest {
       // showDelete = true          // Löschen von Live-Tracking-Contests ermöglichen
                                     // Default: false
-      // createPublic = true        // Öffentliche Live-Tracking-Contests anlegen
-                                    // Default: false
       startLocalTimeOfDay = "08:00" // Lokale Start-Zeit des Live-Tracking-Contests
                                     // am Wettbewerbstag, Default: 06:00
       endLocalTimeOfDay = "20:00"   // Lokale End-Zeit des Live-Tracking-Contests
@@ -4009,8 +4007,6 @@ Um das ohne Kopien oder FTP-Upload zu erreichen, folgende Konfiguration verwende
     }
     navigationtask {
       // showDelete = true          // Löschen von Live-Tracking-Navigationtasks ermöglichen
-                                    // Default: false
-      // createPublic = true        // Öffentliche Live-Tracking-Navigationtasks anlegen
                                     // Default: false
     }
     contestant {
@@ -4194,99 +4190,115 @@ Der letzte Stand der Live-Ergebnis-Datei wird eingefroren.</p>
 &#8594; <a href="#configuration-livetracking">Live-Tracking konfigurieren</a></p>
 </li>
 <li>
-<p>Scenario 1: Airsports Live Tracking mit Flight Contest konfigurieren</p>
+<p>Vollständiges Live-Tracking-Management durch Flight Contest</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Vorbereitende Schritte in Flight Contest</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Allen Besatzungen die Tracker-ID ihres Trackers zuweisen.<br>
-&#8594; Besatzungen &#8594; &lt;Besatzungs-Name&gt; &#8594; Tracker-ID</p>
+<p>Wettbewerb anlegen (mit Besatzungen und Strecken)<br>
+&#8594; Wettbewerb &#8594; Neuer Wettbewerb<br>
+&#8594; Strecken &#8594; Import Strecke<br>
+&#8594; Besatzungen &#8594; Import Excel-Besatzungsliste</p>
 </li>
-</ul>
-</div>
-</li>
-<li>
-<p>Auszuführende Funktionen in Flight Contest</p>
-<div class="ulist">
-<ul>
 <li>
 <p>Live-Tracking-Contest anlegen<br>
-&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest-Datum<br>
-&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest anlegen</p>
+&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest anlegen<br>
+&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Setze Öffentlich</p>
 </li>
 <li>
-<p>Live-Tracking-Navigation-Task anlegen<br>
-&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task-Datum<br>
-&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task anlegen</p>
+<p>Live-Tracking-Teams anlegen<br>
+&#8594; Besatzungen &#8594; Alle auswählen<br>
+&#8594; Besatzungen &#8594; Erstellen und Verbinden von Live-Tracking-Teams für ausgewählte Besatzungen</p>
+</li>
+<li>
+<p>Aufgabe mit Navigations-Test anlegen (erzeugt Flugpläne)<br>
+&#8594; Aufgaben &#8594; Neue Aufgabe<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Navigationstest hinzufügen<br>
+&#8594; Planung &#8594; &lt;Aufgaben-Name&gt; &#8594; Alle auswählen<br>
+&#8594; Planung &#8594; &lt;Aufgaben-Name&gt; &#8594; Wind zuweisen<br>
+&#8594; Planung &#8594; &lt;Aufgaben-Name&gt; &#8594; Zeitplan berechnen</p>
+</li>
+<li>
+<p>Live-Tracking-Navigations-Task anlegen<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Navigation-Task anlegen<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Setze Öffentlich</p>
+</li>
+<li>
+<p>'Results Service' für zusätzliche Tests konfigurieren<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Planning-Test anlegen (wenn vorhanden)<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Observation-Test anlegen (wenn vorhanden)<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Landing-Test anlegen (wenn vorhanden)<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Other-Test anlegen (wenn vorhanden)<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; "Test-Ergebnisse sofort übermitteln" aktivieren<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Speichern<br>
+Mit diesen Einstellungen wird jedes mit "Ergebnis fertig" freigegebene Testergebnis sofort übermittelt.</p>
+</li>
+<li>
+<p>Test-Ergebnisse eingeben<br>
+&#8594; Ergebnisse</p>
+</li>
+<li>
+<p>Veröffentlichen Sie die endgültigen Ergebnisse des Navigationstests im 'Results Service'<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; "Navigations-Ergebnisse übermitteln" aktivieren<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Speichern<br>
+&#8594; Ergebnisse &#8594; &lt;Aufgaben-Name&gt; &#8594; LiveTracking-Ergebnisse aktualisieren<br></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Auszuführende Funktionen in Airsports Live Tracking</p>
+<p>Team-Management durch Live-Tracking</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Live-Tracking-Contest und -Navigation-Task für öffentlichen Zugriff freischalten</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
+<p>Live Tracking: Teams anlegen, mit sehr detaillierten Informationen (Vor- und Nachname von Pilot und Navigator, Flugzeug, Club, &#8230;&#8203;)<br>
+&#8594; Contest management &#8594; New contest<br>
+&#8594; Contest management &#8594; &lt;Wettbewerbs-Name&gt; &#8594; Team list &#8594; Add team</p>
 </li>
 <li>
-<p>Scenario 2: Flight Contest mit Airsports Live Tracking Teams konfigurieren</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Vorbereitende Schritte in Airsports Live Tracking</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Live-Tracking-Contest anlegen</p>
-</li>
-<li>
-<p>Teams zuordnen (Namen, Club, Land, Fotos, Flugzeuge, TAS, Tracker-ID)</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Auszuführende Funktionen in Flight Contest</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Verbinden mit Live-Tracking-Contest<br>
+<p>Flight Contest: Mit einem Live-Tracking-Contest verbinden<br>
 &#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest verbinden</p>
 </li>
 <li>
-<p>Teams aus Live-Tracking-Contest als Besatzungen importieren<br>
+<p>Flight Contest: Live-Tracking-Teams übernehmen<br>
 &#8594; Besatzungen &#8594; Live-Tracking-Teams importieren</p>
-</li>
-<li>
-<p>Zeitplan für Navigations-Flug in Aufgabe berechnen</p>
-</li>
-<li>
-<p>Live-Tracking-Navigation-Task anlegen<br>
-&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task-Datum<br>
-&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; &#8594; Einstellungen &#8594; Live-Tracking &#8594; Navigation-Task anlegen</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Auszuführende Funktionen in Airsports Live Tracking</p>
+<p>Historische Wettbewerbe laden</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Live-Tracking-Contest und -Navigation-Task für öffentlichen Zugriff freischalten</p>
+<p>Datenbank des historischen Wettbewerbs kopieren<br>
+&#8594; Stop Flight Contest (Startmenü &#8594; Flight Contest &#8594; Stop Flight Contest)<br>
+&#8594; Kopiere 'HistoricalContest.fcdb.h2.db' nach 'C:\Program Files\Flight Contest\fc\fcdb.h2.db'<br>
+&#8594; Start Flight Contest (Startmenü &#8594; Flight Contest &#8594; Start Flight Contest)</p>
 </li>
-</ul>
-</div>
+<li>
+<p>Flight Contest öffnen<br>
+&#8594; <a href="http://localhost:8080/fc" class="bare">http://localhost:8080/fc</a> &#8594; &lt;Wettbewerbs-Name&gt;</p>
+</li>
+<li>
+<p>Live-Tracking-Contest anlegen<br>
+&#8594; Wettbewerb &#8594; Einstellungen &#8594; Live-Tracking &#8594; Contest anlegen</p>
+</li>
+<li>
+<p>Einstellen der E-Mails der Besatzungen, die Sie anzeigen möchten<br>
+&#8594; Besatzungen &#8594; &lt;Besatzungs-Name&gt; &#8594; E-Mail</p>
+</li>
+<li>
+<p>Live-Tracking-Teams anlegen<br>
+&#8594; Besatzungen &#8594; Alle auswählen<br>
+&#8594; Besatzungen &#8594; Erstellen und Verbinden von Live-Tracking-Teams für ausgewählte Besatzungen</p>
+</li>
+<li>
+<p>Live-Tracking-Navigations-Task anlegen<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Navigation-Task anlegen</p>
+</li>
+<li>
+<p>Navigation-Tracks hinzufügen<br>
+&#8594; Aufgaben &#8594; &lt;Aufgaben-Name&gt; (Live-Tracking-Einstellungen) &#8594; Navigation-Tracks hinzufügen</p>
 </li>
 </ul>
 </div>

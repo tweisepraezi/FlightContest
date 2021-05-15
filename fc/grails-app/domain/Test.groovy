@@ -14,6 +14,7 @@ class Test
 	BigDecimal taskTAS = 0
 	Aircraft taskAircraft                                  // DB-2.3
     String taskTrackerID = ""                              // DB-2.15
+    Integer taskLiveTrackingTeamID = 0                     // DB-2.25
     Integer aflosStartNum = 0                              // DB-2.10
     Boolean showAflosMark = false                          // DB-2.12
 
@@ -263,6 +264,9 @@ class Test
         landingTestLiveTrackingResultError(nullable:true)
         specialTestLiveTrackingResultOk(nullable:true)
         specialTestLiveTrackingResultError(nullable:true)
+        
+        // DB-2.25 compatibility
+        taskLiveTrackingTeamID(nullable:true)
     }
 
 	static mapping = {

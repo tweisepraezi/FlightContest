@@ -335,20 +335,38 @@
                                 <legend>${message(code:'fc.livetracking')}</legend>
 	                            <div>
                                     <g:if test="${contestInstance.liveTrackingContestID}" >
+                                        <label>${message(code:'fc.livetracking.contestvisibility.contestvisibility')}: ${contestInstance.GetLiveTrackingVisibility()}</label>
+                                        <br/>
                                         <g:if test="${BootStrap.global.ShowLiveTrackingIDs()}">
                                             <label>${message(code:'fc.livetracking.contestid')}: ${contestInstance.liveTrackingContestID}</label>
                                             <br/>
-                                            <br/>
                                         </g:if>
+                                        <br/>
                                         <g:if test="${BootStrap.global.IsLiveTrackingContestDeletePossible()}" >
                                             <g:actionSubmit action="livetracking_contestdelete" value="${message(code:'fc.livetracking.contestdelete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         <g:actionSubmit action="livetracking_contestdisconnect" value="${message(code:'fc.livetracking.contestdisconnect')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                        
+                                        <g:if test="${contestInstance.liveTrackingContestVisibility == Defs.LIVETRACKING_VISIBILITY_PUBLIC}" >
+                                            <g:actionSubmit action="livetracking_contestvisibility_setprivate" value="${message(code:'fc.livetracking.contestvisibility.setprivate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="livetracking_contestvisibility_setunlisted" value="${message(code:'fc.livetracking.contestvisibility.setunlisted')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:if test="${contestInstance.liveTrackingContestVisibility == Defs.LIVETRACKING_VISIBILITY_PRIVATE}" >
+                                            <g:actionSubmit action="livetracking_contestvisibility_setpublic" value="${message(code:'fc.livetracking.contestvisibility.setpublic')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="livetracking_contestvisibility_setunlisted" value="${message(code:'fc.livetracking.contestvisibility.setunlisted')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:if test="${contestInstance.liveTrackingContestVisibility == Defs.LIVETRACKING_VISIBILITY_UNLISTED}" >
+                                            <g:actionSubmit action="livetracking_contestvisibility_setpublic" value="${message(code:'fc.livetracking.contestvisibility.setpublic')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="livetracking_contestvisibility_setprivate" value="${message(code:'fc.livetracking.contestvisibility.setprivate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        
+                                        
                                     </g:if>
                                     <g:else>
                                         <g:actionSubmit action="livetracking_contestcreate" value="${message(code:'fc.livetracking.contestcreate')}" tabIndex="${ti[0]++}"/>
                                         <g:actionSubmit action="livetracking_contestconnect" value="${message(code:'fc.livetracking.contestconnect')}" tabIndex="${ti[0]++}"/>
                                     </g:else>
+                                    <a href="../../docs/help_${session.showLanguage}.html#live-tracking" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
 	                            </div>
                             </fieldset>
 	                    </g:if>

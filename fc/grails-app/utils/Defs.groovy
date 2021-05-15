@@ -45,6 +45,10 @@ class Defs
     static final String LIVETRACKING_TASKTEST_LANDING                  = "Landing"
     static final String LIVETRACKING_TASKTEST_SPECIAL                  = "Other"
     
+    static final String LIVETRACKING_VISIBILITY_PUBLIC                 = "public"
+    static final String LIVETRACKING_VISIBILITY_PRIVATE                = "private"
+    static final String LIVETRACKING_VISIBILITY_UNLISTED               = "unlisted"
+    
     static final int OSMPRINTMAP_RUNSECONDS                            = 2
     static final String OSMPRINTMAP_GROUP                              = "OsmPrintMapGroup"
     static final String OSMPRINTMAP_ACTION                             = "Action"

@@ -973,6 +973,22 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 25) { // DB-2.25 compatibility
+                            print "    2.25 modifications"
+                            Contest.findAll().each { Contest contest_instance ->
+                                contest_instance.liveTrackingContestVisibility = Defs.LIVETRACKING_VISIBILITY_PRIVATE
+                                contest_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.liveTrackingNavigationTaskVisibility = Defs.LIVETRACKING_VISIBILITY_PRIVATE
+                                task_instance.save()
+                            }
+                            Test.findAll().each { Test test_instance ->
+                                test_instance.taskLiveTrackingTeamID = 0
+                                test_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

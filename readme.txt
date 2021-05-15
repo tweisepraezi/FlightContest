@@ -1,7 +1,7 @@
 ﻿Flight Contest
 
 Thomas Weise
-Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Association)
+Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)
 
 https://flightcontest.de
 

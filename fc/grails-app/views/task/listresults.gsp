@@ -17,12 +17,21 @@
                         <tbody>
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
+                                
 	                            <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
 	                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'disabledcheckpoints')}"/></td>
 	                            </g:if>
 	                            <g:else>
 	                            	<td/>
 	                            </g:else>
+                                
+                                <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
+                                    <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listdifferences')}"/></td>
+                                </g:if>
+                                <g:else>
+                                    <td/>
+                                </g:else>
+                                
                                 <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                             </tr>
                             <tr>
@@ -32,12 +41,9 @@
                                 <g:else>
                                     <td/>
                                 </g:else>
-                                <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
-                                    <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listdifferences')}"/></td>
-                                </g:if>
-                                <g:else>
-                                    <td/>
-                                </g:else>
+                                
+                                <td/>
+                                <td/>
                                 <td/>
                             </tr>
                             <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.contest.liveTrackingContestID}" >
@@ -46,19 +52,17 @@
                                     <td>
                                         <g:set var="livetracking_map" value="${BootStrap.global.GetLiveTrackingMap(taskInstance.liveTrackingNavigationTaskID)}"/>
                                         <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingNavigationTaskID && livetracking_map}">
-                                            <a href="${livetracking_map}" target="_blank">${message(code:'fc.livetracking.navigationtaskmap')}<img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></a>
+                                            <a href="${livetracking_map}" target="_blank">${message(code:'fc.livetracking.navigationtaskmap')}<img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></a> (${taskInstance.GetLiveTrackingVisibility()})
+                                        </g:if>
+                                    </td>
+                                    <td>
+                                        <g:set var="livetracking_results" value="${BootStrap.global.GetLiveTrackingResults(taskInstance.contest.liveTrackingContestID, taskInstance.liveTrackingResultsTaskID)}"/>
+                                        <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsTaskID && livetracking_results}">
+                                                <a href="${livetracking_results}" target="_blank">${message(code:'fc.livetracking.results.service')}<img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></a> (${taskInstance.GetLiveTrackingVisibility()})
                                         </g:if>
                                     </td>
                                     <td/>
                                 </tr>
-                                <g:set var="livetracking_results" value="${BootStrap.global.GetLiveTrackingResults(taskInstance.contest.liveTrackingContestID, taskInstance.liveTrackingResultsTaskID)}"/>
-                                <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsTaskID && livetracking_results}">
-                                    <tr>
-                                        <td/>
-                                        <td><a href="${livetracking_results}" target="_blank">${message(code:'fc.livetracking.results.service')}<img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></a></td>
-                                        <td/>
-                                    </tr>
-                                </g:if>
                             </g:if>
                         </tbody>
                     </table>
@@ -222,7 +226,7 @@
 	                                    <g:set var="testInstanceID" value="selectedTestID${test_instance.id.toString()}"></g:set>
                                         <td>
                                             <g:testnum var="${test_instance}" link="${createLink(controller:'test',action:'show')}"/>
-                                            <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsTaskID && test_instance.crew.liveTrackingTeamID}" >
+                                            <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.liveTrackingResultsTaskID && test_instance.taskLiveTrackingTeamID}" >
                                                 <img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.5rem; height:0.7rem;"/>
                                             </g:if>
                                         </td>
