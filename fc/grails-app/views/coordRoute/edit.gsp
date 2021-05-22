@@ -31,7 +31,7 @@
                             </tbody>
                         </table>
                         <g:if test="${!coordRouteInstance.route.Used()}">
-                            <g:editCoordRoute coordRoute="${coordRouteInstance}" ti="${ti}"/>
+                            <g:editCoordRoute coordRoute="${coordRouteInstance}" ti="${ti}" secret="${coordRouteInstance.type == CoordType.SECRET}"/>
 	                        <fieldset>
 	                        	<legend>${message(code:'fc.measure.fromlasttp')}</legend>
 		                        <table>
@@ -96,6 +96,18 @@
                                    <g:if test="${coordRouteInstance.endCurved}">
                                        <tr>
                                            <td class="detailtitle">${message(code:'fc.endcurved.long')}:</td>
+                                           <td>${message(code:'fc.yes')}</td>
+                                       </tr>
+                                   </g:if>
+                                   <g:if test="${coordRouteInstance.circleCenter}">
+                                       <tr>
+                                           <td class="detailtitle">${message(code:'fc.circlecenter')}:</td>
+                                           <td>${message(code:'fc.yes')}</td>
+                                       </tr>
+                                   </g:if>
+                                   <g:if test="${coordRouteInstance.semiCircleInvert}">
+                                       <tr>
+                                           <td class="detailtitle">${message(code:'fc.semicircleinvert')}:</td>
                                            <td>${message(code:'fc.yes')}</td>
                                        </tr>
                                    </g:if>

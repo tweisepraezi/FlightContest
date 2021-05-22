@@ -11741,52 +11741,54 @@ class FcService
 		BigDecimal test_turn_true_track = null
 		CoordType last_coordtype = CoordType.UNKNOWN
 		BigDecimal last_measure_truetrack
-        CoordRoute.findAllByRoute(routeInstance,[sort:"id"]).each { CoordRoute coordroute_instance ->
-      		last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
-            last_map_distance = addMapDistance(last_map_distance,routeInstance.Convert_mm2NM(coordroute_instance.legMeasureDistance))
-			if (coordroute_instance.legDuration) {
-				last_legduration += coordroute_instance.legDuration
-			}
-			if (last_coordtype != CoordType.SECRET) {
-				last_measure_truetrack = coordroute_instance.measureTrueTrack
-			}
-            Map r = newLeg(
-				routeInstance, 
-				coordroute_instance, 
-				last_coordroute_instance, 
-				last_coordroute_test_instance, 
-				last_mapmeasure_distance,
-                last_map_distance,
-				last_legduration,
-				last_coord_distance,
-				first_coord_truetrack,
-				turn_true_track,
-				test_turn_true_track,
-				last_measure_truetrack
-			)
-			last_coord_distance = r.lastCoordDistance
-			first_coord_truetrack = r.firstCoordTrueTrack
-			turn_true_track = r.turnTrueTrack
-			test_turn_true_track = r.testTurnTrueTrack
-            last_coordroute_instance = coordroute_instance
-            switch (coordroute_instance.type) {
-	            case CoordType.SP:
-	            case CoordType.TP:
-	            case CoordType.FP:
-	            case CoordType.iFP:
-	            case CoordType.iLDG:
-	            case CoordType.iTO:
-	            case CoordType.iSP:
-	            	last_coordroute_test_instance = coordroute_instance
-	            	last_mapmeasure_distance = null
-                    last_map_distance = null
-					last_legduration = 0
-					last_coord_distance = 0
-					first_coord_truetrack = null
-					last_measure_truetrack = null
-	            	break
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:"id"])) {
+            if (!coordroute_instance.circleCenter) {
+                last_mapmeasure_distance = addMapMeasureDistance(last_mapmeasure_distance,coordroute_instance.legMeasureDistance)
+                last_map_distance = addMapDistance(last_map_distance,routeInstance.Convert_mm2NM(coordroute_instance.legMeasureDistance))
+                if (coordroute_instance.legDuration) {
+                    last_legduration += coordroute_instance.legDuration
+                }
+                if (last_coordtype != CoordType.SECRET) {
+                    last_measure_truetrack = coordroute_instance.measureTrueTrack
+                }
+                Map r = newLeg(
+                    routeInstance, 
+                    coordroute_instance, 
+                    last_coordroute_instance, 
+                    last_coordroute_test_instance, 
+                    last_mapmeasure_distance,
+                    last_map_distance,
+                    last_legduration,
+                    last_coord_distance,
+                    first_coord_truetrack,
+                    turn_true_track,
+                    test_turn_true_track,
+                    last_measure_truetrack
+                )
+                last_coord_distance = r.lastCoordDistance
+                first_coord_truetrack = r.firstCoordTrueTrack
+                turn_true_track = r.turnTrueTrack
+                test_turn_true_track = r.testTurnTrueTrack
+                last_coordroute_instance = coordroute_instance
+                switch (coordroute_instance.type) {
+                    case CoordType.SP:
+                    case CoordType.TP:
+                    case CoordType.FP:
+                    case CoordType.iFP:
+                    case CoordType.iLDG:
+                    case CoordType.iTO:
+                    case CoordType.iSP:
+                        last_coordroute_test_instance = coordroute_instance
+                        last_mapmeasure_distance = null
+                        last_map_distance = null
+                        last_legduration = 0
+                        last_coord_distance = 0
+                        first_coord_truetrack = null
+                        last_measure_truetrack = null
+                        break
+                }
+                last_coordtype = coordroute_instance.type
             }
-			last_coordtype = coordroute_instance.type
         }
 		printdone ""
     }

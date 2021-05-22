@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M17
-:revdate:   15.05.2021
+:revnumber: 3.2.M18
+:revdate:   22.05.2021
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -311,6 +311,7 @@ einem Import nur noch in 'Flight Contest'.
 <<fc.adoc#route-planning-import>> +
 <<fc.adoc#route-planning-google-earth>> +
 <<fc.adoc#route-planning-google-earth-add-secret>> +
+<<fc.adoc#route-planning-semicircles>> +
 <<fc.adoc#route-planning-verify>> +
 <<fc.adoc#route-planning-deliver>> +
 <<fc.adoc#route-planning-errors>>
@@ -365,12 +366,6 @@ Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig
 + 
 TO, LDG, iTO, iLDG: 0 ft
 * Tor-Breite (in NM)
-+
-TO, LDG, iTO, iLDG: 0.02 NM (entspr. Landebahn-Breite)
-+
-UZK: 2 NM (für Wettbewerb nach dt. Regelwerk, sonst 1 NM)
-+
-sonst: 1 NM
 * Tor-Richtung für TO, LDG, iTO, iLDG (in Grad)
 * Für präzise Übereinstimmung der ausgegebenen gedruckten Wettbewerbs-Karte 
   mit den zu verarbeitenden Daten müssen bei Präzisionsflug-Wettbewerben 
@@ -382,8 +377,6 @@ sonst: 1 NM
   unbekannte Zeitkontrolle ist.
 * Für krumme Strecken-Abschnitte sind Hilfspunkte einzugeben. Diese sind 
   als UZK mit folgenden Angaben einzugeben:
-** Tor-Breite >= 2 NM, damit Abweichungen nicht zu viele manuell 
-	  nachzuprüfende Logger-Fehler verursachen.
 ** Keine Zeitauswertung
 ** Keine Torauswertung
 ** Kein Flugplanungstest
@@ -397,7 +390,7 @@ Der Flugplan der Besatzung erhält als Richtung automatisch die Richtung
 auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke. 
   
 * Für Zwischenlandungen sind für iLDG und iTO folgenden Angaben einzugeben:
-** Tor-Breite 0.02 NM (entspr. Landebahn-Breite)
+** Tor-Breite (in NM)
 ** Tor-Richtung (in Grad)
 ** Keine Zeitauswertung
 ** Keine Torauswertung
@@ -407,20 +400,20 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.
 <<<
 Einzugebende Eigenschaften der Check-Punkte einer Strecke:
 ----
-  Punkt                       Check-       Gate              in         Auswertung   
-                              Punkt        Breite  Richtung  Flugplan   Zeit Kurs Höhe
+  Punkt                       Check-                 in         Auswertung   
+                              Punkt        Richtung  Flugplan   Zeit Kurs Höhe
 							  
-  Takeoff                     TO           0.02    250       ja         ja   nein nein
-  Startpunkt                  SP           1       -         ja         ja   nein ja
-  Wendepunkt                  WP1          1       -         ja         ja   ja   ja
-  Unbekannte Zeitkontrolle    UZK1         2       -         nein       ja   ja   ja
-  Touch&Go-Landung            iFP          1       -         ja         ja   ja   ja
-                              iLDG  (1,2)  0.02    250       ja         nein nein nein
-                              iSP   (2)    1       -         ja         ja   nein ja
-  Krummer Streckenabschnitt   UZK2  (1,2)  2       -         nein       nein ja   ja
-                              WP2   (2,3)  1       -         ja         ja   ja   ja
-  Finalpunkt                  FP           1       -         ja         ja   ja   ja
-  Landung                     LDG          0.02    250       ja         ja   nein nein
+  Takeoff                     TO           250       ja         ja   nein nein
+  Startpunkt                  SP           -         ja         ja   nein ja
+  Wendepunkt                  WP1          -         ja         ja   ja   ja
+  Unbekannte Zeitkontrolle    UZK1         -         nein       ja   ja   ja
+  Touch&Go-Landung            iFP          -         ja         ja   ja   ja
+                              iLDG  (1,2)  250       ja         nein nein nein
+                              iSP   (2)    -         ja         ja   nein ja
+  Krummer Streckenabschnitt   UZK2  (1,2)  -         nein       nein ja   ja
+                              WP2   (2,3)  -         ja         ja   ja   ja
+  Finalpunkt                  FP           -         ja         ja   ja   ja
+  Landung                     LDG          250       ja         ja   nein nein
 
   (1) Keine Zeitauswertung, Keine Torauswertung
   (2) Kein Flugplanungstest
@@ -428,56 +421,56 @@ Einzugebende Eigenschaften der Check-Punkte einer Strecke:
 ----
   
 ----
-  Strecken-Beispiele          Check-      Gate              in         Auswertung   
-                              Punkt       Breite  Richtung  Flugplan   Zeit Kurs Höhe
+  Strecken-Beispiele          Check-                in         Auswertung   
+                              Punkt       Richtung  Flugplan   Zeit Kurs Höhe
 
-  Normal                      TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              WP2         1       -         ja         ja   ja   ja
-                              WP3         1       -         ja         ja   ja   ja
-                              WP4         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
-                                             
-  Unbekannte Zeitkontrollen   TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              UZK1        2       -         nein       ja   ja   ja
-                              UZK2        2       -         nein       ja   ja   ja
-                              WP2         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
-                                             
-  Touch&Go-Zwischenlandung    TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.02    250       ja         nein nein nein
-                              iSP  (2)    1       -         ja         ja   nein ja
-                              WP2         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
+  Normal                      TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              WP2         -         ja         ja   ja   ja
+                              WP3         -         ja         ja   ja   ja
+                              WP4         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
+                                          
+  Unbekannte Zeitkontrollen   TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              UZK1        -         nein       ja   ja   ja
+                              UZK2        -         nein       ja   ja   ja
+                              WP2         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
+                                          
+  Touch&Go-Zwischenlandung    TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              iFP         -         ja         ja   ja   ja
+                              iLDG (1,2)  250       ja         nein nein nein
+                              iSP  (2)    -         ja         ja   nein ja
+                              WP2         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
   
-  Zwischenlandung mit Pause   TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.02    250       ja         nein nein nein
-                              iTO  (1,2)  0.02    250       ja         nein nein nein
-                              iSP  (2)    1       -         ja         ja   nein ja
-                              WP2         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
+  Zwischenlandung mit Pause   TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              iFP         -         ja         ja   ja   ja
+                              iLDG (1,2)  250       ja         nein nein nein
+                              iTO  (1,2)  250       ja         nein nein nein
+                              iSP  (2)    -         ja         ja   nein ja
+                              WP2         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
   
-  Krumme Strecke              TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              UZK1 (1,2)  2       -         nein       nein ja   ja
-                              UZK2 (1,2)  2       -         nein       nein ja   ja
-                              WP2  (2,3)  1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
+  Krumme Strecke              TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              UZK1 (1,2)  -         nein       nein ja   ja
+                              UZK2 (1,2)  -         nein       nein ja   ja
+                              WP2  (2,3)  -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
 ----
 
 [[route-planning-input]]
@@ -633,6 +626,22 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 . 'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern
 
 . Import der korrigierten Strecke (Strecke -> *Import FC-Strecke*)
+
+[[route-planning-semicircles]]
+=== Wettbewerbsstrecke mit Halbkreisen erzeugen
+
+. Definition eines Halbkreises
+
+- Fügen Sie zwischen 2 Wendepunkten eine UZK-Koordinate mit aktivierter Option '*Kreismittelpunkt*' ein.
+- Prüfen Sie mit der OSM-Online-Karte oder einer erzeugten OSM-Wettbewerbskarte die Korrektheit des Halbkreises.
+- Passen Sie ggf. die UZK-Koordinate oder die umgebenen Wendepunkt-Koordinaten an, wenn der Halbkreis nicht korrekt durch die Wendepunkte abgeschlossen wird.
+- Aktivieren Sie die Option '*Halbkreis anders herum*', wenn der Halbkreis um den Mittelpunkt anders herum verlaufen soll.
+
+. Strecke mit krummen Streckenabschnitt erzeugen
+
+- Aktivieren Sie die Strecken-Einstellung '*Halbkreis-Tore aus Kreismittelpunkten exportieren*'.
+- Führen Sie '*GPX-Export (mit Halbkreis-Tore)*' aus.
+- Führen Sie '-> Strecken -> *Import FC-Strecke*' mit der zuvor exportierten GPX-Datei aus. Diese Strecke enthält nun einen krummen Streckenabschnitt, der den Halbkreis beinhaltet.
 
 [[route-planning-verify]]
 === Prüfen der Wettbewerbsstrecke

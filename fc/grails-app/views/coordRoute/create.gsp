@@ -26,7 +26,7 @@
                                 <g:select from="${coordRouteInstance.type.ListNextValues(existiFP)}" name="type" value="${coordRouteInstance.type}" optionValue="${{message(code:it.code)}}" tabIndex="${ti[0]++}"/>
                             </p>
                         </fieldset>
-                        <g:editCoordRoute coordRoute="${coordRouteInstance}" ti="${ti}"/>
+                        <g:editCoordRoute coordRoute="${coordRouteInstance}" ti="${ti}" secret="${params.secret}"/>
                         <g:if test="${!params.secret && coordRouteInstance.type.IsTurnpointSignNextCoord(existiFP)}">
 	                        <g:if test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.AssignPhoto}">
 	                            <fieldset>

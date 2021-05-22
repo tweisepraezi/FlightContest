@@ -1469,10 +1469,10 @@ class TestController
         }
 	}
 	
-    def showofflinemap = {
+    def showofflinemap_test = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            gpxService.printstart "Show offline map of '${test.instance.crew.name}'"
+            gpxService.printstart "showofflinemap_test: Show map of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
             Map converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:true])
@@ -1497,10 +1497,10 @@ class TestController
         }
     }
     
-    def showmap = {
+    def showmap_test = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            gpxService.printstart "Show map of '${test.instance.crew.name}'"
+            gpxService.printstart "showmap_test: Show map of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
@@ -1526,10 +1526,10 @@ class TestController
         }
     }
     
-    def gpxexport = {
+    def gpxexport_test = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            gpxService.printstart "Export logger data of '${test.instance.crew.name}'"
+            gpxService.printstart "gpxexport_test: Export logger data of '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
@@ -1559,10 +1559,10 @@ class TestController
 
     }
      
-    def kmzexport = {
+    def kmzexport_test = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            kmlService.printstart "Export logger data of '${test.instance.crew.name}'"
+            kmlService.printstart "kmzexport_test: Export logger data of crew '${test.instance.crew.name}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.kmz"

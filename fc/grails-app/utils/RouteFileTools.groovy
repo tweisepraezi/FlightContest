@@ -35,6 +35,8 @@ class RouteFileTools
     final static String UNIT_TPnogatecheck = "nogate"
     final static String UNIT_TPnoplanningtest = "noplan"
     final static String UNIT_TPendcurved = "endcurved"
+    final static String UNIT_TPcirclecenter = "circlecenter"
+    final static String UNIT_TPsemicircleinvert = "invert"
     final static String UNIT_TPnosign = "-"
     
     //--------------------------------------------------------------------------
@@ -938,6 +940,8 @@ class RouteFileTools
                         coordroute_instance.noGateCheck = rte.extensions.flightcontest.gate.'@nogatecheck'[0] == "yes"
                         coordroute_instance.noPlanningTest = rte.extensions.flightcontest.gate.'@noplanningtest'[0] == "yes"
                         coordroute_instance.endCurved = rte.extensions.flightcontest.gate.'@endcurved'[0] == "yes"
+                        coordroute_instance.circleCenter = rte.extensions.flightcontest.gate.'@circlecenter'[0] == "yes"
+						coordroute_instance.semiCircleInvert = rte.extensions.flightcontest.gate.'@invert'[0] == "yes"
                         
                         String dist = rte.extensions.flightcontest.gate.'@dist'[0]
                         if (dist) {
@@ -1925,6 +1929,12 @@ class RouteFileTools
                         }
                         if (o == RouteFileTools.UNIT_TPendcurved) {
                             coordroute_instance.endCurved = true
+                        }
+                        if (o == RouteFileTools.UNIT_TPcirclecenter) {
+                            coordroute_instance.circleCenter = true
+                        }
+                        if (o == RouteFileTools.UNIT_TPsemicircleinvert) {
+                            coordroute_instance.semiCircleInvert = true
                         }
                         if (o.startsWith(SIGN)) {
                             String s = o.substring(SIGN.size()).trim()

@@ -1198,10 +1198,10 @@ class TaskController {
 	    }
 	}
     
-    def kmzexport = {
+    def kmzexport_task = {
         Map task = domainService.GetTask(params)
         if (task.instance) {
-            kmlService.printstart "Export '${task.instance.name()}'"
+            kmlService.printstart "kmzexport_task: Export logger data of task '${task.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.gpx"

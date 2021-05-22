@@ -989,6 +989,26 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 26) { // DB-2.26 compatibility
+                            print "    2.26 modifications"
+							Coord.findAll().each { Coord coord_instance ->
+								coord_instance.circleCenter = false
+								coord_instance.save()
+							}
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.exportSemicircleGates = false
+                                route_instance.save()
+                            }
+                            println " done."
+                        }
+                        if (global.versionMinor < 27) { // DB-2.27 compatibility
+                            print "    2.27 modifications"
+							Coord.findAll().each { Coord coord_instance ->
+								coord_instance.semiCircleInvert = false
+								coord_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

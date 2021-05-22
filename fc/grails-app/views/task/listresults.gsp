@@ -402,7 +402,7 @@
                                         <g:actionSubmit action="emailallcrewresults" value="${message(code:'fc.crewresults.all.email')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                     </g:if>
                                     <g:if test="${taskInstance.IsFlightTestRun()}">
-                                        <g:actionSubmit action="kmzexport" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        <g:actionSubmit action="kmzexport_task" value="${message(code:'fc.kmz.export')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                     </g:if>
                                     <g:actionSubmit action="calculatepositions" value="${message(code:'fc.results.calculatepositions')}" tabIndex="${ti[0]++}"/> 
                                     <g:actionSubmit action="printresults" value="${message(code:'fc.test.results.print')}" tabIndex="${ti[0]++}"/>

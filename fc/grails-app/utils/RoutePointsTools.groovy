@@ -44,12 +44,14 @@ class RoutePointsTools
             // add regular point
             if (!contestMap || coordroute_instance.type.IsContestMapCoord()) {
                 if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
-                    Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
-                    new_point += GetPointCoords(coordroute_instance)
-                    if (testInstance) {
-                        new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                    if (!(params.noCircleCenterPoints && coordroute_instance.circleCenter)) {
+                        Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
+                        new_point += GetPointCoords(coordroute_instance)
+                        if (testInstance) {
+                            new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                        }
+                        points += new_point
                     }
-                    points += new_point
                 }
             }
             
@@ -164,6 +166,9 @@ class RoutePointsTools
         }
         ret.latcenter = ret.latcenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
         ret.loncenter = ret.loncenter.setScale(GPXSHOWPPOINT_SCALE, RoundingMode.HALF_EVEN)
+        if (coordrouteInstance.circleCenter) {
+            ret += [circlecenter:true]
+        }
         return ret
     }
     

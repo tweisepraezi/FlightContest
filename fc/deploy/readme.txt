@@ -110,6 +110,8 @@ Erweiterungen in dieser Version (3.2):
 - Englische Hilfe hinzugefügt
 - OSM-Online-Karten-Layer 'Flight Contest' hinzugefügt.
   Ermöglicht die Anzeige von Strecke und Navigationsflügen interaktiv auf der OSM-Wettbewerbs-Karte.
+- Streckenplanung: 'Halbkreis durch Angabe eines Kreismittelpunktes erzeugen' hinzugefügt.
+  -> Hilfe -> Streckenplanung -> Wettbewerbsstrecke mit Halbkreisen erzeugen
 
 Erweiterungen in Version 3.1.11:
 --------------------------------

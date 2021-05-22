@@ -34,6 +34,8 @@ class Coord
     Boolean noGateCheck = false          // No gate check, DB-2.8
 	Boolean noPlanningTest = false       // No planning test, DB-2.6
     BigDecimal gateDirection = 270.0     // Richtung der Startbahn (T/O,LDG,iT/O,iLDG), Grad, DB-2.12
+    Boolean circleCenter = false         // DB-2.26
+    Boolean semiCircleInvert = false     // DB-2.27
     
     // Speicher für Eingabe der Landkarten-Messung
 	boolean measureEntered = false       // UNUSED: Coord.measureEntered, ersetzt durch Is...Measure(), DB-2.13
@@ -200,6 +202,12 @@ class Coord
         enrouteDistance(nullable:true,scale:10,min:0.0)
         enrouteDistanceOk(nullable:true)
         enrouteOrthogonalDistance(nullable:true)
+        
+        // DB-2.26 compatibility
+        circleCenter(nullable:true)
+        
+        // DB-2.27 compatibility
+        semiCircleInvert(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -258,6 +266,8 @@ class Coord
 		noPlanningTest = coordInstance.noPlanningTest
 	    secretLegRatio = coordInstance.secretLegRatio
         gateDirection = coordInstance.gateDirection
+        circleCenter = coordInstance.circleCenter
+        semiCircleInvert = coordInstance.semiCircleInvert
         assignedSign = coordInstance.assignedSign
         correctSign = coordInstance.correctSign
 	    // planCpTime = coordInstance.planCpTime
@@ -748,6 +758,12 @@ class Coord
         }
         if (endCurved) {
             s += ", ${RouteFileTools.UNIT_TPendcurved}"
+        }
+        if (circleCenter) {
+            s += ", ${RouteFileTools.UNIT_TPcirclecenter}"
+        }
+        if (semiCircleInvert) {
+            s += ", ${RouteFileTools.UNIT_TPsemicircleinvert}"
         }
         String tp_sign = GetExportTurnpointSign2()
         if (tp_sign != RouteFileTools.UNIT_TPnosign) {

@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.25
+	// Actual database version: DB-2.27
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 25
+	static int DB_MINOR = 27
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR

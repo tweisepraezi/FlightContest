@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)
-:revnumber: 3.2.M17
-:revdate: 15.05.2021
+:revnumber: 3.2.M18
+:revdate: 22.05.2021
 :nofooter:
 :toc-title: Table of Contents
 :toc:
@@ -310,6 +310,7 @@ only in 'Flight Contest' after an import.
 <<fc_en.adoc#route-planning-import>> +
 <<fc_en.adoc#route-planning-google-earth>> +
 <<fc_en.adoc#route-planning-google-earth-add-secret>> +
+<<fc_en.adoc#route-planning-semicircles>> +
 <<fc_en.adoc#route-planning-verify>> +
 <<fc_en.adoc#route-planning-deliver>> +
 <<fc_en.adoc#route-planning-errors>>
@@ -348,7 +349,7 @@ of a route are to be indicated language-dependently with the following designati
 
 [%autowidth]
 |===
-|competition language|check point designations
+|Competition language|Check point designations
 
 |German|SP, WP1, WP2, ..., FP
 |English|SP, TP1, TP2, ..., FP
@@ -364,12 +365,6 @@ For a competition route, the following information is required for all check poi
 +
 TO, LDG, iTO, iLDG: 0 ft
 * Gate width (in NM)
-+
-TO, LDG, iTO, iLDG: 0.02 NM (corresponding to runway width)
-+
-UZK: 2 NM (for competition according to German regulations, otherwise 1 NM)
-+
-otherwise: 1 NM
 * Gate direction for TO, LDG, iTO, iLDG (in degrees)
 * For precise correspondence of the printed competition map with the data to be processed
   with the data to be processed, distances must be measured on the competition map
@@ -381,8 +376,6 @@ otherwise: 1 NM
   unknown time check.
 * Auxiliary points are to be entered for curved sections of the course. These are to be
   entered as UZK with the following information:
-** Gate width >= 2 NM, so that deviations are not too many manually
-	  to cause too many logger errors to be checked manually.
 ** No time evaluation
 ** No gate evaluation
 ** No flight planning test
@@ -396,7 +389,7 @@ The flight plan of the crew receives as direction automatically the direction
 to the first auxiliary point as entry course to the curved route.
   
 * For stopovers, enter the following information for iLDG and iTO:
-** gate width 0.02 NM (corresponding to runway width)
+** Gate width (in NM)
 ** Gate direction (in degrees)
 ** No time evaluation
 ** No gate evaluation
@@ -406,20 +399,20 @@ to the first auxiliary point as entry course to the curved route.
 <<<
 Properties to be entered for the check points of a route:
 ----
-  Point                       Check        Gate              in         Evaluation
-                              Point        Width   Direction Flightplan Time Course Altitude
+  Point                       Check                  in         Evaluation
+                              Point        Direction Flightplan Time Course Altitude
 							  
-  Takeoff                     TO           0.02    250       yes        yes  no     no
-  Start point                 SP           1       -         yes        yes  no     yes
-  Turning point               TP1          1       -         yes        yes  yes    yes
-  Secret time control         SC1          2       -         no         yes  yes    yes
-  Touch&Go landing            iFP          1       -         yes        yes  yes    yes
-                              iLDG (1,2)   0.02    250       yes        no   no     no
-                              iSP (2)      1       -         yes        yes  no     yes
-  Curved section              SC2 (1,2)    2       -         no         no   yes    yes
-                              TP2 (2,3)    1       -         yes        yes  yes    yes
-  Final point                 FP           1       -         yes        yes  yes    yes
-  Landing                     LDG          0.02    250       yes        yes  no     no
+  Takeoff                     TO           250       yes        yes  no     no
+  Start point                 SP           -         yes        yes  no     yes
+  Turning point               TP1          -         yes        yes  yes    yes
+  Secret time control         SC1          -         no         yes  yes    yes
+  Touch&Go landing            iFP          -         yes        yes  yes    yes
+                              iLDG (1,2)   250       yes        no   no     no
+                              iSP (2)      -         yes        yes  no     yes
+  Curved section              SC2 (1,2)    -         no         no   yes    yes
+                              TP2 (2,3)    -         yes        yes  yes    yes
+  Final point                 FP           -         yes        yes  yes    yes
+  Landing                     LDG          250       yes        yes  no     no
 
   (1) No time evaluation, No goal evaluation
   (2) No flight planning test
@@ -427,55 +420,55 @@ Properties to be entered for the check points of a route:
 ----
   
 ----
-  Route examples              Check        Gate              in         Evaluation
-                              Point        Width   Direction Flightplan Time Course Altitude
-  Normal                      TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              TP2          1       -         yes        yes  yes    yes
-                              TP3          1       -         yes        yes  yes    yes
-                              TP4          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
-                                             
-  Secret time controls        TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              SC1          2       -         no         yes  yes    yes
-                              SC2          2       -         no         yes  yes    yes
-                              TP2          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
-                                             
-  Touch&Go intermediate       TO           0.02    250       yes        yes  no     no
-  landing                     SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              iFP          1       -         yes        yes  yes    yes
-                              iLDG (1,2)   0.02    250       yes        no   no     no
-                              iSP (2)      1       -         yes        yes  no     yes
-                              TP2          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
+  Route examples              Check                  in         Evaluation
+                              Point        Direction Flightplan Time Course Altitude
+  Normal                      TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              TP2          -         yes        yes  yes    yes
+                              TP3          -         yes        yes  yes    yes
+                              TP4          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
+                                           
+  Secret time controls        TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              SC1          -         no         yes  yes    yes
+                              SC2          -         no         yes  yes    yes
+                              TP2          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
+                                           
+  Touch&Go intermediate       TO           250       yes        yes  no     no
+  landing                     SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              iFP          -         yes        yes  yes    yes
+                              iLDG (1,2)   250       yes        no   no     no
+                              iSP (2)      -         yes        yes  no     yes
+                              TP2          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
   
-  Stopover with pause         TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              iFP          1       -         yes        yes  yes    yes
-                              iLDG (1,2)   0.02    250       yes        no   no     no
-                              iTO (1,2)    0.02    250       yes        no   no     no
-                              iSP (2)      1       -         yes        yes  no     yes
-                              WP2          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
+  Stopover with pause         TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              iFP          -         yes        yes  yes    yes
+                              iLDG (1,2)   250       yes        no   no     no
+                              iTO (1,2)    250       yes        no   no     no
+                              iSP (2)      -         yes        yes  no     yes
+                              WP2          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
   
-  Curved track                TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              SC1 (1,2)    2       -         no         no   yes    yes
-                              SC2 (1,2)    2       -         no         no   yes    yes
-                              TP2 (2,3)    1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        no   no     no
+  Curved track                TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              SC1 (1,2)    -         no         no   yes    yes
+                              SC2 (1,2)    -         no         no   yes    yes
+                              TP2 (2,3)    -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        no   no     no
 ----
 
 [[route-planning-input]]
@@ -631,6 +624,22 @@ Edit "Properties" of the added points in the 'Placemark' dialog:
 . Save 'Filename.kmz' with context menu 'Save location as' in new kmz file
 
 . Import the corrected route (Route -> *Import FC Route*)
+
+[[route-planning-semicircles]]
+=== Create competition route with semicircles
+
+. Definition of a semicircle
+
+- Insert a UZK coordinate between 2 turning points with the option '*Circle center*' activated.
+- Check the correctness of the semicircle with the OSM online map or a generated OSM contest map.
+- If necessary, adjust the UZK coordinate or the surrounding turnpoint coordinates if the semicircle is not correctly terminated by the turnpoints.
+- Activate the option '*Invert semi circle*' if you want the semicircle to go around the center point the other way.
+
+. Create a route with a curved leg
+
+- Activate the route setting '*Export semicircle gates from circle centers*'.
+- Execute '*GPX export (with semicircle gates)*'.
+- Execute '-> Routes -> *Import FC route*' with the previously exported GPX file. This route now contains a curved leg that includes the semicircle.
 
 [[route-planning-verify]]
 === Verify the competition route

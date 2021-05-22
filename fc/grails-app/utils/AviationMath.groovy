@@ -367,6 +367,47 @@ class AviationMath
     }
     
     //--------------------------------------------------------------------------
+    static List getSemicircle(BigDecimal centerLatitude, BigDecimal centerLongitude, BigDecimal startLatitude, BigDecimal startLongitude, BigDecimal endLatitude, BigDecimal endLongitude, boolean invertSemicircle)
+    // Berechnet Halbkreis um Koordinate center..., beginnend mit Koordinate start..., endend mit Koordinate end...
+    //   Latitude: Geographische Breite (-90 ... +90 Grad)
+    //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
+    // Rückgabe: Liste von Koordinaten (lat, lon)
+    {
+        List circle_coords = []
+        
+        Map start_leg = calculateLeg(startLatitude, startLongitude, centerLatitude, centerLongitude)
+        Map end_leg = calculateLeg(endLatitude, endLongitude, centerLatitude, centerLongitude)
+        BigDecimal start_leg_radius = start_leg.dis
+        BigDecimal course_change = courseChange(start_leg.dir, end_leg.dir)
+        BigDecimal value_track = start_leg.dir
+        BigDecimal track_change = 0
+        while (track_change < Math.abs(course_change)) {
+            circle_coords += getCoordinate(centerLatitude, centerLongitude, value_track, start_leg_radius)
+            if (course_change > 0) {
+                if (invertSemicircle) {
+                    value_track -= 10
+                } else {
+                    value_track += 10
+                }
+            } else {
+                if (invertSemicircle) {
+                    value_track += 10
+                } else {
+                    value_track -= 10
+                }
+            }
+            if (value_track < 0) {
+                value_track += 360
+            } else if (value_track > 360) {
+                value_track -= 360
+            }
+            track_change += 10
+        }
+        //circle_coords += getCoordinate(centerLatitude, centerLongitude, end_leg.dir, start_leg_radius)
+        return circle_coords
+    }
+    
+    //--------------------------------------------------------------------------
     static Map getTrack2Circle(BigDecimal srcLatitude, BigDecimal srcLongitude,
                                BigDecimal destLatitude, BigDecimal destLongitude,
                                BigDecimal radiusValue)

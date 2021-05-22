@@ -38,12 +38,23 @@ class RouteTagLib
         outln"""    <div>"""
         checkBox("noGateCheck", attrs.coordRoute.noGateCheck, 'fc.nogatecheck', attrs)
         outln"""    </div>"""
-        outln"""    <div>"""
-        checkBox("noPlanningTest", attrs.coordRoute.noPlanningTest, 'fc.noplanningtest', attrs)
-        outln"""    </div>"""
-        outln"""    <div>"""
-        checkBox("endCurved", attrs.coordRoute.endCurved, 'fc.endcurved.long', attrs)
-        outln"""    </div>"""
+        if (!attrs.secret) {
+            outln"""<div>"""
+            checkBox("noPlanningTest", attrs.coordRoute.noPlanningTest, 'fc.noplanningtest', attrs)
+            outln"""</div>"""
+            outln"""<div>"""
+            checkBox("endCurved", attrs.coordRoute.endCurved, 'fc.endcurved.long', attrs)
+            outln"""</div>"""
+        }
+        if (attrs.secret) {
+            outln"""<div>"""
+            checkBox("circleCenter", attrs.coordRoute.circleCenter, 'fc.circlecenter', attrs)
+            outln"""</div>"""
+            outln"""<div>"""
+            checkBox("semiCircleInvert", attrs.coordRoute.semiCircleInvert, 'fc.semicircleinvert', attrs)
+            outln"""</div>"""
+        }
+        // neue Felder funktionieren erst nach grails clean
         outln"""</fieldset>"""
     }
     
@@ -339,6 +350,9 @@ class RouteTagLib
         outln"""    <div>"""
         checkBox("showCurvedPoints", attrs.route.showCurvedPoints, 'fc.route.showcurvedpoints', attrs)
         outln"""    </div>"""
+        outln"""    <div>"""
+        checkBox("exportSemicircleGates", attrs.route.exportSemicircleGates, 'fc.route.exportsemicirclegates', attrs)
+        outln"""    </div>"""
         outln"""</fieldset>"""
     }
     
@@ -498,6 +512,12 @@ class RouteTagLib
             }
             if (coordroute_instance.endCurved) {
                s += """${message(code:'fc.endcurved')}"""
+            }
+            if (coordroute_instance.circleCenter) {
+                if (coordroute_instance.semiCircleInvert) {
+                   s += """${message(code:'fc.semicircleinvert.symbol')}"""
+                }
+                s += """${message(code:'fc.circlecenter.symbol')}"""
             }
             s += """        </td>"""
             outln s

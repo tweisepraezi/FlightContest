@@ -444,13 +444,13 @@ class RouteController {
         }
     }
 
-    def showofflinemap = {
+    def showofflinemap_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            gpxService.printstart "Show offline map of '${route.instance.name()}'"
+            gpxService.printstart "showofflinemap_route: Show map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:false])
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:false, noCircleCenterPoints:true])
             if (converter.ok) {
                 gpxService.printdone ""
                 session.gpxviewerReturnAction = 'show'
@@ -471,10 +471,10 @@ class RouteController {
         }
     }
 
-    def showmap = {
+    def showmap_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            gpxService.printstart "Show map of '${route.instance.name()}'"
+            gpxService.printstart "showmap_route: Show map of '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
@@ -499,10 +499,10 @@ class RouteController {
         }
     }
 
-    def gpxexport = {
+    def gpxexport_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            gpxService.printstart "Export '${route.instance.name()}'"
+            gpxService.printstart "gpxexport_route: Export route '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
@@ -527,10 +527,10 @@ class RouteController {
         }
     }
 
-    def kmzexport = {
+    def kmzexport_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            kmlService.printstart "Export '${route.instance.name()}'"
+            kmlService.printstart "kmzexport_route: Export route '${route.instance.name()}'"
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/KMZ-${uuid}-UPLOAD.kmz"

@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)</span><br>
-<span id="revnumber">version 3.2.M17,</span>
-<span id="revdate">15.05.2021</span>
+<span id="revnumber">version 3.2.M18,</span>
+<span id="revdate">22.05.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -445,6 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-import">Import of competition routes</a></li>
 <li><a href="#route-planning-google-earth">Create competition routes with Google Earth Pro</a></li>
 <li><a href="#route-planning-google-earth-add-secret">Add SCs and curved route sections with Google Earth Pro.</a></li>
+<li><a href="#route-planning-semicircles">Create competition route with semicircles</a></li>
 <li><a href="#route-planning-verify">Verify the competition route</a></li>
 <li><a href="#route-planning-deliver">Passing the competition route to the evaluation referee</a></li>
 <li><a href="#route-planning-errors">Error messages in route details</a></li>
@@ -1169,6 +1170,7 @@ only in 'Flight Contest' after an import.</p>
 <a href="#route-planning-import">Import of competition routes</a><br>
 <a href="#route-planning-google-earth">Create competition routes with Google Earth Pro</a><br>
 <a href="#route-planning-google-earth-add-secret">Add SCs and curved route sections with Google Earth Pro.</a><br>
+<a href="#route-planning-semicircles">Create competition route with semicircles</a><br>
 <a href="#route-planning-verify">Verify the competition route</a><br>
 <a href="#route-planning-deliver">Passing the competition route to the evaluation referee</a><br>
 <a href="#route-planning-errors">Error messages in route details</a></p>
@@ -1218,8 +1220,8 @@ of a route are to be indicated language-dependently with the following designati
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">competition language</th>
-<th class="tableblock halign-left valign-top">check point designations</th>
+<th class="tableblock halign-left valign-top">Competition language</th>
+<th class="tableblock halign-left valign-top">Check point designations</th>
 </tr>
 </thead>
 <tbody>
@@ -1253,15 +1255,6 @@ of a route are to be indicated language-dependently with the following designati
 </li>
 <li>
 <p>Gate width (in NM)</p>
-<div class="paragraph">
-<p>TO, LDG, iTO, iLDG: 0.02 NM (corresponding to runway width)</p>
-</div>
-<div class="paragraph">
-<p>UZK: 2 NM (for competition according to German regulations, otherwise 1 NM)</p>
-</div>
-<div class="paragraph">
-<p>otherwise: 1 NM</p>
-</div>
 </li>
 <li>
 <p>Gate direction for TO, LDG, iTO, iLDG (in degrees)</p>
@@ -1281,10 +1274,6 @@ unknown time check.</p>
 entered as UZK with the following information:</p>
 <div class="ulist">
 <ul>
-<li>
-<p>Gate width &gt;= 2 NM, so that deviations are not too many manually
-to cause too many logger errors to be checked manually.</p>
-</li>
 <li>
 <p>No time evaluation</p>
 </li>
@@ -1321,7 +1310,7 @@ to the first auxiliary point as entry course to the curved route.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>gate width 0.02 NM (corresponding to runway width)</p>
+<p>Gate width (in NM)</p>
 </li>
 <li>
 <p>Gate direction (in degrees)</p>
@@ -1349,20 +1338,20 @@ to the first auxiliary point as entry course to the curved route.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>  Point                       Check        Gate              in         Evaluation
-                              Point        Width   Direction Flightplan Time Course Altitude
+<pre>  Point                       Check                  in         Evaluation
+                              Point        Direction Flightplan Time Course Altitude
 
-  Takeoff                     TO           0.02    250       yes        yes  no     no
-  Start point                 SP           1       -         yes        yes  no     yes
-  Turning point               TP1          1       -         yes        yes  yes    yes
-  Secret time control         SC1          2       -         no         yes  yes    yes
-  Touch&amp;Go landing            iFP          1       -         yes        yes  yes    yes
-                              iLDG (1,2)   0.02    250       yes        no   no     no
-                              iSP (2)      1       -         yes        yes  no     yes
-  Curved section              SC2 (1,2)    2       -         no         no   yes    yes
-                              TP2 (2,3)    1       -         yes        yes  yes    yes
-  Final point                 FP           1       -         yes        yes  yes    yes
-  Landing                     LDG          0.02    250       yes        yes  no     no
+  Takeoff                     TO           250       yes        yes  no     no
+  Start point                 SP           -         yes        yes  no     yes
+  Turning point               TP1          -         yes        yes  yes    yes
+  Secret time control         SC1          -         no         yes  yes    yes
+  Touch&amp;Go landing            iFP          -         yes        yes  yes    yes
+                              iLDG (1,2)   250       yes        no   no     no
+                              iSP (2)      -         yes        yes  no     yes
+  Curved section              SC2 (1,2)    -         no         no   yes    yes
+                              TP2 (2,3)    -         yes        yes  yes    yes
+  Final point                 FP           -         yes        yes  yes    yes
+  Landing                     LDG          250       yes        yes  no     no
 
   (1) No time evaluation, No goal evaluation
   (2) No flight planning test
@@ -1371,55 +1360,55 @@ to the first auxiliary point as entry course to the curved route.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>  Route examples              Check        Gate              in         Evaluation
-                              Point        Width   Direction Flightplan Time Course Altitude
-  Normal                      TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              TP2          1       -         yes        yes  yes    yes
-                              TP3          1       -         yes        yes  yes    yes
-                              TP4          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
+<pre>  Route examples              Check                  in         Evaluation
+                              Point        Direction Flightplan Time Course Altitude
+  Normal                      TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              TP2          -         yes        yes  yes    yes
+                              TP3          -         yes        yes  yes    yes
+                              TP4          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
 
-  Secret time controls        TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              SC1          2       -         no         yes  yes    yes
-                              SC2          2       -         no         yes  yes    yes
-                              TP2          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
+  Secret time controls        TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              SC1          -         no         yes  yes    yes
+                              SC2          -         no         yes  yes    yes
+                              TP2          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
 
-  Touch&amp;Go intermediate       TO           0.02    250       yes        yes  no     no
-  landing                     SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              iFP          1       -         yes        yes  yes    yes
-                              iLDG (1,2)   0.02    250       yes        no   no     no
-                              iSP (2)      1       -         yes        yes  no     yes
-                              TP2          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
+  Touch&amp;Go intermediate       TO           250       yes        yes  no     no
+  landing                     SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              iFP          -         yes        yes  yes    yes
+                              iLDG (1,2)   250       yes        no   no     no
+                              iSP (2)      -         yes        yes  no     yes
+                              TP2          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
 
-  Stopover with pause         TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              iFP          1       -         yes        yes  yes    yes
-                              iLDG (1,2)   0.02    250       yes        no   no     no
-                              iTO (1,2)    0.02    250       yes        no   no     no
-                              iSP (2)      1       -         yes        yes  no     yes
-                              WP2          1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        yes  no     no
+  Stopover with pause         TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              iFP          -         yes        yes  yes    yes
+                              iLDG (1,2)   250       yes        no   no     no
+                              iTO (1,2)    250       yes        no   no     no
+                              iSP (2)      -         yes        yes  no     yes
+                              WP2          -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        yes  no     no
 
-  Curved track                TO           0.02    250       yes        yes  no     no
-                              SP           1       -         yes        yes  no     yes
-                              TP1          1       -         yes        yes  yes    yes
-                              SC1 (1,2)    2       -         no         no   yes    yes
-                              SC2 (1,2)    2       -         no         no   yes    yes
-                              TP2 (2,3)    1       -         yes        yes  yes    yes
-                              FP           1       -         yes        yes  yes    yes
-                              LDG          0.02    250       yes        no   no     no</pre>
+  Curved track                TO           250       yes        yes  no     no
+                              SP           -         yes        yes  no     yes
+                              TP1          -         yes        yes  yes    yes
+                              SC1 (1,2)    -         no         no   yes    yes
+                              SC2 (1,2)    -         no         no   yes    yes
+                              TP2 (2,3)    -         yes        yes  yes    yes
+                              FP           -         yes        yes  yes    yes
+                              LDG          250       yes        no   no     no</pre>
 </div>
 </div>
 </div>
@@ -1707,6 +1696,48 @@ Edit "Properties" of the added points in the 'Placemark' dialog:</p>
 </li>
 <li>
 <p>Import the corrected route (Route &#8594; <strong>Import FC Route</strong>)</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-semicircles">Create competition route with semicircles</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Definition of a semicircle</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Insert a UZK coordinate between 2 turning points with the option '<strong>Circle center</strong>' activated.</p>
+</li>
+<li>
+<p>Check the correctness of the semicircle with the OSM online map or a generated OSM contest map.</p>
+</li>
+<li>
+<p>If necessary, adjust the UZK coordinate or the surrounding turnpoint coordinates if the semicircle is not correctly terminated by the turnpoints.</p>
+</li>
+<li>
+<p>Activate the option '<strong>Invert semi circle</strong>' if you want the semicircle to go around the center point the other way.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Create a route with a curved leg</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Activate the route setting '<strong>Export semicircle gates from circle centers</strong>'.</p>
+</li>
+<li>
+<p>Execute '<strong>GPX export (with semicircle gates)</strong>'.</p>
+</li>
+<li>
+<p>Execute '&#8594; Routes &#8594; <strong>Import FC route</strong>' with the previously exported GPX file. This route now contains a curved leg that includes the semicircle.</p>
+</li>
+</ul>
+</div>
 </li>
 </ol>
 </div>

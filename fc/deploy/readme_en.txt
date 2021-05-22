@@ -1,5 +1,5 @@
-﻿Flight Contest 3.2
-==================
+﻿Flight Contest 3.2.M18
+======================
 
 Changes
 -------
@@ -87,9 +87,9 @@ Changes
     Emailing of contest maps added.
 
 - Judge timetable: 
-    Print option 'Latest submission time' added
-    Print option 'Landing field' added
-    Configuration value 'flightcontest.landing.info' added
+    Print option 'Latest submission time' added.
+    Print option 'Landing field' added.
+    Configuration value 'flightcontest.landing.info' added.
 
 - New crew list template:
   -> Help -> Create crew list -> FC-CrewList-Sample.xlsx
@@ -98,6 +98,9 @@ Changes
 
 - OSM online map layer 'Flight Contest' added.
   Allows to display route and navigation flights interactively on the OSM contest map.
+
+- Route planning: 'Create semicircle by specifying a circle center' added.
+  -> Help -> Route planning -> Create competition route with semicircles
 
 Live Tracking Configuration
 ---------------------------

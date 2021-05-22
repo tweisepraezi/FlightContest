@@ -17,9 +17,9 @@ class GpxController
 			String original_filename = file.getOriginalFilename()
             String file_extension = original_filename.substring(original_filename.lastIndexOf('.')).toLowerCase()
             if (params.offlinemap) {
-                gpxService.printstart "Show offline map of '$original_filename'"
+                gpxService.printstart "showmaploggerdata: Show offline map of '$original_filename'"
             } else {
-                gpxService.printstart "Show map of '$original_filename'"
+                gpxService.printstart "showmaploggerdata: Show map of '$original_filename'"
             }
 			gpxService.println file.getContentType() // "text/xml" 
 			String uuid = UUID.randomUUID().toString()

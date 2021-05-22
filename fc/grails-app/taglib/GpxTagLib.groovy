@@ -461,6 +461,8 @@ class GpxTagLib
                     button_text = """<img src="${attrs.gpxViewerSrc}/Icons/fcphoto.png" style="height:12px;"/> ${p.name}"""
                 } else if (p.enroutecanvas) {
                     button_text = """<img src="${attrs.gpxViewerSrc}/Icons/${p.name.toLowerCase()}.png" style="height:12px;"/>"""
+                } else if (p.circlecenter) {
+                    button_text = """<img src="${attrs.gpxViewerSrc}/Icons/circle_red.svg" style="height:12px;"/> ${p.name}"""
                 }
                 outln"""<button type="button" id="${i}" onmousedown="showPos=${i};wr_pos(${i});return true;" class="${button_class} ${skaliereFunc}:${p.latcenter},${p.loncenter},${p.radius}" tabIndex="${attrs.ti[0]++}">${button_text}</button>"""
                 i++

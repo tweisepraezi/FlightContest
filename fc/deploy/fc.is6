@@ -2,7 +2,7 @@
 
 [Code]
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
-const DBVersion = '2.25.0';     // DB-2.25
+const DBVersion = '2.27.0';     // DB-2.27
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
 const FCVersion = '3.2.0';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
@@ -10,8 +10,8 @@ const FCVersion64 = '3.2.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.2.M17
-AppVersion=3.2.M17
+AppVerName=Flight Contest 3.2.M18
+AppVersion=3.2.M18
 ; no milestone below
 VersionInfoVersion=3.2.0
 

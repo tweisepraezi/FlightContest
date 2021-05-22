@@ -18,6 +18,7 @@ class Route
     EnrouteMeasurement enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned  // DB-2.13
     Boolean showCurvedPoints = false                                             // DB-2.20
 	Integer mapScale = 200000                                                    // DB-2.21
+    Boolean exportSemicircleGates = false                                        // DB-2.26
     
     static int mmPerNM = 1852000
     static int mmPerkm = 1000000
@@ -150,6 +151,9 @@ class Route
         contestMapPrintPoints2(nullable:true)
         contestMapPrintLandscape2(nullable:true)
         contestMapPrintSize2(nullable:true)
+        
+        // DB-2.26 compatibility
+        exportSemicircleGates(nullable:true)
 	}
 
 	static mapping = {
@@ -1019,15 +1023,17 @@ class Route
             max_leg_error = true
         }
         
+        int circlecenter_num = CoordRoute.countByRouteAndCircleCenter(this, true)
+        
         return [min_target_num:min_target_num, max_target_num:max_target_num, min_target_error:min_target_error, max_target_error:max_target_error,
                 min_leg_num:min_leg_num, max_leg_num:max_leg_num, min_leg_error:min_leg_error, max_leg_error:max_leg_error,
-                measure_distance_difference:measure_distance_difference, procedureturn_difference:procedureturn_difference]
+                measure_distance_difference:measure_distance_difference, procedureturn_difference:procedureturn_difference, circlecenter_num:circlecenter_num]
     }
     
     boolean IsRouteOk()
     {
         Map status = RouteStatus()
-        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference || status.procedureturn_difference) {
+        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference || status.procedureturn_difference || status.circlecenter_num) {
             return false
         }
         return true
@@ -1078,6 +1084,13 @@ class Route
                 s += ", "
             }
             s += getMsgArgs('fc.observation.enroute.numerror.max',[status.max_target_num])
+            wr_comma = true
+        }
+        if (status.circlecenter_num) {
+            if (wr_comma) {
+                s += ", "
+            }
+            s += getMsgArgs('fc.circlecenter.error',[status.circlecenter_num])
             wr_comma = true
         }
         return s

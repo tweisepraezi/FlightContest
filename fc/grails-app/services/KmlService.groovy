@@ -54,6 +54,7 @@ class KmlService
     final static String STYLE_AIRPORT = "AirportStyle"
     final static String STYLE_START = "StartStyle"
     final static String STYLE_FINISH = "FinishStyle"
+    final static String STYLE_CIRCLECENTER = "CircleCenterStyle"
     
     final static String STYLE_TRACK = "TrackStyle"
     final static String STYLE_TRACK_COLOR = "ddddddff"
@@ -93,8 +94,8 @@ class KmlService
         kml_writer.writeLine(XMLHEADER)
         xml.kml(xmlns:NAMESPACE_XMLNS,'xmlns:gx':NAMESPACE_XMLNS_GX,'xmlns:kml':NAMESPACE_XMLNS_KML,'xmlns:atom':NAMESPACE_XMLNS_ATOM) {
             xml.Document {
-                KMZStyles(xml)
-                KMZRoute(routeInstance, null, isPrint, wrEnrouteSign, xml)
+                kmz_styles(xml)
+                kmz_route(routeInstance, null, isPrint, wrEnrouteSign, xml)
             }
         }
         kml_writer.close()
@@ -102,10 +103,10 @@ class KmlService
         if (kml_file_name.startsWith(GPXDATA)) {
             BootStrap.tempData.AddData(kml_file_name, kml_data.toCharArray())
             printdone "${kml_data.size()} bytes"
-            // TODO: WriteKMZ
+            // TODO: write_kmz
         } else {
             printdone "${kml_file.size()} bytes"
-            WriteKMZ(webRootDir, kmzFileName, kml_file_name)
+            write_kmz(webRootDir, kmzFileName, kml_file_name)
             DeleteFile(webRootDir + kml_file_name)
         }
 
@@ -142,11 +143,11 @@ class KmlService
         kml_writer.writeLine(XMLHEADER)
         xml.kml(xmlns:NAMESPACE_XMLNS,'xmlns:gx':NAMESPACE_XMLNS_GX,'xmlns:kml':NAMESPACE_XMLNS_KML,'xmlns:atom':NAMESPACE_XMLNS_ATOM) {
             xml.Document {
-                KMZStyles(xml)
-                KMZRoute(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
+                kmz_styles(xml)
+                kmz_route(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
                 xml.Folder {
                     xml.name getMsg('fc.kmz.flights',isPrint)
-                    found_track = KMZTrack(testInstance, isPrint, xml)
+                    found_track = kmz_track(testInstance, isPrint, xml)
                 }
             }
         }
@@ -155,10 +156,10 @@ class KmlService
         if (kml_file_name.startsWith(GPXDATA)) {
             BootStrap.tempData.AddData(kml_file_name, kml_data.toCharArray())
             printdone "${kml_data.size()} bytes"
-            // TODO: WriteKMZ
+            // TODO: write_kmz
         } else {
             printdone "${kml_file.size()} bytes"
-            WriteKMZ(webRootDir, kmzFileName, kml_file_name)
+            write_kmz(webRootDir, kmzFileName, kml_file_name)
             DeleteFile(webRootDir + kml_file_name)
         }
         
@@ -195,14 +196,14 @@ class KmlService
         kml_writer.writeLine(XMLHEADER)
         xml.kml(xmlns:NAMESPACE_XMLNS,'xmlns:gx':NAMESPACE_XMLNS_GX,'xmlns:kml':NAMESPACE_XMLNS_KML,'xmlns:atom':NAMESPACE_XMLNS_ATOM) {
             xml.Document {
-                KMZStyles(xml)
-                KMZRoute(route_instance, null, isPrint, wrEnrouteSign, xml)
+                kmz_styles(xml)
+                kmz_route(route_instance, null, isPrint, wrEnrouteSign, xml)
                 xml.Folder {
                     xml.name getMsg('fc.kmz.flights',isPrint)
                     for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"viewpos"])) {
                         if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
                             if (test_instance.IsFlightTestRun()) {
-                                if (KMZTrack(test_instance, isPrint, xml)) {
+                                if (kmz_track(test_instance, isPrint, xml)) {
                                     found_track = true
                                 }
                             }
@@ -216,10 +217,10 @@ class KmlService
         if (kml_file_name.startsWith(GPXDATA)) {
             BootStrap.tempData.AddData(kml_file_name, kml_data.toCharArray())
             printdone "${kml_data.size()} bytes"
-            // TODO: WriteKMZ
+            // TODO: write_kmz
         } else {
             printdone "${kml_file.size()} bytes"
-            WriteKMZ(webRootDir, kmzFileName, kml_file_name)
+            write_kmz(webRootDir, kmzFileName, kml_file_name)
             DeleteFile(webRootDir + kml_file_name)
         }
         
@@ -229,7 +230,7 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private void KMZStyles(MarkupBuilder xml)
+    private void kmz_styles(MarkupBuilder xml)
     {
         xml.Style(id:STYLE_ROUTELEG) {
             xml.LineStyle {
@@ -307,6 +308,23 @@ class KmlService
                 //xml.'gx:labelVisibility' "1"
             }
         }
+        xml.Style(id:STYLE_CIRCLECENTER) {
+            xml.IconStyle {
+                xml.Icon {
+                    xml.href "files/cluster.png"
+                }
+                xml.hotSpot(x:"0.0", y:"0.0", xunits:"fraction", yunits:"fraction")
+            }
+            xml.LabelStyle {
+                xml.color STYLE_GATE_LABELCOLOR
+                xml.scale STYLE_GATE_SCALE
+            }
+            xml.LineStyle {
+                xml.color STYLE_ROUTELEG_COLOR
+                xml.width STYLE_ROUTELEG_WIDTH
+                xml.'gx:labelVisibility' "1"
+            }
+        }
         xml.Style(id:STYLE_TRACK) {
             xml.LineStyle {
                 xml.color STYLE_TRACK_COLOR
@@ -345,26 +363,27 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private void SetRouteProperties(MarkupBuilder xml)
+    private void set_route_properties(MarkupBuilder xml)
     {
         xml.extrude "1"    // extends the line down to the ground
         xml.tessellate "1" // breaks the line up into smaller chunks
     }
     
     //--------------------------------------------------------------------------
-    private void WriteKMZ(String webRootDir, String kmzFileName, String kmlFileName)
+    private void write_kmz(String webRootDir, String kmzFileName, String kmlFileName)
     {
         ZipOutputStream kmz_zip_output_stream = new ZipOutputStream(new FileOutputStream(webRootDir + kmzFileName))
         
-        WriteFile2KMZ(kmz_zip_output_stream, "doc.kml", webRootDir, kmlFileName)
+        write_file_to_kmz(kmz_zip_output_stream, "doc.kml", webRootDir, kmlFileName)
         kmz_zip_output_stream.putNextEntry(new ZipEntry("files/"))
-        WriteFile2KMZ(kmz_zip_output_stream, "files/photo.png", webRootDir, "GM_Utils/Icons/photo.png")
-        WriteFile2KMZ(kmz_zip_output_stream, "files/airport.png", webRootDir, "GM_Utils/Icons/airport.png")
-        WriteFile2KMZ(kmz_zip_output_stream, "files/start.png", webRootDir, "GM_Utils/Icons/start.png")
-        WriteFile2KMZ(kmz_zip_output_stream, "files/finish.png", webRootDir, "GM_Utils/Icons/finish.png")
+        write_file_to_kmz(kmz_zip_output_stream, "files/photo.png", webRootDir, "GM_Utils/Icons/photo.png")
+        write_file_to_kmz(kmz_zip_output_stream, "files/airport.png", webRootDir, "GM_Utils/Icons/airport.png")
+        write_file_to_kmz(kmz_zip_output_stream, "files/start.png", webRootDir, "GM_Utils/Icons/start.png")
+        write_file_to_kmz(kmz_zip_output_stream, "files/finish.png", webRootDir, "GM_Utils/Icons/finish.png")
+        write_file_to_kmz(kmz_zip_output_stream, "files/cluster.png", webRootDir, "GM_Utils/Icons/cluster.png")
         EnrouteCanvasSign.each { enroute_canvas_sign ->
             if (enroute_canvas_sign.imageName) {
-                WriteFile2KMZ(kmz_zip_output_stream, "files/${enroute_canvas_sign.imageJpgShortName}", webRootDir, enroute_canvas_sign.imageJpgName)
+                write_file_to_kmz(kmz_zip_output_stream, "files/${enroute_canvas_sign.imageJpgShortName}", webRootDir, enroute_canvas_sign.imageJpgName)
             }
         }
 
@@ -372,7 +391,7 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private void WriteFile2KMZ(ZipOutputStream zipOutputStream, String zipFileName, String webRootDir, String fileName)
+    private void write_file_to_kmz(ZipOutputStream zipOutputStream, String zipFileName, String webRootDir, String fileName)
     {
         byte[] buffer = new byte[1024]
         FileInputStream kml_file_input_stream = new FileInputStream(webRootDir + fileName)
@@ -386,9 +405,9 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private void KMZRoute(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml)
+    private void kmz_route(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml)
     {
-        printstart "KMZRoute Print:$isPrint wrEnrouteSign:$wrEnrouteSign"
+        printstart "kmz_route Print:$isPrint wrEnrouteSign:$wrEnrouteSign"
         
         Media media = Media.Screen
         if (isPrint) {
@@ -446,20 +465,45 @@ class KmlService
                         xml.name route_name.encodeAsHTML()
                     }
                     xml.LineString {
-                        SetRouteProperties(xml)
+                        set_route_properties(xml)
                         String route_coordinates = ""
+                        CoordRoute last_coordroute_instance = null
+                        CoordRoute start_coordroute_instance = null
+                        CoordRoute center_coordroute_instance = null
                         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-                            if (coordroute_instance.type.IsCpCheckCoord()) {
-                                BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                if (route_coordinates) {
-                                    route_coordinates += " "
+                            if (center_coordroute_instance) { // semicircle
+                                List semicircle_coords = AviationMath.getSemicircle(
+                                    center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
+                                    start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                                )
+                                for (Map semicircle_coord in semicircle_coords) {
+                                    BigDecimal altitude_meter = center_coordroute_instance.altitude.toLong() / ftPerMeter
+                                    if (route_coordinates) {
+                                        route_coordinates += " "
+                                    }
+                                    route_coordinates += "${semicircle_coord.lon},${semicircle_coord.lat},${altitude_meter}"
                                 }
-                                route_coordinates += "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
+                                start_coordroute_instance = null
+                                center_coordroute_instance = null
+                            } else if (coordroute_instance.circleCenter) {
+                                start_coordroute_instance = last_coordroute_instance
+                                center_coordroute_instance = coordroute_instance
                             }
-                            if (coordroute_instance.type == CoordType.iFP) {
-                                restart_id = coordroute_instance.id
-                                break
+                            if (!coordroute_instance.circleCenter) {
+                                if (coordroute_instance.type.IsCpCheckCoord()) {
+                                    BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                    if (route_coordinates) {
+                                        route_coordinates += " "
+                                    }
+                                    route_coordinates += "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
+                                }
+                                if (coordroute_instance.type == CoordType.iFP) {
+                                    restart_id = coordroute_instance.id
+                                    break
+                                }
                             }
+                            last_coordroute_instance = coordroute_instance
                         }
                         xml.coordinates route_coordinates
                     }
@@ -470,21 +514,46 @@ class KmlService
                         xml.name "2"
                         boolean run = false
                         xml.LineString {
-                            SetRouteProperties(xml)
+                            set_route_properties(xml)
                             String route_coordinates = ""
+                            CoordRoute last_coordroute_instance = null
+                            CoordRoute start_coordroute_instance = null
+                            CoordRoute center_coordroute_instance = null
                             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                                 if (run) {
-                                    if (coordroute_instance.type.IsCpCheckCoord()) {
-                                        BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
-                                        if (route_coordinates) {
-                                            route_coordinates += " "
+                                    if (center_coordroute_instance) { // semicircle
+                                        List semicircle_coords = AviationMath.getSemicircle(
+                                            center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
+                                            start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
+                                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                                        )
+                                        for (Map semicircle_coord in semicircle_coords) {
+                                            BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                            if (route_coordinates) {
+                                                route_coordinates += " "
+                                            }
+                                            route_coordinates += "${semicircle_coord.lon},${semicircle_coord.lat},${altitude_meter}"
                                         }
-                                        route_coordinates += "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
+                                        start_coordroute_instance = null
+                                        center_coordroute_instance = null
+                                    } else if (coordroute_instance.circleCenter) {
+                                        start_coordroute_instance = last_coordroute_instance
+                                        center_coordroute_instance = coordroute_instance
+                                    } 
+                                    if (!coordroute_instance.circleCenter) {
+                                        if (coordroute_instance.type.IsCpCheckCoord()) {
+                                            BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
+                                            if (route_coordinates) {
+                                                route_coordinates += " "
+                                            }
+                                            route_coordinates += "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
+                                        }
+                                        if (coordroute_instance.type == CoordType.iFP) {
+                                            restart_coordroute_instance = coordroute_instance
+                                            break
+                                        }
                                     }
-                                    if (coordroute_instance.type == CoordType.iFP) {
-                                        restart_coordroute_instance = coordroute_instance
-                                        break
-                                    }
+                                    last_coordroute_instance = coordroute_instance
                                 }
                                 if (restart_id == coordroute_instance.id) {
                                     run = true
@@ -596,7 +665,7 @@ class KmlService
                                     } 
                                     xml.MultiGeometry {
                                         xml.LineString {
-                                            SetRouteProperties(xml)
+                                            set_route_properties(xml)
                                             xml.coordinates "${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter} ${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter}"
                                         }
                                         xml.Point {
@@ -625,7 +694,7 @@ class KmlService
                                     } 
                                     xml.MultiGeometry {
                                         xml.LineString {
-                                            SetRouteProperties(xml)
+                                            set_route_properties(xml)
                                             xml.coordinates "${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter} ${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter}"
                                         }
                                         xml.Point {
@@ -657,7 +726,7 @@ class KmlService
                                     } 
                                     xml.MultiGeometry {
                                         xml.LineString {
-                                            SetRouteProperties(xml)
+                                            set_route_properties(xml)
                                             xml.coordinates "${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter} ${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter}"
                                         }
                                         xml.Point {
@@ -686,7 +755,7 @@ class KmlService
                                     } 
                                     xml.MultiGeometry {
                                         xml.LineString {
-                                            SetRouteProperties(xml)
+                                            set_route_properties(xml)
                                             xml.coordinates "${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter} ${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter}"
                                         }
                                         xml.Point {
@@ -719,7 +788,7 @@ class KmlService
                                     } 
                                     xml.MultiGeometry {
                                         xml.LineString {
-                                            SetRouteProperties(xml)
+                                            set_route_properties(xml)
                                             xml.coordinates "${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter} ${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter}"
                                         }
                                         xml.Point {
@@ -748,7 +817,7 @@ class KmlService
                                     } 
                                     xml.MultiGeometry {
                                         xml.LineString {
-                                            SetRouteProperties(xml)
+                                            set_route_properties(xml)
                                             xml.coordinates "${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter} ${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter}"
                                         }
                                         xml.Point {
@@ -782,7 +851,7 @@ class KmlService
                                 }
                                 xml.MultiGeometry {
                                     xml.LineString {
-                                        SetRouteProperties(xml)
+                                        set_route_properties(xml)
                                         xml.coordinates "${start_gate.coordRight.lon},${start_gate.coordRight.lat},${altitude_meter2} ${start_gate.coordLeft.lon},${start_gate.coordLeft.lat},${altitude_meter2}"
                                     }
                                     xml.Point {
@@ -868,26 +937,36 @@ class KmlService
                                     BigDecimal altitude_meter2 = coordroute_instance.altitude.toLong() / ftPerMeter
                                     if (coordroute_instance.type.IsEnrouteFinishCoord()) {
                                         xml.styleUrl "#${STYLE_FINISH}"
+                                    } else if (coordroute_instance.circleCenter) {
+                                        xml.styleUrl "#${STYLE_CIRCLECENTER}"
                                     } else {
                                         xml.styleUrl "#${STYLE_GATE}"
                                     }
                                     xml.name coordroute_instance.titleMediaCode(media)
-                                    xml.LookAt {
-                                        xml.longitude coordroute_instance.lonMath()
-                                        xml.latitude coordroute_instance.latMath()
-                                        xml.altitude "0"
-                                        xml.heading "${gate.gateTrack}"
-                                        xml.tilt TILT_GATE
-                                        xml.range RANGE_GATE
+                                    if (!coordroute_instance.circleCenter) {
+                                        xml.LookAt {
+                                            xml.longitude coordroute_instance.lonMath()
+                                            xml.latitude coordroute_instance.latMath()
+                                            xml.altitude "0"
+                                            xml.heading "${gate.gateTrack}"
+                                            xml.tilt TILT_GATE
+                                            xml.range RANGE_GATE
+                                        }
                                     }
                                     xml.MultiGeometry {
-                                        xml.LineString {
-                                            SetRouteProperties(xml)
-                                            xml.coordinates "${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter2} ${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter2}"
-                                        }
                                         if (coordroute_instance.type.IsEnrouteFinishCoord()) {
                                             xml.Point {
                                                 xml.coordinates "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter2}"
+                                            }
+                                        } else if (coordroute_instance.circleCenter) {
+                                            xml.Point {
+                                                xml.coordinates "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter2}"
+                                            }
+                                        }
+                                        if (!coordroute_instance.circleCenter) {
+                                            xml.LineString {
+                                                set_route_properties(xml)
+                                                xml.coordinates "${gate.coordLeft.lon},${gate.coordLeft.lat},${altitude_meter2} ${gate.coordRight.lon},${gate.coordRight.lat},${altitude_meter2}"
                                             }
                                         }
                                     }
@@ -1009,6 +1088,8 @@ class KmlService
                                 xml.Placemark {
                                     if (coordroute_instance.type.IsEnrouteFinishCoord()) {
                                         xml.styleUrl "#${STYLE_FINISH}"
+                                    } else if (coordroute_instance.circleCenter) {
+                                        xml.styleUrl "#${STYLE_CIRCLECENTER}"
                                     } else {
                                         xml.styleUrl "#${STYLE_GATE}"
                                     }
@@ -1081,10 +1162,10 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private boolean KMZTrack(Test testInstance, boolean isPrint, MarkupBuilder xml)
+    private boolean kmz_track(Test testInstance, boolean isPrint, MarkupBuilder xml)
     // Return true: data found
     {
-        printstart "KMZTrack"
+        printstart "kmz_track"
         
         boolean found = false
         List track_points = []

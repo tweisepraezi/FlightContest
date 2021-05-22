@@ -424,8 +424,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.M17,</span>
-<span id="revdate">15.05.2021</span>
+<span id="revnumber">version 3.2.M18,</span>
+<span id="revdate">22.05.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -445,6 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-import">Import von Wettbewerbsstrecken</a></li>
 <li><a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a></li>
 <li><a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a></li>
+<li><a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a></li>
 <li><a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a></li>
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
@@ -1176,6 +1177,7 @@ einem Import nur noch in 'Flight Contest'.</p>
 <a href="#route-planning-import">Import von Wettbewerbsstrecken</a><br>
 <a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a><br>
 <a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a><br>
+<a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a><br>
 <a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a><br>
 <a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a><br>
 <a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></p>
@@ -1260,15 +1262,6 @@ einer Strecke sprachabhängig mit folgenden Bezeichnungen anzugeben:</p>
 </li>
 <li>
 <p>Tor-Breite (in NM)</p>
-<div class="paragraph">
-<p>TO, LDG, iTO, iLDG: 0.02 NM (entspr. Landebahn-Breite)</p>
-</div>
-<div class="paragraph">
-<p>UZK: 2 NM (für Wettbewerb nach dt. Regelwerk, sonst 1 NM)</p>
-</div>
-<div class="paragraph">
-<p>sonst: 1 NM</p>
-</div>
 </li>
 <li>
 <p>Tor-Richtung für TO, LDG, iTO, iLDG (in Grad)</p>
@@ -1288,10 +1281,6 @@ unbekannte Zeitkontrolle ist.</p>
 als UZK mit folgenden Angaben einzugeben:</p>
 <div class="ulist">
 <ul>
-<li>
-<p>Tor-Breite &gt;= 2 NM, damit Abweichungen nicht zu viele manuell
-nachzuprüfende Logger-Fehler verursachen.</p>
-</li>
 <li>
 <p>Keine Zeitauswertung</p>
 </li>
@@ -1328,7 +1317,7 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Tor-Breite 0.02 NM (entspr. Landebahn-Breite)</p>
+<p>Tor-Breite (in NM)</p>
 </li>
 <li>
 <p>Tor-Richtung (in Grad)</p>
@@ -1356,20 +1345,20 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>  Punkt                       Check-       Gate              in         Auswertung
-                              Punkt        Breite  Richtung  Flugplan   Zeit Kurs Höhe
+<pre>  Punkt                       Check-                 in         Auswertung
+                              Punkt        Richtung  Flugplan   Zeit Kurs Höhe
 
-  Takeoff                     TO           0.02    250       ja         ja   nein nein
-  Startpunkt                  SP           1       -         ja         ja   nein ja
-  Wendepunkt                  WP1          1       -         ja         ja   ja   ja
-  Unbekannte Zeitkontrolle    UZK1         2       -         nein       ja   ja   ja
-  Touch&amp;Go-Landung            iFP          1       -         ja         ja   ja   ja
-                              iLDG  (1,2)  0.02    250       ja         nein nein nein
-                              iSP   (2)    1       -         ja         ja   nein ja
-  Krummer Streckenabschnitt   UZK2  (1,2)  2       -         nein       nein ja   ja
-                              WP2   (2,3)  1       -         ja         ja   ja   ja
-  Finalpunkt                  FP           1       -         ja         ja   ja   ja
-  Landung                     LDG          0.02    250       ja         ja   nein nein
+  Takeoff                     TO           250       ja         ja   nein nein
+  Startpunkt                  SP           -         ja         ja   nein ja
+  Wendepunkt                  WP1          -         ja         ja   ja   ja
+  Unbekannte Zeitkontrolle    UZK1         -         nein       ja   ja   ja
+  Touch&amp;Go-Landung            iFP          -         ja         ja   ja   ja
+                              iLDG  (1,2)  250       ja         nein nein nein
+                              iSP   (2)    -         ja         ja   nein ja
+  Krummer Streckenabschnitt   UZK2  (1,2)  -         nein       nein ja   ja
+                              WP2   (2,3)  -         ja         ja   ja   ja
+  Finalpunkt                  FP           -         ja         ja   ja   ja
+  Landung                     LDG          250       ja         ja   nein nein
 
   (1) Keine Zeitauswertung, Keine Torauswertung
   (2) Kein Flugplanungstest
@@ -1378,56 +1367,56 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>  Strecken-Beispiele          Check-      Gate              in         Auswertung
-                              Punkt       Breite  Richtung  Flugplan   Zeit Kurs Höhe
+<pre>  Strecken-Beispiele          Check-                in         Auswertung
+                              Punkt       Richtung  Flugplan   Zeit Kurs Höhe
 
-  Normal                      TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              WP2         1       -         ja         ja   ja   ja
-                              WP3         1       -         ja         ja   ja   ja
-                              WP4         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
+  Normal                      TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              WP2         -         ja         ja   ja   ja
+                              WP3         -         ja         ja   ja   ja
+                              WP4         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
 
-  Unbekannte Zeitkontrollen   TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              UZK1        2       -         nein       ja   ja   ja
-                              UZK2        2       -         nein       ja   ja   ja
-                              WP2         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
+  Unbekannte Zeitkontrollen   TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              UZK1        -         nein       ja   ja   ja
+                              UZK2        -         nein       ja   ja   ja
+                              WP2         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
 
-  Touch&amp;Go-Zwischenlandung    TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.02    250       ja         nein nein nein
-                              iSP  (2)    1       -         ja         ja   nein ja
-                              WP2         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
+  Touch&amp;Go-Zwischenlandung    TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              iFP         -         ja         ja   ja   ja
+                              iLDG (1,2)  250       ja         nein nein nein
+                              iSP  (2)    -         ja         ja   nein ja
+                              WP2         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
 
-  Zwischenlandung mit Pause   TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              iFP         1       -         ja         ja   ja   ja
-                              iLDG (1,2)  0.02    250       ja         nein nein nein
-                              iTO  (1,2)  0.02    250       ja         nein nein nein
-                              iSP  (2)    1       -         ja         ja   nein ja
-                              WP2         1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein
+  Zwischenlandung mit Pause   TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              iFP         -         ja         ja   ja   ja
+                              iLDG (1,2)  250       ja         nein nein nein
+                              iTO  (1,2)  250       ja         nein nein nein
+                              iSP  (2)    -         ja         ja   nein ja
+                              WP2         -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein
 
-  Krumme Strecke              TO          0.02    250       ja         ja   nein nein
-                              SP          1       -         ja         ja   nein ja
-                              WP1         1       -         ja         ja   ja   ja
-                              UZK1 (1,2)  2       -         nein       nein ja   ja
-                              UZK2 (1,2)  2       -         nein       nein ja   ja
-                              WP2  (2,3)  1       -         ja         ja   ja   ja
-                              FP          1       -         ja         ja   ja   ja
-                              LDG         0.02    250       ja         ja   nein nein</pre>
+  Krumme Strecke              TO          250       ja         ja   nein nein
+                              SP          -         ja         ja   nein ja
+                              WP1         -         ja         ja   ja   ja
+                              UZK1 (1,2)  -         nein       nein ja   ja
+                              UZK2 (1,2)  -         nein       nein ja   ja
+                              WP2  (2,3)  -         ja         ja   ja   ja
+                              FP          -         ja         ja   ja   ja
+                              LDG         250       ja         ja   nein nein</pre>
 </div>
 </div>
 </div>
@@ -1715,6 +1704,48 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 </li>
 <li>
 <p>Import der korrigierten Strecke (Strecke &#8594; <strong>Import FC-Strecke</strong>)</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Definition eines Halbkreises</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fügen Sie zwischen 2 Wendepunkten eine UZK-Koordinate mit aktivierter Option '<strong>Kreismittelpunkt</strong>' ein.</p>
+</li>
+<li>
+<p>Prüfen Sie mit der OSM-Online-Karte oder einer erzeugten OSM-Wettbewerbskarte die Korrektheit des Halbkreises.</p>
+</li>
+<li>
+<p>Passen Sie ggf. die UZK-Koordinate oder die umgebenen Wendepunkt-Koordinaten an, wenn der Halbkreis nicht korrekt durch die Wendepunkte abgeschlossen wird.</p>
+</li>
+<li>
+<p>Aktivieren Sie die Option '<strong>Halbkreis anders herum</strong>', wenn der Halbkreis um den Mittelpunkt anders herum verlaufen soll.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Strecke mit krummen Streckenabschnitt erzeugen</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Aktivieren Sie die Strecken-Einstellung '<strong>Halbkreis-Tore aus Kreismittelpunkten exportieren</strong>'.</p>
+</li>
+<li>
+<p>Führen Sie '<strong>GPX-Export (mit Halbkreis-Tore)</strong>' aus.</p>
+</li>
+<li>
+<p>Führen Sie '&#8594; Strecken &#8594; <strong>Import FC-Strecke</strong>' mit der zuvor exportierten GPX-Datei aus. Diese Strecke enthält nun einen krummen Streckenabschnitt, der den Halbkreis beinhaltet.</p>
+</li>
+</ul>
+</div>
 </li>
 </ol>
 </div>
