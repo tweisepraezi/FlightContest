@@ -28,51 +28,69 @@
                             </tbody>
                         </table>
                         <g:if test="${!coordEnroutePhotoInstance.route.IsEnrouteSignUsed(true)}">
-                            <g:editCoordEnroutePhoto coordEnroute="${coordEnroutePhotoInstance}" create="${false}" ti="${ti}"/>
+                            <g:editCoordEnroutePhoto coordEnroute="${coordEnroutePhotoInstance}" create="${false}" ti="${ti}" next="${params.next}" />
                         </g:if>
                         <g:else>
-                             <table>
+                            <table>
                                 <tbody>
-                                   <tr>
-                                       <td class="detailtitle">${message(code:'fc.observation.enroute.photo.name')}:</td>
-                                       <td>${coordEnroutePhotoInstance.enroutePhotoName}</td>
-                                   </tr>
-                                   <g:if test="${coordEnroutePhotoInstance.route.enroutePhotoRoute != EnrouteRoute.InputName}" >
-	                                   <tr>
-	                                       <td class="detailtitle">${message(code:'fc.latitude')}:</td>
-	                                       <td>${coordEnroutePhotoInstance.latName()}</td>
-	                                   </tr>
-	                                   <tr>
-	                                       <td class="detailtitle">${message(code:'fc.longitude')}:</td>
-	                                       <td>${coordEnroutePhotoInstance.lonName()}</td>
-	                                   </tr>
-                                       <tr>
-                                           <td class="detailtitle">${message(code:'fc.distance.lasttp')}:</td>
-                                           <td>${coordEnroutePhotoInstance.titleCode()}</td>
-                                       </tr>
-	                                   <g:if test="${coordEnroutePhotoInstance.enrouteDistance}">
-	                                       <tr>
-	                                           <td class="detailtitle">${message(code:'fc.distance.fromlasttp')}:</td>
-	                                           <td>${FcMath.DistanceStr(coordEnroutePhotoInstance.enrouteDistance)}${message(code:'fc.mile')}</td>
-	                                       </tr>
-	                                   </g:if>
-	                                   <g:if test="${coordEnroutePhotoInstance.measureDistance}">
-	                                       <tr>
-	                                           <td class="detailtitle">${message(code:'fc.distance.fromlasttp')}:</td>
-	                                           <td>${FcMath.DistanceMeasureStr(coordEnroutePhotoInstance.measureDistance)}${message(code:'fc.mm')}</td>
-	                                       </tr>
-	                                   </g:if>
-                                       <g:if test="${coordEnroutePhotoInstance.coordMeasureDistance}">
-                                           <tr>
-                                               <td class="detailtitle">${message(code:'fc.distance.fromlasttp.coord')}:</td>
-                                               <td>${FcMath.DistanceMeasureStr(coordEnroutePhotoInstance.coordMeasureDistance)}${message(code:'fc.mm')}</td>
-                                           </tr>
-                                       </g:if>
-	                                   <tr>
-	                                       <td class="detailtitle">${message(code:'fc.distance.orthogonal')}:</td>
-	                                       <td>${coordEnroutePhotoInstance.enrouteOrthogonalDistance}${message(code:'fc.m')}</td>
-	                                   </tr>
-	                               </g:if>
+                                    <tr>
+                                        <td class="detailtitle">${message(code:'fc.observation.enroute.photo.name')}:</td>
+                                        <td>${coordEnroutePhotoInstance.enroutePhotoName}</td>
+                                    </tr>
+                                    <g:if test="${coordEnroutePhotoInstance.route.enroutePhotoRoute != EnrouteRoute.InputName}" >
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.latitude')}:</td>
+                                            <td>${coordEnroutePhotoInstance.latName()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.longitude')}:</td>
+                                            <td>${coordEnroutePhotoInstance.lonName()}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.distance.lasttp')}:</td>
+                                            <td>${coordEnroutePhotoInstance.titleCode()}</td>
+                                        </tr>
+                                        <g:if test="${coordEnroutePhotoInstance.enrouteDistance}">
+                                            <tr>
+                                                <td class="detailtitle">${message(code:'fc.distance.fromlasttp')}:</td>
+                                                <td>${FcMath.DistanceStr(coordEnroutePhotoInstance.enrouteDistance)}${message(code:'fc.mile')}</td>
+                                            </tr>
+                                        </g:if>
+                                        <g:if test="${coordEnroutePhotoInstance.measureDistance}">
+                                            <tr>
+                                                <td class="detailtitle">${message(code:'fc.distance.fromlasttp')}:</td>
+                                                <td>${FcMath.DistanceMeasureStr(coordEnroutePhotoInstance.measureDistance)}${message(code:'fc.mm')}</td>
+                                            </tr>
+                                        </g:if>
+                                        <g:if test="${coordEnroutePhotoInstance.coordMeasureDistance}">
+                                            <tr>
+                                                <td class="detailtitle">${message(code:'fc.distance.fromlasttp.coord')}:</td>
+                                                <td>${FcMath.DistanceMeasureStr(coordEnroutePhotoInstance.coordMeasureDistance)}${message(code:'fc.mm')}</td>
+                                            </tr>
+                                        </g:if>
+                                        <tr>
+                                            <td class="detailtitle">${message(code:'fc.distance.orthogonal')}:</td>
+                                            <td>${coordEnroutePhotoInstance.enrouteOrthogonalDistance}${message(code:'fc.m')}</td>
+                                        </tr>
+                                        <g:if test="${coordEnroutePhotoInstance.observationNextPrintPage}">
+                                            <tr>
+                                                <td class="detailtitle">${message(code:'fc.observation.printnextpage')}:</td>
+                                                <td>${message(code:'fc.yes')}</td>
+                                            </tr>
+                                        </g:if>
+                                        <g:if test="${coordEnroutePhotoInstance.imagecoord}">
+                                            <tr>
+                                                <td>
+                                                    <div class="photo">
+                                                        <img class="photo" id="photo_img_id" src="/fc/route/get_enroute_photo/${coordEnroutePhotoInstance.id}" style="width:${coordEnroutePhotoInstance.route.enroutePhotoPrintStyle.width}px; height:${coordEnroutePhotoInstance.route.enroutePhotoPrintStyle.height}px;"/>
+                                                        <div class="phototext">${coordEnroutePhotoInstance.enroutePhotoName}</div>
+                                                        <div class="photoposition" id="photo_position_id" style="top:${coordEnroutePhotoInstance.observationPositionTop}px; left:${coordEnroutePhotoInstance.observationPositionLeft}px;"></div>
+                                                    </div>
+                                                </td>
+                                                <td/>
+                                            </tr>
+                                        </g:if>
+                                    </g:if>
                                 </tbody>
                             </table>
                         </g:else>
@@ -91,6 +109,7 @@
                                 <g:actionSubmit action="reset" value="${message(code:'fc.distance.fromlasttp.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+				            <g:actionSubmit action="selectimagefilename" value="${message(code:'fc.observation.enroute.photo.import')}" tabIndex="${ti[0]++}"/>
                             <g:if test="${params.next}">
                                 <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                             </g:if>

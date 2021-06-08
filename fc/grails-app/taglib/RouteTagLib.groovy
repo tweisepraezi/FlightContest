@@ -59,6 +59,42 @@ class RouteTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    def editCoordTurnpointPhoto = { attrs, body ->
+        if (attrs.coordRoute.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto || attrs.coordRoute.assignedSign != TurnpointSign.NoSign) {
+            outln"""<fieldset>"""
+            outln"""    <div>"""
+            checkBox("observationNextPrintPage", attrs.coordRoute.observationNextPrintPage, 'fc.observation.printnextpage', attrs)
+            outln"""    </div>"""
+            outln"""</fieldset>"""
+            if (attrs.coordRoute.imagecoord) {
+                outln"""<fieldset>"""
+                outln"""    <div class="photo">"""
+                outln"""        <img class="photo" id="photo_img_id" src="/fc/route/get_turnpoint_photo/${attrs.coordRoute.id}" style="width:${attrs.coordRoute.route.turnpointPrintStyle.width}px; height:${attrs.coordRoute.route.turnpointPrintStyle.height}px;"/>"""
+                if (attrs.coordRoute.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto) {
+                    outln"""    <div class="phototext">${attrs.coordRoute.titlePrintCode()}</div>"""
+                } else {
+                    outln"""    <div class="phototext">${attrs.coordRoute.assignedSign.title}</div>"""
+                }
+                outln"""        <div class="photoposition" id="photo_position_id" style="top:${attrs.coordRoute.observationPositionTop}px; left:${attrs.coordRoute.observationPositionLeft}px;"></div>"""
+                outln"""    </div>"""
+                outln"""</fieldset>"""
+                outln"""<script>"""
+                outln"""    \$(document).on('click', '#photo_img_id', function(e) {"""
+                outln"""        var left = e.offsetX - \$("#photo_position_id").width()/2;"""
+                outln"""        var top = e.offsetY - \$("#photo_position_id").height()/2;"""
+                outln"""        window.location.href = "/fc/coordRoute/setposition/${attrs.coordRoute.id}?left=" + left + "&top=" + top + "&next=${attrs.next}";"""
+                outln"""    });"""
+                outln"""    \$(document).on('click', '#photo_position_id', function(e) {"""
+                outln"""        var left = e.offsetX + \$("#photo_position_id").position().left - \$("#photo_position_id").width()/2;"""
+                outln"""        var top = e.offsetY + \$("#photo_position_id").position().top - \$("#photo_position_id").height()/2;"""
+                outln"""        window.location.href = "/fc/coordRoute/setposition/${attrs.coordRoute.id}?left=" + left + "&top=" + top + "&next=${attrs.next}";"""
+                outln"""    });"""
+                outln"""</script>"""
+            }
+        }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     def editCoordEnroutePhoto = { attrs, body ->
         outln"""<fieldset>"""
         outln"""    <p>"""
@@ -119,6 +155,34 @@ class RouteTagLib
             outln"""        <input type="text" id="measureDistance" name="measureDistance" value="${fieldValue(bean:attrs.coordEnroute,field:'measureDistance')}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    </p>"""
             outln"""</fieldset>"""
+        }
+        if (!attrs.create) {
+            outln"""<fieldset>"""
+            outln"""    <div>"""
+            checkBox("observationNextPrintPage", attrs.coordEnroute.observationNextPrintPage, 'fc.observation.printnextpage', attrs)
+            outln"""    </div>"""
+            outln"""</fieldset>"""
+            if (attrs.coordEnroute.imagecoord) {
+                outln"""<fieldset>"""
+                outln"""    <div class="photo">"""
+                outln"""        <img class="photo" id="photo_img_id" src="/fc/route/get_enroute_photo/${attrs.coordEnroute.id}" style="width:${attrs.coordEnroute.route.enroutePhotoPrintStyle.width}px; height:${attrs.coordEnroute.route.enroutePhotoPrintStyle.height}px;"/>"""
+                outln"""        <div class="phototext">${attrs.coordEnroute.enroutePhotoName}</div>"""
+                outln"""        <div class="photoposition" id="photo_position_id" style="top:${attrs.coordEnroute.observationPositionTop}px; left:${attrs.coordEnroute.observationPositionLeft}px;"></div>"""
+                outln"""    </div>"""
+                outln"""</fieldset>"""
+                outln"""<script>"""
+                outln"""    \$(document).on('click', '#photo_img_id', function(e) {"""
+                outln"""        var left = e.offsetX - \$("#photo_position_id").width()/2;"""
+                outln"""        var top = e.offsetY - \$("#photo_position_id").height()/2;"""
+                outln"""        window.location.href = "/fc/coordEnroutePhoto/setposition/${attrs.coordEnroute.id}?left=" + left + "&top=" + top + "&next=${attrs.next}";"""
+                outln"""    });"""
+                outln"""    \$(document).on('click', '#photo_position_id', function(e) {"""
+                outln"""        var left = e.offsetX + \$("#photo_position_id").position().left - \$("#photo_position_id").width()/2;"""
+                outln"""        var top = e.offsetY + \$("#photo_position_id").position().top - \$("#photo_position_id").height()/2;"""
+                outln"""        window.location.href = "/fc/coordEnroutePhoto/setposition/${attrs.coordEnroute.id}?left=" + left + "&top=" + top + "&next=${attrs.next}";"""
+                outln"""    });"""
+                outln"""</script>"""
+            }
         }
     }
     
@@ -380,6 +444,19 @@ class RouteTagLib
         outln"""        <br/>"""
         checkBox("turnpointMapMeasurement", attrs.route.turnpointMapMeasurement, 'fc.observation.turnpoint.mapmeasurement', attrs)
         outln"""    </div>"""
+        outln"""    <div>"""
+        outln"""        <br/>"""
+        outln"""        <label>${message(code:'fc.observation.printstyle')}*:</label>"""
+        outln"""        <br/>"""
+        for (ObservationPrintStyle v in ObservationPrintStyle.values()) {
+            if (attrs.route.turnpointPrintStyle == v) {
+                outln"""<label><input type="radio" name="turnpointPrintStyle" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+            } else {
+                outln"""<label><input type="radio" name="turnpointPrintStyle" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+            }
+        }
+        attrs.ti[0]++
+        outln"""    </div>"""
         outln"""</fieldset>"""
         outln"""<fieldset>"""
         outln"""    <p class="group">${message(code:'fc.observation.enroute.photo')}</p>"""
@@ -408,6 +485,19 @@ class RouteTagLib
                 } else {
                     outln"""<label><input type="radio" name="enroutePhotoMeasurement" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                 }
+            }
+        }
+        attrs.ti[0]++
+        outln"""    </div>"""
+        outln"""    <div>"""
+        outln"""        <br/>"""
+        outln"""        <label>${message(code:'fc.observation.printstyle')}*:</label>"""
+        outln"""        <br/>"""
+        for (ObservationPrintStyle v in ObservationPrintStyle.values()) {
+            if (attrs.route.enroutePhotoPrintStyle == v) {
+                outln"""<label><input type="radio" name="enroutePhotoPrintStyle" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+            } else {
+                outln"""<label><input type="radio" name="enroutePhotoPrintStyle" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
             }
         }
         attrs.ti[0]++
@@ -454,7 +544,11 @@ class RouteTagLib
         outln"""    <thead>"""
         outln"""        <tr>"""
         if (attrs.route.turnpointRoute.IsTurnpointSign()) {
-            outln"""        <th class="table-head" colspan=15">${message(code:'fc.coordroute.list')}</th>"""
+            if (attrs.route.turnpointRoute.IsTurnpointPhoto()) {
+                outln"""    <th class="table-head" colspan=16">${message(code:'fc.coordroute.list')}</th>"""
+            } else {
+                outln"""    <th class="table-head" colspan=15">${message(code:'fc.coordroute.list')}</th>"""
+            }
         } else {
             outln"""        <th class="table-head" colspan=14">${message(code:'fc.coordroute.list')}</th>"""
         }
@@ -480,6 +574,9 @@ class RouteTagLib
                 outln"""    <th>${message(code:'fc.observation.turnpoint.canvas.short')}</th>"""
             } else if (attrs.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto) {
                 outln"""    <th>${message(code:'fc.observation.turnpoint.photo.short')}</th>"""
+            }
+            if (attrs.route.turnpointRoute.IsTurnpointPhoto()) {
+                outln"""    <th>${message(code:'fc.observation.printnextpage.short')}</th>"""
             }
         }
         outln"""        </tr>"""
@@ -558,6 +655,13 @@ class RouteTagLib
             }
             if (attrs.route.turnpointRoute.IsTurnpointSign()) {
                 outln"""    <td>${coordroute_instance.GetTurnpointSign()}</td>"""
+                if (attrs.route.turnpointRoute.IsTurnpointPhoto()) {
+                    if (coordroute_instance.observationNextPrintPage) {
+                        outln"""<td>${message(code:'fc.yes')}</td>"""
+                    } else {
+                        outln"""<td>-</td>"""
+                    }
+                }
             }
             outln"""    </tr>"""
             if (coordroute_instance.type == CoordType.SECRET) {
@@ -701,17 +805,20 @@ class RouteTagLib
             outln"""<table>"""
             outln"""    <thead>"""
             outln"""        <tr>"""
-            outln"""           <th class="table-head" colspan="8">${message(code:'fc.coordroute.photos')}</th>"""
+            outln"""           <th class="table-head" colspan="9">${message(code:'fc.coordroute.photos')}</th>"""
             outln"""        </tr>"""
             outln"""        <tr>"""
             outln"""            <th>${message(code:'fc.number')}</th>"""
             outln"""            <th>${message(code:'fc.observation.enroute.photo.name')}</th>"""
             if (attrs.route.enroutePhotoRoute != EnrouteRoute.InputName) {
-                outln"""            <th>${message(code:'fc.latitude')}</th>"""
-                outln"""            <th>${message(code:'fc.longitude')}</th>"""
-                outln"""            <th>${message(code:'fc.distance.lasttp')}</th>"""
-                outln"""            <th colspan="2">${message(code:'fc.distance.fromlasttp')}</th>"""
-                outln"""            <th>${message(code:'fc.distance.orthogonal')}</th>"""
+                outln"""        <th>${message(code:'fc.latitude')}</th>"""
+                outln"""        <th>${message(code:'fc.longitude')}</th>"""
+                outln"""        <th>${message(code:'fc.distance.lasttp')}</th>"""
+                outln"""        <th>${message(code:'fc.observation.printnextpage.short')}</th>"""
+                outln"""        <th colspan="2">${message(code:'fc.distance.fromlasttp')}</th>"""
+                outln"""        <th>${message(code:'fc.distance.orthogonal')}</th>"""
+            } else {
+                outln"""        <th>${message(code:'fc.observation.printnextpage.short')}</th>"""
             }
             outln"""        </tr>"""
             outln"""    </thead>"""
@@ -759,6 +866,11 @@ class RouteTagLib
                     }
                     s += """    </td>"""
                     outln s
+                    if (coordenroutephoto_instance.observationNextPrintPage) {
+                        outln"""    <td>${message(code:'fc.yes')}</td>"""
+                    } else {
+                        outln"""    <td>-</td>"""
+                    }
                     if (coordenroutephoto_instance.enrouteDistance != null) {
                         if (coordenroutephoto_instance.enrouteDistanceOk) {
                             s = """ <td style="white-space: nowrap;">"""
@@ -780,6 +892,12 @@ class RouteTagLib
                         outln"""<td style="white-space: nowrap;">-</td>"""
                     }
                     outln"""    <td style="white-space: nowrap;">${coordenroutephoto_instance.GetEnrouteOrthogonalDistance()}</td>"""
+                } else {
+                    if (coordenroutephoto_instance.observationNextPrintPage) {
+                        outln"""    <td>${message(code:'fc.yes')}</td>"""
+                    } else {
+                        outln"""    <td>-</td>"""
+                    }
                 }
                 outln"""    </tr>"""
             }
@@ -904,6 +1022,198 @@ class RouteTagLib
         return ret
     }
    
+    // --------------------------------------------------------------------------------------------------------------------
+    def printCoordEnroutePhoto = { attrs, body ->
+
+        int col_pos = 0
+        int col_num = attrs.route.enroutePhotoPrintStyle.columns
+        int row_pos = 0
+        int row_num = attrs.route.enroutePhotoPrintStyle.rows
+        
+        List check_list = []
+        int sort_area = 1
+        boolean name_type_number = false
+        boolean check_name_type = true
+        for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(attrs.route,[sort:"enrouteViewPos"])) {
+            if (check_name_type) {
+                if (coordenroutephoto_instance.enroutePhotoName.isInteger()) {
+                    name_type_number = true
+                }
+                check_name_type = false
+            }
+            if (coordenroutephoto_instance.observationNextPrintPage) {
+                sort_area++
+            }
+            if (name_type_number && coordenroutephoto_instance.enroutePhotoName.isInteger()) {
+                check_list += [instance:coordenroutephoto_instance, name:coordenroutephoto_instance.enroutePhotoName.toInteger(), sortarea:sort_area]
+            } else {
+                check_list += [instance:coordenroutephoto_instance, name:coordenroutephoto_instance.enroutePhotoName, sortarea:sort_area]
+            }
+        }
+        if (attrs.params.alphabetical == 'true') {
+            check_list = check_list.asImmutable().toSorted { a, b -> a.name <=> b.name }
+            check_list = check_list.asImmutable().toSorted { a, b -> a.sortarea <=> b.sortarea }
+        }
+        
+        List write_list = []
+        List write_row = []
+        int check_area = 1
+        for (Map check_value in check_list) {
+            if (check_value.sortarea != check_area) { // new page
+                if (write_row) {
+                    write_list += [write_row]
+                }
+                write_row = []
+                col_pos = 0
+                write_list += [[]]
+                row_pos = 0
+                check_area = check_value.sortarea
+            }
+            if (col_pos < col_num) {
+                write_row += check_value.instance
+            }
+            col_pos++
+            if (col_pos == col_num) { // new line
+                write_list += [write_row]
+                write_row = []
+                col_pos = 0
+                row_pos++
+            }
+            if (row_pos == row_num) {  // new page
+                write_list += [[]]
+                row_pos = 0
+            }
+        }
+        if (write_row) {
+            write_list += [write_row]
+        }
+        
+        outln"""<table class="photo">"""
+        outln"""    <tbody>"""
+        for (List row in write_list) {
+            if (row) {
+                outln"""<tr>"""
+                for (CoordEnroutePhoto coordenroutephoto_instance in row) {
+                    outln"""<td>"""
+                    outln"""    <div class="photo">"""
+                    outln"""        <img class="photo" src="/fc/route/get_enroute_photo/${coordenroutephoto_instance.id}" style="width:${attrs.route.enroutePhotoPrintStyle.width}px; height:${attrs.route.enroutePhotoPrintStyle.height}px;"/>"""
+                    outln"""        <div class="phototext">${coordenroutephoto_instance.enroutePhotoName}</div>"""
+                    outln"""        <div class="photoposition" style="top:${coordenroutephoto_instance.observationPositionTop}px; left:${coordenroutephoto_instance.observationPositionLeft}px;"></div>"""
+                    outln"""    </div>"""
+                    outln"""</td>"""
+                }
+                outln"""</tr>"""
+            } else {
+                outln"""<div style="page-break-after: always;"></div>"""
+            }
+        }
+        outln"""    </tbody>"""
+        outln"""</table>"""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    def printCoordTurnpointPhoto = { attrs, body ->
+
+        int col_pos = 0
+        int col_num = attrs.route.turnpointPrintStyle.columns
+        int row_pos = 0
+        int row_num = attrs.route.turnpointPrintStyle.rows
+        
+        List check_list = []
+        int sort_area = 1
+        boolean name_type_number = false
+        boolean check_name_type = attrs.route.turnpointRoute != TurnpointRoute.TrueFalsePhoto
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(attrs.route,[sort:"id"])) {
+            if (check_name_type) {
+                if (coordroute_instance.assignedSign != TurnpointSign.NoSign && coordroute_instance.assignedSign != TurnpointSign.None) {
+                    if (coordroute_instance.assignedSign.title.isInteger()) {
+                        name_type_number = true
+                    }
+                    check_name_type = false
+                }
+            }
+            if (coordroute_instance.observationNextPrintPage) {
+                sort_area++
+            }
+            if (coordroute_instance.imagecoord) {
+                if (attrs.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto) {
+                    check_list += [instance:coordroute_instance, name:coordroute_instance.titlePrintCode(), sortarea:sort_area]
+                } else {
+                    if (coordroute_instance.assignedSign != TurnpointSign.NoSign && coordroute_instance.assignedSign != TurnpointSign.None) {
+                        if (name_type_number && coordroute_instance.assignedSign.title.isInteger()) {
+                            check_list += [instance:coordroute_instance, name:coordroute_instance.assignedSign.title.toInteger(), sortarea:sort_area]
+                        } else {
+                            check_list += [instance:coordroute_instance, name:coordroute_instance.assignedSign.title, sortarea:sort_area]
+                        }
+                    }
+                }
+            }
+        }
+        if (attrs.params.alphabetical == 'true') {
+            check_list = check_list.asImmutable().toSorted { a, b -> a.name <=> b.name }
+            check_list = check_list.asImmutable().toSorted { a, b -> a.sortarea <=> b.sortarea }
+        }
+        
+        List write_list = []
+        List write_row = []
+        int check_area = 1
+        for (Map check_value in check_list) {
+            if (check_value.sortarea != check_area) { // new page
+                if (write_row) {
+                    write_list += [write_row]
+                }
+                write_row = []
+                col_pos = 0
+                write_list += [[]]
+                row_pos = 0
+                check_area = check_value.sortarea
+            }
+            if (col_pos < col_num) {
+                write_row += check_value.instance
+            }
+            col_pos++
+            if (col_pos == col_num) { // new line
+                write_list += [write_row]
+                write_row = []
+                col_pos = 0
+                row_pos++
+            }
+            if (row_pos == row_num) {  // new page
+                write_list += [[]]
+                row_pos = 0
+            }
+        }
+        if (write_row) {
+            write_list += [write_row]
+        }
+        
+        outln"""<table class="photo">"""
+        outln"""    <tbody>"""
+        for (List row in write_list) {
+            if (row) {
+                outln"""<tr>"""
+                for (CoordRoute coordroute_instance in row) {
+                    outln"""<td>"""
+                    outln"""    <div class="photo">"""
+                    outln"""        <img class="photo" src="/fc/route/get_turnpoint_photo/${coordroute_instance.id}" style="width:${attrs.route.turnpointPrintStyle.width}px; height:${attrs.route.turnpointPrintStyle.height}px;"/>"""
+                    if (attrs.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto) {
+                        outln"""    <div class="phototext">${coordroute_instance.titlePrintCode()}</div>"""
+                    } else {
+                        outln"""    <div class="phototext">${coordroute_instance.assignedSign.title}</div>"""
+                    }
+                    outln"""        <div class="photoposition" style="top:${coordroute_instance.observationPositionTop}px; left:${coordroute_instance.observationPositionLeft}px;"></div>"""
+                    outln"""    </div>"""
+                    outln"""</td>"""
+                }
+                outln"""</tr>"""
+            } else {
+                outln"""<div style="page-break-after: always;"></div>"""
+            }
+        }
+        outln"""    </tbody>"""
+        outln"""</table>"""
+    }
+    
     // --------------------------------------------------------------------------------------------------------------------
     private checkBox(String name, boolean checked, String label, attrs)
     {

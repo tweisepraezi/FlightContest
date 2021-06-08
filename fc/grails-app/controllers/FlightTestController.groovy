@@ -125,7 +125,7 @@ class FlightTestController {
         def flighttest = fcService.addobservationsFlightTest(params)
         if (flighttest.instance) {
             flash.message = flighttest.message
-            redirect(action:show,id:params.id)
+            redirect(action:"show",id:params.id)
         } else {
             flash.message = flighttest.message
             redirect(action:edit,id:params.id)
@@ -136,7 +136,7 @@ class FlightTestController {
         def flighttest = fcService.removeobservationsFlightTest(params)
         if (flighttest.instance) {
             flash.message = flighttest.message
-            redirect(action:show,id:params.id)
+            redirect(action:"show",id:params.id)
         } else {
             flash.message = flighttest.message
             redirect(action:edit,id:params.id)

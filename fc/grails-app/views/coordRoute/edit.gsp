@@ -126,13 +126,13 @@
                                        <td>${coordRouteInstance.coordMeasureDistanceName()}</td>
                                    </tr>
                                    <g:if test="${coordRouteInstance.measureDistance}">
-	                                   <tr>
-	                                       <td class="detailtitle">${message(code:'fc.distance.map.measure')}:</td>
-	                                       <td>${coordRouteInstance.measureDistanceName()}</td>
-	                                   </tr>
+	                                    <tr>
+	                                        <td class="detailtitle">${message(code:'fc.distance.map.measure')}:</td>
+	                                        <td>${coordRouteInstance.measureDistanceName()}</td>
+	                                    </tr>
 	                               </g:if>
 	                               <g:if test="${coordRouteInstance.route.IsObservationSignUsed() && coordRouteInstance.route.turnpointRoute.IsTurnpointSign() && coordRouteInstance.type.IsTurnpointSignCoord()}">
-                                       <tr>
+                                        <tr>
 	                                        <g:if test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.AssignPhoto}">
 	                                            <td class="detailtitle">${message(code:'fc.observation.turnpoint.photo.short')}:</td>
 	                                        </g:if>
@@ -143,7 +143,34 @@
 	                                            <td class="detailtitle">${message(code:'fc.observation.turnpoint.photo.short')}:</td>
 	                                        </g:elseif>
 	                                        <td>${coordRouteInstance.GetTurnpointSign()}</td>
-	                                   </tr>
+	                                    </tr>
+                                        <g:if test="${coordRouteInstance.route.turnpointRoute.IsTurnpointPhoto()}">
+                                            <g:if test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto || coordRouteInstance.assignedSign != TurnpointSign.NoSign}">
+                                                <g:if test="${coordRouteInstance.observationNextPrintPage}">
+                                                    <tr>
+                                                        <td class="detailtitle">${message(code:'fc.observation.printnextpage')}:</td>
+                                                        <td>${message(code:'fc.yes')}</td>
+                                                    </tr>
+                                                </g:if>
+                                                <g:if test="${coordRouteInstance.imagecoord}">
+                                                    <tr>
+                                                        <td>
+                                                            <div class="photo">
+                                                                <img class="photo" id="photo_img_id" src="/fc/route/get_turnpoint_photo/${coordRouteInstance.id}" style="width:${coordRouteInstance.route.turnpointPrintStyle.width}px; height:${coordRouteInstance.route.turnpointPrintStyle.height}px;"/>
+                                                                <g:if test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto}">
+                                                                    <div class="phototext">${coordRouteInstance.titlePrintCode()}</div>
+                                                                </g:if>
+                                                                <g:else>
+                                                                    <div class="phototext">${coordRouteInstance.assignedSign.title}</div>
+                                                                </g:else>
+                                                                <div class="photoposition" id="photo_position_id" style="top:${coordRouteInstance.observationPositionTop}px; left:${coordRouteInstance.observationPositionLeft}px;"></div>
+                                                            </div>
+                                                        </td>
+                                                        <td/>
+                                                    </tr>
+                                                </g:if>
+                                            </g:if>
+                                        </g:if>
 	                               </g:if>
                                 </tbody>
                             </table>
@@ -189,23 +216,26 @@
                                 </g:elseif>
                                 <g:elseif test="${coordRouteInstance.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto}">
                                     <fieldset>
-                                     <div>
-                                         <label>${message(code:'fc.observation.turnpoint.photo')}*:</label>
-                                         <br/>
-                                         <g:each var="v" in="${TurnpointCorrect.values()}">
-                                             <g:if test="${v != TurnpointCorrect.Unassigned}">
-                                                 <g:if test="${coordRouteInstance.correctSign == v}">
-                                                     <label><input type="radio" name="correctSign" value="${v}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:v.code)}</label>
-                                                 </g:if>
-                                                 <g:else>
-                                                     <label><input type="radio" name="correctSign" value="${v}" tabIndex="${ti[0]++}"/>${message(code:v.code)}</label>
-                                                 </g:else>
-                                             </g:if>
-                                         </g:each>
-                                         <br/>
-                                     </div>
+                                        <div>
+                                            <label>${message(code:'fc.observation.turnpoint.photo')}*:</label>
+                                            <br/>
+                                            <g:each var="v" in="${TurnpointCorrect.values()}">
+                                                <g:if test="${v != TurnpointCorrect.Unassigned}">
+                                                    <g:if test="${coordRouteInstance.correctSign == v}">
+                                                        <label><input type="radio" name="correctSign" value="${v}" checked="checked" tabIndex="${ti[0]++}"/>${message(code:v.code)}</label>
+                                                    </g:if>
+                                                    <g:else>
+                                                        <label><input type="radio" name="correctSign" value="${v}" tabIndex="${ti[0]++}"/>${message(code:v.code)}</label>
+                                                    </g:else>
+                                                </g:if>
+                                            </g:each>
+                                            <br/>
+                                        </div>
                                     </fieldset>
                                 </g:elseif>
+                                <g:if test="${coordRouteInstance.route.turnpointRoute.IsTurnpointPhoto()}">
+                                    <g:editCoordTurnpointPhoto coordRoute="${coordRouteInstance}"ti="${ti}" next="${params.next}" />
+                                </g:if>
                             </g:if>
                         </g:if>
                         <input type="hidden" name="id" value="${coordRouteInstance?.id}" />
@@ -225,6 +255,9 @@
 	                        <g:if test="${!params.next || coordRouteInstance.type.IsDeleteAllowedCoord()}">
 	                           <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
 	                        </g:if>
+                            <g:if test="${coordRouteInstance.route.turnpointRoute.IsTurnpointPhoto() && (coordRouteInstance.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto || coordRouteInstance.assignedSign != TurnpointSign.NoSign) && coordRouteInstance.type.IsTurnpointSignCoord()}">
+                                <g:actionSubmit action="selectimagefilename" value="${message(code:'fc.observation.turnpoint.photo.import')}" tabIndex="${ti[0]++}"/>
+                            </g:if>
                             <g:if test="${params.next}">
                                 <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                             </g:if>

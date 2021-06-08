@@ -12,10 +12,12 @@ class Route
     String liveTrackingScorecard = ""                                            // DB-2.18
     TurnpointRoute turnpointRoute = TurnpointRoute.Unassigned                    // DB-2.13
     Boolean turnpointMapMeasurement = false                                      // DB-2.13
+    ObservationPrintStyle turnpointPrintStyle = ObservationPrintStyle.Portrait2x4  // DB-2.28
     EnrouteRoute enroutePhotoRoute = EnrouteRoute.Unassigned                     // DB-2.13
     EnrouteRoute enrouteCanvasRoute = EnrouteRoute.Unassigned                    // DB-2.13
     EnrouteMeasurement enroutePhotoMeasurement = EnrouteMeasurement.Unassigned   // DB-2.13
     EnrouteMeasurement enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned  // DB-2.13
+    ObservationPrintStyle enroutePhotoPrintStyle = ObservationPrintStyle.Portrait2x4  // DB-2.28
     Boolean showCurvedPoints = false                                             // DB-2.20
 	Integer mapScale = 200000                                                    // DB-2.21
     Boolean exportSemicircleGates = false                                        // DB-2.26
@@ -154,6 +156,10 @@ class Route
         
         // DB-2.26 compatibility
         exportSemicircleGates(nullable:true)
+        
+        // DB-2.28 compatibility
+        enroutePhotoPrintStyle(nullable:true)
+        turnpointPrintStyle(nullable:true)
 	}
 
 	static mapping = {
@@ -172,9 +178,11 @@ class Route
         useProcedureTurns = routeInstance.useProcedureTurns
         turnpointRoute = routeInstance.turnpointRoute
         turnpointMapMeasurement = routeInstance.turnpointMapMeasurement
+        turnpointPrintStyle = routeInstance.turnpointPrintStyle
         enroutePhotoRoute = routeInstance.enroutePhotoRoute
-        enrouteCanvasRoute = routeInstance.enrouteCanvasRoute
         enroutePhotoMeasurement = routeInstance.enroutePhotoMeasurement
+        enroutePhotoPrintStyle = routeInstance.enroutePhotoPrintStyle
+        enrouteCanvasRoute = routeInstance.enrouteCanvasRoute
         enrouteCanvasMeasurement = routeInstance.enrouteCanvasMeasurement
         liveTrackingScorecard = routeInstance.liveTrackingScorecard
         mapScale = routeInstance.mapScale
@@ -511,6 +519,11 @@ class Route
         turnpointRoute.IsTurnpointSign()
     }
     
+    boolean IsTurnpointPhoto()
+    {
+        turnpointRoute.IsTurnpointPhoto()
+    }
+    
     private Map TurnpointSignStatus()
     {
         int missingsign_num = 0
@@ -564,6 +577,35 @@ class Route
             }
         }
         return [missingsign_num:missingsign_num, doublesign_num:doublesign_num, invalidsign_num:invalidsign_num, unassigned_num:unassigned_num]
+    }
+    
+    boolean AllTurnpointPhotoUploaded()
+    {
+        if (IsTurnpointSign()) {
+            switch (turnpointRoute) {
+                case TurnpointRoute.AssignPhoto:
+                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:'id'])) {
+                        if (coordroute_instance.type.IsTurnpointSignCoord()) {
+                            if (coordroute_instance.assignedSign == TurnpointSign.NoSign) {
+                                // nothing
+                            } else if (!coordroute_instance.imagecoord) {
+                                return false
+                            }
+                        }
+                    }
+                    return true
+                case TurnpointRoute.TrueFalsePhoto:
+                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:'id'])) {
+                        if (coordroute_instance.type.IsTurnpointSignCoord()) {
+                            if (!coordroute_instance.imagecoord) {
+                                return false
+                            }
+                        }
+                    }
+                    return true
+            }
+        }
+        return false
     }
     
     boolean IsTurnpointSignOk()
@@ -674,6 +716,24 @@ class Route
             }
         }
         return false
+    }
+    
+    boolean IsAnyEnroutePhoto()
+    {
+        if (CoordEnroutePhoto.countByRoute(this,[sort:"enrouteViewPos"])) {
+            return true
+        }
+        return false
+    }
+    
+    boolean AllEnroutePhotoUploaded()
+    {
+        for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(this,[sort:"enrouteViewPos"])) {
+            if (!coordenroutephoto_instance.imagecoord) {
+                return false
+            }
+        }
+        return true
     }
     
     private Map EnrouteSignStatus(boolean enroutePhoto)

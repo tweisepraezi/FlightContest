@@ -379,9 +379,13 @@ class AviationMath
         Map end_leg = calculateLeg(endLatitude, endLongitude, centerLatitude, centerLongitude)
         BigDecimal start_leg_radius = start_leg.dis
         BigDecimal course_change = courseChange(start_leg.dir, end_leg.dir)
+        BigDecimal course_change2 = Math.abs(course_change)
+        if (invertSemicircle) {
+            course_change2 = 360 - course_change2
+        }
         BigDecimal value_track = start_leg.dir
         BigDecimal track_change = 0
-        while (track_change < Math.abs(course_change)) {
+        while (track_change < course_change2) {
             circle_coords += getCoordinate(centerLatitude, centerLongitude, value_track, start_leg_radius)
             if (course_change > 0) {
                 if (invertSemicircle) {

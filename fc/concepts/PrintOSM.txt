@@ -2,16 +2,16 @@ PrintOSM
 ========
 
 + JobID von routeId vorhanden & Scheduler routeId läuft
-    Schalter "Druck-Auftrag unterbrechen"
-    Schalter "Druck-Auftrag verwerfen"
+    Schalter "Druck-Auftrag unterbrechen" (mapbreak)
+    Schalter "Druck-Auftrag verwerfen" (mapdiscard)
 	
 + JobID von routeId vorhanden & Scheduler routeId läuft nicht
-    Schalter "Druck-Auftrag abrufen"
-    Schalter "Druck-Auftrag verwerfen"
+    Schalter "Druck-Auftrag abrufen" (mapfetch)
+    Schalter "Druck-Auftrag verwerfen" (mapdiscard)
 	
 + FileID von routeId  vorhanden
     Schalter "Karte drucken"
-    Schalter "Druck-Auftrag verwerfen"
+    Schalter "Druck-Auftrag verwerfen" (mapdiscard)
 	
 Auftrag starten
     Daten hochladen x

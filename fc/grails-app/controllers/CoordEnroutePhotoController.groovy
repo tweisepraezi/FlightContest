@@ -1,3 +1,5 @@
+import org.springframework.web.multipart.MultipartFile
+
 class CoordEnroutePhotoController {
     
 	def fcService
@@ -166,6 +168,24 @@ class CoordEnroutePhotoController {
         redirect(controller:"route",action:show,id:params.routeid)
     }
     
+    def assignnamealphabetical = {
+        def coordenroutephoto = fcService.assignnamerandomlyCoordEnroutePhoto(params, false)
+        flash.message = coordenroutephoto.message
+        redirect(controller:"route",action:show,id:params.routeid)
+    }
+    
+    def assignnamerandomly = {
+        def coordenroutephoto = fcService.assignnamerandomlyCoordEnroutePhoto(params, true)
+        flash.message = coordenroutephoto.message
+        redirect(controller:"route",action:show,id:params.routeid)
+    }
+    
+    def setposition = {
+        def coordenroutephoto = fcService.setpositionCoordEnroutePhoto(params)
+        flash.message = coordenroutephoto.message
+        redirect(action:edit,id:params.id,params:[next:params.next])
+    }
+    
     def reset = {
 		def coordenroutephoto = fcService.resetmeasureCoordEnroutePhoto(params)
         if (coordenroutephoto.saved) {
@@ -215,6 +235,22 @@ class CoordEnroutePhotoController {
             redirect(controller:"route",action:show,id:params.routeid)
         }
 	}
+    
+	def selectimagefilename = {
+		[:]
+    }
+	
+	def selectimagefilename_cancel = {
+        redirect(action:"edit", id:params.id)
+    }
+    
+	def loadimage = {
+		MultipartFile image_file = request.getFile("imagefile")
+		if (image_file && !image_file.isEmpty()) {
+            fcService.importCoordEnroutePhoto(params, image_file) 
+        }
+        redirect(action:"edit", id:params.id)
+    }
     
     private Map search_next_id(CoordEnroutePhoto coordEnrouteInstance, String nextID)
     {

@@ -112,7 +112,34 @@ Erweiterungen in dieser Version (3.2):
   Ermöglicht die Anzeige von Strecke und Navigationsflügen interaktiv auf der OSM-Wettbewerbs-Karte.
 - Streckenplanung: 'Halbkreis durch Angabe eines Kreismittelpunktes erzeugen' hinzugefügt.
   -> Hilfe -> Streckenplanung -> Wettbewerbsstrecke mit Halbkreisen erzeugen
-
+- Foto-Verwaltung und -Druck hinzugefügt
+    Strecken-Foto-Namen können alphabetisch oder zufällig vergeben werden. Das erste Bild bestimmt, ob dabei Buchstaben oder Zahlen verwendet werden.
+      -> Strecken -> <Strecken-Name> -> Strecken-Foto-Namen alphabetisch vergeben
+      -> Strecken -> <Strecken-Name> -> Strecken-Foto-Namen zufällig vergeben
+    Wendepunkt- und Strecken-Bilder können einzeln importiert werden.
+      -> Strecken -> <Strecken-Name> -> Koordinaten -> <Nr.> -> Wendepunkt-Foto-Bild importieren
+      -> Strecken -> <Strecken-Name> -> Strecken-Fotos -> <Nr.> -> Strecken-Foto-Bild importieren
+    Wendepunkt- und Strecken-Bilder können in einer ZIP-Datei importiert werden.
+      -> Strecken -> <Strecken-Name> -> Wendepunkt-Foto-Bilder importieren (SP.jpg, TP1.jpg, ..., FP.jpg, Name muss mit Check-Punkt übereinstimmen)
+      -> Strecken -> <Strecken-Name> -> Strecken-Foto-Bilder importieren (1.jpg, 2.jpg, ..., Name muss mit Foto-Name übereinstiimen)
+    Foto-Markierung kann mit einem Klick verschoben werden. Bei Bedarf kann hier für den Druck auch ein Seitenwechsle eingefügt werden.
+      -> Strecken -> <Strecken-Name> -> Koordinaten -> <Nr.>
+      -> Strecken -> <Strecken-Name> -> Strecken-Fotos -> <Nr.>
+    Wendepunkt- und Strecken-Bilder können alphabetisch oder nach ihrem Auftreten auf der Strecke sortiert gedruckt werden.
+      -> Strecken -> <Strecken-Name> -> Wendepunkt-Foto-Druck
+      -> Strecken -> <Strecken-Name> -> Wendepunkt-Foto-Druck (alphabetisch)
+      -> Strecken -> <Strecken-Name> -> Wendepunkt-Foto-Druck (Strecken-Verlauf)
+      -> Strecken -> <Strecken-Name> -> Strecken-Foto-Druck (alphabetisch)
+      -> Strecken -> <Strecken-Name> -> Strecken-Foto-Druck (Strecken-Verlauf)
+    Bild-Erstellungs-Hinweise:
+      Ertellen Sie alle Bilder als JPG-Datei im 4:3-Format.
+      Wendepunkt-Bilder mit groß geschriebenen englischen Check-Punkt-Bezeichnungen benennen und in eine ZIP-Datei packen (z.B. SP.jpg, TP1.jpg, ..., FP.jpg)
+      Strecken-Bilder in der Reihenfolge ihres Auftretens mit Zahlen benennen und in eine ZIP-Datei packen (z.B. 1.jpg, 2.jpg, ...)
+      Strecken-Bilder-Koordinaten in eine UTF-8-Textdatei auflisten, z.B.:
+        1, Lat 52° 12.10000' N, Lon 016° 45.90000' E
+        2, Lat 52° 16.80000' N, Lon 017° 23.10000' E
+        ...
+      
 Erweiterungen in Version 3.1.11:
 --------------------------------
 - Wettbewerbs-Anonymisierung erweitert: Löscht auch gescannte Formulare

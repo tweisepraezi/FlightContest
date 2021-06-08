@@ -9,6 +9,8 @@ import org.springframework.web.context.request.RequestContextHolder
 
 import javax.servlet.http.Cookie
 
+import org.springframework.web.multipart.MultipartFile
+
 class FcService
 {
     boolean transactional = true
@@ -4885,6 +4887,127 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
+    Map importTurnpointPhotos(Map params, MultipartFile zipFile)
+    {
+        Map ret = [importNum:0, updateNum:0]
+        
+        Map route = domainService.GetRoute(params)
+        if (!route.instance) {
+            return ret
+        }
+
+        // upload zip file
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ZIP-${uuid}-UPLOAD.zip"
+        printstart "Upload ${zipFile.getOriginalFilename()} -> $upload_filename"
+        zipFile.transferTo(new File(webroot_dir, upload_filename))
+        printdone ""
+        
+        // read photos from zip file
+        def zip_file = new java.util.zip.ZipFile(webroot_dir + upload_filename)
+        zip_file.entries().findAll { !it.directory }.each {
+            if (!it.isDirectory()) {
+                String name = it.name.substring(0,it.name.indexOf("."))
+                if (name) {
+                    def photo_stream = zip_file.getInputStream(it)
+                    
+                    byte[] buff = new byte[8000]
+                    int bytes_read = 0
+                    ByteArrayOutputStream photo_stream2 = new ByteArrayOutputStream()
+                    while((bytes_read = photo_stream.read(buff)) != -1) {
+                        photo_stream2.write(buff, 0, bytes_read)
+                    }
+
+                    for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route.instance,[sort:"id"])) {
+                        if (coordroute_instance.type.IsTurnpointSignCoord()) {
+                            if (name == coordroute_instance.titleExport()) {
+                                if (!coordroute_instance.imagecoord) {
+                                    ImageCoord imagecoord_instance = new ImageCoord(imageData:photo_stream2.toByteArray(), coord:coordroute_instance)
+                                    imagecoord_instance.save()
+                                    coordroute_instance.imagecoord = imagecoord_instance
+                                    coordroute_instance.save()
+                                } else {
+                                    coordroute_instance.imagecoord.imageData = photo_stream2.toByteArray()
+                                    coordroute_instance.imagecoord.save()
+                                }
+                                ret.importNum++
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        zip_file.close()
+        
+        // delete file
+        DeleteFile(webroot_dir + upload_filename)
+        
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map importEnroutePhotos(Map params, MultipartFile zipFile)
+    {
+        Map ret = [importNum:0, updateNum:0]
+        
+        Map route = domainService.GetRoute(params)
+        if (!route.instance) {
+            return ret
+        }
+
+        // upload zip file
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ZIP-${uuid}-UPLOAD.zip"
+        printstart "Upload ${zipFile.getOriginalFilename()} -> $upload_filename"
+        zipFile.transferTo(new File(webroot_dir, upload_filename))
+        printdone ""
+        
+        // read photos from zip file
+        def zip_file = new java.util.zip.ZipFile(webroot_dir + upload_filename)
+        zip_file.entries().findAll { !it.directory }.each {
+            if (!it.isDirectory()) {
+                String name = it.name.substring(0,it.name.indexOf("."))
+                if (name) {
+                    def photo_stream = zip_file.getInputStream(it)
+                    
+                    byte[] buff = new byte[8000]
+                    int bytes_read = 0
+                    ByteArrayOutputStream photo_stream2 = new ByteArrayOutputStream()
+                    while((bytes_read = photo_stream.read(buff)) != -1) {
+                        photo_stream2.write(buff, 0, bytes_read)
+                    }
+
+                    for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(route.instance,[sort:"id"])) {
+                        if (name == coordenroutephoto_instance.enroutePhotoName) {
+                            if (!coordenroutephoto_instance.imagecoord) {
+                                ImageCoord imagecoord_instance = new ImageCoord(imageData:photo_stream2.toByteArray(), coord:coordenroutephoto_instance)
+                                imagecoord_instance.save()
+                            
+                                coordenroutephoto_instance.imagecoord = imagecoord_instance
+                                coordenroutephoto_instance.save()
+                            } else {
+                                coordenroutephoto_instance.imagecoord.imageData = photo_stream2.toByteArray()
+                                coordenroutephoto_instance.imagecoord.save()
+                            }
+                            ret.importNum++
+                            break
+                        }
+                    }
+                }
+            }
+        }
+        zip_file.close()
+        
+        // delete file
+        DeleteFile(webroot_dir + upload_filename)
+        
+        return ret
+    }
+    
+    //--------------------------------------------------------------------------
     Map importLoggerResultTest(String fileExtension, Test testInstance, String originalFileName)
     {
         printstart "importLoggerResultTest '$originalFileName'"
@@ -6476,6 +6599,129 @@ class FcService
         return ['deleted':true,'message':getMsg('fc.coordroute.photo.removedall'),'routeid':route_instance.id]
     }
     
+    //--------------------------------------------------------------------------
+    Map assignnamerandomlyCoordEnroutePhoto(Map params, boolean randomly)
+    {
+        Route route_instance = Route.get(params.routeid)
+        
+        if (route_instance.IsEnrouteSignUsed(true)) {
+            return ['instance':route_instance,'error':true,'message':getMsg('fc.coordroute.photo.update.notallowed.routeused')]
+        }
+        
+        int new_name = 0
+        int sort_area = 1
+        List name_list = []
+        boolean name_type_number = false
+        boolean check_name_type = true
+        for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
+            if (check_name_type) {
+                if (coordenroutephoto_instance.enroutePhotoName.isInteger()) {
+                    name_type_number = true
+                }
+                check_name_type = false
+            }
+            if (coordenroutephoto_instance.observationNextPrintPage) {
+                sort_area++
+            }
+            name_list += [newname:new_name, uuid:UUID.randomUUID().toString(), sortarea:sort_area, viewpos:coordenroutephoto_instance.enrouteViewPos]
+            new_name++
+        }
+        
+        if (randomly) {
+            name_list = name_list.asImmutable().toSorted { a, b -> a.uuid <=> b.uuid }
+            name_list = name_list.asImmutable().toSorted { a, b -> a.sortarea <=> b.sortarea }
+        } else {
+            name_list = name_list.asImmutable().toSorted { a, b -> a.viewpos <=> b.viewpos }
+        }
+        
+        int name_list_pos = 0
+        for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
+            if (name_type_number) {
+                coordenroutephoto_instance.enroutePhotoName = (name_list[name_list_pos].newname+1).toString()
+            } else {
+                coordenroutephoto_instance.enroutePhotoName = (char)((int)'A' + name_list[name_list_pos].newname)
+            }
+            coordenroutephoto_instance.save()
+            name_list_pos++
+        }
+        
+        return ['done':true,'message':getMsg('fc.coordroute.photo.assignednamerandomly'),'routeid':route_instance.id]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map setpositionCoordEnroutePhoto(Map params)
+    {
+        CoordEnroutePhoto coordenroutephoto_instance = CoordEnroutePhoto.get(params.id)
+        if (coordenroutephoto_instance) {
+            coordenroutephoto_instance.observationPositionTop = FcMath.toInteger(params.top)
+            coordenroutephoto_instance.observationPositionLeft = FcMath.toInteger(params.left)
+            coordenroutephoto_instance.save()
+            return ['done':true,'message':getMsg('fc.coordroute.photo.positionassigned')]
+        }
+        
+        return ['done':false,'message':""]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map importCoordEnroutePhoto(Map params, MultipartFile imageFile)
+    {
+        CoordEnroutePhoto coordenroutephoto_instance = CoordEnroutePhoto.get(params.id)
+
+        if (!coordenroutephoto_instance) {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+        
+        if (!coordenroutephoto_instance.imagecoord) {
+            ImageCoord imagecoord_instance = new ImageCoord(imageData:imageFile.getBytes(), coord:coordenroutephoto_instance)
+            imagecoord_instance.save()
+        
+            coordenroutephoto_instance.imagecoord = imagecoord_instance
+            coordenroutephoto_instance.save()
+        } else {
+            coordenroutephoto_instance.imagecoord.imageData = imageFile.getBytes()
+            coordenroutephoto_instance.imagecoord.save()
+        }
+        
+        return ['instance':coordenroutephoto_instance]
+    }
+
+    //--------------------------------------------------------------------------
+    Map setpositionTurnpointPhoto(Map params)
+    {
+        CoordRoute coordroute_instance = CoordRoute.get(params.id)
+        if (coordroute_instance) {
+            coordroute_instance.observationPositionTop = FcMath.toInteger(params.top)
+            coordroute_instance.observationPositionLeft = FcMath.toInteger(params.left)
+            coordroute_instance.save()
+            return ['done':true,'message':getMsg('fc.coordroute.photo.positionassigned')]
+        }
+        
+        return ['done':false,'message':""]
+    }
+    
+    //--------------------------------------------------------------------------
+    Map importTurnpointPhoto(Map params, MultipartFile imageFile)
+    {
+        CoordRoute coordroute_instance = CoordRoute.get(params.id)
+
+        if (!coordroute_instance) {
+            return ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+        }
+        
+        if (!coordroute_instance.imagecoord) {
+            ImageCoord imagecoord_instance = new ImageCoord(imageData:imageFile.getBytes(), coord:coordroute_instance)
+            imagecoord_instance.save()
+        
+            coordroute_instance.imagecoord = imagecoord_instance
+            coordroute_instance.save()
+        } else {
+            coordroute_instance.imagecoord.imageData = imageFile.getBytes()
+            coordroute_instance.imagecoord.save()
+        }
+        
+        return ['instance':coordroute_instance]
+    }
+
     //--------------------------------------------------------------------------
     Map getCoordEnrouteCanvas(Map params)
     {
@@ -10213,7 +10459,7 @@ class FcService
                 remove_observations(flighttest_instance.task)
             }
             
-            Map ret = ['instance':flighttest_instance,'message':getMsg('fc.flighttestwind.addobservation.added')]
+            Map ret = ['instance':flighttest_instance,'message':getMsg('fc.flighttestwind.removeobservation.removed')]
             printdone ret.message
             return ret
             

@@ -1009,6 +1009,21 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 28) { // DB-2.28 compatibility
+                            print "    2.28 modifications"
+                            Route.findAll().each { Route route_instance ->
+								route_instance.enroutePhotoPrintStyle = ObservationPrintStyle.Portrait2x4
+                                route_instance.turnpointPrintStyle = ObservationPrintStyle.Portrait2x4
+                                route_instance.save()
+                            }
+							Coord.findAll().each { Coord coord_instance ->
+                                coord_instance.observationPositionTop = 30
+                                coord_instance.observationPositionLeft = 100
+                                coord_instance.observationNextPrintPage = false
+								coord_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

@@ -15,6 +15,7 @@
 	        <!--[if IE 7]><link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'ie.css')}" media="screen" /><![endif]-->
 	        
 	        <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fc.css')}" media="screen" />
+            <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fcphoto.css')}" media="screen" />
             <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fcprint.css')}" media="print" />
 	        <g:if test="${grails.util.GrailsUtil.getEnvironment().equals(org.codehaus.groovy.grails.commons.GrailsApplication.ENV_DEVELOPMENT) || grails.util.GrailsUtil.getEnvironment().equals("lastdb")}">
 	            <link rel="stylesheet" type="text/css" href="${createLinkTo(dir:'css',file:'fcdev.css')}" media="screen" />

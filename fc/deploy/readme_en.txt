@@ -1,4 +1,4 @@
-﻿Flight Contest 3.2.M18
+﻿Flight Contest 3.2.M19
 ======================
 
 Changes
@@ -101,6 +101,34 @@ Changes
 
 - Route planning: 'Create semicircle by specifying a circle center' added.
   -> Help -> Route planning -> Create competition route with semicircles
+
+- Photo management and printing added
+    Enroute photo names can be assigned alphabetically or randomly. The first image determines whether letters or numbers are used.
+      -> Routes -> <Route name> -> Assign enroute photo names alphabetically
+      -> Routes -> <Route name> -> Assign enroute photo names randomly
+    Turnpoint and enroute images can be imported individually.
+      -> Routes -> <Route name> -> Coordinate list -> <No.> -> Import turnpoint photo image
+      -> Routes -> <Route name> -> Enroute photos -> <No.> -> Import enroute photo image
+    Turnpoint and enroute photos can be imported in a ZIP file.
+      -> Routes -> <Route name> -> Import turnpoint photo images (SP.jpg, TP1.jpg, ..., FP.jpg, name must match check point).
+      -> Routes -> <Route name> -> Import enroute photo images (1.jpg, 2.jpg, ..., name must match photo name)
+    Photo marker can be moved with one click. If necessary, a page change can also be inserted here for printing.
+      -> Routes -> <Route name> -> Coordinate list -> <No.>
+      -> Routes -> <Route name> -> Enroute photos -> <No.>
+    Turnpoint and enroute photos can be printed alphabetically or sorted by their occurrence on the track.
+      -> Routes -> <Route name> -> Print turnpoint photos
+      -> Routes -> <Route name> -> Print turnpoint photos (alphabetical)
+      -> Routes -> <Route name> -> Print turnpoint photos (Route)
+      -> Routes -> <Route name> -> Print enroute photos (alphabetical)
+      -> Routes -> <Route name> -> Print enroute photos (Route)
+    Image Creation Notes:
+      Create all images as JPG files in 4:3 format.
+      Name turnpoint images with capitalized English check point names and put them into a ZIP file (e.g. SP.jpg, TP1.jpg, ..., FP.jpg)
+      Name enroute images with numbers in the order of their occurrence and pack them into a ZIP file (e.g. 1.jpg, 2.jpg, ...)
+      List enroute image coordinates in a UTF-8 text file, e.g.:
+        1, Lat 52° 12.10000' N, Lon 016° 45.90000' E
+        2, Lat 52° 16.80000' N, Lon 017° 23.10000' E
+        ...
 
 Live Tracking Configuration
 ---------------------------

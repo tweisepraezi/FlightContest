@@ -1,8 +1,7 @@
-import java.util.Map;
-
+import java.util.Map
 import org.quartz.JobKey
-
 import java.util.zip.*
+import org.springframework.web.multipart.MultipartFile
 
 class RouteController {
     
@@ -15,7 +14,7 @@ class RouteController {
     def emailService
     def quartzScheduler
     
-    def index = { redirect(action:list,params:params) }
+    def index = { redirect(action:"list",params:params) }
 
     // the delete, save and update actions only accept POST requests
     static allowedMethods = [delete:'POST', save:'POST', update:'POST']
@@ -50,7 +49,7 @@ class RouteController {
         	return [routeInstance:route.instance]
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -63,7 +62,7 @@ class RouteController {
         	return [routeInstance:route.instance]
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -73,15 +72,15 @@ class RouteController {
         	flash.message = route.message
             long next_routeid = route.instance.GetNextID()
             if (next_routeid) {
-                redirect(action:show,id:route.instance.id,params:[next:next_routeid])
+                redirect(action:"show",id:route.instance.id,params:[next:next_routeid])
             } else {
-        	    redirect(action:show,id:route.instance.id)
+        	    redirect(action:"show",id:route.instance.id)
             }
         } else if (route.instance) {
         	render(view:'edit',model:[routeInstance:route.instance])
         } else {
         	flash.message = route.message
-            redirect(action:edit,id:params.id)
+            redirect(action:"edit",id:params.id)
         }
     }
 
@@ -97,7 +96,7 @@ class RouteController {
             flash.error = true
         }
         if (route.saved) {
-        	redirect(action:show,id:route.instance.id)
+        	redirect(action:"show",id:route.instance.id)
         } else {
             render(view:'create',model:[routeInstance:route.instance])
         }
@@ -107,13 +106,13 @@ class RouteController {
         def route = fcService.deleteRoute(params)
         if (route.deleted) {
         	flash.message = route.message
-        	redirect(action:list)
+        	redirect(action:"list")
         } else if (route.notdeleted) {
         	flash.message = route.message
-            redirect(action:show,id:params.id)
+            redirect(action:"show",id:params.id)
         } else {
         	flash.message = route.message
-        	redirect(action:list)
+        	redirect(action:"list")
         }
     }
 	
@@ -134,7 +133,7 @@ class RouteController {
                 redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID)
             }
         } else {
-       	    redirect(action:list)
+       	    redirect(action:"list")
         }
 	}
 	
@@ -145,9 +144,9 @@ class RouteController {
             long next_id2 = Route.GetNextID2(next_id)
             if (next_id) {
                 if (next_id2) {
-                    redirect(action:show,id:next_id,params:[next:next_id2])
+                    redirect(action:"show",id:next_id,params:[next:next_id2])
                 } else {
-                    redirect(action:show,id:next_id)
+                    redirect(action:"show",id:next_id)
                 }
             } else {
                 redirect(controller:"route",action:"list")
@@ -210,7 +209,7 @@ class RouteController {
         }
         flash.error = import_route.error
         flash.message = import_route.message
-        redirect(action:list)
+        redirect(action:"list")
     }
     
     def selectfileroute = {
@@ -263,7 +262,7 @@ class RouteController {
         }
         flash.error = import_route.error
         flash.message = import_route.message
-        redirect(action:list)
+        redirect(action:"list")
     }
     
     def selectimporttxt = {
@@ -286,6 +285,23 @@ class RouteController {
         Route route_instance = Route.get(params.id)
         Map turnpoint_sign_data = ImportSign.GetTurnpointSignData(route_instance)
         redirect(action:selectimporttxt, params:[titlecode:turnpoint_sign_data.titlecode, routeid:params.id, importSign:turnpoint_sign_data.importsign, lineContent:turnpoint_sign_data.linecontent, importEnrouteData: false])
+    }
+    
+    def selectturnpointphotos = {
+        [:]
+    }
+    
+	def selectturnpointphotos_cancel = {
+        redirect(action:"show", id:params.id)
+    }
+    
+	def loadturnpointphotos = {
+		MultipartFile zip_file = request.getFile("zipfile")
+		if (zip_file && !zip_file.isEmpty()) {
+            Map ret = fcService.importTurnpointPhotos(params, zip_file)
+            flash.message = message(code:'fc.coordroute.turnpointphoto.images.import.done', args:[ret.importNum])
+        }
+        redirect(action:"show", id:params.id)
     }
     
     def importenroutephoto = {
@@ -324,18 +340,35 @@ class RouteController {
         redirect(action:"show",controller:"route",id:route_instance.id)
     }
     
+    def selectenroutephotos = {
+        [:]
+    }
+    
+	def selectenroutephotos_cancel = {
+        redirect(action:"show", id:params.id)
+    }
+    
+	def loadselectenroutephotos = {
+		MultipartFile zip_file = request.getFile("zipfile")
+		if (zip_file && !zip_file.isEmpty()) {
+            Map ret = fcService.importEnroutePhotos(params, zip_file)
+            flash.message = message(code:'fc.coordroute.photo.images.import.done', args:[ret.importNum])
+        }
+        redirect(action:"show", id:params.id)
+    }
+    
 	def calculateroutelegs = {
         def route = fcService.caculateroutelegsRoute(params) 
         if (route.error) {
             flash.message = route.message
             flash.error = true
-            redirect(action:show,id:route.instance.id)
+            redirect(action:"show",id:route.instance.id)
         } else if (route.instance) {
             flash.message = route.message
-            redirect(action:show,id:route.instance.id)
+            redirect(action:"show",id:route.instance.id)
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
 	}
     
@@ -344,11 +377,11 @@ class RouteController {
         if (routes.error) {
             flash.message = routes.message
             flash.error = true
-            redirect(action:list)
+            redirect(action:"list")
         } else if (routes.found && routes.content) {
             printService.WritePDF(response,routes.content,session.lastContest.GetPrintPrefix(),"routes",true,false,false)
         } else {
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
     
@@ -357,11 +390,11 @@ class RouteController {
         if (route.error) {
             flash.message = route.message
             flash.error = true
-            redirect(action:list)
+            redirect(action:"list")
         } else if (route.content) {
             printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}",true,false,false)
         } else {
-            redirect(action:list)
+            redirect(action:"list")
         }
 	}
 	
@@ -370,11 +403,11 @@ class RouteController {
         if (route.error) {
             flash.message = route.message
             flash.error = true
-            redirect(action:list)
+            redirect(action:"list")
         } else if (route.content) {
             printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-allpoints",true,false,false)
         } else {
-            redirect(action:list)
+            redirect(action:"list")
         }
 	}
 	
@@ -383,22 +416,84 @@ class RouteController {
         if (route.error) {
             flash.message = route.message
             flash.error = true
-            redirect(action:list)
+            redirect(action:"list")
         } else if (route.content) {
             printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
         } else {
-            redirect(action:list)
+            redirect(action:"list")
         }
 	}
+    
+    def assignnamealphabetical_enroutephoto = {
+        Map route = domainService.GetRoute(params)
+        redirect(controller:'coordEnroutePhoto',action:'assignnamealphabetical',params:['route.id':route.instance.id,'routeid':route.instance.id])
+    }
+    
+    def assignnamerandomly_enroutephoto = {
+        Map route = domainService.GetRoute(params)
+        redirect(controller:'coordEnroutePhoto',action:'assignnamerandomly',params:['route.id':route.instance.id,'routeid':route.instance.id])
+    }
+	
+	def print_enroutephoto_alphabetical = {
+        Map route = printService.printEnroutePhoto(params,true,GetPrintParams()) 
+        if (route.error) {
+            flash.message = route.message
+            flash.error = true
+            redirect(action:"list")
+        } else if (route.content) {
+            printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
+        } else {
+            redirect(action:"list")
+        }
+	}
+    
+    def print_enroutephoto_route = {
+        Map route = printService.printEnroutePhoto(params,false,GetPrintParams()) 
+        if (route.error) {
+            flash.message = route.message
+            flash.error = true
+            redirect(action:"list")
+        } else if (route.content) {
+            printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
+        } else {
+            redirect(action:"list")
+        }
+    }
+	
+	def print_turnpointphoto_alphabetical = {
+        Map route = printService.printTurnpointPhoto(params,true,GetPrintParams()) 
+        if (route.error) {
+            flash.message = route.message
+            flash.error = true
+            redirect(action:"list")
+        } else if (route.content) {
+            printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
+        } else {
+            redirect(action:"list")
+        }
+	}
+    
+    def print_turnpointphoto_route = {
+        Map route = printService.printTurnpointPhoto(params,false,GetPrintParams()) 
+        if (route.error) {
+            flash.message = route.message
+            flash.error = true
+            redirect(action:"list")
+        } else if (route.content) {
+            printService.WritePDF(response,route.content,session.lastContest.GetPrintPrefix(),"route-${route.instance.idTitle}-tppoints",true,false,false)
+        } else {
+            redirect(action:"list")
+        }
+    }
 	
     def copyroute = {
         def route = fcService.copyRoute(params) 
         if (route.error) {
             flash.message = route.message
             flash.error = true
-            redirect(action:list)
+            redirect(action:"list")
         } else {
-            redirect(action:list)
+            redirect(action:"list")
         }
 	}
 	
@@ -412,7 +507,7 @@ class RouteController {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -426,7 +521,7 @@ class RouteController {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -440,10 +535,54 @@ class RouteController {
             return [contestInstance:session.lastContest,routeInstance:route.instance]
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
+    def showturnpointphotoprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            return [contestInstance:session.lastContest,routeInstance:route.instance]
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+    }
+
+	def get_turnpoint_photo = {
+        CoordRoute coordroute_instance = CoordRoute.get(params.id)
+        if (coordroute_instance && coordroute_instance.imagecoord) {
+            response.setContentType("application/octet-stream")
+            response.outputStream << coordroute_instance.imagecoord.imageData
+		}
+	}
+    
+    def showenroutephotoprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            return [contestInstance:session.lastContest,routeInstance:route.instance]
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+    }
+
+	def get_enroute_photo = {
+        CoordEnroutePhoto coordenroutephoto_instance = CoordEnroutePhoto.get(params.id)
+        if (coordenroutephoto_instance && coordenroutephoto_instance.imagecoord) {
+            response.setContentType("application/octet-stream")
+            response.outputStream << coordenroutephoto_instance.imagecoord.imageData
+		}
+	}
+    
     def showofflinemap_route = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
@@ -467,7 +606,7 @@ class RouteController {
             }
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -495,7 +634,7 @@ class RouteController {
             }
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -523,7 +662,7 @@ class RouteController {
             }
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -551,7 +690,7 @@ class RouteController {
             }
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
 
@@ -588,9 +727,11 @@ class RouteController {
                 discard_button = true
                 def job_key = new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP)
                 if (job_key) {
-                    if (!quartzScheduler.getTriggersOfJob(job_key)*.key) {
-                        gpxService.println "Restart OsmPrintMapJob"
-                        redirect(action:'mapfetch',id:params.id)
+                    if (!quartzScheduler.getTriggersOfJob(job_key)*.key) { // Scheduler job of this route is not running
+                        //gpxService.println "Restart OsmPrintMapJob"
+                        //redirect(action:'mapfetch',id:params.id)
+                        break_button = false
+                        fetch_button = true
                     }
                 }
             } else if (route_id && route_id != route.instance.id.toString()) { // Scheduler job of another route is running
@@ -749,7 +890,7 @@ class RouteController {
                 }
             } else {
                 flash.message = route.message
-                redirect(action:list)
+                redirect(action:"list")
             }
         }
     }
@@ -873,7 +1014,7 @@ class RouteController {
                 }
             } else {
                 flash.message = route.message
-                redirect(action:list)
+                redirect(action:"list")
             }
         }
     }
@@ -997,7 +1138,7 @@ class RouteController {
                 }
             } else {
                 flash.message = route.message
-                redirect(action:list)
+                redirect(action:"list")
             }
         }
     }
@@ -1121,7 +1262,7 @@ class RouteController {
                 }
             } else {
                 flash.message = route.message
-                redirect(action:list)
+                redirect(action:"list")
             }
         }
     }
@@ -1241,7 +1382,7 @@ class RouteController {
             redirect(action:'mapexportquestion',id:params.id)
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
     
@@ -1278,11 +1419,14 @@ class RouteController {
                 BufferedWriter printjob_writer = printjob_file.newWriter()
                 printjob_writer << route.instance.id
                 printjob_writer.close()
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.job.continue.error')
             }
             redirect(action:'mapexportquestion',id:params.id)
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
     
@@ -1290,11 +1434,13 @@ class RouteController {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
             String webroot_dir = servletContext.getRealPath("/")
-            String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
             String printjobid_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOBID + route.instance.id + ".txt"
             if (new File(printjobid_filename).exists()) {
                 quartzScheduler.unscheduleJobs(quartzScheduler.getTriggersOfJob(new JobKey("OsmPrintMapJob",Defs.OSMPRINTMAP_GROUP))*.key)
                 gpxService.DeleteFile(printjobid_filename)
+            }
+            String printjob_filename = webroot_dir + Defs.ROOT_FOLDER_GPXUPLOAD_OSMPRINTJOB
+            if (new File(printjob_filename).exists()) {
                 gpxService.DeleteFile(printjob_filename)
             }
             
@@ -1323,7 +1469,7 @@ class RouteController {
             redirect(action:'show', id:params.id)
         } else {
             flash.message = route.message
-            redirect(action:list)
+            redirect(action:"list")
         }
     }
     
@@ -1433,7 +1579,7 @@ class RouteController {
                 }
             } else {
                 flash.message = route.message
-                redirect(action:list)
+                redirect(action:"list")
             }
         } else {
             redirect(controller:'contest',action:'start')
@@ -1488,7 +1634,7 @@ class RouteController {
                 }
             } else {
                 flash.message = route.message
-                redirect(action:list)
+                redirect(action:"list")
             }
         } else {
             redirect(controller:'contest',action:'start')
@@ -1568,7 +1714,7 @@ class RouteController {
                 redirect(action:'show',id:params.id)
             } else {
                 flash.message = route.message
-                redirect(action:list)
+                redirect(action:"list")
             }
         } else {
             redirect(controller:'contest',action:'start')

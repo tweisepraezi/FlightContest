@@ -22,5 +22,15 @@ enum TurnpointRoute // DB-2.13
         return false
     }
     
+    boolean IsTurnpointPhoto()
+    {
+        switch (this) {
+            case TurnpointRoute.AssignPhoto:
+            case TurnpointRoute.TrueFalsePhoto:
+                return true
+        }
+        return false
+    }
+    
     final String code
 }

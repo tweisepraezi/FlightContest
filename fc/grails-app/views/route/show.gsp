@@ -221,7 +221,8 @@
                                 </tr>
                             </tfoot>
                         </table>
-                        <g:if test="${!route_used || route_empty || route_canturnpointsignmodify}">
+                        <g:set var="turnpoint_photos_uploaded" value="${routeInstance.IsTurnpointPhoto() && routeInstance.AllTurnpointPhotoUploaded()}"/>
+                        <g:if test="${!route_used || route_empty || route_canturnpointsignmodify || turnpoint_photos_uploaded}">
 	                        <table>
 	                            <tfoot>
 	                                <tr>
@@ -235,23 +236,53 @@
 	                                        </g:if>
 	                                        <g:if test="${route_canturnpointsignmodify}">
 	                                            <g:actionSubmit action="importturnpointsign" value="${message(code:'fc.coordroute.turnpointsign.import')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                <g:if test="${routeInstance.IsTurnpointPhoto()}">
+                                                    <g:actionSubmit action="selectturnpointphotos" value="${message(code:'fc.coordroute.turnpointphoto.images.import')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                </g:if>
 	                                        </g:if>
 	                                        <g:if test="${!route_used}">
 	                                            <g:actionSubmit action="calculateroutelegs" value="${message(code:'fc.routeleg.calculate')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
 	                                        </g:if>
+                                            <g:if test="${turnpoint_photos_uploaded}">
+                                                <g:if test="${routeInstance.turnpointRoute == TurnpointRoute.TrueFalsePhoto}">
+                                                    <g:actionSubmit action="print_turnpointphoto_route" value="${message(code:'fc.coordroute.turnpointphoto.print')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                </g:if>
+                                                <g:else>
+                                                    <g:actionSubmit action="print_turnpointphoto_alphabetical" value="${message(code:'fc.coordroute.turnpointphoto.print.alphabetical')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                    <g:actionSubmit action="print_turnpointphoto_route" value="${message(code:'fc.coordroute.turnpointphoto.print.route')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                </g:else>
+                                            </g:if>
 	                                    </td>
 	                                </tr>
 	                            </tfoot>
 	                        </table>
 	                    </g:if>
-                        <g:if test="${routeInstance.CanEnrouteSignModify(true)}">
+                        <g:if test="${routeInstance.CanEnrouteSignModify(true) || (routeInstance.enroutePhotoRoute.IsEnrouteRouteInput() && routeInstance.AllEnroutePhotoUploaded())}">
+                            <g:set var="is_any_enroue_photo" value="${routeInstance.IsAnyEnroutePhoto()}"/>
                             <table>
                                 <tfoot>
                                     <tr>
                                         <td>
-                                            <g:actionSubmit action="importenroutephoto" value="${message(code:'fc.coordroute.photo.import')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:actionSubmit action="createenroutephoto" value="${message(code:'fc.coordroute.photo.add')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                            <g:actionSubmit action="removeallenroutephoto" value="${message(code:'fc.coordroute.photo.removeall')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                            <g:if test="${routeInstance.CanEnrouteSignModify(true)}">
+                                                <g:actionSubmit action="importenroutephoto" value="${message(code:'fc.coordroute.photo.import')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                <g:actionSubmit action="createenroutephoto" value="${message(code:'fc.coordroute.photo.add')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                <g:if test="${is_any_enroue_photo}">
+                                                    <g:actionSubmit action="removeallenroutephoto" value="${message(code:'fc.coordroute.photo.removeall')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                                    <g:actionSubmit action="selectenroutephotos" value="${message(code:'fc.coordroute.photo.images.import')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                </g:if>
+                                            </g:if>
+                                            <g:if test="${is_any_enroue_photo}">
+                                                <g:if test="${routeInstance.enroutePhotoRoute.IsEnrouteRouteInput()}">
+                                                    <g:if test="${routeInstance.CanEnrouteSignModify(true)}">
+                                                        <g:actionSubmit action="assignnamealphabetical_enroutephoto" value="${message(code:'fc.coordroute.photo.assignnamealphabetical')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                                        <g:actionSubmit action="assignnamerandomly_enroutephoto" value="${message(code:'fc.coordroute.photo.assignnamerandomly')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                                    </g:if>
+                                                </g:if>
+                                                <g:if test="${routeInstance.enroutePhotoRoute.IsEnrouteRouteInput() && routeInstance.AllEnroutePhotoUploaded()}">
+                                                    <g:actionSubmit action="print_enroutephoto_alphabetical" value="${message(code:'fc.coordroute.photo.print.alphabetical')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                    <g:actionSubmit action="print_enroutephoto_route" value="${message(code:'fc.coordroute.photo.print.route')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                </g:if>
+                                            </g:if>
                                         </td>
                                     </tr>
                                 </tfoot>

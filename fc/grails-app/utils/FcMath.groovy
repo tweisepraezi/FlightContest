@@ -398,4 +398,13 @@ class FcMath
         }
         return landingPenalties
     }
+    
+    //--------------------------------------------------------------------------
+    static int toInteger(String numberValue)
+    {
+        if (numberValue.isBigDecimal()) {
+            return numberValue.toBigDecimal().setScale(0, RoundingMode.HALF_EVEN).toInteger()
+        }
+        return 0
+    }
 }

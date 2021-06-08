@@ -1,0 +1,43 @@
+table.photo {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+table.photo tbody {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+table.photo tr td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+div.photo {
+  position: relative;
+}
+
+img.photo {
+  margin: 0;
+  padding: 0;
+}
+
+.phototext {
+  position: absolute;
+  top: 0px;
+  left: 8px;
+  font-size: 36px;
+  font-weight: bold;
+  color: white;
+}
+
+.photoposition {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 1px solid white;
+  //border-radius: 50px 50px;
+}

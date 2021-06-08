@@ -271,6 +271,66 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
+    Map printEnroutePhoto(Map params, boolean alphabetical, printparams)
+    {
+        Map route = domainService.GetRoute(params)
+        if (!route.instance) {
+            return route
+        }
+        
+        // Print enroute photos of route
+        try {
+            ITextRenderer renderer = new ITextRenderer();
+            addFonts(renderer)
+            ByteArrayOutputStream content = new ByteArrayOutputStream()
+            boolean first_pdf = true
+            String url = "${printparams.baseuri}/route/showenroutephotoprintable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&alphabetical=${alphabetical}&a3=${route.instance.enroutePhotoPrintStyle.a3}&landscape=${route.instance.enroutePhotoPrintStyle.landscape}"
+            println "Print: $url"
+            renderer.setDocument(url)
+            renderer.layout()
+            renderer.createPDF(content,false)
+            renderer.finishPDF()
+            route.content = content.toByteArray()
+            content.close()
+        }
+        catch (Throwable e) {
+            route.message = getMsg('fc.route.printerror',["$e"])
+            route.error = true
+        }
+        return route
+    }
+    
+    //--------------------------------------------------------------------------
+    Map printTurnpointPhoto(Map params, boolean alphabetical, printparams)
+    {
+        Map route = domainService.GetRoute(params)
+        if (!route.instance) {
+            return route
+        }
+        
+        // Print turnpoint photos of route
+        try {
+            ITextRenderer renderer = new ITextRenderer();
+            addFonts(renderer)
+            ByteArrayOutputStream content = new ByteArrayOutputStream()
+            boolean first_pdf = true
+            String url = "${printparams.baseuri}/route/showturnpointphotoprintable/${route.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&alphabetical=${alphabetical}&a3=${route.instance.turnpointPrintStyle.a3}&landscape=${route.instance.turnpointPrintStyle.landscape}"
+            println "Print: $url"
+            renderer.setDocument(url)
+            renderer.layout()
+            renderer.createPDF(content,false)
+            renderer.finishPDF()
+            route.content = content.toByteArray()
+            content.close()
+        }
+        catch (Throwable e) {
+            route.message = getMsg('fc.route.printerror',["$e"])
+            route.error = true
+        }
+        return route
+    }
+    
+    //--------------------------------------------------------------------------
     Map printCrews(Map params, boolean a3, boolean landscape, printparams)
     {
         Map crews = [:]
@@ -1108,7 +1168,7 @@ class PrintService
                     flighttest.error = true
                 }
             }
-            printdone flighttest
+            printdone ""
             return flighttest
         } else {
             Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.flighttest'),params.id])]

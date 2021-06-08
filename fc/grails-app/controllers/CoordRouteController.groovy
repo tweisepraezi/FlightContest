@@ -1,4 +1,5 @@
-import java.util.Map;
+import java.util.Map
+import org.springframework.web.multipart.MultipartFile
 
 class CoordRouteController {
     
@@ -171,6 +172,28 @@ class CoordRouteController {
             redirect(controller:"route",action:show,id:params.routeid)
         }
 	}
+    
+    def setposition = {
+        def coordenroutephoto = fcService.setpositionTurnpointPhoto(params)
+        flash.message = coordenroutephoto.message
+        redirect(action:edit,id:params.id,params:[next:params.next])
+    }
+    
+	def selectimagefilename = {
+		[:]
+    }
+	
+	def selectimagefilename_cancel = {
+        redirect(action:"edit", id:params.id)
+    }
+    
+	def loadimage = {
+		MultipartFile image_file = request.getFile("imagefile")
+		if (image_file && !image_file.isEmpty()) {
+            fcService.importTurnpointPhoto(params, image_file) 
+        }
+        redirect(action:"edit", id:params.id)
+    }
     
     private Map search_next_id(CoordRoute coordRouteInstance)
     {

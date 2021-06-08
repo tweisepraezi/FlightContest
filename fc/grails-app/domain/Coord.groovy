@@ -63,6 +63,12 @@ class Coord
     CoordTitle enrouteCoordTitle              // transienter Wert zur Auswahl
     String enrouteLastPhotoName = ""          // transienter Wert zur Eingabe eines Zaheln-Bereiches
     
+    Integer observationPositionTop = 30       // DB-2.28
+    Integer observationPositionLeft = 100     // DB-2.28
+    Boolean observationNextPrintPage = false  // DB-2.28
+    
+	static hasOne = [imagecoord:ImageCoord]   // DB-2.28
+    
     // plan, results, penalties
     Date planCpTime                     = Date.parse("HH:mm","00:00")
     boolean planProcedureTurn           = false
@@ -208,6 +214,12 @@ class Coord
         
         // DB-2.27 compatibility
         semiCircleInvert(nullable:true)
+        
+        // DB-2.28 compatibility
+        observationPositionTop(nullable:true)
+        observationPositionLeft(nullable:true)
+        observationNextPrintPage(nullable:true)
+        imagecoord(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -270,6 +282,9 @@ class Coord
         semiCircleInvert = coordInstance.semiCircleInvert
         assignedSign = coordInstance.assignedSign
         correctSign = coordInstance.correctSign
+        observationPositionTop = coordInstance.observationPositionTop
+        observationPositionLeft = coordInstance.observationPositionLeft
+        observationNextPrintPage = coordInstance.observationNextPrintPage
 	    // planCpTime = coordInstance.planCpTime
 	    planProcedureTurn = coordInstance.planProcedureTurn
 	    // resultLatitude = coordInstance.resultLatitude
