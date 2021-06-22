@@ -1024,6 +1024,35 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 29) { // DB-2.29 compatibility
+                            print "    2.29 modifications"
+                            Route.findAll().each { Route route_instance ->
+								route_instance.contestMapShowFirstOptions = true
+                                route_instance.contestMapCenterHorizontalPos3 = HorizontalPos.Center
+                                route_instance.contestMapShowThirdOptions = false
+                                route_instance.contestMapCenterVerticalPos3 = VerticalPos.Center
+                                route_instance.SetAllContestMapPoints()
+                                route_instance.contestMapPrintLandscape3 = true
+                                route_instance.contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A3
+                                route_instance.contestMapCenterHorizontalPos4 = HorizontalPos.Center
+                                route_instance.contestMapShowForthOptions = false
+                                route_instance.contestMapCenterVerticalPos4 = VerticalPos.Center
+                                route_instance.SetAllContestMapPoints()
+                                route_instance.contestMapPrintLandscape4 = true
+                                route_instance.contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A3
+                                route_instance.save()
+                            }
+							UploadJobRouteMap.findAll().each { UploadJobRouteMap uploadjobroutemap_instance ->
+								if (uploadjobroutemap_instance.uploadJobSecondOptions) {
+									uploadjobroutemap_instance.uploadJobOptionNumber = 2
+								} else {
+									uploadjobroutemap_instance.uploadJobOptionNumber = 1
+								}
+                                uploadjobroutemap_instance.uploadJobOptionTitle = ""
+								uploadjobroutemap_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

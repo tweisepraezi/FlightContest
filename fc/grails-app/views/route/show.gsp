@@ -78,7 +78,7 @@
                                         <td class="detailtitle">${message(code:'fc.contestmap.contestmaps')}:</td>
                                         <td colspan="4" style="text-align: right;">
                                             <g:each var="map_link" in="${map_links}">
-                                                <a style="margin-left: 0.8rem; font-size: 0.8rem;" href="${map_link.link}" target="_blank">${map_link.edition}</a><a style="margin-left: 0.5rem;" id="deletelink_${map_link.edition}_id" hidden href="/fc/route/mapdeletelink/${routeInstance.id}?edition=${map_link.edition}" onclick="return confirm('${message(code:'fc.areyousure')}');" ><img src="${createLinkTo(dir:'images',file:'delete.png')}" style="width: 10px; heigth: 10px;" /></a></a>
+                                                <a style="margin-left: 0.8rem; font-size: 0.8rem;" href="${map_link.link}" target="_blank">${map_link.title}</a><a style="margin-left: 0.5rem;" id="deletelink_${map_link.edition}_id" hidden href="/fc/route/mapdeletelink/${routeInstance.id}?edition=${map_link.edition}" onclick="return confirm('${message(code:'fc.areyousure')}');" ><img src="${createLinkTo(dir:'images',file:'delete.png')}" style="width: 10px; heigth: 10px;" /></a></a>
                                             </g:each>
                                             <script>
                                                 $(document).on('change', '#show_delete_id', function() {

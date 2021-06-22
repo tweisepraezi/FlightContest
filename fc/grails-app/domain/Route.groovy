@@ -57,6 +57,8 @@ class Route
     Boolean contestMapSpecials = false                                           // DB-2.21
     Boolean contestMapAirspaces = false                                          // DB-2.21
     String contestMapAirspacesLayer = ""                                         // DB-2.21
+    Boolean contestMapShowFirstOptions = true                                    // DB-2.29
+    String contestMapFirstTitle = ""                                             // DB-2.29
     VerticalPos contestMapCenterVerticalPos = VerticalPos.Center                 // DB-2.21
     HorizontalPos contestMapCenterHorizontalPos = HorizontalPos.Center           // DB-2.21
     String contestMapCenterPoints = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.21, list of turn points arranged in map center
@@ -70,12 +72,30 @@ class Route
     String contestMapReserve5                                                    // DB-2.21
     Integer contestMapEdition = 0                                                // DB-2.22
     Boolean contestMapShowSecondOptions = false                                  // DB-2.22
+    String contestMapSecondTitle = ""                                            // DB-2.29
     VerticalPos contestMapCenterVerticalPos2 = VerticalPos.Center                // DB-2.22
     HorizontalPos contestMapCenterHorizontalPos2 = HorizontalPos.Center          // DB-2.22
     String contestMapCenterPoints2 = Defs.CONTESTMAPPOINTS_INIT                  // DB-2.22, list of turn points arranged in map center
     String contestMapPrintPoints2 = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.22, list of turn points for printing
     Boolean contestMapPrintLandscape2 = true                                     // DB-2.22
     String contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A3                    // DB-2.22
+    Boolean contestMapShowThirdOptions = false                                   // DB-2.29
+    String contestMapThirdTitle = ""                                             // DB-2.29
+    VerticalPos contestMapCenterVerticalPos3 = VerticalPos.Center                // DB-2.29
+    HorizontalPos contestMapCenterHorizontalPos3 = HorizontalPos.Center          // DB-2.29
+    String contestMapCenterPoints3 = Defs.CONTESTMAPPOINTS_INIT                  // DB-2.29, list of turn points arranged in map center
+    String contestMapPrintPoints3 = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.29, list of turn points for printing
+    Boolean contestMapPrintLandscape3 = true                                     // DB-2.29
+    String contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A3                    // DB-2.29
+    Boolean contestMapShowForthOptions = false                                   // DB-2.29
+    String contestMapForthTitle = ""                                             // DB-2.29
+    VerticalPos contestMapCenterVerticalPos4 = VerticalPos.Center                // DB-2.29
+    HorizontalPos contestMapCenterHorizontalPos4 = HorizontalPos.Center          // DB-2.29
+    String contestMapCenterPoints4 = Defs.CONTESTMAPPOINTS_INIT                  // DB-2.29, list of turn points arranged in map center
+    String contestMapPrintPoints4 = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.29, list of turn points for printing
+    Boolean contestMapPrintLandscape4 = true                                     // DB-2.29
+    String contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A3                    // DB-2.29
+	
     
 	static belongsTo = [contest:Contest]
 
@@ -160,6 +180,27 @@ class Route
         // DB-2.28 compatibility
         enroutePhotoPrintStyle(nullable:true)
         turnpointPrintStyle(nullable:true)
+		
+		// DB-2.29 compatibility
+		contestMapShowFirstOptions(nullable:true)
+        contestMapFirstTitle(nullable:true)
+        contestMapSecondTitle(nullable:true)
+        contestMapShowThirdOptions(nullable:true)
+        contestMapThirdTitle(nullable:true)
+        contestMapCenterVerticalPos3(nullable:true)
+        contestMapCenterHorizontalPos3(nullable:true)
+        contestMapCenterPoints3(nullable:true)
+        contestMapPrintPoints3(nullable:true)
+        contestMapPrintLandscape3(nullable:true)
+        contestMapPrintSize3(nullable:true)
+        contestMapShowForthOptions(nullable:true)
+        contestMapForthTitle(nullable:true)
+        contestMapCenterVerticalPos4(nullable:true)
+        contestMapCenterHorizontalPos4(nullable:true)
+        contestMapCenterPoints4(nullable:true)
+        contestMapPrintPoints4(nullable:true)
+        contestMapPrintLandscape4(nullable:true)
+        contestMapPrintSize4(nullable:true)
 	}
 
 	static mapping = {
@@ -212,6 +253,8 @@ class Route
         contestMapSpecials = routeInstance.contestMapSpecials
         contestMapAirspaces = routeInstance.contestMapAirspaces
         contestMapAirspacesLayer = routeInstance.contestMapAirspacesLayer
+		contestMapShowFirstOptions = routeInstance.contestMapShowFirstOptions
+        contestMapFirstTitle = routeInstance.contestMapFirstTitle
         contestMapCenterVerticalPos = routeInstance.contestMapCenterVerticalPos
         contestMapCenterHorizontalPos = routeInstance.contestMapCenterHorizontalPos
         contestMapCenterPoints = routeInstance.contestMapCenterPoints
@@ -219,12 +262,29 @@ class Route
         contestMapPrintLandscape = routeInstance.contestMapPrintLandscape
         contestMapPrintSize = routeInstance.contestMapPrintSize
 		contestMapShowSecondOptions = routeInstance.contestMapShowSecondOptions
+        contestMapSecondTitle = routeInstance.contestMapSecondTitle
         contestMapCenterVerticalPos2 = routeInstance.contestMapCenterVerticalPos2
         contestMapCenterHorizontalPos2 = routeInstance.contestMapCenterHorizontalPos2
         contestMapCenterPoints2 = routeInstance.contestMapCenterPoints2
         contestMapPrintPoints2 = routeInstance.contestMapPrintPoints2
         contestMapPrintLandscape2 = routeInstance.contestMapPrintLandscape2
         contestMapPrintSize2 = routeInstance.contestMapPrintSize2
+		contestMapShowThirdOptions = routeInstance.contestMapShowThirdOptions
+        contestMapThirdTitle = routeInstance.contestMapThirdTitle
+        contestMapCenterVerticalPos3 = routeInstance.contestMapCenterVerticalPos3
+        contestMapCenterHorizontalPos3 = routeInstance.contestMapCenterHorizontalPos3
+        contestMapCenterPoints3 = routeInstance.contestMapCenterPoints3
+        contestMapPrintPoints3 = routeInstance.contestMapPrintPoints3
+        contestMapPrintLandscape3 = routeInstance.contestMapPrintLandscape3
+        contestMapPrintSize3 = routeInstance.contestMapPrintSize3
+		contestMapShowForthOptions = routeInstance.contestMapShowForthOptions
+        contestMapForthTitle = routeInstance.contestMapForthTitle
+        contestMapCenterVerticalPos4 = routeInstance.contestMapCenterVerticalPos4
+        contestMapCenterHorizontalPos4 = routeInstance.contestMapCenterHorizontalPos4
+        contestMapCenterPoints4 = routeInstance.contestMapCenterPoints4
+        contestMapPrintPoints4 = routeInstance.contestMapPrintPoints4
+        contestMapPrintLandscape4 = routeInstance.contestMapPrintLandscape4
+        contestMapPrintSize4 = routeInstance.contestMapPrintSize4
         
 		if (!this.save()) {
 			throw new Exception("Route.CopyValues could not save")
@@ -442,7 +502,9 @@ class Route
         List upload_links = []
 		for (UploadJobRouteMap mapuploadjob_route in UploadJobRouteMap.findAllByRoute(this)) {
 			if (mapuploadjob_route.uploadJobStatus == UploadJobStatus.Done) {
-                upload_links += [edition:mapuploadjob_route.uploadJobMapEdition, link:mapuploadjob_route.uploadJobLink, noroute:mapuploadjob_route.uploadJobNoRoute, secondoptions:mapuploadjob_route.uploadJobSecondOptions]
+                upload_links += [edition:mapuploadjob_route.uploadJobMapEdition, link:mapuploadjob_route.uploadJobLink, noroute:mapuploadjob_route.uploadJobNoRoute, 
+                                 optionnumber:mapuploadjob_route.uploadJobOptionNumber, optiontitle:mapuploadjob_route.uploadJobOptionTitle, title:mapuploadjob_route.GetTitle()
+                                ]
             }
         }
         return upload_links
@@ -1412,10 +1474,22 @@ class Route
         if (!contestMapCenterPoints2 || contestMapCenterPoints2 == Defs.CONTESTMAPPOINTS_INIT) {
             save_points = true
         }
+        if (!contestMapCenterPoints3 || contestMapCenterPoints3 == Defs.CONTESTMAPPOINTS_INIT) {
+            save_points = true
+        }
+        if (!contestMapCenterPoints4 || contestMapCenterPoints4 == Defs.CONTESTMAPPOINTS_INIT) {
+            save_points = true
+        }
         if (!contestMapPrintPoints || contestMapPrintPoints == Defs.CONTESTMAPPOINTS_INIT) {
             save_points = true
         }
         if (!contestMapPrintPoints2 || contestMapPrintPoints2 == Defs.CONTESTMAPPOINTS_INIT) {
+            save_points = true
+        }
+        if (!contestMapPrintPoints3 || contestMapPrintPoints3 == Defs.CONTESTMAPPOINTS_INIT) {
+            save_points = true
+        }
+        if (!contestMapPrintPoints4 || contestMapPrintPoints4 == Defs.CONTESTMAPPOINTS_INIT) {
             save_points = true
         }
         if (!contestMapCurvedLegPoints || contestMapCurvedLegPoints == Defs.CONTESTMAPPOINTS_INIT) {
@@ -1457,11 +1531,23 @@ class Route
             if (!contestMapCenterPoints2 || contestMapCenterPoints2 == Defs.CONTESTMAPPOINTS_INIT) {
                 contestMapCenterPoints2 = DisabledCheckPointsTools.Compress(center_points, this)
             }
+            if (!contestMapCenterPoints3 || contestMapCenterPoints3 == Defs.CONTESTMAPPOINTS_INIT) {
+                contestMapCenterPoints3 = DisabledCheckPointsTools.Compress(center_points, this)
+            }
+            if (!contestMapCenterPoints4 || contestMapCenterPoints4 == Defs.CONTESTMAPPOINTS_INIT) {
+                contestMapCenterPoints4 = DisabledCheckPointsTools.Compress(center_points, this)
+            }
             if (!contestMapPrintPoints || contestMapPrintPoints == Defs.CONTESTMAPPOINTS_INIT) {
                 contestMapPrintPoints = DisabledCheckPointsTools.Compress(print_points, this)
             }
             if (!contestMapPrintPoints2 || contestMapPrintPoints2 == Defs.CONTESTMAPPOINTS_INIT) {
                 contestMapPrintPoints2 = DisabledCheckPointsTools.Compress(print_points, this)
+            }
+            if (!contestMapPrintPoints3 || contestMapPrintPoints3 == Defs.CONTESTMAPPOINTS_INIT) {
+                contestMapPrintPoints3 = DisabledCheckPointsTools.Compress(print_points, this)
+            }
+            if (!contestMapPrintPoints4 || contestMapPrintPoints4 == Defs.CONTESTMAPPOINTS_INIT) {
+                contestMapPrintPoints4 = DisabledCheckPointsTools.Compress(print_points, this)
             }
             if (!contestMapCurvedLegPoints || contestMapCurvedLegPoints == Defs.CONTESTMAPPOINTS_INIT) {
                 contestMapCurvedLegPoints = DisabledCheckPointsTools.Compress(curvedleg_points, this)

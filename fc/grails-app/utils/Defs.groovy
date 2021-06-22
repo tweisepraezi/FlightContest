@@ -70,8 +70,12 @@ class Defs
     static final String TurnpointID_TurnpointObs                       = "turnpointobs_"
     static final String TurnpointID_ContestMapCenterPoints             = "contestmapcenterpoints_"
     static final String TurnpointID_ContestMapCenterPoints2            = "contestmapcenterpoints2_"
+    static final String TurnpointID_ContestMapCenterPoints3            = "contestmapcenterpoints3_"
+    static final String TurnpointID_ContestMapCenterPoints4            = "contestmapcenterpoints4_"
     static final String TurnpointID_ContestMapPrintPoints              = "contestmapprintpoints_"
     static final String TurnpointID_ContestMapPrintPoints2             = "contestmapprintpoints2_"
+    static final String TurnpointID_ContestMapPrintPoints3             = "contestmapprintpoints3_"
+    static final String TurnpointID_ContestMapPrintPoints4             = "contestmapprintpoints4_"
     static final String TurnpointID_ContestMapCurvedLegPoints          = "contestmapcurvedlegpoints_"
     
     static final String EnrouteID_PhotoObs                             = "photoobs_"

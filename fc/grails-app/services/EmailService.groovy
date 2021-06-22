@@ -367,17 +367,17 @@ class EmailService
         }
         for (Map map_link in routeInstance.GetMapUploadLinks()) {
             links += "\n"
-            if (!map_link.secondoptions) {
+            if (map_link.optiontitle) {
                 if (!map_link.noroute) {
-                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap')}: "
+                    links += "${map_link.optiontitle}: "
                 } else {
-                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap.noroute')}: "
+                    links += "${map_link.optiontitle} (${getPrintMsg('fc.net.mail.route.body.noroute')}): " 
                 }
             } else {
                 if (!map_link.noroute) {
-                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap2')}: "
+                    links += "${map_link.optionnumber}. ${getPrintMsg('fc.net.mail.route.body.contestmap')}: "
                 } else {
-                    links += "${getPrintMsg('fc.net.mail.route.body.contestmap2.noroute')}: "
+                    links += "${map_link.optionnumber}. ${getPrintMsg('fc.net.mail.route.body.contestmap.noroute')}: "
                 }
             }
             links += map_link.link
@@ -415,11 +415,14 @@ class EmailService
     }
 
     //--------------------------------------------------------------------------
-    void CreateUploadJobRouteMap(Route routeInstance, boolean noRoute, boolean secondOptions)
+    void CreateUploadJobRouteMap(Route routeInstance, boolean noRoute, int optionNumber, String optionTitle)
     {
         UploadJobRouteMap uploadjob_routemap = UploadJobRouteMap.findByRouteAndUploadJobMapEdition(routeInstance, routeInstance.contestMapEdition)
         if (!uploadjob_routemap) {
-            uploadjob_routemap = new UploadJobRouteMap(route:routeInstance, uploadJobMapEdition:routeInstance.contestMapEdition, uploadJobStatus:UploadJobStatus.None, uploadJobNoRoute:noRoute, uploadJobSecondOptions:secondOptions)
+            uploadjob_routemap = new UploadJobRouteMap(
+				route:routeInstance, uploadJobMapEdition:routeInstance.contestMapEdition, uploadJobStatus:UploadJobStatus.None, uploadJobNoRoute:noRoute,
+				uploadJobOptionNumber:optionNumber, uploadJobOptionTitle:optionTitle
+			)
             uploadjob_routemap.save(flush:true)
         }
     }
