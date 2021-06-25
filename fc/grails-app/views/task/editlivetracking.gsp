@@ -97,8 +97,8 @@
                                 <g:actionSubmit action="livetracking_navigationtaskvisiblity_setprivate" value="${message(code:'fc.livetracking.navigationtaskvisibility.setprivate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:if test="${taskInstance.liveTrackingTracksAvailable}">
-                                <g:actionSubmit action="livetracking_navigationtaskaddtracks" value="${message(code:'fc.livetracking.navigationtaskaddtracks')}" tabIndex="${ti[0]++}"/>
-                                <g:actionSubmit action="livetracking_navigationtaskaddtracks_incomplete" value="${message(code:'fc.livetracking.navigationtaskaddtracks.incomplete')}" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="livetracking_navigationtaskaddtracks" value="${message(code:'fc.livetracking.navigationtaskaddtracks')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="livetracking_navigationtaskaddtracks_incomplete" value="${message(code:'fc.livetracking.navigationtaskaddtracks.incomplete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                             </g:if>
                         </g:if>
                         <g:else>

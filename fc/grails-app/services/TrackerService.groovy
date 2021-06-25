@@ -966,6 +966,9 @@ class TrackerService
         }
         
         task_instance.liveTrackingNavigationTaskID = navigationtask_id
+        if (true) {
+            task_instance.liveTrackingTracksAvailable = check_tracks_availability(task_instance)
+        }
         task_instance.liveTrackingNavigationTaskVisibility = navigationtask_visibility
         task_instance.liveTrackingNavigationTaskDate = navigationtask_date
         

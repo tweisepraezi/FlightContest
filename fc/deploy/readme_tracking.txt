@@ -1,6 +1,10 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M21
+---------------
+- Command "Add navigation tracks" added after reconnection of a navigation task
+
 Changes 3.2.M17
 ---------------
 - Tasks without navigation test can now be configured for 'Results Service':
