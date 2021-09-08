@@ -845,7 +845,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName1(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -969,7 +969,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName2(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -1093,7 +1093,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName3(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -1217,7 +1217,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName4(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -1341,7 +1341,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName1(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -1465,7 +1465,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName2(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -1589,7 +1589,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName3(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
@@ -1713,7 +1713,7 @@ class RouteController {
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
                             Map r = osmPrintMapService.PrintOSM([contestTitle: session.lastContest.title,
-                                                                 routeTitle: route.instance.name(),
+                                                                 routeTitle: route.instance.GetOSMRouteName4(),
                                                                  routeId: route.instance.id,
                                                                  webRootDir: webroot_dir,
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,

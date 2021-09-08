@@ -415,6 +415,38 @@ class Route
             return printName()
         }
     }
+
+    String GetOSMRouteName1()
+    {
+        if (contestMapFirstTitle) {
+            return "${name()} - ${contestMapFirstTitle}"
+        }
+        return name()
+    }
+    
+    String GetOSMRouteName2()
+    {
+        if (contestMapSecondTitle) {
+            return "${name()} - ${contestMapSecondTitle}"
+        }
+        return name()
+    }
+    
+    String GetOSMRouteName3()
+    {
+        if (contestMapThirdTitle) {
+            return "${name()} - ${contestMapThirdTitle}"
+        }
+        return name()
+    }
+    
+    String GetOSMRouteName4()
+    {
+        if (contestMapForthTitle) {
+            return "${name()} - ${contestMapForthTitle}"
+        }
+        return name()
+    }
     
 	boolean Used()
 	{
