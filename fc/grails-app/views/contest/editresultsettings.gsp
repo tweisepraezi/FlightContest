@@ -35,7 +35,7 @@
                         </g:if>
                         <fieldset>
                             <p>
-                                <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"id"])}">
+                                <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"idTitle"])}">
                                     <g:set var="task_selected" value="${false}"/>
                                     <g:each var="contest_task_result" in="${contestInstance.contestTaskResults.split(',')}">
                                         <g:if test="${contest_task_result == 'task_' + task_instance.id.toString()}">
@@ -189,7 +189,7 @@
                                     <g:checkBox name="contestPrintShortClass" value="${contestInstance.contestPrintShortClass}" />
                                     <label>${message(code:'fc.printresultclass.short')}</label>
                                 </div>
-                                <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"id"])}">
+                                <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"idTitle"])}">
                                     <g:set var="task_selected" value="${false}"/>
                                     <g:each var="contest_task_test_details" in="${contestInstance.contestPrintTaskTestDetails.split(',')}">
                                         <g:if test="${contest_task_test_details == 'tasktestdetails_' + task_instance.id.toString()}">
@@ -252,7 +252,7 @@
                             <br/>
                             <g:set var="live_position_calculation_labels" value="${[message(code:'fc.contest.liveresults.position.summary')]}"/>
 							<g:set var="live_position_calculation_values" value="${[0]}"/>
-						    <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"id"])}">
+						    <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"idTitle"])}">
 						        <g:set var="live_position_calculation_labels" value="${live_position_calculation_labels += task_instance.bestOfName()}"/>
 						        <g:set var="live_position_calculation_values" value="${live_position_calculation_values += task_instance.id}"/>
 						    </g:each>

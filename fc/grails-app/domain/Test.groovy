@@ -1960,6 +1960,11 @@ class Test
 		return viewpos+1
 	}
 	
+    int GetFlightTestPos()
+    {
+        return task.GetFlightTestPos(this)
+    }
+    
 	int GetStartNum()
 	{
 		return crew.startNum  

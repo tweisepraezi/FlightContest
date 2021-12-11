@@ -326,7 +326,7 @@ class ContestController {
     def tasks = {
         fcService.printstart "List tasks"
         if (session?.lastContest) {
-            def contestTasksList = Task.findAllByContest(session.lastContest,[sort:"id"])
+            def task_list = Task.findAllByContest(session.lastContest,[sort:"idTitle"])
             // save return action
             session.taskReturnAction = actionName 
             session.taskReturnController = controllerName
@@ -338,7 +338,7 @@ class ContestController {
             session.flighttestReturnController = controllerName
             session.flighttestReturnID = params.id
             fcService.printdone "last contest"
-            return [contestInstance:session.lastContest,contestTasks:contestTasksList]
+            return [contestInstance:session.lastContest,contestTasks:task_list]
         }
         fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -597,36 +597,51 @@ class ContestController {
 	
 	def view_image_left = {
 		if (params.contestid) {
-	        Contest contest = Contest.get(params.contestid)
-			response.outputStream << contest.imageLeft
+            try {
+                Contest contest = Contest.get(params.contestid)
+                response.outputStream << contest.imageLeft
+            } catch (Exception e) {
+            }
 		}
 	}
 	     
 	def view_image_center = {
 		if (params.contestid) {
-	        Contest contest = Contest.get(params.contestid)
-			response.outputStream << contest.imageCenter
+            try {
+                Contest contest = Contest.get(params.contestid)
+                response.outputStream << contest.imageCenter
+            } catch (Exception e) {
+            }
 		}
 	}
 	     
 	def view_image_right = {
 		if (params.contestid) {
-	        Contest contest = Contest.get(params.contestid)
-			response.outputStream << contest.imageRight
+            try {
+                Contest contest = Contest.get(params.contestid)
+                response.outputStream << contest.imageRight
+            } catch (Exception e) {
+            }
 		}
 	}
 	     
 	def view_image_bottom_left = {
 		if (params.contestid) {
-	        Contest contest = Contest.get(params.contestid)
-			response.outputStream << contest.imageBottomLeft
+            try {
+                Contest contest = Contest.get(params.contestid)
+                response.outputStream << contest.imageBottomLeft
+            } catch (Exception e) {
+            }
 		}
 	}
 	     
 	def view_image_bottom_right = {
 		if (params.contestid) {
-	        Contest contest = Contest.get(params.contestid)
-			response.outputStream << contest.imageBottomRight
+            try {
+                Contest contest = Contest.get(params.contestid)
+                response.outputStream << contest.imageBottomRight
+            } catch (Exception e) {
+            }
 		}
 	}
 

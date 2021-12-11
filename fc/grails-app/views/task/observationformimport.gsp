@@ -12,7 +12,7 @@
                 <h2>${message(code:'fc.observation.importform')}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post">
-                        <g:set var="test_instances" value="${taskInstance.GetObservationTests()}" />
+                        <g:set var="test_instances" value="${taskInstance.GetIncompleteObservationTests()}" />
                         <div>
                             <p>${message(code:'fc.observation.importform.extern',args:[imagefile])}</p>
                         </div>

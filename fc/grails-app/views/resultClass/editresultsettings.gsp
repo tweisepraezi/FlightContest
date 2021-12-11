@@ -14,7 +14,7 @@
                     <g:form params="${['resultfilter':resultfilter,'editresultsettingsReturnAction':editresultsettingsReturnAction,'editresultsettingsReturnController':editresultsettingsReturnController,'editresultsettingsReturnID':editresultsettingsReturnID]}">
                         <fieldset>
                             <p>
-                                <g:each var="task_instance" in="${Task.findAllByContest(resultclassInstance.contest,[sort:"id"])}">
+                                <g:each var="task_instance" in="${Task.findAllByContest(resultclassInstance.contest,[sort:"idTitle"])}">
                                     <g:set var="task_selected" value="${false}"/>
                                     <g:each var="contest_task_result" in="${resultclassInstance.contestTaskResults.split(',')}">
                                         <g:if test="${contest_task_result == 'task_' + task_instance.id.toString()}">
@@ -136,7 +136,7 @@
                                     <g:checkBox name="contestPrintShortClass" value="${resultclassInstance.contestPrintShortClass}" />
                                     <label>${message(code:'fc.printresultclass.short')}</label>
                                 </div>
-                                <g:each var="task_instance" in="${Task.findAllByContest(resultclassInstance.contest,[sort:"id"])}">
+                                <g:each var="task_instance" in="${Task.findAllByContest(resultclassInstance.contest,[sort:"idTitle"])}">
                                     <g:set var="task_selected" value="${false}"/>
                                     <g:each var="contest_task_test_details" in="${resultclassInstance.contestPrintTaskTestDetails.split(',')}">
                                         <g:if test="${contest_task_test_details == 'tasktestdetails_' + task_instance.id.toString()}">

@@ -67,13 +67,13 @@ class DemoContestProcedureTurnService
 
 			}
 			Map ret = fcService.testData(
-			   [[name:"Route",count:1,table:Route.findAllByContest(lastContest,[sort:"id"]),data:testRoute()],
+			   [[name:"Route",count:1,table:Route.findAllByContest(lastContest,[sort:"idTitle"]),data:testRoute()],
 				[name:"CoordRoute '$ROUTE_NAME_PT'",   count:11,table:CoordRoute.findAllByRoute(   route_pt,[sort:"id"]),data:testCoordRoute(   ROUTE_NAME_PT)],
 				[name:"RouteLegCoord '$ROUTE_NAME_PT'",count:10,table:RouteLegCoord.findAllByRoute(route_pt,[sort:"id"]),data:testRouteLegCoord(ROUTE_NAME_PT)],
 				[name:"RouteLegTest '$ROUTE_NAME_PT'", count:7,table:RouteLegTest.findAllByRoute( route_pt,[sort:"id"]),data:testRouteLegTest( ROUTE_NAME_PT)],
 				
 				[name:"Crew",count:1,table:Crew.findAllByContest(lastContest,[sort:"id"]),data:testCrew()],
-				[name:"Task",count:1,table:Task.findAllByContest(lastContest,[sort:"id"]),data:testTask()],
+				[name:"Task",count:1,table:Task.findAllByContest(lastContest,[sort:"idTitle"]),data:testTask()],
 				
 				[name:"TestLegFlight '$ROUTE_NAME_PT ($NOWIND) - $CREW_60'",   count:8,table:TestLegFlight.findAllByTest(  Test.findByTaskAndCrew(task_pt,     Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegFlight60(   ROUTE_NAME_PT,false)],
 				

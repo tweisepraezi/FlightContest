@@ -1,5 +1,5 @@
 
-Flight Contest 3.2.M22
+Flight Contest 3.2.M23
 Copyright 2009-2021 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
@@ -14,6 +14,14 @@ https://notepad-plus-plus.org/
 
 GNU General Public License 2
 https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+============================================================================
+
+Help generated with AsciiDoctor
+https://asciidoctor.org
+
+Apache License 2.0
+https://www.apache.org/licenses/LICENSE-2.0
 
 ============================================================================
 

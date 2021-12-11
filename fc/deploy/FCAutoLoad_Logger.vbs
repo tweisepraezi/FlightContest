@@ -1,13 +1,14 @@
 ' --------------------------------------------------------------------------------
 '   FCAutoLoad_Logger.vbs
-'   Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-'   23.03.2018
-'   Version 1.0.1
+'   Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+'   30.10.2021
+'   Version 1.0.2
 ' --------------------------------------------------------------------------------
 
 ' Neu gesicherte Dateien automatisch in Browser laden
 
 Const SEARCH_FOLDER = "C:\FCSave\.logger"
+Const SEARCH_FOLDER2 = "C:/FCSave/.logger"
 Const SEARCH_FILTER = "*.gac,*.gpx,*.igc,*.nmea"  ' mehrere Filter mit Komma trennen, Start und Ende mit * trennen
 
 Const CHECK_TIME = 500 ' ms
@@ -134,7 +135,7 @@ End Function
 ' ----------------------------------------------------------------------------------
 Function OpenFile(fileName)
 	'
-	cmd = URL & SEARCH_FOLDER & "\" & fileName
+	cmd = URL & SEARCH_FOLDER2 & "/" & fileName
 	shell.Run cmd, 1, False ' 0 - unsichtbar, True - Wait for return
 	'
 End Function

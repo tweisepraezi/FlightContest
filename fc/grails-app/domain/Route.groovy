@@ -10,17 +10,29 @@ class Route
     Boolean showAflosMark = false                                                // DB-2.12
     Boolean useProcedureTurns = false                                            // DB-2.18
     String liveTrackingScorecard = ""                                            // DB-2.18
+    
     TurnpointRoute turnpointRoute = TurnpointRoute.Unassigned                    // DB-2.13
     Boolean turnpointMapMeasurement = false                                      // DB-2.13
     ObservationPrintStyle turnpointPrintStyle = ObservationPrintStyle.Portrait2x4  // DB-2.28
+    Boolean turnpointPrintPositionMaker = false                                  // DB-2.30
+    
     EnrouteRoute enroutePhotoRoute = EnrouteRoute.Unassigned                     // DB-2.13
     EnrouteRoute enrouteCanvasRoute = EnrouteRoute.Unassigned                    // DB-2.13
     EnrouteMeasurement enroutePhotoMeasurement = EnrouteMeasurement.Unassigned   // DB-2.13
     EnrouteMeasurement enrouteCanvasMeasurement = EnrouteMeasurement.Unassigned  // DB-2.13
     ObservationPrintStyle enroutePhotoPrintStyle = ObservationPrintStyle.Portrait2x4  // DB-2.28
+    Boolean enroutePhotoPrintPositionMaker = false                               // DB-2.30
+    
     Boolean showCurvedPoints = false                                             // DB-2.20
 	Integer mapScale = 200000                                                    // DB-2.21
     Boolean exportSemicircleGates = false                                        // DB-2.26
+    
+    Boolean showCoords = true                                                    // DB-2.30
+    Boolean showCoordObservations = false                                        // DB-2.30
+    Boolean showResultLegs = false                                               // DB-2.30
+    Boolean showTestLegs = false                                                 // DB-2.30
+    Boolean showEnroutePhotos = false                                            // DB-2.30
+    Boolean showEnrouteCanvas = false                                            // DB-2.30
     
     static int mmPerNM = 1852000
     static int mmPerkm = 1000000
@@ -201,6 +213,16 @@ class Route
         contestMapPrintPoints4(nullable:true)
         contestMapPrintLandscape4(nullable:true)
         contestMapPrintSize4(nullable:true)
+        
+        // DB-2.30 compatibility
+        turnpointPrintPositionMaker(nullable:true)
+        enroutePhotoPrintPositionMaker(nullable:true)
+        showCoords(nullable:true)
+        showCoordObservations(nullable:true)
+        showResultLegs(nullable:true)
+        showTestLegs(nullable:true)
+        showEnroutePhotos(nullable:true)
+        showEnrouteCanvas(nullable:true)
 	}
 
 	static mapping = {
@@ -220,13 +242,21 @@ class Route
         turnpointRoute = routeInstance.turnpointRoute
         turnpointMapMeasurement = routeInstance.turnpointMapMeasurement
         turnpointPrintStyle = routeInstance.turnpointPrintStyle
+        turnpointPrintPositionMaker = routeInstance.turnpointPrintPositionMaker
         enroutePhotoRoute = routeInstance.enroutePhotoRoute
         enroutePhotoMeasurement = routeInstance.enroutePhotoMeasurement
         enroutePhotoPrintStyle = routeInstance.enroutePhotoPrintStyle
+        enroutePhotoPrintPositionMaker = routeInstance.enroutePhotoPrintPositionMaker
         enrouteCanvasRoute = routeInstance.enrouteCanvasRoute
         enrouteCanvasMeasurement = routeInstance.enrouteCanvasMeasurement
         liveTrackingScorecard = routeInstance.liveTrackingScorecard
         mapScale = routeInstance.mapScale
+        showCoords = routeInstance.showCoords
+        showCoordObservations = routeInstance.showCoordObservations
+        showResultLegs = routeInstance.showResultLegs
+        showTestLegs = routeInstance.showTestLegs
+        showEnroutePhotos = routeInstance.showEnroutePhotos
+        showEnrouteCanvas = routeInstance.showEnrouteCanvas
 
         contestMapAirfields = routeInstance.contestMapAirfields
         contestMapCircle = routeInstance.contestMapCircle
@@ -1178,16 +1208,53 @@ class Route
         }
         
         int circlecenter_num = CoordRoute.countByRouteAndCircleCenter(this, true)
-        
+		
+		List secret_measure_incomplete = []
+		int secret_pos = 0
+		BigDecimal measure_distance = 0
+		boolean secret_error_found = false
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(this,[sort:"id"])) {
+			if (coordroute_instance.type == CoordType.SECRET) {
+				secret_pos++
+				if (!secret_error_found) {
+					if (secret_pos > 1) {
+						if (coordroute_instance.measureDistance) {
+							if (!measure_distance) {
+								secret_measure_incomplete += coordroute_instance.titleCode()
+								secret_error_found = true
+							} else if (measure_distance > coordroute_instance.measureDistance) {
+								secret_measure_incomplete += coordroute_instance.titleCode()
+								secret_error_found = true
+							}
+						} else {
+							if (measure_distance) {
+								secret_measure_incomplete += coordroute_instance.titleCode()
+								secret_error_found = true
+							}
+						}
+					}
+					if (coordroute_instance.measureDistance) {
+						measure_distance = coordroute_instance.measureDistance
+					}
+				}
+			} else {
+				secret_pos = 0
+				measure_distance = 0
+				secret_error_found = false
+			}
+		}
+         
         return [min_target_num:min_target_num, max_target_num:max_target_num, min_target_error:min_target_error, max_target_error:max_target_error,
                 min_leg_num:min_leg_num, max_leg_num:max_leg_num, min_leg_error:min_leg_error, max_leg_error:max_leg_error,
-                measure_distance_difference:measure_distance_difference, procedureturn_difference:procedureturn_difference, circlecenter_num:circlecenter_num]
+                measure_distance_difference:measure_distance_difference, procedureturn_difference:procedureturn_difference, circlecenter_num:circlecenter_num,
+				secret_measure_incomplete:secret_measure_incomplete]
     }
     
     boolean IsRouteOk()
     {
         Map status = RouteStatus()
-        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference || status.procedureturn_difference || status.circlecenter_num) {
+        if (status.min_target_error || status.max_target_error || status.min_leg_error || status.max_leg_error || status.measure_distance_difference || 
+		    status.procedureturn_difference || status.circlecenter_num || status.secret_measure_incomplete) {
             return false
         }
         return true
@@ -1247,13 +1314,20 @@ class Route
             s += getMsgArgs('fc.circlecenter.error',[status.circlecenter_num])
             wr_comma = true
         }
+        if (status.secret_measure_incomplete) {
+            if (wr_comma) {
+                s += ", "
+            }
+            s += getMsgArgs('fc.route.secretmeasureincomplete',[status.secret_measure_incomplete])
+            wr_comma = true
+        }
         return s
     }
     
     static List GetOkPlanningTestTaskRoutes(Contest contestInstance)
     {
         List ok_routes = []
-        for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
+        for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"idTitle"])) {
             if (route_instance.IsRouteOk()) {
                 ok_routes += route_instance
             }
@@ -1292,7 +1366,7 @@ class Route
     static List GetOkFlightTestRoutes(Contest contestInstance)
     {
         List ok_routes = []
-        for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
+        for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"idTitle"])) {
             if (route_instance.IsRouteOk()) {
                 ok_routes += route_instance
             }
@@ -1439,7 +1513,7 @@ class Route
     {
         long next_id = 0
         boolean set_next = false
-        for (Route route_instance in Route.findAllByContest(this.contest,[sort:'id'])) {
+        for (Route route_instance in Route.findAllByContest(this.contest,[sort:'idTitle'])) {
             if (set_next) {
                 next_id = route_instance.id
                 set_next = false

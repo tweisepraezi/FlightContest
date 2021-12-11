@@ -86,10 +86,10 @@
                         <thead>
                             <tr>
                                 <g:if test="${taskInstance.contest.resultClasses}">
-	                                <th class="table-head" colspan="5">${message(code:'fc.crew.list')}</th>
+	                                <th class="table-head" colspan="6">${message(code:'fc.crew.list')}</th>
 	                            </g:if>
 	                            <g:else>
-	                            	<th class="table-head" colspan="4">${message(code:'fc.crew.list')}</th>
+	                            	<th class="table-head" colspan="5">${message(code:'fc.crew.list')}</th>
 	                            </g:else>
                                 <th class="table-head" colspan="${results_columns}">${message(code:'fc.test.results')}</th>
                             </tr>
@@ -101,6 +101,7 @@
 		                        <g:if test="${taskInstance.contest.resultClasses}">
                                 	<th>${message(code:'fc.resultclass')}</th>
 		                        </g:if>
+                                <th>${message(code:'fc.test.listpos')}</th>
                                 <g:if test="${taskInstance.IsPlanningTestRun()}">
 	                                <th>
                                         ${message(code:'fc.planningresults.planning')}
@@ -250,11 +251,18 @@
 	                                    	</g:else>
 	                                    </g:if>
 	                                    
+                                        <g:set var="flighttest_pos" value="${test_instance.GetFlightTestPos()}"></g:set>
+                                        <g:if test="${flighttest_pos}">
+                                            <td>${flighttest_pos}</td>
+                                        </g:if> <g:else>
+                                            <td/>
+                                        </g:else>
+                                        
 										<g:if test="${test_instance.crew.disabled}">
-											<td colspan="9">${message(code:'fc.disabled')}</td>
+											<td colspan="10">${message(code:'fc.disabled')}</td>
 										</g:if>
                                         <g:elseif test="${test_instance.disabledCrew}">
-                                            <td colspan="9">${message(code:'fc.test.crewdisabled')}</td>
+                                            <td colspan="10">${message(code:'fc.test.crewdisabled')}</td>
                                         </g:elseif>
 										<g:else>
 			                                <g:if test="${taskInstance.IsPlanningTestRun()}">

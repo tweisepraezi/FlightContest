@@ -1162,7 +1162,7 @@ class Task
         return []
     }
     
-    List GetPlanningTests()
+    List GetIncompletePlanningTests()
     {
         List test_instances = []
         for (Test test_instance in Test.findAllByTaskAndScannedPlanningTestAndPlanningTestCompleteAndPlanningtesttaskIsNotNull(this,null,false,[sort:"viewpos"])) {
@@ -1175,7 +1175,7 @@ class Task
         return test_instances
     }
     
-    List GetFlightTests()
+    List GetIncompleteFlightTests()
     {
         List test_instances = []
         for (Test test_instance in Test.findAllByTaskAndFlightTestComplete(this,false,[sort:"viewpos"])) {
@@ -1188,7 +1188,7 @@ class Task
         return test_instances
     }
 
-    List GetObservationTests()
+    List GetIncompleteObservationTests()
     {
         List test_instances = []
         for (Test test_instance in Test.findAllByTaskAndScannedObservationTestAndObservationTestComplete(this,null,false,[sort:"viewpos"])) {
@@ -1201,11 +1201,40 @@ class Task
         return test_instances
     }
 
+    List GetFlightTests()
+    {
+        List test_instances = []
+        for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos"])) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (test_instance.IsFlightTestRun()) {
+                    test_instances += test_instance
+                }
+            }
+        }
+        return test_instances
+    }
+
+    int GetFlightTestPos(Test testInstance)
+    {
+        int flighttest_pos = 0
+        for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos"])) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                if (test_instance.IsFlightTestRun()) {
+                    flighttest_pos++
+                    if (test_instance.id == testInstance.id) {
+                        return flighttest_pos
+                    }
+                }
+            }
+        }
+        return 0
+    }
+
     long GetNextID()
     {
         long next_id = 0
         boolean set_next = false
-        for (Task task_instance in Task.findAllByContest(this.contest,[sort:'id'])) {
+        for (Task task_instance in Task.findAllByContest(this.contest,[sort:'idTitle'])) {
             if (set_next) {
                 next_id = task_instance.id
                 set_next = false

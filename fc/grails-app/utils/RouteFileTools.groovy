@@ -963,9 +963,34 @@ class RouteFileTools
                         if (correctsign) {
                             coordroute_instance.correctSign = TurnpointCorrect.(correctsign.toString())
                         }
-
+                        if (rte.extensions.flightcontest.photoimage) {
+                            String observationpositiontop = rte.extensions.flightcontest.photoimage.'@observationpositiontop'[0]
+                            if (observationpositiontop) {
+                                coordroute_instance.observationPositionTop = observationpositiontop.toInteger()
+                            }
+                            String observationpositionleft = rte.extensions.flightcontest.photoimage.'@observationpositionleft'[0]
+                            if (observationpositionleft) {
+                                coordroute_instance.observationPositionLeft = observationpositionleft.toInteger()
+                            }
+                            String observationnextprintpageturnpoint = rte.extensions.flightcontest.photoimage.'@observationnextprintpageturnpoint'[0]
+                            if (observationnextprintpageturnpoint) {
+                                coordroute_instance.observationNextPrintPage = observationnextprintpageturnpoint == "yes"
+                            }
+                            String observationnextprintpageenroute = rte.extensions.flightcontest.photoimage.'@observationnextprintpageenroute'[0]
+                            if (observationnextprintpageenroute) {
+                                coordroute_instance.observationNextPrintPageEnroute = observationnextprintpageenroute == "yes"
+                            }
+                        }
                         if (!coordroute_instance.save()) {
                             read_errors = "Could not save ${coordroute_instance.title()}"
+                        }
+                        if (rte.extensions.flightcontest.photoimage && rte.extensions.flightcontest.photoimage.imagedata) {
+                            byte[] image_data = Base64.getDecoder().decode(rte.extensions.flightcontest.photoimage.imagedata[0].text())
+                            if (image_data) {
+                                ImageCoord imagecoord_instance = new ImageCoord(imageData:image_data, coord:coordroute_instance)
+                                imagecoord_instance.save()
+                                coordroute_instance.imagecoord = imagecoord_instance
+                            }
                         }
                     }
                     if (read_errors) {
@@ -976,8 +1001,8 @@ class RouteFileTools
             
             // Observations (Version 3)
             if (route_instance) {
+                boolean save_route = false
                 if (gpx.extensions.flightcontest.observationsettings) {
-                    boolean save_route = false
                     String turnpoint = gpx.extensions.flightcontest.observationsettings.'@turnpoint'[0]
                     if (turnpoint) {
                         route_instance.turnpointRoute = TurnpointRoute.(turnpoint.toString())
@@ -988,6 +1013,16 @@ class RouteFileTools
                         route_instance.turnpointMapMeasurement = turnpointmapmeasurement == "yes"
                         save_route = true
                     }
+                    String turnpointprintstyle = gpx.extensions.flightcontest.observationsettings.'@turnpointprintstyle'[0]
+                    if (turnpointprintstyle) {
+                        route_instance.turnpointPrintStyle = ObservationPrintStyle.(turnpointprintstyle.toString())
+                        save_route = true
+                    }
+                    String turnpointprintpositionmaker = gpx.extensions.flightcontest.observationsettings.'@turnpointprintpositionmaker'[0]
+                    if (turnpointprintpositionmaker) {
+                        route_instance.turnpointPrintPositionMaker = turnpointprintpositionmaker == "yes"
+                        save_route = true
+                    }
                     String enroutephoto = gpx.extensions.flightcontest.observationsettings.'@enroutephoto'[0]
                     if (enroutephoto) {
                         route_instance.enroutePhotoRoute = EnrouteRoute.(enroutephoto.toString())
@@ -996,6 +1031,16 @@ class RouteFileTools
                     String enroutephotomeasurement = gpx.extensions.flightcontest.observationsettings.'@enroutephotomeasurement'[0]
                     if (enroutephotomeasurement) {
                         route_instance.enroutePhotoMeasurement = EnrouteMeasurement.(enroutephotomeasurement.toString())
+                        save_route = true
+                    }
+                    String enroutephotoprintstyle = gpx.extensions.flightcontest.observationsettings.'@enroutephotoprintstyle'[0]
+                    if (enroutephotoprintstyle) {
+                        route_instance.enroutePhotoPrintStyle = ObservationPrintStyle.(enroutephotoprintstyle.toString())
+                        save_route = true
+                    }
+                    String enroutephotoprintpositionmarker = gpx.extensions.flightcontest.observationsettings.'@enroutephotoprintpositionmarker'[0]
+                    if (enroutephotoprintpositionmarker) {
+                        route_instance.enroutePhotoPrintPositionMaker = enroutephotoprintpositionmarker == "yes"
                         save_route = true
                     }
                     String enroutecanvas = gpx.extensions.flightcontest.observationsettings.'@enroutecanvas'[0]
@@ -1013,9 +1058,296 @@ class RouteFileTools
                         route_instance.useProcedureTurns = useprocedureturn == "yes"
                         save_route = true
                     }
-                    if (save_route) {
-                        route_instance.save()
+                }
+                if (gpx.extensions.flightcontest.mapsettings) {
+                    String contestmapairfields = gpx.extensions.flightcontest.mapsettings.'@contestmapairfields'[0]
+                    if (contestmapairfields) {
+                        route_instance.contestMapAirfields = contestmapairfields
+                        save_route = true
                     }
+                    String contestmapcircle = gpx.extensions.flightcontest.mapsettings.'@contestmapcircle'[0]
+                    if (contestmapcircle) {
+                        route_instance.contestMapCircle = contestmapcircle == "yes"
+                        save_route = true
+                    }
+                    String contestmapprocedureturn = gpx.extensions.flightcontest.mapsettings.'@contestmapprocedureturn'[0]
+                    if (contestmapprocedureturn) {
+                        route_instance.contestMapProcedureTurn = contestmapprocedureturn == "yes"
+                        save_route = true
+                    }
+                    String contestmapleg = gpx.extensions.flightcontest.mapsettings.'@contestmapleg'[0]
+                    if (contestmapleg) {
+                        route_instance.contestMapLeg = contestmapleg == "yes"
+                        save_route = true
+                    }
+                    String contestmapcurvedleg = gpx.extensions.flightcontest.mapsettings.'@contestmapcurvedleg'[0]
+                    if (contestmapcurvedleg) {
+                        route_instance.contestMapCurvedLeg = contestmapcurvedleg == "yes"
+                        save_route = true
+                    }
+                    String contestmapcurvedlegpoints = gpx.extensions.flightcontest.mapsettings.'@contestmapcurvedlegpoints'[0]
+                    if (contestmapcurvedlegpoints) {
+                        route_instance.contestMapCurvedLegPoints = contestmapcurvedlegpoints
+                        save_route = true
+                    }
+                    String contestmaptpname = gpx.extensions.flightcontest.mapsettings.'@contestmaptpname'[0]
+                    if (contestmaptpname) {
+                        route_instance.contestMapTpName = contestmaptpname == "yes"
+                        save_route = true
+                    }
+                    String contestmapsecretgates = gpx.extensions.flightcontest.mapsettings.'@contestmapsecretgates'[0]
+                    if (contestmapsecretgates) {
+                        route_instance.contestMapSecretGates = contestmapsecretgates == "yes"
+                        save_route = true
+                    }
+                    String contestmapenroutephotos = gpx.extensions.flightcontest.mapsettings.'@contestmapenroutephotos'[0]
+                    if (contestmapenroutephotos) {
+                        route_instance.contestMapEnroutePhotos = contestmapenroutephotos == "yes"
+                        save_route = true
+                    }
+                    String contestmapenroutecanvas = gpx.extensions.flightcontest.mapsettings.'@contestmapenroutecanvas'[0]
+                    if (contestmapenroutecanvas) {
+                        route_instance.contestMapEnrouteCanvas = contestmapenroutecanvas == "yes"
+                        save_route = true
+                    }
+                    String contestmapgraticule = gpx.extensions.flightcontest.mapsettings.'@contestmapgraticule'[0]
+                    if (contestmapgraticule) {
+                        route_instance.contestMapGraticule = contestmapgraticule == "yes"
+                        save_route = true
+                    }
+                    String contestmapcontourlines = gpx.extensions.flightcontest.mapsettings.'@contestmapcontourlines'[0]
+                    if (contestmapcontourlines) {
+                        route_instance.contestMapContourLines = contestmapcontourlines.toInteger()
+                        save_route = true
+                    }
+                    String contestmapmunicipalitynames = gpx.extensions.flightcontest.mapsettings.'@contestmapmunicipalitynames'[0]
+                    if (contestmapmunicipalitynames) {
+                        route_instance.contestMapMunicipalityNames = contestmapmunicipalitynames == "yes"
+                        save_route = true
+                    }
+                    String contestmapchurches = gpx.extensions.flightcontest.mapsettings.'@contestmapchurches'[0]
+                    if (contestmapchurches) {
+                        route_instance.contestMapChurches = contestmapchurches == "yes"
+                        save_route = true
+                    }
+                    String contestmapcastles = gpx.extensions.flightcontest.mapsettings.'@contestmapcastles'[0]
+                    if (contestmapcastles) {
+                        route_instance.contestMapCastles = contestmapcastles == "yes"
+                        save_route = true
+                    }
+                    String contestmapchateaus = gpx.extensions.flightcontest.mapsettings.'@contestmapchateaus'[0]
+                    if (contestmapchateaus) {
+                        route_instance.contestMapChateaus = contestmapchateaus == "yes"
+                        save_route = true
+                    }
+                    String contestmappowerlines = gpx.extensions.flightcontest.mapsettings.'@contestmappowerlines'[0]
+                    if (contestmappowerlines) {
+                        route_instance.contestMapPowerlines = contestmappowerlines == "yes"
+                        save_route = true
+                    }
+                    String contestmapwindpowerstations = gpx.extensions.flightcontest.mapsettings.'@contestmapwindpowerstations'[0]
+                    if (contestmapwindpowerstations) {
+                        route_instance.contestMapWindpowerstations = contestmapwindpowerstations == "yes"
+                        save_route = true
+                    }
+                    String contestmapsmallroads = gpx.extensions.flightcontest.mapsettings.'@contestmapsmallroads'[0]
+                    if (contestmapsmallroads) {
+                        route_instance.contestMapSmallRoads = contestmapsmallroads == "yes"
+                        save_route = true
+                    }
+                    String contestmappeaks = gpx.extensions.flightcontest.mapsettings.'@contestmappeaks'[0]
+                    if (contestmappeaks) {
+                        route_instance.contestMapPeaks = contestmappeaks == "yes"
+                        save_route = true
+                    }
+                    String contestmapdropshadow = gpx.extensions.flightcontest.mapsettings.'@contestmapdropshadow'[0]
+                    if (contestmapdropshadow) {
+                        route_instance.contestMapDropShadow = contestmapdropshadow == "yes"
+                        save_route = true
+                    }
+                    String contestmapadditionals = gpx.extensions.flightcontest.mapsettings.'@contestmapadditionals'[0]
+                    if (contestmapadditionals) {
+                        route_instance.contestMapAdditionals = contestmapadditionals == "yes"
+                        save_route = true
+                    }
+                    String contestmapspecials = gpx.extensions.flightcontest.mapsettings.'@contestmapspecials'[0]
+                    if (contestmapspecials) {
+                        route_instance.contestMapSpecials = contestmapspecials == "yes"
+                        save_route = true
+                    }
+                    String contestmapairspaces = gpx.extensions.flightcontest.mapsettings.'@contestmapairspaces'[0]
+                    if (contestmapairspaces) {
+                        route_instance.contestMapAirspaces = contestmapairspaces == "yes"
+                        save_route = true
+                    }
+                    String contestmapairspaceslayer = gpx.extensions.flightcontest.mapsettings.'@contestmapairspaceslayer'[0]
+                    if (contestmapairspaceslayer) {
+                        route_instance.contestMapAirspacesLayer = contestmapairspaceslayer
+                        save_route = true
+                    }
+                    String contestmapshowoptions1 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions1'[0]
+                    if (contestmapshowoptions1) {
+                        route_instance.contestMapShowFirstOptions = contestmapshowoptions1 == "yes"
+                        save_route = true
+                    }
+                    String contestmaptitle1 = gpx.extensions.flightcontest.mapsettings.'@contestmaptitle1'[0]
+                    if (contestmaptitle1) {
+                        route_instance.contestMapFirstTitle = contestmaptitle1
+                        save_route = true
+                    }
+                    String contestmapcenterverticalpos1 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterverticalpos1'[0]
+                    if (contestmapcenterverticalpos1) {
+                        route_instance.contestMapCenterVerticalPos = VerticalPos.(contestmapcenterverticalpos1.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterhorizontalpos1 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterhorizontalpos1'[0]
+                    if (contestmapcenterhorizontalpos1) {
+                        route_instance.contestMapCenterHorizontalPos = HorizontalPos.(contestmapcenterhorizontalpos1.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterpoints1 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterpoints1'[0]
+                    if (contestmapcenterpoints1) {
+                        route_instance.contestMapCenterPoints = contestmapcenterpoints1
+                        save_route = true
+                    }
+                    String contestmapprintpoints1 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintpoints1'[0]
+                    if (contestmapprintpoints1) {
+                        route_instance.contestMapPrintPoints = contestmapprintpoints1
+                        save_route = true
+                    }
+                    String contestmapprintlandscape1 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintlandscape1'[0]
+                    if (contestmapprintlandscape1) {
+                        route_instance.contestMapPrintLandscape = contestmapprintlandscape1 == "yes"
+                        save_route = true
+                    }
+                    String contestmapprintsize1 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintsize1'[0]
+                    if (contestmapprintsize1) {
+                        route_instance.contestMapPrintSize = contestmapprintsize1
+                        save_route = true
+                    }
+                    String contestmapshowoptions2 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions2'[0]
+                    if (contestmapshowoptions2) {
+                        route_instance.contestMapShowSecondOptions = contestmapshowoptions2 == "yes"
+                        save_route = true
+                    }
+                    String contestmaptitle2 = gpx.extensions.flightcontest.mapsettings.'@contestmaptitle2'[0]
+                    if (contestmaptitle2) {
+                        route_instance.contestMapSecondTitle = contestmaptitle2
+                        save_route = true
+                    }
+                    String contestmapcenterverticalpos2 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterverticalpos2'[0]
+                    if (contestmapcenterverticalpos2) {
+                        route_instance.contestMapCenterVerticalPos2 = VerticalPos.(contestmapcenterverticalpos2.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterhorizontalpos2 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterhorizontalpos2'[0]
+                    if (contestmapcenterhorizontalpos2) {
+                        route_instance.contestMapCenterHorizontalPos2 = HorizontalPos.(contestmapcenterhorizontalpos2.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterpoints2 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterpoints2'[0]
+                    if (contestmapcenterpoints2) {
+                        route_instance.contestMapCenterPoints2 = contestmapcenterpoints2
+                        save_route = true
+                    }
+                    String contestmapprintpoints2 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintpoints2'[0]
+                    if (contestmapprintpoints2) {
+                        route_instance.contestMapPrintPoints2 = contestmapprintpoints2
+                        save_route = true
+                    }
+                    String contestmapprintlandscape2 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintlandscape2'[0]
+                    if (contestmapprintlandscape2) {
+                        route_instance.contestMapPrintLandscape2 = contestmapprintlandscape2 == "yes"
+                        save_route = true
+                    }
+                    String contestmapprintsize2 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintsize2'[0]
+                    if (contestmapprintsize2) {
+                        route_instance.contestMapPrintSize2 = contestmapprintsize2
+                        save_route = true
+                    }
+                    String contestmapshowoptions3 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions3'[0]
+                    if (contestmapshowoptions3) {
+                        route_instance.contestMapShowThirdOptions = contestmapshowoptions3 == "yes"
+                        save_route = true
+                    }
+                    String contestmaptitle3 = gpx.extensions.flightcontest.mapsettings.'@contestmaptitle3'[0]
+                    if (contestmaptitle3) {
+                        route_instance.contestMapThirdTitle = contestmaptitle3
+                        save_route = true
+                    }
+                    String contestmapcenterverticalpos3 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterverticalpos3'[0]
+                    if (contestmapcenterverticalpos3) {
+                        route_instance.contestMapCenterVerticalPos3 = VerticalPos.(contestmapcenterverticalpos3.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterhorizontalpos3 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterhorizontalpos3'[0]
+                    if (contestmapcenterhorizontalpos3) {
+                        route_instance.contestMapCenterHorizontalPos3 = HorizontalPos.(contestmapcenterhorizontalpos3.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterpoints3 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterpoints3'[0]
+                    if (contestmapcenterpoints3) {
+                        route_instance.contestMapCenterPoints3 = contestmapcenterpoints3
+                        save_route = true
+                    }
+                    String contestmapprintpoints3 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintpoints3'[0]
+                    if (contestmapprintpoints3) {
+                        route_instance.contestMapPrintPoints3 = contestmapprintpoints3
+                        save_route = true
+                    }
+                    String contestmapprintlandscape3 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintlandscape3'[0]
+                    if (contestmapprintlandscape3) {
+                        route_instance.contestMapPrintLandscape3 = contestmapprintlandscape3 == "yes"
+                        save_route = true
+                    }
+                    String contestmapprintsize3 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintsize3'[0]
+                    if (contestmapprintsize3) {
+                        route_instance.contestMapPrintSize3 = contestmapprintsize3
+                        save_route = true
+                    }
+                    String contestmapshowoptions4 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions4'[0]
+                    if (contestmapshowoptions4) {
+                        route_instance.contestMapShowForthOptions = contestmapshowoptions4 == "yes"
+                        save_route = true
+                    }
+                    String contestmaptitle4 = gpx.extensions.flightcontest.mapsettings.'@contestmaptitle4'[0]
+                    if (contestmaptitle4) {
+                        route_instance.contestMapForthTitle = contestmaptitle4
+                        save_route = true
+                    }
+                    String contestmapcenterverticalpos4 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterverticalpos4'[0]
+                    if (contestmapcenterverticalpos4) {
+                        route_instance.contestMapCenterVerticalPos4 = VerticalPos.(contestmapcenterverticalpos4.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterhorizontalpos4 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterhorizontalpos4'[0]
+                    if (contestmapcenterhorizontalpos4) {
+                        route_instance.contestMapCenterHorizontalPos4 = HorizontalPos.(contestmapcenterhorizontalpos4.toString())
+                        save_route = true
+                    }
+                    String contestmapcenterpoints4 = gpx.extensions.flightcontest.mapsettings.'@contestmapcenterpoints4'[0]
+                    if (contestmapcenterpoints4) {
+                        route_instance.contestMapCenterPoints4 = contestmapcenterpoints4
+                        save_route = true
+                    }
+                    String contestmapprintpoints4 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintpoints4'[0]
+                    if (contestmapprintpoints4) {
+                        route_instance.contestMapPrintPoints4 = contestmapprintpoints4
+                        save_route = true
+                    }
+                    String contestmapprintlandscape4 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintlandscape4'[0]
+                    if (contestmapprintlandscape4) {
+                        route_instance.contestMapPrintLandscape4 = contestmapprintlandscape4 == "yes"
+                        save_route = true
+                    }
+                    String contestmapprintsize4 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintsize4'[0]
+                    if (contestmapprintsize4) {
+                        route_instance.contestMapPrintSize4 = contestmapprintsize4
+                        save_route = true
+                    }
+                }
+                if (save_route) {
+                    route_instance.save()
                 }
                 if (gpx.extensions.flightcontest.enroutephotosigns) {
                     for (enroutephotosign in gpx.extensions.flightcontest.enroutephotosigns.enroutephotosign) {
@@ -1070,8 +1402,28 @@ class RouteFileTools
                                 coordenroutephoto_instance.enrouteOrthogonalDistance = orthogonaldist.toInteger()
                             }
                             
+                            if (wpt.extensions.flightcontest.enroutephotoimage) {
+                                String observationpositiontop = wpt.extensions.flightcontest.enroutephotoimage.'@observationpositiontop'[0]
+                                if (observationpositiontop) {
+                                    coordenroutephoto_instance.observationPositionTop = observationpositiontop.toInteger()
+                                }
+                                String observationpositionleft = wpt.extensions.flightcontest.enroutephotoimage.'@observationpositionleft'[0]
+                                if (observationpositionleft) {
+                                    coordenroutephoto_instance.observationPositionLeft = observationpositionleft.toInteger()
+                                }
+                            }
+                            
                             //coordenroutephoto_instance.calculateCoordEnrouteValues(coordenroutephoto_instance.route.enroutePhotoRoute)
                             coordenroutephoto_instance.save()
+                            
+                            if (wpt.extensions.flightcontest.enroutephotoimage && wpt.extensions.flightcontest.enroutephotoimage.imagedata) {
+                                byte[] image_data = Base64.getDecoder().decode(wpt.extensions.flightcontest.enroutephotoimage.imagedata[0].text())
+                                if (image_data) {
+                                    ImageCoord imagecoord_instance = new ImageCoord(imageData:image_data, coord:coordenroutephoto_instance)
+                                    imagecoord_instance.save()
+                                    coordenroutephoto_instance.imagecoord = imagecoord_instance
+                                }
+                            }
                         }
                         if (wpt.extensions.flightcontest.enroutecanvassign) {
                             CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
@@ -1149,13 +1501,14 @@ class RouteFileTools
             def kml = new XmlParser().parse(km_reader)
             
             def settings_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_SETTINGS)
+            def mapsettings_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_MAPSETTINGS)
             def turnpoints_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_TURNPOINTS)
             def photos_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_PHOTOS)
             def canvas_folder = search_folder_by_name(kml.Document, Defs.ROUTEEXPORT_CANVAS)
             if (settings_folder && turnpoints_folder) {
                 valid_format = true
                 
-                def data = settings_folder.ExtendedData.Data
+                def settings_data = settings_folder.ExtendedData.Data
                 
                 // Create route
                 route_instance = new Route()
@@ -1177,7 +1530,7 @@ class RouteFileTools
                 if (route_instance.enrouteCanvasMeasurement == EnrouteMeasurement.Unassigned) {
                     route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
                 }
-                for (def d in data) {
+                for (def d in settings_data) {
                     switch (d.'@name') {
                         case "routetitle":
                             String new_title = d.value.text()
@@ -1197,11 +1550,23 @@ class RouteFileTools
                         case "turnpointmapmeasurement":
                             route_instance.turnpointMapMeasurement = d.value.text() == "yes"
                             break
+                        case "turnpointprintstyle":
+                            route_instance.turnpointPrintStyle = ObservationPrintStyle.(d.value.text())
+                            break
+                        case "turnpointprintpositionmaker":
+                            route_instance.turnpointPrintPositionMaker = d.value.text() == "yes"
+                            break
                         case "enroutephoto":
                             route_instance.enroutePhotoRoute = EnrouteRoute.(d.value.text())
                             break
                         case "enroutephotomeasurement":
                             route_instance.enroutePhotoMeasurement = EnrouteMeasurement.(d.value.text())
+                            break
+                        case "enroutephotoprintstyle":
+                            route_instance.enroutePhotoPrintStyle = ObservationPrintStyle.(d.value.text())
+                            break
+                        case "enroutephotoprintpositionmarker":
+                            route_instance.enroutePhotoPrintPositionMaker = d.value.text() == "yes"
                             break
                         case "enroutecanvas":
                             route_instance.enrouteCanvasRoute = EnrouteRoute.(d.value.text())
@@ -1214,11 +1579,186 @@ class RouteFileTools
                             break
                     }
                 }
+                if (mapsettings_folder) {
+                    def mapsettings_data = mapsettings_folder.ExtendedData.Data
+                    for (def d in mapsettings_data) {
+                        switch (d.'@name') {
+                            case "contestmapairfields":
+                                route_instance.contestMapAirfields = d.value.text()
+                                break
+                            case "contestmapcircle":
+                                route_instance.contestMapCircle = d.value.text() == "yes"
+                                break
+                            case "contestmapprocedureturn":
+                                route_instance.contestMapProcedureTurn = d.value.text() == "yes"
+                                break
+                            case "contestmapleg":
+                                route_instance.contestMapLeg = d.value.text() == "yes"
+                                break
+                            case "contestmapcurvedleg":
+                                route_instance.contestMapCurvedLeg = d.value.text() == "yes"
+                                break
+                            case "contestmapcurvedlegpoints":
+                                route_instance.contestMapCurvedLegPoints = d.value.text()
+                                break
+                            case "contestmaptpname":
+                                route_instance.contestMapTpName = d.value.text() == "yes"
+                                break
+                            case "contestmapsecretgates":
+                                route_instance.contestMapSecretGates = d.value.text() == "yes"
+                                break
+                            case "contestmapenroutephotos":
+                                route_instance.contestMapEnroutePhotos = d.value.text() == "yes"
+                                break
+                            case "contestmapgraticule":
+                                route_instance.contestMapGraticule = d.value.text() == "yes"
+                                break
+                            case "contestmapcontourlines":
+                                route_instance.contestMapContourLines = d.value.text().toInteger()
+                                break
+                            case "contestmapmunicipalitynames":
+                                route_instance.contestMapMunicipalityNames = d.value.text() == "yes"
+                                break
+                            case "contestmapchurches":
+                                route_instance.contestMapChurches = d.value.text() == "yes"
+                                break
+                            case "contestmapcastles":
+                                route_instance.contestMapCastles = d.value.text() == "yes"
+                                break
+                            case "contestmapchateaus":
+                                route_instance.contestMapChateaus = d.value.text() == "yes"
+                                break
+                            case "contestmappowerlines":
+                                route_instance.contestMapPowerlines = d.value.text() == "yes"
+                                break
+                            case "contestmapwindpowerstations":
+                                route_instance.contestMapWindpowerstations = d.value.text() == "yes"
+                                break
+                            case "contestmapsmallroads":
+                                route_instance.contestMapSmallRoads = d.value.text() == "yes"
+                                break
+                            case "contestmappeaks":
+                                route_instance.contestMapPeaks = d.value.text() == "yes"
+                                break
+                            case "contestmapdropshadow":
+                                route_instance.contestMapDropShadow = d.value.text() == "yes"
+                                break
+                            case "contestmapadditionals":
+                                route_instance.contestMapAdditionals = d.value.text() == "yes"
+                                break
+                            case "contestmapspecials":
+                                route_instance.contestMapSpecials = d.value.text() == "yes"
+                                break
+                            case "contestmapairspaces":
+                                route_instance.contestMapAirspaces = d.value.text() == "yes"
+                                break
+                            case "contestmapairspaceslayer":
+                                route_instance.contestMapAirspacesLayer = d.value.text()
+                                break
+                            case "contestmapshowoptions1":
+                                route_instance.contestMapShowFirstOptions = d.value.text() == "yes"
+                                break
+                            case "contestmaptitle1":
+                                route_instance.contestMapFirstTitle = d.value.text()
+                                break
+                            case "contestmapcenterverticalpos1":
+                                route_instance.contestMapCenterVerticalPos = VerticalPos.(d.value.text())
+                                break
+                            case "contestmapcenterhorizontalpos1":
+                                route_instance.contestMapCenterHorizontalPos = HorizontalPos.(d.value.text())
+                                break
+                            case "contestmapcenterpoints1":
+                                route_instance.contestMapCenterPoints = d.value.text()
+                                break
+                            case "contestmapprintpoints1":
+                                route_instance.contestMapPrintPoints = d.value.text()
+                                break
+                            case "contestmapprintlandscape1":
+                                route_instance.contestMapPrintLandscape = d.value.text() == "yes"
+                                break
+                            case "contestmapprintsize1":
+                                route_instance.contestMapPrintSize = d.value.text()
+                                break
+                            case "contestmapshowoptions2":
+                                route_instance.contestMapShowSecondOptions = d.value.text() == "yes"
+                                break
+                            case "contestmaptitle2":
+                                route_instance.contestMapSecondTitle = d.value.text()
+                                break
+                            case "contestmapcenterverticalpos2":
+                                route_instance.contestMapCenterVerticalPos2 = VerticalPos.(d.value.text())
+                                break
+                            case "contestmapcenterhorizontalpos2":
+                                route_instance.contestMapCenterHorizontalPos2 = HorizontalPos.(d.value.text())
+                                break
+                            case "contestmapcenterpoints2":
+                                route_instance.contestMapCenterPoints2 = d.value.text()
+                                break
+                            case "contestmapprintpoints2":
+                                route_instance.contestMapPrintPoints2 = d.value.text()
+                                break
+                            case "contestmapprintlandscape2":
+                                route_instance.contestMapPrintLandscape2 = d.value.text() == "yes"
+                                break
+                            case "contestmapprintsize2":
+                                route_instance.contestMapPrintSize2 = d.value.text()
+                                break
+                            case "contestmapshowoptions3":
+                                route_instance.contestMapShowThirdOptions = d.value.text() == "yes"
+                                break
+                            case "contestmaptitle3":
+                                route_instance.contestMapThirdTitle = d.value.text()
+                                break
+                            case "contestmapcenterverticalpos3":
+                                route_instance.contestMapCenterVerticalPos3 = VerticalPos.(d.value.text())
+                                break
+                            case "contestmapcenterhorizontalpos3":
+                                route_instance.contestMapCenterHorizontalPos3 = HorizontalPos.(d.value.text())
+                                break
+                            case "contestmapcenterpoints3":
+                                route_instance.contestMapCenterPoints3 = d.value.text()
+                                break
+                            case "contestmapprintpoints3":
+                                route_instance.contestMapPrintPoints3 = d.value.text()
+                                break
+                            case "contestmapprintlandscape3":
+                                route_instance.contestMapPrintLandscape3 = d.value.text() == "yes"
+                                break
+                            case "contestmapprintsize3":
+                                route_instance.contestMapPrintSize3 = d.value.text()
+                                break
+                            case "contestmapshowoptions4":
+                                route_instance.contestMapShowForthOptions = d.value.text() == "yes"
+                                break
+                            case "contestmaptitle4":
+                                route_instance.contestMapForthTitle = d.value.text()
+                                break
+                            case "contestmapcenterverticalpos4":
+                                route_instance.contestMapCenterVerticalPos4 = VerticalPos.(d.value.text())
+                                break
+                            case "contestmapcenterhorizontalpos4":
+                                route_instance.contestMapCenterHorizontalPos4 = HorizontalPos.(d.value.text())
+                                break
+                            case "contestmapcenterpoints4":
+                                route_instance.contestMapCenterPoints4 = d.value.text()
+                                break
+                            case "contestmapprintpoints4":
+                                route_instance.contestMapPrintPoints4 = d.value.text()
+                                break
+                            case "contestmapprintlandscape4":
+                                route_instance.contestMapPrintLandscape4 = d.value.text() == "yes"
+                                break
+                            case "contestmapprintsize4":
+                                route_instance.contestMapPrintSize4 = d.value.text()
+                                break
+                        }
+                    }
+                }
                 route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
                 route_instance.save()
                 
                 // Add coordinates
-                Map sign_data = ReadImportSign(ImportSign.RouteCoord, turnpoints_folder, "")
+                Map sign_data = read_import_sign(ImportSign.RouteCoord, turnpoints_folder, "", kmz_file)
                 Map ret = add_sign_data(route_instance, ImportSign.RouteCoord, sign_data, false)
                 
                 // Add observations
@@ -1226,7 +1766,7 @@ class RouteFileTools
                     gate_num = ret.importedsignnum
                     
                     if (route_instance.enroutePhotoRoute == EnrouteRoute.InputName) {
-                        for (def d in data) {
+                        for (def d in settings_data) {
                             if (d.'@name'.startsWith("enroutephotosign:")) {
                                 int view_pos = d.'@name'.substring(17).toInteger()
                                 CoordEnroutePhoto coordenroutephoto_instance = new CoordEnroutePhoto()
@@ -1237,12 +1777,12 @@ class RouteFileTools
                             }
                         }
                     } else if (photos_folder) {
-                        sign_data = ReadImportSign(ImportSign.EnroutePhotoCoord, photos_folder, "")
+                        sign_data = read_import_sign(ImportSign.EnroutePhotoCoord, photos_folder, "", kmz_file)
                         add_sign_data(route_instance, ImportSign.EnroutePhotoCoord, sign_data, false)
                     }
                     
                     if (route_instance.enrouteCanvasRoute == EnrouteRoute.InputName) {
-                        for (def d in data) {
+                        for (def d in settings_data) {
                             if (d.'@name'.startsWith("enroutecanvassign:")) {
                                 int view_pos = d.'@name'.substring(18).toInteger()
                                 CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
@@ -1253,7 +1793,7 @@ class RouteFileTools
                             }
                         }
                     } else if (canvas_folder) {
-                        sign_data = ReadImportSign(ImportSign.EnrouteCanvasCoord, canvas_folder, "")
+                        sign_data = read_import_sign(ImportSign.EnrouteCanvasCoord, canvas_folder, "", kmz_file)
                         add_sign_data(route_instance, ImportSign.EnrouteCanvasCoord, sign_data, false)
                     }
                 }
@@ -1550,7 +2090,7 @@ class RouteFileTools
                 folder = kml.Document.Folder[0] // first folder
             }
             if (folder && folder.name) {
-                ret = ReadImportSign(importSign, folder, namePrefix)
+                ret = read_import_sign(importSign, folder, namePrefix, kmz_file)
             }
         } catch (Exception e) {
             ret.read_errors += e.getMessage()
@@ -1566,7 +2106,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadImportSign(ImportSign importSign, def readFolder, String namePrefix)
+    private static Map read_import_sign(ImportSign importSign, def readFolder, String namePrefix, def kmzFile)
     {
         List import_signs = []
         boolean valid_format = false
@@ -1633,6 +2173,37 @@ class RouteFileTools
                             }
                             import_sign += [tptype:tp_type]
                         }
+                        
+                        if (pm.ExtendedData) {
+                            for (def data in pm.ExtendedData.Data) {
+                                if (data.'@name' == "observationpositiontop") {
+                                    import_sign += [observationpositiontop:data.value.text().toInteger()]
+                                }
+                                if (data.'@name' == "observationpositionleft") {
+                                    import_sign += [observationpositionleft:data.value.text().toInteger()]
+                                }
+                                if (data.'@name' == "observationnextprintpageturnpoint") {
+                                    import_sign += [observationnextprintpageturnpoint:data.value.text()]
+                                }
+                                if (data.'@name' == "observationnextprintpageenroute") {
+                                    import_sign += [observationnextprintpageenroute:data.value.text()]
+                                }
+                            }
+                        }
+                        
+                        switch (importSign) {
+                            case ImportSign.RouteCoord:
+                                if (import_sign.tpname) {
+                                    import_sign += [imagedata: read_zipentry_data(kmzFile, "turnpointphotos/${import_sign.tpname}.jpg")]
+                                }
+                                break
+                            case ImportSign.EnroutePhotoCoord:
+                                if (import_sign.name) {
+                                    import_sign += [imagedata: read_zipentry_data(kmzFile, "photos/${import_sign.name}.jpg")]
+                                }
+                                break
+                        }
+                        
                         import_signs += import_sign
                     }
                 }
@@ -1640,6 +2211,25 @@ class RouteFileTools
         }
         
         return [import_signs: import_signs, valid: valid_format, invalidlinenum: invalid_line_num, errors: read_errors]
+    }
+    
+    //--------------------------------------------------------------------------
+    private static byte[] read_zipentry_data(def kmzFile, String entryName)
+    {
+        java.util.zip.ZipEntry tp_entry = kmzFile.getEntry(entryName)
+        if (tp_entry) {
+            InputStream tp_stream = kmzFile.getInputStream(tp_entry)
+            
+            byte[] buff = new byte[8000]
+            int bytes_read = 0
+            ByteArrayOutputStream photo_stream = new ByteArrayOutputStream()
+            while((bytes_read = tp_stream.read(buff)) != -1) {
+                photo_stream.write(buff, 0, bytes_read)
+            }
+            
+            return photo_stream.toByteArray()
+        }
+        return null
     }
     
     //--------------------------------------------------------------------------
@@ -1760,7 +2350,18 @@ class RouteFileTools
                     } else {
                         coordenroutephoto_instance.calculateCoordEnrouteValues(EnrouteRoute.InputCoord)
                     }
+                    if (import_sign.observationpositiontop) {
+                        coordenroutephoto_instance.observationPositionTop = import_sign.observationpositiontop
+                    }
+                    if (import_sign.observationpositionleft) {
+                        coordenroutephoto_instance.observationPositionLeft = import_sign.observationpositionleft
+                    }
                     if (coordenroutephoto_instance.save()) {
+                        if (import_sign.imagedata) {
+                            ImageCoord imagecoord_instance = new ImageCoord(imageData:import_sign.imagedata, coord:coordenroutephoto_instance)
+                            imagecoord_instance.save()
+                            coordenroutephoto_instance.imagecoord = imagecoord_instance
+                        }
                         routeInstance.calculateEnroutPhotoViewPos()
                         imported_sign_num++
                     } else {
@@ -1957,8 +2558,25 @@ class RouteFileTools
                         }
                     }
                 }
-
+                if (import_sign.observationpositiontop) {
+                    coordroute_instance.observationPositionTop = import_sign.observationpositiontop
+                }
+                if (import_sign.observationpositionleft) {
+                    coordroute_instance.observationPositionLeft = import_sign.observationpositionleft
+                }
+                if (import_sign.observationnextprintpageturnpoint) {
+                    coordroute_instance.observationNextPrintPage = import_sign.observationnextprintpageturnpoint == "yes"
+                }
+                if (import_sign.observationnextprintpageenroute) {
+                    coordroute_instance.observationNextPrintPageEnroute = import_sign.observationnextprintpageenroute == "yes"
+                }
+                
                 if (coordroute_instance.save()) {
+                    if (import_sign.imagedata) {
+                        ImageCoord imagecoord_instance = new ImageCoord(imageData:import_sign.imagedata, coord:coordroute_instance)
+                        imagecoord_instance.save()
+                        coordroute_instance.imagecoord = imagecoord_instance
+                    }
                     imported_sign_num++
                 } else {
                     invalid_line_num++

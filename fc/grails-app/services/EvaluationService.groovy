@@ -61,7 +61,7 @@ class EvaluationService
         if (contestTasks) {
             println "Set contest result tasks with $contestTasks"
             contestInstance.contestTaskResults = ""
-            for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+            for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
                 for (Map contest_task in contestTasks) {
                     if (contest_task.instance == task_instance) {
                         if (contestInstance.contestTaskResults) {
@@ -374,7 +374,7 @@ class EvaluationService
         if (contestTasks) {
             println "Set class result tasks with $contestTasks"
             resultclassInstance.contestTaskResults = ""
-            for (Task task_instance in Task.findAllByContest(resultclassInstance.contest,[sort:"id"])) {
+            for (Task task_instance in Task.findAllByContest(resultclassInstance.contest,[sort:"idTitle"])) {
                 for (Map contest_task in contestTasks) {
                     if (contest_task.instance == task_instance) {
                         if (resultclassInstance.contestTaskResults) {
@@ -457,7 +457,7 @@ class EvaluationService
         if (teamTasks) {
             println "Set team result tasks with $teamTasks"
             contestInstance.teamTaskResults = ""
-            for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+            for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
                 for (Map team_task in teamTasks) {
                     if (team_task.instance == task_instance) {
                         if (contestInstance.teamTaskResults) {
@@ -1192,7 +1192,7 @@ class EvaluationService
                             crew_instance.contestPenalties = 0
                             List bestofanalysis_task_penalties = []
                             boolean disable_contest_penalties = false
-                            for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+                            for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
                                 if (task_instance in tastSettings) {
                                     Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
                                     int task_penalties = 0
@@ -1252,7 +1252,7 @@ class EvaluationService
                             if (crew_instance.IsActiveCrew(ResultFilter.Team)) { 
                                 crew_instance.teamPenalties = 0
                                 List bestofanalysis_task_penalties = []
-                                for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+                                for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
                                     if (task_instance in tastSettings) {
                                         Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
                                         int task_penalties = 0

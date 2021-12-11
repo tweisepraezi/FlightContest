@@ -14,6 +14,10 @@ class RoutePointsTools
     //--------------------------------------------------------------------------
     static List GetShowPointsRoute(Route routeInstance, Test testInstance, def messageSource, Map params, Map contestMap = [:])
     {
+        boolean add_image_coord = false
+        if (params.addImageCoord) {
+            add_image_coord = true
+        }
         List points = []
         
         CoordRoute last_coordroute_instance = null
@@ -58,7 +62,7 @@ class RoutePointsTools
             // cache enroute points
             if (params.wrEnrouteSign) {
                 if (coordroute_instance.type.IsEnrouteSignCoord()) {
-                    enroute_points = GetEnrouteSignShowPoints(routeInstance,coordroute_instance.type,coordroute_instance.titleNumber)
+                    enroute_points = GetEnrouteSignShowPoints(routeInstance,coordroute_instance.type,coordroute_instance.titleNumber, add_image_coord)
                     enroute_point_pos = 0
                     lasttp_coordroute_instance = coordroute_instance
                 } else if (coordroute_instance.type != CoordType.SECRET) {
@@ -72,7 +76,7 @@ class RoutePointsTools
         
         // add unknown enroute points
         if (params.wrEnrouteSign) {
-            enroute_points = GetEnrouteSignShowPoints(routeInstance, CoordType.UNKNOWN, 1) // CoordType.UNKNOWN: 0 - Unevaluated, 1 - NotFound
+            enroute_points = GetEnrouteSignShowPoints(routeInstance, CoordType.UNKNOWN, 1, add_image_coord) // CoordType.UNKNOWN: 0 - Unevaluated, 1 - NotFound
             for (Map enroute_point in enroute_points) {
                 Map new_point = enroute_point
                 new_point += [error:true]
@@ -84,7 +88,7 @@ class RoutePointsTools
     }
     
     //--------------------------------------------------------------------------
-    private static List GetEnrouteSignShowPoints(Route routeInstance, CoordType coordType, int titleNumber)
+    private static List GetEnrouteSignShowPoints(Route routeInstance, CoordType coordType, int titleNumber, boolean addImageCoord)
     {
         List enroute_points = []
         
@@ -92,6 +96,9 @@ class RoutePointsTools
         if (routeInstance.enroutePhotoRoute.IsEnrouteRouteInputPosition()) {
             for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRouteAndTypeAndTitleNumber(routeInstance,coordType,titleNumber,[sort:"enrouteViewPos"])) {
                 Map new_point = [name:coordenroutephoto_instance.enroutePhotoName, dist:coordenroutephoto_instance.enrouteDistance, enroutePhoto:true, , enroutephoto:true]
+                if (addImageCoord) {
+                    new_point += [imagecoord:coordenroutephoto_instance.imagecoord]
+                }
                 new_point += GetPointEnrouteCoords(coordenroutephoto_instance)
                 enroute_points += new_point
             }

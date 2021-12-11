@@ -734,24 +734,28 @@ class TestController
         if (test.instance) {
             def file = request.getFile('loggerfile')
             boolean interpolate_missing_data = params?.interpolate_missing_data == "on"
-            Map calc = fcService.calculateLoggerResultTest(LoggerFileTools.GAC_EXTENSION, test.instance, file, false, interpolate_missing_data)
+            int correct_seconds = 0
+            if (params?.correct_seconds && params.correct_seconds.isInteger()) {
+                correct_seconds = params.correct_seconds.toInteger()
+            }
+            Map calc = fcService.calculateLoggerResultTest(LoggerFileTools.GAC_EXTENSION, test.instance, file, false, interpolate_missing_data, correct_seconds)
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.IGC_EXTENSION, test.instance, file, false, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.IGC_EXTENSION, test.instance, file, false, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.GPX_EXTENSION, test.instance, file, false, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.GPX_EXTENSION, test.instance, file, false, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KML_EXTENSION, test.instance, file, false, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KML_EXTENSION, test.instance, file, false, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KMZ_EXTENSION, test.instance, file, false, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.KMZ_EXTENSION, test.instance, file, false, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest(LoggerFileTools.NMEA_EXTENSION, test.instance, file, false, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultTest(LoggerFileTools.NMEA_EXTENSION, test.instance, file, false, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultTest("", test.instance, file, false, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultTest("", test.instance, file, false, interpolate_missing_data, correct_seconds)
             }
             flash.error = calc.error
             flash.message = calc.message
@@ -1533,7 +1537,7 @@ class TestController
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:false, wrEnrouteSign:true, gpxExport:true])
+            Map converter = gpxService.ConvertTest2GPX(test.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:false, wrEnrouteSign:true, gpxExport:true, wrPhotoImage:true])
             if (converter.ok && converter.track) {
                 String logger_file_name = (test.instance.GetTitle(ResultType.Flight) + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")

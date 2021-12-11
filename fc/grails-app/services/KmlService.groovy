@@ -45,7 +45,7 @@ class KmlService
     final static String STYLE_GATE_LABELCOLOR = "ffffffff"
     final static String STYLE_GATE_SCALE = "1.6"
     final static String TILT_GATE = "60" // Betrachtungswinkel in Grad
-    final static String RANGE_GATE = "2000" // Betrachtungsentfernung in m
+    final static String RANGE_GATE = "500" // Betrachtungsentfernung in m
     final static String TILT_TO = "80" // Betrachtungswinkel in Grad
     final static String RANGE_TO = "1500" // Betrachtungsentfernung in m
     final static String TILT_LDG = "45" // Betrachtungswinkel in Grad
@@ -66,7 +66,7 @@ class KmlService
     final static String STYLE_ENROUTE_PHOTO_SCALE = "1.2"
     final static String STYLE_ENROUTE_CANVAS_SCALE = "0.7"
     final static String TILT_ENROUTE = "60" // Betrachtungswinkel in Grad
-    final static String RANGE_ENROUTE = "500" // Betrachtungsentfernung in m
+    final static String RANGE_ENROUTE = "1000" // Betrachtungsentfernung in m
     
     final static String GPXDATA = "GPXDATA"
 	
@@ -82,6 +82,7 @@ class KmlService
         BufferedWriter kml_writer = null
         CharArrayWriter kml_data = null
         File kml_file = null
+        Map photo_list = [:]
         if (kml_file_name.startsWith(GPXDATA)) {
             kml_data = new CharArrayWriter()
             kml_writer = new BufferedWriter(kml_data)
@@ -95,7 +96,7 @@ class KmlService
         xml.kml(xmlns:NAMESPACE_XMLNS,'xmlns:gx':NAMESPACE_XMLNS_GX,'xmlns:kml':NAMESPACE_XMLNS_KML,'xmlns:atom':NAMESPACE_XMLNS_ATOM) {
             xml.Document {
                 kmz_styles(xml)
-                kmz_route(routeInstance, null, isPrint, wrEnrouteSign, xml)
+                photo_list = kmz_route(routeInstance, null, isPrint, wrEnrouteSign, xml)
             }
         }
         kml_writer.close()
@@ -106,7 +107,7 @@ class KmlService
             // TODO: write_kmz
         } else {
             printdone "${kml_file.size()} bytes"
-            write_kmz(webRootDir, kmzFileName, kml_file_name)
+            write_kmz(webRootDir, kmzFileName, kml_file_name, photo_list)
             DeleteFile(webRootDir + kml_file_name)
         }
 
@@ -131,6 +132,7 @@ class KmlService
         BufferedWriter kml_writer = null
         CharArrayWriter kml_data = null
         File kml_file = null
+        Map photo_list = [:]
         if (kml_file_name.startsWith(GPXDATA)) {
             kml_data = new CharArrayWriter()
             kml_writer = new BufferedWriter(kml_data)
@@ -144,7 +146,7 @@ class KmlService
         xml.kml(xmlns:NAMESPACE_XMLNS,'xmlns:gx':NAMESPACE_XMLNS_GX,'xmlns:kml':NAMESPACE_XMLNS_KML,'xmlns:atom':NAMESPACE_XMLNS_ATOM) {
             xml.Document {
                 kmz_styles(xml)
-                kmz_route(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
+                photo_list = kmz_route(route_instance, testInstance, isPrint, wrEnrouteSign, xml)
                 xml.Folder {
                     xml.name getMsg('fc.kmz.flights',isPrint)
                     found_track = kmz_track(testInstance, isPrint, xml)
@@ -159,7 +161,7 @@ class KmlService
             // TODO: write_kmz
         } else {
             printdone "${kml_file.size()} bytes"
-            write_kmz(webRootDir, kmzFileName, kml_file_name)
+            write_kmz(webRootDir, kmzFileName, kml_file_name, photo_list)
             DeleteFile(webRootDir + kml_file_name)
         }
         
@@ -184,6 +186,7 @@ class KmlService
         BufferedWriter kml_writer = null
         CharArrayWriter kml_data = null
         File kml_file = null
+        Map photo_list = [:]
         if (kml_file_name.startsWith(GPXDATA)) {
             kml_data = new CharArrayWriter()
             kml_writer = new BufferedWriter(kml_data)
@@ -197,7 +200,7 @@ class KmlService
         xml.kml(xmlns:NAMESPACE_XMLNS,'xmlns:gx':NAMESPACE_XMLNS_GX,'xmlns:kml':NAMESPACE_XMLNS_KML,'xmlns:atom':NAMESPACE_XMLNS_ATOM) {
             xml.Document {
                 kmz_styles(xml)
-                kmz_route(route_instance, null, isPrint, wrEnrouteSign, xml)
+                photo_list = kmz_route(route_instance, null, isPrint, wrEnrouteSign, xml)
                 xml.Folder {
                     xml.name getMsg('fc.kmz.flights',isPrint)
                     for (Test test_instance in Test.findAllByTask(taskInstance,[sort:"viewpos"])) {
@@ -220,7 +223,7 @@ class KmlService
             // TODO: write_kmz
         } else {
             printdone "${kml_file.size()} bytes"
-            write_kmz(webRootDir, kmzFileName, kml_file_name)
+            write_kmz(webRootDir, kmzFileName, kml_file_name, photo_list)
             DeleteFile(webRootDir + kml_file_name)
         }
         
@@ -370,7 +373,7 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private void write_kmz(String webRootDir, String kmzFileName, String kmlFileName)
+    private void write_kmz(String webRootDir, String kmzFileName, String kmlFileName, Map photoList)
     {
         ZipOutputStream kmz_zip_output_stream = new ZipOutputStream(new FileOutputStream(webRootDir + kmzFileName))
         
@@ -384,6 +387,18 @@ class KmlService
         EnrouteCanvasSign.each { enroute_canvas_sign ->
             if (enroute_canvas_sign.imageName) {
                 write_file_to_kmz(kmz_zip_output_stream, "files/${enroute_canvas_sign.imageJpgShortName}", webRootDir, enroute_canvas_sign.imageJpgName)
+            }
+        }
+        if (photoList.turnpoint_photos) {
+            kmz_zip_output_stream.putNextEntry(new ZipEntry("turnpointphotos/"))
+            for (Map turnpoint_photo in photoList.turnpoint_photos) {
+                write_image_to_kmz(kmz_zip_output_stream, "turnpointphotos/${turnpoint_photo.imagename}.jpg", turnpoint_photo.imagedata)
+            }
+        }
+        if (photoList.enroute_photos) {
+            kmz_zip_output_stream.putNextEntry(new ZipEntry("photos/"))
+            for (Map enroute_photo in photoList.enroute_photos) {
+                write_image_to_kmz(kmz_zip_output_stream, "photos/${enroute_photo.imagename}.jpg", enroute_photo.imagedata)
             }
         }
 
@@ -405,9 +420,19 @@ class KmlService
     }
     
     //--------------------------------------------------------------------------
-    private void kmz_route(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml)
+    private void write_image_to_kmz(ZipOutputStream zipOutputStream, String zipFileName, byte[] imageData)
+    {
+        zipOutputStream.putNextEntry(new ZipEntry(zipFileName))
+        zipOutputStream.write(imageData, 0, imageData.size())
+        zipOutputStream.closeEntry()
+    }
+    
+    //--------------------------------------------------------------------------
+    private Map kmz_route(Route routeInstance, Test testInstance, boolean isPrint, boolean wrEnrouteSign, MarkupBuilder xml)
     {
         printstart "kmz_route Print:$isPrint wrEnrouteSign:$wrEnrouteSign"
+        
+        Map photo_list = [turnpoint_photos:[], enroute_photos:[]]
         
         Media media = Media.Screen
         if (isPrint) {
@@ -628,7 +653,7 @@ class KmlService
             // points
             xml.Folder {
                 xml.name getMsg('fc.kmz.points',isPrint)
-                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:isPrint, wrEnrouteSign:true, showCurvedPoints:true])
+                List enroute_points = RoutePointsTools.GetShowPointsRoute(routeInstance, null, messageSource, [isPrint:isPrint, wrEnrouteSign:true, showCurvedPoints:true, addImageCoord:true])
                 int route_point_pos = 0
                 CoordRoute last_coordroute_instance = null
                 boolean first = true
@@ -858,6 +883,15 @@ class KmlService
                                         xml.coordinates "${last_coordroute_instance.lonMath()},${last_coordroute_instance.latMath()},${altitude_meter2}"
                                     }
                                 }
+                                if (last_coordroute_instance.imagecoord) {
+                                    xml.Style {
+                                        xml.BalloonStyle {
+                                            xml.text {
+                                                mkp.yieldUnescaped "<![CDATA[<img width='500' src='turnpointphotos/${last_coordroute_instance.titleExport()}.jpg'/>]]>"
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                         
@@ -887,6 +921,15 @@ class KmlService
                                         }
                                         xml.Point {
                                             xml.coordinates "${enroute_points[route_point_pos].loncenter},${enroute_points[route_point_pos].latcenter},0"
+                                        }
+                                        if (enroute_points[route_point_pos].imagecoord) {
+                                            xml.Style {
+                                                xml.BalloonStyle {
+                                                    xml.text {
+                                                        mkp.yieldUnescaped "<![CDATA[<img width='500' src='photos/${enroute_points[route_point_pos].name}.jpg'/>]]>"
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 } else if (enroute_points[route_point_pos].enroutecanvas) {
@@ -970,6 +1013,15 @@ class KmlService
                                             }
                                         }
                                     }
+                                    if (coordroute_instance.imagecoord) {
+                                        xml.Style {
+                                            xml.BalloonStyle {
+                                                xml.text {
+                                                    mkp.yieldUnescaped "<![CDATA[<img width='500' src='turnpointphotos/${coordroute_instance.titleExport()}.jpg'/>]]>"
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1009,11 +1061,23 @@ class KmlService
                             xml.Data(name:"turnpointmapmeasurement") {
                                 xml.value getYesNo(routeInstance.turnpointMapMeasurement)
                             }
+                            xml.Data(name:"turnpointprintstyle") {
+                                xml.value routeInstance.turnpointPrintStyle
+                            }
+                            xml.Data(name:"turnpointprintpositionmaker") {
+                                xml.value getYesNo(routeInstance.turnpointPrintPositionMaker)
+                            }
                             xml.Data(name:"enroutephoto") {
                                 xml.value routeInstance.enroutePhotoRoute
                             }
                             xml.Data(name:"enroutephotomeasurement") {
                                 xml.value routeInstance.enroutePhotoMeasurement
+                            }
+                            xml.Data(name:"enroutephotoprintstyle") {
+                                xml.value routeInstance.enroutePhotoPrintStyle
+                            }
+                            xml.Data(name:"enroutephotoprintpositionmarker") {
+                                xml.value getYesNo(routeInstance.enroutePhotoPrintPositionMaker)
                             }
                             xml.Data(name:"enroutecanvas") {
                                 xml.value routeInstance.enrouteCanvasRoute
@@ -1040,6 +1104,183 @@ class KmlService
                             }
                         }
                     }
+                    xml.Folder {
+                        xml.name Defs.ROUTEEXPORT_MAPSETTINGS
+                        xml.visibility "0"
+                        xml.ExtendedData {
+                            xml.Data(name:"contestmapairfields") {
+                                xml.value routeInstance.contestMapAirfields
+                            }
+                            xml.Data(name:"contestmapcircle") {
+                                xml.value getYesNo(routeInstance.contestMapCircle)
+                            }
+                            xml.Data(name:"contestmapprocedureturn") {
+                                xml.value getYesNo(routeInstance.contestMapProcedureTurn)
+                            }
+                            xml.Data(name:"contestmapleg") {
+                                xml.value getYesNo(routeInstance.contestMapLeg)
+                            }
+                            xml.Data(name:"contestmapcurvedleg") {
+                                xml.value getYesNo(routeInstance.contestMapCurvedLeg)
+                            }
+                            xml.Data(name:"contestmapcurvedlegpoints") {
+                                xml.value routeInstance.contestMapCurvedLegPoints
+                            }
+                            xml.Data(name:"contestmaptpname") {
+                                xml.value getYesNo(routeInstance.contestMapTpName)
+                            }
+                            xml.Data(name:"contestmapsecretgates") {
+                                xml.value getYesNo(routeInstance.contestMapSecretGates)
+                            }
+                            xml.Data(name:"contestmapenroutephotos") {
+                                xml.value getYesNo(routeInstance.contestMapEnroutePhotos)
+                            }
+                            xml.Data(name:"contestmapenroutecanvas") {
+                                xml.value getYesNo(routeInstance.contestMapEnrouteCanvas)
+                            }
+                            xml.Data(name:"contestmapgraticule") {
+                                xml.value getYesNo(routeInstance.contestMapGraticule)
+                            }
+                            xml.Data(name:"contestmapcontourlines") {
+                                xml.value routeInstance.contestMapContourLines
+                            }
+                            xml.Data(name:"contestmapmunicipalitynames") {
+                                xml.value getYesNo(routeInstance.contestMapMunicipalityNames)
+                            }
+                            xml.Data(name:"contestmapchurches") {
+                                xml.value getYesNo(routeInstance.contestMapChurches)
+                            }
+                            xml.Data(name:"contestmapcastles") {
+                                xml.value getYesNo(routeInstance.contestMapCastles)
+                            }
+                            xml.Data(name:"contestmapchateaus") {
+                                xml.value getYesNo(routeInstance.contestMapChateaus)
+                            }
+                            xml.Data(name:"contestmappowerlines") {
+                                xml.value getYesNo(routeInstance.contestMapPowerlines)
+                            }
+                            xml.Data(name:"contestmapwindpowerstations") {
+                                xml.value getYesNo(routeInstance.contestMapWindpowerstations)
+                            }
+                            xml.Data(name:"contestmapsmallroads") {
+                                xml.value getYesNo(routeInstance.contestMapSmallRoads)
+                            }
+                            xml.Data(name:"contestmappeaks") {
+                                xml.value getYesNo(routeInstance.contestMapPeaks)
+                            }
+                            xml.Data(name:"contestmapdropshadow") {
+                                xml.value getYesNo(routeInstance.contestMapDropShadow)
+                            }
+                            xml.Data(name:"contestmapadditionals") {
+                                xml.value getYesNo(routeInstance.contestMapAdditionals)
+                            }
+                            xml.Data(name:"contestmapspecials") {
+                                xml.value getYesNo(routeInstance.contestMapSpecials)
+                            }
+                            xml.Data(name:"contestmapairspaces") {
+                                xml.value getYesNo(routeInstance.contestMapAirspaces)
+                            }
+                            xml.Data(name:"contestmapairspaceslayer") {
+                                xml.value routeInstance.contestMapAirspacesLayer
+                            }
+                            xml.Data(name:"contestmapshowoptions1") {
+                                xml.value getYesNo(routeInstance.contestMapShowFirstOptions)
+                            }
+                            xml.Data(name:"contestmaptitle1") {
+                                xml.value routeInstance.contestMapFirstTitle
+                            }
+                            xml.Data(name:"contestmapcenterverticalpos1") {
+                                xml.value routeInstance.contestMapCenterVerticalPos
+                            }
+                            xml.Data(name:"contestmapcenterhorizontalpos1") {
+                                xml.value routeInstance.contestMapCenterHorizontalPos
+                            }
+                            xml.Data(name:"contestmapcenterpoints1") {
+                                xml.value routeInstance.contestMapCenterPoints
+                            }
+                            xml.Data(name:"contestmapprintpoints1") {
+                                xml.value routeInstance.contestMapPrintPoints
+                            }
+                            xml.Data(name:"contestmapprintlandscape1") {
+                                xml.value getYesNo(routeInstance.contestMapPrintLandscape)
+                            }
+                            xml.Data(name:"contestmapprintsize1") {
+                                xml.value routeInstance.contestMapPrintSize
+                            }
+                            xml.Data(name:"contestmapshowoptions2") {
+                                xml.value getYesNo(routeInstance.contestMapShowSecondOptions)
+                            }
+                            xml.Data(name:"contestmaptitle2") {
+                                xml.value routeInstance.contestMapSecondTitle
+                            }
+                            xml.Data(name:"contestmapcenterverticalpos2") {
+                                xml.value routeInstance.contestMapCenterVerticalPos2
+                            }
+                            xml.Data(name:"contestmapcenterhorizontalpos2") {
+                                xml.value routeInstance.contestMapCenterHorizontalPos2
+                            }
+                            xml.Data(name:"contestmapcenterpoints2") {
+                                xml.value routeInstance.contestMapCenterPoints2
+                            }
+                            xml.Data(name:"contestmapprintpoints2") {
+                                xml.value routeInstance.contestMapPrintPoints2
+                            }
+                            xml.Data(name:"contestmapprintlandscape2") {
+                                xml.value getYesNo(routeInstance.contestMapPrintLandscape2)
+                            }
+                            xml.Data(name:"contestmapprintsize2") {
+                                xml.value routeInstance.contestMapPrintSize2
+                            }
+                            xml.Data(name:"contestmapshowoptions3") {
+                                xml.value getYesNo(routeInstance.contestMapShowThirdOptions)
+                            }
+                            xml.Data(name:"contestmaptitle3") {
+                                xml.value routeInstance.contestMapThirdTitle
+                            }
+                            xml.Data(name:"contestmapcenterverticalpos3") {
+                                xml.value routeInstance.contestMapCenterVerticalPos3
+                            }
+                            xml.Data(name:"contestmapcenterhorizontalpos3") {
+                                xml.value routeInstance.contestMapCenterHorizontalPos3
+                            }
+                            xml.Data(name:"contestmapcenterpoints3") {
+                                xml.value routeInstance.contestMapCenterPoints3
+                            }
+                            xml.Data(name:"contestmapprintpoints3") {
+                                xml.value routeInstance.contestMapPrintPoints3
+                            }
+                            xml.Data(name:"contestmapprintlandscape3") {
+                                xml.value getYesNo(routeInstance.contestMapPrintLandscape3)
+                            }
+                            xml.Data(name:"contestmapprintsize3") {
+                                xml.value routeInstance.contestMapPrintSize3
+                            }
+                            xml.Data(name:"contestmapshowoptions4") {
+                                xml.value getYesNo(routeInstance.contestMapShowForthOptions)
+                            }
+                            xml.Data(name:"contestmaptitle4") {
+                                xml.value routeInstance.contestMapForthTitle
+                            }
+                            xml.Data(name:"contestmapcenterverticalpos4") {
+                                xml.value routeInstance.contestMapCenterVerticalPos4
+                            }
+                            xml.Data(name:"contestmapcenterhorizontalpos4") {
+                                xml.value routeInstance.contestMapCenterHorizontalPos4
+                            }
+                            xml.Data(name:"contestmapcenterpoints4") {
+                                xml.value routeInstance.contestMapCenterPoints4
+                            }
+                            xml.Data(name:"contestmapprintpoints4") {
+                                xml.value routeInstance.contestMapPrintPoints4
+                            }
+                            xml.Data(name:"contestmapprintlandscape4") {
+                                xml.value getYesNo(routeInstance.contestMapPrintLandscape4)
+                            }
+                            xml.Data(name:"contestmapprintsize4") {
+                                xml.value routeInstance.contestMapPrintSize4
+                            }
+                        }
+                    }
                 }
 
                 xml.Folder {
@@ -1063,6 +1304,27 @@ class KmlService
                                     xml.Point {
                                         xml.coordinates "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
                                     }
+                                    if (coordroute_instance.imagecoord) {
+                                        xml.ExtendedData {
+                                            xml.Data(name:"observationpositiontop") {
+                                                xml.value coordroute_instance.observationPositionTop
+                                            }
+                                            xml.Data(name:"observationpositionleft") {
+                                                xml.value coordroute_instance.observationPositionLeft
+                                            }
+                                            xml.Data(name:"observationnextprintpageturnpoint") {
+                                                xml.value getYesNo(coordroute_instance.observationNextPrintPage)
+                                            }
+                                            xml.Data(name:"observationnextprintpageenroute") {
+                                                xml.value getYesNo(coordroute_instance.observationNextPrintPageEnroute)
+                                            }
+                                        }
+                                        Map new_photo = [
+                                            imagename: coordroute_instance.titleExport(),
+                                            imagedata: coordroute_instance.imagecoord.imageData
+                                        ]
+                                        photo_list.turnpoint_photos += new_photo
+                                    }
                                 }
                                 break
                         }
@@ -1077,6 +1339,27 @@ class KmlService
                                     xml.visibility "0"
                                     xml.Point {
                                         xml.coordinates "${last_coordroute_instance.lonMath()},${last_coordroute_instance.latMath()},${altitude_meter2}"
+                                    }
+                                    if (last_coordroute_instance.imagecoord) {
+                                        xml.ExtendedData {
+                                            xml.Data(name:"observationpositiontop") {
+                                                xml.value last_coordroute_instance.observationPositionTop
+                                            }
+                                            xml.Data(name:"observationpositionleft") {
+                                                xml.value last_coordroute_instance.observationPositionLeft
+                                            }
+                                            xml.Data(name:"observationnextprintpageturnpoint") {
+                                                xml.value getYesNo(last_coordroute_instance.observationNextPrintPage)
+                                            }
+                                            xml.Data(name:"observationnextprintpageenroute") {
+                                                xml.value getYesNo(last_coordroute_instance.observationNextPrintPageEnroute)
+                                            }
+                                        }
+                                        Map new_photo = [
+                                            imagename: last_coordroute_instance.titleExport(),
+                                            imagedata: last_coordroute_instance.imagecoord.imageData
+                                        ]
+                                        photo_list.turnpoint_photos += new_photo
                                     }
                                 }
                             }
@@ -1097,6 +1380,27 @@ class KmlService
                                     xml.visibility "0"
                                     xml.Point {
                                         xml.coordinates "${coordroute_instance.lonMath()},${coordroute_instance.latMath()},${altitude_meter}"
+                                    }
+                                    if (coordroute_instance.imagecoord) {
+                                        xml.ExtendedData {
+                                            xml.Data(name:"observationpositiontop") {
+                                                xml.value coordroute_instance.observationPositionTop
+                                            }
+                                            xml.Data(name:"observationpositionleft") {
+                                                xml.value coordroute_instance.observationPositionLeft
+                                            }
+                                            xml.Data(name:"observationnextprintpageturnpoint") {
+                                                xml.value getYesNo(coordroute_instance.observationNextPrintPage)
+                                            }
+                                            xml.Data(name:"observationnextprintpageenroute") {
+                                                xml.value getYesNo(coordroute_instance.observationNextPrintPageEnroute)
+                                            }
+                                        }
+                                        Map new_photo = [
+                                            imagename: coordroute_instance.titleExport(),
+                                            imagedata: coordroute_instance.imagecoord.imageData
+                                        ]
+                                        photo_list.turnpoint_photos += new_photo
                                     }
                                 }
                             }
@@ -1121,6 +1425,21 @@ class KmlService
                                     xml.styleUrl "#${STYLE_ENROUTE_PHOTO}"
                                     xml.Point {
                                         xml.coordinates "${coordenroutephoto_instance.lonMath()},${coordenroutephoto_instance.latMath()},0"
+                                    }
+                                    if (coordenroutephoto_instance.imagecoord) {
+                                        xml.ExtendedData {
+                                            xml.Data(name:"observationpositiontop") {
+                                                xml.value coordenroutephoto_instance.observationPositionTop
+                                            }
+                                            xml.Data(name:"observationpositionleft") {
+                                                xml.value coordenroutephoto_instance.observationPositionLeft
+                                            }
+                                        }
+                                        Map new_photo = [
+                                            imagename: coordenroutephoto_instance.enroutePhotoName,
+                                            imagedata: coordenroutephoto_instance.imagecoord.imageData
+                                        ]
+                                        photo_list.enroute_photos += new_photo
                                     }
                                 }
                             }
@@ -1150,6 +1469,7 @@ class KmlService
         }
         
         printdone ""
+        return photo_list
     }
     
     //--------------------------------------------------------------------------

@@ -34,7 +34,7 @@
                 @top-right {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${testInstance.GetViewPos()}"
+                    content: "${testInstance.GetFlightTestPos()}"
                 }
                 @bottom-left {
                     font-family: Noto Sans;

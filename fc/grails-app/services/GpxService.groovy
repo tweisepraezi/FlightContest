@@ -1610,6 +1610,10 @@ class GpxService
         if (params.wrEnrouteSign && testInstance) {
             wr_enroutesign = testInstance.flighttestwind.flighttest.IsObservationSignUsed()
         }
+        boolean wr_photoimage = false
+        if (params.wrPhotoImage) {
+            wr_photoimage = true
+        }
         List curved_point_ids = routeInstance.GetCurvedPointIds()
         Media media = Media.Screen
         boolean is_print = false
@@ -1637,11 +1641,74 @@ class GpxService
                         xml.observationsettings(
                             turnpoint: routeInstance.turnpointRoute,
                             turnpointmapmeasurement: getYesNo(routeInstance.turnpointMapMeasurement),
+                            turnpointprintstyle: routeInstance.turnpointPrintStyle,
+                            turnpointprintpositionmaker: getYesNo(routeInstance.turnpointPrintPositionMaker),
                             enroutephoto: routeInstance.enroutePhotoRoute,
                             enroutephotomeasurement: routeInstance.enroutePhotoMeasurement,
+                            enroutephotoprintstyle: routeInstance.enroutePhotoPrintStyle,
+                            enroutephotoprintpositionmarker: getYesNo(routeInstance.enroutePhotoPrintPositionMaker),
                             enroutecanvas: routeInstance.enrouteCanvasRoute,
                             enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
                             useprocedureturn: getYesNo(routeInstance.useProcedureTurns)
+                        )
+                        xml.mapsettings(
+                            contestmapairfields: routeInstance.contestMapAirfields,
+                            contestmapcircle: getYesNo(routeInstance.contestMapCircle),
+                            contestmapprocedureturn: getYesNo(routeInstance.contestMapProcedureTurn),
+                            contestmapleg: getYesNo(routeInstance.contestMapLeg),
+                            contestmapcurvedleg: getYesNo(routeInstance.contestMapCurvedLeg),
+                            contestmapcurvedlegpoints: routeInstance.contestMapCurvedLegPoints,
+                            contestmaptpname: getYesNo(routeInstance.contestMapTpName),
+                            contestmapsecretgates: getYesNo(routeInstance.contestMapSecretGates),
+                            contestmapenroutephotos: getYesNo(routeInstance.contestMapEnroutePhotos),
+                            contestmapenroutecanvas: getYesNo(routeInstance.contestMapEnrouteCanvas),
+                            contestmapgraticule: getYesNo(routeInstance.contestMapGraticule),
+                            contestmapcontourlines: routeInstance.contestMapContourLines,
+                            contestmapmunicipalitynames: getYesNo(routeInstance.contestMapMunicipalityNames),
+                            contestmapchurches: getYesNo(routeInstance.contestMapChurches),
+                            contestmapcastles: getYesNo(routeInstance.contestMapCastles),
+                            contestmapchateaus: getYesNo(routeInstance.contestMapChateaus),
+                            contestmappowerlines: getYesNo(routeInstance.contestMapPowerlines),
+                            contestmapwindpowerstations: getYesNo(routeInstance.contestMapWindpowerstations),
+                            contestmapsmallroads: getYesNo(routeInstance.contestMapSmallRoads),
+                            contestmappeaks: getYesNo(routeInstance.contestMapPeaks),
+                            contestmapdropshadow: getYesNo(routeInstance.contestMapDropShadow),
+                            contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
+                            contestmapspecials: getYesNo(routeInstance.contestMapSpecials),
+                            contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
+                            contestmapairspaceslayer: routeInstance.contestMapAirspacesLayer,
+                            contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
+                            contestmaptitle1: routeInstance.contestMapFirstTitle,
+                            contestmapcenterverticalpos1: routeInstance.contestMapCenterVerticalPos,
+                            contestmapcenterhorizontalpos1: routeInstance.contestMapCenterHorizontalPos,
+                            contestmapcenterpoints1: routeInstance.contestMapCenterPoints,
+                            contestmapprintpoints1: routeInstance.contestMapPrintPoints,
+                            contestmapprintlandscape1: getYesNo(routeInstance.contestMapPrintLandscape),
+                            contestmapprintsize1: routeInstance.contestMapPrintSize,
+                            contestmapshowoptions2: getYesNo(routeInstance.contestMapShowSecondOptions),
+                            contestmaptitle2: routeInstance.contestMapSecondTitle,
+                            contestmapcenterverticalpos2: routeInstance.contestMapCenterVerticalPos2,
+                            contestmapcenterhorizontalpos2: routeInstance.contestMapCenterHorizontalPos2,
+                            contestmapcenterpoints2: routeInstance.contestMapCenterPoints2,
+                            contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
+                            contestmapprintlandscape2: getYesNo(routeInstance.contestMapPrintLandscape2),
+                            contestmapprintsize2: routeInstance.contestMapPrintSize2,
+                            contestmapshowoptions3: getYesNo(routeInstance.contestMapShowThirdOptions),
+                            contestmaptitle3: routeInstance.contestMapThirdTitle,
+                            contestmapcenterverticalpos3: routeInstance.contestMapCenterVerticalPos3,
+                            contestmapcenterhorizontalpos3: routeInstance.contestMapCenterHorizontalPos3,
+                            contestmapcenterpoints3: routeInstance.contestMapCenterPoints3,
+                            contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
+                            contestmapprintlandscape3: getYesNo(routeInstance.contestMapPrintLandscape3),
+                            contestmapprintsize3: routeInstance.contestMapPrintSize3,
+                            contestmapshowoptions4: getYesNo(routeInstance.contestMapShowForthOptions),
+                            contestmaptitle4: routeInstance.contestMapForthTitle,
+                            contestmapcenterverticalpos4: routeInstance.contestMapCenterVerticalPos4,
+                            contestmapcenterhorizontalpos4: routeInstance.contestMapCenterHorizontalPos4,
+                            contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
+                            contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
+                            contestmapprintlandscape4: getYesNo(routeInstance.contestMapPrintLandscape4),
+                            contestmapprintsize4: routeInstance.contestMapPrintSize4
                         )
                         if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                             xml.enroutephotosigns {
@@ -1776,7 +1843,7 @@ class GpxService
                     if (coordroute_instance.type.IsContestMapCoord()) { // no secret and runway points
                         if (last_coordroute_instance) {
                             if (coordroute_instance.endCurved) {
-                                if (contestMapParams.contestMapCurvedLeg && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints).contains(coordroute_instance.title()+',')) {
+                                if (contestMapParams.contestMapCurvedLeg && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapCurvedLegPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',') && DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(last_coordroute_instance.title()+',')) {
                                     xml.rte {
                                         xml.name "${last_coordroute_instance.titleMediaCode(media)} - ${coordroute_instance.titleMediaCode(media)}"
                                         boolean run = false
@@ -2119,7 +2186,7 @@ class GpxService
                             gate_width
                         )
                         xml.rte {
-                            wr_gate(coordroute_instance, gate_width, xml, task_instance)
+                            wr_gate(coordroute_instance, gate_width, xml, task_instance, wr_photoimage)
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2258,7 +2325,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, gate.coord.lat, gate.coord.lon)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2276,7 +2343,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2297,7 +2364,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, gate.coord.lat, gate.coord.lon)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2315,7 +2382,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2337,7 +2404,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, gate.coord.lat, gate.coord.lon)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2355,7 +2422,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2380,7 +2447,7 @@ class GpxService
                                 last_coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, xml, task_instance)
+                                wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
                                 //BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.name last_coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
@@ -2414,7 +2481,7 @@ class GpxService
                                     gate_width
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, gate_width, xml, task_instance, null, null, set_endcurved)
+                                    wr_gate(coordroute_instance, gate_width, xml, task_instance, wr_photoimage, null, null, set_endcurved)
                                     // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2504,6 +2571,11 @@ class GpxService
                                 measuredist:    coordenroutephoto_instance.measureDistance,
                                 orthogonaldist: coordenroutephoto_instance.enrouteOrthogonalDistance
                             )
+                            if (wr_photoimage && coordenroutephoto_instance.imagecoord) {
+                                xml.enroutephotoimage(observationpositiontop: coordenroutephoto_instance.observationPositionTop, observationpositionleft: coordenroutephoto_instance.observationPositionLeft) {
+                                    xml.imagedata Base64.getEncoder().encodeToString(coordenroutephoto_instance.imagecoord.imageData)
+                                }
+                            }
                         }
                     }
                     xml.name coordenroutephoto_instance.enroutePhotoName
@@ -2550,7 +2622,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void wr_gate(CoordRoute coordrouteInstance, Float gateWidth, MarkupBuilder xml, Task taskInstance, BigDecimal latValue = null, BigDecimal lonValue = null, boolean setEndCurved = false)
+    private void wr_gate(CoordRoute coordrouteInstance, Float gateWidth, MarkupBuilder xml, Task taskInstance, boolean wrPhotoImage, BigDecimal latValue = null, BigDecimal lonValue = null, boolean setEndCurved = false)
     {
         BigDecimal altitude_meter = coordrouteInstance.altitude.toLong() / ftPerMeter
         String dir = ""
@@ -2600,6 +2672,16 @@ class GpxService
                     assignedsign:   coordrouteInstance.assignedSign,
                     correctsign:    coordrouteInstance.correctSign
                 )
+                if (wrPhotoImage && coordrouteInstance.imagecoord) {
+                    xml.photoimage(
+                        observationpositiontop: coordrouteInstance.observationPositionTop,
+                        observationpositionleft: coordrouteInstance.observationPositionLeft,
+                        observationnextprintpageturnpoint: getYesNo(coordrouteInstance.observationNextPrintPage),
+                        observationnextprintpageenroute: getYesNo(coordrouteInstance.observationNextPrintPageEnroute)
+                    ) {
+                        xml.imagedata Base64.getEncoder().encodeToString(coordrouteInstance.imagecoord.imageData)
+                    }
+                }
             }
         }
     }

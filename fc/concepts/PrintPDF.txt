@@ -1,0 +1,23 @@
+
+Flying Saucer
+
+PDF-Print-Options
+http://pigeonholdings.com/projects/flyingsaucer/R8/doc/guide/users-guide-R8.html#xil_34
+
+com.lowagie:itext:2.0.8
+
+New
+http://itextpdf.com
+AGPL
+https://de.wikipedia.org/wiki/GNU_Affero_General_Public_License
+
+PDF-Print-IText-API 
+http://api.itextpdf.com/
+
+pdfHTML
+https://itextpdf.com/en/products/itext-7/convert-html-css-to-pdf-pdfhtml
+https://kb.itextpdf.com/home/it7kb/installation-guidelines/installing-itext-7-pdfhtml-for-java-developers
+https://kb.itextpdf.com/home/it7kb/installation-guidelines/installing-itext-7-for-java
+https://mvnrepository.com/artifact/com.itextpdf/html2pdf
+
+com.itextpdf:html2pdf:4.0.0

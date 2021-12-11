@@ -160,6 +160,18 @@ class FcMath
     }
     
     //--------------------------------------------------------------------------
+    static BigDecimal RoundDecimalGrad(BigDecimal decimalGradValue)
+    {
+        return decimalGradValue.setScale(6, RoundingMode.HALF_EVEN)
+    }
+    
+    //--------------------------------------------------------------------------
+    static BigDecimal DecimalGradDiff(BigDecimal decimalGradValue1, BigDecimal decimalGradValue2)
+    {
+        return RoundDecimalGrad(decimalGradValue1) - RoundDecimalGrad(decimalGradValue2)
+    }
+    
+    //--------------------------------------------------------------------------
     static int RoundAltitude(BigDecimal altitudeValue)
     {
         return altitudeValue.setScale(0, RoundingMode.HALF_EVEN).toInteger()

@@ -534,7 +534,7 @@ class PrintService
             addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
             boolean first_pdf = true
-            Route.findAllByContest(printparams.contest,[sort:"id"]).each { Route route_instance ->
+            Route.findAllByContest(printparams.contest,[sort:"idTitle"]).each { Route route_instance ->
                 String url = "${printparams.baseuri}/route/showprintable/${route_instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
                 println "Print: $url"
                 renderer.setDocument(url)

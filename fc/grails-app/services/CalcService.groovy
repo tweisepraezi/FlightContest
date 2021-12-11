@@ -21,12 +21,12 @@ class CalcService
     final static int COORDINATE_SCALE          = 10   // Nachkommastellen für Koordinaten
     
     //--------------------------------------------------------------------------
-    Map CalculateLoggerFile(String fileExtension, Test testInstance, String loggerFileName, boolean interpolateMissingData)
+    Map CalculateLoggerFile(String fileExtension, Test testInstance, String loggerFileName, boolean interpolateMissingData, int correctSeconds)
     {
         printstart "CalculateLoggerFile: extension '$fileExtension', crew '$testInstance.crew.name', file '$loggerFileName'"
         
         printstart "Import track points from logger file"
-        Map reader = LoggerFileTools.ReadLoggerFile(fileExtension, testInstance, loggerFileName, interpolateMissingData)
+        Map reader = LoggerFileTools.ReadLoggerFile(fileExtension, testInstance, loggerFileName, interpolateMissingData, correctSeconds)
         if (reader.errors) {
             printerror reader.errors
         } else {

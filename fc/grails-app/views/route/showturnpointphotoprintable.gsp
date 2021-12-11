@@ -19,8 +19,8 @@
                     </g:else> 
                 </g:else>
                 <g:if test="${params.landscape=='true'}">
-                    margin-top: 8%;
-                    margin-bottom: 8%;
+                    margin-top: 6%;
+                    margin-bottom: 6%;
                 </g:if>
                 <g:else>
                     margin-top: 10%;
@@ -29,7 +29,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${routeInstance.contest.name()} - ${routeInstance.printName()} - ${message(code:'fc.observation.turnpoint.photos')}"
+                    content: "${routeInstance.contest.name()}"
                 }
                 @top-right {
                     font-family: Noto Sans;

@@ -56,8 +56,8 @@ Weitere nützliche Funktionen von Flight Contest:
   Rangliste während eines laufenden Debriefings.
 * Unterstützung von Airsport Live Tracking (https://airsports.no)
 
-Erweiterungen in dieser Version (3.2):
---------------------------------------
+Erweiterungen in dieser Version (3.2.M23):
+------------------------------------------
 - Umstellung der Laufzeitumgebung
     Plattform: x64
     Laufzeitumgebung: OpenJDK 8, Tomcat 9
@@ -117,13 +117,13 @@ Erweiterungen in dieser Version (3.2):
       -> Strecken -> <Strecken-Name> -> Strecken-Foto-Namen alphabetisch vergeben
       -> Strecken -> <Strecken-Name> -> Strecken-Foto-Namen zufällig vergeben
     Wendepunkt- und Strecken-Bilder können einzeln importiert werden.
-      -> Strecken -> <Strecken-Name> -> Koordinaten -> <Nr.> -> Wendepunkt-Foto-Bild importieren
+      -> Strecken -> <Strecken-Name> -> Wendepunkt-Beobachtungen -> <Nr.> -> Wendepunkt-Foto-Bild importieren
       -> Strecken -> <Strecken-Name> -> Strecken-Fotos -> <Nr.> -> Strecken-Foto-Bild importieren
     Wendepunkt- und Strecken-Bilder können in einer ZIP-Datei importiert werden.
       -> Strecken -> <Strecken-Name> -> Wendepunkt-Foto-Bilder importieren (SP.jpg, TP1.jpg, ..., FP.jpg, Name muss mit Check-Punkt übereinstimmen)
       -> Strecken -> <Strecken-Name> -> Strecken-Foto-Bilder importieren (1.jpg, 2.jpg, ..., Name muss mit Foto-Name übereinstiimen)
-    Foto-Markierung kann mit einem Klick verschoben werden. Bei Bedarf kann hier für den Druck auch ein Seitenwechsle eingefügt werden.
-      -> Strecken -> <Strecken-Name> -> Koordinaten -> <Nr.>
+    Foto-Markierung kann mit einem Klick verschoben werden. Bei Bedarf kann bei Wendepunkt-Beobachtungen für den Druck auch ein Seitenwechsel eingefügt werden.
+      -> Strecken -> <Strecken-Name> -> Wendepunkt-Beobachtungen -> <Nr.>
       -> Strecken -> <Strecken-Name> -> Strecken-Fotos -> <Nr.>
     Wendepunkt- und Strecken-Bilder können alphabetisch oder nach ihrem Auftreten auf der Strecke sortiert gedruckt werden.
       -> Strecken -> <Strecken-Name> -> Wendepunkt-Foto-Druck
@@ -133,12 +133,15 @@ Erweiterungen in dieser Version (3.2):
       -> Strecken -> <Strecken-Name> -> Strecken-Foto-Druck (Strecken-Verlauf)
     Bild-Erstellungs-Hinweise:
       Ertellen Sie alle Bilder als JPG-Datei im 4:3-Format.
-      Wendepunkt-Bilder mit groß geschriebenen englischen Check-Punkt-Bezeichnungen benennen und in eine ZIP-Datei packen (z.B. SP.jpg, TP1.jpg, ..., FP.jpg)
-      Strecken-Bilder in der Reihenfolge ihres Auftretens mit Zahlen benennen und in eine ZIP-Datei packen (z.B. 1.jpg, 2.jpg, ...)
+      Wendepunkt-Bilder mit groß geschriebenen englischen Check-Punkt-Bezeichnungen benennen und in eine ZIP-Datei packen (z.B. SP.jpg, TP1.jpg, ..., FP.jpg).
+      Strecken-Bilder in der Reihenfolge ihres Auftretens mit Zahlen benennen und in eine ZIP-Datei packen (z.B. 1.jpg, 2.jpg, ...).
       Strecken-Bilder-Koordinaten in eine UTF-8-Textdatei auflisten, z.B.:
         1, Lat 52° 12.10000' N, Lon 016° 45.90000' E
         2, Lat 52° 16.80000' N, Lon 017° 23.10000' E
         ...
+      Diese Wendepunkt-Bilder können auch in den Ordner "turnpointphotos" einer bereits erstellten kmz-Streckendatei hinzugefügt werden.
+      Diese Strecken-Bilder können auch in den Ordner "photos" einer bereits erstellten kmz-Streckendatei hinzugefügt werden.
+- Logger-Daten-Anzeige um GPX-Download erweitert
       
 Erweiterungen in Version 3.1.11:
 --------------------------------

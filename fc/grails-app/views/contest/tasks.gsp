@@ -17,10 +17,10 @@
                     <thead>
                         <tr>
                             <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
-                                <th colspan="6" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                                <th colspan="7" class="table-head">${message(code:'fc.contest.tasks')}</th>
                             </g:if>
                             <g:else>
-                                <th colspan="5" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                                <th colspan="6" class="table-head">${message(code:'fc.contest.tasks')}</th>
                             </g:else>
                         </tr>
                         <tr>
@@ -32,6 +32,7 @@
                             </g:if>
                             <th>${message(code:'fc.task.listplanning')}</th>
                             <th>${message(code:'fc.task.listresults')}</th>
+                            <th/>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,6 +74,17 @@
                                 </g:if>
                                 <g:else>
                                     <td/>
+                                </g:else>
+                                
+                                <g:if test="${task_instance.idTitle < contestTasks.size() || task_instance.idTitle > 1}">
+                                    <td>
+                                        ${task_instance.idTitle}
+                                        <g:if test="${task_instance.idTitle < contestTasks.size()}"><a href="${createLink(controller:'task',action:'addviewposition_task',params:[id:task_instance.id])}">+</a></g:if>
+                                        <g:if test="${task_instance.idTitle > 1}"><a href="${createLink(controller:'task',action:'subviewposition_task',params:[id:task_instance.id])}">-</a></g:if>
+                                    </td>
+                                </g:if>
+                                <g:else>
+                                    <td>${task_instance.idTitle}</td>
                                 </g:else>
                             </tr>
                         </g:each>

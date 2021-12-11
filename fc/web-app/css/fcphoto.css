@@ -25,6 +25,10 @@ img.photo {
   padding: 0;
 }
 
+p.photo {
+  margin-top: 0;
+}
+
 .phototext {
   position: absolute;
   top: 0px;

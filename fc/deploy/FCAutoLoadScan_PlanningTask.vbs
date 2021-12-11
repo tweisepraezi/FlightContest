@@ -1,13 +1,14 @@
 ' --------------------------------------------------------------------------------
 '   FCAutoLoadScan_PlanningTask.vbs
-'   Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-'   23.02.2017
-'   Version 1.0.0
+'   Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+'   30.10.2021
+'   Version 1.0.1
 ' --------------------------------------------------------------------------------
 
 ' Neu gesicherte Dateien automatisch in Browser laden
 
 Const SEARCH_FOLDER = "C:\FCSave\.scan"
+Const SEARCH_FOLDER2 = "C:/FCSave/.scan"
 Const SEARCH_FILTER = "fc-*.jpg"          ' mehrere Filter mit Komma trennen, Start und Ende mit * trennen
 
 Const CHECK_TIME = 500 ' ms
@@ -134,7 +135,7 @@ End Function
 ' ----------------------------------------------------------------------------------
 Function OpenFile(fileName)
 	'
-	cmd = URL & SEARCH_FOLDER & "\" & fileName
+	cmd = URL & SEARCH_FOLDER2 & "/" & fileName
 	shell.Run cmd, 1, False ' 0 - unsichtbar, True - Wait for return
 	'
 End Function

@@ -342,7 +342,7 @@ class ResultClass
 	
     boolean IsPlanningTestRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsPlanningTestRun(task_instance)) {
                 return true
             }
@@ -358,7 +358,7 @@ class ResultClass
     
     boolean IsFlightTestRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsFlightTestRun(task_instance)) {
                 return true
             }
@@ -374,7 +374,7 @@ class ResultClass
     
     boolean IsObservationTestRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsObservationTestRun(task_instance)) {
                 return true
             }
@@ -390,7 +390,7 @@ class ResultClass
     
     boolean IsObservationTestTurnpointRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsObservationTestRun(task_instance)) {
                 return true
             }
@@ -406,7 +406,7 @@ class ResultClass
     
     boolean IsObservationTestEnroutePhotoRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsObservationTestRun(task_instance)) {
                 return true
             }
@@ -422,7 +422,7 @@ class ResultClass
     
     boolean IsObservationTestEnrouteCanvasRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsObservationTestRun(task_instance)) {
                 return true
             }
@@ -438,7 +438,7 @@ class ResultClass
     
     boolean IsLandingTestRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsLandingTestRun(task_instance)) {
                 return true
             }
@@ -454,7 +454,7 @@ class ResultClass
     
     boolean IsLandingTest1Run()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsLandingTest1Run(task_instance)) {
                 return true
             }
@@ -470,7 +470,7 @@ class ResultClass
     
     boolean IsLandingTest2Run()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsLandingTest2Run(task_instance)) {
                 return true
             }
@@ -486,7 +486,7 @@ class ResultClass
     
     boolean IsLandingTest3Run()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsLandingTest3Run(task_instance)) {
                 return true
             }
@@ -502,7 +502,7 @@ class ResultClass
     
     boolean IsLandingTest4Run()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsLandingTest4Run(task_instance)) {
                 return true
             }
@@ -518,7 +518,7 @@ class ResultClass
     
     boolean IsSpecialTestRun()
     {
-        for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
             if (IsSpecialTestRun(task_instance)) {
                 return true
             }
@@ -529,7 +529,7 @@ class ResultClass
 	Map GetTeamResultSettings()
 	{
 		Map ret = [:]
-		for (Task task_instance in Task.findAllByContest(contest,[sort:"id"])) {
+		for (Task task_instance in Task.findAllByContest(contest,[sort:"idTitle"])) {
 			for(TaskClass taskclass_instance in TaskClass.findAllByTask(task_instance,[sort:"id"])) {
 				if (taskclass_instance.resultclass.id == this.id) {
 					if (taskclass_instance.planningTestRun) {

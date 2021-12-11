@@ -23,14 +23,17 @@ class EmailService
         String uuid = UUID.randomUUID().toString()
         String webroot_dir = servletContext.getRealPath("/")
         String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.gpx"
+        String upload_gpx4htm_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-HTM-${uuid}.gpx"
         String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.kmz"
         String upload_pdf_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ROUTE-EMAIL-${uuid}.pdf"
-        Map gpx_converter = gpxService.ConvertRoute2GPX(routeInstance, webroot_dir + upload_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:true, gpxExport:false])
+        Map gpx_converter = gpxService.ConvertRoute2GPX(routeInstance, webroot_dir + upload_gpx_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:true, gpxExport:true, wrPhotoImage:true])
+        Map gpx_view_converter = gpxService.ConvertRoute2GPX(routeInstance, webroot_dir + upload_gpx4htm_file_name, [isPrint:true, showPoints:true, wrEnrouteSign:true, gpxExport:false])
         Map kmz_converter = kmlService.ConvertRoute2KMZ(routeInstance, webroot_dir, upload_kmz_file_name, true, true) // true - Print, true - wrEnrouteSign
         Map pdf_converter = printService.ConvertRoute2PDF(routeInstance, webroot_dir + upload_pdf_file_name, false, false, GetPrintParams(routeInstance.contest, printLanguage, grailsAttributes, request)) 
-        if (gpx_converter.ok && kmz_converter.ok && pdf_converter.ok) {
+        if (gpx_converter.ok && gpx_view_converter.ok && kmz_converter.ok && pdf_converter.ok) {
             String route_name = routeInstance.printName().replaceAll(' ','-')
-            String file_name = "${route_name}.gpx"
+            String gpx_file_name = "${route_name}.gpx"
+            String gpx4htm_file_name = "${route_name}_htm.gpx"
             String route_title = routeInstance.GetEMailTitle()
             
             Map email = GetRouteEMailBody(routeInstance.contest.contestUUID, route_name)
@@ -41,7 +44,11 @@ class EmailService
                 String ftp_uploads = ""
                 ftp_uploads += "file:${webroot_dir+upload_gpx_file_name}"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                ftp_uploads += file_name
+                ftp_uploads += gpx_file_name
+                ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                ftp_uploads += "file:${webroot_dir+upload_gpx4htm_file_name}"
+                ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
+                ftp_uploads += gpx4htm_file_name
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
                 ftp_uploads += "file:${webroot_dir+upload_kmz_file_name}"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
@@ -51,12 +58,14 @@ class EmailService
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.pdf"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
+                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(gpx4htm_file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.htm"
                 
                 String remove_files = ""
                 remove_files += webroot_dir + upload_gpx_file_name
+                remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
+                remove_files += webroot_dir + upload_gpx4htm_file_name
                 remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
                 remove_files += webroot_dir + upload_kmz_file_name
                 remove_files += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
@@ -111,10 +120,10 @@ class EmailService
         String webroot_dir = servletContext.getRealPath("/")
         
         String route_name = routeInstance.printName().replaceAll(' ','-')
-        String file_name = "${route_name}-Map-${routeInstance.contestMapEdition}.pdf"
+        String pdf_file_name = "${route_name}-Map-${routeInstance.contestMapEdition}.pdf"
         String route_title = routeInstance.GetEMailTitle()
         
-        Map email = GetRouteMapEMailBody(routeInstance.contest.contestUUID, file_name)
+        Map email = GetRouteMapEMailBody(routeInstance.contest.contestUUID, pdf_file_name)
         String ret_message = ""
         String job_file_name = "${Defs.ROOT_FOLDER_JOBS}/JOB-${uuid}.job"
         BufferedWriter job_writer = null
@@ -122,7 +131,7 @@ class EmailService
             String ftp_uploads = ""
             ftp_uploads += "file:${routeMapFileName}"
             ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-            ftp_uploads += file_name
+            ftp_uploads += pdf_file_name
             
             String remove_files = ""
             remove_files += routeMapFileName
@@ -229,7 +238,7 @@ class EmailService
         }
         if (gpx_converter.ok && gpx_converter.track && kmz_converter.ok && kmz_converter.track) {
             String test_name = testInstance.GetFileName(ResultType.Crew)
-            String file_name = "${test_name}.gpx"
+            String gpx_file_name = "${test_name}.gpx"
             String flight_title = testInstance.GetEMailTitle(ResultType.Flight)
             String email_title = testInstance.GetEMailTitle(ResultType.Crew)
             
@@ -245,13 +254,13 @@ class EmailService
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
                     ftp_uploads += "file:${webroot_dir+upload_gpx_file_name}"
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
-                    ftp_uploads += file_name
+                    ftp_uploads += gpx_file_name
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
                     ftp_uploads += "file:${webroot_dir+upload_kmz_file_name}"
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                     ftp_uploads += "${test_name}.kmz"
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                    ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${file_name}&originalFilename=${HTMLFilter.GetStr(flight_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
+                    ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${gpx_file_name}&originalFilename=${HTMLFilter.GetStr(flight_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                     ftp_uploads += "${test_name}.htm"
                 }

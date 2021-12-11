@@ -23,7 +23,7 @@ class RouteController {
 		fcService.printstart "List routes"
         if (session?.lastContest) {
 			session.lastContest.refresh()
-            def routeList = Route.findAllByContest(session.lastContest,[sort:"id"])
+            def route_list = Route.findAllByContest(session.lastContest,[sort:"idTitle"])
 			fcService.printdone "last contest"
             session.planningtesttaskReturnAction = actionName
             session.planningtesttaskReturnController = controllerName
@@ -34,7 +34,7 @@ class RouteController {
             //session.routeReturnAction = actionName
             //session.routeReturnController = controllerName
             //session.routeReturnID = params.id
-            return [routeInstanceList:routeList]
+            return [routeInstanceList:route_list]
         }
 		fcService.printdone ""
         redirect(controller:'contest',action:'start')
@@ -645,7 +645,7 @@ class RouteController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String upload_gpx_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GPX-${uuid}-UPLOAD.gpx"
-            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:false, wrEnrouteSign:true, gpxExport:true])
+            Map converter = gpxService.ConvertRoute2GPX(route.instance, webroot_dir + upload_gpx_file_name, [isPrint:false, showPoints:false, wrEnrouteSign:true, gpxExport:true, wrPhotoImage:true])
             if (converter.ok) {
                 String route_file_name = (route.instance.name() + '.gpx').replace(' ',"_")
                 response.setContentType("application/octet-stream")
@@ -694,6 +694,32 @@ class RouteController {
         }
     }
 
+    def saveshow_ajax = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            if (params.showCoords) {
+                route.instance.showCoords = params.showCoords == "true"
+            }
+            if (params.showCoordObservations) {
+                route.instance.showCoordObservations = params.showCoordObservations == "true"
+            }
+            if (params.showResultLegs) {
+                route.instance.showResultLegs = params.showResultLegs == "true"
+            }
+            if (params.showTestLegs) {
+                route.instance.showTestLegs = params.showTestLegs == "true"
+            }
+            if (params.showEnroutePhotos) {
+                route.instance.showEnroutePhotos = params.showEnroutePhotos == "true"
+            }
+            if (params.showEnrouteCanvas) {
+                route.instance.showEnrouteCanvas = params.showEnrouteCanvas == "true"
+            }
+            route.instance.save()
+        }
+        render(text: "")
+    }
+    
     def mapexportquestion = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
@@ -2243,7 +2269,6 @@ class RouteController {
         Route route_instance = Route.get(params.id)
         String route_links = emailService.GetRouteLinks(route_instance)
         response.setContentType("application/octet-stream")   
-        response.setContentType("application/octet-stream")   
         response.setHeader("Content-Disposition", "Attachment;Filename=Links.txt")        
         response.outputStream << route_links
     }
@@ -2268,6 +2293,16 @@ class RouteController {
         }
     }
     
+    def addviewposition_route = {
+        fcService.changeviewpositionRoute(params, true)
+        redirect(action:"list")
+    }
+
+    def subviewposition_route = {
+        fcService.changeviewpositionRoute(params, false)
+        redirect(action:"list")
+    }
+
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,

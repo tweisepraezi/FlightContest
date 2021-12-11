@@ -2,7 +2,7 @@
 
 [Code]
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
-const DBVersion = '2.29.0';     // DB-2.29
+const DBVersion = '2.30.0';     // DB-2.30
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
 const FCVersion = '3.2.0';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
@@ -10,8 +10,8 @@ const FCVersion64 = '3.2.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.2.M22
-AppVersion=3.2.M22
+AppVerName=Flight Contest 3.2.M23
+AppVersion=3.2.M23
 ; no milestone below
 VersionInfoVersion=3.2.0
 
@@ -53,8 +53,10 @@ en.BackupError=Backup error
 de.BackupError=Backup-Fehler
 
 [Files]
-Source: "..\..\..\..\Java\openjdk-1.8.0.275x64\jre\*";                DestDir: "{app}\java";       Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
-Source: "..\..\..\..\Server\apache-tomcat-9.0.45-windows-x64\*";      DestDir: "{app}\tomcat";     Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
+Source: "..\..\..\..\Java\openjdk-1.8.0.302x64\jre\*";                DestDir: "{app}\java";       Flags: ignoreversion recursesubdirs;  Excludes: "doc,demo,include,sample,src.zip";
+Source: "..\..\..\..\Server\apache-tomcat-9.0.54-windows-x64\*";      DestDir: "{app}\tomcat";     Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
+Source: "..\..\..\..\Server\apache-tomcat-9.0.13-windows-x64\bin\tomcat9.exe";  DestDir: "{app}\tomcat\bin"; Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
+Source: "..\..\..\..\Server\apache-tomcat-9.0.13-windows-x64\bin\tomcat9w.exe"; DestDir: "{app}\tomcat\bin"; Flags: ignoreversion recursesubdirs;  Excludes: "docs,examples";
 ;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\*.dll";                      DestDir: "{app}\tomcat\bin";
 ;Source: "..\..\..\..\gdal\gdal-3.2.1\bin\gdal\java\gdalalljni.dll";   DestDir: "{app}\tomcat\bin";
 Source: ".\setenv.bat";                                               DestDir: "{app}\tomcat\bin";

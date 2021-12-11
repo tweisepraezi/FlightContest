@@ -1017,8 +1017,8 @@ class BootStrap {
                                 route_instance.save()
                             }
 							Coord.findAll().each { Coord coord_instance ->
-                                coord_instance.observationPositionTop = 30
-                                coord_instance.observationPositionLeft = 100
+                                coord_instance.observationPositionTop = 30 // pixel
+                                coord_instance.observationPositionLeft = 100 // pixel
                                 coord_instance.observationNextPrintPage = false
 								coord_instance.save()
 							}
@@ -1051,6 +1051,32 @@ class BootStrap {
                                 uploadjobroutemap_instance.uploadJobOptionTitle = ""
 								uploadjobroutemap_instance.save()
 							}
+                            println " done."
+                        }
+                        if (global.versionMinor < 30) { // DB-2.30 compatibility
+                            print "    2.30 modifications"
+							CoordRoute.findAll().each { CoordRoute coord_route_instance ->
+                                coord_route_instance.observationPositionTop = coord_route_instance.GetObservationPositionPercentTop(coord_route_instance.observationPositionTop)  // percent
+                                coord_route_instance.observationPositionLeft = coord_route_instance.GetObservationPositionPercentLeft(coord_route_instance.observationPositionLeft)
+                                coord_route_instance.observationNextPrintPageEnroute = coord_route_instance.observationNextPrintPage
+								coord_route_instance.save()
+							}
+							CoordEnroutePhoto.findAll().each { CoordEnroutePhoto coord_enroutephoto_instance ->
+                                coord_enroutephoto_instance.observationPositionTop = coord_enroutephoto_instance.GetObservationPositionPercentTop(coord_enroutephoto_instance.observationPositionTop)
+                                coord_enroutephoto_instance.observationPositionLeft = coord_enroutephoto_instance.GetObservationPositionPercentLeft(coord_enroutephoto_instance.observationPositionLeft)
+								coord_enroutephoto_instance.save()
+							}
+                            Route.findAll().each { Route route_instance ->
+								route_instance.turnpointPrintPositionMaker = true
+								route_instance.enroutePhotoPrintPositionMaker = true
+                                route_instance.showCoords = true
+                                route_instance.showCoordObservations = false
+                                route_instance.showResultLegs = false
+                                route_instance.showTestLegs = false
+                                route_instance.showEnroutePhotos = false
+                                route_instance.showEnrouteCanvas = false
+                                route_instance.save()
+                            }
                             println " done."
                         }
                         if (global.versionMinor < global.DB_MINOR) {

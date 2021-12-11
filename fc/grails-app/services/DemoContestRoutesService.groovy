@@ -129,7 +129,7 @@ class DemoContestRoutesService
 
 			}
             Map ret = fcService.testData(
-               [[name:"Route",count:6,table:Route.findAllByContest(lastContest,[sort:"id"]),data:testRoute()],
+               [[name:"Route",count:6,table:Route.findAllByContest(lastContest,[sort:"idTitle"]),data:testRoute()],
                 [name:"CoordRoute '$ROUTE_5'",count:39,table:CoordRoute.findAllByRoute(route5,[sort:"id"]),data:testCoordRoute(ROUTE_5)],
                 [name:"CoordRoute '$ROUTE_6'",count:39,table:CoordRoute.findAllByRoute(route6,[sort:"id"]),data:testCoordRoute(ROUTE_6)],
                 [name:"CoordRoute '$ROUTE_7'",count:39,table:CoordRoute.findAllByRoute(route7,[sort:"id"]),data:testCoordRoute(ROUTE_7)],
@@ -149,7 +149,7 @@ class DemoContestRoutesService
                 [name:"RouteLegTest '$ROUTE_6M'",count:14,table:RouteLegTest.findAllByRoute(route6m,[sort:"id"]),data:testRouteLegTest(ROUTE_6M)],
                 [name:"RouteLegTest '$ROUTE_7M'",count:15,table:RouteLegTest.findAllByRoute(route7m,[sort:"id"]),data:testRouteLegTest(ROUTE_7M)],
                 [name:"Crew",count:2,table:Crew.findAllByContest(lastContest,[sort:"id"]),data:testCrew()],
-                [name:"Task",count:3,table:Task.findAllByContest(lastContest,[sort:"id"]),data:testTask()],
+                [name:"Task",count:3,table:Task.findAllByContest(lastContest,[sort:"idTitle"]),data:testTask()],
                 [name:"TestLegFlight 'Besatzung 120' '$ROUTE_5'",count:36,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(task5,Crew.findByContestAndName(lastContest,"Besatzung 120")),[sort:"id"]),data:testTestLegFlight120(ROUTE_5)],
                 [name:"TestLegFlight 'Besatzung 60' '$ROUTE_5'", count:36,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(task5,Crew.findByContestAndName(lastContest,"Besatzung 60")), [sort:"id"]),data:testTestLegFlight60(ROUTE_5)],
                 [name:"TestLegFlight 'Besatzung 120' '$ROUTE_6'",count:36,table:TestLegFlight.findAllByTest(Test.findByTaskAndCrew(task6,Crew.findByContestAndName(lastContest,"Besatzung 120")),[sort:"id"]),data:testTestLegFlight120(ROUTE_6)],

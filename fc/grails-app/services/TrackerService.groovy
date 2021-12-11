@@ -37,7 +37,7 @@ class TrackerService
         
         BigDecimal latitude2
         BigDecimal longitude2
-        for (Route route_instance in Route.findAllByContest(contest_instance)) {
+        for (Route route_instance in Route.findAllByContest(contest_instance,[sort:"idTitle"])) {
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
                 if (coordroute_instance.type == CoordType.TO) {
                     latitude2 = coordroute_instance.latMath()
@@ -176,7 +176,7 @@ class TrackerService
             contest_instance.liveTrackingContestID = 0
             contest_instance.liveTrackingContestVisibility = Defs.LIVETRACKING_VISIBILITY_PRIVATE
             contest_instance.save()
-            for (Task task_instance in Task.findAllByContest(contest_instance)) {
+            for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"idTitle"])) {
                 reset_task(task_instance)
             }
             for (Crew crew_instance in Crew.findAllByContest(contest_instance)) {
@@ -203,7 +203,7 @@ class TrackerService
 		contest_instance.liveTrackingContestID = 0
         contest_instance.liveTrackingContestVisibility = Defs.LIVETRACKING_VISIBILITY_PRIVATE
 		contest_instance.save()
-		for (Task task_instance in Task.findAllByContest(contest_instance)) {
+		for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"idTitle"])) {
             reset_task(task_instance)
 		}
         for (Crew crew_instance in Crew.findAllByContest(contest_instance)) {
@@ -234,7 +234,7 @@ class TrackerService
             // set navigation tasks visiblities lower
             switch (newVisibility) {
                 case Defs.LIVETRACKING_VISIBILITY_UNLISTED:
-                    for (Task task_instance in Task.findAllByContest(contest_instance)) {
+                    for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"idTitle"])) {
                         if (task_instance.liveTrackingNavigationTaskID && task_instance.liveTrackingNavigationTaskVisibility == Defs.LIVETRACKING_VISIBILITY_PUBLIC) {
                             task_instance.liveTrackingNavigationTaskVisibility = Defs.LIVETRACKING_VISIBILITY_UNLISTED
                             task_instance.save()
@@ -242,7 +242,7 @@ class TrackerService
                     }
                     break
                 case Defs.LIVETRACKING_VISIBILITY_PRIVATE:
-                    for (Task task_instance in Task.findAllByContest(contest_instance)) {
+                    for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"idTitle"])) {
                         if (task_instance.liveTrackingNavigationTaskID) {
                             switch (task_instance.liveTrackingNavigationTaskVisibility) {
                                 case Defs.LIVETRACKING_VISIBILITY_PUBLIC:

@@ -145,14 +145,14 @@ class DemoContestObservationService
         if (lastContest && lastContest.title == contestName) {
             fcService.printstart "runtest '$lastContest.title'"
             Map ret = fcService.testData(
-               [[name:"Route",count:1,table:Route.findAllByContest(lastContest,[sort:"id"]),data:test1Route()],
+               [[name:"Route",count:1,table:Route.findAllByContest(lastContest,[sort:"idTitle"]),data:test1Route()],
                 [name:"CoordRoute",count:14,table:CoordRoute.findAllByRoute(Route.findByContest(lastContest),[sort:"id"]),data:test1CoordRoute()],
                 [name:"RouteLegCoord",count:13,table:RouteLegCoord.findAllByRoute(Route.findByContest(lastContest),[sort:"id"]),data:test1RouteLegCoord()],
                 [name:"RouteLegTest",count:6,table:RouteLegTest.findAllByRoute(Route.findByContest(lastContest),[sort:"id"]),data:test1RouteLegTest()],
                 [name:"Crew",count:5,table:Crew.findAllByContest(lastContest,[sort:"id"]),data:test1Crew()],
                 [name:"Aircraft",count:5,table:Aircraft.findAllByContest(lastContest,[sort:"id"]),data:test1Aircraft()],
                 [name:"Team",count:2,table:Team.findAllByContest(lastContest,[sort:"id"]),data:test1Team()],
-                [name:"Task",count:1,table:Task.findAllByContest(lastContest,[sort:"id"]),data:test1Task()],
+                [name:"Task",count:1,table:Task.findAllByContest(lastContest,[sort:"idTitle"]),data:test1Task()],
                 [name:"TestLegPlanning 'Besatzung 3'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 3")),[sort:"id"]),data:test1TestLegPlanning3()],
                 [name:"TestLegPlanning 'Besatzung 18'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 18")),[sort:"id"]),data:test1TestLegPlanning18()],
                 [name:"TestLegPlanning 'Besatzung 19'",count:6,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(Task.findByContest(lastContest),Crew.findByContestAndName(lastContest,"Besatzung 19")),[sort:"id"]),data:test1TestLegPlanning19()],

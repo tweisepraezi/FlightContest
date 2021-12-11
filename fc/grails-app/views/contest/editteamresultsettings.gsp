@@ -36,7 +36,7 @@
                         </g:if>
                         <fieldset>
                             <p>
-                                <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"id"])}">
+                                <g:each var="task_instance" in="${Task.findAllByContest(contestInstance,[sort:"idTitle"])}">
                                     <g:set var="task_selected" value="${false}"/>
                                     <g:each var="contest_task_result" in="${contestInstance.teamTaskResults.split(',')}">
                                         <g:if test="${contest_task_result == 'task_' + task_instance.id.toString()}">

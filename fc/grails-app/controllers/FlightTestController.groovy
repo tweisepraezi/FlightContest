@@ -44,7 +44,7 @@ class FlightTestController {
         def flighttest = fcService.updateFlightTest(session.showLanguage, params) 
         if (flighttest.saved) {
         	flash.message = flighttest.message
-        	redirect(action:show,id:flighttest.instance.id)
+        	redirect(action:"show",id:flighttest.instance.id)
         } else if (flighttest.instance) {
         	render(view:'edit',model:[flightTestInstance:flighttest.instance])
         } else {
@@ -61,7 +61,7 @@ class FlightTestController {
             if (flighttest.fromlistplanning) {
             	redirect(controller:"task",action:"listplanning",id:flighttest.taskid)
             } else if (flighttest.fromtask) {
-            	redirect(controller:"task",action:show,id:flighttest.taskid)
+            	redirect(controller:"task",action:"show",id:flighttest.taskid)
             } else {
             	redirect(controller:"contest",action:"tasks")
             }
@@ -77,7 +77,7 @@ class FlightTestController {
             if (flighttest.fromlistplanning) {
             	redirect(controller:"task",action:"listplanning",id:flighttest.taskid)
             } else if (flighttest.fromtask) {
-            	redirect(controller:"task",action:show,id:flighttest.taskid)
+            	redirect(controller:"task",action:"show",id:flighttest.taskid)
             } else {
             	redirect(controller:"contest",action:"tasks")
             }
@@ -95,7 +95,7 @@ class FlightTestController {
         } else if (flighttest.notdeleted) {
 			flash.error = true
         	flash.message = flighttest.message
-            redirect(action:show,id:params.id)
+            redirect(action:"show",id:params.id)
         } else {
         	flash.message = flighttest.message
         	redirect(controller:"contest",action:"tasks")
@@ -105,14 +105,13 @@ class FlightTestController {
 	def cancel = {
 		// process return action
 		if (params.flighttestReturnAction) {
-            println "YY1 $params"
 			redirect(action:params.flighttestReturnAction,controller:params.flighttestReturnController,id:params.flighttestReturnID)
 		} else if (params.fromlistplanning) {
             redirect(controller:"task",action:"listplanning",id:params.taskid)
         } else if (params.fromtask) {
-            redirect(controller:"task",action:show,id:params.taskid)
+            redirect(controller:"task",action:"show",id:params.taskid)
         } else {
-            redirect(controller:"contest", action:"tasks")
+            redirect(action:"show",id:params.id)
         }
 	}
 	
@@ -151,7 +150,7 @@ class FlightTestController {
         } else if (flighttest.error) {
             flash.message = flighttest.message
             flash.error = true
-            redirect(action:show,id:flighttest.instance.id)
+            redirect(action:"show",id:flighttest.instance.id)
         } else if (flighttest.content) {
             printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"observation-task${flighttest.instance.task.idTitle}",true,false,false)
         } else {
@@ -167,7 +166,7 @@ class FlightTestController {
         } else if (flighttest.error) {
             flash.message = flighttest.message
             flash.error = true
-            redirect(action:show,id:flighttest.instance.id)
+            redirect(action:"show",id:flighttest.instance.id)
         } else if (flighttest.content) {
             printService.WritePDF(response,flighttest.content,session.lastContest.GetPrintPrefix(),"observation-task${flighttest.instance.task.idTitle}",true,false,false)
         } else {

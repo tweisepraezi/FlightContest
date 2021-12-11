@@ -343,7 +343,7 @@ class FcService
 			
 			if (set_result_classes) {
 				println "Contest with classes has been set."
-				for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"id"])) {
+				for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"idTitle"])) {
 					if (!TaskClass.findByTask(task_instance)) {
 						for (ResultClass resultclass_instance in ResultClass.findAllByContest(contest_instance,[sort:"id"])) {
 							TaskClass taskclass_instance = new TaskClass()
@@ -611,7 +611,7 @@ class FcService
 	private void calculate_points_contest(Contest contestInstance)
 	{
 		printstart "calculate_points_contest"
-		Task.findAllByContest(contestInstance,[sort:"id"]).each { Task task_instance ->
+		Task.findAllByContest(contestInstance,[sort:"idTitle"]).each { Task task_instance ->
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 				calculateTestPenalties(test_instance,true)
                 test_instance.flightTestLink = ""
@@ -884,7 +884,7 @@ class FcService
         
         List routes_with_disabled_procedureturns = []
         if (!newContest) {
-            for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"id"])) {
+            for (Route route_instance in Route.findAllByContest(contestInstance,[sort:"idTitle"])) {
                 if (!route_instance.useProcedureTurns) {
                     routes_with_disabled_procedureturns += route_instance.id
                 }
@@ -1259,7 +1259,7 @@ class FcService
                 return ['notdeleted':true,'message':getMsg('fc.notdeleted.live',[getMsg('fc.contest'),params.id])]
             }
             try {
-            	Task.findAllByContest(contest_instance,[sort:"id"]).each { Task task_instance ->
+            	Task.findAllByContest(contest_instance,[sort:"idTitle"]).each { Task task_instance ->
             		task_instance.delete()
             	}
                 contest_instance.delete()
@@ -1320,7 +1320,7 @@ class FcService
                 team_instance.name = "Team-${df.format(i)}"
                 team_instance.save()
             }
-            for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"id"])) {
+            for (Task task_instance in Task.findAllByContest(contest_instance,[sort:"idTitle"])) {
                 for (Test test_instance in Test.findAllByTask(task_instance,[sort:"id"])) {
                     test_instance.scannedPlanningTest = null
                     test_instance.scannedObservationTest = null
@@ -2604,7 +2604,7 @@ class FcService
                 task_instance.delete()
                 
                 // correct idTitle of other tasks
-                Task.findAllByContest(task_instance.contest,[sort:"id"]).eachWithIndex { Task task_instance2, int index -> 
+                Task.findAllByContest(task_instance.contest,[sort:"idTitle"]).eachWithIndex { Task task_instance2, int index -> 
                     task_instance2.idTitle = index + 1
                 }
                 
@@ -2616,6 +2616,42 @@ class FcService
         } else {
             return ['message':getMsg('fc.notfound',[getMsg('fc.task'),params.id])]
         }
+    }
+    
+    //--------------------------------------------------------------------------
+    void changeviewpositionTask(Map params, boolean addViewPos)
+    {
+		printstart "changeviewpositionTask addViewPos=$addViewPos"
+        Task task_instance = Task.get(params.id.toLong())
+        if (task_instance) {
+            boolean task_found = false
+            if (addViewPos) {
+                for (Task task_instance2 in Task.findAllByContest(task_instance.contest,[sort:"idTitle"])) {
+                    if (task_found) {
+                        task_instance2.idTitle--
+                        task_instance2.save()
+                        task_found = false
+                    } else if (task_instance2.id == task_instance.id) {
+                        task_found = true
+                    }
+                }
+                task_instance.idTitle++
+                task_instance.save()
+            } else {
+                for (Task task_instance2 in Task.findAllByContest(task_instance.contest,[sort:"idTitle", order: "desc"])) {
+                    if (task_found) {
+                        task_instance2.idTitle++
+                        task_instance2.save()
+                        task_found = false
+                    } else if (task_instance2.id == task_instance.id) {
+                        task_found = true
+                    }
+                }
+                task_instance.idTitle--
+                task_instance.save()
+            }
+        }
+        printdone ""
     }
     
     //--------------------------------------------------------------------------
@@ -2832,7 +2868,7 @@ class FcService
         }
         if (!task_instance) {
 			if (contestInstance) {
-	        	Task.findAllByContestAndHidePlanning(contestInstance,false,[sort:"id"]).each { 
+	        	Task.findAllByContestAndHidePlanning(contestInstance,false,[sort:"idTitle"]).each { 
 					if (!it.hidePlanning) {
 		        		if (!task_instance) {
 		        			task_instance = it
@@ -2856,7 +2892,7 @@ class FcService
         }
         if (!task_instance) {
 			if (contestInstance) {
-	            Task.findAllByContestAndHideResults(contestInstance,false,[sort:"id"]).each {
+	            Task.findAllByContestAndHideResults(contestInstance,false,[sort:"idTitle"]).each {
 	                if (!task_instance) {
 	                    task_instance = it
 	                }
@@ -4252,7 +4288,7 @@ class FcService
 	private void calculate_points_resultclass(ResultClass resultclassInstance)
 	{
 		printstart "calculate_points_resultclass: $resultclassInstance.name"
-		Task.findAllByContest(resultclassInstance.contest,[sort:"id"]).each { Task task_instance ->
+		Task.findAllByContest(resultclassInstance.contest,[sort:"idTitle"]).each { Task task_instance ->
 			Test.findAllByTask(task_instance,[sort:"id"]).each { Test test_instance ->
 				if (test_instance.crew.resultclass.id == resultclassInstance.id) {
 					calculateTestPenalties(test_instance,true)
@@ -4296,7 +4332,7 @@ class FcService
         if(!resultclass_instance.hasErrors() && resultclass_instance.save()) {
 			// create TaskClasses
 			if (contestInstance.resultClasses) {
-				for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+				for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
 					TaskClass taskclass_instance = new TaskClass()
 					taskclass_instance.task = task_instance
 					taskclass_instance.resultclass = resultclass_instance
@@ -4387,7 +4423,14 @@ class FcService
                 }
             }
             
+            route_instance.showCoords = params.showCoords == "on"
+            route_instance.showCoordObservations = params.showCoordObservations == "on"
+            route_instance.showResultLegs = params.showResultLegs == "on"
+            route_instance.showTestLegs = params.showTestLegs == "on"
+            route_instance.showEnroutePhotos = params.showEnroutePhotos == "on"
+            route_instance.showEnrouteCanvas = params.showEnrouteCanvas == "on"
             route_instance.properties = params
+            
             if(!route_instance.hasErrors() && route_instance.save()) {
                 return ['instance':route_instance,'saved':true,'message':getMsg('fc.updated',["${route_instance.name()}"])]
             } else {
@@ -4470,7 +4513,7 @@ class FcService
 				Contest contest_instance = route_instance.contest
                 route_instance.delete()
                 
-                Route.findAllByContest(contest_instance,[sort:"id"]).eachWithIndex { Route route_instance2, int index -> 
+                Route.findAllByContest(contest_instance,[sort:"idTitle"]).eachWithIndex { Route route_instance2, int index -> 
                     route_instance2.idTitle = index + 1
                 }
                 
@@ -4488,6 +4531,42 @@ class FcService
 			printerror ret.message
 			return ret
         }
+    }
+    
+    //--------------------------------------------------------------------------
+    void changeviewpositionRoute(Map params, boolean addViewPos)
+    {
+		printstart "changeviewpositionRoute addViewPos=$addViewPos"
+        Route route_instance = Route.get(params.id.toLong())
+        if (route_instance) {
+            boolean task_found = false
+            if (addViewPos) {
+                for (Route route_instance2 in Route.findAllByContest(route_instance.contest,[sort:"idTitle"])) {
+                    if (task_found) {
+                        route_instance2.idTitle--
+                        route_instance2.save()
+                        task_found = false
+                    } else if (route_instance2.id == route_instance.id) {
+                        task_found = true
+                    }
+                }
+                route_instance.idTitle++
+                route_instance.save()
+            } else {
+                for (Route route_instance2 in Route.findAllByContest(route_instance.contest,[sort:"idTitle", order: "desc"])) {
+                    if (task_found) {
+                        route_instance2.idTitle++
+                        route_instance2.save()
+                        task_found = false
+                    } else if (route_instance2.id == route_instance.id) {
+                        task_found = true
+                    }
+                }
+                route_instance.idTitle--
+                route_instance.save()
+            }
+        }
+        printdone ""
     }
     
     //--------------------------------------------------------------------------
@@ -5017,7 +5096,7 @@ class FcService
         String webroot_dir = servletContext.getRealPath("/")
         
         // read file
-        Map reader = import_test(fileExtension, testInstance, webroot_dir + "testdata/" + originalFileName, false, true)
+        Map reader = import_test(fileExtension, testInstance, webroot_dir + "testdata/" + originalFileName, false, true, 0)
         
         if (!reader.valid) {
             ret.error = true
@@ -5043,7 +5122,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map calculateLoggerResultTest(String fileExtension, Test testInstance, def file, boolean noRemoveExistingData, boolean interpolateMissingData)
+    Map calculateLoggerResultTest(String fileExtension, Test testInstance, def file, boolean noRemoveExistingData, boolean interpolateMissingData, int correctSeconds)
     // fileExtension - '.gac', '.gpx'
     // Return        - found = true, wenn zutreffende Logger-Datei  
     {
@@ -5072,7 +5151,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_test(fileExtension, testInstance, webroot_dir + upload_filename, noRemoveExistingData, interpolateMissingData)
+                Map reader = import_test(fileExtension, testInstance, webroot_dir + upload_filename, noRemoveExistingData, interpolateMissingData, correctSeconds)
                 
                 // delete file
                 DeleteFile(webroot_dir + upload_filename)
@@ -5098,7 +5177,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map calculateLoggerResultExternTest(String fileExtension, Test testInstance, String fileName, boolean interpolateMissingData)
+    Map calculateLoggerResultExternTest(String fileExtension, Test testInstance, String fileName, boolean interpolateMissingData, int correctSeconds)
     // fileExtension - '.gac', '.gpx'
     // Return        - found = true, wenn zutreffende Logger-Datei  
     {
@@ -5119,7 +5198,7 @@ class FcService
                 printdone ""
                 
                 // read file
-                Map reader = import_test(fileExtension, testInstance, original_filename, false, interpolateMissingData)
+                Map reader = import_test(fileExtension, testInstance, original_filename, false, interpolateMissingData, correctSeconds)
                 
                 if (!reader.valid) {
                     ret.error = true
@@ -5142,12 +5221,12 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    private Map import_test(String fileExtension, Test testInstance, String loadFileName, boolean noRemoveExistingData, boolean interpolateMissingData)
+    private Map import_test(String fileExtension, Test testInstance, String loadFileName, boolean noRemoveExistingData, boolean interpolateMissingData, int correctSeconds)
     {
         printstart "import_test '$loadFileName'"
         
         // read file
-        Map reader = calcService.CalculateLoggerFile(fileExtension, testInstance, loadFileName, interpolateMissingData)
+        Map reader = calcService.CalculateLoggerFile(fileExtension, testInstance, loadFileName, interpolateMissingData, correctSeconds)
                 
         boolean no_flightresults = false
         boolean flight_failures = false
@@ -5551,8 +5630,6 @@ class FcService
             }
             
 			if (coordroute_instance.route.Used()) {
-                // return ['instance':coordroute_instance,'error':true,'message':getMsg('fc.coordroute.update.notallowed.routeused')]
-                
                 params.gatewidth2 = Languages.GetLanguageDecimal(showLanguage, params.gatewidth2)
                 
                 coordroute_instance.properties = params
@@ -5562,6 +5639,84 @@ class FcService
                 if (params.gateDirection) {
                     coordroute_instance.gateDirection = params.gateDirection.toBigDecimal()
                 }
+
+                if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
+                    Map ret = ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
+                    printdone ret.message
+                    return ret
+                } else {
+                    printerror ""
+                    return ['instance':coordroute_instance]
+                }
+			} else {
+                BigDecimal old_latmath = coordroute_instance.latMath()
+                BigDecimal old_lonmath = coordroute_instance.lonMath()
+                
+                params = calculateCoordRoute(showLanguage, params, coordroute_instance.route.contest.coordPresentation)
+    			
+                coordroute_instance.properties = params
+    			if (coordroute_instance.gatewidth2 == null) {
+    				coordroute_instance.gatewidth2 = 0.0f
+    			}
+                if (params.gateDirection) {
+                    coordroute_instance.gateDirection = params.gateDirection.toBigDecimal()
+			    }
+                if (!params.legDuration) {
+                    coordroute_instance.legDuration = null
+                }
+                if (!params.measureTrueTrack) {
+                    coordroute_instance.measureTrueTrack = null
+                }
+                if (!params.measureDistance) {
+                    coordroute_instance.measureDistance = null
+                    coordroute_instance.legMeasureDistance = null
+                    coordroute_instance.legDistance = null
+                }
+    
+                if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
+                    calculateAllLegMeasureDistances(coordroute_instance.route)
+                    calculateSecretLegRatio(coordroute_instance.route)
+                    calculateRouteLegs(coordroute_instance.route)
+                    if (FcMath.DecimalGradDiff(old_latmath, coordroute_instance.latMath()) || FcMath.DecimalGradDiff(old_lonmath,coordroute_instance.lonMath())) {
+                        calculateEnrouteValues(coordroute_instance.route)
+                    }
+                    Map ret = ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
+                    printdone ret.message
+                    return ret
+                } else {
+                    printerror ""
+                    return ['instance':coordroute_instance]
+                }
+			}
+        } else {
+            Map ret = ['message':getMsg('fc.notfound',[getMsg('fc.coordroute'),params.id])]
+            printerror ret.message
+            return ret
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    Map updateCoordRouteObject(String showLanguage, Map params)
+    {
+        printstart "updateCoordRouteObject $showLanguage $params"
+        
+        CoordRoute coordroute_instance = CoordRoute.get(params.id)
+        
+        if (coordroute_instance) {
+
+            if(params.version) {
+                long version = params.version.toLong()
+                if(coordroute_instance.version > version) {
+                    coordroute_instance.errors.rejectValue("version", "coordRoute.optimistic.locking.failure", getMsg('fc.notupdated'))
+                    printerror ""
+                    return ['instance':coordroute_instance]
+                }
+            }
+            
+			if (coordroute_instance.route.Used()) {
+                // return ['instance':coordroute_instance,'error':true,'message':getMsg('fc.coordroute.update.notallowed.routeused')]
+                
+                coordroute_instance.properties = params
                 if (!coordroute_instance.route.IsTurnpointSignUsed()) {
                     if (params.assignedSign) {
                         coordroute_instance.assignedSign = TurnpointSign.(params.assignedSign)
@@ -5580,39 +5735,15 @@ class FcService
                     return ['instance':coordroute_instance]
                 }
 			} else {
-                params = calculateCoordRoute(showLanguage, params, coordroute_instance.route.contest.coordPresentation)
-    			
                 coordroute_instance.properties = params
-    			if (coordroute_instance.gatewidth2 == null) {
-    				coordroute_instance.gatewidth2 = 0.0f
-    			}
-                if (params.gateDirection) {
-                    coordroute_instance.gateDirection = params.gateDirection.toBigDecimal()
-			    }
                 if (params.assignedSign) {
                     coordroute_instance.assignedSign = TurnpointSign.(params.assignedSign)
                 }
                 if (params.correctSign) {
                     coordroute_instance.correctSign = TurnpointCorrect.(params.correctSign)
                 }
-                if (!params.legDuration) {
-                    coordroute_instance.legDuration = null
-                }
-                if (!params.measureTrueTrack) {
-                    coordroute_instance.measureTrueTrack = null
-                }
-                if (!params.measureDistance) {
-                    coordroute_instance.measureDistance = null
-                    coordroute_instance.legMeasureDistance = null
-                    coordroute_instance.legDistance = null
-                }
-    			//calculateLegMeasureDistance(coordroute_instance, false)
     
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
-                    calculateAllLegMeasureDistances(coordroute_instance.route)
-                    calculateSecretLegRatio(coordroute_instance.route)
-                    calculateRouteLegs(coordroute_instance.route)
-                    calculateEnrouteValues(coordroute_instance.route)
                     Map ret = ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
                     printdone ret.message
                     return ret
@@ -6608,11 +6739,40 @@ class FcService
             return ['instance':route_instance,'error':true,'message':getMsg('fc.coordroute.photo.update.notallowed.routeused')]
         }
         
+        List page_coord_types = []
+        List page_types = []
+        CoordRoute last_coordroute_instance2 = null
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:'id'])) {
+            if (coordroute_instance.type.IsTurnpointSignCoord()) {
+                if (!page_coord_types) {
+                    if (coordroute_instance.type.IsEnrouteSignCoord()) {
+                        page_coord_types = [coordroute_instance.titlePrintCode()]
+                    }
+                }
+                if (coordroute_instance.observationNextPrintPageEnroute) {
+                    page_types += [page_coord_types]
+                    page_coord_types = []
+                    if (coordroute_instance.type.IsEnrouteSignCoord()) {
+                        page_coord_types = [coordroute_instance.titlePrintCode()]
+                    }
+                } else {
+                    if (coordroute_instance.type.IsEnrouteSignCoord()) {
+                        page_coord_types += coordroute_instance.titlePrintCode()
+                    }
+                }
+                last_coordroute_instance2 = coordroute_instance
+            }
+        }
+        if (page_coord_types) {
+            page_types += [page_coord_types]
+        }
+        
         int new_name = 0
         int sort_area = 1
         List name_list = []
         boolean name_type_number = false
         boolean check_name_type = true
+		int page_types_pos = 0
         for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(route_instance,[sort:"enrouteViewPos"])) {
             if (check_name_type) {
                 if (coordenroutephoto_instance.enroutePhotoName.isInteger()) {
@@ -6620,8 +6780,9 @@ class FcService
                 }
                 check_name_type = false
             }
-            if (coordenroutephoto_instance.observationNextPrintPage) {
+            if (!(coordenroutephoto_instance.titlePrintCode() in page_types[page_types_pos])) {
                 sort_area++
+				page_types_pos++
             }
             name_list += [newname:new_name, uuid:UUID.randomUUID().toString(), sortarea:sort_area, viewpos:coordenroutephoto_instance.enrouteViewPos]
             new_name++
@@ -6653,8 +6814,8 @@ class FcService
     {
         CoordEnroutePhoto coordenroutephoto_instance = CoordEnroutePhoto.get(params.id)
         if (coordenroutephoto_instance) {
-            coordenroutephoto_instance.observationPositionTop = FcMath.toInteger(params.top)
-            coordenroutephoto_instance.observationPositionLeft = FcMath.toInteger(params.left)
+            coordenroutephoto_instance.observationPositionTop = coordenroutephoto_instance.GetObservationPositionPercentTop(FcMath.toInteger(params.top))
+            coordenroutephoto_instance.observationPositionLeft = coordenroutephoto_instance.GetObservationPositionPercentLeft(FcMath.toInteger(params.left))
             coordenroutephoto_instance.save()
             return ['done':true,'message':getMsg('fc.coordroute.photo.positionassigned')]
         }
@@ -6690,8 +6851,8 @@ class FcService
     {
         CoordRoute coordroute_instance = CoordRoute.get(params.id)
         if (coordroute_instance) {
-            coordroute_instance.observationPositionTop = FcMath.toInteger(params.top)
-            coordroute_instance.observationPositionLeft = FcMath.toInteger(params.left)
+            coordroute_instance.observationPositionTop = coordroute_instance.GetObservationPositionPercentTop(FcMath.toInteger(params.top))
+            coordroute_instance.observationPositionLeft = coordroute_instance.GetObservationPositionPercentLeft(FcMath.toInteger(params.left))
             coordroute_instance.save()
             return ['done':true,'message':getMsg('fc.coordroute.photo.positionassigned')]
         }
@@ -7449,7 +7610,7 @@ class FcService
 					
 					// create TaskClasses
 					if (contestInstance.resultClasses) {
-						for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"id"])) {
+						for (Task task_instance in Task.findAllByContest(contestInstance,[sort:"idTitle"])) {
 							TaskClass taskclass_instance = new TaskClass()
 							taskclass_instance.task = task_instance
 							taskclass_instance.resultclass = resultclass_instance
@@ -7467,7 +7628,7 @@ class FcService
                 }
 			}
 			
-            Task.findAllByContest(contestInstance,[sort:"id"]).each { Task task_instance ->
+            Task.findAllByContest(contestInstance,[sort:"idTitle"]).each { Task task_instance ->
 				//if (!task_instance.hidePlanning) {
 	                Test test_instance = new Test()
 	                test_instance.crew = crew_instance
@@ -7779,7 +7940,7 @@ class FcService
         }
         
         // correct all test's viewpos
-        Task.findAllByContest(crewInstance.contest,[sort:"id"]).each { Task task_instance ->
+        Task.findAllByContest(crewInstance.contest,[sort:"idTitle"]).each { Task task_instance ->
         	Test.findAllByTask(task_instance,[sort:"viewpos"]).eachWithIndex { Test test_instance, int i ->
         		test_instance.viewpos = i
         		test_instance.save()

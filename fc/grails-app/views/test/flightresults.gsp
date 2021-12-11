@@ -96,7 +96,7 @@
                                     </g:else>
                                 </tr>
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.wind')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.wind')} (${message(code:'fc.runway.setoffset')}):</td>
                                     <g:if test="${testInstance.flighttestwind}">
                                         <td><g:flighttestwind var="${testInstance.flighttestwind}" link="${createLink(controller:'flightTestWind',action:'edit')}"/></td>
                                     </g:if> <g:else>

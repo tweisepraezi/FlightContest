@@ -23,6 +23,11 @@
                             <g:checkBox name="interpolate_missing_data" value="${true}" tabIndex="${ti[0]++}"/>
                             ${message(code:'fc.loggerdata.interpolate')}
                         </p>
+                        <div>
+                            ${message(code:'fc.loggerdata.correctseconds')} [${message(code:'fc.time.s')}]:<br/>
+                            <input type="text" id="correct_seconds" name="correct_seconds" value="${0}" tabIndex="${ti[0]++}"/>
+                        </div>
+                        <br/>
                         <g:actionSubmit action="importloggerfile" value="${message(code:'fc.import')}" tabIndex="${ti[0]++}"/>
                         <g:actionSubmit action="cancelimportcrew" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:uploadForm>

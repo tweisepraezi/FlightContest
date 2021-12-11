@@ -61,7 +61,7 @@
                                     <tr>
                                         <td class="detailtitle">${message(code:'fc.route.list')}:</td>
                                         <td>
-                                            <g:each var="routeInstance" in="${Route.findAllByContest(contestInstance,[sort:"id"])}">
+                                            <g:each var="routeInstance" in="${Route.findAllByContest(contestInstance,[sort:"idTitle"])}">
                                                 <g:route var="${routeInstance}" link="${createLink(controller:'route',action:'show')}"/>
                                                 <br/>
                                                 <g:each var="coordRouteInstance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">

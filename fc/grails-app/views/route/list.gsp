@@ -11,7 +11,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="11" class="table-head">${message(code:'fc.route.list')}</th>
+                        <th colspan="12" class="table-head">${message(code:'fc.route.list')}</th>
                         <th class="table-head"><a href="../docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
@@ -27,6 +27,7 @@
                        <th>${message(code:'fc.planningtesttask.list2')}</th>
                        <th>${message(code:'fc.flighttest.list')}</th>
                        <th>${message(code:'fc.observation')}</th>
+                       <th/>
                     </tr>
                 </thead>
                 <tbody>
@@ -112,6 +113,17 @@
                                     <br/>
                                 </g:each>
                             </td>
+                            
+                            <g:if test="${route_instance.idTitle < routeInstanceList.size() || route_instance.idTitle > 1}">
+                                <td>
+                                    ${route_instance.idTitle}
+                                    <g:if test="${route_instance.idTitle < routeInstanceList.size()}"><a href="${createLink(controller:'route',action:'addviewposition_route',params:[id:route_instance.id])}">+</a></g:if>
+                                    <g:if test="${route_instance.idTitle > 1}"><a href="${createLink(controller:'route',action:'subviewposition_route',params:[id:route_instance.id])}">-</a></g:if>
+                                </td>
+                            </g:if>
+                            <g:else>
+                                <td>${route_instance.idTitle}</td>
+                            </g:else>
                         </tr>
                     </g:each>
                 </tbody>

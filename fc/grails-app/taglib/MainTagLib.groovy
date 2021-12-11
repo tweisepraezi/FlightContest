@@ -150,7 +150,7 @@ class MainTagLib
             outln """<div class="clear"></div>"""
 			outln """<div class="grid">"""
             outln """  <ul class="nav main">"""
-			for (Task task_instance in Task.findAllByContest(session.lastContest,[sort:"id"])) {
+			for (Task task_instance in Task.findAllByContest(session.lastContest,[sort:"idTitle"])) {
 				if (p.taskplanning) {
 					if (!task_instance.hidePlanning) {
 						outln """    <li> <a class="${if (session.lastTaskPlanning == task_instance.id) "active"}" href="${p.link}/../../task/listplanning/${task_instance.id}" >${task_instance.name()}</a> </li>"""

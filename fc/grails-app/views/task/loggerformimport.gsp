@@ -13,7 +13,7 @@
                 <div class="block" id="forms" >
                     <g:form method="post">
                         <g:set var="ti" value="${[]+1}"/>
-                        <g:set var="test_instances" value="${taskInstance.GetFlightTests()}" />
+                        <g:set var="test_instances" value="${taskInstance.GetIncompleteFlightTests()}" />
                         <div>
                             <p>${message(code:'fc.loggerdata.importform.extern',args:[loggerfile])}</p>
                         </div>
@@ -37,6 +37,11 @@
                             <g:checkBox name="interpolate_missing_data" value="${true}" tabIndex="${ti[0]++}"/>
                             ${message(code:'fc.loggerdata.interpolate')}
                         </p>
+                        <div>
+                            ${message(code:'fc.loggerdata.correctseconds')} [${message(code:'fc.time.s')}]:<br/>
+                            <input type="text" id="correct_seconds" name="correct_seconds" value="${0}" tabIndex="${ti[0]++}"/>
+                        </div>
+                        <br/>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />                        
                         <input type="hidden" name="loggerfile" value="${loggerfile}" />
                         <g:if test="${test_instances}">

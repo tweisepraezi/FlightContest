@@ -1,4 +1,4 @@
-﻿Flight Contest 3.2.M22
+﻿Flight Contest 3.2.M23
 ======================
 
 Changes
@@ -107,13 +107,13 @@ Changes
       -> Routes -> <Route name> -> Assign enroute photo names alphabetically
       -> Routes -> <Route name> -> Assign enroute photo names randomly
     Turnpoint and enroute images can be imported individually.
-      -> Routes -> <Route name> -> Coordinate list -> <No.> -> Import turnpoint photo image
+      -> Routes -> <Route name> -> Turnpoint observations -> <No.> -> Import turnpoint photo image
       -> Routes -> <Route name> -> Enroute photos -> <No.> -> Import enroute photo image
     Turnpoint and enroute photos can be imported in a ZIP file.
       -> Routes -> <Route name> -> Import turnpoint photo images (SP.jpg, TP1.jpg, ..., FP.jpg, name must match check point).
       -> Routes -> <Route name> -> Import enroute photo images (1.jpg, 2.jpg, ..., name must match photo name)
-    Photo marker can be moved with one click. If necessary, a page change can also be inserted here for printing.
-      -> Routes -> <Route name> -> Coordinate list -> <No.>
+    Photo marker can be moved with one click. If necessary, a page change can also be inserted in turnpoint observations for printing.
+      -> Routes -> <Route name> -> Turnpoint observations -> <No.>
       -> Routes -> <Route name> -> Enroute photos -> <No.>
     Turnpoint and enroute photos can be printed alphabetically or sorted by their occurrence on the track.
       -> Routes -> <Route name> -> Print turnpoint photos
@@ -129,6 +129,10 @@ Changes
         1, Lat 52° 12.10000' N, Lon 016° 45.90000' E
         2, Lat 52° 16.80000' N, Lon 017° 23.10000' E
         ...
+      These turnpoint images can also be added to the "turnpointphotos" folder of an already created kmz track file.
+      These track images can also be added to the "photos" folder of an already created kmz track file.
+
+- 'Show logger data' extended with 'Gpx download'
 
 Live Tracking Configuration
 ---------------------------

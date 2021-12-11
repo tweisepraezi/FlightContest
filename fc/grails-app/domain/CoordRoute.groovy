@@ -24,4 +24,24 @@ class CoordRoute extends Coord
         }
         return true
     }
+    
+    int GetObservationPositionTop()
+    {
+        return ((observationPositionTop * route.turnpointPrintStyle.height) / 100).toInteger()
+    }
+    
+    int GetObservationPositionLeft()
+    {
+        return ((observationPositionLeft * route.turnpointPrintStyle.width) / 100).toInteger()
+    }
+    
+    int GetObservationPositionPercentTop(int observationPositionTop)
+    {
+        return (100 * observationPositionTop / route.turnpointPrintStyle.height).toInteger()
+    }
+    
+    int GetObservationPositionPercentLeft(int observationPositionLeft)
+    {
+        return (100 * observationPositionLeft / route.turnpointPrintStyle.width).toInteger()
+    }
 }

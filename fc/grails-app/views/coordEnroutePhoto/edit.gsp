@@ -72,19 +72,13 @@
                                             <td class="detailtitle">${message(code:'fc.distance.orthogonal')}:</td>
                                             <td>${coordEnroutePhotoInstance.enrouteOrthogonalDistance}${message(code:'fc.m')}</td>
                                         </tr>
-                                        <g:if test="${coordEnroutePhotoInstance.observationNextPrintPage}">
-                                            <tr>
-                                                <td class="detailtitle">${message(code:'fc.observation.printnextpage')}:</td>
-                                                <td>${message(code:'fc.yes')}</td>
-                                            </tr>
-                                        </g:if>
                                         <g:if test="${coordEnroutePhotoInstance.imagecoord}">
                                             <tr>
                                                 <td>
                                                     <div class="photo">
-                                                        <img class="photo" id="photo_img_id" src="/fc/route/get_enroute_photo/${coordEnroutePhotoInstance.id}" style="width:${coordEnroutePhotoInstance.route.enroutePhotoPrintStyle.width}px; height:${coordEnroutePhotoInstance.route.enroutePhotoPrintStyle.height}px;"/>
+                                                        <img class="photo" id="photo_img_id" src="/fc/route/get_enroute_photo/${coordEnroutePhotoInstance.id}" style="height:${coordEnroutePhotoInstance.route.enroutePhotoPrintStyle.height}px; width:${coordEnroutePhotoInstance.route.enroutePhotoPrintStyle.width}px;"/>
                                                         <div class="phototext">${coordEnroutePhotoInstance.enroutePhotoName}</div>
-                                                        <div class="photoposition" id="photo_position_id" style="top:${coordEnroutePhotoInstance.observationPositionTop}px; left:${coordEnroutePhotoInstance.observationPositionLeft}px;"></div>
+                                                        <div class="photoposition" id="photo_position_id" style="top:${coordEnroutePhotoInstance.GetObservationPositionTop()}px; left:${coordEnroutePhotoInstance.GetObservationPositionLeft()}px;"></div>
                                                     </div>
                                                 </td>
                                                 <td/>

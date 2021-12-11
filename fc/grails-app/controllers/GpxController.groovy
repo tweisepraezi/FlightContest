@@ -18,7 +18,9 @@ class GpxController
             String file_extension = original_filename.substring(original_filename.lastIndexOf('.')).toLowerCase()
             if (params.offlinemap) {
                 gpxService.printstart "showmaploggerdata: Show offline map of '$original_filename'"
-            } else {
+            } else if (params.gpxdownload) {
+                gpxService.printstart "showmaploggerdata: Download gpx of '$original_filename'"
+            } else { // params.onlinemap
                 gpxService.printstart "showmaploggerdata: Show map of '$original_filename'"
             }
 			gpxService.println file.getContentType() // "text/xml" 
@@ -98,7 +100,18 @@ class GpxController
                 }
                 if (params.offlinemap) {
                     redirect(action:'startofflineviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
-                } else {
+                } else if (params.gpxdownload) {
+                    gpxService.printstart "Download GPX"
+                    String gpx_filename2 = original_filename.replace(' ',"_")
+                    if (!gpx_filename2.endsWith('.gpx')) {
+                        gpx_filename2 += '.gpx'
+                    }
+                    response.setContentType("application/octet-stream")
+                    response.setHeader("Content-Disposition", "Attachment;Filename=${gpx_filename2}")
+                    gpxService.Download(webroot_dir + gpx_filename, webroot_dir + gpx_filename2, response.outputStream)
+                    gpxService.printdone ""
+                    gpxService.DeleteFile(gpx_filename)
+                } else { // params.onlinemap
                     redirect(action:'startgpxviewer',params:[uploadFilename:gpx_filename,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
                 }
             } else {
@@ -120,7 +133,7 @@ class GpxController
             String original_filename = file.getOriginalFilename()
             if (params.offlinemap) {
                 gpxService.printstart "Show offline map of '$original_filename'"
-            } else {
+            } else { // params.onlinemap
                 gpxService.printstart "Show map of '$original_filename'"
             }
             gpxService.println file.getContentType() // "text/xml"
@@ -151,7 +164,7 @@ class GpxController
                     }
                     if (params.offlinemap) {
                         redirect(action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",showZoom:"yes",showPoints:"yes"])
-                    } else {
+                    } else { // params.onlinemap
                         redirect(action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:original_filename,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"yes",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
                     }
                 } else {

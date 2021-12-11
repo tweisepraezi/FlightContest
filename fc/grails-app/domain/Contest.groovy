@@ -760,7 +760,7 @@ class Contest
             }
             
 			if (copyRoutes) { // routes:Route
-				Route.findAllByContest(contestInstance,[sort:"id"]).each { Route route_instance ->
+				Route.findAllByContest(contestInstance,[sort:"idTitle"]).each { Route route_instance ->
 					Route new_route_instance = new Route()
 					new_route_instance.contest = this
 					new_route_instance.CopyValues(route_instance)
@@ -803,7 +803,7 @@ class Contest
 			}
 			
 			if (copyTaskSettings) { // tasks:Task
-				Task.findAllByContest(contestInstance,[sort:"id"]).each { Task task_instance ->
+				Task.findAllByContest(contestInstance,[sort:"idTitle"]).each { Task task_instance ->
 					Task new_task_instance = new Task()
 					new_task_instance.contest = this
 					new_task_instance.CopyValues(task_instance)
@@ -829,7 +829,7 @@ class Contest
 		
 	boolean IsPlanningTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+		for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
 			if (task_instance.IsPlanningTestRun()) {
 				return true
 			}
@@ -839,7 +839,7 @@ class Contest
 	
 	boolean IsFlightTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+		for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
 			if (task_instance.IsFlightTestRun()) {
 				return true
 			}
@@ -849,7 +849,7 @@ class Contest
 	
 	boolean IsObservationTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+		for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
 			if (task_instance.IsObservationTestRun()) {
 				return true
 			}
@@ -859,7 +859,7 @@ class Contest
 	
 	boolean IsLandingTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+		for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
 			if (task_instance.IsLandingTestRun()) {
 				return true
 			}
@@ -869,7 +869,7 @@ class Contest
 	
 	boolean IsSpecialTestRun()
 	{
-		for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+		for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
 			if (task_instance.IsSpecialTestRun()) {
 				return true
 			}
@@ -1146,7 +1146,7 @@ class Contest
 	{
 		List ret = []
 		String task_ids = "$resultTaskIDs,"
-		for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+		for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
 			if (task_ids.contains("task_${task_instance.id},")) {
 				ret += task_instance
 			}
@@ -1158,7 +1158,7 @@ class Contest
     {
         List ret = []
         String task_ids = "$resultTaskIDs,"
-        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
             if (task_ids.contains("task_${task_instance.id},")) {
                 ret += task_instance.id
             }
@@ -1170,7 +1170,7 @@ class Contest
     {
         List ret = []
         String task_ids = "$testDetailsTaskIDs,"
-        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
             if (task_ids.contains("tasktestdetails_${task_instance.id},")) {
                 ret += task_instance
             }
@@ -1182,7 +1182,7 @@ class Contest
     {
         List ret = []
         String task_ids = "$testDetailsTaskIDs,"
-        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
             if (task_ids.contains("tasktestdetails_${task_instance.id},")) {
                 ret += task_instance.id
             }
@@ -1253,7 +1253,7 @@ class Contest
     {
         String s = ""
         String task_ids = "$resultTaskIDs,"
-        for (Task task_instance in Task.findAllByContest(this,[sort:"id"])) {
+        for (Task task_instance in Task.findAllByContest(this,[sort:"idTitle"])) {
             if (task_ids.contains("task_${task_instance.id},")) {
                 if (s) {
                     s += ","
@@ -1362,7 +1362,7 @@ class Contest
 
     boolean RouteTitleFound(String newTitle)
     {
-        for (Route route_instance in Route.findAllByContest(this,[sort:"id"])) {
+        for (Route route_instance in Route.findAllByContest(this,[sort:"idTitle"])) {
            if (route_instance.title == newTitle) {
                return true
            }

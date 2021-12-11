@@ -19,32 +19,32 @@ class LoggerFileTools
     final static String IGCFORMAT_DEF = "I033638FXA3940SIU4143ENL"
     
     //--------------------------------------------------------------------------
-    static Map ReadLoggerFile(String fileExtension, Test testInstance, String loggerFileName, boolean interpolateMissingData)
+    static Map ReadLoggerFile(String fileExtension, Test testInstance, String loggerFileName, boolean interpolateMissingData, int correctSeconds)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid logger format
     //         errors        - <> ""
     {
         switch (fileExtension) {
             case GAC_EXTENSION:
-                return ReadGACFile(testInstance, loggerFileName, interpolateMissingData)
+                return ReadGACFile(testInstance, loggerFileName, interpolateMissingData, correctSeconds)
             case IGC_EXTENSION:
-                return ReadIGCFile(testInstance, loggerFileName, interpolateMissingData)
+                return ReadIGCFile(testInstance, loggerFileName, interpolateMissingData, correctSeconds)
             case GPX_EXTENSION:
                 RemoveExistingBOM(loggerFileName)
-                return ReadGPXFile(testInstance, loggerFileName, interpolateMissingData)
+                return ReadGPXFile(testInstance, loggerFileName, interpolateMissingData, correctSeconds)
             case KML_EXTENSION:
                 RemoveExistingBOM(loggerFileName)
-                return ReadKMLFile(testInstance, loggerFileName, false, interpolateMissingData)
+                return ReadKMLFile(testInstance, loggerFileName, false, interpolateMissingData, correctSeconds)
             case KMZ_EXTENSION:
-                return ReadKMLFile(testInstance, loggerFileName, true, interpolateMissingData)
+                return ReadKMLFile(testInstance, loggerFileName, true, interpolateMissingData, correctSeconds)
             case NMEA_EXTENSION:
-                return ReadNMEAFile(testInstance, loggerFileName, interpolateMissingData)
+                return ReadNMEAFile(testInstance, loggerFileName, interpolateMissingData, correctSeconds)
         }
         return [trackpointnum: 0, valid: false, errors: ""]
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadGACFile(Test testInstance, String gacFileName, boolean interpolateMissingData)
+    private static Map ReadGACFile(Test testInstance, String gacFileName, boolean interpolateMissingData, int correctSeconds)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid gac format
     //         errors        - <> ""
@@ -95,6 +95,10 @@ class LoggerFileTools
                                 int j = 0
                             }
                             */
+                            
+                            if (correctSeconds) {
+                                utc = FcTime.UTCAddSeconds(utc, correctSeconds)
+                            }
                             
                             // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                             String latitude_grad = line.substring(7,9)
@@ -178,7 +182,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadIGCFile(Test testInstance, String igcFileName, boolean interpolateMissingData)
+    private static Map ReadIGCFile(Test testInstance, String igcFileName, boolean interpolateMissingData, int correctSeconds)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid igc format
     //         errors        - <> ""
@@ -229,6 +233,10 @@ class LoggerFileTools
                                 int j = 0
                             }
                             */
+                            
+                            if (correctSeconds) {
+                                utc = FcTime.UTCAddSeconds(utc, correctSeconds)
+                            }
                             
                             // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                             String latitude_grad = line.substring(7,9)
@@ -312,7 +320,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadGPXFile(Test testInstance, String gpxFileName, boolean interpolateMissingData)
+    private static Map ReadGPXFile(Test testInstance, String gpxFileName, boolean interpolateMissingData, int correctSeconds)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid gpx format
     //         errors        - <> ""
@@ -366,6 +374,10 @@ class LoggerFileTools
                             int j = 0
                         }
                         */
+                        
+                        if (correctSeconds) {
+                            utc = FcTime.UTCAddSeconds(utc, correctSeconds)
+                        }
                         
                         // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                         BigDecimal latitude = it.'@lat'.toBigDecimal()
@@ -436,7 +448,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadKMLFile(Test testInstance, String kmFileName, boolean kmzFile, boolean interpolateMissingData)
+    private static Map ReadKMLFile(Test testInstance, String kmFileName, boolean kmzFile, boolean interpolateMissingData, int correctSeconds)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid gpx format
     //         errors        - <> ""
@@ -492,6 +504,10 @@ class LoggerFileTools
                     
                     // UTC
                     String utc = FcTime.UTCGetNextDateTime(last_utc, "${time_utc.substring(11,19)}")
+                    
+                    if (correctSeconds) {
+                        utc = FcTime.UTCAddSeconds(utc, correctSeconds)
+                    }
                                 
                     // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                     BigDecimal latitude = coord_values[1].toBigDecimal() 
@@ -564,7 +580,7 @@ class LoggerFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadNMEAFile(Test testInstance, String nmeaFileName, boolean interpolateMissingData)
+    private static Map ReadNMEAFile(Test testInstance, String nmeaFileName, boolean interpolateMissingData, int correctSeconds)
     // Return: trackpointnum - Number of track points 
     //         valid         - true, if valid nmea format
     //         errors        - <> ""
@@ -617,6 +633,10 @@ class LoggerFileTools
                                 int j = 0
                             }
                             */
+                            
+                            if (correctSeconds) {
+                                utc = FcTime.UTCAddSeconds(utc, correctSeconds)
+                            }
                             
                             // Latitude (Geographische Breite: -90 (S)... +90 Grad (N))
                             String latitude_grad = line_values[2].substring(0,2)

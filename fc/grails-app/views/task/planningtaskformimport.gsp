@@ -12,7 +12,7 @@
                 <h2>${message(code:'fc.planningtesttask.importform')}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post">
-                        <g:set var="test_instances" value="${taskInstance.GetPlanningTests()}" />
+                        <g:set var="test_instances" value="${taskInstance.GetIncompletePlanningTests()}" />
                         <div>
                             <p>${message(code:'fc.planningtesttask.importform.extern',args:[imagefile])}</p>
                         </div>

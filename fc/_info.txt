@@ -107,6 +107,23 @@ Code
         p1.name.compareTo(p2.name)
     }
 
+    AJAX
+    ----
+        Send data sample 1:  outln"""\$.post("/fc/route/saveshow_ajax", {id:${some_id}, setData:true}, "json");"""
+        Send data sample 2:  $.post("/fc/route/saveshow_ajax", {id:some_id, setData:false}, "json");
+        Receive data:
+            def saveshow_ajax = {
+                SomeClass class_instance = SomeClass.get(params.id)
+                if (class_instance) {
+                    if (params.setData) {
+                        class_instance.setData = params.setData == "true"
+                    }   
+                    class_instance.save()
+                }
+                render(text: "")
+            }
+    }
+    
 Konfiguration
 =============
     Alle Grails-Konfigurationsänderungen sind mit FC: markiert.

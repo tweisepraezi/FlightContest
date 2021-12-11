@@ -1,5 +1,6 @@
 <html>
     <head>
+        <g:set var="flighttest_num" value="${taskInstance.GetFlightTests().size()}"/>
 		<style type="text/css">
 		    @page {
                 <g:if test="${params.a3=='true'}">
@@ -29,7 +30,7 @@
                 @top-left {
                     font-family: Noto Sans;
                     font-size: 90%;
-                    content: "${message(code:'fc.test.timetablejudge')} - ${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})"
+                    content: "${message(code:'fc.test.timetablejudge')} - ${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})"
                 }
                 @top-right {
                     font-family: Noto Sans;
@@ -55,7 +56,7 @@
     </head>
     <body>
 	    <h2>${message(code:'fc.test.timetablejudge')}<g:if test="${taskInstance.printTimetableJuryPrintTitle}"> - ${taskInstance.printTimetableJuryPrintTitle}</g:if></h2>
-	    <h3>${taskInstance.printName()} (${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
+	    <h3>${taskInstance.printName()} (${message(code:'fc.crew.num', args:[flighttest_num])}, ${message(code:'fc.version')} ${taskInstance.timetableVersion})</h3>
         <g:if test="${taskInstance.printTimetableJuryLandingField}">
             <h4>${message(code:'fc.test.landing.printinfo', args:[BootStrap.global.GetLandingInfo()])}</h4>
         </g:if>

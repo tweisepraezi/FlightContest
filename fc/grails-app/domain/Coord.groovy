@@ -63,9 +63,10 @@ class Coord
     CoordTitle enrouteCoordTitle              // transienter Wert zur Auswahl
     String enrouteLastPhotoName = ""          // transienter Wert zur Eingabe eines Zaheln-Bereiches
     
-    Integer observationPositionTop = 30       // DB-2.28
-    Integer observationPositionLeft = 100     // DB-2.28
-    Boolean observationNextPrintPage = false  // DB-2.28
+    Integer observationPositionTop = 50       // DB-2.28, DB-2.29 percent
+    Integer observationPositionLeft = 50      // DB-2.28, DB-2.29 percent
+    Boolean observationNextPrintPage = false  // DB-2.28, Turnpoint
+    Boolean observationNextPrintPageEnroute = false  // DB-2.30
     
 	static hasOne = [imagecoord:ImageCoord]   // DB-2.28
     
@@ -220,6 +221,9 @@ class Coord
         observationPositionLeft(nullable:true)
         observationNextPrintPage(nullable:true)
         imagecoord(nullable:true)
+        
+        // DB-2.30 compatibility
+        observationNextPrintPageEnroute(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -285,7 +289,8 @@ class Coord
         observationPositionTop = coordInstance.observationPositionTop
         observationPositionLeft = coordInstance.observationPositionLeft
         observationNextPrintPage = coordInstance.observationNextPrintPage
-	    // planCpTime = coordInstance.planCpTime
+        observationNextPrintPageEnroute = coordInstance.observationNextPrintPageEnroute
+        // planCpTime = coordInstance.planCpTime
 	    planProcedureTurn = coordInstance.planProcedureTurn
 	    // resultLatitude = coordInstance.resultLatitude
 	    // resultLongitude = coordInstance.resultLongitude
@@ -302,6 +307,13 @@ class Coord
 		if (!this.save()) {
 			throw new Exception("Coord.CopyValues could not save")
 		}
+        
+        if (coordInstance.imagecoord) {
+            ImageCoord imagecoord_instance = new ImageCoord(imageData:coordInstance.imagecoord.imageData, coord:this)
+            if (!imagecoord_instance.save()) {
+                throw new Exception("Coord.CopyValues (ImageCoord) could not save")
+            }
+        }
 	}
 	
     String title()
@@ -1273,5 +1285,5 @@ class Coord
     {
         Map enroute_from_cp = AviationMath.calculateLeg(values.from_cp.lat, values.from_cp.lon, latMath(), lonMath())
         return enroute_from_cp.dis * Math.sin(Math.toRadians(90 - AviationMath.courseChange(values.true_track, AviationMath.getDiametricalTrack(enroute_from_cp.dir)).abs()))
-    } 
+    }
 }

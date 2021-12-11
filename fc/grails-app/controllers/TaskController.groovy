@@ -1330,24 +1330,28 @@ class TaskController {
         if (params.testid) {
             Test test_instance = Test.get(params.testid)
             boolean interpolate_missing_data = params?.interpolate_missing_data == "on"
-            Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
+            int correct_seconds = 0
+            if (params?.correct_seconds && params.correct_seconds.isInteger()) {
+                correct_seconds = params?.correct_seconds.toInteger()
+            }
+            Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KML_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KML_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KMZ_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KMZ_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, false, interpolate_missing_data)
+                calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
             }
             flash.error = calc.error
             flash.message = calc.message
@@ -1649,6 +1653,16 @@ class TaskController {
         redirect(action:listresults, id:ret.taskInstance.id)
     }
     
+    def addviewposition_task = {
+        fcService.changeviewpositionTask(params, true)
+        redirect(controller:"contest",action:"tasks")
+    }
+
+    def subviewposition_task = {
+        fcService.changeviewpositionTask(params, false)
+        redirect(controller:"contest",action:"tasks")
+    }
+
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,

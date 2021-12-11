@@ -179,7 +179,7 @@ class DemoContestIntermediateService
 
 			}
 			Map ret = fcService.testData(
-			   [[name:"Route",count:4,table:Route.findAllByContest(lastContest,[sort:"id"]),data:testRoute()],
+			   [[name:"Route",count:4,table:Route.findAllByContest(lastContest,[sort:"idTitle"]),data:testRoute()],
 				   
 				[name:"CoordRoute '$ROUTE_NAME'",         count:10,table:CoordRoute.findAllByRoute(   route,         [sort:"id"]),data:testCoordRoute(ROUTE_NAME)],
 				[name:"CoordRoute '$ROUTE_NAME_NOITO'",   count: 9,table:CoordRoute.findAllByRoute(   route_noito,   [sort:"id"]),data:testCoordRoute(ROUTE_NAME_NOITO)],
@@ -197,7 +197,7 @@ class DemoContestIntermediateService
 				[name:"RouteLegTest '$ROUTE_NAME_NOITOLDG'",count:5, table:RouteLegTest.findAllByRoute( route_noitoldg,[sort:"id"]),data:testRouteLegTest(ROUTE_NAME_NOITOLDG)],
 				
 				[name:"Crew",count:3,table:Crew.findAllByContest(lastContest,[sort:"id"]),data:testCrew()],
-				[name:"Task",count:7,table:Task.findAllByContest(lastContest,[sort:"id"]),data:testTask()],
+				[name:"Task",count:7,table:Task.findAllByContest(lastContest,[sort:"idTitle"]),data:testTask()],
 				
 				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_60'",     count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60(ROUTE_NAME,false,false)],
 				[name:"TestLegPlanning '$ROUTE_NAME ($NOWIND) - $CREW_90'",     count:7, table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_normal,   Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90(ROUTE_NAME,false,false)],

@@ -329,7 +329,7 @@
                                 </tr>
                             </tfoot>
                         </table>
-                        <g:showRouteDetails route="${routeInstance}" />
+                        <g:showRouteDetails route="${routeInstance}" ti="${ti}"/>
                         <table>
                             <tfoot>
                                 <tr>

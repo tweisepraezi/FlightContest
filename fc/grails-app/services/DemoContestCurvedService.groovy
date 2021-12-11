@@ -124,7 +124,7 @@ class DemoContestCurvedService
 
 			}
 			Map ret = fcService.testData(
-			   [[name:"Route",count:2,table:Route.findAllByContest(lastContest,[sort:"id"]),data:testRoute()],
+			   [[name:"Route",count:2,table:Route.findAllByContest(lastContest,[sort:"idTitle"]),data:testRoute()],
 				[name:"CoordRoute '$ROUTE_NAME_CURVED'",   count:8,table:CoordRoute.findAllByRoute(   route_curved,[sort:"id"]),data:testCoordRoute(   ROUTE_NAME_CURVED)],
 				[name:"CoordRoute '$ROUTE_NAME_NORMAL'",   count:8,table:CoordRoute.findAllByRoute(   route_normal,[sort:"id"]),data:testCoordRoute(   ROUTE_NAME_NORMAL)],
 				[name:"RouteLegCoord '$ROUTE_NAME_CURVED'",count:7,table:RouteLegCoord.findAllByRoute(route_curved,[sort:"id"]),data:testRouteLegCoord(ROUTE_NAME_CURVED)],
@@ -133,7 +133,7 @@ class DemoContestCurvedService
 				[name:"RouteLegTest '$ROUTE_NAME_NORMAL'", count:5,table:RouteLegTest.findAllByRoute( route_normal,[sort:"id"]),data:testRouteLegTest( ROUTE_NAME_NORMAL)],
 				
 				[name:"Crew",count:3,table:Crew.findAllByContest(lastContest,[sort:"id"]),data:testCrew()],
-				[name:"Task",count:4,table:Task.findAllByContest(lastContest,[sort:"id"]),data:testTask()],
+				[name:"Task",count:4,table:Task.findAllByContest(lastContest,[sort:"idTitle"]),data:testTask()],
 				
 				[name:"TestLegPlanning '$ROUTE_NAME_CURVED ($NOWIND) - $CREW_60'", count:1,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_curved,     Crew.findByContestAndName(lastContest,CREW_60)), [sort:"id"]),data:testTestLegPlanning60( ROUTE_NAME_CURVED,false,false)],
 				[name:"TestLegPlanning '$ROUTE_NAME_CURVED ($NOWIND) - $CREW_90'", count:1,table:TestLegPlanning.findAllByTest(Test.findByTaskAndCrew(task_curved,     Crew.findByContestAndName(lastContest,CREW_90)), [sort:"id"]),data:testTestLegPlanning90( ROUTE_NAME_CURVED,false,false)],
