@@ -429,7 +429,7 @@ enum ContestRules
 	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
 
 	R4 ([
-            ruleTitle:"FAI Precision Flying - Edition 2020",
+            ruleTitle:"FAI Precision Flying - Edition 2022",
             
 			// General
 			precisionFlying:true,
@@ -494,53 +494,53 @@ enum ContestRules
             observationTestEnrouteFalsePoints:30,                 // A10.2.1
             
 			// LandingTest
-			landingTest1MaxPoints:400,                            // A10.3
-			landingTest1NoLandingPoints:300,                      // A10.3
-			landingTest1OutsideLandingPoints:300,                 // A10.3
-			landingTest1RollingOutsidePoints:200,                 // A10.3
-			landingTest1PowerInBoxPoints:50,                      // A10.3
+			landingTest1MaxPoints:400,                            // Landing 6.2.1
+			landingTest1NoLandingPoints:300,                      // Landing 6.2.1
+			landingTest1OutsideLandingPoints:300,                 // Landing 6.2.1
+			landingTest1RollingOutsidePoints:200,                 // Landing 6.2.1
+			landingTest1PowerInBoxPoints:50,                      // Landing 6.2.1
 			landingTest1GoAroundWithoutTouchingPoints:0,
 			landingTest1GoAroundInsteadStopPoints:0,
-			landingTest1AbnormalLandingPoints:200,                // A10.3
+			landingTest1AbnormalLandingPoints:200,                // Landing 6.2.1
 			landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // A10.3
+			landingTest1PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
 		
-			landingTest2MaxPoints:200,                            // A10.3
-			landingTest2NoLandingPoints:200,                      // A10.3
-			landingTest2OutsideLandingPoints:200,                 // A10.3
-			landingTest2RollingOutsidePoints:150,                 // A10.3
-			landingTest2PowerInBoxPoints:50,                      // A10.3
+			landingTest2MaxPoints:200,                            // Landing 6.2.1
+			landingTest2NoLandingPoints:200,                      // Landing 6.2.1
+			landingTest2OutsideLandingPoints:200,                 // Landing 6.2.1
+			landingTest2RollingOutsidePoints:150,                 // Landing 6.2.1
+			landingTest2PowerInBoxPoints:50,                      // Landing 6.2.1
 			landingTest2GoAroundWithoutTouchingPoints:0,
 			landingTest2GoAroundInsteadStopPoints:0,
-			landingTest2AbnormalLandingPoints:200,                // A10.3
+			landingTest2AbnormalLandingPoints:200,                // Landing 6.2.1
 			landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest2PowerInAirPoints:200,                     // A10.3
-			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // A10.3
+			landingTest2PowerInAirPoints:200,                     // Landing 6.2.1
+			landingTest2PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
 			
-			landingTest3MaxPoints:200,                            // A10.3
-			landingTest3NoLandingPoints:200,                      // A10.3
-			landingTest3OutsideLandingPoints:200,                 // A10.3
-			landingTest3RollingOutsidePoints:150,                 // A10.3
-			landingTest3PowerInBoxPoints:50,                      // A10.3
+			landingTest3MaxPoints:200,                            // Landing 6.2.1
+			landingTest3NoLandingPoints:200,                      // Landing 6.2.1
+			landingTest3OutsideLandingPoints:200,                 // Landing 6.2.1
+			landingTest3RollingOutsidePoints:150,                 // Landing 6.2.1
+			landingTest3PowerInBoxPoints:50,                      // Landing 6.2.1
 			landingTest3GoAroundWithoutTouchingPoints:0,
 			landingTest3GoAroundInsteadStopPoints:0,
-			landingTest3AbnormalLandingPoints:200,                // A10.3
+			landingTest3AbnormalLandingPoints:200,                // Landing 6.2.1
 			landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest3PowerInAirPoints:200,                     // A10.3
-			landingTest3FlapsInAirPoints:200,                     // A10.3
-			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // A10.3
+			landingTest3PowerInAirPoints:200,                     // Landing 6.2.1
+			landingTest3FlapsInAirPoints:200,                     // Landing 6.2.1
+			landingTest3PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 3*i}else{return -(6*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 150;case 'D':return 75;case 'E':return 90;case 'F':return 105;case 'G':return 120;case 'H':return 135;default:return null;}}}", // Landing 6.2.2
 			
-			landingTest4MaxPoints:400,                            // A10.3
-			landingTest4NoLandingPoints:300,                      // A10.3
-			landingTest4OutsideLandingPoints:300,                 // A10.3
-			landingTest4RollingOutsidePoints:200,                 // A10.3
-			landingTest4PowerInBoxPoints:50,                      // A10.3
+			landingTest4MaxPoints:400,                            // Landing 6.2.1
+			landingTest4NoLandingPoints:300,                      // Landing 6.2.1
+			landingTest4OutsideLandingPoints:300,                 // Landing 6.2.1
+			landingTest4RollingOutsidePoints:200,                 // Landing 6.2.1
+			landingTest4PowerInBoxPoints:50,                      // Landing 6.2.1
 			landingTest4GoAroundWithoutTouchingPoints:0,
 			landingTest4GoAroundInsteadStopPoints:0,
-			landingTest4AbnormalLandingPoints:200,                // A10.3
+			landingTest4AbnormalLandingPoints:200,                // Landing 6.2.1
 			landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
-			landingTest4TouchingObstaclePoints:400,               // A10.3
-			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // A10.3
+			landingTest4TouchingObstaclePoints:400,               // Landing 6.2.1
+			landingTest4PenaltyCalculator:"{x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}", // Landing 6.2.2
 
             // Defaults
             flightPlanShowLegDistance:true,
@@ -568,7 +568,7 @@ enum ContestRules
             useProcedureTurns:true,
             liveTrackingScorecard:"FAI Precision 2020"
 		]
-	), // "FAI Precision Flying - Edition 2020"
+	), // "FAI Precision Flying - Edition 2022"
 
 	R5 ([
             ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017",
@@ -713,7 +713,7 @@ enum ContestRules
 	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
 
     R6 ([
-            ruleTitle:"FAI Air Rally Flying - Edition 2020",
+            ruleTitle:"FAI Air Rally Flying - Edition 2022",
             
             // General
             precisionFlying:false,
@@ -759,12 +759,12 @@ enum ContestRules
             flightTestBadCourseMaxPoints:1000,                   // A4.5
             flightTestBadCourseStartLandingPoints:0,
             flightTestLandingToLatePoints:0,
-            flightTestGivenToLatePoints:300,                     // A4.6
+            flightTestGivenToLatePoints:300,                     // A4.7
             flightTestSafetyAndRulesInfringementPoints:600,      // A4.4
             flightTestInstructionsNotFollowedPoints:200,         // A4.4
             flightTestFalseEnvelopeOpenedPoints:0,
             flightTestSafetyEnvelopeOpenedPoints:400,            // A4.4
-            flightTestFrequencyNotMonitoredPoints:200,           // A4.7
+            flightTestFrequencyNotMonitoredPoints:200,           // A4.8
             flightTestForbiddenEquipmentPoints:0,
 
             // ObservationTest
@@ -778,53 +778,53 @@ enum ContestRules
             observationTestEnrouteFalsePoints:50,                // A4.3
             
             // LandingTest
-            landingTest1MaxPoints:300,                           // A4.6
-            landingTest1NoLandingPoints:300,                     // A4.6
-            landingTest1OutsideLandingPoints:200,                // A4.6
-            landingTest1RollingOutsidePoints:200,                // A4.6
-            landingTest1PowerInBoxPoints:50,                     // A4.6
-            landingTest1GoAroundWithoutTouchingPoints:200,       // A4.6
-            landingTest1GoAroundInsteadStopPoints:200,           // A4.6
-            landingTest1AbnormalLandingPoints:150,               // A4.6
+            landingTest1MaxPoints:300,                           // A4.6 - Landing 6.1
+            landingTest1NoLandingPoints:300,                     // A4.6 - Landing 6.1
+            landingTest1OutsideLandingPoints:200,                // A4.6 - Landing 6.1
+            landingTest1RollingOutsidePoints:200,                // A4.6 - Landing 6.1
+            landingTest1PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
+            landingTest1GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
+            landingTest1GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
+            landingTest1AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
             landingTest1NotAllowedAerodynamicAuxiliariesPoints:0,
-            landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
+            landingTest1PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
         
-            landingTest2MaxPoints:300,                           // A4.6
-            landingTest2NoLandingPoints:300,                     // A4.6
-            landingTest2OutsideLandingPoints:200,                // A4.6
-            landingTest2RollingOutsidePoints:200,                // A4.6
-            landingTest2PowerInBoxPoints:50,                     // A4.6
-            landingTest2GoAroundWithoutTouchingPoints:200,       // A4.6
-            landingTest2GoAroundInsteadStopPoints:200,           // A4.6
-            landingTest2AbnormalLandingPoints:150,               // A4.6
+            landingTest2MaxPoints:300,                           // A4.6 - Landing 6.1
+            landingTest2NoLandingPoints:300,                     // A4.6 - Landing 6.1
+            landingTest2OutsideLandingPoints:200,                // A4.6 - Landing 6.1
+            landingTest2RollingOutsidePoints:200,                // A4.6 - Landing 6.1
+            landingTest2PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
+            landingTest2GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
+            landingTest2GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
+            landingTest2AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
             landingTest2NotAllowedAerodynamicAuxiliariesPoints:0,
             landingTest2PowerInAirPoints:0,
-            landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
+            landingTest2PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
             
-            landingTest3MaxPoints:300,                           // A4.6
-            landingTest3NoLandingPoints:300,                     // A4.6
-            landingTest3OutsideLandingPoints:200,                // A4.6
-            landingTest3RollingOutsidePoints:200,                // A4.6
-            landingTest3PowerInBoxPoints:50,                     // A4.6
-            landingTest3GoAroundWithoutTouchingPoints:200,       // A4.6
-            landingTest3GoAroundInsteadStopPoints:200,           // A4.6
-            landingTest3AbnormalLandingPoints:150,               // A4.6
+            landingTest3MaxPoints:300,                           // A4.6 - Landing 6.1
+            landingTest3NoLandingPoints:300,                     // A4.6 - Landing 6.1
+            landingTest3OutsideLandingPoints:200,                // A4.6 - Landing 6.1
+            landingTest3RollingOutsidePoints:200,                // A4.6 - Landing 6.1
+            landingTest3PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
+            landingTest3GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
+            landingTest3GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
+            landingTest3AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
             landingTest3NotAllowedAerodynamicAuxiliariesPoints:0,
             landingTest3PowerInAirPoints:0,
             landingTest3FlapsInAirPoints:0,
-            landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
+            landingTest3PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
             
-            landingTest4MaxPoints:300,                           // A4.6
-            landingTest4NoLandingPoints:300,                     // A4.6
-            landingTest4OutsideLandingPoints:200,                // A4.6
-            landingTest4RollingOutsidePoints:200,                // A4.6
-            landingTest4PowerInBoxPoints:50,                     // A4.6
-            landingTest4GoAroundWithoutTouchingPoints:200,       // A4.6
-            landingTest4GoAroundInsteadStopPoints:200,           // A4.6
-            landingTest4AbnormalLandingPoints:150,               // A4.6
+            landingTest4MaxPoints:300,                           // A4.6 - Landing 6.1
+            landingTest4NoLandingPoints:300,                     // A4.6 - Landing 6.1
+            landingTest4OutsideLandingPoints:200,                // A4.6 - Landing 6.1
+            landingTest4RollingOutsidePoints:200,                // A4.6 - Landing 6.1
+            landingTest4PowerInBoxPoints:50,                     // A4.6 - Landing 6.1
+            landingTest4GoAroundWithoutTouchingPoints:200,       // A4.6 - Landing 6.1
+            landingTest4GoAroundInsteadStopPoints:200,           // A4.6 - Landing 6.1
+            landingTest4AbnormalLandingPoints:150,               // A4.6 - Landing 6.1
             landingTest4NotAllowedAerodynamicAuxiliariesPoints:0,
             landingTest4TouchingObstaclePoints:0,
-            landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.7
+            landingTest4PenaltyCalculator:"{x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}", // A4.6 - Landing 6.1
 
             // Defaults
             flightPlanShowLegDistance:false,
@@ -852,7 +852,7 @@ enum ContestRules
             useProcedureTurns:false,
             liveTrackingScorecard:"FAI Air Rally 2020"
         ]
-    ), // "FAI Air Rally Flying - Edition 2020"
+    ), // "FAI Air Rally Flying - Edition 2022"
 
     R7 ([
             ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017",
@@ -1577,8 +1577,8 @@ enum ContestRules
         List ret = []
         ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
         ret += R11 // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
-        ret += R4  // FAI Precision Flying - Edition 2020
-        ret += R6  // FAI Air Rally Flying - Edition 2020
+        ret += R4  // FAI Precision Flying - Edition 2022
+        ret += R6  // FAI Air Rally Flying - Edition 2022
         ret += R5  // Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
         ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017
         ret += R8  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017

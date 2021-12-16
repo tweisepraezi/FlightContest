@@ -56,7 +56,7 @@ Weitere nützliche Funktionen von Flight Contest:
   Rangliste während eines laufenden Debriefings.
 * Unterstützung von Airsport Live Tracking (https://airsports.no)
 
-Erweiterungen in dieser Version (3.2.M23):
+Erweiterungen in dieser Version (3.2.M24):
 ------------------------------------------
 - Umstellung der Laufzeitumgebung
     Plattform: x64
@@ -142,6 +142,9 @@ Erweiterungen in dieser Version (3.2.M23):
       Diese Wendepunkt-Bilder können auch in den Ordner "turnpointphotos" einer bereits erstellten kmz-Streckendatei hinzugefügt werden.
       Diese Strecken-Bilder können auch in den Ordner "photos" einer bereits erstellten kmz-Streckendatei hinzugefügt werden.
 - Logger-Daten-Anzeige um GPX-Download erweitert
+- Aktualisierung folgender Regelwerke
+    FAI Precision Flying - Edition 2022
+    FAI Air Rally Flying - Edition 2022
       
 Erweiterungen in Version 3.1.11:
 --------------------------------

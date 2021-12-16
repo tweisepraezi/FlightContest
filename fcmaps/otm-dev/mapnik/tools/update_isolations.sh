@@ -18,7 +18,7 @@
 #
 
 
-DBname='gis'
+DBname='gis2'
 toolpath='mapnik/tools'
 demfile='mapnik/dem/raw.tif'
 

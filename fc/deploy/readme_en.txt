@@ -1,4 +1,4 @@
-﻿Flight Contest 3.2.M23
+﻿Flight Contest 3.2.M24
 ======================
 
 Changes
@@ -133,6 +133,11 @@ Changes
       These track images can also be added to the "photos" folder of an already created kmz track file.
 
 - 'Show logger data' extended with 'Gpx download'
+
+- Updating of the following sets of rules
+    FAI Precision Flying - Edition 2022
+    FAI Air Rally Flying - Edition 2022
+
 
 Live Tracking Configuration
 ---------------------------

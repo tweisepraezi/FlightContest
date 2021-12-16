@@ -10,8 +10,8 @@ const FCVersion64 = '3.2.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.2.M23
-AppVersion=3.2.M23
+AppVerName=Flight Contest 3.2.M24
+AppVersion=3.2.M24
 ; no milestone below
 VersionInfoVersion=3.2.0
 
@@ -149,8 +149,9 @@ Name: "{group}\Scripts\FCAutoLoadScanObservation";                              
 Name: "{group}\Scripts\FCAutoLoadLogger";                                            Filename: "{app}\scripts\FCAutoLoad_Logger.vbs";            WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-CrewList-Sample.xlsx";                                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-CrewList-Sample.xlsx";          WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-TakoffLandingCalculation-Sample.xlsx";                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-TakoffLandingCalculation-Sample.xlsx"; WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2020";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_precision_flying_rules_2020.pdf";WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2020";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_rally_flying_rules_2020.pdf";    WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2022";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_precision_flying_rules_2022.pdf";WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2022";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_rally_flying_rules_2022.pdf";    WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI GAC Landing appendix 2022";                                 Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_landing_rules_2022.pdf";         WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2020";           Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Navigationsflug_2020.pdf";        WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2017";           Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Navigationsflug_2017.pdf";        WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2017"; Filename: "{app}\tomcat\webapps\fc\docs\rules\CH_Praezisionsflug_2017.pdf";        WorkingDir: "{commondesktop}";

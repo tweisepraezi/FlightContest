@@ -12,7 +12,7 @@
 
 # Constants: Name of the database, path tools and DEM file
 
-DBname='gis'
+DBname='gis2'
 toolpath='mapnik/tools'
 demfile='mapnik/dem/raw.tif'
 

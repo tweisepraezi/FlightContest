@@ -247,7 +247,11 @@
 								<g:else>
 								    <td colspan="3"></td>
 								</g:else>
-                                <td colspan="3"><g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" /> <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" /></td>
+                                <td colspan="3">
+                                    <g:actionSubmit action="timeadd" value="${message(code:'fc.test.time.add')}" />
+                                    <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" />
+                                    <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" size="3" /> ${message(code:'fc.time.min')}
+                                </td>
                                 <td colspan="2"><g:actionSubmit action="exporttimetable" value="${message(code:'fc.test.timetable.export')}" /></td>
                                 <td/>
                             </tr>

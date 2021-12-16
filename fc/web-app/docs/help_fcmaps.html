@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.M23,</span>
-<span id="revdate">11.12.2021</span>
+<span id="revnumber">version 3.2.M24,</span>
+<span id="revdate">16.12.2021</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -833,54 +833,53 @@ ln -s ~/fcmaps/otm/mapnik/data .</pre>
 <div class="sect2">
 <h3 id="_osm_data">OSM data</h3>
 <div class="paragraph">
-<p>Data upgrade: Remove databases <strong>gis</strong> and <strong>lowzoom</strong></p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>dropdb gis
-dropdb lowzoom</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create database <strong>gis</strong></p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>createdb gis
-psql -d gis -c 'CREATE EXTENSION postgis;'</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Download data for necessary countries (Germany, Austria, Switzerland, France, South Africa: 4GB)</p>
+<p>Download data (Europe)</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>cd ~/data
 mkdir osm &amp;&amp; cd osm
-wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
-cd ~/data
-mkdir osm2 &amp;&amp; cd osm2
-wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
+wget http://download.geofabrik.de/europe-latest.osm.pbf</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Download data of countries (if needed)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
 wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
 wget http://download.geofabrik.de/europe/france-latest.osm.pbf
+wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
 wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis)</p>
+<p>Create database <strong>gis2</strong></p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cd ~
-osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/germany-latest.osm.pbf</pre>
+<pre>createdb gis2
+psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (8h)</p>
+<p>Load initial OSM data into OSM database (~/data/osm/*.pbf &#8594; gis2)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done</pre>
+<pre>osm2pgsql -d gis2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (22h)</p>
+</div>
+<div class="paragraph">
+<p>Load more OSM data into OSM database (~/data/osm2/*.pbf &#8594; gis2)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis2 --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -891,7 +890,7 @@ osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cd ~/fcmaps/otm/mapnik/tools/
+<pre>cd ~/fcmaps/otm-dev/mapnik/tools/
 cc -o saddledirection saddledirection.c -lm -lgdal
 cc -Wall -o isolation isolation.c -lgdal -lm -O2
 ls -l</pre>
@@ -902,8 +901,8 @@ ls -l</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>cd ~/fcmaps/otm/mapnik/tools/
-psql gis &lt; arealabel.sql
+<pre>cd ~/fcmaps/otm-dev/mapnik/tools/
+psql gis2 &lt; arealabel.sql
 bash update_lowzoom.sh</pre>
 </div>
 </div>
@@ -928,7 +927,7 @@ bash update_lowzoom.sh</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>psql gis &lt; stationdirection.sql</pre>
+<pre>psql gis2 &lt; stationdirection.sql</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -936,22 +935,26 @@ bash update_lowzoom.sh</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>psql gis &lt; viewpointdirection.sql
-psql gis &lt; pitchicon.sql</pre>
+<pre>psql gis2 &lt; viewpointdirection.sql
+psql gis2 &lt; pitchicon.sql</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Activate new databases <strong>gis</strong> and <strong>lowzoom</strong></p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>dropdb gisold
+dropdb lowzoomold
+psql -d postgres -c 'ALTER DATABASE gis RENAME TO gisold;'
+psql -d postgres -c 'ALTER DATABASE gis2 RENAME TO gis;'
+psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
+psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_contour_data">Contour data</h3>
-<div class="paragraph">
-<p>Create database <strong>contours</strong></p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>createdb contours
-psql -d contours -c 'CREATE EXTENSION postgis;'</pre>
-</div>
-</div>
 <div class="paragraph">
 <p>Download all necessary SRTM tiles, see <a href="http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm" class="bare">http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm</a></p>
 </div>
@@ -964,23 +967,102 @@ nano list.txt</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Insert the following (for Germany, Austria, Switzerland, South Africa)</p>
+<p>Insert the following (for Germany)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>http://viewfinderpanoramas.org/dem3/L31.zip
-http://viewfinderpanoramas.org/dem3/L32.zip
-http://viewfinderpanoramas.org/dem3/L33.zip
-http://viewfinderpanoramas.org/dem3/L34.zip
-http://viewfinderpanoramas.org/dem3/M31.zip
+<pre>http://viewfinderpanoramas.org/dem3/N32.zip
+http://viewfinderpanoramas.org/dem3/N33.zip
 http://viewfinderpanoramas.org/dem3/M32.zip
 http://viewfinderpanoramas.org/dem3/M33.zip
-http://viewfinderpanoramas.org/dem3/M34.zip
-http://viewfinderpanoramas.org/dem3/N31.zip
-http://viewfinderpanoramas.org/dem3/N32.zip
-http://viewfinderpanoramas.org/dem3/N33.zip
-http://viewfinderpanoramas.org/dem3/N34.zip
-http://viewfinderpanoramas.org/dem3/SG33.zip
+http://viewfinderpanoramas.org/dem3/L32.zip
+http://viewfinderpanoramas.org/dem3/L33.zip</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Save it and continue with</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>wget -i list.txt</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Move zip files to folder germany and unpack all</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mkdir germany &amp;&amp; mv N*.zip germany &amp;&amp; mv M*.zip germany &amp;&amp; mv L*.zip germany
+for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; done</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fill all voids (*.hgt &#8594; *.hgt.tif)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>for hgtfile in germany/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Merge into one huge tif (*.hgt.tif &#8594; raw.tif)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o germany/unpacked/raw.tif germany/unpacked/*.hgt.tif</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Convert into Mercator projection, interpolate and shrink (raw.tif &#8594; 90.tif)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 germany/unpacked/raw.tif germany/unpacked/90.tif</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create 10m contour data (90.tif &#8594; lon*.pbf) (high memory consumption)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf germany/unpacked/90.tif</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>tif: 14844 x 23256 points, Lon 6...18°, Lat 44...56°</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wait&#8230;&#8203; (4h)</p>
+</div>
+<div class="paragraph">
+<p>Do these steps for other countries (with different folders and ids). Because of memory consumption of phyghtmap only max. 6 zip files.</p>
+</div>
+<div class="paragraph">
+<p>France (node-id=3000000000)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://viewfinderpanoramas.org/dem3/M30.zip
+http://viewfinderpanoramas.org/dem3/M31.zip
+http://viewfinderpanoramas.org/dem3/L30.zip
+http://viewfinderpanoramas.org/dem3/L31.zip
+http://viewfinderpanoramas.org/dem3/K30.zip
+http://viewfinderpanoramas.org/dem3/K31.zip</pre>
+</div>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>tif: 14844 x 21493 points, Lon -6...6°, Lat 40...52°</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>South Africa (node-id=2000000000)</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://viewfinderpanoramas.org/dem3/SG33.zip
 http://viewfinderpanoramas.org/dem3/SG34.zip
 http://viewfinderpanoramas.org/dem3/SG35.zip
 http://viewfinderpanoramas.org/dem3/SG36.zip
@@ -993,89 +1075,51 @@ http://viewfinderpanoramas.org/dem3/SI34.zip
 http://viewfinderpanoramas.org/dem3/SI35.zip</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Save it and continue with</p>
-</div>
 <div class="literalblock">
 <div class="content">
-<pre>wget -i list.txt</pre>
+<pre>Lon 14...36°, Lat -35...-24°</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Move zip files to region folder and unpack all</p>
+<p>Old</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>mkdir europe &amp;&amp; mv N*.zip europe &amp;&amp; mv M*.zip europe &amp;&amp; mv L*.zip europe
-mkdir africa &amp;&amp; mv S*.zip africa
-for zipfile in europe/*.zip; do unzip -j -o "$zipfile" -d europe/unpacked; done
-for zipfile in africa/*.zip; do unzip -j -o "$zipfile" -d africa/unpacked; done</pre>
+<pre>http://viewfinderpanoramas.org/dem3/N31.zip
+http://viewfinderpanoramas.org/dem3/N34.zip
+http://viewfinderpanoramas.org/dem3/M34.zip
+http://viewfinderpanoramas.org/dem3/L34.zip</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Fill all voids per region (*.hgt &#8594; *.hgt.tif)</p>
+<p>Create database <strong>contours2</strong></p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>for hgtfile in europe/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
-for hgtfile in africa/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done</pre>
+<pre>createdb contours2
+psql -d contours2 -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Merge into one huge tif per region (*.hgt.tif &#8594; raw.tif)</p>
+<p>Load contour data into contour database (all generated pbf files must be loaded together in one step)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o europe/unpacked/raw.tif europe/unpacked/*.hgt.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o africa/unpacked/raw.tif africa/unpacked/*.hgt.tif</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Convert into Mercator projection, interpolate and shrink per region (raw.tif &#8594; 90.tif)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 europe/unpacked/raw.tif europe/unpacked/90.tif</pre>
-</div>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 africa/unpacked/raw.tif africa/unpacked/90.tif</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Create 10m contour data per region (90.tif &#8594; lon*.pbf)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf europe/unpacked/90.tif</pre>
+<pre>osm2pgsql -d contours2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Wait&#8230;&#8203; (4h)</p>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>phyghtmap --step=10 --start-node-id=2000000000 --start-way-id=2000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf africa/unpacked/90.tif</pre>
-</div>
-</div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (2h)</p>
-</div>
-<div class="paragraph">
-<p>Load contour data into contour database</p>
+<p>Activate new database <strong>contours</strong></p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d contours --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf</pre>
+<pre>dropdb contoursold
+psql -d postgres -c 'ALTER DATABASE contours RENAME TO contoursold;'
+psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (4h)</p>
 </div>
 </div>
 </div>

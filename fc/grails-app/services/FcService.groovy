@@ -3675,10 +3675,11 @@ class FcService
             return task
         }
 		try {
+            save_addtimevalue_task(task.instance, params.addTimeValue)
 	        Map selected_testids = [selectedTestID:""]
 	        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
 	            if (params["selectedTestID${test_instance.id}"] == "on") {
-	                addTestingTime(task.instance,test_instance)
+	                modify_testing_time(task.instance, test_instance, true) // true - add
 	                selected_testids["selectedTestID${test_instance.id}"] = "on"
 	            }
 	        }
@@ -3703,10 +3704,11 @@ class FcService
             return task
         }
 		try {
+            save_addtimevalue_task(task.instance, params.addTimeValue)
 	        Map selected_testids = [selectedTestID:""]
 	        Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
 	            if (params["selectedTestID${test_instance.id}"] == "on") {
-	                subtractTestingTime(task.instance,test_instance)
+	                modify_testing_time(task.instance, test_instance, false) // false - subtract
 	                selected_testids["selectedTestID${test_instance.id}"] = "on"
 	            }
 	        }
@@ -3721,6 +3723,48 @@ class FcService
         return task
     }
     
+    //--------------------------------------------------------------------------
+    private void save_addtimevalue_task(Task taskInstance, String addTimeValue)
+    {
+        if (addTimeValue.isInteger()) {
+            int add_time_value = addTimeValue.toInteger()
+            taskInstance.addTimeValue = add_time_value
+			taskInstance.save()
+        }
+    }
+    
+    //--------------------------------------------------------------------------
+    private void modify_testing_time(Task taskInstance, Test testInstance, boolean add)
+    {
+        if (testInstance.timeCalculated) {
+            GregorianCalendar time = new GregorianCalendar() 
+            time.setTime(testInstance.testingTime)
+            
+            // add testingTime
+            if (add) {
+                time.add(Calendar.MINUTE, taskInstance.addTimeValue)
+            } else {
+                time.add(Calendar.MINUTE, -taskInstance.addTimeValue)
+            }
+            testInstance.testingTime = time.getTime()
+            
+            // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
+            calculate_times(time, taskInstance, testInstance)
+			testInstance.ResetFlightTestResults()
+			testInstance.CalculateTestPenalties()
+            testInstance.flightTestLink = ""
+			delete_uploadjobtest(testInstance)
+            testInstance.crewResultsModified = true
+            testInstance.save()
+            
+            calculate_coordresult(testInstance)
+			
+			taskInstance.timetableModified = true
+			taskInstance.save()
+			testInstance.timetableVersion = taskInstance.timetableVersion + 1 
+        }
+    }
+  
     //--------------------------------------------------------------------------
     Map exporttimetableTask(Map params, String uploadFileName)
     {
@@ -12363,64 +12407,6 @@ class FcService
         return lastMapDistance
     }
     
-    //--------------------------------------------------------------------------
-    private void addTestingTime(Task taskInstance, Test testInstance)
-    {
-        if (testInstance.timeCalculated) {
-            
-            GregorianCalendar time = new GregorianCalendar() 
-            time.setTime(testInstance.testingTime)
-            
-            // add testingTime
-            time.add(Calendar.MINUTE, taskInstance.addTimeValue)
-            testInstance.testingTime = time.getTime()
-            
-            // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
-            calculate_times(time, taskInstance, testInstance)
-			testInstance.ResetFlightTestResults()
-			testInstance.CalculateTestPenalties()
-            testInstance.flightTestLink = ""
-			delete_uploadjobtest(testInstance)
-            testInstance.crewResultsModified = true
-            testInstance.save()
-            
-            calculate_coordresult(testInstance)
-			
-			taskInstance.timetableModified = true
-			taskInstance.save()
-			testInstance.timetableVersion = taskInstance.timetableVersion + 1 
-        }
-    }
-  
-    //--------------------------------------------------------------------------
-    private void subtractTestingTime(Task taskInstance, Test testInstance)
-    {
-        if (testInstance.timeCalculated) {
-            
-            GregorianCalendar time = new GregorianCalendar() 
-            time.setTime(testInstance.testingTime)
-            
-            // subtract testingTime
-            time.add(Calendar.MINUTE, -taskInstance.addTimeValue)
-            testInstance.testingTime = time.getTime()
-            
-            // calulate endTestingTime, takeoffTime, startTime, finishTime, arrivalTime
-            calculate_times(time, taskInstance, testInstance)
-			testInstance.ResetFlightTestResults()
-			testInstance.CalculateTestPenalties()
-            testInstance.flightTestLink = ""
-			delete_uploadjobtest(testInstance)
-            testInstance.crewResultsModified = true
-            testInstance.save()
-            
-            calculate_coordresult(testInstance)
-
-			taskInstance.timetableModified = true
-			taskInstance.save()
-			testInstance.timetableVersion = taskInstance.timetableVersion + 1 
-		}
-    }
-
     //--------------------------------------------------------------------------
     private void calulateTimetableWarnings(Task taskInstance)
     {

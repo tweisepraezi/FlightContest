@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M23
-:revdate:   11.12.2021
+:revnumber: 3.2.M24
+:revdate:   16.12.2021
 :nofooter:
 :toc-title: Table of content
 :toc:
@@ -199,50 +199,48 @@ Close ```screen``` with
  
 === OSM data
 
-Data upgrade: Remove databases *gis* and *lowzoom*
-
- dropdb gis
- dropdb lowzoom
- 
-Create database *gis*
-
- createdb gis
- psql -d gis -c 'CREATE EXTENSION postgis;'
-
-Download data for necessary countries (Germany, Austria, Switzerland, France, South Africa: 4GB)
+Download data (Europe)
 
  cd ~/data
  mkdir osm && cd osm
+ wget http://download.geofabrik.de/europe-latest.osm.pbf
+
+Download data of countries (if needed)
+
  wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
- cd ~/data
- mkdir osm2 && cd osm2
- wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
  wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
  wget http://download.geofabrik.de/europe/france-latest.osm.pbf
+ wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
  wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf
 
-Load OSM data into OSM database (~/data/osm/*.pbf -> gis)
+Create database *gis2*
 
- cd ~
- osm2pgsql -d gis --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/germany-latest.osm.pbf
+ createdb gis2
+ psql -d gis2 -c 'CREATE EXTENSION postgis;'
 
-Wait... (8h)
+Load initial OSM data into OSM database (~/data/osm/*.pbf -> gis2)
 
- for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done
+ osm2pgsql -d gis2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
+
+Wait... (22h)
  
-Wait... (22h) 
+Load more OSM data into OSM database (~/data/osm2/*.pbf -> gis2)
+
+ for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis2 --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done
+
+Wait... (22h)
 
 Compile preprocessing tools (warnings can be ignored)
 
- cd ~/fcmaps/otm/mapnik/tools/
+ cd ~/fcmaps/otm-dev/mapnik/tools/
  cc -o saddledirection saddledirection.c -lm -lgdal
  cc -Wall -o isolation isolation.c -lgdal -lm -O2
  ls -l
  
 Preprocessing
 
- cd ~/fcmaps/otm/mapnik/tools/
- psql gis < arealabel.sql
+ cd ~/fcmaps/otm-dev/mapnik/tools/
+ psql gis2 < arealabel.sql
  bash update_lowzoom.sh
 
 Wait... (1h)
@@ -255,20 +253,24 @@ Wait... (10min)
 
 Wait... (5min)
  
- psql gis < stationdirection.sql
+ psql gis2 < stationdirection.sql
  
 Wait... (15min)
 
- psql gis < viewpointdirection.sql
- psql gis < pitchicon.sql
+ psql gis2 < viewpointdirection.sql
+ psql gis2 < pitchicon.sql
 
+Activate new databases *gis* and *lowzoom*
+
+ dropdb gisold
+ dropdb lowzoomold
+ psql -d postgres -c 'ALTER DATABASE gis RENAME TO gisold;'
+ psql -d postgres -c 'ALTER DATABASE gis2 RENAME TO gis;'
+ psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
+ psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'
+ 
 === Contour data
 
-Create database *contours*
- 
- createdb contours
- psql -d contours -c 'CREATE EXTENSION postgis;'
- 
 Download all necessary SRTM tiles, see http://www.viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm
 
  cd ~/data
@@ -276,20 +278,59 @@ Download all necessary SRTM tiles, see http://www.viewfinderpanoramas.org/Covera
  cd ~/data/srtm
  nano list.txt
 
-Insert the following (for Germany, Austria, Switzerland, South Africa)
+Insert the following (for Germany)
 
- http://viewfinderpanoramas.org/dem3/L31.zip
- http://viewfinderpanoramas.org/dem3/L32.zip
- http://viewfinderpanoramas.org/dem3/L33.zip
- http://viewfinderpanoramas.org/dem3/L34.zip
- http://viewfinderpanoramas.org/dem3/M31.zip
- http://viewfinderpanoramas.org/dem3/M32.zip
- http://viewfinderpanoramas.org/dem3/M33.zip
- http://viewfinderpanoramas.org/dem3/M34.zip
- http://viewfinderpanoramas.org/dem3/N31.zip
  http://viewfinderpanoramas.org/dem3/N32.zip
  http://viewfinderpanoramas.org/dem3/N33.zip
- http://viewfinderpanoramas.org/dem3/N34.zip
+ http://viewfinderpanoramas.org/dem3/M32.zip
+ http://viewfinderpanoramas.org/dem3/M33.zip
+ http://viewfinderpanoramas.org/dem3/L32.zip
+ http://viewfinderpanoramas.org/dem3/L33.zip
+
+Save it and continue with
+
+ wget -i list.txt
+
+Move zip files to folder germany and unpack all
+
+ mkdir germany && mv N*.zip germany && mv M*.zip germany && mv L*.zip germany
+ for zipfile in germany/*.zip; do unzip -j -o "$zipfile" -d germany/unpacked; done
+ 
+Fill all voids (*.hgt -> *.hgt.tif)
+
+ for hgtfile in germany/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
+
+Merge into one huge tif (*.hgt.tif -> raw.tif)
+
+ gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o germany/unpacked/raw.tif germany/unpacked/*.hgt.tif
+
+Convert into Mercator projection, interpolate and shrink (raw.tif -> 90.tif)
+
+ gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 germany/unpacked/raw.tif germany/unpacked/90.tif
+
+Create 10m contour data (90.tif -> lon*.pbf) (high memory consumption)
+
+ phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf germany/unpacked/90.tif
+ 
+ tif: 14844 x 23256 points, Lon 6...18°, Lat 44...56°
+
+Wait... (4h)
+
+Do these steps for other countries (with different folders and ids). Because of memory consumption of phyghtmap only max. 6 zip files.
+
+France (node-id=3000000000)
+
+ http://viewfinderpanoramas.org/dem3/M30.zip
+ http://viewfinderpanoramas.org/dem3/M31.zip
+ http://viewfinderpanoramas.org/dem3/L30.zip
+ http://viewfinderpanoramas.org/dem3/L31.zip
+ http://viewfinderpanoramas.org/dem3/K30.zip
+ http://viewfinderpanoramas.org/dem3/K31.zip
+  
+ tif: 14844 x 21493 points, Lon -6...6°, Lat 40...52°
+
+South Africa (node-id=2000000000)
+
  http://viewfinderpanoramas.org/dem3/SG33.zip
  http://viewfinderpanoramas.org/dem3/SG34.zip
  http://viewfinderpanoramas.org/dem3/SG35.zip
@@ -301,51 +342,33 @@ Insert the following (for Germany, Austria, Switzerland, South Africa)
  http://viewfinderpanoramas.org/dem3/SI33.zip
  http://viewfinderpanoramas.org/dem3/SI34.zip
  http://viewfinderpanoramas.org/dem3/SI35.zip
-
-Save it and continue with
-
- wget -i list.txt
-
-Move zip files to region folder and unpack all
-
- mkdir europe && mv N*.zip europe && mv M*.zip europe && mv L*.zip europe
- mkdir africa && mv S*.zip africa
- for zipfile in europe/*.zip; do unzip -j -o "$zipfile" -d europe/unpacked; done
- for zipfile in africa/*.zip; do unzip -j -o "$zipfile" -d africa/unpacked; done
  
-Fill all voids per region (*.hgt -> *.hgt.tif)
+ Lon 14...36°, Lat -35...-24°
 
- for hgtfile in europe/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
- for hgtfile in africa/unpacked/*.hgt; do gdal_fillnodata.py $hgtfile $hgtfile.tif; done
+Old
 
-Merge into one huge tif per region (*.hgt.tif -> raw.tif)
+ http://viewfinderpanoramas.org/dem3/N31.zip
+ http://viewfinderpanoramas.org/dem3/N34.zip
+ http://viewfinderpanoramas.org/dem3/M34.zip
+ http://viewfinderpanoramas.org/dem3/L34.zip
 
- gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o europe/unpacked/raw.tif europe/unpacked/*.hgt.tif
-
- gdal_merge.py -n 32767 -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -o africa/unpacked/raw.tif africa/unpacked/*.hgt.tif
+Create database *contours2*
  
-Convert into Mercator projection, interpolate and shrink per region (raw.tif -> 90.tif)
+ createdb contours2
+ psql -d contours2 -c 'CREATE EXTENSION postgis;'
+ 
+Load contour data into contour database (all generated pbf files must be loaded together in one step)
 
- gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 europe/unpacked/raw.tif europe/unpacked/90.tif
-
- gdalwarp -co BIGTIFF=YES -co TILED=YES -co COMPRESS=LZW -co PREDICTOR=2 -t_srs "+proj=merc +ellps=sphere +R=6378137 +a=6378137 +units=m" -r bilinear -tr 90 90 africa/unpacked/raw.tif africa/unpacked/90.tif
-
-Create 10m contour data per region (90.tif -> lon*.pbf)
-
- phyghtmap --step=10 --start-node-id=1000000000 --start-way-id=1000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf europe/unpacked/90.tif
+ osm2pgsql -d contours2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf
 
 Wait... (4h)
-  
- phyghtmap --step=10 --start-node-id=2000000000 --start-way-id=2000000000 --max-nodes-per-tile=0 --no-zero-contour --pbf africa/unpacked/90.tif
- 
-Wait... (2h)
- 
-Load contour data into contour database
 
- osm2pgsql -d contours --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/contours.style ~/data/srtm/lon*.pbf
+Activate new database *contours*
 
-Wait... (4h)
- 
+ dropdb contoursold
+ psql -d postgres -c 'ALTER DATABASE contours RENAME TO contoursold;'
+ psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'
+
 [[configure-server]]
 == Configure server
 

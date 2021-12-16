@@ -1,0 +1,8 @@
+
+X = Recorded time at this point
+
+Aircraft F1 & F2    SP correct flown, Time recorded
+Aircraft F3 & F4    SP not observed, Time recorded
+Aircraft F5         SP not observed, Time recorded too soon, bad course detected -> manually check for rule A2.2.14 and for Bad course at start or landing needed 
+Aircraft F6         Flight is not automatically evaluable (no start found) This practically does not happen.
+

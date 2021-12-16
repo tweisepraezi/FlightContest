@@ -210,7 +210,7 @@ class Task
 		parkingDuration(range:0..240)
 		minNextFlightDuration(range:0..240)
 		procedureTurnDuration(range:0..60)
-		addTimeValue(range:1..60)
+		addTimeValue(range:1..240)
 		
 		planningtest(nullable:true)
 		flighttest(nullable:true)
