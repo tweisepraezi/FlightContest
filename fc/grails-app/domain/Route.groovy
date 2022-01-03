@@ -25,6 +25,7 @@ class Route
     
     Boolean showCurvedPoints = false                                             // DB-2.20
 	Integer mapScale = 200000                                                    // DB-2.21
+	Integer altitudeAboveGround = 500                                            // DB-2.31, Altitude (Höhe) über Grund in ft
     Boolean exportSemicircleGates = false                                        // DB-2.26
     
     Boolean showCoords = true                                                    // DB-2.30
@@ -223,6 +224,9 @@ class Route
         showTestLegs(nullable:true)
         showEnroutePhotos(nullable:true)
         showEnrouteCanvas(nullable:true)
+		
+		// DB-2.31 compatibility
+		altitudeAboveGround(nullable:true)
 	}
 
 	static mapping = {
@@ -251,6 +255,7 @@ class Route
         enrouteCanvasMeasurement = routeInstance.enrouteCanvasMeasurement
         liveTrackingScorecard = routeInstance.liveTrackingScorecard
         mapScale = routeInstance.mapScale
+		altitudeAboveGround = routeInstance.altitudeAboveGround
         showCoords = routeInstance.showCoords
         showCoordObservations = routeInstance.showCoordObservations
         showResultLegs = routeInstance.showResultLegs

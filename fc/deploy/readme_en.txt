@@ -1,4 +1,4 @@
-﻿Flight Contest 3.2.M24
+﻿Flight Contest 3.2.M25
 ======================
 
 Changes
@@ -83,7 +83,8 @@ Changes
     All options will be saved in database.
     Curved legs can be disabled separately.
     Direct generation without route details added.
-    A 2nd set of generation options added.
+	Direct generation with all route details added.
+    3 more sets of generation options added.
     Emailing of contest maps added.
 
 - Judge timetable: 
@@ -138,6 +139,8 @@ Changes
     FAI Precision Flying - Edition 2022
     FAI Air Rally Flying - Edition 2022
 
+- Routes: Altitude above ground added. The terrain height above normal zero must now be entered for the individual coordinates.
+  The minimum flight altitude above normal zero is thus the sum of altitude above ground and terrain altitude.
 
 Live Tracking Configuration
 ---------------------------

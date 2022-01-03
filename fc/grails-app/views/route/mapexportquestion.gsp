@@ -107,23 +107,23 @@
                                     <g:checkBox name="contestMapGraticule" value="${routeInstance.contestMapGraticule}" tabIndex="${ti[0]++}" />
                                     <label>${message(code:'fc.contestmap.contestmapgraticule')}</label>
                                 </div>
-	                            <g:if test="${geodata_airfields}">
-	                                <div>
-                                        <g:if test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}">
-                                            <g:set var="airfields_checked_icao" value="checked"/>
-                                        </g:if>
-                                        <g:elseif test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_NAME}">
-                                            <g:set var="airfields_checked_name" value="checked"/>
-                                        </g:elseif>
-                                        <g:elseif test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA}">
-                                            <g:set var="airfields_checked_geodata" value="checked"/>
-                                        </g:elseif>
-	                                    <label>${message(code:'fc.contestmap.contestmapairfields')}</label> <img src="${createLinkTo(dir:'images/map',file:'airfield.png')}"/>:
-                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" ${airfields_checked_icao} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.icao')}</label>
-                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" ${airfields_checked_name} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.name')}</label>
-                                        <label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" value="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" ${airfields_checked_geodata} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.geodata')}</label>
-	                                </div>
-	                            </g:if>
+								<div>
+									<g:if test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}">
+										<g:set var="airfields_checked_icao" value="checked"/>
+									</g:if>
+									<g:elseif test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_OSM_NAME}">
+										<g:set var="airfields_checked_name" value="checked"/>
+									</g:elseif>
+									<g:elseif test="${routeInstance.contestMapAirfields == Defs.CONTESTMAPAIRFIELDS_GEODATA}">
+										<g:set var="airfields_checked_geodata" value="checked"/>
+									</g:elseif>
+									<label>${message(code:'fc.contestmap.contestmapairfields')}</label> <img src="${createLinkTo(dir:'images/map',file:'airfield.png')}"/>:
+									<label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_ICAO}" ${airfields_checked_icao} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.icao')}</label>
+									<label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" value="${Defs.CONTESTMAPAIRFIELDS_OSM_NAME}" ${airfields_checked_name} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.osmdata.name')}</label>
+									<g:if test="${geodata_airfields}">
+										<label><input type="radio" name="contestMapAirfields" id="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" value="${Defs.CONTESTMAPAIRFIELDS_GEODATA}" ${airfields_checked_geodata} tabIndex="${ti[0]++}"/>${message(code:'fc.contestmap.contestmapairfields.geodata')}</label>
+									</g:if>
+								</div>
 	                            <div>
 	                                <g:checkBox name="contestMapChurches" value="${routeInstance.contestMapChurches}" tabIndex="${ti[0]++}" />
 	                                <label>${message(code:'fc.contestmap.contestmapchurches')}</label>
@@ -303,6 +303,7 @@
 									<input type="hidden" name="id" value="${routeInstance?.id}" />
 									<g:actionSubmit action="mapgenerate" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
 									<g:actionSubmit action="mapgenerate_noroute" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+									<g:actionSubmit action="mapgenerate_allroutedetails" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function firstoptions_click() {
@@ -391,6 +392,7 @@
                                     <br/>
                                     <g:actionSubmit action="mapgenerate2" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                     <g:actionSubmit action="mapgenerate_noroute2" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+									<g:actionSubmit action="mapgenerate_allroutedetails2" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function secondoptions_click() {
@@ -479,6 +481,7 @@
                                     <br/>
                                     <g:actionSubmit action="mapgenerate3" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                     <g:actionSubmit action="mapgenerate_noroute3" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+									<g:actionSubmit action="mapgenerate_allroutedetails3" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function thirdoptions_click() {
@@ -567,6 +570,7 @@
                                     <br/>
                                     <g:actionSubmit action="mapgenerate4" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                     <g:actionSubmit action="mapgenerate_noroute4" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+									<g:actionSubmit action="mapgenerate_allroutedetails4" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function forthoptions_click() {

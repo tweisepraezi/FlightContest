@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M24
-:revdate:   16.12.2021
+:revnumber: 3.2.M25
+:revdate:   03.01.2022
 :nofooter:
 :toc-title: Inhaltsverzeichnis
 :toc:
@@ -363,7 +363,7 @@ Intermediate-Punkte sind mit folgenden Bezeichnungen anzugeben:
 Für eine Wettbewerbsstrecke sind für alle Check-Punkte folgende Angaben nötig:
 
 * Koordinaten
-* Minimale Flug-Höhe über Normal-Null (Altitude, in ft)
+* Höhe des Geländes über Normal-Null (Altitude, in ft)
 + 
 TO, LDG, iTO, iLDG: 0 ft
 * Tor-Breite (in NM)
@@ -480,7 +480,7 @@ Einzugebende Eigenschaften der Check-Punkte einer Strecke:
 Beachten Sie bei der Strecken-Eingabe in 'Flight Contest', dass die Check-Punkte nur 
 nacheinander eingeben werden können und das Einfügen von Check-Punkten nicht möglich ist. 
 Alle Eigenschaften bis auf den Check-Punkt-Typ sind bis zur ersten Nutzung änderbar.
-Flug-Höhe und Tor-Breite sind auch nach der ersten Nutzung änderbar.
+Gelände-Höhe und Tor-Breite sind auch nach der ersten Nutzung änderbar.
 
 Alternativ ist die Eingabe und Weitergabe von Strecken oder Teilen davon 
 auch mit Textdateien (UTF-8) möglich. In einer leeren Strecke können alle Check-Punkte mit 

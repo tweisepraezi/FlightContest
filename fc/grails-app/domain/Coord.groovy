@@ -25,7 +25,7 @@ class Coord
     Integer lonMin = 0
     BigDecimal lonSecondDecimal = 0.0
 
-    int altitude = 500                   // Altitude (Höhe) in ft 
+    int altitude = 500                   // Altitude (Höhe) des Bodens über Meeresspiegel in ft
     int gatewidth = 1                    // UNUSED: Coord.gatewidth, migriert nach gatewidth2 (Float), DB-2.3
 	Float gatewidth2 = 1.0f              // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM), DB-2.3
 	Integer legDuration                  // duration of leg [min], DB-2.3

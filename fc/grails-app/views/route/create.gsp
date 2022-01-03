@@ -35,6 +35,11 @@
                                     <br/>
                                     <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:routeInstance,field:'mapScale')}" tabIndex="${ti[0]++}"/>
                                 </p>
+                                <p>
+                                    <label>${message(code:'fc.altitude.aboveground')}*:</label>
+                                    <br/>
+                                    <input type="text" id="altitudeAboveGround" name="altitudeAboveGround" value="${fieldValue(bean:routeInstance,field:'altitudeAboveGround')}" tabIndex="${ti[0]++}"/>
+                                </p>
                             </fieldset>
                             <g:editRouteObservations route="${routeInstance}" ti="${ti}"/>
                         </fieldset>

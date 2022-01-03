@@ -1058,6 +1058,17 @@ class RouteFileTools
                         route_instance.useProcedureTurns = useprocedureturn == "yes"
                         save_route = true
                     }
+                    String mapscale = gpx.extensions.flightcontest.observationsettings.'@mapscale'[0]
+                    if (mapscale) {
+                        route_instance.mapScale = mapscale.toInteger()
+                        save_route = true
+                    }
+					route_instance.altitudeAboveGround = 0
+                    String altitudeaboveground = gpx.extensions.flightcontest.observationsettings.'@altitudeaboveground'[0]
+                    if (altitudeaboveground) {
+                        route_instance.altitudeAboveGround = altitudeaboveground.toInteger()
+                        save_route = true
+                    }
                 }
                 if (gpx.extensions.flightcontest.mapsettings) {
                     String contestmapairfields = gpx.extensions.flightcontest.mapsettings.'@contestmapairfields'[0]
@@ -1530,6 +1541,7 @@ class RouteFileTools
                 if (route_instance.enrouteCanvasMeasurement == EnrouteMeasurement.Unassigned) {
                     route_instance.enrouteCanvasMeasurement = EnrouteMeasurement.None
                 }
+				route_instance.altitudeAboveGround = 0
                 for (def d in settings_data) {
                     switch (d.'@name') {
                         case "routetitle":
@@ -1577,6 +1589,12 @@ class RouteFileTools
                         case "useprocedureturn":
                             route_instance.useProcedureTurns = d.value.text() == "yes"
                             break
+						case "mapscale":
+							route_instance.mapScale = d.value.text().toInteger()
+							break
+						case "altitudeaboveground":
+							route_instance.altitudeAboveGround = d.value.text().toInteger()
+							break
                     }
                 }
                 if (mapsettings_folder) {

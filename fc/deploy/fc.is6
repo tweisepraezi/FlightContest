@@ -2,7 +2,7 @@
 
 [Code]
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
-const DBVersion = '2.30.0';     // DB-2.30
+const DBVersion = '2.31.0';     // DB-2.31
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
 const FCVersion = '3.2.0';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
@@ -10,12 +10,12 @@ const FCVersion64 = '3.2.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.2.M24
-AppVersion=3.2.M24
+AppVerName=Flight Contest 3.2.M25
+AppVersion=3.2.M25
 ; no milestone below
 VersionInfoVersion=3.2.0
 
-AppCopyright=(C) 2009-2021 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+AppCopyright=(C) 2009-2022 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://flightcontest.de
 ;AppUpdatesURL=http://flightcontest.de

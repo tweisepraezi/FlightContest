@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M24
-:revdate:   16.12.2021
+:revnumber: 3.2.M25
+:revdate:   03.01.2022
 :nofooter:
 :toc-title: Table of content
 :toc:
@@ -19,12 +19,12 @@ Descriptions and tools based on following projects
 
 [[server-requirements]]
 == Virtual server requirements
-* RAM: 32GB (not dynamic)
-* SSD: 1024GB
+* RAM: 60GB (not dynamic)
+* SSD: 2TB
 * CPU: 16
 * OS: Ubuntu 18.04 LTS 64bit
 
-such as: Strato V-Server Linux V80
+such as: Strato V-Server Linux V80-60
 
 [[software-installation]]
 == Software installation
@@ -205,31 +205,17 @@ Download data (Europe)
  mkdir osm && cd osm
  wget http://download.geofabrik.de/europe-latest.osm.pbf
 
-Download data of countries (if needed)
-
- wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
- wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
- wget http://download.geofabrik.de/europe/france-latest.osm.pbf
- wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
- wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf
-
 Create database *gis2*
 
  createdb gis2
  psql -d gis2 -c 'CREATE EXTENSION postgis;'
 
-Load initial OSM data into OSM database (~/data/osm/*.pbf -> gis2)
+Load OSM data into OSM database (~/data/osm/*.pbf -> gis2)
 
- osm2pgsql -d gis2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
+ osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
 
 Wait... (22h)
  
-Load more OSM data into OSM database (~/data/osm2/*.pbf -> gis2)
-
- for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis2 --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done
-
-Wait... (22h)
-
 Compile preprocessing tools (warnings can be ignored)
 
  cd ~/fcmaps/otm-dev/mapnik/tools/
@@ -268,6 +254,10 @@ Activate new databases *gis* and *lowzoom*
  psql -d postgres -c 'ALTER DATABASE gis2 RENAME TO gis;'
  psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
  psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'
+ 
+Check database size
+
+ psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
  
 === Contour data
 
@@ -369,6 +359,10 @@ Activate new database *contours*
  psql -d postgres -c 'ALTER DATABASE contours RENAME TO contoursold;'
  psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'
 
+Check database size
+
+ psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"
+ 
 [[configure-server]]
 == Configure server
 
@@ -384,8 +378,10 @@ Display free disk space
  
  df
  
-320GB used, 680GB free
+Display free ram
 
+ free -m
+ 
 SSH login with user *root*
 
  ssh -l root <server-dns-name>

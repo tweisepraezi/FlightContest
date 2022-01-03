@@ -1,6 +1,10 @@
 Flight Contest 3.2 Live Tracking Notes
 ======================================
 
+Changes 3.2.M25
+---------------
+- Command "Crews -> Create and connect live tracking teams for selected crews" runs "Import live tracking teams" for selected teams previously
+
 Changes 3.2.M21
 ---------------
 - Command "Add navigation tracks" added after reconnection of a navigation task

@@ -109,3 +109,104 @@ PUT /api/v1/contests/{id}/share/
 PUT /api/v1/contests/{contest_pk}/navigationtasks/{id}/share/ 
     visibility*	    string      VisibilityEnum: public, private, unlisted
 
+
+Used APIs (simplified)
+----------------------
+
+https://airsports.no/docs/
+
+call_rest("teams/",                      "POST", 201, json_builder.toString(), ALL_DATA)
+call_rest("teams/{liveTrackingTeamID}/", "GET",  200, "", ALL_DATA)
+
+call_rest("contests/",              "GET",    200, "", ALL_DATA)
+call_rest("contests/",              "POST",   201, json_builder.toString(), "id")
+call_rest("contests/{contest_pk}/", "DELETE", 204, "", "")
+
+call_rest("contests/{contest_pk}/share/", "PUT", 200, json_builder.toString(), "")
+
+call_rest("contests/{contest_pk}/teams/", "GET", 200, "", ALL_DATA)
+
+call_rest("contests/{contest_pk}/contestteams/",                             "POST",   201, json_builder.toString(), ALL_DATA)
+call_rest("contests/{contest_pk}/contestteams/{liveTrackingContestTeamID}/", "GET",    200, "", ALL_DATA)
+call_rest("contests/{contest_pk}/contestteams/{liveTrackingContestTeamID}/", "DELETE", 204, "", "")
+
+call_rest("contests/{contest_pk}/tasks/",           "GET",    200, "", ALL_DATA)
+call_rest("contests/{contest_pk}/tasks/",           "POST",   201, json_builder.toString(), "id")
+call_rest("contests/{contest_pk}/tasks/{task_id}/", "DELETE", 204, "", "")
+
+call_rest("contests/{contest_pk}/tasktests/",                "GET",    200, "", ALL_DATA)
+call_rest("contests/{contest_pk}/tasktests/{tasktest_id}/",  "DELETE", 204, "", "")
+call_rest("contests/{contest_pk}/tasktests/",                "POST",   201, json_builder.toString(), "id")
+
+call_rest("contests/{contest_pk}/navigationtasks/", "GET", 200, "", ALL_DATA)
+
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/", "GET", 200, "", ALL_DATA)
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/", "DELETE", 204, "", "")
+
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/share/", "PUT", 200, json_builder.toString(), "")
+
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestants/", "GET", 200, "", ALL_DATA)
+
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestantsteamid/", "POST", 201, json_builder.toString(), ALL_DATA)
+
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestants/{contestant_id}/update_without_team/", "PUT", 200, json_builder.toString(), "")
+
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestants/{contestant_id}/gpx_track/", "POST", 201, json_builder.toString(), "")
+
+call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestants/{contestant_id}/track/", "GET", 200, "", ALL_DATA)
+
+call_rest("contests/{contest_pk}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
+
+call_rest("contests/{contest_pk}/update_test_result/", "PUT", 200, json_builder.toString(), "")
+
+
+call_rest function parameter (Java)
+-----------------------------------
+Map call_rest(String funcURL, String requestMethod, int successfulResponseCode, String jsonOutputData, String retDataKey)
+
+
+Used APIs (original call)
+-------------------------
+
+Map ret3 = call_rest("contests/", "GET", 200, "", ALL_DATA)
+Map ret1 = call_rest("contests/", "POST", 201, json_builder.toString(), "id")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/", "DELETE", 204, "", "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/share/", "PUT", 200, json_builder.toString(), "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/teams/", "GET", 200, "", ALL_DATA)
+Map ret1 = call_rest("teams/", "POST", 201, team_json_builder.toString(), ALL_DATA)
+	ret1 = call_rest("teams/", "POST", 201, team_json_builder.toString(), ALL_DATA)
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/contestteams/", "POST", 201, contestteam_json_builder.toString(), ALL_DATA)
+Map ret1 = call_rest("teams/${crew_instance.liveTrackingTeamID}/", "GET", 200, "", ALL_DATA)
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/contestteams/${crew_instance.liveTrackingContestTeamID}/", "GET", 200, "", ALL_DATA)
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/contestteams/${crew_instance.liveTrackingContestTeamID}/", "DELETE", 204, "", "")
+Map ret3 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/", "GET", 200, "", ALL_DATA)
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
+Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+Map ret3 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/", "GET", 200, "", ALL_DATA)
+Map ret7 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${navigationtask_id}/", "GET", 200, "", ALL_DATA)
+Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/${tasktest.id}/", "DELETE", 204, "", "")
+	ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/", "GET", 200, "", ALL_DATA)
+Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/${task.id}/", "DELETE", 204, "", "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/", "DELETE", 204, "", "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/", "POST", 201, json_builder_createtask.toString(), "id")
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/", "GET", 200, "", ALL_DATA)
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/", "GET", 200, "", ALL_DATA)
+Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasks/${task.id}/", "DELETE", 204, "", "")
+Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "POST", 201, json_builder_tasktest.toString(), "id")
+Map ret7 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
+Map ret6 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/${tasktest_id}/", "DELETE", 204, "", "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/share/", "PUT", 200, json_builder.toString(), "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/", "GET", 200, "", ALL_DATA)
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/", "GET", 200, "", ALL_DATA)
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestantsteamid/", "POST", 201, json_builder.toString(), ALL_DATA)
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/update_without_team/", "PUT", 200, json_builder.toString(), "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/", "GET", 200, "", ALL_DATA)
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/gpx_track/", "POST", 201, json_builder.toString(), "")
+Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/", "GET", 200, "", ALL_DATA)
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/track/", "GET", 200, "", ALL_DATA)
+Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/update_test_result/", "PUT", 200, json_builder_result.toString(), "")
+
+

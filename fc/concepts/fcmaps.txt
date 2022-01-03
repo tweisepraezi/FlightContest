@@ -1,4 +1,10 @@
 
+Genutzter Zoom-Level: maxscale_zoom11
+
+Lowzoom-Anwendungen dieses Zoom-Levels (unvollständig):
+	railways_lowzoom
+
+
 Source
 https://github.com/der-stefan/OpenTopoMap/tree/master/mapnik
 
@@ -13,8 +19,8 @@ mapnik/relief_color_text_file.txt	(mapnik/relief_color_text_file.txt)
 mapnik/opentopomap.xml  			(mapnik/opentopomap.xml)
 mapnik/opentopomap-ele.xml			(mapnik/opentopomap.xml)
 
-modifications
-=============
+modifications (unvollständig)
+=============================
 
 mapnik/opentopomap.xml
 ----------------------

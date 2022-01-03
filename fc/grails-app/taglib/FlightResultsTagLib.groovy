@@ -29,6 +29,7 @@ class FlightResultsTagLib
             int penalty_coord_summary = 0
             int penalty_badcourse_summary = 0
             int penalty_altitude_summary = 0
+			Route route_instance = attrs.t.task.flighttest.route
             CoordResult last_coordresult_instance = null
             for(CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
                 
@@ -109,7 +110,11 @@ class FlightResultsTagLib
                 } else {
                     outln"""        <td/>"""
                 }
-                outln"""            <td>${coordresult_instance.altitude}${message(code:'fc.foot')}</td>"""
+				int check_altitude = coordresult_instance.altitude
+				if (coordresult_instance.type.IsAltitudeCheckCoord()) {
+					check_altitude += route_instance.altitudeAboveGround
+				}
+                outln"""            <td>${check_altitude}${message(code:'fc.foot')}</td>"""
                 outln"""        </tr>"""
                 outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                 outln"""            <td/>"""

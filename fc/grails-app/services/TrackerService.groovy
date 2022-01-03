@@ -270,7 +270,7 @@ class TrackerService
     }
     
     //--------------------------------------------------------------------------
-    Map importTeams(Map params)
+    Map importTeams(Map params, boolean importAll)
     {
         printstart "importTeams"
 		
@@ -294,30 +294,32 @@ class TrackerService
 			}
 			
 			if (found_num) {
-				Map ret2 = fcService.importCrews2(crew_list, false, true, contest_instance)
+				Map ret2 = fcService.importCrews2(crew_list, false, importAll, contest_instance)
                 import_num = ret2.new_crew_num
                 if (ret2.exist_crews) { // connect and check differencies
                     for (Map crew in ret2.exist_crews) {
                         Crew crew_instance = Crew.findByEmailAndContest(crew.email, contest_instance)
                         if (crew_instance) {
-                            if (!crew_instance.liveTrackingTeamID) {
-                                crew_instance.liveTrackingTeamID = crew.liveTrackingTeamID
-                                connected_num++
-                            } else {
-                                already_connected_num++
+                            if (importAll || params["selectedCrewID${crew_instance.id}"] == "on") {
+                                if (!crew_instance.liveTrackingTeamID) {
+                                    crew_instance.liveTrackingTeamID = crew.liveTrackingTeamID
+                                    connected_num++
+                                } else {
+                                    already_connected_num++
+                                }
+                                crew_instance.liveTrackingContestTeamID = crew.liveTrackingContestTeamID // every contest team mofification generate a new contest team id
+                                crew_instance.liveTrackingDifferences = false
+                                if (check_differencies(crew_instance, crew).different) {
+                                    differency_num++
+                                }
+                                crew_instance.save()
                             }
-                            crew_instance.liveTrackingContestTeamID = crew.liveTrackingContestTeamID // every contest team mofification generate a new contest team id
-                            crew_instance.liveTrackingDifferences = false
-                            if (check_differencies(crew_instance, crew).different) {
-                                differency_num++
-                            }
-                            crew_instance.save()
                         }
                     }
                 }
 			}
 			
-			Map ret = ['instance':contest_instance, 'imported':true, 'message':getMsg('fc.livetracking.teams.import.done',[found_num, import_num, connected_num, already_connected_num, differency_num])]
+			Map ret = ['instance':contest_instance, 'imported':connected_num > 0, 'different':differency_num > 0, 'message':getMsg('fc.livetracking.teams.import.done',[found_num, import_num, connected_num, already_connected_num, differency_num])]
 			printdone ret
 			return ret
 		} else {
@@ -337,6 +339,9 @@ class TrackerService
         int differency_num = 0
         String error_msg = ""
 		 
+        // import or connect selected teams if already exist in contest
+        def ret9 = importTeams(params, false)
+        
         Crew.findAllByContest(contest_instance,[sort:"viewpos"]).each { Crew crew_instance ->
             if (params["selectedCrewID${crew_instance.id}"] == "on") {
                 if (crew_instance.email && !crew_instance.liveTrackingTeamID) {
@@ -383,7 +388,16 @@ class TrackerService
             }
         }
 
-		Map ret = ['error':error_msg != "",'message':getMsg('fc.livetracking.teams.connect.done',[connect_num, differency_num, error_msg])]
+        String msg = ""
+        boolean error = error_msg != ""
+        if (ret9.imported) {
+            msg = "${ret9.message} - "
+            if (ret9.different) {
+                error = true
+            }
+        }
+        msg += getMsg('fc.livetracking.teams.connect.done',[connect_num, differency_num, error_msg])
+		Map ret = ['error':error,'message':msg]
 		printdone ret
         return ret
 	}

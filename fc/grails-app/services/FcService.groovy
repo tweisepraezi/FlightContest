@@ -11987,7 +11987,10 @@ class FcService
 		coordResultInstance.resultMinAltitudeMissed = false
 		if (coordResultInstance.type.IsAltitudeCheckCoord()) {
 			if (coordResultInstance.resultAltitude) {
-				coordResultInstance.resultMinAltitudeMissed = coordResultInstance.resultAltitude < coordResultInstance.altitude
+				if (coordResultInstance.type.IsAltitudeCheckCoord()) {
+					Route route_instance = coordResultInstance.test.task.flighttest.route
+					coordResultInstance.resultMinAltitudeMissed = coordResultInstance.resultAltitude < coordResultInstance.altitude + route_instance.altitudeAboveGround
+				}
 			}
 		}
         

@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)
-:revnumber: 3.2.M24
-:revdate: 16.12.2021
+:revnumber: 3.2.M25
+:revdate: 03.01.2022
 :nofooter:
 :toc-title: Table of Contents
 :toc:
@@ -40,8 +40,8 @@ Sends emails of the navigation flight charts to the participants.
 
 Supports special stretching properties:
 
-* Unknown time controls
-* Curved track sections
+* Unknown time checks
+* Curved legs
 * Touch & Go landings
 
 
@@ -79,14 +79,14 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 == Default competition / Tasks to be done
 
 _Contest organizer_ +
-*Evaluation referee
+*Evaluation referee*
 
 [upperalpha]
 . Before competition day
 
 [arabic]
 .. _Engineer competition route_ +
-   (Coordinates, maps, pictures, ground signs, radio, turning loops, unknown time controls).
+   (Coordinates, maps, pictures, ground signs, radio, turning loops, unknown time checks).
    
 .. _Engineer approach and departure route_ +
    (distances/time requirements, maps, radio, tower communication)
@@ -110,57 +110,57 @@ _Contest organizer_ +
 .. *Calculate schedule of the competition day* +
    (taking into account the specified start/landing direction and the specified wind)
    
-.. *Print schedules & evaluation lists for notice board & various referees*.
-***overview and crew schedule for posting
+.. *Print schedules & evaluation lists for notice board & various referees*
+*** Overview and crew schedule for posting
 *** Crew list for logger output
 *** Referee schedule for tower (aircraft, takeoff time, latest landing time)
 *** Referee schedule for preparation room (crew, aircraft, issue time)
 *** Referee schedule for landings (Aircraft, Latest landing time)
 *** Referee schedule for documents handover (Aircraft, Latest landing time, Parking)
 
-.. *Print crew specific data
+.. *Print crew specific data*
 *** Label for document envelopes
 *** Input forms for planning test
 *** Evaluation forms for observations
 *** Flight plans
 
-.. _Logger output_.
+.. _Logger output_
 *** Switch on logger
 *** Document logger number
 
-.. _Complete document envelopes_ .
+.. _Complete document envelopes_
 *** Add crew specific labels
 *** Add crew-specific input forms for planning test
 *** Add crew specific evaluation forms for observations
 
-.. _Briefing_ .
-*** Route (turn loops, unknown time controls, approach/departure procedures, radio, tower communication)
+.. _Briefing_
+*** Route (turn loops, unknown time check, approach/departure procedures, radio, tower communication)
 *** Procedure (handing out of documents, handing in of evaluation forms/loggers after arrival, receipt of results)
 *** Weather
 
-.. _Coordinate planning test and flight preparation room_.
+.. _Coordinate planning test and flight preparation room_
 *** Document envelope issuance
 *** Take back planning test input forms
 *** Issue crew-specific flight plan
 *** Document time of leaving the preparation room.
 
-.. *Evaluate planning test* .
-***Scan and import planning test form
+.. *Evaluate planning test*
+*** Scan and import planning test form
 *** Data input planning test
 
-.. _Check logger on departing crews_.
+.. _Check logger on departing crews_
 
-.. _Survey landings_.
+.. _Survey landings_
 *** Document landing field (0, Field name, Out)
 *** Document abnormal landing
 *** Transmit landing result continuously to evaluation referee
 
-.. _Coordinate arriving crews_.
+.. _Coordinate arriving crews_
 *** Monitor time for completion of evaluation form
 *** Receive evaluation form and logger
 *** Transport evaluation form and logger to evaluation referee
 
-.. *Evaluate landings and navigation flight* .
+.. *Evaluate landings and navigation flight*
 *** Data entry landings
 *** Logger evaluation
 *** Scan and import observation evaluation form
@@ -168,13 +168,13 @@ _Contest organizer_ +
 *** Print and transfer result for crew
 *** Update live evaluation
 
-.. _Distribute results_ .
+.. _Distribute results_
 *** Collect results from the evaluation referee
 *** Hand over results continuously to crews
 *** Receive queries from the crews and make decisions
 *** Hand over corrections to the evaluation referee
 
-.. *Final evaluation*.
+.. *Final evaluation*
 *** Process corrections in response to crew queries.
 *** Process final landing list
 *** Create final evaluation
@@ -240,8 +240,8 @@ Turnpoint overflight time of a task should not be evaluated::
   Disable 'time evaluation' of the turn point (Results -> Disable check points) +
   Causes recalculation of the result.
   
-Unknown time control of a task should not be scored::
-  'Time evaluation' and 'Goal missed' of the unknown time control.
+Unknown time check of a task should not be scored::
+  'Time evaluation' and 'Goal missed' of the unknown time check.
      deactivate (Results -> Deactivate check points) +
   Causes recalculation of the result.
 
@@ -319,34 +319,34 @@ only in 'Flight Contest' after an import.
 [[route-planning-definitions]]
 === Definitions
 
-Start point (SP), check points (CP) and end point (FP = Finish point)
+Start point (SP), check points (CP) and finish point (FP)
 are logger measuring points of a route, where overflight time and flight altitude are measured
 as well as previous course changes >= 90 degrees are determined.
 
-Turn points (WP o. TP = Turn point) are check points,
+Turn points (TP) are check points,
 where a course change occurs and which are in the flight plan of a crew.
 
-Unknown time checks (UZK o. SC) are check points for
+Secret time checks (SC) are check points for
 time measurements on the route that are not in a crew's flight plan.
 
 Takeoff (TO) is a check point where the overflight time is measured to evaluate
-compliance with the takeoff time window is measured.
+compliance with the takeoff time window.
 
 Landing (LDG) is a check point where the overflight time is measured to evaluate
-compliance with the latest landing time is measured.
+compliance with the latest landing time.
 
 Intermediate points are design points for an intermediate landing.
 At the intermediate final point (iFP) and intermediate takeoff point (iSP) the
-Overflight time and altitude are measured and evaluated.
+overflight time and altitude are measured and evaluated.
 Intermediate landing (iLDG) and intermediate takeoff (iTO) only serve
 for display in the flight plan of a crew.
-In the case of a touch&go intermediate landing, iTO must be dispensed with.
+In the case of a touch&go intermediate landing, iTO must be dropped.
 
 [[route-planning-mandatory-details]]
 === Required details for a competitive route
 
-In a competition map, the starting point, turning points and end point of a route are to be
-of a route are to be indicated language-dependently with the following designations:
+In a competition map, the starting point, turning points and finish point of a route
+are to be indicated language-dependently with the following designations:
 
 [%autowidth]
 |===
@@ -362,32 +362,28 @@ Intermediate points shall be indicated with the following designations:
 For a competition route, the following information is required for all check points:
 
 * Coordinates
-* Minimum flight altitude above sea level (Altitude, in ft)
+* Height of the terrain above normal zero (Altitude, in ft)
 +
 TO, LDG, iTO, iLDG: 0 ft
 * Gate width (in NM)
 * Gate direction for TO, LDG, iTO, iLDG (in degrees)
-* For precise correspondence of the printed competition map with the data to be processed
-  with the data to be processed, distances must be measured on the competition map
+* For precise correspondence of the printed competition map with the data to be processed,
   distances must be measured on the competition map and entered into the field
-  in the field 'Distance measurement (map) [mm]'. Thereby
-  the distance from the previous turn point is measured in mm
+  'Distance measurement (map) [mm]'. Thereby the distance from the previous turn point is measured in mm
   (for a map with the competition scale 1:200000).
-  The previous turn point is a check point that is not an unknown time control.
-  unknown time check.
-* Auxiliary points are to be entered for curved sections of the course. These are to be
-  entered as UZK with the following information:
+  The previous turn point is a check point that is not an unknown time check.
+* Auxiliary points are to be entered for curved legs of the course. These are to be
+  entered as SC with the following information:
 ** No time evaluation
 ** No gate evaluation
 ** No flight planning test
-* The turning point, with which the curved route ends, is to be
+* The turning point, with which the curved leg ends, is to be
   entered:
-** No flight planning test, so that the curved route is not included in the
-	  is not included in the flight planning test
-** Check point after curved route
+** No flight planning test, so that the curved leg is not included in the flight planning test
+** Check point after curved leg
 +
 The flight plan of the crew receives as direction automatically the direction
-to the first auxiliary point as entry course to the curved route.
+to the first auxiliary point as entry course to the curved leg.
   
 * For stopovers, enter the following information for iLDG and iTO:
 ** Gate width (in NM)
@@ -406,11 +402,11 @@ Properties to be entered for the check points of a route:
   Takeoff                     TO           250       yes        yes  no     no
   Start point                 SP           -         yes        yes  no     yes
   Turning point               TP1          -         yes        yes  yes    yes
-  Secret time control         SC1          -         no         yes  yes    yes
+  Secret time check           SC1          -         no         yes  yes    yes
   Touch&Go landing            iFP          -         yes        yes  yes    yes
                               iLDG (1,2)   250       yes        no   no     no
                               iSP (2)      -         yes        yes  no     yes
-  Curved section              SC2 (1,2)    -         no         no   yes    yes
+  Curved leg                  SC2 (1,2)    -         no         no   yes    yes
                               TP2 (2,3)    -         yes        yes  yes    yes
   Final point                 FP           -         yes        yes  yes    yes
   Landing                     LDG          250       yes        yes  no     no
@@ -432,7 +428,7 @@ Properties to be entered for the check points of a route:
                               FP           -         yes        yes  yes    yes
                               LDG          250       yes        yes  no     no
                                            
-  Secret time controls        TO           250       yes        yes  no     no
+  Secret time check           TO           250       yes        yes  no     no
                               SP           -         yes        yes  no     yes
                               TP1          -         yes        yes  yes    yes
                               SC1          -         no         yes  yes    yes
@@ -458,11 +454,11 @@ Properties to be entered for the check points of a route:
                               iLDG (1,2)   250       yes        no   no     no
                               iTO (1,2)    250       yes        no   no     no
                               iSP (2)      -         yes        yes  no     yes
-                              WP2          -         yes        yes  yes    yes
+                              TP2          -         yes        yes  yes    yes
                               FP           -         yes        yes  yes    yes
                               LDG          250       yes        yes  no     no
   
-  Curved track                TO           250       yes        yes  no     no
+  Curved leg                  TO           250       yes        yes  no     no
                               SP           -         yes        yes  no     yes
                               TP1          -         yes        yes  yes    yes
                               SC1 (1,2)    -         no         no   yes    yes
@@ -478,7 +474,7 @@ Properties to be entered for the check points of a route:
 When entering a route in 'Flight Contest', please note that the check points can only be entered one after the other.
 can be entered one after the other and inserting check points is not possible.
 All properties except the check point type can be changed until the first use.
-Flight altitude and gate width are also changeable after the first use.
+Terrain heigth and gate width are also changeable after the first use.
 
 Alternatively, the input and forwarding of routes or parts of them is
 is also possible with text files (UTF-8). In an empty route all check points can be added with
@@ -559,7 +555,7 @@ Blank lines and lines starting with # are ignored
 
 - Click the *Route* folder and add a 'Path'. +
 The 'Edit Path' dialog opens. Set the name of the path according to the route name. +
-With the 'Edit Path' dialog still open, left click in the graphics area to add all check points (TO, SP, WP1, WP2, ..., FP, LDG) of the route without SCs one after the other. +
+With the 'Edit Path' dialog still open, left click in the graphics area to add all check points (TO, SP, TP1, TP2, ..., FP, LDG) of the route without SCs one after the other. +
 The position does not have to be exact yet. Its accuracy can be corrected afterwards. +
 Exit 'Edit path' dialog
 
@@ -569,7 +565,7 @@ Open the 'Properties' context menu of the path +
 With the 'Edit path' dialog open, grab the check point with the left mouse button and drag it to the desired position + Close the 'Edit path' dialog
 Close 'Edit path' dialog
 
-- Unknown time controls or curved courses can be added after the course import.
+- Unknown time checks or curved legs can be added after the course import.
 
 .. Enter route photos
 
@@ -631,9 +627,9 @@ Edit "Properties" of the added points in the 'Placemark' dialog:
 
 . Definition of a semicircle
 
-- Insert a UZK coordinate between 2 turning points with the option '*Circle center*' activated.
+- Insert a SC coordinate between 2 turning points with the option '*Circle center*' activated.
 - Check the correctness of the semicircle with the OSM online map or a generated OSM contest map.
-- If necessary, adjust the UZK coordinate or the surrounding turnpoint coordinates if the semicircle is not correctly terminated by the turnpoints.
+- If necessary, adjust the SC coordinate or the surrounding turnpoint coordinates if the semicircle is not correctly terminated by the turnpoints.
 - Activate the option '*Invert semi circle*' if you want the semicircle to go around the center point the other way.
 
 . Create a route with a curved leg
@@ -754,7 +750,7 @@ The following route details can be drawn on the map:
 * Stage lines
 * Course of curved stages
 * Turning point names (in the respective print language, German WP, English TP)
-* Gates of unknown time controls
+* Gates of unknown time checks
 * Positions of track photos
 * Positions of track ground signs
 
@@ -799,7 +795,7 @@ Special objects can be added to the file *C:\FCSave\.geodata\specials.csv*.
 to be added to the print:
 
   id|point|name|wkt|dx|dy
-  1|"Route 1 - WP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0
+  1|"Route 1 - TP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0
 
 1. sequence number
 2. description (in quotation marks, will not be printed)
@@ -1484,7 +1480,7 @@ Table classes:
 |--class +
 2
 |--use a different gate width for SCs in time evaluation for crews of this class (gate width in NM)
-|--class -> <class-name> -> different gate-width from UZK coordinates for this class
+|--class -> <class-name> -> different gate-width from SC coordinates for this class
 |--class +
 --before-starttime
 |--class +

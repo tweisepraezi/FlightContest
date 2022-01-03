@@ -1088,6 +1088,12 @@ class KmlService
                             xml.Data(name:"useprocedureturn") {
                                 xml.value getYesNo(routeInstance.useProcedureTurns)
                             }
+                            xml.Data(name:"mapscale") {
+                                xml.value routeInstance.mapScale
+                            }
+                            xml.Data(name:"altitudeaboveground") {
+                                xml.value routeInstance.altitudeAboveGround
+                            }
                             if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                                 for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                                     xml.Data(name:"enroutephotosign:${coordenroutephoto_instance.enrouteViewPos}") {

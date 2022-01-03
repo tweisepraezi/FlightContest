@@ -56,7 +56,7 @@ Weitere nützliche Funktionen von Flight Contest:
   Rangliste während eines laufenden Debriefings.
 * Unterstützung von Airsport Live Tracking (https://airsports.no)
 
-Erweiterungen in dieser Version (3.2.M24):
+Erweiterungen in dieser Version (3.2.M25):
 ------------------------------------------
 - Umstellung der Laufzeitumgebung
     Plattform: x64
@@ -99,7 +99,8 @@ Erweiterungen in dieser Version (3.2.M24):
     Alle Optionen werden in der Datenbank gespeichert.
     Krumme Etappen können separat deaktiviert werden.
     Direktes Erzeugen ohne Streckendetails hinzugefügt.
-    Einen 2. Satz Erzeugungs-Optionen hinzugefügt.
+	Direktes Erzeugen mit allen Streckendetails hinzugefügt.
+    3 weitere Sätze Erzeugungs-Optionen hinzugefügt.
     E-Mail-Versand von Wettbewerbskarten hinzugefügt.
 - Schiedsrichter-Zeitplan:
     Druck-Option 'Späteste Abgabezeit' hinzugefügt
@@ -145,6 +146,8 @@ Erweiterungen in dieser Version (3.2.M24):
 - Aktualisierung folgender Regelwerke
     FAI Precision Flying - Edition 2022
     FAI Air Rally Flying - Edition 2022
+- Strecken: Höhe über Grund hinzugefügt. Bei den einzelnen Koordinaten ist jetzt die Geländehöhe über Normal-Null einzugeben.
+  Die Mindestflughöhe über Normal-Null ist somit die Summe aus Höhe über Grund und Geländehöhe.
       
 Erweiterungen in Version 3.1.11:
 --------------------------------

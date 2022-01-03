@@ -779,15 +779,17 @@ class OsmPrintMapService
             printstart "Upload special.png"
             FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "images/map/special.png")
             printdone ""
-            printstart "Upload all images of ${Defs.FCSAVE_FOLDER_GEODATA_IMAGES}"
             File geodata_images_dir = new File(Defs.FCSAVE_FOLDER_GEODATA_IMAGES)
-            geodata_images_dir.eachFile() { File geodata_image ->
-                if (geodata_image.isFile()) {
-                    println "Upload ${geodata_image.name}"
-                    FileUpload("/upload/${printjob_id}", geodata_image.canonicalPath.replace("\\", "/"))
-                }
-            }
-            printdone ""
+			if (geodata_images_dir.exists()) {
+				printstart "Upload all images of ${Defs.FCSAVE_FOLDER_GEODATA_IMAGES}"
+				geodata_images_dir.eachFile() { File geodata_image ->
+					if (geodata_image.isFile()) {
+						println "Upload ${geodata_image.name}"
+						FileUpload("/upload/${printjob_id}", geodata_image.canonicalPath.replace("\\", "/"))
+					}
+				}
+				printdone ""
+			}
             if (contestMapParams.contestMapEnroutePhotos) {
                 printstart "Upload fcphoto.png"
                 FileUpload("/upload/${printjob_id}", contestMapParams.webRootDir + "GM_Utils/Icons/fcphoto.png")

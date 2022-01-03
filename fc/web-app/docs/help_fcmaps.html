@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.M24,</span>
-<span id="revdate">16.12.2021</span>
+<span id="revnumber">version 3.2.M25,</span>
+<span id="revdate">03.01.2022</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -511,10 +511,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p>RAM: 32GB (not dynamic)</p>
+<p>RAM: 60GB (not dynamic)</p>
 </li>
 <li>
-<p>SSD: 1024GB</p>
+<p>SSD: 2TB</p>
 </li>
 <li>
 <p>CPU: 16</p>
@@ -525,7 +525,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>such as: Strato V-Server Linux V80</p>
+<p>such as: Strato V-Server Linux V80-60</p>
 </div>
 </div>
 </div>
@@ -843,18 +843,6 @@ wget http://download.geofabrik.de/europe-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Download data of countries (if needed)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>wget http://download.geofabrik.de/europe/germany-latest.osm.pbf
-wget http://download.geofabrik.de/europe/switzerland-latest.osm.pbf
-wget http://download.geofabrik.de/europe/france-latest.osm.pbf
-wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
-wget http://download.geofabrik.de/africa/south-africa-latest.osm.pbf</pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Create database <strong>gis2</strong></p>
 </div>
 <div class="literalblock">
@@ -864,22 +852,11 @@ psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Load initial OSM data into OSM database (~/data/osm/*.pbf &#8594; gis2)</p>
+<p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis2)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d gis2 --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (22h)</p>
-</div>
-<div class="paragraph">
-<p>Load more OSM data into OSM database (~/data/osm2/*.pbf &#8594; gis2)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>for pbffile in ~/data/osm2/*.pbf; do osm2pgsql -d gis2 --append --slim --cache 12000 --number-processes 10 --style ~/fcmaps/osm2pgsql/fcmaps.style $pbffile; done</pre>
+<pre>osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -950,6 +927,14 @@ psql -d postgres -c 'ALTER DATABASE gis RENAME TO gisold;'
 psql -d postgres -c 'ALTER DATABASE gis2 RENAME TO gis;'
 psql -d postgres -c 'ALTER DATABASE lowzoom RENAME TO lowzoomold;'
 psql -d postgres -c 'ALTER DATABASE lowzoom2 RENAME TO lowzoom;'</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Check database size</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</pre>
 </div>
 </div>
 </div>
@@ -1121,6 +1106,14 @@ psql -d postgres -c 'ALTER DATABASE contours RENAME TO contoursold;'
 psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Check database size</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>psql -d postgres -c "SELECT pg_database.datname, pg_size_pretty(pg_database_size(pg_database.datname)) AS size FROM pg_database;"</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1149,7 +1142,12 @@ psql -d postgres -c 'ALTER DATABASE contours2 RENAME TO contours;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>320GB used, 680GB free</p>
+<p>Display free ram</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>free -m</pre>
+</div>
 </div>
 <div class="paragraph">
 <p>SSH login with user <strong>root</strong></p>

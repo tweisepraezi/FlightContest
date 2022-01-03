@@ -1199,9 +1199,9 @@ class ContestController {
     }
     
     def livetracking_teamsimport = {
-        def ret = trackerService.importTeams(params)
+        def ret = trackerService.importTeams(params, true)
         flash.message = ret.message
-        if (!ret.imported) {
+        if (ret.different) {
             flash.error = true
         }
         redirect(controller:"crew", action:"list") // ,model:[contestInstance:ret.instance])

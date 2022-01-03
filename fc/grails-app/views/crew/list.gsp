@@ -89,6 +89,7 @@
 	                    </g:each>
 	                </tbody>
 	                <tfoot>
+                        <input type="hidden" name="id" value="${session.lastContest.id}"/>
 	                    <tr class="">
 	                        <td><g:actionSubmit action="selectall" value="${message(code:'fc.selectall')}" tabIndex="${ti[0]++}"/></td>
 	                        <td><g:actionSubmit action="calculatesequence" value="${message(code:'fc.test.sequence.calculate')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/></td>

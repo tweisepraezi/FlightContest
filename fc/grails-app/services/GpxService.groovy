@@ -1649,7 +1649,9 @@ class GpxService
                             enroutephotoprintpositionmarker: getYesNo(routeInstance.enroutePhotoPrintPositionMaker),
                             enroutecanvas: routeInstance.enrouteCanvasRoute,
                             enroutecanvasmeasurement: routeInstance.enrouteCanvasMeasurement,
-                            useprocedureturn: getYesNo(routeInstance.useProcedureTurns)
+                            useprocedureturn: getYesNo(routeInstance.useProcedureTurns),
+							mapscale: routeInstance.mapScale,
+							altitudeaboveground: routeInstance.altitudeAboveGround
                         )
                         xml.mapsettings(
                             contestmapairfields: routeInstance.contestMapAirfields,
@@ -2819,7 +2821,7 @@ class GpxService
                             for (Map calc_result in calc_results) {
                                 if (calc_result.utc == utc) {
                                     if (observationsign_used && !calc_result.badCourse && !calc_result.badTurn && !calc_result.gateMissed && !calc_result.gateNotFound && calc_result.coordType.IsEnrouteSignCoord()) { // cache enroute photo / canvas data
-                                        enroute_points = RoutePointsTools.GetEnrouteSignShowPoints(route_instance,calc_result.coordType,calc_result.titleNumber)
+                                        enroute_points = RoutePointsTools.GetEnrouteSignShowPoints(route_instance,calc_result.coordType,calc_result.titleNumber, false)
                                         enroute_point_pos = 0
                                         from_tp = [titleCode:calc_result.titleCode, latitude:calc_result.latitude, longitude:calc_result.longitude]
                                     }

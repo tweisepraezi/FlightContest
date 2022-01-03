@@ -32,6 +32,11 @@
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.scale')}:</td>
                                     <td>1:${fieldValue(bean:routeInstance, field:'mapScale')}</td>
+                                    <td colspan="3"/>
+                                </tr>
+                                <tr>
+                                    <td class="detailtitle">${message(code:'fc.altitude.aboveground')}:</td>
+									<td>${fieldValue(bean:routeInstance, field:'altitudeAboveGround')}${message(code:'fc.foot')}</td>
 									<g:set var="upload_job_status" value="${routeInstance.GetUploadJobStatus()}"/>
                                     <g:if test="${upload_job_status == UploadJobStatus.Waiting}"> 
                                         <td style="width:1%;"> 
