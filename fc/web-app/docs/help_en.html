@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.15">
-<meta name="author" content="Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)">
+<meta name="author" content="Thomas Weise, German Precision Flying Club">
 <title>Flight Contest</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -440,9 +440,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="header">
 <h1>Flight Contest</h1>
 <div class="details">
-<span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)</span><br>
-<span id="revnumber">version 3.2.M25,</span>
-<span id="revdate">03.01.2022</span>
+<span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
+<span id="revnumber">version 3.2.0,</span>
+<span id="revdate">11.01.2022</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -494,8 +494,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#evaluation-special">Special evaluations</a></li>
 </ul>
 </li>
+<li><a href="#read-logger">Read logger</a></li>
 <li><a href="#supported-logger">Supported loggers</a>
 <ul class="sectlevel2">
+<li><a href="#supported-logger-renkforce-GT-730FL-S">Renkforce GT-730FL-S</a></li>
 <li><a href="#supported-logger-aflosreader">AFLOS</a></li>
 <li><a href="#supported-logger-airopserver">AirObserver based loggers</a></li>
 <li><a href="#supported-logger-dg100">DG-100</a></li>
@@ -559,7 +561,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 and evaluates results for planning tests, navigation tests, observations and/or landings.</p>
 </div>
 <div class="paragraph">
-<p>Flight Contest has a flexible contest management system. This includes the support:</p>
+<p>Flight Contest has a flexible contest management system. This includes the support of:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -568,7 +570,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 (adaptation of individual evaluation details (points) possible if required)</p>
 </li>
 <li>
-<p>of competition classes (different evaluation of crew groups in one competition)</p>
+<p>competition classes (different evaluation of crew groups in one competition)</p>
 </li>
 <li>
 <p>combined competitions (simultaneous competitions with a common starting field)</p>
@@ -587,7 +589,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <div class="ulist">
 <ul>
 <li>
-<p>The user interface runs in the web browser (Firefox, Internet Explorer, etc.).</p>
+<p>The user interface runs in the web browser (Firefox, Edge Chromium, Chrome, etc.).</p>
 </li>
 <li>
 <p>It can be used on multiple networked computers simultaneously.</p>
@@ -596,10 +598,10 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Each user can use his preferred operating language (German, English, extensible).</p>
 </li>
 <li>
-<p>Crash-proof.</p>
+<p>Crash-proof</p>
 </li>
 <li>
-<p>High security against operating errors.</p>
+<p>High security against operating errors</p>
 </li>
 </ul>
 </div>
@@ -627,6 +629,9 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Curved legs</p>
 </li>
 <li>
+<p>Semicircles</p>
+</li>
+<li>
 <p>Touch &amp; Go landings</p>
 </li>
 </ul>
@@ -640,7 +645,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Display of the preliminary ranking during a debriefing.</p>
 </li>
 <li>
-<p>Simultaneous publication on the local network and on the Internet</p>
+<p>Simultaneous publication on the local network and the Internet</p>
 </li>
 </ul>
 </div>
@@ -650,13 +655,16 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <div class="ulist">
 <ul>
 <li>
-<p>Offline map display for navigation flight assessment.</p>
+<p>Offline map display for navigation flight assessment</p>
+</li>
+<li>
+<p>Fast offline map display near a selected turnpoint</p>
 </li>
 <li>
 <p>Online map display with Open Street Map</p>
 </li>
 <li>
-<p>Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files</p>
+<p>Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files with optional gpx download</p>
 </li>
 </ul>
 </div>
@@ -730,7 +738,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <ol class="arabic">
 <li>
 <p><em>Engineer competition route</em><br>
-(Coordinates, maps, pictures, ground signs, radio, turning loops, unknown time checks).</p>
+(Coordinates, maps, pictures, ground signs, turning loops, unknown time checks).</p>
 </li>
 <li>
 <p><em>Engineer approach and departure route</em><br>
@@ -1099,7 +1107,7 @@ Start times of all crews and flight plans are recalculated.</p>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Crew lists are created using Excel.<br>
-Use the template <a href="samples/FC-CrewList-Sample.xlsx" target="_blank" rel="noopener">FC-CrewList-Sample.xlsx</a>, whose structure ensures a successful import.</p>
+Use the template <a href="samples/FC-CrewList-Sample.xlsx" target="_blank" rel="noopener">FC-CrewList-Sample.xlsx</a> whose structure ensures a successful import.</p>
 </div>
 <div class="paragraph">
 <p>The list captures the following data:</p>
@@ -1125,7 +1133,7 @@ Use the template <a href="samples/FC-CrewList-Sample.xlsx" target="_blank" rel="
 <p>TAS (kn)</p>
 </li>
 <li>
-<p>Aircraft registration number</p>
+<p>Aircraft registration plate</p>
 </li>
 <li>
 <p>Aircraft type (optional)</p>
@@ -1134,7 +1142,7 @@ Use the template <a href="samples/FC-CrewList-Sample.xlsx" target="_blank" rel="
 <p>Aircraft color (optional)</p>
 </li>
 <li>
-<p>Tracker ID (for competitions with live tracking)</p>
+<p>Tracker ID (optional, for competitions with live tracking)</p>
 </li>
 </ul>
 </div>
@@ -1142,13 +1150,13 @@ Use the template <a href="samples/FC-CrewList-Sample.xlsx" target="_blank" rel="
 <p>This list must be available on the day of the competition (sorting is not necessary).</p>
 </div>
 <div class="paragraph">
-<p>Start numbers only specified if special numbering is required.
-Start numbers that are not specified are automatically assigned a number during import.
+<p>Specify start numbers only if special numbering is required.
+Start numbers that are not specified are automatically assigned a number during import
 (the first number after the highest existing number).</p>
 </div>
 <div class="paragraph">
-<p>This template can also be used for planning other matters of the competition
-(hotel, contact details). For this purpose, columns, rows and
+<p>This template can also be used for planning of other matters of the competition
+(hotel, contact details). For this purpose, columns, rows, and
 table sheets may be inserted according to the following rules:</p>
 </div>
 <div class="ulist">
@@ -1161,25 +1169,21 @@ table sheets may be inserted according to the following rules:</p>
 crew to be imported</p>
 </li>
 <li>
-<p>Any number of spreadsheets at any positions.
-Only data from the spreadsheet 'Crews' will be imported.</p>
+<p>Any number of table sheets at any positions.
+Only data from the table sheet 'Crews' will be imported.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
 <p>Crew lists are added to the 'Flight Contest' database with 'Crews &#8594; Import Excel crew list'.
-Flight Contest' database.
-If the option "Omit start number" is selected, the specified numbers will not be used.
-will not be used or replaced by another start number.
-The given numbers can be configured under 'Contest &#8594; Defaults' (default: '13').
-(default: '13').</p>
+If the option "Omit start number" is selected, the specified numbers will not be used
+or replaced by another start number.
+The numbers to be omitted can be configured under 'Competition &#8594; Defaults' (default: '13').</p>
 </div>
 <div class="paragraph">
 <p>Only crew names (pilot + navigator) that are not yet in the 'Flight Contest' database are imported.
-Flight Contest' database. Corrections of already imported crew names
-already imported crew names (pilot or navigator) will cause the re-import of the crew
-with assignment of another start number. Therefore correct crews after an import only in
-only in 'Flight Contest' after an import.</p>
+Corrections of already imported crew names (pilot or navigator) will cause the re-import of the crew
+with assignment of another start number. Therefore correct crews after an import only in 'Flight Contest'.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1468,7 +1472,7 @@ LDG,  Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
 <p>Allowed coordinate representations according to competition setting.</p>
 </div>
 <div class="paragraph">
-<p>Import of observations from text files (see 'Programs &#8594; Flight Contest &#8594; Instructions Observations'
+<p>Import of observations from text files (see 'Start menu &#8594; Flight Contest &#8594; Instructions Observations'
 &#8594; chapter 'Configure observation evaluation')</p>
 </div>
 <div class="paragraph">
@@ -2926,10 +2930,79 @@ crews can be excluded.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="read-logger">Read logger</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Supported loggers: 'Renkforce GT-730FL-S', 'GlobalSat DG-100', 'GlobalSat DG-200'.</p>
+</div>
+<div class="paragraph">
+<p>Prerequisite: Installation of GPSBabel 1.7.0 or higher</p>
+</div>
+<div class="paragraph">
+<p>Vorgehen:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open 'Results &#8594; Task &#8594; Read logger' &#8594; opens tab 'Read logger'</p>
+</li>
+<li>
+<p>Connect logger with a USB port</p>
+</li>
+<li>
+<p>Switch on the logger</p>
+</li>
+<li>
+<p>Click 'Refresh' &#8594; a new COM port appears</p>
+</li>
+<li>
+<p>Select newly appeared COM port</p>
+</li>
+<li>
+<p>Click 'Import' &#8594; After reading, the 'Import logger data' tab is opened</p>
+</li>
+<li>
+<p>Select crew</p>
+</li>
+<li>
+<p>Click 'Import' &#8594; after the import 'Navigation flight results' is opened</p>
+</li>
+<li>
+<p>After checking the navigation flight results, close them with 'Result ready' and close tab</p>
+</li>
+<li>
+<p>Switch off logger and disconnect from USB port</p>
+</li>
+<li>
+<p>Continue with step 2 in 'Read logger' tab</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Alternatively, the loggers can also be read out via the following scripts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Startmenü &#8594; Flight Contest &#8594; Read logger SkyTraq logger Renkforce GT-730FL-S</p>
+</li>
+<li>
+<p>Startmenü &#8594; Flight Contest &#8594; Read logger GlobalSat DG-100</p>
+</li>
+<li>
+<p>Startmenü &#8594; Flight Contest &#8594; Read logger GlobalSat DG-200</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="supported-logger">Supported loggers</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="#supported-logger-aflosreader">AFLOS</a><br>
+<p><a href="#supported-logger-renkforce-GT-730FL-S">Renkforce GT-730FL-S</a><br>
+<a href="#supported-logger-aflosreader">AFLOS</a><br>
 <a href="#supported-logger-airopserver">AirObserver based loggers</a><br>
 <a href="#supported-logger-dg100">DG-100</a><br>
 <a href="#supported-logger-dg200">DG-200</a><br>
@@ -2938,6 +3011,19 @@ crews can be excluded.</p>
 <a href="#supported-logger-gpx">Any other GPX logger</a><br>
 <a href="#supported-logger-kml">Any other KML logger</a><br>
 <a href="#supported-logger-nmea">Any other NMEA logger</a></p>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-renkforce-GT-730FL-S">Renkforce GT-730FL-S</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Read logger: built-in (<a href="#read-logger">Read logger</a>)</p>
+</li>
+<li>
+<p>Delete logger recording: 'FFA SkyTraq V6 &#8594; Tools &#8594; Clear memory'</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="supported-logger-aflosreader">AFLOS</h3>
@@ -2993,13 +3079,16 @@ crews can be excluded.</p>
 <div class="ulist">
 <ul>
 <li>
+<p>Read logger: built-in (<a href="#read-logger">Read logger</a>)</p>
+</li>
+<li>
 <p>Logger settings software: 'Data Logger Utility S-OPC-0L-110631'.</p>
 </li>
 <li>
 <p>Logger setting: 'Data Logger Utility &#8594; Settings &#8594; Configuration'.</p>
 </li>
 <li>
-<p>Logger readout software: 'FSNavigator.net 2.0.0.90'.</p>
+<p>Alternative logger readout software: 'FSNavigator.net 2.0.0.90'.</p>
 </li>
 <li>
 <p>Logger readout: 'FSNavigator.net &#8594; Plugins &#8594; FRPocket device &#8594; Download tracks'.</p>
@@ -3022,7 +3111,10 @@ Import Logger Data &#8594; Select GAC File &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Logger readout software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'.</p>
+<p>Read logger: built-in (<a href="#read-logger">Read logger</a>)</p>
+</li>
+<li>
+<p>Alternative logger readout software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'.</p>
 </li>
 <li>
 <p>Logger setting: 'DG200Tool.exe &#8594; Device &#8594; Device settings'.</p>
@@ -3817,8 +3909,7 @@ TP3,TP5:1,2 = increase from TP3 by 1, from TP5 by another 2</p></td>
 </div>
 <div class="paragraph">
 <p>If 'Flight Contest' does not start anymore after changes, the last
-change in 'C:\FCSave\.fc\config.groovy' has to be undone or deleted.
-or delete this file.</p>
+change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.</p>
 </div>
 <div class="paragraph">
 <p><a href="#configuration-email">Configure email sending</a><br>
@@ -3896,10 +3987,10 @@ flightcontest {
 <div class="ulist">
 <ul>
 <li>
-<p>GM_Utils-6.13 - GPX viewer JavaScript library.</p>
+<p>GM_Utils-6.13 - GPX viewer JavaScript library</p>
 </li>
 <li>
-<p>Any name without spaces or special characters - contest directory (above example: "demo").</p>
+<p>Any name without spaces or special characters - contest directory (above example: "demo")</p>
 </li>
 </ul>
 </div>
@@ -4353,7 +4444,7 @@ With these settings each with 'Result ready' approved test result will be submit
 and only work with the Firefox browser.<br>
 The first call of the script turns automatic action on.<br>
 Calling the script again turns off automatic action after confirmation.<br>
-&#8594; 'Programs &#8594; Flight Contest &#8594; Scripts'.</p>
+&#8594; 'Start menu &#8594; Flight Contest'.</p>
 </div>
 <div class="paragraph">
 <p><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a><br>
@@ -4507,7 +4598,7 @@ after you have made backups as described below.</p>
 <h3 id="save-fcdb">Backup of the 'Flight Contest' database</h3>
 <div class="paragraph">
 <p>Call the script
-'Programs &#8594; Flight Contest &#8594; Scripts &#8594; Save contest database'.<br>
+'Start menu &#8594; Flight Contest &#8594; Save contest database'.<br>
 The database will be saved with date and time
 saved to the backup directory C:\FCSave (&lt;date&gt;-&lt;time&gt;-fcdb.h2.db).</p>
 </div>
@@ -4531,7 +4622,7 @@ the download manager.</p>
 <div class="paragraph">
 <p>If this setting is not possible or desired,
 prints will end up in the Windows-Temp-Directory.
-From there they can be saved with the script 'Programs &#8594; Flight Contest &#8594; Scripts &#8594; Save contest prints'.
+From there they can be saved with the script 'Start menu &#8594; Flight Contest &#8594; Save contest prints'.
 to the backup directory C:\FCSave.
 Note, however, that Firefox deletes all downloads from the Windows temp directory when it is closed,
 so there is a risk of losing prints if this script is not called regularly.</p>

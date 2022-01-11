@@ -1,5 +1,5 @@
-Flight Contest 3.2 Live Tracking Notes
-======================================
+Flight Contest Live Tracking Notes
+==================================
 
 Changes 3.2.M25
 ---------------

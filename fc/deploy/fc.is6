@@ -10,8 +10,8 @@ const FCVersion64 = '3.2.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.2.M25
-AppVersion=3.2.M25
+AppVerName=Flight Contest 3.2.0
+AppVersion=3.2.0
 ; no milestone below
 VersionInfoVersion=3.2.0
 
@@ -76,6 +76,9 @@ Source: ".\FCAutoOpenPDF.vbs";                        DestDir: "{app}\scripts"; 
 Source: ".\FCAutoLoadScan_PlanningTask.vbs";          DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FCAutoLoadScan_Observation.vbs";           DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: ".\FCAutoLoad_Logger.vbs";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\read_skytraq_logger.bat";                  DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\read_dg100_logger.bat";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
+Source: ".\read_dg200_logger.bat";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: "..\web-app\licenses\GPL_License.txt";        DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly; AfterInstall: MyAfterInstall;
 
 ;Source: ".\tomcat-users.xml";                         DestDir: "{app}\tomcat\conf";
@@ -147,6 +150,9 @@ Name: "{group}\Scripts\FCAutoOpenPDF";                                          
 Name: "{group}\Scripts\FCAutoLoadScanPlanningTask";                                  Filename: "{app}\scripts\FCAutoLoadScan_PlanningTask.vbs";  WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\FCAutoLoadScanObservation";                                   Filename: "{app}\scripts\FCAutoLoadScan_Observation.vbs";   WorkingDir: "{commondesktop}";
 Name: "{group}\Scripts\FCAutoLoadLogger";                                            Filename: "{app}\scripts\FCAutoLoad_Logger.vbs";            WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\Read SkyTraq logger Renkforce GT-730FL-S";                    Filename: "{app}\scripts\read_skytraq_logger.bat";          WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\Read logger GlobalSat DG-100";                                Filename: "{app}\scripts\read_dg100_logger.bat";            WorkingDir: "{commondesktop}";
+Name: "{group}\Scripts\Read logger GlobalSat DG-200";                                Filename: "{app}\scripts\read_dg200_logger.bat";            WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-CrewList-Sample.xlsx";                                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-CrewList-Sample.xlsx";          WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-TakoffLandingCalculation-Sample.xlsx";                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-TakoffLandingCalculation-Sample.xlsx"; WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2022";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_precision_flying_rules_2022.pdf";WorkingDir: "{commondesktop}";

@@ -1,5 +1,5 @@
-﻿Flight Contest 3.2.M25
-======================
+﻿Flight Contest 3.2.0
+====================
 
 Changes
 -------
@@ -79,6 +79,9 @@ Changes
 
 - The map scale is now set in the route settings.
 
+- The height above ground is now defined in the route settings. Consequently, the terrain height above normal zero must be entered for the individual coordinates.
+  The minimum altitude above normal zero is therefore the sum of the height above ground and the terrain height.
+  
 - OSM Contest Map:
     All options will be saved in database.
     Curved legs can be disabled separately.
@@ -138,9 +141,12 @@ Changes
 - Updating of the following sets of rules
     FAI Precision Flying - Edition 2022
     FAI Air Rally Flying - Edition 2022
+    
+- Logger evaluation: In the list of calculated points, the offline map is now quickly available for each individual turn point.
 
-- Routes: Altitude above ground added. The terrain height above normal zero must now be entered for the individual coordinates.
-  The minimum flight altitude above normal zero is thus the sum of altitude above ground and terrain altitude.
+- The readout of the logger 'Renkforce GT-730FL-S', 'GlobalSat DG-100', and 'GlobalSat DG-200' can now be done directly from Flight Contest.
+  Requirement: Installation of GPSBabel 1.7.0 (http://www.gpsbabel.org/download.html)
+    -> Help -> Read logger
 
 Live Tracking Configuration
 ---------------------------

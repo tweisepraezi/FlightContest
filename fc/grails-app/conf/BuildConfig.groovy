@@ -26,7 +26,7 @@ grails.project.fork = [
 ]
 
 
-grails.dependency.cache.dir = "K:/Projects/Grails/Dependency-Cache" // file://K:/Projects/Grails/Dependency-Cache
+grails.dependency.cache.dir = "./dependency-cache"
 
 grails.project.dependency.resolver = "maven" // or ivy
 
@@ -44,7 +44,6 @@ grails.project.dependency.resolution = {
 	
 	repositories { 
 		//inherits true // Whether to inherit repository definitions from plugins
-        mavenRepo "file://K:/Projects/Grails/maven" // lokal
         mavenRepo "https://repo1.maven.org/maven2" // mavenCentral()
         mavenRepo "https://repo.grails.org/grails/core" // Grails
         mavenRepo "https://repo.grails.org/grails/plugins" // Grails plugins
@@ -69,6 +68,8 @@ grails.project.dependency.resolution = {
         //compile "org.python:jython:2.7.2" // https://repo1.maven.org/maven2/org/python/jython
         
         //test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
+        
+        compile "com.fazecast:jSerialComm:2.8.0" // https://repo1.maven.org/maven2/com/fazecast/jSerialComm
 	}
 	 
 	plugins {

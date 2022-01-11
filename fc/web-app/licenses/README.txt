@@ -1,5 +1,5 @@
 
-Flight Contest 3.2.M25
+Flight Contest 3.2.0
 Copyright 2009-2022 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
@@ -102,6 +102,22 @@ https://github.com/printmaps/printmaps/blob/master/LICENSE.txt
 
 OpenTopoMap
 https://github.com/der-stefan/OpenTopoMap
+
+============================================================================
+
+GPSBabel
+https://www.gpsbabel.org
+
+GNU General Public License 2
+https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+============================================================================
+
+jSerialComm
+https://fazecast.github.io/jSerialComm/
+
+Apache License 2.0
+https://www.apache.org/licenses/LICENSE-2.0
 
 ============================================================================
 

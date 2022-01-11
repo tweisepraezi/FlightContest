@@ -265,6 +265,11 @@ class GpxTagLib
         outln"""    var buttons = document.getElementsByTagName("button");"""
         outln"""    for(var i=0; i<buttons.length; i++) {"""
         outln"""        var button = buttons[i];"""
+        if (attrs.showCoord) {
+            outln"""    var rescale_first_button = true;"""
+        } else {
+            outln"""    var rescale_first_button = false;"""
+        }
         outln"""        if (button.className) {"""
         outln"""            var class_name = button.className;"""
         outln"""            var cn = class_name.search("xskaliere");"""
@@ -279,6 +284,10 @@ class GpxTagLib
         outln"""                            } else if(cmd.length == 2) {"""
         outln"""                                var pars = cmd[1].split(",");"""
         outln"""                                button.onclick = function(){rescale(pars[0],pars[1],pars[2],"")};"""
+        outln"""                                if (rescale_first_button && (button.innerHTML == '${attrs.showCoord}')) {"""
+        outln"""                                    rescale(pars[0],pars[1],pars[2],"");"""
+        outln"""                                    rescale_first_button = false;"""
+        outln"""                                }"""
         outln"""                            }"""
         outln"""                        } )();"""
         outln"""                    }"""

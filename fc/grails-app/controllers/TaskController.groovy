@@ -410,6 +410,49 @@ class TaskController {
         render(view:'listdifferences',model:[taskInstance:task.instance])
     }
     
+	def readlogger = {
+        Map task = domainService.GetTask(params) 
+        if (task.instance) {
+			// assign return action
+			if (session.taskReturnAction) {
+				return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+			}
+			return [taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+	}
+    
+    def readlogger_refresh = {
+        Map task = domainService.GetTask(params)
+        flash.message = ""
+        flash.error = false
+        render(view:'readlogger',model:[taskInstance:task.instance, taskReturnAction:params.taskReturnAction, taskReturnController:params.taskReturnController, taskReturnID:params.taskReturnID, loggertype:params.loggertype, port:params.port])
+    }
+	
+    def readlogger_read = {
+        Map task = domainService.GetTask(params)
+        String logger_file = ""
+        if (params.port && params.loggertype) {
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String gpx_filename = "${webroot_dir}${Defs.ROOT_FOLDER_GPXUPLOAD}/LOGGERDATA-${uuid}-READ.gpx".replace("\\","/")
+            String gpsbabel_call = """"${Defs.EXE_GPSBABEL}" -t -i ${params.loggertype} -f ${params.port} -x track,start=${params.start_time},stop=${params.end_time} -o gpx -F ${gpx_filename}"""
+            fcService.println "readlogger_read $gpsbabel_call"
+            gpsbabel_call.execute().waitFor()
+            if (new File(gpx_filename).exists()) {
+                flash.message = message(code:'fc.task.readlogger.done')
+                flash.error = false
+                logger_file = gpx_filename
+            } else {
+                flash.message = message(code:'fc.task.readlogger.error')
+                flash.error = true
+            }
+        }
+        render(view:'readlogger',model:[taskInstance:task.instance, taskReturnAction:params.taskReturnAction, taskReturnController:params.taskReturnController, taskReturnID:params.taskReturnID, loggertype:params.loggertype, port:params.port, loggerfile:logger_file, info:params.port])
+    }
+	
 	def cancel = {
 		// process return action
 		if (params.taskReturnAction) {
@@ -1307,7 +1350,7 @@ class TaskController {
             session.lastContest.refresh()
             def task = fcService.startresultsTask(params, session.lastContest, session.lastTaskResults)
             if (task.taskid) {
-                redirect(action:loggerformimport,id:task.taskid,params:['loggerfile':params.loggerfile])
+                redirect(action:loggerformimport,id:task.taskid,params:['loggerfile':params.loggerfile, 'removefile':params.removefile, 'info':params.info])
             } else {
                 redirect(controller:"task",action:"startresults")
             }
@@ -1319,7 +1362,7 @@ class TaskController {
     def loggerformimport = {
         Map task = domainService.GetTask(params) 
         if (task.instance) {
-            return [taskInstance:task.instance,loggerfile:params.loggerfile]
+            return [taskInstance:task.instance,loggerfile:params.loggerfile, 'removefile':params.removefile, 'info':params.info]
         } else {
             flash.message = task.message
             redirect(controller:"contest",action:"tasks")
@@ -1327,31 +1370,35 @@ class TaskController {
     }
     
     def loggerformimportsave = {
-        if (params.testid) {
+        boolean remove_file = false
+        if (params?.removefile) {
+            remove_file = true
+        }
+        if (params.testid && params.testid.isLong()) {
             Test test_instance = Test.get(params.testid)
             boolean interpolate_missing_data = params?.interpolate_missing_data == "on"
             int correct_seconds = 0
             if (params?.correct_seconds && params.correct_seconds.isInteger()) {
                 correct_seconds = params?.correct_seconds.toInteger()
             }
-            Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
+            Map calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GAC_EXTENSION, test_instance, params.loggerfile, remove_file, interpolate_missing_data, correct_seconds)
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.IGC_EXTENSION, test_instance, params.loggerfile, remove_file, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.GPX_EXTENSION, test_instance, params.loggerfile, remove_file, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KML_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KML_EXTENSION, test_instance, params.loggerfile, remove_file, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KMZ_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.KMZ_EXTENSION, test_instance, params.loggerfile, remove_file, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
+                calc = fcService.calculateLoggerResultExternTest(LoggerFileTools.NMEA_EXTENSION, test_instance, params.loggerfile, remove_file, interpolate_missing_data, correct_seconds)
             }
             if (!calc.found) {
-                calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, interpolate_missing_data, correct_seconds)
+                calc = fcService.calculateLoggerResultExternTest("", test_instance, params.loggerfile, remove_file, interpolate_missing_data, correct_seconds)
             }
             flash.error = calc.error
             flash.message = calc.message
@@ -1362,11 +1409,17 @@ class TaskController {
                 redirect(controller:'test',action:'flightresults',id:test_instance.id)
             }
         } else {
+            if (remove_file && params.loggerfile) {
+                fcService.DeleteFile(params.loggerfile)
+            }
             redirect(controller:"task",action:"startresults")
         }
     }
     
     def loggerimportcancel = {
+        if (params.removefile) {
+            fcService.DeleteFile(params.loggerfile)
+        }
         redirect(controller:"task",action:"startresults")
     }
     

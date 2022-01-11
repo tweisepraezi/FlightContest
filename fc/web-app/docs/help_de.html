@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.M25,</span>
-<span id="revdate">03.01.2022</span>
+<span id="revnumber">version 3.2.0,</span>
+<span id="revdate">11.01.2022</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -494,8 +494,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#evaluation-special">Sonder-Auswertungen</a></li>
 </ul>
 </li>
+<li><a href="#read-logger">Logger auslesen</a></li>
 <li><a href="#supported-logger">Unterstützte Logger</a>
 <ul class="sectlevel2">
+<li><a href="#supported-logger-renkforce-GT-730FL-S">Renkforce GT-730FL-S</a></li>
 <li><a href="#supported-logger-aflosreader">AFLOS</a></li>
 <li><a href="#supported-logger-airopserver">AirObserver basierte Logger</a></li>
 <li><a href="#supported-logger-dg100">DG-100</a></li>
@@ -587,7 +589,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <div class="ulist">
 <ul>
 <li>
-<p>Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Internet Explorer u.a.).</p>
+<p>Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Edge Chromium, Chrome u.a.).</p>
 </li>
 <li>
 <p>Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden.</p>
@@ -596,10 +598,10 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Jeder Benutzer kann dabei seine bevorzugte Bediensprache verwenden (Deutsch, Englisch, erweiterbar).</p>
 </li>
 <li>
-<p>Absturzsicher.</p>
+<p>Absturzsicher</p>
 </li>
 <li>
-<p>Hohe Sicherheit gegen Fehlbedienung.</p>
+<p>Hohe Sicherheit gegen Fehlbedienung</p>
 </li>
 </ul>
 </div>
@@ -625,6 +627,9 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 </li>
 <li>
 <p>Krumme Streckenabschnitte</p>
+</li>
+<li>
+<p>Halbkreise</p>
 </li>
 <li>
 <p>Touch &amp; Go-Landungen</p>
@@ -653,10 +658,13 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Offline-Kartenanzeige zur Beurteilung des Navigationsfluges</p>
 </li>
 <li>
+<p>Schnelle Offline-Kartenanzeige in der Nähe eines gewählten Wendepunktes</p>
+</li>
+<li>
 <p>Online-Kartenanzeige mit Open Street Map</p>
 </li>
 <li>
-<p>Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien</p>
+<p>Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien mit optionalem gpx-Download</p>
 </li>
 </ul>
 </div>
@@ -733,7 +741,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <ol class="arabic">
 <li>
 <p><em>Wettbewerbsstrecke ausarbeiten</em><br>
-(Koordinaten, Karten, Bilder, Bodenzeichen, Funk, Wendeschleifen, Unbekannte Zeitkontrollen)</p>
+(Koordinaten, Karten, Bilder, Bodenzeichen, Wendeschleifen, Unbekannte Zeitkontrollen)</p>
 </li>
 <li>
 <p><em>An- u. Abflugstrecke ausarbeiten</em><br>
@@ -1137,7 +1145,7 @@ Verwenden Sie die Vorlage <a href="samples/FC-CrewList-Sample.xlsx" target="_bla
 <p>Flugzeug-Farbe (optional)</p>
 </li>
 <li>
-<p>Tracker-ID (für Wettbewerbe mit Live-Tracking)</p>
+<p>Tracker-ID (optional, für Wettbewerbe mit Live-Tracking)</p>
 </li>
 </ul>
 </div>
@@ -1174,7 +1182,7 @@ Importiert werden nur Daten aus dem Tabellenblatt 'Crews'.</p>
 'Flight Contest'-Datenbank aufgenommen.
 Bei angegebener Option "Start-Nr. weglassen" werden die angegebenen Nummern
 nicht verwendet bzw. bei Angabe durch eine andere Startnummer ersetzt.
-Die angegebenen Nummern können unter 'Wettbewerb &#8594; Vorgaben' konfiguriert
+Die wegzulassenden Nummern können unter 'Wettbewerb &#8594; Vorgaben' konfiguriert
 werden (Standard: '13').</p>
 </div>
 <div class="paragraph">
@@ -1476,7 +1484,7 @@ LDG,  Lat 48° 46.68300' N, Lon 010° 16.05600' E, Alt 1915ft, Gate 270° 0.02NM
 <p>Zulässige Koordinaten-Darstellungen entspr. Wettbewerbseinstellung.</p>
 </div>
 <div class="paragraph">
-<p>Import von Beobachtungen aus Text-Dateien (siehe 'Programme &#8594; Flight Contest &#8594; Anleitung Beobachtungen'
+<p>Import von Beobachtungen aus Text-Dateien (siehe 'Startmenü &#8594; Flight Contest &#8594; Anleitung Beobachtungen'
 &#8594; Kapitel "Beobachtungsauswertung konfigurieren")</p>
 </div>
 <div class="paragraph">
@@ -2937,10 +2945,79 @@ Besatzungen ausgeschlossen werden.</p>
 </div>
 </div>
 <div class="sect1">
+<h2 id="read-logger">Logger auslesen</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Unterstützte Logger: 'Renkforce GT-730FL-S', 'GlobalSat DG-100', 'GlobalSat DG-200'</p>
+</div>
+<div class="paragraph">
+<p>Voraussetzung: Installation von GPSBabel 1.7.0 oder höher</p>
+</div>
+<div class="paragraph">
+<p>Vorgehen:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>'Ergebnisse &#8594; Aufgabe &#8594; Logger auslesen' öffnen &#8594; öffnet Tab 'Logger auslesen'</p>
+</li>
+<li>
+<p>Logger mit einem USB-Anschluss verbinden</p>
+</li>
+<li>
+<p>Logger einschalten</p>
+</li>
+<li>
+<p>'Aktualisieren' anklicken &#8594; ein neuer COM-Aschluss erscheint</p>
+</li>
+<li>
+<p>Neu erschienenen COM-Aschluss wählen</p>
+</li>
+<li>
+<p>'Import' anklicken &#8594; nach dem Auslesen wird Tab 'Logger-Daten importieren' geöffnet</p>
+</li>
+<li>
+<p>Besatzung wählen</p>
+</li>
+<li>
+<p>'Import' anklicken &#8594; nach dem Import wird 'Navigationsflugergebnisse' geöffnet</p>
+</li>
+<li>
+<p>Nach der Überprüfung der Navigationsflugergebnisse diese mit 'Ergebnis fertig' abschliessen und Tab schliessen</p>
+</li>
+<li>
+<p>Logger ausschalten und von USB-Aschluss trennen</p>
+</li>
+<li>
+<p>Weiter mit Schritt 2 in Tab 'Logger auslesen'</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Alternativ können die Logger auch über folgende Skripte ausgelsen werden:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Startmenü &#8594; Flight Contest &#8594; Read logger SkyTraq logger Renkforce GT-730FL-S</p>
+</li>
+<li>
+<p>Startmenü &#8594; Flight Contest &#8594; Read logger GlobalSat DG-100</p>
+</li>
+<li>
+<p>Startmenü &#8594; Flight Contest &#8594; Read logger GlobalSat DG-200</p>
+</li>
+</ul>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="supported-logger">Unterstützte Logger</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="#supported-logger-aflosreader">AFLOS</a><br>
+<p><a href="#supported-logger-renkforce-GT-730FL-S">Renkforce GT-730FL-S</a><br>
+<a href="#supported-logger-aflosreader">AFLOS</a><br>
 <a href="#supported-logger-airopserver">AirObserver basierte Logger</a><br>
 <a href="#supported-logger-dg100">DG-100</a><br>
 <a href="#supported-logger-dg200">DG-200</a><br>
@@ -2949,6 +3026,19 @@ Besatzungen ausgeschlossen werden.</p>
 <a href="#supported-logger-gpx">Beliebiger anderer GPX-Logger</a><br>
 <a href="#supported-logger-kml">Beliebiger anderer KML-Logger</a><br>
 <a href="#supported-logger-nmea">Beliebiger anderer NMEA-Logger</a></p>
+</div>
+<div class="sect2">
+<h3 id="supported-logger-renkforce-GT-730FL-S">Renkforce GT-730FL-S</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Logger auslesen: integriert (<a href="#read-logger">Logger auslesen</a>)</p>
+</li>
+<li>
+<p>Logger-Aufzeichnung löschen: 'FFA SkyTraq V6 &#8594; Tools &#8594; Clear memory'</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="supported-logger-aflosreader">AFLOS</h3>
@@ -3004,13 +3094,16 @@ Besatzungen ausgeschlossen werden.</p>
 <div class="ulist">
 <ul>
 <li>
+<p>Logger auslesen: integriert (<a href="#read-logger">Logger auslesen</a>)</p>
+</li>
+<li>
 <p>Logger-Einstellungs-Software: 'Data Logger Utility S-OPC-0L-110631'</p>
 </li>
 <li>
 <p>Logger-Einstellung: 'Data Logger Utility &#8594; Settings &#8594; Configuration'</p>
 </li>
 <li>
-<p>Logger-Auslese-Software: 'FSNavigator.net 2.0.0.90'</p>
+<p>Alternative Logger-Auslese-Software: 'FSNavigator.net 2.0.0.90'</p>
 </li>
 <li>
 <p>Logger-Aufzeichnung auslesen: 'FSNavigator.net &#8594; Plugins &#8594; FRPocket device &#8594; Download tracks'</p>
@@ -3033,7 +3126,10 @@ Import Logger-Daten &#8594; GAC-Datei auswählen &#8594; Import</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Logger-Auslese-Software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'</p>
+<p>Logger auslesen: integriert (<a href="#read-logger">Logger auslesen</a>)</p>
+</li>
+<li>
+<p>Alternative Logger-Auslese-Software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'</p>
 </li>
 <li>
 <p>Logger-Einstellung: 'DG200Tool.exe &#8594; Device &#8594; Device settings'</p>
@@ -4363,11 +4459,11 @@ Mit diesen Einstellungen wird jedes mit "Ergebnis fertig" freigegebene Testergeb
 <h2 id="automatic-actions">Automatische Aktionen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Automatische Aktionen werden durch dauerhaft laufende Scripte erledigt
+<p>Automatische Aktionen werden durch dauerhaft laufende Skripte erledigt
 und funktionieren nur mit dem Firefox-Browser.<br>
-Der erste Aufruf des Scriptes schaltet automatische Aktion ein.<br>
-Erneuter Aufruf des Scriptes schaltet automatische Aktion nach Rückfrage aus.<br>
-&#8594; 'Programme &#8594; Flight Contest &#8594; Scripts'</p>
+Der erste Aufruf des Skriptes schaltet automatische Aktion ein.<br>
+Erneuter Aufruf des Skriptes schaltet automatische Aktion nach Rückfrage aus.<br>
+&#8594; 'Startmenü &#8594; Flight Contest'</p>
 </div>
 <div class="paragraph">
 <p><a href="#automatic-actions-openpdf">FCAutoOpenPDF</a><br>
@@ -4520,8 +4616,8 @@ nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.</p>
 <div class="sect2">
 <h3 id="save-fcdb">Sicherung der 'Flight Contest'-Datenbank</h3>
 <div class="paragraph">
-<p>Rufen Sie das Script
-'Programme &#8594; Flight Contest &#8594; Scripts &#8594; Save contest database' auf.<br>
+<p>Rufen Sie das Skript
+'Startmenü &#8594; Flight Contest &#8594; Save contest database' auf.<br>
 Die Datenbank wird mit Datum und Uhrzeit versehen
 ins Sicherungsverzeichnis C:\FCSave gespeichert (&lt;Datum&gt;-&lt;Uhrzeit&gt;-fcdb.h2.db).</p>
 </div>
@@ -4545,10 +4641,10 @@ den Download-Manager.</p>
 <div class="paragraph">
 <p>Ist diese Einstellung nicht möglich oder gewünscht,
 landen Ausdrucke im Windows-Temp-Verzeichnis.
-Von dort können sie mit dem Script 'Programme &#8594; Flight Contest &#8594; Scripts &#8594; Save contest prints'
+Von dort können sie mit dem Skript 'Startmenü &#8594; Flight Contest &#8594; Save contest prints'
 ins Sicherungsverzeichnis C:\FCSave gespeichert werden.
 Beachten Sie jedoch, dass Firefox beim Schließen alle Downloads aus dem Windows-Temp-Verzeichnis löscht,
-so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Script nicht regelmässig aufgerufen wird.</p>
+so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Skript nicht regelmässig aufgerufen wird.</p>
 </div>
 </div>
 <div class="sect2">

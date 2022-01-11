@@ -1,8 +1,9 @@
 = Flight Contest
-Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)
-:revnumber: 3.2.M25
-:revdate: 03.01.2022
+Thomas Weise, German Precision Flying Club
+:revnumber: 3.2.0
+:revdate: 11.01.2022
 :nofooter:
+:title-page:
 :toc-title: Table of Contents
 :toc:
 :lang: en
@@ -13,22 +14,22 @@ Thomas Weise, Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Clu
 Flight Contest plans the timed competition sequence of a general aviation powered flight contest
 and evaluates results for planning tests, navigation tests, observations and/or landings.
 
-Flight Contest has a flexible contest management system. This includes the support:
+Flight Contest has a flexible contest management system. This includes the support of:
 
 * different competition regulations (FAI, Germany, Switzerland, Austria, expandable) +
 (adaptation of individual evaluation details (points) possible if required)
-* of competition classes (different evaluation of crew groups in one competition)
+* competition classes (different evaluation of crew groups in one competition)
 * combined competitions (simultaneous competitions with a common starting field)
 * parallel competitions (concurrent competitions with independent starting fields)
 * the evaluation of special crew groups, which can be defined ad hoc
 
 Is an open source, multilingual, network-enabled database application based on Java techniques:
 
-* The user interface runs in the web browser (Firefox, Internet Explorer, etc.).
+* The user interface runs in the web browser (Firefox, Edge Chromium, Chrome, etc.).
 * It can be used on multiple networked computers simultaneously.
 * Each user can use his preferred operating language (German, English, extensible).
-* Crash-proof.
-* High security against operating errors.
+* Crash-proof
+* High security against operating errors
 
 Supports logger data formats GAC, IGC, GPX, KML, KMZ and NMEA 0183 (extensible).
 
@@ -42,19 +43,20 @@ Supports special stretching properties:
 
 * Unknown time checks
 * Curved legs
+* Semicircles
 * Touch & Go landings
-
 
 Provides a live score display (Live Scoring):
 
 * Display of the preliminary ranking during a debriefing.
-* Simultaneous publication on the local network and on the Internet
+* Simultaneous publication on the local network and the Internet
 
 Provides integrated map viewers for navigation flights, routes and logger files:
 
-* Offline map display for navigation flight assessment.
+* Offline map display for navigation flight assessment
+* Fast offline map display near a selected turnpoint
 * Online map display with Open Street Map
-* Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files
+* Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files with optional gpx download
 
 <<<
 [[manuals]]
@@ -86,7 +88,7 @@ _Contest organizer_ +
 
 [arabic]
 .. _Engineer competition route_ +
-   (Coordinates, maps, pictures, ground signs, radio, turning loops, unknown time checks).
+   (Coordinates, maps, pictures, ground signs, turning loops, unknown time checks).
    
 .. _Engineer approach and departure route_ +
    (distances/time requirements, maps, radio, tower communication)
@@ -257,7 +259,7 @@ Recalculate schedule of a task::
 == Create crew list
 
 Crew lists are created using Excel. +
-Use the template link:samples/FC-CrewList-Sample.xlsx[FC-CrewList-Sample.xlsx^], whose structure ensures a successful import.
+Use the template link:samples/FC-CrewList-Sample.xlsx[FC-CrewList-Sample.xlsx^] whose structure ensures a successful import.
 
 The list captures the following data:
 
@@ -267,39 +269,35 @@ The list captures the following data:
 * Team (optional)
 * Class (for competitions with different evaluation classes)
 * TAS (kn)
-* Aircraft registration number
+* Aircraft registration plate
 * Aircraft type (optional)
 * Aircraft color (optional)
-* Tracker ID (for competitions with live tracking)
+* Tracker ID (optional, for competitions with live tracking)
 
 This list must be available on the day of the competition (sorting is not necessary).
 
-Start numbers only specified if special numbering is required.
-Start numbers that are not specified are automatically assigned a number during import.
+Specify start numbers only if special numbering is required.
+Start numbers that are not specified are automatically assigned a number during import
 (the first number after the highest existing number).
 
-This template can also be used for planning other matters of the competition
-(hotel, contact details). For this purpose, columns, rows and
+This template can also be used for planning of other matters of the competition
+(hotel, contact details). For this purpose, columns, rows, and
 table sheets may be inserted according to the following rules:
 
 * Any number of additional columns at the end (after the 'Tracker ID' column).
 * Any number of additional rows after a blank row following the last
   crew to be imported
-* Any number of spreadsheets at any positions.
-  Only data from the spreadsheet 'Crews' will be imported.
+* Any number of table sheets at any positions.
+  Only data from the table sheet 'Crews' will be imported.
 
 Crew lists are added to the 'Flight Contest' database with 'Crews -> Import Excel crew list'.
-Flight Contest' database.
-If the option "Omit start number" is selected, the specified numbers will not be used.
-will not be used or replaced by another start number.
-The given numbers can be configured under 'Contest -> Defaults' (default: '13').
-(default: '13').
+If the option "Omit start number" is selected, the specified numbers will not be used
+or replaced by another start number.
+The numbers to be omitted can be configured under 'Competition -> Defaults' (default: '13').
 
 Only crew names (pilot + navigator) that are not yet in the 'Flight Contest' database are imported.
-Flight Contest' database. Corrections of already imported crew names
-already imported crew names (pilot or navigator) will cause the re-import of the crew
-with assignment of another start number. Therefore correct crews after an import only in
-only in 'Flight Contest' after an import.
+Corrections of already imported crew names (pilot or navigator) will cause the re-import of the crew
+with assignment of another start number. Therefore correct crews after an import only in 'Flight Contest'.
 
 <<<
 [[route-planning]]
@@ -497,7 +495,7 @@ Check point, latitude, longitude, altitude, gate direction and latitude, etc.
 
 Allowed coordinate representations according to competition setting.
   
-Import of observations from text files (see 'Programs -> Flight Contest -> Instructions Observations'
+Import of observations from text files (see 'Start menu -> Flight Contest -> Instructions Observations'
 -> chapter 'Configure observation evaluation')
   
 The Route Printout (Route -> Print) contains the text representations of all check points
@@ -1173,9 +1171,38 @@ the crew option "No competition evaluation" can be used to exclude all crews tha
 crews can be excluded.
 
 <<<
+[[read-logger]]
+== Read logger
+Supported loggers: 'Renkforce GT-730FL-S', 'GlobalSat DG-100', 'GlobalSat DG-200'.
+
+Prerequisite: Installation of GPSBabel 1.7.0 or higher
+
+[arabic]
+Vorgehen:
+[arabic]
+. Open 'Results -> Task -> Read logger' -> opens tab 'Read logger'
+. Connect logger with a USB port
+. Switch on the logger
+. Click 'Refresh' -> a new COM port appears
+. Select newly appeared COM port
+. Click 'Import' -> After reading, the 'Import logger data' tab is opened
+. Select crew
+. Click 'Import' -> after the import 'Navigation flight results' is opened
+. After checking the navigation flight results, close them with 'Result ready' and close tab
+. Switch off logger and disconnect from USB port
+. Continue with step 2 in 'Read logger' tab
+
+Alternatively, the loggers can also be read out via the following scripts:
+
+* Startmenü -> Flight Contest -> Read logger SkyTraq logger Renkforce GT-730FL-S
+* Startmenü -> Flight Contest -> Read logger GlobalSat DG-100
+* Startmenü -> Flight Contest -> Read logger GlobalSat DG-200
+
+<<<
 [[supported-logger]]
 == Supported loggers
 
+<<fc_en.adoc#supported-logger-renkforce-GT-730FL-S>> +
 <<fc_en.adoc#supported-logger-aflosreader>> +
 <<fc_en.adoc#supported-logger-airopserver>> +
 <<fc_en.adoc#supported-logger-dg100>> +
@@ -1185,6 +1212,11 @@ crews can be excluded.
 <<fc_en.adoc#supported-logger-gpx>> +
 <<fc_en.adoc#supported-logger-kml>> +
 <<fc_en.adoc#supported-logger-nmea>>
+
+[[supported-logger-renkforce-GT-730FL-S]]
+=== Renkforce GT-730FL-S
+* Read logger: built-in (<<fc_en.adoc#read-logger>>)
+* Delete logger recording: 'FFA SkyTraq V6 -> Tools -> Clear memory'
 
 [[supported-logger-aflosreader]]
 === AFLOS
@@ -1207,9 +1239,10 @@ crews can be excluded.
 
 [[supported-logger-dg100]]
 === DG-100
+* Read logger: built-in (<<fc_en.adoc#read-logger>>)
 * Logger settings software: 'Data Logger Utility S-OPC-0L-110631'.
 * Logger setting: 'Data Logger Utility -> Settings -> Configuration'.
-* Logger readout software: 'FSNavigator.net 2.0.0.90'.
+* Alternative logger readout software: 'FSNavigator.net 2.0.0.90'.
 * Logger readout: 'FSNavigator.net -> Plugins -> FRPocket device -> Download tracks'.
 * Create GAC file: 'FSNavigator.net -> Logger object -> Save'.
 * Import logger data: results -> task title -> navigation flight -> ... ->
@@ -1218,7 +1251,8 @@ crews can be excluded.
 
 [[supported-logger-dg200]]
 === DG-200
-* Logger readout software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'.
+* Read logger: built-in (<<fc_en.adoc#read-logger>>)
+* Alternative logger readout software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'.
 * Logger setting: 'DG200Tool.exe -> Device -> Device settings'.
 ** Select data logging format: "Position,Time,Date,Speed,Altitude".
 ** Enable WAAS
@@ -1559,8 +1593,7 @@ Allows customization of the deployment environment of the 'Flight Contest' insta
 Changes only effective after restarting 'Flight Contest'.
 
 If 'Flight Contest' does not start anymore after changes, the last
-change in 'C:\FCSave\.fc\config.groovy' has to be undone or deleted.
-or delete this file.
+change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.
 
 <<fc_en.adoc#configuration-email>> +
 <<fc_en.adoc#configuration-viewemail>> +
@@ -1622,8 +1655,8 @@ or delete this file.
 
 2 directories must exist in the root directory of the FTP server:
 
-* GM_Utils-6.13 - GPX viewer JavaScript library.
-* Any name without spaces or special characters - contest directory (above example: "demo").
+* GM_Utils-6.13 - GPX viewer JavaScript library
+* Any name without spaces or special characters - contest directory (above example: "demo")
 
 The mentioned version of the GPX view can be taken from the following directory:
 
@@ -1919,7 +1952,7 @@ Automatic actions are handled by permanently running scripts
 and only work with the Firefox browser. +
 The first call of the script turns automatic action on. +
 Calling the script again turns off automatic action after confirmation. +
--> 'Programs -> Flight Contest -> Scripts'.
+-> 'Start menu -> Flight Contest'.
 
 <<fc_en.adoc#automatic-actions-openpdf>> +
 <<fc_en.adoc#automatic-actions-loadscanplanningtask>> +
@@ -2000,7 +2033,7 @@ after you have made backups as described below.
 === Backup of the 'Flight Contest' database
 
 Call the script
-'Programs -> Flight Contest -> Scripts -> Save contest database'. +
+'Start menu -> Flight Contest -> Save contest database'. +
 The database will be saved with date and time
 saved to the backup directory C:\FCSave (<date>-<time>-fcdb.h2.db).
 
@@ -2018,7 +2051,7 @@ the download manager.
   
 If this setting is not possible or desired,
 prints will end up in the Windows-Temp-Directory.
-From there they can be saved with the script 'Programs -> Flight Contest -> Scripts -> Save contest prints'.
+From there they can be saved with the script 'Start menu -> Flight Contest -> Save contest prints'.
 to the backup directory C:\FCSave.
 Note, however, that Firefox deletes all downloads from the Windows temp directory when it is closed,
 so there is a risk of losing prints if this script is not called regularly.

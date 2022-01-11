@@ -34,6 +34,8 @@ class Defs
     static final String LIVE_FILENAME                                  = "fclive.htm"
     static final int LIVE_UPLOADSECONDS                                = 60
     
+    static final String EXE_GPSBABEL                                   = "C:/Program Files (x86)/GPSBabel/gpsbabel.exe"
+    
     static final String LIVETRACKING_DISPLAY_TASK                      = "/display/task/"
     static final String LIVETRACKING_DISPLAY_MAP                       = "/map/"
     static final String LIVETRACKING_RESULTS_SERVICE                   = "/resultsservice/"

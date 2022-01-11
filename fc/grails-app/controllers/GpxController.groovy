@@ -187,9 +187,9 @@ class GpxController
     }
 	
     def startofflineviewer = {
-        gpxService.printstart "startofflineviewer ($params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints)"
+        gpxService.printstart "startofflineviewer ($params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints, showCoord:$params.showCoord)"
         if (session.gpxShowPoints) {
-            render(view:"offlineviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
+            render(view:"offlineviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,showCoord:params.showCoord,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
         } else {
             render(view:"offlineviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints])
         }

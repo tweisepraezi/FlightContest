@@ -15,13 +15,18 @@
                         <g:set var="ti" value="${[]+1}"/>
                         <g:set var="test_instances" value="${taskInstance.GetIncompleteFlightTests()}" />
                         <div>
-                            <p>${message(code:'fc.loggerdata.importform.extern',args:[loggerfile])}</p>
+                            <g:if test="${info}">
+                                <p>${message(code:'fc.loggerdata.importform.externdata',args:[info])}</p>
+                            </g:if>
+                            <g:else>
+                                <p>${message(code:'fc.loggerdata.importform.externfile',args:[loggerfile])}</p>
+                            </g:else>
                         </div>
                         <g:if test="${test_instances}">
                             <p>
                                 <div>
                                     <label>${message(code:'fc.crew')}: </label>
-                                    <g:select from="${test_instances}" optionKey="id" optionValue="${{it.name()}}" name="testid" value="" noSelection="${[id:'']}" tabIndex="${ti[0]++}"/>
+                                    <g:select from="${test_instances}" id="select_id" optionKey="id" optionValue="${{it.name()}}" name="testid" value="" noSelection="${[id:'']}" onchange="select();" tabIndex="${ti[0]++}"/>
                                 </div>
                             </p>
 	                        <div>
@@ -44,10 +49,31 @@
                         <br/>
                         <input type="hidden" name="id" value="${taskInstance?.id}" />                        
                         <input type="hidden" name="loggerfile" value="${loggerfile}" />
+                        <input type="hidden" name="removefile" value="${removefile}" />
+                        <input type="hidden" name="info" value="${info}" />
                         <g:if test="${test_instances}">
-                            <g:actionSubmit action="loggerformimportsave" value="${message(code:'fc.import')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit id="import_button" action="loggerformimportsave" value="${message(code:'fc.import')}" disabled tabIndex="${ti[0]++}"/>
+                            <script>
+                                function select() {
+                                    var select_value = $("#select_id").val();
+                                    $("#import_button").prop("disabled", select_value == "id");
+                                }
+                            </script>
                         </g:if>
                         <g:actionSubmit action="loggerimportcancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        <script>
+                             var body = document.getElementsByTagName("body");
+                             <g:if test="${info}">
+                                if (body) {
+                                    body[0].onunload = removeGpxFile;
+                                }
+                            </g:if>
+                            function removeGpxFile() {
+                                var xmlhttp=new XMLHttpRequest();
+                                xmlhttp.open("GET","${createLinkTo(dir:'gpx/deletegpxfile',file:'')}?filename=${loggerfile}",false);
+                                xmlhttp.send();
+                            }
+                        </script>
                     </g:form>
                 </div>
             </div>

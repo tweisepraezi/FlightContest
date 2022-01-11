@@ -1470,7 +1470,7 @@ class GpxService
                 show_points = GetShowPoints(gpxFileName, params.wrEnrouteSign)
             } else {
                 println "Generate points for buttons (GetShowPointsRoute)"
-                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, messageSource, [isPrint:params.isPrint, wrEnrouteSign:params.wrEnrouteSign, showCurvedPoints:false])
+                show_points = RoutePointsTools.GetShowPointsRoute(route_instance, testInstance, messageSource, [isPrint:params.isPrint, wrEnrouteSign:params.wrEnrouteSign, showCurvedPoints:false, showCoord:params.showCoord])
             }
         }
         
@@ -2799,6 +2799,13 @@ class GpxService
                     List enroute_points = []
                     int enroute_point_pos = 0
                     Map from_tp = [:]
+                    String start_time = ""
+                    String end_time = ""
+                    if (params.showUtc) {
+                        start_time = FcTime.UTCAddSeconds(params.showUtc, -120)
+                        end_time = FcTime.UTCAddSeconds(params.showUtc, 120)
+                        println "Show track points ${start_time}...${end_time}"
+                    }
                     for (Map p in track_points) {
                         
                         String utc = p.utc
@@ -2809,6 +2816,17 @@ class GpxService
                                     println "Track points cut off: ${utc}"
                                     break
                                 }
+                            }
+                        }
+                        if (start_time) {
+                            if (utc <= start_time) {
+                                continue
+                            }
+                        }
+                        if (end_time) {
+                            if (utc >= end_time) {
+                                println "Track points cut off: ${end_time}"
+                                break
                             }
                         }
                         
@@ -2853,7 +2871,13 @@ class GpxService
                                                     if (calc_result.noGateMissed) {
                                                         v = "no"
                                                     }
-                                                    xml.badgate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway), v)
+                                                    if (params.showCoord) {
+                                                        if (params.showCoord == calc_result.titleCode) {
+                                                            xml.badgate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway), v)
+                                                        }
+                                                    } else {
+                                                        xml.badgate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway), v)
+                                                    }
                                                 }
                                             } else if (calc_result.gateNotFound) {
                                                 if (!calc_result.judgeDisabled && !calc_result.hide) {
@@ -2861,10 +2885,20 @@ class GpxService
                                                     if (calc_result.noGateMissed) {
                                                         v = "no"
                                                     }
-                                                    xml.gatenotfound(name:calc_result.titleCode, lat:calc_result.latitude, lon:calc_result.longitude, runway:getYesNo(calc_result.runway), v)
+                                                    if (params.showCoord) {
+                                                        if (params.showCoord == calc_result.titleCode) {
+                                                            xml.gatenotfound(name:calc_result.titleCode, lat:calc_result.latitude, lon:calc_result.longitude, runway:getYesNo(calc_result.runway), v)
+                                                        }
+                                                    } else {
+                                                        xml.gatenotfound(name:calc_result.titleCode, lat:calc_result.latitude, lon:calc_result.longitude, runway:getYesNo(calc_result.runway), v)
+                                                    }
                                                 }
                                             } else {
-                                                if (show_curved_point || !(calc_result.titleCode in curved_point_titlecodes)) {
+                                                if (params.showCoord) {
+                                                    if (params.showCoord == calc_result.titleCode) {
+                                                        xml.gate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway))
+                                                    }
+                                                } else if (show_curved_point || !(calc_result.titleCode in curved_point_titlecodes)) {
                                                     xml.gate(name:calc_result.titleCode, runway:getYesNo(calc_result.runway))
                                                 }
                                             }

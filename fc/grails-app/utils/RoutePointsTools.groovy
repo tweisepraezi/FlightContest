@@ -47,7 +47,16 @@ class RoutePointsTools
             
             // add regular point
             if (!contestMap || coordroute_instance.type.IsContestMapCoord()) {
-                if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
+                if (params.showCoord) {
+                    if (params.showCoord == coordroute_instance.titleCode()) {
+                        Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
+                        new_point += GetPointCoords(coordroute_instance)
+                        if (testInstance) {
+                            new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                        }
+                        points += new_point
+                    }
+                } else if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                     if (!(params.noCircleCenterPoints && coordroute_instance.circleCenter)) {
                         Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
                         new_point += GetPointCoords(coordroute_instance)

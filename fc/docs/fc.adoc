@@ -1,8 +1,9 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.M25
-:revdate:   03.01.2022
+:revnumber: 3.2.0
+:revdate:   11.01.2022
 :nofooter:
+:title-page:
 :toc-title: Inhaltsverzeichnis
 :toc:
 :lang: de
@@ -24,11 +25,11 @@ Flight Contest hat ein flexibles Wettbewerbsmanagement. Dazu zählen die Unterst
 
 Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkfähige Open-Source-Datenbank-Anwendung:
 
-* Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Internet Explorer u.a.).
+* Die Benutzer-Oberfläche läuft im Web-Browser (Firefox, Edge Chromium, Chrome u.a.).
 * Sie kann auf mehreren vernetzten Computern gleichzeitig benutzt werden.
 * Jeder Benutzer kann dabei seine bevorzugte Bediensprache verwenden (Deutsch, Englisch, erweiterbar).
-* Absturzsicher.
-* Hohe Sicherheit gegen Fehlbedienung.
+* Absturzsicher
+* Hohe Sicherheit gegen Fehlbedienung
 
 Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).
 
@@ -42,8 +43,8 @@ Unterstützt besondere Streckeneigenschaften:
 
 * Unbekannte Zeitkontrollen
 * Krumme Streckenabschnitte
+* Halbkreise
 * Touch & Go-Landungen
-
 
 Stellt eine Live-Ergebnis-Anzeige (Live Scoring) bereit:
 
@@ -53,8 +54,9 @@ Stellt eine Live-Ergebnis-Anzeige (Live Scoring) bereit:
 Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dateien bereit:
 
 * Offline-Kartenanzeige zur Beurteilung des Navigationsfluges
+* Schnelle Offline-Kartenanzeige in der Nähe eines gewählten Wendepunktes
 * Online-Kartenanzeige mit Open Street Map
-* Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien
+* Logger-Daten-Anzeige für GAC-, IGC-, GPX-, KML-, KMZ- und NMEA-Dateien mit optionalem gpx-Download
 
 <<<
 [[manuals]]
@@ -87,7 +89,7 @@ _Ausrichter des Wettbewerbes_ +
 
 [arabic]
 .. _Wettbewerbsstrecke ausarbeiten_ +
-   (Koordinaten, Karten, Bilder, Bodenzeichen, Funk, Wendeschleifen, Unbekannte Zeitkontrollen)
+   (Koordinaten, Karten, Bilder, Bodenzeichen, Wendeschleifen, Unbekannte Zeitkontrollen)
    
 .. _An- u. Abflugstrecke ausarbeiten_ +
    (Entfernungen/Zeit-Bedarf, Karten, Funk, Tower-Kommunikation)
@@ -271,7 +273,7 @@ Die Liste erfasst folgende Daten:
 * Flugzeug-Kennzeichen
 * Flugzeug-Typ (optional)
 * Flugzeug-Farbe (optional)
-* Tracker-ID (für Wettbewerbe mit Live-Tracking)
+* Tracker-ID (optional, für Wettbewerbe mit Live-Tracking)
 
 Diese Liste muss am Wettbewerbstag vorliegen (Sortierung nicht notwendig).
 
@@ -293,7 +295,7 @@ Besatzungslisten werden mit 'Besatzungen -> Import Excel-Besatzungsliste' in die
 'Flight Contest'-Datenbank aufgenommen. 
 Bei angegebener Option "Start-Nr. weglassen" werden die angegebenen Nummern 
 nicht verwendet bzw. bei Angabe durch eine andere Startnummer ersetzt.
-Die angegebenen Nummern können unter 'Wettbewerb -> Vorgaben' konfiguriert
+Die wegzulassenden Nummern können unter 'Wettbewerb -> Vorgaben' konfiguriert
 werden (Standard: '13').
 
 Importiert werden nur Besatzungsnamen (Pilot + Navigator), die noch nicht in der 
@@ -503,7 +505,7 @@ Check-Punkt (engl.), Latitude, Longitude, Altitude, Gate-Richtung und -Breite, u
 
 Zulässige Koordinaten-Darstellungen entspr. Wettbewerbseinstellung.
   
-Import von Beobachtungen aus Text-Dateien (siehe 'Programme -> Flight Contest -> Anleitung Beobachtungen' 
+Import von Beobachtungen aus Text-Dateien (siehe 'Startmenü -> Flight Contest -> Anleitung Beobachtungen' 
 -> Kapitel "Beobachtungsauswertung konfigurieren")
   
 Der Strecken-Ausdruck (Strecke -> Druck) enthält die Text-Darstellungen aller Check-Punkte
@@ -1180,9 +1182,38 @@ können mit der Besatzungs-Option "Keine Wettbewerbs-Auswertung" alle nicht zutr
 Besatzungen ausgeschlossen werden.
 
 <<<
+[[read-logger]]
+== Logger auslesen
+Unterstützte Logger: 'Renkforce GT-730FL-S', 'GlobalSat DG-100', 'GlobalSat DG-200'
+
+Voraussetzung: Installation von GPSBabel 1.7.0 oder höher
+
+[arabic]
+Vorgehen:
+[arabic]
+. 'Ergebnisse -> Aufgabe -> Logger auslesen' öffnen -> öffnet Tab 'Logger auslesen'
+. Logger mit einem USB-Anschluss verbinden
+. Logger einschalten
+. 'Aktualisieren' anklicken -> ein neuer COM-Aschluss erscheint
+. Neu erschienenen COM-Aschluss wählen
+. 'Import' anklicken -> nach dem Auslesen wird Tab 'Logger-Daten importieren' geöffnet
+. Besatzung wählen
+. 'Import' anklicken -> nach dem Import wird 'Navigationsflugergebnisse' geöffnet
+. Nach der Überprüfung der Navigationsflugergebnisse diese mit 'Ergebnis fertig' abschliessen und Tab schliessen
+. Logger ausschalten und von USB-Aschluss trennen
+. Weiter mit Schritt 2 in Tab 'Logger auslesen'
+
+Alternativ können die Logger auch über folgende Skripte ausgelsen werden:
+
+* Startmenü -> Flight Contest -> Read logger SkyTraq logger Renkforce GT-730FL-S
+* Startmenü -> Flight Contest -> Read logger GlobalSat DG-100
+* Startmenü -> Flight Contest -> Read logger GlobalSat DG-200
+
+<<<
 [[supported-logger]]
 == Unterstützte Logger
 
+<<fc.adoc#supported-logger-renkforce-GT-730FL-S>> +
 <<fc.adoc#supported-logger-aflosreader>> +
 <<fc.adoc#supported-logger-airopserver>> +
 <<fc.adoc#supported-logger-dg100>> +
@@ -1192,6 +1223,11 @@ Besatzungen ausgeschlossen werden.
 <<fc.adoc#supported-logger-gpx>> +
 <<fc.adoc#supported-logger-kml>> +
 <<fc.adoc#supported-logger-nmea>>
+
+[[supported-logger-renkforce-GT-730FL-S]]
+=== Renkforce GT-730FL-S
+* Logger auslesen: integriert (<<fc.adoc#read-logger>>)
+* Logger-Aufzeichnung löschen: 'FFA SkyTraq V6 -> Tools -> Clear memory'
 
 [[supported-logger-aflosreader]]
 === AFLOS
@@ -1214,9 +1250,10 @@ Besatzungen ausgeschlossen werden.
 
 [[supported-logger-dg100]]
 === DG-100
+* Logger auslesen: integriert (<<fc.adoc#read-logger>>)
 * Logger-Einstellungs-Software: 'Data Logger Utility S-OPC-0L-110631'
 * Logger-Einstellung: 'Data Logger Utility -> Settings -> Configuration'
-* Logger-Auslese-Software: 'FSNavigator.net 2.0.0.90'
+* Alternative Logger-Auslese-Software: 'FSNavigator.net 2.0.0.90'
 * Logger-Aufzeichnung auslesen: 'FSNavigator.net -> Plugins -> FRPocket device -> Download tracks'
 * GAC-Datei erzeugen: 'FSNavigator.net -> Logger-Object -> Save'
 * Logger-Daten-Import: Ergebnisse -> Aufgaben-Titel -> Navigationsflug -> ... -> 
@@ -1225,7 +1262,8 @@ Besatzungen ausgeschlossen werden.
 
 [[supported-logger-dg200]]
 === DG-200
-* Logger-Auslese-Software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'
+* Logger auslesen: integriert (<<fc.adoc#read-logger>>)
+* Alternative Logger-Auslese-Software: 'DG200Tool.exe DG-200 S-OPC-15-1401211'
 * Logger-Einstellung: 'DG200Tool.exe -> Device -> Device settings'
 ** Data logging format: "Position,Time,Date,Speed,Altitude" wählen
 ** "Enable WAAS" aktivieren
@@ -1926,11 +1964,11 @@ Mit diesen Einstellungen wird jedes mit "Ergebnis fertig" freigegebene Testergeb
 <<<
 [[automatic-actions]]
 == Automatische Aktionen
-Automatische Aktionen werden durch dauerhaft laufende Scripte erledigt
+Automatische Aktionen werden durch dauerhaft laufende Skripte erledigt
 und funktionieren nur mit dem Firefox-Browser. +
-Der erste Aufruf des Scriptes schaltet automatische Aktion ein. +
-Erneuter Aufruf des Scriptes schaltet automatische Aktion nach Rückfrage aus. +
--> 'Programme -> Flight Contest -> Scripts'
+Der erste Aufruf des Skriptes schaltet automatische Aktion ein. +
+Erneuter Aufruf des Skriptes schaltet automatische Aktion nach Rückfrage aus. +
+-> 'Startmenü -> Flight Contest'
 
 <<fc.adoc#automatic-actions-openpdf>> +
 <<fc.adoc#automatic-actions-loadscanplanningtask>> +
@@ -2010,8 +2048,8 @@ nachdem Sie Sicherungen wie unten beschrieben durchgeführt haben.
 [[save-fcdb]]
 === Sicherung der 'Flight Contest'-Datenbank
 
-Rufen Sie das Script 
-'Programme -> Flight Contest -> Scripts -> Save contest database' auf. +
+Rufen Sie das Skript 
+'Startmenü -> Flight Contest -> Save contest database' auf. +
 Die Datenbank wird mit Datum und Uhrzeit versehen
 ins Sicherungsverzeichnis C:\FCSave gespeichert (<Datum>-<Uhrzeit>-fcdb.h2.db).
 
@@ -2029,10 +2067,10 @@ den Download-Manager.
   
 Ist diese Einstellung nicht möglich oder gewünscht,
 landen Ausdrucke im Windows-Temp-Verzeichnis. 
-Von dort können sie mit dem Script 'Programme -> Flight Contest -> Scripts -> Save contest prints' 
+Von dort können sie mit dem Skript 'Startmenü -> Flight Contest -> Save contest prints' 
 ins Sicherungsverzeichnis C:\FCSave gespeichert werden.
 Beachten Sie jedoch, dass Firefox beim Schließen alle Downloads aus dem Windows-Temp-Verzeichnis löscht, 
-so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Script nicht regelmässig aufgerufen wird.
+so dass der Verlust erfolgter Ausdrucke droht, wenn dieses Skript nicht regelmässig aufgerufen wird.
 
 [[restore-fcdb]]
 === Datenwiederherstellung der 'Flight Contest'-Datenbank

@@ -310,9 +310,9 @@ class FlightResultsTagLib
             outln"""    <thead>"""
             outln"""        <tr>"""
             if (show_judgeactions) {
-                outln"""        <th colspan="9" class="table-head">${message(code:'fc.flightresults.calculatedpoints')}</th>"""
+                outln"""        <th colspan="10" class="table-head">${message(code:'fc.flightresults.calculatedpoints')}</th>"""
             } else {
-                outln"""        <th colspan="8" class="table-head">${message(code:'fc.flightresults.allcalculatedpoints')}</th>"""
+                outln"""        <th colspan="9" class="table-head">${message(code:'fc.flightresults.allcalculatedpoints')}</th>"""
             }
             outln"""        </tr>"""
             outln"""        <tr>"""
@@ -327,6 +327,7 @@ class FlightResultsTagLib
             if (show_judgeactions) {
                 outln"""        <th></th>"""
             }
+            outln"""            <th>${message(code:'fc.offlinemap')}</th>"""
             outln"""        </tr>"""
             outln"""    </thead>"""
             outln"""    <tbody>"""
@@ -449,6 +450,11 @@ class FlightResultsTagLib
             } else {
                 outln"""    <td/>"""
             }
+        }
+        if (calcresultInstance.coordTitle) {
+            outln"""    <td><a href="${createLink(controller:'test',action:'showofflinemap_test',params:[id:calcresultInstance.loggerresult.test.id, showCoord:calcresultInstance.coordTitle.titleCode(), showUtc:calcresultInstance.utc])}" target="_blank">...</a></td>"""
+        } else {
+            outln"""    <td></td>"""
         }
         outln"""    </tr>"""
     }

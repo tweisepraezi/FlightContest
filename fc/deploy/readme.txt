@@ -56,8 +56,8 @@ Weitere nützliche Funktionen von Flight Contest:
   Rangliste während eines laufenden Debriefings.
 * Unterstützung von Airsport Live Tracking (https://airsports.no)
 
-Erweiterungen in dieser Version (3.2.M25):
-------------------------------------------
+Erweiterungen in dieser Version (3.2.0):
+----------------------------------------
 - Umstellung der Laufzeitumgebung
     Plattform: x64
     Laufzeitumgebung: OpenJDK 8, Tomcat 9
@@ -95,6 +95,8 @@ Erweiterungen in dieser Version (3.2.M25):
   --landingresults                    -> Auswertung -> Wettbewerbs-Auswertung -> Wettbewerbs-Auswertungs-Einstellungen -> Lande-Strafpunkte um angegebenen Faktor reduzieren
   -> Hilfe -> Ersetzte CSS-Eigenschaften
 - Der Kartenmaßstab wird jetzt in den Strecken-Einstellungen festgelegt.
+- Die Höhe über Grund wird jetzt in den Strecken-Einstellungen festgelegt. Bei den einzelnen Koordinaten ist demzufolge die Geländehöhe über Normal-Null einzugeben.
+  Die Mindestflughöhe über Normal-Null ist damit die Summe aus Höhe über Grund und Geländehöhe.
 - OSM-Wettbewerbs-Karte:
     Alle Optionen werden in der Datenbank gespeichert.
     Krumme Etappen können separat deaktiviert werden.
@@ -146,8 +148,10 @@ Erweiterungen in dieser Version (3.2.M25):
 - Aktualisierung folgender Regelwerke
     FAI Precision Flying - Edition 2022
     FAI Air Rally Flying - Edition 2022
-- Strecken: Höhe über Grund hinzugefügt. Bei den einzelnen Koordinaten ist jetzt die Geländehöhe über Normal-Null einzugeben.
-  Die Mindestflughöhe über Normal-Null ist somit die Summe aus Höhe über Grund und Geländehöhe.
+- Logger-Auswertung: In der Liste berechneter Punkte steht die Offline-Karte jetzt schnell für jeden einzelnen Wendepunkt zur Verfügung.
+- Das Auslesen der Logger 'Renkforce GT-730FL-S', 'GlobalSat DG-100' und 'GlobalSat DG-200' kann jetzt direkt aus Flight Contest heraus erledigt werden.
+  Vorausetzung: Installation von GPSBabel 1.7.0 (http://www.gpsbabel.org/download.html)
+    -> Hilfe -> Logger auslesen
       
 Erweiterungen in Version 3.1.11:
 --------------------------------

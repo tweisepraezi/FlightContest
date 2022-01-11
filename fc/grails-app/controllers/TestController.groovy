@@ -1476,14 +1476,19 @@ class TestController
     def showofflinemap_test = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            gpxService.printstart "showofflinemap_test: Show map of '${test.instance.crew.name}'"
+            gpxService.printstart "showofflinemap_test: Show map of '${test.instance.crew.name}' $params"
             String uuid = UUID.randomUUID().toString()
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
-            Map converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:true])
+            Map converter = [:]
+            if (params.showCoord) {
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:true, showCoord:params.showCoord, showUtc:params.showUtc])
+            } else {
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:true])
+            }
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
-                redirect(controller:'gpx',action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showZoom:"yes",showPoints:"yes"])
+                redirect(controller:'gpx',action:'startofflineviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showZoom:"yes",showPoints:"yes",showCoord:params.showCoord])
             } else {
                 flash.error = true
                 if (converter.ok && !converter.track) {

@@ -114,6 +114,8 @@ class FcTagLib
             out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.disabledcheckpoints')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/listdifferences')}") {
             out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.differences')}</a>"""
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/readlogger')}") {
+            out << """<a href="${p.link}/${p.var.id}${next_str}" target="_blank">${message(code:'fc.task.readlogger')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetable')}") {
 			out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.timetable')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetablejudge')}") {

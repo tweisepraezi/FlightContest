@@ -17,21 +17,24 @@
                         <tbody>
                             <tr>
                                 <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/></td>
-                                
 	                            <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
 	                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'disabledcheckpoints')}"/></td>
 	                            </g:if>
 	                            <g:else>
 	                            	<td/>
 	                            </g:else>
-                                
                                 <g:if test="${taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
                                     <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'listdifferences')}"/></td>
                                 </g:if>
                                 <g:else>
                                     <td/>
                                 </g:else>
-                                
+	                            <g:if test="${new File(Defs.EXE_GPSBABEL).exists() && taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
+	                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'readlogger')}"/></td>
+	                            </g:if>
+	                            <g:else>
+	                            	<td/>
+	                            </g:else>
                                 <td style="width:1%;"><a href="#end"><img src="${createLinkTo(dir:'images',file:'down.png')}"/></a></td>
                             </tr>
                             <tr>
@@ -41,7 +44,7 @@
                                 <g:else>
                                     <td/>
                                 </g:else>
-                                
+                                <td/>
                                 <td/>
                                 <td/>
                                 <td/>
@@ -61,6 +64,7 @@
                                                 <a href="${livetracking_results}" target="_blank">${message(code:'fc.livetracking.results.service')}<img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/></a> (${taskInstance.GetLiveTrackingVisibility()})
                                         </g:if>
                                     </td>
+                                    <td/>
                                     <td/>
                                 </tr>
                             </g:if>

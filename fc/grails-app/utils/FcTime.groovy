@@ -191,4 +191,11 @@ class FcTime
 		}
 		return ""
 	}
+    
+    //--------------------------------------------------------------------------
+    static String GetCompactTime(String utcDateTime)
+    {
+        Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utcDateTime)
+        return utc_date.format("yyyyMMddHHmmss")
+    }
 }

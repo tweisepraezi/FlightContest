@@ -5221,7 +5221,7 @@ class FcService
     }
     
     //--------------------------------------------------------------------------
-    Map calculateLoggerResultExternTest(String fileExtension, Test testInstance, String fileName, boolean interpolateMissingData, int correctSeconds)
+    Map calculateLoggerResultExternTest(String fileExtension, Test testInstance, String fileName, boolean removeFile, boolean interpolateMissingData, int correctSeconds)
     // fileExtension - '.gac', '.gpx'
     // Return        - found = true, wenn zutreffende Logger-Datei  
     {
@@ -5236,7 +5236,7 @@ class FcService
             ret.error = true
             ret.message = getMsg('fc.flightresults.loggerimport.nofile')
         } else {
-            printstart "calculateLoggerResultExternTest '$original_filename'"
+            printstart "calculateLoggerResultExternTest '$original_filename' remove=${removeFile}"
             if (original_filename.toLowerCase().endsWith(fileExtension)) {
                 ret.found = true
                 printdone ""
@@ -5257,6 +5257,10 @@ class FcService
                     ret.message =  getMsg('fc.flightresults.loggerimport.flightfailures',[testInstance.crew.name])
                 } else {
                     ret.message = getMsg('fc.flightresults.loggerimport.flightok',[original_filename])
+                }
+                
+                if (removeFile) {
+                    DeleteFile(fileName)
                 }
             }
             printdone ""
