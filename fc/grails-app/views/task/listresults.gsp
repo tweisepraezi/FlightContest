@@ -29,7 +29,7 @@
                                 <g:else>
                                     <td/>
                                 </g:else>
-	                            <g:if test="${new File(Defs.EXE_GPSBABEL).exists() && taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
+	                            <g:if test="${new File(Defs.EXE_GPSBABEL).exists() && taskInstance.liveTrackingNavigationTaskDate && taskInstance.flighttest && taskInstance.IsFlightTestRun()}">
 	                                <td><g:task var="${taskInstance}" link="${createLink(controller:'task',action:'readlogger')}"/></td>
 	                            </g:if>
 	                            <g:else>

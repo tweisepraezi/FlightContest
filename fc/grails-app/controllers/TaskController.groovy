@@ -438,7 +438,7 @@ class TaskController {
             String uuid = UUID.randomUUID().toString()
             String webroot_dir = servletContext.getRealPath("/")
             String gpx_filename = "${webroot_dir}${Defs.ROOT_FOLDER_GPXUPLOAD}/LOGGERDATA-${uuid}-READ.gpx".replace("\\","/")
-            String gpsbabel_call = """"${Defs.EXE_GPSBABEL}" -t -i ${params.loggertype} -f ${params.port} -x track,start=${params.start_time},stop=${params.end_time} -o gpx -F ${gpx_filename}"""
+            String gpsbabel_call = """"${Defs.EXE_GPSBABEL}" -t -i ${params.loggertype} -f ${params.port} -x track,start=${params.start_time},stop=${params.end_time} -o gpx -F "${gpx_filename}" """
             fcService.println "readlogger_read $gpsbabel_call"
             gpsbabel_call.execute().waitFor()
             if (new File(gpx_filename).exists()) {
