@@ -1465,7 +1465,7 @@ class GpxService
         
         List show_points = []
         if (params.showPoints) {
-            if (testInstance.IsLoggerResultWithoutRunwayMissed()) {
+            if (!(params.showCoord) && testInstance.IsLoggerResultWithoutRunwayMissed()) {
                 println "Generate points for buttons (GetShowPoints)"
                 show_points = GetShowPoints(gpxFileName, params.wrEnrouteSign)
             } else {
@@ -1678,7 +1678,7 @@ class GpxService
                             contestmapadditionals: getYesNo(routeInstance.contestMapAdditionals),
                             contestmapspecials: getYesNo(routeInstance.contestMapSpecials),
                             contestmapairspaces: getYesNo(routeInstance.contestMapAirspaces),
-                            contestmapairspaceslayer: routeInstance.contestMapAirspacesLayer,
+                            contestmapairspaceslayer2: routeInstance.contestMapAirspacesLayer2,
                             contestmapshowoptions1: getYesNo(routeInstance.contestMapShowFirstOptions),
                             contestmaptitle1: routeInstance.contestMapFirstTitle,
                             contestmapcenterverticalpos1: routeInstance.contestMapCenterVerticalPos,
@@ -1687,6 +1687,8 @@ class GpxService
                             contestmapprintpoints1: routeInstance.contestMapPrintPoints,
                             contestmapprintlandscape1: getYesNo(routeInstance.contestMapPrintLandscape),
                             contestmapprintsize1: routeInstance.contestMapPrintSize,
+                            contestmapcentermovex1: routeInstance.contestMapCenterMoveX,
+                            contestmapcentermovey1: routeInstance.contestMapCenterMoveY,
                             contestmapshowoptions2: getYesNo(routeInstance.contestMapShowSecondOptions),
                             contestmaptitle2: routeInstance.contestMapSecondTitle,
                             contestmapcenterverticalpos2: routeInstance.contestMapCenterVerticalPos2,
@@ -1695,6 +1697,8 @@ class GpxService
                             contestmapprintpoints2: routeInstance.contestMapPrintPoints2,
                             contestmapprintlandscape2: getYesNo(routeInstance.contestMapPrintLandscape2),
                             contestmapprintsize2: routeInstance.contestMapPrintSize2,
+                            contestmapcentermovex2: routeInstance.contestMapCenterMoveX2,
+                            contestmapcentermovey2: routeInstance.contestMapCenterMoveY2,
                             contestmapshowoptions3: getYesNo(routeInstance.contestMapShowThirdOptions),
                             contestmaptitle3: routeInstance.contestMapThirdTitle,
                             contestmapcenterverticalpos3: routeInstance.contestMapCenterVerticalPos3,
@@ -1703,6 +1707,8 @@ class GpxService
                             contestmapprintpoints3: routeInstance.contestMapPrintPoints3,
                             contestmapprintlandscape3: getYesNo(routeInstance.contestMapPrintLandscape3),
                             contestmapprintsize3: routeInstance.contestMapPrintSize3,
+                            contestmapcentermovex3: routeInstance.contestMapCenterMoveX3,
+                            contestmapcentermovey3: routeInstance.contestMapCenterMoveY3,
                             contestmapshowoptions4: getYesNo(routeInstance.contestMapShowForthOptions),
                             contestmaptitle4: routeInstance.contestMapForthTitle,
                             contestmapcenterverticalpos4: routeInstance.contestMapCenterVerticalPos4,
@@ -1710,7 +1716,9 @@ class GpxService
                             contestmapcenterpoints4: routeInstance.contestMapCenterPoints4,
                             contestmapprintpoints4: routeInstance.contestMapPrintPoints4,
                             contestmapprintlandscape4: getYesNo(routeInstance.contestMapPrintLandscape4),
-                            contestmapprintsize4: routeInstance.contestMapPrintSize4
+                            contestmapprintsize4: routeInstance.contestMapPrintSize4,
+                            contestmapcentermovex4: routeInstance.contestMapCenterMoveX4,
+                            contestmapcentermovey4: routeInstance.contestMapCenterMoveY4
                         )
                         if (routeInstance.enroutePhotoRoute == EnrouteRoute.InputName) {
                             xml.enroutephotosigns {
@@ -1766,6 +1774,20 @@ class GpxService
                         max_longitude = contest_map_rect.lonmax
                         center_latitude = (max_latitude+min_latitude)/2
                         center_longitude = (max_longitude+min_longitude)/2
+                        if (contestMapParams.contestMapCenterMoveY) {
+                            if (contestMapParams.contestMapCenterMoveY > 0) {
+                                center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 180, contestMapParams.contestMapCenterMoveY).lat
+                            } else {
+                                center_latitude = AviationMath.getCoordinate(center_latitude, center_longitude, 0, -contestMapParams.contestMapCenterMoveY).lat
+                            }
+                        }
+                        if (contestMapParams.contestMapCenterMoveX) {
+                            if (contestMapParams.contestMapCenterMoveX > 0) {
+                                center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 270, contestMapParams.contestMapCenterMoveX).lon
+                            } else {
+                                center_longitude = AviationMath.getCoordinate(center_latitude, center_longitude, 90, -contestMapParams.contestMapCenterMoveX).lon
+                            }
+                        }
                         
                         xml.contestmap(
                             min_latitude: min_latitude,
@@ -2739,7 +2761,6 @@ class GpxService
             track_points = testInstance.GetTrackPoints(testInstance.loggerDataStartUtc, testInstance.loggerDataEndUtc).trackPoints 
         }
         if (track_points) {
-            println "Write track points"
             Media media = Media.Screen
             if (params.isTracking) {
                 media = Media.Tracking
@@ -2750,9 +2771,10 @@ class GpxService
             boolean observationsign_used = testInstance.task.flighttest.IsObservationSignUsed()
             boolean show_curved_point = route_instance.showCurvedPoints
             List curved_point_titlecodes = route_instance.GetCurvedPointTitleCodes(media)
-            // cache calc results
+            
             List calc_results = []
             if (testInstance.IsLoggerResult()) {
+                println "Cache calc results"
                 for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
                     String title_code = ""
                     CoordType coord_type = CoordType.UNKNOWN
@@ -2790,9 +2812,11 @@ class GpxService
                                           ]
                     calc_results += new_calc_result
                 }
+                println "${calc_results.size()} calc results found"
             }
             
             // write xml
+            println "Write xml"
             xml.trk {
                 xml.name testInstance.crew.startNum
                 xml.trkseg {
@@ -2836,8 +2860,15 @@ class GpxService
                             xml.time utc
                             
                             // add <extensions> for tp and flight errors
-                            for (Map calc_result in calc_results) {
+                            int last_calc_result_pos = 0;
+                            for (int calc_result_pos = last_calc_result_pos; calc_result_pos < calc_results.size(); calc_result_pos++) {
+                                Map calc_result = calc_results[calc_result_pos]
+                                if (calc_result.utc > utc) {
+                                    break
+                                }
                                 if (calc_result.utc == utc) {
+                                    last_calc_result_pos = calc_result_pos
+                                    println "Write extension for calc result $utc"
                                     if (observationsign_used && !calc_result.badCourse && !calc_result.badTurn && !calc_result.gateMissed && !calc_result.gateNotFound && calc_result.coordType.IsEnrouteSignCoord()) { // cache enroute photo / canvas data
                                         enroute_points = RoutePointsTools.GetEnrouteSignShowPoints(route_instance,calc_result.coordType,calc_result.titleNumber, false)
                                         enroute_point_pos = 0

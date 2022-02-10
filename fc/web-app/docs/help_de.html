@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.0,</span>
-<span id="revdate">11.01.2022</span>
+<span id="revnumber">version 3.2.1,</span>
+<span id="revdate">10.02.2022</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -1999,12 +1999,26 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 Dazu alle Dateien von <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> in den Ordner <strong>C:\FCSave\.geodata</strong> kopieren.</p>
 </div>
 <div class="paragraph">
+<p>Es können einer Strecke beliebig viele Lufträume zugeordnet werden.
+Tragen Sie die Namen benötigter Lufträume, die Sie in <strong>C:\FCSave\.geodata\airspaces.kmz</strong> finden, in das Textfeld ein.</p>
+</div>
+<div class="paragraph">
+<p>Jeder Luftraum kann in seinem Aussehen individuell konfiguriert werden.
+Dazu sind dem Namen mit Komma getrennt verschiedene Attribute mitzugeben.
+Das Beispiel zeigt alle möglichen Attribute mit ihrem Default-Wert:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Alle genannten Streckendetails und Objekte können abgewählt werden.</p>
 </div>
 <div class="paragraph">
 <p>Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
-Strecken, die das gewählte Druck-Format sprengen, können mittels
-Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.</p>
+Strecken, die das gewählte Druck-Format sprengen, können mittels Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.
+Zusätzlich kann das ermittelte Kartenzentrum horizontal und/oder vertikal verschoben werden.</p>
 </div>
 <div class="paragraph">
 <p>Einzelne Wendepunkte können vom Druck ausgenommen werden.

@@ -1,8 +1,19 @@
-﻿Flight Contest 3.2.0
-====================
+﻿Flight Contest
+==============
 
-Changes
--------
+Changes 3.2.1
+-------------
+- OSM Contest Map:
+    Individual configuration of the appearance of each airspace added
+    Horizontal and vertical shift of map center added
+
+- Offline map for each individual turn point:
+    Time offset to shift the shown logger recording section added
+
+- Adjustments to Live Tracking API changes
+
+Changes 3.2.0
+-------------
 - New runtime environment
     Platform: x64
     Runtime environment: OpenJDK 8, Tomcat 9

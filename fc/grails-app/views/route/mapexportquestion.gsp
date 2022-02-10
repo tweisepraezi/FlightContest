@@ -191,7 +191,7 @@
 	                                    <g:checkBox name="contestMapAirspaces" value="${routeInstance.contestMapAirspaces}" tabIndex="${ti[0]++}" />
 	                                    <label>${message(code:'fc.contestmap.contestmapairspaces')}</label>
 	                                    <p>
-	                                        <input type="text" id="contestMapAirspacesLayer" name="contestMapAirspacesLayer" value="${fieldValue(bean:routeInstance,field:'contestMapAirspacesLayer')}" tabIndex="${ti[0]++}"/>
+                                            <g:textArea id="contestMapAirspacesLayer2" name="contestMapAirspacesLayer2" value="${fieldValue(bean:routeInstance,field:'contestMapAirspacesLayer2')}" rows="5" style="width:100%;" tabIndex="${ti[0]++}"/>
 	                                    </p>
 	                                </div>
 	                            </g:if>
@@ -265,6 +265,18 @@
 										<br/>
 										<g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints}" tpid="${Defs.TurnpointID_ContestMapCenterPoints}" ti="${ti}" />
 									</div>
+                                    <div>
+                                        <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveX" name="contestMapCenterMoveX" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX')}" tabIndex="${ti[0]++}"/>
+                                    </div>
+                                    <div>
+                                        <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveY" name="contestMapCenterMoveY" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY')}" tabIndex="${ti[0]++}"/>
+                                    </div>
 									<div>
 										<br/>
 										<label>${message(code:'fc.contestmap.contestmapprintpoints')}:</label>
@@ -357,6 +369,18 @@
                                     </div>
                                     <div>
                                         <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveX2" name="contestMapCenterMoveX2" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX2')}" tabIndex="${ti[0]++}"/>
+                                    </div>
+                                    <div>
+                                        <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveY2" name="contestMapCenterMoveY2" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY2')}" tabIndex="${ti[0]++}"/>
+                                    </div>
+                                    <div>
+                                        <br/>
                                         <label>${message(code:'fc.contestmap.contestmapprintpoints')}:</label>
                                         <br/>
                                         <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints2}" tpid="${Defs.TurnpointID_ContestMapPrintPoints2}" ti="${ti}" />
@@ -446,6 +470,18 @@
                                     </div>
                                     <div>
                                         <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveX3" name="contestMapCenterMoveX3" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX3')}" tabIndex="${ti[0]++}"/>
+                                    </div>
+                                    <div>
+                                        <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveY3" name="contestMapCenterMoveY3" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY3')}" tabIndex="${ti[0]++}"/>
+                                    </div>
+                                    <div>
+                                        <br/>
                                         <label>${message(code:'fc.contestmap.contestmapprintpoints')}:</label>
                                         <br/>
                                         <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapPrintPoints3}" tpid="${Defs.TurnpointID_ContestMapPrintPoints3}" ti="${ti}" />
@@ -532,6 +568,18 @@
                                         <label>${message(code:'fc.contestmap.contestmapcenterpoints')}:</label>
                                         <br/>
                                         <g:contestMapRoutePointsInput r="${routeInstance}" tp="${routeInstance.contestMapCenterPoints4}" tpid="${Defs.TurnpointID_ContestMapCenterPoints4}" ti="${ti}" />
+                                    </div>
+                                    <div>
+                                        <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovex')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveX4" name="contestMapCenterMoveX4" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveX4')}" tabIndex="${ti[0]++}"/>
+                                    </div>
+                                    <div>
+                                        <br/>
+                                        <label>${message(code:'fc.contestmap.contestmapcentermovey')} [${message(code:'fc.mile')}]:</label>
+                                        <br/>
+                                        <input type="text" id="contestMapCenterMoveY4" name="contestMapCenterMoveY4" value="${fieldValue(bean:routeInstance,field:'contestMapCenterMoveY4')}" tabIndex="${ti[0]++}"/>
                                     </div>
                                     <div>
                                         <br/>

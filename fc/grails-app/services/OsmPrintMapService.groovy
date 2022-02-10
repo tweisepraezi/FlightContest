@@ -120,6 +120,11 @@ class OsmPrintMapService
     final static String GEODATA_SYMBOL_SCALE = "scale(0.75, 0.75)"
     final static int SYMBOL_TEXT_FONT_SIZE = FACTOR*10
     
+    final static String AIRSPACE_PRAEFIX = "AIRSPACE:"
+    final static String AIRSPACE_LAYER_STYLE_SEPARATOR = ","
+    final static String AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR = ":"
+    final static BigDecimal AIRSPACE_STROKE_WIDTH = FACTOR*0.75
+    
     // 1:50000
     //final static int landuse_residential = 0xe0dfdf
     //final static int landuse_commercial = 0xf2dad9
@@ -658,17 +663,68 @@ class OsmPrintMapService
         
         String airspaces_lines = ""
         String airspaces_file_name = ""
-        if (contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer) {
+        if (contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer2) {
             airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
             String airspaces_short_file_name = airspaces_file_name.substring(airspaces_file_name.lastIndexOf('/')+1)
-            for (String airspaces_layer in contestMapParams.contestMapAirspacesLayer.split(",")) {
-                airspaces_lines += """,{
-                    "Style": "<PolygonSymbolizer fill-opacity='0.2' fill='steelblue' />",
-                    "SRS": "+init=${ATTR_INPUT_SRS}",
-                    "Type": "ogr",
-                    "File": "${airspaces_short_file_name}",
-                    "Layer": "${airspaces_layer.trim()}"
-                }"""
+            for (String layer in contestMapParams.contestMapAirspacesLayer2.split("\n")) {
+                if (layer && layer.trim()) {
+                    String airspace_layer = layer.trim()
+                    String airspace_text = airspace_layer
+                    String airspace_textsize= '10'
+                    String airspace_textspacing = '100'
+                    String airspace_textcolor = 'black'
+                    String airspace_fillcolor = 'steelblue'
+                    String airspace_fillopacity = '0.2'
+                    for (String airspace_style in Tools.Split(airspace_layer, AIRSPACE_LAYER_STYLE_SEPARATOR)) {
+                        List airspace_style_values = Tools.Split(airspace_style.trim(), AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
+                        if (airspace_style_values.size() == 1) {
+                            airspace_layer = airspace_style_values[0].trim()
+                            airspace_text = airspace_layer
+                        } else if (airspace_style_values.size() == 2) {
+                            switch (airspace_style_values[0].trim()) {
+                                case 'text': 
+                                    airspace_text = airspace_style_values[1].trim()
+                                    break
+                                case 'textsize': 
+                                    airspace_textsize = airspace_style_values[1].trim()
+                                    break
+                                case 'textspacing': 
+                                    airspace_textspacing = airspace_style_values[1].trim()
+                                    break
+                                case 'textcolor': 
+                                    airspace_textcolor = airspace_style_values[1].trim()
+                                    break
+                                case 'fillcolor': 
+                                    airspace_fillcolor = airspace_style_values[1].trim()
+                                    break
+                                case 'fillopacity': 
+                                    airspace_fillopacity = airspace_style_values[1].trim()
+                                    break
+                            }
+                        }
+                    }
+                    airspaces_lines += """,{
+                        "Style": "<PolygonSymbolizer fill-opacity='${airspace_fillopacity}' fill='${airspace_fillcolor}' />",
+                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "Type": "ogr",
+                        "File": "${airspaces_short_file_name}",
+                        "Layer": "${airspace_layer}"
+                    }
+                    ,{
+                        "Style": "<LineSymbolizer stroke='${airspace_fillcolor}' stroke-width='${AIRSPACE_STROKE_WIDTH}' stroke-linecap='round' />",
+                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "Type": "ogr",
+                        "File": "${airspaces_short_file_name}",
+                        "Layer": "${airspace_layer}"
+                    }
+                    ,{
+                        "Style": "<TextSymbolizer fontset-name='fontset-0' size='${airspace_textsize}' fill='${airspace_textcolor}' allow-overlap='false' placement='line' halo-radius='1' halo-fill='white' spacing='${airspace_textspacing}'>'${airspace_text}'</TextSymbolizer>",
+                        "SRS": "+init=${ATTR_INPUT_SRS}",
+                        "Type": "ogr",
+                        "File": "${airspaces_short_file_name}",
+                        "Layer": "${airspace_layer}"
+                    }"""
+                }
             }
         }
         

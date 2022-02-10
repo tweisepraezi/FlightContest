@@ -37,11 +37,13 @@ class RoutePointsTools
             }
             
             // add additional error points
-            if (testInstance) {
-                if (testInstance.IsLoggerResult()) {
-                    points += GetErrorPoints(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
-                } else {
-                    points += GetErrorPointsOld(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
+            if (false && !params.showCoord) { // additional error points diabled
+                if (testInstance) {
+                    if (testInstance.IsLoggerResult()) {
+                        points += GetErrorPoints(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
+                    } else {
+                        points += GetErrorPointsOld(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
+                    }
                 }
             }
             

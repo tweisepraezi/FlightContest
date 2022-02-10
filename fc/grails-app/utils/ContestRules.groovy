@@ -140,7 +140,7 @@ enum ContestRules
             minEnrouteTargets:10,                                // (3.4.1)
             maxEnrouteTargets:25,                                // (3.4.1)
             useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally 2020"
+            liveTrackingScorecard:"FAI Air Rally"
 		]
 	), // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020"
 
@@ -282,7 +282,7 @@ enum ContestRules
             minEnrouteTargets:16,
             maxEnrouteTargets:25,
             useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision 2020"
+            liveTrackingScorecard:"FAI Precision"
 		]
 	), // "Wettbewerbsordnung Pr\u00E4zisionsflug Deutschland - Ausgabe 2005"
 
@@ -424,7 +424,7 @@ enum ContestRules
             minEnrouteTargets:15,
             maxEnrouteTargets:20,
             useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally 2020"
+            liveTrackingScorecard:"FAI Air Rally"
 		]
 	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
 
@@ -566,7 +566,7 @@ enum ContestRules
             minEnrouteTargets:16,                                 // A3.2
             maxEnrouteTargets:25,                                 // A3.2
             useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision 2020"
+            liveTrackingScorecard:"FAI Precision"
 		]
 	), // "FAI Precision Flying - Edition 2022"
 
@@ -708,7 +708,7 @@ enum ContestRules
             minEnrouteTargets:16,                                   // 4.8.1
             maxEnrouteTargets:25,                                   // 4.8.1
             useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision 2020"
+            liveTrackingScorecard:"FAI Precision"
 		]
 	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
 
@@ -850,7 +850,7 @@ enum ContestRules
             minEnrouteTargets:15,
             maxEnrouteTargets:25,
             useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally 2020"
+            liveTrackingScorecard:"FAI Air Rally"
         ]
     ), // "FAI Air Rally Flying - Edition 2022"
 
@@ -992,7 +992,7 @@ enum ContestRules
             minEnrouteTargets:13,                                // 4.3.a
             maxEnrouteTargets:18,                                // 4.3.a
             useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision 2020"
+            liveTrackingScorecard:"FAI Precision"
         ]
     ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017"
 
@@ -1134,7 +1134,7 @@ enum ContestRules
             minEnrouteTargets:13,                                // 4.3a
             maxEnrouteTargets:18,                                // 4.3a
             useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision 2020"
+            liveTrackingScorecard:"FAI Precision"
         ]
     ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017"
 
@@ -1276,7 +1276,7 @@ enum ContestRules
             minEnrouteTargets:13,                                // 4.3a
             maxEnrouteTargets:18,                                // 4.3a
             useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision 2020"
+            liveTrackingScorecard:"FAI Precision"
         ]
     ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2017"
 
@@ -1418,7 +1418,7 @@ enum ContestRules
             minEnrouteTargets:12,                                // 5.2.5d
             maxEnrouteTargets:20,                                // 5.2.5d
             useProcedureTurns:false,
-            liveTrackingScorecard:"FAI Air Rally 2020"
+            liveTrackingScorecard:"FAI Air Rally"
         ]
     ), // "Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2017"
 
@@ -1560,7 +1560,7 @@ enum ContestRules
             minEnrouteTargets:0,
             maxEnrouteTargets:35,
             useProcedureTurns:true,
-            liveTrackingScorecard:"FAI Precision 2020"
+            liveTrackingScorecard:"FAI Precision"
         ]
     ) // "Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017"
 

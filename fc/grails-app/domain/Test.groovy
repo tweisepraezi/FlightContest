@@ -173,7 +173,7 @@ class Test
 	static transients = ['printSummaryResults','printPlanningResults','printPlanningResultsScan',
                          'printFlightResults','printFlightMap',
                          'printObservationResults','printObservationResultsScan',
-                         'printLandingResults','printSpecialResults','printProvisionalResults',]
+                         'printLandingResults','printSpecialResults','printProvisionalResults','addShowTimeValue']
     boolean printSummaryResults = true
 	boolean printPlanningResults = true
     boolean printPlanningResultsScan = true
@@ -184,6 +184,7 @@ class Test
 	boolean printLandingResults = true
 	boolean printSpecialResults = true
 	boolean printProvisionalResults = false
+    int addShowTimeValue = 0                               // add/subtract time value [min] 
 	
 	static belongsTo = [task:Task]
 	

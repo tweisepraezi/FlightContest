@@ -736,7 +736,7 @@ class TrackerService
             }
             
             task_instance.properties = params
-			
+            
             if (params["liveTrackingResultsFlightOn"]) {
                 task_instance.liveTrackingResultsFlightOn = true
             } else {
@@ -788,7 +788,7 @@ class TrackerService
         printstart "createNavigationTask $params"
         
         Task task_instance = Task.get(params.id)
-        Map ret4 = is_task_complete(task_instance, true)
+        Map ret4 = is_task_complete(task_instance, !task_instance.setLiveTrackingNavigationTaskDate)
         if (!ret4.ok) {
             Map ret = ['instance':task_instance, 'created':false, 'message':ret4.message]
             printerror ret
@@ -889,7 +889,7 @@ class TrackerService
         JsonBuilder json_builder = new JsonBuilder()
         json_builder {
             name task_instance.GetMediaName(Media.Tracking)
-            scorecard route_instance.liveTrackingScorecard
+            original_scorecard route_instance.liveTrackingScorecard
             start_time FcTime.UTCGetDateTime(task_instance.liveTrackingNavigationTaskDate, first_date, task_instance.contest.timeZone)
             finish_time FcTime.UTCGetDateTime(task_instance.liveTrackingNavigationTaskDate, finish_date, task_instance.contest.timeZone)
             if (!contest_instance.resultClasses || !class_evaluation) {
@@ -901,7 +901,6 @@ class TrackerService
         }
         
         Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
-        // ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtask/", "POST", 201, json_builder.toString(), "id")
     
         gpxService.DeleteFile(upload_gpx_file_name)
         
@@ -1837,10 +1836,6 @@ class TrackerService
                             flightTestCheckTakeOff:                testInstance.IsFlightTestCheckTakeOff(),
                             flightTestCheckLanding:                testInstance.IsFlightTestCheckLanding()
                            ]
-        ret.data += ["gate_score_override": get_gate_score_overrides(score_values, gate_types)]
-        if (class_evaluation) {
-            ret.data += ["track_score_override": get_track_score_overrides(score_values)]
-        }
         if (contest_instance.resultClasses) {
             Map class_name = testInstance.GetResultClassName()
             ret.data += ["competition_class_longform": class_name.name,
@@ -2085,6 +2080,11 @@ class TrackerService
                     track_file track_data
                 }
                 Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${task_instance.liveTrackingNavigationTaskID}/contestants/${contestant_id}/gpx_track/", "POST", 201, json_builder.toString(), "")
+                if (!ret2.ok) {
+                    println "Error: $ret2.errorMsg"
+                    //File gpx_file = new File("D:\\_temp\\gpxdata-${uuid}.gpx")
+                    //gpx_file << gpx_data
+                }
                 gpxService.DeleteFile(upload_gpx_file_name)
                 if (ret2.ok) {
                     return true

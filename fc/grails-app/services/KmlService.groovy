@@ -1186,8 +1186,8 @@ class KmlService
                             xml.Data(name:"contestmapairspaces") {
                                 xml.value getYesNo(routeInstance.contestMapAirspaces)
                             }
-                            xml.Data(name:"contestmapairspaceslayer") {
-                                xml.value routeInstance.contestMapAirspacesLayer
+                            xml.Data(name:"contestmapairspaceslayer2") {
+                                xml.value routeInstance.contestMapAirspacesLayer2
                             }
                             xml.Data(name:"contestmapshowoptions1") {
                                 xml.value getYesNo(routeInstance.contestMapShowFirstOptions)
@@ -1213,6 +1213,12 @@ class KmlService
                             xml.Data(name:"contestmapprintsize1") {
                                 xml.value routeInstance.contestMapPrintSize
                             }
+                            xml.Data(name:"contestmapcentermovex1") {
+                                xml.value routeInstance.contestMapCenterMoveX
+                            }
+                            xml.Data(name:"contestmapcentermovey1") {
+                                xml.value routeInstance.contestMapCenterMoveY
+                            }
                             xml.Data(name:"contestmapshowoptions2") {
                                 xml.value getYesNo(routeInstance.contestMapShowSecondOptions)
                             }
@@ -1236,6 +1242,12 @@ class KmlService
                             }
                             xml.Data(name:"contestmapprintsize2") {
                                 xml.value routeInstance.contestMapPrintSize2
+                            }
+                            xml.Data(name:"contestmapcentermovex2") {
+                                xml.value routeInstance.contestMapCenterMoveX2
+                            }
+                            xml.Data(name:"contestmapcentermovey2") {
+                                xml.value routeInstance.contestMapCenterMoveY2
                             }
                             xml.Data(name:"contestmapshowoptions3") {
                                 xml.value getYesNo(routeInstance.contestMapShowThirdOptions)
@@ -1261,6 +1273,12 @@ class KmlService
                             xml.Data(name:"contestmapprintsize3") {
                                 xml.value routeInstance.contestMapPrintSize3
                             }
+                            xml.Data(name:"contestmapcentermovex3") {
+                                xml.value routeInstance.contestMapCenterMoveX3
+                            }
+                            xml.Data(name:"contestmapcentermovey3") {
+                                xml.value routeInstance.contestMapCenterMoveY3
+                            }
                             xml.Data(name:"contestmapshowoptions4") {
                                 xml.value getYesNo(routeInstance.contestMapShowForthOptions)
                             }
@@ -1284,6 +1302,12 @@ class KmlService
                             }
                             xml.Data(name:"contestmapprintsize4") {
                                 xml.value routeInstance.contestMapPrintSize4
+                            }
+                            xml.Data(name:"contestmapcentermovex4") {
+                                xml.value routeInstance.contestMapCenterMoveX4
+                            }
+                            xml.Data(name:"contestmapcentermovey4") {
+                                xml.value routeInstance.contestMapCenterMoveY4
                             }
                         }
                     }

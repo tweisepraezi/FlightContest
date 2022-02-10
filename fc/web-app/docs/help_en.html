@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.2.0,</span>
-<span id="revdate">11.01.2022</span>
+<span id="revnumber">version 3.2.1,</span>
+<span id="revdate">10.02.2022</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -1987,12 +1987,26 @@ License: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http:/
 To do this, copy all files from <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> to the folder <strong>C:\FCSave\.geodata</strong>.</p>
 </div>
 <div class="paragraph">
+<p>Any number of airspaces can be assigned to a route.
+Enter the names of required airspaces found in <strong>C:\FCSave\.geodata\airspaces.kmz</strong> into the text field.</p>
+</div>
+<div class="paragraph">
+<p>Each airspace can be configured individually in its appearance.
+For this purpose, various attributes are to be added to the name separated by commas.
+The example shows all possible attributes with their default value:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
+</div>
+</div>
+<div class="paragraph">
 <p>All mentioned route details and objects can be deselected.</p>
 </div>
 <div class="paragraph">
 <p>The center of the map is determined from the positions of all turning points.
-Routes that exceed the selected print format can be divided into several prints by deselecting
-can be divided into several prints by deselecting suitable turning points.</p>
+Stretches that exceed the selected print format can be divided into several prints by deselecting suitable turning points.
+In addition, the determined map center can be shifted horizontally and/or vertically.</p>
 </div>
 <div class="paragraph">
 <p>Individual turning points can be excluded from printing.

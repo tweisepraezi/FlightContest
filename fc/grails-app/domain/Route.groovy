@@ -69,7 +69,8 @@ class Route
     Boolean contestMapAdditionals = true                                         // DB-2.21
     Boolean contestMapSpecials = false                                           // DB-2.21
     Boolean contestMapAirspaces = false                                          // DB-2.21
-    String contestMapAirspacesLayer = ""                                         // DB-2.21
+    String contestMapAirspacesLayer = ""                                         // DB-2.21, UNUSED, since DB-2.32
+    String contestMapAirspacesLayer2 = ""                                        // DB-2.32
     Boolean contestMapShowFirstOptions = true                                    // DB-2.29
     String contestMapFirstTitle = ""                                             // DB-2.29
     VerticalPos contestMapCenterVerticalPos = VerticalPos.Center                 // DB-2.21
@@ -78,6 +79,8 @@ class Route
     String contestMapPrintPoints = Defs.CONTESTMAPPOINTS_INIT                    // DB-2.21, list of turn points for printing
     Boolean contestMapPrintLandscape = true                                      // DB-2.21
     String contestMapPrintSize = Defs.CONTESTMAPPRINTSIZE_A3                     // DB-2.21
+    BigDecimal contestMapCenterMoveX = 0.0                                       // DB-2.32, NM
+    BigDecimal contestMapCenterMoveY = 0.0                                       // DB-2.32, NM
     Boolean contestMapReserve1                                                   // DB-2.21
     Boolean contestMapReserve2                                                   // DB-2.21
     Boolean contestMapReserve3                                                   // DB-2.21
@@ -92,6 +95,8 @@ class Route
     String contestMapPrintPoints2 = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.22, list of turn points for printing
     Boolean contestMapPrintLandscape2 = true                                     // DB-2.22
     String contestMapPrintSize2 = Defs.CONTESTMAPPRINTSIZE_A3                    // DB-2.22
+    BigDecimal contestMapCenterMoveX2 = 0.0                                      // DB-2.32, NM
+    BigDecimal contestMapCenterMoveY2 = 0.0                                      // DB-2.32, NM
     Boolean contestMapShowThirdOptions = false                                   // DB-2.29
     String contestMapThirdTitle = ""                                             // DB-2.29
     VerticalPos contestMapCenterVerticalPos3 = VerticalPos.Center                // DB-2.29
@@ -100,6 +105,8 @@ class Route
     String contestMapPrintPoints3 = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.29, list of turn points for printing
     Boolean contestMapPrintLandscape3 = true                                     // DB-2.29
     String contestMapPrintSize3 = Defs.CONTESTMAPPRINTSIZE_A3                    // DB-2.29
+    BigDecimal contestMapCenterMoveX3 = 0.0                                      // DB-2.32, NM
+    BigDecimal contestMapCenterMoveY3 = 0.0                                      // DB-2.32, NM
     Boolean contestMapShowForthOptions = false                                   // DB-2.29
     String contestMapForthTitle = ""                                             // DB-2.29
     VerticalPos contestMapCenterVerticalPos4 = VerticalPos.Center                // DB-2.29
@@ -108,6 +115,8 @@ class Route
     String contestMapPrintPoints4 = Defs.CONTESTMAPPOINTS_INIT                   // DB-2.29, list of turn points for printing
     Boolean contestMapPrintLandscape4 = true                                     // DB-2.29
     String contestMapPrintSize4 = Defs.CONTESTMAPPRINTSIZE_A3                    // DB-2.29
+    BigDecimal contestMapCenterMoveX4 = 0.0                                      // DB-2.32, NM
+    BigDecimal contestMapCenterMoveY4 = 0.0                                      // DB-2.32, NM
 	
     
 	static belongsTo = [contest:Contest]
@@ -227,6 +236,17 @@ class Route
 		
 		// DB-2.31 compatibility
 		altitudeAboveGround(nullable:true)
+        
+		// DB-2.32 compatibility
+        contestMapAirspacesLayer2(nullable:true)
+        contestMapCenterMoveX(nullable:true)
+        contestMapCenterMoveY(nullable:true)
+        contestMapCenterMoveX2(nullable:true)
+        contestMapCenterMoveY2(nullable:true)
+        contestMapCenterMoveX3(nullable:true)
+        contestMapCenterMoveY3(nullable:true)
+        contestMapCenterMoveX4(nullable:true)
+        contestMapCenterMoveY4(nullable:true)
 	}
 
 	static mapping = {
@@ -235,6 +255,7 @@ class Route
 		testlegs sort:"id"
         enroutephotos sort:"id"
         enroutecanvas sort:"id"
+        contestMapAirspacesLayer2 sqlType: "nvarchar(max)"
 	}
 	
 	void CopyValues(Route routeInstance)
@@ -287,7 +308,7 @@ class Route
         contestMapAdditionals = routeInstance.contestMapAdditionals
         contestMapSpecials = routeInstance.contestMapSpecials
         contestMapAirspaces = routeInstance.contestMapAirspaces
-        contestMapAirspacesLayer = routeInstance.contestMapAirspacesLayer
+        contestMapAirspacesLayer2 = routeInstance.contestMapAirspacesLayer2
 		contestMapShowFirstOptions = routeInstance.contestMapShowFirstOptions
         contestMapFirstTitle = routeInstance.contestMapFirstTitle
         contestMapCenterVerticalPos = routeInstance.contestMapCenterVerticalPos
@@ -296,6 +317,8 @@ class Route
         contestMapPrintPoints = routeInstance.contestMapPrintPoints
         contestMapPrintLandscape = routeInstance.contestMapPrintLandscape
         contestMapPrintSize = routeInstance.contestMapPrintSize
+        contestMapCenterMoveX = routeInstance.contestMapCenterMoveX
+        contestMapCenterMoveY = routeInstance.contestMapCenterMoveY
 		contestMapShowSecondOptions = routeInstance.contestMapShowSecondOptions
         contestMapSecondTitle = routeInstance.contestMapSecondTitle
         contestMapCenterVerticalPos2 = routeInstance.contestMapCenterVerticalPos2
@@ -304,6 +327,8 @@ class Route
         contestMapPrintPoints2 = routeInstance.contestMapPrintPoints2
         contestMapPrintLandscape2 = routeInstance.contestMapPrintLandscape2
         contestMapPrintSize2 = routeInstance.contestMapPrintSize2
+        contestMapCenterMoveX2 = routeInstance.contestMapCenterMoveX2
+        contestMapCenterMoveY2 = routeInstance.contestMapCenterMoveY2
 		contestMapShowThirdOptions = routeInstance.contestMapShowThirdOptions
         contestMapThirdTitle = routeInstance.contestMapThirdTitle
         contestMapCenterVerticalPos3 = routeInstance.contestMapCenterVerticalPos3
@@ -312,6 +337,8 @@ class Route
         contestMapPrintPoints3 = routeInstance.contestMapPrintPoints3
         contestMapPrintLandscape3 = routeInstance.contestMapPrintLandscape3
         contestMapPrintSize3 = routeInstance.contestMapPrintSize3
+        contestMapCenterMoveX3 = routeInstance.contestMapCenterMoveX3
+        contestMapCenterMoveY3 = routeInstance.contestMapCenterMoveY3
 		contestMapShowForthOptions = routeInstance.contestMapShowForthOptions
         contestMapForthTitle = routeInstance.contestMapForthTitle
         contestMapCenterVerticalPos4 = routeInstance.contestMapCenterVerticalPos4
@@ -320,6 +347,8 @@ class Route
         contestMapPrintPoints4 = routeInstance.contestMapPrintPoints4
         contestMapPrintLandscape4 = routeInstance.contestMapPrintLandscape4
         contestMapPrintSize4 = routeInstance.contestMapPrintSize4
+        contestMapCenterMoveX4 = routeInstance.contestMapCenterMoveX4
+        contestMapCenterMoveY4 = routeInstance.contestMapCenterMoveY4
         
 		if (!this.save()) {
 			throw new Exception("Route.CopyValues could not save")

@@ -1193,7 +1193,12 @@ class RouteFileTools
                     }
                     String contestmapairspaceslayer = gpx.extensions.flightcontest.mapsettings.'@contestmapairspaceslayer'[0]
                     if (contestmapairspaceslayer) {
-                        route_instance.contestMapAirspacesLayer = contestmapairspaceslayer
+                        route_instance.contestMapAirspacesLayer2 = contestmapairspaceslayer.replace(',','\n')
+                        save_route = true
+                    }
+                    String contestmapairspaceslayer2 = gpx.extensions.flightcontest.mapsettings.'@contestmapairspaceslayer2'[0]
+                    if (contestmapairspaceslayer2) {
+                        route_instance.contestMapAirspacesLayer2 = contestmapairspaceslayer2
                         save_route = true
                     }
                     String contestmapshowoptions1 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions1'[0]
@@ -1236,6 +1241,16 @@ class RouteFileTools
                         route_instance.contestMapPrintSize = contestmapprintsize1
                         save_route = true
                     }
+                    String contestmapcentermovex1 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovex1'[0]
+                    if (contestmapcentermovex1) {
+                        route_instance.contestMapCenterMoveX = contestmapcentermovex1.toBigDecimal()
+                        save_route = true
+                    }
+                    String contestmapcentermovey1 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovey1'[0]
+                    if (contestmapcentermovey1) {
+                        route_instance.contestMapCenterMoveY = contestmapcentermovey1.toBigDecimal()
+                        save_route = true
+                    }
                     String contestmapshowoptions2 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions2'[0]
                     if (contestmapshowoptions2) {
                         route_instance.contestMapShowSecondOptions = contestmapshowoptions2 == "yes"
@@ -1274,6 +1289,16 @@ class RouteFileTools
                     String contestmapprintsize2 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintsize2'[0]
                     if (contestmapprintsize2) {
                         route_instance.contestMapPrintSize2 = contestmapprintsize2
+                        save_route = true
+                    }
+                    String contestmapcentermovex2 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovex2'[0]
+                    if (contestmapcentermovex2) {
+                        route_instance.contestMapCenterMoveX2 = contestmapcentermovex2.toBigDecimal()
+                        save_route = true
+                    }
+                    String contestmapcentermovey2 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovey2'[0]
+                    if (contestmapcentermovey2) {
+                        route_instance.contestMapCenterMoveY2 = contestmapcentermovey2.toBigDecimal()
                         save_route = true
                     }
                     String contestmapshowoptions3 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions3'[0]
@@ -1316,6 +1341,16 @@ class RouteFileTools
                         route_instance.contestMapPrintSize3 = contestmapprintsize3
                         save_route = true
                     }
+                    String contestmapcentermovex3 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovex3'[0]
+                    if (contestmapcentermovex3) {
+                        route_instance.contestMapCenterMoveX3 = contestmapcentermovex3.toBigDecimal()
+                        save_route = true
+                    }
+                    String contestmapcentermovey3 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovey3'[0]
+                    if (contestmapcentermovey3) {
+                        route_instance.contestMapCenterMoveY3 = contestmapcentermovey3.toBigDecimal()
+                        save_route = true
+                    }
                     String contestmapshowoptions4 = gpx.extensions.flightcontest.mapsettings.'@contestmapshowoptions4'[0]
                     if (contestmapshowoptions4) {
                         route_instance.contestMapShowForthOptions = contestmapshowoptions4 == "yes"
@@ -1354,6 +1389,16 @@ class RouteFileTools
                     String contestmapprintsize4 = gpx.extensions.flightcontest.mapsettings.'@contestmapprintsize4'[0]
                     if (contestmapprintsize4) {
                         route_instance.contestMapPrintSize4 = contestmapprintsize4
+                        save_route = true
+                    }
+                    String contestmapcentermovex4 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovex4'[0]
+                    if (contestmapcentermovex4) {
+                        route_instance.contestMapCenterMoveX4 = contestmapcentermovex4.toBigDecimal()
+                        save_route = true
+                    }
+                    String contestmapcentermovey4 = gpx.extensions.flightcontest.mapsettings.'@contestmapcentermovey4'[0]
+                    if (contestmapcentermovey4) {
+                        route_instance.contestMapCenterMoveY4 = contestmapcentermovey4.toBigDecimal()
                         save_route = true
                     }
                 }
@@ -1671,7 +1716,10 @@ class RouteFileTools
                                 route_instance.contestMapAirspaces = d.value.text() == "yes"
                                 break
                             case "contestmapairspaceslayer":
-                                route_instance.contestMapAirspacesLayer = d.value.text()
+                                route_instance.contestMapAirspacesLayer2 = d.value.text().replace(',','\n')
+                                break
+                            case "contestmapairspaceslayer2":
+                                route_instance.contestMapAirspacesLayer2 = d.value.text()
                                 break
                             case "contestmapshowoptions1":
                                 route_instance.contestMapShowFirstOptions = d.value.text() == "yes"
@@ -1697,6 +1745,12 @@ class RouteFileTools
                             case "contestmapprintsize1":
                                 route_instance.contestMapPrintSize = d.value.text()
                                 break
+                            case "contestmapcentermovex1":
+                                route_instance.contestMapCenterMoveX = d.value.text().toBigDecimal()
+                                break
+                            case "contestmapcentermovey1":
+                                route_instance.contestMapCenterMoveY = d.value.text().toBigDecimal()
+                                break
                             case "contestmapshowoptions2":
                                 route_instance.contestMapShowSecondOptions = d.value.text() == "yes"
                                 break
@@ -1720,6 +1774,12 @@ class RouteFileTools
                                 break
                             case "contestmapprintsize2":
                                 route_instance.contestMapPrintSize2 = d.value.text()
+                                break
+                            case "contestmapcentermovex2":
+                                route_instance.contestMapCenterMoveX2 = d.value.text().toBigDecimal()
+                                break
+                            case "contestmapcentermovey2":
+                                route_instance.contestMapCenterMoveY2 = d.value.text().toBigDecimal()
                                 break
                             case "contestmapshowoptions3":
                                 route_instance.contestMapShowThirdOptions = d.value.text() == "yes"
@@ -1745,6 +1805,12 @@ class RouteFileTools
                             case "contestmapprintsize3":
                                 route_instance.contestMapPrintSize3 = d.value.text()
                                 break
+                            case "contestmapcentermovex3":
+                                route_instance.contestMapCenterMoveX3 = d.value.text().toBigDecimal()
+                                break
+                            case "contestmapcentermovey3":
+                                route_instance.contestMapCenterMoveY3 = d.value.text().toBigDecimal()
+                                break
                             case "contestmapshowoptions4":
                                 route_instance.contestMapShowForthOptions = d.value.text() == "yes"
                                 break
@@ -1768,6 +1834,12 @@ class RouteFileTools
                                 break
                             case "contestmapprintsize4":
                                 route_instance.contestMapPrintSize4 = d.value.text()
+                                break
+                            case "contestmapcentermovex4":
+                                route_instance.contestMapCenterMoveX4 = d.value.text().toBigDecimal()
+                                break
+                            case "contestmapcentermovey4":
+                                route_instance.contestMapCenterMoveY4 = d.value.text().toBigDecimal()
                                 break
                         }
                     }

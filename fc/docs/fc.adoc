@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.0
-:revdate:   11.01.2022
+:revnumber: 3.2.1
+:revdate:   10.02.2022
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -772,11 +772,20 @@ Folgende Objekte können in die Karte gezeichnet werden:
 Lufträume müssen vor der ersten Nutzung manuell installiert werden.
 Dazu alle Dateien von *https://my.hidrive.com/share/vobbr89etw#$/Geodata* in den Ordner *C:\FCSave\.geodata* kopieren.
 
+Es können einer Strecke beliebig viele Lufträume zugeordnet werden. 
+Tragen Sie die Namen benötigter Lufträume, die Sie in *C:\FCSave\.geodata\airspaces.kmz* finden, in das Textfeld ein.
+
+Jeder Luftraum kann in seinem Aussehen individuell konfiguriert werden. 
+Dazu sind dem Namen mit Komma getrennt verschiedene Attribute mitzugeben.
+Das Beispiel zeigt alle möglichen Attribute mit ihrem Default-Wert:
+
+    Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
+
 Alle genannten Streckendetails und Objekte können abgewählt werden.
 
 Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
-Strecken, die das gewählte Druck-Format sprengen, können mittels
-Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.
+Strecken, die das gewählte Druck-Format sprengen, können mittels Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.
+Zusätzlich kann das ermittelte Kartenzentrum horizontal und/oder vertikal verschoben werden.
 
 Einzelne Wendepunkte können vom Druck ausgenommen werden.
 Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.

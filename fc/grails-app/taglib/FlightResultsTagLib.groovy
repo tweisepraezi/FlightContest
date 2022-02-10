@@ -345,18 +345,34 @@ class FlightResultsTagLib
                 }
             }
             outln"""    </tbody>"""
-            if (false) {
-                outln"""<tfoot>"""
-                outln"""    <tr>"""
-                if (show_judgeactions) {
-                    outln"""    <td colspan="9" class="errors">${message(code:'fc.flightresults.loggerresults.toldgnotfound')}</td>"""
-                } else {
-                    outln"""    <td colspan="8" class="errors">${message(code:'fc.flightresults.loggerresults.toldgnotfound')}</td>"""
-                }
-                outln"""    </tr>"""
-                outln"""</tfoot>"""
+            outln"""<tfoot>"""
+            outln"""    <tr>"""
+            if (show_judgeactions) {
+                outln"""    <td colspan="9"/>"""
+            } else {
+                outln"""    <td colspan="8"/>"""
             }
+            outln"""        <td><input type="text" id="addShowTimeValue" name="addShowTimeValue" value="${fieldValue(bean:attrs.t,field:'addShowTimeValue')}" size="3" /> ${message(code:'fc.time.min')}</td>"""
+            outln"""    </tr>"""
+            outln"""</tfoot>"""
             outln"""</table>"""
+            outln"""<script>"""
+            outln"""\$(document).on('keyup', '#addShowTimeValue', function() {"""
+            outln"""    var add_showtime_value = \$("#addShowTimeValue").val();"""
+            outln"""    if (add_showtime_value) {"""
+            outln"""        \$("[href]").each(function(){"""
+            outln"""            if (\$(this).attr("href").indexOf("showofflinemap_test") > 0) {"""
+            outln"""                var href = \$(this).attr("href");"""
+            outln"""                if (href.lastIndexOf("&addShowTimeValue=") > 0) {"""
+            outln"""                    href = href.substring(0, href.lastIndexOf("&addShowTimeValue="));"""
+            outln"""                }"""
+            outln"""                href = href + "&addShowTimeValue=" + add_showtime_value;"""
+            outln"""                \$(this).attr("href", href);"""
+            outln"""            }"""
+            outln"""        });"""
+            outln"""    }"""
+            outln"""});"""
+            outln"""</script>"""
          }
     }
     
@@ -452,7 +468,7 @@ class FlightResultsTagLib
             }
         }
         if (calcresultInstance.coordTitle) {
-            outln"""    <td><a href="${createLink(controller:'test',action:'showofflinemap_test',params:[id:calcresultInstance.loggerresult.test.id, showCoord:calcresultInstance.coordTitle.titleCode(), showUtc:calcresultInstance.utc])}" target="_blank">...</a></td>"""
+            outln"""    <td><a class="showOfflineMapTest" href="${createLink(controller:'test',action:'showofflinemap_test',params:[id:calcresultInstance.loggerresult.test.id, showCoord:calcresultInstance.coordTitle.titleCode(), showUtc:calcresultInstance.utc])}" target="_blank">...</a></td>"""
         } else {
             outln"""    <td></td>"""
         }

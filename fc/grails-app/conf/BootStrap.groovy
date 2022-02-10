@@ -1087,6 +1087,26 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 32) { // DB-2.32 compatibility
+                            print "    2.32 modifications"
+                            Route.findAll().each { Route route_instance ->
+                                if (route_instance.contestMapAirspacesLayer) {
+                                    route_instance.contestMapAirspacesLayer2 = route_instance.contestMapAirspacesLayer.replace(',','\n')
+                                } else {
+                                    route_instance.contestMapAirspacesLayer2 = route_instance.contestMapAirspacesLayer
+                                }
+                                route_instance.contestMapCenterMoveX = 0.0
+                                route_instance.contestMapCenterMoveY = 0.0
+                                route_instance.contestMapCenterMoveX2 = 0.0
+                                route_instance.contestMapCenterMoveY2 = 0.0
+                                route_instance.contestMapCenterMoveX3 = 0.0
+                                route_instance.contestMapCenterMoveY3 = 0.0
+                                route_instance.contestMapCenterMoveX4 = 0.0
+                                route_instance.contestMapCenterMoveY4 = 0.0
+                                route_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

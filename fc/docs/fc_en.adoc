@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.2.0
-:revdate: 11.01.2022
+:revnumber: 3.2.1
+:revdate: 10.02.2022
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -762,11 +762,20 @@ The following objects can be drawn on the map:
 Airspaces must be installed manually before first use.
 To do this, copy all files from *https://my.hidrive.com/share/vobbr89etw#$/Geodata* to the folder *C:\FCSave\.geodata*.
 
+Any number of airspaces can be assigned to a route. 
+Enter the names of required airspaces found in *C:\FCSave\.geodata\airspaces.kmz* into the text field.
+
+Each airspace can be configured individually in its appearance. 
+For this purpose, various attributes are to be added to the name separated by commas.
+The example shows all possible attributes with their default value:
+
+    Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
+    
 All mentioned route details and objects can be deselected.
 
 The center of the map is determined from the positions of all turning points.
-Routes that exceed the selected print format can be divided into several prints by deselecting
-can be divided into several prints by deselecting suitable turning points.
+Stretches that exceed the selected print format can be divided into several prints by deselecting suitable turning points.
+In addition, the determined map center can be shifted horizontally and/or vertically.
 
 Individual turning points can be excluded from printing.
 This also eliminates associated stages and turning loops.

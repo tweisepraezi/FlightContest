@@ -1481,7 +1481,11 @@ class TestController
             String upload_gpx_file_name = "${GpxService.GPXDATA}-${uuid}"
             Map converter = [:]
             if (params.showCoord) {
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:true, showCoord:params.showCoord, showUtc:params.showUtc])
+                String show_utc = params.showUtc
+                if (params.addShowTimeValue && params.addShowTimeValue.isInteger()) {
+                    show_utc = FcTime.UTCAddSeconds(show_utc, 60*params.addShowTimeValue.toInteger())
+                }
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:true, showCoord:params.showCoord, showUtc:show_utc])
             } else {
                 converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:true])
             }

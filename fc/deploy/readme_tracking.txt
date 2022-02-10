@@ -1,6 +1,10 @@
 Flight Contest Live Tracking Notes
 ==================================
 
+Changes 3.2.1
+-------------
+- Adjustments to Live Tracking API changes
+
 Changes 3.2.M25
 ---------------
 - Command "Crews -> Create and connect live tracking teams for selected crews" runs "Import live tracking teams" for selected teams previously

@@ -836,6 +836,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
                                          contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -877,7 +879,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -960,6 +962,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
                                          contestMapPrintSize:route.instance.contestMapPrintSize2,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1001,7 +1005,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -1084,6 +1088,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
                                          contestMapPrintSize:route.instance.contestMapPrintSize3,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1125,7 +1131,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -1208,6 +1214,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
                                          contestMapPrintSize:route.instance.contestMapPrintSize4,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1249,7 +1257,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -1332,6 +1340,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
                                          contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1373,7 +1383,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -1456,6 +1466,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints2,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
                                          contestMapPrintSize:route.instance.contestMapPrintSize2,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1497,7 +1509,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
@@ -1580,6 +1592,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints3,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
                                          contestMapPrintSize:route.instance.contestMapPrintSize3,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1621,7 +1635,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
@@ -1704,6 +1718,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints4,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
                                          contestMapPrintSize:route.instance.contestMapPrintSize4,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1745,7 +1761,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
@@ -1841,6 +1857,8 @@ class RouteController {
                                          contestMapPrintPoints:route.instance.contestMapPrintPoints,
                                          contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
                                          contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -1882,7 +1900,7 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
                                                                  contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
@@ -1974,10 +1992,12 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
-                                         contestMapCenterPoints:route.instance.contestMapCenterPoints,
-                                         contestMapPrintPoints:route.instance.contestMapPrintPoints,
-                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
-                                         contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterPoints:route.instance.contestMapCenterPoints2,
+                                         contestMapPrintPoints:route.instance.contestMapPrintPoints2,
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape2,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize2,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX2,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY2,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -2019,10 +2039,10 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
-                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
-                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos2,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapSecondTitle)
@@ -2111,10 +2131,12 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
-                                         contestMapCenterPoints:route.instance.contestMapCenterPoints,
-                                         contestMapPrintPoints:route.instance.contestMapPrintPoints,
-                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
-                                         contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterPoints:route.instance.contestMapCenterPoints3,
+                                         contestMapPrintPoints:route.instance.contestMapPrintPoints3,
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape3,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize3,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX3,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY3,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -2156,10 +2178,10 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
-                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
-                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos3,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapThirdTitle)
@@ -2248,10 +2270,12 @@ class RouteController {
                                          contestMapAdditionals:route.instance.contestMapAdditionals,
                                          contestMapSpecials:route.instance.contestMapSpecials,
                                          contestMapAirspaces:route.instance.contestMapAirspaces,
-                                         contestMapCenterPoints:route.instance.contestMapCenterPoints,
-                                         contestMapPrintPoints:route.instance.contestMapPrintPoints,
-                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape,
-                                         contestMapPrintSize:route.instance.contestMapPrintSize,
+                                         contestMapCenterPoints:route.instance.contestMapCenterPoints4,
+                                         contestMapPrintPoints:route.instance.contestMapPrintPoints4,
+                                         contestMapPrintLandscape:route.instance.contestMapPrintLandscape4,
+                                         contestMapPrintSize:route.instance.contestMapPrintSize4,
+                                         contestMapCenterMoveX:route.instance.contestMapCenterMoveX4,
+                                         contestMapCenterMoveY:route.instance.contestMapCenterMoveY4,
                                          contestMapDevStyle:route.instance.contestMapDevStyle,
                                          contestMapFCStyle:true,
                                         ]
@@ -2293,10 +2317,10 @@ class RouteController {
                                                                  gpxFileName: webroot_dir + route_gpx_file_name,
                                                                  pngFileName: webroot_dir + map_png_file_name,
                                                                  graticuleFileName: webroot_dir + map_graticule_file_name,
-                                                                 contestMapAirspacesLayer: route.instance.contestMapAirspacesLayer,
+                                                                 contestMapAirspacesLayer2: route.instance.contestMapAirspacesLayer2,
                                                                  mapScale: route.instance.mapScale,
-                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos,
-                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
+                                                                 contestMapCenterHorizontalPos: route.instance.contestMapCenterHorizontalPos4,
+                                                                 contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
                             if (r.ok) {
                                 emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapForthTitle)
@@ -2363,7 +2387,7 @@ class RouteController {
         routeInstance.contestMapAdditionals = params.contestMapAdditionals == "on"
         routeInstance.contestMapSpecials = params.contestMapSpecials == "on"
         routeInstance.contestMapAirspaces = params.contestMapAirspaces == "on"
-        routeInstance.contestMapAirspacesLayer = params.contestMapAirspacesLayer
+        routeInstance.contestMapAirspacesLayer2 = params.contestMapAirspacesLayer2
         String center_points = ""
         String center_points2 = ""
         String center_points3 = ""
@@ -2456,6 +2480,12 @@ class RouteController {
         routeInstance.contestMapPrintPoints = DisabledCheckPointsTools.Compress(print_points, routeInstance)
         routeInstance.contestMapPrintLandscape = params.contestMapPrintLandscape == "on"
         routeInstance.contestMapPrintSize = params.contestMapPrintSize
+        if (params.contestMapCenterMoveX && params.contestMapCenterMoveX.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveX = params.contestMapCenterMoveX.replace(',','.').toBigDecimal()
+        }
+        if (params.contestMapCenterMoveY && params.contestMapCenterMoveY.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveY = params.contestMapCenterMoveY.replace(',','.').toBigDecimal()
+        }
         routeInstance.contestMapShowSecondOptions = params.contestMapShowSecondOptions == "on"
         routeInstance.contestMapSecondTitle = params.contestMapSecondTitle
         routeInstance.contestMapCenterVerticalPos2 = params.contestMapCenterVerticalPos2
@@ -2464,6 +2494,12 @@ class RouteController {
         routeInstance.contestMapPrintPoints2 = DisabledCheckPointsTools.Compress(print_points2, routeInstance)
         routeInstance.contestMapPrintLandscape2 = params.contestMapPrintLandscape2 == "on"
         routeInstance.contestMapPrintSize2 = params.contestMapPrintSize2
+        if (params.contestMapCenterMoveX2 && params.contestMapCenterMoveX2.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveX2 = params.contestMapCenterMoveX2.replace(',','.').toBigDecimal()
+        }
+        if (params.contestMapCenterMoveY2 && params.contestMapCenterMoveY2.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveY2 = params.contestMapCenterMoveY2.replace(',','.').toBigDecimal()
+        }
         routeInstance.contestMapShowThirdOptions = params.contestMapShowThirdOptions == "on"
         routeInstance.contestMapThirdTitle = params.contestMapThirdTitle
         routeInstance.contestMapCenterVerticalPos3 = params.contestMapCenterVerticalPos3
@@ -2472,6 +2508,12 @@ class RouteController {
         routeInstance.contestMapPrintPoints3 = DisabledCheckPointsTools.Compress(print_points3, routeInstance)
         routeInstance.contestMapPrintLandscape3 = params.contestMapPrintLandscape3 == "on"
         routeInstance.contestMapPrintSize3 = params.contestMapPrintSize3
+        if (params.contestMapCenterMoveX3 && params.contestMapCenterMoveX3.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveX3 = params.contestMapCenterMoveX3.replace(',','.').toBigDecimal()
+        }
+        if (params.contestMapCenterMoveY3 && params.contestMapCenterMoveY3.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveY3 = params.contestMapCenterMoveY3.replace(',','.').toBigDecimal()
+        }
         routeInstance.contestMapShowForthOptions = params.contestMapShowForthOptions == "on"
         routeInstance.contestMapForthTitle = params.contestMapForthTitle
         routeInstance.contestMapCenterVerticalPos4 = params.contestMapCenterVerticalPos4
@@ -2480,6 +2522,12 @@ class RouteController {
         routeInstance.contestMapPrintPoints4 = DisabledCheckPointsTools.Compress(print_points4, routeInstance)
         routeInstance.contestMapPrintLandscape4 = params.contestMapPrintLandscape4 == "on"
         routeInstance.contestMapPrintSize4 = params.contestMapPrintSize4
+        if (params.contestMapCenterMoveX4 && params.contestMapCenterMoveX4.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveX4 = params.contestMapCenterMoveX4.replace(',','.').toBigDecimal()
+        }
+        if (params.contestMapCenterMoveY4 && params.contestMapCenterMoveY4.replace(',','.').isBigDecimal()) {
+            routeInstance.contestMapCenterMoveY4 = params.contestMapCenterMoveY4.replace(',','.').toBigDecimal()
+        }
         routeInstance.contestMapDevStyle = params.contestMapDevStyle == "on"
         routeInstance.save()
     }
