@@ -138,6 +138,8 @@ call_rest("contests/{contest_pk}/tasktests/",                "GET",    200, "", 
 call_rest("contests/{contest_pk}/tasktests/{tasktest_id}/",  "DELETE", 204, "", "")
 call_rest("contests/{contest_pk}/tasktests/",                "POST",   201, json_builder.toString(), "id")
 
+call_rest("contests/{contest_pk}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
+
 call_rest("contests/{contest_pk}/navigationtasks/", "GET", 200, "", ALL_DATA)
 
 call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/", "GET", 200, "", ALL_DATA)
@@ -155,7 +157,7 @@ call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestants
 
 call_rest("contests/{contest_pk}/navigationtasks/{navigationtask_pk}/contestants/{contestant_id}/track/", "GET", 200, "", ALL_DATA)
 
-call_rest("contests/{contest_pk}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
+call_rest("contests/${contest_pk}/navigationtasks/${navigationtask_pk}/scorecard/", "PUT", 200, json_builder2.toString(), "id")
 
 call_rest("contests/{contest_pk}/update_test_result/", "PUT", 200, json_builder.toString(), "")
 
@@ -181,6 +183,7 @@ Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/contest
 Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/contestteams/${crew_instance.liveTrackingContestTeamID}/", "DELETE", 204, "", "")
 Map ret3 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/", "GET", 200, "", ALL_DATA)
 Map ret1 = call_rest("contests/${contest_instance.liveTrackingContestID}/importnavigationtaskteamid/", "POST", 201, json_builder.toString(), "id")
+Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${ret1.data}/scorecard/", "PUT", 200, json_builder2.toString(), "id")
 Map ret5 = call_rest("contests/${contest_instance.liveTrackingContestID}/tasktests/", "GET", 200, "", ALL_DATA)
 Map ret3 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/", "GET", 200, "", ALL_DATA)
 Map ret7 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${navigationtask_id}/", "GET", 200, "", ALL_DATA)

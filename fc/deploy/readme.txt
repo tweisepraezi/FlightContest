@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.2.1.1
+------------------
+- Anpassungen an Live-Tracking-API-Änderungen (Übernahme von Punkte-Änderungen)
+
 Änderungen 3.2.1
 ----------------
 - OSM-Wettbewerbs-Karte:

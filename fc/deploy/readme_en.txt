@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.2.1.1
+---------------
+- Adjustments to Live Tracking API changes (scorecard overrides)
+
 Changes 3.2.1
 -------------
 - OSM Contest Map:

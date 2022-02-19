@@ -814,6 +814,9 @@ class TrackerService
             
         if (task_instance.setLiveTrackingNavigationTaskDate) {
             task_instance.liveTrackingNavigationTaskDate = FcTime.GetDateStr(new Date())
+            if (task_instance.liveTrackingNavigationTaskDate < task_instance.contest.liveTrackingContestDate) {
+                task_instance.liveTrackingNavigationTaskDate = task_instance.contest.liveTrackingContestDate
+            }
             task_instance.save()
         }
         
@@ -892,10 +895,6 @@ class TrackerService
             original_scorecard route_instance.liveTrackingScorecard
             start_time FcTime.UTCGetDateTime(task_instance.liveTrackingNavigationTaskDate, first_date, task_instance.contest.timeZone)
             finish_time FcTime.UTCGetDateTime(task_instance.liveTrackingNavigationTaskDate, finish_date, task_instance.contest.timeZone)
-            if (!contest_instance.resultClasses || !class_evaluation) {
-                gate_score_override  get_gate_score_overrides(score_values, gate_types)
-                track_score_override get_track_score_overrides(score_values)
-            }
             contestant_set contestant_list
             route_file route_data
         }
@@ -910,6 +909,19 @@ class TrackerService
             return ret
         }
         
+        String error_msg = ""
+        JsonBuilder json_builder2 = new JsonBuilder()
+        json_builder2 {
+            gatescore_set get_gate_score_overrides(score_values, gate_types)
+            backtracking_penalty score_values.flightTestBadCoursePoints
+            backtracking_grace_time_seconds score_values.flightTestBadCourseCorrectSecond
+            backtracking_maximum_penalty score_values.flightTestBadCourseMaxPoints
+        }
+        Map ret2 = call_rest("contests/${contest_instance.liveTrackingContestID}/navigationtasks/${ret1.data}/scorecard/", "PUT", 200, json_builder2.toString(), "id")
+        if (!ret2.ok) {
+            error_msg = ret2.errorMsg
+        }
+    
         task_instance.liveTrackingTracksAvailable = tracks_available
         task_instance.liveTrackingNavigationTaskID = ret1.data.toInteger()
         task_instance.save()
@@ -932,7 +944,7 @@ class TrackerService
             }
         }
         
-        Map ret = ['instance':task_instance, 'created':true, 'message':getMsg('fc.livetracking.navigationtaskcreate.done',[task_instance.liveTrackingNavigationTaskID])]
+        Map ret = ['instance':task_instance, 'created':true, 'message':getMsg('fc.livetracking.navigationtaskcreate.done',[task_instance.liveTrackingNavigationTaskID, error_msg])]
         printdone ret
         return ret
     }
@@ -1846,6 +1858,7 @@ class TrackerService
         return ret
     }
     
+    /*
     //--------------------------------------------------------------------------
     private Map get_track_score_overrides(Map scoreValues)
     {
@@ -1858,6 +1871,7 @@ class TrackerService
         }
         return ret
     }
+    */
     
     //--------------------------------------------------------------------------
     private List get_gate_score_overrides(Map scoreValues, Map gateType)
@@ -1867,25 +1881,25 @@ class TrackerService
         // TO
         if (gateType.TO) {
             if (scoreValues.flightTestCheckTakeOff) {
-                Map to_override = [for_gate_types: ["to"],
-                                   checkpoint_grace_period_before: 0,
-                                   checkpoint_grace_period_after: scoreValues.flightTestTakeoffCorrectSecond,
-                                   checkpoint_not_found:          scoreValues.flightTestTakeoffMissedPoints,
-                                   checkpoint_maximum_penalty:    scoreValues.flightTestTakeoffMissedPoints
+                Map to_override = [gate_type:          "to",
+                                   graceperiod_before: 0,
+                                   graceperiod_after:  scoreValues.flightTestTakeoffCorrectSecond,
+                                   missed_penalty:     scoreValues.flightTestTakeoffMissedPoints,
+                                   maximum_penalty:    scoreValues.flightTestTakeoffMissedPoints
                                   ]
                 if (scoreValues.flightTestTakeoffCheckSeconds) {
-                    to_override += [checkpoint_penalty_per_second: scoreValues.flightTestTakeoffPointsPerSecond]
+                    to_override += [penalty_per_second: scoreValues.flightTestTakeoffPointsPerSecond]
                 } else {
-                    to_override += [checkpoint_penalty_per_second: scoreValues.flightTestTakeoffMissedPoints]
+                    to_override += [penalty_per_second: scoreValues.flightTestTakeoffMissedPoints]
                 }
                 gate_score_overrides += to_override
             } else {
-                Map to_override = [for_gate_types: ["to"],
-                                   checkpoint_grace_period_before: 0,
-                                   checkpoint_grace_period_after:  scoreValues.flightTestTakeoffCorrectSecond,
-                                   checkpoint_not_found:           0,
-                                   checkpoint_maximum_penalty:     0,
-                                   checkpoint_penalty_per_second:  0
+                Map to_override = [gate_type:          "to",
+                                   graceperiod_before: 0,
+                                   graceperiod_after:  scoreValues.flightTestTakeoffCorrectSecond,
+                                   missed_penalty:     0,
+                                   maximum_penalty:    0,
+                                   penalty_per_second: 0
                                   ]
                 gate_score_overrides += to_override
             }
@@ -1893,12 +1907,12 @@ class TrackerService
         
         // SP
         if (gateType.SP) {
-            Map sp_override = [for_gate_types: ["sp"],
-                               checkpoint_grace_period_before:     scoreValues.flightTestCptimeCorrectSecond,
-                               checkpoint_grace_period_after:      scoreValues.flightTestCptimeCorrectSecond,
-                               checkpoint_penalty_per_second:      scoreValues.flightTestCptimePointsPerSecond,
-                               checkpoint_maximum_penalty:         scoreValues.flightTestCptimeMaxPoints,
-                               checkpoint_not_found:               scoreValues.flightTestCpNotFoundPoints,
+            Map sp_override = [gate_type:                          "sp",
+                               graceperiod_before:                 scoreValues.flightTestCptimeCorrectSecond,
+                               graceperiod_after:                  scoreValues.flightTestCptimeCorrectSecond,
+                               penalty_per_second:                 scoreValues.flightTestCptimePointsPerSecond,
+                               maximum_penalty:                    scoreValues.flightTestCptimeMaxPoints,
+                               missed_penalty:                     scoreValues.flightTestCpNotFoundPoints,
                                bad_crossing_extended_gate_penalty: scoreValues.flightTestBadCoursePoints
                               ]
             gate_score_overrides += sp_override
@@ -1906,13 +1920,13 @@ class TrackerService
         
         // TP
         if (gateType.TP) {
-            Map tp_override = [for_gate_types: ["tp"],
-                               checkpoint_grace_period_before: scoreValues.flightTestCptimeCorrectSecond,
-                               checkpoint_grace_period_after:  scoreValues.flightTestCptimeCorrectSecond,
-                               checkpoint_penalty_per_second:  scoreValues.flightTestCptimePointsPerSecond,
-                               checkpoint_maximum_penalty:     scoreValues.flightTestCptimeMaxPoints,
-                               checkpoint_not_found:           scoreValues.flightTestCpNotFoundPoints,
-                               missing_procedure_turn_penalty: scoreValues.flightTestProcedureTurnNotFlownPoints
+            Map tp_override = [gate_type:                     "tp",
+                               graceperiod_before:            scoreValues.flightTestCptimeCorrectSecond,
+                               graceperiod_after:             scoreValues.flightTestCptimeCorrectSecond,
+                               penalty_per_second:            scoreValues.flightTestCptimePointsPerSecond,
+                               maximum_penalty:               scoreValues.flightTestCptimeMaxPoints,
+                               missed_penalty:                scoreValues.flightTestCpNotFoundPoints,
+                               missed_procedure_turn_penalty: scoreValues.flightTestProcedureTurnNotFlownPoints
                               ]
             gate_score_overrides += tp_override
         }
@@ -1920,21 +1934,21 @@ class TrackerService
         // SC
         if (gateType.SC) {
             if (scoreValues.flightTestCheckSecretPoints) {
-                Map secret_override = [for_gate_types: ["secret"],
-                                       checkpoint_grace_period_before: scoreValues.flightTestCptimeCorrectSecond,
-                                       checkpoint_grace_period_after:  scoreValues.flightTestCptimeCorrectSecond,
-                                       checkpoint_penalty_per_second:  scoreValues.flightTestCptimePointsPerSecond,
-                                       checkpoint_maximum_penalty:     scoreValues.flightTestCptimeMaxPoints,
-                                       checkpoint_not_found:           scoreValues.flightTestCpNotFoundPoints
+                Map secret_override = [gate_type:          "secret",
+                                       graceperiod_before: scoreValues.flightTestCptimeCorrectSecond,
+                                       graceperiod_after:  scoreValues.flightTestCptimeCorrectSecond,
+                                       penalty_per_second: scoreValues.flightTestCptimePointsPerSecond,
+                                       maximum_penalty:    scoreValues.flightTestCptimeMaxPoints,
+                                       missed_penalty:     scoreValues.flightTestCpNotFoundPoints
                                       ]
                 gate_score_overrides += secret_override
             } else {
-                Map secret_override = [for_gate_types: ["secret"],
-                                       checkpoint_grace_period_before: scoreValues.flightTestCptimeCorrectSecond,
-                                       checkpoint_grace_period_after:  scoreValues.flightTestCptimeCorrectSecond,
-                                       checkpoint_penalty_per_second:  0,
-                                       checkpoint_maximum_penalty:     0,
-                                       checkpoint_not_found:           0
+                Map secret_override = [gate_type:          "secret",
+                                       graceperiod_before: scoreValues.flightTestCptimeCorrectSecond,
+                                       graceperiod_after:  scoreValues.flightTestCptimeCorrectSecond,
+                                       penalty_per_second: 0,
+                                       maximum_penalty:    0,
+                                       missed_penalty:     0
                                       ]
                 gate_score_overrides += secret_override
             }
@@ -1942,12 +1956,12 @@ class TrackerService
         
         // FP
         if (gateType.FP) {
-            Map fp_override = [for_gate_types: ["fp"],
-                               checkpoint_grace_period_before: scoreValues.flightTestCptimeCorrectSecond,
-                               checkpoint_grace_period_after:  scoreValues.flightTestCptimeCorrectSecond,
-                               checkpoint_penalty_per_second:  scoreValues.flightTestCptimePointsPerSecond,
-                               checkpoint_maximum_penalty:     scoreValues.flightTestCptimeMaxPoints,
-                               checkpoint_not_found:           scoreValues.flightTestCpNotFoundPoints
+            Map fp_override = [gate_type:          "fp",
+                               graceperiod_before: scoreValues.flightTestCptimeCorrectSecond,
+                               graceperiod_after:  scoreValues.flightTestCptimeCorrectSecond,
+                               penalty_per_second: scoreValues.flightTestCptimePointsPerSecond,
+                               maximum_penalty:    scoreValues.flightTestCptimeMaxPoints,
+                               missed_penalty:     scoreValues.flightTestCpNotFoundPoints
                               ]
             gate_score_overrides += fp_override
         }
@@ -1955,22 +1969,22 @@ class TrackerService
         // LDG
         if (gateType.LDG) {
             if (scoreValues.flightTestCheckLanding) {
-                Map ldg_override = [for_gate_types: ["ldg"],
-                                   checkpoint_grace_period_before: 1800, // 30 min
-                                   checkpoint_grace_period_after:  0,
-                                   checkpoint_not_found:           scoreValues.flightTestLandingToLatePoints,
-                                   checkpoint_maximum_penalty:     scoreValues.flightTestLandingToLatePoints,
-                                   checkpoint_penalty_per_second:  scoreValues.flightTestLandingToLatePoints
-                                  ]
+                Map ldg_override = [gate_type:          "ldg",
+                                    graceperiod_before: 1800, // 30 min
+                                    graceperiod_after:  0,
+                                    missed_penalty:     scoreValues.flightTestLandingToLatePoints,
+                                    maximum_penalty:    scoreValues.flightTestLandingToLatePoints,
+                                    penalty_per_second: scoreValues.flightTestLandingToLatePoints
+                                   ]
                 gate_score_overrides += ldg_override
             } else {
-                Map ldg_override = [for_gate_types: ["ldg"],
-                                   checkpoint_grace_period_before: 0,
-                                   checkpoint_grace_period_after:  0,
-                                   checkpoint_not_found:           0,
-                                   checkpoint_maximum_penalty:     0,
-                                   checkpoint_penalty_per_second:  0
-                                  ]
+                Map ldg_override = [gate_type:          "ldg",
+                                    graceperiod_before: 0,
+                                    graceperiod_after:  0,
+                                    missed_penalty:     0,
+                                    maximum_penalty:    0,
+                                    penalty_per_second: 0
+                                   ]
                 gate_score_overrides += ldg_override
             }
         }
