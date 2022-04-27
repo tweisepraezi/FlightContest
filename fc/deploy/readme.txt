@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.2.2
+----------------
+- Das Speichern von Links auf hochgeladene OSM-Karten wurde um "Alle Strecken-Details" erweitert.
+
 Änderungen 3.2.1.1
 ------------------
 - Anpassungen an Live-Tracking-API-Änderungen (Übernahme von Punkte-Änderungen)

@@ -598,7 +598,8 @@ class Route
         List upload_links = []
 		for (UploadJobRouteMap mapuploadjob_route in UploadJobRouteMap.findAllByRoute(this)) {
 			if (mapuploadjob_route.uploadJobStatus == UploadJobStatus.Done) {
-                upload_links += [edition:mapuploadjob_route.uploadJobMapEdition, link:mapuploadjob_route.uploadJobLink, noroute:mapuploadjob_route.uploadJobNoRoute, 
+                upload_links += [edition:mapuploadjob_route.uploadJobMapEdition, link:mapuploadjob_route.uploadJobLink,
+                                 noroute:mapuploadjob_route.uploadJobNoRoute, allroutedetails:mapuploadjob_route.uploadJobAllRouteDetails,
                                  optionnumber:mapuploadjob_route.uploadJobOptionNumber, optiontitle:mapuploadjob_route.uploadJobOptionTitle, title:mapuploadjob_route.GetTitle()
                                 ]
             }

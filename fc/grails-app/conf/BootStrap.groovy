@@ -1107,6 +1107,14 @@ class BootStrap {
                             }
                             println " done."
                         }
+                        if (global.versionMinor < 33) { // DB-2.33 compatibility
+                            print "    2.33 modifications"
+							UploadJobRouteMap.findAll().each { UploadJobRouteMap uploadjobroutemap_instance ->
+                                uploadjobroutemap_instance.uploadJobAllRouteDetails = false
+								uploadjobroutemap_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

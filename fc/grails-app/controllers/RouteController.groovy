@@ -885,7 +885,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, false, 1, route.instance.contestMapFirstTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, false, 1, route.instance.contestMapFirstTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1011,7 +1011,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, false, 2, route.instance.contestMapSecondTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, false, 2, route.instance.contestMapSecondTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1137,7 +1137,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, false, 3, route.instance.contestMapThirdTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, false, 3, route.instance.contestMapThirdTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1263,7 +1263,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, false, 4, route.instance.contestMapForthTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, false, 4, route.instance.contestMapForthTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1389,7 +1389,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapFirstTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 1, route.instance.contestMapFirstTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1515,7 +1515,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 2, route.instance.contestMapSecondTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 2, route.instance.contestMapSecondTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1641,7 +1641,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 3, route.instance.contestMapThirdTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 3, route.instance.contestMapThirdTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1767,7 +1767,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 4, route.instance.contestMapForthTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, true, false, 4, route.instance.contestMapForthTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -1906,7 +1906,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapFirstTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, true, 1, route.instance.contestMapFirstTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -2045,7 +2045,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos2
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapSecondTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, true, 2, route.instance.contestMapSecondTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -2184,7 +2184,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos3
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapThirdTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, true, 3, route.instance.contestMapThirdTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)
@@ -2323,7 +2323,7 @@ class RouteController {
                                                                  contestMapCenterVerticalPos: route.instance.contestMapCenterVerticalPos4
                                                                 ] + contestmap_params)
                             if (r.ok) {
-                                emailService.CreateUploadJobRouteMap(route.instance, true, 1, route.instance.contestMapForthTitle)
+                                emailService.CreateUploadJobRouteMap(route.instance, false, true, 4, route.instance.contestMapForthTitle)
                                 gpxService.printdone ""
                                 flash.message = message(code:'fc.contestmap.job.started',args:[])
                                 redirect(action:'mapexportquestion', id:params.id)

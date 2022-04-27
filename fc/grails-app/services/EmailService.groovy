@@ -5,6 +5,8 @@ import org.springframework.web.context.request.RequestContextHolder
 
 class EmailService
 {
+    static final int FTP_UPLOAD_MAXSHOWPOINTS = 34
+    
     def domainService
     def gpxService
     def kmlService
@@ -58,7 +60,11 @@ class EmailService
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.pdf"
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(gpx4htm_file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
+                if (gpx_converter.gpxShowPoints.size() <= FTP_UPLOAD_MAXSHOWPOINTS) {
+                    ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(gpx4htm_file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
+                } else {
+                    ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${HTMLFilter.GetStr(gpx4htm_file_name)}&originalFilename=${HTMLFilter.GetStr(route_title)}&printLanguage=${printLanguage}&showProfiles=no&gpxShowPoints=${HTMLFilter.GetStr2([])}"
+                }
                 ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                 ftp_uploads += "${route_name}.htm"
                 
@@ -260,7 +266,11 @@ class EmailService
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                     ftp_uploads += "${test_name}.kmz"
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_OBJECT_SEPARATOR
-                    ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${gpx_file_name}&originalFilename=${HTMLFilter.GetStr(flight_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
+                    if (gpx_converter.gpxShowPoints.size() <= FTP_UPLOAD_MAXSHOWPOINTS) {
+                        ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${gpx_file_name}&originalFilename=${HTMLFilter.GetStr(flight_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr2(gpx_converter.gpxShowPoints)}"
+                    } else {
+                        ftp_uploads += "http://localhost:8080/fc/gpx/startftpgpxviewer?fileName=${gpx_file_name}&originalFilename=${HTMLFilter.GetStr(flight_title)}&printLanguage=${printLanguage}&showProfiles=yes&gpxShowPoints=${HTMLFilter.GetStr2([])}"
+                    }
                     ftp_uploads += Defs.BACKGROUNDUPLOAD_SRCDEST_SEPARATOR
                     ftp_uploads += "${test_name}.htm"
                 }
@@ -377,16 +387,20 @@ class EmailService
         for (Map map_link in routeInstance.GetMapUploadLinks()) {
             links += "\n"
             if (map_link.optiontitle) {
-                if (!map_link.noroute) {
-                    links += "${map_link.optiontitle}: "
-                } else {
+                if (map_link.noroute) {
                     links += "${map_link.optiontitle} (${getPrintMsg('fc.net.mail.route.body.noroute')}): " 
+                } else if (map_link.allroutedetails) {
+                    links += "${map_link.optiontitle} (${getPrintMsg('fc.net.mail.route.body.allroutedetails')}): " 
+                } else {
+                    links += "${map_link.optiontitle}: "
                 }
             } else {
-                if (!map_link.noroute) {
-                    links += "${map_link.optionnumber}. ${getPrintMsg('fc.net.mail.route.body.contestmap')}: "
-                } else {
+                if (map_link.noroute) {
                     links += "${map_link.optionnumber}. ${getPrintMsg('fc.net.mail.route.body.contestmap.noroute')}: "
+                } else if (map_link.allroutedetails) {
+                    links += "${map_link.optionnumber}. ${getPrintMsg('fc.net.mail.route.body.contestmap.allroutedetails')}: "
+                } else {
+                    links += "${map_link.optionnumber}. ${getPrintMsg('fc.net.mail.route.body.contestmap')}: "
                 }
             }
             links += map_link.link
@@ -424,12 +438,12 @@ class EmailService
     }
 
     //--------------------------------------------------------------------------
-    void CreateUploadJobRouteMap(Route routeInstance, boolean noRoute, int optionNumber, String optionTitle)
+    void CreateUploadJobRouteMap(Route routeInstance, boolean noRoute, boolean allRouteDetails, int optionNumber, String optionTitle)
     {
         UploadJobRouteMap uploadjob_routemap = UploadJobRouteMap.findByRouteAndUploadJobMapEdition(routeInstance, routeInstance.contestMapEdition)
         if (!uploadjob_routemap) {
             uploadjob_routemap = new UploadJobRouteMap(
-				route:routeInstance, uploadJobMapEdition:routeInstance.contestMapEdition, uploadJobStatus:UploadJobStatus.None, uploadJobNoRoute:noRoute,
+				route:routeInstance, uploadJobMapEdition:routeInstance.contestMapEdition, uploadJobStatus:UploadJobStatus.None, uploadJobNoRoute:noRoute, uploadJobAllRouteDetails: allRouteDetails,
 				uploadJobOptionNumber:optionNumber, uploadJobOptionTitle:optionTitle
 			)
             uploadjob_routemap.save(flush:true)

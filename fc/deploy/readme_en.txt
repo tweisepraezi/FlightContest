@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.2.2
+-------------
+- Saving links to uploaded OSM maps has been extended to include "All route details".
+
 Changes 3.2.1.1
 ---------------
 - Adjustments to Live Tracking API changes (scorecard overrides)
