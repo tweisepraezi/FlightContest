@@ -1184,7 +1184,7 @@ crews can be excluded.
 == Read logger
 Supported loggers: 'Renkforce GT-730FL-S', 'GlobalSat DG-100', 'GlobalSat DG-200'.
 
-Prerequisite: Installation of GPSBabel 1.7.0 or higher
+Prerequisite: Installation of GPSBabel 1.8.0 or higher
 
 [arabic]
 Vorgehen:

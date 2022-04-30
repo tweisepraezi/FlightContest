@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.2.2.1
+------------------
+- Update auf GPSBabel 1.8.0
+
 Änderungen 3.2.2
 ----------------
 - Das Speichern von Links auf hochgeladene OSM-Karten wurde um "Alle Strecken-Details" erweitert.
@@ -131,7 +135,7 @@
 - Logger-Auswertung: In der Liste berechneter Punkte steht die Offline-Karte jetzt schnell für jeden einzelnen Wendepunkt zur Verfügung.
 
 - Das Auslesen der Logger 'Renkforce GT-730FL-S', 'GlobalSat DG-100' und 'GlobalSat DG-200' kann jetzt direkt aus Flight Contest heraus erledigt werden.
-  Vorausetzung: Installation von GPSBabel 1.7.0 (http://www.gpsbabel.org/download.html)
+  Vorausetzung: Installation von GPSBabel (http://www.gpsbabel.org/download.html)
     -> Hilfe -> Logger auslesen
 
       

@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.2
-:revdate:   27.04.2022
+:revnumber: 3.2.2.1
+:revdate:   30.04.2022
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -1195,7 +1195,7 @@ Besatzungen ausgeschlossen werden.
 == Logger auslesen
 Unterstützte Logger: 'Renkforce GT-730FL-S', 'GlobalSat DG-100', 'GlobalSat DG-200'
 
-Voraussetzung: Installation von GPSBabel 1.7.0 oder höher
+Voraussetzung: Installation von GPSBabel 1.8.0 oder höher
 
 [arabic]
 Vorgehen:

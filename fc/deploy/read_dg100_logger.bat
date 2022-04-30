@@ -14,7 +14,7 @@ echo.
 
 for /f %%a in ('powershell -Command "Get-Date -format yyyyMMdd"') do set date=%%a
 
-set gpsbabel=%ProgramFiles(x86)%\GPSBabel\gpsbabel.exe
+set gpsbabel=%ProgramFiles%\GPSBabel\gpsbabel.exe
 if not exist "%gpsbabel%" goto gpsbabel_error
 
 :: port

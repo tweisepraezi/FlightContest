@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.2.2.1
+---------------
+- Update to GPSBabel 1.8.0
+
 Changes 3.2.2
 -------------
 - Saving links to uploaded OSM maps has been extended to include "All route details".
@@ -164,7 +168,7 @@ Changes 3.2.0
 - Logger evaluation: In the list of calculated points, the offline map is now quickly available for each individual turn point.
 
 - The readout of the logger 'Renkforce GT-730FL-S', 'GlobalSat DG-100', and 'GlobalSat DG-200' can now be done directly from Flight Contest.
-  Requirement: Installation of GPSBabel 1.7.0 (http://www.gpsbabel.org/download.html)
+  Requirement: Installation of GPSBabel (http://www.gpsbabel.org/download.html)
     -> Help -> Read logger
 
 Live Tracking Configuration
