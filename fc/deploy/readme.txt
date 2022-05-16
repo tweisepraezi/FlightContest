@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.2.2.2
+------------------
+- Bug "Höhenauswertung liefert Höhenfehler bei Vorbeiflügen" behoben
+
 Änderungen 3.2.2.1
 ------------------
 - Update auf GPSBabel 1.8.0

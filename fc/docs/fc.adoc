@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.2.1
-:revdate:   30.04.2022
+:revnumber: 3.2.2.2
+:revdate:   14.05.2022
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis

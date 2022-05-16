@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.2.2.2
+---------------
+- Bug "Altitude evaluation delivers altitude error on flybys" fixed
+
 Changes 3.2.2.1
 ---------------
 - Update to GPSBabel 1.8.0
