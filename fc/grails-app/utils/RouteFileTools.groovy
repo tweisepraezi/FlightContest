@@ -18,6 +18,8 @@ class RouteFileTools
     final static Float DEFAULT_GATEWIDTH_TP = 1.0f
     
     final static String ALT = "Alt"
+    final static String MINALT = "MinAlt"
+    final static String MAXALT = "MaxAlt"
     final static String GATE = "Gate"
     final static String DURATION = "Duration"
     final static String DIST = "Dist"
@@ -928,6 +930,14 @@ class RouteFileTools
                         
                         //coordroute_instance.altitude = rte.extensions.flightcontest.gate.'@ele'[0].toBigDecimal() * GpxService.ftPerMeter
                         coordroute_instance.altitude = rte.extensions.flightcontest.gate.'@alt'[0].toInteger()
+                        String minalt = rte.extensions.flightcontest.gate.'@minalt'[0]
+                        if (minalt) {
+                            coordroute_instance.minAltitudeAboveGround = minalt.toInteger()
+                        }
+                        String maxalt = rte.extensions.flightcontest.gate.'@maxalt'[0]
+                        if (maxalt) {
+                            coordroute_instance.maxAltitudeAboveGround = maxalt.toInteger()
+                        }
                         coordroute_instance.gatewidth2 = rte.extensions.flightcontest.gate.'@width'[0].toFloat()
                         
                         if (coordroute_instance.type.IsRunwayCoord()) {
@@ -2586,6 +2596,27 @@ class RouteFileTools
                                         coordroute_instance.gatewidth2 = s.toFloat()
                                     }
                                 }
+                            }
+                        }
+                        if (o.startsWith(ALT) && o.endsWith(UNIT_ft)) {
+                            String s = o.substring(ALT.size()).trim()
+                            s = s.substring(0,s.size()-UNIT_ft.size())
+                            if (s.isInteger()) {
+                                coordroute_instance.altitude = s.toInteger()
+                            }
+                        }
+                        if (o.startsWith(MINALT) && o.endsWith(UNIT_ft)) {
+                            String s = o.substring(MINALT.size()).trim()
+                            s = s.substring(0,s.size()-UNIT_ft.size())
+                            if (s.isInteger()) {
+                                coordroute_instance.minAltitudeAboveGround = s.toInteger()
+                            }
+                        }
+                        if (o.startsWith(MAXALT) && o.endsWith(UNIT_ft)) {
+                            String s = o.substring(MAXALT.size()).trim()
+                            s = s.substring(0,s.size()-UNIT_ft.size())
+                            if (s.isInteger()) {
+                                coordroute_instance.maxAltitudeAboveGround = s.toInteger()
                             }
                         }
                         if (o.startsWith(DURATION) && o.endsWith(UNIT_min)) {

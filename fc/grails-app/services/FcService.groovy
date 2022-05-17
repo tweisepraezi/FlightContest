@@ -5687,6 +5687,12 @@ class FcService
                 if (params.gateDirection) {
                     coordroute_instance.gateDirection = params.gateDirection.toBigDecimal()
                 }
+                if (params.minAltitudeAboveGround) {
+                    coordroute_instance.minAltitudeAboveGround = params.minAltitudeAboveGround.toInteger()
+			    }
+                if (params.maxAltitudeAboveGround) {
+                    coordroute_instance.maxAltitudeAboveGround = params.maxAltitudeAboveGround.toInteger()
+			    }
 
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
                     Map ret = ['instance':coordroute_instance,'saved':true,'message':getMsg('fc.updated',["${coordroute_instance.name()}"])]
@@ -5720,6 +5726,12 @@ class FcService
                     coordroute_instance.legMeasureDistance = null
                     coordroute_instance.legDistance = null
                 }
+                if (params.minAltitudeAboveGround) {
+                    coordroute_instance.minAltitudeAboveGround = params.minAltitudeAboveGround.toInteger()
+			    }
+                if (params.maxAltitudeAboveGround) {
+                    coordroute_instance.maxAltitudeAboveGround = params.maxAltitudeAboveGround.toInteger()
+			    }
     
                 if(!coordroute_instance.hasErrors() && coordroute_instance.save()) {
                     calculateAllLegMeasureDistances(coordroute_instance.route)
@@ -5991,6 +6003,12 @@ class FcService
         }
         if (params.correctSign) {
             coordroute_instance.correctSign = TurnpointCorrect.(params.correctSign)
+        }
+        if (params.minAltitudeAboveGround) {
+            coordroute_instance.minAltitudeAboveGround = params.minAltitudeAboveGround.toInteger()
+        }
+        if (params.maxAltitudeAboveGround) {
+            coordroute_instance.maxAltitudeAboveGround = params.maxAltitudeAboveGround.toInteger()
         }
         coordroute_instance.route = route_instance
 		calculateLegMeasureDistance(coordroute_instance, true)
@@ -11993,7 +12011,14 @@ class FcService
 			if (coordResultInstance.resultAltitude) {
 				if (coordResultInstance.type.IsAltitudeCheckCoord()) {
 					Route route_instance = coordResultInstance.test.task.flighttest.route
-					coordResultInstance.resultMinAltitudeMissed = coordResultInstance.resultAltitude < coordResultInstance.altitude + route_instance.altitudeAboveGround
+                    if (coordResultInstance.resultAltitude < coordResultInstance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround)) {
+                        coordResultInstance.resultMinAltitudeMissed = true
+                    } else {
+                        int max_altitude = coordResultInstance.GetMaxAltitudeAboveGround()
+                        if (max_altitude > 0 && coordResultInstance.resultAltitude > max_altitude) {
+                            coordResultInstance.resultMinAltitudeMissed = true
+                        }
+                    }
 				}
 			}
 		}
@@ -12939,6 +12964,8 @@ class FcService
             coordresult_instance.lonMinute = coordroute_instance.lonMinute
             coordresult_instance.lonDirection = coordroute_instance.lonDirection
             coordresult_instance.altitude = coordroute_instance.altitude
+            coordresult_instance.minAltitudeAboveGround = coordroute_instance.minAltitudeAboveGround
+            coordresult_instance.maxAltitudeAboveGround = coordroute_instance.maxAltitudeAboveGround
             coordresult_instance.gatewidth2 = coordroute_instance.gatewidth2
             coordresult_instance.endCurved = coordroute_instance.endCurved
             

@@ -2682,6 +2682,8 @@ class GpxService
                     lat:            latValue,
                     lon:            lonValue,
                     alt:            coordrouteInstance.altitude,
+                    minalt:         coordrouteInstance.minAltitudeAboveGround,
+                    maxalt:         coordrouteInstance.maxAltitudeAboveGround,
                     width:          gateWidth,
                     dir:            dir,
                     notimecheck:    getYesNo(no_timecheck),

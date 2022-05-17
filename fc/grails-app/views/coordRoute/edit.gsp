@@ -137,8 +137,18 @@
 	                            <p>
 	                                <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
 	                                <br/>
-	                                <input type="text" id="altitude" name="altitude" value="${fieldValue(bean:coordRouteInstance,field:'altitude')}" tabIndex="${ti[0]++}"/>
+	                                <input type="text" id="altitude" name="altitude" value="${coordRouteInstance.altitude}" tabIndex="${ti[0]++}"/>
 	                            </p>
+                                <p>
+                                    <label>${message(code:'fc.minaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>
+                                    <br/>
+                                    <input type="text" id="minAltitudeAboveGround" name="minAltitudeAboveGround" value="${coordRouteInstance.minAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
+                                </p>
+                                <p>
+                                    <label>${message(code:'fc.maxaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>
+                                    <br/>
+                                    <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${coordRouteInstance.maxAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
+                                </p>
 	                            <p>
 	                                <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
 	                                <br/>

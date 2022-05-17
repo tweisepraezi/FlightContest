@@ -110,11 +110,15 @@ class FlightResultsTagLib
                 } else {
                     outln"""        <td/>"""
                 }
-				int check_altitude = coordresult_instance.altitude
+				String check_altitude = ""
 				if (coordresult_instance.type.IsAltitudeCheckCoord()) {
-					check_altitude += route_instance.altitudeAboveGround
+					check_altitude = "${coordresult_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround)}${message(code:'fc.foot')}"
+                    int max_altitude = coordresult_instance.GetMaxAltitudeAboveGround()
+                    if (max_altitude) {
+                        check_altitude += " - ${max_altitude}${message(code:'fc.foot')}"
+                    }
 				}
-                outln"""            <td>${check_altitude}${message(code:'fc.foot')}</td>"""
+                outln"""            <td>${check_altitude}</td>"""
                 outln"""        </tr>"""
                 outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                 outln"""            <td/>"""

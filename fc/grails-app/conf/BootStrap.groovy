@@ -1115,6 +1115,15 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 34) { // DB-2.34 compatibility
+                            print "    2.34 modifications"
+							Coord.findAll().each { Coord coord_instance ->
+								coord_instance.minAltitudeAboveGround = 0
+								coord_instance.maxAltitudeAboveGround = 0
+								coord_instance.save()
+							}
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }

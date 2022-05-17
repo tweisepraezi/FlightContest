@@ -759,7 +759,7 @@ class CalcService
                                     gateWidth:coordroute_instance.gatewidth2,
                                     gateLatitude:gate.coord.lat,
                                     gateLongitude:gate.coord.lon,
-                                    gateAltitude:coordroute_instance.altitude + route_instance.altitudeAboveGround,
+                                    gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
                                     procedureTurn:false,
                                     additionalGate:false]
                     gates += new_gate
@@ -789,7 +789,7 @@ class CalcService
                                     gateWidth:coordroute_instance.gatewidth2,
                                     gateLatitude:gate.coord.lat,
                                     gateLongitude:gate.coord.lon,
-                                    gateAltitude:coordroute_instance.altitude + route_instance.altitudeAboveGround,
+                                    gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
                                     procedureTurn:false,
                                     additionalGate:false]
                     gates += new_gate
@@ -820,7 +820,7 @@ class CalcService
                                     gateWidth:coordroute_instance.gatewidth2,
                                     gateLatitude:gate.coord.lat,
                                     gateLongitude:gate.coord.lon,
-                                    gateAltitude:coordroute_instance.altitude + route_instance.altitudeAboveGround,
+                                    gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
                                     procedureTurn:false,
                                     additionalGate:false]
                     gates += new_gate
@@ -848,7 +848,7 @@ class CalcService
                                     gateWidth:last_coordroute_instance.gatewidth2,
                                     gateLatitude:last_coordroute_instance.latMath(),
                                     gateLongitude:last_coordroute_instance.lonMath(),
-                                    gateAltitude:last_coordroute_instance.altitude + route_instance.altitudeAboveGround,
+                                    gateAltitude:last_coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
                                     procedureTurn:false,
                                     additionalGate:false
                                    ]
@@ -920,7 +920,7 @@ class CalcService
                                     gateWidth:gate_width,
                                     gateLatitude:coordroute_instance.latMath(),
                                     gateLongitude:coordroute_instance.lonMath(),
-                                    gateAltitude:coordroute_instance.altitude + route_instance.altitudeAboveGround,
+                                    gateAltitude:coordroute_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround),
                                     procedureTurn:procedure_turn,
                                     additionalGate:false
                                    ]
@@ -963,7 +963,7 @@ class CalcService
                             gateWidth:lastCoordRouteInstance.gatewidth2,
                             gateLatitude:lastCoordRouteInstance.latMath(),
                             gateLongitude:lastCoordRouteInstance.lonMath(),
-                            gateAltitude:lastCoordRouteInstance.altitude + lastCoordRouteInstance.route.altitudeAboveGround,
+                            gateAltitude:lastCoordRouteInstance.GetMinAltitudeAboveGround(lastCoordRouteInstance.route.altitudeAboveGround),
                             procedureTurn:false,
                             additionalGate:true
                            ]

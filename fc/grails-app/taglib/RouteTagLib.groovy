@@ -11,7 +11,17 @@ class RouteTagLib
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>"""
         outln"""        <br/>"""
-        outln"""        <input type="text" id="altitude" name="altitude" value="${fieldValue(bean:attrs.coordRoute,field:'altitude')}" tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""        <input type="text" id="altitude" name="altitude" value="${attrs.coordRoute.altitude}" tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""    </p>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.minaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="minAltitudeAboveGround" name="minAltitudeAboveGround" value="${attrs.coordRoute.minAltitudeAboveGround}" tabIndex="${attrs.ti[0]++}"/>"""
+        outln"""    </p>"""
+        outln"""    <p>"""
+        outln"""        <label>${message(code:'fc.maxaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>"""
+        outln"""        <br/>"""
+        outln"""        <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${attrs.coordRoute.maxAltitudeAboveGround}" tabIndex="${attrs.ti[0]++}"/>"""
         outln"""    </p>"""
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>"""
@@ -631,7 +641,17 @@ class RouteTagLib
             outln s
             outln"""        <td style="white-space: nowrap;">${coordroute_instance.latName()}</td>"""
             outln"""        <td style="white-space: nowrap;">${coordroute_instance.lonName()}</td>"""
-            outln"""        <td>${coordroute_instance.altitude}${message(code:'fc.foot')}</td>"""
+            s = "${coordroute_instance.altitude}${message(code:'fc.foot')}"
+            if (coordroute_instance.minAltitudeAboveGround || coordroute_instance.maxAltitudeAboveGround) {
+                s += " "
+            }
+            if (coordroute_instance.minAltitudeAboveGround) {
+                s += "-"
+            }
+            if (coordroute_instance.maxAltitudeAboveGround) {
+                s += "+"
+            }
+            outln"""        <td>${s}</td>"""
             outln"""        <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>"""
             if (coordroute_instance.type.IsRunwayCoord()) {
                 outln"""    <td>${coordroute_instance.gateDirection}${message(code:'fc.grad')}</td>"""

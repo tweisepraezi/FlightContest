@@ -49,7 +49,7 @@ enum ImportSign
         // LDG, Lat 54° 25.52474' N, Lon 009° 32.19382' E, Alt 800ft, Gate 270° 0.02NM
         line_content += "<br/>LDG, ${GetImportTxtLineContent2(routeInstance.contest, 54, 25.52474, CoordPresentation.NORTH, 9, 32.19382, CoordPresentation.EAST, 0)}, ${RouteFileTools.GATE} 270${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM}"
         // Common
-        line_content += "<br/><br/>TO, ${GetImportTxtLineContent(routeInstance.contest)}, [${RouteFileTools.GATE} 240${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM},] [${RouteFileTools.DIST} 93.0${RouteFileTools.UNIT_mm},] [${RouteFileTools.TRACK} 001.00${RouteFileTools.UNIT_GRAD},] [${RouteFileTools.DURATION} 2${RouteFileTools.UNIT_min},] [${RouteFileTools.UNIT_TPnotimecheck},] [${RouteFileTools.UNIT_TPnogatecheck},] [${RouteFileTools.UNIT_TPnoplanningtest},]"
+        line_content += "<br/><br/>TO, ${GetImportTxtLineContent(routeInstance.contest)}, [${RouteFileTools.MINALT} 600${RouteFileTools.UNIT_ft},] [${RouteFileTools.MAXALT} 2000${RouteFileTools.UNIT_ft},] [${RouteFileTools.GATE} 240${RouteFileTools.UNIT_GRAD} 0.02${RouteFileTools.UNIT_NM},] [${RouteFileTools.DIST} 93.0${RouteFileTools.UNIT_mm},] [${RouteFileTools.TRACK} 001.00${RouteFileTools.UNIT_GRAD},] [${RouteFileTools.DURATION} 2${RouteFileTools.UNIT_min},] [${RouteFileTools.UNIT_TPnotimecheck},] [${RouteFileTools.UNIT_TPnogatecheck},] [${RouteFileTools.UNIT_TPnoplanningtest},]"
         if (sign_content) {
             line_content += " [${RouteFileTools.UNIT_TPendcurved},] [${sign_content}]"
         } else {

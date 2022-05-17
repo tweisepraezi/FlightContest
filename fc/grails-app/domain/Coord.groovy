@@ -26,6 +26,8 @@ class Coord
     BigDecimal lonSecondDecimal = 0.0
 
     int altitude = 500                   // Altitude (Höhe) des Bodens über Meeresspiegel in ft
+    Integer minAltitudeAboveGround = 0   // DB-2.34, min. Altitude (Höhe) über Grund in ft, wenn > 0
+    Integer maxAltitudeAboveGround = 0   // DB-2.34, max. Altitude (Höhe) über Grund in ft, wenn > 0
     int gatewidth = 1                    // UNUSED: Coord.gatewidth, migriert nach gatewidth2 (Float), DB-2.3
 	Float gatewidth2 = 1.0f              // Gate-Breite (in NM) (Standard: 1NM, Secret: 2NM), DB-2.3
 	Integer legDuration                  // duration of leg [min], DB-2.3
@@ -224,6 +226,10 @@ class Coord
         
         // DB-2.30 compatibility
         observationNextPrintPageEnroute(nullable:true)
+        
+        // DB-2.34 compatibility
+        minAltitudeAboveGround(nullable:true, min:0)
+        maxAltitudeAboveGround(nullable:true, min:0)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -262,6 +268,8 @@ class Coord
 	    lonMinute = coordInstance.lonMinute
 	    lonDirection = coordInstance.lonDirection
 	    altitude = coordInstance.altitude 
+        minAltitudeAboveGround = coordInstance.minAltitudeAboveGround 
+        maxAltitudeAboveGround = coordInstance.maxAltitudeAboveGround 
 	    gatewidth2 = coordInstance.gatewidth2
 		coordTrueTrack = coordInstance.coordTrueTrack
 		coordMeasureDistance = coordInstance.coordMeasureDistance
@@ -612,7 +620,23 @@ class Coord
 		return "-"
 
 	}
-	
+
+    int GetMinAltitudeAboveGround(int routeAltitudeAboveGround)
+    {
+        if (minAltitudeAboveGround) {
+            return altitude + minAltitudeAboveGround
+        }
+        return altitude + routeAltitudeAboveGround
+    }
+
+    int GetMaxAltitudeAboveGround()
+    {
+        if (maxAltitudeAboveGround) {
+            return altitude + maxAltitudeAboveGround
+        }
+        return 0
+    }
+
 	String GetCpNotFoundName()
 	{
 		switch(type) {
@@ -764,6 +788,15 @@ class Coord
             s += ", ${RouteFileTools.GATE} ${gateDirection}${RouteFileTools.UNIT_GRAD} ${gatewidth2}${RouteFileTools.UNIT_NM}"
         } else {
             s += ", ${RouteFileTools.GATE} ${gatewidth2}${RouteFileTools.UNIT_NM}"
+        }
+        if (kmzExport) {
+            s += ", ${RouteFileTools.ALT} ${altitude}${RouteFileTools.UNIT_ft}"
+        }
+        if (minAltitudeAboveGround) {
+            s += ", ${RouteFileTools.MINALT} ${minAltitudeAboveGround}${RouteFileTools.UNIT_ft}"
+        }
+        if (maxAltitudeAboveGround) {
+            s += ", ${RouteFileTools.MAXALT} ${maxAltitudeAboveGround}${RouteFileTools.UNIT_ft}"
         }
         if (measureDistance) {
             s += ", ${RouteFileTools.DIST} ${FcMath.DistanceMeasureStr2(measureDistance)}${RouteFileTools.UNIT_mm}"

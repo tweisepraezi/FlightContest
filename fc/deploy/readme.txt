@@ -1,6 +1,17 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.2.3
+----------------
+- Für jeden einzelnen Check-Punkt einer Strecke kann jetzt auch eine separate Mindestflughöhe über Grund angegeben werden
+  (abweichend von der Festlegung in den Stecken-Einstellungen, die sonst für alle Check-Punkte gilt).
+- Für jeden einzelnen Check-Punkt einer Strecke kann jetzt auch eine Maximalflughöhe über Grund angegeben werden,
+  deren Überschreiung dann auch zu einer Bestrafung wegen Verletzung der korrekten Flughöhe führt.
+- Beachten Sie bei der Festlung derartiger Höhenangaben, dass die barometrische Höhenmessung während der Fluges eine andere Höhe
+  ergibt als die GPS-Messung, die mit diesen Festlegungen ausgewertet wird.
+  Reduzieren Sie also die tatsächlich auszuwertende Minimalhöhe bzw. erhöhen Sie die tatsächlich auszuwertende Maximalhöhe 
+  um eine Toleranz-Wert (z.B. 200ft), um Fälle im Grenzbereich nicht zu bestrafen.
+
 Änderungen 3.2.2.2
 ------------------
 - Bug "Höhenauswertung liefert Höhenfehler bei Vorbeiflügen" behoben
@@ -73,8 +84,8 @@
 
 - Der Kartenmaßstab wird jetzt in den Strecken-Einstellungen festgelegt.
 
-- Die Höhe über Grund wird jetzt in den Strecken-Einstellungen festgelegt. Bei den einzelnen Koordinaten ist demzufolge die Geländehöhe über Normal-Null einzugeben.
-  Die Mindestflughöhe über Normal-Null ist damit die Summe aus Höhe über Grund und Geländehöhe.
+- Die Mindestflughöhe über Grund wird jetzt in den Strecken-Einstellungen festgelegt. Bei den einzelnen Koordinaten ist demzufolge die Geländehöhe über Normal-Null einzugeben.
+  Die Mindestflughöhe über Normal-Null ist damit die Summe aus Mindestflughöhe über Grund und der Geländehöhe.
 
 - OSM-Wettbewerbs-Karte:
     Alle Optionen werden in der Datenbank gespeichert.

@@ -1,6 +1,17 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.2.3
+-------------
+- For each individual check point of a route, a separate minimum altitude above ground can now be specified
+  (different from the definition in the track settings, which otherwise applies to all check points).
+- For each individual check point of a route, a maximum altitude above ground can now also be specified.
+  If the maximum altitude is exceeded, the user will be penalized for violating the correct altitude.
+- When determining such altitudes, please note that the barometric altitude measurement during the flight 
+  results in a different altitude than the GPS measurement, which is evaluated with these specifications.
+  Therefore, reduce the actual minimum altitude to be evaluated, or increase the actual maximum altitude to be evaluated 
+  by a tolerance value (e.g. 200ft) in order not to penalize cases near this specifications.
+
 Changes 3.2.2.2
 ---------------
 - Bug "Altitude evaluation delivers altitude error on flybys" fixed
@@ -106,8 +117,8 @@ Changes 3.2.0
 
 - The map scale is now set in the route settings.
 
-- The height above ground is now defined in the route settings. Consequently, the terrain height above normal zero must be entered for the individual coordinates.
-  The minimum altitude above normal zero is therefore the sum of the height above ground and the terrain height.
+- The minimum altitude above ground is now defined in the route settings. Consequently, the terrain height above normal zero must be entered for the individual coordinates.
+  The minimum altitude above normal zero is therefore the sum of the minimum altitude above ground and the terrain height.
   
 - OSM Contest Map:
     All options will be saved in database.
