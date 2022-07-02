@@ -1,6 +1,13 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.2.4
+----------------
+- Zeitplan-Export (Daten) hinzugefügt.
+  Liefert eine JSON-Datei, die die Startzeit und alle Wendepunkt-Überflug-Zeiten für alle Besatzungen beinhaltet.
+- Löschen von Wendepunkt-Foto-Bildern hinzugefügt
+- Löschen von Strecken-Foto-Bildern hinzugefügt
+
 Änderungen 3.2.3
 ----------------
 - Für jeden einzelnen Check-Punkt einer Strecke kann jetzt auch eine separate Mindestflughöhe über Grund angegeben werden

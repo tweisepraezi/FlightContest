@@ -895,6 +895,16 @@ class Route
         return true
     }
     
+    boolean AnyEnroutePhotoUploaded()
+    {
+        for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(this,[sort:"enrouteViewPos"])) {
+            if (coordenroutephoto_instance.imagecoord) {
+                return true
+            }
+        }
+        return false
+    }
+    
     private Map EnrouteSignStatus(boolean enroutePhoto)
     {
         int doublesign_num = 0

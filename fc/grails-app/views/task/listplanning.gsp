@@ -252,11 +252,11 @@
                                     <g:actionSubmit action="timesubtract" value="${message(code:'fc.test.time.subtract')}" />
                                     <input type="text" id="addTimeValue" name="addTimeValue" value="${fieldValue(bean:taskInstance,field:'addTimeValue')}" size="3" /> ${message(code:'fc.time.min')}
                                 </td>
-                                <td colspan="2"><g:actionSubmit action="exporttimetable" value="${message(code:'fc.test.timetable.export')}" /></td>
+                                <td colspan="2"></td>
                                 <td/>
                             </tr>
-                            <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.contest.liveTrackingContestID && taskInstance.contest.liveTrackingScorecard && taskInstance.liveTrackingNavigationTaskID}" >
-                                <tr class="join">
+                            <tr class="join">
+                                <g:if test="${BootStrap.global.IsLiveTrackingPossible() && taskInstance.contest.liveTrackingContestID && taskInstance.contest.liveTrackingScorecard && taskInstance.liveTrackingNavigationTaskID}" >
                                     <td colspan="2"><g:actionSubmit action="livetracking_navigationtaskupdatecrews" value="${message(code:'fc.livetracking.navigationtaskupdatecrews')}"/></td>
                                     <g:if test="${taskInstance.contest.resultClasses}">
                                         <g:if test="${taskInstance.liveTrackingTracksAvailable}">
@@ -274,10 +274,20 @@
                                             <td colspan="2"></td>
                                         </g:else>
                                     </g:else>
-                                    <td colspan="8"></td>
-                                    <td/>
-                                </tr>
-                            </g:if>
+                                </g:if>
+                                <g:else>
+                                    <g:if test="${taskInstance.contest.resultClasses}">
+                                        <td colspan="5"></td>
+                                    </g:if>
+                                    <g:else>
+                                        <td colspan="4"></td>
+                                    </g:else>
+                                </g:else>
+                                <td colspan="4"></td>
+                                <td colspan="2"><g:actionSubmit action="exporttimetable_label" value="${message(code:'fc.test.timetable.export.labelprint')}" /></td>
+                                <td colspan="2"><g:actionSubmit action="exporttimetable_data" value="${message(code:'fc.test.timetable.export.data')}" /></td>
+                                <td/>
+                            </tr>
                         </tfoot>
                     </table>
                     <a name="end"/>

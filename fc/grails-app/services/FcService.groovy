@@ -2,6 +2,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat
 import java.util.Map;
 import java.util.Date
+import groovy.json.JsonBuilder
 
 import org.xhtmlrenderer.pdf.ITextRenderer
 import org.springframework.dao.DataIntegrityViolationException
@@ -3766,9 +3767,9 @@ class FcService
     }
   
     //--------------------------------------------------------------------------
-    Map exporttimetableTask(Map params, String uploadFileName)
+    Map exporttimetablelabelTask(Map params, String uploadFileName)
     {
-        printstart "exporttimetableTask $uploadFileName"
+        printstart "exporttimetablelabelTask $uploadFileName"
         
         Map task = domainService.GetTask(params)
         if (!task.instance) {
@@ -3817,6 +3818,79 @@ class FcService
                     upload_writer.writeLine "PLANNINGTIME:${export_value.testtime}"
                     upload_writer.writeLine "TAKEOFFTIME:${export_value.takeofftime}"
                 }
+                upload_writer.close()
+            } else {
+                task.message = getMsg('fc.test.timetable.export.someonemustselected')
+                task.error = true
+                printerror task.message
+                return task
+            }
+            printdone ""
+        } catch (Exception e) {
+            task.message = e.getMessage()
+            task.error = true
+            printerror e.getMessage()
+        }
+        return task
+
+    }
+    
+    //--------------------------------------------------------------------------
+    Map exporttimetabledataTask(Map params, String uploadFileName)
+    {
+        printstart "exporttimetabledataTask $uploadFileName"
+        
+        Map task = domainService.GetTask(params)
+        if (!task.instance) {
+            return task
+        }
+        if (!task.instance.liveTrackingNavigationTaskDate) {
+            return task + [error:true, message:getMsg('fc.livetracking.navigationtaskdate.notexists')]
+        }
+        try {
+            List export_values = []
+            Test.findAllByTask(task.instance,[sort:"viewpos"]).each { Test test_instance ->
+                if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+                    if (params["selectedTestID${test_instance.id}"] == "on") {
+                        String result_class = ""
+                        if (test_instance.crew.resultclass) {
+                            result_class = test_instance.crew.resultclass.name
+                        }
+                        String team = ""
+                        if (test_instance.crew.team) {
+                            team = test_instance.crew.team.name
+                        }
+                        
+                        Contest contest_instance = task.instance.contest
+                        String to_time = FcTime.UTCGetDateTime(task.instance.liveTrackingNavigationTaskDate, test_instance.takeoffTime, contest_instance.timeZone)
+                        String ldg_time = FcTime.UTCGetDateTime(task.instance.liveTrackingNavigationTaskDate, test_instance.maxLandingTime, contest_instance.timeZone)
+                        Map gate_times = [:]
+                        gate_times += ["TO":to_time]
+                        gate_times += ["SP":FcTime.UTCGetDateTime(task.instance.liveTrackingNavigationTaskDate, test_instance.startTime, contest_instance.timeZone)]
+                        Date leg_time = test_instance.startTime
+                        for (TestLegFlight testlegflight_instance in TestLegFlight.findAllByTest(test_instance)) {
+                            leg_time = testlegflight_instance.AddPlanLegTime(leg_time)
+                            gate_times += ["${testlegflight_instance.coordTitle.titleMediaCode(Media.Tracking)}":FcTime.UTCGetDateTime(task.instance.liveTrackingNavigationTaskDate, leg_time, contest_instance.timeZone)] 
+                        }
+                        gate_times += ["LDG":ldg_time]
+                        
+                        Map new_value = [startnum:        test_instance.crew.startNum,
+                                         registration:    test_instance.crew.aircraft.registration,
+                                         crewname:        test_instance.crew.name,
+                                         teamname:        team,
+                                         resultclassname: result_class,
+                                         tas:             FcMath.SpeedStr_TAS(test_instance.crew.tas),
+                                         gate_times:      gate_times
+                                        ]
+                        export_values += new_value
+                    }
+                }
+            }
+            if (export_values.size() > 0) {
+                JsonBuilder json_builder = new JsonBuilder(export_values)
+                File upload_file = new File(uploadFileName)
+                BufferedWriter upload_writer = upload_file.newWriter("UTF-8")
+                upload_writer.writeLine json_builder.toString()
                 upload_writer.close()
             } else {
                 task.message = getMsg('fc.test.timetable.export.someonemustselected')
@@ -6913,6 +6987,23 @@ class FcService
     }
 
     //--------------------------------------------------------------------------
+    void deleteEnroutePhotos(Map params)
+    {
+        Map route = domainService.GetRoute(params)
+        if (!route.instance) {
+            return
+        }
+        
+        for (CoordEnroutePhoto coordenroutephoto_instance in CoordEnroutePhoto.findAllByRoute(route.instance,[sort:"enrouteViewPos"])) {
+            if (coordenroutephoto_instance.imagecoord) {
+                coordenroutephoto_instance.imagecoord.delete()
+                coordenroutephoto_instance.imagecoord = null
+                coordenroutephoto_instance.save()
+            }
+        }
+    }
+    
+    //--------------------------------------------------------------------------
     Map setpositionTurnpointPhoto(Map params)
     {
         CoordRoute coordroute_instance = CoordRoute.get(params.id)
@@ -6949,6 +7040,23 @@ class FcService
         return ['instance':coordroute_instance]
     }
 
+    //--------------------------------------------------------------------------
+    void deleteTurnpointPhotos(Map params)
+    {
+        Map route = domainService.GetRoute(params)
+        if (!route.instance) {
+            return
+        }
+        
+        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route.instance,[sort:"id"])) {
+            if (coordroute_instance.imagecoord) {
+                coordroute_instance.imagecoord.delete()
+                coordroute_instance.imagecoord = null
+                coordroute_instance.save()
+            }
+        }
+    }
+    
     //--------------------------------------------------------------------------
     Map getCoordEnrouteCanvas(Map params)
     {

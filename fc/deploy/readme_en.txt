@@ -1,6 +1,13 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.2.4
+-------------
+- Export timetable (Data) added
+  Returns a JSON file containing the takeoff time and all turnpoint overflight times for all crews.
+- Delete command of turnpoint photos added
+- Delete command of enroute photos added
+
 Changes 3.2.3
 -------------
 - For each individual check point of a route, a separate minimum altitude above ground can now be specified

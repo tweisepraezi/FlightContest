@@ -184,15 +184,24 @@ class RouteFileTools
                 
             } else {
                 def folder = null
+                boolean root_folder = false
                 if (folderName) {
                     folder = search_folder_by_name(kml.Document, folderName)
                 } else {
                     folder = kml.Document.Folder[0] // first folder
+                    if (!folder) {
+                        folder = kml.Document // root
+                        root_folder = true
+                    }
                 }
                 
                 if (folder && folder.Placemark) {
                 
-                    if (folder.Placemark.name) {
+                    if (root_folder) {
+                        if (folder.name) {
+                            route_name = folder.name.text()
+                        }
+                    } else if (folder.Placemark.name) {
                         route_name = folder.Placemark.name.text()
                     }
                     if (route_name) {
@@ -796,7 +805,7 @@ class RouteFileTools
                 coordroute_instance.noPlanningTest = true
                 sc_num++
             // SC
-            } else if (track_diff != null && track_diff < 1) {
+            } else if (track_diff != null && track_diff < 1.5) {
                 coordroute_instance.type = CoordType.SECRET
                 coordroute_instance.titleNumber = sc_num
                 coordroute_instance.gatewidth2 = contestInstance.scGateWidth

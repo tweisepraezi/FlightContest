@@ -256,6 +256,7 @@
                                                     <g:actionSubmit action="print_turnpointphoto_alphabetical" value="${message(code:'fc.coordroute.turnpointphoto.print.alphabetical')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                                     <g:actionSubmit action="print_turnpointphoto_route" value="${message(code:'fc.coordroute.turnpointphoto.print.route')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                                 </g:else>
+                                                <g:actionSubmit action="delete_turnpointphoto_route" value="${message(code:'fc.coordroute.turnpointphoto.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                             </g:if>
 	                                    </td>
 	                                </tr>
@@ -286,6 +287,9 @@
                                                 <g:if test="${routeInstance.enroutePhotoRoute.IsEnrouteRouteInput() && routeInstance.AllEnroutePhotoUploaded()}">
                                                     <g:actionSubmit action="print_enroutephoto_alphabetical" value="${message(code:'fc.coordroute.photo.print.alphabetical')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                                     <g:actionSubmit action="print_enroutephoto_route" value="${message(code:'fc.coordroute.photo.print.route')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                                </g:if>
+                                                <g:if test="${routeInstance.enroutePhotoRoute.IsEnrouteRouteInput() && routeInstance.AnyEnroutePhotoUploaded()}">
+                                                    <g:actionSubmit action="delete_enroutephoto_route" value="${message(code:'fc.coordroute.photo.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                                 </g:if>
                                             </g:if>
                                         </td>

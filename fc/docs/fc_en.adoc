@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.2.2
-:revdate: 27.04.2022
+:revnumber: 3.2.4
+:revdate: 02.07.2022
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -1187,7 +1187,7 @@ Supported loggers: 'Renkforce GT-730FL-S', 'GlobalSat DG-100', 'GlobalSat DG-200
 Prerequisite: Installation of GPSBabel 1.8.0 or higher
 
 [arabic]
-Vorgehen:
+Procedure steps:
 [arabic]
 . Open 'Results -> Task -> Read logger' -> opens tab 'Read logger'
 . Connect logger with a USB port

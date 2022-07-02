@@ -459,6 +459,12 @@ class RouteController {
             redirect(action:"list")
         }
     }
+    
+    def delete_enroutephoto_route = {
+        fcService.deleteEnroutePhotos(params) 
+        flash.message = message(code:'fc.coordroute.photo.deleted')
+        redirect(action:"show",id:params.id)
+    }
 	
 	def print_turnpointphoto_alphabetical = {
         Map route = printService.printTurnpointPhoto(params,true,GetPrintParams()) 
@@ -484,6 +490,12 @@ class RouteController {
         } else {
             redirect(action:"list")
         }
+    }
+    
+    def delete_turnpointphoto_route = {
+        fcService.deleteTurnpointPhotos(params) 
+        flash.message = message(code:'fc.coordroute.turnpointphoto.delete.done')
+        redirect(action:"show",id:params.id)
     }
 	
     def copyroute = {
