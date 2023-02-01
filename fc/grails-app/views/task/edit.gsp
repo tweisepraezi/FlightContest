@@ -18,6 +18,8 @@
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['taskReturnAction':taskReturnAction,'taskReturnController':taskReturnController,'taskReturnID':taskReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${taskInstance.GetNextTaskID()}"/>
+						<g:set var="prev_id" value="${taskInstance.GetPrevTaskID()}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.title')} (${taskInstance.idName()}):</label>
@@ -36,22 +38,42 @@
                             <p>
                                 <label>${message(code:'fc.task.firsttime')}* [${message(code:'fc.time.hmin')}]:</label>
                                 <br/>
-                                <input type="text" id="firstTime" name="firstTime" value="${fieldValue(bean:taskInstance,field:'firstTime')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="firstTime" name="firstTime" value="${fieldValue(bean:taskInstance,field:'firstTime')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="firstTime" name="firstTime" value="${fieldValue(bean:taskInstance,field:'firstTime')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.takeoffinterval.normal')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="takeoffIntervalNormal" name="takeoffIntervalNormal" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalNormal')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.takeoffinterval.sloweraircraft')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="takeoffIntervalSlowerAircraft" name="takeoffIntervalSlowerAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalSlowerAircraft')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="takeoffIntervalSlowerAircraft" name="takeoffIntervalSlowerAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalSlowerAircraft')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="takeoffIntervalSlowerAircraft" name="takeoffIntervalSlowerAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalSlowerAircraft')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.takeoffinterval.fasteraircraft')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="takeoffIntervalFasterAircraft" name="takeoffIntervalFasterAircraft" value="${fieldValue(bean:taskInstance,field:'takeoffIntervalFasterAircraft')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -59,46 +81,86 @@
                             <p>
                                 <label>${message(code:'fc.task.planningtestduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="planningTestDuration" name="planningTestDuration" value="${fieldValue(bean:taskInstance,field:'planningTestDuration')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.preparationduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="preparationDuration" name="preparationDuration" value="${fieldValue(bean:taskInstance,field:'preparationDuration')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.risingduration')}*:</label>
                                 <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="risingDurationFormula" name="risingDurationFormula" value="${fieldValue(bean:taskInstance,field:'risingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.maxlandingduration')}*:</label>
                                 <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="maxLandingDurationFormula" name="maxLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'maxLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.parkingduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="parkingDuration" name="parkingDuration" value="${fieldValue(bean:taskInstance,field:'parkingDuration')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.procedureturnduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="procedureTurnDuration" name="procedureTurnDuration" value="${fieldValue(bean:taskInstance,field:'procedureTurnDuration')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.ilandingduration')}*:</label>
                                 <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="iLandingDurationFormula" name="iLandingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iLandingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                             <p>
                                 <label>${message(code:'fc.task.irisingduration')}*:</label>
                                 <a href="../../docs/help_${session.showLanguage}.html#flight-time-calculation" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a>
                                 <br/>
-                                <input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="iRisingDurationFormula" name="iRisingDurationFormula" value="${fieldValue(bean:taskInstance,field:'iRisingDurationFormula')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                         </fieldset>
                         <fieldset>
@@ -106,7 +168,12 @@
                             <p>
                                 <label>${message(code:'fc.task.minnextflightduration')}* [${message(code:'fc.time.min')}]:</label>
                                 <br/>
-                                <input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="${ti[0]++}"/>
+								<g:if test="${taskInstance.lockPlanning}">
+									<input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" disabled tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:else>
+									<input type="text" id="minNextFlightDuration" name="minNextFlightDuration" value="${fieldValue(bean:taskInstance,field:'minNextFlightDuration')}" tabIndex="${ti[0]++}"/>
+								</g:else>
                             </p>
                         </fieldset>
                     	<g:if test="${taskInstance.contest.resultClasses}">
@@ -289,31 +356,67 @@
                     	</g:else>
                         <fieldset>
                             <label>${message(code:'fc.landingtest.landing1')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="${ti[0]++}"/>
+							<g:if test="${taskInstance.lockPlanning}">
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" disabled tabIndex="${ti[0]++}"/>
+							</g:if>
+							<g:else>
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest1Points}" name="landingTest1Points" tabIndex="${ti[0]++}"/>
+							</g:else>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing2')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="${ti[0]++}"/>
+							<g:if test="${taskInstance.lockPlanning}">
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" disabled tabIndex="${ti[0]++}"/>
+							</g:if>
+							<g:else>
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest2Points}" name="landingTest2Points" tabIndex="${ti[0]++}"/>
+							</g:else>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing3')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="${ti[0]++}"/>
+							<g:if test="${taskInstance.lockPlanning}">
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" disabled tabIndex="${ti[0]++}"/>
+							</g:if>
+							<g:else>
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest3Points}" name="landingTest3Points" tabIndex="${ti[0]++}"/>
+							</g:else>
                             <br/>
                             <label>${message(code:'fc.landingtest.landing4')}:</label>
-                            <g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="${ti[0]++}"/>
+							<g:if test="${taskInstance.lockPlanning}">
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" disabled tabIndex="${ti[0]++}"/>
+							</g:if>
+							<g:else>
+								<g:select from="${[1,2,3,4]}" optionValue="${{message(code:taskInstance.GetLandingPointsText(it))}}" value="${taskInstance.landingTest4Points}" name="landingTest4Points" tabIndex="${ti[0]++}"/>
+							</g:else>
                         </fieldset>
                         <fieldset>
                             <p>
                                 <div>
-                                    <g:checkBox name="bestOfAnalysis" value="${taskInstance.bestOfAnalysis}" />
+									<g:if test="${taskInstance.lockPlanning}">
+										<g:checkBox name="bestOfAnalysis" value="${taskInstance.bestOfAnalysis}" disabled="disabled" />
+									</g:if>
+									<g:else>
+										<g:checkBox name="bestOfAnalysis" value="${taskInstance.bestOfAnalysis}" />
+									</g:else>
                                     <label>${message(code:'fc.task.bestofanalysis')}</label>
                                 </div>
 	                            <g:if test="${taskInstance.GetIncreaseValues() != ""}">
 	                                <div>
-	                                    <g:checkBox name="increaseEnabled" value="${taskInstance.increaseEnabled}" />
+										<g:if test="${taskInstance.lockPlanning}">
+											<g:checkBox name="increaseEnabled" value="${taskInstance.increaseEnabled}" disabled="disabled" />
+										</g:if>
+										<g:else>
+											<g:checkBox name="increaseEnabled" value="${taskInstance.increaseEnabled}" />
+										</g:else>
 	                                    <label>${message(code:'fc.task.increaseenabled',args:[taskInstance.GetIncreaseValues()])}</label>
 	                                </div>
 	                            </g:if>
                             </p>
+                        </fieldset>
+                        <fieldset>
                             <p>
+                                <div>
+                                    <g:checkBox name="lockPlanning" value="${taskInstance.lockPlanning}" />
+                                    <label>${message(code:'fc.task.lockplanning')}</label>
+                                </div>
                                 <div>
                                     <g:checkBox name="hidePlanning" value="${taskInstance.hidePlanning}" />
                                     <label>${message(code:'fc.task.hideplanning')}</label>
@@ -334,18 +437,34 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${taskInstance?.id}"/>
                         <input type="hidden" name="version" value="${taskInstance?.version}"/>
-                        <g:if test="${params.next}">
+                        <g:if test="${next_id}">
                             <g:actionSubmit action="gotonext" value="${message(code:'fc.task.gotonext')}" tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:else>
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.task.gotonext')}" disabled tabIndex="${ti[0]++}"/>
                         </g:else>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="${ti[0]++}"/>
-                        <g:actionSubmit action="copy" value="${message(code:'fc.copy')}" tabIndex="${ti[0]++}"/>
-                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${prev_id}">
+                            <g:actionSubmit action="gotoprev" value="${message(code:'fc.task.gotoprev')}" tabIndex="${ti[0]++}"/>
                         </g:if>
+                        <g:else>
+                            <g:actionSubmit action="gotoprev" value="${message(code:'fc.task.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+                        </g:else>
+                        <g:actionSubmit action="savesettings" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${next_id}">
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.task.updatenext')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:else>
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.task.updatenext')}" disabled tabIndex="${ti[0]++}"/>
+                        </g:else>
+                        <g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="copy" value="${message(code:'fc.copy')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${taskInstance.lockPlanning}">
+							<g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" disabled tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:else>
+							<g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                        </g:else>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                         <a name="end"/>
                     </g:form>
                 </div>

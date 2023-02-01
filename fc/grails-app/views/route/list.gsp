@@ -11,7 +11,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th colspan="12" class="table-head">${message(code:'fc.route.list')}</th>
+                        <th colspan="11" class="table-head">${message(code:'fc.route.list')}</th>
                         <th class="table-head"><a href="../docs/help_${session.showLanguage}.html#route-planning" target="_blank"><img src="${createLinkTo(dir:'images',file:'help.png')}"/></a></th>
                     </tr>
                     <tr>
@@ -24,26 +24,18 @@
                        <th>${message(code:'fc.secretpoints')}</th>
                        <th>${message(code:'fc.distance.to2ldg')}</th>
                        <th>${message(code:'fc.distance.sp2fp')}</th>
-                       <th>${message(code:'fc.planningtesttask.list2')}</th>
-                       <th>${message(code:'fc.flighttest.list')}</th>
-                       <th>${message(code:'fc.observation')}</th>
+                       <th>${message(code:'fc.task.tasks')}</th>
                        <th/>
                     </tr>
                 </thead>
                 <tbody>
                     <g:each var="route_instance" in="${routeInstanceList}" status="i">
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                            <g:set var="next_route" value=""/>
-                            <g:set var="next_route_id" value="${route_instance.GetNextID()}" />
-                            <g:if test="${next_route_id}">
-                                <g:set var="next_route" value="?next=${next_route_id}"/>
-                            </g:if>
-                            
                             <g:if test="${route_instance.IsRouteOk()}">
-                                <td><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" next="${next_route}"/></td>
+                                <td><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" /></td>
                             </g:if>
                             <g:else>
-                                <td class="errors"><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" next="${next_route}" error="${true}"/> !</td>
+                                <td class="errors"><g:route var="${route_instance}" link="${createLink(controller:'route',action:'show')}" error="${true}"/> !</td>
                             </g:else>
                             <g:set var="is_turnpoint_sign_ok" value="${route_instance.IsTurnpointSignOk()}"/>
                             <g:set var="turnpoint_sign_class" value=""/>
@@ -89,28 +81,27 @@
                             <td>${FcMath.DistanceStr(route_data.distance_sp2fp)}${message(code:'fc.mile')}</td>
                             
                             <td>
-                                <g:each var="c" in="${PlanningTestTask.findAllByRoute(route_instance,[sort:"id"])}">
-                                    <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-
-                            <td>
-                                <g:each var="c" in="${FlightTest.findAllByRoute(route_instance,[sort:"id"])}">
-                                    <g:flighttest var="${c}" link="${createLink(controller:'flightTest',action:'show')}"/>
-                                    <br/>                                     
-                                </g:each>
-                            </td>
-                            
-                            <td>
-                                <g:each var="flighttest_instance" in="${FlightTest.findAllByRoute(route_instance,[sort:"id"])}">
-                                    <g:if test="${flighttest_instance.IsObservationSignUsed()}">
-                                        ${message(code:'fc.yes')}
+                                <g:each var="task" in="${SearchTools.GetRouteTasks(route_instance)}">
+                                    <g:if test="${!task.hidePlanning}">
+                                        <g:task var="${task}" link="${createLink(controller:'task',action:'listplanning')}"/>
                                     </g:if>
+                                    <g:elseif test="${!task.hideResults}">
+                                        <g:task var="${task}" link="${createLink(controller:'task',action:'listresults')}"/>
+                                    </g:elseif>
                                     <g:else>
-                                        ${message(code:'fc.no')}
+                                        ${task.name().encodeAsHTML()}
                                     </g:else>
-                                    <br/>
+									<g:each var="flighttest_instance" in="${FlightTest.findAllByRoute(route_instance,[sort:"id"])}">
+										<g:if test="${flighttest_instance && flighttest_instance.task == task}">
+											<g:if test="${flighttest_instance.IsObservationSignUsed()}">
+												(${message(code:'fc.observation')}: ${message(code:'fc.yes')})
+											</g:if>
+											<g:else>
+												(${message(code:'fc.observation')}: ${message(code:'fc.no')})
+											</g:else>
+										</g:if>
+									</g:each>
+                                    <br/>                                     
                                 </g:each>
                             </td>
                             

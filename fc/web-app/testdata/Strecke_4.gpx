@@ -420,7 +420,7 @@
   <wpt lat='49.1981500303' lon='10.2016022380'>
     <extensions>
       <flightcontest>
-        <enroutecanvassign canvasname='S09' viewpos='3' type='TP' number='8' dist='4.2400000000' measuredist='' orthogonaldist='0' />
+        <enroutecanvassign canvasname='NoSign' viewpos='4' type='FP' number='1' dist='0E-10' measuredist='' orthogonaldist='0' />
       </flightcontest>
     </extensions>
     <name>S09</name>

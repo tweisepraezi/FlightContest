@@ -63,7 +63,7 @@ class ContestController {
             
             // ShowLimitCrewNum
             if (!session?.showLimitCrewNum) {
-                String showLimitCrewNum = fcService.GetCookie("ShowLimitCrewNum","10")
+                String showLimitCrewNum = fcService.GetCookie("ShowLimitTestNum","0")
                 if (showLimitCrewNum) {
                     fcService.println "Set showLimitCrewNum to '$showLimitCrewNum'"
                     session.showLimitCrewNum = showLimitCrewNum.toInteger() 
@@ -274,6 +274,9 @@ class ContestController {
             fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
             session.showLimit = false
             session.showLimitStartPos = 0
+			session.showPage = false
+			session.showPagePos = 1
+			session.showPageNum = 1
             session.lastTaskPlanning = null
             session.lastTaskResults = null
             session.lastResultClassResults = null
@@ -311,6 +314,9 @@ class ContestController {
             fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
             session.showLimit = false
             session.showLimitStartPos = 0
+			session.showPage = false
+			session.showPagePos = 1
+			session.showPageNum = 1
             session.lastTaskPlanning = null
             session.lastTaskResults = null
             session.lastResultClassResults = null
@@ -349,6 +355,9 @@ class ContestController {
         fcService.SetCookie(response, "LastContestID",  session.lastContest.id.toString())
         session.showLimit = false
         session.showLimitStartPos = 0
+		session.showPage = false
+		session.showPagePos = 1
+		session.showPageNum = 1
         session.lastTaskPlanning = null
         session.lastTaskResults = null
         session.lastResultClassResults = null
@@ -382,6 +391,9 @@ class ContestController {
                 // fcService.SetCookie(response, "LastContestID",  "")
                 session.showLimit = false
                 session.showLimitStartPos = 0
+				session.showPage = false
+				session.showPagePos = 1
+				session.showPageNum = 1
                 session.lastTaskPlanning = null
                 session.lastTaskResults = null
                 session.lastResultClassResults = null
@@ -394,6 +406,9 @@ class ContestController {
                 fcService.SetCookie(response, "LastContestID",  "")
                 session.showLimit = false
                 session.showLimitStartPos = 0
+				session.showPage = false
+				session.showPagePos = 1
+				session.showPageNum = 1
                 session.lastTaskPlanning = null
                 session.lastTaskResults = null
                 session.lastResultClassResults = null

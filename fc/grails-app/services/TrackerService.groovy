@@ -1043,6 +1043,14 @@ class TrackerService
                         task_instance.liveTrackingResultsObservationID = tasktest.id
                     } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING) {
                         task_instance.liveTrackingResultsLandingID = tasktest.id
+                    } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING1) {
+                        task_instance.liveTrackingResultsLanding1ID = tasktest.id
+                    } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING2) {
+                        task_instance.liveTrackingResultsLanding2ID = tasktest.id
+                    } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING3) {
+                        task_instance.liveTrackingResultsLanding3ID = tasktest.id
+                    } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING4) {
+                        task_instance.liveTrackingResultsLanding4ID = tasktest.id
                     } else if (tasktest.name == Defs.LIVETRACKING_TASKTEST_SPECIAL) {
                         task_instance.liveTrackingResultsSpecialID = tasktest.id
                     }
@@ -1172,6 +1180,14 @@ class TrackerService
                             task_instance.liveTrackingResultsObservationID = 0
                         } else if (tasktest.id == task_instance.liveTrackingResultsLandingID) {
                             task_instance.liveTrackingResultsLandingID = 0
+                        } else if (tasktest.id == task_instance.liveTrackingResultsLanding1ID) {
+                            task_instance.liveTrackingResultsLanding1ID = 0
+                        } else if (tasktest.id == task_instance.liveTrackingResultsLanding2ID) {
+                            task_instance.liveTrackingResultsLanding2ID = 0
+                        } else if (tasktest.id == task_instance.liveTrackingResultsLanding3ID) {
+                            task_instance.liveTrackingResultsLanding3ID = 0
+                        } else if (tasktest.id == task_instance.liveTrackingResultsLanding4ID) {
+                            task_instance.liveTrackingResultsLanding4ID = 0
                         } else if (tasktest.id == task_instance.liveTrackingResultsSpecialID) {
                             task_instance.liveTrackingResultsSpecialID = 0
                         }
@@ -1350,6 +1366,38 @@ class TrackerService
                     index 1
                 }
                 break
+            case ResultType.Landing1:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_LANDING1
+                    heading Defs.LIVETRACKING_TASKTEST_LANDING1
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
+            case ResultType.Landing2:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_LANDING2
+                    heading Defs.LIVETRACKING_TASKTEST_LANDING2
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
+            case ResultType.Landing3:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_LANDING3
+                    heading Defs.LIVETRACKING_TASKTEST_LANDING3
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
+            case ResultType.Landing4:
+                json_builder_tasktest {
+                    name Defs.LIVETRACKING_TASKTEST_LANDING4
+                    heading Defs.LIVETRACKING_TASKTEST_LANDING4
+                    task task_instance.liveTrackingResultsTaskID
+                    index 1
+                }
+                break
             case ResultType.Special:
                 json_builder_tasktest {
                     name Defs.LIVETRACKING_TASKTEST_SPECIAL
@@ -1370,6 +1418,18 @@ class TrackerService
                     break
                 case ResultType.Landing:
                     task_instance.liveTrackingResultsLandingID = ret6.data.toInteger()
+                    break
+                case ResultType.Landing1:
+                    task_instance.liveTrackingResultsLanding1ID = ret6.data.toInteger()
+                    break
+                case ResultType.Landing2:
+                    task_instance.liveTrackingResultsLanding2ID = ret6.data.toInteger()
+                    break
+                case ResultType.Landing3:
+                    task_instance.liveTrackingResultsLanding3ID = ret6.data.toInteger()
+                    break
+                case ResultType.Landing4:
+                    task_instance.liveTrackingResultsLanding4ID = ret6.data.toInteger()
                     break
                 case ResultType.Special:
                     task_instance.liveTrackingResultsSpecialID = ret6.data.toInteger()
@@ -1398,6 +1458,30 @@ class TrackerService
                             case ResultType.Landing:
                                 if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING) {
                                     task_instance.liveTrackingResultsLandingID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                            case ResultType.Landing1:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING1) {
+                                    task_instance.liveTrackingResultsLanding1ID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                            case ResultType.Landing2:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING2) {
+                                    task_instance.liveTrackingResultsLanding2ID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                            case ResultType.Landing3:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING3) {
+                                    task_instance.liveTrackingResultsLanding3ID = tasktest.id
+                                    connected = true
+                                }
+                                break
+                            case ResultType.Landing4:
+                                if (tasktest.name == Defs.LIVETRACKING_TASKTEST_LANDING4) {
+                                    task_instance.liveTrackingResultsLanding4ID = tasktest.id
                                     connected = true
                                 }
                                 break
@@ -1455,6 +1539,22 @@ class TrackerService
                 tasktest_id = task_instance.liveTrackingResultsLandingID
                 task_instance.liveTrackingResultsLandingID = 0
                 break
+            case ResultType.Landing1:
+                tasktest_id = task_instance.liveTrackingResultsLanding1ID
+                task_instance.liveTrackingResultsLanding1ID = 0
+                break
+            case ResultType.Landing2:
+                tasktest_id = task_instance.liveTrackingResultsLanding2ID
+                task_instance.liveTrackingResultsLanding2ID = 0
+                break
+            case ResultType.Landing3:
+                tasktest_id = task_instance.liveTrackingResultsLanding3ID
+                task_instance.liveTrackingResultsLanding3ID = 0
+                break
+            case ResultType.Landing4:
+                tasktest_id = task_instance.liveTrackingResultsLanding4ID
+                task_instance.liveTrackingResultsLanding4ID = 0
+                break
             case ResultType.Special:
                 tasktest_id = task_instance.liveTrackingResultsSpecialID
                 task_instance.liveTrackingResultsSpecialID = 0
@@ -1495,6 +1595,22 @@ class TrackerService
                 case ResultType.Landing:
                     test_instance.landingTestLiveTrackingResultOk = false
                     test_instance.landingTestLiveTrackingResultError = false
+                    break
+                case ResultType.Landing1:
+                    test_instance.landingTest1LiveTrackingResultOk = false
+                    test_instance.landingTest1LiveTrackingResultError = false
+                    break
+                case ResultType.Landing2:
+                    test_instance.landingTest2LiveTrackingResultOk = false
+                    test_instance.landingTest2LiveTrackingResultError = false
+                    break
+                case ResultType.Landing3:
+                    test_instance.landingTest3LiveTrackingResultOk = false
+                    test_instance.landingTest3LiveTrackingResultError = false
+                    break
+                case ResultType.Landing4:
+                    test_instance.landingTest4LiveTrackingResultOk = false
+                    test_instance.landingTest4LiveTrackingResultError = false
                     break
                 case ResultType.Special:
                     test_instance.specialTestLiveTrackingResultOk = false
@@ -1582,6 +1698,10 @@ class TrackerService
         taskInstance.liveTrackingResultsFlightOn = false
         taskInstance.liveTrackingResultsObservationID = 0
         taskInstance.liveTrackingResultsLandingID = 0
+        taskInstance.liveTrackingResultsLanding1ID = 0
+        taskInstance.liveTrackingResultsLanding2ID = 0
+        taskInstance.liveTrackingResultsLanding3ID = 0
+        taskInstance.liveTrackingResultsLanding4ID = 0
         taskInstance.liveTrackingResultsSpecialID = 0
         taskInstance.liveTrackingTracksAvailable = false
         taskInstance.liveTrackingResultsPublishImmediately = false
@@ -1599,7 +1719,15 @@ class TrackerService
             test_instance.observationTestLiveTrackingResultOk = false
             test_instance.observationTestLiveTrackingResultError = false
             test_instance.landingTestLiveTrackingResultOk = false
+            test_instance.landingTest1LiveTrackingResultOk = false
+            test_instance.landingTest2LiveTrackingResultOk = false
+            test_instance.landingTest3LiveTrackingResultOk = false
+            test_instance.landingTest4LiveTrackingResultOk = false
             test_instance.landingTestLiveTrackingResultError = false
+            test_instance.landingTest1LiveTrackingResultError = false
+            test_instance.landingTest2LiveTrackingResultError = false
+            test_instance.landingTest3LiveTrackingResultError = false
+            test_instance.landingTest4LiveTrackingResultError = false
             test_instance.specialTestLiveTrackingResultOk = false
             test_instance.specialTestLiveTrackingResultError = false
             test_instance.taskLiveTrackingTeamID = 0
@@ -2318,6 +2446,42 @@ class TrackerService
                         error_num++
                     }
                 }
+                if (test_instance.landingTest1Complete && !test_instance.landingTest1LiveTrackingResultOk || test_instance.landingTest1LiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Landing1)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+                if (test_instance.landingTest2Complete && !test_instance.landingTest2LiveTrackingResultOk || test_instance.landingTest2LiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Landing2)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+                if (test_instance.landingTest3Complete && !test_instance.landingTest3LiveTrackingResultOk || test_instance.landingTest3LiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Landing3)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
+                if (test_instance.landingTest4Complete && !test_instance.landingTest4LiveTrackingResultOk || test_instance.landingTest4LiveTrackingResultError) {
+                    Map ret = update_test_result(test_instance, ResultType.Landing4)
+                    if (ret.ok) {
+                        result_num++
+                    }
+                    if (ret.error) {
+                        error_num++
+                    }
+                }
                 if (test_instance.specialTestComplete && !test_instance.specialTestLiveTrackingResultOk || test_instance.specialTestLiveTrackingResultError) {
                     Map ret = update_test_result(test_instance, ResultType.Special)
                     if (ret.ok) {
@@ -2363,6 +2527,22 @@ class TrackerService
             case ResultType.Landing:
                 tasktest_id = task_instance.liveTrackingResultsLandingID
                 test_penalties = testInstance.landingTestPenalties
+                break
+            case ResultType.Landing1:
+                tasktest_id = task_instance.liveTrackingResultsLanding1ID
+                test_penalties = testInstance.landingTest1Penalties
+                break
+            case ResultType.Landing2:
+                tasktest_id = task_instance.liveTrackingResultsLanding2ID
+                test_penalties = testInstance.landingTest2Penalties
+                break
+            case ResultType.Landing3:
+                tasktest_id = task_instance.liveTrackingResultsLanding3ID
+                test_penalties = testInstance.landingTest3Penalties
+                break
+            case ResultType.Landing4:
+                tasktest_id = task_instance.liveTrackingResultsLanding4ID
+                test_penalties = testInstance.landingTest4Penalties
                 break
             case ResultType.Special:
                 tasktest_id = task_instance.liveTrackingResultsSpecialID
@@ -2415,6 +2595,42 @@ class TrackerService
                     } else {
                         testInstance.landingTestLiveTrackingResultOk = false
                         testInstance.landingTestLiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Landing1:
+                    if (ret5.ok) {
+                        testInstance.landingTest1LiveTrackingResultOk = true
+                        testInstance.landingTest1LiveTrackingResultError = false
+                    } else {
+                        testInstance.landingTest1LiveTrackingResultOk = false
+                        testInstance.landingTest1LiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Landing2:
+                    if (ret5.ok) {
+                        testInstance.landingTest2LiveTrackingResultOk = true
+                        testInstance.landingTest2LiveTrackingResultError = false
+                    } else {
+                        testInstance.landingTest2LiveTrackingResultOk = false
+                        testInstance.landingTest2LiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Landing3:
+                    if (ret5.ok) {
+                        testInstance.landingTest3LiveTrackingResultOk = true
+                        testInstance.landingTest3LiveTrackingResultError = false
+                    } else {
+                        testInstance.landingTest3LiveTrackingResultOk = false
+                        testInstance.landingTest3LiveTrackingResultError = true
+                    }
+                    break
+                case ResultType.Landing4:
+                    if (ret5.ok) {
+                        testInstance.landingTest4LiveTrackingResultOk = true
+                        testInstance.landingTest4LiveTrackingResultError = false
+                    } else {
+                        testInstance.landingTest4LiveTrackingResultOk = false
+                        testInstance.landingTest4LiveTrackingResultError = true
                     }
                     break
                 case ResultType.Special:

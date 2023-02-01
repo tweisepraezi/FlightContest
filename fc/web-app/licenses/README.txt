@@ -1,6 +1,6 @@
 
-Flight Contest 3.2.4
-Copyright 2009-2022 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 3.3.0
+Copyright 2009-2023 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
 

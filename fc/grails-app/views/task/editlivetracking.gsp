@@ -56,7 +56,11 @@
                                                 ${message(code:'fc.livetracking.results.task.planning')}: ${taskInstance.liveTrackingResultsPlanningID}</g:if><g:if test="${taskInstance.liveTrackingResultsFlightID}" >,
                                                 ${message(code:'fc.livetracking.results.task.flight')}: ${taskInstance.liveTrackingResultsFlightID}</g:if><g:if test="${taskInstance.liveTrackingResultsObservationID}" >,
                                                 ${message(code:'fc.livetracking.results.task.observation')}: ${taskInstance.liveTrackingResultsObservationID}</g:if><g:if test="${taskInstance.liveTrackingResultsLandingID}" >,
-                                                ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLandingID}</g:if><g:if test="${taskInstance.liveTrackingResultsSpecialID}" >,
+                                                ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLandingID}</g:if><g:if test="${taskInstance.liveTrackingResultsLanding1ID}" >,
+                                                ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLanding1ID}</g:if><g:if test="${taskInstance.liveTrackingResultsLanding2ID}" >,
+                                                ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLanding2ID}</g:if><g:if test="${taskInstance.liveTrackingResultsLanding3ID}" >,
+                                                ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLanding3ID}</g:if><g:if test="${taskInstance.liveTrackingResultsLanding4ID}" >,
+                                                ${message(code:'fc.livetracking.results.task.landing')}: ${taskInstance.liveTrackingResultsLanding4ID}</g:if><g:if test="${taskInstance.liveTrackingResultsSpecialID}" >,
                                                 ${message(code:'fc.livetracking.results.task.special')}: ${taskInstance.liveTrackingResultsSpecialID}</g:if>
                                             </label>
                                         </g:if>
@@ -133,12 +137,46 @@
                                 </g:else>
                             </g:if>
                             <g:if test="${taskInstance.IsLandingTestRun()}">
-                                <g:if test="${!taskInstance.liveTrackingResultsLandingID}" >
-                                    <g:actionSubmit action="livetracking_landingcreate" value="${message(code:'fc.livetracking.results.task.landingcreate')}" tabIndex="${ti[0]++}"/>
-                                </g:if>
-                                <g:else>
-                                    <g:actionSubmit action="livetracking_landingdelete" value="${message(code:'fc.livetracking.results.task.landingdelete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                                </g:else>
+								<g:if test="${!taskInstance.IsLandingTestAnyRun()}">
+									<g:if test="${!taskInstance.liveTrackingResultsLandingID}" >
+										<g:actionSubmit action="livetracking_landingcreate" value="${message(code:'fc.livetracking.results.task.landingcreate')}" tabIndex="${ti[0]++}"/>
+									</g:if>
+								</g:if>
+								<g:if test="${taskInstance.liveTrackingResultsLandingID}" >
+									<g:actionSubmit action="livetracking_landingdelete" value="${message(code:'fc.livetracking.results.task.landingdelete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:if test="${taskInstance.IsLandingTest1Run()}">
+									<g:if test="${!taskInstance.liveTrackingResultsLanding1ID}" >
+										<g:actionSubmit action="livetracking_landing1create" value="${message(code:'fc.livetracking.results.task.landing1create')}" tabIndex="${ti[0]++}"/>
+									</g:if>
+								</g:if>
+								<g:if test="${taskInstance.liveTrackingResultsLanding1ID}" >
+									<g:actionSubmit action="livetracking_landing1delete" value="${message(code:'fc.livetracking.results.task.landing1delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:if test="${taskInstance.IsLandingTest2Run()}">
+									<g:if test="${!taskInstance.liveTrackingResultsLanding2ID}" >
+										<g:actionSubmit action="livetracking_landing2create" value="${message(code:'fc.livetracking.results.task.landing2create')}" tabIndex="${ti[0]++}"/>
+									</g:if>
+								</g:if>
+								<g:if test="${taskInstance.liveTrackingResultsLanding2ID}" >
+									<g:actionSubmit action="livetracking_landing2delete" value="${message(code:'fc.livetracking.results.task.landing2delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:if test="${taskInstance.IsLandingTest3Run()}">
+									<g:if test="${!taskInstance.liveTrackingResultsLanding3ID}" >
+										<g:actionSubmit action="livetracking_landing3create" value="${message(code:'fc.livetracking.results.task.landing3create')}" tabIndex="${ti[0]++}"/>
+									</g:if>
+								</g:if>
+								<g:if test="${taskInstance.liveTrackingResultsLanding3ID}" >
+									<g:actionSubmit action="livetracking_landing3delete" value="${message(code:'fc.livetracking.results.task.landing3delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+								</g:if>
+								<g:if test="${taskInstance.IsLandingTest4Run()}">
+									<g:if test="${!taskInstance.liveTrackingResultsLanding4ID}" >
+										<g:actionSubmit action="livetracking_landing4create" value="${message(code:'fc.livetracking.results.task.landing4create')}" tabIndex="${ti[0]++}"/>
+									</g:if>
+								</g:if>
+								<g:if test="${taskInstance.liveTrackingResultsLanding4ID}" >
+									<g:actionSubmit action="livetracking_landing4delete" value="${message(code:'fc.livetracking.results.task.landing4delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+								</g:if>
                             </g:if>
                             <g:if test="${taskInstance.IsSpecialTestRun()}">
                                 <g:if test="${!taskInstance.liveTrackingResultsSpecialID}" >

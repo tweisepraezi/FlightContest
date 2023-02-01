@@ -136,7 +136,7 @@ class Coord
         legMeasureDistance(nullable:true,scale:10)
         legDistance(nullable:true,scale:10)
         resultCpTimeInput(blank:false, validator:{ val, obj ->
-        	String v = val.replace('.',':')
+        	String v = FcTime.GetInputTimeStr(val)
 	        switch(v.size()) {
 	            case 1:
 	                try {
@@ -591,15 +591,32 @@ class Coord
 		return "${FcMath.RouteGradStr(coordTrueTrack)}${getMsg('fc.grad')}"
 	}
 	
-	String coordMeasureDistanceName()
+	String coordMeasureDistanceName(boolean isPrint = false)
 	{
-		return  "${FcMath.DistanceMeasureStr(coordMeasureDistance)}${getMsg('fc.mm')}"
+		if (isPrint) {
+			return "${FcMath.DistanceMeasureStr(coordMeasureDistance)}${getPrintMsg('fc.mm')}"
+		}
+		return "${FcMath.DistanceMeasureStr(coordMeasureDistance)}${getMsg('fc.mm')}"
 	}
 	
-	String measureDistanceName()
+	String measureDistanceName(boolean isPrint = false)
     {
     	if (measureDistance != null) {
-    		return  "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
+			if (isPrint) {
+				return "${FcMath.DistanceMeasureStr(measureDistance)}${getPrintMsg('fc.mm')}"
+			}
+    		return "${FcMath.DistanceMeasureStr(measureDistance)}${getMsg('fc.mm')}"
+    	}
+    	return "-"
+    }
+    
+	String measureDistanceDiffName(boolean isPrint = false)
+    {
+    	if (measureDistance != null) {
+			if (isPrint) {
+				return "${FcMath.DistanceMeasureStr(coordMeasureDistance-measureDistance)}${getPrintMsg('fc.mm')}"
+			}
+    		return "${FcMath.DistanceMeasureStr(coordMeasureDistance-measureDistance)}${getMsg('fc.mm')}"
     	}
     	return "-"
     }
@@ -904,6 +921,35 @@ class Coord
         }
     }
 
+    String GetExportEnrouteKML(boolean enroutePhoto)
+    {
+        if (enroutePhoto) {
+            switch (route.enroutePhotoRoute) {
+                case EnrouteRoute.InputName:
+                case EnrouteRoute.InputCoord:
+                    return enroutePhotoName
+                case EnrouteRoute.InputNMFromTP:
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                case EnrouteRoute.InputmmFromTP:
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                case EnrouteRoute.InputCoordmm:
+                    return "${enroutePhotoName}, ${RouteFileTools.DIST} ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+            }
+        } else {
+            switch (route.enrouteCanvasRoute) {
+                case EnrouteRoute.InputName:
+                case EnrouteRoute.InputCoord:
+                    return enrouteCanvasSign
+                case EnrouteRoute.InputNMFromTP:
+                    return "${enrouteCanvasSign}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                case EnrouteRoute.InputmmFromTP:
+                    return "${enrouteCanvasSign}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                case EnrouteRoute.InputCoordmm:
+                    return "${enrouteCanvasSign}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+            }
+        }
+    }
+
     String GetGeoDataRouteCoord()
     {
         return """"${route.printName()} - ${titleExport()}"|"${titlePrintCode()}"|POINT (${CoordPresentation.DecimalGradStr(lonMath()).replaceAll(',','.')} ${CoordPresentation.DecimalGradStr(latMath()).replaceAll(',','.')})"""
@@ -962,67 +1008,6 @@ class Coord
         if (values.valid_ok) {
             enrouteDistanceOk = values.enrouteDistanceOk
         }
-        /*
-        BigDecimal true_track = null
-        BigDecimal from_true_track = null
-        BigDecimal leg_distance = null
-        BigDecimal from_leg_distance = 0
-        boolean enroute_leg_found = false 
-        CoordType from_type = type
-        int from_titlenumber = titleNumber
-        Map from_tp = [:]
-        for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
-            if (enroute_leg_found) {
-                Map sc = get_coordinate_from_coord(routeleg_instance.startTitle.type, routeleg_instance.startTitle.number)
-                Map leg = AviationMath.calculateLeg(sc.lat, sc.lon, from_tp.lat, from_tp.lon)
-                leg_distance = leg.dis
-                if (routeleg_instance.startTitle.type == CoordType.SECRET) {
-                    from_true_track = leg.dir
-                    if (leg_distance > enrouteDistance) {
-                        break
-                    }
-                    from_type = routeleg_instance.startTitle.type
-                    from_titlenumber = routeleg_instance.startTitle.number
-                    true_track = routeleg_instance.coordTrueTrack
-                    from_leg_distance = leg_distance
-                } else {
-                    break
-                }
-            }
-            if ((routeleg_instance.startTitle.type == type) && (routeleg_instance.startTitle.number == titleNumber)) {
-                enroute_leg_found = true
-                from_type = routeleg_instance.startTitle.type
-                from_titlenumber = routeleg_instance.startTitle.number
-                true_track = routeleg_instance.coordTrueTrack
-                leg_distance = routeleg_instance.coordDistance
-                from_tp = get_coordinate_from_coord(from_type, from_titlenumber)
-            }
-        }
-        if (true_track != null) {
-            Map from_cp = get_coordinate_from_coord(from_type, from_titlenumber)
-            if ((from_cp.lat != null) && (from_cp.lon != null)) {
-                if (enrouteDistance != null) {
-                    BigDecimal from_cp_distance = get_cp_distance(from_leg_distance, from_true_track, enrouteDistance, true_track)
-                    Map enroute_coord = AviationMath.getCoordinate(from_cp.lat, from_cp.lon, true_track, from_cp_distance)
-                    Map lat = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lat, true)
-                    Map lon = CoordPresentation.GetDirectionGradDecimalMinute(enroute_coord.lon, false)
-                    latDirection = lat.direction
-                    latGrad = lat.grad
-                    latMinute = lat.minute
-                    lonDirection = lon.direction
-                    lonGrad = lon.grad
-                    lonMinute = lon.minute
-                    if (enrouteDistance >= leg_distance) {
-                        enrouteDistanceOk = false
-                    } else {
-                        enrouteDistanceOk = true
-                    }
-                } else {
-                    enrouteDistanceOk = false
-                }
-            }
-        }
-        */
     }
     
     private BigDecimal get_cp_distance(BigDecimal fromLegDistance, BigDecimal fromTrueTrack, BigDecimal enrouteDistance, BigDecimal trueTrack)
@@ -1258,60 +1243,6 @@ class Coord
                 enrouteOrthogonalDistance = -Route.Convert_NM2m(orthogonal.dis) // left
             }
         }
-        
-        /*
-        BigDecimal enroute_distance = route.Convert_mm2NM(coordMeasureDistance)
-        BigDecimal true_track = null
-        BigDecimal leg_distance = null
-        BigDecimal secret_legs_distance = 0
-        boolean enroute_leg_found = false 
-        CoordType from_type = type
-        int from_titlenumber = titleNumber
-        for (RouteLegCoord routeleg_instance in RouteLegCoord.findAllByRoute(route,[sort:'id'])) {
-            if (enroute_leg_found) {
-                if (routeleg_instance.startTitle.type == CoordType.SECRET) {
-                    if (enroute_distance < secret_legs_distance + leg_distance) {
-                        break
-                    }
-                    secret_legs_distance += leg_distance
-                    from_type = routeleg_instance.startTitle.type
-                    from_titlenumber = routeleg_instance.startTitle.number
-                    true_track = routeleg_instance.coordTrueTrack
-                    leg_distance = routeleg_instance.coordDistance
-                } else {
-                    break
-                }
-            }
-            if ((routeleg_instance.startTitle.type == type) && (routeleg_instance.startTitle.number == titleNumber)) {
-                enroute_leg_found = true
-                from_type = routeleg_instance.startTitle.type
-                from_titlenumber = routeleg_instance.startTitle.number
-                true_track = routeleg_instance.coordTrueTrack
-                leg_distance = routeleg_instance.coordDistance
-            }
-        }
-        if (true_track != null) {
-            BigDecimal fromtp_lat = null
-            BigDecimal fromtp_lon = null
-            for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route,[sort:'id'])) {
-                if ((coordroute_instance.type == from_type) && (coordroute_instance.titleNumber == from_titlenumber)) {
-                    fromtp_lat = coordroute_instance.latMath()
-                    fromtp_lon = coordroute_instance.lonMath()
-                    break
-                }
-            }
-            if ((fromtp_lat != null) && (fromtp_lon != null)) {
-                Map enroute_coord = AviationMath.getCoordinate(fromtp_lat, fromtp_lon, true_track, enroute_distance - secret_legs_distance)
-                Map orthogonal = AviationMath.calculateLeg(latMath(),lonMath(),enroute_coord.lat,enroute_coord.lon)
-                BigDecimal orthogonal_track = AviationMath.getOrthogonalTrackRight(true_track)
-                if ((orthogonal.dir - orthogonal_track).abs() < Defs.ENROUTE_MAX_COURSE_DIFF) {
-                    enrouteOrthogonalDistance = Route.Convert_NM2m(orthogonal.dis)
-                } else {
-                    enrouteOrthogonalDistance = -Route.Convert_NM2m(orthogonal.dis)
-                }
-            }
-        }
-        */
     }
     
     private BigDecimal get_from_dis(Map values)

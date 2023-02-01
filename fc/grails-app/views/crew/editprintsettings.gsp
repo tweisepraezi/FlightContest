@@ -139,6 +139,26 @@
                                 </div>
                             </g:radioGroup>
                         </fieldset>
+                        <fieldset>
+							<div>
+								<g:checkBox name="printTeams" value="${contestInstance.printTeams}" onclick="modify();"/>
+								<label>${message(code:'fc.team.print')}</label>
+							</div>
+							<div>
+								<g:checkBox name="printTeamLandscape" value="${contestInstance.printTeamLandscape}" onclick="modify();"/>
+								<label>${message(code:'fc.printlandscape')}</label>
+							</div>
+                        </fieldset>
+                        <fieldset>
+							<div>
+								<g:checkBox name="printAircraft" value="${contestInstance.printAircraft}" onclick="modify();"/>
+								<label>${message(code:'fc.aircraft.print')}</label>
+							</div>
+							<div>
+								<g:checkBox name="printAircraftLandscape" value="${contestInstance.printAircraftLandscape}" onclick="modify();"/>
+								<label>${message(code:'fc.printlandscape')}</label>
+							</div>
+                        </fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}" />
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
                         <g:actionSubmit action="saveprintsettings" id="saveprintsettings_id" value="${message(code:'fc.save')}" disabled tabIndex="${ti[0]++}"/>

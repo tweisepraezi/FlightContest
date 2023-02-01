@@ -12,6 +12,7 @@
                 <h2>${message(code:'fc.contest.resultsettings')}</h2>
                 <div class="block" id="forms">
                     <g:form params="${['resultfilter':resultfilter,'editresultsettingsReturnAction':editresultsettingsReturnAction,'editresultsettingsReturnController':editresultsettingsReturnController,'editresultsettingsReturnID':editresultsettingsReturnID]}">
+						<g:set var="ti" value="${[]+1}"/>
                         <g:if test="${contestInstance.resultClasses}">
                             <fieldset>
                                 <p>
@@ -127,7 +128,7 @@
                                         <p>
                                             <label>${message(code:'fc.landingresults.factor')}:</label>
                                             <br/>
-                                            <input type="text" id="contestLandingResultsFactor" name="contestLandingResultsFactor" value="${fieldValue(bean:contestInstance,field:'contestLandingResultsFactor')}" />
+                                            <input type="text" id="contestLandingResultsFactor" name="contestLandingResultsFactor" value="${fieldValue(bean:contestInstance,field:'contestLandingResultsFactor')}" tabIndex="${ti[0]++}" />
                                         </p>
                                 </g:if>
                             </p>
@@ -160,12 +161,12 @@
                                 </div>
                             </g:radioGroup>
                             <p>
-                                <input type="text" id="contestPrintTitle" name="contestPrintTitle" value="${fieldValue(bean:contestInstance,field:'contestPrintTitle')}" tabIndex="1"/>
+                                <input type="text" id="contestPrintTitle" name="contestPrintTitle" value="${fieldValue(bean:contestInstance,field:'contestPrintTitle')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.printsubtitle')}:</label>
                                 <br/>
-                                <input type="text" id="contestPrintSubtitle" name="contestPrintSubtitle" value="${fieldValue(bean:contestInstance,field:'contestPrintSubtitle')}" tabIndex="2"/>
+                                <input type="text" id="contestPrintSubtitle" name="contestPrintSubtitle" value="${fieldValue(bean:contestInstance,field:'contestPrintSubtitle')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <div>
@@ -214,6 +215,11 @@
                                     <label>${message(code:'fc.printtaskdetails')}</label>
                                 </div>
                             </p>
+                            <p>
+                                <label>${message(code:'fc.printfooter')}:</label>
+                                <br/>
+                                <input type="text" id="contestPrintFooter" name="contestPrintFooter" value="${fieldValue(bean:contestInstance,field:'contestPrintFooter')}" tabIndex="${ti[0]++}"/>
+                            </p>
                         </fieldset>
                         <fieldset>
                             <p>
@@ -240,7 +246,7 @@
                             <p>
                                 <label>${message(code:'fc.contest.liveresults.refresh')}* [${message(code:'fc.time.s')}]:</label>
                                 <br/>
-                                <input type="text" id="liveRefreshSeconds" name="liveRefreshSeconds" value="${fieldValue(bean:contestInstance,field:'liveRefreshSeconds')}" tabIndex="3"/>
+                                <input type="text" id="liveRefreshSeconds" name="liveRefreshSeconds" value="${fieldValue(bean:contestInstance,field:'liveRefreshSeconds')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
 	                            <div>
@@ -265,8 +271,8 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="101"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="102"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

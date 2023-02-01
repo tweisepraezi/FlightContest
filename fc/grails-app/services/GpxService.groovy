@@ -1734,7 +1734,7 @@ class GpxService
                             xml.enroutecanvassigns {
                                 for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                                     xml.enroutecanvassign(
-                                        canvasname: coordenroutecanvas_instance.enrouteCanvasSign.canvasName,
+                                        canvasname: coordenroutecanvas_instance.enrouteCanvasSign,
                                         viewpos: coordenroutecanvas_instance.enrouteViewPos
                                     )
                                 }
@@ -2615,7 +2615,7 @@ class GpxService
                     xml.extensions {
                         xml.flightcontest {
                             xml.enroutecanvassign(
-                                canvasname:     coordenroutecanvas_instance.enrouteCanvasSign.canvasName,
+                                canvasname:     coordenroutecanvas_instance.enrouteCanvasSign,
                                 viewpos:        coordenroutecanvas_instance.enrouteViewPos,
                                 type:           coordenroutecanvas_instance.type,
                                 number:         coordenroutecanvas_instance.titleNumber,
@@ -2625,8 +2625,8 @@ class GpxService
                             )
                         }
                     }
-                    xml.name coordenroutecanvas_instance.enrouteCanvasSign.canvasName
-                    xml.sym coordenroutecanvas_instance.enrouteCanvasSign.canvasName.toLowerCase()
+                    xml.name coordenroutecanvas_instance.enrouteCanvasSign
+                    xml.sym coordenroutecanvas_instance.enrouteCanvasSign.toString().toLowerCase()
                 }
             }
         }
@@ -2828,7 +2828,11 @@ class GpxService
                     String start_time = ""
                     String end_time = ""
                     if (params.showUtc) {
-                        start_time = FcTime.UTCAddSeconds(params.showUtc, -120)
+						if (params.lastUtc) {
+							start_time = FcTime.UTCAddSeconds(params.lastUtc, -30) 
+						} else {
+							start_time = FcTime.UTCAddSeconds(params.showUtc, -120)
+						}
                         end_time = FcTime.UTCAddSeconds(params.showUtc, 120)
                         println "Show track points ${start_time}...${end_time}"
                     }

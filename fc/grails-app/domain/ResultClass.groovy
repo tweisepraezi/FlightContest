@@ -38,6 +38,7 @@ class ResultClass
 	Boolean contestPrintProvisional = false             // Ausdruck "vorl‰ufig", DB-2.3
 	Boolean contestPrintA3 = false                      // Ausdruck A3, DB-2.3
     Boolean contestPrintEqualPositions = false          // Ausdruck gleicher Positionen, DB-2.8
+	String contestPrintFooter = ""                      // Ausdruck Fuﬂzeilen, DB-2.35
 	
 	// PlanningTest
 	int planningTestDirectionCorrectGrad = 2
@@ -300,6 +301,9 @@ class ResultClass
         
         // DB-2.21 compatibility
         ruleTitle(nullable:true)
+		
+		// DB-2.35 compatibility
+		contestPrintFooter(nullable:true)
 	}
 
 	String GetPrintContestTitle()
@@ -685,7 +689,7 @@ class ResultClass
 		return false
 	}
 	
-	Map GetClassResultSettings()
+	Map GetClassResultSettings(boolean isPrint = false)
 	{
 		Map ret = [:]
 		if (contestPrintTaskNamesInTitle) {
@@ -694,7 +698,11 @@ class ResultClass
 				if (task_names) {
 					task_names += ", "
 				}
-				task_names += task_instance.name()
+				if (isPrint) {
+					task_names += task_instance.printName()
+				} else {
+					task_names += task_instance.name()
+				}
 			}
 			if (task_names) {
 				ret += [Tasks:task_names]
@@ -723,31 +731,31 @@ class ResultClass
 		return name.substring(0,1)
 	}
 
-    long GetNextID()
+    long GetNextResultClassID()
     {
-        long next_id = 0
-        boolean set_next = false
+        boolean start_found = false
         for (ResultClass resultclass_instance in ResultClass.findAllByContest(this.contest,[sort:'name'])) {
-            if (set_next) {
-                next_id = resultclass_instance.id
-                set_next = false
+            if (start_found) {
+                return resultclass_instance.id
             }
             if (resultclass_instance.id == this.id) {
-                set_next = true
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
     
-    static long GetNextID2(long resultClassID)
+    long GetPrevResultClassID()
     {
-        long next_id = 0
-        if (resultClassID) {
-            ResultClass resultclass_instance = ResultClass.get(resultClassID)
-            if (resultclass_instance) {
-                next_id = resultclass_instance.GetNextID()
+        boolean start_found = false
+        for (ResultClass resultclass_instance in ResultClass.findAllByContest(this.contest,[sort:'name', order:'desc'])) {
+            if (start_found) {
+                return resultclass_instance.id
+            }
+            if (resultclass_instance.id == this.id) {
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
 }

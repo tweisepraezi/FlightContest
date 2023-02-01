@@ -1,7 +1,7 @@
 ﻿= Flight Contest maps server
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.2.4
-:revdate:   02.07.2022
+:revnumber: 3.3.0
+:revdate:   01.02.2023
 :nofooter:
 :title-page:
 :toc-title: Table of content
@@ -208,44 +208,28 @@ Download data (Europe)
 
 Create database *gis2*
 
+ dropdb gis2
  createdb gis2
  psql -d gis2 -c 'CREATE EXTENSION postgis;'
 
-Load OSM data into OSM database (~/data/osm/*.pbf -> gis2)
+Load OSM data into OSM database (~/data/osm/*.pbf -> gis2) +
+(Germany, Austria, Switzerland, parts of France, Poland, Czech Republic, Slovakia, Hungary)
 
- osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
+ osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf
 
 Wait... (22h)
- 
-Compile preprocessing tools (warnings can be ignored)
 
- cd ~/fcmaps/otm-dev/mapnik/tools/
- cc -o saddledirection saddledirection.c -lm -lgdal
- cc -Wall -o isolation isolation.c -lgdal -lm -O2
- ls -l
- 
 Preprocessing
 
  cd ~/fcmaps/otm-dev/mapnik/tools/
  psql gis2 < arealabel.sql
- bash update_lowzoom.sh
-
-Wait... (1h)
-
- bash update_saddles.sh
-
-Wait... (10min)
-
- bash update_isolations.sh
-
-Wait... (5min)
- 
  psql gis2 < stationdirection.sql
- 
-Wait... (15min)
-
  psql gis2 < viewpointdirection.sql
  psql gis2 < pitchicon.sql
+ psql -d gis2 -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
+ bash update_lowzoom.sh
+
+Wait... (12h)
 
 Activate new databases *gis* and *lowzoom*
 

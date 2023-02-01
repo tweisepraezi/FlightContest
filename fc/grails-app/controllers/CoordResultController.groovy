@@ -27,12 +27,7 @@ class CoordResultController
         def coordresult = fcService.updateCoordResult(session.showLanguage, params) 
         if (coordresult.saved) {
             flash.message = coordresult.message
-			long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Flight)
-			if (next_testid) {
-				redirect(controller:"test",action:'flightresults',id:params.testid,params:[next:next_testid])
-			} else {
-				redirect(controller:"test",action:'flightresults',id:params.testid)
-			}
+			redirect(controller:"test",action:'flightresults',id:params.testid)
         } else if (coordresult.instance) {
             if (coordresult.error) {
                 flash.message = coordresult.message
@@ -185,12 +180,7 @@ class CoordResultController
     }
 
     def cancel = {
-		long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Flight)
-		if (next_testid) {
-			redirect(controller:"test",action:'flightresults',id:params.testid,params:[next:next_testid])
-		} else {
-			redirect(controller:"test",action:'flightresults',id:params.testid)
-		}
+		redirect(controller:"test",action:'flightresults',id:params.testid)
     }
 	
 }

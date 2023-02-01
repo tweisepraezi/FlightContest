@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.2.4
-:revdate:   02.07.2022
+:revnumber: 3.3.0
+:revdate:   01.02.2023
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -33,7 +33,7 @@ Ist eine auf Java-Techniken basierende, mehrsprachige und netzwerkfähige Open-S
 
 Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).
 
-Erzeugt OSM-basierte A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.
+Erzeugt OSM-basierte topographische A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.
 
 Erzeugt PDF für Druck und Internet-Veröffentlichung.
 
@@ -82,7 +82,7 @@ Stellt integrierte Karten-Viewer für Navigationsflüge, Strecken und Logger-Dat
 == Standard-Wettbewerbsablauf / Zu erledigende Aufgaben
 
 _Ausrichter des Wettbewerbes_ +
-*Auswerte-Schiedsrichter*
+*Auswerte-Manager*
 
 [upperalpha]
 . Vor Wettbewerbstag
@@ -156,12 +156,12 @@ _Ausrichter des Wettbewerbes_ +
 .. _Landungen vermessen_
 *** Landefeld dokumentieren (0, Feld-Name, Out)
 *** Abnormale Landung dokumentieren
-*** Lande-Ergebnis kontinuierlich an Auswerte-Schiedsrichter übermitteln
+*** Lande-Ergebnis kontinuierlich an Auswerte-Manager übermitteln
 
 .. _Ankommende Besatzungen koordinieren_
 *** Überwachung der Zeit für Komplettierung des Auswerteformulares
 *** Auswerteformular und Logger entgegennehmen
-*** Transport von Auswerteformular und Logger zum Auswerte-Schiedsrichter
+*** Transport von Auswerteformular und Logger zum Auswerte-Manager
 
 .. *Landungen und Navigationsflug auswerten*
 *** Dateneingabe Landungen
@@ -172,10 +172,10 @@ _Ausrichter des Wettbewerbes_ +
 *** Live-Auswertung aktualisieren
 
 .. _Ergebnisse verteilen_
-*** Ergebnisse vom Auswerte-Schiedsrichter abholen
+*** Ergebnisse vom Auswerte-Manager abholen
 *** Ergebnisse kontinuierlich an Besatzungen übergeben
 *** Rückfragen der Besatzungen entgegennehmen u. entscheiden
-*** Korrekturen an Auswerte-Schiedsrichter übergeben
+*** Korrekturen an Auswerte-Manager übergeben
 
 .. *Endauswertung*
 *** Korrekturen auf Rückfragen der Besatzungen verarbeiten
@@ -192,10 +192,10 @@ _Ausrichter des Wettbewerbes_ +
 
 - Fett markierte Texte und Zahlen sowie das Zeichen '...' sind Links, 
   hinter denen sich weitere Daten verbergen.
-- Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
-  wodurch das Drücken der Shift-Taste nicht notwendig ist.
-- Bei der Eingabe gebrochener Zahlen kann anstelle des "," auch ein '.' benutzt 
-  werden.
+- Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.', ',' oder ';' benutzt werden.
+  Dadurch wird das Drücken der Shift-Taste bei der deutschen ':'-Taste nicht notwendig
+  und es kann auch eine Zahlen-Tastatur mit einem Komma genutzt werden.
+- Bei der Eingabe gebrochener Zahlen kann anstelle des "," auch ein '.' benutzt werden.
 - Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben 
   eingegeben werden, wodurch das Drücken der Shift-Taste nicht notwendig ist.
 - Bei der Eingabe von Landemesswerten kann der Landemesswert "out" für Landungen
@@ -622,13 +622,15 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 "Eigenschaften" der hinzufügten Punkte im 'Ortsmarkierung'-Dialog bearbeiten:
 
 *** Im Name-Feld Check-Punkt-Bezeichnung und Gate-Breite anpassen +
-(TP -> SC, z.B. "TP1, Gate 1.0NM" -> "SC1, Gate 2.0NM")
+(TP1 -> SC, z.B. "TP1, Gate 1.0NM" -> "SC, Gate 2.0NM" (SC muss nicht nummeriert werden))
 *** Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gewünschten Position ziehen
 *** 'Ortsmarkierung'-Dialog beenden
 
 . 'Dateiname.kmz' mit Kontextmenü 'Ort speichern unter' in neuer kmz-Datei abspeichern
 
 . Import der korrigierten Strecke (Strecke -> *Import FC-Strecke*)
+
+. Beim Wendepunkt, mit dem der krumme Streckenabschnitt endet, die Option '*Check-Punkt nach krummer Strecke*' aktivieren.
 
 [[route-planning-semicircles]]
 === Wettbewerbsstrecke mit Halbkreisen erzeugen
@@ -659,10 +661,10 @@ Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:
 ** Wendeschleifen (Kursänderungen > 90 Grad) korrekt?
 
 [[route-planning-deliver]]
-=== Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter
+=== Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager
 
 Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' oder 'KMZ-Export'
-zur Weitergabe an den Auswerte-Schiedsrichter, der diese mit 'Strecken -> Import FC-Strecke' 
+zur Weitergabe an den Auswerte-Manager, der diese mit 'Strecken -> Import FC-Strecke' 
 in sein 'Flight Contest' zur Nutzung importieren kann.
 
 [[route-planning-errors]]
@@ -1102,7 +1104,7 @@ Zur Erfassung der Landungen drucken Sie den Schiedsrichter-Zeitplan einer Aufgab
 
 Drucken Sie nicht die Besatzung aus, da dass dem Regelwerk widerspricht.
 
-Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig über die konkrete Besatzung eines Flugzeuges wissen.
+Lande-Schiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig über die konkrete Besatzung eines Flugzeuges wissen.
 
 <<<
 [[evaluation]]
@@ -1410,6 +1412,7 @@ Tabellen-Klassen:
 |routelegs|name value coursechange summary|from2tp trackdistance
 |enroutephotos|name title value|photoname coords distfromtp tpname
 |enroutecanvas|name title value|canvassign coords distfromtp tpname
+|mapdistances|title title2 value|tpname coorddist measuredist difference
 |routecoordexport|title value|
 |turnpointsignexport|title value|
 |enroutephotoexport|title value|
@@ -1425,8 +1428,9 @@ Tabellen-Klassen:
 |timetablelist|value [#crew.num]|num crew aircraft tas team resultclass shortresultclass planningtime planningtimebefore takeofftime version
 |legtimelist|value [#tas]|tas legtime
 |timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
-|timetableoverviewlist|briefing planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]|col1 col2 col3
+|timetableoverviewlist|briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
+|landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4
 
 |crewtest||title crew team resultclass aircraft aircrafttype tas
 |crewneutral||title num crew aircraft col
@@ -1456,6 +1460,7 @@ Tabellen-Klassen:
 
 |resultlist|[#pos]|pos crew aircraft team resultclass shortresultclass planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties taskpenalties contestpenalties
 |teamresultlist|[#pos]|pos team crews teampenalties
+|resultfooter|[#line<line>]|[#col<column>]
 
 |freetext||#line
 |testlist||testcol1 testcol2 testcol3 testcol4 testcol5
@@ -1505,6 +1510,10 @@ Tabellen-Klassen:
 ** Ergebnis-Liste Team-Auswertung - Zeilen verkleinern
 
  table.teamresultlist td { font-size: 90%; }
+
+** Fußzeile in Ergebnisliste - Zeilen vergrößern
+
+ table.resultfooter tr td { font-size: 120%; }
 
 ** Punkte-Druck Landefeld - Größe verändern
 
@@ -1639,7 +1648,7 @@ zu machen oder diese Datei zu löschen.
  flightcontest {
    mail {
      from = "TODO"       // Absender-E-Mail-Adresse (muss auf SMTP-Server gültig sein)
-     cc = "TODO"         // E-Mail-Adresse des Auswerte-Schiedsrichters
+     cc = "TODO"         // E-Mail-Adresse des Auswerte-Managers
    }
    testmail {
      to = "TODO"         // Ziel-E-Mail-Adresse
@@ -1697,7 +1706,7 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.
 
 <<<
 [[configuration-landing]]
-=== Information für Landeschiedsrichter konfigurieren
+=== Information für Lande-Schiedsrichter konfigurieren
  flightcontest {
    landing {
      info = "WhatsApp an +49(170)12345678 senden."
@@ -1818,6 +1827,9 @@ auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de
    }
    clouddemo {
      enable = true // Aktiviert die Cloud-Demo-Anzeige
+   }
+   observation {
+     nobuttons = true // Deaktiviert Schalter bei Beobachtungs-Ergebnis-Eingabe
    }
  }
 

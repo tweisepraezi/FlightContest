@@ -12,6 +12,9 @@
                 <h2>${testInstance.GetTitle(ResultType.Special)}</h2>
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" method="post" >
+						<g:set var="ti" value="${[]+1}" />
+						<g:set var="next_id" value="${testInstance.GetNextTestID(ResultType.Special,session)}"/>
+						<g:set var="prev_id" value="${testInstance.GetPrevTestID(ResultType.Special,session)}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -65,8 +68,11 @@
 	                            <p>
 	                                <label>${message(code:'fc.specialresults.results')}* [${message(code:'fc.points')}]:</label>
 	                                <br/>
-	                                <input type="text" id="specialTestPenalties" name="specialTestPenalties" value="${fieldValue(bean:testInstance,field:'specialTestPenalties')}" tabIndex="1"/>
+	                                <input type="text" id="specialTestPenalties" name="specialTestPenalties" value="${fieldValue(bean:testInstance,field:'specialTestPenalties')}" tabIndex="${ti[0]++}"/>
 	                            </p>
+                                <script>
+									$('#specialTestPenalties').select();
+								</script>
 	                        </fieldset>
                         </g:if>
    	                    <g:else>
@@ -84,32 +90,45 @@
                                 <tr>
                                     <td>
 				                        <g:if test="${!testInstance.specialTestComplete}">
-				                            <g:if test="${params.next}">
-				                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="11"/>
-				                                <g:actionSubmit action="specialresultsreadynext" value="${message(code:'fc.results.readynext')}"  tabIndex="12"/>
+				                        	<g:actionSubmit action="specialresultssave" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+				                            <g:if test="${next_id}">
+				                                <g:actionSubmit action="specialresultsreadynext" value="${message(code:'fc.results.readynext')}" tabIndex="${ti[0]++}"/>
 				                            </g:if>
-				                            <g:else>
-				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="13"/>
-				                            </g:else>
-				                        	<g:actionSubmit action="specialresultsready" value="${message(code:'fc.results.ready')}" tabIndex="14"/>
-				                        	<g:actionSubmit action="specialresultssave" value="${message(code:'fc.save')}" tabIndex="15"/>
-				                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="16"/>
-				                            <g:if test="${params.next}">
-				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="17"/>
+											<g:else>
+												<g:actionSubmit action="specialresultsreadynext" value="${message(code:'fc.results.readynext')}" disabled tabIndex="${ti[0]++}"/>
+											</g:else>
+				                        	<g:actionSubmit action="specialresultsready" value="${message(code:'fc.results.ready')}" tabIndex="${ti[0]++}"/>
+				                            <g:if test="${next_id}">
+				                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
 				                            </g:if>
+											<g:else>
+												<g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" disabled tabIndex="${ti[0]++}"/>
+											</g:else>
+											<g:if test="${prev_id}">
+												<g:actionSubmit action="specialresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" tabIndex="${ti[0]++}"/>
+											</g:if>
+											<g:else>
+												<g:actionSubmit action="specialresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+											</g:else>
+				                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+			                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
 				                        </g:if>
 				                        <g:else>
-				                            <g:if test="${params.next}">
-				                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="41"/>
+				                            <g:if test="${next_id}">
+				                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
 				                            </g:if>
 				                            <g:else>
-				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="42"/>
+				                                <g:actionSubmit action="specialresultsgotonext" value="${message(code:'fc.results.gotonext')}" disabled tabIndex="${ti[0]++}"/>
 				                            </g:else>
-				                        	<g:actionSubmit action="specialresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="43"/>
-				                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="44"/>
-				                            <g:if test="${params.next}">
-				                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="45"/>
-				                            </g:if>
+											<g:if test="${prev_id}">
+												<g:actionSubmit action="specialresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" tabIndex="${ti[0]++}"/>
+											</g:if>
+											<g:else>
+												<g:actionSubmit action="specialresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+											</g:else>
+				                        	<g:actionSubmit action="specialresultsreopen" value="${message(code:'fc.results.reopen')}" tabIndex="${ti[0]++}"/>
+				                            <g:actionSubmit action="printspecialresults" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+			                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
 				                        </g:else>
 				                    </td>
                                     <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>

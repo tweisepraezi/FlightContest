@@ -63,26 +63,36 @@ class AircraftController {
         }
     }
 
+    def savesettings = {
+        def aircraft = fcService.updateAircraft(params) 
+        if (aircraft.saved) {
+        	flash.message = aircraft.message
+			redirect(action:edit,id:aircraft.instance.id)
+        } else if (aircraft.error) {
+            flash.message = aircraft.message
+            flash.error = true
+            render(view:'edit',model:[aircraftInstance:aircraft.instance])
+        } else if (aircraft.instance) {
+        	render(view:'edit',model:[aircraftInstance:aircraft.instance])
+        } else {
+        	flash.message = aircraft.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+
     def updatenext = {
         def aircraft = fcService.updateAircraft(params)
         if (aircraft.instance) {
-            long next_id = aircraft.instance.GetNextID()
-            long next_id2 = Aircraft.GetNextID2(next_id)
+            long next_id = aircraft.instance.GetNextAircraftID()
             if (aircraft.saved) {
                 flash.message = aircraft.message
                 if (next_id) {
-                    if (next_id2) {
-                        redirect(action:edit,id:next_id,params:[next:next_id2])
-                    } else {
-                        redirect(action:edit,id:next_id)
-                    }
+                    redirect(action:edit,id:next_id)
                 } else {
                     redirect(controller:"aircraft",action:"list")
                 }
             } else {
-                if (next_id && next_id2) {
-                    render(view:'edit',model:[crewInstance:aircraft.instance,params:[next:next_id2]])
-                } else if (next_id) {
+                if (next_id) {
                     render(view:'edit',model:[crewInstance:aircraft.instance,params:[next:next_id]])
                 } else {
                     render(view:'edit',model:[crewInstance:aircraft.instance])
@@ -139,14 +149,24 @@ class AircraftController {
     def gotonext = {
         def aircraft = fcService.getAircraft(params)
         if (aircraft.instance) {
-            long next_id = aircraft.instance.GetNextID()
-            long next_id2 = Aircraft.GetNextID2(next_id)
+            long next_id = aircraft.instance.GetNextAircraftID()
             if (next_id) {
-                if (next_id2) {
-                    redirect(action:edit,id:next_id,params:[next:next_id2])
-                } else {
-                    redirect(action:edit,id:next_id)
-                }
+                redirect(action:edit,id:next_id)
+            } else {
+                redirect(controller:"aircraft",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"aircraft",action:"list")
+        }
+    }
+    
+    def gotoprev = {
+        def aircraft = fcService.getAircraft(params)
+        if (aircraft.instance) {
+            long prev_id = aircraft.instance.GetPrevAircraftID()
+            if (prev_id) {
+                redirect(action:edit,id:prev_id)
             } else {
                 redirect(controller:"aircraft",action:"list")
             }

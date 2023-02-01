@@ -12,6 +12,9 @@
                 <h2>${message(code:'fc.test.planningtask')} ${testInstance.GetStartNum()}</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['planningtaskReturnAction':planningtaskReturnAction,'planningtaskReturnController':planningtaskReturnController,'planningtaskReturnID':planningtaskReturnID]}">
+						<g:set var="ti" value="${[]+1}" />
+						<g:set var="next_id" value="${testInstance.GetNextTestID(ResultType.Planningtask,session)}"/>
+						<g:set var="prev_id" value="${testInstance.GetPrevTestID(ResultType.Planningtask,session)}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -139,9 +142,21 @@
                             </div>
                         </g:if>
                         <input type="hidden" name="id" value="${testInstance?.id}"/>
-                        <g:actionSubmit action="printplanningtask" value="${message(code:'fc.print')}" tabIndex="1"/>
-                        <g:actionSubmit action="printplanningtaskwithresults" value="${message(code:'fc.printresults')}" tabIndex="2"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="3"/>
+						<g:if test="${next_id}">
+							<g:actionSubmit action="planningtaskgotonext" value="${message(code:'fc.test.planningtask.gotonext')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="planningtaskgotonext" value="${message(code:'fc.test.planningtask.gotonext')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+						<g:if test="${prev_id}">
+							<g:actionSubmit action="planningtaskgotoprev" value="${message(code:'fc.test.planningtask.gotoprev')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="planningtaskgotoprev" value="${message(code:'fc.test.planningtask.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+                        <g:actionSubmit action="printplanningtask" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="printplanningtaskwithresults" value="${message(code:'fc.printresults')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

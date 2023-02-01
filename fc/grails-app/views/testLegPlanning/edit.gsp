@@ -17,6 +17,7 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form>
+						<g:set var="ti" value="${[]+1}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -50,13 +51,33 @@
                                 <p>
                                     <label>${message(code:'fc.trueheading')}* [${message(code:'fc.grad')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultTrueHeading" name="resultTrueHeading" value="${fieldValue(bean:testLegPlanningInstance,field:'resultTrueHeading')}" tabIndex="1"/>
+                                    <input type="text" id="resultTrueHeading" name="resultTrueHeading" value="${fieldValue(bean:testLegPlanningInstance,field:'resultTrueHeading')}" tabIndex="${ti[0]++}"/>
                                 </p>
                                 <p>
                                     <label>${message(code:'fc.legtime')}* [${message(code:'fc.time.hminsec')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultLegTimeInput" name="resultLegTimeInput" value="${fieldValue(bean:testLegPlanningInstance,field:'resultLegTimeInput')}" tabIndex="2"/>
+                                    <input type="text" id="resultLegTimeInput" name="resultLegTimeInput" value="${fieldValue(bean:testLegPlanningInstance,field:'resultLegTimeInput')}" tabIndex="${ti[0]++}"/>
                                 </p>
+                                <script>
+									$('#resultTrueHeading').select();
+                                    $(document).on('keypress', '#resultTrueHeading', function(e) {
+										if (e.charCode == 13) {
+											$('#resultLegTimeInput').select() 
+											e.preventDefault();
+										}
+                                    });
+                                    $(document).on('keypress', '#resultLegTimeInput', function(e) {
+										if (e.charCode == 13) {
+											<g:if test="${params.next}">
+												$('#updatenext').focus()
+											</g:if>
+											<g:else>
+												$('#updatereturn').focus()
+											</g:else>
+											e.preventDefault();
+										}
+                                    });
+                                </script>
                              </g:if>
                              <g:else>
                                 <table>
@@ -77,17 +98,17 @@
                         <input type="hidden" name="testid" value="${testLegPlanningInstance.test.id}"/>
                         <g:if test="${!testLegPlanningInstance.test.planningTestComplete}">
                         	<g:if test="${params.next}">
-                            	<g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="3"/>
+                            	<g:actionSubmit action="updatenext" id="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="${ti[0]++}"/>
                             </g:if>
-                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="4"/>
-                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="5"/>
+                            <g:actionSubmit action="updatereturn" id="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:else>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="6"/>
+                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
                             </g:if>
                         </g:else>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="7"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

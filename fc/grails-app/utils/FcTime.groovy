@@ -198,4 +198,13 @@ class FcTime
         Date utc_date = Date.parse("yyyy-MM-dd'T'HH:mm:ss'Z'", utcDateTime)
         return utc_date.format("yyyyMMddHHmmss")
     }
+	
+    //--------------------------------------------------------------------------
+	static String GetInputTimeStr(String inputTimeStr)
+	{
+		String ret = inputTimeStr.replace('.',':')
+		ret = ret.replace(',',':')
+		ret = ret.replace(';',':')
+		return ret
+	}
 }

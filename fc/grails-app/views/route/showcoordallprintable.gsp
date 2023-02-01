@@ -70,7 +70,7 @@
                         <tr>
                             <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
                             <td class="coords">${coordroute_instance.namePrintable(true,false)}</td>
-                            <td class="altitude">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
+                            <td class="altitude"><g:getAltitudeValues route="${routeInstance}" coordresult="${coordroute_instance}"/></td>
                             <td class="gatewidth">${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
                         </tr>
                     </g:each>

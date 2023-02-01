@@ -89,11 +89,19 @@
                                     </div>
 	                            </g:if>
     	                       	<g:if test="${testInstance.IsLandingTestRun()}">
-	                                <div>
-	                                    <g:checkBox name="printLandingResults" value="${testInstance.printLandingResults}" />
-	                                    <label>${message(code:'fc.landingresults')} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})<g:if test="${!testInstance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
-	                                </div>
-	                            </g:if>
+									<g:if test="${testInstance.IsLandingTestAnyRun()}">
+										<div>
+											<g:checkBox name="printLandingResults" value="${testInstance.printLandingResults}" />
+											<label>${message(code:'fc.landingresults')}</label>
+										</div>
+									</g:if>
+									<g:else>
+										<div>
+											<g:checkBox name="printLandingResults" value="${testInstance.printLandingResults}" />
+											<label>${message(code:'fc.landingresults')} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})<g:if test="${!testInstance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></label>
+										</div>
+									</g:else>
+								</g:if>
     	                       	<g:if test="${testInstance.IsSpecialTestRun()}">
 	                                <div>
 	                                    <g:checkBox name="printSpecialResults" value="${testInstance.printSpecialResults}" />

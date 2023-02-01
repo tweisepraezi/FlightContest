@@ -1,7 +1,7 @@
 ﻿Flight Contest
 
 Thomas Weise
-Deutscher Präzisionsflug-Verein e.V. (German Precision Flying Club)
+Deutscher Praezisionsflug-Verein e.V. (German Precision Flying Club)
 
 https://flightcontest.de
 
@@ -14,7 +14,7 @@ Flight Contest features flexible competition management, particularly supporting
 * parallel competitions (competitions taking place at the same time with different competitors participating in)
 * the evaluation of specific groups of crews, which can be determined on an ad hoc basis
 
-Is an advanced, Java technology-based, multilingual and networkcompatible open source database application:
+Is an open source, multilingual, network-enabled database application based on Java techniques:
 * User interface runs in a (modern) web browser (Chrome, Firefox, Edge Chromium, etc.).
 * It can be used simultaneously on several networked computers.
 * Every user can use his/her preferred language (German, English, expandable).
@@ -24,18 +24,20 @@ Is an advanced, Java technology-based, multilingual and networkcompatible open s
 Supports special route features:
 * Secret time checks
 * Curved legs
+* Semicircles
 * Touch-and-go landings
 
 Supports GAC, IGC, GPX, KML, KMZ and NMEA-0183 logger data formats (expandable).
 
 Provides integrated map viewers for navigation flights, routes and logger files:
 * Offline map display for navigation flight evaluation
-* Online map display using Google Maps and Open Street Map
-* Logger data display for supported logger data formats
+* Fast offline map display near a selected turnpoint
+* Online map display with Open Street Map
+* Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files with optional gpx download
 
-Creates PDF for printing and publication on the internet.
+Creates PDF for print and internet publishing.
 
-OSM competition map printing.
+Generates OSM-based topographic A3 & A4 competition maps in TÜK-200 style.
 
 Emailing of crew result to participants.
 

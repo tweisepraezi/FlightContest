@@ -1,6 +1,44 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.3.0
+-------------
+- The route list and route details now show the usage of tasks.
+- Minimum altitude is now initialized at 300ft (500ft - 200ft tolerance) for new routes.
+- Altitude values in dialogs and route printings now show altitude of the terrain (GND:), the minimum flight altitude (>) and the maximum flight altitude (<).
+- Bug "Route altitude adjustments will not be applied to the next logger evaluation" fixed
+- Support of numeric keyboards added
+	When editing the planning given value, the Enter key can be used to navigate to the next input field.
+	When editing measured values of checkpoints, the Enter key can be used to navigate to the next input field.
+	When entering distances in observation results, the Enter key can be used to navigate to the next input field.
+	When entering times, a ',' is also accepted instead of the ':', among others.
+- Offline map for check points now shows flight from previous check point.
+- Print footer for evaluation prints added.
+- Task settings: Option "Lock planning" added. Disables all commands that can change the planning.
+- Planning: Export timetable (Start list) added. For FFA_SkyTraq's start list.
+- Route printing: Overview of coordinate map distances (in mm) added.
+- Crew printing: Team printing and aircraft printing to subsequent pages added.
+- Landing result input: Button 'Save and next result' added.
+- Results: The result list now contains a separate column for each landing test (max. 4: Ldg1, Ldg2, Ldg3, Ldg4).
+- Result input: Button 'Previous result' added.
+- Observation result input has been optimized for touchscreen use:
+    Route photo input has been changed from choice list to buttons.
+	Radio buttons were enlarged and provided with frames.
+- All list details: 'Previous item' button added.
+- Planning: Landing test start list added. Allows printout of a start list without setting a schedule.
+  Printout with grouping.
+- Read logger: Option 'Read logger of a new port immediately' added.
+- Planning, Results and Crews: Page breaks can be added to form groups.
+    Page breaks are inserted before the configured crew when printing.
+	The activated option "Show pages one by one" reduces the crew display to the selected page
+	and limits navigation to the next or previous crew.
+- Route import improved:
+	Up to 3 coordinates can be declared as semicircle center points.
+	The course change to be evaluated for automatic determination of UZK coordinates can be adjusted (default: 1.5°).
+- Empty enroute canvas sign added.
+    The input is made by selecting the *. Causes additional lines to be printed in the evaluation form.
+	A correct result is then that no canvas sign was found in these lines.
+
 Changes 3.2.4
 -------------
 - Export timetable (Data) added

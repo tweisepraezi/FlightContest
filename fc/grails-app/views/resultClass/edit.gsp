@@ -18,6 +18,8 @@
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['resultclassReturnAction':resultclassReturnAction,'resultclassReturnController':resultclassReturnController,'resultclassReturnID':resultclassReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${resultclassInstance.GetNextResultClassID()}"/>
+						<g:set var="prev_id" value="${resultclassInstance.GetPrevResultClassID()}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.resultclass.name')}*:</label>
@@ -62,22 +64,28 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${resultclassInstance?.id}"/>
                         <input type="hidden" name="version" value="${resultclassInstance?.version}"/>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="gotonext" value="${message(code:'fc.resultclass.gotonext')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="savesettings" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${next_id}">
                             <g:actionSubmit action="updatenext" value="${message(code:'fc.resultclass.updatenext')}" tabIndex="${ti[0]++}"/>
+							<g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.resultclass.gotonext')}" tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:else>
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.resultclass.updatenext')}" disabled tabIndex="${ti[0]++}"/>
+							<g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.resultclass.gotonext')}" disabled tabIndex="${ti[0]++}"/>
                         </g:else>
-                        <g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
-                        <g:actionSubmit action="savesettings" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+						<g:if test="${prev_id}">
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.resultclass.gotoprev')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:else>
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.resultclass.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+                        </g:else>
                         <g:if test="${resultclassInstance.contest.contestRuleForEachClass}">
                             <g:actionSubmit action="editpoints" value="${message(code:'fc.points')}" tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
-                        </g:if>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

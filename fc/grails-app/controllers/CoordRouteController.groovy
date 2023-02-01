@@ -42,7 +42,7 @@ class CoordRouteController {
         def coordroute = fcService.updateCoordRoute(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
-            long next_routeid = coordroute.instance.route.GetNextID()
+            long next_routeid = coordroute.instance.route.GetNextRouteID()
             if (next_routeid) {
                 redirect(controller:"route",action:'show',id:coordroute.instance.route.id,params:[next:next_routeid])
             } else {
@@ -64,7 +64,7 @@ class CoordRouteController {
         def coordroute = fcService.updateCoordRouteObject(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
-            long next_routeid = coordroute.instance.route.GetNextID()
+            long next_routeid = coordroute.instance.route.GetNextRouteID()
             if (next_routeid) {
                 redirect(controller:"route",action:'show',id:coordroute.instance.route.id,params:[next:next_routeid])
             } else {
@@ -86,11 +86,9 @@ class CoordRouteController {
         def coordroute = fcService.updateCoordRoute(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
-            Map n = search_next_id(coordroute.instance, false)
-			if (n.i2) {
-				redirect(action:'edit',id:n.i1.id,params:[name:n.no,next:n.i2.id])
-			} else if (n.i1) {
-				redirect(action:'edit',id:n.i1.id,params:[name:n.no])
+			long next_id = coordroute.instance.GetNextCoordRouteID(false)
+			if (next_id) {
+				redirect(action:'edit',id:next_id)
 			} else {
 				redirect(controller:"route",action:'show',id:coordroute.instance.route.id)
 			}
@@ -110,11 +108,9 @@ class CoordRouteController {
         def coordroute = fcService.updateCoordRouteObject(session.showLanguage, params) 
         if (coordroute.saved) {
         	flash.message = coordroute.message
-            Map n = search_next_id(coordroute.instance, true)
-			if (n.i2) {
-				redirect(action:'edit_object',id:n.i1.id,params:[name:n.no,next:n.i2.id])
-			} else if (n.i1) {
-				redirect(action:'edit_object',id:n.i1.id,params:[name:n.no])
+			long next_id = coordroute.instance.GetNextCoordRouteID(true)
+			if (next_id) {
+				redirect(action:'edit_object',id:next_id)
 			} else {
 				redirect(controller:"route",action:'show',id:coordroute.instance.route.id)
 			}
@@ -133,11 +129,24 @@ class CoordRouteController {
 	def gotonext = {
         def coordroute = fcService.getCoordRoute(params)
 		if (coordroute.instance) {
-            Map n = search_next_id(coordroute.instance, false)
-			if (n.i2) {
-				redirect(action:'edit',id:n.i1.id,params:[name:n.no,next:n.i2.id])
-			} else if (n.i1) {
-				redirect(action:'edit',id:n.i1.id,params:[name:n.no])
+			long next_id = coordroute.instance.GetNextCoordRouteID(false)
+			if (next_id) {
+				redirect(action:'edit',id:next_id)
+			} else {
+				redirect(controller:"route",action:'show',id:coordroute.instance.route.id)
+			}
+		} else {
+			flash.message = coordroute.message
+			redirect(action:'edit',id:params.id)
+		}
+	}
+
+	def gotoprev = {
+        def coordroute = fcService.getCoordRoute(params)
+		if (coordroute.instance) {
+			long prev_id = coordroute.instance.GetPrevCoordRouteID(false)
+			if (prev_id) {
+				redirect(action:'edit',id:prev_id)
 			} else {
 				redirect(controller:"route",action:'show',id:coordroute.instance.route.id)
 			}
@@ -150,11 +159,24 @@ class CoordRouteController {
 	def gotonext_object = {
         def coordroute = fcService.getCoordRoute(params)
 		if (coordroute.instance) {
-            Map n = search_next_id(coordroute.instance, true)
-			if (n.i2) {
-				redirect(action:'edit_object',id:n.i1.id,params:[name:n.no,next:n.i2.id])
-			} else if (n.i1) {
-				redirect(action:'edit_object',id:n.i1.id,params:[name:n.no])
+			long next_id = coordroute.instance.GetNextCoordRouteID(true)
+			if (next_id) {
+				redirect(action:'edit_object',id:next_id)
+			} else {
+				redirect(controller:"route",action:'show',id:coordroute.instance.route.id)
+			}
+		} else {
+			flash.message = coordroute.message
+			redirect(action:'edit_object',id:params.id)
+		}
+	}
+
+	def gotoprev_object = {
+        def coordroute = fcService.getCoordRoute(params)
+		if (coordroute.instance) {
+			long prev_id = coordroute.instance.GetPrevCoordRouteID(true)
+			if (prev_id) {
+				redirect(action:'edit_object',id:prev_id)
 			} else {
 				redirect(controller:"route",action:'show',id:coordroute.instance.route.id)
 			}
@@ -188,7 +210,7 @@ class CoordRouteController {
 
     def delete = {
         CoordRoute coordroute_instance = CoordRoute.get(params.id)
-        long next_routeid = coordroute_instance.route.GetNextID()
+        long next_routeid = coordroute_instance.route.GetNextRouteID()
         def coordroute = fcService.deleteCoordRoute(params)
         if (coordroute.deleted) {
         	flash.message = coordroute.message
@@ -213,10 +235,10 @@ class CoordRouteController {
     def reset = {
 		def coordroute = fcService.resetmeasureCoordRoute(params)
 		if (coordroute.saved) {
-            Map n = search_next_id(coordroute.instance, false)
+			long next_id = coordroute.instance.GetNextCoordRouteID(false)
 			flash.message = coordroute.message
-            if (n.i1) {
-                redirect(action:'edit', id:params.id, params:[name:n.no,next:n.i1.id])
+            if (next_id) {
+                redirect(action:'edit', id:params.id, params:[next:next_id])
             } else {
 			    redirect(action:'edit', id:params.id)
             }
@@ -235,7 +257,7 @@ class CoordRouteController {
 	def cancel = {
         def coordroute = fcService.getCoordRoute(params) 
         if (coordroute.instance) {
-            long next_routeid = coordroute.instance.route.GetNextID()
+            long next_routeid = coordroute.instance.route.GetNextRouteID()
             if (next_routeid) {
                 redirect(controller:"route",action:'show',id:coordroute.instance.route.id,params:[next:next_routeid])
             } else {
@@ -268,30 +290,4 @@ class CoordRouteController {
         redirect(action:"edit_object", id:params.id)
     }
     
-    private Map search_next_id(CoordRoute coordRouteInstance, boolean searchObject)
-    {
-        boolean set_next = false
-        CoordRoute coordroute_nextinstance = null
-        CoordRoute coordroute_nextinstance2 = null
-        int leg_no = 0
-        for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(coordRouteInstance.route,[sort:"id"]) ) {
-            if (!searchObject ||coordroute_instance.type.IsTurnpointSignCoord()) {
-                if (!coordroute_nextinstance) {
-                    leg_no++
-                }
-                if (set_next) {
-                    if (!coordroute_nextinstance) {
-                        coordroute_nextinstance = coordroute_instance
-                    } else if (!coordroute_nextinstance2) {
-                        coordroute_nextinstance2 = coordroute_instance
-                        break
-                    }
-                }
-                if (coordroute_instance == coordRouteInstance) {
-                    set_next = true
-                }
-            }
-        }
-        return [i1:coordroute_nextinstance, i2:coordroute_nextinstance2, no:leg_no]
-    }
 }

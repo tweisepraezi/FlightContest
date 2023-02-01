@@ -5,6 +5,12 @@ class CoordTitle // DB-2.5
 	
 	static belongsTo = [RouteLeg,TestLegFlight,TestLegPlanning,CalcResult] // BUG: RouteLeg anstelle von RouteLegCoord & RouteLegTest angegeben, DB-2.12
 	
+	CoordTitle(String v)
+	{
+		this.type = CoordType.UNKNOWN
+		this.number = 0
+	}
+	
 	CoordTitle(CoordType type, int number)
 	{
 		this.type = type

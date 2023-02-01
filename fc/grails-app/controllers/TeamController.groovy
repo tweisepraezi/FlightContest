@@ -69,26 +69,36 @@ class TeamController {
         }
     }
 
+    def savesettings = {
+        def team = fcService.updateTeam(params) 
+        if (team.saved) {
+        	flash.message = team.message
+			redirect(action:edit,id:team.instance.id)
+        } else if (team.error) {
+            flash.message = team.message
+            flash.error = true
+            render(view:'edit',model:[teamInstance:team.instance])
+        } else if (team.instance) {
+        	render(view:'edit',model:[teamInstance:team.instance])
+        } else {
+        	flash.message = team.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+
     def updatenext = {
         def team = fcService.updateTeam(params)
         if (team.instance) {
-            long next_id = team.instance.GetNextID()
-            long next_id2 = Team.GetNextID2(next_id)
+            long next_id = team.instance.GetNextTeamID()
             if (team.saved) {
                 flash.message = team.message
                 if (next_id) {
-                    if (next_id2) {
-                        redirect(action:edit,id:next_id,params:[next:next_id2])
-                    } else {
-                        redirect(action:edit,id:next_id)
-                    }
+                    redirect(action:edit,id:next_id)
                 } else {
                     redirect(controller:"team",action:"list")
                 }
             } else {
-                if (next_id && next_id2) {
-                    render(view:'edit',model:[crewInstance:team.instance,params:[next:next_id2]])
-                } else if (next_id) {
+                if (next_id) {
                     render(view:'edit',model:[crewInstance:team.instance,params:[next:next_id]])
                 } else {
                     render(view:'edit',model:[crewInstance:team.instance])
@@ -144,14 +154,24 @@ class TeamController {
     def gotonext = {
         def team = fcService.getTeam(params)
         if (team.instance) {
-            long next_id = team.instance.GetNextID()
-            long next_id2 = Team.GetNextID2(next_id)
+            long next_id = team.instance.GetNextTeamID()
             if (next_id) {
-                if (next_id2) {
-                    redirect(action:edit,id:next_id,params:[next:next_id2])
-                } else {
-                    redirect(action:edit,id:next_id)
-                }
+                redirect(action:edit,id:next_id)
+            } else {
+                redirect(controller:"team",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"team",action:"list")
+        }
+    }
+    
+    def gotoprev = {
+        def team = fcService.getTeam(params)
+        if (team.instance) {
+            long prev_id = team.instance.GetPrevTeamID()
+            if (prev_id) {
+                redirect(action:edit,id:prev_id)
             } else {
                 redirect(controller:"team",action:"list")
             }

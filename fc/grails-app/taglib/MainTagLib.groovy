@@ -35,7 +35,7 @@ class MainTagLib
 				outln """    <li> <a class="${active(p.controller,'resultClass')}" href="${p.link}/../../resultClass/list">${message(code:'fc.resultclass.list')}</a> </li>"""
 			}
 			outln """    <li> <a class="${active(p.controller,'aircraft')}" href="${p.link}/../../aircraft/list">${message(code:'fc.aircraft.list')}</a> </li>"""
-            outln """    <li> <a class="${if (p.contesttasks) active(p.controller,'contest')}" href="${p.link}/../../contest/tasks">${message(code:'fc.contest.tasks')}</a> </li>"""
+            outln """    <li> <a class="${if (p.contesttasks) active(p.controller,'contest')}" href="${p.link}/../../contest/tasks">${message(code:'fc.task.tasks')}</a> </li>"""
 			if (Task.findByContestAndHidePlanning(session.lastContest,false)) {
 				outln """    <li> <a class="${if (p.taskplanning) active(p.controller,'task')}" href="${p.link}/../../task/startplanning">${message(code:'fc.task.listplanning')}</a> </li>"""
 			}
@@ -99,8 +99,8 @@ class MainTagLib
 				}
 				if (p.importaction) {
 					if (p.controller == "route") {
-                        outln """    <li> <a href="${p.link}/../../${p.controller}/importfcroute">${message(code:'fc.route.fcfileimport')}</a> </li>"""
                         outln """    <li> <a href="${p.link}/../../${p.controller}/importfileroute">${message(code:'fc.route.fileimport')}</a> </li>"""
+                        outln """    <li> <a href="${p.link}/../../${p.controller}/importfcroute">${message(code:'fc.route.fcfileimport')}</a> </li>"""
 					} else if (p.controller == "crew") {
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
 					}
@@ -173,7 +173,7 @@ class MainTagLib
 				}
 			}
 			
-			if (!session.lastResultClassResults && !session.lastTeamResults && !session.lastContestResults) {
+			if (p.taskplanning || p.taskresults) {
 				if (session.showLimit) {
 					int crew_num = Crew.countByContest(session.lastContest)
 					int next_start = 0
@@ -205,8 +205,20 @@ class MainTagLib
 						outln """    <li class="secondary"> <a href="?startpos=${before_start}">&lt;&lt;</a> </li>"""
 						outln """    <li class="secondary"> <a href="?startpos=0">&#124;&lt;</a> </li>"""
 					//}
+				} else if (session.showPage) {
+					outln """    <li class="secondary"> <a href="?showpage=off">${message(code:'fc.showlimitall')}</a> </li>"""
+					for (int page_pos = session.showPageNum; page_pos > 0; page_pos--) {
+						if (session.showPagePos == page_pos) {
+							outln """<li class="secondary"> <a class="active" href="?showpagepos=${page_pos}">${page_pos}</a> </li>"""
+						} else {
+							outln """<li class="secondary"> <a href="?showpagepos=${page_pos}">${page_pos}</a> </li>"""
+						}
+					}
 				} else {
-					outln """    <li class="secondary"> <a href="?showlimit=on">${message(code:'fc.showlimit',args:[session.showLimitCrewNum])}</a> </li>"""
+					if (session.showLimitCrewNum) {
+						outln """    <li class="secondary"> <a href="?showlimit=on">${message(code:'fc.showlimit',args:[session.showLimitCrewNum])}</a> </li>"""
+					}
+					outln """    <li class="secondary"> <a href="?showpage=on">${message(code:'fc.showpage')}</a> </li>"""
 				}
 			}
 			

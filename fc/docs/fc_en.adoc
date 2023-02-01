@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.2.4
-:revdate: 02.07.2022
+:revnumber: 3.3.0
+:revdate: 01.02.2023
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -33,7 +33,7 @@ Is an open source, multilingual, network-enabled database application based on J
 
 Supports logger data formats GAC, IGC, GPX, KML, KMZ and NMEA 0183 (extensible).
 
-Generates OSM-based A3 & A4 competition maps in TÜK-200 style.
+Generates OSM-based topographic A3 and A4 competition maps in TÜK-200 style.
 
 Creates PDF for print and internet publishing.
 
@@ -41,10 +41,10 @@ Sends emails of the navigation flight charts to the participants.
 
 Supports special stretching properties:
 
-* Unknown time checks
+* Secret time checks
 * Curved legs
 * Semicircles
-* Touch & Go landings
+* Touch-and-go landings
 
 Provides a live score display (Live Scoring):
 
@@ -53,7 +53,7 @@ Provides a live score display (Live Scoring):
 
 Provides integrated map viewers for navigation flights, routes and logger files:
 
-* Offline map display for navigation flight assessment
+* Offline map display for navigation flight evaluation
 * Fast offline map display near a selected turnpoint
 * Online map display with Open Street Map
 * Logger data display for GAC, IGC, GPX, KML, KMZ and NMEA files with optional gpx download
@@ -81,14 +81,14 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 == Default competition / Tasks to be done
 
 _Contest organizer_ +
-*Evaluation referee*
+*Scoring manager*
 
 [upperalpha]
 . Before competition day
 
 [arabic]
 .. _Engineer competition route_ +
-   (Coordinates, maps, pictures, ground signs, turning loops, unknown time checks).
+   (Coordinates, maps, pictures, ground signs, turning loops, secret time checks).
    
 .. _Engineer approach and departure route_ +
    (distances/time requirements, maps, radio, tower communication)
@@ -136,7 +136,7 @@ _Contest organizer_ +
 *** Add crew specific evaluation forms for observations
 
 .. _Briefing_
-*** Route (turn loops, unknown time check, approach/departure procedures, radio, tower communication)
+*** Route (turn loops, secret time check, approach/departure procedures, radio, tower communication)
 *** Procedure (handing out of documents, handing in of evaluation forms/loggers after arrival, receipt of results)
 *** Weather
 
@@ -155,12 +155,12 @@ _Contest organizer_ +
 .. _Survey landings_
 *** Document landing field (0, Field name, Out)
 *** Document abnormal landing
-*** Transmit landing result continuously to evaluation referee
+*** Transmit landing result continuously to scoring manager
 
 .. _Coordinate arriving crews_
 *** Monitor time for completion of evaluation form
 *** Receive evaluation form and logger
-*** Transport evaluation form and logger to evaluation referee
+*** Transport evaluation form and logger to scoring manager
 
 .. *Evaluate landings and navigation flight*
 *** Data entry landings
@@ -171,10 +171,10 @@ _Contest organizer_ +
 *** Update live evaluation
 
 .. _Distribute results_
-*** Collect results from the evaluation referee
+*** Collect results from the scoring manager
 *** Hand over results continuously to crews
 *** Receive queries from the crews and make decisions
-*** Hand over corrections to the evaluation referee
+*** Hand over corrections to the scoring manager
 
 .. *Final evaluation*
 *** Process corrections in response to crew queries.
@@ -191,15 +191,14 @@ _Contest organizer_ +
 
 - Bold marked texts and numbers as well as the sign '...' are links,
   behind which further data are hidden.
-- When entering times, a '.' can also be used instead of the ':',
-  which makes it unnecessary to press the shift key.
-- When entering fractional numbers, a '.' can also be used instead of the ','.
-  can be used.
-- When entering land measurement values, lowercase letters can be used instead of uppercase letters.
-  instead of uppercase letters, which eliminates the need to press the Shift key.
-- When entering landing values, the landing value "out" for landings outside the landing box and "no" for landings outside the landing box can be entered.
-  outside the landing box and "no" for no landing can be entered, in order to
-  enter these errors without mouse operation.
+- When entering times, a '.', ',', or ';' can also be used instead of the ':'.
+  This makes it unnecessary to press the shift key with the german ':' key
+  and a numeric keyboard with a comma can also be used.
+- When entering fractional numbers, a '.' can also be used instead of the ','. 
+- When entering land measurement values, lowercase letters can be used instead of uppercase letters,
+  which eliminates the need to press the shift key.
+- When entering landing values, the landing value "out" for landings outside the landing box and "no" for landings outside the landing box can be entered,
+  in order to enter these errors without mouse clicks.
 
 <<<
 [[response-to-modifications]]
@@ -242,8 +241,8 @@ Turnpoint overflight time of a task should not be evaluated::
   Disable 'time evaluation' of the turn point (Results -> Disable check points) +
   Causes recalculation of the result.
   
-Unknown time check of a task should not be scored::
-  'Time evaluation' and 'Goal missed' of the unknown time check.
+Secret time check of a task should not be scored::
+  'Time evaluation' and 'Goal missed' of the secret time check.
      deactivate (Results -> Deactivate check points) +
   Causes recalculation of the result.
 
@@ -369,7 +368,7 @@ TO, LDG, iTO, iLDG: 0 ft
   distances must be measured on the competition map and entered into the field
   'Distance measurement (map) [mm]'. Thereby the distance from the previous turn point is measured in mm
   (for a map with the competition scale 1:200000).
-  The previous turn point is a check point that is not an unknown time check.
+  The previous turn point is a check point that is not an secret time check.
 * Auxiliary points are to be entered for curved legs of the course. These are to be
   entered as SC with the following information:
 ** No time evaluation
@@ -469,14 +468,14 @@ Properties to be entered for the check points of a route:
 [[route-planning-input]]
 === Competitive route input
 
-When entering a route in 'Flight Contest', please note that the check points can only be entered one after the other.
-can be entered one after the other and inserting check points is not possible.
+When entering a route in 'Flight Contest', please note that the check points can only be entered one after the other
+and inserting check points is not possible.
 All properties except the check point type can be changed until the first use.
 Terrain heigth and gate width are also changeable after the first use.
 
-Alternatively, the input and forwarding of routes or parts of them is
+Alternatively, the input and forwarding of routes or parts of them
 is also possible with text files (UTF-8). In an empty route all check points can be added with
-"Import coordinates" from a text file can be added (incl. properties):
+"Import coordinates" from a text file (incl. properties):
   
  TO,   Lat 48° 46.66700' N, Lon 010° 15.79600' E, Alt 1915ft, Gate 270° 0.02NM
  SP,   Lat 48° 49.84000' N, Lon 010° 12.70000' E, Alt 2567ft, Gate 1.0NM
@@ -563,7 +562,7 @@ Open the 'Properties' context menu of the path +
 With the 'Edit path' dialog open, grab the check point with the left mouse button and drag it to the desired position + Close the 'Edit path' dialog
 Close 'Edit path' dialog
 
-- Unknown time checks or curved legs can be added after the course import.
+- Secret time checks or curved legs can be added after the course import.
 
 .. Enter route photos
 
@@ -612,13 +611,15 @@ Execute context menu item "Paste" once or several times (according to the number
 Edit "Properties" of the added points in the 'Placemark' dialog:
 
 *** In the Name field adjust check point name and gate width +
-(TP -> SC, e.g. "TP1, Gate 1.0NM" -> "SC1, Gate 2.0NM")
+(TP1 -> SC, e.g. "TP1, Gate 1.0NM" -> "SC, Gate 2.0NM" (SC does not need to be numbered))
 *** Grab point in graphic area with left mouse button and drag to desired position
 *** Close 'Place marking' dialog
 
 . Save 'Filename.kmz' with context menu 'Save location as' in new kmz file
 
 . Import the corrected route (Route -> *Import FC Route*)
+
+. Activate the option '*Check point after curved leg*' at the turn point with which the curved section ends.
 
 [[route-planning-semicircles]]
 === Create competition route with semicircles
@@ -649,7 +650,7 @@ Check your entered route in 'Route details' as follows:
 ** Turning loops (course changes > 90 degrees) correct?
 
 [[route-planning-deliver]]
-=== Passing the competition route to the evaluation referee
+=== Passing the competition route to the scoring manager
 
 Export a course entered with 'Flight Contest' with 'GPX-Export' or 'KMZ-Export'.
 to pass it on to the judge, who can import it with 'Routes -> Import FC-Route'.
@@ -748,7 +749,7 @@ The following route details can be drawn on the map:
 * Stage lines
 * Course of curved stages
 * Turning point names (in the respective print language, German WP, English TP)
-* Gates of unknown time checks
+* Gates of secret time checks
 * Positions of track photos
 * Positions of track ground signs
 
@@ -1284,12 +1285,12 @@ Alternatively, the loggers can also be read out via the following scripts:
 [[supported-logger-igc]]
 === Any other IGC logger
 * A use in the competition is to be clarified with the competition leader.
-* The readout program is to be made available to the evaluation referee.
+* The readout program is to be made available to the scoring manager.
 
 [[supported-logger-gpx]]
 === Any other GPX logger
 * A use in the competition is to be clarified with the competition leader.
-* The readout program is to be made available to the evaluation referee.
+* The readout program is to be made available to the scoring manager.
 * Necessary logger settings:
 ** Recording interval: 1 second
 ** Recording with altitude information
@@ -1300,7 +1301,7 @@ Alternatively, the loggers can also be read out via the following scripts:
 [[supported-logger-kml]]
 === Any other KML logger
 * A use in the competition is to be clarified with the competition leader.
-* The readout program is to be made available to the evaluation referee.
+* The readout program is to be made available to the scoring manager.
 * Necessary logger settings:
 ** Recording interval: 1 second
 ** Recording with altitude data
@@ -1313,7 +1314,7 @@ Alternatively, the loggers can also be read out via the following scripts:
 === Any other NMEA logger
 * The logger must support the standard 'NMEA 0183'.
 * A use in competition has to be clarified with the competition manager.
-* The readout program must be made available to the evaluation referee.
+* The readout program must be made available to the scoring manager.
 
 <<<
 [[print-styles]]
@@ -1399,6 +1400,7 @@ Table classes:
 |routelegs|name value coursechange summary|from2tp trackdistance
 |enroutephotos|name title value|photoname coords distfromtp tpname
 |enroutecanvas|name title value|canvassign coords distfromtp tpname
+|mapdistances|title title2 value|tpname coorddist measuredist difference
 |routecoordexport|title value|
 |turnpointsignexport|title value|
 |enroutephotoexport|title value|
@@ -1416,6 +1418,7 @@ Table classes:
 |timetablejudgelist|value [#crew.num]|num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass planningtime planningtimebefore planningendtime takeofftime sptime tptime fptime landingtime arrivaltime submissiontime empty1 empty2 empty3 empty4
 |timetableoverviewlist|briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]|col1 col2 col3
 |timetableoverviewlist2|head, times [#tas]|tas to2sp ifp2ildg ildg2isp fp2ldg
+|landingstartlistlist|value [#crew.num]|group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4	
 
 |crewtest||title crew team resultclass aircraft aircrafttype tas
 |crewneutral||title num crew aircraft col
@@ -1445,6 +1448,7 @@ Table classes:
 
 |resultlist|[#pos]|pos crew aircraft team resultclass shortresultclass planningpenalties flightpenalties observationpenalties landingpenalties specialpenalties taskpenalties contestpenalties
 |teamresultlist|[#pos]|pos team crews teampenalties
+|resultfooter|[#line<line>]|[#col<column>]
 
 |freetext||#line
 |testlist||testcol1 testcol2 testcol3 testcol4 testcol5
@@ -1494,6 +1498,10 @@ Table classes:
 ** Result list team evaluation - reduce lines
 
  table.teamresultlist td { font-size: 90%; }
+
+** Footer in result list - enlarge rows
+
+ table.resultfooter tr td { font-size: 120%; }
 
 ** Points pressure landing field - change size
 
@@ -1802,6 +1810,9 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
    }
    clouddemo {
      enable = true // Enables the cloud demo display
+   }
+   observation {
+     nobuttons = true // Disables buttons on observation result input
    }
  }
 

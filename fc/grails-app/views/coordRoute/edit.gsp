@@ -18,6 +18,8 @@
                 <div class="block" id="forms" >
                     <g:form method="post" >
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${coordRouteInstance.GetNextCoordRouteID(false)}"/>
+						<g:set var="prev_id" value="${coordRouteInstance.GetPrevCoordRouteID(false)}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -139,16 +141,18 @@
 	                                <br/>
 	                                <input type="text" id="altitude" name="altitude" value="${coordRouteInstance.altitude}" tabIndex="${ti[0]++}"/>
 	                            </p>
-                                <p>
-                                    <label>${message(code:'fc.minaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>
-                                    <br/>
-                                    <input type="text" id="minAltitudeAboveGround" name="minAltitudeAboveGround" value="${coordRouteInstance.minAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
-                                </p>
-                                <p>
-                                    <label>${message(code:'fc.maxaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>
-                                    <br/>
-                                    <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${coordRouteInstance.maxAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
-                                </p>
+                                <g:if test="${!coordRouteInstance.type.IsRunwayCoord()}">
+                                    <p>
+                                        <label>${message(code:'fc.minaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>
+                                        <br/>
+                                        <input type="text" id="minAltitudeAboveGround" name="minAltitudeAboveGround" value="${coordRouteInstance.minAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
+                                    </p>
+                                    <p>
+                                        <label>${message(code:'fc.maxaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>
+                                        <br/>
+                                        <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${coordRouteInstance.maxAltitudeAboveGround}" tabIndex="${ti[0]++}"/>
+                                    </p>
+                                </g:if>
 	                            <p>
 	                                <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>
 	                                <br/>
@@ -165,38 +169,34 @@
 	                    </g:else>
                         <input type="hidden" name="id" value="${coordRouteInstance?.id}" />
                         <input type="hidden" name="version" value="${coordRouteInstance?.version}" />
+						<g:if test="${next_id}">
+							<g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+						<g:if test="${prev_id}">
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.gotoprev')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+						<g:if test="${next_id}">
+							<g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+                        <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
                         <g:if test="${!coordRouteInstance.route.Used()}">
-	                       	<g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
-	                            <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="${ti[0]++}"/>
-	                        </g:if>
-                            <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:else>
-	                        <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="${ti[0]++}"/>
                             <g:if test="${coordRouteInstance.IsRouteMeasure()}">
-	                            <g:actionSubmit action="reset" value="${message(code:'fc.measure.fromlasttp.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+	                            <g:actionSubmit action="reset" value="${message(code:'fc.measure.fromlasttp.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
 	                        </g:if>
-	                        <g:if test="${!params.next || coordRouteInstance.type.IsDeleteAllowedCoord()}">
-	                           <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+	                        <g:if test="${!next_id || coordRouteInstance.type.IsDeleteAllowedCoord()}">
+	                           <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
 	                        </g:if>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
 	                    </g:if>
-	                    <g:else>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
-                                <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
-                            <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:else>
-                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="${ti[0]++}"/>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
-	                    </g:else>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

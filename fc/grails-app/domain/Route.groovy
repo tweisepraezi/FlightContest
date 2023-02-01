@@ -25,7 +25,7 @@ class Route
     
     Boolean showCurvedPoints = false                                             // DB-2.20
 	Integer mapScale = 200000                                                    // DB-2.21
-	Integer altitudeAboveGround = 500                                            // DB-2.31, min. Altitude (Höhe) über Grund in ft
+	Integer altitudeAboveGround = 300                                            // DB-2.31, min. Altitude (Höhe) über Grund in ft
     Boolean exportSemicircleGates = false                                        // DB-2.26
     
     Boolean showCoords = true                                                    // DB-2.30
@@ -61,7 +61,7 @@ class Route
     Boolean contestMapChurches = true                                            // DB-2.21
     Boolean contestMapCastles = true                                             // DB-2.21
     Boolean contestMapChateaus = true                                            // DB-2.21
-    Boolean contestMapPowerlines = true                                          // DB-2.21
+    Boolean contestMapPowerlines = false                                         // DB-2.21
     Boolean contestMapWindpowerstations = true                                   // DB-2.21
     Boolean contestMapSmallRoads = false                                         // DB-2.21
     Boolean contestMapPeaks = true                                               // DB-2.21
@@ -957,7 +957,9 @@ class Route
                     } else if (!coordenroutecanvas_instance.enrouteDistanceOk) {
                         distancetolong_num++
                     }
-                    signs += coordenroutecanvas_instance.enrouteCanvasSign
+					if (coordenroutecanvas_instance.enrouteCanvasSign != EnrouteCanvasSign.NoSign) {
+						signs += coordenroutecanvas_instance.enrouteCanvasSign
+					}
                 }
                 num = CoordEnrouteCanvas.countByRoute(this)
                 min_num = contest.minEnrouteCanvas
@@ -1132,6 +1134,9 @@ class Route
     
     boolean IsEnrouteCanvasSignUsed(EnrouteCanvasSign enrouteCanvasSign)
     {
+		if (enrouteCanvasSign == EnrouteCanvasSign.NoSign) {
+			return false
+		}
         if (CoordEnrouteCanvas.findByEnrouteCanvasSignAndRoute(enrouteCanvasSign,this,[sort:"enrouteViewPos"])) {
             return true
         }
@@ -1490,6 +1495,14 @@ class Route
                     }
                 }
             }
+            for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRouteAndTypeAndTitleNumber(this,CoordType.FP,1,[sort:'enrouteViewPos'])) {
+                pos++
+                if (coordenroutecanvas_instance.enrouteViewPos != pos) {
+                    // println "2. Set enrouteViewPos from '${coordenroutecanvas_instance.enrouteCanvasSign}' to ${pos}."
+                    coordenroutecanvas_instance.enrouteViewPos = pos
+                    coordenroutecanvas_instance.save()
+                }
+            }
             for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRouteAndTypeAndTitleNumber(this,CoordType.UNKNOWN,1,[sort:'enrouteViewPos'])) {
                 pos++
                 if (coordenroutecanvas_instance.enrouteViewPos != pos) {
@@ -1554,32 +1567,32 @@ class Route
         return curved_point_titlecodes
     }
     
-    long GetNextID()
+    long GetNextRouteID()
     {
-        long next_id = 0
-        boolean set_next = false
+        boolean start_found = false
         for (Route route_instance in Route.findAllByContest(this.contest,[sort:'idTitle'])) {
-            if (set_next) {
-                next_id = route_instance.id
-                set_next = false
+            if (start_found) {
+                return route_instance.id
             }
             if (route_instance.id == this.id) {
-                set_next = true
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
     
-    static long GetNextID2(long routeID)
+    long GetPrevRouteID()
     {
-        long next_id = 0
-        if (routeID) {
-            Route route_instance = Route.get(routeID)
-            if (route_instance) {
-                next_id = route_instance.GetNextID()
+        boolean start_found = false
+        for (Route route_instance in Route.findAllByContest(this.contest,[sort:'idTitle', order:'desc'])) {
+            if (start_found) {
+                return route_instance.id
+            }
+            if (route_instance.id == this.id) {
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
     
     Map GetRouteData()
@@ -1657,7 +1670,7 @@ class Route
                     } else {
                         center_points = coordroute_instance.title() 
                     }
-                    if (!coordroute_instance.type.IsRunwayCoord()) {
+                    if (!coordroute_instance.type.IsRunwayCoord() || coordroute_instance.type == CoordType.TO) {
                         if (print_points) {
                             print_points += ",${coordroute_instance.title()}"
                         } else {

@@ -83,7 +83,7 @@ class GlobalController {
 			session.printLanguage = Languages.de.toString()
 		}
 		if (!session.showLimitCrewNum) {
-			session.showLimitCrewNum = 10
+			session.showLimitCrewNum = 0
 		}
         String config_file_name = Defs.FCSAVE_FILE_CONFIG
         fcService.println "Read $config_file_name"
@@ -113,7 +113,7 @@ class GlobalController {
 		
 		fcService.SetCookie(response, "ShowLanguage",     params.showLanguage)
 		fcService.SetCookie(response, "PrintLanguage",    params.printLanguage)
-		fcService.SetCookie(response, "ShowLimitCrewNum", params.showLimitCrewNum)
+		fcService.SetCookie(response, "ShowLimitTestNum", params.showLimitCrewNum)
         
         File config_dir = new File("${System.properties['user.home']}/.fc")
         if (!config_dir.exists()) {

@@ -32,21 +32,15 @@
 	                </thead>
 	                <tbody>
 	                    <g:each var="team_instance" in="${teamInstanceList}" status="i" >
-                            <g:set var="next_team" value=""/>
-                            <g:set var="next_team_id" value="${team_instance.GetNextID()}" />
-                            <g:if test="${next_team_id}">
-                                <g:set var="next_team" value="?next=${next_team_id}"/>
-                            </g:if>
-                            
 	                    	<g:if test="${Crew.findByTeam(team_instance)}">
 								<g:each var="crew_instance" in="${Crew.findAllByTeam(team_instance,[sort:'name'])}" status="j" >
 			                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
 		                               	<g:if test="${j==0}">
 		                                    <g:set var="team_id" value="selectedTeamID${team_instance.id.toString()}"></g:set>
 		                                    <g:if test="${flash.selectedTeamIDs && (flash.selectedTeamIDs[team_id] == 'on')}">
-		                                        <td><g:checkBox name="${team_id}" value="${true}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" next="${next_team}"/><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+		                                        <td><g:checkBox name="${team_id}" value="${true}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" /><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
 		                                    </g:if> <g:else>
-		                                        <td><g:checkBox name="${team_id}" value="${false}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" next="${next_team}"/><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+		                                        <td><g:checkBox name="${team_id}" value="${false}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" /><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
 		                                    </g:else>
 		                                </g:if>
 		                                <g:else>
@@ -77,9 +71,9 @@
 		                		<tr class="${(i % 2) == 0 ? 'odd' : ''}">
 	                                <g:set var="team_id" value="selectedTeamID${team_instance.id.toString()}"></g:set>
 	                                <g:if test="${flash.selectedTeamIDs && (flash.selectedTeamIDs[team_id] == 'on')}">
-	                                    <td><g:checkBox name="${team_id}" value="${true}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" next="${next_team}"/><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+	                                    <td><g:checkBox name="${team_id}" value="${true}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" /><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
 	                                </g:if> <g:else>
-	                                    <td><g:checkBox name="${team_id}" value="${false}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" next="${next_team}"/><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
+	                                    <td><g:checkBox name="${team_id}" value="${false}"/> <g:team var="${team_instance}" link="${createLink(controller:'team',action:'edit')}" /><g:if test="${team_instance.disabled}"> (${message(code:'fc.disabled')})</g:if></td>
 	                                </g:else>
 		                			<td/>
                                     <g:if test="${resultClasses}">

@@ -62,7 +62,7 @@ class ResultClassController {
 			flash.message = resultclass.message
 			// process return action
 			if (params.editpointsReturnAction) {
-                long next_resultclassid = resultclass.instance.GetNextID()
+                long next_resultclassid = resultclass.instance.GetNextResultClassID()
                 if (next_resultclassid) {
                     redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID,params:[next:next_resultclassid])
                 } else {
@@ -90,23 +90,16 @@ class ResultClassController {
     def updatenext = {
         def resultclass = fcService.updateResultClass(session.showLanguage, params)
         if (resultclass.instance) {
-            long next_id = resultclass.instance.GetNextID()
-            long next_id2 = ResultClass.GetNextID2(next_id)
+            long next_id = resultclass.instance.GetNextResultClassID()
             if (resultclass.saved) {
                 flash.message = resultclass.message
                 if (next_id) {
-                    if (next_id2) {
-                        redirect(action:edit,id:next_id,params:[next:next_id2])
-                    } else {
-                        redirect(action:edit,id:next_id)
-                    }
+                    redirect(action:edit,id:next_id)
                 } else {
                     redirect(controller:"resultclass",action:"list")
                 }
             } else {
-                if (next_id && next_id2) {
-                    render(view:'edit',model:[crewInstance:resultclass.instance,params:[next:next_id2]])
-                } else if (next_id) {
+                if (next_id) {
                     render(view:'edit',model:[crewInstance:resultclass.instance,params:[next:next_id]])
                 } else {
                     render(view:'edit',model:[crewInstance:resultclass.instance])
@@ -122,7 +115,7 @@ class ResultClassController {
 		def resultclass = fcService.updateResultClass(session.showLanguage, params)
 		if (resultclass.saved) {
 			flash.message = resultclass.message
-            long next_resultclassid = resultclass.instance.GetNextID()
+            long next_resultclassid = resultclass.instance.GetNextResultClassID()
             if (next_resultclassid) {
                 redirect(action:edit,id:params.id,params:[next:next_resultclassid])
             } else {
@@ -204,7 +197,7 @@ class ResultClassController {
 	def cancel = {
 		if (params.editpointsReturnAction) {
             def resultclass = fcService.getResultClass(params)
-            long next_resultclassid = resultclass.instance.GetNextID()
+            long next_resultclassid = resultclass.instance.GetNextResultClassID()
             if (next_resultclassid) {
                 redirect(action:params.editpointsReturnAction,controller:params.editpointsReturnController,id:params.editpointsReturnID,params:[next:next_resultclassid])
             } else {
@@ -224,14 +217,24 @@ class ResultClassController {
     def gotonext = {
         def resultclass = fcService.getResultClass(params)
         if (resultclass.instance) {
-            long next_id = resultclass.instance.GetNextID()
-            long next_id2 = ResultClass.GetNextID2(next_id)
+            long next_id = resultclass.instance.GetNextResultClassID()
             if (next_id) {
-                if (next_id2) {
-                    redirect(action:edit,id:next_id,params:[next:next_id2])
-                } else {
-                    redirect(action:edit,id:next_id)
-                }
+                redirect(action:edit,id:next_id)
+            } else {
+                redirect(controller:"resultclass",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"resultclass",action:"list")
+        }
+    }
+    
+    def gotoprev = {
+        def resultclass = fcService.getResultClass(params)
+        if (resultclass.instance) {
+            long prev_id = resultclass.instance.GetPrevResultClassID()
+            if (prev_id) {
+                redirect(action:edit,id:prev_id)
             } else {
                 redirect(controller:"resultclass",action:"list")
             }

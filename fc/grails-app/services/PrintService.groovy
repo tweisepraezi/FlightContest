@@ -346,6 +346,23 @@ class PrintService
             renderer.setDocument(url)
             renderer.layout()
             renderer.createPDF(content,false)
+
+			if (printparams.contest.printTeams) {
+				url = "${printparams.baseuri}/team/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${printparams.contest.printTeamLandscape}"
+				println "Print: $url"
+				renderer.setDocument(url)
+				renderer.layout()
+				renderer.writeNextDocument(1)
+			}
+			
+			if (printparams.contest.printAircraft) {
+				url = "${printparams.baseuri}/aircraft/listprintable?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${printparams.contest.printAircraftLandscape}"
+				println "Print: $url"
+				renderer.setDocument(url)
+				renderer.layout()
+				renderer.writeNextDocument(1)
+			}
+			
             renderer.finishPDF()
             crews.content = content.toByteArray()
             content.close()
@@ -815,6 +832,56 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
+    Map printlandingstartlistTask(Map params, printparams)
+    {
+        Map task = domainService.GetTask(params) 
+        if (!task.instance) {
+            return task
+        }
+
+        boolean a3 = false
+        boolean landscape = false
+        a3 = task.instance.printLandingStartlistA3
+        landscape = task.instance.printLandingStartlistLandscape
+        println "printlandingstartlistTask Judge (${task.instance.name()})"
+        
+        // Have all crews an aircraft?
+        boolean call_return = false
+        Test.findAllByTask(task.instance,[sort:"id"]).each { Test test_instance ->
+            if (!test_instance.taskAircraft) {
+                call_return = true
+            }
+        }
+        if (call_return) {
+            task.message = getMsg('fc.aircraft.notassigned')
+            task.error = true
+            return task
+        }
+
+        // Print landing start list
+        try {
+            ITextRenderer renderer = new ITextRenderer();
+            addFonts(renderer)
+            ByteArrayOutputStream content = new ByteArrayOutputStream()
+            boolean first_pdf = true
+            String url = ""
+			url = "${printparams.baseuri}/task/landingstartlistprintable/${task.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+            println "Print: $url"
+            renderer.setDocument(url)
+            renderer.layout()
+            renderer.createPDF(content,false)
+            renderer.finishPDF()
+            task.content = content.toByteArray()
+            content.close()
+        }
+        catch (Throwable e) {
+            task.message = getMsg('fc.print.error',["$e"])
+            task.error = true
+        }
+        return task
+    }
+    
+    //--------------------------------------------------------------------------
     Map printflightplansTask(Map params, boolean a3, boolean landscape, printparams)
     {
         printstart "printflightplansTask"
@@ -1250,8 +1317,8 @@ class PrintService
         task.instance.printObservationResultsScan = params.printObservationResultsScan == "on"
         task.instance.printLandingResults = params.printLandingResults == "on"
         task.instance.printSpecialResults = params.printSpecialResults == "on"
-        task.instance.printModifiedResults = params.printModifiedResults == "on"
-        task.instance.printCompletedResults = params.printCompletedResults == "on"
+        task.instance.printModifiedResults = params.printResults == "ModifiedResults"
+        task.instance.printCompletedResults = params.printResults == "CompletedResults"
         task.instance.printProvisionalResults = params.printProvisionalResults == "on"
         
         // Print all crewresults
@@ -1735,19 +1802,38 @@ class PrintService
     }
     
     //--------------------------------------------------------------------------
-    Map printlandingresultsTest(Map params, boolean a3, boolean landscape, printparams)
+    Map printlandingresultsTest(Map params, boolean a3, boolean landscape, printparams, ResultType resultType)
     {
         Map test = domainService.GetTest(params)
         if (!test.instance) {
             return test
         }
+		
+		String print_action = ""
+		switch (resultType) {
+			case ResultType.Landing:
+				print_action = "landingresultsprintable"
+				break
+			case ResultType.Landing1:
+				print_action = "landingresultsprintable1"
+				break
+			case ResultType.Landing2:
+				print_action = "landingresultsprintable2"
+				break
+			case ResultType.Landing3:
+				print_action = "landingresultsprintable3"
+				break
+			case ResultType.Landing4:
+				print_action = "landingresultsprintable4"
+				break
+		}
         
         // Print landing test results
         try {
             ITextRenderer renderer = new ITextRenderer();
             addFonts(renderer)
             ByteArrayOutputStream content = new ByteArrayOutputStream()
-            String url = "${printparams.baseuri}/test/landingresultsprintable/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
+            String url = "${printparams.baseuri}/test/${print_action}/${test.instance.id}?print=1&lang=${printparams.lang}&contestid=${printparams.contest.id}&a3=${a3}&landscape=${landscape}"
             println "Print: $url"
             renderer.setDocument(url)
             renderer.layout()

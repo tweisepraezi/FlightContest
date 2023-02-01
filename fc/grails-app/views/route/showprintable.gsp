@@ -81,7 +81,7 @@
                         <tr class="value">
                             <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
                             <td class="coords">${coordroute_instance.namePrintable(true,true)}</td>
-                            <td class="altitude">${coordroute_instance.altitude}${message(code:'fc.foot')}</td>
+                            <td class="altitude"><g:getAltitudeValues route="${routeInstance}" coordresult="${coordroute_instance}"/></td>
                             <td class="gatewidth">${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>
                             <g:if test="${routeInstance.turnpointRoute.IsTurnpointSign()}" >
                                 <td class="sign">${coordroute_instance.GetPrintTurnpointSign()}</td>
@@ -196,16 +196,50 @@
                         <tbody>
                             <g:each var="coordenroutecanvas_instance" in="${CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])}">
                                 <tr class="value">
-                                    <td class="canvassign"><img src="${createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName)}" /><br/>${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>
-                                    <td class="coords">${coordenroutecanvas_instance.namePrintable(false,true)}</td>
-                                    <td class="distfromtp">${FcMath.DistanceStr(coordenroutecanvas_instance.enrouteDistance)}${message(code:'fc.mile')}<br/>${FcMath.DistanceMeasureStr(coordenroutecanvas_instance.GetMeasureDistance())}${message(code:'fc.mm')}<br/>${coordenroutecanvas_instance.GetPrintEnrouteOrthogonalDistance()}</td>
-                                    <td class="tpname">${coordenroutecanvas_instance.titlePrintCode()}</td>
+									<g:if test="${coordenroutecanvas_instance.enrouteCanvasSign != EnrouteCanvasSign.NoSign}">
+										<td class="canvassign"><img src="${createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName)}" /><br/>${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>
+										<td class="coords">${coordenroutecanvas_instance.namePrintable(false,true)}</td>
+										<td class="distfromtp">${FcMath.DistanceStr(coordenroutecanvas_instance.enrouteDistance)}${message(code:'fc.mile')}<br/>${FcMath.DistanceMeasureStr(coordenroutecanvas_instance.GetMeasureDistance())}${message(code:'fc.mm')}<br/>${coordenroutecanvas_instance.GetPrintEnrouteOrthogonalDistance()}</td>
+										<td class="tpname">${coordenroutecanvas_instance.titlePrintCode()}</td>
+									</g:if>
+									<g:else>
+										<td class="canvassign">${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>
+										<td class="coords"></td>
+										<td class="distfromtp"></td>
+										<td class="tpname"></td>
+									</g:else>
                                 </tr>
                             </g:each>
                         </tbody>
                     </table>
                 </div>
             </g:if>
+            <br/>
+            <div style="page-break-inside:avoid">
+	            <table class="mapdistances">
+                    <thead>
+                        <tr class="title">
+                            <th colspan="4">${message(code:'fc.distance.distances')}</th>
+                        </tr>
+                        <tr class="title2">
+							<th/>
+							<th>${message(code:'fc.distance.coord')}</th>
+							<th>${message(code:'fc.distance.map.measure')}</th>
+							<th>${message(code:'fc.distance.diff.measure')}</th>
+                        </tr>
+                    </thead>
+	                <tbody>
+						<g:each var="coordroute_instance" in="${CoordRoute.findAllByRoute(routeInstance,[sort:"id"])}">
+                            <tr class="value">
+                                <td class="tpname">${coordroute_instance.titlePrintCode()}</td>
+                                <td class="coorddist">${coordroute_instance.coordMeasureDistanceName(true)}</td>
+                                <td class="measuredist">${coordroute_instance.measureDistanceName(true)}</td>
+								<td class="difference">${coordroute_instance.measureDistanceDiffName(true)}</td>
+                            </tr>
+                        </g:each>
+	                </tbody>
+	            </table>
+	        </div>
             <br/>
             <div style="page-break-inside:avoid">
 	            <table class="routecoordexport">

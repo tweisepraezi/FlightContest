@@ -240,9 +240,16 @@ class ObservationResultsTagLib
                 }
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                     boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
-                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+                    String image_name = ""
+					if (enroutecanvasdata_instance.canvasSign.imageName) {
+						image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+					}
                     outln"""    <tr>"""
-                    outln"""        <td><img src="${image_name}" style="height:14px;"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					if (image_name) {
+						outln"""    <td><img class="observationcompletecanvasimage" src="${image_name}"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					} else {
+						outln"""    <td><img class="observationcompletecanvasimage" /> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					}
                     switch (attrs.t.GetEnrouteCanvasMeasurement()) {
                         case EnrouteMeasurement.Map:
                             String s = ""
@@ -373,6 +380,8 @@ class ObservationResultsTagLib
     
     // --------------------------------------------------------------------------------------------------------------------
     def observationTestInput = { attrs, body ->
+		boolean show_buttons = BootStrap.global.ShowObservationButtons()
+		attrs.complete[0] = true
         if (attrs.t.IsObservationSignUsed()) {
             // TurnpointData
             if (attrs.t.GetTurnpointRoute().IsTurnpointSign() && attrs.t.IsObservationTestTurnpointRun()) {
@@ -391,6 +400,7 @@ class ObservationResultsTagLib
                 for (TurnpointData turnpointdata_instance in TurnpointData.findAllByTest(attrs.t,[sort:"id"])) {
                     if (turnpointdata_instance.resultValue == EvaluationValue.Unevaluated) {
                         complete = false
+						attrs.complete[0] = false
                     }
                 }
                 outln"""<table>"""
@@ -442,9 +452,9 @@ class ObservationResultsTagLib
                             outln"""    <div>"""
                             for (def v in EvaluationValue.GetEvaluationValues(false)) {
                                 if (turnpointdata_instance.evaluationValue == v) {
-                                    outln"""<label><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
+                                    outln"""<label class="observationinputradio"><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
                                 } else {
-                                    outln"""<label><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
+                                    outln"""<label class="observationinputradio"><input type="radio" name="turnpointdataevaluation_${turnpointdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.turnpointEvaluationCode)}</label>"""
                                 }
                             }
                             attrs.ti[0]++
@@ -499,9 +509,9 @@ class ObservationResultsTagLib
                     outln"""<div>"""
                     for (def v in EnrouteValueUnit.values()) {
                         if (attrs.t.GetObservationTestEnroutePhotoValueUnit() == v) {
-                            outln"""<label><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+                            outln"""<label class="observationinputradio"><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         } else {
-                            outln"""<label><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+                            outln"""<label class="observationinputradio"><input type="radio" name="observationTestEnroutePhotoValueUnit" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         }
                     }
                     attrs.ti[0]++
@@ -513,6 +523,7 @@ class ObservationResultsTagLib
                 for (EnroutePhotoData enroutephotodata_instance in EnroutePhotoData.findAllByTest(attrs.t,[sort:"id"])) {
                     if (enroutephotodata_instance.resultValue == EvaluationValue.Unevaluated) {
                         complete = false
+						attrs.complete[0] = false
                     }
                 }
                 int col_span = 2
@@ -575,9 +586,9 @@ class ObservationResultsTagLib
                                         break
                                 }
                                 if (enroutephotodata_instance.evaluationValue == v) {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label class="observationinputradio"><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 } else {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label class="observationinputradio"><input type="radio" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 }
                             }
                             attrs.ti[0]++
@@ -587,11 +598,28 @@ class ObservationResultsTagLib
                             break
                         case EnrouteMeasurement.NMFromTP:
                             outln"""<td>"""
-                            outln"""    <select name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
-                            write_select_options(enroutephotodata_instance)
-                            outln"""    </select>"""
-                            outln"""    <input type="text" id="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${fieldValue(bean:enroutephotodata_instance,field:'evaluationDistance')}" tabIndex="${attrs.ti[0]++}"/>"""
+							String disabled_attribute = ""
+							if (show_buttons && !complete) {
+								write_buttons(enroutephotodata_instance, true)
+								if (enroutephotodata_instance.IsEvaluationFromTPNotFound()) {
+									disabled_attribute = "disabled"
+								}
+							} else {
+								outln"""    <select name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+								write_select_options(enroutephotodata_instance)
+								outln"""    </select>"""
+							}
+                            outln"""    <input type="text" class="measurement" id="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${fieldValue(bean:enroutephotodata_instance,field:'evaluationDistance')}" size="3" ${disabled_attribute} tabIndex="${attrs.ti[0]++}"/>"""
                             outln"""    <label>${message(code:'fc.mile')}</label>"""
+							outln"""	<script>"""
+							outln"""		\$(document).on('keypress', '#${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}', function(e) {"""
+							outln"""			if (e.charCode == 13) {"""
+							outln"""				var next_enroutephotodata_id = get_next_measurement_input_id('${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}');"""
+							outln"""				\$('#'+next_enroutephotodata_id).select();"""
+							outln"""				e.preventDefault();"""
+							outln"""			}"""
+							outln"""		});"""
+							outln"""	</script>"""
                             outln"""</td>"""
                             if (complete) {
                                 outln"""<td>${enroutephotodata_instance.tpName()} ${attrs.t.GetEnrouteDistanceResultsNM(enroutephotodata_instance.distanceNM)} ${message(code:'fc.mile')}</td>"""
@@ -599,11 +627,28 @@ class ObservationResultsTagLib
                             break
                         case EnrouteMeasurement.mmFromTP:
                             outln"""<td>"""
-                            outln"""    <select name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
-                            write_select_options(enroutephotodata_instance)
-                            outln"""    </select>"""
-                            outln"""    <input type="text" id="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${fieldValue(bean:enroutephotodata_instance,field:'evaluationDistance')}" tabIndex="${attrs.ti[0]++}"/>"""
+							String disabled_attribute = ""
+							if (show_buttons && !complete) {
+								write_buttons(enroutephotodata_instance, true)
+								if (enroutephotodata_instance.IsEvaluationFromTPNotFound()) {
+									disabled_attribute = "disabled"
+								}
+							} else {
+								outln"""    <select name="${Defs.EnrouteID_PhotoCoordTitle}${enroutephotodata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+								write_select_options(enroutephotodata_instance)
+								outln"""    </select>"""
+							}
+                            outln"""    <input type="text" class="measurement" id="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" name="${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}" value="${fieldValue(bean:enroutephotodata_instance,field:'evaluationDistance')}" size="3" ${disabled_attribute} tabIndex="${attrs.ti[0]++}"/>"""
                             outln"""    <label>${message(code:'fc.mm')}</label>"""
+							outln"""	<script>"""
+							outln"""		\$(document).on('keypress', '#${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}', function(e) {"""
+							outln"""			if (e.charCode == 13) {"""
+							outln"""				var next_enroutephotodata_id = get_next_measurement_input_id('${Defs.EnrouteID_PhotoEvaluationValue}${enroutephotodata_instance.id}');"""
+							outln"""				\$('#'+next_enroutephotodata_id).select();"""
+							outln"""				e.preventDefault();"""
+							outln"""			}"""
+							outln"""		});"""
+							outln"""	</script>"""
                             outln"""</td>"""
                             if (complete) {
                                 outln"""<td>${enroutephotodata_instance.tpName()} ${attrs.t.GetEnrouteDistanceResultsmm(enroutephotodata_instance.distancemm)} ${message(code:'fc.mm')}</td>"""
@@ -662,9 +707,9 @@ class ObservationResultsTagLib
                     outln"""<div>"""
                     for (def v in EnrouteValueUnit.values()) {
                         if (attrs.t.GetObservationTestEnrouteCanvasValueUnit() == v) {
-                            outln"""<label><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+                            outln"""<label class="observationinputradio"><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         } else {
-                            outln"""<label><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
+                            outln"""<label class="observationinputradio"><input type="radio" name="observationTestEnrouteCanvasValueUnit" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.code)}</label>"""
                         }
                     }
                     attrs.ti[0]++
@@ -676,6 +721,7 @@ class ObservationResultsTagLib
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                     if (enroutecanvasdata_instance.resultValue == EvaluationValue.Unevaluated) {
                         complete = false
+						attrs.complete[0] = false
                     }
                 }
                 int col_span = 2
@@ -721,9 +767,16 @@ class ObservationResultsTagLib
                 outln"""    <tbody>"""
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                     boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
-                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+                    String image_name = ""
+					if (enroutecanvasdata_instance.canvasSign.imageName) {
+						image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+					}
                     outln"""    <tr>"""
-                    outln"""        <td><img src="${image_name}" style="height:16px;"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					if (image_name) {
+						outln"""    <td><img class="observationinputcanvasimage" src="${image_name}"/> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					} else {
+						outln"""    <td><img class="observationinputcanvasimage" /> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					}
                     switch (attrs.t.GetEnrouteCanvasMeasurement()) {
                         case EnrouteMeasurement.Map:
                             outln"""<td>"""
@@ -739,9 +792,9 @@ class ObservationResultsTagLib
                                         break
                                 }
                                 if (enroutecanvasdata_instance.evaluationValue == v) {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label class="observationinputradio"><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 } else {
-                                    outln"""<label><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
+                                    outln"""<label class="observationinputradio"><input type="radio" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${v}" tabIndex="${attrs.ti[0]}"/>${message(code:v.enrouteEvaluationCode,args:[s])}</label>"""
                                 }
                             }
                             attrs.ti[0]++
@@ -751,11 +804,28 @@ class ObservationResultsTagLib
                             break
                         case EnrouteMeasurement.NMFromTP:
                             outln"""<td>"""
-                            outln"""    <select name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
-                            write_select_options(enroutecanvasdata_instance)
-                            outln"""    </select>"""
-                            outln"""    <input type="text" id="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${fieldValue(bean:enroutecanvasdata_instance,field:'evaluationDistance')}" tabIndex="${attrs.ti[0]++}"/>"""
+							String disabled_attribute = ""
+							if (show_buttons && !complete) {
+								write_buttons(enroutecanvasdata_instance, false)
+								if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound()) {
+									disabled_attribute = "disabled"
+								}
+							} else {
+								outln"""    <select name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+								write_select_options(enroutecanvasdata_instance)
+								outln"""    </select>"""
+							}
+                            outln"""    <input type="text" class="measurement" id="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${fieldValue(bean:enroutecanvasdata_instance,field:'evaluationDistance')}" size="3" ${disabled_attribute} tabIndex="${attrs.ti[0]++}"/>"""
                             outln"""    <label>${message(code:'fc.mile')}</label>"""
+							outln"""	<script>"""
+							outln"""		\$(document).on('keypress', '#${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}', function(e) {"""
+							outln"""			if (e.charCode == 13) {"""
+							outln"""				var next_enroutecanvasdata_id = get_next_measurement_input_id('${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}');"""
+							outln"""				\$('#'+next_enroutecanvasdata_id).select();"""
+							outln"""				e.preventDefault();"""
+							outln"""			}"""
+							outln"""		});"""
+							outln"""	</script>"""
                             outln"""</td>"""
                             if (complete) {
                                 outln"""<td>${enroutecanvasdata_instance.tpName()} ${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)} ${message(code:'fc.mile')}</td>"""
@@ -763,11 +833,28 @@ class ObservationResultsTagLib
                             break
                         case EnrouteMeasurement.mmFromTP:
                             outln"""<td>"""
-                            outln"""    <select name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
-                            write_select_options(enroutecanvasdata_instance)
-                            outln"""    </select>"""
-                            outln"""    <input type="text" id="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${fieldValue(bean:enroutecanvasdata_instance,field:'evaluationDistance')}" tabIndex="${attrs.ti[0]++}"/>"""
+							String disabled_attribute = ""
+							if (show_buttons && !complete) {
+								write_buttons(enroutecanvasdata_instance, false)
+								if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound()) {
+									disabled_attribute = "disabled"
+								}
+							} else {
+								outln"""    <select name="${Defs.EnrouteID_CanvasCoordTitle}${enroutecanvasdata_instance.id}" tabIndex="${attrs.ti[0]++}">"""
+								write_select_options(enroutecanvasdata_instance)
+								outln"""    </select>"""
+							}
+                            outln"""    <input type="text" class="measurement" id="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" name="${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}" value="${fieldValue(bean:enroutecanvasdata_instance,field:'evaluationDistance')}" size="3" ${disabled_attribute} tabIndex="${attrs.ti[0]++}"/>"""
                             outln"""    <label>${message(code:'fc.mm')}</label>"""
+							outln"""	<script>"""
+							outln"""		\$(document).on('keypress', '#${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}', function(e) {"""
+							outln"""			if (e.charCode == 13) {"""
+							outln"""				var next_enroutecanvasdata_id = get_next_measurement_input_id('${Defs.EnrouteID_CanvasEvaluationValue}${enroutecanvasdata_instance.id}');"""
+							outln"""				\$('#'+next_enroutecanvasdata_id).select();"""
+							outln"""				e.preventDefault();"""
+							outln"""			}"""
+							outln"""		});"""
+							outln"""	</script>"""
                             outln"""</td>"""
                             if (complete) {
                                 outln"""<td>${enroutecanvasdata_instance.tpName()} ${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)} ${message(code:'fc.mm')}</td>"""
@@ -828,6 +915,23 @@ class ObservationResultsTagLib
             outln"""        <input type="text" id="observationTestOtherPenalties" name="observationTestOtherPenalties" value="${fieldValue(bean:attrs.t,field:'observationTestOtherPenalties')}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""    </p>"""
             outln"""</fieldset>"""
+			
+			outln"""<script>"""
+			outln"""	function get_next_measurement_input_id(startid) {"""
+			outln"""		var tr_element = \$('#'+startid).parent().parent().next();"""
+			outln"""		while (true) {"""
+			outln"""			if (tr_element.val() === undefined) {"""
+			outln"""				return 0;"""
+			outln"""			}"""
+			outln"""			var next_id = tr_element.find('input.measurement:enabled').attr('id');"""
+			outln"""			if (next_id) {"""
+			outln"""				return next_id;"""
+			outln"""			}"""
+			outln"""			tr_element = tr_element.next();"""
+			outln"""		}"""
+			outln"""	}"""
+			outln"""</script>"""
+
             
         } else {
             outln"""<fieldset>"""
@@ -837,6 +941,9 @@ class ObservationResultsTagLib
                 outln"""    <br/>"""
                 outln"""    <input type="text" id="observationTestTurnPointPhotoPenalties" name="observationTestTurnPointPhotoPenalties" value="${fieldValue(bean:attrs.t,field:'observationTestTurnPointPhotoPenalties')}" tabIndex="${attrs.ti[0]++}"/>"""
                 outln"""</p>"""
+				outln"""<script>"""
+				outln"""	\$('#observationTestTurnPointPhotoPenalties').select();"""
+				outln"""</script>"""
             }
             if (attrs.t.IsObservationTestEnroutePhotoRun()) {
                 outln"""<p>"""
@@ -844,6 +951,11 @@ class ObservationResultsTagLib
                 outln"""    <br/>"""
                 outln"""    <input type="text" id="observationTestRoutePhotoPenalties" name="observationTestRoutePhotoPenalties" value="${fieldValue(bean:attrs.t,field:'observationTestRoutePhotoPenalties')}" tabIndex="${attrs.ti[0]++}"/>"""
                 outln"""</p>"""
+				if (!attrs.t.IsObservationTestTurnpointRun()) {
+					outln"""<script>"""
+					outln"""	\$('#observationTestRoutePhotoPenalties').select();"""
+					outln"""</script>"""
+				}
             }
             if (attrs.t.IsObservationTestEnrouteCanvasRun()) {
                 outln"""<p>"""
@@ -851,6 +963,11 @@ class ObservationResultsTagLib
                 outln"""    <br/>"""
                 outln"""    <input type="text" id="observationTestGroundTargetPenalties" name="observationTestGroundTargetPenalties" value="${fieldValue(bean:attrs.t,field:'observationTestGroundTargetPenalties')}" tabIndex="${attrs.ti[0]++}"/>"""
                 outln"""</p>"""
+				if (!(attrs.t.IsObservationTestTurnpointRun() || attrs.t.IsObservationTestEnroutePhotoRun())) {
+					outln"""<script>"""
+					outln"""	\$('#observationTestGroundTargetPenalties').select();"""
+					outln"""</script>"""
+				}
             }
             outln"""    <p>"""
             outln"""        <label>${message(code:'fc.observationresults.otherpenalties')}* [${message(code:'fc.points')}]:</label>"""
@@ -873,18 +990,74 @@ class ObservationResultsTagLib
                 }
             } else if ((coord_title.type == CoordType.UNKNOWN) && (coord_title.number == 1)) {
                 if (enrouteDataInstance.IsEvaluationFromTPNotFound()) {
-                    outln"""<option value="${Defs.EnrouteValue_NotFound}" selected="selected">-</option>"""
+                    outln"""<option value="${Defs.EnrouteValue_NotFound}" selected="selected">${message(code:'fc.observation.evaluationvalue.enroute.notfound')}</option>"""
                 } else {
-                    outln"""<option value="${Defs.EnrouteValue_NotFound}">-</option>"""
+                    outln"""<option value="${Defs.EnrouteValue_NotFound}">${message(code:'fc.observation.evaluationvalue.enroute.notfound')}</option>"""
                 }
             } else {
                 if ((coord_title.type == enrouteDataInstance.evaluationType) && (coord_title.number == enrouteDataInstance.evaluationNumber)) {
-                    outln"""<option value="${coord_title}" selected="selected">${coord_title.titleEnrouteInput()}</option>"""
+                    outln"""<option value="${coord_title}" selected="selected">${coord_title.titleCode()}</option>"""
                 } else {
-                    outln"""<option value="${coord_title}">${coord_title.titleEnrouteInput()}</option>"""
+                    outln"""<option value="${coord_title}">${coord_title.titleCode()}</option>"""
                 }
             }
         }
+	}
+	
+    // --------------------------------------------------------------------------------------------------------------------
+    private void write_buttons(EnrouteData enrouteDataInstance, boolean enroutePhoto)
+    {
+        String coordtitle_id = ""
+		String input_id = ""
+        if (enroutePhoto) {
+            coordtitle_id = Defs.EnrouteID_PhotoCoordTitle
+			input_id = "${Defs.EnrouteID_PhotoEvaluationValue}${enrouteDataInstance.id}"
+        } else {
+            coordtitle_id = Defs.EnrouteID_CanvasCoordTitle
+			input_id = "${Defs.EnrouteID_CanvasEvaluationValue}${enrouteDataInstance.id}"
+        }
+        for (CoordTitle coordtitle_instance in enrouteDataInstance.route.GetEnrouteCoordTitles(true)) {
+            if ((coordtitle_instance.type == CoordType.UNKNOWN) && (coordtitle_instance.number == 0)) {
+                if (enrouteDataInstance.IsEvaluationFromTPUnevaluated()) {
+					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${Defs.EnrouteValue_Unevaluated}"/>"""
+                }
+            } else if ((coordtitle_instance.type == CoordType.UNKNOWN) && (coordtitle_instance.number == 1)) {
+                if (enrouteDataInstance.IsEvaluationFromTPNotFound()) {
+                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
+					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${Defs.EnrouteValue_NotFound}"/>"""
+                } else {
+                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${message(code:'fc.observation.evaluationvalue.enroute.notfound')}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${Defs.EnrouteValue_NotFound}');"/>"""
+                }
+            } else {
+                if ((coordtitle_instance.type == enrouteDataInstance.evaluationType) && (coordtitle_instance.number == enrouteDataInstance.evaluationNumber)) {
+                    outln"""<input type="button" class="observationinputbutton" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${coordtitle_instance.titleCode()}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${coordtitle_instance}');"/>"""
+					outln"""<input type="hidden" id="${coordtitle_id}${enrouteDataInstance.id}" name="${coordtitle_id}${enrouteDataInstance.id}" value="${coordtitle_instance}"/>"""
+                } else {
+                    outln"""<input type="button" id="button_${coordtitle_id}${enrouteDataInstance.id}_${coordtitle_instance.id}" value="${coordtitle_instance.titleCode()}" onclick="set_enroute_value('${coordtitle_id}','${enrouteDataInstance.id}','${coordtitle_instance.id}','${input_id}','${coordtitle_instance}');"/>"""
+                }
+            }
+        }
+        outln"""<input type="button" value="-->" onclick="goto_input('${input_id}');"/>"""
+		outln"""<script>"""
+		outln"""	function set_enroute_value(coordtitle_id, data_id, button_id, input_id, value) {"""
+		outln"""		\$("#"+coordtitle_id+data_id).val(value);"""
+        for (CoordTitle coordtitle_instance in enrouteDataInstance.route.GetEnrouteCoordTitles(true)) {
+			//outln"""	\$("#button_"+coordtitle_id+data_id+"_${coordtitle_instance.id}").attr("style", "");"""
+			outln"""	\$("#button_"+coordtitle_id+data_id+"_${coordtitle_instance.id}").attr("class", "");"""
+		}
+		//outln"""		\$("#button_"+coordtitle_id+data_id+"_"+button_id).attr("style", "background-color:yellow;");"""
+		outln"""		\$("#button_"+coordtitle_id+data_id+"_"+button_id).attr("class", "observationinputbutton");"""
+		outln"""		if (value == '${Defs.EnrouteValue_NotFound}') {"""
+		outln"""			\$("#"+input_id).val(0);"""
+		outln"""			\$("#"+input_id).attr("disabled", true);"""
+		outln"""		} else {"""
+		outln"""			\$("#"+input_id).attr("disabled", false);"""
+		outln"""		}"""
+		outln"""	}"""
+		outln"""	function goto_input(input_id) {"""
+		outln"""		\$("#"+input_id).select();"""
+		outln"""	}"""
+		outln"""</script>"""
     }
     
 	// --------------------------------------------------------------------------------------------------------------------
@@ -1083,9 +1256,16 @@ class ObservationResultsTagLib
                 outln"""    <tbody>"""
                 for (EnrouteCanvasData enroutecanvasdata_instance in EnrouteCanvasData.findAllByTest(attrs.t,[sort:"id"])) {
                     boolean is_disabled = attrs.t.task.disabledEnrouteCanvasObs.contains("${enroutecanvasdata_instance.canvasSign.canvasName},")
-                    String image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
-                    outln"""    <tr class="value" id="${image_name}">"""
-                    outln"""        <td class="imagename"><img src="${image_name}" /> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					String image_name = ""
+					if (enroutecanvasdata_instance.canvasSign.imageName) {
+						image_name = createLinkTo(dir:'',file:enroutecanvasdata_instance.canvasSign.imageName)
+					}
+                    outln"""    <tr class="value" id="${enroutecanvasdata_instance.canvasSign}">"""
+					if (image_name) {
+						outln"""    <td class="imagename"><img src="${image_name}" /> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					} else {
+						outln"""    <td class="imagename"><img /> ${enroutecanvasdata_instance.canvasSign.canvasName}</td>"""
+					}
                     switch (attrs.t.GetEnrouteCanvasMeasurement()) {
                         case EnrouteMeasurement.Map:
                             String s = ""
@@ -1100,14 +1280,18 @@ class ObservationResultsTagLib
                             outln"""<td class="evaluation">${message(code:enroutecanvasdata_instance.evaluationValue.enrouteEvaluationCode,args:[s])}</td>"""
                             break
                         case EnrouteMeasurement.NMFromTP:
-                            if (enroutecanvasdata_instance.IsEvaluationFromTPUnevaluated()) {
+							if (enroutecanvasdata_instance.IsEvaluationFromTPUnevaluated()) {
                                 outln"""<td class="evaluation">${message(code:'fc.observation.evaluationvalue.enroute.noinput')}</td>"""
                             } else if (enroutecanvasdata_instance.IsEvaluationFromTPNotFound()) {
                                 outln"""<td class="evaluation">-</td>"""
                             } else {
                                 outln"""<td class="evaluation">${enroutecanvasdata_instance.evaluationPrintName()} ${FcMath.DistanceStr(enroutecanvasdata_instance.evaluationDistance)} ${message(code:'fc.mile')}</td>"""
                             }
-                            outln"""<td class="plan">${enroutecanvasdata_instance.tpPrintName()} ${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)} ${message(code:'fc.mile')}</td>"""
+                            if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
+								outln"""<td class="plan">${enroutecanvasdata_instance.tpPrintName()} ${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)} ${message(code:'fc.mile')}</td>"""
+							} else {
+								outln"""<td/>"""
+							}
                             break
                         case EnrouteMeasurement.mmFromTP:
                             if (enroutecanvasdata_instance.IsEvaluationFromTPUnevaluated()) {
@@ -1117,7 +1301,11 @@ class ObservationResultsTagLib
                             } else {
                                 outln"""<td class="evaluation">${enroutecanvasdata_instance.evaluationPrintName()} ${FcMath.DistanceMeasureStr(enroutecanvasdata_instance.evaluationDistance)} ${message(code:'fc.mm')}</td>"""
                             }
-                            outln"""<td class="plan">${enroutecanvasdata_instance.tpPrintName()} ${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)} ${message(code:'fc.mm')}</td>"""
+                            if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
+								outln"""<td class="plan">${enroutecanvasdata_instance.tpPrintName()} ${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)} ${message(code:'fc.mm')}</td>"""
+							} else {
+								outln"""<td/>"""
+							}
                             break
                     }
                     outln"""         <td class="result">${message(code:enroutecanvasdata_instance.resultValue.enrouteResultCode)}</td>"""

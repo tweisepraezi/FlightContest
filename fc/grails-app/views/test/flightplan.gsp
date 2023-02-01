@@ -12,6 +12,9 @@
                 <h2>${message(code:'fc.test.flightplan')} ${testInstance.GetStartNum()} - ${testInstance?.task.name()} (${message(code:'fc.test.timetable.version')} ${testInstance.task.GetTimeTableVersion()}<g:if test="${testInstance.task.timetableModified}">*</g:if><g:if test="${testInstance.task.GetTimeTableVersion() != testInstance.timetableVersion}">, ${message(code:'fc.test.timetable.unchangedversion')} ${testInstance.timetableVersion}</g:if>)</h2>
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['flightplanReturnAction':flightplanReturnAction,'flightplanReturnController':flightplanReturnController,'flightplanReturnID':flightplanReturnID]}">
+						<g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${testInstance.GetNextTestID(ResultType.Flight,session)}"/>
+						<g:set var="prev_id" value="${testInstance.GetPrevTestID(ResultType.Flight,session)}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -235,8 +238,20 @@
                             </div>
                         </g:if>
                         <input type="hidden" name="id" value="${testInstance?.id}"/>
-                        <g:actionSubmit action="printflightplan" value="${message(code:'fc.print')}" tabIndex="1"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="2"/>
+						<g:if test="${next_id}">
+							<g:actionSubmit action="flightplangotonext" value="${message(code:'fc.test.flightplan.gotonext')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="flightplangotonext" value="${message(code:'fc.test.flightplan.gotonext')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+						<g:if test="${prev_id}">
+							<g:actionSubmit action="flightplangotoprev" value="${message(code:'fc.test.flightplan.gotoprev')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="flightplangotoprev" value="${message(code:'fc.test.flightplan.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+                        <g:actionSubmit action="printflightplan" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

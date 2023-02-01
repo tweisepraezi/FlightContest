@@ -191,7 +191,7 @@
                     </thead>
 	                <tbody>
 	                    <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'taskPosition'])}">
-	                        <g:if test="${test_instance.crew.resultclass.id == resultclassInstance.id}">
+	                        <g:if test="${test_instance.crew.resultclass?.id == resultclassInstance.id}">
 		                        <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
 			                        <tr id="${test_instance.taskPosition}">
 			                            <td class="pos">${test_instance.taskPosition}</td>
@@ -239,16 +239,16 @@
 		                                	<td class="landingpenalties">${test_instance.landingTestPenalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                </g:if>
 		                                <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest1Run()}">
-		                                	<td class="landingpenalties">${test_instance.landingTest1Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                	<td class="landingpenalties">${test_instance.landingTest1Penalties}<g:if test="${!test_instance.landingTest1Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                </g:if>
 		                                <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest2Run()}">
-		                                	<td class="landingpenalties">${test_instance.landingTest2Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                	<td class="landingpenalties">${test_instance.landingTest2Penalties}<g:if test="${!test_instance.landingTest2Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                </g:if>
 		                                <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest3Run()}">
-		                                	<td class="landingpenalties">${test_instance.landingTest3Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                	<td class="landingpenalties">${test_instance.landingTest3Penalties}<g:if test="${!test_instance.landingTest3Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                </g:if>
 		                                <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest4Run()}">
-		                                	<td class="landingpenalties">${test_instance.landingTest4Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+		                                	<td class="landingpenalties">${test_instance.landingTest4Penalties}<g:if test="${!test_instance.landingTest4Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 		                                </g:if>
 		                                <g:if test="${test_instance.IsSpecialTestRun()}">
 		                                	<td class="specialpenalties">${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
@@ -421,16 +421,16 @@
 				                        <td class="landingpenalties">${test_instance.landingTestPenalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                    </g:if>
 				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest1Run()}">
-				                        <td class="landingpenalties">${test_instance.landingTest1Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                        <td class="landingpenalties">${test_instance.landingTest1Penalties}<g:if test="${!test_instance.landingTest1Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                    </g:if>
 				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest2Run()}">
-				                        <td class="landingpenalties">${test_instance.landingTest2Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                        <td class="landingpenalties">${test_instance.landingTest2Penalties}<g:if test="${!test_instance.landingTest2Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                    </g:if>
 				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest3Run()}">
-				                        <td class="landingpenalties">${test_instance.landingTest3Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                        <td class="landingpenalties">${test_instance.landingTest3Penalties}<g:if test="${!test_instance.landingTest3Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                    </g:if>
 				                    <g:if test="${test_instance.IsLandingTestRun() && test_instance.IsLandingTest4Run()}">
-				                        <td class="landingpenalties">${test_instance.landingTest4Penalties}<g:if test="${!test_instance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+				                        <td class="landingpenalties">${test_instance.landingTest4Penalties}<g:if test="${!test_instance.landingTest4Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
 				                    </g:if>
 				                    <g:if test="${test_instance.IsSpecialTestRun()}">
 				                        <td class="specialpenalties">${test_instance.specialTestPenalties}<g:if test="${!test_instance.specialTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>

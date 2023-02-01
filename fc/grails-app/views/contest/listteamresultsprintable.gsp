@@ -98,6 +98,25 @@
                     </g:each>
                 </tbody>
             </table>
+			<g:if test="${contestInstance.teamPrintFooter}">
+				<br/>
+				<table class="resultfooter">
+					<tbody>
+						<g:each var="foot_line" in="${Tools.Split(contestInstance.teamPrintFooter,Defs.RESULTS_FOOTER_LINE_SEPARATOR)}" status="i">
+							<tr id="line${i+1}">
+								<g:if test="${!foot_line}">
+									<td><br/></td>
+								</g:if>
+								<g:else>
+									<g:each var="foot_col" in="${Tools.Split(foot_line,Defs.RESULTS_FOOTER_COLUMN_SEPARATOR)}" status="j">
+										<td id="col${j+1}">${foot_col}</td>
+									</g:each>
+								</g:else>
+							</tr>
+						</g:each>
+					</tbody>
+				</table>
+			</g:if>
         </g:form>
     </body>
 </html>

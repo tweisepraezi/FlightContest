@@ -32,3 +32,6 @@ Mapnik
                     https://www.volkerschatz.com/net/osm/styleadv.html
    Projektionen     http://pubs.usgs.gov/of/1990/0284/report.pdf 
                     https://proj.org/operations/projections/merc.html
+                    
+Tile-Server on Windows                    
+    http://openstreetmapserverwindows.blogspot.com/2015/11/osmopenstreetmap-tile-server.html

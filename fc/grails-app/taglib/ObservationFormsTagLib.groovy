@@ -290,8 +290,13 @@ class ObservationFormsTagLib
                     outln"""<tr class="data">"""
                     if (attrs.printResults) {
                         outln"""<td class="sign"><img src="${image_name}"/></td>"""
-                        outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
-                        outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)}</td>"""
+						if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
+							outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
+							outln"""<td class="nmfromtp">${attrs.t.GetEnrouteDistanceResultsNM(enroutecanvasdata_instance.distanceNM)}</td>"""
+						} else {
+							outln"""<td class="fromlasttp"/>"""
+							outln"""<td class="nmfromtp"/>"""
+						}
                     } else {
                         outln"""<td class="sign">.</td>"""
                         outln"""<td class="fromlasttp"/>"""
@@ -303,8 +308,13 @@ class ObservationFormsTagLib
                     outln"""<tr class="data">"""
                     if (attrs.printResults) {
                         outln"""<td class="sign"><img src="${image_name}"/></td>"""
-                        outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
-                        outln"""<td class="mmfromtp">${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)}</td>"""
+						if (enroutecanvasdata_instance.canvasSign != EnrouteCanvasSign.NoSign) {
+							outln"""<td class="fromlasttp">${enroutecanvasdata_instance.tpPrintName()}</td>"""
+							outln"""<td class="mmfromtp">${attrs.t.GetEnrouteDistanceResultsmm(enroutecanvasdata_instance.distancemm)}</td>"""
+						} else {
+							outln"""<td class="fromlasttp"/>"""
+							outln"""<td class="mmfromtp"/>"""
+						}
                     } else {
                         outln"""<td class="sign">.</td>"""
                         outln"""<td class="fromlasttp"/>"""

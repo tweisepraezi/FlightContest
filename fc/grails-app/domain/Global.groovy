@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.34
+	// Actual database version: DB-2.35
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 34
+	static int DB_MINOR = 35
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -71,6 +71,16 @@ class Global
             return true
         }
         return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean ShowObservationButtons()
+    {
+        if (grailsApplication.config.flightcontest.observation
+         && grailsApplication.config.flightcontest.observation.nobuttons) {
+            return false
+        }
+        return true
     }
     
     // --------------------------------------------------------------------------------------------------------------------

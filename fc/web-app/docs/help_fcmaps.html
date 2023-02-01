@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest maps server</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.2.4,</span>
-<span id="revdate">02.07.2022</span>
+<span id="revnumber">version 3.3.0,</span>
+<span id="revdate">01.02.2023</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of content</div>
@@ -847,31 +847,22 @@ wget http://download.geofabrik.de/europe-latest.osm.pbf</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>createdb gis2
+<pre>dropdb gis2
+createdb gis2
 psql -d gis2 -c 'CREATE EXTENSION postgis;'</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis2)</p>
+<p>Load OSM data into OSM database (~/data/osm/*.pbf &#8594; gis2)<br>
+(Germany, Austria, Switzerland, parts of France, Poland, Czech Republic, Slovakia, Hungary)</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf</pre>
+<pre>osm2pgsql -d gis2 --slim --drop --flat-nodes=FILENAME --bbox 1.0,42.0,24.0,55.0 --style ~/fcmaps/osm2pgsql/fcmaps.style ~/data/osm/europe-latest.osm.pbf</pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Wait&#8230;&#8203; (22h)</p>
-</div>
-<div class="paragraph">
-<p>Compile preprocessing tools (warnings can be ignored)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>cd ~/fcmaps/otm-dev/mapnik/tools/
-cc -o saddledirection saddledirection.c -lm -lgdal
-cc -Wall -o isolation isolation.c -lgdal -lm -O2
-ls -l</pre>
-</div>
 </div>
 <div class="paragraph">
 <p>Preprocessing</p>
@@ -880,41 +871,15 @@ ls -l</pre>
 <div class="content">
 <pre>cd ~/fcmaps/otm-dev/mapnik/tools/
 psql gis2 &lt; arealabel.sql
+psql gis2 &lt; stationdirection.sql
+psql gis2 &lt; viewpointdirection.sql
+psql gis2 &lt; pitchicon.sql
+psql -d gis2 -c 'ALTER TABLE planet_osm_point ADD COLUMN otm_isolation text;'
 bash update_lowzoom.sh</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Wait&#8230;&#8203; (1h)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bash update_saddles.sh</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (10min)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>bash update_isolations.sh</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (5min)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>psql gis2 &lt; stationdirection.sql</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Wait&#8230;&#8203; (15min)</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>psql gis2 &lt; viewpointdirection.sql
-psql gis2 &lt; pitchicon.sql</pre>
-</div>
+<p>Wait&#8230;&#8203; (12h)</p>
 </div>
 <div class="paragraph">
 <p>Activate new databases <strong>gis</strong> and <strong>lowzoom</strong></p>

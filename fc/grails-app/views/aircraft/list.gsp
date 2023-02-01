@@ -25,13 +25,7 @@
                 <tbody>
                     <g:each var="aircraft_instance" in="${aircraftInstanceList}" status="i" >
                         <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-                            <g:set var="next_aircraft" value=""/>
-                            <g:set var="next_aircraft_id" value="${aircraft_instance.GetNextID()}" />
-                            <g:if test="${next_aircraft_id}">
-                                <g:set var="next_aircraft" value="?next=${next_aircraft_id}"/>
-                            </g:if>
-                            
-                            <td><g:aircraft var="${aircraft_instance}" link="${createLink(controller:'aircraft',action:'edit')}" next="${next_aircraft}"/></td>
+                            <td><g:aircraft var="${aircraft_instance}" link="${createLink(controller:'aircraft',action:'edit')}" /></td>
                             <td>${fieldValue(bean:aircraft_instance, field:'type')}</td>
                             <td>${fieldValue(bean:aircraft_instance, field:'colour')}</td>
                             <td><g:crew var="${aircraft_instance.user1}" link="${createLink(controller:'crew',action:'edit')}"/><g:if test="${aircraft_instance.user1?.disabled}"> (${message(code:'fc.disabled')})</g:if></td>

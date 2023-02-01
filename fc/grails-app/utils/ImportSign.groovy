@@ -94,7 +94,7 @@ enum ImportSign
         return [importsign:import_sign, linecontent:line_content, titlecode:title_code]
     }
     
-    private static ImportSign GetEnrouteSign(Route routeInstance, boolean enroutePhoto)
+    static ImportSign GetEnrouteSign(Route routeInstance, boolean enroutePhoto)
     {
         if (enroutePhoto) {
             switch (routeInstance.enroutePhotoRoute) {

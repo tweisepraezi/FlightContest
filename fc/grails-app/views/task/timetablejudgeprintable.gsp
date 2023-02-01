@@ -161,6 +161,9 @@
                 <tbody>
                     <g:each var="test_instance" in="${Test.findAllByTask(taskInstance,[sort:'viewpos'])}">
                        	<g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
+							<g:if test="${test_instance.pageBreak}">
+								<div style="page-break-before:always"/>
+							</g:if>
                             <tr class="value" id="${test_instance.crew.startNum}">
                                 <g:if test="${taskInstance.printTimetableJuryNumber}">
                                     <td class="num">${test_instance.GetStartNum()}</td>

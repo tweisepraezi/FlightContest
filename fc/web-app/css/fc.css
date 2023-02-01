@@ -34,6 +34,14 @@ ul.main li a.active {
 /* zusätzliche Styles
 ----------------------------------------------- */
 
+input[type="submit"]:focus {
+	background-color: #ffc107;
+}
+
+input[type="checkbox"]:focus, input[type="radio"]:focus {
+    filter: sepia(80%) brightness(70%) hue-rotate(170deg) saturate(70%) contrast(300%);
+}
+
 div.errors {
     background: #fff3f3;
     border: 1px solid red;
@@ -155,4 +163,26 @@ p.errors {
 a.error {
     font-weight:bold;
     color: red;
+}
+
+.observationinputradio {
+	padding: 4px;
+	border: 1px solid black;
+	border-radius: 4px;
+}
+
+.observationinputbutton {
+	background-color: yellow;
+}
+
+.observationcompletecanvasimage {
+	height: 14px;
+}
+
+.observationinputcanvasimage {
+	height: 16px;
+}
+
+tr.pagebreak td {
+	border-top: 2px solid black;
 }

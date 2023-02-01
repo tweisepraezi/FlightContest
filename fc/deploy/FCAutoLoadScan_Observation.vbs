@@ -1,8 +1,8 @@
 ' --------------------------------------------------------------------------------
 '   FCAutoLoadScan_Observation.vbs
 '   Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
-'   30.10.2021
-'   Version 1.0.1
+'   16.12.2022
+'   Version 1.0.2
 ' --------------------------------------------------------------------------------
 
 ' Neu gesicherte Dateien automatisch in Browser laden
@@ -135,7 +135,7 @@ End Function
 ' ----------------------------------------------------------------------------------
 Function OpenFile(fileName)
 	'
-	cmd = URL & SEARCH_FOLDER2 & "/" & fileName
+	cmd = Chr(34) & URL & SEARCH_FOLDER2 & "/" & fileName & Chr(34)
 	shell.Run cmd, 1, False ' 0 - unsichtbar, True - Wait for return
 	'
 End Function

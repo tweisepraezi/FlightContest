@@ -13,6 +13,8 @@
                 <div class="block" id="forms" >
                     <g:form id="${testInstance.id}" params="${['crewresultsReturnAction':crewresultsReturnAction,'crewresultsReturnController':crewresultsReturnController,'crewresultsReturnID':crewresultsReturnID]}">
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${testInstance.GetNextTestID(ResultType.Crew,session)}"/>
+						<g:set var="prev_id" value="${testInstance.GetPrevTestID(ResultType.Crew,session)}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -115,13 +117,45 @@
         	                            <td>${testInstance.observationTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})<g:if test="${!testInstance.observationTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
 			                    	</tr>
 	                            </g:if>
-                            	<g:if test="${testInstance.IsLandingTestRun()}">
-                            	   <g:set var="task_penalties" value="${task_penalties + testInstance.landingTestPenalties}" />
-			                    	<tr>
-			                     		<td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>
-        	                            <td>${testInstance.landingTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})<g:if test="${!testInstance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
-			                    	</tr>
-			                    </g:if>
+								<g:if test="${testInstance.IsLandingTestRun()}">
+									<g:if test="${testInstance.IsLandingTestAnyRun()}">
+										<g:if test="${testInstance.IsLandingTest1Run()}">
+										   <g:set var="task_penalties" value="${task_penalties + testInstance.landingTest1Penalties}" />
+											<tr>
+												<td class="detailtitle">${message(code:'fc.landingtest.landing1')}:</td>
+												<td>${testInstance.landingTest1Penalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetLandingTest1Version()})<g:if test="${!testInstance.landingTest1Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
+											</tr>
+										</g:if>
+										<g:if test="${testInstance.IsLandingTest2Run()}">
+										   <g:set var="task_penalties" value="${task_penalties + testInstance.landingTest2Penalties}" />
+											<tr>
+												<td class="detailtitle">${message(code:'fc.landingtest.landing2')}:</td>
+												<td>${testInstance.landingTest2Penalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetLandingTest2Version()})<g:if test="${!testInstance.landingTest2Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
+											</tr>
+										</g:if>
+										<g:if test="${testInstance.IsLandingTest3Run()}">
+										   <g:set var="task_penalties" value="${task_penalties + testInstance.landingTest3Penalties}" />
+											<tr>
+												<td class="detailtitle">${message(code:'fc.landingtest.landing3')}:</td>
+												<td>${testInstance.landingTest3Penalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetLandingTest3Version()})<g:if test="${!testInstance.landingTest3Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
+											</tr>
+										</g:if>
+										<g:if test="${testInstance.IsLandingTest4Run()}">
+										   <g:set var="task_penalties" value="${task_penalties + testInstance.landingTest4Penalties}" />
+											<tr>
+												<td class="detailtitle">${message(code:'fc.landingtest.landing4')}:</td>
+												<td>${testInstance.landingTest4Penalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetLandingTest4Version()})<g:if test="${!testInstance.landingTest4Complete}"> [${message(code:'fc.provisional')}]</g:if></td>
+											</tr>
+										</g:if>
+									</g:if>
+									<g:else>
+									   <g:set var="task_penalties" value="${task_penalties + testInstance.landingTestPenalties}" />
+										<tr>
+											<td class="detailtitle">${message(code:'fc.landingresults.landing')}:</td>
+											<td>${testInstance.landingTestPenalties} ${message(code:'fc.points')} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})<g:if test="${!testInstance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></td>
+										</tr>
+									</g:else>
+								</g:if>
 	                           	<g:if test="${testInstance.IsSpecialTestRun()}">
 	                           	   <g:set var="task_penalties" value="${task_penalties + testInstance.specialTestPenalties}" />
 			                     	<tr>
@@ -160,7 +194,12 @@
 	                        <table>
 	                            <thead>
 	                                <tr>
-	                                    <th colspan="4" class="table-head">${message(code:'fc.landingresults')} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})<g:if test="${!testInstance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></th>
+										<g:if test="${testInstance.IsLandingTestAnyRun()}">
+											<th colspan="4" class="table-head">${message(code:'fc.landingresults')}</th>
+										</g:if>
+										<g:else>
+											<th colspan="4" class="table-head">${message(code:'fc.landingresults')} (${message(code:'fc.version')} ${testInstance.GetLandingTestVersion()})<g:if test="${!testInstance.landingTestComplete}"> [${message(code:'fc.provisional')}]</g:if></th>
+										</g:else>
 	                                </tr>
 	                            </thead>
 	                            <tbody>
@@ -204,19 +243,23 @@
                             <tfoot>
                                 <tr>
                                     <td>
-				                        <g:if test="${params.next}">
+				                        <g:if test="${next_id}">
 				                            <g:actionSubmit action="crewresultsgotonext" value="${message(code:'fc.results.gotonext')}" tabIndex="${ti[0]++}"/>
 				                        </g:if>
 				                        <g:else>
-				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+				                            <g:actionSubmit action="crewresultsgotonext" value="${message(code:'fc.results.gotonext')}" disabled tabIndex="${ti[0]++}"/>
 				                        </g:else>
+				                        <g:if test="${prev_id}">
+				                            <g:actionSubmit action="crewresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" tabIndex="${ti[0]++}"/>
+				                        </g:if>
+										<g:else>
+											<g:actionSubmit action="crewresultsgotoprev" value="${message(code:'fc.results.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+										</g:else>
 				                        <g:actionSubmit action="crewresultsprintquestion" value="${message(code:'fc.print')}" tabIndex="${ti[0]++}"/>
                                         <g:if test="${testInstance.IsSendEMailPossible()}">
                                             <g:actionSubmit action="sendmail" value="${message(code:'fc.crewresults.sendmail')}" onclick="this.form.target='_self';return true;" title="${testInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
                                         </g:if>
-				                        <g:if test="${params.next}">
-				                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
-				                        </g:if>
+			                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
 			                        </td>
                                     <td style="width:1%;"><a href="#start"><img src="${createLinkTo(dir:'images',file:'up.png')}"/></a></td>
                                 </tr>

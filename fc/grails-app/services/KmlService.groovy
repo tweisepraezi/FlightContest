@@ -348,7 +348,7 @@ class KmlService
         }
         EnrouteCanvasSign.each { enroute_canvas_sign ->
             if (enroute_canvas_sign.imageName) {
-                xml.Style(id:STYLE_ENROUTE_CANVAS + enroute_canvas_sign.canvasName) {
+                xml.Style(id:STYLE_ENROUTE_CANVAS + enroute_canvas_sign) {
                     xml.IconStyle {
                         xml.color STYLE_ENROUTE_LABELCOLOR
                         xml.scale STYLE_ENROUTE_CANVAS_SCALE
@@ -1104,7 +1104,7 @@ class KmlService
                             if (routeInstance.enrouteCanvasRoute == EnrouteRoute.InputName) {
                                 for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRoute(routeInstance,[sort:"enrouteViewPos"])) {
                                     xml.Data(name:"enroutecanvassign:${coordenroutecanvas_instance.enrouteViewPos}") {
-                                        xml.value coordenroutecanvas_instance.enrouteCanvasSign.canvasName
+                                        xml.value coordenroutecanvas_instance.enrouteCanvasSign
                                     }
                                 }
                             }
@@ -1450,7 +1450,7 @@ class KmlService
                             xml.visibility "0"
                             for (CoordEnroutePhoto coordenroutephoto_instance in coordenroutephoto_instances) {
                                 xml.Placemark {
-                                    xml.name coordenroutephoto_instance.enroutePhotoName
+                                    xml.name coordenroutephoto_instance.GetExportEnrouteKML(true)
                                     xml.visibility "0"
                                     xml.styleUrl "#${STYLE_ENROUTE_PHOTO}"
                                     xml.Point {
@@ -1484,9 +1484,9 @@ class KmlService
                             xml.visibility "0"
                             for (CoordEnrouteCanvas coordenroutecanvas_instance in coordenroutecanvas_instances) {
                                 xml.Placemark {
-                                    xml.name coordenroutecanvas_instance.enrouteCanvasSign.canvasName
+                                    xml.name coordenroutecanvas_instance.GetExportEnrouteKML(false)
                                     xml.visibility "0"
-                                    xml.styleUrl "#${STYLE_ENROUTE_CANVAS}${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}"
+                                    xml.styleUrl "#${STYLE_ENROUTE_CANVAS}${coordenroutecanvas_instance.enrouteCanvasSign}"
                                     xml.Point {
                                         xml.coordinates "${coordenroutecanvas_instance.lonMath()},${coordenroutecanvas_instance.latMath()},0"
                                     }

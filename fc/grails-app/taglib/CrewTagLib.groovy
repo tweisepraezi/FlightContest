@@ -57,6 +57,9 @@ class CrewTagLib
     
     // --------------------------------------------------------------------------------------------------------------------
     def crewPrintable = { attrs, body ->
+		if (attrs.pageBreak) {
+			outln"""<div style="page-break-before:always"/>"""
+		}
         outln"""<tr class="value" id="${attrs.crew.startNum}">"""
         if (attrs.contest.printCrewNumber) {
             outln"""<td class="num">${attrs.crew.startNum}</td>"""

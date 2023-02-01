@@ -16,7 +16,7 @@
             <g:viewmsg msg="${flash.message}" error="${flash.error}"/>
             <g:form method="post" >
                 <g:set var="ti" value="${[]+1}"/>
-                <g:set var="columns" value="${6}"/>
+                <g:set var="columns" value="${7}"/>
                 <g:if test="${resultClasses}">
                     <g:set var="columns" value="${columns+1}"/>
                 </g:if>
@@ -29,6 +29,7 @@
 	                    <tr>
                             <th>${message(code:'fc.crew.startnum')}</th>
 	                        <th>${message(code:'fc.crew.name')}</th>
+							<th>${message(code:'fc.test.listpos')}</th>
                             <th>${message(code:'fc.crew.email')}</th>
 	                        <th>${message(code:'fc.team')}</th>
                             <g:if test="${resultClasses}">
@@ -40,14 +41,13 @@
 	                    </tr>
 	                </thead>
 	                <tbody>
+						<g:set var="crew_pos" value="${0}"></g:set>
 	                    <g:each var="crew_instance" in="${crewList}" status="i">
-	                        <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-	                            <g:set var="next_crew" value=""/>
-	                            <g:set var="next_crew_id" value="${crew_instance.GetNextID()}" />
-	                            <g:if test="${next_crew_id}">
-	                                <g:set var="next_crew" value="?next=${next_crew_id}"/>
-	                            </g:if>
-	                            
+							<g:set var="pagebreak_class" value=""></g:set>
+							<g:if test="${crew_instance.pageBreak}">
+								<g:set var="pagebreak_class" value="pagebreak"></g:set>
+							</g:if>
+	                        <tr class="${(i % 2) == 0 ? 'odd' : ''} ${pagebreak_class}">
 	                            <g:set var="crew_id" value="selectedCrewID${crew_instance.id.toString()}"></g:set>
                                 <g:set var="crew_selected" value="${false}"></g:set>
 	                            <g:if test="${flash.selectedCrewIDs && (flash.selectedCrewIDs[crew_id] == 'on')}">
@@ -62,7 +62,14 @@
                                         </g:if>
                                     </g:if>
                                 </td>
-                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}" next="${next_crew}"/><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:if test="${crew_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[crew_instance.GetIncreaseFactor()])})</g:if></td>
+                                <td><g:crew var="${crew_instance}" link="${createLink(controller:'crew',action:'edit')}" /><g:if test="${crew_instance.disabled}"> (${message(code:'fc.disabled')})</g:if><g:if test="${crew_instance.IsIncreaseEnabled()}"> (${message(code:'fc.crew.increaseenabled.short',args:[crew_instance.GetIncreaseFactor()])})</g:if></td>
+								<g:if test="${!crew_instance.disabled}">
+									<g:set var="crew_pos" value="${crew_pos+1}"></g:set>
+									<td>${crew_pos}</td>
+								</g:if>
+								<g:else>
+									<td></td>
+								</g:else>
                                 <td>${fieldValue(bean:crew_instance, field:'email')}</td>
                                 <g:if test="${crew_instance.team}">                          
                                     <td>

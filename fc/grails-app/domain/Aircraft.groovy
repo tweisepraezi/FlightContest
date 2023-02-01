@@ -28,31 +28,31 @@ class Aircraft
 		}
 	}
 
-    long GetNextID()
+    long GetNextAircraftID()
     {
-        long next_id = 0
-        boolean set_next = false
+        boolean start_found = false
         for (Aircraft aircraft_instance in Aircraft.findAllByContest(this.contest,[sort:'registration'])) {
-            if (set_next) {
-                next_id = aircraft_instance.id
-                set_next = false
+            if (start_found) {
+                return aircraft_instance.id
             }
             if (aircraft_instance.id == this.id) {
-                set_next = true
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
     
-    static long GetNextID2(long aircraftID)
+    long GetPrevAircraftID()
     {
-        long next_id = 0
-        if (aircraftID) {
-            Aircraft aircraft_instance = Aircraft.get(aircraftID)
-            if (aircraft_instance) {
-                next_id = aircraft_instance.GetNextID()
+        boolean start_found = false
+        for (Aircraft aircraft_instance in Aircraft.findAllByContest(this.contest,[sort:'registration', order:'desc'])) {
+            if (start_found) {
+                return aircraft_instance.id
+            }
+            if (aircraft_instance.id == this.id) {
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
 }

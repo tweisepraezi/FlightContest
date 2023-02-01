@@ -193,6 +193,7 @@
 	
 	&basemap-relief;
 	
+    <!--
 	<Layer name="landuse-lowzoom">
 		<StyleName>landuse-lowzoom</StyleName>
 		<Datasource>
@@ -201,6 +202,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="landuse">
 		<StyleName>landuse</StyleName>
@@ -235,6 +237,7 @@
 		</Datasource>
 	</Layer>
 	
+    <!--
 	<Layer name="water-lowzoom">
 		<StyleName>water-casing-lowzoom</StyleName>
 		<StyleName>water-fill-lowzoom</StyleName>
@@ -244,6 +247,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="waterway-lines">
 		<StyleName>waterway-lines</StyleName>
@@ -357,6 +361,7 @@
         </Datasource>
     </Layer>
     
+    <!--
 	<Layer name="borders-lowzoom">
 		<StyleName>borders-lowzoom</StyleName>
 		<Datasource>
@@ -365,6 +370,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="borders">
 		<StyleName>borders</StyleName>
@@ -430,6 +436,7 @@
 		</Datasource>
 	</Layer>
 
+    <!--
 	<Layer name="roads-lowzoom">
 		<StyleName>roads-casing-lowzoom</StyleName>
 		<StyleName>roads-fill-lowzoom</StyleName>
@@ -439,6 +446,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="roads">
 		<StyleName>roads-casing</StyleName>
@@ -567,7 +575,7 @@
 	<Layer name="text-natural-areas-lowzoom">
 	 <StyleName>text-natural-areas-lowzoom</StyleName>
 	 <Datasource>
-	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturallabels </Parameter>
+	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturalarealabels </Parameter>
 	   <Parameter name="dbname">lowzoom</Parameter>
 	   &postgis-settings;
 	 </Datasource>
@@ -716,14 +724,16 @@
 		</Datasource>
 	</Layer>
 
+    <!--
 	<Layer name="text-natural-areas-highzoom">
 	 <StyleName>text-natural-areas-highzoom</StyleName>
 	 <Datasource>
-	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturallabels </Parameter>
+	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturalarealabels </Parameter>
 	   <Parameter name="dbname">lowzoom</Parameter>
 	   &postgis-settings;
 	 </Datasource>
 	</Layer>
+    -->
 
 	<Layer name="symbols-viewpoint">
 		<StyleName>symbols-viewpoint</StyleName>
@@ -778,6 +788,7 @@
 		</Datasource>
 	</Layer>
 	
+    <!--
 	<Layer name="text-cities-lowzoom">
 		<StyleName>text-cities-lowzoom</StyleName>
 		<Datasource>
@@ -786,6 +797,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 
 	<Layer name="text-cities" clear-label-cache="on">
 		<StyleName>text-cities</StyleName>

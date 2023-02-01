@@ -118,9 +118,11 @@ class RoutePointsTools
         // CoordEnrouteCanvas
         if (routeInstance.enrouteCanvasRoute.IsEnrouteRouteInputPosition()) {
             for (CoordEnrouteCanvas coordenroutecanvas_instance in CoordEnrouteCanvas.findAllByRouteAndTypeAndTitleNumber(routeInstance,coordType,titleNumber,[sort:"enrouteViewPos"])) {
-                Map new_point = [name:coordenroutecanvas_instance.enrouteCanvasSign.canvasName, dist:coordenroutecanvas_instance.enrouteDistance, enroutePhoto:false, enroutecanvas:true]
-                new_point += GetPointEnrouteCoords(coordenroutecanvas_instance)
-                enroute_points += new_point
+				if (coordenroutecanvas_instance.enrouteCanvasSign != EnrouteCanvasSign.NoSign) {
+					Map new_point = [name:coordenroutecanvas_instance.enrouteCanvasSign.canvasName, dist:coordenroutecanvas_instance.enrouteDistance, enroutePhoto:false, enroutecanvas:true]
+					new_point += GetPointEnrouteCoords(coordenroutecanvas_instance)
+					enroute_points += new_point
+				}
             }
         }
         

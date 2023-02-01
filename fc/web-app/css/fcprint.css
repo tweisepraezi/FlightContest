@@ -6,13 +6,14 @@ body {
 
 table {
     width: 100%;
+    border-collapse: collapse;
 }
 
 table th {
     vertical-align: top;
 }
 
-table,  table th, table td {
+table th, table td {
 	border: 1px solid black;
     border-collapse: collapse;
     padding: 2px;
@@ -327,11 +328,13 @@ table.freetext td {
 
 /* -------------------------------------------------------------------------------------------------------------------- */
 img.scannedobservationtest {
-	width:90%;
+	//width:90%;
+	height: 25cm;
 }
 
 img.scannedplanningtest {
-	width:90%;
+	//width:90%;
+	height: 25cm;
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
@@ -350,4 +353,27 @@ table.loggerdatalist td.nobadcourseinfo {
 
 table.loggerdatalist tr.tpvalue td {
     font-weight: bold;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.resultfooter {
+    border-style: none;
+	table-layout: fixed;
+}
+table.resultfooter tr td {
+    border-style: none;
+	text-align: center;
+}
+
+/* -------------------------------------------------------------------------------------------------------------------- */
+table.observationturnpointresultlist tr.value td {
+	font-size: 70%;
+}
+
+table.observationsroutephotoresultlist tr.value td {
+	font-size: 70%;
+}
+
+table.observationsroutecanvasresultlist tr.value td {
+	font-size: 70%;
 }

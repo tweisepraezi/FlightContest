@@ -13,16 +13,18 @@ class RouteTagLib
         outln"""        <br/>"""
         outln"""        <input type="text" id="altitude" name="altitude" value="${attrs.coordRoute.altitude}" tabIndex="${attrs.ti[0]++}"/>"""
         outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.minaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="minAltitudeAboveGround" name="minAltitudeAboveGround" value="${attrs.coordRoute.minAltitudeAboveGround}" tabIndex="${attrs.ti[0]++}"/>"""
-        outln"""    </p>"""
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.maxaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${attrs.coordRoute.maxAltitudeAboveGround}" tabIndex="${attrs.ti[0]++}"/>"""
-        outln"""    </p>"""
+        if (!attrs.coordRoute.type.IsRunwayCoord()) {
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.minaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>"""
+            outln"""    <br/>"""
+            outln"""    <input type="text" id="minAltitudeAboveGround" name="minAltitudeAboveGround" value="${attrs.coordRoute.minAltitudeAboveGround}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""</p>"""
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.maxaltitude.abovegroud')} [${message(code:'fc.foot')}]:</label>"""
+            outln"""    <br/>"""
+            outln"""    <input type="text" id="maxAltitudeAboveGround" name="maxAltitudeAboveGround" value="${attrs.coordRoute.maxAltitudeAboveGround}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""</p>"""
+        }
         outln"""    <p>"""
         outln"""        <label>${message(code:'fc.gatewidth')}* [${message(code:'fc.mile')}]:</label>"""
         outln"""        <br/>"""
@@ -35,11 +37,13 @@ class RouteTagLib
             outln"""    <input type="text" id="gateDirection" name="gateDirection" value="${fieldValue(bean:attrs.coordRoute,field:'gateDirection')}" tabIndex="${attrs.ti[0]++}"/>"""
             outln"""</p>"""
         }
-        outln"""    <p>"""
-        outln"""        <label>${message(code:'fc.legduration')} [${message(code:'fc.time.min')}]:</label>"""
-        outln"""        <br/>"""
-        outln"""        <input type="text" id="legDuration" name="legDuration" value="${fieldValue(bean:attrs.coordRoute,field:'legDuration')}" tabIndex="${attrs.ti[0]++}"/>"""
-        outln"""    </p>"""
+        if (!attrs.coordRoute.type.IsRunwayCoord()) {
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.legduration')} [${message(code:'fc.time.min')}]:</label>"""
+            outln"""    <br/>"""
+            outln"""    <input type="text" id="legDuration" name="legDuration" value="${fieldValue(bean:attrs.coordRoute,field:'legDuration')}" tabIndex="${attrs.ti[0]++}"/>"""
+            outln"""</p>"""
+        }
         outln"""</fieldset>"""
         outln"""<fieldset>"""
         outln"""    <div>"""
@@ -216,7 +220,11 @@ class RouteTagLib
         for (EnrouteCanvasSign v in EnrouteCanvasSign.values()) {
             if (attrs.create && (attrs.coordEnroute.route.enrouteCanvasRoute == EnrouteRoute.InputName)) {
                 if (v != EnrouteCanvasSign.None && !(v in attrs.coordEnroute.route.contest.contestRule.ruleValues.printIgnoreEnrouteCanvas) && (attrs.coordEnroute.route.contest.enrouteCanvasMultiple ||!attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v))) {
-                    checkBoxImg("enrouteCanvasSign_${v.canvasName}", v.canvasName, createLinkTo(dir:'',file:v.imageName), attrs)
+					if (v.imageName) {
+						checkBoxImg("enrouteCanvasSign_${v.canvasName}", v.canvasName, createLinkTo(dir:'',file:v.imageName), attrs)
+					} else {
+						checkBoxImg("enrouteCanvasSign_${v.canvasName}", v.canvasName, "", attrs)
+					}
                 }
             } else {
                 if (v == EnrouteCanvasSign.None || (v in attrs.coordEnroute.route.contest.contestRule.ruleValues.printIgnoreEnrouteCanvas)) {
@@ -230,10 +238,18 @@ class RouteTagLib
                     }
                 } else {
                     if (attrs.coordEnroute.enrouteCanvasSign == v) {
-                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+						if (v.imageName) {
+							outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+						} else {
+							outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" checked="checked" tabIndex="${attrs.ti[0]}"/><img style="height:16px;"/> ${v.canvasName}</label>"""
+						}
                         add_tabindex = true
                     } else if (attrs.coordEnroute.route.contest.enrouteCanvasMultiple || !attrs.coordEnroute.route.IsEnrouteCanvasSignUsed(v)) {
-                        outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+						if (v.imageName) {
+							outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]}"/><img src="${createLinkTo(dir:'',file:v.imageName)}" style="height:16px;"/> ${v.canvasName}</label>"""
+						} else {
+							outln"""<label><input type="radio" name="enrouteCanvasSign" value="${v}" tabIndex="${attrs.ti[0]}"/><img style="height:16px;"/> ${v.canvasName}</label>"""
+						}
                         add_tabindex = true
                     }
                 }
@@ -641,15 +657,26 @@ class RouteTagLib
             outln s
             outln"""        <td style="white-space: nowrap;">${coordroute_instance.latName()}</td>"""
             outln"""        <td style="white-space: nowrap;">${coordroute_instance.lonName()}</td>"""
-            s = "${coordroute_instance.altitude}${message(code:'fc.foot')}"
-            if (coordroute_instance.minAltitudeAboveGround || coordroute_instance.maxAltitudeAboveGround) {
-                s += " "
+            int min_altitude = coordroute_instance.GetMinAltitudeAboveGround(attrs.route.altitudeAboveGround)
+            s = ""
+            if (coordroute_instance.type.IsAltitudeCheckCoord()) {
+                if (min_altitude != coordroute_instance.altitude) {
+                    s += Defs.ALTITUDE_GND
+                } else {
+                    s += Defs.ALTITUDE_MINIMUM
+                }
+            } else {
+                s += Defs.ALTITUDE_GND
             }
-            if (coordroute_instance.minAltitudeAboveGround) {
-                s += "-"
-            }
-            if (coordroute_instance.maxAltitudeAboveGround) {
-                s += "+"
+            s += "${coordroute_instance.altitude}${message(code:'fc.foot')}"
+            if (coordroute_instance.type.IsAltitudeCheckCoord()) {
+                if (min_altitude != coordroute_instance.altitude) {
+                    s += " ${Defs.ALTITUDE_MINIMUM}${min_altitude}${message(code:'fc.foot')}"
+                }
+                int max_altitude = coordroute_instance.GetMaxAltitudeAboveGround()
+                if (max_altitude) {
+                    s += " ${Defs.ALTITUDE_MAXIMUM}${max_altitude}${message(code:'fc.foot')}"
+                }
             }
             outln"""        <td>${s}</td>"""
             outln"""        <td>${coordroute_instance.gatewidth2}${message(code:'fc.mile')}</td>"""
@@ -1197,7 +1224,11 @@ class RouteTagLib
                 }
                 s += """        </td>"""
                 outln s
-                outln"""        <td style="white-space: nowrap;"><img src="${createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName)}" style="height:16px;"/> ${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>"""
+				if (coordenroutecanvas_instance.enrouteCanvasSign.imageName) {
+					outln"""        <td style="white-space: nowrap;"><img src="${createLinkTo(dir:'',file:coordenroutecanvas_instance.enrouteCanvasSign.imageName)}" style="height:16px;"/> ${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>"""
+				} else {
+					outln"""        <td style="white-space: nowrap;"><img style="height:16px;"/> ${coordenroutecanvas_instance.enrouteCanvasSign.canvasName}</td>"""
+				}
                 
                 if (attrs.route.enrouteCanvasRoute != EnrouteRoute.InputName) {
                     outln"""        <td style="white-space: nowrap;">${coordenroutecanvas_instance.latName()}</td>"""
@@ -1573,6 +1604,34 @@ class RouteTagLib
         }
     }
     
+	// --------------------------------------------------------------------------------------------------------------------
+    def getAltitudeValues = { attrs, body ->
+        String ret_str = ""
+        int min_altitude = attrs.coordresult.GetMinAltitudeAboveGround(attrs.route.altitudeAboveGround)
+        if (attrs.coordresult.type.IsAltitudeCheckCoord()) {
+            if (min_altitude != attrs.coordresult.altitude) {
+                ret_str += Defs.ALTITUDE_GND
+            } else {
+                ret_str += Defs.ALTITUDE_MINIMUM
+            }
+        } else {
+            ret_str += Defs.ALTITUDE_GND
+        }
+        ret_str += "${attrs.coordresult.altitude}${message(code:'fc.foot')}"
+        if (attrs.coordresult.type.IsAltitudeCheckCoord()) {
+            if (min_altitude != attrs.coordresult.altitude) {
+                ret_str += "<br/>"
+                ret_str += " ${Defs.ALTITUDE_MINIMUM}${min_altitude}${message(code:'fc.foot')}"
+            }
+            int max_altitude = attrs.coordresult.GetMaxAltitudeAboveGround()
+            if (max_altitude) {
+                ret_str += "<br/>"
+                ret_str += " ${Defs.ALTITUDE_MAXIMUM_HTML}${max_altitude}${message(code:'fc.foot')}"
+            }
+        }
+        outln ret_str
+    }
+    
     // --------------------------------------------------------------------------------------------------------------------
     private checkBox(String name, boolean checked, String label, attrs)
     {
@@ -1590,7 +1649,11 @@ class RouteTagLib
     {
         //outln"""<input type="hidden" name="_${name}"/>"""
         outln"""<input type="checkbox" id="${name}" name="${name}" tabIndex="${attrs.ti[0]++}"/>"""
-        outln"""<img src="${imageName}" style="height:16px;"/>"""
+		if (imageName) {
+			outln"""<img src="${imageName}" style="height:16px;"/>"""
+		} else {
+			outln"""<img style="height:16px;"/>"""
+		}
         outln"""<label>$label</label>"""
     }
     

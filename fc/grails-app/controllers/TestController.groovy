@@ -85,6 +85,36 @@ class TestController
         }
     }
 
+	def flightplangotonext = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
+			if (nexttest_id) {
+				redirect(action:flightplan,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def flightplangotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Flight,session)
+			if (prevtest_id) {
+				redirect(action:flightplan,id:prevtest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
     def planningtask = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
@@ -148,6 +178,36 @@ class TestController
         }
     }
 
+	def planningtaskgotonext = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
+			if (nexttest_id) {
+				redirect(action:planningtask,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def planningtaskgotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Flight,session)
+			if (prevtest_id) {
+				redirect(action:planningtask,id:prevtest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
     def planningtaskresults = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
@@ -187,14 +247,9 @@ class TestController
         } else if (test.instance) {
             trackerService.updateTestResult(params, ResultType.Planningtask)
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Planningtask)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:planningtaskresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:planningtaskresults,id:nexttest_id)
-				}
+				redirect(action:planningtaskresults,id:nexttest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -207,14 +262,24 @@ class TestController
 	def planningtaskresultsgotonext = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Planningtask)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:planningtaskresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:planningtaskresults,id:nexttest_id)
-				}
+				redirect(action:planningtaskresults,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def planningtaskresultsgotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Planningtask,session)
+			if (prevtest_id) {
+				redirect(action:planningtaskresults,id:prevtest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -232,7 +297,7 @@ class TestController
             redirect(action:planningtaskresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
 			if (nexttest_id) {
 				redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -252,7 +317,7 @@ class TestController
             redirect(action:planningtaskresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
 			if (nexttest_id) {
 				redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -327,7 +392,7 @@ class TestController
             }
             flash.error = img.error
             flash.message = img.message
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
             if (nexttest_id) {
                 redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -344,7 +409,7 @@ class TestController
         if (test.instance) {
             delete_imagefile(['testInstance':test.instance,'imageField':'scannedPlanningTest'])
             flash.message = message(code:'fc.planningtesttask.deleteform.deleted')
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
             if (nexttest_id) {
                 redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -366,7 +431,7 @@ class TestController
     def planningtaskformimportcancel = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Planningtask,session)
             if (nexttest_id) {
                 redirect(action:planningtaskresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -422,14 +487,9 @@ class TestController
         } else if (test.instance) {
             trackerService.updateTestResult(params, ResultType.Flight)
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Flight)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:flightresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:flightresults,id:nexttest_id)
-				}
+				redirect(action:flightresults,id:nexttest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -442,14 +502,24 @@ class TestController
 	def flightresultsgotonext = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Flight)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:flightresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:flightresults,id:nexttest_id)
-				}
+				redirect(action:flightresults,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def flightresultsgotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Flight,session)
+			if (prevtest_id) {
+				redirect(action:flightresults,id:prevtest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -467,7 +537,7 @@ class TestController
             redirect(action:flightresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
 				redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -487,7 +557,7 @@ class TestController
             redirect(action:flightresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
 				redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -606,7 +676,7 @@ class TestController
             redirect(action:flightresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
 				redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -685,7 +755,7 @@ class TestController
                 flash.error = ret.error
             }
             Map test = domainService.GetTest(params)
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -708,7 +778,7 @@ class TestController
             	flash.error = ret.error
             }
 			Map test = domainService.GetTest(params)
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
 			if (nexttest_id) {
 				redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -718,7 +788,7 @@ class TestController
             flash.error = ret.error
             flash.message = ret.message
             Map test = domainService.GetTest(params)
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -759,7 +829,7 @@ class TestController
             }
             flash.error = calc.error
             flash.message = calc.message
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -792,7 +862,7 @@ class TestController
             if (ret.error) {
                 flash.error = ret.error
             }
-            long nexttest_id = ret.instance.GetNextTestID(ResultType.Flight)
+            long nexttest_id = ret.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:ret.instance.id,params:[next:nexttest_id])
             } else {
@@ -814,7 +884,7 @@ class TestController
             if (ret.error) {
                 flash.error = ret.error
             }
-            long nexttest_id = ret.instance.GetNextTestID(ResultType.Flight)
+            long nexttest_id = ret.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:ret.instance.id,params:[next:nexttest_id])
             } else {
@@ -848,7 +918,7 @@ class TestController
         if (test.error) {
             flash.error = true
             flash.message = test.message
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
             if (nexttest_id) {
                 redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -866,7 +936,7 @@ class TestController
         if (test.error) {
             flash.error = true
             flash.message = test.message
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
             if (nexttest_id) {
                 redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -875,14 +945,9 @@ class TestController
         } else if (test.instance) {
             trackerService.updateTestResult(params, ResultType.Observation)
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Observation)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:observationresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:observationresults,id:nexttest_id)
-				}
+				redirect(action:observationresults,id:nexttest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -895,14 +960,24 @@ class TestController
 	def observationresultsgotonext = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Observation)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:observationresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:observationresults,id:nexttest_id)
-				}
+				redirect(action:observationresults,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def observationresultsgotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Observation,session)
+			if (prevtest_id) {
+				redirect(action:observationresults,id:prevtest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -917,7 +992,7 @@ class TestController
         if (test.error) {
             flash.error = true
             flash.message = test.message
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
             if (nexttest_id) {
                 redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -925,7 +1000,7 @@ class TestController
             }
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
 			if (nexttest_id) {
 				redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -945,7 +1020,7 @@ class TestController
             redirect(action:observationresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
 			if (nexttest_id) {
 				redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -1020,7 +1095,7 @@ class TestController
             }
             flash.error = img.error
             flash.message = img.message
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
             if (nexttest_id) {
                 redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -1037,7 +1112,7 @@ class TestController
         if (test.instance) {
             delete_imagefile(['testInstance':test.instance,'imageField':'scannedObservationTest'])
             flash.message = message(code:'fc.observation.deleteform.deleted')
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
             if (nexttest_id) {
                 redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -1062,7 +1137,7 @@ class TestController
     def observationformimportcancel = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Observation,session)
             if (nexttest_id) {
                 redirect(action:observationresults,id:params.id,params:[next:nexttest_id])
             } else {
@@ -1096,18 +1171,13 @@ class TestController
     }
 
     def landingresultsready = {
-        def test = fcService.readylandingresultsTest(params)
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing)
         flash.message = test.message
 		if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Landing)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing,session)
 	        if (test.error) {
 	            flash.error = true
-				if (nexttest_id && next2test_id) {
-					redirect(action:landingresults,id:params.id,params:[next:next2test_id])
-				} else {
-	            	redirect(action:landingresults,id:params.id)
-				}
+            	redirect(action:landingresults,id:params.id)
 	        } else {
                 trackerService.updateTestResult(params, ResultType.Landing)
 	            redirect(controller:"task",action:"startresults",params:[message:test.message])
@@ -1118,28 +1188,19 @@ class TestController
     }
     
     def landingresultsreadynext = {
-        def test = fcService.readylandingresultsTest(params)
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing)
         flash.message = test.message
 		if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Landing)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing,session)
 	        if (test.error) {
 	            flash.error = true
-				if (nexttest_id && next2test_id) {
-					redirect(action:landingresults,id:params.id,params:[next:next2test_id])
-				} else {
-	            	redirect(action:landingresults,id:params.id)
-				}
+            	redirect(action:landingresults,id:params.id)
 	        } else {
                 trackerService.updateTestResult(params, ResultType.Landing)
 				if (nexttest_id) {
-					if (next2test_id) {
-						redirect(action:landingresults,id:nexttest_id,params:[next:next2test_id])
-					} else {
-						redirect(action:landingresults,id:nexttest_id)
-					}
-				} else {
 					redirect(action:landingresults,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
 				}
 	        }
         } else {
@@ -1150,14 +1211,9 @@ class TestController
 	def landingresultsgotonext = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Landing)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:landingresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:landingresults,id:nexttest_id)
-				}
+				redirect(action:landingresults,id:nexttest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -1167,11 +1223,47 @@ class TestController
         }
 	}
 	
-    def landingresultssave = {
-        def test = fcService.savelandingresultsTest(params)
+	def landingresultsgotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing,session)
+			if (prevtest_id) {
+				redirect(action:landingresults,id:prevtest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresultssavenext = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing)
         flash.message = test.message
 		if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing)
+				if (nexttest_id) {
+					redirect(action:landingresults,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultssave = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing,session)
 	        if (test.error) {
 	            flash.error = true
 	        }
@@ -1186,14 +1278,14 @@ class TestController
     }
     
     def landingresultsreopen = {
-        def test = fcService.openlandingresultsTest(params) 
+        def test = fcService.openlandingresultsTest(params, ResultType.Landing) 
         if (test.error) {
             flash.error = true
             flash.message = test.message
             redirect(action:landingresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing,session)
 			if (nexttest_id) {
 				redirect(action:landingresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -1206,7 +1298,7 @@ class TestController
     }
     
     def printlandingresults = {
-        Map test = printService.printlandingresultsTest(params,false,false,GetPrintParams()) 
+        Map test = printService.printlandingresultsTest(params, false, false, GetPrintParams(), ResultType.Landing) 
         if (!test.instance) {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -1226,7 +1318,691 @@ class TestController
             session.lastContest = Contest.get(params.contestid)
             session.printLanguage = params.lang
         }
-        def test = fcService.getlandingresultsprintableTest(params) 
+        def test = fcService.getlandingresultsprintableTest(params, ResultType.Landing) 
+        if (test.instance) {
+            return [contestInstance:session.lastContest,testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresults1 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			// save return action
+			session.crewReturnAction = actionName 
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+        	return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+
+    def landingresultsready1 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing1)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing1,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults1,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing1)
+	            redirect(controller:"task",action:"startresults",params:[message:test.message])
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultsreadynext1 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing1)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing1,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults1,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing1)
+				if (nexttest_id) {
+					redirect(action:landingresults1,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+	def landingresultsgotonext1 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing1,session)
+			if (nexttest_id) {
+				redirect(action:landingresults1,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def landingresultsgotoprev1 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing1,session)
+			if (prevtest_id) {
+				redirect(action:landingresults1,id:prevtest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresultssavenext1 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing1)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing1,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults1,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing1)
+				if (nexttest_id) {
+					redirect(action:landingresults1,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultssave1 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing1)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing1,session)
+	        if (test.error) {
+	            flash.error = true
+	        }
+			if (nexttest_id) {
+				redirect(action:landingresults1,id:params.id,params:[next:nexttest_id])
+			} else {
+            	redirect(action:landingresults1,id:params.id)
+			}
+        } else {
+            redirect(action:landingresults1,id:params.id)
+        }
+    }
+    
+    def landingresultsreopen1 = {
+        def test = fcService.openlandingresultsTest(params, ResultType.Landing1)
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:landingresults1,id:params.id)
+        } else if (test.instance) {
+            flash.message = test.message
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing1,session)
+			if (nexttest_id) {
+				redirect(action:landingresults1,id:params.id,params:[next:nexttest_id])
+			} else {
+				redirect(action:landingresults1,id:params.id)
+			}
+        } else {
+            flash.message = test.message
+            redirect(action:landingresults1,id:params.id)
+        }
+    }
+	
+    def printlandingresults1 = {
+        Map test = printService.printlandingresultsTest(params, false, false, GetPrintParams(), ResultType.Landing1) 
+        if (!test.instance) {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        } else if (test.error) {
+            flash.message = test.message
+            flash.error = true
+            redirect(action:show,id:test.instance.id)
+        } else if (test.content) {
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTest1Version()}",true,false,false)
+        } else {
+            redirect(action:show,id:test.instance.id)
+        }
+    }
+
+    def landingresultsprintable1 = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        def test = fcService.getlandingresultsprintableTest(params, ResultType.Landing1) 
+        if (test.instance) {
+            return [contestInstance:session.lastContest,testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresults2 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			// save return action
+			session.crewReturnAction = actionName 
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+        	return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+
+    def landingresultsready2 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing2)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing2,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults2,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing2)
+	            redirect(controller:"task",action:"startresults",params:[message:test.message])
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultsreadynext2 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing2)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing2,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults2,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing2)
+				if (nexttest_id) {
+					redirect(action:landingresults2,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+	def landingresultsgotonext2 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing2,session)
+			if (nexttest_id) {
+				redirect(action:landingresults2,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def landingresultsgotoprev2 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing2,session)
+			if (prevtest_id) {
+				redirect(action:landingresults2,id:prevtest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresultssavenext2 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing2)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing2,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults2,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing2)
+				if (nexttest_id) {
+					redirect(action:landingresults2,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultssave2 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing2)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing2,session)
+	        if (test.error) {
+	            flash.error = true
+	        }
+			if (nexttest_id) {
+				redirect(action:landingresults2,id:params.id,params:[next:nexttest_id])
+			} else {
+            	redirect(action:landingresults2,id:params.id)
+			}
+        } else {
+            redirect(action:landingresults2,id:params.id)
+        }
+    }
+    
+    def landingresultsreopen2 = {
+        def test = fcService.openlandingresultsTest(params, ResultType.Landing2)
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:landingresults2,id:params.id)
+        } else if (test.instance) {
+            flash.message = test.message
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing2,session)
+			if (nexttest_id) {
+				redirect(action:landingresults2,id:params.id,params:[next:nexttest_id])
+			} else {
+				redirect(action:landingresults2,id:params.id)
+			}
+        } else {
+            flash.message = test.message
+            redirect(action:landingresults2,id:params.id)
+        }
+    }
+	
+    def printlandingresults2 = {
+        Map test = printService.printlandingresultsTest(params, false, false, GetPrintParams(), ResultType.Landing2) 
+        if (!test.instance) {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        } else if (test.error) {
+            flash.message = test.message
+            flash.error = true
+            redirect(action:show,id:test.instance.id)
+        } else if (test.content) {
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTest2Version()}",true,false,false)
+        } else {
+            redirect(action:show,id:test.instance.id)
+        }
+    }
+
+    def landingresultsprintable2 = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        def test = fcService.getlandingresultsprintableTest(params, ResultType.Landing2) 
+        if (test.instance) {
+            return [contestInstance:session.lastContest,testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresults3 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			// save return action
+			session.crewReturnAction = actionName 
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+        	return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+
+    def landingresultsready3 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing3)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing3,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults3,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing3)
+	            redirect(controller:"task",action:"startresults",params:[message:test.message])
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultsreadynext3 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing3)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing3,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults3,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing3)
+				if (nexttest_id) {
+					redirect(action:landingresults3,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+	def landingresultsgotonext3 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing3,session)
+			if (nexttest_id) {
+				redirect(action:landingresults3,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def landingresultsgotoprev3 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing3,session)
+			if (prevtest_id) {
+				redirect(action:landingresults3,id:prevtest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresultssavenext3 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing3)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing3,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults3,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing3)
+				if (nexttest_id) {
+					redirect(action:landingresults3,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultssave3 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing3)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing3,session)
+	        if (test.error) {
+	            flash.error = true
+	        }
+			if (nexttest_id) {
+				redirect(action:landingresults3,id:params.id,params:[next:nexttest_id])
+			} else {
+            	redirect(action:landingresults3,id:params.id)
+			}
+        } else {
+            redirect(action:landingresults3,id:params.id)
+        }
+    }
+    
+    def landingresultsreopen3 = {
+        def test = fcService.openlandingresultsTest(params, ResultType.Landing3) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:landingresults3,id:params.id)
+        } else if (test.instance) {
+            flash.message = test.message
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing3,session)
+			if (nexttest_id) {
+				redirect(action:landingresults3,id:params.id,params:[next:nexttest_id])
+			} else {
+				redirect(action:landingresults3,id:params.id)
+			}
+        } else {
+            flash.message = test.message
+            redirect(action:landingresults3,id:params.id)
+        }
+    }
+
+    def printlandingresults3 = {
+        Map test = printService.printlandingresultsTest(params, false, false, GetPrintParams(), ResultType.Landing3) 
+        if (!test.instance) {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        } else if (test.error) {
+            flash.message = test.message
+            flash.error = true
+            redirect(action:show,id:test.instance.id)
+        } else if (test.content) {
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTest3Version()}",true,false,false)
+        } else {
+            redirect(action:show,id:test.instance.id)
+        }
+    }
+
+    def landingresultsprintable3 = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        def test = fcService.getlandingresultsprintableTest(params, ResultType.Landing3) 
+        if (test.instance) {
+            return [contestInstance:session.lastContest,testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresults4 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			// save return action
+			session.crewReturnAction = actionName 
+			session.crewReturnController = controllerName
+			session.crewReturnID = params.id
+        	return [testInstance:test.instance]
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+
+    def landingresultsready4 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing4)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing4,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults4,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing4)
+	            redirect(controller:"task",action:"startresults",params:[message:test.message])
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultsreadynext4 = {
+        def test = fcService.readylandingresultsTest(params, ResultType.Landing4)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing4,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults4,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing4)
+				if (nexttest_id) {
+					redirect(action:landingresults4,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+	def landingresultsgotonext4 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing4,session)
+			if (nexttest_id) {
+				redirect(action:landingresults4,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def landingresultsgotoprev4 = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Landing4,session)
+			if (prevtest_id) {
+				redirect(action:landingresults4,id:prevtest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+    def landingresultssavenext4 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing4)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing4,session)
+	        if (test.error) {
+	            flash.error = true
+            	redirect(action:landingresults4,id:params.id)
+	        } else {
+                trackerService.updateTestResult(params, ResultType.Landing4)
+				if (nexttest_id) {
+					redirect(action:landingresults4,id:nexttest_id)
+				} else {
+					redirect(controller:"task",action:"startresults")
+				}
+	        }
+        } else {
+            redirect(controller:"task",action:"startresults")
+        }
+    }
+    
+    def landingresultssave4 = {
+        def test = fcService.savelandingresultsTest(params, ResultType.Landing4)
+        flash.message = test.message
+		if (test.instance) {
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing4,session)
+	        if (test.error) {
+	            flash.error = true
+	        }
+			if (nexttest_id) {
+				redirect(action:landingresults4,id:params.id,params:[next:nexttest_id])
+			} else {
+            	redirect(action:landingresults4,id:params.id)
+			}
+        } else {
+            redirect(action:landingresults4,id:params.id)
+        }
+    }
+    
+    def landingresultsreopen4 = {
+        def test = fcService.openlandingresultsTest(params, ResultType.Landing4) 
+        if (test.error) {
+            flash.error = true
+            flash.message = test.message
+            redirect(action:landingresults4,id:params.id)
+        } else if (test.instance) {
+            flash.message = test.message
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Landing4,session)
+			if (nexttest_id) {
+				redirect(action:landingresults4,id:params.id,params:[next:nexttest_id])
+			} else {
+				redirect(action:landingresults4,id:params.id)
+			}
+        } else {
+            flash.message = test.message
+            redirect(action:landingresults4,id:params.id)
+        }
+    }
+
+    def printlandingresults4 = {
+        Map test = printService.printlandingresultsTest(params, false, false, GetPrintParams(), ResultType.Landing4) 
+        if (!test.instance) {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        } else if (test.error) {
+            flash.message = test.message
+            flash.error = true
+            redirect(action:show,id:test.instance.id)
+        } else if (test.content) {
+            printService.WritePDF(response,test.content,session.lastContest.GetPrintPrefix(),"landingresults-task${test.instance.task.idTitle}-crew${test.instance.crew.startNum}-${test.instance.GetLandingTest4Version()}",true,false,false)
+        } else {
+            redirect(action:show,id:test.instance.id)
+        }
+    }
+
+    def landingresultsprintable4 = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        def test = fcService.getlandingresultsprintableTest(params, ResultType.Landing4) 
         if (test.instance) {
             return [contestInstance:session.lastContest,testInstance:test.instance]
         } else {
@@ -1271,14 +2047,9 @@ class TestController
         } else if (test.instance) {
             trackerService.updateTestResult(params, ResultType.Special)
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Special)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Special)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Special,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:specialresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:specialresults,id:nexttest_id)
-				}
+				redirect(action:specialresults,id:nexttest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -1291,14 +2062,24 @@ class TestController
 	def specialresultsgotonext = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Special)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Special)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Special,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:specialresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:specialresults,id:nexttest_id)
-				}
+				redirect(action:specialresults,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def specialresultsgotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Special,session)
+			if (prevtest_id) {
+				redirect(action:specialresults,id:prevtest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -1316,7 +2097,7 @@ class TestController
             redirect(action:specialresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Special)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Special,session)
 			if (nexttest_id) {
 				redirect(action:specialresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -1336,7 +2117,7 @@ class TestController
             redirect(action:specialresults,id:params.id)
         } else if (test.instance) {
             flash.message = test.message
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Special)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Special,session)
 			if (nexttest_id) {
 				redirect(action:specialresults,id:params.id,params:[next:nexttest_id])
 			} else {
@@ -1381,14 +2162,24 @@ class TestController
 	def crewresultsgotonext = {
         Map test = domainService.GetTest(params) 
         if (test.instance) {
-			long nexttest_id = test.instance.GetNextTestID(ResultType.Crew)
-			long next2test_id = Test.GetNext2TestID(nexttest_id,ResultType.Crew)
+			long nexttest_id = test.instance.GetNextTestID(ResultType.Crew,session)
 			if (nexttest_id) {
-				if (next2test_id) {
-					redirect(action:crewresults,id:nexttest_id,params:[next:next2test_id])
-				} else {
-					redirect(action:crewresults,id:nexttest_id)
-				}
+				redirect(action:crewresults,id:nexttest_id)
+			} else {
+				redirect(controller:"task",action:"startresults")
+			}
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"startresults")
+        }
+	}
+	
+	def crewresultsgotoprev = {
+        Map test = domainService.GetTest(params) 
+        if (test.instance) {
+			long prevtest_id = test.instance.GetPrevTestID(ResultType.Crew,session)
+			if (prevtest_id) {
+				redirect(action:crewresults,id:prevtest_id)
 			} else {
 				redirect(controller:"task",action:"startresults")
 			}
@@ -1485,7 +2276,7 @@ class TestController
                 if (params.addShowTimeValue && params.addShowTimeValue.isInteger()) {
                     show_utc = FcTime.UTCAddSeconds(show_utc, 60*params.addShowTimeValue.toInteger())
                 }
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:true, showCoord:params.showCoord, showUtc:show_utc])
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:true, showCoord:params.showCoord, showUtc:show_utc, lastUtc:params.lastUtc])
             } else {
                 converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:true])
             }
@@ -1640,7 +2431,7 @@ class TestController
     def cancelimportcrew = {
         Map test = domainService.GetTest(params)
         if (test.instance) {
-            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight)
+            long nexttest_id = test.instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(action:flightresults,id:params.id,params:[next:nexttest_id])
             } else {

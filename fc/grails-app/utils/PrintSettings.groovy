@@ -27,5 +27,10 @@ enum PrintSettings
 	TimetableNone,
 	TimetableAll,
 	TimetableRemoveChange,
-	TimetableAddChange
+	TimetableAddChange,
+	
+	LandingStartlistModified,
+	LandingStartlistStandard,
+	LandingStartlistNone,
+	LandingStartlistAll	
 }

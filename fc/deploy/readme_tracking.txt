@@ -1,6 +1,11 @@
 Flight Contest Live Tracking Notes
 ==================================
 
+Changes 3.3.0
+-------------
+- Live Tracking task settings for the 'Results Service':
+  Each landing test has now it's own test column (max. 4: Landing1, Landing2, Landing3, Landing4)
+
 Changes 3.2.1.1
 ---------------
 - Adjustments to Live Tracking API changes (scorecard overrides)

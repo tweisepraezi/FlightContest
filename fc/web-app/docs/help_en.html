@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.2.4,</span>
-<span id="revdate">02.07.2022</span>
+<span id="revnumber">version 3.3.0,</span>
+<span id="revdate">01.02.2023</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -464,7 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-google-earth-add-secret">Add SCs and curved route sections with Google Earth Pro.</a></li>
 <li><a href="#route-planning-semicircles">Create competition route with semicircles</a></li>
 <li><a href="#route-planning-verify">Verify the competition route</a></li>
-<li><a href="#route-planning-deliver">Passing the competition route to the evaluation referee</a></li>
+<li><a href="#route-planning-deliver">Passing the competition route to the scoring manager</a></li>
 <li><a href="#route-planning-errors">Error messages in route details</a></li>
 </ul>
 </li>
@@ -609,7 +609,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Supports logger data formats GAC, IGC, GPX, KML, KMZ and NMEA 0183 (extensible).</p>
 </div>
 <div class="paragraph">
-<p>Generates OSM-based A3 &amp; A4 competition maps in TÜK-200 style.</p>
+<p>Generates OSM-based topographic A3 and A4 competition maps in TÜK-200 style.</p>
 </div>
 <div class="paragraph">
 <p>Creates PDF for print and internet publishing.</p>
@@ -623,7 +623,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <div class="ulist">
 <ul>
 <li>
-<p>Unknown time checks</p>
+<p>Secret time checks</p>
 </li>
 <li>
 <p>Curved legs</p>
@@ -632,7 +632,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Semicircles</p>
 </li>
 <li>
-<p>Touch &amp; Go landings</p>
+<p>Touch-and-go landings</p>
 </li>
 </ul>
 </div>
@@ -655,7 +655,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <div class="ulist">
 <ul>
 <li>
-<p>Offline map display for navigation flight assessment</p>
+<p>Offline map display for navigation flight evaluation</p>
 </li>
 <li>
 <p>Fast offline map display near a selected turnpoint</p>
@@ -725,7 +725,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <div class="sectionbody">
 <div class="paragraph">
 <p><em>Contest organizer</em><br>
-<strong>Evaluation referee</strong></p>
+<strong>Scoring manager</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -738,7 +738,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <ol class="arabic">
 <li>
 <p><em>Engineer competition route</em><br>
-(Coordinates, maps, pictures, ground signs, turning loops, unknown time checks).</p>
+(Coordinates, maps, pictures, ground signs, turning loops, secret time checks).</p>
 </li>
 <li>
 <p><em>Engineer approach and departure route</em><br>
@@ -853,7 +853,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <div class="ulist">
 <ul>
 <li>
-<p>Route (turn loops, unknown time check, approach/departure procedures, radio, tower communication)</p>
+<p>Route (turn loops, secret time check, approach/departure procedures, radio, tower communication)</p>
 </li>
 <li>
 <p>Procedure (handing out of documents, handing in of evaluation forms/loggers after arrival, receipt of results)</p>
@@ -910,7 +910,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Document abnormal landing</p>
 </li>
 <li>
-<p>Transmit landing result continuously to evaluation referee</p>
+<p>Transmit landing result continuously to scoring manager</p>
 </li>
 </ul>
 </div>
@@ -926,7 +926,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Receive evaluation form and logger</p>
 </li>
 <li>
-<p>Transport evaluation form and logger to evaluation referee</p>
+<p>Transport evaluation form and logger to scoring manager</p>
 </li>
 </ul>
 </div>
@@ -961,7 +961,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <div class="ulist">
 <ul>
 <li>
-<p>Collect results from the evaluation referee</p>
+<p>Collect results from the scoring manager</p>
 </li>
 <li>
 <p>Hand over results continuously to crews</p>
@@ -970,7 +970,7 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 <p>Receive queries from the crews and make decisions</p>
 </li>
 <li>
-<p>Hand over corrections to the evaluation referee</p>
+<p>Hand over corrections to the scoring manager</p>
 </li>
 </ul>
 </div>
@@ -1012,21 +1012,20 @@ and evaluates results for planning tests, navigation tests, observations and/or 
 behind which further data are hidden.</p>
 </li>
 <li>
-<p>When entering times, a '.' can also be used instead of the ':',
-which makes it unnecessary to press the shift key.</p>
+<p>When entering times, a '.', ',', or ';' can also be used instead of the ':'.
+This makes it unnecessary to press the shift key with the german ':' key
+and a numeric keyboard with a comma can also be used.</p>
 </li>
 <li>
-<p>When entering fractional numbers, a '.' can also be used instead of the ','.
-can be used.</p>
+<p>When entering fractional numbers, a '.' can also be used instead of the ','.</p>
 </li>
 <li>
-<p>When entering land measurement values, lowercase letters can be used instead of uppercase letters.
-instead of uppercase letters, which eliminates the need to press the Shift key.</p>
+<p>When entering land measurement values, lowercase letters can be used instead of uppercase letters,
+which eliminates the need to press the shift key.</p>
 </li>
 <li>
-<p>When entering landing values, the landing value "out" for landings outside the landing box and "no" for landings outside the landing box can be entered.
-outside the landing box and "no" for no landing can be entered, in order to
-enter these errors without mouse operation.</p>
+<p>When entering landing values, the landing value "out" for landings outside the landing box and "no" for landings outside the landing box can be entered,
+in order to enter these errors without mouse clicks.</p>
 </li>
 </ul>
 </div>
@@ -1084,9 +1083,9 @@ Old aircraft and old TAS remain unchanged for completed tasks.</p>
 <p>Disable 'time evaluation' of the turn point (Results &#8594; Disable check points)<br>
 Causes recalculation of the result.</p>
 </dd>
-<dt class="hdlist1">Unknown time check of a task should not be scored</dt>
+<dt class="hdlist1">Secret time check of a task should not be scored</dt>
 <dd>
-<p>'Time evaluation' and 'Goal missed' of the unknown time check.
+<p>'Time evaluation' and 'Goal missed' of the secret time check.
    deactivate (Results &#8594; Deactivate check points)<br>
 Causes recalculation of the result.</p>
 </dd>
@@ -1200,7 +1199,7 @@ with assignment of another start number. Therefore correct crews after an import
 <a href="#route-planning-google-earth-add-secret">Add SCs and curved route sections with Google Earth Pro.</a><br>
 <a href="#route-planning-semicircles">Create competition route with semicircles</a><br>
 <a href="#route-planning-verify">Verify the competition route</a><br>
-<a href="#route-planning-deliver">Passing the competition route to the evaluation referee</a><br>
+<a href="#route-planning-deliver">Passing the competition route to the scoring manager</a><br>
 <a href="#route-planning-errors">Error messages in route details</a></p>
 </div>
 <div class="sect2">
@@ -1292,7 +1291,7 @@ are to be indicated language-dependently with the following designations:</p>
 distances must be measured on the competition map and entered into the field
 'Distance measurement (map) [mm]'. Thereby the distance from the previous turn point is measured in mm
 (for a map with the competition scale 1:200000).
-The previous turn point is a check point that is not an unknown time check.</p>
+The previous turn point is a check point that is not an secret time check.</p>
 </li>
 <li>
 <p>Auxiliary points are to be entered for curved legs of the course. These are to be
@@ -1439,15 +1438,15 @@ to the first auxiliary point as entry course to the curved leg.</p>
 <div class="sect2">
 <h3 id="route-planning-input">Competitive route input</h3>
 <div class="paragraph">
-<p>When entering a route in 'Flight Contest', please note that the check points can only be entered one after the other.
-can be entered one after the other and inserting check points is not possible.
+<p>When entering a route in 'Flight Contest', please note that the check points can only be entered one after the other
+and inserting check points is not possible.
 All properties except the check point type can be changed until the first use.
 Terrain heigth and gate width are also changeable after the first use.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively, the input and forwarding of routes or parts of them is
+<p>Alternatively, the input and forwarding of routes or parts of them
 is also possible with text files (UTF-8). In an empty route all check points can be added with
-"Import coordinates" from a text file can be added (incl. properties):</p>
+"Import coordinates" from a text file (incl. properties):</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -1583,7 +1582,7 @@ With the 'Edit path' dialog open, grab the check point with the left mouse butto
 Close 'Edit path' dialog</p>
 </li>
 <li>
-<p>Unknown time checks or curved legs can be added after the course import.</p>
+<p>Secret time checks or curved legs can be added after the course import.</p>
 </li>
 </ul>
 </div>
@@ -1701,7 +1700,7 @@ Edit "Properties" of the added points in the 'Placemark' dialog:</p>
 <ul>
 <li>
 <p>In the Name field adjust check point name and gate width<br>
-(TP &#8594; SC, e.g. "TP1, Gate 1.0NM" &#8594; "SC1, Gate 2.0NM")</p>
+(TP1 &#8594; SC, e.g. "TP1, Gate 1.0NM" &#8594; "SC, Gate 2.0NM" (SC does not need to be numbered))</p>
 </li>
 <li>
 <p>Grab point in graphic area with left mouse button and drag to desired position</p>
@@ -1720,6 +1719,9 @@ Edit "Properties" of the added points in the 'Placemark' dialog:</p>
 </li>
 <li>
 <p>Import the corrected route (Route &#8594; <strong>Import FC Route</strong>)</p>
+</li>
+<li>
+<p>Activate the option '<strong>Check point after curved leg</strong>' at the turn point with which the curved section ends.</p>
 </li>
 </ol>
 </div>
@@ -1803,7 +1805,7 @@ Edit "Properties" of the added points in the 'Placemark' dialog:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-deliver">Passing the competition route to the evaluation referee</h3>
+<h3 id="route-planning-deliver">Passing the competition route to the scoring manager</h3>
 <div class="paragraph">
 <p>Export a course entered with 'Flight Contest' with 'GPX-Export' or 'KMZ-Export'.
 to pass it on to the judge, who can import it with 'Routes &#8594; Import FC-Route'.
@@ -1953,7 +1955,7 @@ License: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http:/
 <p>Turning point names (in the respective print language, German WP, English TP)</p>
 </li>
 <li>
-<p>Gates of unknown time checks</p>
+<p>Gates of secret time checks</p>
 </li>
 <li>
 <p>Positions of track photos</p>
@@ -3193,7 +3195,7 @@ Import logger data &#8594; select GPX file &#8594; Import</p>
 <p>A use in the competition is to be clarified with the competition leader.</p>
 </li>
 <li>
-<p>The readout program is to be made available to the evaluation referee.</p>
+<p>The readout program is to be made available to the scoring manager.</p>
 </li>
 </ul>
 </div>
@@ -3206,7 +3208,7 @@ Import logger data &#8594; select GPX file &#8594; Import</p>
 <p>A use in the competition is to be clarified with the competition leader.</p>
 </li>
 <li>
-<p>The readout program is to be made available to the evaluation referee.</p>
+<p>The readout program is to be made available to the scoring manager.</p>
 </li>
 <li>
 <p>Necessary logger settings:</p>
@@ -3245,7 +3247,7 @@ Import logger data &#8594; select GPX file &#8594; Import</p>
 <p>A use in the competition is to be clarified with the competition leader.</p>
 </li>
 <li>
-<p>The readout program is to be made available to the evaluation referee.</p>
+<p>The readout program is to be made available to the scoring manager.</p>
 </li>
 <li>
 <p>Necessary logger settings:</p>
@@ -3290,7 +3292,7 @@ Import logger data &#8594; select GPX file &#8594; Import</p>
 <p>A use in competition has to be clarified with the competition manager.</p>
 </li>
 <li>
-<p>The readout program must be made available to the evaluation referee.</p>
+<p>The readout program must be made available to the scoring manager.</p>
 </li>
 </ul>
 </div>
@@ -3491,6 +3493,11 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 <td class="tableblock halign-left valign-top"><p class="tableblock">canvassign coords distfromtp tpname</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mapdistances</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title title2 value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname coorddist measuredist difference</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">routecoordexport</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -3564,6 +3571,11 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">head, times [#tas]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tas to2sp ifp2ildg ildg2isp fp2ldg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">landingstartlistlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">crewtest</p></td>
@@ -3691,6 +3703,11 @@ Default values: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">
 <td class="tableblock halign-left valign-top"><p class="tableblock">pos team crews teampenalties</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">resultfooter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[#line&lt;line&gt;]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[#col&lt;column&gt;]</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">freetext</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">#line</p></td>
@@ -3778,6 +3795,14 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 <div class="literalblock">
 <div class="content">
 <pre>table.teamresultlist td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Footer in result list - enlarge rows</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.resultfooter tr td { font-size: 120%; }</pre>
 </div>
 </div>
 </li>
@@ -4205,6 +4230,9 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
   }
   clouddemo {
     enable = true // Enables the cloud demo display
+  }
+  observation {
+    nobuttons = true // Disables buttons on observation result input
   }
 }</pre>
 </div>

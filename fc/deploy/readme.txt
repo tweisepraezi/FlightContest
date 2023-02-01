@@ -1,6 +1,44 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.0
+----------------
+- Strecken-Liste und Strecken-Details zeigen jetzt alle Aufgaben-Verwendungen an.
+- Die Mindestflughöhe wird jetzt bei neuen Strecken mit 300ft (500ft - 200ft Toleranz) initialisiert.
+- Höhen-Angaben in Dialogen und beim Strecken-Druck zeigen jetzt Höhe des Geländes (GND:), die Mindestflughöhe (>) und die Maximalflughöhe (<).
+- Bug "Strecken-Höhen-Anpassungen werden bei der nächsten Logger-Auswertung nicht übernommen" behoben
+- Unterstützung von Zahlen-Tastaturen hinzugefügt
+	Bei der Bearbeitung des Planungs-Abgabewertes kann zur Navigation zum nächsten Eingabefeld die Enter-Taste benutzt werden.
+	Bei der Bearbeitung von Check-Wert-Meßpunkten kann zur Navigation zum nächsten Eingabefeld die Enter-Taste benutzt werden.
+	Bei der Eingabe von Entfernungen in Beobachtungsergebnissen kann zur Navigation zum nächsten Eingabefeld die Enter-Taste benutzt werden.
+	Bei der Eingabe von Zeiten wird anstelle des ':' u.a. auch ein ',' akzeptiert.	
+- Offline-Karte für Check-Punkte zeigt nun Flug vom vorhergehenden Check-Punkt aus.
+- Druckfußzeile für Auswertungs-Drucke hinzugefügt.
+- Aufgaben-Einstellungen: Option "Planung sperren" hinzugefügt. Deaktiviert alle Kommandos, die die Planung verändern können.
+- Planung: Zeitplan-Export (Start-Liste) hinzugefügt. Für die Startliste von FFA_SkyTraq.
+- Strecken-Druck: Übersicht der Koordinaten-Karten-Entfernungen (in mm) hinzugefügt.
+- Besatzungs-Druck: Team-Druck und Flugzeug-Druck auf Folge-Seiten hinzugefügt.
+- Landungs-Ergebnis-Eingabe: Schalter 'Speichern und nächstes Ergebnis' hinzugefügt.
+- Ergebnisse: Die Ergebnis-Liste enthält nun für jede Landung eine separate Spalte (max. 4: Ldg1, Ldg2, Ldg3, Ldg4).
+- Ergebnis-Eingabe: Schalter 'Vorheriges Ergebnis' hinzugefügt.
+- Beobachtungs-Ergebnis-Eingabe wurde für Touchscreen-Nutzung optimiert:
+    Strecken-Foto-Eingabe wurde von Auswahlliste auf Schalter umgestellt.
+	Radio-Buttons wurden vergrößert und mit Rahmen versehen.
+- Alle Listen-Details: Schalter 'Vorheriges Element' hinzugefügt.
+- Planung: Landetest-Startliste hinzugefügt. Erlaubt Ausdruck einer Startliste, ohne einen Zeitplan festzulegen.
+  Ausdruck mit Gruppierung.
+- Logger auslesen: Option 'Logger eines neuen Ports sofort auslesen' hinzugefügt.
+- Planung, Ergebnisse und Besatzungen: Zur Bildung von Gruppen können Seitenumbrüche hinzugefügt werden.
+    Seitenumbrüche werden beim Drucken vor der konfigurierten Besatzung eingefügt.
+	Die aktivierte Option "Zeige Seiten einzeln" reduziert die Besatzungs-Anzeige auf die gewählte Seite
+	und begrenzt die Navigation zur nächsten oder vorherigen Besatzung.
+- Strecken-Import erweitert:
+	Bis zu 3 Koordinaten können als Halbkreis-Mittelpunkte deklariert werden.
+	Die auszuwertende Kursänderung zur automatischen Ermittlung von UZK-Koordinaten kann angepasst werden (Standard: 1,5°).
+- Leeres Strecken-Bodenzeichen hinzugefügt.
+    Die Eingabe erfolgt durch Auswahl des *. Bewirkt, dass zusätzliche Zeilen im Auswerteformular gedruckt werden.
+	Ein korrektes Ergebnis besteht dann darin, dass in diesen Zeilen keine Bodenzeichen gefunden wurden.
+
 Änderungen 3.2.4
 ----------------
 - Zeitplan-Export (Daten) hinzugefügt.

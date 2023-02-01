@@ -848,9 +848,24 @@ class EvaluationService
             }
         }
         if (resultSettings["Landing"]) {
-            if (task.isLandingTest) {
-                penalties += FcMath.GetLandingPenalties(landingResultsFactor, task.landingTestPenalties)
-            }
+			if (task.isLandingTest1 || task.isLandingTest2 || task.isLandingTest3 || task.isLandingTest4) {
+				if (task.isLandingTest1) {
+					penalties += FcMath.GetLandingPenalties(landingResultsFactor, task.landingTest1Penalties)
+				}
+				if (task.isLandingTest2) {
+					penalties += FcMath.GetLandingPenalties(landingResultsFactor, task.landingTest2Penalties)
+				}
+				if (task.isLandingTest3) {
+					penalties += FcMath.GetLandingPenalties(landingResultsFactor, task.landingTest3Penalties)
+				}
+				if (task.isLandingTest4) {
+					penalties += FcMath.GetLandingPenalties(landingResultsFactor, task.landingTest4Penalties)
+				}
+			} else {
+				if (task.isLandingTest) {
+					penalties += FcMath.GetLandingPenalties(landingResultsFactor, task.landingTestPenalties)
+				}
+			}
         }
         if (resultSettings["Special"]) {
             if (task.isSpecialTest) {
@@ -866,7 +881,7 @@ class EvaluationService
     //--------------------------------------------------------------------------
     private void calculatepositions_contest(Contest contestInstance, ResultClass resultclassInstance, List teamSettings, Map resultSettings, boolean ignoreProvisional)
     {
-        printstart "calculatepositions_contest [Class:${resultclassInstance?.name}, Teams:${teamSettings}]"
+        printstart "calculatepositions_contest [Class:${resultclassInstance?.name}, Teams:${teamSettings}, resultSettings:${resultSettings}]"
         
         int act_penalty = -1
         int max_position = Crew.countByContest(contestInstance)
@@ -1216,7 +1231,23 @@ class EvaluationService
                                             }
                                         }
                                         if (test_instance.IsLandingTestRun()) {
-                                            int landing_test_penalties = FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTestPenalties)
+											int landing_test_penalties = 0
+											if (test_instance.IsLandingTestAnyRun()) {
+												if (test_instance.IsLandingTest1Run()) {
+													landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest1Penalties)
+												}
+												if (test_instance.IsLandingTest2Run()) {
+													landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest2Penalties)
+												}
+												if (test_instance.IsLandingTest3Run()) {
+													landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest3Penalties)
+												}
+												if (test_instance.IsLandingTest4Run()) {
+													landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest4Penalties)
+												}
+											} else {
+												landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTestPenalties)
+											}
                                             crew_instance.landingPenalties += landing_test_penalties
                                             if (resultSettings["Landing"]) {
                                                 task_penalties += landing_test_penalties
@@ -1276,7 +1307,23 @@ class EvaluationService
                                                 }
                                             }
                                             if (test_instance.IsLandingTestRun()) {
-                                                int landing_test_penalties = FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTestPenalties)
+												int landing_test_penalties = 0
+												if (test_instance.IsLandingTestAnyRun()) {
+													if (test_instance.IsLandingTest1Run()) {
+														landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest1Penalties)
+													}
+													if (test_instance.IsLandingTest2Run()) {
+														landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest2Penalties)
+													}
+													if (test_instance.IsLandingTest3Run()) {
+														landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest3Penalties)
+													}
+													if (test_instance.IsLandingTest4Run()) {
+														landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTest4Penalties)
+													}
+												} else {
+													landing_test_penalties += FcMath.GetLandingPenalties(landing_results_factor, test_instance.landingTestPenalties)
+												}
                                                 crew_instance.landingPenalties += landing_test_penalties
                                                 if (resultSettings["Landing"]) {
                                                     task_penalties += landing_test_penalties
@@ -1356,7 +1403,23 @@ class EvaluationService
                             }
                         }
                         if (live_task.isLandingTest) {
-                            int landing_test_penalties = FcMath.GetLandingPenalties(liveContest.getLandingResultsFactor, live_task.landingTestPenalties)
+							int landing_test_penalties = 0
+							if (live_task.isLandingTest1 || live_task.isLandingTest2 || live_task.isLandingTest3 || live_task.isLandingTest4) {
+								if (live_task.isLandingTest1) {
+									landing_test_penalties += FcMath.GetLandingPenalties(liveContest.getLandingResultsFactor, live_task.landingTest1Penalties)
+								}
+								if (live_task.isLandingTest2) {
+									landing_test_penalties += FcMath.GetLandingPenalties(liveContest.getLandingResultsFactor, live_task.landingTest2Penalties)
+								}
+								if (live_task.isLandingTest3) {
+									landing_test_penalties += FcMath.GetLandingPenalties(liveContest.getLandingResultsFactor, live_task.landingTest3Penalties)
+								}
+								if (live_task.isLandingTest4) {
+									landing_test_penalties += FcMath.GetLandingPenalties(liveContest.getLandingResultsFactor, live_task.landingTest4Penalties)
+								}
+							} else {
+								landing_test_penalties += FcMath.GetLandingPenalties(liveContest.getLandingResultsFactor, live_task.landingTestPenalties)
+							}
                             live_crew.landingPenalties += landing_test_penalties
                             if (resultSettings["Landing"]) {
                                 task_penalties += landing_test_penalties

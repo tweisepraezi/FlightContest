@@ -14,6 +14,8 @@
                     <g:form params="${['routeReturnAction':routeReturnAction,'routeReturnController':routeReturnController,'routeReturnID':routeReturnID]}">
                         <input type="hidden" name="id" value="${routeInstance?.id}"/>
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${routeInstance.GetNextRouteID()}"/>
+						<g:set var="prev_id" value="${routeInstance.GetPrevRouteID()}"/>
                         <g:set var="route_data" value="${routeInstance.GetRouteData()}" />
                         <g:set var="route_used" value="${routeInstance.Used()}"/>
                         <g:set var="route_empty" value="${routeInstance.IsRouteEmpty()}"/>
@@ -172,16 +174,37 @@
                                     </td>
                                     <td colspan="2"/>
                                 </tr>
+								
                                 <tr>
-                                    <td class="detailtitle">${message(code:'fc.planningtesttask.list')}:</td>
+                                    <td class="detailtitle">${message(code:'fc.task.tasks')}:</td>
                                     <td colspan="2">
-                                        <g:each var="c" in="${PlanningTestTask.findAllByRoute(routeInstance,[sort:"id"])}">
-                                            <g:planningtesttask var="${c}" link="${createLink(controller:'planningTestTask',action:'show')}"/>
-                                            <br/>
-                                        </g:each>
-                                    </td>
+										<g:each var="task" in="${SearchTools.GetRouteTasks(routeInstance)}">
+											<g:if test="${!task.hidePlanning}">
+												<g:task var="${task}" link="${createLink(controller:'task',action:'listplanning')}"/>
+											</g:if>
+											<g:elseif test="${!task.hideResults}">
+												<g:task var="${task}" link="${createLink(controller:'task',action:'listresults')}"/>
+											</g:elseif>
+											<g:else>
+												${task.name().encodeAsHTML()}
+											</g:else>
+											<g:each var="flighttest_instance" in="${FlightTest.findAllByRoute(routeInstance,[sort:"id"])}">
+												<g:if test="${flighttest_instance && flighttest_instance.task == task}">
+													<g:if test="${flighttest_instance.IsObservationSignUsed()}">
+														(${message(code:'fc.observation')}: ${message(code:'fc.yes')})
+													</g:if>
+													<g:else>
+														(${message(code:'fc.observation')}: ${message(code:'fc.no')})
+													</g:else>
+												</g:if>
+											</g:each>
+											<br/>                                  
+										</g:each>
+									</td>
                                     <td colspan="2"/>
                                 </tr>
+								
+								<%--
                                 <tr>
                                     <td class="detailtitle">${message(code:'fc.flighttest.list')}:</td>
                                     <td colspan="2">
@@ -198,6 +221,7 @@
                                     </td>
                                     <td colspan="2"/>
                                 </tr>
+								--%>
                             </tbody>
                         </table>
                         <table>
@@ -208,20 +232,24 @@
                             <tfoot>
                                 <tr>
                                     <td>
-                                        <g:if test="${params.next}">
+                                        <g:if test="${next_id}">
                                             <g:actionSubmit action="gotonext" value="${message(code:'fc.route.gotonext')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         <g:else>
-                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                            <g:actionSubmit action="gotonext" value="${message(code:'fc.route.gotonext')}" onclick="this.form.target='_self';return true;" disabled tabIndex="${ti[0]++}"/>
+                                        </g:else>
+                                        <g:if test="${prev_id}">
+                                            <g:actionSubmit action="gotoprev" value="${message(code:'fc.route.gotoprev')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
+                                        </g:if>
+                                        <g:else>
+                                            <g:actionSubmit action="gotoprev" value="${message(code:'fc.route.gotoprev')}" onclick="this.form.target='_self';return true;" disabled tabIndex="${ti[0]++}"/>
                                         </g:else>
                                         <g:actionSubmit action="edit" value="${message(code:'fc.route.settings')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                         <g:if test="${!route_used}">
                                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="this.form.target='_self';return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                                         </g:if>
                                         <g:actionSubmit action="copyroute" value="${message(code:'fc.copy')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        <g:if test="${params.next}">
-                                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
-                                        </g:if>
+                                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='_self';return true;" tabIndex="${ti[0]++}"/>
                                     </td>
                                 </tr>
                             </tfoot>

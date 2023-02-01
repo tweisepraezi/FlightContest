@@ -93,7 +93,7 @@
                                 <td class="col2">${first_test.takeoffTime.format('HH:mm')}</td>
                                 <td class="col3">- ${last_test.takeoffTime.format('HH:mm')}</td>
                             </tr>
-                            <tr class="takeoffintervall">
+                            <tr class="takeoffinterval">
                                 <td class="col1">${message(code:'fc.task.takeoffinterval')}:</td>
                                 <td class="col2" colspan="2">${taskInstance.takeoffIntervalNormal} ${message(code:'fc.time.min')}</td>
                             </tr>

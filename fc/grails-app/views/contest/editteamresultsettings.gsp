@@ -12,6 +12,7 @@
                 <h2>${message(code:'fc.contest.teamresultsettings')}</h2>
                 <div class="block" id="forms">
                     <g:form params="${['resultfilter':resultfilter,'editteamresultsettingsReturnAction':editteamresultsettingsReturnAction,'editteamresultsettingsReturnController':editteamresultsettingsReturnController,'editteamresultsettingsReturnID':editteamresultsettingsReturnID]}">
+						<g:set var="ti" value="${[]+1}"/>
                        	<g:set var="resultclass_contesttitles" value="${false}"/>
                         <g:if test="${contestInstance.resultClasses}">
 	                        <fieldset>
@@ -112,19 +113,24 @@
 								</div>
 							</g:radioGroup>
                             <p>
-                                <input type="text" id="teamPrintTitle" name="teamPrintTitle" value="${fieldValue(bean:contestInstance,field:'teamPrintTitle')}" tabIndex="1"/>
+                                <input type="text" id="teamPrintTitle" name="teamPrintTitle" value="${fieldValue(bean:contestInstance,field:'teamPrintTitle')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.printsubtitle')}:</label>
                                 <br/>
-                                <input type="text" id="teamPrintSubtitle" name="teamPrintSubtitle" value="${fieldValue(bean:contestInstance,field:'teamPrintSubtitle')}" tabIndex="2"/>
+                                <input type="text" id="teamPrintSubtitle" name="teamPrintSubtitle" value="${fieldValue(bean:contestInstance,field:'teamPrintSubtitle')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.printfooter')}:</label>
+                                <br/>
+                                <input type="text" id="teamPrintFooter" name="teamPrintFooter" value="${fieldValue(bean:contestInstance,field:'teamPrintFooter')}" tabIndex="${ti[0]++}"/>
                             </p>
                        	</fieldset>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.teamcrewnum')}*:</label>
                                 <br/>
-                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="3"/>
+                                <input type="text" id="teamCrewNum" name="teamCrewNum" value="${fieldValue(bean:contestInstance,field:'teamCrewNum')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <div>
                                 <g:checkBox name="teamPrintLandscape" value="${contestInstance.teamPrintLandscape}" />
@@ -146,8 +152,8 @@
                        	</fieldset>
                         <input type="hidden" name="id" value="${contestInstance?.id}"/>
                         <input type="hidden" name="version" value="${contestInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="4"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="5"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

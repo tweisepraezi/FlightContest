@@ -110,15 +110,7 @@ class FlightResultsTagLib
                 } else {
                     outln"""        <td/>"""
                 }
-				String check_altitude = ""
-				if (coordresult_instance.type.IsAltitudeCheckCoord()) {
-					check_altitude = "${coordresult_instance.GetMinAltitudeAboveGround(route_instance.altitudeAboveGround)}${message(code:'fc.foot')}"
-                    int max_altitude = coordresult_instance.GetMaxAltitudeAboveGround()
-                    if (max_altitude) {
-                        check_altitude += " - ${max_altitude}${message(code:'fc.foot')}"
-                    }
-				}
-                outln"""            <td>${check_altitude}</td>"""
+                outln"""            <td>${get_check_altitude_str(route_instance, coordresult_instance)}</td>"""
                 outln"""        </tr>"""
                 outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
                 outln"""            <td/>"""
@@ -336,6 +328,7 @@ class FlightResultsTagLib
             outln"""    </thead>"""
             outln"""    <tbody>"""
             int leg_no = 0
+			String to_utc = ""
             for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(attrs.t.loggerResult,[sort:'utc'])) {
                 leg_no++
                 boolean show_point = true
@@ -345,8 +338,20 @@ class FlightResultsTagLib
                     }
                 }
                 if (show_point) {
-                    wr_calcresult(calcresult_instance, leg_no, attrs.t.task.contest.timeZone, show_judgeactions)
+                    wr_calcresult(calcresult_instance, leg_no, attrs.t.task.contest.timeZone, show_judgeactions, to_utc)
+					to_utc = ""
                 }
+				if (calcresult_instance.coordTitle) {
+					to_utc = calcresult_instance.utc
+					/*
+					switch (calcresult_instance.coordTitle.type) {
+						case CoordType.TO:
+						case CoordType.FP:
+							to_utc = calcresult_instance.utc
+							break
+					}
+					*/
+				}
             }
             outln"""    </tbody>"""
             outln"""<tfoot>"""
@@ -381,7 +386,7 @@ class FlightResultsTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    private void wr_calcresult(CalcResult calcresultInstance, int legNo, String timeZone, boolean showJudgeActions)
+    private void wr_calcresult(CalcResult calcresultInstance, int legNo, String timeZone, boolean showJudgeActions, String lastUtc)
     {
         String show_class = ""
         if (calcresultInstance.hide) {
@@ -472,7 +477,7 @@ class FlightResultsTagLib
             }
         }
         if (calcresultInstance.coordTitle) {
-            outln"""    <td><a class="showOfflineMapTest" href="${createLink(controller:'test',action:'showofflinemap_test',params:[id:calcresultInstance.loggerresult.test.id, showCoord:calcresultInstance.coordTitle.titleCode(), showUtc:calcresultInstance.utc])}" target="_blank">...</a></td>"""
+            outln"""    <td><a class="showOfflineMapTest" href="${createLink(controller:'test',action:'showofflinemap_test',params:[id:calcresultInstance.loggerresult.test.id, showCoord:calcresultInstance.coordTitle.titleCode(), showUtc:calcresultInstance.utc, lastUtc:lastUtc])}" target="_blank">...</a></td>"""
         } else {
             outln"""    <td></td>"""
         }
@@ -1344,6 +1349,33 @@ class FlightResultsTagLib
             }
         }
         return ret
+    }
+    
+	// --------------------------------------------------------------------------------------------------------------------
+    private String get_check_altitude_str(Route routeInstance, CoordResult coordresultInstance)
+    {
+        String ret_str = ""
+        int min_altitude = coordresultInstance.GetMinAltitudeAboveGround(routeInstance.altitudeAboveGround)
+        if (coordresultInstance.type.IsAltitudeCheckCoord()) {
+            if (min_altitude != coordresultInstance.altitude) {
+                ret_str += Defs.ALTITUDE_GND
+            } else {
+                ret_str += Defs.ALTITUDE_MINIMUM
+            }
+        } else {
+            ret_str += Defs.ALTITUDE_GND
+        }
+        ret_str += "${coordresultInstance.altitude}${message(code:'fc.foot')}"
+        if (coordresultInstance.type.IsAltitudeCheckCoord()) {
+            if (min_altitude != coordresultInstance.altitude) {
+                ret_str += " ${Defs.ALTITUDE_MINIMUM}${min_altitude}${message(code:'fc.foot')}"
+            }
+            int max_altitude = coordresultInstance.GetMaxAltitudeAboveGround()
+            if (max_altitude) {
+                ret_str += " ${Defs.ALTITUDE_MAXIMUM}${max_altitude}${message(code:'fc.foot')}"
+            }
+        }
+        return ret_str
     }
     
 	// --------------------------------------------------------------------------------------------------------------------

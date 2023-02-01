@@ -119,11 +119,36 @@ class Task
 	Boolean printTimetableLandscape          = false // DB-2.3
 	Boolean printTimetableA3                 = false // DB-2.3
 	
+	String printLandingStartlistPrintTitle   = ""    // DB-2.35
+	Boolean printLandingStartlistNumber      = true  // DB-2.35
+	Boolean printLandingStartlistCrew        = true  // DB-2.35
+	Boolean printLandingStartlistAircraft    = true  // DB-2.35
+	Boolean printLandingStartlistAircraftType   = true  // DB-2.35
+	Boolean printLandingStartlistAircraftColour = false // DB-2.35
+	Boolean printLandingStartlistTAS         = false // DB-2.35
+	Boolean printLandingStartlistTeam        = false // DB-2.35
+	Boolean printLandingStartlistClass       = false // DB-2.35
+	Boolean printLandingStartlistShortClass  = false // DB-2.35
+	Boolean printLandingStartlistEmptyColumn1 = false // DB-2.35
+	String printLandingStartlistEmptyTitle1   = ""    // DB-2.35
+	Boolean printLandingStartlistEmptyColumn2 = false // DB-2.35
+	String printLandingStartlistEmptyTitle2   = ""    // DB-2.35
+	Boolean printLandingStartlistEmptyColumn3 = false // DB-2.35
+	String printLandingStartlistEmptyTitle3   = ""    // DB-2.35
+	Boolean printLandingStartlistEmptyColumn4 = false // DB-2.35
+	String printLandingStartlistEmptyTitle4   = ""    // DB-2.35
+	Integer printLandingStartlistGroupCrewNum = 5     // DB-2.35
+	String printLandingStartlistStartGroupCrews = ""  // DB-2.35
+    Boolean printLandingStartlistLandingField = false // DB-2.35
+	Boolean printLandingStartlistLandscape   = false // DB-2.35
+	Boolean printLandingStartlistA3          = false // DB-2.35
+	
     String briefingTime                      = "10:00" // DB-2.8
     Boolean printTimetableOverviewLegTimes   = true  // DB-2.8
     Boolean printTimetableOverviewLandscape  = false // DB-2.8
     Boolean printTimetableOverviewA3         = false // DB-2.8
     
+	Boolean lockPlanning                     = false // DB-2.35
 	Boolean hidePlanning                     = false // DB-2.3
 	Boolean hideResults                      = false // DB-2.3
     
@@ -140,6 +165,10 @@ class Task
     Boolean liveTrackingResultsFlightOn      = false // DB-2.23
     Integer liveTrackingResultsObservationID = 0     // DB-2.23
     Integer liveTrackingResultsLandingID     = 0     // DB-2.23
+    Integer liveTrackingResultsLanding1ID    = 0     // DB-2.35
+    Integer liveTrackingResultsLanding2ID    = 0     // DB-2.35
+    Integer liveTrackingResultsLanding3ID    = 0     // DB-2.35
+    Integer liveTrackingResultsLanding4ID    = 0     // DB-2.35
     Integer liveTrackingResultsSpecialID     = 0     // DB-2.23
     Boolean liveTrackingResultsPublishImmediately = false // DB-2.23
     
@@ -148,7 +177,7 @@ class Task
                          'printFlightResults','printFlightMap',
                          'printObservationResults','printObservationResultsScan',
                          'printLandingResults','printSpecialResults','printAircraft','printTeam','printClass','printShortClass',
-                         'printModifiedResults','printCompletedResults','printProvisionalResults',
+                         'printResults','printModifiedResults','printCompletedResults','printProvisionalResults',
                          'showOffset','showTurnPoints','showTurnPointSigns','showEnroutePhotos','showEnrouteCanavas',
                          'setLiveTrackingNavigationTaskDate']
     boolean printSummaryResults = true
@@ -164,6 +193,7 @@ class Task
 	boolean printTeam = false
 	boolean printClass = false
 	boolean printShortClass = false
+	String printResults = ""
     boolean printModifiedResults = true
     boolean printCompletedResults = true
 	boolean printProvisionalResults = false
@@ -356,6 +386,36 @@ class Task
         
         // DB-2.25 compatibility
         liveTrackingNavigationTaskVisibility(nullable:true)
+		
+		// DB-2.35 compatibility
+		lockPlanning(nullable:true)
+		liveTrackingResultsLanding1ID(nullable:true)
+		liveTrackingResultsLanding2ID(nullable:true)
+		liveTrackingResultsLanding3ID(nullable:true)
+		liveTrackingResultsLanding4ID(nullable:true)
+		printLandingStartlistPrintTitle(nullable:true)
+		printLandingStartlistNumber(nullable:true)
+		printLandingStartlistCrew(nullable:true)
+		printLandingStartlistAircraft(nullable:true)
+		printLandingStartlistAircraftType(nullable:true)
+		printLandingStartlistAircraftColour(nullable:true)
+		printLandingStartlistTAS(nullable:true)
+		printLandingStartlistTeam(nullable:true)
+		printLandingStartlistClass(nullable:true)
+		printLandingStartlistShortClass(nullable:true)
+		printLandingStartlistEmptyColumn1(nullable:true)
+		printLandingStartlistEmptyTitle1(nullable:true)
+		printLandingStartlistEmptyColumn2(nullable:true)
+		printLandingStartlistEmptyTitle2(nullable:true)
+		printLandingStartlistEmptyColumn3(nullable:true)
+		printLandingStartlistEmptyTitle3(nullable:true)
+		printLandingStartlistEmptyColumn4(nullable:true)
+		printLandingStartlistEmptyTitle4(nullable:true)
+		printLandingStartlistGroupCrewNum(nullable:true)
+		printLandingStartlistStartGroupCrews(nullable:true)
+		printLandingStartlistLandingField(nullable:true)
+		printLandingStartlistLandscape(nullable:true)
+		printLandingStartlistA3(nullable:true)
 	}
 
     static mapping = {
@@ -797,7 +857,7 @@ class Task
 	{
         if (contest.resultClasses) {
             for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-                if (taskclass_instance.landingTest1Run) {
+                if (taskclass_instance.landingTestRun && taskclass_instance.landingTest1Run) {
                     return true
                 }
             }
@@ -810,7 +870,7 @@ class Task
 	{
         if (contest.resultClasses) {
             for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-                if (taskclass_instance.landingTest2Run) {
+                if (taskclass_instance.landingTestRun && taskclass_instance.landingTest2Run) {
                     return true
                 }
             }
@@ -823,7 +883,7 @@ class Task
 	{
         if (contest.resultClasses) {
             for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-                if (taskclass_instance.landingTest3Run) {
+                if (taskclass_instance.landingTestRun && taskclass_instance.landingTest3Run) {
                     return true
                 }
             }
@@ -836,7 +896,7 @@ class Task
 	{
         if (contest.resultClasses) {
             for (TaskClass taskclass_instance in TaskClass.findAllByTask(this,[sort:"id"])) {
-                if (taskclass_instance.landingTest4Run) {
+                if (taskclass_instance.landingTestRun && taskclass_instance.landingTest4Run) {
                     return true
                 }
             }
@@ -1214,52 +1274,68 @@ class Task
         return test_instances
     }
 
-    int GetFlightTestPos(Test testInstance)
+    List GetLandingTests()
     {
-        int flighttest_pos = 0
+        List test_instances = []
         for (Test test_instance in Test.findAllByTask(this,[sort:"viewpos"])) {
             if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
-                if (test_instance.IsFlightTestRun()) {
-                    flighttest_pos++
-                    if (test_instance.id == testInstance.id) {
-                        return flighttest_pos
-                    }
+                if (test_instance.IsLandingTestRun()) {
+                    test_instances += test_instance
                 }
+            }
+        }
+        return test_instances
+    }
+
+    long GetNextTaskID()
+    {
+        boolean start_found = false
+        for (Task task_instance in Task.findAllByContest(this.contest,[sort:'idTitle'])) {
+            if (start_found) {
+                return task_instance.id
+            }
+            if (task_instance.id == this.id) {
+                start_found = true
             }
         }
         return 0
     }
-
-    long GetNextID()
+    
+    long GetPrevTaskID()
     {
-        long next_id = 0
-        boolean set_next = false
-        for (Task task_instance in Task.findAllByContest(this.contest,[sort:'idTitle'])) {
-            if (set_next) {
-                next_id = task_instance.id
-                set_next = false
+        boolean start_found = false
+        for (Task task_instance in Task.findAllByContest(this.contest,[sort:'idTitle', order:'desc'])) {
+            if (start_found) {
+                return task_instance.id
             }
             if (task_instance.id == this.id) {
-                set_next = true
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
-    
-    static long GetNextID2(long taskID)
-    {
-        long next_id = 0
-        if (taskID) {
-            Task task_instance = Task.get(taskID)
-            if (task_instance) {
-                next_id = task_instance.GetNextID()
-            }
-        }
-        return next_id
-    }
+	
+	int GetPageNum()
+	{
+		return Test.findAllByTaskAndPageBreak(this,true,[sort:'viewpos']).size()+1
+	}
     
     String GetLiveTrackingVisibility()
     {
         return "${liveTrackingNavigationTaskVisibility.substring(0,1).toUpperCase()}${liveTrackingNavigationTaskVisibility.substring(1).toLowerCase()}"
     }
+	
+	boolean IsGroupStart(int crewStartNum)
+	{
+		if (printLandingStartlistStartGroupCrews) {
+			for (String crew_no in printLandingStartlistStartGroupCrews.split(',')) {
+				if (crew_no.isInteger()) {
+					if (crew_no.toInteger() == crewStartNum) {
+						return true
+					}
+				}
+			}
+		}
+		return false
+	}
 }

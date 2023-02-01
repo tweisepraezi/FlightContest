@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.2.4,</span>
-<span id="revdate">02.07.2022</span>
+<span id="revnumber">version 3.3.0,</span>
+<span id="revdate">01.02.2023</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -464,7 +464,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a></li>
 <li><a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a></li>
 <li><a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a></li>
-<li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a></li>
+<li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager</a></li>
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
 </ul>
 </li>
@@ -524,7 +524,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-email">E-Mail-Versand konfigurieren</a></li>
 <li><a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a></li>
 <li><a href="#configuration-ftp">FTP-Versand konfigurieren</a></li>
-<li><a href="#configuration-landing">Information für Landeschiedsrichter konfigurieren</a></li>
+<li><a href="#configuration-landing">Information für Lande-Schiedsrichter konfigurieren</a></li>
 <li><a href="#configuration-live">Live-Anzeige konfigurieren</a></li>
 <li><a href="#configuration-livetracking">Live-Tracking konfigurieren</a></li>
 <li><a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a></li>
@@ -609,7 +609,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Unterstützt die Logger-Datenformate GAC, IGC, GPX, KML, KMZ und NMEA 0183 (erweiterbar).</p>
 </div>
 <div class="paragraph">
-<p>Erzeugt OSM-basierte A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.</p>
+<p>Erzeugt OSM-basierte topographische A3- u. A4-Wettbewerbs-Karten im TÜK-200-Stil.</p>
 </div>
 <div class="paragraph">
 <p>Erzeugt PDF für Druck und Internet-Veröffentlichung.</p>
@@ -728,7 +728,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <div class="sectionbody">
 <div class="paragraph">
 <p><em>Ausrichter des Wettbewerbes</em><br>
-<strong>Auswerte-Schiedsrichter</strong></p>
+<strong>Auswerte-Manager</strong></p>
 </div>
 <div class="olist upperalpha">
 <ol class="upperalpha" type="A">
@@ -913,7 +913,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Abnormale Landung dokumentieren</p>
 </li>
 <li>
-<p>Lande-Ergebnis kontinuierlich an Auswerte-Schiedsrichter übermitteln</p>
+<p>Lande-Ergebnis kontinuierlich an Auswerte-Manager übermitteln</p>
 </li>
 </ul>
 </div>
@@ -929,7 +929,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Auswerteformular und Logger entgegennehmen</p>
 </li>
 <li>
-<p>Transport von Auswerteformular und Logger zum Auswerte-Schiedsrichter</p>
+<p>Transport von Auswerteformular und Logger zum Auswerte-Manager</p>
 </li>
 </ul>
 </div>
@@ -964,7 +964,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <div class="ulist">
 <ul>
 <li>
-<p>Ergebnisse vom Auswerte-Schiedsrichter abholen</p>
+<p>Ergebnisse vom Auswerte-Manager abholen</p>
 </li>
 <li>
 <p>Ergebnisse kontinuierlich an Besatzungen übergeben</p>
@@ -973,7 +973,7 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 <p>Rückfragen der Besatzungen entgegennehmen u. entscheiden</p>
 </li>
 <li>
-<p>Korrekturen an Auswerte-Schiedsrichter übergeben</p>
+<p>Korrekturen an Auswerte-Manager übergeben</p>
 </li>
 </ul>
 </div>
@@ -1015,12 +1015,12 @@ und wertet Ergebnisse für Planungstests, Navigationstests, Beobachtungen und/od
 hinter denen sich weitere Daten verbergen.</p>
 </li>
 <li>
-<p>Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.' benutzt werden,
-wodurch das Drücken der Shift-Taste nicht notwendig ist.</p>
+<p>Bei der Eingabe von Zeiten kann anstelle des ':' auch ein '.', ',' oder ';' benutzt werden.
+Dadurch wird das Drücken der Shift-Taste bei der deutschen ':'-Taste nicht notwendig
+und es kann auch eine Zahlen-Tastatur mit einem Komma genutzt werden.</p>
 </li>
 <li>
-<p>Bei der Eingabe gebrochener Zahlen kann anstelle des "," auch ein '.' benutzt
-werden.</p>
+<p>Bei der Eingabe gebrochener Zahlen kann anstelle des "," auch ein '.' benutzt werden.</p>
 </li>
 <li>
 <p>Bei der Eingabe von Landemesswerten können Klein- anstelle von Großbuchstaben
@@ -1207,7 +1207,7 @@ einem Import nur noch in 'Flight Contest'.</p>
 <a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a><br>
 <a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a><br>
 <a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a><br>
-<a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</a><br>
+<a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager</a><br>
 <a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></p>
 </div>
 <div class="sect2">
@@ -1713,7 +1713,7 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 <ul>
 <li>
 <p>Im Name-Feld Check-Punkt-Bezeichnung und Gate-Breite anpassen<br>
-(TP &#8594; SC, z.B. "TP1, Gate 1.0NM" &#8594; "SC1, Gate 2.0NM")</p>
+(TP1 &#8594; SC, z.B. "TP1, Gate 1.0NM" &#8594; "SC, Gate 2.0NM" (SC muss nicht nummeriert werden))</p>
 </li>
 <li>
 <p>Im Grafikbereich Punkt mit der linken Maustaste anfassen und zur gewünschten Position ziehen</p>
@@ -1732,6 +1732,9 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 </li>
 <li>
 <p>Import der korrigierten Strecke (Strecke &#8594; <strong>Import FC-Strecke</strong>)</p>
+</li>
+<li>
+<p>Beim Wendepunkt, mit dem der krumme Streckenabschnitt endet, die Option '<strong>Check-Punkt nach krummer Strecke</strong>' aktivieren.</p>
 </li>
 </ol>
 </div>
@@ -1815,10 +1818,10 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 </div>
 </div>
 <div class="sect2">
-<h3 id="route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Schiedsrichter</h3>
+<h3 id="route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager</h3>
 <div class="paragraph">
 <p>Exportieren Sie eine mit 'Flight Contest' eingegebene Strecke mit 'GPX-Export' oder 'KMZ-Export'
-zur Weitergabe an den Auswerte-Schiedsrichter, der diese mit 'Strecken &#8594; Import FC-Strecke'
+zur Weitergabe an den Auswerte-Manager, der diese mit 'Strecken &#8594; Import FC-Strecke'
 in sein 'Flight Contest' zur Nutzung importieren kann.</p>
 </div>
 </div>
@@ -2773,7 +2776,7 @@ anklickbare Check-Boxen eingegeben.</p>
 <p>Drucken Sie nicht die Besatzung aus, da dass dem Regelwerk widerspricht.</p>
 </div>
 <div class="paragraph">
-<p>Landeschiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig über die konkrete Besatzung eines Flugzeuges wissen.</p>
+<p>Lande-Schiedsrichter sollen zur objektiven Beurteilung einer Landung möglichst wenig über die konkrete Besatzung eines Flugzeuges wissen.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3506,6 +3509,11 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">canvassign coords distfromtp tpname</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mapdistances</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">title title2 value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tpname coorddist measuredist difference</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">routecoordexport</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title value</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -3572,13 +3580,18 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">briefing planning takeoff takeoffintervall intermediatelanding landing, legtimes [#tas]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">briefing planning takeoff takeoffinterval intermediatelanding landing, legtimes [#tas]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">col1 col2 col3</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timetableoverviewlist2</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">head, times [#tas]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">tas to2sp ifp2ildg ildg2isp fp2ldg</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">landingstartlistlist</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">value [#crew.num]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">group num crew aircraft aircrafttype aircraftcolor tas team resultclass shortresultclass empty1 empty2 empty3 empty4</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">crewtest</p></td>
@@ -3706,6 +3719,11 @@ Default-Werte: <a href="http://localhost:8080/fc/css/fcprint.css" class="bare">h
 <td class="tableblock halign-left valign-top"><p class="tableblock">pos team crews teampenalties</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">resultfooter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[#line&lt;line&gt;]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[#col&lt;column&gt;]</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">freetext</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">#line</p></td>
@@ -3793,6 +3811,14 @@ table.landingresultlist tr.summary { font-size: 70%; }</pre>
 <div class="literalblock">
 <div class="content">
 <pre>table.teamresultlist td { font-size: 90%; }</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Fußzeile in Ergebnisliste - Zeilen vergrößern</p>
+<div class="literalblock">
+<div class="content">
+<pre>table.resultfooter tr td { font-size: 120%; }</pre>
 </div>
 </div>
 </li>
@@ -3945,7 +3971,7 @@ zu machen oder diese Datei zu löschen.</p>
 <p><a href="#configuration-email">E-Mail-Versand konfigurieren</a><br>
 <a href="#configuration-viewemail">E-Mail-Anzeige konfigurieren</a><br>
 <a href="#configuration-ftp">FTP-Versand konfigurieren</a><br>
-<a href="#configuration-landing">Information für Landeschiedsrichter konfigurieren</a><br>
+<a href="#configuration-landing">Information für Lande-Schiedsrichter konfigurieren</a><br>
 <a href="#configuration-live">Live-Anzeige konfigurieren</a><br>
 <a href="#configuration-livetracking">Live-Tracking konfigurieren</a><br>
 <a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a><br>
@@ -3967,7 +3993,7 @@ zu machen oder diese Datei zu löschen.</p>
 flightcontest {
   mail {
     from = "TODO"       // Absender-E-Mail-Adresse (muss auf SMTP-Server gültig sein)
-    cc = "TODO"         // E-Mail-Adresse des Auswerte-Schiedsrichters
+    cc = "TODO"         // E-Mail-Adresse des Auswerte-Managers
   }
   testmail {
     to = "TODO"         // Ziel-E-Mail-Adresse
@@ -4052,7 +4078,7 @@ nicht jedoch auf das Root-Verzeichnis des FTP-Servers.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="configuration-landing">Information für Landeschiedsrichter konfigurieren</h3>
+<h3 id="configuration-landing">Information für Lande-Schiedsrichter konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
 <pre>flightcontest {
@@ -4224,6 +4250,9 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
   }
   clouddemo {
     enable = true // Aktiviert die Cloud-Demo-Anzeige
+  }
+  observation {
+    nobuttons = true // Deaktiviert Schalter bei Beobachtungs-Ergebnis-Eingabe
   }
 }</pre>
 </div>

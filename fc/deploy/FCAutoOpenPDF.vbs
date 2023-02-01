@@ -1,8 +1,8 @@
 ' --------------------------------------------------------------------------------
 '   FCAutoOpenPDF.vbs
 '   Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-'   01.06.2017
-'   Version 1.0.1
+'   16.12.2022
+'   Version 1.0.2
 ' --------------------------------------------------------------------------------
 
 ' Neu gesichterte Dateien automatisch öffnen
@@ -132,7 +132,7 @@ End Function
 ' ----------------------------------------------------------------------------------
 Function OpenFile(fileName)
 	'
-	shell.Run SEARCH_FOLDER & "\" & fileName, 1, False ' 0 - unsichtbar, True - Wait for return
+	shell.Run Chr(34) & SEARCH_FOLDER & "\" & fileName & Chr(34), 1, False ' 0 - unsichtbar, True - Wait for return
 	'
 End Function
 

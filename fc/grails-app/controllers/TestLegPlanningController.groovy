@@ -27,12 +27,7 @@ class TestLegPlanningController
         def testlegplanning = fcService.updateTestLegPlanningResult(session.showLanguage, params) 
         if (testlegplanning.saved) {
             flash.message = testlegplanning.message
-			long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Planningtask)
-			if (next_testid) {
-				redirect(controller:"test",action:'planningtaskresults',id:params.testid,params:[next:next_testid])
-			} else {
-				redirect(controller:"test",action:'planningtaskresults',id:params.testid)
-			}
+			redirect(controller:"test",action:'planningtaskresults',id:params.testid)
         } else if (testlegplanning.instance) {
             if (testlegplanning.error) {
                 flash.message = testlegplanning.message
@@ -149,12 +144,7 @@ class TestLegPlanningController
     }
 
     def cancel = {
-		long next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Planningtask)
-		if (next_testid) {
-			redirect(controller:"test",action:'planningtaskresults',id:params.testid,params:[next:next_testid])
-		} else {
-			redirect(controller:"test",action:'planningtaskresults',id:params.testid)
-		}
+		redirect(controller:"test",action:'planningtaskresults',id:params.testid)
     }
 
 }

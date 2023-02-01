@@ -116,13 +116,13 @@
                 <tbody>
                     <g:if test="${crewList}">
                      <g:each var="crew_instance" in="${crewList}" >
-                         <g:crewPrintable crew="${crew_instance}" contest="${contestInstance}" />
+                         <g:crewPrintable crew="${crew_instance}" contest="${contestInstance}" pageBreak="${crew_instance.pageBreak}"/>
                      </g:each>
                  </g:if>
                  <g:else>
                         <g:each var="test_instance" in="${testList}">
                             <g:if test="${!test_instance.disabledCrew && !test_instance.crew.disabled}">
-                                <g:crewPrintable crew="${test_instance.crew}" contest="${contestInstance}" />
+                                <g:crewPrintable crew="${test_instance.crew}" contest="${contestInstance}" pageBreak="${test_instance.pageBreak}"/>
                             </g:if>
                         </g:each>
                  </g:else>

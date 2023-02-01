@@ -248,15 +248,7 @@ class GpxController
     
 	def cancel = {
         if (session.gpxviewerReturnAction) {
-            long next_testid = 0
-            if (params.testid) {
-                next_testid = Test.GetNext2TestID(params.testid.toLong(),ResultType.Flight)
-            }
-            if (next_testid) {
-                redirect(action:session.gpxviewerReturnAction,controller:session.gpxviewerReturnController,id:session.gpxviewerReturnID,params:[next:next_testid])
-            } else {
-                redirect(action:session.gpxviewerReturnAction,controller:session.gpxviewerReturnController,id:session.gpxviewerReturnID)
-            }
+            redirect(action:session.gpxviewerReturnAction,controller:session.gpxviewerReturnController,id:session.gpxviewerReturnID)
         } else {
 		    redirect(controller:'global',action:'info')
         }

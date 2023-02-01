@@ -16,9 +16,11 @@
                     </div>
                 </g:hasErrors>
                 <div class="block" id="forms" >
-                    <g:set var="fromrouteparam" value="['routeid':params.routeid,'nextid':params.next]"/>
+                    <g:set var="fromrouteparam" value="['routeid':params.routeid,'nextid':next_id]"/>
                     <g:form method="post" params="${fromrouteparam}" >
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${coordEnroutePhotoInstance.GetNextCoordEnroutePhotoID()}"/>
+						<g:set var="prev_id" value="${coordEnroutePhotoInstance.GetPrevCoordEnroutePhotoID()}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -28,7 +30,7 @@
                             </tbody>
                         </table>
                         <g:if test="${!coordEnroutePhotoInstance.route.IsEnrouteSignUsed(true)}">
-                            <g:editCoordEnroutePhoto coordEnroute="${coordEnroutePhotoInstance}" create="${false}" ti="${ti}" next="${params.next}" />
+                            <g:editCoordEnroutePhoto coordEnroute="${coordEnroutePhotoInstance}" create="${false}" ti="${ti}" next="${next_id}" />
                         </g:if>
                         <g:else>
                             <table>
@@ -90,35 +92,33 @@
                         </g:else>
                         <input type="hidden" name="id" value="${coordEnroutePhotoInstance?.id}" />
                         <input type="hidden" name="version" value="${coordEnroutePhotoInstance?.version}" />
+						<g:if test="${next_id}">
+							<g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+						<g:if test="${prev_id}">
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.gotoprev')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
                         <g:if test="${!coordEnroutePhotoInstance.route.IsEnrouteSignUsed(true)}">
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
-                                <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}"  tabIndex="${ti[0]++}"/>
+                            <g:if test="${next_id}">
+                                <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" disabled tabIndex="${ti[0]++}"/>
                             </g:else>
-                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}"  tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
                             <g:if test="${coordEnroutePhotoInstance.IsEnroutePhotoMeasure()}">
-                                <g:actionSubmit action="reset" value="${message(code:'fc.distance.fromlasttp.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
+                                <g:actionSubmit action="reset" value="${message(code:'fc.distance.fromlasttp.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                             </g:if>
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');"  tabIndex="${ti[0]++}"/>
 				            <g:actionSubmit action="selectimagefilename" value="${message(code:'fc.observation.enroute.photo.import')}" tabIndex="${ti[0]++}"/>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
                         </g:if>
-                        <g:else>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
-                            <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:else>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
-                        </g:else>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

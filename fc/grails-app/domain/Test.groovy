@@ -17,6 +17,7 @@ class Test
     Integer taskLiveTrackingTeamID = 0                     // DB-2.25
     Integer aflosStartNum = 0                              // DB-2.10
     Boolean showAflosMark = false                          // DB-2.12
+    Boolean pageBreak = false                              // DB-2.35
 
 	// planning
 	boolean timeCalculated = false
@@ -93,6 +94,11 @@ class Test
     Boolean landingTest1PowerInAir = false                 // DB-2.9
     Boolean landingTest1FlapsInAir = false                 // DB-2.9
     Boolean landingTest1TouchingObstacle = false           // DB-2.9
+	Boolean landingTest1Complete = false                   // DB-2.35
+    Boolean landingTest1LiveTrackingResultOk = false       // DB-2.35
+    Boolean landingTest1LiveTrackingResultError = false    // DB-2.35
+	Boolean landingTest1Modified = true                    // DB-2.35
+	Integer landingTest1Version = 0                        // DB-2.35
 
 	String  landingTest2Measure = ""                       // DB-2.0
 	int     landingTest2MeasurePenalties = 0               // DB-2.0
@@ -107,6 +113,11 @@ class Test
 	boolean landingTest2PowerInAir = false                 // DB-2.0
     Boolean landingTest2FlapsInAir = false                 // DB-2.9
     Boolean landingTest2TouchingObstacle = false           // DB-2.9
+	Boolean landingTest2Complete = false                   // DB-2.35
+    Boolean landingTest2LiveTrackingResultOk = false       // DB-2.35
+    Boolean landingTest2LiveTrackingResultError = false    // DB-2.35
+	Boolean landingTest2Modified = true                    // DB-2.35
+	Integer landingTest2Version = 0                        // DB-2.35
 
 	String  landingTest3Measure = ""                       // DB-2.0
 	int     landingTest3MeasurePenalties = 0               // DB-2.0
@@ -121,6 +132,11 @@ class Test
 	boolean landingTest3PowerInAir = false                 // DB-2.0
 	boolean landingTest3FlapsInAir = false                 // DB-2.0
     Boolean landingTest3TouchingObstacle = false           // DB-2.9
+	Boolean landingTest3Complete = false                   // DB-2.35
+    Boolean landingTest3LiveTrackingResultOk = false       // DB-2.35
+    Boolean landingTest3LiveTrackingResultError = false    // DB-2.35
+	Boolean landingTest3Modified = true                    // DB-2.35
+	Integer landingTest3Version = 0                        // DB-2.35
     
 	String  landingTest4Measure = ""                       // DB-2.0
 	int     landingTest4MeasurePenalties = 0               // DB-2.0
@@ -135,6 +151,11 @@ class Test
     Boolean landingTest4PowerInAir = false                 // DB-2.9
     Boolean landingTest4FlapsInAir = false                 // DB-2.9
 	boolean landingTest4TouchingObstacle = false           // DB-2.0
+	Boolean landingTest4Complete = false                   // DB-2.35
+    Boolean landingTest4LiveTrackingResultOk = false       // DB-2.35
+    Boolean landingTest4LiveTrackingResultError = false    // DB-2.35
+	Boolean landingTest4Modified = true                    // DB-2.35
+	Integer landingTest4Version = 0                        // DB-2.35
 	
 	int     landingTestOtherPenalties = 0                  // DB-2.0
 	int     landingTestPenalties = 0
@@ -268,6 +289,29 @@ class Test
         
         // DB-2.25 compatibility
         taskLiveTrackingTeamID(nullable:true)
+
+		// DB-2.35 compatibility
+		landingTest1Complete(nullable:true)
+		landingTest2Complete(nullable:true)
+		landingTest3Complete(nullable:true)
+		landingTest4Complete(nullable:true)
+		landingTest1LiveTrackingResultOk(nullable:true)
+		landingTest2LiveTrackingResultOk(nullable:true)
+		landingTest3LiveTrackingResultOk(nullable:true)
+		landingTest4LiveTrackingResultOk(nullable:true)
+		landingTest1LiveTrackingResultError(nullable:true)
+		landingTest2LiveTrackingResultError(nullable:true)
+		landingTest3LiveTrackingResultError(nullable:true)
+		landingTest4LiveTrackingResultError(nullable:true)
+		landingTest1Modified(nullable:true)
+		landingTest2Modified(nullable:true)
+		landingTest3Modified(nullable:true)
+		landingTest4Modified(nullable:true)
+		landingTest1Version(nullable:true)
+		landingTest2Version(nullable:true)
+		landingTest3Version(nullable:true)
+		landingTest4Version(nullable:true)
+		pageBreak(nullable:true)
     }
 
 	static mapping = {
@@ -332,8 +376,20 @@ class Test
 		landingTest4Penalties = 0
 		landingTestPenalties = 0
 		landingTestComplete = false
+		landingTest1Complete = false
+		landingTest2Complete = false
+		landingTest3Complete = false
+		landingTest4Complete = false
         landingTestLiveTrackingResultOk = false
+        landingTest1LiveTrackingResultOk = false
+        landingTest2LiveTrackingResultOk = false
+        landingTest3LiveTrackingResultOk = false
+        landingTest4LiveTrackingResultOk = false
         landingTestLiveTrackingResultError = false
+        landingTest1LiveTrackingResultError = false
+        landingTest2LiveTrackingResultError = false
+        landingTest3LiveTrackingResultError = false
+        landingTest4LiveTrackingResultError = false
 	}
 	
 	void ResetSpecialTestResults()
@@ -374,6 +430,38 @@ class Test
 			return landingTestVersion + 1
 		}
 		return landingTestVersion
+	}
+
+	int GetLandingTest1Version()
+	{	
+		if (landingTest1Modified) {
+			return landingTest1Version + 1
+		}
+		return landingTest1Version
+	}
+
+	int GetLandingTest2Version()
+	{	
+		if (landingTest2Modified) {
+			return landingTest2Version + 1
+		}
+		return landingTest2Version
+	}
+
+	int GetLandingTest3Version()
+	{	
+		if (landingTest3Modified) {
+			return landingTest3Version + 1
+		}
+		return landingTest3Version
+	}
+
+	int GetLandingTest4Version()
+	{	
+		if (landingTest4Modified) {
+			return landingTest4Version + 1
+		}
+		return landingTest4Version
 	}
 
 	int GetSpecialTestVersion()
@@ -813,8 +901,31 @@ class Test
 		}
 		if (resultSettings["Landing"]) {
 			if (printLandingResults && IsLandingTestRun()) {
-				if (!landingTestComplete) {
-					provisional = true
+				if (IsLandingTestAnyRun()) {
+					if (IsLandingTest1Run()) {
+						if (!landingTest1Complete) {
+							provisional = true
+						}
+					}
+					if (IsLandingTest2Run()) {
+						if (!landingTest2Complete) {
+							provisional = true
+						}
+					}
+					if (IsLandingTest3Run()) {
+						if (!landingTest3Complete) {
+							provisional = true
+						}
+					}
+					if (IsLandingTest4Run()) {
+						if (!landingTest4Complete) {
+							provisional = true
+						}
+					}
+				} else {
+					if (!landingTestComplete) {
+						provisional = true
+					}
 				}
 			}
 		}
@@ -888,9 +999,32 @@ class Test
         }
         if (resultSettings["Landing"]) {
             if (IsLandingTestRun()) {
-                if (!landingTestComplete) {
-                    provisional = true
-                }
+				if (IsLandingTestAnyRun()) {
+					if (IsLandingTest1Run()) {
+						if (!landingTest1Complete) {
+							provisional = true
+						}
+					}
+					if (IsLandingTest2Run()) {
+						if (!landingTest2Complete) {
+							provisional = true
+						}
+					}
+					if (IsLandingTest3Run()) {
+						if (!landingTest3Complete) {
+							provisional = true
+						}
+					}
+					if (IsLandingTest4Run()) {
+						if (!landingTest4Complete) {
+							provisional = true
+						}
+					}
+				} else {
+					if (!landingTestComplete) {
+						provisional = true
+					}
+				}
             }
         }
         if (resultSettings["Special"]) {
@@ -1961,11 +2095,6 @@ class Test
 		return viewpos+1
 	}
 	
-    int GetFlightTestPos()
-    {
-        return task.GetFlightTestPos(this)
-    }
-    
 	int GetStartNum()
 	{
 		return crew.startNum  
@@ -2001,6 +2130,22 @@ class Test
 			case ResultType.Landing:
 				result_version = GetLandingTestVersion()
                 provisional = !landingTestComplete
+				break
+			case ResultType.Landing1:
+				result_version = GetLandingTest1Version()
+                provisional = !landingTest1Complete
+				break
+			case ResultType.Landing2:
+				result_version = GetLandingTest2Version()
+                provisional = !landingTest2Complete
+				break
+			case ResultType.Landing3:
+				result_version = GetLandingTest3Version()
+                provisional = !landingTest3Complete
+				break
+			case ResultType.Landing4:
+				result_version = GetLandingTest4Version()
+                provisional = !landingTest4Complete
 				break
 			case ResultType.Special:	
 				result_version = GetSpecialTestVersion()
@@ -2082,6 +2227,22 @@ class Test
                 result_version = GetLandingTestVersion()
                 result_type = "landingresults"
                 break
+            case ResultType.Landing1:
+                result_version = GetLandingTest1Version()
+                result_type = "landingresults1"
+                break
+            case ResultType.Landing2:
+                result_version = GetLandingTest2Version()
+                result_type = "landingresults2"
+                break
+            case ResultType.Landing3:
+                result_version = GetLandingTest3Version()
+                result_type = "landingresults3"
+                break
+            case ResultType.Landing4:
+                result_version = GetLandingTest4Version()
+                result_type = "landingresults4"
+                break
             case ResultType.Special:    
                 result_version = GetSpecialTestVersion()
                 result_type = "specialresults"
@@ -2094,63 +2255,156 @@ class Test
         return "${result_type}-task${task.idTitle}-${result_version}"
     }
     
-	long GetNextTestID(ResultType resultType)
+	long GetNextTestID(ResultType resultType, def session)
 	{
-		long nexttest_id = 0
-		boolean set_next = false
+		boolean start_found = false
+		int page_pos = 1
+		boolean show_test = false
 		for (Test test_instance2 in Test.findAllByTask(this.task,[sort:'viewpos'])) {
-			if (set_next) {
-				if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
-					boolean get_next = false
-					switch (resultType) {
-						case ResultType.Planningtask:
-							get_next = test_instance2.IsPlanningTestRun()
-							break
-						case ResultType.Flight:
-							get_next = test_instance2.IsFlightTestRun()
-							break
-						case ResultType.Observation:
-							get_next = test_instance2.IsObservationTestRun()
-							break
-						case ResultType.Landing:
-							get_next = test_instance2.IsLandingTestRun()
-							break
-						case ResultType.Special:
-							get_next = test_instance2.IsSpecialTestRun()
-							break
-						case ResultType.Crew:
-							get_next = true
-							break
-					}
-					if (get_next) {
-						nexttest_id = test_instance2.id
-						set_next = false
+			if (session.showPage) {
+				if (test_instance2.pageBreak) {
+					page_pos++
+				}
+				if (page_pos == session.showPagePos) {
+					show_test = true
+				} else {
+					show_test = false
+				}
+			} else {
+				show_test = true
+			}
+			if (show_test) {
+				if (start_found) {
+					if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
+						boolean test_found = false
+						switch (resultType) {
+							case ResultType.Planningtask:
+								test_found = test_instance2.IsPlanningTestRun()
+								break
+							case ResultType.Flight:
+								test_found = test_instance2.IsFlightTestRun()
+								break
+							case ResultType.Observation:
+								test_found = test_instance2.IsObservationTestRun()
+								break
+							case ResultType.Landing:
+								test_found = test_instance2.IsLandingTestRun()
+								break
+							case ResultType.Landing1:
+								test_found = test_instance2.IsLandingTest1Run()
+								break
+							case ResultType.Landing2:
+								test_found = test_instance2.IsLandingTest2Run()
+								break
+							case ResultType.Landing3:
+								test_found = test_instance2.IsLandingTest3Run()
+								break
+							case ResultType.Landing4:
+								test_found = test_instance2.IsLandingTest4Run()
+								break
+							case ResultType.Special:
+								test_found = test_instance2.IsSpecialTestRun()
+								break
+							case ResultType.Crew:
+								test_found = true
+								break
+						}
+						if (test_found) {
+							return test_instance2.id
+						}
 					}
 				}
+				if (test_instance2.id == this.id) {
+					start_found = true
+				}
 			}
-            if (test_instance2.id == this.id) {
-				set_next = true
+		}
+		return 0
+	}
+	
+	long GetPrevTestID(ResultType resultType, def session)
+	{
+		boolean start_found = false
+		int page_pos = 1
+		if (session.showPage) {
+			page_pos = session.showPageNum
+		}
+		boolean show_test = false
+		for (Test test_instance2 in Test.findAllByTask(this.task,[sort:'viewpos', order:'desc'])) {
+			if (session.showPage) {
+				if (page_pos == session.showPagePos) {
+					show_test = true
+				} else {
+					show_test = false
+				}
+				if (test_instance2.pageBreak) {
+					page_pos--
+				}
+			} else {
+				show_test = true
+			}
+			if (show_test) {
+				if (start_found) {
+					if (!test_instance2.disabledCrew && !test_instance2.crew.disabled) {
+						boolean test_found = false
+						switch (resultType) {
+							case ResultType.Planningtask:
+								test_found = test_instance2.IsPlanningTestRun()
+								break
+							case ResultType.Flight:
+								test_found = test_instance2.IsFlightTestRun()
+								break
+							case ResultType.Observation:
+								test_found = test_instance2.IsObservationTestRun()
+								break
+							case ResultType.Landing:
+								test_found = test_instance2.IsLandingTestRun()
+								break
+							case ResultType.Landing1:
+								test_found = test_instance2.IsLandingTest1Run()
+								break
+							case ResultType.Landing2:
+								test_found = test_instance2.IsLandingTest2Run()
+								break
+							case ResultType.Landing3:
+								test_found = test_instance2.IsLandingTest3Run()
+								break
+							case ResultType.Landing4:
+								test_found = test_instance2.IsLandingTest4Run()
+								break
+							case ResultType.Special:
+								test_found = test_instance2.IsSpecialTestRun()
+								break
+							case ResultType.Crew:
+								test_found = true
+								break
+						}
+						if (test_found) {
+							return test_instance2.id
+						}
+					}
+				}
+				if (test_instance2.id == this.id) {
+					start_found = true
+				}
+			}
+		}
+		return 0
+	}
+	
+    int GetTestPos()
+    {
+        int test_pos = 0
+        for (Test test_instance in Test.findAllByTask(this.task,[sort:"viewpos"])) {
+            if (!test_instance.disabledCrew && !test_instance.crew.disabled) {
+				test_pos++
+				if (test_instance.id == this.id) {
+					return test_pos
+				}
             }
-		}
-		return nexttest_id
-	}
-	
-	static long GetNext2TestID(long testID, ResultType resultType)
-	{
-		long next2test_id = 0
-		if (testID) {
-			Test test_instance = Test.get(testID)
-			if (test_instance) {
-				next2test_id = test_instance.GetNextTestID(resultType)
-			}
-		}
-		return next2test_id
-	}
-	
-	long GetNext2TestID(ResultType resultType)
-	{
-		return GetNext2TestID(this.id, resultType)
-	}
+        }
+        return 0
+    }
     
     String GetIntermediateLandingTime(boolean viewShortTime)
     {

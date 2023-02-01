@@ -81,7 +81,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="detailtitle">${message(code:'fc.task.list')}:</td>
+                                        <td class="detailtitle">${message(code:'fc.task.tasks')}:</td>
                                         <td>
                                             <g:each var="taskInstance" in="${Task.findAllByContest(contestInstance,[sort:"id"])}">
                                                 - <g:task var="${taskInstance}" link="${createLink(controller:'task',action:'edit')}"/>

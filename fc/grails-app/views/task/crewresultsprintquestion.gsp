@@ -77,12 +77,9 @@
                         <fieldset>
                             <p>
                                 <div>
-                                    <g:checkBox name="printModifiedResults" value="${taskInstance.printModifiedResults}" />
-                                    <label>${message(code:'fc.printmodified')}</label>
-                                </div>
-                                <div>
-                                    <g:checkBox name="printCompletedResults" value="${taskInstance.printCompletedResults}" />
-                                    <label>${message(code:'fc.printcompleted')}</label>
+									<label><input type="radio" name="printResults" value="AllResults" checked="checked" />${message(code:'fc.printall')}</label>
+									<label><input type="radio" name="printResults" value="ModifiedResults" />${message(code:'fc.printmodified')}</label>
+									<label><input type="radio" name="printResults" value="CompletedResults" />${message(code:'fc.printcompleted')}</label>
                                 </div>
                             </p>
                         </fieldset>

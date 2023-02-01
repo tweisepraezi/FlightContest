@@ -76,26 +76,32 @@ class CrewController {
         }
     }
 
+    def savesettings = {
+        def crew = fcService.updateCrew(params) 
+        if (crew.saved) {
+        	flash.message = crew.message
+			redirect(action:edit,id:crew.instance.id)
+        } else if (crew.instance) {
+        	render(view:'edit',model:[crewInstance:crew.instance])
+        } else {
+        	flash.message = crew.message
+            redirect(action:edit,id:params.id)
+        }
+    }
+
     def updatenext = {
         def crew = fcService.updateCrew(params)
         if (crew.instance) {
-            long next_id = crew.instance.GetNextID()
-            long next_id2 = Crew.GetNextID2(next_id)
+            long next_id = crew.instance.GetNextCrewID()
             if (crew.saved) {
                 flash.message = crew.message
                 if (next_id) {
-                    if (next_id2) {
-                        redirect(action:edit,id:next_id,params:[next:next_id2])
-                    } else {
-                        redirect(action:edit,id:next_id)
-                    }
+                    redirect(action:edit,id:next_id)
                 } else {
                     redirect(controller:"crew",action:"list")
                 }
             } else {
-                if (next_id && next_id2) {
-                    render(view:'edit',model:[crewInstance:crew.instance,params:[next:next_id2]])
-                } else if (next_id) {
+                if (next_id) {
                     render(view:'edit',model:[crewInstance:crew.instance,params:[next:next_id]])
                 } else {
                     render(view:'edit',model:[crewInstance:crew.instance])
@@ -214,14 +220,24 @@ class CrewController {
     def gotonext = {
         def crew = fcService.getCrew(params) 
         if (crew.instance) {
-            long next_id = crew.instance.GetNextID()
-            long next_id2 = Crew.GetNextID2(next_id)
+            long next_id = crew.instance.GetNextCrewID()
             if (next_id) {
-                if (next_id2) {
-                    redirect(action:edit,id:next_id,params:[next:next_id2])
-                } else {
-                    redirect(action:edit,id:next_id)
-                }
+                redirect(action:edit,id:next_id)
+            } else {
+                redirect(controller:"crew",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"crew",action:"list")
+        }
+    }
+    
+    def gotoprev = {
+        def crew = fcService.getCrew(params) 
+        if (crew.instance) {
+            long prev_id = crew.instance.GetPrevCrewID()
+            if (prev_id) {
+                redirect(action:edit,id:prev_id)
             } else {
                 redirect(controller:"crew",action:"list")
             }

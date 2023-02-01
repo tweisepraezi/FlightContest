@@ -18,6 +18,7 @@ class Crew
     Boolean disabledTeam = false              // DB-2.8
     Boolean disabledContest = false           // DB-2.9
     Boolean increaseEnabled = false           // DB-2.13 
+    Boolean pageBreak = false                 // DB-2.35
     
     String uuid = UUID.randomUUID().toString()// DB-2.10
     String email = ""                         // DB-2.10
@@ -99,6 +100,9 @@ class Crew
         // DB-2.24 compatibility
         liveTrackingContestTeamID(nullable:true)
         liveTrackingDifferences(nullable:true)
+		
+		// DB-2.35 compatibility
+		pageBreak(nullable:true)
 	}
 	
 	int GetResultPenalties(Map resultSettings)
@@ -215,31 +219,32 @@ class Crew
         return increaseEnabled && (GetIncreaseFactor() > 0)
     }
     
-    long GetNextID()
+    long GetNextCrewID()
     {
-        long next_id = 0
-        boolean set_next = false
+        boolean start_found = false
         for (Crew crew_instance in Crew.findAllByContest(this.contest,[sort:'viewpos'])) {
-            if (set_next) {
-                next_id = crew_instance.id
-                set_next = false
+            if (start_found) {
+                return crew_instance.id
             }
             if (crew_instance.id == this.id) {
-                set_next = true
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
     
-    static long GetNextID2(long crewID)
+    long GetPrevCrewID()
     {
-        long next_id = 0
-        if (crewID) {
-            Crew crew_instance = Crew.get(crewID)
-            if (crew_instance) {
-                next_id = crew_instance.GetNextID()
+        boolean start_found = false
+        for (Crew crew_instance in Crew.findAllByContest(this.contest,[sort:'viewpos', order:'desc'])) {
+            if (start_found) {
+                return crew_instance.id
+            }
+            if (crew_instance.id == this.id) {
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
+    
 }

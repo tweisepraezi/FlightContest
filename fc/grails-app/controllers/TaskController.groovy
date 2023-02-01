@@ -92,6 +92,45 @@ class TaskController {
         }
     }
 
+    def updatenext = {
+        def task = fcService.updateTask(params) 
+		if (task.saved) {
+        	flash.message = task.message
+            long next_id = task.instance.GetNextTaskID()
+            if (next_id) {
+                redirect(action:edit,id:next_id)
+			} else {
+        		redirect(controller:"contest",action:"tasks")
+			}
+        } else if (task.instance) {
+			if (task.error) {
+				flash.error = true
+				flash.message = task.message
+			}
+			render(view:'edit',model:[taskInstance:task.instance])
+        } else {
+			flash.message = task.message
+			redirect(action:edit,id:params.id)
+        }
+    }
+
+    def savesettings = {
+        def task = fcService.updateTask(params) 
+		if (task.saved) {
+        	flash.message = task.message
+       		redirect(action:"edit",id:task.instance.id)
+        } else if (task.instance) {
+			if (task.error) {
+				flash.error = true
+				flash.message = task.message
+			}
+			render(view:'edit',model:[taskInstance:task.instance])
+        } else {
+			flash.message = task.message
+			redirect(action:edit,id:params.id)
+        }
+    }
+
     def savetimetablejudgesettings = {
         def task = fcService.updateprintsettingsTask(params,PrintSettings.TimetableJuryModified)
 		if (task.instance) {
@@ -428,7 +467,7 @@ class TaskController {
         Map task = domainService.GetTask(params)
         flash.message = ""
         flash.error = false
-        render(view:'readlogger',model:[taskInstance:task.instance, taskReturnAction:params.taskReturnAction, taskReturnController:params.taskReturnController, taskReturnID:params.taskReturnID, loggertype:params.loggertype, port:params.port])
+        render(view:'readlogger',model:[taskInstance:task.instance, taskReturnAction:params.taskReturnAction, taskReturnController:params.taskReturnController, taskReturnID:params.taskReturnID, loggertype:params.loggertype, newportimport:params.newportimport, port:params.port, ports:params.ports, checkports:true])
     }
 	
     def readlogger_read = {
@@ -450,9 +489,97 @@ class TaskController {
                 flash.error = true
             }
         }
-        render(view:'readlogger',model:[taskInstance:task.instance, taskReturnAction:params.taskReturnAction, taskReturnController:params.taskReturnController, taskReturnID:params.taskReturnID, loggertype:params.loggertype, port:params.port, loggerfile:logger_file, info:params.port])
+        render(view:'readlogger',model:[taskInstance:task.instance, taskReturnAction:params.taskReturnAction, taskReturnController:params.taskReturnController, taskReturnID:params.taskReturnID, loggertype:params.loggertype, newportimport:params.newportimport, port:params.port, ports:params.ports, checkports:true, loggerfile:logger_file, info:params.port])
     }
 	
+	def landingstartlist = {
+        Map task = domainService.GetTask(params)
+        if (task.instance) {
+			// assign return action
+			if (session.taskReturnAction) {
+				return [taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID]
+			}
+			return [taskInstance:task.instance]
+        } else {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        }
+	}
+    
+	def updatelandingstartlistsettingsstandard = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.LandingStartlistStandard) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'landingstartlist',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+		} else {
+			flash.message = task.message
+			redirect(controller:"contest",action:"tasks")
+		}
+	}
+	
+	def updatelandingstartlistsettingsnone = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.LandingStartlistNone) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'landingstartlist',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+		} else {
+			flash.message = task.message
+			redirect(controller:"contest",action:"tasks")
+		}
+	}
+	
+	def updatelandingstartlistsettingsall = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.LandingStartlistAll) 
+        if (task.instance) {
+			flash.message = task.message
+			render(view:'landingstartlist',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+		} else {
+			flash.message = task.message
+			redirect(controller:"contest",action:"tasks")
+		}
+	}
+	
+    def savelandingstartlistsettings = {
+        def task = fcService.updateprintsettingsTask(params,PrintSettings.LandingStartlistModified)
+		if (task.instance) {
+			flash.message = task.message
+			render(view:'landingstartlist',model:[taskInstance:task.instance,taskReturnAction:session.taskReturnAction,taskReturnController:session.taskReturnController,taskReturnID:session.taskReturnID])
+        } else {
+			flash.message = task.message
+			redirect(action:edit,id:params.id)
+        }
+    }
+
+	def printlandingstartlist = {
+        Map task = printService.printlandingstartlistTask(params,GetPrintParams()) 
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else if (task.error) {
+        	flash.message = task.message
+           	flash.error = true
+        	redirect(action:listplanning,id:task.instance.id)
+        } else if (task.content) {
+        	printService.WritePDF(response,task.content,session.lastContest.GetPrintPrefix(),"landingstartlist-task${task.instance.idTitle}",true,task.instance.printLandingStartlistA3,task.instance.printLandingStartlistLandscape)
+	    } else {
+        	redirect(action:listplanning,id:task.instance.id)
+	    }
+	}
+	
+	def landingstartlistprintable = {
+        if (params.contestid) {
+            session.lastContest = Contest.get(params.contestid)
+            session.printLanguage = params.lang
+        }
+        Map task = domainService.GetTask(params)
+        if (!task.instance) {
+            flash.message = task.message
+            redirect(controller:"contest",action:"tasks")
+        } else {
+        	return [contestInstance:session.lastContest,taskInstance:task.instance ]
+        }
+    }
+
 	def cancel = {
 		// process return action
 		if (params.taskReturnAction) {
@@ -469,14 +596,24 @@ class TaskController {
     def gotonext = {
         Map task = domainService.GetTask(params)
         if (task.instance) {
-            long next_id = task.instance.GetNextID()
-            long next_id2 = Task.GetNextID2(next_id)
+            long next_id = task.instance.GetNextTaskID()
             if (next_id) {
-                if (next_id2) {
-                    redirect(action:edit,id:next_id,params:[next:next_id2])
-                } else {
-                    redirect(action:edit,id:next_id)
-                }
+                redirect(action:edit,id:next_id)
+            } else {
+                redirect(controller:"task",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"task",action:"list")
+        }
+    }
+    
+    def gotoprev = {
+        Map task = domainService.GetTask(params)
+        if (task.instance) {
+            long next_id = task.instance.GetPrevTaskID()
+            if (next_id) {
+                redirect(action:edit,id:next_id)
             } else {
                 redirect(controller:"task",action:"list")
             }
@@ -529,7 +666,7 @@ class TaskController {
 				fcService.printdone "Hide task."
 				redirect(controller:"contest",action:"tasks")
 	        } else {
-				SetLimit()
+				SetLimit(task.instance)
 	            session.lastTaskPlanning = task.instance.id
 				// save return action
 				session.taskReturnAction = actionName
@@ -604,7 +741,7 @@ class TaskController {
 				fcService.printdone "Hide task."
 				redirect(controller:"contest",action:"listresults")
 	        } else {
-				SetLimit()
+				SetLimit(task.instance)
 	            session.lastTaskResults = task.instance.id
 				// save return action
 				session.taskReturnAction = actionName 
@@ -917,6 +1054,45 @@ class TaskController {
         }
     }
     
+    def setpagebreak = {
+        def task = fcService.SetPageBreakTask(params, true, session)
+        if (task.instance) {
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            redirect(action:listplanning,id:task.instance.id)
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def resetpagebreak = {
+        def task = fcService.SetPageBreakTask(params, false, session)
+        if (task.instance) {
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            redirect(action:listplanning,id:task.instance.id)
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
+    def resetallpagebreak = {
+        def task = fcService.ResetAllPageBreakTask(params, session)
+        if (task.instance) {
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            redirect(action:listplanning,id:task.instance.id)
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+    
 	def calculatetimetable = {
         def task = fcService.calculatetimetableTask(params) 
         flash.message = task.message
@@ -970,7 +1146,34 @@ class TaskController {
         if (task.instance) {
             boolean run_redirect = true
             if (!task.error) {
-                String timetable_file_name = (task.instance.name() + '.txt').replace(' ',"_")
+                String timetable_file_name = ('label_' + task.instance.name() + '.txt').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${timetable_file_name}")
+                fcService.Download(webroot_dir + upload_file_name, timetable_file_name, response.outputStream)
+                fcService.DeleteFile(webroot_dir + upload_file_name)
+                run_redirect = false
+            }
+            flash.message = task.message
+            if (task.error) {
+                flash.error = true
+            }
+            if (run_redirect) {
+                redirect(action:listplanning,id:task.instance.id)
+            }
+        } else {
+            redirect(controller:"contest",action:"tasks")
+        }
+    }
+
+    def exporttimetable_startlist = {
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        String upload_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/TXT-${uuid}-UPLOAD.txt"
+        def task = fcService.exporttimetablestartlistTask(params, webroot_dir + upload_file_name)
+        if (task.instance) {
+            boolean run_redirect = true
+            if (!task.error) {
+                String timetable_file_name = ('startlist_' + task.instance.name() + '.txt').replace(' ',"_")
                 response.setContentType("application/octet-stream")
                 response.setHeader("Content-Disposition", "Attachment;Filename=${timetable_file_name}")
                 fcService.Download(webroot_dir + upload_file_name, timetable_file_name, response.outputStream)
@@ -1433,7 +1636,7 @@ class TaskController {
             }
             flash.error = calc.error
             flash.message = calc.message
-            long nexttest_id = test_instance.GetNextTestID(ResultType.Flight)
+            long nexttest_id = test_instance.GetNextTestID(ResultType.Flight,session)
             if (nexttest_id) {
                 redirect(controller:'test',action:'flightresults',id:test_instance.id,params:[next:nexttest_id])
             } else {
@@ -1661,8 +1864,64 @@ class TaskController {
         render(view:'editlivetracking',model:[taskInstance:ret.instance])
     }
     
+    def livetracking_landing1create = {
+        def ret = trackerService.createTest(params, ResultType.Landing1)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landing2create = {
+        def ret = trackerService.createTest(params, ResultType.Landing2)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landing3create = {
+        def ret = trackerService.createTest(params, ResultType.Landing3)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landing4create = {
+        def ret = trackerService.createTest(params, ResultType.Landing4)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
     def livetracking_landingdelete = {
         def ret = trackerService.deleteTest(params, ResultType.Landing)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landing1delete = {
+        def ret = trackerService.deleteTest(params, ResultType.Landing1)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landing2delete = {
+        def ret = trackerService.deleteTest(params, ResultType.Landing2)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landing3delete = {
+        def ret = trackerService.deleteTest(params, ResultType.Landing3)
+        flash.message = ret.message
+        flash.error = !ret.created
+        render(view:'editlivetracking',model:[taskInstance:ret.instance])
+    }
+    
+    def livetracking_landing4delete = {
+        def ret = trackerService.deleteTest(params, ResultType.Landing5)
         flash.message = ret.message
         flash.error = !ret.created
         render(view:'editlivetracking',model:[taskInstance:ret.instance])
@@ -1754,16 +2013,29 @@ class TaskController {
                ]
     }
 	
-	void SetLimit() {
+	void SetLimit(Task taskInstance) {
 		if (params.showlimit == "on") {
 			session.showLimit = true
-			if (!session?.showLimitStartPos) {
-				session.showLimitStartPos = 0
-			}
+			session.showLimitStartPos = 0
 		} else if (params.showlimit == "off") {
 			session.showLimit = false
+			session.showLimitStartPos = 0
 		} else if (params.startpos) {
 			session.showLimitStartPos = params.startpos.toInteger()
+		}
+		
+		session.showPageNum = taskInstance.GetPageNum()
+		if (params.showpage == "on") {
+			session.showPage = true
+			session.showPagePos = 1
+		} else if (params.showpagepos) {
+			session.showPagePos = params.showpagepos.toInteger()
+		} else if (params.showpage == "off") {
+			session.showPage = false
+			session.showPagePos = 1
+		}
+		if (session.showPagePos > session.showPageNum) {
+			session.showPagePos = 1
 		}
 	}
 }

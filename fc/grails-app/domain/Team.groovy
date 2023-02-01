@@ -61,31 +61,31 @@ class Team
 		return false	
 	}
 
-    long GetNextID()
+    long GetNextTeamID()
     {
-        long next_id = 0
-        boolean set_next = false
+        boolean start_found = false
         for (Team team_instance in Team.findAllByContest(this.contest,[sort:'name'])) {
-            if (set_next) {
-                next_id = team_instance.id
-                set_next = false
+            if (start_found) {
+                return team_instance.id
             }
             if (team_instance.id == this.id) {
-                set_next = true
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
-    
-    static long GetNextID2(long teamID)
+
+    long GetPrevTeamID()
     {
-        long next_id = 0
-        if (teamID) {
-            Team team_instance = Team.get(teamID)
-            if (team_instance) {
-                next_id = team_instance.GetNextID()
+        boolean start_found = false
+        for (Team team_instance in Team.findAllByContest(this.contest,[sort:'name', order:'desc'])) {
+            if (start_found) {
+                return team_instance.id
+            }
+            if (team_instance.id == this.id) {
+                start_found = true
             }
         }
-        return next_id
+        return 0
     }
 }

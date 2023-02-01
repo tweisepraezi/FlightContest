@@ -118,6 +118,8 @@ class FcTagLib
             out << """<a href="${p.link}/${p.var.id}${next_str}" target="_blank">${message(code:'fc.task.readlogger')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetable')}") {
 			out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.timetable')}</a>"""
+        } else if (p.link == "${createLinkTo(dir:'',file:'task/landingstartlist')}") {
+			out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.landingstartlist')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetablejudge')}") {
 			out << """<a href="${p.link}/${p.var.id}${next_str}">${message(code:'fc.task.timetablejudge')}</a>"""
         } else if (p.link == "${createLinkTo(dir:'',file:'task/timetableoverview')}") {

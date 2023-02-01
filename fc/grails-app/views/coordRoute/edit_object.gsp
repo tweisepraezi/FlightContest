@@ -18,6 +18,8 @@
                 <div class="block" id="forms" >
                     <g:form method="post" >
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${coordRouteInstance.GetNextCoordRouteID(true)}"/>
+						<g:set var="prev_id" value="${coordRouteInstance.GetPrevCoordRouteID(true)}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -120,38 +122,36 @@
                                 </fieldset>
                             </g:elseif>
                             <g:if test="${coordRouteInstance.route.turnpointRoute.IsTurnpointPhoto() || coordRouteInstance.route.enroutePhotoRoute.IsEnrouteRouteInput()}">
-                                <g:editCoordTurnpointPhoto coordRoute="${coordRouteInstance}"ti="${ti}" next="${params.next}" />
+                                <g:editCoordTurnpointPhoto coordRoute="${coordRouteInstance}"ti="${ti}" next="${next_id}" />
                             </g:if>
                         </g:if>
                         <input type="hidden" name="id" value="${coordRouteInstance?.id}" />
                         <input type="hidden" name="version" value="${coordRouteInstance?.version}" />
+						<g:if test="${next_id}">
+							<g:actionSubmit action="gotonext_object" value="${message(code:'fc.gotonext')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="gotonext_object" value="${message(code:'fc.gotonext')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
+						<g:if test="${prev_id}">
+							<g:actionSubmit action="gotoprev_object" value="${message(code:'fc.gotoprev')}" tabIndex="${ti[0]++}"/>
+						</g:if>
+						<g:else>
+							<g:actionSubmit action="gotoprev_object" value="${message(code:'fc.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+						</g:else>
                         <g:if test="${!coordRouteInstance.route.IsObservationSignUsed()}">
-	                       	<g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext_object" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
-	                            <g:actionSubmit action="updatenext_object" value="${message(code:'fc.savenext')}"  tabIndex="${ti[0]++}"/>
+	                       	<g:if test="${next_id}">
+	                            <g:actionSubmit action="updatenext_object" value="${message(code:'fc.savenext')}" tabIndex="${ti[0]++}"/>
 	                        </g:if>
                             <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
+								<g:actionSubmit action="updatenext_object" value="${message(code:'fc.savenext')}" disabled tabIndex="${ti[0]++}"/>
                             </g:else>
 	                        <g:actionSubmit action="updatereturn_object" value="${message(code:'fc.saveend')}"  tabIndex="${ti[0]++}"/>
                             <g:if test="${coordRouteInstance.route.turnpointRoute.IsTurnpointPhoto() && (coordRouteInstance.route.turnpointRoute == TurnpointRoute.TrueFalsePhoto || coordRouteInstance.assignedSign != TurnpointSign.NoSign) && coordRouteInstance.type.IsTurnpointSignCoord()}">
                                 <g:actionSubmit action="selectimagefilename" value="${message(code:'fc.observation.turnpoint.photo.import')}" tabIndex="${ti[0]++}"/>
                             </g:if>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
 	                    </g:if>
-	                    <g:else>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext_object" value="${message(code:'fc.gotonext')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
-                            <g:else>
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:else>
-                            <g:if test="${params.next}">
-                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}"  tabIndex="${ti[0]++}"/>
-                            </g:if>
-	                    </g:else>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

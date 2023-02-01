@@ -19,6 +19,8 @@
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['crewReturnAction':crewReturnAction,'crewReturnController':crewReturnController,'crewReturnID':crewReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${crewInstance.GetNextCrewID()}"/>
+						<g:set var="prev_id" value="${crewInstance.GetPrevCrewID()}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.crew.startnum')}*:</label>
@@ -82,6 +84,14 @@
                                 </div>
                             </p>
                         </fieldset>
+                        <fieldset>
+                            <p>
+                                <div>
+                                    <g:checkBox name="pageBreak" value="${crewInstance.pageBreak}" />
+                                    <label>${message(code:'fc.crew.pagebreak')}</label>
+                                </div>
+                            </p>
+                        </fieldset>
                         <g:if test="${crewInstance.GetIncreaseFactor() > 0}">
                             <fieldset>
                                 <p>
@@ -108,18 +118,25 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${crewInstance?.id}"/>
                         <input type="hidden" name="version" value="${crewInstance?.version}"/>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="gotonext" value="${message(code:'fc.crew.gotonext')}" tabIndex="${ti[0]++}"/>
+						<g:actionSubmit action="savesettings" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${next_id}">
                             <g:actionSubmit action="updatenext" value="${message(code:'fc.crew.updatenext')}" tabIndex="${ti[0]++}"/>
+							<g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.crew.gotonext')}" tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:else>
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.crew.updatenext')}" disabled tabIndex="${ti[0]++}"/>
+							<g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.crew.gotonext')}" disabled tabIndex="${ti[0]++}"/>
                         </g:else>
-                        <g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
-                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+						<g:if test="${prev_id}">
+                            <g:actionSubmit action="gotoprev" value="${message(code:'fc.crew.gotoprev')}" tabIndex="${ti[0]++}"/>
                         </g:if>
+                        <g:else>
+                            <g:actionSubmit action="gotoprev" value="${message(code:'fc.crew.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+                        </g:else>
+                        <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

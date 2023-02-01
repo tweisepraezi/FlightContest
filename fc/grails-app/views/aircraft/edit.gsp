@@ -18,6 +18,8 @@
                 <div class="block" id="forms" >
                     <g:form method="post" params="${['aircraftReturnAction':aircraftReturnAction,'aircraftReturnController':aircraftReturnController,'aircraftReturnID':aircraftReturnID]}" >
                         <g:set var="ti" value="${[]+1}"/>
+						<g:set var="next_id" value="${aircraftInstance.GetNextAircraftID()}"/>
+						<g:set var="prev_id" value="${aircraftInstance.GetPrevAircraftID()}"/>
                         <fieldset>
                             <p>
                                 <label>${message(code:'fc.aircraft.registration')}*:</label>
@@ -62,20 +64,27 @@
                         </g:if>
                         <input type="hidden" name="id" value="${aircraftInstance?.id}"/>
                         <input type="hidden" name="version" value="${aircraftInstance?.version}"/>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="gotonext" value="${message(code:'fc.aircraft.gotonext')}" tabIndex="${ti[0]++}"/>
+						<g:actionSubmit action="savesettings" value="${message(code:'fc.save')}" tabIndex="${ti[0]++}"/>
+                        <g:if test="${next_id}">
                             <g:actionSubmit action="updatenext" value="${message(code:'fc.aircraft.updatenext')}" tabIndex="${ti[0]++}"/>
+							<g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.aircraft.gotonext')}" tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:else>
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="updatenext" value="${message(code:'fc.aircraft.updatenext')}" disabled tabIndex="${ti[0]++}"/>
+							<g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="gotonext" value="${message(code:'fc.aircraft.gotonext')}" disabled tabIndex="${ti[0]++}"/>
                         </g:else>
-                        <g:actionSubmit action="update" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+						<g:if test="${prev_id}">
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.aircraft.gotoprev')}" tabIndex="${ti[0]++}"/>
+                        </g:if>
+                        <g:else>
+							<g:actionSubmit action="gotoprev" value="${message(code:'fc.aircraft.gotoprev')}" disabled tabIndex="${ti[0]++}"/>
+                        </g:else>
                         <g:if test="${!Test.findByTaskAircraft(aircraftInstance)}">
                             <g:actionSubmit action="delete" value="${message(code:'fc.delete')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                         </g:if>
-                        <g:if test="${params.next}">
-                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
-                        </g:if>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

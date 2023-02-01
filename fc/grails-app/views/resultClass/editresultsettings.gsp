@@ -12,7 +12,8 @@
                 <h2>${message(code:'fc.resultclass.resultsettings')}</h2>
                 <div class="block" id="forms">
                     <g:form params="${['resultfilter':resultfilter,'editresultsettingsReturnAction':editresultsettingsReturnAction,'editresultsettingsReturnController':editresultsettingsReturnController,'editresultsettingsReturnID':editresultsettingsReturnID]}">
-                        <fieldset>
+                        <g:set var="ti" value="${[]+1}"/>
+						<fieldset>
                             <p>
                                 <g:each var="task_instance" in="${Task.findAllByContest(resultclassInstance.contest,[sort:"idTitle"])}">
                                     <g:set var="task_selected" value="${false}"/>
@@ -107,12 +108,12 @@
                             <p>
                                 <label>${message(code:'fc.resultclass.contesttitle')}:</label>
                                 <br/>
-                                <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="1"/>
+                                <input type="text" id="contestTitle" name="contestTitle" value="${fieldValue(bean:resultclassInstance,field:'contestTitle')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <label>${message(code:'fc.printsubtitle')}:</label>
                                 <br/>
-                                <input type="text" id="contestPrintSubtitle" name="contestPrintSubtitle" value="${fieldValue(bean:resultclassInstance,field:'contestPrintSubtitle')}" tabIndex="2"/>
+                                <input type="text" id="contestPrintSubtitle" name="contestPrintSubtitle" value="${fieldValue(bean:resultclassInstance,field:'contestPrintSubtitle')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
                                 <div>
@@ -161,6 +162,11 @@
                                     <label>${message(code:'fc.printtaskdetails')}</label>
                                 </div>
                             </p>
+                            <p>
+                                <label>${message(code:'fc.printfooter')}:</label>
+                                <br/>
+                                <input type="text" id="contestPrintFooter" name="contestPrintFooter" value="${fieldValue(bean:resultclassInstance,field:'contestPrintFooter')}" tabIndex="${ti[0]++}"/>
+                            </p>
                         </fieldset>
                         <fieldset>
                             <p>
@@ -185,8 +191,8 @@
                         </fieldset>
                         <input type="hidden" name="id" value="${resultclassInstance?.id}"/>
                         <input type="hidden" name="version" value="${resultclassInstance?.version}"/>
-                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="3"/>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="4"/>
+                        <g:actionSubmit action="update" value="${message(code:'fc.update')}" tabIndex="${ti[0]++}"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

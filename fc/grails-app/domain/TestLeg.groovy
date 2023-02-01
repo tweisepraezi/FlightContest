@@ -50,7 +50,7 @@ class TestLeg
 		resultLegTime(scale:10)
 		
 		resultLegTimeInput(blank:false, validator:{ val, obj ->
-			String v = val.replace('.',':')
+			String v = FcTime.GetInputTimeStr(val)
         	switch(v.size()) {
                 case 1:
                     try {

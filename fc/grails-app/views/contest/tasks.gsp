@@ -2,7 +2,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="layout" content="main" />
-        <title>${message(code:'fc.contest.tasks')}</title>
+        <title>${message(code:'fc.task.tasks')}</title>
     </head>
     <body>
         <g:if test="${contestInstance}">
@@ -17,10 +17,10 @@
                     <thead>
                         <tr>
                             <g:if test="${BootStrap.global.IsLiveTrackingPossible() && contestInstance.liveTrackingContestID && contestInstance.liveTrackingScorecard}" >
-                                <th colspan="7" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                                <th colspan="7" class="table-head">${message(code:'fc.task.tasks')}</th>
                             </g:if>
                             <g:else>
-                                <th colspan="6" class="table-head">${message(code:'fc.contest.tasks')}</th>
+                                <th colspan="6" class="table-head">${message(code:'fc.task.tasks')}</th>
                             </g:else>
                         </tr>
                         <tr>
@@ -38,13 +38,7 @@
                     <tbody>
                         <g:each var="task_instance" in="${contestTasks}" status="i">
                             <tr class="${(i % 2) == 0 ? 'odd' : ''}">
-	                            <g:set var="next_task" value=""/>
-	                            <g:set var="next_task_id" value="${task_instance.GetNextID()}" />
-	                            <g:if test="${next_task_id}">
-	                                <g:set var="next_task" value="?next=${next_task_id}"/>
-	                            </g:if>
-	                            
-                                <td><g:task var="${task_instance}" link="${createLink(controller:'task',action:'edit')}" next="${next_task}"/></td>
+                                <td><g:task var="${task_instance}" link="${createLink(controller:'task',action:'edit')}" /></td>
                                 
                                 <g:if test="${task_instance.planningtest}">
                                     <td><g:planningtest var="${task_instance.planningtest}" link="${createLink(controller:'planningTest',action:'show')}"/></td>
@@ -62,12 +56,14 @@
                                     <td><g:livetrackingtask var="${task_instance}" link="${createLink(controller:'task',action:'editlivetracking')}"/><img src="${createLinkTo(dir:'images',file:'livetracking.svg')}" style="margin-left:0.2rem; height:0.6rem;"/> (${task_instance.GetLiveTrackingVisibility()})</td>
                                 </g:if>
 
-                                <g:if test="${task_instance.hidePlanning}">
-                                    <td>${message(code:'fc.hided')}</td>
-                                </g:if>
-                                <g:else>
-                                    <td/>
-                                </g:else>
+								<td>
+									<g:if test="${task_instance.lockPlanning}">
+										${message(code:'fc.locked')}
+									</g:if>
+									<g:if test="${task_instance.hidePlanning}">
+										${message(code:'fc.hided')}
+									</g:if>
+								</td>
                                 
                                 <g:if test="${task_instance.hideResults}">
                                     <td>${message(code:'fc.hided')}</td>

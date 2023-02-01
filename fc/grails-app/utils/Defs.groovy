@@ -45,6 +45,10 @@ class Defs
     static final String LIVETRACKING_TASKTEST_NAVIGATION               = "Navigation"
     static final String LIVETRACKING_TASKTEST_OBSERVATION              = "Observation"
     static final String LIVETRACKING_TASKTEST_LANDING                  = "Landing"
+    static final String LIVETRACKING_TASKTEST_LANDING1                 = "Landing1"
+    static final String LIVETRACKING_TASKTEST_LANDING2                 = "Landing2"
+    static final String LIVETRACKING_TASKTEST_LANDING3                 = "Landing3"
+    static final String LIVETRACKING_TASKTEST_LANDING4                 = "Landing4"
     static final String LIVETRACKING_TASKTEST_SPECIAL                  = "Other"
     
     static final String LIVETRACKING_VISIBILITY_PUBLIC                 = "public"
@@ -158,10 +162,18 @@ class Defs
     
     static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
     
-    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 9"
+    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 10"
     static final String ROUTEEXPORT_SETTINGS                           = "settings"
     static final String ROUTEEXPORT_MAPSETTINGS                        = "mapsettings"
     static final String ROUTEEXPORT_TURNPOINTS                         = "turnpoints"
     static final String ROUTEEXPORT_PHOTOS                             = "photos"
     static final String ROUTEEXPORT_CANVAS                             = "canvas"
+    
+    static final String ALTITUDE_GND                                   = "GND:"
+    static final String ALTITUDE_MINIMUM                               = ">"
+    static final String ALTITUDE_MAXIMUM                               = "<"
+    static final String ALTITUDE_MAXIMUM_HTML                          = "&lt;"
+	
+	static final String RESULTS_FOOTER_LINE_SEPARATOR                  = "+"
+	static final String RESULTS_FOOTER_COLUMN_SEPARATOR                = ","
 }

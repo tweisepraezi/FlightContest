@@ -17,6 +17,7 @@
                 </g:hasErrors>
                 <div class="block" id="forms" >
                     <g:form>
+						<g:set var="ti" value="${[]+1}"/>
                         <table>
                             <tbody>
                                 <tr>
@@ -65,27 +66,76 @@
                             <g:if test="${edit_checkpoint}">
                                  <p>
                                    	<div>
-                                   		<g:checkBox name="resultCpNotFound" value="${coordResultInstance.resultCpNotFound}" />
+                                   		<g:checkBox name="resultCpNotFound" id="resultCpNotFound" value="${coordResultInstance.resultCpNotFound}" tabIndex="${ti[0]++}"/>
                                        	<label>${coordResultInstance.GetCpNotFoundName()}</label>
                                    	</div>
                                  </p>
                                  <p>
                                     <label>${message(code:'fc.cptime')}* [${message(code:'fc.time.hminsec')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultCpTimeInput" name="resultCpTimeInput" value="${fieldValue(bean:coordResultInstance,field:'resultCpTimeInput')}" tabIndex="2"/>
+                                    <input type="text" id="resultCpTimeInput" name="resultCpTimeInput" value="${fieldValue(bean:coordResultInstance,field:'resultCpTimeInput')}" tabIndex="${ti[0]++}"/>
                                  </p>
                                 <p>
                                     <label>${message(code:'fc.altitude')}* [${message(code:'fc.foot')}]:</label>
                                     <br/>
-                                    <input type="text" id="resultAltitude" name="resultAltitude" value="${coordResultInstance.resultAltitude}" tabIndex="3"/>
+                                    <input type="text" id="resultAltitude" name="resultAltitude" value="${coordResultInstance.resultAltitude}" tabIndex="${ti[0]++}"/>
                                 </p>
+                                <script>
+									$('#resultCpNotFound').focus();
+									$(document).on('keypress', '#resultCpNotFound', function(e) {
+										if (e.charCode == 13) {
+											$('#resultCpTimeInput').select() 
+											e.preventDefault();
+										}
+									});
+									$(document).on('keypress', '#resultCpTimeInput', function(e) {
+										if (e.charCode == 13) {
+											$('#resultAltitude').select() 
+											e.preventDefault();
+										}
+									});
+                                </script>
                                 <g:if test="${coordResultInstance.type.IsBadCourseCheckCoord()}">
                                     <p>
                                         <label>${message(code:'fc.badcoursenum')}*:</label>
                                         <br/>
-                                        <input type="text" id="resultBadCourseNum" name="resultBadCourseNum" value="${fieldValue(bean:coordResultInstance,field:'resultBadCourseNum')}" tabIndex="4"/>
+                                        <input type="text" id="resultBadCourseNum" name="resultBadCourseNum" value="${fieldValue(bean:coordResultInstance,field:'resultBadCourseNum')}" tabIndex="${ti[0]++}"/>
                                     </p>
+									<script>
+										$(document).on('keypress', '#resultAltitude', function(e) {
+											if (e.charCode == 13) {
+												$('#resultBadCourseNum').select() 
+												e.preventDefault();
+											}
+										});
+										$(document).on('keypress', '#resultBadCourseNum', function(e) {
+											if (e.charCode == 13) {
+												<g:if test="${params.next}">
+													$('#updatenext').focus()
+												</g:if>
+												<g:else>
+													$('#updatereturn').focus()
+												</g:else>
+												e.preventDefault();
+											}
+										});
+									</script>
                                 </g:if>
+								<g:else>
+									<script>
+										$(document).on('keypress', '#resultAltitude', function(e) {
+											if (e.charCode == 13) {
+												<g:if test="${params.next}">
+													$('#updatenext').focus()
+												</g:if>
+												<g:else>
+													$('#updatereturn').focus()
+												</g:else>
+												e.preventDefault();
+											}
+										});
+									</script>
+								</g:else>
                             </g:if>
                             <g:else>
                                 <table>
@@ -123,17 +173,17 @@
                         <input type="hidden" name="next" value="${params.next}" />
                         <g:if test="${edit_checkpoint}">
                         	<g:if test="${params.next}">
-                            	<g:actionSubmit action="updatenext" value="${message(code:'fc.savenext')}" tabIndex="5"/>
+                            	<g:actionSubmit action="updatenext" id="updatenext" value="${message(code:'fc.savenext')}" tabIndex="${ti[0]++}"/>
                             </g:if>
-                            <g:actionSubmit action="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="6"/>
-                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="7"/>
+                            <g:actionSubmit action="updatereturn" id="updatereturn" value="${message(code:'fc.saveend')}" tabIndex="${ti[0]++}"/>
+                            <g:actionSubmit action="reset" value="${message(code:'fc.reset')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}"/>
                         </g:if>
                         <g:else>
                             <g:if test="${params.next}">
-                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" tabIndex="8"/>
+                                <g:actionSubmit action="gotonext" value="${message(code:'fc.gotonext')}" tabIndex="${ti[0]++}"/>
                             </g:if>
                         </g:else>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="9"/>
+                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" tabIndex="${ti[0]++}"/>
                     </g:form>
                 </div>
             </div>

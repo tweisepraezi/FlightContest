@@ -891,7 +891,7 @@ class BootStrap {
                                 route_instance.contestMapChurches = true
                                 route_instance.contestMapCastles = true
                                 route_instance.contestMapChateaus = true
-                                route_instance.contestMapPowerlines = true
+                                route_instance.contestMapPowerlines = false
                                 route_instance.contestMapWindpowerstations = true
                                 route_instance.contestMapSmallRoads = false
                                 route_instance.contestMapPeaks = true
@@ -1121,6 +1121,102 @@ class BootStrap {
 								coord_instance.minAltitudeAboveGround = 0
 								coord_instance.maxAltitudeAboveGround = 0
 								coord_instance.save()
+							}
+                            println " done."
+                        }
+                        if (global.versionMinor < 35) { // DB-2.35 compatibility
+                            print "    2.35 modifications"
+							Contest.findAll().each { Contest contest_instance ->
+								contest_instance.contestPrintFooter = ""
+								contest_instance.teamPrintFooter = ""
+								contest_instance.printTeams = false
+								contest_instance.printTeamLandscape = false
+								contest_instance.printAircraft = false
+								contest_instance.printAircraftLandscape = false
+								contest_instance.save()
+							}
+							ResultClass.findAll().each { ResultClass resultclass_instance ->
+								resultclass_instance.contestPrintFooter = ""
+								resultclass_instance.save()
+							}
+                            Crew.findAll().each { Crew crew_instance ->
+                                crew_instance.pageBreak = false
+                                crew_instance.save()
+                            }
+                            Task.findAll().each { Task task_instance ->
+                                task_instance.lockPlanning = false
+								task_instance.liveTrackingResultsLanding1ID = 0
+								task_instance.liveTrackingResultsLanding2ID = 0
+								task_instance.liveTrackingResultsLanding3ID = 0
+								task_instance.liveTrackingResultsLanding4ID = 0
+								task_instance.printLandingStartlistPrintTitle = ""
+								task_instance.printLandingStartlistNumber = true
+								task_instance.printLandingStartlistCrew = true
+								task_instance.printLandingStartlistAircraft = true
+								task_instance.printLandingStartlistAircraftType = true
+								task_instance.printLandingStartlistAircraftColour = false
+								task_instance.printLandingStartlistTAS = false
+								task_instance.printLandingStartlistTeam = false
+								task_instance.printLandingStartlistClass = false
+								task_instance.printLandingStartlistShortClass = false
+								task_instance.printLandingStartlistEmptyColumn1 = false
+								task_instance.printLandingStartlistEmptyTitle1 = ""
+								task_instance.printLandingStartlistEmptyColumn2 = false
+								task_instance.printLandingStartlistEmptyTitle2 = ""
+								task_instance.printLandingStartlistEmptyColumn3 = false
+								task_instance.printLandingStartlistEmptyTitle3 = ""
+								task_instance.printLandingStartlistEmptyColumn4 = false
+								task_instance.printLandingStartlistEmptyTitle4 = ""
+								task_instance.printLandingStartlistGroupCrewNum = 5
+								task_instance.printLandingStartlistStartGroupCrews = ""
+								task_instance.printLandingStartlistLandingField = false
+								task_instance.printLandingStartlistLandscape = false
+								task_instance.printLandingStartlistA3 = false
+                                task_instance.save()
+                            }
+							Test.findAll().each { Test test_instance ->
+								test_instance.landingTest1Complete = false
+								test_instance.landingTest2Complete = false
+								test_instance.landingTest3Complete = false
+								test_instance.landingTest4Complete = false
+								test_instance.landingTest1LiveTrackingResultOk = false
+								test_instance.landingTest2LiveTrackingResultOk = false
+								test_instance.landingTest3LiveTrackingResultOk = false
+								test_instance.landingTest4LiveTrackingResultOk = false
+								test_instance.landingTest1LiveTrackingResultError = false
+								test_instance.landingTest2LiveTrackingResultError = false
+								test_instance.landingTest3LiveTrackingResultError = false
+								test_instance.landingTest4LiveTrackingResultError = false
+								test_instance.landingTest1Modified = true
+								test_instance.landingTest2Modified = true
+								test_instance.landingTest3Modified = true
+								test_instance.landingTest4Modified = true
+								test_instance.landingTest1Version = 0
+								test_instance.landingTest2Version = 0
+								test_instance.landingTest3Version = 0
+								test_instance.landingTest4Version = 0
+								if (test_instance.IsLandingTest1Run()) {
+									test_instance.landingTest1Complete = test_instance.landingTestComplete
+									test_instance.landingTest1Modified = test_instance.landingTestModified
+									test_instance.landingTest1Version = test_instance.landingTestVersion
+								}
+								if (test_instance.IsLandingTest2Run()) {
+									test_instance.landingTest2Complete = test_instance.landingTestComplete
+									test_instance.landingTest2Modified = test_instance.landingTestModified
+									test_instance.landingTest2Version = test_instance.landingTestVersion
+								}
+								if (test_instance.IsLandingTest3Run()) {
+									test_instance.landingTest3Complete = test_instance.landingTestComplete
+									test_instance.landingTest3Modified = test_instance.landingTestModified
+									test_instance.landingTest3Version = test_instance.landingTestVersion
+								}
+								if (test_instance.IsLandingTest4Run()) {
+									test_instance.landingTest4Complete = test_instance.landingTestComplete
+									test_instance.landingTest4Modified = test_instance.landingTestModified
+									test_instance.landingTest4Version = test_instance.landingTestVersion
+								}
+								test_instance.pageBreak = false
+								test_instance.save()
 							}
                             println " done."
                         }

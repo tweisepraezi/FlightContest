@@ -66,6 +66,7 @@ class Contest
 	Boolean contestPrintProvisional = false             // Ausdruck "vorl‰ufig", DB-2.3
 	Boolean contestPrintA3 = false                      // Ausdruck A3, DB-2.3
     Boolean contestPrintEqualPositions = false          // Ausdruck gleicher Positionen, DB-2.8
+	String contestPrintFooter = ""                      // Ausdruck Fuﬂzeilen, DB-2.35
     
 	// Team-Auswertung
 	int teamCrewNum = 0                    	            // Anzahl von Besatzungen, DB-2.0
@@ -83,6 +84,7 @@ class Contest
 	Boolean teamPrintProvisional = false                // Ausdruck "vorl‰ufig", DB-2.3
 	Boolean teamPrintA3 = false                         // Ausdruck A3, DB-2.3
     Boolean teamPrintEqualPositions = false             // Ausdruck gleicher Positionen, DB-2.8
+	String teamPrintFooter = ""                         // Ausdruck Fuﬂzeilen, DB-2.35
 	
     // Live-Auswertung
     Integer liveRefreshSeconds = LIVE_REFRESHSECONDS    // Live-Anzeige-Refresh-Zeit in Sekunden, DB-2.8
@@ -226,6 +228,10 @@ class Contest
 	Boolean printCrewLandscape = false                  // DB-2.3
 	Boolean printCrewA3 = false                         // DB-2.3
     Integer printCrewOrder = 0                          // DB-2.9
+	Boolean printTeams = false                          // DB-2.35
+	Boolean printTeamLandscape = false                  // DB-2.35
+	Boolean printAircraft = false                       // DB-2.35
+	Boolean printAircraftLandscape = false              // DB-2.35
     
 	// Points print settings
 	String printPointsPrintTitle = ""                   // DB-2.3
@@ -599,6 +605,14 @@ class Contest
         
         // DB-2.25 compatibility
         liveTrackingContestVisibility(nullable:true)
+
+		// DB-2.35 compatibility
+		contestPrintFooter(nullable:true)
+		teamPrintFooter(nullable:true)
+		printTeams(nullable:true)
+		printTeamLandscape(nullable:true)
+		printAircraft(nullable:true)
+		printAircraftLandscape(nullable:true)
 	}
 
     static mapping = {
@@ -1095,7 +1109,7 @@ class Contest
 		return false
 	}
 	
-	Map GetResultSettings()
+	Map GetResultSettings(boolean isPrint = false)
 	{
 		Map ret = [:]
 		if (contestPrintTaskNamesInTitle) {
@@ -1104,7 +1118,11 @@ class Contest
 				if (task_names) {
 					task_names += ", "
 				}
-				task_names += task_instance.name()
+				if (isPrint) {
+					task_names += task_instance.printName()
+				} else {
+					task_names += task_instance.name()
+				}
 			}
 			if (task_names) {
 				ret += [Tasks:task_names]

@@ -15,7 +15,8 @@ enum EnrouteCanvasSign // DB-2.13
     S12 ('S12','GM_Utils/Icons/s12.png','s12.png','images/enroute/s12.jpg','s12.jpg'),
     S13 ('S13','GM_Utils/Icons/s13.png','s13.png','images/enroute/s13.jpg','s13.jpg'),
     S14 ('S14','GM_Utils/Icons/s14.png','s14.png','images/enroute/s14.jpg','s14.jpg'),
-    S15 ('S15','GM_Utils/Icons/s15.png','s15.png','images/enroute/s15.jpg','s15.jpg')
+    S15 ('S15','GM_Utils/Icons/s15.png','s15.png','images/enroute/s15.jpg','s15.jpg'),
+    NoSign ('*', '','','','')
     
     EnrouteCanvasSign(String canvasName, String imageName, String imageShortName, String imageJpgName, String imageJpgShortName)
     {

@@ -17,12 +17,13 @@ class DemoContestObservationService
 		// Crews and Aircrafts
 		Map crew1 = fcService.putCrew(contest,1,"Besatzung 1", "crew1.fc@localhost","","","D-EAAA","","",95)
 		Map crew2 = fcService.putCrew(contest,2,"Besatzung 2", "crew2.fc@localhost","","","D-EAAD","","",90)
+		Map crew3 = fcService.putCrew(contest,3,"Besatzung 3", "crew3.fc@localhost","","","D-EAAX","","",80)
 		
 		// Route 1
         Map route1 = [:]
         fcService.printstart "Route 1"
         route1 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_4.gpx")
-        //route1.instance.title = ""
+        route1.instance.title = "Strecke_4 (Crew)"
         //route1.instance.save()
         fcService.printdone ""
         
@@ -30,11 +31,33 @@ class DemoContestObservationService
         Map route2 = [:]
         fcService.printstart "Route 2"
         route2 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_4.gpx")
-        //route2.instance.title = ""
+        route2.instance.title = "Strecke_4 (Judge)"
         route2.instance.turnpointMapMeasurement = true
         route2.instance.enroutePhotoMeasurement = EnrouteMeasurement.Map
         route2.instance.enrouteCanvasMeasurement = EnrouteMeasurement.Map
         route2.instance.save()
+        fcService.printdone ""
+        
+        // Route 3
+        Map route3 = [:]
+        fcService.printstart "Route 3"
+        route3 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_4_AssignPhoto.gpx")
+        route3.instance.title = "Strecke_4_AssignPhoto"
+        route3.instance.turnpointMapMeasurement = true
+        //route3.instance.enroutePhotoMeasurement = EnrouteMeasurement.Map
+        //route3.instance.enrouteCanvasMeasurement = EnrouteMeasurement.Map
+        route3.instance.save()
+        fcService.printdone ""
+        
+        // Route 4
+        Map route4 = [:]
+        fcService.printstart "Route 4"
+        route4 = fcService.importDemoFcRoute(RouteFileTools.GPX_EXTENSION, contest.instance, "Strecke_4_AssignCanvas.gpx")
+        route4.instance.title = "Strecke_4_AssignCanvas"
+        route4.instance.turnpointMapMeasurement = true
+        //route4.instance.enroutePhotoMeasurement = EnrouteMeasurement.Map
+        //route4.instance.enrouteCanvasMeasurement = EnrouteMeasurement.Map
+        route4.instance.save()
         fcService.printdone ""
         
         // Task 1
@@ -43,11 +66,9 @@ class DemoContestObservationService
         task1.instance.planningTestDuration = 0
         task1.instance.preparationDuration = 50
         task1.instance.save()
-
         Map flighttest1 = fcService.putFlightTest(task1,"",route1)
 		Map flighttestwind1 = fcService.putFlightTestWind(flighttest1, 260,10, 270,0,0, 270,0,0, 0,0,0)
 		//fcService.putflighttestwindTask(task1,flighttestwind1)
-		
         //fcService.puttimetableTask(task1,[])
 
         // Task 2        
@@ -56,12 +77,32 @@ class DemoContestObservationService
         task2.instance.planningTestDuration = 0
         task2.instance.preparationDuration = 50
         task2.instance.save()
-        
         Map flighttest2 = fcService.putFlightTest(task2,"",route2)
         Map flighttestwind2 = fcService.putFlightTestWind(flighttest2, 260,10, 270,0,0, 270,0,0, 0,0,0)
         //fcService.putflighttestwindTask(task2,flighttestwind2)
-        
         //fcService.puttimetableTask(task2,[])
+        
+        // Task 3
+        Map task3 = fcService.putTask(contest,"Auswertung TP-Photos","10:10",2,"wind+:4NM","wind+:7.5NM",5,"wind:1","wind:1",false,false,true,false,false, false,true, true,true,true, false,false,false,false, true,true,true, false,false)
+        task3.instance.takeoffIntervalSlowerAircraft = 2
+        task3.instance.planningTestDuration = 0
+        task3.instance.preparationDuration = 50
+        task3.instance.save()
+        Map flighttest3 = fcService.putFlightTest(task3,"",route3)
+        Map flighttestwind3 = fcService.putFlightTestWind(flighttest3, 260,10, 270,0,0, 270,0,0, 0,0,0)
+        //fcService.putflighttestwindTask(task3,flighttestwind3)
+        //fcService.puttimetableTask(task3,[])
+        
+        // Task 4
+        Map task4 = fcService.putTask(contest,"Auswertung TP-Canvas","10:10",2,"wind+:4NM","wind+:7.5NM",5,"wind:1","wind:1",false,false,true,false,false, false,true, true,true,true, false,false,false,false, true,true,true, false,false)
+        task4.instance.takeoffIntervalSlowerAircraft = 2
+        task4.instance.planningTestDuration = 0
+        task4.instance.preparationDuration = 50
+        task4.instance.save()
+        Map flighttest4 = fcService.putFlightTest(task4,"",route4)
+        Map flighttestwind4 = fcService.putFlightTestWind(flighttest4, 260,10, 270,0,0, 270,0,0, 0,0,0)
+        //fcService.putflighttestwindTask(task4,flighttestwind4)
+        //fcService.puttimetableTask(task4,[])
         
 		// Results 1
         /*

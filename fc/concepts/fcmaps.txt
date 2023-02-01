@@ -1,8 +1,11 @@
 
 Genutzter Zoom-Level: maxscale_zoom11
 
-Lowzoom-Anwendungen dieses Zoom-Levels (unvollständig):
-	railways_lowzoom
+Layer (Table) dieses Zoom-Levels:
+	railways_lowzoom (railways)
+    text-natural-areas-lowzoom (naturalarealabels)
+    text-water-lowzoom (lakelabels)
+    text-glacier-lowzoom (lakelabels)
 
 
 Source

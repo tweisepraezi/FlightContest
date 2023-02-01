@@ -70,7 +70,7 @@ class RouteController {
         def route = fcService.updateRoute(params) 
         if (route.saved) {
         	flash.message = route.message
-            long next_routeid = route.instance.GetNextID()
+            long next_routeid = route.instance.GetNextRouteID()
             if (next_routeid) {
                 redirect(action:"show",id:route.instance.id,params:[next:next_routeid])
             } else {
@@ -123,7 +123,7 @@ class RouteController {
         } else if (session.routeReturnAction) {
             Map route = domainService.GetRoute(params) 
             if (route.instance) {
-                long next_routeid = route.instance.GetNextID()
+                long next_routeid = route.instance.GetNextRouteID()
                 if (next_routeid) {
                     redirect(action:session.routeReturnAction,controller:session.routeReturnController,id:session.routeReturnID,params:[next:next_routeid])
                 } else {
@@ -140,14 +140,24 @@ class RouteController {
     def gotonext = {
         Map route = domainService.GetRoute(params) 
         if (route.instance) {
-            long next_id = route.instance.GetNextID()
-            long next_id2 = Route.GetNextID2(next_id)
+            long next_id = route.instance.GetNextRouteID()
             if (next_id) {
-                if (next_id2) {
-                    redirect(action:"show",id:next_id,params:[next:next_id2])
-                } else {
-                    redirect(action:"show",id:next_id)
-                }
+                redirect(action:"show",id:next_id)
+            } else {
+                redirect(controller:"route",action:"list")
+            }
+        } else {
+            flash.message = test.message
+            redirect(controller:"route",action:"list")
+        }
+    }
+    
+    def gotoprev = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            long next_id = route.instance.GetPrevRouteID()
+            if (next_id) {
+                redirect(action:"show",id:next_id)
             } else {
                 redirect(controller:"route",action:"list")
             }
@@ -213,7 +223,11 @@ class RouteController {
     }
     
     def selectfileroute = {
-        return [:]
+        if (session?.lastContest) {
+			return [contestInstance:session.lastContest]
+		} else {
+			return [:]
+		}
     }
     
     def importfileroute = {
@@ -225,6 +239,7 @@ class RouteController {
     
     def importfileroute2 = {
         def file = request.getFile('routefile')
+		String secretcoursechange = params?.secretcoursechange.replace(',','.')
         Map import_params = [foldername:params?.foldername,
                              firstcoordto:params?.firstcoordto == 'on',
                              todirection:params?.todirection.isBigDecimal()?params?.todirection.toBigDecimal():0.0,
@@ -237,12 +252,19 @@ class RouteController {
                              curved3:params?.curved3 == 'on',
                              curvedstartpos3:params?.curvedstartpos3.isInteger()?params?.curvedstartpos3.toInteger():null,
                              curvedendpos3:params?.curvedendpos3.isInteger()?params?.curvedendpos3.toInteger():null,
+                             semicircle1:params?.semicircle1 == 'on',
+                             semicirclepos1:params?.semicirclepos1.isInteger()?params?.semicirclepos1.toInteger():null,
+                             semicircle2:params?.semicircle2 == 'on',
+                             semicirclepos2:params?.semicirclepos2.isInteger()?params?.semicirclepos2.toInteger():null,
+                             semicircle3:params?.semicircle3 == 'on',
+                             semicirclepos3:params?.semicirclepos3.isInteger()?params?.semicirclepos3.toInteger():null,
                              ildg:params?.ildg == 'on', 
                              ildgpos:params?.ildgpos.isInteger()?params?.ildgpos.toInteger():null, 
                              ildgdirection:params?.ildgdirection.isBigDecimal()?params?.ildgdirection.toBigDecimal():0.0,
                              ldg:params?.ldg.toInteger(),
                              ldgdirection:params?.ldgdirection.isBigDecimal()?params?.ldgdirection.toBigDecimal():0.0,
-                             autosecret:params?.autosecret == 'on' 
+                             autosecret:params?.autosecret == 'on',
+							 secretcoursechange:secretcoursechange.isBigDecimal()?secretcoursechange.toBigDecimal():1.5,
                             ]
         Map import_route = fcService.importFileRoute(RouteFileTools.GPX_EXTENSION, session.lastContest, file, import_params)
         if (!import_route.found) {

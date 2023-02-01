@@ -83,9 +83,20 @@ class RouteFileTools
 
         FileReader gpx_reader = new FileReader(gpx_file)
         try {
+            String org_file_name = originalFileName.substring(0,originalFileName.lastIndexOf('.'))
+            route_name = org_file_name
+            if (route_name) {
+                int num = 0
+                while (Route.findByContestAndTitle(contestInstance, route_name)) {
+                    num++
+                    route_name = "${org_file_name} ($num)"
+                }
+            }
+            
             def gpx = new XmlParser().parse(gpx_reader)
             if (gpx.rte.size() == 1) {
                 
+				/*
                 route_name = gpx.rte[0].name[0].text()
                 if (route_name) {
                     int num = 0
@@ -94,6 +105,7 @@ class RouteFileTools
                         route_name = "${gpx.rte[0].name[0].text()} ($num)"
                     }
                 }
+				*/
                 
                 BigDecimal last_latitude = null
                 BigDecimal last_longitude = null
@@ -162,10 +174,21 @@ class RouteFileTools
         }
 
         try {
+            String org_file_name = originalFileName.substring(0,originalFileName.lastIndexOf('.'))
+            route_name = org_file_name
+            if (route_name) {
+                int num = 0
+                while (Route.findByContestAndTitle(contestInstance, route_name)) {
+                    num++
+                    route_name = "${org_file_name} ($num)"
+                }
+            }
+            
             def kml = new XmlParser().parse(km_reader)
             
             if (kml.Document.Placemark.LineString.coordinates) {
                 
+				/*
                 route_name = kml.Document.Placemark.name.text()
                 if (route_name) {
                     int num = 0
@@ -174,6 +197,7 @@ class RouteFileTools
                         route_name = "${kml.Document.Placemark.name.text()} ($num)"
                     }
                 }
+				*/
                 
                 String coordinates = kml.Document.Placemark.LineString.coordinates.text()
                 Map kml_coords = ReadKMLCoordinates(coordinates, null, null)
@@ -197,6 +221,7 @@ class RouteFileTools
                 
                 if (folder && folder.Placemark) {
                 
+					/*
                     if (root_folder) {
                         if (folder.name) {
                             route_name = folder.name.text()
@@ -211,6 +236,7 @@ class RouteFileTools
                             route_name = "${folder.Placemark.name.text()} ($num)"
                         }
                     }
+					*/
                     
                     BigDecimal last_latitude = null
                     BigDecimal last_longitude = null
@@ -688,6 +714,7 @@ class RouteFileTools
         route_instance.enroutePhotoRoute = route_instance.enroutePhotoMeasurement.GetEnrouteRoute()
         route_instance.enrouteCanvasMeasurement = contestInstance.enrouteCanvasRule.GetEnrouteMeasurement()
         route_instance.enrouteCanvasRoute = route_instance.enrouteCanvasMeasurement.GetEnrouteRoute()
+		route_instance.useProcedureTurns = contestInstance.useProcedureTurns
         route_instance.liveTrackingScorecard = contestInstance.liveTrackingScorecard
         if (!route_instance.save()) {
             return [gatenum: coord_num, valid: false, errors: "Could not save route ${routeData.routename}"]
@@ -804,8 +831,38 @@ class RouteFileTools
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
                 sc_num++
+            // Semicircle (SC) (1)
+            } else if (importParams.semicircle1 && gate_pos == importParams.semicirclepos1) {
+                coordroute_instance.type = CoordType.SECRET
+                coordroute_instance.titleNumber = sc_num
+                coordroute_instance.gatewidth2 = contestInstance.scGateWidth
+                coordroute_instance.noTimeCheck = true
+                coordroute_instance.noGateCheck = true
+                coordroute_instance.noPlanningTest = true
+				coordroute_instance.circleCenter = true
+                sc_num++
+            // Semicircle (SC) (2)
+            } else if (importParams.semicircle2 && gate_pos == importParams.semicirclepos2) {
+                coordroute_instance.type = CoordType.SECRET
+                coordroute_instance.titleNumber = sc_num
+                coordroute_instance.gatewidth2 = contestInstance.scGateWidth
+                coordroute_instance.noTimeCheck = true
+                coordroute_instance.noGateCheck = true
+                coordroute_instance.noPlanningTest = true
+				coordroute_instance.circleCenter = true
+                sc_num++
+            // Semicircle (SC) (3)
+            } else if (importParams.semicircle3 && gate_pos == importParams.semicirclepos3) {
+                coordroute_instance.type = CoordType.SECRET
+                coordroute_instance.titleNumber = sc_num
+                coordroute_instance.gatewidth2 = contestInstance.scGateWidth
+                coordroute_instance.noTimeCheck = true
+                coordroute_instance.noGateCheck = true
+                coordroute_instance.noPlanningTest = true
+				coordroute_instance.circleCenter = true
+                sc_num++
             // SC
-            } else if (track_diff != null && track_diff < 1.5) {
+            } else if (track_diff != null && track_diff < importParams.secretcoursechange) {
                 coordroute_instance.type = CoordType.SECRET
                 coordroute_instance.titleNumber = sc_num
                 coordroute_instance.gatewidth2 = contestInstance.scGateWidth
@@ -1501,22 +1558,24 @@ class RouteFileTools
                             }
                         }
                         if (wpt.extensions.flightcontest.enroutecanvassign) {
+							EnrouteCanvasSign enroute_canvassign = EnrouteCanvasSign.(wpt.extensions.flightcontest.enroutecanvassign.'@canvasname'[0])
+							
                             CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
                             coordenroutecanvas_instance.route = route_instance
                             
-                            coordenroutecanvas_instance.enrouteCanvasSign = EnrouteCanvasSign.(wpt.extensions.flightcontest.enroutecanvassign.'@canvasname'[0])
+                            coordenroutecanvas_instance.enrouteCanvasSign = enroute_canvassign
                             coordenroutecanvas_instance.enrouteViewPos = wpt.extensions.flightcontest.enroutecanvassign.'@viewpos'[0].toInteger()
                             
-                            Map lat = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lat'.toBigDecimal(), true)
-                            coordenroutecanvas_instance.latDirection = lat.direction
-                            coordenroutecanvas_instance.latGrad = lat.grad
-                            coordenroutecanvas_instance.latMinute = lat.minute
-                            
-                            Map lon = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lon'.toBigDecimal(), false)
-                            coordenroutecanvas_instance.lonDirection = lon.direction
-                            coordenroutecanvas_instance.lonGrad = lon.grad
-                            coordenroutecanvas_instance.lonMinute = lon.minute
-                            
+							Map lat = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lat'.toBigDecimal(), true)
+							coordenroutecanvas_instance.latDirection = lat.direction
+							coordenroutecanvas_instance.latGrad = lat.grad
+							coordenroutecanvas_instance.latMinute = lat.minute
+							
+							Map lon = CoordPresentation.GetDirectionGradDecimalMinute(wpt.'@lon'.toBigDecimal(), false)
+							coordenroutecanvas_instance.lonDirection = lon.direction
+							coordenroutecanvas_instance.lonGrad = lon.grad
+							coordenroutecanvas_instance.lonMinute = lon.minute
+
                             coordenroutecanvas_instance.type = CoordType.(wpt.extensions.flightcontest.enroutecanvassign.'@type'[0])
                             coordenroutecanvas_instance.titleNumber = wpt.extensions.flightcontest.enroutecanvassign.'@number'[0].toInteger()
                             
@@ -1886,8 +1945,9 @@ class RouteFileTools
                             }
                         }
                     } else if (photos_folder) {
-                        sign_data = read_import_sign(ImportSign.EnroutePhotoCoord, photos_folder, "", kmz_file)
-                        add_sign_data(route_instance, ImportSign.EnroutePhotoCoord, sign_data, false)
+						ImportSign import_sign = ImportSign.GetEnrouteSign(route_instance, true)
+                        sign_data = read_import_sign(import_sign, photos_folder, "", kmz_file)
+                        add_sign_data(route_instance, import_sign, sign_data, false)
                     }
                     
                     if (route_instance.enrouteCanvasRoute == EnrouteRoute.InputName) {
@@ -1902,8 +1962,9 @@ class RouteFileTools
                             }
                         }
                     } else if (canvas_folder) {
-                        sign_data = read_import_sign(ImportSign.EnrouteCanvasCoord, canvas_folder, "", kmz_file)
-                        add_sign_data(route_instance, ImportSign.EnrouteCanvasCoord, sign_data, false)
+						ImportSign import_sign = ImportSign.GetEnrouteSign(route_instance, false)
+                        sign_data = read_import_sign(import_sign, canvas_folder, "", kmz_file)
+                        add_sign_data(route_instance, import_sign, sign_data, false)
                     }
                 }
                 
@@ -2242,7 +2303,7 @@ class RouteFileTools
                         if (importSign.IsEnrouteCanvas() || importSign.IsEnroutePhoto()) {
                             boolean canvas_name = false
                             for (EnrouteCanvasSign sign in EnrouteCanvasSign.values()) {
-                                if (sign.canvasName == sign_name) {
+                                if (sign_name.startsWith(sign.toString())) {
                                     canvas_name = true
                                     break
                                 }
@@ -2434,31 +2495,51 @@ class RouteFileTools
                     coordenroutephoto_instance.route = routeInstance
                     coordenroutephoto_instance.enroutePhotoName = import_sign.name
                     coordenroutephoto_instance.enrouteViewPos = CoordEnroutePhoto.countByRoute(routeInstance) + 1
-                    if (import_sign.lat) {
+                    if (import_sign.lat || import_sign.lat_value) {
                         coordenroutephoto_instance.latDirection = import_sign.lat_value.direction
                         coordenroutephoto_instance.latGrad = import_sign.lat_value.grad
                         coordenroutephoto_instance.latMinute = import_sign.lat_value.minute
                     }
-                    if (import_sign.lon) {
+                    if (import_sign.lon || import_sign.lon_value) {
                         coordenroutephoto_instance.lonDirection = import_sign.lon_value.direction
                         coordenroutephoto_instance.lonGrad = import_sign.lon_value.grad
                         coordenroutephoto_instance.lonMinute = import_sign.lon_value.minute
                     }
                     if (import_sign.tpname) {
-                        coordenroutephoto_instance.type = import_sign.tptype
-                        coordenroutephoto_instance.titleNumber = import_sign.tpnumber
+						if (!import_sign.tptype) {
+							CoordTitle coord_title = CoordTitle.GetCoordTitle(import_sign.tpname)
+							coordenroutephoto_instance.type = coord_title.type
+							coordenroutephoto_instance.titleNumber = coord_title.number
+						} else {
+							coordenroutephoto_instance.type = import_sign.tptype
+							coordenroutephoto_instance.titleNumber = import_sign.tpnumber
+						}
                     }
                     if (import_sign.nm) {
-                        coordenroutephoto_instance.enrouteDistance = import_sign.nm_value
+						if (!import_sign.nm_value) {
+							if (import_sign.nm.endsWith(UNIT_NM)) {
+								String s = import_sign.nm.substring(0,import_sign.nm.size()-UNIT_NM.size())
+								if (s.isBigDecimal()) {
+									coordenroutephoto_instance.enrouteDistance = s.toBigDecimal()
+								}
+							}
+						} else {
+							coordenroutephoto_instance.enrouteDistance = import_sign.nm_value
+						}
                     }
                     if (import_sign.mm) {
-                        coordenroutephoto_instance.measureDistance = import_sign.mm_value
+						if (!import_sign.mm_value) {
+							if (import_sign.mm.endsWith(UNIT_mm)) {
+								String s = import_sign.mm.substring(0,import_sign.mm.size()-UNIT_mm.size())
+								if (s.isBigDecimal()) {
+									coordenroutephoto_instance.measureDistance = s.toBigDecimal()
+								}
+							}
+						} else {
+							coordenroutephoto_instance.measureDistance = import_sign.mm_value
+						}
                     }
-                    if (txtFile) {
-                        coordenroutephoto_instance.calculateCoordEnrouteValues(routeInstance.enroutePhotoRoute)
-                    } else {
-                        coordenroutephoto_instance.calculateCoordEnrouteValues(EnrouteRoute.InputCoord)
-                    }
+                    coordenroutephoto_instance.calculateCoordEnrouteValues(routeInstance.enroutePhotoRoute)
                     if (import_sign.observationpositiontop) {
                         coordenroutephoto_instance.observationPositionTop = import_sign.observationpositiontop
                     }
@@ -2483,35 +2564,56 @@ class RouteFileTools
                 }
             } else if (importSign.IsEnrouteCanvas()) {
                 if (CoordEnrouteCanvas.countByRoute(routeInstance) < routeInstance.contest.maxEnrouteCanvas) {
+					EnrouteCanvasSign enroute_canvassign = EnrouteCanvasSign.(import_sign.name)
                     CoordEnrouteCanvas coordenroutecanvas_instance = new CoordEnrouteCanvas()
                     coordenroutecanvas_instance.route = routeInstance
-                    coordenroutecanvas_instance.enrouteCanvasSign = EnrouteCanvasSign.(import_sign.name)
+                    coordenroutecanvas_instance.enrouteCanvasSign = enroute_canvassign
                     coordenroutecanvas_instance.enrouteViewPos = CoordEnrouteCanvas.countByRoute(routeInstance) + 1
-                    if (import_sign.lat) {
-                        coordenroutecanvas_instance.latDirection = import_sign.lat_value.direction
-                        coordenroutecanvas_instance.latGrad = import_sign.lat_value.grad
-                        coordenroutecanvas_instance.latMinute = import_sign.lat_value.minute
-                    }
-                    if (import_sign.lon) {
-                        coordenroutecanvas_instance.lonDirection = import_sign.lon_value.direction
-                        coordenroutecanvas_instance.lonGrad = import_sign.lon_value.grad
-                        coordenroutecanvas_instance.lonMinute = import_sign.lon_value.minute
-                    }
+					if (import_sign.lat || import_sign.lat_value) {
+						coordenroutecanvas_instance.latDirection = import_sign.lat_value.direction
+						coordenroutecanvas_instance.latGrad = import_sign.lat_value.grad
+						coordenroutecanvas_instance.latMinute = import_sign.lat_value.minute
+					}
+					if (import_sign.lon || import_sign.lon_value) {
+						coordenroutecanvas_instance.lonDirection = import_sign.lon_value.direction
+						coordenroutecanvas_instance.lonGrad = import_sign.lon_value.grad
+						coordenroutecanvas_instance.lonMinute = import_sign.lon_value.minute
+					}
                     if (import_sign.tpname) {
-                        coordenroutecanvas_instance.type = import_sign.tptype
-                        coordenroutecanvas_instance.titleNumber = import_sign.tpnumber
+						if (!import_sign.tptype) {
+							CoordTitle coord_title = CoordTitle.GetCoordTitle(import_sign.tpname)
+							coordenroutecanvas_instance.type = coord_title.type
+							coordenroutecanvas_instance.titleNumber = coord_title.number
+						} else {
+							coordenroutecanvas_instance.type = import_sign.tptype
+							coordenroutecanvas_instance.titleNumber = import_sign.tpnumber
+						}
                     }
                     if (import_sign.nm) {
-                        coordenroutecanvas_instance.enrouteDistance = import_sign.nm_value
+						if (!import_sign.nm_value) {
+							if (import_sign.nm.endsWith(UNIT_NM)) {
+								String s = import_sign.nm.substring(0,import_sign.nm.size()-UNIT_NM.size())
+								if (s.isBigDecimal()) {
+									coordenroutecanvas_instance.enrouteDistance = s.toBigDecimal()
+								}
+							}
+						} else {
+							coordenroutecanvas_instance.enrouteDistance = import_sign.nm_value
+						}
                     }
                     if (import_sign.mm) {
-                        coordenroutecanvas_instance.measureDistance = import_sign.mm_value
-                    }
-                    if (txtFile) {
-                        coordenroutecanvas_instance.calculateCoordEnrouteValues(routeInstance.enrouteCanvasRoute)
-                    } else {
-                        coordenroutecanvas_instance.calculateCoordEnrouteValues(EnrouteRoute.InputCoord)
-                    }
+						if (!import_sign.nm_value) {
+							if (import_sign.nm.endsWith(UNIT_NM)) {
+								String s = import_sign.nm.substring(0,import_sign.nm.size()-UNIT_NM.size())
+								if (s.isBigDecimal()) {
+									coordenroutecanvas_instance.enrouteDistance = s.toBigDecimal()
+								}
+							}
+						} else {
+							coordenroutecanvas_instance.measureDistance = import_sign.mm_value
+						}
+					}
+                    coordenroutecanvas_instance.calculateCoordEnrouteValues(routeInstance.enrouteCanvasRoute)
                     if (coordenroutecanvas_instance.save()) {
                         routeInstance.calculateEnroutCanvasViewPos()
                         imported_sign_num++
