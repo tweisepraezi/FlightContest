@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.3.1
+-------------
+- OpenAIP integration for airspace display and map printing added.
+    OSM Contest Map: Airspace coordinates are now retrieved from OpenAIP.
+    OSM Online Map: OpenAIP layer added. Displays airspaces and airfields into the map.
+    OpenAIP configuration required, see 'Help -> Configure OpenAIP for airspace display and map printing'.
+
+- OSM Contest Map: Support for multiple airspace files added
+- OSM Online Map: OpenAIP layer added. Displays airspaces and airfields into the map.
+
 Changes 3.3.0
 -------------
 - The route list and route details now show the usage of tasks.

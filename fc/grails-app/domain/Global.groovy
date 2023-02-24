@@ -393,6 +393,43 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    boolean IsOpenAIP()
+    {
+        if (   grailsApplication.config.flightcontest.openaip
+            && grailsApplication.config.flightcontest.openaip.server
+            && grailsApplication.config.flightcontest.openaip.api
+            && grailsApplication.config.flightcontest.openaip.token
+        ) {
+            return true
+        }
+        return false
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    String GetOpenAIPAPI()
+    {
+        if (   grailsApplication.config.flightcontest.openaip
+            && grailsApplication.config.flightcontest.openaip.server
+            && grailsApplication.config.flightcontest.openaip.api
+        ) {
+            return grailsApplication.config.flightcontest.openaip.server + grailsApplication.config.flightcontest.openaip.api
+        }
+        return ""
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+	String GetOpenAIPToken()
+	{
+        if (   grailsApplication.config.flightcontest.openaip
+            && grailsApplication.config.flightcontest.openaip.token
+           )
+        {
+            return grailsApplication.config.flightcontest.openaip.token
+        }
+        return ""
+	}
+	
+    // --------------------------------------------------------------------------------------------------------------------
     boolean IsGDALAvailable() {
         return gdalJNI.isAvailable()
     }

@@ -1,7 +1,7 @@
 ﻿= Flight Contest
 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
-:revnumber: 3.3.0
-:revdate:   01.02.2023
+:revnumber: 3.3.1
+:revdate:   24.02.2023
 :nofooter:
 :title-page:
 :toc-title: Inhaltsverzeichnis
@@ -781,7 +781,7 @@ Jeder Luftraum kann in seinem Aussehen individuell konfiguriert werden.
 Dazu sind dem Namen mit Komma getrennt verschiedene Attribute mitzugeben.
 Das Beispiel zeigt alle möglichen Attribute mit ihrem Default-Wert:
 
-    Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
+    Muenster-Osnabrueck 129.875,file:airspaces.kmz,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
 
 Alle genannten Streckendetails und Objekte können abgewählt werden.
 
@@ -1633,6 +1633,7 @@ zu machen oder diese Datei zu löschen.
 <<fc.adoc#configuration-livetracking>> +
 <<fc.adoc#configuration-osmonlinemap>> +
 <<fc.adoc#configuration-osmprint>> +
+<<fc.adoc#configuration-openaip>> +
 <<fc.adoc#configuration-test>>
 
 [[configuration-email]]
@@ -1816,6 +1817,18 @@ auf einen alternativen Tiles-Server (anstelle von https://tiles.flightcontest.de
                              // festlegen (EPSG-Nummer)
      devoptions = true       // Blendet beim OSM-Wettbewerbs-Karten-Dialog
                              // zusätzliche Entwicklungsoptionen ein
+   }
+ }
+
+[[configuration-openaip]]
+=== OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren
+ flightcontest {
+   openaip {
+     server = "https://api.core.openaip.net" // Adresse des OpenAIP-Servers
+     api = "/api"
+     token = "TODO"                          // Client ID Token, mit dem der Zugriff
+                                             // auf den OpenAIP-Server ermöglicht wird
+                                             // Anmeldung auf https://www.openaip.net
    }
  }
 

@@ -1,6 +1,13 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.1
+----------------
+- OpenAIP-Integration für Luftraum-Anzeige und -Kartendruck hinzugefügt
+    OSM-Wettbewerbs-Karte: Luftraum-Koordinaten werden jetzt aus OpenAIP abgerufen.
+    OSM-Online-Karte: OpenAIP-Layer hinzugefügt. Zeigt Lufträume und Flugplätze auf der Karte an.
+    OpenAIP-Konfiguration erforderlich, siehe 'Hilfe -> OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren'
+
 Änderungen 3.3.0
 ----------------
 - Strecken-Liste und Strecken-Details zeigen jetzt alle Aufgaben-Verwendungen an.

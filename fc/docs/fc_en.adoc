@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.3.0
-:revdate: 01.02.2023
+:revnumber: 3.3.1
+:revdate: 24.02.2023
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -770,7 +770,7 @@ Each airspace can be configured individually in its appearance.
 For this purpose, various attributes are to be added to the name separated by commas.
 The example shows all possible attributes with their default value:
 
-    Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
+    Muenster-Osnabrueck 129.875,file:airspaces.kmz,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
     
 All mentioned route details and objects can be deselected.
 
@@ -1620,6 +1620,7 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.
 <<fc_en.adoc#configuration-livetracking>> +
 <<fc_en.adoc#configuration-osmonlinemap>> +
 <<fc_en.adoc#configuration-osmprint>> +
+<<fc_en.adoc#configuration-openaip>> +
 <<fc_en.adoc#configuration-test>>
 
 [[configuration-email]]
@@ -1799,6 +1800,18 @@ to an alternative tiles server (instead of https://tiles.flightcontest.de).
      printserverapi = "TODO" // Address of the print server for OSM contest map generation
      projection = "3857"     // Set other projection of OSM contest map generation (EPSG number)
      devoptions = true       // Show additional devoptions in the OSM contest map dialog
+   }
+ }
+
+[[configuration-openaip]]
+=== Configure OpenAIP for airspace display and map printing
+ flightcontest {
+   openaip {
+     server = "https://api.core.openaip.net" // Adress of OpenAIP server
+     api = "/api"
+     token = "TODO"                          // Client ID Token 
+                                             // to enable access to the OpenAIP server
+                                             // Registration at https://www.openaip.net
    }
  }
 

@@ -118,6 +118,11 @@ class MainTagLib
 				}
 				if (p.printaction) {
 					outln """    <li> <a href="${p.link}/../../${p.controller}/print">${p.printaction}</a> </li>"""
+					if (p.controller == "route") {
+						if (BootStrap.global.IsDevelopmentEnvironment() && BootStrap.global.IsOpenAIP()) {
+							outln """    <li> <a href="${p.link}/../../${p.controller}/openaip_test">OpenAIP Test</a> </li>"""
+						}
+					}
 		        }
 				if (p.printsettings) {
 					outln """    <li> <a href="${p.link}/../../${p.controller}/editprintsettings">${p.printsettings}</a> </li>"""

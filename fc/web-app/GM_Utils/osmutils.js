@@ -99,6 +99,18 @@ JB.Map = function(makemap) {
 	this.maptypes.Keine_Karte = [nr++, grau];
 	baseLayers[JB.GPX2GM.strings[JB.GPX2GM.parameters.doclang].noMap] = grau;
 
+	// FC OpenAIP
+    if (FCOpenaipApiKey != '') {
+		var openaip = L.tileLayer('https://api.tiles.openaip.net/api/data/openaip/{z}/{x}/{y}.png?apiKey='+FCOpenaipApiKey, {
+			tms: false,
+			minZoom: 5, 
+			maxZoom: 13,
+			attribution: 'Map data &copy; <a href="https://www.openaip.net/" target="_blank">OpenAIP</a>'
+		});
+		this.maptypes.OPENAIP = [nr++, openaip];
+		overlayLayers["OpenAIP"] = openaip;
+	}
+	/*
 	var opensea = L.tileLayer('https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png', {
 		attribution: 'Kartendaten: © <a href="http://www.openseamap.org">OpenSeaMap</a> contributors'
 	});
@@ -116,6 +128,7 @@ JB.Map = function(makemap) {
 	});
 	this.maptypes.Cycling = [nr++, cycling];
 	overlayLayers["Cycling"] = cycling;
+	*/
 
 	// ['hiking', 'cycling', 'mtb', 'skating', 'slopes', 'riding'];
 	
@@ -401,6 +414,35 @@ JB.Map.prototype.getZoom = function() {
 	return {zoom:this.map.getZoom(),maxzoom:this.map.getMaxZoom()}; 
 }
 
+// FC OpenAIP
+JB.Map.prototype.change = function(maptype) {
+	var mt = "OSM";
+	if(maptype in this.maptypes) mt = maptype;
+	if(maptype=="OPENAIP") mt = "OSM";
+	var nr = this.maptypes[mt][0];
+	var type = this.maptypes[mt][1];
+	for(var m in this.maptypes) this.map.removeLayer(this.maptypes[m][1]);
+	if(this.makemap.parameters.showmaptypecontroll) {
+		var layerControlElement = this.mapcanvas.getElementsByClassName('leaflet-control-layers')[0];
+		if(layerControlElement) {
+			var openaipcheckbox = layerControlElement.querySelectorAll('input[type=checkbox]')[0];
+			if(maptype=="OPENAIP") {
+				if(!openaipcheckbox.checked) openaipcheckbox.click();
+			}
+			else {
+				if(openaipcheckbox.checked) openaipcheckbox.click();
+			}
+		}
+		else {
+			var dieses = this;
+			window.setTimeout(function(){ dieses.change(maptype);},100);
+		}
+	}
+	this.map.addLayer(type);
+	JB.Debug_Info(this.id,"Maptype, gewählt: "+maptype+", eingestellt: "+mt,false);
+} // change
+
+/*
 JB.Map.prototype.change = function(maptype) {
 	var mt = "OSM";
 	if(maptype in this.maptypes) mt = maptype;
@@ -441,6 +483,7 @@ JB.Map.prototype.change = function(maptype) {
 	this.map.addLayer(type);
 	JB.Debug_Info(this.id,"Maptype, gewählt: "+maptype+", eingestellt: "+mt,false);
 } // change
+*/
 
 JB.Map.prototype.getPixelPerKM = function(gpxdaten) {
 	var bounds = this.map.getBounds();

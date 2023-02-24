@@ -17,6 +17,8 @@
                 <g:else>
                     FCTilesTMS = false;
                 </g:else>
+                <g:set var="openaip_apikey" value="${BootStrap.global.GetOpenAIPToken()}"/>
+				FCOpenaipApiKey = '${openaip_apikey}';
             </script>
 	        <g:gpxViewerHead/>
 	    </head>

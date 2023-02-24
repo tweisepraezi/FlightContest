@@ -34,6 +34,7 @@ class OsmPrintMapService
     def messageSource
     def quartzScheduler
     def gpxService
+	def openAIPService
     
     final static Map HEADER_CONTENTTYPE = [name:"Content-Type", value:"application/vnd.api+json; charset=utf-8"]
     final static Map HEADER_ACCEPT = [name:"Accept", value:"application/vnd.api+json; charset=utf-8"]
@@ -662,13 +663,24 @@ class OsmPrintMapService
         }
         
         String airspaces_lines = ""
-        String airspaces_file_name = ""
+        String airspaces_file_name = "" // will be uploaded
         if (contestMapParams.contestMapAirspaces && contestMapParams.contestMapAirspacesLayer2) {
-            airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
+			if (BootStrap.global.IsOpenAIP()) {
+				String uuid = UUID.randomUUID().toString()
+				Route route_instance = Route.get(contestMapParams.routeId)
+				String file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
+				Map ret2 = openAIPService.WriteAirspaces2KMZ(route_instance, contestMapParams.webRootDir, file_name, false)
+				if (ret2.ok) {
+				}
+				airspaces_file_name = contestMapParams.webRootDir + "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
+			} else {
+				airspaces_file_name = Defs.FCSAVE_FILE_GEODATA_AIRSPACES
+			}
             String airspaces_short_file_name = airspaces_file_name.substring(airspaces_file_name.lastIndexOf('/')+1)
             for (String layer in contestMapParams.contestMapAirspacesLayer2.split("\n")) {
                 if (layer && layer.trim()) {
                     String airspace_layer = layer.trim()
+                    String airspace_filename = airspaces_short_file_name
                     String airspace_text = airspace_layer
                     String airspace_textsize= '10'
                     String airspace_textspacing = '100'
@@ -682,6 +694,9 @@ class OsmPrintMapService
                             airspace_text = airspace_layer
                         } else if (airspace_style_values.size() == 2) {
                             switch (airspace_style_values[0].trim()) {
+                                case 'file': 
+                                    airspace_filename = airspace_style_values[1].trim()
+                                    break
                                 case 'text': 
                                     airspace_text = airspace_style_values[1].trim()
                                     break
@@ -707,21 +722,21 @@ class OsmPrintMapService
                         "Style": "<PolygonSymbolizer fill-opacity='${airspace_fillopacity}' fill='${airspace_fillcolor}' />",
                         "SRS": "+init=${ATTR_INPUT_SRS}",
                         "Type": "ogr",
-                        "File": "${airspaces_short_file_name}",
+                        "File": "${airspace_filename}",
                         "Layer": "${airspace_layer}"
                     }
                     ,{
                         "Style": "<LineSymbolizer stroke='${airspace_fillcolor}' stroke-width='${AIRSPACE_STROKE_WIDTH}' stroke-linecap='round' />",
                         "SRS": "+init=${ATTR_INPUT_SRS}",
                         "Type": "ogr",
-                        "File": "${airspaces_short_file_name}",
+                        "File": "${airspace_filename}",
                         "Layer": "${airspace_layer}"
                     }
                     ,{
                         "Style": "<TextSymbolizer fontset-name='fontset-0' size='${airspace_textsize}' fill='${airspace_textcolor}' allow-overlap='false' placement='line' halo-radius='1' halo-fill='white' spacing='${airspace_textspacing}'>'${airspace_text}'</TextSymbolizer>",
                         "SRS": "+init=${ATTR_INPUT_SRS}",
                         "Type": "ogr",
-                        "File": "${airspaces_short_file_name}",
+                        "File": "${airspace_filename}",
                         "Layer": "${airspace_layer}"
                     }"""
                 }
@@ -909,6 +924,9 @@ class OsmPrintMapService
                 printstart "Upload airspaces"
                 FileUpload("/upload/${printjob_id}", airspaces_file_name)
                 printdone ""
+				if (BootStrap.global.IsOpenAIP()) {
+					gpxService.DeleteFile(airspaces_file_name)
+				}
             }
         }
         

@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.3.0,</span>
-<span id="revdate">01.02.2023</span>
+<span id="revnumber">version 3.3.1,</span>
+<span id="revdate">24.02.2023</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -529,6 +529,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-livetracking">Live-Tracking konfigurieren</a></li>
 <li><a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a></li>
 <li><a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a></li>
+<li><a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a></li>
 <li><a href="#configuration-test">Test-Anzeigen konfigurieren</a></li>
 </ul>
 </li>
@@ -2012,7 +2013,7 @@ Das Beispiel zeigt alle möglichen Attribute mit ihrem Default-Wert:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
+<pre>Muenster-Osnabrueck 129.875,file:airspaces.kmz,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3976,6 +3977,7 @@ zu machen oder diese Datei zu löschen.</p>
 <a href="#configuration-livetracking">Live-Tracking konfigurieren</a><br>
 <a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a><br>
 <a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a><br>
+<a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a><br>
 <a href="#configuration-test">Test-Anzeigen konfigurieren</a></p>
 </div>
 <div class="sect2">
@@ -4235,6 +4237,22 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
                             // festlegen (EPSG-Nummer)
     devoptions = true       // Blendet beim OSM-Wettbewerbs-Karten-Dialog
                             // zusätzliche Entwicklungsoptionen ein
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  openaip {
+    server = "https://api.core.openaip.net" // Adresse des OpenAIP-Servers
+    api = "/api"
+    token = "TODO"                          // Client ID Token, mit dem der Zugriff
+                                            // auf den OpenAIP-Server ermöglicht wird
+                                            // Anmeldung auf https://www.openaip.net
   }
 }</pre>
 </div>

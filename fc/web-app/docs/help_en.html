@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.3.0,</span>
-<span id="revdate">01.02.2023</span>
+<span id="revnumber">version 3.3.1,</span>
+<span id="revdate">24.02.2023</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -529,6 +529,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-livetracking">Configure live tracking</a></li>
 <li><a href="#configuration-osmonlinemap">Configure OSM online map</a></li>
 <li><a href="#configuration-osmprint">Configure OSM contest map printing</a></li>
+<li><a href="#configuration-openaip">Configure OpenAIP for airspace display and map printing</a></li>
 <li><a href="#configuration-test">Configure test displays</a></li>
 </ul>
 </li>
@@ -1999,7 +2000,7 @@ The example shows all possible attributes with their default value:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>Muenster-Osnabrueck 129.875,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
+<pre>Muenster-Osnabrueck 129.875,file:airspaces.kmz,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3959,6 +3960,7 @@ change in 'C:\FCSave\.fc\config.groovy' has to be undone or delete this file.</p
 <a href="#configuration-livetracking">Configure live tracking</a><br>
 <a href="#configuration-osmonlinemap">Configure OSM online map</a><br>
 <a href="#configuration-osmprint">Configure OSM contest map printing</a><br>
+<a href="#configuration-openaip">Configure OpenAIP for airspace display and map printing</a><br>
 <a href="#configuration-test">Configure test displays</a></p>
 </div>
 <div class="sect2">
@@ -4215,6 +4217,22 @@ to an alternative tiles server (instead of <a href="https://tiles.flightcontest.
     printserverapi = "TODO" // Address of the print server for OSM contest map generation
     projection = "3857"     // Set other projection of OSM contest map generation (EPSG number)
     devoptions = true       // Show additional devoptions in the OSM contest map dialog
+  }
+}</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="configuration-openaip">Configure OpenAIP for airspace display and map printing</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  openaip {
+    server = "https://api.core.openaip.net" // Adress of OpenAIP server
+    api = "/api"
+    token = "TODO"                          // Client ID Token
+                                            // to enable access to the OpenAIP server
+                                            // Registration at https://www.openaip.net
   }
 }</pre>
 </div>

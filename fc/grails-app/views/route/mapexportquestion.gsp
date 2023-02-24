@@ -186,13 +186,16 @@
 	                                    <img src="${createLinkTo(dir:'images/map',file:'special.png')}"/>
 	                                </div>
 	                            </g:if>
-	                            <g:if test="${geodata_airspace}">
+	                            <g:if test="${BootStrap.global.IsOpenAIP() || geodata_airspace}">
 	                                <div>
 	                                    <g:checkBox name="contestMapAirspaces" value="${routeInstance.contestMapAirspaces}" tabIndex="${ti[0]++}" />
 	                                    <label>${message(code:'fc.contestmap.contestmapairspaces')}</label>
 	                                    <p>
                                             <g:textArea id="contestMapAirspacesLayer2" name="contestMapAirspacesLayer2" value="${fieldValue(bean:routeInstance,field:'contestMapAirspacesLayer2')}" rows="5" style="width:100%;" tabIndex="${ti[0]++}"/>
 	                                    </p>
+										<g:if test="${BootStrap.global.IsOpenAIP()}">
+											<g:actionSubmit action="kmzexportairspaces_route" value="${message(code:'fc.contestmap.contestmapairspaces.kmzexport')}" tabIndex="${ti[0]++}" />
+										</g:if>
 	                                </div>
 	                            </g:if>
 	                        </fieldset>

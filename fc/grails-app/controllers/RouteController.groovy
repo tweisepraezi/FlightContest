@@ -13,6 +13,7 @@ class RouteController {
     def osmPrintMapService
     def emailService
     def quartzScheduler
+	def openAIPService
     
     def index = { redirect(action:"list",params:params) }
 
@@ -727,6 +728,35 @@ class RouteController {
             redirect(action:"list")
         }
     }
+	
+	def kmzexportairspaces_route = {
+        Map route = domainService.GetRoute(params) 
+        if (route.instance) {
+            save_map_settings(route.instance, params)
+            String uuid = UUID.randomUUID().toString()
+            String webroot_dir = servletContext.getRealPath("/")
+            String upload_kmz_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/AIRSPACES-${uuid}-UPLOAD.kmz"
+			Map ret = openAIPService.WriteAirspaces2KMZ(route.instance, webroot_dir, upload_kmz_file_name, false)
+            if (ret.ok) {
+                String route_file_name = (route.instance.name() + '.kmz').replace(' ',"_")
+                response.setContentType("application/octet-stream")
+                response.setHeader("Content-Disposition", "Attachment;Filename=${route_file_name}")
+                kmlService.Download(webroot_dir + upload_kmz_file_name, route_file_name, response.outputStream)
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printdone ""
+            } else {
+                flash.error = true
+                flash.message = message(code:'fc.contestmap.contestmapairspaces.kmzexport.missedairspaces',args:[ret.missingAirspaces])
+                kmlService.DeleteFile(upload_kmz_file_name)
+                kmlService.printerror flash.message
+				redirect(action:'mapexportquestion',id:params.id)
+            }
+			
+        } else {
+            flash.message = route.message
+            redirect(action:"list")
+        }
+	}
 
     def saveshow_ajax = {
         Map route = domainService.GetRoute(params) 
@@ -2669,7 +2699,7 @@ class RouteController {
                 gpxService.DeleteFile(printfileid_filename)
             }
             
-            redirect(action:'show', id:params.id)
+            redirect(action:'mapexportquestion',id:params.id)
         } else {
             flash.message = route.message
             redirect(action:"list")
@@ -2933,6 +2963,15 @@ class RouteController {
         redirect(action:"list")
     }
 
+    def openaip_test = {
+        def ret = openAIPService.test(params)
+        flash.message = ret.message
+		if (ret.error) {
+			flash.error = true
+		}
+		redirect(action:"list")
+    }
+    
 	Map GetPrintParams() {
         return [baseuri:request.scheme + "://" + request.serverName + ":" + request.serverPort + grailsAttributes.getApplicationUri(request),
                 contest:session.lastContest,
