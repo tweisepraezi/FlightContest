@@ -68,6 +68,14 @@ JB.Map = function(makemap) {
 	this.maptypes.OPENTOPO = [nr++, opentopo];
 	baseLayers["Open Topo"] = opentopo;
 	
+    // FC Michelin
+	var viamichelin = L.tileLayer('http://map3.viamichelin.com/map/mapdirect?map=viamichelin&z={z}&x={x}&y={y}&format=png&version=201503191157&layer=background&locale=default', {
+		maxZoom: 17,
+		attribution: 'Map data: © Michelin'
+	});
+	this.maptypes.VIAMICCHELIN = [nr++, viamichelin];
+	baseLayers["Michelin"] = viamichelin;
+	
 	if(JB.GPX2GM.OSM_Cycle_Api_Key && JB.GPX2GM.OSM_Cycle_Api_Key.length>0) {
 		var osmcycle = L.tileLayer('https://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey='+JB.GPX2GM.OSM_Cycle_Api_Key, {
 			maxZoom: 22,

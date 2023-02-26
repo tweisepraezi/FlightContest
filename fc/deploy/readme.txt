@@ -1,6 +1,10 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.1.1
+------------------
+- OSM-Online-Karte: Kartendaten von Michelin hinzugefügt
+
 Änderungen 3.3.1
 ----------------
 - OpenAIP-Integration für Luftraum-Anzeige und -Kartendruck hinzugefügt
