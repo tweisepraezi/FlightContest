@@ -74,25 +74,27 @@ class OpenAIPService
 				for (String layer in routeInstance.contestMapAirspacesLayer2.split("\n")) {
 					if (layer && layer.trim()) {
 						String airspace_name = layer.trim()
-						for (String airspace_style in Tools.Split(airspace_name, OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR)) {
-							List airspace_style_values = Tools.Split(airspace_style.trim(), OsmPrintMapService.AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
-							if (airspace_style_values.size() == 1) {
-								airspace_name = airspace_style_values[0].trim()
-							}
-						}
-						String search_name = URLEncoder.encode(airspace_name, "UTF-8")
-						Map ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items") // searchOptLwc=true&
-						if (ret.ok && ret.data) {
-							String airspace_coordinates = ret.data.geometry.coordinates.toString()
-							airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
-							write_airspace(xml, airspace_name, "airspace", airspace_coordinates)
-						} else {
-							all_airspaces_written = false
-							if (missing_airspaces) {
-								missing_airspaces += ", "
-							}
-							missing_airspaces += airspace_name
-						}
+                        if (!airspace_name.startsWith(Defs.IGNORE_LINE)) {
+                            for (String airspace_style in Tools.Split(airspace_name, OsmPrintMapService.AIRSPACE_LAYER_STYLE_SEPARATOR)) {
+                                List airspace_style_values = Tools.Split(airspace_style.trim(), OsmPrintMapService.AIRSPACE_LAYER_STYLE_KEY_VALUE_SEPARATOR)
+                                if (airspace_style_values.size() == 1) {
+                                    airspace_name = airspace_style_values[0].trim()
+                                }
+                            }
+                            String search_name = URLEncoder.encode(airspace_name, "UTF-8")
+                            Map ret = call_rest("airspaces?search=${search_name}", "GET", 200, "", "items") // searchOptLwc=true&
+                            if (ret.ok && ret.data) {
+                                String airspace_coordinates = ret.data.geometry.coordinates.toString()
+                                airspace_coordinates = airspace_coordinates.replace(', ',',').replace('],[',' ').replace('[','').replace(']]]]','')
+                                write_airspace(xml, airspace_name, "airspace", airspace_coordinates)
+                            } else {
+                                all_airspaces_written = false
+                                if (missing_airspaces) {
+                                    missing_airspaces += ", "
+                                }
+                                missing_airspaces += airspace_name
+                            }
+                        }
 					}
 				}
 			}

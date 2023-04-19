@@ -455,7 +455,7 @@ class RouteFileTools
                     break
                 }
                 line_num++
-                if (line && !line.startsWith('#')) {
+                if (line && !line.startsWith(Defs.IGNORE_LINE)) {
                     valid_format = true
                     String line1 = line 
                     while (line1.contains('  ')) {
@@ -2027,7 +2027,7 @@ class RouteFileTools
                     break
                 }
                 line_pos++
-                if (line && line.trim() && !line.startsWith('#')) {
+                if (line && line.trim() && !line.startsWith(Defs.IGNORE_LINE)) {
                     line = change_comma2point(line)
                     line = change_problemchars(line)
                     valid_format = true

@@ -1719,20 +1719,28 @@ class Route
         }
     }
     
-    BigDecimal Convert_mm2NM(BigDecimal measureValue)
+    BigDecimal Convert_mm2NM(BigDecimal measureValue, boolean round = false)
     {
         if (measureValue == null) {
             return null
         }
-        return mapScale * measureValue / mmPerNM
+        BigDecimal nm_value = mapScale * measureValue / mmPerNM
+        if (round) {
+            return FcMath.RoundEnrouteDistance(nm_value)
+        }
+        return nm_value
     }
 
-    BigDecimal Convert_NM2mm(BigDecimal distanceValue)
+    BigDecimal Convert_NM2mm(BigDecimal distanceValue, boolean round = false)
     {
         if (distanceValue == null) {
             return null
         }
-        return distanceValue * mmPerNM / mapScale 
+        BigDecimal mm_value = distanceValue * mmPerNM / mapScale
+        if (round) {
+            return FcMath.RoundMeasureDistance(mm_value)
+        }
+        return mm_value
     }
 
     static BigDecimal Convert_NM2m(BigDecimal distanceValue)

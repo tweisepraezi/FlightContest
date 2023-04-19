@@ -249,6 +249,16 @@
                                 <input type="text" id="liveRefreshSeconds" name="liveRefreshSeconds" value="${fieldValue(bean:contestInstance,field:'liveRefreshSeconds')}" tabIndex="${ti[0]++}"/>
                             </p>
                             <p>
+                                <label>${message(code:'fc.contest.liveresults.showsize')}*:</label>
+                                <br/>
+                                <input type="text" id="liveShowSize" name="liveShowSize" value="${fieldValue(bean:contestInstance,field:'liveShowSize')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
+                                <label>${message(code:'fc.contest.liveresults.newestshowsize')}*:</label>
+                                <br/>
+                                <input type="text" id="liveNewestShowSize" name="liveNewestShowSize" value="${fieldValue(bean:contestInstance,field:'liveNewestShowSize')}" tabIndex="${ti[0]++}"/>
+                            </p>
+                            <p>
 	                            <div>
 	                                <g:checkBox name="liveShowSummary" value="${contestInstance.liveShowSummary}" />
 	                                <label>${message(code:'fc.contest.liveresults.showsummary')}</label>

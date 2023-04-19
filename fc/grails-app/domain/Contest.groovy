@@ -18,8 +18,6 @@ class Contest
 	static final String LANDING_NO = "NO"               // DB-2.8
 	static final String LANDING_OUT = "OUT"             // DB-2.8
     
-    static final int LIVE_REFRESHSECONDS = 10           // DB-2.8
-	
 	String title = ""
 	int mapScale = 200000                               // UNUSED, since DB-2.21
     CoordPresentation coordPresentation = CoordPresentation.DEGREEMINUTE // DB-2.12 
@@ -87,10 +85,12 @@ class Contest
 	String teamPrintFooter = ""                         // Ausdruck Fuﬂzeilen, DB-2.35
 	
     // Live-Auswertung
-    Integer liveRefreshSeconds = LIVE_REFRESHSECONDS    // Live-Anzeige-Refresh-Zeit in Sekunden, DB-2.8
+    Integer liveRefreshSeconds = Defs.LIVE_REFRESHSECONDS  // Live-Anzeige-Refresh-Zeit in Sekunden, DB-2.8
     String liveStylesheet = Defs.LIVE_STYLESHEET        // Live-Anzeige-Stylesheet, DB-2.8
     Integer livePositionCalculation = 0                 // Live-Positions-Berechnung (0 = Contest, sonst Task), DB-2.8
     Boolean liveShowSummary = true                      // Live-Summary-Anzeige, DB-2.8
+    Integer liveShowSize = Defs.LIVE_SHOWSIZE           // Live-Anzeige-Crew-Anzahl, DB-2.36
+    Integer liveNewestShowSize = Defs.LIVE_NEWESTSHOWSIZE  // Live-Anzeige-Neueste-Crew-Anzahl, DB-2.36
     
 	// PlanningTest
 	int planningTestDirectionCorrectGrad = 2
@@ -613,6 +613,10 @@ class Contest
 		printTeamLandscape(nullable:true)
 		printAircraft(nullable:true)
 		printAircraftLandscape(nullable:true)
+        
+        // DB-2.36 compatibility
+        liveShowSize(nullable:true,min:1)
+        liveNewestShowSize(nullable:true,min:0)
 	}
 
     static mapping = {

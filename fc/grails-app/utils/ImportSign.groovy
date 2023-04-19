@@ -198,13 +198,13 @@ enum ImportSign
                 line_content = "1, ${coord_demo_lat}, ${coord_demo_lon}"
                 break
             case ImportSign.EnroutePhotoNMFromTP:
-                line_content = "1, TP1, 12.43NM"
+                line_content = "1, TP1, 12.4NM"
                 break
             case ImportSign.EnroutePhotommFromTP:
-                line_content = "1, TP1, 109.39mm"
+                line_content = "1, TP1, 109mm"
                 break
             case ImportSign.EnroutePhotoCoordmm:
-                line_content = "1, ${coord_demo_lat}, ${coord_demo_lon}, 109.39mm"
+                line_content = "1, ${coord_demo_lat}, ${coord_demo_lon}, 109mm"
                 break
             case ImportSign.EnrouteCanvasName:
                 line_content = "S01"
@@ -213,13 +213,13 @@ enum ImportSign
                 line_content = "S01, ${coord_demo_lat}, ${coord_demo_lon}"
                 break
             case ImportSign.EnrouteCanvasNMFromTP:
-                line_content = "S01, TP1, 2.00NM"
+                line_content = "S01, TP1, 2.0NM"
                 break
             case ImportSign.EnrouteCanvasmmFromTP:
-                line_content = "S01, SP, 18.52mm"
+                line_content = "S01, SP, 18mm"
                 break
             case ImportSign.EnrouteCanvasCoordmm:
-                line_content = "S01, ${coord_demo_lat}, ${coord_demo_lon}, 109.39mm"
+                line_content = "S01, ${coord_demo_lat}, ${coord_demo_lon}, 109mm"
                 break
         }
         return [importsign:import_sign, linecontent:line_content]

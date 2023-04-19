@@ -193,6 +193,7 @@ class EvaluationService
                            ]
         
         List live_crews = []
+        List newest_live_crews = []
         Map last_crew = [:]
         for (Crew crew_instance in Crew.findAllByContest(contestInstance,[sort:"id"])) {
             
@@ -219,6 +220,7 @@ class EvaluationService
                 
             if (!crew_instance.disabled && !crew_instance.IsProvisionalCrew(result_settings) && active_class_crew && (!team_settings || (team_id in team_settings))) {
                 List crew_tasks = []
+                Date results_time = null
                 for (Task task_instance in result_tasks) {
                     Map task_values = GetTaskValues(task_instance, last_crew)
                     Test test_instance = Test.findByCrewAndTask(crew_instance,task_instance)
@@ -268,11 +270,20 @@ class EvaluationService
                                     taskPenalties:test_instance.taskPenalties,
                                     taskPosition:0]
                     crew_tasks += new_task
+                    if (test_instance.taskResultsTime) {
+                        if (results_time && results_time < test_instance.taskResultsTime) {
+                            results_time = test_instance.taskResultsTime
+                        } else {
+                            results_time = test_instance.taskResultsTime
+                        }
+                    }
                 }
                 Map new_crew = [startNum:crew_instance.startNum, name:crew_instance.name, registration:aircraft_registration, teamName:team_name, teamID:team_id, className:crew_class_name, classShortName:crew_class_shortname,
                                 increaseFactor:crew_instance.GetIncreaseFactor(),
-                                planningPenalties:0, flightPenalties:0, observationPenalties:0, landingPenalties:0, specialPenalties:0, contestPenalties:0, contestPosition:0, noContestPosition:false, contestEqualPosition:false, contestAddPosition:0, tasks: crew_tasks]
+                                planningPenalties:0, flightPenalties:0, observationPenalties:0, landingPenalties:0, specialPenalties:0, contestPenalties:0,
+                                contestPosition:0, noContestPosition:false, contestEqualPosition:false, contestAddPosition:0, resultsTime:results_time, tasks: crew_tasks]
                 live_crews += new_crew
+                newest_live_crews += new_crew
                 last_crew = new_crew
             }
         }
@@ -285,8 +296,11 @@ class EvaluationService
         
         calculatelivepositions_contest(live_crews)
         
+        newest_live_crews = newest_live_crews.asImmutable().toSorted { a, b -> b.resultsTime <=> a.resultsTime }
+        
         contest.livecontest = live_contest
         contest.livecrews = live_crews
+        contest.newestlivecrews = newest_live_crews
         contest.message = getMsg('fc.results.positionscalculated')
         printdone contest.message      
         return contest

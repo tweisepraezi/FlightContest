@@ -9161,6 +9161,7 @@ class FcService
         test.instance.planningTestComplete = true
         test.instance.planningTestLiveTrackingResultOk = false
         test.instance.planningTestLiveTrackingResultError = false
+        test.instance.taskResultsTime = new Date()
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -9258,6 +9259,7 @@ class FcService
         test.instance.flightTestComplete = true
         test.instance.flightTestLiveTrackingResultOk = false
         test.instance.flightTestLiveTrackingResultError = false
+        test.instance.taskResultsTime = new Date()
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -9360,6 +9362,7 @@ class FcService
         test.instance.observationTestComplete = true
         test.instance.observationTestLiveTrackingResultOk = false
         test.instance.observationTestLiveTrackingResultError = false
+        test.instance.taskResultsTime = new Date()
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -9833,6 +9836,7 @@ class FcService
 					test.instance.landingTest4LiveTrackingResultError = false
 					break
 			}
+            test.instance.taskResultsTime = new Date()
 		}
 		
         if(!test.instance.hasErrors() && test.instance.save()) {
@@ -10178,6 +10182,7 @@ class FcService
         test.instance.specialTestComplete = true
         test.instance.specialTestLiveTrackingResultOk = false
         test.instance.specialTestLiveTrackingResultError = false
+        test.instance.taskResultsTime = new Date()
         calculateTestPenalties(test.instance,false)
         
         if(!test.instance.hasErrors() && test.instance.save()) {

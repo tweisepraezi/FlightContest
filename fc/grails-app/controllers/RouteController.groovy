@@ -962,7 +962,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1088,7 +1088,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1214,7 +1214,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1340,7 +1340,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1466,7 +1466,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1592,7 +1592,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1718,7 +1718,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1844,7 +1844,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -1983,7 +1983,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -2122,7 +2122,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -2261,7 +2261,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
@@ -2400,7 +2400,7 @@ class RouteController {
                                 }
                                 gpxService.printdone ""
                                 flash.error = true
-                                redirect(action:'show',id:params.id)
+                                redirect(action:'mapexportquestion', id:params.id)
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)

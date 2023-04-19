@@ -1,6 +1,6 @@
 class Defs
 {
-    static final String GPX_VIEWER_VERSION                             = "GM_Utils-6.13"
+    static final String GPX_VIEWER_VERSION                             = "GM_Utils-6.13a"
  
     static final String FCSAVE_FOLDER                                  = "C:/FCSave"
     static final String FCSAVE_FOLDER_FC                               = "${FCSAVE_FOLDER}/.fc"
@@ -30,10 +30,13 @@ class Defs
     static final String ROOT_FOLDER_FONTS                              = "fonts"
     static final String ROOT_FOLDER_LIVE                               = "live"
     
-    static final String LIVE_STYLESHEET                                = "fclive.css"
+    static final String LIVE_STYLESHEET                                = "fclive.css" // Live-Anzeige-Stylesheet
     static final String LIVE_FILENAME                                  = "fclive.htm"
-    static final int LIVE_UPLOADSECONDS                                = 60
-    
+    static final int LIVE_UPLOADSECONDS                                = 60 // Live-Anzeige-Upload-Zeit in Sekunden
+    static final int LIVE_SHOWSIZE                                     = 30 // Live-Anzeige-Crew-Anzahl
+    static final int LIVE_NEWESTSHOWSIZE                               = 5  // Live-Anzeige-Neueste-Crew-Anzahl
+    static final int LIVE_REFRESHSECONDS                               = 10 // Live-Anzeige-Refresh-Zeit in Sekunden
+
     static final String EXE_GPSBABEL                                   = "C:/Program Files/GPSBabel/gpsbabel.exe"
     
     static final String LIVETRACKING_DISPLAY_TASK                      = "/display/task/"
@@ -176,4 +179,6 @@ class Defs
 	
 	static final String RESULTS_FOOTER_LINE_SEPARATOR                  = "+"
 	static final String RESULTS_FOOTER_COLUMN_SEPARATOR                = ","
+    
+    static final String IGNORE_LINE                                    = '#'
 }

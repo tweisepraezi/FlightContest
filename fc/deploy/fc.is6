@@ -2,18 +2,18 @@
 
 [Code]
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
-const DBVersion = '2.35.0';     // DB-2.35
+const DBVersion = '2.36.0';     // DB-2.36
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
-const FCVersion = '3.3.1.1';      // no milestone
+const FCVersion = '3.3.2';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
-const FCVersion64 = '3.3.1.1';    // no milestone
+const FCVersion64 = '3.3.2';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.3.1.1
-AppVersion=3.3.1.1
+AppVerName=Flight Contest 3.3.2
+AppVersion=3.3.2
 ; no milestone below
-VersionInfoVersion=3.3.1.1
+VersionInfoVersion=3.3.2
 
 AppCopyright=(C) 2009-2023 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -261,13 +261,6 @@ begin
     end;
   end;
 
-  // save last version
-  if not RegQueryStringValue( HKCU, 'SOFTWARE\Flight Contest', 'lastVersion', last_version ) then begin
-    if RegQueryStringValue( HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Flight Contest_is1', 'DisplayVersion', last_version ) then begin
-      RegWriteStringValue( HKCU, 'SOFTWARE\Flight Contest', 'lastVersion', last_version )
-    end;
-  end;
-
   // stop tomcat
   shell := CreateOleObject('WScript.Shell');
   ret := shell.Run('cmd.exe /Ctaskkill.exe /F /IM tomcat9w.exe', 0, true);  // 0 - unsichtbar, True - Wait for return
@@ -298,25 +291,15 @@ begin
   // fc_service_start_filename := ExpandConstant('{app}\fc-service-start.xml');
   
   // db backup
-  if not IsCompatibel(last_version,DBVersion,DBCompatibelDigits) then begin
-    if DirExists( db_dir ) then begin
-      db_backup_dir := db_dir + '-' + GetDateTimeString('yyyy.mm.dd-hh.nn.ss', #0, #0);
-      if last_version <> '' then begin
-        db_backup_dir := db_backup_dir + '-' + last_version;
-      end;
-      RenameFile( db_dir, db_backup_dir );
+  if DirExists( db_dir ) then begin
+    db_backup_dir := db_dir + '-backup-' + GetDateTimeString('yyyy.mm.dd-hh.nn.ss', #0, #0);
+    if last_version <> '' then begin
+      db_backup_dir := db_backup_dir + '-' + last_version;
     end;
-  end else begin
-    if DirExists( db_dir ) then begin
-      db_backup_dir := db_dir + '-backup-' + GetDateTimeString('yyyy.mm.dd-hh.nn.ss', #0, #0);
-      if last_version <> '' then begin
-        db_backup_dir := db_backup_dir + '-' + last_version;
-      end;
-      if CreateDir(db_backup_dir) then begin
-        Exec('xcopy', '/s "' + db_dir + '" "' + db_backup_dir + '"', ExpandConstant('{app}'), SW_HIDE, ewWaitUntilTerminated, ret );
-        if ret <> 0 then begin
-          MsgBox( ExpandConstant('{cm:BackupError}') + ' ' + IntToStr(ret), mbInformation, MB_OK);
-        end;
+    if CreateDir(db_backup_dir) then begin
+      Exec('xcopy', '/s "' + db_dir + '" "' + db_backup_dir + '"', ExpandConstant('{app}'), SW_HIDE, ewWaitUntilTerminated, ret );
+      if ret <> 0 then begin
+        MsgBox( ExpandConstant('{cm:BackupError}') + ' ' + IntToStr(ret), mbInformation, MB_OK);
       end;
     end;
   end;

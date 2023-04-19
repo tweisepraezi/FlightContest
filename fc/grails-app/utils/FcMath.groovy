@@ -19,13 +19,6 @@ class FcMath
 	}
 	
     //--------------------------------------------------------------------------
-    static BigDecimal RoundMeasureDistance(BigDecimal measureValue)
-    // mm
-    {
-        return measureValue.setScale(1, RoundingMode.HALF_EVEN)
-    }
-    
-    //--------------------------------------------------------------------------
 	static BigDecimal RoundTrackpointDistance(BigDecimal distanceValue)
     // m
 	{
@@ -34,39 +27,57 @@ class FcMath
 	
     //--------------------------------------------------------------------------
 	static String DistanceStr(BigDecimal distanceValue)
+    // NM
 	{
 		if (distanceValue != null) {
-			DecimalFormat df = new DecimalFormat("#0.00")
+			DecimalFormat df = new DecimalFormat("#0.0#")
 			return df.format(distanceValue)
 		}
 		return ""
 	}
 
     //--------------------------------------------------------------------------
-    static String DistanceStr2(BigDecimal distanceValue)
+	static BigDecimal RoundEnrouteDistance(BigDecimal distanceValue)
+    // NM
+	{
+		return distanceValue.setScale(1, RoundingMode.HALF_EVEN)
+	}
+	
+    //--------------------------------------------------------------------------
+    static String EnrouteExportDistanceStr(BigDecimal distanceValue)
+    // NM
     {
         if (distanceValue != null) {
-            DecimalFormat df = new DecimalFormat("#0.00")
+            DecimalFormat df = new DecimalFormat("#0.0#")
             return df.format(distanceValue).replaceAll(',','.')
         }
         return ""
     }
 
     //--------------------------------------------------------------------------
+    static BigDecimal RoundMeasureDistance(BigDecimal measureValue)
+    // mm
+    {
+        return measureValue.setScale(0, RoundingMode.HALF_EVEN)
+    }
+    
+    //--------------------------------------------------------------------------
     static String DistanceMeasureStr(BigDecimal distanceValue)
+    // mm
     {
         if (distanceValue != null) {
-            DecimalFormat df = new DecimalFormat("0.0#")
+            DecimalFormat df = new DecimalFormat("#0.#")
             return df.format(distanceValue)
         }
         return ""
     }
 
     //--------------------------------------------------------------------------
-    static String DistanceMeasureStr2(BigDecimal distanceValue)
+    static String ExportDistanceMeasureStr(BigDecimal distanceValue)
+    // mm
     {
         if (distanceValue != null) {
-            DecimalFormat df = new DecimalFormat("0.0#")
+            DecimalFormat df = new DecimalFormat("#0.#")
             return df.format(distanceValue).replaceAll(',','.')
         }
         return ""

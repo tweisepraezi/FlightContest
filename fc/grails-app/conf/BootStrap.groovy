@@ -427,7 +427,7 @@ class BootStrap {
 								contest_instance.printCrewEmptyTitle4 = ""
                                 contest_instance.contestPrintTaskTestDetails = ""
                                 contest_instance.contestPrintLandingDetails = false
-                                contest_instance.liveRefreshSeconds = Contest.LIVE_REFRESHSECONDS
+                                contest_instance.liveRefreshSeconds = Defs.LIVE_REFRESHSECONDS
                                 contest_instance.liveStylesheet = Defs.LIVE_STYLESHEET
                                 contest_instance.livePositionCalculation = 0
                                 contest_instance.liveShowSummary = true
@@ -1217,6 +1217,15 @@ class BootStrap {
 								}
 								test_instance.pageBreak = false
 								test_instance.save()
+							}
+                            println " done."
+                        }
+                        if (global.versionMinor < 36) { // DB-2.36 compatibility
+                            print "    2.36 modifications"
+							Contest.findAll().each { Contest contest_instance ->
+								contest_instance.liveShowSize = Defs.LIVE_SHOWSIZE
+                                contest_instance.liveNewestShowSize = Defs.LIVE_NEWESTSHOWSIZE
+								contest_instance.save()
 							}
                             println " done."
                         }

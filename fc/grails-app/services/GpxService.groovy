@@ -66,6 +66,9 @@ class GpxService
     final static String COLOR_WARNING = "blue"
     
     final static String GPXDATA = "GPXDATA"
+    
+    Integer LiveStartPos = 1
+    Integer LiveCrews = 0
 	
 	//--------------------------------------------------------------------------
 	boolean RepairGAC(String gacOriginalFileName, String gacRepairFileName, boolean repairTracks, boolean repairIdenticalTimes)
@@ -3243,10 +3246,11 @@ class GpxService
                 String live_html_file_name = "${webroot_dir}${Defs.ROOT_FOLDER_GPXUPLOAD}/LIVE-${uuid}.htm"
                 
                 String live_url
+                LiveCrews = 0
                 if (uploadNoLiveResults) {
                     live_url = "http://localhost:8080/fc/contest/listnoliveresults/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
                 } else {
-                    live_url = "http://localhost:8080/fc/contest/listresultslive/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}"
+                live_url = "http://localhost:8080/fc/contest/listresultslive/${contest_instance.id}?lang=${BootStrap.global.liveLanguage}&livestartpos=${LiveStartPos}&liveshowsize=${contest_instance.liveShowSize}&livenewestshowsize=${contest_instance.liveNewestShowSize}"
                 }
                 printstart "${live_url} -> ${live_html_file_name}"
                 byte[] utf8_bom = new byte[3]
@@ -3258,7 +3262,18 @@ class GpxService
                 live_html_file << new URL(live_url).openStream()
                 live_html_file.close()
                 printdone ""
-                
+ 
+                if (!uploadNoLiveResults) {
+                    if (!LiveCrews) {
+                        LiveStartPos = 1
+                    } else {
+                        LiveStartPos += contest_instance.liveShowSize
+                        if (LiveStartPos > LiveCrews) {
+                            LiveStartPos = 1
+                        }
+                    }
+                }
+
                 String live_file_name ="${webroot_dir}${Defs.ROOT_FOLDER_LIVE}/${Defs.LIVE_FILENAME}"
                 printstart "Copy to '$live_file_name'"
                 def live_src_file = new File(live_html_file_name).newInputStream()

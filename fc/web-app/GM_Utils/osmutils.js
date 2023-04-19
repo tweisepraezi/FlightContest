@@ -68,6 +68,14 @@ JB.Map = function(makemap) {
 	this.maptypes.OPENTOPO = [nr++, opentopo];
 	baseLayers["Open Topo"] = opentopo;
 	
+    // FC TopPlusOpen
+	var topplusopen = L.tileLayer('https://sgx.geodatenzentrum.de/wmts_topplus_open/tile/1.0.0/web/default/WEBMERCATOR/{z}/{y}/{x}.png', {
+		maxZoom: 18,
+		attribution: 'Kartendaten: © <a href="https://www.bkg.bund.de/SharedDocs/Produktinformationen/BKG/DE/P-2017/170922-TopPlus-Web-Open.html" target="_blank">Bundesamt für Kartographie und Geodäsie</a>'
+	});
+	this.maptypes.TOPPLUSOPEN = [nr++, topplusopen];
+	baseLayers["TopPlusOpen"] = topplusopen;
+    
     // FC Michelin
 	var viamichelin = L.tileLayer('http://map3.viamichelin.com/map/mapdirect?map=viamichelin&z={z}&x={x}&y={y}&format=png&version=201503191157&layer=background&locale=default', {
 		maxZoom: 17,
@@ -430,22 +438,23 @@ JB.Map.prototype.change = function(maptype) {
 	var nr = this.maptypes[mt][0];
 	var type = this.maptypes[mt][1];
 	for(var m in this.maptypes) this.map.removeLayer(this.maptypes[m][1]);
-	if(this.makemap.parameters.showmaptypecontroll) {
-		var layerControlElement = this.mapcanvas.getElementsByClassName('leaflet-control-layers')[0];
-		if(layerControlElement) {
-			var openaipcheckbox = layerControlElement.querySelectorAll('input[type=checkbox]')[0];
-			if(maptype=="OPENAIP") {
-				if(!openaipcheckbox.checked) openaipcheckbox.click();
-			}
-			else {
-				if(openaipcheckbox.checked) openaipcheckbox.click();
-			}
-		}
-		else {
-			var dieses = this;
-			window.setTimeout(function(){ dieses.change(maptype);},100);
-		}
-	}
+    if (FCOpenaipApiKey != '') {
+        if(this.makemap.parameters.showmaptypecontroll) {
+            var layerControlElement = this.mapcanvas.getElementsByClassName('leaflet-control-layers')[0];
+            if(layerControlElement) {
+                var openaipcheckbox = layerControlElement.querySelectorAll('input[type=checkbox]')[0];
+                if(maptype=="OPENAIP") {
+                    if(!openaipcheckbox.checked) openaipcheckbox.click();
+                } else {
+                    if(openaipcheckbox.checked) openaipcheckbox.click();
+                }
+            }
+            else {
+                var dieses = this;
+                window.setTimeout(function(){ dieses.change(maptype);},100);
+            }
+        }
+    }
 	this.map.addLayer(type);
 	JB.Debug_Info(this.id,"Maptype, gewählt: "+maptype+", eingestellt: "+mt,false);
 } // change

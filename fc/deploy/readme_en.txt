@@ -1,9 +1,30 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.3.2
+-------------
+- Accuracy of enroute photos and canvas signs reduced (one tenth NM, whole mm)
+- Contest evaluation settings: Option "Live result crew count" added.
+    Defines the max. number of crews displayed in the live result display on one page.
+    If the set value is exceeded (default: 30), alternating page contents will be generated.
+- Contest evaluation settings: Option "Live results newest crew count" added.
+    Defines the number of crews that will be displayed in the live result display as the newest completed evaluation at the top of the page.
+    Default: 5 crews
+- OSM Online Map: Map "TopPlusOpen" from Bundesamt für Kartographie und Geodäsie added.
+- OSM Contest Map:
+    Generate: Specific error message for incorrect airspaces added.
+    Deactivation of entries in the airspace list added: Entries starting with # are now ignored during map generation.
+- Bug "Database is emptied during Flight Contest installation by another user" fixed
+  The database can be restored from the installation backup copy:
+    1. Stop Flight Contest
+    2. Copy C:\Program Files\Flight Contest\fc-<date>-<time>-<FC version>\fcdb.h2.db -> C:\Program Files\Flight Contest\fc
+       or
+       Copy C:\Program Files\Flight Contest\fc-backup-<date>-<time>-<db version>\fcdb.h2.db -> C:\Program Files\Flight Contest\fc
+    3. Start Flight Contest
+
 Changes 3.3.1.1
 ---------------
-- OSM Online Map: Map data from Michelin added
+- OSM Online Map: Map from Michelin added
 
 Changes 3.3.1
 -------------

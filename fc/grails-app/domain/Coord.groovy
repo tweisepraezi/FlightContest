@@ -816,7 +816,7 @@ class Coord
             s += ", ${RouteFileTools.MAXALT} ${maxAltitudeAboveGround}${RouteFileTools.UNIT_ft}"
         }
         if (measureDistance) {
-            s += ", ${RouteFileTools.DIST} ${FcMath.DistanceMeasureStr2(measureDistance)}${RouteFileTools.UNIT_mm}"
+            s += ", ${RouteFileTools.DIST} ${FcMath.ExportDistanceMeasureStr(measureDistance)}${RouteFileTools.UNIT_mm}"
         }
         if (measureTrueTrack) {
             s += ", ${RouteFileTools.TRACK} ${FcMath.RouteGradStr2(measureTrueTrack)}${RouteFileTools.UNIT_GRAD}"
@@ -899,11 +899,11 @@ class Coord
                 case EnrouteRoute.InputCoord:
                     return "${enroutePhotoName}, ${latExportName()}, ${lonExportName()}"
                 case EnrouteRoute.InputNMFromTP:
-                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.EnrouteExportDistanceStr(enrouteDistance)}${RouteFileTools.UNIT_NM}"
                 case EnrouteRoute.InputmmFromTP:
-                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
                 case EnrouteRoute.InputCoordmm:
-                    return "${enroutePhotoName}, ${latExportName()}, ${lonExportName()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enroutePhotoName}, ${latExportName()}, ${lonExportName()}, ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
             }
         } else {
             switch (route.enrouteCanvasRoute) {
@@ -912,11 +912,11 @@ class Coord
                 case EnrouteRoute.InputCoord:
                     return "${enrouteCanvasSign.canvasName}, ${latExportName()}, ${lonExportName()}"
                 case EnrouteRoute.InputNMFromTP:
-                    return "${enrouteCanvasSign.canvasName}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                    return "${enrouteCanvasSign.canvasName}, ${titleExport()}, ${FcMath.EnrouteExportDistanceStr(enrouteDistance)}${RouteFileTools.UNIT_NM}"
                 case EnrouteRoute.InputmmFromTP:
-                    return "${enrouteCanvasSign.canvasName}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enrouteCanvasSign.canvasName}, ${titleExport()}, ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
                 case EnrouteRoute.InputCoordmm:
-                    return "${enrouteCanvasSign.canvasName}, ${latExportName()}, ${lonExportName()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enrouteCanvasSign.canvasName}, ${latExportName()}, ${lonExportName()}, ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
             }
         }
     }
@@ -929,11 +929,11 @@ class Coord
                 case EnrouteRoute.InputCoord:
                     return enroutePhotoName
                 case EnrouteRoute.InputNMFromTP:
-                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.EnrouteExportDistanceStr(enrouteDistance)}${RouteFileTools.UNIT_NM}"
                 case EnrouteRoute.InputmmFromTP:
-                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enroutePhotoName}, ${titleExport()}, ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
                 case EnrouteRoute.InputCoordmm:
-                    return "${enroutePhotoName}, ${RouteFileTools.DIST} ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enroutePhotoName}, ${RouteFileTools.DIST} ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
             }
         } else {
             switch (route.enrouteCanvasRoute) {
@@ -941,11 +941,11 @@ class Coord
                 case EnrouteRoute.InputCoord:
                     return enrouteCanvasSign
                 case EnrouteRoute.InputNMFromTP:
-                    return "${enrouteCanvasSign}, ${titleExport()}, ${FcMath.DistanceStr2(enrouteDistance)}${RouteFileTools.UNIT_NM}"
+                    return "${enrouteCanvasSign}, ${titleExport()}, ${FcMath.EnrouteExportDistanceStr(enrouteDistance)}${RouteFileTools.UNIT_NM}"
                 case EnrouteRoute.InputmmFromTP:
-                    return "${enrouteCanvasSign}, ${titleExport()}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enrouteCanvasSign}, ${titleExport()}, ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
                 case EnrouteRoute.InputCoordmm:
-                    return "${enrouteCanvasSign}, ${FcMath.DistanceMeasureStr2(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
+                    return "${enrouteCanvasSign}, ${FcMath.ExportDistanceMeasureStr(GetMeasureDistance())}${RouteFileTools.UNIT_mm}"
             }
         }
     }
@@ -970,23 +970,23 @@ class Coord
             case EnrouteRoute.InputCoord:
                 measureDistance = null
                 calculateCoordEnrouteFromTP()
-                enrouteDistance = route.Convert_mm2NM(coordMeasureDistance)
+                enrouteDistance = route.Convert_mm2NM(coordMeasureDistance, true)
                 calculateCoordEnrouteOrthogonalDistance()
                 break
             case EnrouteRoute.InputCoordmm:
                 calculateCoordEnrouteFromTP()
-                enrouteDistance = route.Convert_mm2NM(GetMeasureDistance())
+                enrouteDistance = route.Convert_mm2NM(GetMeasureDistance(), true)
                 calculateCoordEnrouteOrthogonalDistance()
                 break
             case EnrouteRoute.InputNMFromTP:
-                coordMeasureDistance = route.Convert_NM2mm(enrouteDistance)
+                coordMeasureDistance = route.Convert_NM2mm(enrouteDistance, true)
                 measureDistance = null
                 calculateCoordEnrouteCoordinate()
                 enrouteOrthogonalDistance = 0
                 break
             case EnrouteRoute.InputmmFromTP:
                 coordMeasureDistance = measureDistance
-                enrouteDistance = route.Convert_mm2NM(coordMeasureDistance)
+                enrouteDistance = route.Convert_mm2NM(coordMeasureDistance, true)
                 calculateCoordEnrouteCoordinate()
                 enrouteOrthogonalDistance = 0
                 break
@@ -1212,9 +1212,9 @@ class Coord
                         titleNumber = from_titlenumber
                         // direkte Entfernung bei krummen Strecken
                         enroute = AviationMath.calculateLeg(latMath(),lonMath(),from_coordroute_instance.latMath(),from_coordroute_instance.lonMath())
-                        coordMeasureDistance = route.Convert_NM2mm(enroute.dis)
+                        coordMeasureDistance = route.Convert_NM2mm(enroute.dis, true)
                         // Entferung an der krummen Strecke entlang
-                        // coordMeasureDistance = route.Convert_NM2mm(from_distance + enroute.dis)
+                        // coordMeasureDistance = route.Convert_NM2mm(from_distance + enroute.dis, true)
                         enrouteDistanceOk = true
                         return
                     }

@@ -10,6 +10,7 @@ class ContestController {
 	def demoContestService
     def testService
     def trackerService
+    def gpxService
 
     def index = { redirect(action:start,params:params) }
 
@@ -756,8 +757,9 @@ class ContestController {
 			session.lastContest.refresh()
 			def contest = evaluationService.calculatelivepositionsContest(session.lastContest)
             session.contestTitle = session.lastContest.GetPrintContestTitle(ResultFilter.Contest)
+            gpxService.LiveCrews = contest.livecrews.size()
             evaluationService.printdone "Show live html."
-			return [contestInstance:session.lastContest, liveTest:false, params:null, liveContest:contest.livecontest, liveCrews:contest.livecrews, showIntern:show_intern]
+			return [contestInstance:session.lastContest, liveTest:false, params:null, liveContest:contest.livecontest, liveCrews:contest.livecrews, newestLiveCrews:contest.newestlivecrews, showIntern:show_intern, LiveStartPos:params.livestartpos.toInteger(), LiveShowSize:params.liveshowsize.toInteger(), LiveNewestShowSize:params.livenewestshowsize.toInteger()]
         } else {
             evaluationService.printdone "Start."
             redirect(action:start)
@@ -788,7 +790,7 @@ class ContestController {
     
 	def liveview = {
 		if (session?.lastContest) {
-			redirect(action:listresultslive,params:[showIntern:'yes'])
+			redirect(action:listresultslive,params:[showIntern:'yes',livestartpos:1,liveshowsize:9999,livenewestshowsize:0])
         } else {
             redirect(action:start)
 		}

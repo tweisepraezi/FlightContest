@@ -177,6 +177,7 @@ class Test
 	
 	int taskPenalties = 0
     int taskPosition = 0
+    Date taskResultsTime                                   // DB-2.36
     
     LoggerDataTest loggerData = null                       // DB-2.12
     String loggerDataStartUtc = ""                         // DB-2.12
@@ -312,6 +313,9 @@ class Test
 		landingTest3Version(nullable:true)
 		landingTest4Version(nullable:true)
 		pageBreak(nullable:true)
+        
+        // DB-2.36 compatibility
+        taskResultsTime(nullable:true)
     }
 
 	static mapping = {
@@ -2722,8 +2726,8 @@ class Test
         BigDecimal inexact_check_value = GetObservationTestEnrouteInexactValue()
         
         if (GetObservationTestEnrouteValueUnit() == EnrouteValueUnit.mm) {
-            correct_check_value = FcMath.RoundDistance(task.flighttest.route.Convert_mm2NM(correct_check_value))
-            inexact_check_value = FcMath.RoundDistance(task.flighttest.route.Convert_mm2NM(inexact_check_value))
+            correct_check_value = FcMath.RoundDistance(task.flighttest.route.Convert_mm2NM(correct_check_value, true))
+            inexact_check_value = FcMath.RoundDistance(task.flighttest.route.Convert_mm2NM(inexact_check_value, true))
         }
         
         return [inexact_points: inexact_points,
@@ -2743,8 +2747,8 @@ class Test
         BigDecimal inexact_check_value = GetObservationTestEnrouteInexactValue()
         
         if (GetObservationTestEnrouteValueUnit() == EnrouteValueUnit.NM) {
-            correct_check_value = FcMath.RoundMeasureDistance(task.flighttest.route.Convert_NM2mm(correct_check_value))
-            inexact_check_value = FcMath.RoundMeasureDistance(task.flighttest.route.Convert_NM2mm(inexact_check_value))
+            correct_check_value = task.flighttest.route.Convert_NM2mm(correct_check_value, true)
+            inexact_check_value = task.flighttest.route.Convert_NM2mm(inexact_check_value, true)
         }
         
         return [inexact_points: inexact_points,

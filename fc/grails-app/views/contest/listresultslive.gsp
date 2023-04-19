@@ -40,23 +40,29 @@
                             <g:set var="live_tasks" value="${live_crew.tasks}"/>
                         </g:if>
                     </g:each>
+                    <g:set var="col_num" value="${new Integer(2)}"/>
                     <thead>
                         <tr>
                             <th>${message(code:'fc.test.results.position')}</th>
                             <th>${message(code:'fc.crew')}</th>
                             <g:if test="${liveContest.contestPrintAircraft}">
+                                <g:set var="col_num" value="${col_num+1}"/>
                                 <th>${message(code:'fc.aircraft')}</th>
                             </g:if>
                             <g:if test="${liveContest.contestPrintTeam}">
+                                <g:set var="col_num" value="${col_num+1}"/>
                                 <th>${message(code:'fc.team')}</th>
                             </g:if>
                             <g:if test="${liveContest.contestPrintClass}">
+                                <g:set var="col_num" value="${col_num+1}"/>
                                 <th>${message(code:'fc.resultclass')}</th>
                             </g:if>
                             <g:if test="${liveContest.contestPrintShortClass}">
+                                <g:set var="col_num" value="${col_num+1}"/>
                                 <th>${message(code:'fc.resultclass.short.short')}</th>
                             </g:if>
                             <g:if test="${liveContest.contestPrintTaskDetails || liveContest.contestPrintTaskTestDetails}">
+                                <g:set var="col_num" value="${col_num+1}"/>
 	                            <g:each var="live_task" in="${live_tasks}">
 				                    <g:set var="detail_num" value="${new Integer(0)}"/>
 				                    <g:if test="${live_task.id in liveContest.getTestDetailsTasksIDs}">
@@ -121,9 +127,11 @@
 				                        <g:set var="detail_num" value="${detail_num+1}"/>
 				                    </g:if>
 	                                <th colspan="${detail_num}">${live_task.bestOfName}</th>
+                                    <g:set var="col_num" value="${col_num+detail_num}"/>
 	                            </g:each>
 	                        </g:if>
 	                        <g:if test="${liveContest.liveShowSummary}">
+                                <g:set var="col_num" value="${col_num+1}"/>
 	                            <th>${message(code:'fc.test.results.summary')}</th>
 	                        </g:if>
             	        </tr>
@@ -233,20 +241,37 @@
                         </g:if>
                     </thead>
                     <tbody>
+                        <g:if test="${LiveNewestShowSize}">
+                            <g:set var="newest_live_crew_pos" value="${0}"/>
+                            <g:each var="newest_live_crew" in="${newestLiveCrews}">
+                                <g:set var="newest_live_crew_pos" value="${newest_live_crew_pos+1}"/>
+                                <g:if test="${newest_live_crew_pos <= LiveNewestShowSize}">
+                                    <g:liveResultLine pos="${newest_live_crew.contestPosition}" crew="${newest_live_crew}" livecontest="${liveContest}" />
+                                </g:if>
+                            </g:each>
+                            <tr><td colspan="${col_num}" style="height:10px;"/></tr>
+                        </g:if>
+                        <g:set var="live_crew_pos" value="${0}"/>
                         <g:if test="${liveContest.livePositionCalculation == 0}">
                             <g:each var="live_crew" in="${liveCrews}">
                                 <g:if test="${!live_crew.noContestPosition && (live_crew.contestPosition != 0)}">
-                                    <g:liveResultLine pos="${live_crew.contestPosition}" crew="${live_crew}" livecontest="${liveContest}" />
+                                    <g:set var="live_crew_pos" value="${live_crew_pos+1}"/>
+                                    <g:if test="${live_crew_pos >= LiveStartPos && live_crew_pos < LiveStartPos+LiveShowSize}">
+                                        <g:liveResultLine pos="${live_crew.contestPosition}" crew="${live_crew}" livecontest="${liveContest}" />
+                                    </g:if>
                                 </g:if>
                             </g:each>
 	                    </g:if>
 	                    <g:else>
                             <g:each var="live_crew" in="${EvaluationService.GetLiveCrewSort(liveCrews,liveContest.livePositionCalculation)}">
-		                        <g:each var="live_task" in="${live_crew.tasks}">
-		                            <g:if test="${live_task.id == liveContest.livePositionCalculation}">
-		                                <g:liveResultLine pos="${live_task.taskPosition}" crew="${live_crew}" livecontest="${liveContest}" task="${liveContest.livePositionCalculation}" />
-		                            </g:if>
-		                        </g:each>
+                                <g:each var="live_task" in="${live_crew.tasks}">
+                                    <g:if test="${live_task.id == liveContest.livePositionCalculation}">
+                                        <g:set var="live_crew_pos" value="${live_crew_pos+1}"/>
+                                        <g:if test="${live_crew_pos >= LiveStartPos && live_crew_pos < LiveStartPos+LiveShowSize}">
+                                            <g:liveResultLine pos="${live_task.taskPosition}" crew="${live_crew}" livecontest="${liveContest}" task="${liveContest.livePositionCalculation}" />
+                                        </g:if>
+                                    </g:if>
+                                </g:each>
 		                    </g:each>
 	                    </g:else>
                     </tbody>

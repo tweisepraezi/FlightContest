@@ -1,9 +1,30 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.2
+----------------
+- Genauigkeit von Strecken-Fotos und Bodenzeichen reduziert (ein Zehntel NM, ganze mm)
+- Wettbewerbs-Auswertungs-Einstellungen: Option "Live-Ergebnis-Besatzungs-Anzahl" hinzugefügt.
+    Definiert die max. Anzahl der Besatzungen, die in der Live-Ergebnis-Anzeige auf einer Seite angezeigt werden.
+    Bei Überschreiten des eingestellten Wertes (Default: 30) werden sich abwechselnde Seiteninhalte erzeugt.
+- Wettbewerbs-Auswertungs-Einstellungen: Option "Live-Ergebnis-Neueste-Besatzungs-Anzahl" hinzugefügt.
+    Definiert die Anzahl der Besatzungen, die in der Live-Ergebnis-Anzeige als neueste fertiggestellte Auswertung am Anfang der Seite angezeigt werden.
+    Default: 5 Besatzungen
+- OSM-Online-Karte: Karte "TopPlusOpen" vom Bundesamt für Kartographie und Geodäsie hinzugefügt.
+- OSM-Wettbewerbs-Karte:
+    Erzeugen: Spezifische Fehlermeldung bei fehlerhaften Lufträumen hinzugefügt.
+    Deaktivierung von Einträgen in der Luftraum-Liste hinzugefügt: Mit # beginnde Einträge werden jetzt bei der Kartenerzeugung ignoriert.
+- Bug "Datenbank wird bei Flight Contest-Installation durch einen anderen Benutzer geleert" behoben.
+  Die Datenbank kann aus der Installations-Sicherungs-Kopie wiederhergestellt werden.
+    1. Stop Flight Contest
+    2. Kopie C:\Program Files\Flight Contest\fc-<Datum>-<Zeit>-<FC-Version>\fcdb.h2.db -> C:\Program Files\Flight Contest\fc
+       oder
+       Kopie C:\Program Files\Flight Contest\fc-backup-<Datum>-<Zeit>-<DB-Version>\fcdb.h2.db -> C:\Program Files\Flight Contest\fc
+    3. Start Flight Contest
+
 Änderungen 3.3.1.1
 ------------------
-- OSM-Online-Karte: Kartendaten von Michelin hinzugefügt
+- OSM-Online-Karte: Karte von Michelin hinzugefügt
 
 Änderungen 3.3.1
 ----------------
