@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.3.2
-:revdate: 19.04.2023
+:revnumber: 3.3.3
+:revdate: 10.05.2023
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -69,12 +69,12 @@ Provides integrated map viewers for navigation flights, routes and logger files:
 
 * link:rules/DE_Navigationsflug_2020.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2020 (German)^]
 * link:rules/DE_Navigationsflug_2017_en.pdf[Wettbewerbsordnung Navigationsflug Deutschland 2017^]
-* link:rules/FAI_rally_flying_rules_2022.pdf[FAI Air Rally Flying^]
-* link:rules/FAI_precision_flying_rules_2022.pdf[FAI Precision Flying^]
-* link:rules/FAI_landing_rules_2022.pdf[FAI GAC Landing appendix^]
+* link:rules/FAI_rally_flying_rules_2023.pdf[FAI Air Rally Flying^]
+* link:rules/FAI_precision_flying_rules_2023.pdf[FAI Precision Flying^]
+* link:rules/FAI_landing_rules_2023.pdf[FAI GAC Landing appendix^]
 * link:rules/CH_Praezisionsflug_2017.pdf[Wettkampfreglement Präzisionsflug-Schweizermeisterschaft (German)^]
-* link:rules/AT_Motorflug_2017.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
-* link:rules/AT_Motorflug_2017.pdf#page=30[Navigationsflug-Reglement Österreich (German)^]
+* link:rules/AT_Motorflug_2023.pdf#page=17[Präzisionsflug-Reglement Österreich (German)^]
+* link:rules/AT_Motorflug_2023.pdf#page=29[Navigationsflug-Reglement Österreich (German)^]
 
 <<<
 [[default-competition]]
@@ -1036,11 +1036,11 @@ The following formulas are used for penalty point calculation of landings:
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 20;case 'B':return 40;case 'C':return 60;case 'D':return 80;case 'E':return 50;case 'F':return 90;default:return null;}}
 
-* link:rules/FAI_landing_rules_2022.pdf#page=10[FAI Air Rally Flying - Edition 2022^] ( all landings)
+* link:rules/FAI_landing_rules_2023.pdf#page=10[FAI Air Rally Flying - Edition 2023^] ( all landings)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 
-* link:rules/FAI_landing_rules_2022.pdf#page=11[FAI Precision Flying - Edition 2022^]
+* link:rules/FAI_landing_rules_2023.pdf#page=11[FAI Precision Flying - Edition 2023^]
 ** Landing 1 and 4
 
   {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 5*i}else{return -(10*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'A':return 250;case 'D':return 125;case 'E':return 150;case 'F':return 175;case 'G':return 200;case 'H':return 225;default:return null;}}}
@@ -1065,19 +1065,19 @@ The order of application can be configured for a task.
 +
 The order of application can be configured for a task.
 
-* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2017^] (all landings).
+* link:rules/AT_Motorflug_2023.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 1 - Ausgabe 2023^] (all landings).
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'A':return 20;case 'I':return 10;case 'II':return 30;case 'III':return 50;default:return null;}}
   
-* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2017^] (all landings).
+* link:rules/AT_Motorflug_2023.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 2 - Ausgabe 2023^] (all landings).
 
   {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(4*i)}}else{switch(x.toUpperCase()){case '0':return 0;case 'C':return 60;case 'B':return 40;case 'A':return 20;case 'I':return 10;case 'II':return 20;case 'III':return 30;case 'IV':return 40;case 'V':return 50;case 'VI':return 60;default:return null;}}}
   
-* link:rules/AT_Motorflug_2017.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2017^] (all landings).
+* link:rules/AT_Motorflug_2023.pdf#page=27[Präzisionsflug-Reglement Österreich - Landefeld Typ 3 - Ausgabe 2023^] (all landings).
 
   {x -> if(x.isInteger()){i=x.toInteger();if(i>0){return 2*i}else{return -(3*i)}}else{return null;}}
   
-* link:rules/AT_Motorflug_2017.pdf#page=37[Navigationsflug-Reglement Österreich - Ausgabe 2017^] (all landings)
+* link:rules/AT_Motorflug_2023.pdf#page=36[Navigationsflug-Reglement Österreich - Ausgabe 2023^] (all landings)
 
   {x -> switch(x.toUpperCase()){case '0':return 0;case 'A':return 10;case 'B':return 20;case 'C':return 30;case 'D':return 40;case 'E':return 60;case 'F':return 80;case 'G':return 100;case 'H':return 120;case 'X':return 60;case 'Y':return 120;default:return null;}}
 

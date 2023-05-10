@@ -4,16 +4,16 @@
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
 const DBVersion = '2.36.0';     // DB-2.36
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
-const FCVersion = '3.3.2';      // no milestone
+const FCVersion = '3.3.3';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
-const FCVersion64 = '3.3.2';    // no milestone
+const FCVersion64 = '3.3.3';    // no milestone
 [Setup]
 AppName=Flight Contest
 
-AppVerName=Flight Contest 3.3.2
-AppVersion=3.3.2
+AppVerName=Flight Contest 3.3.3
+AppVersion=3.3.3
 ; no milestone below
-VersionInfoVersion=3.3.2
+VersionInfoVersion=3.3.3
 
 AppCopyright=(C) 2009-2023 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
@@ -155,13 +155,13 @@ Name: "{group}\Scripts\Read logger GlobalSat DG-100";                           
 Name: "{group}\Scripts\Read logger GlobalSat DG-200";                                Filename: "{app}\scripts\read_dg200_logger.bat";            WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-CrewList-Sample.xlsx";                                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-CrewList-Sample.xlsx";          WorkingDir: "{commondesktop}";
 Name: "{group}\Samples\FC-TakoffLandingCalculation-Sample.xlsx";                     Filename: "{app}\tomcat\webapps\fc\docs\samples\FC-TakoffLandingCalculation-Sample.xlsx"; WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2022";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_precision_flying_rules_2022.pdf";WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2022";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_rally_flying_rules_2022.pdf";    WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\FAI GAC Landing appendix 2022";                                 Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_landing_rules_2022.pdf";         WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Precision Flying Rules and Regulations 2023";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_precision_flying_rules_2023.pdf";WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI Air Rally Flying Rules and Regulations 2023";               Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_rally_flying_rules_2023.pdf";    WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\FAI GAC Landing appendix 2023";                                 Filename: "{app}\tomcat\webapps\fc\docs\rules\FAI_landing_rules_2023.pdf";         WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2020";           Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Navigationsflug_2020.pdf";        WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettbewerbsordnung Navigationsflug Deutschland 2017";           Filename: "{app}\tomcat\webapps\fc\docs\rules\DE_Navigationsflug_2017.pdf";        WorkingDir: "{commondesktop}";
 Name: "{group}\Rules\Wettkampfreglement Präzisionsflug-Schweizermeisterschaft 2017"; Filename: "{app}\tomcat\webapps\fc\docs\rules\CH_Praezisionsflug_2017.pdf";        WorkingDir: "{commondesktop}";
-Name: "{group}\Rules\Motorflug-Wettbewerbsordnung Österreich 2017";                  Filename: "{app}\tomcat\webapps\fc\docs\rules\AT_Motorflug_2017.pdf";              WorkingDir: "{commondesktop}";
+Name: "{group}\Rules\Motorflug-Wettbewerbsordnung Österreich 2023";                  Filename: "{app}\tomcat\webapps\fc\docs\rules\AT_Motorflug_2023.pdf";              WorkingDir: "{commondesktop}";
 
 [Code]
 //---------------------------------------------------------------------------------------------------------

@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.3.3
+-------------
+- Updating of the following sets of rules
+    FAI Precision Flying - Edition 2023
+    FAI Air Rally Flying - Edition 2023
+    GAC Landing appendix - Edition 2023
+    Motorflug-Wettbewerbsordnung Österreich 2023
+- Minimum altitude is now initialized at 400ft (500ft - 100ft tolerance) for new routes.
+    Reason: Rule 'FAI Precision Flying - Edition 2023' defines a buffer of 100ft for altitude measurement.
+    
 Changes 3.3.2
 -------------
 - Accuracy of enroute photos and canvas signs reduced (one tenth NM, whole mm)

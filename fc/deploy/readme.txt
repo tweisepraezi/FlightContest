@@ -1,6 +1,16 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.3
+----------------
+- Aktualisierung folgender Regelwerke
+    FAI Precision Flying - Edition 2023
+    FAI Air Rally Flying - Edition 2023
+    GAC Landing appendix - Edition 2023
+    Motorflug-Wettbewerbsordnung Österreich 2023
+- Die Mindestflughöhe wird jetzt bei neuen Strecken mit 400ft (500ft - 100ft Toleranz) initialisiert.
+    Grund: Das Regelwerk 'FAI Precision Flying - Edition 2023' definiert einen Puffer von 100ft für die Höhenmessung.
+
 Änderungen 3.3.2
 ----------------
 - Genauigkeit von Strecken-Fotos und Bodenzeichen reduziert (ein Zehntel NM, ganze mm)

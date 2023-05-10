@@ -1,0 +1,52 @@
+Problem:
+    Skytraq Venus chipset does not have a correct UTC time
+
+
+https://github.com/GPSBabel/gpsbabel/issues/70
+    Skytraq Venus 6 leap seconds added
+
+    <para>
+    gps_utc_offset is used to override the built-in table of offsets of
+    the offset between GPS time and UTC time. This chipset reports only 
+    GPS time to the host and relies on software to know every time an adjustment
+    is made. Since GPS time offsets can change without a new version of GPSBabel
+    is released, those that care about total accuracy can override it.
+
+    <screen>
+    <command>gpsbabel</command>
+    -i skytraq.bin,gps_utc_offset=15 -f <replaceable>filename.bin</replaceable>
+    </screen>
+
+    Indicates that GPS is ahead of UTC by fifteen seconds, as was the case in 2009.
+    </para>
+
+    <para>
+    Consult formal eplanation of <ulink url="http://tycho.usno.navy.mil/leapsec.html">GPS time vs. UTC time</ulink> if you're into that.
+    </para>
+
+GPSBabel 1.8.0 
+    Option "Seconds that GPS time tracks UTC" (Sekunden, in denen die GPS-Zeit der UTC-Zeit folgt)
+    gps-utc-offset=15
+    
+    Indicates that GPS is ahead of UTC by fifteen seconds, as was the case in 2009.
+
+https://github.com/GPSBabel/gpsbabel/blob/master/skytraq.cc
+    1999: 13s
+    2006: 14s
+    2009: 15s
+    2012: 16s
+    2015: 17s
+    2017: 18s
+    
+Check for modifications
+    http://hpiers.obspm.fr/iers/bul/bulc
+    https://hpiers.obspm.fr/iers/bul/bulc/Leap_Second.dat
+              SkyTraq  TAI-UTC  (Diff 19s)
+        1999: 13s      32s
+        2006: 14s      33s
+        2009: 15s      34s
+        2012: 16s      35s
+        2015: 17s      36s
+        2017: 18s      37s
+    http://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat
+        2023:          37s

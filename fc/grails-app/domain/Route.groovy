@@ -25,7 +25,7 @@ class Route
     
     Boolean showCurvedPoints = false                                             // DB-2.20
 	Integer mapScale = 200000                                                    // DB-2.21
-	Integer altitudeAboveGround = 300                                            // DB-2.31, min. Altitude (Höhe) über Grund in ft
+	Integer altitudeAboveGround = 400                                            // DB-2.31, min. Altitude (Höhe) über Grund in ft
     Boolean exportSemicircleGates = false                                        // DB-2.26
     
     Boolean showCoords = true                                                    // DB-2.30

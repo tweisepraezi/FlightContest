@@ -429,7 +429,7 @@ enum ContestRules
 	), // "FAI Air Rally Flying - Unlimited - Edition 2016"
 
 	R4 ([
-            ruleTitle:"FAI Precision Flying - Edition 2022",
+            ruleTitle:"FAI Precision Flying - Edition 2023",
             
 			// General
 			precisionFlying:true,
@@ -568,7 +568,7 @@ enum ContestRules
             useProcedureTurns:true,
             liveTrackingScorecard:"FAI Precision"
 		]
-	), // "FAI Precision Flying - Edition 2022"
+	), // "FAI Precision Flying - Edition 2023"
 
 	R5 ([
             ruleTitle:"Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017",
@@ -713,7 +713,7 @@ enum ContestRules
 	), // "Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017"
 
     R6 ([
-            ruleTitle:"FAI Air Rally Flying - Edition 2022",
+            ruleTitle:"FAI Air Rally Flying - Edition 2023",
             
             // General
             precisionFlying:false,
@@ -852,10 +852,10 @@ enum ContestRules
             useProcedureTurns:false,
             liveTrackingScorecard:"FAI Air Rally"
         ]
-    ), // "FAI Air Rally Flying - Edition 2022"
+    ), // "FAI Air Rally Flying - Edition 2023"
 
     R7 ([
-            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017",
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023",
             
             // General
             precisionFlying:true,
@@ -872,7 +872,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/at_precision_landing1.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[],
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
             printLandingCalculatorValues:"C,A,I,II,III",
             
             // PlanningTest
@@ -994,10 +994,10 @@ enum ContestRules
             useProcedureTurns:true,
             liveTrackingScorecard:"FAI Precision"
         ]
-    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017"
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023"
 
     R8 ([
-            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017",
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023",
             
             // General
             precisionFlying:true,
@@ -1014,7 +1014,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/at_precision_landing2.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[],
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
             printLandingCalculatorValues:"C,B,A,-5,5,I,II,III,IV,V,VI",
             
             // PlanningTest
@@ -1136,10 +1136,10 @@ enum ContestRules
             useProcedureTurns:true,
             liveTrackingScorecard:"FAI Precision"
         ]
-    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017"
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023"
 
     R9 ([
-            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2017",
+            ruleTitle:"Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023",
             
             // General
             precisionFlying:true,
@@ -1156,7 +1156,7 @@ enum ContestRules
             landingFieldImageName:'images/landingfield/at_precision_landing3.jpg',
             printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[],
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
             printLandingCalculatorValues:"-20,-10,-1,1,10,20,30",
             
             // PlanningTest
@@ -1278,10 +1278,10 @@ enum ContestRules
             useProcedureTurns:true,
             liveTrackingScorecard:"FAI Precision"
         ]
-    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2017"
+    ), // "Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023"
 
     R10 ([
-            ruleTitle:"Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2017",
+            ruleTitle:"Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023",
             
             // General
             precisionFlying:false,
@@ -1296,9 +1296,9 @@ enum ContestRules
             printPointsLandingTest4:false,
             printPointsLandingField:true,
             landingFieldImageName:'images/landingfield/at_nav.jpg',
-            printPointsTurnpointSign:false,
+            printPointsTurnpointSign:true,
             printPointsEnrouteCanvas:true,
-            printIgnoreEnrouteCanvas:[],
+            printIgnoreEnrouteCanvas:[EnrouteCanvasSign.S08],
             printLandingCalculatorValues:"Y,X,A,B,C,D,E,F,G,H",
             
             // PlanningTest
@@ -1316,34 +1316,34 @@ enum ContestRules
             flightTestTakeoffCheckSeconds:true,                  // 5.3a
             flightTestTakeoffPointsPerSecond:3,                  // 5.3a
             flightTestTakeoffMissedPoints:100,                   // 5.3a
-            flightTestCptimeCorrectSecond:5,                     // 5.3b
-            flightTestCptimePointsPerSecond:2,                   // 5.3b
+            flightTestCptimeCorrectSecond:2,                     // 5.3b
+            flightTestCptimePointsPerSecond:3,                   // 5.3b
             flightTestCptimeMaxPoints:100,                       // 5.3b
             flightTestCpNotFoundPoints:100,                      // 5.3b, 5.3d
             flightTestProcedureTurnNotFlownPoints:0,
             flightTestMinAltitudeMissedPoints:200,               // 5.3d
             flightTestBadCourseCorrectSecond:5,                  // 5.3d
-            flightTestBadCoursePoints:200,                       // 5.3d
+            flightTestBadCoursePoints:100,                       // 5.3d
             flightTestBadCourseMaxPoints:0,
             flightTestBadCourseStartLandingPoints:0,
             flightTestLandingToLatePoints:300,                   // 5.3h
             flightTestGivenToLatePoints:300,                     // 5.3f
             flightTestSafetyAndRulesInfringementPoints:600,      // 5.3d
             flightTestInstructionsNotFollowedPoints:200,         // 5.3d
-            flightTestFalseEnvelopeOpenedPoints:100,             // 5.3d
-            flightTestSafetyEnvelopeOpenedPoints:300,            // 5.3i
+            flightTestFalseEnvelopeOpenedPoints:0,
+            flightTestSafetyEnvelopeOpenedPoints:400,            // 5.3i
             flightTestFrequencyNotMonitoredPoints:200,           // 5.3g
             flightTestForbiddenEquipmentPoints:600,              // 5.3d
 
             // ObservationTest
-            observationTestTurnpointNotFoundPoints:0,
-            observationTestTurnpointFalsePoints:0,
+            observationTestTurnpointNotFoundPoints:50,           // 5.3c
+            observationTestTurnpointFalsePoints:100,             // 5.3c
             observationTestEnrouteValueUnit:EnrouteValueUnit.NM, // 5.3c
             observationTestEnrouteCorrectValue:0.5f,             // 5.3c
             observationTestEnrouteInexactValue:1.0f,             // 5.3c
-            observationTestEnrouteInexactPoints:10,              // 5.3c
-            observationTestEnrouteNotFoundPoints:20,             // 5.3c
-            observationTestEnrouteFalsePoints:40,                // 5.3c
+            observationTestEnrouteInexactPoints:15,              // 5.3c
+            observationTestEnrouteNotFoundPoints:30,             // 5.3c
+            observationTestEnrouteFalsePoints:50,                // 5.3c
             
             // LandingTest
             landingTest1MaxPoints:300,                           // 5.3e
@@ -1420,7 +1420,7 @@ enum ContestRules
             useProcedureTurns:false,
             liveTrackingScorecard:"FAI Air Rally"
         ]
-    ), // "Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2017"
+    ), // "Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023"
 
     R11 ([
             ruleTitle:"Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017",
@@ -1577,13 +1577,13 @@ enum ContestRules
         List ret = []
         ret += R1  // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2020
         ret += R11 // Wettbewerbsordnung Navigationsflug Deutschland - Ausgabe 2017
-        ret += R4  // FAI Precision Flying - Edition 2022
-        ret += R6  // FAI Air Rally Flying - Edition 2022
+        ret += R4  // FAI Precision Flying - Edition 2023
+        ret += R6  // FAI Air Rally Flying - Edition 2023
         ret += R5  // Wettkampfreglement Pr\u00E4zisionsflug-Schweizermeisterschaft - Ausgabe 2017
-        ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2017
-        ret += R8  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2017
-        ret += R9  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2017
-        ret += R10 // Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2017
+        ret += R7  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 1 - Ausgabe 2023
+        ret += R8  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 2 - Ausgabe 2023
+        ret += R9  // Pr\u00E4zisionsflug-Reglement \u00D6sterreich - Landefeld Typ 3 - Ausgabe 2023
+        ret += R10 // Navigationsflug-Reglement \u00D6sterreich - Ausgabe 2023
         return ret
     }
     
