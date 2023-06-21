@@ -1,6 +1,12 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.3.4
+-------------
+- OSM contest map/Generate PNG contest map with world file: added pnginfo file containing detailed information about the generated map
+- Bug "Import of coordinates from kml files does not work" fixed
+- Bug "Importing degrees of TO/LDG coordinates from kml files does not work" fixed
+
 Changes 3.3.3
 -------------
 - Updating of the following sets of rules

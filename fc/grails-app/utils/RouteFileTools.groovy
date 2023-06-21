@@ -170,7 +170,8 @@ class RouteFileTools
                 }
             }
         } else {
-            km_reader = new FileReader(km_file)
+            //km_reader = new FileReader(km_file)
+            km_reader = new InputStreamReader(new FileInputStream(km_file), "UTF-8")
         }
 
         try {
@@ -1628,7 +1629,8 @@ class RouteFileTools
                 }
             }
         } else {
-            km_reader = new FileReader(km_file)
+            //km_reader = new FileReader(km_file)
+            km_reader = new InputStreamReader(new FileInputStream(km_file), "UTF-8")
         }
         
         try {
@@ -2248,7 +2250,8 @@ class RouteFileTools
                 }
             }
         } else {
-            km_reader = new FileReader(km_file)
+            //km_reader = new FileReader(km_file)
+            km_reader = new InputStreamReader(new FileInputStream(km_file), "UTF-8")
         }
 
         try {
@@ -2361,17 +2364,19 @@ class RouteFileTools
                             }
                         }
                         
-                        switch (importSign) {
-                            case ImportSign.RouteCoord:
-                                if (import_sign.tpname) {
-                                    import_sign += [imagedata: read_zipentry_data(kmzFile, "turnpointphotos/${import_sign.tpname}.jpg")]
-                                }
-                                break
-                            case ImportSign.EnroutePhotoCoord:
-                                if (import_sign.name) {
-                                    import_sign += [imagedata: read_zipentry_data(kmzFile, "photos/${import_sign.name}.jpg")]
-                                }
-                                break
+                        if (kmzFile) {
+                            switch (importSign) {
+                                case ImportSign.RouteCoord:
+                                    if (import_sign.tpname) {
+                                        import_sign += [imagedata: read_zipentry_data(kmzFile, "turnpointphotos/${import_sign.tpname}.jpg")]
+                                    }
+                                    break
+                                case ImportSign.EnroutePhotoCoord:
+                                    if (import_sign.name) {
+                                        import_sign += [imagedata: read_zipentry_data(kmzFile, "photos/${import_sign.name}.jpg")]
+                                    }
+                                    break
+                            }
                         }
                         
                         import_signs += import_sign

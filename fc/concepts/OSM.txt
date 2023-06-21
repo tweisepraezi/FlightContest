@@ -35,3 +35,13 @@ Mapnik
                     
 Tile-Server on Windows                    
     http://openstreetmapserverwindows.blogspot.com/2015/11/osmopenstreetmap-tile-server.html
+
+Search: Mapnik Mercator Projection Latitude distortions
+    Mapnik tiles have latitude distortion, projection issue?
+        https://gis.stackexchange.com/questions/118627/mapnik-tiles-have-latitude-distortion-projection-issue
+    
+            map.aspect_fix_mode = mapnik.Map.ASPECT_RESPECT;
+            before: map.extent = bbox;
+        
+        https://github.com/mapnik/node-mapnik/issues/885
+

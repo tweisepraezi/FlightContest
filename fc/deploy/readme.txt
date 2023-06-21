@@ -1,6 +1,12 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.4
+----------------
+- OSM-Wettbewerbs-Karte/PNG-Wettbewerbs-Karte mit World-File erzeugen: pnginfo-Datei hinzugefügt, die detailierte Informationen zur erzeugten Karte enthält
+- Bug "Import von Koordinaten aus kml-Dateien funktioniert nicht" behoben
+- Bug "Import der Grad-Zahl von TO/LDG-Kooordinaten aus kml-Dateien funktioniert nicht" behoben
+
 Änderungen 3.3.3
 ----------------
 - Aktualisierung folgender Regelwerke

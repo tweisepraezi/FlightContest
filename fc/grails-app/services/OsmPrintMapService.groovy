@@ -1080,6 +1080,7 @@ class OsmPrintMapService
                         String download_zip_file_name = "${pngFileName}.zip"
                         String unpacked_png_file_name = "${pngFileName}.png"
                         String world_file_name = "${pngFileName}w"
+                        String info_file_name = "${pngFileName}info"
                         String tif_file_name = "${pngFileName.substring(0,pngFileName.lastIndexOf('.'))}.tif"
                         
                         printstart "Write ${download_zip_file_name}"
@@ -1118,6 +1119,24 @@ class OsmPrintMapService
                             world_file_writer << "${lon_min}\n" // 5
                             world_file_writer << "${lat_max}" // 6
                             world_file_writer.close()
+                        } catch (Exception e) {
+                            println e.getMessage()
+                        }
+                        printdone ""
+                        
+                        printstart "Generate ${info_file_name}"
+                        try {
+                            File info_file = new File(info_file_name)
+                            BufferedWriter info_file_writer = info_file.newWriter()
+                            info_file_writer << "Top(Lat):    ${lat_max}\n"
+                            info_file_writer << "Center(Lat): ${(lat_max-lat_min)/2+lat_min}\n"
+                            info_file_writer << "Bottom(Lat): ${lat_min}\n"
+                            info_file_writer << "Right(Lon):  ${lon_max}\n"
+                            info_file_writer << "Center(Lon): ${(lon_max-lon_min)/2+lon_min}\n"
+                            info_file_writer << "Left(Lon):   ${lon_min}\n"
+                            info_file_writer << "Height:      ${img_height}px\n"
+                            info_file_writer << "Width:       ${img_width}px\n"
+                            info_file_writer.close()
                         } catch (Exception e) {
                             println e.getMessage()
                         }

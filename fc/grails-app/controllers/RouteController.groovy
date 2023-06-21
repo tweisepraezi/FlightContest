@@ -933,6 +933,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -966,6 +967,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1059,6 +1061,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1092,6 +1095,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1185,6 +1189,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1218,6 +1223,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1311,6 +1317,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1344,6 +1351,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1437,6 +1445,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}l"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1470,6 +1479,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1563,6 +1573,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}l"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1596,6 +1607,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1689,6 +1701,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}l"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1722,6 +1735,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1815,6 +1829,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1848,6 +1863,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -1954,6 +1970,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -1987,6 +2004,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -2093,6 +2111,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2126,6 +2145,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -2232,6 +2252,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2265,6 +2286,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -2371,6 +2393,7 @@ class RouteController {
                             printjob_writer.close()
                             String map_png_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/MAP-${uuid}.png"
                             String world_file_name = "${map_png_file_name}w"
+                            String info_file_name = "${map_png_file_name}info"
                             String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                             String vrt_file_name = "${tif_file_name}.vrt"
                             String map_graticule_file_name = "${Defs.ROOT_FOLDER_GPXUPLOAD}/GRATICULE-${uuid}.csv"
@@ -2404,6 +2427,7 @@ class RouteController {
                             }
                             gpxService.DeleteFile(map_png_file_name)
                             gpxService.DeleteFile(world_file_name)
+                            gpxService.DeleteFile(info_file_name)
                             gpxService.DeleteFile(tif_file_name)
                             gpxService.DeleteFile(vrt_file_name)
                             gpxService.DeleteFile(map_graticule_file_name)
@@ -2685,6 +2709,7 @@ class RouteController {
                 printfileid_reader.close()
                 String unpacked_png_file_name = "${map_png_file_name}.png"
                 String world_file_name = "${map_png_file_name}w"
+                String info_file_name = "${map_png_file_name}info"
                 String map_zip_file_name = map_png_file_name + ".zip"
                 String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                 String vrt_file_name = "${tif_file_name}.vrt"
@@ -2692,6 +2717,7 @@ class RouteController {
                 gpxService.DeleteFile(map_png_file_name)
                 gpxService.DeleteFile(unpacked_png_file_name)
                 gpxService.DeleteFile(world_file_name)
+                gpxService.DeleteFile(info_file_name)
                 gpxService.DeleteFile(map_zip_file_name)
                 gpxService.DeleteFile(tif_file_name)
                 gpxService.DeleteFile(vrt_file_name)
@@ -2722,6 +2748,7 @@ class RouteController {
                     LineNumberReader printfileid_file_reader = printfileid_file.newReader()
                     String map_png_file_name = printfileid_file_reader.readLine()
                     String world_file_name = "${map_png_file_name}w"
+                    String info_file_name = "${map_png_file_name}info"
                     String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                     String vrt_file_name = "${tif_file_name}.vrt"
                     boolean print_landscape = printfileid_file_reader.readLine() == 'true'
@@ -2741,6 +2768,7 @@ class RouteController {
                         ZipOutputStream zip_stream = new ZipOutputStream(new FileOutputStream(map_zip_file_name))
                         write_file_to_zip(zip_stream, png_file_name, map_png_file_name)
                         write_file_to_zip(zip_stream, png_file_name + "w", world_file_name)
+                        write_file_to_zip(zip_stream, png_file_name + "info", info_file_name)
                         zip_stream.close()
                         gpxService.printdone ""
                         gpxService.printstart "Download PNGZIP"
@@ -2832,6 +2860,7 @@ class RouteController {
                     LineNumberReader printfileid_file_reader = printfileid_file.newReader()
                     String map_png_file_name = printfileid_file_reader.readLine()
                     String world_file_name = "${map_png_file_name}w"
+                    String info_file_name = "${map_png_file_name}info"
                     String tif_file_name = "${map_png_file_name.substring(0,map_png_file_name.lastIndexOf('.'))}.tif"
                     String vrt_file_name = "${tif_file_name}.vrt"
                     boolean print_landscape = printfileid_file_reader.readLine() == 'true'
