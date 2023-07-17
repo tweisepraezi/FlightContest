@@ -242,6 +242,7 @@ class RouteController {
         def file = request.getFile('routefile')
 		String secretcoursechange = params?.secretcoursechange.replace(',','.')
         Map import_params = [foldername:params?.foldername,
+                             readplacemarks:params?.readplacemarks == 'on',
                              firstcoordto:params?.firstcoordto == 'on',
                              todirection:params?.todirection.isBigDecimal()?params?.todirection.toBigDecimal():0.0,
                              curved1:params?.curved1 == 'on',

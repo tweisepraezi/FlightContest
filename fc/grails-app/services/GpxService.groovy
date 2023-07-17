@@ -2213,7 +2213,7 @@ class GpxService
                             gate_width
                         )
                         xml.rte {
-                            wr_gate(coordroute_instance, gate_width, xml, task_instance, wr_photoimage)
+                            wr_gate(coordroute_instance, gate_width, 0, xml, task_instance, wr_photoimage)
                             // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                             xml.name coordroute_instance.titleMediaCode(media)
                             xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2285,8 +2285,11 @@ class GpxService
             CoordRoute center_coordroute_instance = null
             boolean set_endcurved = false
             boolean first = true
-            int semicircle_gate_num = 0
+            int secret_gate_num = 0
             for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
+                if (coordroute_instance.type == CoordType.SECRET && !coordroute_instance.circleCenter) {
+                    secret_gate_num++
+                }
                 if (routeInstance.exportSemicircleGates && params.gpxExport) {
                     if (center_coordroute_instance) { // semicircle
                         boolean write_gate = false
@@ -2310,16 +2313,16 @@ class GpxService
                             Map last_semicircle_coord = null
                             for (Map semicircle_coord in semicircle_coords) {
                                 if (last_semicircle_coord) {
-                                    semicircle_gate_num++
+                                    secret_gate_num++
                                     Map gate = AviationMath.getGate(
                                         last_semicircle_coord.lat, last_semicircle_coord.lon,
                                         semicircle_coord.lat, semicircle_coord.lon,
                                         gate_width
                                     )
                                     xml.rte {
-                                        wr_gate_semicircle(semicircle_coord.lat, semicircle_coord.lon, center_coordroute_instance.altitude, gate_width, semicircle_gate_num, xml, task_instance)
+                                        wr_gate_semicircle(semicircle_coord.lat, semicircle_coord.lon, center_coordroute_instance.altitude, gate_width, secret_gate_num, xml, task_instance)
                                         //BigDecimal altitude_meter = center_coordroute_instance.altitude.toLong() / ftPerMeter
-                                        xml.name "${getMsg(CoordType.SECRET.code, is_print)}${semicircle_gate_num}"
+                                        xml.name "${getMsg(CoordType.SECRET.code, is_print)}${secret_gate_num}"
                                         xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
                                             //xml.ele altitude_meter
                                         }
@@ -2352,7 +2355,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2370,7 +2373,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2391,7 +2394,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2409,7 +2412,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2431,7 +2434,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage, gate.coord.lat, gate.coord.lon)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2449,7 +2452,7 @@ class GpxService
                                     coordroute_instance.gatewidth2
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
+                                    wr_gate(coordroute_instance, coordroute_instance.gatewidth2, 0, xml, task_instance, wr_photoimage)
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordRight.lat, lon:gate.coordRight.lon) {
                                         // xml.ele altitude_meter
@@ -2474,7 +2477,7 @@ class GpxService
                                 last_coordroute_instance.gatewidth2
                             )
                             xml.rte {
-                                wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, xml, task_instance, wr_photoimage)
+                                wr_gate(last_coordroute_instance, last_coordroute_instance.gatewidth2, secret_gate_num, xml, task_instance, wr_photoimage)
                                 //BigDecimal altitude_meter = last_coordroute_instance.altitude.toLong() / ftPerMeter
                                 xml.name last_coordroute_instance.titleMediaCode(media)
                                 xml.rtept(lat:start_gate.coordRight.lat, lon:start_gate.coordRight.lon) {
@@ -2508,7 +2511,7 @@ class GpxService
                                     gate_width
                                 )
                                 xml.rte {
-                                    wr_gate(coordroute_instance, gate_width, xml, task_instance, wr_photoimage, null, null, set_endcurved)
+                                    wr_gate(coordroute_instance, gate_width, secret_gate_num, xml, task_instance, wr_photoimage, null, null, set_endcurved)
                                     // BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
                                     xml.name coordroute_instance.titleMediaCode(media)
                                     xml.rtept(lat:gate.coordLeft.lat, lon:gate.coordLeft.lon) {
@@ -2649,7 +2652,7 @@ class GpxService
     }
     
     //--------------------------------------------------------------------------
-    private void wr_gate(CoordRoute coordrouteInstance, Float gateWidth, MarkupBuilder xml, Task taskInstance, boolean wrPhotoImage, BigDecimal latValue = null, BigDecimal lonValue = null, boolean setEndCurved = false)
+    private void wr_gate(CoordRoute coordrouteInstance, Float gateWidth, int secretGateNumber, MarkupBuilder xml, Task taskInstance, boolean wrPhotoImage, BigDecimal latValue = null, BigDecimal lonValue = null, boolean setEndCurved = false)
     {
         BigDecimal altitude_meter = coordrouteInstance.altitude.toLong() / ftPerMeter
         String dir = ""
@@ -2677,11 +2680,15 @@ class GpxService
         if (coordrouteInstance.type == CoordType.SECRET) {
             end_curved = false
         }
+        int gate_number = coordrouteInstance.titleNumber
+        if (coordrouteInstance.type == CoordType.SECRET && secretGateNumber) {
+            gate_number = secretGateNumber
+        }
         xml.extensions {
             xml.flightcontest {
                 xml.gate(
                     type:           coordrouteInstance.type,
-                    number:         coordrouteInstance.titleNumber,
+                    number:         gate_number,
                     lat:            latValue,
                     lon:            lonValue,
                     alt:            coordrouteInstance.altitude,

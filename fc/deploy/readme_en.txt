@@ -1,6 +1,12 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.3.5
+-------------
+- Route import: Option "Read placemarks instead of path in kml/kmz file" added
+  By default "On", French kml/kmz files are automatically supported.
+- Bug "When exporting semicircle gates from circle centers, curved route legs are exported incorrectly" fixed
+
 Changes 3.3.4
 -------------
 - OSM contest map/Generate PNG contest map with world file: added pnginfo file containing detailed information about the generated map

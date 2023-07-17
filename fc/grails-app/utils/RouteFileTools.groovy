@@ -52,10 +52,10 @@ class RouteFileTools
                 Map route_data = ReadGPXFile(contestInstance, routeFileName, originalFileName)
                 return create_route(contestInstance, route_data, importParams)
             case KML_EXTENSION:
-                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, importParams.foldername, false)
+                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, importParams.foldername, importParams.readplacemarks, false)
                 return create_route(contestInstance, route_data, importParams)
             case KMZ_EXTENSION:
-                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, importParams.foldername, true)
+                Map route_data = ReadKMLFile(contestInstance, routeFileName, originalFileName, importParams.foldername, importParams.readplacemarks, true)
                 return create_route(contestInstance, route_data, importParams)
             case REF_EXTENSION:
                 Map route_data = ReadREFFile(contestInstance, routeFileName, originalFileName)
@@ -148,7 +148,7 @@ class RouteFileTools
     }
     
     //--------------------------------------------------------------------------
-    private static Map ReadKMLFile(Contest contestInstance, String kmFileName, String originalFileName, String folderName, boolean kmzFile)
+    private static Map ReadKMLFile(Contest contestInstance, String kmFileName, String originalFileName, String folderName, boolean readPlacemarks, boolean kmzFile)
     // Return: gates     - List of gates (lat, lon, alt)
     //         routename - Name of route
     //         valid     - true, if valid route file format
@@ -187,7 +187,7 @@ class RouteFileTools
             
             def kml = new XmlParser().parse(km_reader)
             
-            if (kml.Document.Placemark.LineString.coordinates) {
+            if (!readPlacemarks && kml.Document.Placemark.LineString.coordinates) {
                 
 				/*
                 route_name = kml.Document.Placemark.name.text()
@@ -212,12 +212,18 @@ class RouteFileTools
                 boolean root_folder = false
                 if (folderName) {
                     folder = search_folder_by_name(kml.Document, folderName)
+                    println "XX1"
                 } else {
+                    folder = kml.Document // root
+                    println "XX2"
+                    /*
                     folder = kml.Document.Folder[0] // first folder
                     if (!folder) {
                         folder = kml.Document // root
                         root_folder = true
+                        println "XX3"
                     }
+                    */
                 }
                 
                 if (folder && folder.Placemark) {
@@ -242,18 +248,22 @@ class RouteFileTools
                     BigDecimal last_latitude = null
                     BigDecimal last_longitude = null
                     for (def pm in folder.Placemark) {
-                        if (pm.Point.coordinates) {
-                            String coordinates = pm.Point.coordinates.text()
-                            Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
-                            gates += kml_coords.gates
-                            last_latitude = kml_coords.lastlatitude
-                            last_longitude = kml_coords.lastlongitude
-                        } else if (pm.LineString.coordinates) {
-                            String coordinates = pm.LineString.coordinates.text()
-                            Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
-                            gates += kml_coords.gates
-                            last_latitude = kml_coords.lastlatitude
-                            last_longitude = kml_coords.lastlongitude
+                        if (readPlacemarks) {
+                            if (pm.Point.coordinates) {
+                                String coordinates = pm.Point.coordinates.text()
+                                Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
+                                gates += kml_coords.gates
+                                last_latitude = kml_coords.lastlatitude
+                                last_longitude = kml_coords.lastlongitude
+                            }
+                        } else {
+                            if (pm.LineString.coordinates) {
+                                String coordinates = pm.LineString.coordinates.text()
+                                Map kml_coords = ReadKMLCoordinates(coordinates, last_latitude, last_longitude)
+                                gates += kml_coords.gates
+                                last_latitude = kml_coords.lastlatitude
+                                last_longitude = kml_coords.lastlongitude
+                            }
                         }
                     }
                     if (gates.size()) {

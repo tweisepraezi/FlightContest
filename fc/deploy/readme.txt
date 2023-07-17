@@ -1,6 +1,12 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.5
+----------------
+- Strecken-Import: Option "Lese Ortsmarkierungen anstelle von Pfaden bei kml/kmz-Dateien" hinzugefügt
+  Durch die Voreinstellung "Ein" werden französische kml/kmz-Dateien automatisch unterstützt.
+- Bug "Beim Export von Halbkreis-Toren aus Kreismittelpunkten werden krumme Streckenabschnitte fehlerhaft exportiert" behoben
+
 Änderungen 3.3.4
 ----------------
 - OSM-Wettbewerbs-Karte/PNG-Wettbewerbs-Karte mit World-File erzeugen: pnginfo-Datei hinzugefügt, die detailierte Informationen zur erzeugten Karte enthält

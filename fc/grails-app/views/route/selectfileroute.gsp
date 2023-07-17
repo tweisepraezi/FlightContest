@@ -28,6 +28,11 @@
                             <label>${message(code:'fc.route.fileimport.foldername')}:</label>
                             <input type="text" id="foldername" name="foldername" value="" tabIndex="${ti[0]++}"/>
                         </div>
+                        <div>
+                            <g:checkBox name="readplacemarks" value="${readplacemarks}" checked= "${true}" tabIndex="${ti[0]++}"/>
+                            <label>${message(code:'fc.route.fileimport.readplacemarks')}</label>
+                            <br/>
+                        </div>
                         <p>
                             <div>
                                 <g:checkBox name="firstcoordto" value="${firstcoordto}" checked= "${true}" tabIndex="${ti[0]++}"/>
