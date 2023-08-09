@@ -1,6 +1,15 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.3.6
+-------------
+- Bug "SCs of the curved legs in the navigation flight result are always printed for curved legs one behind the other" fixed
+- Result printing: Page layout improved to reduce print pages
+- OSM contest map: ANR format adapted to ANR 2.2.0
+- Bug "Import FC route: Enroute photos and canvas from iSP are not imported" fixed
+- OSM contest map: Village roads, forest paths, and field paths extended
+- OSM contest map: Help improved
+
 Changes 3.3.5
 -------------
 - Route import: Option "Read placemarks instead of path in kml/kmz file" added

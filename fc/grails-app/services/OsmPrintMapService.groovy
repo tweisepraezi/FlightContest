@@ -76,7 +76,7 @@ class OsmPrintMapService
     final static int A3_LONG = 420 // mm
     final static int A4_SHORT = 210 // mm
     final static int A4_LONG = 297 // mm
-    final static int ANR_SHORT = 140 // mm
+    final static int ANR_SHORT = 172 // mm
     final static int ANR_LONG = 198 // mm
     final static int MARGIN = 10 // nicht bedruckbarer Rand [mm]
 

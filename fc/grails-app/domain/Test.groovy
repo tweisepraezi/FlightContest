@@ -2870,7 +2870,8 @@ class Test
                 } else {
                     curved_point_ids += coordresult_instance.id
                 }
-            } else if (coordresult_instance.endCurved) {
+            }
+            if (coordresult_instance.endCurved) {
                 curved_point = true
             }
         }

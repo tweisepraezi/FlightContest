@@ -209,6 +209,33 @@
                 </div>
                 <br/>
             </g:if>
+            
+            <!-- observation (1) -->
+            <g:set var="observationtest_printed" value="${false}" />
+            <g:if test="${!planningtest_printed}" >
+                <!-- observation test -->
+                <g:if test="${testInstance.IsObservationTestRun() && testInstance.printObservationResults}">
+                    <g:set var="observationtest_printed" value="${true}" />
+                    <div style="page-break-inside:avoid">
+                        <br/>
+                        <g:if test="${!testInstance.observationTestComplete}">
+                            <h3>${message(code:'fc.observationresults')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+                        </g:if>
+                        <g:else>
+                            <h3>${message(code:'fc.observationresults')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})</h3>
+                        </g:else>
+                        <g:observationTestPrintable t="${testInstance}"/>
+                    </div>
+                </g:if>
+             
+                <!-- scanned observation test -->
+                <g:if test="${testInstance.IsObservationTestRun() && testInstance.printObservationResultsScan}">
+                    <g:set var="observationtest_printed" value="${true}" />
+                    <g:observationTestScannedPrintable t="${testInstance}"/>
+                </g:if>
+                
+            </g:if>
+            
          
             <!-- flight map --> 
 			<g:set var="flighttest_printed" value="${false}" />
@@ -234,27 +261,29 @@
                 </div>
             </g:if>
             
-            <!-- observation test -->
-			<g:set var="observationtest_printed" value="${false}" />
-            <g:if test="${testInstance.IsObservationTestRun() && testInstance.printObservationResults}">
-				<g:set var="observationtest_printed" value="${true}" />
-				<div style="page-break-before:always"/>
-                <div style="page-break-inside:avoid">
-					<br/>
-                    <g:if test="${!testInstance.observationTestComplete}">
-                        <h3>${message(code:'fc.observationresults')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()}) [${message(code:'fc.provisional')}]</h3>
-                    </g:if>
-                    <g:else>
-                        <h3>${message(code:'fc.observationresults')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})</h3>
-                    </g:else>
-                    <g:observationTestPrintable t="${testInstance}"/>
-      	        </div>
-            </g:if>
-         
-            <!-- scanned observation test -->
-            <g:if test="${testInstance.IsObservationTestRun() && testInstance.printObservationResultsScan}">
-				<g:set var="observationtest_printed" value="${true}" />
-                <g:observationTestScannedPrintable t="${testInstance}"/>
+            <!-- observation (2) -->
+            <g:if test="${!observationtest_printed}" >
+                <!-- observation test -->
+                <g:if test="${testInstance.IsObservationTestRun() && testInstance.printObservationResults}">
+                    <g:set var="observationtest_printed" value="${true}" />
+                    <div style="page-break-before:always"/>
+                    <div style="page-break-inside:avoid">
+                        <br/>
+                        <g:if test="${!testInstance.observationTestComplete}">
+                            <h3>${message(code:'fc.observationresults')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()}) [${message(code:'fc.provisional')}]</h3>
+                        </g:if>
+                        <g:else>
+                            <h3>${message(code:'fc.observationresults')} (${message(code:'fc.version')} ${testInstance.GetObservationTestVersion()})</h3>
+                        </g:else>
+                        <g:observationTestPrintable t="${testInstance}"/>
+                    </div>
+                </g:if>
+             
+                <!-- scanned observation test -->
+                <g:if test="${testInstance.IsObservationTestRun() && testInstance.printObservationResultsScan}">
+                    <g:set var="observationtest_printed" value="${true}" />
+                    <g:observationTestScannedPrintable t="${testInstance}"/>
+                </g:if>
             </g:if>
             
             <!-- special test --> 

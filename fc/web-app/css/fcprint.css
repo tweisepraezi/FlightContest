@@ -237,11 +237,6 @@ table.observationsroutecanvaslist tr.data td.sign {
 }
 
 /* -------------------------------------------------------------------------------------------------------------------- */
-table.observationsroutecanvasresultlist td.imagename img {
-    height: 14px;
-}
-
-/* -------------------------------------------------------------------------------------------------------------------- */
 table.observationsroutecrewjudgesign {
     float: right;
 	width: 48%;
@@ -374,6 +369,10 @@ table.observationsroutephotoresultlist tr.value td {
 	font-size: 70%;
 }
 
-table.observationsroutecanvasresultlist tr.value td {
+table.observationsroutecanvasresultlist tr td {
 	font-size: 70%;
+}
+
+table.observationsroutecanvasresultlist td.imagename img {
+    height: 10px;
 }

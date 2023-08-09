@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, German Precision Flying Club</span><br>
-<span id="revnumber">version 3.3.5,</span>
-<span id="revdate">17.07.2023</span>
+<span id="revnumber">version 3.3.6,</span>
+<span id="revdate">09.08.2023</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
@@ -470,10 +470,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#osm-contest-map">OSM contest map</a>
 <ul class="sectlevel2">
-<li><a href="#osm-contest-map-printserver">Own print server</a></li>
-<li><a href="#osm-contest-map-additional-datasources">Other data sources</a></li>
-<li><a href="#osm-contest-map-configuration">Configuration details</a></li>
+<li><a href="#osm-contest-map-options">Print options</a></li>
 <li><a href="#osm-contest-map-workflow">Workflow of a map-based route construction</a></li>
+<li><a href="#osm-contest-map-configuration">Server configuration</a></li>
+<li><a href="#osm-contest-map-datasources">Data sources</a></li>
 </ul>
 </li>
 <li><a href="#flight-time-calculation">Flight-time-calculation for take-offs and landings</a></li>
@@ -1881,62 +1881,24 @@ Execute 'Recalculate stages</p>
 <h2 id="osm-contest-map">OSM contest map</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With 'Routes &#8594; Route &#8594; OSM competition map' a PDF competition map can be
-in scale 1:200000 or 1:250000 can be generated using a custom print server in TÜK200 style.</p>
+<p><a href="#osm-contest-map-options">Print options</a><br>
+<a href="#osm-contest-map-workflow">Workflow of a map-based route construction</a><br>
+<a href="#osm-contest-map-configuration">Server configuration</a><br>
+<a href="#osm-contest-map-datasources">Data sources</a><br></p>
+</div>
+<div class="paragraph">
+<p>With 'Routes &#8594; Route &#8594; OSM Contest Map' a topographic PDF competition map
+in scale 1:200000 or 1:250000 can be generated with the help of a print server.</p>
 </div>
 <div class="paragraph">
 <p>Use of the maps:<br>
 The use of the map material is at your own risk. The map material may contain errors or be insufficient.
-The creators of these maps do not assume any warranty or liability for damages caused directly or indirectly by the use of the map material.</p>
-</div>
-<div class="paragraph">
-<p>Map data license conditions:<br>
-Map data © OpenStreetMap contributors (ODbL).<br>
-The map objects shown are based on the data of the OpenStreetMap project.
-OpenStreetMap is a free, editable map of the entire world and enables collaborative viewing and editing of geographic data from anywhere in the world.<br>
-Link: <a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a><br>
-License: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
+The providers of the map data and the manufacturer of this function do not assume any warranty or liability for damage caused directly or indirectly by the use of the map material.</p>
 </div>
 <div class="sect2">
-<h3 id="osm-contest-map-printserver">Own print server</h3>
+<h3 id="osm-contest-map-options">Print options</h3>
 <div class="paragraph">
-<p>installation:
-<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
-</div>
-<div class="paragraph">
-<p>Map data is only available for installed countries.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="osm-contest-map-additional-datasources">Other data sources</h3>
-<div class="paragraph">
-<p>Air Spaces:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>DAeC (<a href="https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten" class="bare">https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten</a>)</p>
-</li>
-<li>
-<p>Skyfool.de (<a href="http://www.skyfool.de/luftraeume" class="bare">http://www.skyfool.de/luftraeume</a>)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Contour lines and surface contours:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Viewfinder Panoramas (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="osm-contest-map-configuration">Configuration details</h3>
-<div class="paragraph">
-<p>The following route details can be drawn on the map:</p>
+<p><strong>The following route details can be drawn on the map:</strong></p>
 </div>
 <div class="ulist">
 <ul>
@@ -1944,41 +1906,56 @@ License: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http:/
 <p>Turning point circles (diameter 1 NM)</p>
 </li>
 <li>
-<p>Turning loops</p>
+<p>Procedure turns</p>
 </li>
 <li>
-<p>Stage lines</p>
+<p>Track lines</p>
 </li>
 <li>
-<p>Course of curved stages</p>
+<p>Course of curved tracks</p>
 </li>
 <li>
-<p>Turning point names (in the respective print language, German WP, English TP)</p>
+<p>Turning point names (in the choosen print language, German WP, English TP)</p>
 </li>
 <li>
 <p>Gates of secret time checks</p>
 </li>
 <li>
-<p>Positions of track photos</p>
+<p>Positions of enroute photos</p>
 </li>
 <li>
-<p>Positions of track ground signs</p>
+<p>Positions of enroute canvas</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>The following objects can be drawn on the map:</p>
+<p><strong>The following objects can be drawn on the map:</strong></p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Grade grid</p>
-</li>
-<li>
 <p>Elevation lines (100m, 50m or 20m)</p>
 </li>
 <li>
-<p>Manually added objects</p>
+<p>Grade grid</p>
+</li>
+<li>
+<p>Churches, castles and ruins</p>
+</li>
+<li>
+<p>Power lines</p>
+</li>
+<li>
+<p>Wind power stations</p>
+</li>
+<li>
+<p>Forest and field tracks</p>
+</li>
+<li>
+<p>Additional object positions</p>
+</li>
+<li>
+<p>Special locations</p>
 </li>
 <li>
 <p>Airspaces</p>
@@ -1986,108 +1963,239 @@ License: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http:/
 </ul>
 </div>
 <div class="paragraph">
-<p>Airspaces must be installed manually before first use.
-To do this, copy all files from <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> to the folder <strong>C:\FCSave\.geodata</strong>.</p>
-</div>
-<div class="paragraph">
-<p>Any number of airspaces can be assigned to a route.
-Enter the names of required airspaces found in <strong>C:\FCSave\.geodata\airspaces.kmz</strong> into the text field.</p>
-</div>
-<div class="paragraph">
-<p>Each airspace can be configured individually in its appearance.
-For this purpose, various attributes are to be added to the name separated by commas.
-The example shows all possible attributes with their default value:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Muenster-Osnabrueck 129.875,file:airspaces.kmz,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
-</div>
-</div>
-<div class="paragraph">
 <p>All mentioned route details and objects can be deselected.</p>
 </div>
 <div class="paragraph">
-<p>The center of the map is determined from the positions of all turning points.
-Stretches that exceed the selected print format can be divided into several prints by deselecting suitable turning points.
-In addition, the determined map center can be shifted horizontally and/or vertically.</p>
+<p><strong>4 setting areas allow the following map printing options to be used parallel in one route:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The center of the map is determined from the positions of turnpoints activated for it (default: all).
+This center can be moved to the edge or corners.
+In addition, a horizontal and/or vertical shift by an amount configurable in NM is still possible.</p>
+</li>
+<li>
+<p>Individual turning points can be excluded from printing. This also eliminates associated tracks and procedure turns.</p>
+</li>
+<li>
+<p>Printout can be in landscape or portrait format in A1 to A4 or ANR size.</p>
+</li>
+<li>
+<p>The printout can be made with or without the configured route details or with all route details.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
-<p>Individual turning points can be excluded from printing.
-This also eliminates associated stages and turning loops.</p>
+<p><strong>Additional object positions</strong></p>
 </div>
 <div class="paragraph">
-<p>The printout can be made in landscape or portrait format in A1 to A4 or ANR size.</p>
-</div>
-<div class="paragraph">
-<p>Missing flying sites, churches, castles, castle ruins, country houses, wind turbines and elevation points.
-as well as own symbols can be added in the file <strong>C:\FCSave\.geodata\additionals.csv</strong> for printing:</p>
+<p>Missing airfields, churches, castles, ruins, wind power stations
+as well as own symbols can be added in the file <strong>C:\FCSave\.geodata\additionals.csv</strong> for printing.
+To do this, use the template <a href="samples/additionals.csv" target="_blank" rel="noopener">additionals.csv</a>
+and, using a text editor with the UTF-8 character set, add lines for each additional object according to the following example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>id|symbol|name|wkt
 1|church.png|""|POINT (9.46600 49.50288)
-2|airfield.png|"airfield"|POINT (9.54128 49.51144)</pre>
+2|airfield.png|"Airfield name"|POINT (9.54128 49.51144)</pre>
 </div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>sequential number</p>
+<p>Sequence number</p>
 </li>
 <li>
-<p>symbol to be displayed:<br>
-airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png or name of own symbol</p>
+<p>Symbol to display:<br>
+airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png or name of the own symbol</p>
 </li>
 <li>
-<p>name of object (in quotes) ("": print no name)</p>
+<p>Name of the object (in quotes) ("": do not print a name)</p>
 </li>
 <li>
-<p>display position in geo-coordinates</p>
+<p>Display position in geo-coordinates</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
 <p>Own symbols are to be saved in <strong>C:\FCSave\.geodata\images</strong> (png).
-Note that symbol names are case-sensitive.</p>
+Note that the case of the symbol names is the same.</p>
 </div>
 <div class="paragraph">
-<p>Special objects can be added to the file <strong>C:\FCSave\.geodata\specials.csv</strong>.
-to be added to the print:</p>
+<p>Incorrect structure of this file prevents map generation.</p>
+</div>
+<div class="paragraph">
+<p><strong>Special locations</strong></p>
+</div>
+<div class="paragraph">
+<p>Special locations can be added to the <strong>C:\FCSave\.geodata\specials.csv</strong> file for printing.
+To do this, use the template <a href="samples/specials.csv" target="_blank" rel="noopener">specials.csv</a>
+and, using a text editor with the UTF-8 character set, add lines for each additional location according to the following example:</p>
 </div>
 <div class="literalblock">
 <div class="content">
 <pre>id|point|name|wkt|dx|dy
-1|"Route 1 - TP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0</pre>
+1|"Route 1 - TP3"|"Vacation farm"|POINT (9.9166569218 48.9058522143)|10|0</pre>
 </div>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>sequence number</p>
+<p>Sequence number</p>
 </li>
 <li>
-<p>description (in quotation marks, will not be printed)</p>
+<p>Description (in quotes, will not be printed)</p>
 </li>
 <li>
-<p>name of object (in quotes) ("": do not print name)</p>
+<p>Name of the object (in quotes) ("": do not print a name)</p>
 </li>
 <li>
-<p>display position in geo-coordinates</p>
+<p>Display position in geo-coordinates</p>
 </li>
 <li>
-<p>horizontal displacement of the object name to be printed (in pixels)</p>
+<p>Horizontal displacement of the object name to be printed (in pixels)</p>
 </li>
 <li>
-<p>vertical displacement of the object name to be printed (in pixels)</p>
+<p>Vertical displacement of the object name to be printed (in pixels)</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Geo-coordinates of turning points are output with the route printout (CSV-GeoData).</p>
+<p>Incorrect structure of this file prevents map generation.</p>
 </div>
 <div class="paragraph">
-<p>The names of airspaces are taken from the file <strong>C:\FCSave\.geodata\airspaces.kmz</strong>.
-Incorrect names prevent the map generation.</p>
+<p><strong>Airspaces</strong></p>
+</div>
+<div class="paragraph">
+<p>Any number of airspaces can be assigned to a route.
+Enter the names of required airspaces found in <a href="https://www.openaip.net/data/airspaces" class="bare">https://www.openaip.net/data/airspaces</a> into the text box with line break.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>CTR BERLIN
+ED-R37A Nordhorn MON-FRI</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Incorrect or non-existent airspace names prevent map generation.</p>
+</div>
+<div class="paragraph">
+<p>Each airspace can be configured individually in its appearance.
+For this purpose, various attributes are to be added to the name separated by commas.
+The example shows all possible attributes:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>ED-R37A Nordhorn MON-FRI,text:ED-R37A Nordhorn GND-FL100,textsize:14,textspacing:90,textcolor:red,fillcolor:red,fillopacity:0.3</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Alternate margin text<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>text:ED-R37A Nordhorn GND-FL100</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Effect: This specification causes the designation "ED-R37A Nordhorn GND-FL100" to be written in the margin text instead of "ED-R37A Nordhorn MON-FRI".</p>
+</div>
+</li>
+<li>
+<p>Alternative size of the margin text<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textsize:14</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>14 pixel height is written.<br>
+Not specified: 10 pixel.</p>
+</div>
+</li>
+<li>
+<p>Alternative spacing of the margin text<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textspacing:90</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Minimum distance 90px. This value influences how often the margin text is written on the margin.<br>
+Not specified: 100 pixel.</p>
+</div>
+</li>
+<li>
+<p>Alternative color of the border text<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textcolor:red</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Red text.<br>
+Not specified: black</p>
+</div>
+</li>
+<li>
+<p>Alternative color of the area of the airspace<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>fillcolor:red</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Area of the airspace is filled red.<br>
+Not specified: blue</p>
+</div>
+</li>
+<li>
+<p>Alternative transparency of the area of the airspace<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>fillopacity:0.3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Area of the airspace with low coverage.<br>
+Not specified: 0.2</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Meaningful attributes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ED-R area in red<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>,text:???,textsize:14,textspacing:100,textcolor:red,fillcolor:red,fillopacity:0.2</pre>
+</div>
+</div>
+</li>
+<li>
+<p>RMZ area in blue<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Surrounding area in gray<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:lightgray,fillopacity:0.2</pre>
+</div>
+</div>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -2101,7 +2209,7 @@ Incorrect names prevent the map generation.</p>
 <p>Create route with TO (Routes &#8594; <strong>New route</strong>)</p>
 </li>
 <li>
-<p>Print competition map with TO (route &#8594; <strong>OSM competition map</strong>)<br>
+<p>Print competition map with TO (route &#8594; <strong>OSM Contest Map</strong>)<br>
 Place TO at a desired position (top right, bottom left or similar).</p>
 </li>
 <li>
@@ -2140,9 +2248,61 @@ With the coordinate rulers on the left and above, the turning point coordinates 
 <p>Check competition map (route &#8594; <strong>OSM online map</strong>)</p>
 </li>
 <li>
-<p>Print competition map (route &#8594; <strong>OSM competition map</strong>)</p>
+<p>Print competition map (route &#8594; <strong>OSM Contest Map</strong>)</p>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-configuration">Server configuration</h3>
+<div class="paragraph">
+<p>Generating the competition map requires a <strong>print server</strong>.
+For this purpose, a server operated by the DAeC can be used, whose address is to be requested and set with an installation-dependent configuration in <strong>C:\FCSave\.fc\config.groovy</strong>.:<br>
+<a href="#configuration-osmprint">Configure OSM contest map printing</a><br></p>
+</div>
+<div class="paragraph">
+<p>Alternatively, a separate print server can be set up:<br>
+<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+</div>
+<div class="paragraph">
+<p>Map data is only available for installed countries.</p>
+</div>
+<div class="paragraph">
+<p>For the use of airspaces, an <strong>OpenAIP</strong> access with an installation-dependent configuration must be set in <strong>C:\FCSave\.fc\config.groovy</strong>.:<br>
+<a href="#configuration-openaip">Configure OpenAIP for airspace display and map printing</a></p>
+</div>
+<div class="paragraph">
+<p>Airspaces are available worldwide.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-datasources">Data sources</h3>
+<div class="paragraph">
+<p>Map data:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Map data © OpenStreetMap contributors (ODbL) (<a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a>)<br></p>
+<div class="paragraph">
+<p>The map objects shown are based on the data of the OpenStreetMap project.<br>
+OpenStreetMap is a free, editable map of the entire world and allows geographic data to be viewed and edited collaboratively from anywhere in the world.<br></p>
+</div>
+<div class="paragraph">
+<p>License: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Contour lines and surface contours:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Viewfinder Panoramas (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
+</li>
+</ul>
 </div>
 <div style="page-break-after: always;"></div>
 </div>

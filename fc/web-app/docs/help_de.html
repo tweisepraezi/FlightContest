@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.3.5,</span>
-<span id="revdate">17.07.2023</span>
+<span id="revnumber">version 3.3.6,</span>
+<span id="revdate">09.08.2023</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -470,10 +470,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#osm-contest-map">OSM-Wettbewerbs-Karte</a>
 <ul class="sectlevel2">
-<li><a href="#osm-contest-map-printserver">Eigener Druckserver</a></li>
-<li><a href="#osm-contest-map-additional-datasources">Weitere Datenquellen</a></li>
-<li><a href="#osm-contest-map-configuration">Konfigurationsdetails</a></li>
+<li><a href="#osm-contest-map-options">Druck-Optionen</a></li>
 <li><a href="#osm-contest-map-workflow">Ablauf einer Karten-basierten Streckenkonstruktion</a></li>
+<li><a href="#osm-contest-map-configuration">Server-Konfiguration</a></li>
+<li><a href="#osm-contest-map-datasources">Datenquellen</a></li>
 </ul>
 </li>
 <li><a href="#flight-time-calculation">Flugzeit-Berechnung für Starts und Landungen</a></li>
@@ -1894,62 +1894,24 @@ Koordinate des Strecken-Fotos oder -Bodenzeichens korrigieren.</p>
 <h2 id="osm-contest-map">OSM-Wettbewerbs-Karte</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Mit 'Strecken &#8594; Strecke &#8594; OSM-Wettbewerbs-Karte' kann eine PDF-Wettbewerbskarte
-im Maßstab 1:200000 oder 1:250000 mit Hilfe eines eigenen Druckserver im TÜK200-Stil erzeugt werden.</p>
+<p><a href="#osm-contest-map-options">Druck-Optionen</a><br>
+<a href="#osm-contest-map-workflow">Ablauf einer Karten-basierten Streckenkonstruktion</a><br>
+<a href="#osm-contest-map-configuration">Server-Konfiguration</a><br>
+<a href="#osm-contest-map-datasources">Datenquellen</a><br></p>
+</div>
+<div class="paragraph">
+<p>Mit 'Strecken &#8594; Strecke &#8594; OSM-Wettbewerbs-Karte' kann eine topographische PDF-Wettbewerbskarte
+im Maßstab 1:200000 oder 1:250000 mit Hilfe eines Druck-Servers erzeugt werden.</p>
 </div>
 <div class="paragraph">
 <p>Nutzung der Karten:<br>
 Die Nutzung des Kartenmaterials erfolgt auf eigene Gefahr. Das Kartenmaterial kann Fehler enthalten oder unzureichend sein.
-Die Ersteller dieser Karten übernehmen keinerlei Gewährleistung oder Haftung für Schäden, die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.</p>
-</div>
-<div class="paragraph">
-<p>Lizenzbedingungen des Kartendaten:<br>
-Map data © OpenStreetMap contributors (ODbL).<br>
-Die dargestellten Kartenobjekte basieren auf den Daten des OpenStreetMap-Projektes.
-OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und ermöglicht es, geographische Daten gemeinschaftlich von überall auf der Welt anzuschauen und zu bearbeiten.<br>
-Link: <a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a><br>
-Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
+Die Bereitsteller der Kartendaten und der Hersteller dieser Funktion übernehmen keinerlei Gewährleistung oder Haftung für Schäden, die direkt oder indirekt durch die Nutzung des Kartenmaterials entstehen.</p>
 </div>
 <div class="sect2">
-<h3 id="osm-contest-map-printserver">Eigener Druckserver</h3>
+<h3 id="osm-contest-map-options">Druck-Optionen</h3>
 <div class="paragraph">
-<p>Installation:
-<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
-</div>
-<div class="paragraph">
-<p>Kartendaten sind nur für installierte Länder verfügbar.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="osm-contest-map-additional-datasources">Weitere Datenquellen</h3>
-<div class="paragraph">
-<p>Lufträume:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>DAeC (<a href="https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten" class="bare">https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten</a>)</p>
-</li>
-<li>
-<p>Skyfool.de (<a href="http://www.skyfool.de/luftraeume" class="bare">http://www.skyfool.de/luftraeume</a>)</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Höhenlinien und Oberflächenkonturen:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Viewfinder Panoramas (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="osm-contest-map-configuration">Konfigurationsdetails</h3>
-<div class="paragraph">
-<p>Folgende Streckendetails können in die Karte gezeichnet werden:</p>
+<p><strong>Folgende Streckendetails können in die Karte gezeichnet werden:</strong></p>
 </div>
 <div class="ulist">
 <ul>
@@ -1980,18 +1942,33 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 </ul>
 </div>
 <div class="paragraph">
-<p>Folgende Objekte können in die Karte gezeichnet werden:</p>
+<p><strong>Folgende Objekte können in die Karte gezeichnet werden:</strong></p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Gradnetz</p>
-</li>
-<li>
 <p>Höhenlinen (100m, 50m oder 20m)</p>
 </li>
 <li>
-<p>Manuell hinzugefügte Objekte</p>
+<p>Gradnetz</p>
+</li>
+<li>
+<p>Burgen, Schlösser und Ruinen</p>
+</li>
+<li>
+<p>Hochspannungsleitungen</p>
+</li>
+<li>
+<p>Windkraftanlagen</p>
+</li>
+<li>
+<p>Wald- und Feldwege</p>
+</li>
+<li>
+<p>Zusätzliche Objekt-Positionen</p>
+</li>
+<li>
+<p>Besondere Orte</p>
 </li>
 <li>
 <p>Lufträume</p>
@@ -1999,41 +1976,37 @@ Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://
 </ul>
 </div>
 <div class="paragraph">
-<p>Lufträume müssen vor der ersten Nutzung manuell installiert werden.
-Dazu alle Dateien von <strong><a href="https://my.hidrive.com/share/vobbr89etw#$/Geodata" class="bare">https://my.hidrive.com/share/vobbr89etw#$/Geodata</a></strong> in den Ordner <strong>C:\FCSave\.geodata</strong> kopieren.</p>
-</div>
-<div class="paragraph">
-<p>Es können einer Strecke beliebig viele Lufträume zugeordnet werden.
-Tragen Sie die Namen benötigter Lufträume, die Sie in <strong>C:\FCSave\.geodata\airspaces.kmz</strong> finden, in das Textfeld ein.</p>
-</div>
-<div class="paragraph">
-<p>Jeder Luftraum kann in seinem Aussehen individuell konfiguriert werden.
-Dazu sind dem Namen mit Komma getrennt verschiedene Attribute mitzugeben.
-Das Beispiel zeigt alle möglichen Attribute mit ihrem Default-Wert:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>Muenster-Osnabrueck 129.875,file:airspaces.kmz,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
-</div>
-</div>
-<div class="paragraph">
 <p>Alle genannten Streckendetails und Objekte können abgewählt werden.</p>
 </div>
 <div class="paragraph">
-<p>Die Mitte der Karte wird aus den Positionen aller Wendepunkte ermittelt.
-Strecken, die das gewählte Druck-Format sprengen, können mittels Abwahl geeigneter Wendepunkte in mehrere Drucke aufgeteilt werden.
-Zusätzlich kann das ermittelte Kartenzentrum horizontal und/oder vertikal verschoben werden.</p>
+<p><strong>4 Einstellungs-Bereiche erlauben folgende Karten-Druck-Optionen in einer Strecke parallel zu nutzen:</strong></p>
 </div>
-<div class="paragraph">
-<p>Einzelne Wendepunkte können vom Druck ausgenommen werden.
-Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.</p>
-</div>
-<div class="paragraph">
+<div class="ulist">
+<ul>
+<li>
+<p>Die Mitte der Karte wird aus den Positionen dafür aktivierter Wendepunkte ermittelt (Voreinstellung: alle).
+Diese Mitte kann an den Rand oder die Ecken verschoben werden.
+Zusätzlich ist noch eine horizontale und/oder vertikale Verschiebung um einen in NM konfigurierbaren Betrag möglich.</p>
+</li>
+<li>
+<p>Einzelne Wendepunkte können vom Druck ausgenommen werden. Dadurch entfallen auch damit verbundene Etappen und Wendeschleifen.</p>
+</li>
+<li>
 <p>Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.</p>
+</li>
+<li>
+<p>Der Ausdruck kann mit oder ohne den konfigurierten Streckendetails oder mit allen Streckendetails erfolgen.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Zusätzliche Objekt-Positionen</strong></p>
 </div>
 <div class="paragraph">
 <p>Fehlende Flupplätze, Kirchen, Burgen, Burgruinen, Landhäuser, Windkraftanlagen und Höhenpunkte
-sowie eigene Symbole können in der Datei <strong>C:\FCSave\.geodata\additionals.csv</strong> zum Druck hinzugefügt werden:</p>
+sowie eigene Symbole können in der Datei <strong>C:\FCSave\.geodata\additionals.csv</strong> zum Druck hinzugefügt werden.
+Verwenden Sie dazu die Vorlage <a href="samples/additionals.csv" target="_blank" rel="noopener">additionals.csv</a>
+und fügen Sie mit einem Texteditor mit dem Zeichensatz UTF-8 Zeilen für jedes zusätzliche Objekt entsprechend dem folgendem Beispiel hinzu:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -2064,8 +2037,15 @@ airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowersta
 Beachten Sie, dass die Groß-/Kleinschreibung der Symbolnamen übereinstimmt.</p>
 </div>
 <div class="paragraph">
-<p>Besondere Objekte können in der Datei <strong>C:\FCSave\.geodata\specials.csv</strong>
-zum Druck hinzugefügt werden:</p>
+<p>Ein fehlerhafter Aufbau dieser Datei verhindert die Kartenerzeugung.</p>
+</div>
+<div class="paragraph">
+<p><strong>Besondere Orte</strong></p>
+</div>
+<div class="paragraph">
+<p>Besondere Objekte können in der Datei <strong>C:\FCSave\.geodata\specials.csv</strong> zum Druck hinzugefügt werden.
+Verwenden Sie dazu die Vorlage <a href="samples/specials.csv" target="_blank" rel="noopener">specials.csv</a>
+und fügen Sie mit einem Texteditor mit dem Zeichensatz UTF-8 Zeilen für jeden zusätzlichen Ort entsprechend dem folgendem Beispiel hinzu:</p>
 </div>
 <div class="literalblock">
 <div class="content">
@@ -2096,11 +2076,139 @@ zum Druck hinzugefügt werden:</p>
 </ol>
 </div>
 <div class="paragraph">
-<p>Geo-Koordinaten von Wendepunkten werden beim Strecken-Druck mit ausgegeben (CSV-GeoDaten).</p>
+<p>Ein fehlerhafter Aufbau dieser Datei verhindert die Kartenerzeugung.</p>
 </div>
 <div class="paragraph">
-<p>Die Namen von Lufträumen entnehme man der Datei <strong>C:\FCSave\.geodata\airspaces.kmz</strong>.
-Fehlerhafte Namen verhindern die Kartenerzeugung.</p>
+<p><strong>Lufträume</strong></p>
+</div>
+<div class="paragraph">
+<p>Es können einer Strecke beliebig viele Lufträume zugeordnet werden.
+Tragen Sie die Namen benötigter Lufträume, die Sie in <a href="https://www.openaip.net/data/airspaces" class="bare">https://www.openaip.net/data/airspaces</a> finden, mit Zeilenwechsel in das Textfeld ein.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>CTR BERLIN
+ED-R37A Nordhorn MON-FRI</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fehlerhafte oder nicht existierende Luftraum-Namen verhinderen die Kartenerzeugung.</p>
+</div>
+<div class="paragraph">
+<p>Jeder Luftraum kann in seinem Aussehen individuell konfiguriert werden.
+Dazu sind dem Namen mit Komma getrennt verschiedene Attribute mitzugeben.
+Das Beispiel zeigt alle möglichen Attribute:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>ED-R37A Nordhorn MON-FRI,text:ED-R37A Nordhorn GND-FL100,textsize:14,textspacing:90,textcolor:red,fillcolor:red,fillopacity:0.3</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Alternativer Randtext<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>text:ED-R37A Nordhorn GND-FL100</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Wirkung: Durch diese Angabe wird im Randtext anstelle von "ED-R37A Nordhorn MON-FRI" die Bezeichnung "ED-R37A Nordhorn GND-FL100" in die Karte geschrieben.</p>
+</div>
+</li>
+<li>
+<p>Alternative Größe des Randtextes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textsize:14</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Es werden 14 Pixel Höhe geschrieben.<br>
+Keine Angabe: 10 Pixel.</p>
+</div>
+</li>
+<li>
+<p>Alternative Abstände des Randtextes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textspacing:90</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mindest-Abstand 90px. Dieser Wert beeinflusst, wie oft der Randtext auf den Rand geschrieben wird.<br>
+Keine Angabe: 100 Pixel.</p>
+</div>
+</li>
+<li>
+<p>Alternative Farbe des Randtextes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>textcolor:red</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Roter Text.<br>
+Keine Angabe: schwarz</p>
+</div>
+</li>
+<li>
+<p>Alternative Farbe der Fläche des Luftraumes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>fillcolor:red</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fläche des Luftraumes wird rot gefüllt.<br>
+Keine Angabe: blau</p>
+</div>
+</li>
+<li>
+<p>Alternative Transparenz der Fläche des Luftraumes<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>fillopacity:0.3</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Fläche des Luftraumes mit geringer Überdeckung.<br>
+Keine Angabe: 0.2</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Sinnvolle Attribute:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ED-R-Fläche in rot<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>,text:???,textsize:14,textspacing:100,textcolor:red,fillcolor:red,fillopacity:0.2</pre>
+</div>
+</div>
+</li>
+<li>
+<p>RMZ-Fläche in blau<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Umgebende Fläche in grau<br></p>
+<div class="literalblock">
+<div class="content">
+<pre>,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:lightgray,fillopacity:0.2</pre>
+</div>
+</div>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -2156,6 +2264,58 @@ Mit den Koordinaten-Linealen links und oben können mit einem Zirkel die Wendepu
 <p>Wettbewerbs-Karte drucken (Strecke &#8594; <strong>OSM-Wettbewerbs-Karte</strong>)</p>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-configuration">Server-Konfiguration</h3>
+<div class="paragraph">
+<p>Das Erzeugen der Wettbewerbs-Karte benötigt einen <strong>Druck-Server</strong>.
+Dazu kann ein vom DAeC betriebener Server verwendet werden, dessen Adresse zu erfragen und mit einer installationsabhängigen Konfiguration in <strong>C:\FCSave\.fc\config.groovy</strong> einzustellen ist:<br>
+<a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a><br></p>
+</div>
+<div class="paragraph">
+<p>Alternativ kann ein eigener Druckserver errichtet werden:<br>
+<a href="help_fcmaps.html" target="_blank" rel="noopener">Flight Contest maps server</a></p>
+</div>
+<div class="paragraph">
+<p>Kartendaten sind nur für installierte Länder verfügbar.</p>
+</div>
+<div class="paragraph">
+<p>Für die Nutzung von Lufträumen ist ein <strong>OpenAIP</strong>-Zugriff mit einer installationsabhängigen Konfiguration in <strong>C:\FCSave\.fc\config.groovy</strong> einzustellen:<br>
+<a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a></p>
+</div>
+<div class="paragraph">
+<p>Lufträume sind weltweit verfügbar.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="osm-contest-map-datasources">Datenquellen</h3>
+<div class="paragraph">
+<p>Kartendaten:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Map data © OpenStreetMap contributors (ODbL) (<a href="http://www.openstreetmap.org/" class="bare">http://www.openstreetmap.org/</a>)<br></p>
+<div class="paragraph">
+<p>Die dargestellten Kartenobjekte basieren auf den Daten des OpenStreetMap-Projektes.<br>
+OpenStreetMap ist eine freie, editierbare Karte der gesamten Welt und ermöglicht es, geographische Daten gemeinschaftlich von überall auf der Welt anzuschauen und zu bearbeiten.<br></p>
+</div>
+<div class="paragraph">
+<p>Lizenz: <a href="http://www.openstreetmap.org/copyright/en" class="bare">http://www.openstreetmap.org/copyright/en</a></p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Höhenlinien und Oberflächenkonturen:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Viewfinder Panoramas (<a href="http://www.viewfinderpanoramas.org" class="bare">http://www.viewfinderpanoramas.org</a>)</p>
+</li>
+</ul>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -4233,10 +4393,6 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
   contestmap {
     printserverapi = "TODO" // Adresse des Druck-Servers für die Erzeugung
                             // der OSM-Wettbewerbs-Karte
-    projection = "3857"     // Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung
-                            // festlegen (EPSG-Nummer)
-    devoptions = true       // Blendet beim OSM-Wettbewerbs-Karten-Dialog
-                            // zusätzliche Entwicklungsoptionen ein
   }
 }</pre>
 </div>
@@ -4271,6 +4427,12 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
   }
   observation {
     nobuttons = true // Deaktiviert Schalter bei Beobachtungs-Ergebnis-Eingabe
+  }
+  contestmap {
+    projection = "3857"  // Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung
+                         // festlegen (EPSG-Nummer)
+    devoptions = true    // Blendet beim OSM-Wettbewerbs-Karten-Dialog
+                         // zusätzliche Entwicklungsoptionen ein
   }
 }</pre>
 </div>

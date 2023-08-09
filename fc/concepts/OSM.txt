@@ -16,6 +16,8 @@ https://de.wikipedia.org/wiki/European_Petroleum_Survey_Group_Geodesy   EPSG-Num
 
 https://wiki.openstreetmap.org/wiki/Creating_your_own_tiles
 
+https://wiki.openstreetmap.org/wiki/DE:Key:tracktype
+
 https://raw.githubusercontent.com/openstreetmap/mapnik-stylesheets/master/generate_image.py
 
 Mapnik

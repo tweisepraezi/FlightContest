@@ -50,6 +50,8 @@
     <!ENTITY roads-casing-small SYSTEM "styles-otm/roads-casing-small.xml">
 	<!ENTITY roads-fill SYSTEM "styles-otm/roads-fill.xml">
     <!ENTITY roads-fill-small SYSTEM "styles-otm/roads-fill-small.xml">
+    <!ENTITY roads-residential-fill SYSTEM "styles-otm/roads-residential-fill.xml">
+    <!ENTITY roads-residential-casing SYSTEM "styles-otm/roads-residential-casing.xml">
 	<!ENTITY trams SYSTEM "styles-otm/trams.xml">
 	<!ENTITY housenumbers-poly SYSTEM "styles-otm/housenumbers-poly.xml">
 	<!ENTITY housenumbers-point SYSTEM "styles-otm/housenumbers-point.xml">
@@ -145,6 +147,8 @@
     &roads-casing-small;
 	&roads-fill;
     &roads-fill-small;
+    &roads-residential-fill;
+    &roads-residential-casing;
 	&trams;
 	&railway-points;
 	&symbols-road;
@@ -193,6 +197,7 @@
 	
 	&basemap-relief;
 	
+    <!--
 	<Layer name="landuse-lowzoom">
 		<StyleName>landuse-lowzoom</StyleName>
 		<Datasource>
@@ -201,6 +206,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="landuse">
 		<StyleName>landuse</StyleName>
@@ -235,6 +241,7 @@
 		</Datasource>
 	</Layer>
 	
+    <!--
 	<Layer name="water-lowzoom">
 		<StyleName>water-casing-lowzoom</StyleName>
 		<StyleName>water-fill-lowzoom</StyleName>
@@ -244,6 +251,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="waterway-lines">
 		<StyleName>waterway-lines</StyleName>
@@ -312,6 +320,16 @@
 		</Datasource>
 	</Layer>
 	
+    <Layer name="roads-residential">
+        <StyleName>roads-residential-casing</StyleName>
+        <StyleName>roads-residential-fill</StyleName>
+        <Datasource>
+            <Parameter name="table">(SELECT way,ST_Length(way) AS length,highway,name,sac_scale,trail_visibility,via_ferrata_scale,service,surface,tracktype,lanes,embankment,oneway,railway,leisure,sport,attraction FROM planet_osm_line WHERE (!scale_denominator! &gt; 300000) OR ((bridge IS NULL OR bridge = 'no') AND (tunnel IS NULL OR tunnel != 'yes')) AND (highway IS NOT NULL OR railway='tram' OR leisure='track' OR attraction='summer_toboggan') ORDER BY (CASE WHEN highway IN ('motorway','trunk') THEN 5 WHEN highway='primary' THEN 1 WHEN highway='secondary' THEN 2 WHEN highway='tertiary' THEN 3 ELSE 4 END) DESC ) AS roads</Parameter> 
+            <Parameter name="dbname">gis</Parameter>
+            &postgis-settings;
+        </Datasource>
+    </Layer>
+    
 	<Layer name="buildings">
 		<StyleName>buildings</StyleName>
 		<Datasource>
@@ -357,6 +375,7 @@
         </Datasource>
     </Layer>
     
+    <!--
 	<Layer name="borders-lowzoom">
 		<StyleName>borders-lowzoom</StyleName>
 		<Datasource>
@@ -365,6 +384,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="borders">
 		<StyleName>borders</StyleName>
@@ -430,6 +450,7 @@
 		</Datasource>
 	</Layer>
 
+    <!--
 	<Layer name="roads-lowzoom">
 		<StyleName>roads-casing-lowzoom</StyleName>
 		<StyleName>roads-fill-lowzoom</StyleName>
@@ -439,6 +460,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 	
 	<Layer name="roads">
 		<StyleName>roads-casing</StyleName>
@@ -567,7 +589,7 @@
 	<Layer name="text-natural-areas-lowzoom">
 	 <StyleName>text-natural-areas-lowzoom</StyleName>
 	 <Datasource>
-	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturallabels </Parameter>
+	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturalarealabels </Parameter>
 	   <Parameter name="dbname">lowzoom</Parameter>
 	   &postgis-settings;
 	 </Datasource>
@@ -716,14 +738,16 @@
 		</Datasource>
 	</Layer>
 
+    <!--
 	<Layer name="text-natural-areas-highzoom">
 	 <StyleName>text-natural-areas-highzoom</StyleName>
 	 <Datasource>
-	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturallabels </Parameter>
+	   <Parameter name="table">(SELECT way,name,areatype,way_area,nextregionsize,subregionsize FROM naturalarealabels) AS naturalarealabels </Parameter>
 	   <Parameter name="dbname">lowzoom</Parameter>
 	   &postgis-settings;
 	 </Datasource>
 	</Layer>
+    -->
 
 	<Layer name="symbols-viewpoint">
 		<StyleName>symbols-viewpoint</StyleName>
@@ -778,6 +802,7 @@
 		</Datasource>
 	</Layer>
 	
+    <!--
 	<Layer name="text-cities-lowzoom">
 		<StyleName>text-cities-lowzoom</StyleName>
 		<Datasource>
@@ -786,6 +811,7 @@
 			&postgis-settings;
 		</Datasource>
 	</Layer>
+    -->
 
 	<Layer name="text-cities" clear-label-cache="on">
 		<StyleName>text-cities</StyleName>

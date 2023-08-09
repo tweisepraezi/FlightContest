@@ -1,7 +1,7 @@
 = Flight Contest
 Thomas Weise, German Precision Flying Club
-:revnumber: 3.3.5
-:revdate: 17.07.2023
+:revnumber: 3.3.6
+:revdate: 09.08.2023
 :nofooter:
 :title-page:
 :toc-title: Table of Contents
@@ -705,117 +705,165 @@ Execute 'Recalculate stages
 [[osm-contest-map]]
 == OSM contest map
 
-With 'Routes -> Route -> OSM competition map' a PDF competition map can be
-in scale 1:200000 or 1:250000 can be generated using a custom print server in TÜK200 style.
+<<fc_en.adoc#osm-contest-map-options>> +
+<<fc_en.adoc#osm-contest-map-workflow>> +
+<<fc_en.adoc#osm-contest-map-configuration>> +
+<<fc_en.adoc#osm-contest-map-datasources>> +
+
+With 'Routes -> Route -> OSM Contest Map' a topographic PDF competition map 
+in scale 1:200000 or 1:250000 can be generated with the help of a print server.
 
 Use of the maps: +
 The use of the map material is at your own risk. The map material may contain errors or be insufficient.
-The creators of these maps do not assume any warranty or liability for damages caused directly or indirectly by the use of the map material.
+The providers of the map data and the manufacturer of this function do not assume any warranty or liability for damage caused directly or indirectly by the use of the map material.
 
-Map data license conditions: +
-Map data © OpenStreetMap contributors (ODbL). +
-The map objects shown are based on the data of the OpenStreetMap project.
-OpenStreetMap is a free, editable map of the entire world and enables collaborative viewing and editing of geographic data from anywhere in the world. +
-Link: http://www.openstreetmap.org/ +
-License: http://www.openstreetmap.org/copyright/en
+[[osm-contest-map-options]]
+=== Print options
 
-[[osm-contest-map-printserver]]
-=== Own print server
-
-installation:
-link:help_fcmaps.html[Flight Contest maps server^]
-
-Map data is only available for installed countries.
-
-[[osm-contest-map-additional-datasources]]
-=== Other data sources
-
-Air Spaces:
-
-* DAeC (https://www.daec.de/fachbereiche/luftraum-flugbetrieb/luftraumdaten)
-* Skyfool.de (http://www.skyfool.de/luftraeume)
-
-Contour lines and surface contours:
-
-* Viewfinder Panoramas (http://www.viewfinderpanoramas.org)
-
-[[osm-contest-map-configuration]]
-=== Configuration details
-
-The following route details can be drawn on the map:
+*The following route details can be drawn on the map:*
 
 * Turning point circles (diameter 1 NM)
-* Turning loops
-* Stage lines
-* Course of curved stages
-* Turning point names (in the respective print language, German WP, English TP)
+* Procedure turns
+* Track lines
+* Course of curved tracks
+* Turning point names (in the choosen print language, German WP, English TP)
 * Gates of secret time checks
-* Positions of track photos
-* Positions of track ground signs
+* Positions of enroute photos
+* Positions of enroute canvas
 
-The following objects can be drawn on the map:
+*The following objects can be drawn on the map:*
 
-* Grade grid
 * Elevation lines (100m, 50m or 20m)
-* Manually added objects
+* Grade grid
+* Churches, castles and ruins
+* Power lines
+* Wind power stations
+* Forest and field tracks
+* Additional object positions
+* Special locations
 * Airspaces
 
-Airspaces must be installed manually before first use.
-To do this, copy all files from *https://my.hidrive.com/share/vobbr89etw#$/Geodata* to the folder *C:\FCSave\.geodata*.
-
-Any number of airspaces can be assigned to a route. 
-Enter the names of required airspaces found in *C:\FCSave\.geodata\airspaces.kmz* into the text field.
-
-Each airspace can be configured individually in its appearance. 
-For this purpose, various attributes are to be added to the name separated by commas.
-The example shows all possible attributes with their default value:
-
-    Muenster-Osnabrueck 129.875,file:airspaces.kmz,text:D 2500/4500 Münster-Osnabrück 129.875,textsize:10,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
-    
 All mentioned route details and objects can be deselected.
 
-The center of the map is determined from the positions of all turning points.
-Stretches that exceed the selected print format can be divided into several prints by deselecting suitable turning points.
-In addition, the determined map center can be shifted horizontally and/or vertically.
+*4 setting areas allow the following map printing options to be used parallel in one route:*
 
-Individual turning points can be excluded from printing.
-This also eliminates associated stages and turning loops.
+* The center of the map is determined from the positions of turnpoints activated for it (default: all).
+This center can be moved to the edge or corners. 
+In addition, a horizontal and/or vertical shift by an amount configurable in NM is still possible.
+* Individual turning points can be excluded from printing. This also eliminates associated tracks and procedure turns.
+* Printout can be in landscape or portrait format in A1 to A4 or ANR size.
+* The printout can be made with or without the configured route details or with all route details.
 
-The printout can be made in landscape or portrait format in A1 to A4 or ANR size.
+*Additional object positions*
 
-Missing flying sites, churches, castles, castle ruins, country houses, wind turbines and elevation points.
-as well as own symbols can be added in the file *C:\FCSave\.geodata\additionals.csv* for printing:
+Missing airfields, churches, castles, ruins, wind power stations
+as well as own symbols can be added in the file *C:\FCSave\.geodata\additionals.csv* for printing.
+To do this, use the template link:samples/additionals.csv[additionals.csv^] 
+and, using a text editor with the UTF-8 character set, add lines for each additional object according to the following example:
 
   id|symbol|name|wkt
   1|church.png|""|POINT (9.46600 49.50288)
-  2|airfield.png|"airfield"|POINT (9.54128 49.51144)
+  2|airfield.png|"Airfield name"|POINT (9.54128 49.51144)
 
-1. sequential number
-2. symbol to be displayed: +
-airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png or name of own symbol
-3. name of object (in quotes) ("": print no name)
-4. display position in geo-coordinates
+1. Sequence number
+2. Symbol to display: +
+airfield.png, church.png, castle.png, castle_ruin.png, chateau.png, windpowerstation.png, peak.png or name of the own symbol
+3. Name of the object (in quotes) ("": do not print a name)
+4. Display position in geo-coordinates
 
 Own symbols are to be saved in *C:\FCSave\.geodata\images* (png).
-Note that symbol names are case-sensitive.
+Note that the case of the symbol names is the same.
 
-Special objects can be added to the file *C:\FCSave\.geodata\specials.csv*.
-to be added to the print:
+Incorrect structure of this file prevents map generation.
+
+*Special locations*
+
+Special locations can be added to the *C:\FCSave\.geodata\specials.csv* file for printing.
+To do this, use the template link:samples/specials.csv[specials.csv^]
+and, using a text editor with the UTF-8 character set, add lines for each additional location according to the following example:
 
   id|point|name|wkt|dx|dy
-  1|"Route 1 - TP3"|"Ferienhof König"|POINT (9.9166569218 48.9058522143)|10|0
+  1|"Route 1 - TP3"|"Vacation farm"|POINT (9.9166569218 48.9058522143)|10|0
 
-1. sequence number
-2. description (in quotation marks, will not be printed)
-3. name of object (in quotes) ("": do not print name)
-4. display position in geo-coordinates
-5. horizontal displacement of the object name to be printed (in pixels)
-6. vertical displacement of the object name to be printed (in pixels)
+1. Sequence number
+2. Description (in quotes, will not be printed)
+3. Name of the object (in quotes) ("": do not print a name)
+4. Display position in geo-coordinates
+5. Horizontal displacement of the object name to be printed (in pixels)
+6. Vertical displacement of the object name to be printed (in pixels)
 
-Geo-coordinates of turning points are output with the route printout (CSV-GeoData).
+Incorrect structure of this file prevents map generation.
 
-The names of airspaces are taken from the file *C:\FCSave\.geodata\airspaces.kmz*.
-Incorrect names prevent the map generation.
+*Airspaces*
+
+Any number of airspaces can be assigned to a route.
+Enter the names of required airspaces found in https://www.openaip.net/data/airspaces into the text box with line break.
+
+  CTR BERLIN
+  ED-R37A Nordhorn MON-FRI
+
+Incorrect or non-existent airspace names prevent map generation.
+
+Each airspace can be configured individually in its appearance. 
+For this purpose, various attributes are to be added to the name separated by commas.
+The example shows all possible attributes:
+
+  ED-R37A Nordhorn MON-FRI,text:ED-R37A Nordhorn GND-FL100,textsize:14,textspacing:90,textcolor:red,fillcolor:red,fillopacity:0.3
+
+* Alternate margin text +
++  
+    text:ED-R37A Nordhorn GND-FL100
++
+Effect: This specification causes the designation "ED-R37A Nordhorn GND-FL100" to be written in the margin text instead of "ED-R37A Nordhorn MON-FRI".
+    
+* Alternative size of the margin text +
++
+    textsize:14
++
+14 pixel height is written. +
+Not specified: 10 pixel.
+
+* Alternative spacing of the margin text +
++
+    textspacing:90
++
+Minimum distance 90px. This value influences how often the margin text is written on the margin. +
+Not specified: 100 pixel.
+
+* Alternative color of the border text +
++
+    textcolor:red
++
+Red text. +
+Not specified: black
+
+* Alternative color of the area of the airspace +
++
+    fillcolor:red
++
+Area of the airspace is filled red. +
+Not specified: blue
+
+* Alternative transparency of the area of the airspace +
++
+    fillopacity:0.3
++
+Area of the airspace with low coverage. +
+Not specified: 0.2
+
+Meaningful attributes:
+
+* ED-R area in red +
++
+  ,text:???,textsize:14,textspacing:100,textcolor:red,fillcolor:red,fillopacity:0.2
+
+* RMZ area in blue +
++
+  ,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:steelblue,fillopacity:0.2
+
+* Surrounding area in gray +
++
+  ,text:???,textsize:14,textspacing:100,textcolor:black,fillcolor:lightgray,fillopacity:0.2
 
 [[osm-contest-map-workflow]]
 === Workflow of a map-based route construction
@@ -824,7 +872,7 @@ Incorrect names prevent the map generation.
 
 . Create route with TO (Routes -> *New route*)
 
-. Print competition map with TO (route -> *OSM competition map*) +
+. Print competition map with TO (route -> *OSM Contest Map*) +
 Place TO at a desired position (top right, bottom left or similar).
 
 . Select suitable turning points on the printed map +
@@ -845,7 +893,40 @@ With the coordinate rulers on the left and above, the turning point coordinates 
 
 . Check competition map (route -> *OSM online map*)
 
-. Print competition map (route -> *OSM competition map*)
+. Print competition map (route -> *OSM Contest Map*)
+
+[[osm-contest-map-configuration]]
+=== Server configuration
+
+Generating the competition map requires a *print server*.
+For this purpose, a server operated by the DAeC can be used, whose address is to be requested and set with an installation-dependent configuration in *C:\FCSave\.fc\config.groovy*.: +
+<<fc_en.adoc#configuration-osmprint>> +
+
+Alternatively, a separate print server can be set up: +
+link:help_fcmaps.html[Flight Contest maps server^]
+
+Map data is only available for installed countries.
+
+For the use of airspaces, an *OpenAIP* access with an installation-dependent configuration must be set in *C:\FCSave\.fc\config.groovy*.: +
+<<fc_en.adoc#configuration-openaip>>
+
+Airspaces are available worldwide.
+
+[[osm-contest-map-datasources]]
+=== Data sources
+
+Map data:
+
+* Map data © OpenStreetMap contributors (ODbL) (http://www.openstreetmap.org/) +
++
+The map objects shown are based on the data of the OpenStreetMap project. +
+OpenStreetMap is a free, editable map of the entire world and allows geographic data to be viewed and edited collaboratively from anywhere in the world. +
++
+License: http://www.openstreetmap.org/copyright/en 
+
+Contour lines and surface contours:
+
+* Viewfinder Panoramas (http://www.viewfinderpanoramas.org)
 
 <<<
 [[flight-time-calculation]]

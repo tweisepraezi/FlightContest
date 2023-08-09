@@ -1,0 +1,8 @@
+<Style name="roads-residential-casing">
+    <Rule>
+        &maxscale_zoom11;
+        &minscale_zoom11;
+        <Filter>([highway] = 'residential')</Filter>
+        <LineSymbolizer stroke="black" stroke-width="1.2" />
+    </Rule>
+</Style>

@@ -2,7 +2,7 @@
     <Rule>
         &maxscale_zoom11;
         &minscale_zoom11;
-        <Filter>([highway] = 'track') and (([tracktype] = 'grade1') or ([tracktype] = 'grade2'))</Filter>
+        <Filter>([highway] = 'track') and (([tracktype] = 'grade1') or ([tracktype] = 'grade2') or ([tracktype] = 'grade3') or ([tracktype] = 'grade4') or ([tracktype] = 'grade5'))</Filter>
         <LineSymbolizer stroke="white" stroke-width="0.8" />
     </Rule>
 </Style>

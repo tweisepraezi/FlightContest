@@ -21,8 +21,18 @@ class CoordTitle // DB-2.5
 	{
 		if (coordTitleValue.startsWith("T/O")) {
 			return new CoordTitle(CoordType.TO,1)
+		} else if (coordTitleValue.startsWith("TO")) {
+			return new CoordTitle(CoordType.TO,1)
+		} else if (coordTitleValue.startsWith("FTO")) {
+			return new CoordTitle(CoordType.TO,1)
+		} else if (coordTitleValue.startsWith("iTO")) {
+			return new CoordTitle(CoordType.iTO,1)
 		} else if (coordTitleValue.startsWith("SP")) {
 			return new CoordTitle(CoordType.SP,1)
+		} else if (coordTitleValue.startsWith("iSP")) {
+			return new CoordTitle(CoordType.iSP,1)
+		} else if (coordTitleValue.startsWith("ISP")) {
+			return new CoordTitle(CoordType.iSP,1)
 		} else if (coordTitleValue.startsWith("WP") || coordTitleValue.startsWith("TP")) {
 			int tp_num = coordTitleValue.substring(2).toInteger()
 			return new CoordTitle(CoordType.TP,tp_num)
@@ -37,8 +47,14 @@ class CoordTitle // DB-2.5
 			return new CoordTitle(CoordType.SECRET,sc_num)
 		} else if (coordTitleValue.startsWith("FP")) {
 			return new CoordTitle(CoordType.FP,1)
+		} else if (coordTitleValue.startsWith("iFP")) {
+			return new CoordTitle(CoordType.iFP,1)
+		} else if (coordTitleValue.startsWith("IFP")) {
+			return new CoordTitle(CoordType.iFP,1)
 		} else if (coordTitleValue.startsWith("LDG")) {
 			return new CoordTitle(CoordType.LDG,1)
+		} else if (coordTitleValue.startsWith("iLDG")) {
+			return new CoordTitle(CoordType.iLDG,1)
 		}
 		return new CoordTitle(CoordType.UNKNOWN,0)
 	}

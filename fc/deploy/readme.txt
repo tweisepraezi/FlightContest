@@ -1,6 +1,15 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.3.6
+----------------
+- Bug "UZKs des krummen Streckenabschnittes im Navigationsflug-Ergebnis werden bei hintereinander liegenden krummen Streckenabschnitten immer gedruckt" behoben
+- Ergebnis-Druck: Seiteanordnung zur Verringerung von Druckseiten verbessert 
+- OSM-Wettbewerbs-Karte: ANR-Format an ANR 2.2.0 angepasst
+- Bug "Import FC-Strecke: Strecken-Fotos und -Bodenzeichen vom iSP werden nicht importiert" behoben
+- OSM-Wettbewerbs-Karte: Ortsstraßen sowie Wald- und Feldwege erweitert
+- OSM-Wettbewerbs-Karte: Hilfe verbessert
+
 Änderungen 3.3.5
 ----------------
 - Strecken-Import: Option "Lese Ortsmarkierungen anstelle von Pfaden bei kml/kmz-Dateien" hinzugefügt
