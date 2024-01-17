@@ -441,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>Flight Contest</h1>
 <div class="details">
 <span id="author" class="author">Thomas Weise, Deutscher Präzisionsflug-Verein e.V.</span><br>
-<span id="revnumber">version 3.3.6,</span>
-<span id="revdate">09.08.2023</span>
+<span id="revnumber">version 3.4.0,</span>
+<span id="revdate">17.01.2024</span>
 </div>
 <div id="toc" class="toc">
 <div id="toctitle">Inhaltsverzeichnis</div>
@@ -463,6 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a></li>
 <li><a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a></li>
 <li><a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a></li>
+<li><a href="#route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</a></li>
 <li><a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a></li>
 <li><a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager</a></li>
 <li><a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></li>
@@ -530,6 +531,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a></li>
 <li><a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a></li>
 <li><a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a></li>
+<li><a href="#configuration-task-creator">Original-Task-Creator für Nutzung konfigurieren</a></li>
 <li><a href="#configuration-test">Test-Anzeigen konfigurieren</a></li>
 </ul>
 </li>
@@ -1207,6 +1209,7 @@ einem Import nur noch in 'Flight Contest'.</p>
 <a href="#route-planning-google-earth">Wettbewerbsstrecken mit Google Earth Pro erstellen</a><br>
 <a href="#route-planning-google-earth-add-secret">UZKs und krumme Streckenabschnitte mit Google Earth Pro hinzufügen</a><br>
 <a href="#route-planning-semicircles">Wettbewerbsstrecke mit Halbkreisen erzeugen</a><br>
+<a href="#route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</a><br>
 <a href="#route-planning-verify">Prüfen der Wettbewerbsstrecke</a><br>
 <a href="#route-planning-deliver">Weitergabe der Wettbewerbsstrecke an den Auswerte-Manager</a><br>
 <a href="#route-planning-errors">Fehlermeldungen in Streckendetails</a></p>
@@ -1374,78 +1377,90 @@ auf den ersten Hilfspunkt als Einflug-Kurs auf die krumme Strecke.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>  Punkt                       Check-                 in         Auswertung
-                              Punkt        Richtung  Flugplan   Zeit Kurs Höhe
+<pre>  Punkt                       Check-                  in         Auswertung
+                              Punkt         Richtung  Flugplan   Zeit Kurs Höhe
 
-  Takeoff                     TO           250       ja         ja   nein nein
-  Startpunkt                  SP           -         ja         ja   nein ja
-  Wendepunkt                  WP1          -         ja         ja   ja   ja
-  Unbekannte Zeitkontrolle    UZK1         -         nein       ja   ja   ja
-  Touch&amp;Go-Landung            iFP          -         ja         ja   ja   ja
-                              iLDG  (1,2)  250       ja         nein nein nein
-                              iSP   (2)    -         ja         ja   nein ja
-  Krummer Streckenabschnitt   UZK2  (1,2)  -         nein       nein ja   ja
-                              WP2   (2,3)  -         ja         ja   ja   ja
-  Finalpunkt                  FP           -         ja         ja   ja   ja
-  Landung                     LDG          250       ja         ja   nein nein
+  Takeoff                     TO            250       ja         ja   nein nein
+  Startpunkt                  SP            -         ja         ja   nein ja
+  Wendepunkt                  WP1           -         ja         ja   ja   ja
+  Unbekannte Zeitkontrolle    UZK1          -         nein       ja   ja   ja
+  Touch&amp;Go-Landung            iFP           -         ja         ja   ja   ja
+                              iLDG  (1,2)   250       ja         nein nein nein
+                              iSP   (2)     -         ja         ja   nein ja
+  Halbkreis                   UZK2  (1,2)   -         nein       nein ja   ja
+                              WP2   (2,3)   -         ja         ja   ja   ja
+  Landschaftlicher Abschnitt  UZK3  (1,2,4) -         nein       nein nein ja
+                              WP3   (2,3)   -         ja         ja   ja   ja
+  Finalpunkt                  FP            -         ja         ja   ja   ja
+  Landung                     LDG           250       ja         ja   nein nein
 
   (1) Keine Zeitauswertung, Keine Torauswertung
   (2) Kein Flugplanungstest
-  (3) Check-Punkt nach krummer Strecke</pre>
+  (3) Check-Punkt nach krummer Strecke
+  (4) Keine Auswertung der Kursabweichung</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>  Strecken-Beispiele          Check-                in         Auswertung
-                              Punkt       Richtung  Flugplan   Zeit Kurs Höhe
+<pre>  Strecken-Beispiele          Check-                 in         Auswertung
+                              Punkt        Richtung  Flugplan   Zeit Kurs Höhe
 
-  Normal                      TO          250       ja         ja   nein nein
-                              SP          -         ja         ja   nein ja
-                              WP1         -         ja         ja   ja   ja
-                              WP2         -         ja         ja   ja   ja
-                              WP3         -         ja         ja   ja   ja
-                              WP4         -         ja         ja   ja   ja
-                              FP          -         ja         ja   ja   ja
-                              LDG         250       ja         ja   nein nein
+  Normal                      TO           250       ja         ja   nein nein
+                              SP           -         ja         ja   nein ja
+                              WP1          -         ja         ja   ja   ja
+                              WP2          -         ja         ja   ja   ja
+                              WP3          -         ja         ja   ja   ja
+                              WP4          -         ja         ja   ja   ja
+                              FP           -         ja         ja   ja   ja
+                              LDG          250       ja         ja   nein nein
 
-  Unbekannte Zeitkontrollen   TO          250       ja         ja   nein nein
-                              SP          -         ja         ja   nein ja
-                              WP1         -         ja         ja   ja   ja
-                              UZK1        -         nein       ja   ja   ja
-                              UZK2        -         nein       ja   ja   ja
-                              WP2         -         ja         ja   ja   ja
-                              FP          -         ja         ja   ja   ja
-                              LDG         250       ja         ja   nein nein
+  Unbekannte Zeitkontrollen   TO           250       ja         ja   nein nein
+                              SP           -         ja         ja   nein ja
+                              WP1          -         ja         ja   ja   ja
+                              UZK1         -         nein       ja   ja   ja
+                              UZK2         -         nein       ja   ja   ja
+                              WP2          -         ja         ja   ja   ja
+                              FP           -         ja         ja   ja   ja
+                              LDG          250       ja         ja   nein nein
 
-  Touch&amp;Go-Zwischenlandung    TO          250       ja         ja   nein nein
-                              SP          -         ja         ja   nein ja
-                              WP1         -         ja         ja   ja   ja
-                              iFP         -         ja         ja   ja   ja
-                              iLDG (1,2)  250       ja         nein nein nein
-                              iSP  (2)    -         ja         ja   nein ja
-                              WP2         -         ja         ja   ja   ja
-                              FP          -         ja         ja   ja   ja
-                              LDG         250       ja         ja   nein nein
+  Touch&amp;Go-Zwischenlandung    TO           250       ja         ja   nein nein
+                              SP           -         ja         ja   nein ja
+                              WP1          -         ja         ja   ja   ja
+                              iFP          -         ja         ja   ja   ja
+                              iLDG (1,2)   250       ja         nein nein nein
+                              iSP  (2)     -         ja         ja   nein ja
+                              WP2          -         ja         ja   ja   ja
+                              FP           -         ja         ja   ja   ja
+                              LDG          250       ja         ja   nein nein
 
-  Zwischenlandung mit Pause   TO          250       ja         ja   nein nein
-                              SP          -         ja         ja   nein ja
-                              WP1         -         ja         ja   ja   ja
-                              iFP         -         ja         ja   ja   ja
-                              iLDG (1,2)  250       ja         nein nein nein
-                              iTO  (1,2)  250       ja         nein nein nein
-                              iSP  (2)    -         ja         ja   nein ja
-                              WP2         -         ja         ja   ja   ja
-                              FP          -         ja         ja   ja   ja
-                              LDG         250       ja         ja   nein nein
+  Zwischenlandung mit Pause   TO           250       ja         ja   nein nein
+                              SP           -         ja         ja   nein ja
+                              WP1          -         ja         ja   ja   ja
+                              iFP          -         ja         ja   ja   ja
+                              iLDG (1,2)   250       ja         nein nein nein
+                              iTO  (1,2)   250       ja         nein nein nein
+                              iSP  (2)     -         ja         ja   nein ja
+                              WP2          -         ja         ja   ja   ja
+                              FP           -         ja         ja   ja   ja
+                              LDG          250       ja         ja   nein nein
 
-  Krumme Strecke              TO          250       ja         ja   nein nein
-                              SP          -         ja         ja   nein ja
-                              WP1         -         ja         ja   ja   ja
-                              UZK1 (1,2)  -         nein       nein ja   ja
-                              UZK2 (1,2)  -         nein       nein ja   ja
-                              WP2  (2,3)  -         ja         ja   ja   ja
-                              FP          -         ja         ja   ja   ja
-                              LDG         250       ja         ja   nein nein</pre>
+  Halbkreis                   TO           250       ja         ja   nein nein
+                              SP           -         ja         ja   nein ja
+                              WP1          -         ja         ja   ja   ja
+                              UZK1 (1,2)   -         nein       nein ja   ja
+                              UZK2 (1,2)   -         nein       nein ja   ja
+                              WP2  (2,3)   -         ja         ja   ja   ja
+                              FP           -         ja         ja   ja   ja
+                              LDG          250       ja         ja   nein nein
+
+  Landschaftlicher Abschnitt  TO           250       ja         ja   nein nein
+                              SP           -         ja         ja   nein ja
+                              WP1          -         ja         ja   ja   ja
+                              UZK1 (1,2,4) -         nein       nein nein ja
+                              UZK2 (1,2,4) -         nein       nein nein ja
+                              WP2  (2,3)   -         ja         ja   ja   ja
+                              FP           -         ja         ja   ja   ja
+                              LDG          250       ja         ja   nein nein</pre>
 </div>
 </div>
 </div>
@@ -1783,6 +1798,55 @@ Kontexmenüpunkt "Einfügen" ein- oder mehrmals ausführen (entspr. Anzahl benö
 </div>
 </div>
 <div class="sect2">
+<h3 id="route-planning-task-creator">Wettbewerbsstrecken mit Task-Creator erstellen</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Strecke mit TO anlegen (Strecken &#8594; <strong>Neue Strecke</strong>)</p>
+</li>
+<li>
+<p>Wettbewerbs-Karte mit TO drucken</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Strecke &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Online-Karte um Flughafen erzeugen</strong></p>
+</li>
+<li>
+<p>Strecke &#8594; OSM-Wettbewerbs-Karte &#8594; <strong>Task-Creator-Karte um Flughafen erzeugen</strong></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Task-Creator starten (Karten &#8594; AirportArea (Task Creator) &#8594; <strong>&#8230;&#8203;</strong>)<br></p>
+<div class="paragraph">
+<p>Im gestarteten Task-Creator ist die "Map Url" im Task-Creator voreingestellt und kann mit <strong>Load</strong> geladen werden.<br>
+Nach Aktivieren von <strong>Turn Points &#8594; Edit</strong> können mit Doppelklick Wendepunkte auf der Karte hinzugefügt werden.<br>
+Mit <strong>Save task data</strong> kann die Aufgabe als CSV-Datei im Download-Ordner des Computers abgespeichert werden.</p>
+</div>
+</li>
+<li>
+<p>Task-Creator zur weiteren Bearbeitung starten (Karten &#8594; <strong>Task-Creator</strong>)<br></p>
+<div class="paragraph">
+<p>Mit <strong>Load task data</strong> kann die gespeicherte CSV-Datei einer Aufgabe geladen werden.<br>
+Eine voreingestellte "Map Url" muss mit <strong>Load</strong> geladen werden.<br>
+Nach Aktivieren von <strong>Turn Points &#8594; Edit</strong> ist eine Weiterbearbeitung der Aufgabe möglich.</p>
+</div>
+</li>
+<li>
+<p>Export der Wettbewerbsstrecke (Task-Creator &#8594; <strong>Export FC kml</strong>)</p>
+</li>
+<li>
+<p>Import der Wettbewerbsstrecke (Strecken &#8594; <strong>Import FC-Strecke</strong>)<br></p>
+<div class="paragraph">
+<p>Wenn Sie die Fehlermeldung "Koordinaten-Wendeschleifen abweichend" erhalten, drücken Sie die Schaltfläche <strong>Etappen neu berechnen</strong>.<br>
+Die Korrektheit der Strecke kann nun mit <strong>OSM-Online-Karte</strong> geprüft werden.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
 <h3 id="route-planning-verify">Prüfen der Wettbewerbsstrecke</h3>
 <div class="paragraph">
 <p>Prüfen Sie Ihre eingegebene Strecke in 'Streckendetails' folgendermaßen:</p>
@@ -1979,6 +2043,19 @@ Die Bereitsteller der Kartendaten und der Hersteller dieser Funktion übernehmen
 <p>Alle genannten Streckendetails und Objekte können abgewählt werden.</p>
 </div>
 <div class="paragraph">
+<p><strong>Übersichts-Karten-Druck-Optionen:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>"<em>Online-Karte um Flughafen erzeugen</em>" erzeugt eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für OSM-Online-Anzeige.</p>
+</li>
+<li>
+<p>"<em>Task-Creator-Karte um Flughafen erzeugen</em>" erzeugt eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für Verwendung im Task-Creator.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
 <p><strong>4 Einstellungs-Bereiche erlauben folgende Karten-Druck-Optionen in einer Strecke parallel zu nutzen:</strong></p>
 </div>
 <div class="ulist">
@@ -1995,7 +2072,7 @@ Zusätzlich ist noch eine horizontale und/oder vertikale Verschiebung um einen i
 <p>Der Ausdruck kann im Quer- oder Hochformat in A1 bis A4 oder in ANR-Größe erfolgen.</p>
 </li>
 <li>
-<p>Der Ausdruck kann mit oder ohne den konfigurierten Streckendetails oder mit allen Streckendetails erfolgen.</p>
+<p>Der Ausdruck kann mit oder ohne den konfigurierten Streckendetails, mit allen Streckendetails oder für Nutzung im Task-Creator erfolgen.</p>
 </li>
 </ul>
 </div>
@@ -4138,6 +4215,7 @@ zu machen oder diese Datei zu löschen.</p>
 <a href="#configuration-osmonlinemap">OSM-Online-Karte konfigurieren</a><br>
 <a href="#configuration-osmprint">OSM-Wettbewerbs-Kartendruck konfigurieren</a><br>
 <a href="#configuration-openaip">OpenAIP für Luftraum-Anzeige und -Kartendruck konfigurieren</a><br>
+<a href="#configuration-task-creator">Original-Task-Creator für Nutzung konfigurieren</a><br>
 <a href="#configuration-test">Test-Anzeigen konfigurieren</a></p>
 </div>
 <div class="sect2">
@@ -4391,8 +4469,7 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
 <div class="content">
 <pre>flightcontest {
   contestmap {
-    printserverapi = "TODO" // Adresse des Druck-Servers für die Erzeugung
-                            // der OSM-Wettbewerbs-Karte
+    printserverapi = "TODO" // Adresse des Druck-Servers für die Erzeugung der OSM-Wettbewerbs-Karte
   }
 }</pre>
 </div>
@@ -4415,6 +4492,24 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
 </div>
 </div>
 <div class="sect2">
+<h3 id="configuration-task-creator">Original-Task-Creator für Nutzung konfigurieren</h3>
+<div class="literalblock">
+<div class="content">
+<pre>flightcontest {
+  taskcreator {
+    url = "http://www.airrats.cl/taskcreator/?lang=en&amp;admin"
+  }
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Flight Contest wird mit einem integrierten Task-Creator ausgeliefert.
+Die Angabe dieses Wertes deaktiviert den internen Task-Creator und schaltet auf den Original-Task-Creator um.
+Der integrierte Task-Creator hat ein abweichendes Aussehen und hat Online-Funktionen deaktivert,
+was das Speichern einer Aufgabe in eine öffentlich zugängliche Datenbank verhindert.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="configuration-test">Test-Anzeigen konfigurieren</h3>
 <div class="literalblock">
 <div class="content">
@@ -4429,10 +4524,8 @@ auf einen alternativen Tiles-Server (anstelle von <a href="https://tiles.flightc
     nobuttons = true // Deaktiviert Schalter bei Beobachtungs-Ergebnis-Eingabe
   }
   contestmap {
-    projection = "3857"  // Andere Projektion der OSM-Wettbewerbs-Kartenerzeugung
-                         // festlegen (EPSG-Nummer)
-    devoptions = true    // Blendet beim OSM-Wettbewerbs-Karten-Dialog
-                         // zusätzliche Entwicklungsoptionen ein
+    devoptions = true    // Blendet beim OSM-Wettbewerbs-Karten-Dialog zusätzliche Entwicklungsoptionen ein
+    osmcartostyle = true // Schaltet auf OSM-Carto-Stil um
   }
 }</pre>
 </div>

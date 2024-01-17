@@ -1,6 +1,6 @@
 
-Flight Contest 3.3.6
-Copyright 2009-2023 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
+Flight Contest 3.4.0
+Copyright 2009-2024 Thomas Weise, Deutscher Praezisionsflug-Verein e.V.
 
 https://flightcontest.de
 
@@ -118,6 +118,13 @@ https://fazecast.github.io/jSerialComm/
 
 Apache License 2.0
 https://www.apache.org/licenses/LICENSE-2.0
+
+============================================================================
+
+Many thanks to Carlos Rocca,
+who allowed me to integrate his Rally Flying Task Creator into Flight Contest.
+
+http://www.airrats.cl/taskcreator?lang=en
 
 ============================================================================
 

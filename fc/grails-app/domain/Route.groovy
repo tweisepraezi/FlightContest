@@ -26,7 +26,9 @@ class Route
     Boolean showCurvedPoints = false                                             // DB-2.20
 	Integer mapScale = 200000                                                    // DB-2.21
 	Integer altitudeAboveGround = 400                                            // DB-2.31, min. Altitude (Höhe) über Grund in ft
+    String defaultOnlineMap = ""                                                 // DB-2.37
     Boolean exportSemicircleGates = false                                        // DB-2.26
+    Integer semicircleCourseChange = 5                                           // DB-2.37
     
     Boolean showCoords = true                                                    // DB-2.30
     Boolean showCoordObservations = false                                        // DB-2.30
@@ -39,11 +41,12 @@ class Route
     static int mmPerkm = 1000000
     
     // transient values 
-    static transients = ['contestMapOutput','contestMapPrint','contestMapDevStyle']
+    static transients = ['contestMapOutput','contestMapPrint','contestMapDevStyle','contestMapPrintName']
             
     String contestMapOutput = Defs.CONTESTMAPOUTPUT_EXPORTPRINTMAP
-    String contestMapPrint = Defs.CONTESTMAPPRINT_PDFMAP
+    String contestMapPrint = Defs.CONTESTMAPPRINT_ONLINEMAP
     boolean contestMapDevStyle = false
+    String contestMapPrintName = ""
     
     String contestMapAirfields = Defs.CONTESTMAPAIRFIELDS_OSM_ICAO               // DB-2.21
     Boolean contestMapCircle = true                                              // DB-2.21
@@ -247,6 +250,10 @@ class Route
         contestMapCenterMoveY3(nullable:true)
         contestMapCenterMoveX4(nullable:true)
         contestMapCenterMoveY4(nullable:true)
+
+		// DB-2.37 compatibility
+        defaultOnlineMap(nullable:true)
+        semicircleCourseChange(nullable:true,min:1,max:90)
 	}
 
 	static mapping = {
@@ -283,6 +290,7 @@ class Route
         showTestLegs = routeInstance.showTestLegs
         showEnroutePhotos = routeInstance.showEnroutePhotos
         showEnrouteCanvas = routeInstance.showEnrouteCanvas
+        semicircleCourseChange = routeInstance.semicircleCourseChange
 
         contestMapAirfields = routeInstance.contestMapAirfields
         contestMapCircle = routeInstance.contestMapCircle

@@ -50,6 +50,7 @@ class GpxService
     final static BigDecimal CONTESTMAP_TPNAME_PROCEDURETURN_DISTANCE = 3.0 // NM
     final static BigDecimal CONTESTMAP_MARGIN_DISTANCE = 5 // NM
     final static BigDecimal CONTESTMAP_RUNWAY_FRAME_DISTANCE = 2 // NM  
+    final static BigDecimal CONTESTMAP_RUNWAY_MIN_TO_LDG_DISTANCE = 2 // NM  
     
 	final static boolean WRLOG = false
     
@@ -1828,7 +1829,8 @@ class GpxService
                         List semicircle_coords = AviationMath.getSemicircle(
                             center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
                             start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
-                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
+                            routeInstance.semicircleCourseChange
                         )
                         if (semicircle_coords.size() > 2) {
                             xml.rte {
@@ -1945,7 +1947,8 @@ class GpxService
                         List semicircle_coords = AviationMath.getSemicircle(
                             center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
                             start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
-                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
+                            routeInstance.semicircleCourseChange
                         )
                         for (Map semicircle_coord in semicircle_coords) {
                             xml.rtept(lat:semicircle_coord.lat, lon:semicircle_coord.lon) {
@@ -1992,7 +1995,8 @@ class GpxService
                                 List semicircle_coords = AviationMath.getSemicircle(
                                     center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
                                     start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
-                                    coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
+                                    routeInstance.semicircleCourseChange
                                 )
                                 for (Map semicircle_coord in semicircle_coords) {
                                     xml.rtept(lat:semicircle_coord.lat, lon:semicircle_coord.lon) {
@@ -2089,6 +2093,8 @@ class GpxService
                 CoordRoute last_coordroute_instance = null
                 CoordRoute last_coordroute_instance2 = null
                 CoordRoute last_last_coordroute_instance = null
+                CoordRoute to_coordroute_instance = null
+                CoordRoute ildg_coordroute_instance = null
                 for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
                     if (coordroute_instance.type.IsContestMapCoord()) {
                         if (last_coordroute_instance && last_last_coordroute_instance) {
@@ -2163,15 +2169,42 @@ class GpxService
                         last_coordroute_instance = coordroute_instance
                     } else if (coordroute_instance.type.IsRunwayCoord()) {
                         if (DisabledCheckPointsTools.Uncompress(contestMapParams.contestMapPrintPoints).contains(coordroute_instance.title()+',')) {
-                            Map tp_coord = AviationMath.getCoordinate(
-                                coordroute_instance.latMath(), coordroute_instance.lonMath(),
-                                CONTESTMAP_TPNAME_RUNWAY_DIRECTION,
-                                CONTESTMAP_TPNAME_RUNWAY_DISTANCE
-                            )
-                            xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
-                                xml.name coordroute_instance.titleMediaCode(media)
-                                xml.sym "empty.png"
-                                xml.type ""
+                            boolean print_runway_coord = true
+                            switch (coordroute_instance.type) {
+                                case CoordType.TO:
+                                    to_coordroute_instance = coordroute_instance
+                                    break
+                                case CoordType.iLDG:
+                                    ildg_coordroute_instance = coordroute_instance
+                                    break
+                                case CoordType.LDG:
+                                    if (to_coordroute_instance) {
+                                        Map leg = AviationMath.calculateLeg(to_coordroute_instance.latMath(),to_coordroute_instance.lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
+                                        if (leg.dis < CONTESTMAP_RUNWAY_MIN_TO_LDG_DISTANCE) {
+                                            print_runway_coord = false
+                                        }
+                                    }
+                                    break
+                                case CoordType.iTO:
+                                    if (ildg_coordroute_instance) {
+                                        Map leg = AviationMath.calculateLeg(ildg_coordroute_instance.latMath(),ildg_coordroute_instance.lonMath(),coordroute_instance.latMath(),coordroute_instance.lonMath())
+                                        if (leg.dis < CONTESTMAP_RUNWAY_MIN_TO_LDG_DISTANCE) {
+                                            print_runway_coord = false
+                                        }
+                                    }
+                                    break
+                            }
+                            if (print_runway_coord) {
+                                Map tp_coord = AviationMath.getCoordinate(
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(),
+                                    CONTESTMAP_TPNAME_RUNWAY_DIRECTION,
+                                    CONTESTMAP_TPNAME_RUNWAY_DISTANCE
+                                )
+                                xml.wpt(lat:tp_coord.lat, lon:tp_coord.lon) {
+                                    xml.name coordroute_instance.titleMediaCode(media)
+                                    xml.sym "empty.png"
+                                    xml.type ""
+                                }
                             }
                         }
                     } else if (contestMapParams.contestMapSecretGates && coordroute_instance.type == CoordType.SECRET && !coordroute_instance.HideSecret(curved_point_ids)) {
@@ -2297,11 +2330,15 @@ class GpxService
                         if (show_curved_point) {
                             write_gate = true
                         }
+                        if (coordroute_instance.ignoreGate && routeInstance.showCurvedPoints) {
+                            write_gate = false
+                        }
                         if (write_gate) {
                             List semicircle_coords = AviationMath.getSemicircle(
                                 center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
                                 start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
-                                coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                                coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
+                                routeInstance.semicircleCourseChange
                             )
                             Float gate_width = null
                             if (testInstance) {
@@ -2496,6 +2533,9 @@ class GpxService
                             boolean show_curved_point = params.gpxExport || routeInstance.showCurvedPoints
                             if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                                 write_gate = true
+                            }
+                            if (coordroute_instance.ignoreGate && routeInstance.showCurvedPoints) {
+                                write_gate = false
                             }
                             if (write_gate) {
                                 Float gate_width = null
@@ -2702,6 +2742,7 @@ class GpxService
                     endcurved:      getYesNo(end_curved),
                     circlecenter:   getYesNo(coordrouteInstance.circleCenter),
                     invert:         getYesNo(coordrouteInstance.semiCircleInvert),
+                    ignoregate:     getYesNo(coordrouteInstance.ignoreGate),
                     dist:           coordrouteInstance.measureDistance,
                     track:          coordrouteInstance.measureTrueTrack,
                     duration:       coordrouteInstance.legDuration,

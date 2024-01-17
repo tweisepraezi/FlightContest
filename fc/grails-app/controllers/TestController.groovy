@@ -2193,7 +2193,19 @@ class TestController
         Map test = domainService.GetTest(params) 
         if (test.instance) {
 			// set return action
-           	return [testInstance:test.instance,crewresultsprintquestionReturnAction:"crewresults",crewresultsprintquestionReturnController:controllerName,crewresultsprintquestionReturnID:params.id]
+            if (params.fromTask) {
+                test.instance.printPlanningResults = false
+                test.instance.printPlanningResultsScan = false
+                test.instance.printFlightResults = false
+                test.instance.printFlightMap = false
+                test.instance.printObservationResults = false
+                test.instance.printObservationResultsScan = false
+                test.instance.printLandingResults = false
+                test.instance.printSpecialResults = false
+                return [testInstance:test.instance,taskInstance:test.instance.task,crewresultsprintquestionReturnAction:"startresults",crewresultsprintquestionReturnController:"task",crewresultsprintquestionReturnID:params.id]
+            } else {
+                return [testInstance:test.instance,crewresultsprintquestionReturnAction:"crewresults",crewresultsprintquestionReturnController:controllerName,crewresultsprintquestionReturnID:params.id]
+            }
         } else {
             flash.message = test.message
             redirect(controller:"task",action:"startresults")
@@ -2276,9 +2288,9 @@ class TestController
                 if (params.addShowTimeValue && params.addShowTimeValue.isInteger()) {
                     show_utc = FcTime.UTCAddSeconds(show_utc, 60*params.addShowTimeValue.toInteger())
                 }
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:true, showCoord:params.showCoord, showUtc:show_utc, lastUtc:params.lastUtc])
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:false, gpxExport:false, showCoord:params.showCoord, showUtc:show_utc, lastUtc:params.lastUtc])
             } else {
-                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:true])
+                converter = gpxService.ConvertTest2GPX(test.instance, upload_gpx_file_name, [isPrint:false, showPoints:true, wrEnrouteSign:true, gpxExport:false])
             }
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
@@ -2312,7 +2324,7 @@ class TestController
             if (converter.ok && converter.track) {
                 gpxService.printdone ""
                 session.gpxShowPoints = HTMLFilter.GetStr(converter.gpxShowPoints)
-                redirect(controller:'gpx',action:'startgpxviewer',params:[uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
+                redirect(controller:'gpx',action:'startgpxviewer',params:[defaultOnlineMap:test.instance.task.flighttest.route.defaultOnlineMap,uploadFilename:upload_gpx_file_name,originalFilename:test.instance.GetTitle(ResultType.Flight).encodeAsHTML(),testID:test.instance.id,showLanguage:session.showLanguage,lang:session.showLanguage,showCancel:"no",showProfiles:"yes",gmApiKey:BootStrap.global.GetGMApiKey()])
             } else {
                 flash.error = true
                 if (converter.ok && !converter.track) {

@@ -110,7 +110,7 @@ JB.Map = function(makemap) {
 		this.maptypes.OSM_Outdoors = [nr++, osmoutdoors];
 		baseLayers["Outdoors"] = osmoutdoors;
 	}
-
+    
 	var grau = L.tileLayer(JB.GPX2GM.Path+"Icons/Grau256x256.png", { maxZoom: 22 });
 	this.maptypes.Keine_Karte = [nr++, grau];
 	baseLayers[JB.GPX2GM.strings[JB.GPX2GM.parameters.doclang].noMap] = grau;
@@ -160,6 +160,47 @@ JB.Map = function(makemap) {
 		dragging: true,
 	} );
 	
+    // FC OnlineMap
+    if (onlineMapIndex > 0 && onlineMapUrls && onlineMapBounds) {
+        var onlinemap_slider = document.getElementById("onlinemap_opacity_id");
+        var onlinemap_select = document.getElementById("onlinemap_route_id");
+        onlinemap_slider.style.display = 'initial';
+        onlinemap_select.style.display = 'initial';
+        
+        var overlays = [];
+        var map1 = this.map;
+        for (let i = 0; i < onlineMapUrls.length; i++) {
+            var option = document.createElement("option");
+            var onlinemap_url = onlineMapUrls[i];
+            option.text = onlinemap_url.substring(onlinemap_url.lastIndexOf('/')+1, onlinemap_url.length-4);
+            option.value = onlinemap_url;
+            if (i+1 == onlineMapIndex) {
+                option.selected = true;
+            }
+            onlinemap_select.add(option);
+            var onlinemap_overlay = L.imageOverlay(onlineMapUrls[i], onlineMapBounds[i])
+            overlays.push(onlinemap_overlay)
+        }
+        overlays[onlineMapIndex-1].addTo(map1);
+        
+        onlinemap_slider.onmousemove = function() {
+            overlays[onlineMapIndex-1].setOpacity(onlinemap_slider.value);
+        }
+        
+        onlinemap_slider.onclick = function() {
+            overlays[onlineMapIndex-1].setOpacity(onlinemap_slider.value);
+        }
+        
+        onlinemap_select.onchange = function() {
+            if (map1.hasLayer(overlays[onlineMapIndex-1])) {
+                map1.removeLayer(overlays[onlineMapIndex-1]);
+            }
+            onlineMapIndex = onlinemap_select.selectedIndex + 1;
+            overlays[onlineMapIndex-1].addTo(map1);
+            overlays[onlineMapIndex-1].setOpacity(onlinemap_slider.value);
+        }
+    }
+
 	JB.handle_touch_action(dieses,genugplatz);
 	
 	if(makemap.parameters.unit=="si") L.control.scale({imperial:false}).addTo(this.map); // Mit Maßstab km

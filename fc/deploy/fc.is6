@@ -2,23 +2,22 @@
 
 [Code]
 const DBCompatibelDigits = 1;   // Number of digits for database compatibility
-const DBVersion = '2.36.0';     // DB-2.36
+const DBVersion = '2.37.0';     // DB-2.37
 const FCCompatibelDigits = 0;   // Number of digits for application compatibility
-const FCVersion = '3.3.6';      // no milestone
+const FCVersion = '3.4.0';      // no milestone
 const FCCompatibelDigits64 = 2; // Number of digits for application compatibility
-const FCVersion64 = '3.3.6';    // no milestone
+const FCVersion64 = '3.4.0';    // no milestone
 [Setup]
 AppName=Flight Contest
 
 AppVerName=Flight Contest
-AppVersion=3.3.6
+AppVersion=3.4.0
 ; no milestone below
-VersionInfoVersion=3.3.6
+VersionInfoVersion=3.4.0
 
-AppCopyright=(C) 2009-2023 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
+AppCopyright=(C) 2009-2024 Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisher=Thomas Weise, Deutscher Präzisionsflug-Verein e.V.
 AppPublisherURL=http://flightcontest.de
-;AppUpdatesURL=http://flightcontest.de
 AppSupportURL=http://flightcontest.de
 
 DefaultDirName={commonpf}\Flight Contest
@@ -39,10 +38,6 @@ PrivilegesRequired=admin
 [Languages]
 Name: "en"; MessagesFile: "compiler:Default.isl";
 Name: "de"; MessagesFile: "German-6.1.isl";
-
-[Messages]
-;en.BeveledLabel=Flight Contest
-;de.BeveledLabel=Flight Contest
 
 [CustomMessages]
 en.AdminNecessary=You need administrator privileges to install 'Flight Contest'.
@@ -81,9 +76,6 @@ Source: ".\read_dg100_logger.bat";                    DestDir: "{app}\scripts"; 
 Source: ".\read_dg200_logger.bat";                    DestDir: "{app}\scripts";         Attribs: readonly; Flags: overwritereadonly;
 Source: "..\web-app\licenses\GPL_License.txt";        DestDir: "{app}";                 Attribs: readonly; Flags: overwritereadonly uninsremovereadonly; AfterInstall: MyAfterInstall;
 
-;Source: ".\tomcat-users.xml";                         DestDir: "{app}\tomcat\conf";
-;Source: ".\fc-service-start.xml";                     DestDir: "{app}";
-
 [Dirs]
 Name: "C:\FCSave";         Flags: uninsneveruninstall; Permissions: everyone-modify;
 Name: "C:\FCSave\.fc";     Flags: uninsneveruninstall; Permissions: everyone-modify;
@@ -93,7 +85,6 @@ Name: "C:\FCSave\.geodata";Flags: uninsneveruninstall; Permissions: everyone-mod
 Name: "C:\FCSave\.geodata\images";Flags: uninsneveruninstall; Permissions: everyone-modify;
 
 [Registry]
-;Root: HKLM32; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat9w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC32();
 Root: HKLM64; Subkey: "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers"; ValueType: string; ValueName: "{app}\tomcat\bin\tomcat9w.exe"; ValueData: "RUNASADMIN"; Check: IsUAC64();
 
 [Run]
@@ -102,7 +93,6 @@ Filename: "{app}\install-service.bat";      Parameters: "install FlightContest";
 Filename: "sc.exe";                         Parameters: "sdset FlightContest D:AR(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWRPWPDTLOCRRC;;;IU)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)"; WorkingDir: "{app}";  Flags: runhidden;
 ; start tomcat monitor
 Filename: "{app}\tomcat\bin\tomcat9w.exe";  Parameters: "//MS//FlightContest";             WorkingDir: "{app}"; Flags: nowait;
-;Filename: "schtasks.exe";                   Parameters: "/Create /S {computername} /XML ""{app}\fc-service-start.xml"" /TN ""Flight Contest Service Manager"""; WorkingDir: "{app}";  Flags: runhidden;
 
 [UninstallRun]
 ; remove FlightContest service
@@ -126,8 +116,6 @@ Type: filesandordirs; Name: "{app}\scripts";
 Type: filesandordirs; Name: "{app}\rules";
 
 [Icons]
-;Name: "{userdesktop}\Flight Contest";           Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{userdesktop}";    
-  ;nur sichtbar, wenn User zur Administrator-Gruppe gehört
 Name: "{commondesktop}\Flight Contest";         Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";    
 Name: "{group}\Flight Contest Service Manager"; Filename: "{app}\tomcat\bin\tomcat9w.exe";          Parameters: "//MS//FlightContest";           WorkingDir: "{app}";
 Name: "{group}\Flight Contest";                 Filename: "http://localhost:8080/fc/contest/start"; IconFilename: "{app}\fc.ico";                WorkingDir: "{commondesktop}";
@@ -265,9 +253,55 @@ begin
   shell := CreateOleObject('WScript.Shell');
   ret := shell.Run('cmd.exe /Ctaskkill.exe /F /IM tomcat9w.exe', 0, true);  // 0 - unsichtbar, True - Wait for return
   ret := shell.Run('cmd.exe /Ctaskkill.exe /F /IM tomcat9.exe', 0, true);  // 0 - unsichtbar, True - Wait for return
-  //MsgBox( IntToStr(ret), mbInformation, MB_OK);
 
   Result := true;
+end;
+
+//---------------------------------------------------------------------------------------------------------
+procedure DirectoryCopy(SourcePath, DestPath: string);
+var
+  find_rec: TFindRec;
+  source_file_path: string;
+  dest_file_path: string;
+begin
+  if FindFirst(SourcePath + '\*', find_rec) then begin
+    try
+      repeat
+        if (find_rec.Name <> '.') and (find_rec.Name <> '..') then begin
+          source_file_path := SourcePath + '\' + find_rec.Name;
+          dest_file_path := DestPath + '\' + find_rec.Name;
+          if find_rec.Attributes and FILE_ATTRIBUTE_DIRECTORY = 0 then begin
+            FileCopy(source_file_path, dest_file_path, False)
+          end else begin
+            if DirExists(dest_file_path) or CreateDir(dest_file_path) then begin
+              DirectoryCopy(source_file_path, dest_file_path);
+            end;
+          end;
+        end;
+      until not FindNext(find_rec);
+    finally
+      FindClose(find_rec);
+    end;
+  end;
+end;
+
+//---------------------------------------------------------------------------------------------------------
+function PrepareToInstall(var NeedsRestart: Boolean): String;
+var map_dir: string;
+    map_backup_dir: string;
+    map_backup_dir2: string;
+begin
+  // save maps
+  map_dir := ExpandConstant('{app}\tomcat\webapps\fc\map');
+  map_backup_dir := ExpandConstant('{app}\map-backup');
+  map_backup_dir2 := ExpandConstant('{app}\map-backup-' + GetDateTimeString('yyyy.mm.dd-hh.nn.ss', #0, #0));
+  if CreateDir(map_backup_dir2) then begin
+    DirectoryCopy(map_dir, map_backup_dir2);
+  end;
+  DelTree(map_backup_dir, True, True, True);
+  RenameFile(map_dir, map_backup_dir);
+
+  Result := '';
 end;
 
 //---------------------------------------------------------------------------------------------------------
@@ -275,14 +309,8 @@ procedure MyAfterInstall();
 var last_version: string;
     db_dir: string;
     db_backup_dir: string;
-    // fc_service_start_filename: string;
     ret: integer;
-    //fc_service_start_array: TArrayOfString;
-    //user_domain: string;
-    //i: integer;
-    //p: integer;
 begin
-
   // get last version
   RegQueryStringValue( HKCU, 'SOFTWARE\Flight Contest', 'lastVersion', last_version )
   
@@ -309,16 +337,6 @@ begin
     CreateDir( db_dir );
   end;
   
-  // modify task
-  //if LoadStringsFromFile(fc_service_start_filename, fc_service_start_array) then begin
-  //  user_domain :=  ExpandConstant('{%USERDOMAIN}')
-  //  for i := 0 to GetArrayLength(fc_service_start_array)-1 do begin
-  //    StringChangeEx(fc_service_start_array[i],'${USERID}', user_domain + '\' + ExpandConstant('{username}'), true);
-  //    StringChangeEx(fc_service_start_array[i],'${CMD}',    ExpandConstant('{app}\tomcat\bin\tomcat9w.exe'), true);
-  //  end;
-  //  SaveStringsToFile(fc_service_start_filename, fc_service_start_array, false); // false - no append
-  //end;
-
   // Remove logs
   DelTree( db_dir + '\logs', true, true, true );
   DeleteFile( db_dir + '\fcdb.trace.db' );
@@ -328,5 +346,4 @@ begin
 
   // write installed version
   RegWriteStringValue( HKCU, 'SOFTWARE\Flight Contest', 'lastVersion', DBVersion )
-
 end;

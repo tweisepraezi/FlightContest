@@ -42,6 +42,9 @@
                         size: 140mm 198mm;
                     </g:else>
                 </g:elseif>
+                <g:elseif test="${params.printSize==Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA}">
+                    size: 840mm 840mm;
+                </g:elseif>
                 margin-top: 8mm;
                 margin-left: 8mm;
                 margin-right: 8mm;

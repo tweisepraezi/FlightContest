@@ -201,11 +201,11 @@ class GpxController
     }
     
     def startgpxviewer = {
-        gpxService.printstart "startgpxviewer ($params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints, gmApiKey:$params.gmApiKey)"
+        gpxService.printstart "startgpxviewer (${session.lastContest.contestUUID} $params.uploadFilename, $params.originalFilename, TestID:$params.testID, Lang:$params.showLanguage, Cancel:$params.showCancel, Profiles:$params.showProfiles, Zoom:$params.showZoom, Points:$params.showPoints, gmApiKey:$params.gmApiKey)"
         if (session.gpxShowPoints) {
-            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gmApiKey:params.gmApiKey,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
+            render(view:"gpxviewer",model:[contestUUID:session.lastContest.contestUUID, defaultOnlineMap:params.defaultOnlineMap, fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gmApiKey:params.gmApiKey,gpxShowPoints:HTMLFilter.GetList(session.gpxShowPoints)])
         } else {
-            render(view:"gpxviewer",model:[fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gmApiKey:params.gmApiKey])
+            render(view:"gpxviewer",model:[contestUUID:session.lastContest.contestUUID, defaultOnlineMap:params.defaultOnlineMap, fileName:params.uploadFilename,originalFilename:params.originalFilename,testID:params.testID,showLanguage:params.showLanguage,showCancel:params.showCancel,showProfiles:params.showProfiles,showZoom:params.showZoom,showPoints:params.showPoints,gmApiKey:params.gmApiKey])
         }
         gpxService.printdone ""
     }

@@ -278,6 +278,10 @@ Interessante Test-Daten
         2  - 3.7. - Logger-Aufzeichnung vor TO mit identischen Punkten
     2017_07_3.1.RC6_SWDR
         Bilder und Bodenzeichen im Halbkreis (Koordinaten fehlerhaft)
+    2023_02_3.3.5.2_WRFC
+        Delta: Semicircle, Scenic, Semicircle, Touceh & Go ohne iLDG
+            02 - Bad courses im Scenic Leg, da Vorbeiflug WP8
+            
         
     BC = Bad Course
     BT = Bad Turn

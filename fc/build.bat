@@ -15,8 +15,8 @@ cd %startdir%
 
 for /f %%a in ('powershell -Command "Get-Date -format yyyy-MM-ddTHH-mm-ss"') do set BUILD_TIME=%%a
 
-set JAVA_HOME=%basedir%\Java\openjdk-1.8.0.275x64
-set RUBY_HOME=%basedir%\Ruby\ruby-2.3.3-x64-mingw32\bin
+set JAVA_HOME=%basedir%\Java\openjdk-1.8.0.302x64
+set ASCIIDOCTOR_HOME=%basedir%\AsciiDoctorJ\asciidoctorj-2.5.1
 set GRAILS_HOME=%basedir%\Grails\Grails-2.5.6
 set GRAILS_OPTS=-server -Xmx4096M -Xms768M -Dfile.encoding=UTF-8
 set SETUPEXE=%ProgramFiles(x86)%\Inno Setup 6\iscc.exe
@@ -24,10 +24,10 @@ set TOUCHEXE=%basedir%\Touch\touch.exe
 ::set GDAL_BIN=%basedir%\gdal\gdal-3.2.1\bin
 ::set GDAL_BIN2=%basedir%\gdal\gdal-3.2.1\bin\gdal\java
 ::set PROJ_LIB=%basedir%\gdal\gdal-3.2.1\bin\proj7\share
-set SAVEDIR=%basedir%\EPJ\PJ11\_Projekt\_save
+set SAVEDIR=%startdir%\save
 
 if not exist "%JAVA_HOME%" goto javaerror
-if not exist "%RUBY_HOME%" goto rubyerror
+if not exist %ASCIIDOCTOR_HOME% goto asciidoctorerror
 if not exist "%GRAILS_HOME%" goto grailserror
 if not exist "%SETUPEXE%" goto setuperror
 if not exist "%TOUCHEXE%" goto setuperror
@@ -49,7 +49,7 @@ echo FCWAR_NAME=%FCWAR_NAME%
 echo SAVEDIR=%SAVEDIR%
 echo.
 echo JAVA_HOME=%JAVA_HOME%
-echo RUBY_HOME=%RUBY_HOME%
+echo ASCIIDOCTOR_HOME=%ASCIIDOCTOR_HOME%
 echo GRAILS_HOME=%GRAILS_HOME%
 echo GRAILS_OPTS=%GRAILS_OPTS%
 echo SETUPEXE=%SETUPEXE%
@@ -76,10 +76,18 @@ echo.
 rmdir /Q /S web-app\gpxupload
 md web-app\gpxupload
 attrib +h web-app\gpxupload
+rmdir /Q /S web-app\map
+md web-app\map
+attrib +h web-app\map
 del /Q web-app\jobs\*
 del /Q web-app\jobs\done\*
 del /Q web-app\jobs\error\*
 del /Q web-app\live\*
+
+::-------------------------------------------------------------------
+:createfolder
+if not exist output md output
+if not exist save md save
 
 ::-------------------------------------------------------------------
 :buildhelp
@@ -122,6 +130,8 @@ call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\fc.war
 echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help.pdf
 echo.
+call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help_en.pdf
+echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- output\help_fcmaps.pdf
 echo.
 call %TOUCHEXE% -xamv -t %DEPLOY_TIME% -- deploy\readme_tracking.txt
@@ -145,9 +155,9 @@ echo.
 goto :eof
 
 ::-------------------------------------------------------------------
-:rubyerror
+:asciidoctorerror
 echo.
-echo '%RUBY_HOME%' not found. 
+echo '%ASCIIDOCTOR_HOME%' not found. 
 echo Exit.
 echo.
 ::pause

@@ -45,6 +45,12 @@ styles:
 - name: fcmaps-dev
   xmlpath: ../otm-dev/mapnik
   xmlfile: fcmaps.xml
+- name: fcmaps-latlon
+  xmlpath: ../otm/mapnik
+  xmlfile: fcmaps-latlon.xml
+- name: fcmaps-latlon-dev
+  xmlpath: ../otm-dev/mapnik
+  xmlfile: fcmaps-latlon.xml
 - name: opentopomap-fc
   xmlpath: ../otm/mapnik
   xmlfile: fcmaps-old.xml

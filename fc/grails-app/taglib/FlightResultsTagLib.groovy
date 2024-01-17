@@ -32,232 +32,234 @@ class FlightResultsTagLib
 			Route route_instance = attrs.t.task.flighttest.route
             CoordResult last_coordresult_instance = null
             for(CoordResult coordresult_instance in CoordResult.findAllByTest(attrs.t,[sort:"id"])) {
+                if (!coordresult_instance.ignoreGate) {
                 
-                // procedure turn
-                if (coordresult_instance.planProcedureTurn && (attrs.t.task.procedureTurnDuration > 0)) {
-                    leg_no++
-                    outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
-                    outln"""        <td>${coordresult_link(coordresult_instance, leg_no.toString(), true, createLink(controller:'coordResult',action:'editprocedureturn'),0)}</td>"""
-                    outln"""        <td>${message(code:'fc.procedureturn')}</td>"""
-                    outln"""        <td>${message(code:'fc.test.results.measured')}</td>"""
-                    //outln"""      <td/>"""
-                    //outln"""      <td/>"""
-                    if (coordresult_instance.resultProcedureTurnEntered) {
-                        if (coordresult_instance.resultProcedureTurnNotFlown) {
-                            if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
-                                outln"""<td>${message(code:'fc.flighttest.procedureturnnotflown.short')}</td>"""
-                            } else if (attrs.t.task.procedureTurnDuration == 0) {
-                                outln"""<td>${message(code:'fc.flighttest.procedureturnnotflown.short')}</td>"""
+                    // procedure turn
+                    if (coordresult_instance.planProcedureTurn && (attrs.t.task.procedureTurnDuration > 0)) {
+                        leg_no++
+                        outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
+                        outln"""        <td>${coordresult_link(coordresult_instance, leg_no.toString(), true, createLink(controller:'coordResult',action:'editprocedureturn'),0)}</td>"""
+                        outln"""        <td>${message(code:'fc.procedureturn')}</td>"""
+                        outln"""        <td>${message(code:'fc.test.results.measured')}</td>"""
+                        //outln"""      <td/>"""
+                        //outln"""      <td/>"""
+                        if (coordresult_instance.resultProcedureTurnEntered) {
+                            if (coordresult_instance.resultProcedureTurnNotFlown) {
+                                if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
+                                    outln"""<td>${message(code:'fc.flighttest.procedureturnnotflown.short')}</td>"""
+                                } else if (attrs.t.task.procedureTurnDuration == 0) {
+                                    outln"""<td>${message(code:'fc.flighttest.procedureturnnotflown.short')}</td>"""
+                                } else {
+                                    outln"""<td class="errors">${message(code:'fc.flighttest.procedureturnnotflown.short')}</td>"""
+                                }
                             } else {
-                                outln"""<td class="errors">${message(code:'fc.flighttest.procedureturnnotflown.short')}</td>"""
+                                outln"""<td>${message(code:'fc.flighttest.procedureturnflown.short')}</td>"""
                             }
                         } else {
-                            outln"""<td>${message(code:'fc.flighttest.procedureturnflown.short')}</td>"""
+                            outln"""    <td>${message(code:'fc.unknown')}</td>"""
                         }
-                    } else {
-                        outln"""    <td>${message(code:'fc.unknown')}</td>"""
-                    }
-                    outln"""        <td/>"""
-                    outln"""        <td/>"""
-                    outln"""    </tr>"""
-                    outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
-                    outln"""        <td/>"""
-                    outln"""        <td/>"""
-                    outln"""        <td>${message(code:'fc.test.results.penalty')}</td>"""
-                    //outln"""      <td/>"""
-                    //outln"""      <td/>"""
-                    if (coordresult_instance.resultProcedureTurnEntered) {
-                        if (last_coordresult_instance && DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
-                            outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                        } else if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() == 0) || (attrs.t.task.procedureTurnDuration == 0)) {
-                            outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                        } else if (coordresult_instance.resultProcedureTurnNotFlown) {
-                            penalty_coord_summary += attrs.t.GetFlightTestProcedureTurnNotFlownPoints()
-                            outln"""<td class="points">${attrs.t.GetFlightTestProcedureTurnNotFlownPoints()} ${message(code:'fc.points')}</td>"""
+                        outln"""        <td/>"""
+                        outln"""        <td/>"""
+                        outln"""    </tr>"""
+                        outln"""    <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
+                        outln"""        <td/>"""
+                        outln"""        <td/>"""
+                        outln"""        <td>${message(code:'fc.test.results.penalty')}</td>"""
+                        //outln"""      <td/>"""
+                        //outln"""      <td/>"""
+                        if (coordresult_instance.resultProcedureTurnEntered) {
+                            if (last_coordresult_instance && DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsProcedureTurn).contains(last_coordresult_instance.title()+',')) {
+                                outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                            } else if ((attrs.t.GetFlightTestProcedureTurnNotFlownPoints() == 0) || (attrs.t.task.procedureTurnDuration == 0)) {
+                                outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                            } else if (coordresult_instance.resultProcedureTurnNotFlown) {
+                                penalty_coord_summary += attrs.t.GetFlightTestProcedureTurnNotFlownPoints()
+                                outln"""<td class="points">${attrs.t.GetFlightTestProcedureTurnNotFlownPoints()} ${message(code:'fc.points')}</td>"""
+                            } else {
+                                outln"""<td class="zeropoints">0 ${message(code:'fc.points')}</td>"""
+                            }
                         } else {
-                            outln"""<td class="zeropoints">0 ${message(code:'fc.points')}</td>"""
+                            outln"""    <td>${message(code:'fc.unknown')}</td>"""
                         }
+                        outln"""        <td/>"""
+                        outln"""        <td/>"""
+                        outln"""    </tr>"""
+                    }
+                    leg_no++
+                    
+                    // check point
+                    outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
+                    long next_id = 0
+                    boolean set_next = false
+                    for (CoordResult coordresult_instance2 in CoordResult.findAllByTest(attrs.t,[sort:"id"])) { // search next_id
+                        if (set_next) {
+                            next_id = coordresult_instance2.id
+                            set_next = false
+                        }
+                        if (coordresult_instance2 == coordresult_instance) {
+                            set_next = true
+                        }
+                    }
+                    outln"""            <td>${coordresult_link(coordresult_instance, leg_no.toString(), false, createLink(controller:'coordResult',action:'edit'), next_id)}</td>"""
+                    outln"""            <td>${coordresult_instance.titleCode()}</td>"""
+                    outln"""            <td>${message(code:'fc.test.results.plan')}</td>"""
+                    //outln"""          <td>${coordresult_instance.latName()}</td>"""
+                    //outln"""          <td>${coordresult_instance.lonName()}</td>"""
+                    outln"""            <td>${FcMath.TimeStr(coordresult_instance.planCpTime)}</td>"""
+                    if (coordresult_instance.type.IsBadCourseCheckCoord()) {
+                        outln"""        <td>0</td>"""
                     } else {
-                        outln"""    <td>${message(code:'fc.unknown')}</td>"""
+                        outln"""        <td/>"""
                     }
-                    outln"""        <td/>"""
-                    outln"""        <td/>"""
-                    outln"""    </tr>"""
-                }
-                leg_no++
-                
-                // check point
-                outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
-                long next_id = 0
-                boolean set_next = false
-                for (CoordResult coordresult_instance2 in CoordResult.findAllByTest(attrs.t,[sort:"id"])) { // search next_id
-                    if (set_next) {
-                        next_id = coordresult_instance2.id
-                        set_next = false
-                    }
-                    if (coordresult_instance2 == coordresult_instance) {
-                        set_next = true
-                    }
-                }
-                outln"""            <td>${coordresult_link(coordresult_instance, leg_no.toString(), false, createLink(controller:'coordResult',action:'edit'), next_id)}</td>"""
-                outln"""            <td>${coordresult_instance.titleCode()}</td>"""
-                outln"""            <td>${message(code:'fc.test.results.plan')}</td>"""
-                //outln"""          <td>${coordresult_instance.latName()}</td>"""
-                //outln"""          <td>${coordresult_instance.lonName()}</td>"""
-                outln"""            <td>${FcMath.TimeStr(coordresult_instance.planCpTime)}</td>"""
-                if (coordresult_instance.type.IsBadCourseCheckCoord()) {
-                    outln"""        <td>0</td>"""
-                } else {
-                    outln"""        <td/>"""
-                }
-                outln"""            <td>${get_check_altitude_str(route_instance, coordresult_instance)}</td>"""
-                outln"""        </tr>"""
-                outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
-                outln"""            <td/>"""
-                outln"""            <td/>"""
-                outln"""            <td>${message(code:'fc.test.results.measured')}</td>"""
-                //outln"""          <td>${coordresult_instance.resultLatitude}</td>"""
-                //outln"""          <td>${coordresult_instance.resultLongitude}</td>"""
-                if (coordresult_instance.resultEntered) {
-                    if (coordresult_instance.resultCpNotFound) {
-                        if ((coordresult_instance.type == CoordType.TO) && (!(coordresult_instance.test.IsFlightTestCheckTakeOff() || coordresult_instance.test.GetFlightTestTakeoffCheckSeconds()))) {
-                            outln"""<td/>"""
-                        } else if ((coordresult_instance.type == CoordType.LDG) && !coordresult_instance.test.IsFlightTestCheckLanding()) {
-                            outln"""<td/>"""
-                        } else if (coordresult_instance.type.IsCpTimeCheckCoord()) {
-                            if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
-                                if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsNotFound).contains(coordresult_instance.title()+',')) {
-                                    outln"""<td>${coordresult_instance.GetCpNotFoundShortName()}</td>"""
+                    outln"""            <td>${get_check_altitude_str(route_instance, coordresult_instance)}</td>"""
+                    outln"""        </tr>"""
+                    outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
+                    outln"""            <td/>"""
+                    outln"""            <td/>"""
+                    outln"""            <td>${message(code:'fc.test.results.measured')}</td>"""
+                    //outln"""          <td>${coordresult_instance.resultLatitude}</td>"""
+                    //outln"""          <td>${coordresult_instance.resultLongitude}</td>"""
+                    if (coordresult_instance.resultEntered) {
+                        if (coordresult_instance.resultCpNotFound) {
+                            if ((coordresult_instance.type == CoordType.TO) && (!(coordresult_instance.test.IsFlightTestCheckTakeOff() || coordresult_instance.test.GetFlightTestTakeoffCheckSeconds()))) {
+                                outln"""<td/>"""
+                            } else if ((coordresult_instance.type == CoordType.LDG) && !coordresult_instance.test.IsFlightTestCheckLanding()) {
+                                outln"""<td/>"""
+                            } else if (coordresult_instance.type.IsCpTimeCheckCoord()) {
+                                if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
+                                    if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsNotFound).contains(coordresult_instance.title()+',')) {
+                                        outln"""<td>${coordresult_instance.GetCpNotFoundShortName()}</td>"""
+                                    } else {
+                                        outln"""<td class="errors">${coordresult_instance.GetCpNotFoundShortName()}</td>"""
+                                    }
                                 } else {
-                                    outln"""<td class="errors">${coordresult_instance.GetCpNotFoundShortName()}</td>"""
+                                    outln"""<td>${coordresult_instance.GetCpNotFoundShortName()}</td>"""
                                 }
                             } else {
                                 outln"""<td>${coordresult_instance.GetCpNotFoundShortName()}</td>"""
                             }
                         } else {
-                            outln"""<td>${coordresult_instance.GetCpNotFoundShortName()}</td>"""
+                            outln"""    <td>${FcMath.TimeStr(coordresult_instance.resultCpTime)}</td>"""
                         }
-                    } else {
-                        outln"""    <td>${FcMath.TimeStr(coordresult_instance.resultCpTime)}</td>"""
-                    }
-                    if (coordresult_instance.type.IsBadCourseCheckCoord()) {
-                        if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
-                            outln"""<td>${coordresult_instance.resultBadCourseNum}</td>"""
-                        } else if (coordresult_instance.resultBadCourseNum) {
-                            outln"""<td class="errors">${coordresult_instance.resultBadCourseNum}</td>"""
-                        } else {
-                            outln"""<td>0</td>"""
-                        }
-                    } else {
-                        outln"""    <td/>"""
-                    }
-                    if (!coordresult_instance.resultAltitude) {
-                        outln"""    <td/>"""
-                    } else {
-                        if (!coordresult_instance.resultMinAltitudeMissed) {
-                            outln"""<td>${coordresult_instance.resultAltitude}${message(code:'fc.foot')}</td>"""
-                        } else {
-                            if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsMinAltitude).contains(coordresult_instance.title()+',')) {
-                                outln"""<td>${coordresult_instance.resultAltitude}${message(code:'fc.foot')}</td>"""
-                            } else {
-                                outln"""<td class="errors">${coordresult_instance.resultAltitude}${message(code:'fc.foot')}</td>"""
-                            }
-                        }
-                    }
-                } else {
-                    outln"""        <td>${message(code:'fc.unknown')}</td>"""
-                    if (coordresult_instance.type.IsBadCourseCheckCoord()) {
-                        outln"""    <td>${message(code:'fc.unknown')}</td>"""
-                    } else {
-                        outln"""    <td/>"""
-                    }
-                    outln"""        <td/>"""
-                }
-                outln"""        </tr>"""
-                outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
-                outln"""            <td/>"""
-                outln"""            <td/>"""
-                outln"""            <td>${message(code:'fc.test.results.penalty')}</td>"""
-                //outln"""          <td/>"""
-                //outln"""          <td/>"""
-                if (coordresult_instance.resultEntered) {
-                    if ((coordresult_instance.type == CoordType.TO) && (!(coordresult_instance.test.IsFlightTestCheckTakeOff() || coordresult_instance.test.GetFlightTestTakeoffCheckSeconds()))) {
-                        outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                    } else if ((coordresult_instance.type == CoordType.LDG) && !coordresult_instance.test.IsFlightTestCheckLanding()) {
-                        outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                    } else if (coordresult_instance.resultCpNotFound) {
-                        if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsNotFound).contains(coordresult_instance.title()+',')) {
-                            outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                        } else if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
-                            outln"""<td class="points">${coordresult_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
-                        } else {
-                            outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                        }
-                    } else if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPoints).contains(coordresult_instance.title()+',')) {
-                        outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                    } else if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
-                        String points_class = "points"
-                        if (!coordresult_instance.penaltyCoord) {
-                            points_class = "zeropoints"
-                        }
-                        outln"""    <td class="${points_class}">${coordresult_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
-                    } else {
-                        outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                    }
-                    
-                    
-                    if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
                         if (coordresult_instance.type.IsBadCourseCheckCoord()) {
                             if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
-                                outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                                outln"""<td>${coordresult_instance.resultBadCourseNum}</td>"""
+                            } else if (coordresult_instance.resultBadCourseNum) {
+                                outln"""<td class="errors">${coordresult_instance.resultBadCourseNum}</td>"""
                             } else {
-                                int badcourse_penalties = coordresult_instance.GetBadCoursePenalties()
-                                penalty_badcourse_summary += badcourse_penalties
-                                String points_class = "points"
-                                if (!coordresult_instance.resultBadCourseNum) {
-                                    points_class = "zeropoints"
+                                outln"""<td>0</td>"""
+                            }
+                        } else {
+                            outln"""    <td/>"""
+                        }
+                        if (!coordresult_instance.resultAltitude) {
+                            outln"""    <td/>"""
+                        } else {
+                            if (!coordresult_instance.resultMinAltitudeMissed) {
+                                outln"""<td>${coordresult_instance.resultAltitude}${message(code:'fc.foot')}</td>"""
+                            } else {
+                                if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsMinAltitude).contains(coordresult_instance.title()+',')) {
+                                    outln"""<td>${coordresult_instance.resultAltitude}${message(code:'fc.foot')}</td>"""
+                                } else {
+                                    outln"""<td class="errors">${coordresult_instance.resultAltitude}${message(code:'fc.foot')}</td>"""
                                 }
-                                outln"""<td class="${points_class}">${badcourse_penalties} ${message(code:'fc.points')}</td>"""
                             }
-                        } else {
-                            outln"""<td/>"""
                         }
                     } else {
-                        outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                    }
-                } else {
-                    outln"""        <td>${message(code:'fc.unknown')}</td>"""
-                    if (coordresult_instance.type.IsBadCourseCheckCoord()) {
-                        outln"""    <td>${message(code:'fc.unknown')}</td>"""
-                    } else {
-                        outln"""    <td/>"""
-                    }
-                }
-                if (coordresult_instance.type.IsAltitudeCheckCoord()) {
-                    if (attrs.t.GetFlightTestMinAltitudeMissedPoints() > 0) {
-                        if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsMinAltitude).contains(coordresult_instance.title()+',')) {
-                            outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
-                        } else if (!coordresult_instance.resultAltitude) {
-                            outln"""<td/>"""
+                        outln"""        <td>${message(code:'fc.unknown')}</td>"""
+                        if (coordresult_instance.type.IsBadCourseCheckCoord()) {
+                            outln"""    <td>${message(code:'fc.unknown')}</td>"""
                         } else {
-                            if (coordresult_instance.resultMinAltitudeMissed) {
-                                penalty_altitude_summary += attrs.t.GetFlightTestMinAltitudeMissedPoints()
-                                outln"""<td class="points">${attrs.t.GetFlightTestMinAltitudeMissedPoints()} ${message(code:'fc.points')}</td>"""
+                            outln"""    <td/>"""
+                        }
+                        outln"""        <td/>"""
+                    }
+                    outln"""        </tr>"""
+                    outln"""        <tr class="${(leg_no % 2) == 0 ? '' : 'odd'}">"""
+                    outln"""            <td/>"""
+                    outln"""            <td/>"""
+                    outln"""            <td>${message(code:'fc.test.results.penalty')}</td>"""
+                    //outln"""          <td/>"""
+                    //outln"""          <td/>"""
+                    if (coordresult_instance.resultEntered) {
+                        if ((coordresult_instance.type == CoordType.TO) && (!(coordresult_instance.test.IsFlightTestCheckTakeOff() || coordresult_instance.test.GetFlightTestTakeoffCheckSeconds()))) {
+                            outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                        } else if ((coordresult_instance.type == CoordType.LDG) && !coordresult_instance.test.IsFlightTestCheckLanding()) {
+                            outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                        } else if (coordresult_instance.resultCpNotFound) {
+                            if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsNotFound).contains(coordresult_instance.title()+',')) {
+                                outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                            } else if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
+                                outln"""<td class="points">${coordresult_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
                             } else {
-                                outln"""<td class="zeropoints">0 ${message(code:'fc.points')}</td>"""
+                                outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                             }
+                        } else if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPoints).contains(coordresult_instance.title()+',')) {
+                            outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                        } else if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
+                            String points_class = "points"
+                            if (!coordresult_instance.penaltyCoord) {
+                                points_class = "zeropoints"
+                            }
+                            outln"""    <td class="${points_class}">${coordresult_instance.penaltyCoord} ${message(code:'fc.points')}</td>"""
+                        } else {
+                            outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                        }
+                        
+                        
+                        if (attrs.t.GetFlightTestBadCoursePoints() > 0) {
+                            if (coordresult_instance.type.IsBadCourseCheckCoord()) {
+                                if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsBadCourse).contains(coordresult_instance.title()+',')) {
+                                    outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                                } else {
+                                    int badcourse_penalties = coordresult_instance.GetBadCoursePenalties()
+                                    penalty_badcourse_summary += badcourse_penalties
+                                    String points_class = "points"
+                                    if (!coordresult_instance.resultBadCourseNum) {
+                                        points_class = "zeropoints"
+                                    }
+                                    outln"""<td class="${points_class}">${badcourse_penalties} ${message(code:'fc.points')}</td>"""
+                                }
+                            } else {
+                                outln"""<td/>"""
+                            }
+                        } else {
+                            outln"""    <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
                         }
                     } else {
-                       outln"""     <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                        outln"""        <td>${message(code:'fc.unknown')}</td>"""
+                        if (coordresult_instance.type.IsBadCourseCheckCoord()) {
+                            outln"""    <td>${message(code:'fc.unknown')}</td>"""
+                        } else {
+                            outln"""    <td/>"""
+                        }
                     }
-                } else {
-                    outln"""        <td/>"""
+                    if (coordresult_instance.type.IsAltitudeCheckCoord()) {
+                        if (attrs.t.GetFlightTestMinAltitudeMissedPoints() > 0) {
+                            if (DisabledCheckPointsTools.Uncompress(attrs.t.task.disabledCheckPointsMinAltitude).contains(coordresult_instance.title()+',')) {
+                                outln"""<td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                            } else if (!coordresult_instance.resultAltitude) {
+                                outln"""<td/>"""
+                            } else {
+                                if (coordresult_instance.resultMinAltitudeMissed) {
+                                    penalty_altitude_summary += attrs.t.GetFlightTestMinAltitudeMissedPoints()
+                                    outln"""<td class="points">${attrs.t.GetFlightTestMinAltitudeMissedPoints()} ${message(code:'fc.points')}</td>"""
+                                } else {
+                                    outln"""<td class="zeropoints">0 ${message(code:'fc.points')}</td>"""
+                                }
+                            }
+                        } else {
+                           outln"""     <td class="zeropoints">${message(code:'fc.disabled')}</td>"""
+                        }
+                    } else {
+                        outln"""        <td/>"""
+                    }
+                    outln"""        </tr>"""
+                    if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
+                        penalty_coord_summary += coordresult_instance.penaltyCoord
+                    }
+                    last_coordresult_instance = coordresult_instance
                 }
-                outln"""        </tr>"""
-                if ((coordresult_instance.type != CoordType.SECRET) || check_secretpoints) {
-                    penalty_coord_summary += coordresult_instance.penaltyCoord
-                }
-                last_coordresult_instance = coordresult_instance
             }
             outln"""        </tbody>"""
             outln"""        <tfoot>"""

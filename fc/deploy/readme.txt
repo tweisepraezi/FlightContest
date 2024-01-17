@@ -1,6 +1,48 @@
 ﻿Flight Contest
 ==============
 
+Änderungen 3.4.0
+----------------
+- Menüpunkt "Karten" hinzugefügt
+    Listet alle lokal gespeicherten Karten des Wettbewerbes auf.
+    Hier stehen Kommandos zur PDF- und PNG-Erzeugung, zum Export, zum Umbenennen, zum Löschen und zum Aufruf des Task-Creators zur Verfügung.
+    PDF-Karten sind zum Druck vorgesehen.
+    Neue Karten zur PDF/PNG-Erzeugung oder zur Verwendung im Task-Creator werden mit "OSM-Wettbewerbs-Karte" einer Strecke erzeugt.
+    Dabei muss für PDF/PNG oder für den Task-Creator jeweils eine eigene Karte erzeugt werden.
+    Mit "Karte importieren" kann ein Karten-Export auf einem anderen Notebook oder in einem anderen Wettbewerb importiert werden.
+- OSM-Wettbewerbs-Karte erweitert:
+    1. Schalter "Online-Karte um Flughafen erzeugen" hinzugefügt,
+       welche eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für OSM-Online-Anzeige erzeugt.
+    2. Schalter "Task-Creator-Karte um Flughafen erzeugen" hinzugefügt,
+       welche eine Karte mit T/O in der Mitte mit 420mm Abstand zum Rand für Verwendung im Task-Creator erzeugt.
+    3. Schalter "Erzeugen (für Task-Creator)" jeweils in den 1./2./3./4. Einstellungen hinzugefügt,
+       welche Karten mit T/O und ggf. LDG aber ohne weitere Streckendetails zur Verwendung im Task-Creator erzeugt.
+    4. Erzeugte OSM-Karten werden jetzt immer lokal gespeichert und sind dann über den Menüpunkt "Karten" erreichbar,
+       wo Weiterverarbeitungs-Kommandos zur Verfügung stehen.
+- OSM-Online-Karte: Anzeige lokal gespeicherter Karten hinzugefügt
+    Hierbei kann fließend zwischen Online-Karte und lokaler Karte umgeschaltet werden.
+    Sind mehrere lokale Karten vorhanden, kann zwischen diesen umgeschaltet werden.
+    Die Default-Karte kann in den 'Strecken-Einstellungen' festgelegt werden.
+    Für den Task-Creator erzeugte Karten können hier nicht angezeigt werden, da diese Karten eine andere Karten-Projektion nutzen.
+- Integrierter Task-Creator zur Strecken-Konstruktion hinzugefügt
+    Basiert auf http://www.airrats.cl/taskcreator?lang=en von Carlos Rocca.
+    Start des Task-Creators über "..." einer gepeicherten Karte für eine neue Aufgabe:
+      Hier ist die "Map Url" im Task-Creator voreingestellt und kann mit "Load" geladen werden.
+      Nach Aktivieren von "Turn Points -> Edit" können mit Doppelklick Wendepunkte auf der Karte hinzugefügt werden.
+      Mit "Save task data" kann die Aufgabe als CSV-Datei im Download-Ordner des Computers abgespeichert werden.
+    Start über Menüpunkt "Karten -> Task-Creator" zum Laden bereits gespeicherter Aufgaben:
+      Mit "Load task data" kann die gespeicherte CSV-Datei einer Aufgabe geladen werden. 
+      Eine voreingestellte "Map Url" muss mit "Load" geladen werden.
+      Nach Aktivieren von "Turn Points -> Edit" ist eine Weiterbearbeitung der Aufgabe möglich.
+      Mit "Export FC kml" kann eine Strecke exportiert werden, die mit "Strecken -> Import FC-Strecke" zur Planung und Auswertung genutzt werden kann.
+- Halbkreis-Tore aus Kreismittelpunkten werden jetzt mit 5° Kursänderung erzeugt.
+    Das kann mit der Strecken-Einstellung "Kurs-Änderung je Halbkreis-Tor" verändert werden.
+- Die Begrenzung der Anzahl von Strecken-Punkten wurde aufgehoben.
+- Strecken-Koordinate: Option "Check-Punkt ignorieren" für landschaftlichen Streckenabschnitt hinzugefügt
+    Bewirkt, dass diese Koordinate nicht ausgewertet wird und nicht in Online/Offline-Viewer und verschiedenen Eingabe-Masken zu sehen ist.
+- Ergebnisse: Druck-Optionen bei anstehendem Besatzungs-Ergebnisdruck über ... mit einem Klick erreichbar.
+    Das ermöglicht es, bei Änderungen an einem Besatzungs-Ergebnis dessen Korrektur-Druck schneller durchzuführen.
+
 Änderungen 3.3.6
 ----------------
 - Bug "UZKs des krummen Streckenabschnittes im Navigationsflug-Ergebnis werden bei hintereinander liegenden krummen Streckenabschnitten immer gedruckt" behoben

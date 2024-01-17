@@ -85,3 +85,13 @@ http://code.google.com/apis/maps/documentation/overlays.html#Google_Maps_Coordin
 
 https://wiki.openstreetmap.org/wiki/DE:Slippy_map_tilenames
     - Java
+
+
+gdalwarp
+--------
+https://gis.stackexchange.com/questions/34265/how-to-convert-a-png-with-known-bounds-from-plate-carree-to-mercator-with-gdal
+gdal_translate -of Gtiff -a_ullr LeftLon UpperLat RightLon BottomLat -a_srs EPSG:4326 pc_map_piece.png pc_map_piece.tiff
+gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3857 pc_map_piece.tiff mer_map_piece.tiff
+
+gdal_translate -of Gtiff -a_ullr LeftLon UpperLat RightLon BottomLat -a_srs EPSG:3857 pc_map_piece.png pc_map_piece.tiff
+gdalwarp -s_srs EPSG:3857 -t_srs EPSG:4326 pc_map_piece.tiff mer_map_piece.tiff

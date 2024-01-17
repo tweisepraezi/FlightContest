@@ -1,0 +1,118 @@
+
+http://www.airrats.cl/taskcreator/?lang=en
+http://www.airrats.cl/taskcreator/?lang=en&admin
+
+http://localhost:8080/fc/map/areamap.png
+http://localhost:8080/fc/map/areamap.pnginfo
+
+https://results.flightcontest.de/maps/areamap.png
+
+Top(Lat):    54.9060693889
+Center(Lat): 54.6572481220
+Bottom(Lat): 54.4084268551
+Right(Lon):  10.0634652024
+Center(Lon): 9.44243499999
+Left(Lon):   8.82140479758
+
+loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
+
+http://www.airrats.cl/taskcreator/?lang=en&admin&loadmap='https://results.flightcontest.de/maps/areamap.png',54.9060693889,54.4084268551,10.0634652024,8.82140479758
+
+    <!--
+    <script>
+        function get_map_params(params, searchParam) {
+            params = params.substr(1);
+            var params_array = params.split('&');
+            for (let i in params_array) {
+                if (params_array[i].startsWith(searchParam)) {
+                    var data = params_array[i].substr(searchParam.length+1);
+                    var data_array = data.split(',');
+                    return data_array;
+                }
+            }
+            return null;
+        }
+        var map_data = get_map_params(window.location.search, 'loadmap');
+        if (map_data) {
+            $("#map_url").val(map_data[0].replaceAll('%27',''));
+            $("#map_n").val(map_data[1]);
+            $("#map_s").val(map_data[2]);
+            $("#map_e").val(map_data[3]);
+            $("#map_w").val(map_data[4]);
+        }
+    </script>
+    -->
+
+
+    <script>
+        /*
+        $("btn_delete_task").click(function(event) {
+            if (confirm('You are going to delete the task. Are you sure?')) {
+            }
+            //event.preventDefault();
+            event.stopPropagation();
+            return false;
+        });
+        */
+        document.getElementById("btn_delete_task").addEventListener("click", function(event){
+          if (confirm('You are going to delete the task. Are you sure?')) {
+            //return true;
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          confirm('XXX')
+          return false;
+        });
+    </script>
+
+Projection problem
+------------------
+
+The Google Maps / Bing Maps Spherical Mercator Projection
+https://alastaira.wordpress.com/2011/01/23/the-google-maps-bing-maps-spherical-mercator-projection/
++nadgrids=@null
+
+Google Maps Boden-Overlays
+https://developers.google.com/maps/documentation/javascript/groundoverlays?hl=de
+
+Super-Overlays mit gdal2tiles erstellen (Nutzung von GDAL tools)
+https://developers.google.com/kml/articles/raster?hl=de
+    Verwenden Sie gdalinfo, um Informationen zum Bild zu ermitteln.
+    Mit gdal_translate ein Georeferenz für das Bild erstellen
+    Mit gdalwarp die Projektion des Bildes ändern
+    Mit gdal2tiles können Sie das Bild in Kacheln aufteilen und den zugehörigen KML-Code erstellen.
+
+    PNG -> TIFF -> PNG
+    gdal_translate -of Gtiff -a_ullr 75 45 145 -15 -a_srs EPSG:4326 CJGMY.png out_4326.tiff
+    gdalwarp -s_srs EPSG:4326 -t_srs EPSG:3857 -ts 850 728 out_4326.tiff out_3857.tiff
+    gdal_translate -of png out_3857.tiff final.png
+
+GroundOverlay distortion
+https://groups.google.com/g/google-maps-js-api-v3/c/89iWbjtZ3ko?pli=1
+
+    We stretch images in JS. The image is expected to be in LatLng coordinates, and is then warped according to the current projection:
+    http://code.google.com/apis/maps/documentation/javascript/overlays.html#GroundOverlays
+
+Leaflet vs GoggleMaps Overlays:
+https://gis.stackexchange.com/questions/299595/conversion-to-leaflet-from-google-maps-throws-image-overlay-out-of-alignment
+
+    gdal_translate and gdalwarp
+    Reprojection GoggleMaps images to Leaflet images to with gdal_translate and gdalwarp
+    
+LatLon   EPSG:4326
+Mercator EPSG:3857
+Mercator EPSG:3785 (old)
+Google Mercator EPSG:900913 (old)
+
+Georeferencing with GCPs
+https://courses.spatialthoughts.com/gdal-tools.html#georeferencing-with-gcps
+
+https://desktop.arcgis.com/de/arcmap/latest/map/projections/what-are-map-projections.htm
+
+Service PATH
+------------
+http://workblog.pilin.name/2013/03/service-environment-variables.html?m=1
+https://superuser.com/questions/222238/how-to-change-path-to-executable-for-a-windows-service
+
+
+

@@ -39,6 +39,7 @@ class RouteFileTools
     final static String UNIT_TPendcurved = "endcurved"
     final static String UNIT_TPcirclecenter = "circlecenter"
     final static String UNIT_TPsemicircleinvert = "invert"
+    final static String UNIT_TPignoregate = "ignoregate"
     final static String UNIT_TPnosign = "-"
     
     //--------------------------------------------------------------------------
@@ -799,6 +800,7 @@ class RouteFileTools
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
+                coordroute_instance.ignoreGate = true
                 sc_num++
             // Curved (TP, SC..., TP) (2)
             } else if (importParams.curved2 && gate_pos == importParams.curvedstartpos2 ) {
@@ -820,6 +822,7 @@ class RouteFileTools
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
+                coordroute_instance.ignoreGate = true
                 sc_num++
             // Curved (TP, SC..., TP) (3)
             } else if (importParams.curved3 && gate_pos == importParams.curvedstartpos3) {
@@ -841,6 +844,7 @@ class RouteFileTools
                 coordroute_instance.noTimeCheck = true
                 coordroute_instance.noGateCheck = true
                 coordroute_instance.noPlanningTest = true
+                coordroute_instance.ignoreGate = true
                 sc_num++
             // Semicircle (SC) (1)
             } else if (importParams.semicircle1 && gate_pos == importParams.semicirclepos1) {
@@ -1029,6 +1033,7 @@ class RouteFileTools
                         coordroute_instance.endCurved = rte.extensions.flightcontest.gate.'@endcurved'[0] == "yes"
                         coordroute_instance.circleCenter = rte.extensions.flightcontest.gate.'@circlecenter'[0] == "yes"
 						coordroute_instance.semiCircleInvert = rte.extensions.flightcontest.gate.'@invert'[0] == "yes"
+						coordroute_instance.ignoreGate = rte.extensions.flightcontest.gate.'@ignoregate'[0] == "yes"
                         
                         String dist = rte.extensions.flightcontest.gate.'@dist'[0]
                         if (dist) {
@@ -2783,6 +2788,9 @@ class RouteFileTools
                         }
                         if (o == RouteFileTools.UNIT_TPsemicircleinvert) {
                             coordroute_instance.semiCircleInvert = true
+                        }
+                        if (o == RouteFileTools.UNIT_TPignoregate) {
+                            coordroute_instance.ignoreGate = true
                         }
                         if (o.startsWith(SIGN)) {
                             String s = o.substring(SIGN.size()).trim()

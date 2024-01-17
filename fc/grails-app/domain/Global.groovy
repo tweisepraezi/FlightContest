@@ -5,9 +5,9 @@ class Global
 {
     def grailsApplication
     
-	// Actual database version: DB-2.36
+	// Actual database version: DB-2.37
 	static int DB_MAJOR = 2
-	static int DB_MINOR = 36
+	static int DB_MINOR = 37
 	
 	int versionMajor = DB_MAJOR
 	int versionMinor = DB_MINOR
@@ -345,15 +345,15 @@ class Global
     }
     
     // --------------------------------------------------------------------------------------------------------------------
-    String GetPrintServerProjection()
+    boolean GetPrintServerFCStyle()
     {
         if (   grailsApplication.config.flightcontest.contestmap
-            && grailsApplication.config.flightcontest.contestmap.projection
+            && grailsApplication.config.flightcontest.contestmap.osmcartostyle
            )
         {
-            return grailsApplication.config.flightcontest.contestmap.projection
+            return false
         }
-        return ""
+        return true
     }
     
     // --------------------------------------------------------------------------------------------------------------------
@@ -471,4 +471,17 @@ class Global
         }
         return ""
     }
+    
+    // --------------------------------------------------------------------------------------------------------------------
+    boolean IsTaskCreator()
+    {
+        if (   grailsApplication.config.flightcontest.taskcreator
+            && grailsApplication.config.flightcontest.taskcreator.url
+        ) {
+            return true
+        }
+        return false
+    }
+    
+    
 }

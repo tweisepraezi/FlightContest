@@ -1,4 +1,6 @@
 /output
+/dependency-cache
+/save
 /fcdb.h2.db
 /fcdb.lock.db
 /fcdb.trace.db
@@ -15,6 +17,7 @@
 /web-app/gpxupload
 /web-app/jobs
 /web-app/live
+/web-app/map
 /old
 /old-aflos
 /old-excelimport

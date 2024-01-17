@@ -36,6 +36,7 @@
                                     <br/>
                                     <input type="text" id="mapScale" name="mapScale" value="${fieldValue(bean:routeInstance,field:'mapScale')}" tabIndex="${ti[0]++}"/>
                                 </p>
+                                <g:editRouteDefaultOnlineMap route="${routeInstance}" ti="${ti}"/>
                                 <p>
                                     <label>${message(code:'fc.altitude.aboveground')}*:</label>
                                     <br/>

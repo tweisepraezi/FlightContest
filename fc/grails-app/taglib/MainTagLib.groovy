@@ -29,6 +29,7 @@ class MainTagLib
 			session.lastContest.refresh()
 	        outln """    <li> <a class="${if (p.conteststart) active(p.controller,'contest')}" href="${p.link}/../../contest/start">${message(code:'fc.contest')}</a> </li>"""
 			outln """    <li> <a class="${active(p.controller,'route')}" href="${p.link}/../../route/list">${message(code:'fc.route.list')}</a> </li>"""
+			outln """    <li> <a class="${active(p.controller,'map')}" href="${p.link}/../../map/list">${message(code:'fc.map.list')}</a> </li>"""
 	        outln """    <li> <a class="${active(p.controller,'crew')}" href="${p.link}/../../crew/list">${message(code:'fc.crew.list')}</a> </li>"""
 			outln """    <li> <a class="${active(p.controller,'team')}" href="${p.link}/../../team/list">${message(code:'fc.team.list')}</a> </li>"""
 			if (session?.lastContest.resultClasses) {
@@ -103,6 +104,9 @@ class MainTagLib
                         outln """    <li> <a href="${p.link}/../../${p.controller}/importfcroute">${message(code:'fc.route.fcfileimport')}</a> </li>"""
 					} else if (p.controller == "crew") {
 						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
+					} else if (p.controller == "map") {
+						outln """    <li> <a href="${p.link}/../../${p.controller}/selectfilename">${p.importaction}</a> </li>"""
+						outln """    <li> <a href="${p.link}/../../${p.controller}/start_taskcreator" target="_blank">${p.taskcreatoraction}</a> </li>"""
 					}
 				}
 				if (p.importaction2) {

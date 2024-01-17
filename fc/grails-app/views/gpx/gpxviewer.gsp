@@ -25,7 +25,7 @@
 	    <body>
 	        <g:form method="post" params="${['filename':fileName,'testid':testID,'gpxviewerReturnAction':gpxviewerReturnAction,'gpxviewerReturnController':gpxviewerReturnController,'gpxviewerReturnID':gpxviewerReturnID]}">
 	            <g:set var="ti" value="${[]+1}"/>
-	            <g:gpxViewerForm showCancel="${showCancel}" showProfiles="${showProfiles}" gpxFileName="${createLinkTo(dir:'',file:fileName)}" infoText="${originalFilename}" gpxViewerSrc="${createLinkTo(dir:'GM_Utils',file:'')}" showLanguage="${showLanguage}" gpxShowPoints="${gpxShowPoints}" gmApiKey="${gmApiKey}" ti="${ti}"/>
+	            <g:gpxViewerForm contestUUID="${contestUUID}" defaultOnlineMap="${defaultOnlineMap}" showCancel="${showCancel}" showProfiles="${showProfiles}" gpxFileName="${createLinkTo(dir:'',file:fileName)}" infoText="${originalFilename}" gpxViewerSrc="${createLinkTo(dir:'GM_Utils',file:'')}" showLanguage="${showLanguage}" gpxShowPoints="${gpxShowPoints}" gmApiKey="${gmApiKey}" ti="${ti}"/>
 		        <script type="text/javascript" src="${createLinkTo(dir:'',file:'GM_Utils/GPX2GM.js')}"></script>
 		        <script>
 		            function removeGpxFile() {

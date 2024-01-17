@@ -378,7 +378,89 @@ class GpxTagLib
         outln"""    var gmApiKey = "${attrs.gmApiKey}";"""
         outln"""</script>"""
         
+        // FC OnlineMap
+        String map_folder_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${attrs.contestUUID}/"
+        File map_folder = new File(map_folder_name)
+        String onlinemap_names = ""
+        int onlinemap_index = 1
+        int i = 0
+        if (map_folder.exists()) {
+            map_folder.traverse { File file ->
+                if (file.name.endsWith('.png') && !file.name.endsWith('.warped.png')) {
+                    if (onlinemap_names) {
+                        onlinemap_names += ","
+                    }
+                    onlinemap_names += "http://localhost:8080/fc/map/${attrs.contestUUID}/${file.name}"
+                    i++
+                    String file_title = file.name.substring(0,file.name.size()-4)
+                    if (file_title == attrs.defaultOnlineMap) {
+                        onlinemap_index = i
+                    }
+                }
+            }
+        }
+        outln"""<script>"""
+        outln"""    var onlineMapUrls = [];"""
+        outln"""    var onlineMapBounds = [];"""
+        outln"""    var onlineMapIndex = 0;"""
+        if (onlinemap_names) {
+            outln"""const xhttp = new XMLHttpRequest();"""
+            outln"""var onlinemap_names_array = "${onlinemap_names}".split(",");"""
+            outln"""for (let i in onlinemap_names_array) {"""
+            outln"""    var onlinemap_name = onlinemap_names_array[i];"""
+            outln"""    xhttp.onload = function() {load_onlinemap_info(this);}"""
+            outln"""    xhttp.open("GET", onlinemap_name + "info", false);"""
+            outln"""    xhttp.send();"""
+            outln"""    function load_onlinemap_info(infoData) {"""
+            outln"""        var top = 0;"""
+            outln"""        var bottom = 0;"""
+            outln"""        var right = 0;"""
+            outln"""        var left = 0;"""
+            outln"""        var projection = '';"""
+            outln"""        var found = false;"""
+            outln"""        var lines = infoData.responseText.split('\\n');"""
+            outln"""        for (var line = 0; line < lines.length; line++) {"""
+            outln"""            var key_value = lines[line].split(':');"""
+            outln"""            if (key_value) {"""
+            outln"""                switch(key_value[0]) {"""
+            outln"""                    case 'Top(Lat)':"""
+            outln"""                        top = Number(key_value[1].trim());"""
+            outln"""                        found = true;"""
+            outln"""                        break;"""
+            outln"""                    case 'Bottom(Lat)':"""
+            outln"""                        bottom = Number(key_value[1].trim());"""
+            outln"""                        found = true;"""
+            outln"""                        break;"""
+            outln"""                    case 'Right(Lon)':"""
+            outln"""                        right = Number(key_value[1].trim());"""
+            outln"""                        found = true;"""
+            outln"""                        break;"""
+            outln"""                    case 'Left(Lon)':"""
+            outln"""                        left = Number(key_value[1].trim());"""
+            outln"""                        found = true;"""
+            outln"""                        break;"""
+            outln"""                    case 'Projection':"""
+            outln"""                        projection = key_value[1].trim();"""
+            outln"""                        found = true;"""
+            outln"""                        break;"""
+            outln"""                }"""
+            outln"""            }"""
+            outln"""        }"""
+            outln"""        if (found && projection == '3857') {"""
+            outln"""            onlineMapUrls.push(onlinemap_name);"""
+            outln"""            onlineMapBounds.push([[top, left], [bottom, right]]);"""
+            outln"""            onlineMapIndex = ${onlinemap_index};"""
+            outln"""        }"""
+            outln"""    }"""
+            outln"""}"""
+        }
+        outln"""</script>"""
+        
         wrbuttons("gpxview:map:skaliere", attrs)
+        
+        // FC OnlineMap
+        outln"""<input type="range" id="onlinemap_opacity_id" value="1.0" min="0.0" max="1.0" step="0.01" style="display:none; vertical-align:middle; width:60px;"></input>"""
+        outln"""<select id="onlinemap_route_id" style="display:none; vertical-align:middle;"></select>"""
         
         outln"""<script>"""
         outln"""    function resize_map() {"""

@@ -29,6 +29,8 @@ class Defs
     static final String ROOT_FOLDER_JOBS_LOCK                          = "jobs/.lock"
     static final String ROOT_FOLDER_FONTS                              = "fonts"
     static final String ROOT_FOLDER_LIVE                               = "live"
+    static final String ROOT_FOLDER_MAP                                = "map" // FC OnlineMap
+    static final String ROOT_FOLDER_MAPBACKUP                          = "../../../map-backup"
     
     static final String LIVE_STYLESHEET                                = "fclive.css" // Live-Anzeige-Stylesheet
     static final String LIVE_FILENAME                                  = "fclive.htm"
@@ -68,6 +70,8 @@ class Defs
     static final String OSMPRINTMAP_FILEIDFILENAME                     = "FileIdFileName"
     static final String OSMPRINTMAP_PNGFILENAME                        = "PngFileName"
     static final String OSMPRINTMAP_PRINTLANDSCAPE                     = "PrintLandscape"
+    static final String OSMPRINTMAP_PRINTSIZE                          = "PrintSize"
+    static final String OSMPRINTMAP_PRINTPROJECTION                    = "PrintProjection"
     static final String OSMPRINTMAP_PRINTCOLORCHANGES                  = "PrintColorChanges"
     static final String OSMPRINTMAP_ERR_EXTENSION                      = ".err"
     
@@ -129,9 +133,11 @@ class Defs
     static final String CONTESTMAPOUTPUT_EXPORTPRINTMAP                = "contestMapOutput_exportPrintMap"
     static final String CONTESTMAPOUTPUT_SHOWONLINEMAP                 = "contestMapOutput_showOnlineMap"
     static final String CONTESTMAPOUTPUT_EXPORTGPX                     = "contestMapOutput_exportGPX"
+    
     static final String CONTESTMAPPRINT_PDFMAP                         = "contestMapPrint_PDFMap"
     static final String CONTESTMAPPRINT_PNGMAP                         = "contestMapPrint_PNGMap"
     static final String CONTESTMAPPRINT_PNGZIP                         = "contestMapPrint_PNGZip"
+    static final String CONTESTMAPPRINT_ONLINEMAP                      = "contestMapPrint_ONLINEMAP" // FC OnlineMap
     static final String CONTESTMAPPRINT_TIFMAP                         = "contestMapPrint_TIFMAP"
     static final String CONTESTMAPPRINT_TILES                          = "contestMapPrint_TILES"
     
@@ -154,6 +160,7 @@ class Defs
     static final String CONTESTMAPPRINTSIZE_A2                         = "A2"      // saved in database. do not modify.
     static final String CONTESTMAPPRINTSIZE_A1                         = "A1"      // saved in database. do not modify.
     static final String CONTESTMAPPRINTSIZE_ANR                        = "ANR"     // saved in database. do not modify.
+    static final String CONTESTMAPPRINTSIZE_AIRPORTAREA                = "AIRPORTAREA"
     
     static final String BACKGROUNDUPLOAD_OBJECT_SEPARATOR              = ";"
     static final String BACKGROUNDUPLOAD_SRCDEST_SEPARATOR             = "!"
@@ -165,7 +172,7 @@ class Defs
     
     static final BigDecimal TRACKPOINT_INTERPOLATED_SPEED              = 20.0f // NM, min. Geschwindigkeit für Interpolation von Logger-Meßpunkten
     
-    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 10"
+    static final String ROUTEEXPORT_CREATOR                            = "Flight Contest - flightcontest.de - Version 11"
     static final String ROUTEEXPORT_SETTINGS                           = "settings"
     static final String ROUTEEXPORT_MAPSETTINGS                        = "mapsettings"
     static final String ROUTEEXPORT_TURNPOINTS                         = "turnpoints"

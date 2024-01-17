@@ -113,6 +113,12 @@
                                            <td>${message(code:'fc.yes')}</td>
                                        </tr>
                                    </g:if>
+                                   <g:if test="${coordRouteInstance.ignoreGate}">
+                                       <tr>
+                                           <td class="detailtitle">${message(code:'fc.ignoregate')}:</td>
+                                           <td>${message(code:'fc.yes')}</td>
+                                       </tr>
+                                   </g:if>
                                    <tr>
                                        <td class="detailtitle">${message(code:'fc.truetrack.coord')}:</td>
                                        <td>${coordRouteInstance.coordTrueTrackName()}</td>

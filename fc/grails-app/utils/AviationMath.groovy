@@ -367,7 +367,7 @@ class AviationMath
     }
     
     //--------------------------------------------------------------------------
-    static List getSemicircle(BigDecimal centerLatitude, BigDecimal centerLongitude, BigDecimal startLatitude, BigDecimal startLongitude, BigDecimal endLatitude, BigDecimal endLongitude, boolean invertSemicircle)
+    static List getSemicircle(BigDecimal centerLatitude, BigDecimal centerLongitude, BigDecimal startLatitude, BigDecimal startLongitude, BigDecimal endLatitude, BigDecimal endLongitude, boolean invertSemicircle, int semicircleCourseChange)
     // Berechnet Halbkreis um Koordinate center..., beginnend mit Koordinate start..., endend mit Koordinate end...
     //   Latitude: Geographische Breite (-90 ... +90 Grad)
     //   Longitude: Geographische Laenge (-179.999 ... +180 Grad)
@@ -389,15 +389,15 @@ class AviationMath
             circle_coords += getCoordinate(centerLatitude, centerLongitude, value_track, start_leg_radius)
             if (course_change > 0) {
                 if (invertSemicircle) {
-                    value_track -= 10
+                    value_track -= semicircleCourseChange
                 } else {
-                    value_track += 10
+                    value_track += semicircleCourseChange
                 }
             } else {
                 if (invertSemicircle) {
-                    value_track += 10
+                    value_track += semicircleCourseChange
                 } else {
-                    value_track -= 10
+                    value_track -= semicircleCourseChange
                 }
             }
             if (value_track < 0) {
@@ -405,7 +405,7 @@ class AviationMath
             } else if (value_track > 360) {
                 value_track -= 360
             }
-            track_change += 10
+            track_change += semicircleCourseChange
         }
         //circle_coords += getCoordinate(centerLatitude, centerLongitude, end_leg.dir, start_leg_radius)
         return circle_coords
@@ -594,4 +594,21 @@ class AviationMath
             distanceValue, distanceValue
         )
     }
+
+    //--------------------------------------------------------------------------
+    static BigDecimal getLatLonDistanceRelation(BigDecimal srcLatitude)
+    // Berechnet Entfernungs-Verhältnis zwischen Längen- und Breitengard für eine geographische Breite
+    //   srcLatitude: Geographische Breite (-90 ... +90 Grad)
+    // Rückgabe: Entfernungs-Verhältnis (< 1)
+    {
+        BigDecimal left_longitude = -1
+        BigDecimal right_longitude = 1
+        BigDecimal top_latitude = srcLatitude + 1
+        BigDecimal bottom_latitude = srcLatitude - 1
+        BigDecimal lon_dis = calculateLeg(srcLatitude, left_longitude, srcLatitude, right_longitude).dis
+        BigDecimal lat_dis = calculateLeg(top_latitude, 0, bottom_latitude, 0).dis
+        
+        return lon_dis / lat_dis
+    }
+
 }

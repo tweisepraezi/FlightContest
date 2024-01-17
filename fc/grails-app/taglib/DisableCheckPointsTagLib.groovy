@@ -41,8 +41,10 @@ class DisableCheckPointsTagLib
         int i = 0
         CoordRoute last_coordroute_instance = null
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(route_instance,[sort:"id"])) {
-            i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, route_instance.useProcedureTurns, route_instance.useProcedureTurns && coordroute_instance.planProcedureTurn)
-            last_coordroute_instance = coordroute_instance
+            if (!coordroute_instance.ignoreGate) {
+                i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, route_instance.useProcedureTurns, route_instance.useProcedureTurns && coordroute_instance.planProcedureTurn)
+                last_coordroute_instance = coordroute_instance
+            }
         }
         i = inputCoord(last_coordroute_instance, route_instance, i, attrs.t, route_instance.useProcedureTurns, false)
         outln"""    </tbody>"""

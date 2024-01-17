@@ -38,6 +38,7 @@ class Coord
     BigDecimal gateDirection = 270.0     // Richtung der Startbahn (T/O,LDG,iT/O,iLDG), Grad, DB-2.12
     Boolean circleCenter = false         // DB-2.26
     Boolean semiCircleInvert = false     // DB-2.27
+    Boolean ignoreGate = false           // DB-2.37
     
     // Speicher für Eingabe der Landkarten-Messung
 	boolean measureEntered = false       // UNUSED: Coord.measureEntered, ersetzt durch Is...Measure(), DB-2.13
@@ -92,7 +93,7 @@ class Coord
     
     static constraints = {
 		type()
-        titleNumber(range:1..<100)
+        titleNumber()
 		mark(nullable:true)
         
         latDirection(inList:[CoordPresentation.NORTH,CoordPresentation.SOUTH])
@@ -230,6 +231,9 @@ class Coord
         // DB-2.34 compatibility
         minAltitudeAboveGround(nullable:true, min:0)
         maxAltitudeAboveGround(nullable:true, min:0)
+        
+        // DB-2.37 compatibility
+        ignoreGate(nullable:true)
     }
 
 	void ResetResults(boolean resetProcedureTurn)
@@ -292,6 +296,7 @@ class Coord
         gateDirection = coordInstance.gateDirection
         circleCenter = coordInstance.circleCenter
         semiCircleInvert = coordInstance.semiCircleInvert
+        ignoreGate = coordInstance.ignoreGate
         assignedSign = coordInstance.assignedSign
         correctSign = coordInstance.correctSign
         observationPositionTop = coordInstance.observationPositionTop
@@ -841,6 +846,9 @@ class Coord
         }
         if (semiCircleInvert) {
             s += ", ${RouteFileTools.UNIT_TPsemicircleinvert}"
+        }
+        if (ignoreGate) {
+            s += ", ${RouteFileTools.UNIT_TPignoregate}"
         }
         String tp_sign = GetExportTurnpointSign2()
         if (tp_sign != RouteFileTools.UNIT_TPnosign) {

@@ -225,6 +225,18 @@
 	                            <input type="hidden" name="contestMapOutput" value="${routeInstance.contestMapOutput}" />
 		                    </g:else>
 	                        <fieldset>
+                                <g:actionSubmit action="mapsavesettings" value="${message(code:'fc.save')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                <g:if test="${CoordRoute.findByRouteAndType(routeInstance,CoordType.TO,[sort:"id"])}" >
+                                    <g:actionSubmit action="mapgenerate_airportarea" value="${message(code:'fc.generate.airportarea.online')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    <g:actionSubmit action="mapgenerate_airportarea_taskcreator" value="${message(code:'fc.generate.airportarea.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                </g:if>
+                                <g:else>
+                                    <g:actionSubmit action="mapgenerate_airportarea" value="${message(code:'fc.generate.airportarea.online')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" disabled="disabled" />
+                                    <g:actionSubmit action="mapgenerate_airportarea_taskcreator" value="${message(code:'fc.generate.airportarea.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" disabled="disabled" />
+                                </g:else>
+                                <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
+	                        </fieldset>
+	                        <fieldset>
                                 <div>
                                     <g:checkBox id="firstoptions_checkbox_id" name="contestMapShowFirstOptions" value="${routeInstance.contestMapShowFirstOptions}" onclick="firstoptions_click();"/>
                                     <label>${message(code:'fc.contestmap.printfirstoptions')}</label>
@@ -319,6 +331,7 @@
 									<g:actionSubmit action="mapgenerate" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
 									<g:actionSubmit action="mapgenerate_noroute" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
 									<g:actionSubmit action="mapgenerate_allroutedetails" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+									<g:actionSubmit action="mapgenerate_taskcreator" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function firstoptions_click() {
@@ -420,6 +433,7 @@
                                     <g:actionSubmit action="mapgenerate2" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                     <g:actionSubmit action="mapgenerate_noroute2" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
 									<g:actionSubmit action="mapgenerate_allroutedetails2" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    <g:actionSubmit action="mapgenerate_taskcreator2" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function secondoptions_click() {
@@ -521,6 +535,7 @@
                                     <g:actionSubmit action="mapgenerate3" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                     <g:actionSubmit action="mapgenerate_noroute3" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
 									<g:actionSubmit action="mapgenerate_allroutedetails3" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    <g:actionSubmit action="mapgenerate_taskcreator3" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function thirdoptions_click() {
@@ -622,6 +637,7 @@
                                     <g:actionSubmit action="mapgenerate4" value="${message(code:'fc.generate')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                     <g:actionSubmit action="mapgenerate_noroute4" value="${message(code:'fc.generate.noroute')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
 									<g:actionSubmit action="mapgenerate_allroutedetails4" value="${message(code:'fc.generate.allroutedetails')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
+                                    <g:actionSubmit action="mapgenerate_taskcreator4" value="${message(code:'fc.generate.taskcreator')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                                 </div>
                                 <script>
                                     function forthoptions_click() {
@@ -629,7 +645,6 @@
                                     }
                                 </script>
 	                        </fieldset>
-                            <g:actionSubmit action="mapsavesettings" value="${message(code:'fc.save')}" onclick="if (document.getElementById('${Defs.CONTESTMAPOUTPUT_SHOWONLINEMAP}').checked){this.form.target='_blank';}else{this.form.target='';}return true;""" tabIndex="${ti[0]++}" />
                         </g:if>
                         <g:else>
 							<g:contestMapRoutePrintOptions r="${routeInstance}" BreakButton="${BreakButton}" FetchButton="${FetchButton}" PrintButton="${PrintButton}" map_upload_job_status="${map_upload_job_status}" ti="${ti}"/>
@@ -645,7 +660,9 @@
                                 <g:actionSubmit action="maprefresh" value="${message(code:'fc.refresh')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
                             </g:elseif>
                             <g:elseif test="${PrintButton}">
-                                <g:actionSubmit action="mapprint" value="${message(code:'fc.contestmap.job.print')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
+                                <g:actionSubmit id="mapsave_gotomap_id" action="mapsave_gotomap" value="${message(code:'fc.contestmap.job.save.gotomap')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
+                                <g:actionSubmit id="mapsave_id" action="mapsave" value="${message(code:'fc.contestmap.job.save')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
+                                <%--
                                 <g:if test="${routeInstance.IsMapSendEMailPossible()}">
                                     <g:actionSubmit id="mapsendmail_id" action="mapsendmail" value="${message(code:'fc.route.sendmail')}" onclick="this.form.target='_self';return true;" title="${routeInstance.EMailAddress()}" tabIndex="${ti[0]++}"/>
                                     <script>
@@ -655,12 +672,14 @@
                                     </script>
                                 </g:if>
                                 <g:actionSubmit action="mapdiscard" value="${message(code:'fc.contestmap.job.finish')}" tabIndex="${ti[0]++}" />
+                                --%>
+                                <g:actionSubmit action="mapdiscard" value="${message(code:'fc.contestmap.job.discard')}" onclick="return confirm('${message(code:'fc.areyousure')}');" tabIndex="${ti[0]++}" />
                             </g:elseif>
                             <g:else>
                                 <g:actionSubmit action="maprefresh" value="${message(code:'fc.refresh')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
                             </g:else>
+                            <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
                         </g:else>
-                        <g:actionSubmit action="cancel" value="${message(code:'fc.cancel')}" onclick="this.form.target='';return true;" tabIndex="${ti[0]++}" />
                     </g:form>
                 </div>
             </div>

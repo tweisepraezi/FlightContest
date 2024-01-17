@@ -505,7 +505,10 @@
 		                                        <td>${message(code:'fc.test.results.position.none')}</td>
 		                                    </g:else>
 		                                    <g:if test="${!test_provisional && test_instance.crewResultsModified}">
-		                                        <td><a href="${createLink(controller:'test',action:'printcrewresults',id:test_instance.id,params:test_instance.GetPrintCrewResultsDefaultParams())}"><img src="${createLinkTo(dir:'images',file:'print.png')}"/></a></td>
+		                                        <td>
+                                                    <a href="${createLink(controller:'test',action:'printcrewresults',id:test_instance.id,params:test_instance.GetPrintCrewResultsDefaultParams())}"><img src="${createLinkTo(dir:'images',file:'print.png')}"/></a>
+                                                    <a href="${createLink(controller:'test',action:'crewresultsprintquestion',id:test_instance.id,params:[fromTask:true])}">...</a>
+                                                </td>
 		                                    </g:if>
 		                                    <g:else>
 		                                        <td/>

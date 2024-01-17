@@ -18,6 +18,9 @@ https://wiki.openstreetmap.org/wiki/Creating_your_own_tiles
 
 https://wiki.openstreetmap.org/wiki/DE:Key:tracktype
 
+https://ircama.github.io/osm-carto-tutorials/
+https://ircama.github.io/osm-carto-tutorials/osm-rendering-process/
+
 https://raw.githubusercontent.com/openstreetmap/mapnik-stylesheets/master/generate_image.py
 
 Mapnik
@@ -34,16 +37,36 @@ Mapnik
                     https://www.volkerschatz.com/net/osm/styleadv.html
    Projektionen     http://pubs.usgs.gov/of/1990/0284/report.pdf 
                     https://proj.org/operations/projections/merc.html
+                    https://proj.org/en/9.3/usage/projections.html
                     
 Tile-Server on Windows                    
     http://openstreetmapserverwindows.blogspot.com/2015/11/osmopenstreetmap-tile-server.html
 
-Search: Mapnik Mercator Projection Latitude distortions
-    Mapnik tiles have latitude distortion, projection issue?
-        https://gis.stackexchange.com/questions/118627/mapnik-tiles-have-latitude-distortion-projection-issue
-    
-            map.aspect_fix_mode = mapnik.Map.ASPECT_RESPECT;
-            before: map.extent = bbox;
-        
-        https://github.com/mapnik/node-mapnik/issues/885
+Projections
+    EPSG_4326 = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
+    EPSG_3857 = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over'
+    opentopomap '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs +over
+    osm-carto = '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0.0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over'
 
+    https://proj.org/en/9.3/usage/projections.html
+    +proj   Projection name
+    +ellps  Ellipsoid name
+    +datum  
+    +a      Semimajor radius of the ellipsoid axis
+    +b      Semiminor radius of the ellipsoid axis
+    +lat_ts Latitude of true scale. Defines the latitude where scale is not distorted.
+    +lon_0  Central meridian (in degree if no angular unit specified)
+    +x_0    False easting (always in meters)
+    +y_0    False northing (always in meters)
+    +k      Scaling factor (deprecated)
+    +k_0    Scaling factor
+    +units  Horizontal coordinate system units (meters, US survey feet, etc.)
+    +nadgrids=@null
+    +no_defs
+    +over   Allow longitude output outside -180 to 180 range, disables wrapping (see below)
+    +wktext
+
+    https://spatialreference.org/
+
+Running OpenStreetMap Carto with Docker
+    https://github.com/gravitystorm/openstreetmap-carto/blob/master/DOCKER.md

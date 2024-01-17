@@ -67,6 +67,9 @@ class RouteTagLib
             outln"""<div>"""
             checkBox("semiCircleInvert", attrs.coordRoute.semiCircleInvert, 'fc.semicircleinvert', attrs)
             outln"""</div>"""
+            outln"""<div>"""
+            checkBox("ignoreGate", attrs.coordRoute.ignoreGate, 'fc.ignoregate', attrs)
+            outln"""</div>"""
         }
         // neue Felder funktionieren erst nach grails clean
         outln"""</fieldset>"""
@@ -445,6 +448,31 @@ class RouteTagLib
     }
     
     // --------------------------------------------------------------------------------------------------------------------
+    def editRouteDefaultOnlineMap = { attrs, body ->
+        String map_folder_name = "${servletContext.getRealPath('/')}${Defs.ROOT_FOLDER_MAP}/${attrs.route.contest.contestUUID}/"
+        File map_folder = new File(map_folder_name)
+        if (map_folder.exists()) {
+            outln"""<p>"""
+            outln"""    <label>${message(code:'fc.route.onlinemap.default')}:</label>"""
+            outln"""    <br/>"""
+            outln"""    <select id="defaultOnlineMap" name="defaultOnlineMap" value="AirportArea" tabIndex="${attrs.ti[0]++}">"""
+            outln"""        <option></option>"""
+            map_folder.traverse { File file ->
+                if (file.name.endsWith('.png') && !file.name.endsWith('.warped.png')) {
+                    String file_title = file.name.substring(0,file.name.size()-4)
+                    if (file_title == attrs.route.defaultOnlineMap) {
+                        outln"""<option value="${file_title}" selected>${file_title}</option>"""
+                    } else {
+                        outln"""<option value="${file_title}">${file_title}</option>"""
+                    }
+                }
+            }
+            outln"""    </select>"""
+            outln"""</p>"""
+        }
+    }
+    
+    // --------------------------------------------------------------------------------------------------------------------
     def editRouteSpecialSettings = { attrs, body ->
         outln"""<fieldset>"""
         outln"""    <div>"""
@@ -452,6 +480,10 @@ class RouteTagLib
         outln"""    </div>"""
         outln"""    <div>"""
         checkBox("exportSemicircleGates", attrs.route.exportSemicircleGates, 'fc.route.exportsemicirclegates', attrs)
+        outln"""    </div>"""
+        outln"""    <div>"""
+        outln"""        <label>${message(code:'fc.route.semicirclecoursechange')}* [${message(code:'fc.grad')}]:</label>"""
+        outln"""        <input type="text" name="semicircleCourseChange" value="${fieldValue(bean:attrs.route,field:'semicircleCourseChange')}" tabIndex="${attrs.ti[0]++}"/>"""
         outln"""    </div>"""
         outln"""</fieldset>"""
     }
@@ -614,8 +646,9 @@ class RouteTagLib
         outln"""            <th>${message(code:'fc.notimecheck')}</th>""" // 9
         outln"""            <th>${message(code:'fc.nogatecheck')}</th>""" // 10
         outln"""            <th>${message(code:'fc.noplanningtest')}</th>""" // 11
-        outln"""            <th>${message(code:'fc.truetrack.map.measure')}</th>""" // 12
-        outln"""            <th>${message(code:'fc.distance.map')}</th>""" // 13
+        outln"""            <th>${message(code:'fc.ignoregate.short')}</th>""" // 12
+        outln"""            <th>${message(code:'fc.truetrack.map.measure')}</th>""" // 13
+        outln"""            <th>${message(code:'fc.distance.map')}</th>""" // 14
         outln"""        </tr>"""
         outln"""    </thead>"""
         outln"""    <tbody>"""
@@ -697,6 +730,11 @@ class RouteTagLib
                 outln"""    <td>-</td>"""
             }
             if (coordroute_instance.noPlanningTest) {
+                outln"""    <td>${message(code:'fc.yes')}</td>"""
+            } else {
+                outln"""    <td>-</td>"""
+            }
+            if (coordroute_instance.ignoreGate) {
                 outln"""    <td>${message(code:'fc.yes')}</td>"""
             } else {
                 outln"""    <td>-</td>"""

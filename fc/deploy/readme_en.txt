@@ -1,6 +1,50 @@
 ﻿Flight Contest
 ==============
 
+Changes 3.4.0
+-------------
+- Menu item "Maps" added
+    Lists all locally saved maps of the competition.
+    Commands for creating PDF and PNG files, exporting, renaming, deleting and calling up the Task Creator are available here.
+    PDF maps are intended for printing.
+    New maps for PDF/PNG generation or for use in the Task Creator are created with "OSM Contest Map" of a route.
+    A separate map must be created for PDF/PNG or for the Task Creator.
+    With "Import map", a map export can be imported on another notebook or in another competition.
+- OSM Contest Map extended:
+    1. Button "Generate online map around airport" added,
+       which creates a map with T/O in the center with 420mm distance to the edge for OSM online map display.
+    2. Button "Generate Task Creator map around airport" added,
+       which creates a map with T/O in the center with 420mm distance to the edge for use in the Task Creator.
+    3. Button "Generate (for Task Creator)" in the 1./2./3./4. settings,
+       which creates maps with T/O and possibly LDG but without further route details for use in the Task Creator.
+    4. Generated OSM maps are now always saved locally and can then be accessed via the menu item "Maps",
+       where further processing commands are available.
+- OSM online map: Display of locally saved maps added
+    It is now possible to switch seamlessly between the online map and the local map.
+    If several local maps are available, you can switch between them.
+    The default map can be defined in the 'Route settings'.
+    Maps created for the Task Creator cannot be displayed here because these maps use a different map projection.
+- Integrated Task Creator for route construction added
+    Based on http://www.airrats.cl/taskcreator?lang=en by Carlos Rocca.
+    Start the Task-Creator via "..." of a saved map for a new task:
+      Here, the "Map Url" is preset in the Task Creator and can be loaded with "Load".
+      After activating "Turn Points -> Edit", turn points can be added to the map with a double-click.
+      With "Save task data" the task can be saved as a CSV file in the download folder of the computer.
+    Start via menu item "Maps -> Task Creator" to load previously saved tasks:
+      "Load task data" can be used to load the saved CSV file of a task. 
+      A preset "Map Url" must be loaded with "Load".
+      After activating "Turn Points -> Edit", further processing of the task is now possible.
+      With "Export FC kml" a route can be exported, which can be used for planning and evaluation with "Routes -> Import FC route".
+- Semicircle gates from circle centers are now created with a 5° course change.
+    This can be changed with the route setting "Course change per semicircle gate".
+- The limit on the number of route points has been lifted.
+- Route coordinate: "Ignore check point" option added for scenic route legs
+    This means that this coordinate is not evaluated and cannot be seen in the online/offline viewer and various input masks.
+- Results: Print options for pending crew result printing via ... with one click.
+    This makes it possible to print corrections more quickly if changes are made to a crew result.
+
+http://www.airrats.cl/taskcreator?lang=en
+    
 Changes 3.3.6
 -------------
 - Bug "SCs of the curved legs in the navigation flight result are always printed for curved legs one behind the other" fixed
@@ -253,7 +297,7 @@ Changes 3.2.0
   Allows to display route and navigation flights interactively on the OSM contest map.
 
 - Route planning: 'Create semicircle by specifying a circle center' added.
-  -> Help -> Route planning -> Create competition route with semicircles
+  -> Help -> Route planning -> Create contest route with semicircles
 
 - Photo management and printing added
     Enroute photo names can be assigned alphabetically or randomly. The first image determines whether letters or numbers are used.

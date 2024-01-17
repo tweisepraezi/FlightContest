@@ -500,7 +500,8 @@ class KmlService
                                 List semicircle_coords = AviationMath.getSemicircle(
                                     center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
                                     start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
-                                    coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                                    coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
+                                    routeInstance.semicircleCourseChange
                                 )
                                 for (Map semicircle_coord in semicircle_coords) {
                                     BigDecimal altitude_meter = center_coordroute_instance.altitude.toLong() / ftPerMeter
@@ -550,7 +551,8 @@ class KmlService
                                         List semicircle_coords = AviationMath.getSemicircle(
                                             center_coordroute_instance.latMath(), center_coordroute_instance.lonMath(),
                                             start_coordroute_instance.latMath(), start_coordroute_instance.lonMath(),
-                                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert
+                                            coordroute_instance.latMath(), coordroute_instance.lonMath(), center_coordroute_instance.semiCircleInvert,
+                                            routeInstance.semicircleCourseChange
                                         )
                                         for (Map semicircle_coord in semicircle_coords) {
                                             BigDecimal altitude_meter = coordroute_instance.altitude.toLong() / ftPerMeter
@@ -962,6 +964,9 @@ class KmlService
                             List curved_point_ids = routeInstance.GetCurvedPointIds()
                             if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
                                 wr_gate = true
+                            }
+                            if (coordroute_instance.ignoreGate && routeInstance.showCurvedPoints) {
+                                wr_gate = false
                             }
                             if (wr_gate) {
                                 Float gate_width = null

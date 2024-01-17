@@ -54,6 +54,8 @@ class BootStrap {
         mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS_DONE)
         mk_root_dir(servletContext, Defs.ROOT_FOLDER_JOBS_ERROR)
         mk_root_dir(servletContext, Defs.ROOT_FOLDER_LIVE)
+        mk_root_dir(servletContext, Defs.ROOT_FOLDER_MAP)
+        restore_root_dir(servletContext, Defs.ROOT_FOLDER_MAP, Defs.ROOT_FOLDER_MAPBACKUP)
         
 		switch (global.dbCompatibility) {
 			case "upgrade":
@@ -1229,6 +1231,19 @@ class BootStrap {
 							}
                             println " done."
                         }
+                        if (global.versionMinor < 37) { // DB-2.37 compatibility
+                            print "    2.37 modifications"
+                            Route.findAll().each { Route route_instance ->
+                                route_instance.defaultOnlineMap = ""
+                                route_instance.semicircleCourseChange = 10
+                                route_instance.save()
+                            }
+                            Coord.findAll().each { Coord coord_instance ->
+                                coord_instance.ignoreGate = false
+                                coord_instance.save()
+                            }
+                            println " done."
+                        }
                         if (global.versionMinor < global.DB_MINOR) {
                             db_migrate = true
                         }
@@ -1336,6 +1351,26 @@ class BootStrap {
         if (!root_dir.exists()) {
             println "'${root_dir}' created."
             root_dir.mkdir()
+        }
+    }
+    
+    private void restore_root_dir(def actServletContext, String dirName, String backupName)
+    {
+        String webroot_dir =  actServletContext.getRealPath("/")
+        String backup_dir_name = "${webroot_dir}${backupName}"
+        File backup_dir = new File(backup_dir_name)
+        if (backup_dir.exists()) {
+            println "Backup from '${backup_dir_name}'"
+            backup_dir.eachDir { File dir ->
+                String new_dir = "${webroot_dir}${dirName}/${dir.name}"
+                if (dir.renameTo(new_dir)) {
+                    println "'${new_dir}' moved."
+                } else {
+                    println "'${new_dir}' already exists."
+                }
+            }
+        } else {
+            println "No backup on '${backup_dir_name}'"
         }
     }
 } 

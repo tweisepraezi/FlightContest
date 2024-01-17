@@ -5480,73 +5480,75 @@ class FcService
         int badcourse_seconds = 0
         int course_errors = 0
         CoordResult.findAllByTest(testInstance,[sort:"id"]).each { CoordResult coordresult_instance ->
-        	boolean found = false
-            for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
-        		if (calcresult_instance.IsCoordTitleEqual(coordresult_instance.type, coordresult_instance.titleNumber)) {
-                    found = true
-                    
-                    // get altitude
-                    get_altitude_from_route(coordresult_instance)
+            if (!coordresult_instance.ignoreGate) {
+                boolean found = false
+                for (CalcResult calcresult_instance in CalcResult.findAllByLoggerresult(testInstance.loggerResult,[sort:'utc'])) {
+                    if (calcresult_instance.IsCoordTitleEqual(coordresult_instance.type, coordresult_instance.titleNumber)) {
+                        found = true
+                        
+                        // get altitude
+                        get_altitude_from_route(coordresult_instance)
 
-        			// reset results
-        			coordresult_instance.ResetResults(true) // true - with procedure turn
+                        // reset results
+                        coordresult_instance.ResetResults(true) // true - with procedure turn
 
-                    // set results	        			
-        			coordresult_instance.resultCpTimeInput = calcresult_instance.GetUTCTime()
-        			coordresult_instance.resultLatitude = calcresult_instance.GetLatitudeStr()
-                    coordresult_instance.resultLongitude = calcresult_instance.GetLongitudeStr()
-        			coordresult_instance.resultAltitude = calcresult_instance.altitude
-                    if ((calcresult_instance.gateNotFound || calcresult_instance.gateMissed) && !calcresult_instance.judgeDisabled) {
-                        coordresult_instance.resultCpNotFound = true
-                        checkpoint_errors++
+                        // set results	        			
+                        coordresult_instance.resultCpTimeInput = calcresult_instance.GetUTCTime()
+                        coordresult_instance.resultLatitude = calcresult_instance.GetLatitudeStr()
+                        coordresult_instance.resultLongitude = calcresult_instance.GetLongitudeStr()
+                        coordresult_instance.resultAltitude = calcresult_instance.altitude
+                        if ((calcresult_instance.gateNotFound || calcresult_instance.gateMissed) && !calcresult_instance.judgeDisabled) {
+                            coordresult_instance.resultCpNotFound = true
+                            checkpoint_errors++
+                        }
+                        
+                        // calculate results
+                        if (coordresult_instance.planProcedureTurn) {
+                            coordresult_instance.resultProcedureTurnEntered = true
+                        }
+                        calculateCoordResultInstance(coordresult_instance,true,false)
+                        
+                        // calculate verify values
+                        if (!calcresult_instance.judgeDisabled) {
+                            if (!(calcresult_instance.gateNotFound || calcresult_instance.gateMissed) && coordresult_instance.resultMinAltitudeMissed) {
+                                height_errors++
+                            }
+                        }
+                        
+                        // save results
+                        coordresult_instance.save()
+                        
+                        // log
+                        if (coordresult_instance.planProcedureTurn) {
+                            println "PROCEDURE TURN"
+                        }
+                        println "CheckPoint found ${coordresult_instance.title()}"
                     }
+                }
+                if (!found && !noRemoveExistingData) {
+                    // reset results
+                    coordresult_instance.ResetResults(true) // true - with procedure turn
                     
-        			// calculate results
+                    // calculate results
+                    coordresult_instance.resultCpNotFound = true
                     if (coordresult_instance.planProcedureTurn) {
                         coordresult_instance.resultProcedureTurnEntered = true
                     }
-        			calculateCoordResultInstance(coordresult_instance,true,false)
-        			
-                    // calculate verify values
-                    if (!calcresult_instance.judgeDisabled) {
-                        if (!(calcresult_instance.gateNotFound || calcresult_instance.gateMissed) && coordresult_instance.resultMinAltitudeMissed) {
-                            height_errors++
-                        }
-                    }
+                    calculateCoordResultInstance(coordresult_instance,true,false)
                     
-        			// save results
+                    // calculate verify values
+                    checkpoint_errors++
+                    
+                    // save results
                     coordresult_instance.save()
                     
                     // log
                     if (coordresult_instance.planProcedureTurn) {
                         println "PROCEDURE TURN"
                     }
-                    println "CheckPoint found ${coordresult_instance.title()}"
-        		}
-        	}
-        	if (!found && !noRemoveExistingData) {
-        		// reset results
-                coordresult_instance.ResetResults(true) // true - with procedure turn
-                
-        		// calculate results
-                coordresult_instance.resultCpNotFound = true
-                if (coordresult_instance.planProcedureTurn) {
-                    coordresult_instance.resultProcedureTurnEntered = true
+                    println "CheckPoint not found ${coordresult_instance.title()}"
                 }
-                calculateCoordResultInstance(coordresult_instance,true,false)
-                
-                // calculate verify values
-                checkpoint_errors++
-                
-                // save results
-                coordresult_instance.save()
-                
-                // log
-                if (coordresult_instance.planProcedureTurn) {
-                    println "PROCEDURE TURN"
-                }
-                println "CheckPoint not found ${coordresult_instance.title()}"
-        	}
+            }
     	}
         printdone ""
     	
@@ -13393,6 +13395,7 @@ class FcService
             coordresult_instance.maxAltitudeAboveGround = coordroute_instance.maxAltitudeAboveGround
             coordresult_instance.gatewidth2 = coordroute_instance.gatewidth2
             coordresult_instance.endCurved = coordroute_instance.endCurved
+            coordresult_instance.ignoreGate = coordroute_instance.ignoreGate
             
 			// Set planProcedureTurn (CoordResult)
 			if (route_instance.useProcedureTurns && coordroute_instance.planProcedureTurn && last_coordtype.IsProcedureTurnCoord()) {
@@ -14295,6 +14298,60 @@ class FcService
         Map ret = calculatetimetableTask(p)
 		printdone ret
 		return ret
+    }
+    
+    //--------------------------------------------------------------------------
+    Map importMap(MultipartFile zipFile, String mapDirName, String mapName)
+    {
+        Map ret = [importOk:false]
+        
+        // upload zip file
+        String uuid = UUID.randomUUID().toString()
+        String webroot_dir = servletContext.getRealPath("/")
+        String upload_filename = "${Defs.ROOT_FOLDER_GPXUPLOAD}/ZIP-${uuid}-UPLOAD.zip"
+        printstart "Upload ${zipFile.getOriginalFilename()} -> $upload_filename"
+        zipFile.transferTo(new File(webroot_dir, upload_filename))
+        printdone ""
+        
+        // read map from zip file
+        boolean png_found = false
+        boolean pngw_found = false
+        boolean pnginfo_found = false
+        def zip_file = new java.util.zip.ZipFile(webroot_dir + upload_filename)
+        zip_file.entries().findAll { !it.directory }.each {
+            if (!it.isDirectory()) {
+                String extension = it.name.substring(it.name.lastIndexOf('.')).toLowerCase()
+                switch (extension) {
+                    case ".png":
+                        png_found = true
+                        break
+                    case ".pngw":
+                        pngw_found = true
+                        break
+                    case ".pnginfo":
+                        pnginfo_found = true
+                        break
+                }
+            }
+        }
+        if (png_found && pngw_found && pnginfo_found) {
+            zip_file.entries().findAll { !it.directory }.each {
+                if (!it.isDirectory()) {
+                    String extension = it.name.substring(it.name.lastIndexOf('.')).toLowerCase()
+                    String save_file_name = "${mapDirName}/${mapName}${extension}"
+                    println save_file_name
+                    File save_file = new File(save_file_name)
+                    save_file << zip_file.getInputStream(it)
+                }
+            }
+            ret.importOk = true
+        }
+        zip_file.close()
+        
+        // delete file
+        DeleteFile(webroot_dir + upload_filename)
+        
+        return ret
     }
     
     //--------------------------------------------------------------------------

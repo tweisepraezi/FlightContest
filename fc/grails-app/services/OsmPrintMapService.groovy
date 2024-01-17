@@ -25,6 +25,7 @@ import org.quartz.JobKey
 
 import org.gdal.gdal.Dataset
 import org.gdal.gdal.TranslateOptions
+import org.gdal.gdal.WarpOptions
 import org.gdal.gdal.gdal
 import org.gdal.gdalconst.gdalconstConstants
 
@@ -60,7 +61,6 @@ class OsmPrintMapService
     
     final static String ATTR_OUTPUT_PROJECTION = "3857" // EPSG-Nummer, WGS84 / Pseudo-Mercator, Google Maps, OpenStreetMap und andere Kartenanbieter im Netz
     final static String ATTR_INPUT_SRS = "epsg:4326"
-    final static String GEOTIFF_OUTPUT_SRS = "" // "WGS84" // "EPSG:4326" geht nicht im war-Container
      
     // Formate
     //   DIN-A1 Hochformat = 594 x 841 mm, DIN-A1 Querformat = 841 x 594 mm 
@@ -78,6 +78,7 @@ class OsmPrintMapService
     final static int A4_LONG = 297 // mm
     final static int ANR_SHORT = 172 // mm
     final static int ANR_LONG = 198 // mm
+    final static int AIRPORTAREA_DISTANCE = 420 // mm
     final static int MARGIN = 10 // nicht bedruckbarer Rand [mm]
 
     final static int FACTOR = 1 // Maﬂstabsverkleinerung (1 = 1:200000, 2 =  1:100000, 4 = 1:50000)
@@ -261,6 +262,9 @@ class OsmPrintMapService
             if (!contestMapParams.contestMapSmallRoads) {
                 hide_layers += ",${HIDELAYERS_FC_SMALLROADS}"
             }
+            if (contestMapParams.contestMapDevStyle) {
+                style = STYLE_FC_DEV
+            }
         } else {
             if (contestMapParams.contestMapContourLines) {
                 style = STYLE_PRINTMAPS_CARTO_CONTOURLINES
@@ -271,9 +275,6 @@ class OsmPrintMapService
             if (!contestMapParams.contestMapMunicipalityNames) {
                 hide_layers += ",${HIDELAYERS_PRINTMAPS_CARTO_MUNICIPALITY}"
             }
-        }
-        if (contestMapParams.contestMapDevStyle) {
-            style = STYLE_FC_DEV
         }
         
         int map_scale = contestMapParams.mapScale
@@ -337,6 +338,11 @@ class OsmPrintMapService
                     print_height = ANR_LONG
                 }
                 break
+            case Defs.CONTESTMAPPRINTSIZE_AIRPORTAREA:
+                paper_size = "T/O"
+                print_width = 2*AIRPORTAREA_DISTANCE
+                print_height = 2*AIRPORTAREA_DISTANCE
+                break
         }
         if (contestMapParams.contestMapPrintLandscape) {
             min_print_height = A4_SHORT
@@ -381,6 +387,22 @@ class OsmPrintMapService
         int scalebar_ypos = print_height - SCALEBAR_YPOS_TOP*FACTOR
         int scalbar_text_ypos = scalebar_ypos - 3*FACTOR   // 3mm nach unten
         
+        //...........................................................................................
+        String mapdata_date = ""
+        printstart "Get service capabilities"
+        Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
+        if (status.responseCode == 200) {
+            for (def config_style in status.json.ConfigStyles) {
+                if (config_style.Name == style) {
+                    mapdata_date = config_style.Date
+                }
+            }
+            printdone mapdata_date
+        } else {
+            printerror ""
+        }
+        
+        //...........................................................................................
         String edition_text = "${getMsg('fc.contestmap.edition',true)} ${contestMapParams.contestMapEdition}"
         String generator_text = getMsg('fc.contestmap.generator.printmaps',true)
         if (contestMapParams.contestMapFCStyle) {
@@ -394,6 +416,9 @@ class OsmPrintMapService
         if (contestMapParams.contestMapFCStyle) {
             copyright_text += ", ${getMsg('fc.contestmap.copyright.srtm',[],true)}"
             // copyright_text += ", ${getMsg('fc.contestmap.copyright.otm',[],true)}"
+        }
+        if (mapdata_date) {
+            copyright_text += ". ${getMsg('fc.contestmap.mapdata.date',[mapdata_date],true)}"
         }
         String user_text = """{
             "Style": "<LineSymbolizer stroke='black' stroke-width='${FRAME_STROKE_WIDTH}' stroke-linecap='butt' />",
@@ -758,22 +783,12 @@ class OsmPrintMapService
         println "PX_PER_MM: $PX_PER_MM"
         println "print_width: $print_width mm, $print_width_px px, $print_width_pxx pxx"
         println "print_height: $print_height mm, $print_height_px px, $print_height_pxx pxx"
-        
-
-        //...........................................................................................
-        printstart "Get service capabilities"
-        Map status = CallPrintServer("/capabilities/service", [HEADER_ACCEPT], "GET", DataType.JSON, "")
-        printdone ""
     
         String printjob_id = ""
         boolean job_started = false
         boolean job_successfully = false
         int img_width = 0
         int img_height = 0
-        String projection =  BootStrap.global.GetPrintServerProjection()
-        if (!projection) { 
-            projection = ATTR_OUTPUT_PROJECTION
-        }
         
         //...........................................................................................
         printstart "Create job"
@@ -790,7 +805,7 @@ class OsmPrintMapService
                     "Latitude": ${contestMapParams.centerLatitude},
                     "Longitude": ${contestMapParams.centerLongitude},
                     "Style": "${style}",
-                    "Projection": "${projection}",
+                    "Projection": "${ATTR_OUTPUT_PROJECTION}",
                     "HideLayers": "${hide_layers}",
                     "UserObjects": [
                         ${user_text}
@@ -988,6 +1003,8 @@ class OsmPrintMapService
             printfileid_writer << contestMapParams.contestMapPrintLandscape
             printfileid_writer << "\n"
             printfileid_writer << contestMapParams.contestMapPrintSize
+            printfileid_writer << "\n"
+            printfileid_writer << contestMapParams.routeTitle
             printfileid_writer.close()
             printdone ""
             
@@ -1003,6 +1020,8 @@ class OsmPrintMapService
                  (Defs.OSMPRINTMAP_FILEIDFILENAME):printfileid_filename,
                  (Defs.OSMPRINTMAP_PNGFILENAME):contestMapParams.pngFileName,
                  (Defs.OSMPRINTMAP_PRINTLANDSCAPE):contestMapParams.contestMapPrintLandscape,
+                 (Defs.OSMPRINTMAP_PRINTSIZE):contestMapParams.contestMapPrintSize,
+                 (Defs.OSMPRINTMAP_PRINTPROJECTION):ATTR_OUTPUT_PROJECTION,
                  (Defs.OSMPRINTMAP_PRINTCOLORCHANGES):false // contestMapParams.printColorChanges
                 ]
             )
@@ -1015,7 +1034,7 @@ class OsmPrintMapService
     }
     
     //--------------------------------------------------------------------------
-    void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String fileIdFileName, String pngFileName, boolean printLandscape, boolean printColorChanges)
+    void BackgroundJob(String actionName, String jobFileName, String jobId, String jobIdFileName, String fileIdFileName, String pngFileName, boolean printLandscape, String printSize, String printProjection, boolean printColorChanges)
     {
         printstart "BackgroundJob ${actionName} ${jobId}"
         
@@ -1047,11 +1066,6 @@ class OsmPrintMapService
                             pix_width = (lon_max - lon_min) / img_height
                             pix_height = (lat_max - lat_min) / img_width
                             println "Successfully. Status='${status.json.Data.Attributes.MapBuildSuccessful}', Width=${img_width}, Height=${img_height}, LonDiff=${lon_max-lon_min}, LatDiff=${lat_max-lat_min}, PixWidth=${pix_width}, PixHeight=${pix_height}"
-                            
-                            // correction TODO remove
-                            int add_pix = 4
-                            lat_min += add_pix*pix_height
-                            lat_max += add_pix*pix_height
                         } else {
                             println "Not successfully. Status='${status.json.Data.Attributes.MapBuildSuccessful}"
                         }
@@ -1082,7 +1096,10 @@ class OsmPrintMapService
                         String world_file_name = "${pngFileName}w"
                         String info_file_name = "${pngFileName}info"
                         String tif_file_name = "${pngFileName.substring(0,pngFileName.lastIndexOf('.'))}.tif"
+                        String warped_tif_file_name = "${pngFileName.substring(0,pngFileName.lastIndexOf('.'))}.warped.tif"
+                        String warped_png_file_name = "${pngFileName}.warped.png"
                         
+                        // Write download_zip_file_name
                         printstart "Write ${download_zip_file_name}"
                         FileOutputStream zip_stream = new FileOutputStream(download_zip_file_name)
                         zip_stream << status.binary
@@ -1090,6 +1107,7 @@ class OsmPrintMapService
                         zip_stream.close()
                         printdone ""
                         
+                        // Write unpacked_png_file_name
                         def km_reader = null
                         def kmz_file = new java.util.zip.ZipFile(download_zip_file_name)
                         kmz_file.entries().findAll { !it.directory }.each {
@@ -1108,6 +1126,7 @@ class OsmPrintMapService
                         }
                         kmz_file.close()
                         
+                        // Generate world_file_name
                         printstart "Generate ${world_file_name}"
                         try {
                             File world_file = new File(world_file_name)
@@ -1124,6 +1143,7 @@ class OsmPrintMapService
                         }
                         printdone ""
                         
+                        // Generate info_file_name
                         printstart "Generate ${info_file_name}"
                         try {
                             File info_file = new File(info_file_name)
@@ -1134,14 +1154,18 @@ class OsmPrintMapService
                             info_file_writer << "Right(Lon):  ${lon_max}\n"
                             info_file_writer << "Center(Lon): ${(lon_max-lon_min)/2+lon_min}\n"
                             info_file_writer << "Left(Lon):   ${lon_min}\n"
+                            info_file_writer << "Projection:  ${printProjection}\n"
                             info_file_writer << "Height:      ${img_height}px\n"
                             info_file_writer << "Width:       ${img_width}px\n"
+                            info_file_writer << "Landscape:   ${printLandscape}\n"
+                            info_file_writer << "Size:        ${printSize}\n"
                             info_file_writer.close()
                         } catch (Exception e) {
                             println e.getMessage()
                         }
                         printdone ""
                         
+                        // Delete download_zip_file_name
                         printstart "Delete ${download_zip_file_name}"
                         File download_zip_file = new File(download_zip_file_name)
                         if (download_zip_file.delete()) {
@@ -1150,6 +1174,7 @@ class OsmPrintMapService
                             printerror ""
                         }
                         
+                        // Generate pngFileName
                         if (FACTOR > 1) {
                             printstart "Downscale ${unpacked_png_file_name} -> ${pngFileName}"
                             downscaleImage(unpacked_png_file_name, pngFileName, (img_width/FACTOR2).toInteger(), (img_height/FACTOR2).toInteger(), printLandscape, printColorChanges)
@@ -1168,41 +1193,32 @@ class OsmPrintMapService
                             src_file.close()
                         }
 
-                        // generate GeoTIFF
+                        /*
                         if (BootStrap.global.IsGDALAvailable()) {
-                            String projection =  BootStrap.global.GetPrintServerProjection()
-                            if (!projection) { 
-                                projection = ATTR_OUTPUT_PROJECTION
-                            }
+                            gdal.AllRegister()
+                            
+                            // Generate GeoTIFF
                             printstart "Generate ${tif_file_name}"
                             try {
-                                String parameters = "-of GTiff "
-                                if (GEOTIFF_OUTPUT_SRS) {
-                                    parameters += "-a_srs $GEOTIFF_OUTPUT_SRS "
-                                }
-                                parameters += "-a_ullr $lon_min $lat_max $lon_max $lat_min -co COMPRESS=JPEG -co TILED=YES"
-                                println parameters
-                                gdal.AllRegister()
-                                Vector translate_options = new Vector()
-                                translate_options.add("-of")
-                                translate_options.add("GTiff")
-                                if (GEOTIFF_OUTPUT_SRS) {
-                                    translate_options.add("-a_srs")
-                                    translate_options.add(GEOTIFF_OUTPUT_SRS)
-                                }
-                                translate_options.add("-a_ullr") // upper left, lower right
-                                translate_options.add(lon_min.toString())
-                                translate_options.add(lat_max.toString())
-                                translate_options.add(lon_max.toString())
-                                translate_options.add(lat_min.toString())
-                                translate_options.add("-co")
-                                translate_options.add("COMPRESS=JPEG") // compress
-                                translate_options.add("-co")
-                                translate_options.add("TILED=YES") // creation of tiled TIFF files
-                                TranslateOptions options = new TranslateOptions(translate_options)
+                                Vector options = new Vector()
+                                options.add("-of")
+                                options.add("GTiff")
+                                options.add("-a_srs")
+                                options.add("EPSG:3857")
+                                options.add("-a_ullr") // upper left, lower right
+                                options.add(lon_min.toString())
+                                options.add(lat_max.toString())
+                                options.add(lon_max.toString())
+                                options.add(lat_min.toString())
+                                options.add("-co")
+                                options.add("COMPRESS=JPEG") // compress
+                                options.add("-co")
+                                options.add("TILED=YES") // creation of tiled TIFF files
+                                println options.toString()
+                                TranslateOptions translate_options = new TranslateOptions(options)
                                 Dataset png_data = gdal.Open(pngFileName, gdalconstConstants.GA_ReadOnly)
                                 if (png_data) {
-                                    Dataset ds = gdal.Translate(tif_file_name.toString(), png_data, options)
+                                    Dataset ds = gdal.Translate(tif_file_name, png_data, translate_options)
                                     if (ds) {
                                         ds.delete()
                                         printdone ""
@@ -1213,11 +1229,45 @@ class OsmPrintMapService
                                 } else {
                                     printerror "No png loaded."
                                 }
+                                translate_options.delete()
+                            } catch (Exception e) {
+                                printerror e.getMessage()
+                            }
+                            
+                            // Generate warped PNG
+                            printstart "Warp to ${warped_png_file_name}"
+                            try {
+                                Vector options = new Vector()
+                                options.add("-of")
+                                options.add("PNG")
+                                options.add("-s_srs")
+                                options.add("EPSG:3857")
+                                options.add("-t_srs")
+                                options.add("EPSG:3857")
+                                println options.toString()
+                                WarpOptions warp_options = new WarpOptions(options)
+                                Dataset tif_data = gdal.Open(tif_file_name, gdalconstConstants.GA_ReadOnly)
+                                if (tif_data) {
+                                    Dataset[] tif_data2 = [tif_data]
+                                    Dataset ds = gdal.Warp(warped_png_file_name, tif_data2, warp_options);
+                                    if (ds) {
+                                        ds.delete()
+                                        printdone ""
+                                    } else {
+                                        printerror "No png generated."
+                                    }
+                                    tif_data.delete()
+                                } else {
+                                    printerror "No tif loaded."
+                                }
+                                warp_options.delete()
                             } catch (Exception e) {
                                 printerror e.getMessage()
                             }
                         }
+                        */
 
+                        // Delete unpacked_png_file_name
                         printstart "Delete ${unpacked_png_file_name}"
                         File unpacked_png_file = new File(unpacked_png_file_name)
                         if (unpacked_png_file.delete()) {

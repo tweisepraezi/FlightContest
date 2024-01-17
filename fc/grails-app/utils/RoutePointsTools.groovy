@@ -5,11 +5,11 @@ import org.springframework.web.context.request.RequestContextHolder
 
 class RoutePointsTools
 {
-    final static Float GPXSHOWPPOINT_RADIUS_CHECKPOINT = 2.0f   // Anzeigeradius um Checkpunkt in NM
-    final static Float GPXSHOWPPOINT_RADIUS_ERRORPOINT = 2.0f   // Anzeigeradius um Fehlerpunkt in NM
-    final static Float GPXSHOWPPOINT_RADIUS_AIRFIELD = 0.5f   // Anzeigeradius um Flugplatz in NM
-    final static Float GPXSHOWPPOINT_RADIUS_ENROUTESIGN = 0.5f   // Anzeigeradius um Strecken-Objekt in NM
-    final static int GPXSHOWPPOINT_SCALE = 4                     // Nachkommastellen für Koordinaten
+    final static Float GPXSHOWPPOINT_RADIUS_CHECKPOINT  = 2.0f   // Anzeigeradius um Checkpunkt in NM
+    final static Float GPXSHOWPPOINT_RADIUS_ERRORPOINT  = 2.0f   // Anzeigeradius um Fehlerpunkt in NM
+    final static Float GPXSHOWPPOINT_RADIUS_AIRFIELD    = 2.0f   // Anzeigeradius um Flugplatz in NM
+    final static Float GPXSHOWPPOINT_RADIUS_ENROUTESIGN = 2.0f   // Anzeigeradius um Strecken-Objekt in NM
+    final static int GPXSHOWPPOINT_SCALE                = 4      // Nachkommastellen für Koordinaten
     
     //--------------------------------------------------------------------------
     static List GetShowPointsRoute(Route routeInstance, Test testInstance, def messageSource, Map params, Map contestMap = [:])
@@ -27,62 +27,64 @@ class RoutePointsTools
         boolean show_curved_point = params.showCurvedPoints || routeInstance.showCurvedPoints
         List curved_point_ids = routeInstance.GetCurvedPointIds()
         for (CoordRoute coordroute_instance in CoordRoute.findAllByRoute(routeInstance,[sort:'id'])) {
-            // add enroute points
-            if (params.wrEnrouteSign && (enroute_point_pos < enroute_points.size())) {
-                Map from_tp_leg = AviationMath.calculateLeg(coordroute_instance.latMath(), coordroute_instance.lonMath(), lasttp_coordroute_instance.latMath(), lasttp_coordroute_instance.lonMath())
-                while ((enroute_point_pos < enroute_points.size()) && (enroute_points[enroute_point_pos].dist < from_tp_leg.dis)) {
-                    points += enroute_points[enroute_point_pos]
-                    enroute_point_pos++
-                }
-            }
-            
-            // add additional error points
-            if (false && !params.showCoord) { // additional error points diabled
-                if (testInstance) {
-                    if (testInstance.IsLoggerResult()) {
-                        points += GetErrorPoints(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
-                    } else {
-                        points += GetErrorPointsOld(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
+            if (!coordroute_instance.ignoreGate) {
+                // add enroute points
+                if (params.wrEnrouteSign && (enroute_point_pos < enroute_points.size())) {
+                    Map from_tp_leg = AviationMath.calculateLeg(coordroute_instance.latMath(), coordroute_instance.lonMath(), lasttp_coordroute_instance.latMath(), lasttp_coordroute_instance.lonMath())
+                    while ((enroute_point_pos < enroute_points.size()) && (enroute_points[enroute_point_pos].dist < from_tp_leg.dis)) {
+                        points += enroute_points[enroute_point_pos]
+                        enroute_point_pos++
                     }
                 }
-            }
-            
-            // add regular point
-            if (!contestMap || coordroute_instance.type.IsContestMapCoord()) {
-                if (params.showCoord) {
-                    if (params.showCoord == coordroute_instance.titleCode()) {
-                        Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
-                        new_point += GetPointCoords(coordroute_instance)
-                        if (testInstance) {
-                            new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                
+                // add additional error points
+                if (false && !params.showCoord) { // additional error points diabled
+                    if (testInstance) {
+                        if (testInstance.IsLoggerResult()) {
+                            points += GetErrorPoints(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
+                        } else {
+                            points += GetErrorPointsOld(testInstance, coordroute_instance, last_coordroute_instance, messageSource)
                         }
-                        points += new_point
                     }
-                } else if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
-                    if (!(params.noCircleCenterPoints && coordroute_instance.circleCenter)) {
-                        Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
-                        new_point += GetPointCoords(coordroute_instance)
-                        if (testInstance) {
-                            new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                }
+                
+                // add regular point
+                if (!contestMap || coordroute_instance.type.IsContestMapCoord()) {
+                    if (params.showCoord) {
+                        if (params.showCoord == coordroute_instance.titleCode()) {
+                            Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
+                            new_point += GetPointCoords(coordroute_instance)
+                            if (testInstance) {
+                                new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                            }
+                            points += new_point
                         }
-                        points += new_point
+                    } else if (show_curved_point || !coordroute_instance.HideSecret(curved_point_ids)) {
+                        if (!(params.noCircleCenterPoints && coordroute_instance.circleCenter)) {
+                            Map new_point = [name:coordroute_instance.titleCode(params.isPrint)]
+                            new_point += GetPointCoords(coordroute_instance)
+                            if (testInstance) {
+                                new_point += GetPointGateMissed(testInstance, coordroute_instance)
+                            }
+                            points += new_point
+                        }
                     }
                 }
-            }
-            
-            // cache enroute points
-            if (params.wrEnrouteSign) {
-                if (coordroute_instance.type.IsEnrouteSignCoord()) {
-                    enroute_points = GetEnrouteSignShowPoints(routeInstance,coordroute_instance.type,coordroute_instance.titleNumber, add_image_coord)
-                    enroute_point_pos = 0
-                    lasttp_coordroute_instance = coordroute_instance
-                } else if (coordroute_instance.type != CoordType.SECRET) {
-                    enroute_points = []
-                    enroute_point_pos = 0
+                
+                // cache enroute points
+                if (params.wrEnrouteSign) {
+                    if (coordroute_instance.type.IsEnrouteSignCoord()) {
+                        enroute_points = GetEnrouteSignShowPoints(routeInstance,coordroute_instance.type,coordroute_instance.titleNumber, add_image_coord)
+                        enroute_point_pos = 0
+                        lasttp_coordroute_instance = coordroute_instance
+                    } else if (coordroute_instance.type != CoordType.SECRET) {
+                        enroute_points = []
+                        enroute_point_pos = 0
+                    }
                 }
+                
+                last_coordroute_instance = coordroute_instance
             }
-            
-            last_coordroute_instance = coordroute_instance
         }
         
         // add unknown enroute points
